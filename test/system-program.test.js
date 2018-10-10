@@ -61,7 +61,7 @@ test('assign', () => {
   // TODO: Validate transaction contents more
 });
 
-test('unstable - load', async () => {
+test('unstable - load noop', async () => {
   if (mockRpcEnabled) {
     console.log('non-live test skipped');
     return;
@@ -88,6 +88,57 @@ test('unstable - load', async () => {
   signature = await connection.sendTransaction(from, noopTransaction);
   expect(connection.confirmTransaction(signature)).resolves.toBe(true);
 
+
+});
+
+test('unstable - load solua', async () => {
+  if (mockRpcEnabled) {
+    console.log('non-live test skipped');
+    return;
+  }
+
+  const connection = new Connection(url);
+  const from = await newAccountWithTokens(connection, 10);
+  const to = await newAccountWithTokens(connection, 10);
+
+  const soluaProgramId = (new Account()).publicKey;
+
+  const loadTransaction = SystemProgram.load(
+    from.publicKey,
+    soluaProgramId,
+    'solua',
+  );
+  let signature = await connection.sendTransaction(from, loadTransaction);
+  expect(connection.confirmTransaction(signature)).resolves.toBe(true);
+
+  const assignTransaction = SystemProgram.assign(from.publicKey, soluaProgramId);
+  signature = await connection.sendTransaction(from, assignTransaction);
+  expect(connection.confirmTransaction(signature)).resolves.toBe(true);
+
+  /*
+   *
+   * TODO: Need to load `luaProgram` into the userdata of an account.  It cannot
+   * run from the userdata of a `Transaction` as it attempted below
+   *
+   */
+  const luaProgram = `
+      accounts[0].tokens -= 1
+      accounts[1].tokens += 1
+  `;
+
+  const soluaTransaction = new Transaction({
+    fee: 0,
+    keys: [from.publicKey, to.publicKey],
+    programId: soluaProgramId,
+    userdata: Buffer.from(luaProgram),
+  });
+  signature = await connection.sendTransaction(from, soluaTransaction);
+  expect(connection.confirmTransaction(signature)).resolves.toBe(true);
+
+  let balance = await connection.getBalance(from.publicKey);
+  expect(balance).toBe(9);
+  balance = await connection.getBalance(to.publicKey);
+  expect(balance).toBe(10);
 
 });
 
