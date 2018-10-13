@@ -45,7 +45,7 @@ deploy:
     script:
       - npx semantic-release
     on:
-      branch: master
+      branch: dev
       node_js: "lts/*"
   - provider: releases
     skip-cleanup: true

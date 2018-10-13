@@ -17,7 +17,11 @@
     "url": "http://github.com/solana-labs/solana-web3.js.git/issues"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "dev"
+  },
+  "release": {
+    "branch": "dev"
   },
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
