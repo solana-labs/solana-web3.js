@@ -43,20 +43,21 @@ export class Loader {
       BufferLayout.u32('bytesLengthPadding'),
       BufferLayout.seq(
         BufferLayout.u8('byte'),
-        BufferLayout.offset(BufferLayout.u32(), -8),
-        'bytes'
-      ),
+        BufferLayout.offset(BufferLayout.u32(), -8),'bytes'),
     ]);
 
-    let userdata = Buffer.alloc(bytes.length + 16);
-    userdataLayout.encode(
-      {
-        instruction: 0, // Load instruction
-        offset,
-        bytes,
-      },
-      userdata,
-    );
+    let i,j;
+    const chunk_size = 256; // Size of chunk, just needs to fit into tx
+    let userdata = Buffer.alloc(chunk_size + 16);
+    for (i = 0, j = bytes.length; i < j; i += chunk_size) {
+      userdataLayout.encode(
+        {
+          instruction: 0, // Load instruction
+          offset: i,
+          bytes: bytes.slice(i, i + chunk_size),
+        },
+        userdata,
+      );
 
     const transaction = new Transaction().add({
       keys: [program.publicKey],

@@ -14,11 +14,6 @@ if (!mockRpcEnabled) {
   jest.setTimeout(10000);
 }
 
-// test('parse noop program', async () => {
-//   BpfLoader.parse('tictactoe_dashboard_c.o');
-// });
-
-
 test('load noop program', async () => {
   if (mockRpcEnabled) {
     console.log('non-live test skipped');
@@ -27,8 +22,7 @@ test('load noop program', async () => {
 
   const connection = new Connection(url);
   const from = await newAccountWithTokens(connection);
-
-  const noopProgramId = await BpfLoader.load(connection, from, 'noop');
+  const noopProgramId = await BpfLoader.load(connection, from, 'test/bin/noop_c.o');
   const noopTransaction = new Transaction({
     fee: 0,
     keys: [from.publicKey],

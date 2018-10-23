@@ -1,11 +1,11 @@
 // @flow
 
-import * as fs from 'file-system';
-import * as elfy from 'elfy';
+import fs from 'mz/fs';
+import elfy from 'elfy';
 
-import { Account, PublicKey, Loader, SystemProgram } from '.';
-import { sendAndConfirmTransaction } from './util/send-and-confirm-transaction';
-import type { Connection } from '.';
+import {Account, PublicKey, Loader, SystemProgram} from '.';
+import {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
+import type {Connection} from '.';
 
 /**
  * Factory class for transactions to interact with a program loader
@@ -17,18 +17,6 @@ export class BpfLoader {
   static get programId(): PublicKey {
     return new PublicKey('0x0606060606060606060606060606060606060606060606060606060606060606');
   }
-
-  // static parse(programName: string) {
-
-  //   var file = fs.readFileSync(programName);
-  //   var elf = elfy.parse(file);
-  //   var section = elf.body.sections.find(function (sect) {
-  //     return sect.name == '.text.entrypoint';
-  //   });
-  //   // console.log('cwd: ' + process.cwd());
-  //   // console.log('elf: ' + JSON.stringify(elf));
-  //   console.log('section: ' + JSON.stringify(section.data));
-  // }
 
   /**
    * Loads a BPF program
@@ -44,21 +32,16 @@ export class BpfLoader {
   ): Promise<PublicKey> {
     const programAccount = new Account();
 
-    var file = fs.readFileSync(programName);
-    var elf = elfy.parse(file);
-    var section = elf.body.sections.find(function (sect) {
-      return sect.name == '.text.entrypoint';
-    });
-    // console.log('cwd: ' + process.cwd());
-    // console.log('elf: ' + JSON.stringify(elf));
-    // console.log('section: ' + JSON.stringify(section.data));
+    const data = await fs.readFile(programName);
+    const elf = elfy.parse(data);
+    const section = elf.body.sections.find(section => section.name === '.text.entrypoint');
 
     // Allocate memory for the program account
     const transaction = SystemProgram.createAccount(
       owner.publicKey,
       programAccount.publicKey,
       1,
-      section.data.length + 1,
+      section.data.length,
       BpfLoader.programId,
     );
     await sendAndConfirmTransaction(connection, owner, transaction);
