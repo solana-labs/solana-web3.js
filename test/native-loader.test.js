@@ -9,7 +9,6 @@ import {
 import {mockRpcEnabled} from './__mocks__/node-fetch';
 import {url} from './url';
 import {newAccountWithTokens} from './new-account-with-tokens';
-import {sendAndConfirmTransaction} from '../src/util/send-and-confirm-transaction';
 
 if (!mockRpcEnabled) {
   // The default of 5 seconds is too slow for live testing sometimes

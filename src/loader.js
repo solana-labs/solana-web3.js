@@ -32,7 +32,6 @@ export class Loader {
    * Load program data
    *
    * @param program Account to load the program info
-   * @param offset Account userdata offset to write `bytes` into
    * @param data Program data
    */
   async load(program: Account, data: Array<number>) {
