@@ -33,9 +33,9 @@ export class Loader {
    *
    * @param program Account to load the program info
    * @param offset Account userdata offset to write `bytes` into
-   * @param bytes Program data
+   * @param data Program data
    */
-  async load(program: Account, bytes: Array<number>) {
+  async load(program: Account, data: Array<number>) {
     const userdataLayout = BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.u32('offset'),
@@ -49,14 +49,15 @@ export class Loader {
     const chunkSize = 256;
     let userdata = Buffer.alloc(chunkSize + 16);
     let offset = 0;
-    while (bytes.length > 0) {
-      const slice = bytes.slice(0, chunkSize);
+    let array = data;
+    while (array.length > 0) {
+      const bytes = array.slice(0, chunkSize);
 
       userdataLayout.encode(
         {
           instruction: 0, // Load instruction
           offset,
-          bytes: slice,
+          bytes,
         },
         userdata,
       );
@@ -69,7 +70,7 @@ export class Loader {
       await sendAndConfirmTransaction(this.connection, program, transaction);
 
       offset += chunkSize;
-      bytes = bytes.slice(chunkSize);
+      array = array.slice(chunkSize);
     }
   }
 
