@@ -47,7 +47,7 @@ export class BpfLoader {
     await sendAndConfirmTransaction(connection, owner, transaction);
 
     const loader = new Loader(connection, BpfLoader.programId);
-    await loader.load(programAccount, 0, section.data);
+    await loader.load(programAccount, section.data);
     await loader.finalize(programAccount);
 
     return programAccount.publicKey;

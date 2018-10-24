@@ -42,7 +42,7 @@ export class NativeLoader {
     await sendAndConfirmTransaction(connection, owner, transaction);
 
     const loader = new Loader(connection, NativeLoader.programId);
-    await loader.load(programAccount, 0, bytes);
+    await loader.load(programAccount, bytes);
     await loader.finalize(programAccount);
 
     return programAccount.publicKey;

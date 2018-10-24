@@ -9,14 +9,14 @@ import {
 import {mockRpcEnabled} from './__mocks__/node-fetch';
 import {url} from './url';
 import {newAccountWithTokens} from './new-account-with-tokens';
+import {sendAndConfirmTransaction} from '../src/util/send-and-confirm-transaction';
 
 if (!mockRpcEnabled) {
   // The default of 5 seconds is too slow for live testing sometimes
   jest.setTimeout(10000);
 }
 
-
-test('load noop program', async () => {
+test('load native program', async () => {
   if (mockRpcEnabled) {
     console.log('non-live test skipped');
     return;
@@ -24,12 +24,12 @@ test('load noop program', async () => {
 
   const connection = new Connection(url);
   const from = await newAccountWithTokens(connection);
-
-  const noopProgramId = await NativeLoader.load(connection, from, 'noop');
-  const noopTransaction = new Transaction().add({
+  const programId = await NativeLoader.load(connection, from, 'noop');
+  const transaction = new Transaction().add({
     keys: [from.publicKey],
-    programId: noopProgramId,
+    programId,
   });
-  await expect(sendAndConfirmTransaction(connection, from, noopTransaction)).resolves.toBeUndefined();
+
+  await sendAndConfirmTransaction(connection, from, transaction);
 });
 
