@@ -49,6 +49,7 @@ export class Loader {
     let userdata = Buffer.alloc(chunkSize + 16);
     let offset = 0;
     let array = data;
+    const transactions= [];
     while (array.length > 0) {
       const bytes = array.slice(0, chunkSize);
 
@@ -66,11 +67,12 @@ export class Loader {
         programId: this.programId,
         userdata,
       });
-      await sendAndConfirmTransaction(this.connection, program, transaction);
+      transactions.push(await sendAndConfirmTransaction(this.connection, program, transaction));
 
       offset += chunkSize;
       array = array.slice(chunkSize);
     }
+    await Promise.all(transactions);
   }
 
   /**
