@@ -15,7 +15,9 @@ if (!mockRpcEnabled) {
   jest.setTimeout(15000);
 }
 
-test('load native program', async () => {
+// TODO: Skipped until the 'noop' native program is installed directly from the SDK side
+// to avoid assumptions about it being always present.
+test.skip('load native program', async () => {
   if (mockRpcEnabled) {
     console.log('non-live test skipped');
     return;
