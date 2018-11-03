@@ -90,8 +90,8 @@ function jsonRpcResult(resultDescription: any) {
  */
 const AccountInfoResult = struct({
   executable: 'boolean',
-  loader_program_id: 'array',
-  program_id: 'array',
+  loaderProgramId: 'array',
+  programId: 'array',
   tokens: 'number',
   userdata: 'array',
 });
@@ -276,8 +276,8 @@ export class Connection {
     return {
       executable: result.executable,
       tokens: result.tokens,
-      programId: new PublicKey(result.program_id),
-      loaderProgramId: new PublicKey(result.loader_program_id),
+      programId: new PublicKey(result.programId),
+      loaderProgramId: new PublicKey(result.loaderProgramId),
       userdata: Buffer.from(result.userdata),
     };
   }
@@ -470,8 +470,8 @@ export class Connection {
         sub.callback({
           executable: result.executable,
           tokens: result.tokens,
-          programId: new PublicKey(result.program_id),
-          loaderProgramId: new PublicKey(result.loader_program_id),
+          programId: new PublicKey(result.programId),
+          loaderProgramId: new PublicKey(result.loaderProgramId),
           userdata: Buffer.from(result.userdata),
         });
         return true;

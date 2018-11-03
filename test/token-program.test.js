@@ -100,7 +100,7 @@ test('create new token', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             1,
@@ -110,7 +110,7 @@ test('create new token', async () => {
             4, 0, 0, 0, 0, 0, 0, 0, 84, 69, 83, 84
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -138,7 +138,7 @@ test('create new token', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -148,7 +148,7 @@ test('create new token', async () => {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -196,7 +196,7 @@ test('create new token account', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -206,7 +206,7 @@ test('create new token account', async () => {
             0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -254,7 +254,7 @@ test('transfer', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -264,7 +264,7 @@ test('transfer', async () => {
             0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -296,7 +296,7 @@ test('transfer', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -306,7 +306,7 @@ test('transfer', async () => {
             0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -363,7 +363,7 @@ test('approve/revoke', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -375,7 +375,7 @@ test('approve/revoke', async () => {
             200, 1, 0, 0, 0, 0, 0, 0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],
@@ -418,7 +418,7 @@ test('approve/revoke', async () => {
       {
         error: null,
         result: {
-          program_id: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
+          programId: [...SYSTEM_TOKEN_PROGRAM_ID.toBuffer()],
           tokens: 1,
           userdata: [
             2,
@@ -430,7 +430,7 @@ test('approve/revoke', async () => {
             0, 0, 0, 0, 0, 0, 0, 0,
           ],
           executable: false,
-          loader_program_id: [
+          loaderProgramId: [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
           ],

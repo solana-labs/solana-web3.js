@@ -200,14 +200,14 @@ test('request airdrop', async () => {
     {
       error: null,
       result: {
-        program_id: [
+        programId: [
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         ],
         tokens: 42,
         userdata: [],
         executable: false,
-        loader_program_id: [
+        loaderProgramId: [
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         ],
