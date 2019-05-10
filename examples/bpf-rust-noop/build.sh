@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 
 cargo install xargo
 
-set -e
+set -ex
 
 # Ensure the sdk is installed
 ../../bpf-sdk/scripts/install.sh
