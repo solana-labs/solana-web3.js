@@ -21,7 +21,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install -y clang-7 --allow-unauthenticated
   - clang-7 --version
-  - curl https://sh.rustup.rs -sSf
+  - curl https://sh.rustup.rs -sSf | sh
   - PATH=$HOME/.cargo/bin:$PATH
   - rustup --version
 
