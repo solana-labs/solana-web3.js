@@ -1,13 +1,14 @@
 // @flow
 
-import * as BufferLayout from 'buffer-layout';
-import * as Layout from './layout';
-import {PublicKey} from './publickey';
-import {Account} from './account';
-import * as shortvec from './util/shortvec-encoding';
 import {struct} from 'superstruct';
 
-const VALIDATOR_INFO_KEY = new PublicKey('Va1idator1nfo111111111111111111111111111111');
+import * as Layout from './layout';
+import * as shortvec from './util/shortvec-encoding';
+import {PublicKey} from './publickey';
+
+const VALIDATOR_INFO_KEY = new PublicKey(
+  'Va1idator1nfo111111111111111111111111111111',
+);
 
 /**
  * @private
