@@ -143,7 +143,7 @@ declare module '@solana/web3.js' {
   }
 
   // === src/validator-info.js ===
-  declare type Info = {|
+  declare export type Info = {|
     name: string,
     website?: string,
     details?: string,

@@ -18,9 +18,15 @@ type ConfigKey = {|
 |};
 
 /**
- * @private
+ * Info used to identity validators.
+ *
+ * @typedef {Object} Info
+ * @property {string} name validator name
+ * @property {?string} website optional, validator website
+ * @property {?string} details optional, extra information the validator chose to share
+ * @property {?string} keybaseId optional, used to identify validators on keybase.io
  */
-type Info = {|
+export type Info = {|
   name: string,
   website?: string,
   details?: string,
@@ -38,11 +44,20 @@ const InfoString = struct({
  * ValidatorInfo class
  */
 export class ValidatorInfo {
+  /**
+   * validator public key
+   */
   key: PublicKey;
+  /**
+   * validator information
+   */
   info: Info;
 
   /**
    * Construct a valid ValidatorInfo
+   *
+   * @param key validator public key
+   * @param info validator information
    */
   constructor(key: PublicKey, info: Info) {
     this.key = key;
@@ -52,7 +67,8 @@ export class ValidatorInfo {
   /**
    * Deserialize ValidatorInfo from the config account data.
    *
-   * @return ValidatorInfo or null if info was not found
+   * @param buffer config account data
+   * @return null if info was not found
    */
   static fromConfigData(buffer: Buffer): ?ValidatorInfo {
     const PUBKEY_LENGTH = 32;
