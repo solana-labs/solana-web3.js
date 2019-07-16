@@ -66,7 +66,8 @@ export class ValidatorInfo {
   }
 
   /**
-   * Deserialize ValidatorInfo from the config account data.
+   * Deserialize ValidatorInfo from the config account data. Exactly two config
+   * keys are required in the data.
    *
    * @param buffer config account data
    * @return null if info was not found
@@ -76,7 +77,7 @@ export class ValidatorInfo {
 
     let byteArray = [...buffer];
     const configKeyCount = shortvec.decodeLength(byteArray);
-    if (configKeyCount < 2) return null;
+    if (configKeyCount !== 2) return null;
 
     const configKeys: Array<ConfigKey> = [];
     for (let i = 0; i < 2; i++) {
