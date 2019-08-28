@@ -154,6 +154,7 @@ test('get inflation', async () => {
 
   const inflation = await connection.getInflation();
   expect(inflation.initial).toBeGreaterThan(0);
+  expect(inflation.storage).toBeGreaterThan(0);
   expect(inflation.terminal).toBeGreaterThan(0);
 });
 
