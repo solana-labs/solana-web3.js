@@ -1,8 +1,10 @@
 import {Account, Connection, Transaction, SystemProgram} from '..';
 
 //
-// run as: yarn run ts-test/test-transaction.ts
-// [from this directory's parent, where package.json is]
+// [from this directory's parent, where package.json is, run:]
+//
+// $ yarn
+// $ yarn run ts-test/test-transaction.ts
 //
 
 function sleep(ms) {
