@@ -233,6 +233,9 @@ declare module '@solana/web3.js' {
     serialize(): Buffer;
   }
 
+  // === src/sysvar-rent.js ===
+  declare export var SYSVAR_RENT_PUBKEY;
+
   // === src/loader.js ===
   declare export class Loader {
     static load(

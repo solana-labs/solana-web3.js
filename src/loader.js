@@ -126,7 +126,7 @@ export class Loader {
       const transaction = new Transaction().add({
         keys: [
           {pubkey: program.publicKey, isSigner: true, isDebitable: true},
-          {pubkey: RENT_SYSVAR_ACCOUNT_KEY, isSigner: false, isDebitable: false}
+          {pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isDebitable: false}
         ],
         programId,
         data,

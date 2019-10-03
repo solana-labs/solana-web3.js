@@ -9,7 +9,7 @@ export {SystemInstruction, SystemProgram} from './system-program';
 export {Transaction, TransactionInstruction} from './transaction';
 export {VALIDATOR_INFO_KEY, ValidatorInfo} from './validator-info';
 export {VOTE_ACCOUNT_KEY, VoteAccount} from './vote-account';
-export {RENT_SYSVAR_ACCOUNT_KEY} from './sysvar/rent';
+export {SYSVAR_RENT_PUBKEY} from './sysvar-rent';
 export {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
 export {
   sendAndConfirmRawTransaction,
