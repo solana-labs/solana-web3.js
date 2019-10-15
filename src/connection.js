@@ -143,7 +143,6 @@ const GetBalanceRpcResult = struct({
 /**
  * @private
  */
-
 function jsonRpcResult(resultDescription: any) {
   const jsonRpcVersion = struct.literal('2.0');
   return struct.union([
