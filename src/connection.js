@@ -143,6 +143,7 @@ const GetBalanceRpcResult = struct({
 /**
  * @private
  */
+
 function jsonRpcResult(resultDescription: any) {
   const jsonRpcVersion = struct.literal('2.0');
   return struct.union([
@@ -252,7 +253,7 @@ const GetClusterNodes_015 = jsonRpcResult(
 const GetVoteAccounts = jsonRpcResult(
   struct({
     current: struct.list([
-      struct({
+      struct.partial({
         votePubkey: 'string',
         nodePubkey: 'string',
         activatedStake: 'number',
@@ -262,7 +263,7 @@ const GetVoteAccounts = jsonRpcResult(
       }),
     ]),
     delinquent: struct.list([
-      struct({
+      struct.partial({
         votePubkey: 'string',
         nodePubkey: 'string',
         activatedStake: 'number',

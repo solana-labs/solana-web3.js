@@ -12,6 +12,7 @@ import {mockRpc, mockRpcEnabled} from './__mocks__/node-fetch';
 import {mockGetRecentBlockhash} from './mockrpc/get-recent-blockhash';
 import {url} from './url';
 import {sleep} from '../src/util/sleep';
+import {struct} from "superstruct";
 
 if (!mockRpcEnabled) {
   // The default of 5 seconds is too slow for live testing sometimes
@@ -25,6 +26,41 @@ const errorResponse = {
   },
   result: undefined,
 };
+
+test('allow extra fields', () => {
+  const GetVoteAccounts =
+    struct({
+      current: struct.list([
+        struct.partial({
+          votePubkey: 'string',
+          nodePubkey: 'string',
+          activatedStake: 'number',
+          epochVoteAccount: 'boolean',
+          commission: 'number',
+          lastVote: 'number',
+        }),
+      ]),
+      delinquent: struct.list([
+        struct.partial({
+          votePubkey: 'string',
+          nodePubkey: 'string',
+          activatedStake: 'number',
+          epochVoteAccount: 'boolean',
+          commission: 'number',
+          lastVote: 'number',
+        }),
+      ]),
+    });
+
+  const data = '{"current":[{"activatedStake":134783,"commission":127,"epochVoteAccount":true,"lastVote":1506,"nodePubkey":"CwrP776MijsSKhAL6oBevDDfVo75NhVuhEdAcDysmUpk","rootSlot":1475,"votePubkey":"BiBvr6sK3nZCWPBYLGL65FnCKGaKhppptYPC4TRroAZA"},{"activatedStake":134783,"commission":127,"epochVoteAccount":true,"lastVote":1506,"nodePubkey":"9Zp1g3myDHBfSYrVB2VuiwZ3hdnsfYXivCyNWUspMFhE","rootSlot":1475,"votePubkey":"HS8NH8Jub3bTAuHSgeFsNGoy3HVoRShWdjmczSQYK2So"},{"activatedStake":134783,"commission":127,"epochVoteAccount":true,"lastVote":1506,"nodePubkey":"BA4HeDyuhRH8EEEac9jAZv9VBHpggUKdjMGRk78nNcMX","rootSlot":1475,"votePubkey":"DPiKbNr2wmmsmBiH3yGi2PuETx7zxScc4TNDC2wmmCvx"},{"activatedStake":424243,"commission":0,"epochVoteAccount":true,"lastVote":1506,"nodePubkey":"6M6ovjDRJGf8PUCTqRrpAviCt2mwNGXm36mc5Cn9vknr","rootSlot":1475,"votePubkey":"3RCTZLrTivk6ChF2CWU5Btiix7sETv7foYkJU9paB1DR"}],"delinquent":[{"activatedStake":0,"commission":127,"epochVoteAccount":true,"lastVote":301,"nodePubkey":"528ot8vbUCi9Ds8XaHXJsm4wNyWtSgyfgpLYkKwXGRBT","rootSlot":270,"votePubkey":"6jqUpNXLkdNtj6t5uzozYhjALioLGEFpj1eP7pMK9st8"},{"activatedStake":0,"commission":127,"epochVoteAccount":true,"lastVote":0,"nodePubkey":"DNFro1M3hnKW9rChPoQ2eFxZeuvgocCcggzLjX4D7mLZ","rootSlot":0,"votePubkey":"9cmUEWiWH7FHypmj8TdP54DGJJdNXjcQh37Sat8jMSse"}]}';
+  const json = JSON.parse(data);
+  const res = GetVoteAccounts(json);
+  if (res.error) {
+    console.log('err', res);
+  } else {
+    console.log('ok', res);
+  }
+});
 
 test('get account info - error', () => {
   const account = new Account();
