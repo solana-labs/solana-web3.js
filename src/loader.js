@@ -6,6 +6,7 @@ import {Account} from './account';
 import {PublicKey} from './publickey';
 import {NUM_TICKS_PER_SECOND} from './timing';
 import {Transaction, PACKET_DATA_SIZE} from './transaction';
+import type {TransactionSignature} from './transaction';
 import {SYSVAR_RENT_PUBKEY} from './sysvar-rent';
 import {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
 import {sleep} from './util/sleep';
@@ -148,7 +149,7 @@ export class Loader {
     return program.publicKey;
   }
 
-/**
+  /**
    * Invoke a generic program's "entrypoint"
    *
    * @param connection The connection to use
@@ -164,7 +165,6 @@ export class Loader {
     keys: Array<{pubkey: PublicKey, isSigner: boolean, isDebitable: boolean}>,
     data: Buffer,
   ): Promise<TransactionSignature> {
-
     const dataLayout = BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.u32('bytesLength'),
@@ -192,4 +192,3 @@ export class Loader {
     return await sendAndConfirmTransaction(connection, transaction, payer);
   }
 }
-

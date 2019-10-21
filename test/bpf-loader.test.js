@@ -5,13 +5,6 @@ import fs from 'mz/fs';
 import {
   Connection,
   BpfLoader,
-<<<<<<< HEAD
-  Transaction,
-  sendAndConfirmTransaction,
-=======
-  Loader,
-  SOL_LAMPORTS,
->>>>>>> fix: call program via invoke_main
 } from '../src';
 import {mockRpcEnabled} from './__mocks__/node-fetch';
 import {url} from './url';
@@ -29,14 +22,9 @@ test('load BPF C program', async () => {
     console.log('non-live test skipped');
     return;
   }
-<<<<<<< HEAD
-=======
+
   const connection = new Connection(url);
-  const from = await newAccountWithLamports(connection, SOL_LAMPORTS);
->>>>>>> fix: call program via invoke_main
-
   const data = await fs.readFile('test/fixtures/noop-c/noop.so');
-
   const connection = new Connection(url);
   const [, feeCalculator] = await connection.getRecentBlockhash();
   const fees =
@@ -46,13 +34,14 @@ test('load BPF C program', async () => {
 
   const programId = await BpfLoader.load(connection, from, data);
 
-  const program_data = Buffer.alloc(0)
+  const program_data = Buffer.alloc(0);
   await Loader.invoke_main(
     connection,
     from,
     programId,
     [{pubkey: from.publicKey, isSigner: true, isDebitable: true}],
-    program_data);
+    program_data,
+  );
 });
 
 test('load BPF Rust program', async () => {
@@ -64,21 +53,20 @@ test('load BPF Rust program', async () => {
   const data = await fs.readFile(
     'test/fixtures/noop-rust/solana_bpf_rust_noop.so',
   );
-
   const connection = new Connection(url);
   const [, feeCalculator] = await connection.getRecentBlockhash();
   const fees =
     feeCalculator.lamportsPerSignature *
     (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES);
   const from = await newAccountWithLamports(connection, fees);
-
   const programId = await BpfLoader.load(connection, from, data);
 
-  const program_data = Buffer.alloc(0)
+  const program_data = Buffer.alloc(0);
   await Loader.invoke_main(
     connection,
     from,
     programId,
     [{pubkey: from.publicKey, isSigner: true, isDebitable: true}],
-    program_data);
+    program_data,
+  );
 });
