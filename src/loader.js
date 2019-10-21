@@ -175,19 +175,18 @@ export class Loader {
         'bytes',
       ),
     ]);
-    const program_data = Buffer.alloc(data.length + 12);
+    const encoded_data = Buffer.alloc(data.length + 12);
     dataLayout.encode(
       {
         instruction: 2, // InvokeMain instruction
-        data,
+        bytes: data,
       },
-      program_data,
+      encoded_data,
     );
-
     const transaction = new Transaction().add({
       keys,
       programId,
-      data: program_data,
+      data: encoded_data,
     });
     return await sendAndConfirmTransaction(connection, transaction, payer);
   }

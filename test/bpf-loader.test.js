@@ -34,7 +34,7 @@ test('load BPF C program', async () => {
 
   const programId = await BpfLoader.load(connection, from, data);
 
-  const program_data = Buffer.alloc(0);
+  const program_data = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
   await Loader.invoke_main(
     connection,
     from,
@@ -61,7 +61,7 @@ test('load BPF Rust program', async () => {
   const from = await newAccountWithLamports(connection, fees);
   const programId = await BpfLoader.load(connection, from, data);
 
-  const program_data = Buffer.alloc(0);
+  const program_data = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
   await Loader.invoke_main(
     connection,
     from,
