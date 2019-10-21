@@ -147,4 +147,49 @@ export class Loader {
     }
     return program.publicKey;
   }
+
+/**
+   * Invoke a generic program's "entrypoint"
+   *
+   * @param connection The connection to use
+   * @param payer Account that pays to load the program
+   * @param programId Public key that identifies the loader
+   * @param keys Public keys to include in this transaction
+   * @param data Program input
+   */
+  static async invoke_main(
+    connection: Connection,
+    payer: Account,
+    programId: PublicKey,
+    keys: Array<{pubkey: PublicKey, isSigner: boolean, isDebitable: boolean}>,
+    data: Buffer,
+  ): Promise<TransactionSignature> {
+
+    const dataLayout = BufferLayout.struct([
+      BufferLayout.u32('instruction'),
+      BufferLayout.u32('bytesLength'),
+      BufferLayout.u32('bytesLengthPadding'),
+      BufferLayout.seq(
+        BufferLayout.u8('byte'),
+        BufferLayout.offset(BufferLayout.u32(), -8),
+        'bytes',
+      ),
+    ]);
+    const program_data = Buffer.alloc(data.length + 12);
+    dataLayout.encode(
+      {
+        instruction: 2, // InvokeMain instruction
+        data,
+      },
+      program_data,
+    );
+
+    const transaction = new Transaction().add({
+      keys,
+      programId,
+      data: program_data,
+    });
+    return await sendAndConfirmTransaction(connection, transaction, payer);
+  }
 }
+
