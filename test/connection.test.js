@@ -80,9 +80,13 @@ test('get program accounts', async () => {
       account1.publicKey.toBase58(),
     ]).toEqual(expect.arrayContaining([element[0]]));
     if (element[0] == account0.publicKey) {
-      expect(element[1].lamports).toBe(SOL_LAMPORTS - feeCalculator.lamportsPerSignature);
+      expect(element[1].lamports).toBe(
+        SOL_LAMPORTS - feeCalculator.lamportsPerSignature,
+      );
     } else {
-      expect(element[1].lamports).toBe(0.5 * SOL_LAMPORTS- feeCalculator.lamportsPerSignature);
+      expect(element[1].lamports).toBe(
+        0.5 * SOL_LAMPORTS - feeCalculator.lamportsPerSignature,
+      );
     }
   });
 });
@@ -164,6 +168,43 @@ test('get inflation', async () => {
     expect(inflation).toHaveProperty(key);
     expect(inflation[key]).toBeGreaterThan(0);
   }
+});
+
+test('get epoch schedule', async () => {
+  const connection = new Connection(url);
+
+  mockRpc.push([
+    url,
+    {
+      method: 'getEpochSchedule',
+      params: [],
+    },
+    {
+      error: null,
+      result: {
+        first_normal_epoch: 8,
+        first_normal_slot: 8160,
+        leader_schedule_slot_offset: 8192,
+        slots_per_epoch: 8192,
+        warmup: true,
+      },
+    },
+  ]);
+
+  const epochSchedule = await connection.getEpochSchedule();
+
+  for (const key of [
+    'first_normal_epoch',
+    'first_normal_slot',
+    'leader_schedule_slot_offset',
+    'slots_per_epoch',
+  ]) {
+    expect(epochSchedule).toHaveProperty(key);
+    expect(epochSchedule[key]).toBeGreaterThan(0);
+  }
+
+  expect(epochSchedule).toHaveProperty('warmup');
+  expect(epochSchedule.warmup).toBeTruthy();
 });
 
 test('get slot', async () => {
