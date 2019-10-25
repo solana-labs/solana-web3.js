@@ -267,6 +267,9 @@ declare module '@solana/web3.js' {
       programId: PublicKey,
       data: Array<number>,
     ): Promise<PublicKey>;
+    static invokeMainInstruction(
+      item: TransactionInstruction | TransactionInstructionCtorFields,
+    ): TransactionInstruction;
   }
 
   // === src/bpf-loader.js ===

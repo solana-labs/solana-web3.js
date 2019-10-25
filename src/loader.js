@@ -5,8 +5,12 @@ import * as BufferLayout from 'buffer-layout';
 import {Account} from './account';
 import {PublicKey} from './publickey';
 import {NUM_TICKS_PER_SECOND} from './timing';
-import {Transaction, PACKET_DATA_SIZE} from './transaction';
-import type {TransactionSignature} from './transaction';
+import {
+  Transaction,
+  TransactionInstruction,
+  PACKET_DATA_SIZE,
+} from './transaction';
+import type {TransactionInstructionCtorFields} from './transaction';
 import {SYSVAR_RENT_PUBKEY} from './sysvar-rent';
 import {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
 import {sleep} from './util/sleep';
@@ -151,20 +155,10 @@ export class Loader {
 
   /**
    * Invoke a generic program's "entrypoint"
-   *
-   * @param connection The connection to use
-   * @param payer Account that pays to load the program
-   * @param programId Public key that identifies the loader
-   * @param keys Public keys to include in this transaction
-   * @param data Program input
    */
-  static async invoke_main(
-    connection: Connection,
-    payer: Account,
-    programId: PublicKey,
-    keys: Array<{pubkey: PublicKey, isSigner: boolean, isDebitable: boolean}>,
-    data: Buffer,
-  ): Promise<TransactionSignature> {
+  static invokeMainInstruction(
+    item: TransactionInstruction | TransactionInstructionCtorFields,
+  ): TransactionInstruction {
     const dataLayout = BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.u32('bytesLength'),
@@ -175,19 +169,25 @@ export class Loader {
         'bytes',
       ),
     ]);
-    const encoded_data = Buffer.alloc(data.length + 12);
+
+    var instruction;
+    if (item instanceof TransactionInstruction) {
+      instruction = item;
+    } else {
+      instruction = new TransactionInstruction(item);
+    }
+    const encoded_data = Buffer.alloc(instruction.data.length + 12);
     dataLayout.encode(
       {
         instruction: 2, // InvokeMain instruction
-        bytes: data,
+        bytes: instruction.data,
       },
       encoded_data,
     );
-    const transaction = new Transaction().add({
-      keys,
-      programId,
+    return new TransactionInstruction({
+      keys: instruction.keys,
+      programId: instruction.programId,
       data: encoded_data,
     });
-    return await sendAndConfirmTransaction(connection, transaction, payer);
   }
 }

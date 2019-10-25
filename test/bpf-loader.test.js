@@ -2,13 +2,12 @@
 
 import fs from 'mz/fs';
 
-import {
-  Connection,
-  BpfLoader,
-} from '../src';
+import {Connection, BpfLoader, Loader} from '../src';
 import {mockRpcEnabled} from './__mocks__/node-fetch';
 import {url} from './url';
 import {newAccountWithLamports} from './new-account-with-lamports';
+import {sendAndConfirmTransaction} from '../src/util/send-and-confirm-transaction';
+import {Transaction} from '../src/transaction';
 
 if (!mockRpcEnabled) {
   // The default of 5 seconds is too slow for live testing sometimes
@@ -23,25 +22,24 @@ test('load BPF C program', async () => {
     return;
   }
 
-  const connection = new Connection(url);
   const data = await fs.readFile('test/fixtures/noop-c/noop.so');
   const connection = new Connection(url);
   const [, feeCalculator] = await connection.getRecentBlockhash();
   const fees =
     feeCalculator.lamportsPerSignature *
-    (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES);
-  const from = await newAccountWithLamports(connection, fees);
-
-  const programId = await BpfLoader.load(connection, from, data);
-
+    (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES + 1);
+  const payer = await newAccountWithLamports(connection, fees);
+  const programId = await BpfLoader.load(connection, payer, data);
   const program_data = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
-  await Loader.invoke_main(
-    connection,
-    from,
-    programId,
-    [{pubkey: from.publicKey, isSigner: true, isDebitable: true}],
-    program_data,
+
+  const transaction = new Transaction().add(
+    Loader.invokeMainInstruction({
+      keys: [{pubkey: payer.publicKey, isSigner: true, isDebitable: true}],
+      programId,
+      data: program_data,
+    }),
   );
+  return await sendAndConfirmTransaction(connection, transaction, payer);
 });
 
 test('load BPF Rust program', async () => {
@@ -57,16 +55,17 @@ test('load BPF Rust program', async () => {
   const [, feeCalculator] = await connection.getRecentBlockhash();
   const fees =
     feeCalculator.lamportsPerSignature *
-    (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES);
-  const from = await newAccountWithLamports(connection, fees);
-  const programId = await BpfLoader.load(connection, from, data);
-
+    (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES + 1);
+  const payer = await newAccountWithLamports(connection, fees);
+  const programId = await BpfLoader.load(connection, payer, data);
   const program_data = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
-  await Loader.invoke_main(
-    connection,
-    from,
-    programId,
-    [{pubkey: from.publicKey, isSigner: true, isDebitable: true}],
-    program_data,
+
+  const transaction = new Transaction().add(
+    Loader.invokeMainInstruction({
+      keys: [{pubkey: payer.publicKey, isSigner: true, isDebitable: true}],
+      programId,
+      data: program_data,
+    }),
   );
+  return await sendAndConfirmTransaction(connection, transaction, payer);
 });

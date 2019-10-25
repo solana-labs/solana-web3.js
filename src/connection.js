@@ -71,7 +71,7 @@ type VoteAccountStatus = {
  * (see https://docs.solana.com/book/v/master/implemented-proposals/ed_overview)
  *
  * @typedef {Object} Inflation
- * @property {number} foundation 
+ * @property {number} foundation
  * @property {number} foundation_term
  * @property {number} initial
  * @property {number} storage
@@ -90,7 +90,7 @@ const GetInflationResult = struct({
 /**
  * EpochSchedule parameters
  * (see https://docs.solana.com/book/v/master/terminology#epoch)
- * 
+ *
  * @typedef {Object} EpochSchedule
  * @property {number} slots_per_epoch
  * @property {number} leader_schedule_slot_offset
