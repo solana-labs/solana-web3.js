@@ -30,13 +30,13 @@ test('load BPF C program', async () => {
     (BpfLoader.getMinNumSignatures(data.length) + NUM_RETRIES + 1);
   const payer = await newAccountWithLamports(connection, fees);
   const programId = await BpfLoader.load(connection, payer, data);
-  const program_data = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
+  const programData = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
 
   const transaction = new Transaction().add(
     Loader.invokeMainInstruction({
       keys: [{pubkey: payer.publicKey, isSigner: true, isDebitable: true}],
       programId,
-      data: program_data,
+      data: programData,
     }),
   );
   return await sendAndConfirmTransaction(connection, transaction, payer);

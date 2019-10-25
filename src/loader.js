@@ -170,24 +170,24 @@ export class Loader {
       ),
     ]);
 
-    var instruction;
+    let instruction;
     if (item instanceof TransactionInstruction) {
       instruction = item;
     } else {
       instruction = new TransactionInstruction(item);
     }
-    const encoded_data = Buffer.alloc(instruction.data.length + 12);
+    const encodedData = Buffer.alloc(instruction.data.length + 12);
     dataLayout.encode(
       {
         instruction: 2, // InvokeMain instruction
         bytes: instruction.data,
       },
-      encoded_data,
+      encodedData,
     );
     return new TransactionInstruction({
       keys: instruction.keys,
       programId: instruction.programId,
-      data: encoded_data,
+      data: encodedData,
     });
   }
 }
