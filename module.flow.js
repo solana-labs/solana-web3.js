@@ -281,6 +281,9 @@ declare module '@solana/web3.js' {
       payer: Account,
       elfBytes: Array<number>,
     ): Promise<PublicKey>;
+    static invokeMainInstruction(
+      item: TransactionInstruction | TransactionInstructionCtorFields,
+    ): TransactionInstruction;
   }
 
   // === src/util/send-and-confirm-transaction.js ===

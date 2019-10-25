@@ -2,7 +2,7 @@
 
 import fs from 'mz/fs';
 
-import {Connection, BpfLoader, Loader} from '../src';
+import {Connection, BpfLoader} from '../src';
 import {mockRpcEnabled} from './__mocks__/node-fetch';
 import {url} from './url';
 import {newAccountWithLamports} from './new-account-with-lamports';
@@ -33,7 +33,7 @@ test('load BPF C program', async () => {
   const programData = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
 
   const transaction = new Transaction().add(
-    Loader.invokeMainInstruction({
+    BpfLoader.invokeMainInstruction({
       keys: [{pubkey: payer.publicKey, isSigner: true, isDebitable: true}],
       programId,
       data: programData,
@@ -61,7 +61,7 @@ test('load BPF Rust program', async () => {
   const programData = Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]);
 
   const transaction = new Transaction().add(
-    Loader.invokeMainInstruction({
+    BpfLoader.invokeMainInstruction({
       keys: [{pubkey: payer.publicKey, isSigner: true, isDebitable: true}],
       programId,
       data: programData,

@@ -1,9 +1,11 @@
 // @flow
 
 import {Account} from './account';
+import type {Connection} from './connection';
 import {PublicKey} from './publickey';
 import {Loader} from './loader';
-import type {Connection} from './connection';
+import {TransactionInstruction} from './transaction';
+import type {TransactionInstructionCtorFields} from './transaction';
 
 /**
  * Factory class for transactions to interact with a program loader
@@ -40,5 +42,13 @@ export class BpfLoader {
   ): Promise<PublicKey> {
     const program = new Account();
     return Loader.load(connection, payer, program, BpfLoader.programId, elf);
+  }
+  /**
+   * Invoke a BPF program's "entrypoint"
+   */
+  static invokeMainInstruction(
+    item: TransactionInstruction | TransactionInstructionCtorFields,
+  ): TransactionInstruction {
+    return Loader.invokeMainInstruction(item);
   }
 }
