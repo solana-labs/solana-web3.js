@@ -16,5 +16,5 @@ export {
 } from './util/send-and-confirm-raw-transaction';
 export {testnetChannelEndpoint} from './util/testnet';
 
-// There are 2^34 lamports in one SOL
-export const SOL_LAMPORTS = 17179869184;
+// There are 1-billion lamports in one SOL
+export const SOL_LAMPORTS = 1000000000;
