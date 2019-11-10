@@ -171,18 +171,18 @@ test('get inflation', async () => {
 });
 
 test('get epoch info', async () => {
-  const connection = new Connection(url);
+  const connection = new Connection(url, 'recent');
 
   mockRpc.push([
     url,
     {
       method: 'getEpochInfo',
-      params: [],
+      params: [{'commitment': 'recent'}],
     },
     {
       error: null,
       result: {
-        epoch: 1,
+        epoch: 0,
         slotIndex: 1,
         slotsInEpoch: 8192,
         absoluteSlot: 1,
@@ -194,7 +194,7 @@ test('get epoch info', async () => {
 
   for (const key of ['epoch', 'slotIndex', 'slotsInEpoch', 'absoluteSlot']) {
     expect(epochInfo).toHaveProperty(key);
-    expect(epochInfo[key]).toBeGreaterThan(0);
+    expect(epochInfo[key]).toBeGreaterThanOrEqual(0);
   }
 });
 
