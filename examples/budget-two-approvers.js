@@ -59,7 +59,7 @@ function confirmTransaction(signature) {
 }
 
 function airDrop(feeCalculator) {
-  const airdrop = 100 + 3 * feeCalculator.targetLamportsPerSignature;
+  const airdrop = 100 + 5 * feeCalculator.targetLamportsPerSignature;
   console.log(`\n== Requesting airdrop of ${airdrop} to ${account1.publicKey}`);
   return connection
     .requestAirdrop(account1.publicKey, airdrop)
