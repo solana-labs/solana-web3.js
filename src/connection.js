@@ -20,16 +20,22 @@ type RpcRequest = (methodName: string, args: Array<any>) => any;
 
 /**
  * The node will query the most recent block which has reached max voter lockout
+ *
+ * @typedef {'max'} MAX_COMMITMENT
  */
 export type MAX_COMMITMENT = 'max';
 
 /**
  * The node will query its most recent block
+ *
+ * @typedef {'recent'} RECENT_COMMITMENT
  */
 export type RECENT_COMMITMENT = 'recent';
 
 /**
  * The level of commitment desired when querying state
+ *
+ * @typedef {MAX_COMMITMENT | RECENT_COMMITMENT} Commitment
  */
 export type Commitment = MAX_COMMITMENT | RECENT_COMMITMENT;
 
@@ -521,7 +527,7 @@ export class Connection {
    * Establish a JSON RPC connection
    *
    * @param endpoint URL to the fullnode JSON RPC endpoint
-   * @param commitment {Commitment} optional default commitment level
+   * @param commitment optional default commitment level
    */
   constructor(endpoint: string, commitment: ?Commitment) {
     let url = urlParse(endpoint);
