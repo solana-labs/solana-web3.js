@@ -177,7 +177,7 @@ test('get epoch info', async () => {
     url,
     {
       method: 'getEpochInfo',
-      params: [{'commitment': 'recent'}],
+      params: [{commitment: 'recent'}],
     },
     {
       error: null,
@@ -795,11 +795,16 @@ test('account change notification', async () => {
   );
 
   await connection.requestAirdrop(owner.publicKey, SOL_LAMPORTS);
-  await Loader.load(connection, owner, programAccount, BpfLoader.programId, [
-    1,
-    2,
-    3,
-  ]);
+  try {
+    await Loader.load(connection, owner, programAccount, BpfLoader.programId, [
+      1,
+      2,
+      3,
+    ]);
+  } catch (err) {
+    await connection.removeAccountChangeListener(subscriptionId);
+    throw err;
+  }
 
   // Wait for mockCallback to receive a call
   let i = 0;
@@ -849,11 +854,16 @@ test('program account change notification', async () => {
   );
 
   await connection.requestAirdrop(owner.publicKey, SOL_LAMPORTS);
-  await Loader.load(connection, owner, programAccount, BpfLoader.programId, [
-    1,
-    2,
-    3,
-  ]);
+  try {
+    await Loader.load(connection, owner, programAccount, BpfLoader.programId, [
+      1,
+      2,
+      3,
+    ]);
+  } catch (err) {
+    await connection.removeProgramAccountChangeListener(subscriptionId);
+    throw err;
+  }
 
   // Wait for mockCallback to receive a call
   let i = 0;
