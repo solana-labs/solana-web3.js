@@ -16,7 +16,7 @@ const approver2 = new solanaWeb3.Account();
 let url;
 url = 'http://localhost:8899';
 //url = 'http://testnet.solana.com:8899';
-const connection = new solanaWeb3.Connection(url);
+const connection = new solanaWeb3.Connection(url, 'recent');
 
 function getTransactionFee() {
   return connection.getRecentBlockhash().then(response => {
