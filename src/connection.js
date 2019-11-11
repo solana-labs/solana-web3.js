@@ -19,25 +19,13 @@ import type {TransactionSignature} from './transaction';
 type RpcRequest = (methodName: string, args: Array<any>) => any;
 
 /**
- * The node will query the most recent block which has reached max voter lockout
- *
- * @typedef {'max'} MAX_COMMITMENT
- */
-export type MAX_COMMITMENT = 'max';
-
-/**
- * The node will query its most recent block
- *
- * @typedef {'recent'} RECENT_COMMITMENT
- */
-export type RECENT_COMMITMENT = 'recent';
-
-/**
  * The level of commitment desired when querying state
+ *   'max':    Query the most recent block which has reached max voter lockout
+ *   'recent': Query the most recent block
  *
- * @typedef {MAX_COMMITMENT | RECENT_COMMITMENT} Commitment
+ * @typedef {'max' | 'recent'} Commitment
  */
-export type Commitment = MAX_COMMITMENT | RECENT_COMMITMENT;
+export type Commitment = 'max' | 'recent';
 
 /**
  * Information describing a cluster node

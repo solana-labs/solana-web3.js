@@ -47,9 +47,7 @@ declare module '@solana/web3.js' {
   /* TODO */
 
   // === src/connection.js ===
-  declare export type MAX_COMMITMENT = 'max';
-  declare export type RECENT_COMMITMENT = 'recent';
-  declare export type Commitment = MAX_COMMITMENT | RECENT_COMMITMENT;
+  declare export type Commitment = 'max' | 'recent';
 
   declare export type AccountInfo = {
     executable: boolean,
