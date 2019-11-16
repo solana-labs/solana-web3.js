@@ -132,4 +132,4 @@ and [npmjs.com](https://www.npmjs.com/package/@solana/web3.js)
 
 Each Github release features a tarball containing API documentation and a
 minified version of the module suitable for direct use in a browser environment
-(&lt;script&gt; tag)
+(&lt;script&gt; tag).
