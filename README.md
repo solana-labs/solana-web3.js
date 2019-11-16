@@ -35,7 +35,7 @@ This is the Solana Javascript API built on the Solana [JSON RPC API](https://doc
 [Latest API Documentation](https://solana-labs.github.io/solana-web3.js/)
 
 
-## Installation
+## Installation.
 
 ### Yarn
 ```
