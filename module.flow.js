@@ -75,7 +75,9 @@ declare module '@solana/web3.js' {
     blockhash: Blockhash,
     previousBlockhash: Blockhash,
     parentSlot: number,
-    transactions: Array<[Transaction, SignatureSuccess | TransactionError | null]>,
+    transactions: Array<
+      [Transaction, SignatureSuccess | TransactionError | null],
+    >,
   };
 
   declare export type KeyedAccountInfo = {
@@ -94,10 +96,17 @@ declare module '@solana/web3.js' {
     commission: number,
   };
 
+  declare export type SlotInfo = {
+    parent: 'number',
+    slot: 'number',
+    root: 'number',
+  };
+
   declare type AccountChangeCallback = (accountInfo: AccountInfo) => void;
   declare type ProgramAccountChangeCallback = (
     keyedAccountInfo: KeyedAccountInfo,
   ) => void;
+  declare type SlotChangeCallback = (slotInfo: SlotInfo) => void;
 
   declare export type SignatureSuccess = {|
     Ok: null,
@@ -189,6 +198,7 @@ declare module '@solana/web3.js' {
       programId: PublicKey,
       callback: ProgramAccountChangeCallback,
     ): number;
+    onSlotChange(callback: SlotChangeCallback): number;
     removeProgramAccountChangeListener(id: number): Promise<void>;
     validatorExit(): Promise<boolean>;
   }
