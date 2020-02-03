@@ -1,7 +1,6 @@
 // @flow
 
 import * as BufferLayout from 'buffer-layout';
-import hasha from 'hasha';
 
 import {encodeData} from './instruction';
 import type {InstructionType} from './instruction';
@@ -11,7 +10,6 @@ import {SystemProgram} from './system-program';
 import {
   SYSVAR_CLOCK_PUBKEY,
   SYSVAR_RENT_PUBKEY,
-  SYSVAR_REWARDS_PUBKEY,
   SYSVAR_STAKE_HISTORY_PUBKEY,
 } from './sysvar';
 import {Transaction, TransactionInstruction} from './transaction';
@@ -123,26 +121,22 @@ export const StakeInstructionLayout = Object.freeze({
     index: 2,
     layout: BufferLayout.struct([BufferLayout.u32('instruction')]),
   },
-  RedeemVoteCredits: {
-    index: 3,
-    layout: BufferLayout.struct([BufferLayout.u32('instruction')]),
-  },
   Split: {
-    index: 4,
+    index: 3,
     layout: BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.ns64('lamports'),
     ]),
   },
   Withdraw: {
-    index: 5,
+    index: 4,
     layout: BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.ns64('lamports'),
     ]),
   },
   Deactivate: {
-    index: 6,
+    index: 5,
     layout: BufferLayout.struct([BufferLayout.u32('instruction')]),
   },
 });
@@ -167,26 +161,6 @@ export const StakeAuthorizationLayout = Object.freeze({
   },
 });
 
-class RewardsPoolPublicKey extends PublicKey {
-  static get rewardsPoolBaseId(): PublicKey {
-    return new PublicKey('StakeRewards1111111111111111111111111111111');
-  }
-
-  /**
-   * Generate Derive a public key from another key, a seed, and a programId.
-   */
-  static randomId(): PublicKey {
-    const randomInt = Math.floor(Math.random() * (256 - 1));
-    let pubkey = this.rewardsPoolBaseId;
-    for (let i = 0; i < randomInt; i++) {
-      const buffer = pubkey.toBuffer();
-      const hash = hasha(buffer, {algorithm: 'sha256'});
-      return new PublicKey('0x' + hash);
-    }
-    return pubkey;
-  }
-}
-
 /**
  * Factory class for transactions to interact with the Stake program
  */
@@ -202,7 +176,7 @@ export class StakeProgram {
    * Max space of a Stake account
    */
   static get space(): number {
-    return 2008;
+    return 4008;
   }
 
   /**
@@ -301,6 +275,11 @@ export class StakeProgram {
         {pubkey: stakeAccount, isSigner: false, isWritable: true},
         {pubkey: votePubkey, isSigner: false, isWritable: false},
         {pubkey: SYSVAR_CLOCK_PUBKEY, isSigner: false, isWritable: false},
+        {
+          pubkey: SYSVAR_STAKE_HISTORY_PUBKEY,
+          isSigner: false,
+          isWritable: false,
+        },
         {pubkey: STAKE_CONFIG_ID, isSigner: false, isWritable: false},
         {pubkey: authorizedPubkey, isSigner: true, isWritable: false},
       ],
@@ -330,38 +309,6 @@ export class StakeProgram {
         {pubkey: stakeAccount, isSigner: false, isWritable: true},
         {pubkey: SYSVAR_CLOCK_PUBKEY, isSigner: false, isWritable: true},
         {pubkey: authorizedPubkey, isSigner: true, isWritable: false},
-      ],
-      programId: this.programId,
-      data,
-    });
-  }
-
-  /**
-   * Generate a Transaction that authorizes a new PublicKey as Staker
-   * or Withdrawer on the Stake account.
-   */
-  static redeemVoteCredits(
-    stakeAccount: PublicKey,
-    votePubkey: PublicKey,
-  ): Transaction {
-    const type = StakeInstructionLayout.RedeemVoteCredits;
-    const data = encodeData(type);
-
-    return new Transaction().add({
-      keys: [
-        {pubkey: stakeAccount, isSigner: false, isWritable: true},
-        {pubkey: votePubkey, isSigner: false, isWritable: true},
-        {
-          pubkey: RewardsPoolPublicKey.randomId(),
-          isSigner: false,
-          isWritable: true,
-        },
-        {pubkey: SYSVAR_REWARDS_PUBKEY, isSigner: false, isWritable: false},
-        {
-          pubkey: SYSVAR_STAKE_HISTORY_PUBKEY,
-          isSigner: false,
-          isWritable: false,
-        },
       ],
       programId: this.programId,
       data,
