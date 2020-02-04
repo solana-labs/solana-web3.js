@@ -7,13 +7,9 @@ import {testnetDefaultChannel} from '../../package.json';
  */
 const endpoint = {
   http: {
-    edge: 'http://edge.testnet.solana.com:8899',
-    beta: 'http://beta.testnet.solana.com:8899',
     stable: 'http://testnet.solana.com:8899',
   },
   https: {
-    edge: 'https://edge.testnet.solana.com:8443',
-    beta: 'https://beta.testnet.solana.com:8443',
     stable: 'https://testnet.solana.com:8443',
   },
 };
