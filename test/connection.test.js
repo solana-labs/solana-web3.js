@@ -479,6 +479,19 @@ test('confirm transaction - error', async () => {
   await expect(
     connection.getSignatureStatus(badTransactionSignature),
   ).rejects.toThrow(errorMessage);
+
+  mockRpc.push([
+    url,
+    {
+      method: 'getSignatureConfirmation',
+      params: [badTransactionSignature],
+    },
+    errorResponse,
+  ]);
+
+  await expect(
+    connection.getSignatureConfirmation(badTransactionSignature),
+  ).rejects.toThrow(errorMessage);
 });
 
 test('get transaction count', async () => {
@@ -995,6 +1008,9 @@ test('transaction', async () => {
     },
   ]);
 
+  // Wait for one confirmation
+  await sleep(500);
+
   let i = 0;
   for (;;) {
     if (await connection.confirmTransaction(signature)) {
@@ -1023,6 +1039,34 @@ test('transaction', async () => {
   await expect(connection.getSignatureStatus(signature)).resolves.toEqual({
     Ok: null,
   });
+
+  mockRpc.push([
+    url,
+    {
+      method: 'getSignatureConfirmation',
+      params: [
+        '3WE5w4B7v59x6qjyC4FbG2FEKYKQfvsJwqSxNVmtMjT8TQ31hsZieDHcSgqzxiAoTL56n2w5TncjqEKjLhtF4Vk',
+        {commitment: 'recent'},
+      ],
+    },
+    {
+      error: null,
+      result: {
+        status: {Ok: null},
+        confirmations: 1,
+      },
+    },
+  ]);
+  const confirmation = await connection.getSignatureConfirmation(
+    signature,
+    'recent',
+  );
+  if (confirmation) {
+    expect(confirmation.confirmations).toBeGreaterThan(0);
+    expect(confirmation.status).toEqual({Ok: null});
+  } else {
+    expect(confirmation).not.toBeNull();
+  }
 
   mockRpc.push([
     url,

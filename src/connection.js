@@ -221,7 +221,7 @@ type ConfirmedBlock = {
       fee: number,
       preBalances: Array<number>,
       postBalances: Array<number>,
-      status?: SignatureStatusResult,
+      status?: SignatureStatus,
     },
   }>,
   rewards: Array<{
@@ -456,6 +456,19 @@ const GetSignatureStatusRpcResult = jsonRpcResult(
 );
 
 /**
+ * Expected JSON RPC response for the "getSignatureConfirmation" message
+ */
+const GetSignatureConfirmationRpcResult = jsonRpcResult(
+  struct.union([
+    'null',
+    struct({
+      confirmations: 'number',
+      status: SignatureStatusResult,
+    }),
+  ]),
+);
+
+/**
  * Expected JSON RPC response for the "getTransactionCount" message
  */
 const GetTransactionCountRpcResult = jsonRpcResult('number');
@@ -630,7 +643,7 @@ type SlotSubscriptionInfo = {
  * Callback function for signature notifications
  */
 export type SignatureResultCallback = (
-  signatureResult: SignatureStatusResult,
+  signatureStatus: SignatureStatus,
 ) => void;
 
 /**
@@ -659,6 +672,23 @@ export type SignatureSuccess = {|
 export type TransactionError = {|
   Err: Object,
 |};
+
+/**
+ * Signature status
+ *
+ * @typedef {Object} SignatureStatus
+ */
+export type SignatureStatus = SignatureSuccess | TransactionError;
+
+/**
+ * Signature confirmation info
+ *
+ * @typedef {Object} SignatureConfirmation
+ */
+export type SignatureConfirmation = {
+  confirmations: number,
+  status: SignatureStatus,
+};
 
 /**
  * A connection to a fullnode JSON RPC endpoint
@@ -939,12 +969,29 @@ export class Connection {
   }
 
   /**
+   * Fetch the current status and confirmation count of a signature
+   */
+  async getSignatureConfirmation(
+    signature: TransactionSignature,
+    commitment: ?Commitment,
+  ): Promise<SignatureConfirmation | null> {
+    const args = this._argsWithCommitment([signature], commitment);
+    const unsafeRes = await this._rpcRequest('getSignatureConfirmation', args);
+    const res = GetSignatureConfirmationRpcResult(unsafeRes);
+    if (res.error) {
+      throw new Error(res.error.message);
+    }
+    assert(typeof res.result !== 'undefined');
+    return res.result;
+  }
+
+  /**
    * Fetch the current status of a signature
    */
   async getSignatureStatus(
     signature: TransactionSignature,
     commitment: ?Commitment,
-  ): Promise<SignatureSuccess | TransactionError | null> {
+  ): Promise<SignatureStatus | null> {
     const args = this._argsWithCommitment([signature], commitment);
     const unsafeRes = await this._rpcRequest('getSignatureStatus', args);
     const res = GetSignatureStatusRpcResult(unsafeRes);

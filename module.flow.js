@@ -59,9 +59,12 @@ declare module '@solana/web3.js' {
 
   declare export type Commitment = 'max' | 'recent';
 
-  declare export type SignatureStatusResult =
-    | SignatureSuccess
-    | TransactionError;
+  declare export type SignatureStatus = SignatureSuccess | TransactionError;
+
+  declare export type SignatureConfirmation = {
+    status: SignatureSuccess,
+    confirmations: number,
+  };
 
   declare export type BlockhashAndFeeCalculator = {
     blockhash: Blockhash,
@@ -98,7 +101,7 @@ declare module '@solana/web3.js' {
         fee: number,
         preBalances: Array<number>,
         postBalances: Array<number>,
-        status: ?SignatureStatusResult,
+        status: ?SignatureStatus,
       },
     }>,
   };
@@ -131,7 +134,7 @@ declare module '@solana/web3.js' {
   ) => void;
   declare type SlotChangeCallback = (slotInfo: SlotInfo) => void;
   declare type SignatureResultCallback = (
-    signatureResult: SignatureStatusResult,
+    signatureStatus: SignatureStatus,
   ) => void;
 
   declare export type SignatureSuccess = {|
@@ -198,7 +201,11 @@ declare module '@solana/web3.js' {
     getSignatureStatus(
       signature: TransactionSignature,
       commitment: ?Commitment,
-    ): Promise<SignatureSuccess | TransactionError | null>;
+    ): Promise<SignatureStatus | null>;
+    getSignatureConfirmation(
+      signature: TransactionSignature,
+      commitment: ?Commitment,
+    ): Promise<SignatureConfirmation | null>;
     getTransactionCount(commitment: ?Commitment): Promise<number>;
     getTotalSupply(commitment: ?Commitment): Promise<number>;
     getVersion(): Promise<Version>;
