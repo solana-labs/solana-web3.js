@@ -25,7 +25,7 @@ const errorResponse = {
   result: undefined,
 };
 
-test('get account info - error', () => {
+test('get account info - not found', async () => {
   const account = new Account();
   const connection = new Connection(url);
 
@@ -35,12 +35,18 @@ test('get account info - error', () => {
       method: 'getAccountInfo',
       params: [account.publicKey.toBase58()],
     },
-    errorResponse,
+    {
+      error: null,
+      result: {
+        context: {
+          slot: 11,
+        },
+        value: null,
+      },
+    },
   ]);
 
-  return expect(connection.getAccountInfo(account.publicKey)).rejects.toThrow(
-    errorMessage,
-  );
+  expect(await connection.getAccountInfo(account.publicKey)).toBeNull();
 });
 
 test('get program accounts', async () => {
@@ -820,6 +826,10 @@ test('request airdrop', async () => {
   ]);
 
   const accountInfo = await connection.getAccountInfo(account.publicKey);
+  if (accountInfo === null) {
+    expect(accountInfo).not.toBeNull();
+    return;
+  }
   expect(accountInfo.lamports).toBe(minimumAmount + 42);
   expect(accountInfo.data).toHaveLength(0);
   expect(accountInfo.owner).toEqual(SystemProgram.programId);
@@ -982,10 +992,7 @@ test('transaction failure', async () => {
       },
     },
   ]);
-  await connection.requestAirdrop(
-    account.publicKey,
-    minimumAmount + 100010,
-  );
+  await connection.requestAirdrop(account.publicKey, minimumAmount + 100010);
   expect(await connection.getBalance(account.publicKey)).toBe(
     minimumAmount + 100010,
   );
@@ -1034,7 +1041,7 @@ test('transaction failure', async () => {
   await sleep(1000);
   expect(await connection.confirmTransaction(signature)).toEqual(false);
 
-  const expectedErr = { InstructionError: [ 0, 'AccountBorrowFailed' ] };
+  const expectedErr = {InstructionError: [0, 'AccountBorrowFailed']};
   mockRpc.push([
     url,
     {
