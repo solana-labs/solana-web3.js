@@ -30,7 +30,7 @@
 
 # Solana JavaScript API
 
-This is the Solana Javascript API built on the Solana [JSON RPC API](https://docs.solana.com/apps/jsonrpc-api)
+This is the Solana JavaScript API built on the Solana [JSON RPC API](https://docs.solana.com/apps/jsonrpc-api)
 
 [Latest API Documentation](https://solana-labs.github.io/solana-web3.js/)
 
@@ -56,9 +56,9 @@ $ npm install --save @solana/web3.js
 The Solana BPF SDK is located in the `bpf-sdk/` subdirectory if you installed
 solana-web3.js from npmjs.com.
 
-From a git clone, run `npm run bpf-sdk:install` to fetch the latest BPF SDK.
+From a Git clone, run `npm run bpf-sdk:install` to fetch the latest BPF SDK.
 
-Additionally Rust must be installed to build Rust BPF programs such as
+Additionally, Rust must be installed to build Rust BPF programs such as
 `examples/bpf-rust-noop/`.  See https://www.rust-lang.org/install.html for
 installation details.
 
