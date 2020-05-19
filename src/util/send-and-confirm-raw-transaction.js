@@ -6,6 +6,8 @@ import {sleep} from './sleep';
 import type {TransactionSignature} from '../transaction';
 import {DEFAULT_TICKS_PER_SLOT, NUM_TICKS_PER_SECOND} from '../timing';
 
+const NUM_STATUS_RETRIES = 10;
+
 /**
  * Sign, send and confirm a raw transaction
  */
@@ -20,15 +22,17 @@ export async function sendAndConfirmRawTransaction(
 
   // Wait up to a couple slots for a confirmation
   let status = null;
-  let statusRetries = 6;
+  let statusRetries = NUM_STATUS_RETRIES;
   for (;;) {
     status = (await connection.getSignatureStatus(signature)).value;
     if (status) {
-      if (statusCommitment === 'max' && status.confirmations === null) {
+      statusRetries = NUM_STATUS_RETRIES;
+      if (
+        status.confirmations === null ||
+        (status.confirmations > 0 &&
+          (statusCommitment === 'recent' || statusCommitment === 'single'))
+      )
         break;
-      } else if (statusCommitment === 'recent') {
-        break;
-      }
     }
 
     // Sleep for approximately half a slot

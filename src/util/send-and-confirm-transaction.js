@@ -65,12 +65,13 @@ async function _sendAndConfirmTransaction(
     for (;;) {
       status = (await connection.getSignatureStatus(signature)).value;
       if (status) {
-        // Recieved a status, if not an error wait for confirmation
+        // Received a status, if not an error wait for confirmation
         statusRetries = NUM_STATUS_RETRIES;
         if (
           status.err ||
           status.confirmations === null ||
-          (statusCommitment === 'recent' && status.confirmations >= 1)
+          ((statusCommitment === 'recent' || statusCommitment === 'single') &&
+            status.confirmations >= 1)
         ) {
           break;
         }
