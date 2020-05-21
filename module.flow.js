@@ -267,11 +267,13 @@ declare module '@solana/web3.js' {
     onAccountChange(
       publickey: PublicKey,
       callback: AccountChangeCallback,
+      commitment: ?Commitment,
     ): number;
     removeAccountChangeListener(id: number): Promise<void>;
     onProgramAccountChange(
       programId: PublicKey,
       callback: ProgramAccountChangeCallback,
+      commitment: ?Commitment,
     ): number;
     removeProgramAccountChangeListener(id: number): Promise<void>;
     onSlotChange(callback: SlotChangeCallback): number;
@@ -279,6 +281,7 @@ declare module '@solana/web3.js' {
     onSignature(
       signature: TransactionSignature,
       callback: SignatureResultCallback,
+      commitment: ?Commitment,
     ): number;
     removeSignatureListener(id: number): Promise<void>;
     onRootChange(callback: RootChangeCallback): number;
