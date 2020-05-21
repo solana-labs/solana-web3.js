@@ -199,6 +199,7 @@ declare module '@solana/web3.js' {
     ): Promise<RpcResponseAndContext<number>>;
     getBalance(publicKey: PublicKey, commitment?: Commitment): Promise<number>;
     getBlockTime(slot: number): Promise<number | null>;
+    getMinimumLedgerSlot(): Promise<number>;
     getClusterNodes(): Promise<Array<ContactInfo>>;
     getConfirmedBlock(slot: number): Promise<ConfirmedBlock>;
     getConfirmedTransaction(
@@ -229,7 +230,7 @@ declare module '@solana/web3.js' {
     getVersion(): Promise<Version>;
     getInflation(commitment?: Commitment): Promise<Inflation>;
     getEpochSchedule(): Promise<EpochSchedule>;
-    getEpochInfo(): Promise<EpochInfo>;
+    getEpochInfo(commitment?: Commitment): Promise<EpochInfo>;
     getRecentBlockhashAndContext(
       commitment?: Commitment,
     ): Promise<RpcResponseAndContext<BlockhashAndFeeCalculator>>;
