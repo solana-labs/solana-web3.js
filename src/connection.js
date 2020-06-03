@@ -1696,7 +1696,7 @@ export class Connection {
         let attempts = 0;
         const startTime = Date.now();
         for (;;) {
-          const {blockhash} = await this.getRecentBlockhash();
+          const {blockhash} = await this.getRecentBlockhash('max');
 
           if (this._blockhashInfo.recentBlockhash != blockhash) {
             this._blockhashInfo = {
