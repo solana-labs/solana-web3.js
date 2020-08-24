@@ -513,18 +513,19 @@ function createRpcRequest(url): RpcRequest {
       for (;;) {
         res = await fetch(url, options);
         if (
-          res.status !== 429 /* Too many requests */ ||
-          too_many_requests_retries === 0
+          res.status !== 429 /* Too many requests */
         ) {
           break;
         }
-
+        too_many_requests_retries -= 1;
+        if (too_many_requests_retries === 0) {
+          break;
+        }
         console.log(
-          `Server responded with ${res.status} ${res.statusText}.  Retrying after brief delay...`,
+          `Server responded with ${res.status} ${res.statusText}.  Retrying after ${waitTime}ms delay...`,
         );
         await sleep(waitTime);
         waitTime *= 2;
-        too_many_requests_retries -= 1;
       }
 
       const text = await res.text();
