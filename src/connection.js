@@ -509,7 +509,7 @@ function createRpcRequest(url): RpcRequest {
     try {
       let too_many_requests_retries = 5;
       let res = {};
-
+      let waitTime = 500;
       for (;;) {
         res = await fetch(url, options);
         if (
@@ -522,7 +522,8 @@ function createRpcRequest(url): RpcRequest {
         console.log(
           `Server responded with ${res.status} ${res.statusText}.  Retrying after brief delay...`,
         );
-        await sleep(500);
+        await sleep(waitTime);
+        waitTime *= 2;
         too_many_requests_retries -= 1;
       }
 
