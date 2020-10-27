@@ -367,9 +367,34 @@ const SimulatedTransactionResponseValidator = jsonRpcResultAndContext(
   }),
 );
 
-type InnerInstruction = {
+type ParsedInnerInstruction = {
   index: number,
-  instructions: (ParsedInstruction | PartiallyDecodedInstruction)[]
+  instructions: ParsedInstruction[]
+};
+
+/**
+ * Metadata for a parsed confirmed transaction on the ledger
+ *
+ * @typedef {Object} ParsedConfirmedTransactionMeta
+ * @property {number} fee The fee charged for processing the transaction
+ * @property {Array<ParsedInnerInstruction>} An array of cross program invoked parsed instructions
+ * @property {Array<number>} preBalances The balances of the transaction accounts before processing
+ * @property {Array<number>} postBalances The balances of the transaction accounts after processing
+ * @property {Array<string>} logMessages An array of program log messages emitted during a transaction
+ * @property {object|null} err The error result of transaction processing
+ */
+type ParsedConfirmedTransactionMeta = {
+  fee: number,
+  innerInstructions?: ParsedInnerInstruction[],
+  preBalances: Array<number>,
+  postBalances: Array<number>,
+  logMessages?: Array<string>,
+  err: TransactionError | null,
+};
+
+type PartiallyDecodedInnerInstruction = {
+  index: number,
+  instructions: PartiallyDecodedInstruction[]
 };
 
 /**
@@ -377,7 +402,7 @@ type InnerInstruction = {
  *
  * @typedef {Object} ConfirmedTransactionMeta
  * @property {number} fee The fee charged for processing the transaction
- * @property {Array<InnerInstruction>} An array of cross program invoked instructions
+ * @property {Array<PartiallyDecodedInnerInstruction>} An array of cross program invoked instructions
  * @property {Array<number>} preBalances The balances of the transaction accounts before processing
  * @property {Array<number>} postBalances The balances of the transaction accounts after processing
  * @property {Array<string>} logMessages An array of program log messages emitted during a transaction
@@ -385,7 +410,7 @@ type InnerInstruction = {
  */
 type ConfirmedTransactionMeta = {
   fee: number,
-  innerInstructions?: InnerInstruction[],
+  innerInstructions?: PartiallyDecodedInnerInstruction[],
   preBalances: Array<number>,
   postBalances: Array<number>,
   logMessages?: Array<string>,
@@ -480,12 +505,12 @@ type ParsedTransaction = {
  * @typedef {Object} ParsedConfirmedTransaction
  * @property {number} slot The slot during which the transaction was processed
  * @property {ParsedTransaction} transaction The details of the transaction
- * @property {ConfirmedTransactionMeta|null} meta Metadata produced from the transaction
+ * @property {ParsedConfirmedTransactionMeta|null} meta Metadata produced from the transaction
  */
 type ParsedConfirmedTransaction = {
   slot: number,
   transaction: ParsedTransaction,
-  meta: ConfirmedTransactionMeta | null,
+  meta: ParsedConfirmedTransactionMeta | null,
 };
 
 /**
