@@ -1133,6 +1133,18 @@ const ConfirmedTransactionMetaResult = struct.union([
   struct.pick({
     err: TransactionErrorResult,
     fee: 'number',
+    innerInstructions: struct.array([
+      struct({
+        index: 'number',
+        instructions: struct.array([
+          struct({
+            accounts: struct.array(['number']),
+            data: 'string',
+            programIdIndex: 'number',
+          }),
+        ])}
+      )
+    ]),
     preBalances: struct.array(['number']),
     postBalances: struct.array(['number']),
     logMessages: struct.union([struct.array(['string']), 'null', 'undefined']),
