@@ -1137,13 +1137,20 @@ const ConfirmedTransactionMetaResult = struct.union([
       struct({
         index: 'number',
         instructions: struct.array([
-          struct({
-            accounts: struct.array(['number']),
-            data: 'string',
-            programIdIndex: 'number',
-          }),
-        ])}
-      )
+          struct.union([
+            struct({
+              accounts: struct.array(['string']),
+              data: 'string',
+              programId: 'string',
+            }),
+            struct({
+              parsed: 'any',
+              program: 'string',
+              programId: 'string',
+            }),
+          ]),
+        ]),
+      })
     ]),
     preBalances: struct.array(['number']),
     postBalances: struct.array(['number']),
