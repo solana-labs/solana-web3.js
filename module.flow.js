@@ -151,9 +151,15 @@ declare module '@solana/web3.js' {
     err: TransactionError | string | null,
     logs: Array<string> | null,
   };
+  
+  declare export type InnerInstruction = {
+    index: number,
+    instructions: (ParsedInstruction | PartiallyDecodedInstruction)[]
+  };
 
   declare export type ConfirmedTransactionMeta = {
     fee: number,
+    innerInstructions?: InnerInstruction[],
     preBalances: Array<number>,
     postBalances: Array<number>,
     logMessages?: Array<string>,

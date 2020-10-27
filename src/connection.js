@@ -367,11 +367,17 @@ const SimulatedTransactionResponseValidator = jsonRpcResultAndContext(
   }),
 );
 
+type InnerInstruction = {
+  index: number,
+  instructions: (ParsedInstruction | PartiallyDecodedInstruction)[]
+};
+
 /**
  * Metadata for a confirmed transaction on the ledger
  *
  * @typedef {Object} ConfirmedTransactionMeta
  * @property {number} fee The fee charged for processing the transaction
+ * @property {Array<InnerInstruction>} An array of cross program invoked instructions
  * @property {Array<number>} preBalances The balances of the transaction accounts before processing
  * @property {Array<number>} postBalances The balances of the transaction accounts after processing
  * @property {Array<string>} logMessages An array of program log messages emitted during a transaction
@@ -379,6 +385,7 @@ const SimulatedTransactionResponseValidator = jsonRpcResultAndContext(
  */
 type ConfirmedTransactionMeta = {
   fee: number,
+  innerInstructions?: InnerInstruction[],
   preBalances: Array<number>,
   postBalances: Array<number>,
   logMessages?: Array<string>,
