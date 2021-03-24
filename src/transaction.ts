@@ -274,7 +274,9 @@ export class Transaction {
       const checkSigner = x.isSigner === y.isSigner ? 0 : x.isSigner ? -1 : 1;
       const checkWritable =
         x.isWritable === y.isWritable ? 0 : x.isWritable ? -1 : 1;
-      return checkSigner || checkWritable;
+        const checkBn = x.pubkey._bn ===  y.pubkey._bn ? 0 : x.pubkey._bn < y.pubkey._bn ? -1 :  1
+      
+      return checkSigner || checkWritable || checkBn
     });
 
     // Cull duplicate account metas
