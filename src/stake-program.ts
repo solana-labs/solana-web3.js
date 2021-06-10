@@ -139,6 +139,8 @@ export type SplitStakeParams = {
   authorizedPubkey: PublicKey;
   splitStakePubkey: PublicKey;
   lamports: number;
+  basePubkey: PublicKey,
+  seed: string
 };
 
 /**
@@ -313,6 +315,7 @@ export class StakeInstruction {
       instruction.data,
     );
 
+    // @ts-ignore
     return {
       stakePubkey: instruction.keys[0].pubkey,
       splitStakePubkey: instruction.keys[1].pubkey,
@@ -674,22 +677,28 @@ export class StakeProgram {
    * Generate a Transaction that splits Stake tokens into another stake account
    */
   static split(params: SplitStakeParams): Transaction {
-    const {stakePubkey, authorizedPubkey, splitStakePubkey, lamports} = params;
-
+    const {
+      stakePubkey,
+      authorizedPubkey,
+      splitStakePubkey,
+      lamports,
+      seed,
+      basePubkey,
+    } = params;
     const transaction = new Transaction();
-    transaction.add(
-      SystemProgram.createAccount({
-        fromPubkey: authorizedPubkey,
-        newAccountPubkey: splitStakePubkey,
-        lamports: 0,
-        space: this.space,
-        programId: this.programId,
-      }),
-    );
+    transaction.add(SystemProgram.createAccountWithSeed({
+      fromPubkey: authorizedPubkey,
+      newAccountPubkey: splitStakePubkey,
+      lamports: 0,
+      seed: seed,
+      space: this.space,
+      programId: this.programId,
+      basePubkey: basePubkey
+    }));
     const type = STAKE_INSTRUCTION_LAYOUTS.Split;
     const data = encodeData(type, {lamports});
 
-    return transaction.add({
+    return transaction.add( new TransactionInstruction({
       keys: [
         {pubkey: stakePubkey, isSigner: false, isWritable: true},
         {pubkey: splitStakePubkey, isSigner: false, isWritable: true},
@@ -697,7 +706,7 @@ export class StakeProgram {
       ],
       programId: this.programId,
       data,
-    });
+    }));
   }
 
   /**
