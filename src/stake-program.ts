@@ -676,7 +676,7 @@ export class StakeProgram {
   /**
    * Generate a Transaction that splits Stake tokens into another stake account
    */
-  static split(params: SplitStakeParams): Transaction {
+  static splitWithSeed(params: SplitStakeParams): Transaction {
     const {
       stakePubkey,
       authorizedPubkey,
@@ -707,6 +707,37 @@ export class StakeProgram {
       programId: this.programId,
       data,
     }));
+  }
+
+
+  /**
+   * Generate a Transaction that splits Stake tokens into another stake account
+   */
+  static split(params: SplitStakeParams): Transaction {
+    const {stakePubkey, authorizedPubkey, splitStakePubkey, lamports} = params;
+
+    const transaction = new Transaction();
+    transaction.add(
+        SystemProgram.createAccount({
+          fromPubkey: authorizedPubkey,
+          newAccountPubkey: splitStakePubkey,
+          lamports: 0,
+          space: this.space,
+          programId: this.programId,
+        }),
+    );
+    const type = STAKE_INSTRUCTION_LAYOUTS.Split;
+    const data = encodeData(type, {lamports});
+
+    return transaction.add({
+      keys: [
+        {pubkey: stakePubkey, isSigner: false, isWritable: true},
+        {pubkey: splitStakePubkey, isSigner: false, isWritable: true},
+        {pubkey: authorizedPubkey, isSigner: true, isWritable: false},
+      ],
+      programId: this.programId,
+      data,
+    });
   }
 
   /**
