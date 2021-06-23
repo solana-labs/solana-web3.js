@@ -20,6 +20,7 @@ import {
   tuple,
   unknown,
   any,
+  Infer,
 } from 'superstruct';
 import type {Struct} from 'superstruct';
 import {Client as RpcWebSocketClient} from 'rpc-websockets';
@@ -38,10 +39,18 @@ import {sleep} from './util/sleep';
 import {promiseTimeout} from './util/promise-timeout';
 import {toBuffer} from './util/to-buffer';
 import {makeWebsocketUrl} from './util/url';
+import {RPCError, SendTransactionRPCError} from './connection-error';
 import type {Blockhash} from './blockhash';
 import type {FeeCalculator} from './fee-calculator';
 import type {TransactionSignature} from './transaction';
 import type {CompiledInstruction} from './message';
+
+const errorWithMessage = (msg: string) => (e: any) => {
+  if (e instanceof RPCError) {
+    throw e;
+  }
+  return new Error(`${msg}: ${e instanceof Error ? e.message : e}`);
+};
 
 const PublicKeyFromString = coerce(
   instance(PublicKey),
@@ -137,6 +146,17 @@ export type RpcResponseAndContext<T> = {
   value: T;
 };
 
+const rpcError = pick({
+  code: unknown(),
+  message: string(),
+  data: optional(any()),
+});
+
+/**
+ * Raw RPC error type
+ */
+export type RawRPCError = Infer<typeof rpcError>;
+
 /**
  * @internal
  */
@@ -150,11 +170,7 @@ function createRpcResult<T, U>(result: Struct<T, U>) {
     pick({
       jsonrpc: literal('2.0'),
       id: string(),
-      error: pick({
-        code: unknown(),
-        message: string(),
-        data: optional(any()),
-      }),
+      error: rpcError,
     }),
   ]);
 }
@@ -833,11 +849,6 @@ const GetEpochScheduleRpcResult = jsonRpcResult(GetEpochScheduleResult);
  * Expected JSON RPC response for the "getLeaderSchedule" message
  */
 const GetLeaderScheduleRpcResult = jsonRpcResult(GetLeaderScheduleResult);
-
-/**
- * Expected JSON RPC response for the "minimumLedgerSlot" and "getFirstAvailableBlock" messages
- */
-const SlotRpcResult = jsonRpcResult(number());
 
 /**
  * Supply
@@ -2061,6 +2072,34 @@ export class Connection {
     );
   }
 
+  private async _safeRpcRequest<T>(
+    methodName: string,
+    args: any[],
+    value: Struct<T, null>,
+    prefix?: () => string,
+  ): Promise<T> {
+    const unsafeRes = await this._rpcRequest(methodName, args);
+    const res = create(unsafeRes, jsonRpcResult(value));
+    if ('error' in res) {
+      throw new RPCError(methodName, res.error, prefix?.());
+    }
+    return (res as any).result;
+  }
+
+  private async _safeRpcRequestAndContext<T, S>(
+    methodName: string,
+    args: any[],
+    value: Struct<T, S>,
+    prefix?: () => string,
+  ): Promise<RpcResponseAndContext<T>> {
+    const unsafeRes = await this._rpcRequest(methodName, args);
+    const res = create(unsafeRes, jsonRpcResultAndContext(value));
+    if ('error' in res) {
+      throw new RPCError(methodName, res.error, prefix?.());
+    }
+    return (res as any).result;
+  }
+
   /**
    * The default commitment used for requests
    */
@@ -2076,17 +2115,12 @@ export class Connection {
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<number>> {
     const args = this._buildArgs([publicKey.toBase58()], commitment);
-    const unsafeRes = await this._rpcRequest('getBalance', args);
-    const res = create(unsafeRes, jsonRpcResultAndContext(number()));
-    if ('error' in res) {
-      throw new Error(
-        'failed to get balance for ' +
-          publicKey.toBase58() +
-          ': ' +
-          res.error.message,
-      );
-    }
-    return res.result;
+    return await this._safeRpcRequestAndContext(
+      'getBalance',
+      args,
+      number(),
+      () => `failed to get balance for account ${publicKey.toBase58()}`,
+    );
   }
 
   /**
@@ -2099,6 +2133,9 @@ export class Connection {
     return await this.getBalanceAndContext(publicKey, commitment)
       .then(x => x.value)
       .catch(e => {
+        if (e instanceof RPCError) {
+          throw e;
+        }
         throw new Error(
           'failed to get balance of account ' + publicKey.toBase58() + ': ' + e,
         );
@@ -2109,14 +2146,12 @@ export class Connection {
    * Fetch the estimated production time of a block
    */
   async getBlockTime(slot: number): Promise<number | null> {
-    const unsafeRes = await this._rpcRequest('getBlockTime', [slot]);
-    const res = create(unsafeRes, jsonRpcResult(nullable(number())));
-    if ('error' in res) {
-      throw new Error(
-        'failed to get block time for slot ' + slot + ': ' + res.error.message,
-      );
-    }
-    return res.result;
+    return await this._safeRpcRequest(
+      'getBlockTime',
+      [slot],
+      nullable(number()),
+      () => `failed to get block time for slot ${slot}`,
+    );
   }
 
   /**
@@ -2124,28 +2159,24 @@ export class Connection {
    * This value may increase over time if the node is configured to purge older ledger data
    */
   async getMinimumLedgerSlot(): Promise<number> {
-    const unsafeRes = await this._rpcRequest('minimumLedgerSlot', []);
-    const res = create(unsafeRes, jsonRpcResult(number()));
-    if ('error' in res) {
-      throw new Error(
-        'failed to get minimum ledger slot: ' + res.error.message,
-      );
-    }
-    return res.result;
+    return await this._safeRpcRequest(
+      'minimumLedgerSlot',
+      [],
+      number(),
+      () => 'failed to get minimum ledger slot',
+    );
   }
 
   /**
    * Fetch the slot of the lowest confirmed block that has not been purged from the ledger
    */
   async getFirstAvailableBlock(): Promise<number> {
-    const unsafeRes = await this._rpcRequest('getFirstAvailableBlock', []);
-    const res = create(unsafeRes, SlotRpcResult);
-    if ('error' in res) {
-      throw new Error(
-        'failed to get first available block: ' + res.error.message,
-      );
-    }
-    return res.result;
+    return await this._safeRpcRequest(
+      'getFirstAvailableBlock',
+      [],
+      number(),
+      () => 'failed to get first available block',
+    );
   }
 
   /**
@@ -2313,20 +2344,12 @@ export class Connection {
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>> {
     const args = this._buildArgs([publicKey.toBase58()], commitment, 'base64');
-    const unsafeRes = await this._rpcRequest('getAccountInfo', args);
-    const res = create(
-      unsafeRes,
-      jsonRpcResultAndContext(nullable(AccountInfoResult)),
+    return await this._safeRpcRequestAndContext(
+      'getAccountInfo',
+      args,
+      nullable(AccountInfoResult),
+      () => `failed to get info about account ${publicKey.toBase58()}`,
     );
-    if ('error' in res) {
-      throw new Error(
-        'failed to get info about account ' +
-          publicKey.toBase58() +
-          ': ' +
-          res.error.message,
-      );
-    }
-    return res.result;
   }
 
   /**
@@ -2343,20 +2366,12 @@ export class Connection {
       commitment,
       'jsonParsed',
     );
-    const unsafeRes = await this._rpcRequest('getAccountInfo', args);
-    const res = create(
-      unsafeRes,
-      jsonRpcResultAndContext(nullable(ParsedAccountInfoResult)),
+    return await this._safeRpcRequestAndContext(
+      'getAccountInfo',
+      args,
+      nullable(ParsedAccountInfoResult),
+      () => `failed to get info about account ${publicKey.toBase58()}`,
     );
-    if ('error' in res) {
-      throw new Error(
-        'failed to get info about account ' +
-          publicKey.toBase58() +
-          ': ' +
-          res.error.message,
-      );
-    }
-    return res.result;
   }
 
   /**
@@ -2370,9 +2385,9 @@ export class Connection {
       const res = await this.getAccountInfoAndContext(publicKey, commitment);
       return res.value;
     } catch (e) {
-      throw new Error(
-        'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
-      );
+      throw errorWithMessage(
+        'failed to get info about account ' + publicKey.toBase58(),
+      )(e);
     }
   }
 
@@ -3469,15 +3484,9 @@ export class Connection {
     const unsafeRes = await this._rpcRequest('sendTransaction', args);
     const res = create(unsafeRes, SendTransactionRpcResult);
     if ('error' in res) {
-      if ('data' in res.error) {
-        const logs = res.error.data.logs;
-        if (logs && Array.isArray(logs)) {
-          const traceIndent = '\n    ';
-          const logTrace = traceIndent + logs.join(traceIndent);
-          console.error(res.error.message, logTrace);
-        }
-      }
-      throw new Error('failed to send transaction: ' + res.error.message);
+      const err = new SendTransactionRPCError(res.error);
+      err.printTrace();
+      throw err;
     }
     return res.result;
   }
