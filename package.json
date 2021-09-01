@@ -1,6 +1,6 @@
 {
-  "name": "@solana/web3.js",
-  "version": "0.0.0-development",
+  "name": "@velas/web3",
+  "version": "0.1.4",
   "description": "Solana Javascript API",
   "keywords": [
     "api",
