@@ -1,8 +1,7 @@
-import assert from 'assert';
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-import {parse as urlParse, format as urlFormat} from 'url';
-import fetch, {Response} from 'node-fetch';
+import fetch from 'cross-fetch';
+import type {Response} from 'cross-fetch';
 import {
   type as pick,
   number,
@@ -27,17 +26,21 @@ import RpcClient from 'jayson/lib/client/browser';
 import {IWSRequestParams} from 'rpc-websockets/dist/lib/client';
 
 import {AgentManager} from './agent-manager';
+import {EpochSchedule} from './epoch-schedule';
+import {SendTransactionError} from './errors';
 import {NonceAccount} from './nonce-account';
 import {PublicKey} from './publickey';
+import {Signer} from './keypair';
 import {MS_PER_SLOT} from './timing';
 import {Transaction} from './transaction';
 import {Message} from './message';
+import assert from './util/assert';
 import {sleep} from './util/sleep';
 import {promiseTimeout} from './util/promise-timeout';
 import {toBuffer} from './util/to-buffer';
+import {makeWebsocketUrl} from './util/url';
 import type {Blockhash} from './blockhash';
 import type {FeeCalculator} from './fee-calculator';
-import type {Account} from './account';
 import type {TransactionSignature} from './transaction';
 import type {CompiledInstruction} from './message';
 
@@ -112,8 +115,6 @@ export type ConfirmOptions = {
 
 /**
  * Options for getConfirmedSignaturesForAddress2
- *
- * @typedef {Object} ConfirmedSignaturesForAddress2Options
  */
 export type ConfirmedSignaturesForAddress2Options = {
   /**
@@ -121,6 +122,23 @@ export type ConfirmedSignaturesForAddress2Options = {
    * @remark If not provided the search starts from the highest max confirmed block.
    */
   before?: TransactionSignature;
+  /** Search until this transaction signature is reached, if found before `limit`. */
+  until?: TransactionSignature;
+  /** Maximum transaction signatures to return (between 1 and 1,000, default: 1,000). */
+  limit?: number;
+};
+
+/**
+ * Options for getSignaturesForAddress
+ */
+export type SignaturesForAddressOptions = {
+  /**
+   * Start searching backwards from this transaction signature.
+   * @remark If not provided the search starts from the highest max confirmed block.
+   */
+  before?: TransactionSignature;
+  /** Search until this transaction signature is reached, if found before `limit`. */
+  until?: TransactionSignature;
   /** Maximum transaction signatures to return (between 1 and 1,000, default: 1,000). */
   limit?: number;
 };
@@ -208,8 +226,6 @@ function notificationResultAndContext<T, U>(value: Struct<T, U>) {
  *   'confirmed': Query the most recent block which has reached 1 confirmation by the cluster
  *   'finalized': Query the most recent block which has been finalized by the cluster
  * </pre>
- *
- * @typedef {'processed' | 'confirmed' | 'finalized'} Commitment
  */
 export type Commitment =
   | 'processed'
@@ -222,100 +238,90 @@ export type Commitment =
   | 'max'; // Deprecated as of v1.5.5
 
 /**
+ * A subset of Commitment levels, which are at least optimistically confirmed
+ * <pre>
+ *   'confirmed': Query the most recent block which has reached 1 confirmation by the cluster
+ *   'finalized': Query the most recent block which has been finalized by the cluster
+ * </pre>
+ */
+export type Finality = 'confirmed' | 'finalized';
+
+/**
  * Filter for largest accounts query
  * <pre>
  *   'circulating':    Return the largest accounts that are part of the circulating supply
  *   'nonCirculating': Return the largest accounts that are not part of the circulating supply
  * </pre>
- *
- * @typedef {'circulating' | 'nonCirculating'} LargestAccountsFilter
  */
 export type LargestAccountsFilter = 'circulating' | 'nonCirculating';
 
 /**
  * Configuration object for changing `getLargestAccounts` query behavior
- *
- * @typedef {Object} GetLargestAccountsConfig
- * @property {Commitment|undefined} commitment The level of commitment desired
- * @property {LargestAccountsFilter|undefined} filter Filter largest accounts by whether they are part of the circulating supply
  */
 export type GetLargestAccountsConfig = {
+  /** The level of commitment desired */
   commitment?: Commitment;
+  /** Filter largest accounts by whether they are part of the circulating supply */
   filter?: LargestAccountsFilter;
 };
 
 /**
  * Configuration object for changing query behavior
- *
- * @typedef {Object} SignatureStatusConfig
- * @property {boolean} searchTransactionHistory enable searching status history, not needed for recent transactions
  */
 export type SignatureStatusConfig = {
+  /** enable searching status history, not needed for recent transactions */
   searchTransactionHistory: boolean;
 };
 
 /**
  * Information describing a cluster node
- *
- * @typedef {Object} ContactInfo
- * @property {string} pubkey Identity public key of the node
- * @property {string|null} gossip Gossip network address for the node
- * @property {string|null} tpu TPU network address for the node (null if not available)
- * @property {string|null} rpc JSON RPC network address for the node (null if not available)
- * @property {string|null} version Software version of the node (null if not available)
  */
 export type ContactInfo = {
+  /** Identity public key of the node */
   pubkey: string;
+  /** Gossip network address for the node */
   gossip: string | null;
+  /** TPU network address for the node (null if not available) */
   tpu: string | null;
+  /** JSON RPC network address for the node (null if not available) */
   rpc: string | null;
+  /** Software version of the node (null if not available) */
   version: string | null;
 };
 
 /**
  * Information describing a vote account
- *
- * @typedef {Object} VoteAccountInfo
- * @property {string} votePubkey Public key of the vote account
- * @property {string} nodePubkey Identity public key of the node voting with this account
- * @property {number} activatedStake The stake, in lamports, delegated to this vote account and activated
- * @property {boolean} epochVoteAccount Whether the vote account is staked for this epoch
- * @property {Array<Array<number>>} epochCredits Recent epoch voting credit history for this voter
- * @property {number} commission A percentage (0-100) of rewards payout owed to the voter
- * @property {number} lastVote Most recent slot voted on by this vote account
  */
 export type VoteAccountInfo = {
+  /** Public key of the vote account */
   votePubkey: string;
+  /** Identity public key of the node voting with this account */
   nodePubkey: string;
+  /** The stake, in lamports, delegated to this vote account and activated */
   activatedStake: number;
+  /** Whether the vote account is staked for this epoch */
   epochVoteAccount: boolean;
+  /** Recent epoch voting credit history for this voter */
   epochCredits: Array<[number, number, number]>;
+  /** A percentage (0-100) of rewards payout owed to the voter */
   commission: number;
+  /** Most recent slot voted on by this vote account */
   lastVote: number;
 };
 
 /**
  * A collection of cluster vote accounts
- *
- * @typedef {Object} VoteAccountStatus
- * @property {Array<VoteAccountInfo>} current Active vote accounts
- * @property {Array<VoteAccountInfo>} delinquent Inactive vote accounts
  */
 export type VoteAccountStatus = {
+  /** Active vote accounts */
   current: Array<VoteAccountInfo>;
+  /** Inactive vote accounts */
   delinquent: Array<VoteAccountInfo>;
 };
 
 /**
  * Network Inflation
  * (see https://docs.solana.com/implemented-proposals/ed_overview)
- *
- * @typedef {Object} InflationGovernor
- * @property {number} foundation
- * @property {number} foundation_term
- * @property {number} initial
- * @property {number} taper
- * @property {number} terminal
  */
 export type InflationGovernor = {
   foundation: number;
@@ -334,15 +340,37 @@ const GetInflationGovernorResult = pick({
 });
 
 /**
+ * The inflation reward for an epoch
+ */
+export type InflationReward = {
+  /** epoch for which the reward occurs */
+  epoch: number;
+  /** the slot in which the rewards are effective */
+  effectiveSlot: number;
+  /** reward amount in lamports */
+  amount: number;
+  /** post balance of the account in lamports */
+  postBalance: number;
+};
+
+/**
+ * Expected JSON RPC response for the "getInflationReward" message
+ */
+const GetInflationRewardResult = jsonRpcResult(
+  array(
+    nullable(
+      pick({
+        epoch: number(),
+        effectiveSlot: number(),
+        amount: number(),
+        postBalance: number(),
+      }),
+    ),
+  ),
+);
+
+/**
  * Information about the current epoch
- *
- * @typedef {Object} EpochInfo
- * @property {number} epoch
- * @property {number} slotIndex
- * @property {number} slotsInEpoch
- * @property {number} absoluteSlot
- * @property {number} blockHeight
- * @property {number} transactionCount
  */
 export type EpochInfo = {
   epoch: number;
@@ -362,25 +390,6 @@ const GetEpochInfoResult = pick({
   transactionCount: optional(number()),
 });
 
-/**
- * Epoch schedule
- * (see https://docs.solana.com/terminology#epoch)
- *
- * @typedef {Object} EpochSchedule
- * @property {number} slotsPerEpoch The maximum number of slots in each epoch
- * @property {number} leaderScheduleSlotOffset The number of slots before beginning of an epoch to calculate a leader schedule for that epoch
- * @property {boolean} warmup Indicates whether epochs start short and grow
- * @property {number} firstNormalEpoch The first epoch with `slotsPerEpoch` slots
- * @property {number} firstNormalSlot The first slot of `firstNormalEpoch`
- */
-export type EpochSchedule = {
-  slotsPerEpoch: number;
-  leaderScheduleSlotOffset: number;
-  warmup: boolean;
-  firstNormalEpoch: number;
-  firstNormalSlot: number;
-};
-
 const GetEpochScheduleResult = pick({
   slotsPerEpoch: number(),
   leaderScheduleSlotOffset: number(),
@@ -392,8 +401,6 @@ const GetEpochScheduleResult = pick({
 /**
  * Leader schedule
  * (see https://docs.solana.com/terminology#leader-schedule)
- *
- * @typedef {Object} LeaderSchedule
  */
 export type LeaderSchedule = {
   [address: string]: number[];
@@ -404,7 +411,7 @@ const GetLeaderScheduleResult = record(string(), array(number()));
 /**
  * Transaction error or null
  */
-const TransactionErrorResult = nullable(pick({}));
+const TransactionErrorResult = nullable(union([pick({}), string()]));
 
 /**
  * Signature status for a transaction
@@ -418,17 +425,15 @@ const SignatureStatusResult = pick({
  */
 const SignatureReceivedResult = literal('receivedSignature');
 
+/**
+ * Version info for a node
+ */
 export type Version = {
+  /** Version of solana-core */
   'solana-core': string;
   'feature-set'?: number;
 };
 
-/**
- * Version info for a node
- *
- * @typedef {Object} Version
- * @property {string} solana-core Version of solana-core
- */
 const VersionResult = pick({
   'solana-core': string(),
   'feature-set': optional(number()),
@@ -459,25 +464,23 @@ export type TokenBalance = {
 
 /**
  * Metadata for a parsed confirmed transaction on the ledger
- *
- * @typedef {Object} ParsedConfirmedTransactionMeta
- * @property {number} fee The fee charged for processing the transaction
- * @property {Array<ParsedInnerInstruction>} innerInstructions An array of cross program invoked parsed instructions
- * @property {Array<number>} preBalances The balances of the transaction accounts before processing
- * @property {Array<number>} postBalances The balances of the transaction accounts after processing
- * @property {Array<string>} logMessages An array of program log messages emitted during a transaction
- * @property {Array<TokenBalance>} preTokenBalances The token balances of the transaction accounts before processing
- * @property {Array<TokenBalance>} postTokenBalances The token balances of the transaction accounts after processing
- * @property {object|null} err The error result of transaction processing
  */
 export type ParsedConfirmedTransactionMeta = {
+  /** The fee charged for processing the transaction */
   fee: number;
+  /** An array of cross program invoked parsed instructions */
   innerInstructions?: ParsedInnerInstruction[] | null;
+  /** The balances of the transaction accounts before processing */
   preBalances: Array<number>;
+  /** The balances of the transaction accounts after processing */
   postBalances: Array<number>;
+  /** An array of program log messages emitted during a transaction */
   logMessages?: Array<string> | null;
+  /** The token balances of the transaction accounts before processing */
   preTokenBalances?: Array<TokenBalance> | null;
+  /** The token balances of the transaction accounts after processing */
   postTokenBalances?: Array<TokenBalance> | null;
+  /** The error result of transaction processing */
   err: TransactionError | null;
 };
 
@@ -488,41 +491,56 @@ export type CompiledInnerInstruction = {
 
 /**
  * Metadata for a confirmed transaction on the ledger
- *
- * @typedef {Object} ConfirmedTransactionMeta
- * @property {number} fee The fee charged for processing the transaction
- * @property {Array<CompiledInnerInstruction>} innerInstructions An array of cross program invoked instructions
- * @property {Array<number>} preBalances The balances of the transaction accounts before processing
- * @property {Array<number>} postBalances The balances of the transaction accounts after processing
- * @property {Array<string>} logMessages An array of program log messages emitted during a transaction
- * @property {Array<TokenBalance>} preTokenBalances The token balances of the transaction accounts before processing
- * @property {Array<TokenBalance>} postTokenBalances The token balances of the transaction accounts after processing
- * @property {object|null} err The error result of transaction processing
  */
 export type ConfirmedTransactionMeta = {
+  /** The fee charged for processing the transaction */
   fee: number;
+  /** An array of cross program invoked instructions */
   innerInstructions?: CompiledInnerInstruction[] | null;
+  /** The balances of the transaction accounts before processing */
   preBalances: Array<number>;
+  /** The balances of the transaction accounts after processing */
   postBalances: Array<number>;
+  /** An array of program log messages emitted during a transaction */
   logMessages?: Array<string> | null;
+  /** The token balances of the transaction accounts before processing */
   preTokenBalances?: Array<TokenBalance> | null;
+  /** The token balances of the transaction accounts after processing */
   postTokenBalances?: Array<TokenBalance> | null;
+  /** The error result of transaction processing */
   err: TransactionError | null;
 };
 
 /**
+ * A processed transaction from the RPC API
+ */
+export type TransactionResponse = {
+  /** The slot during which the transaction was processed */
+  slot: number;
+  /** The transaction */
+  transaction: {
+    /** The transaction message */
+    message: Message;
+    /** The transaction signatures */
+    signatures: string[];
+  };
+  /** Metadata produced from the transaction */
+  meta: ConfirmedTransactionMeta | null;
+  /** The unix timestamp of when the transaction was processed */
+  blockTime?: number | null;
+};
+
+/**
  * A confirmed transaction on the ledger
- *
- * @typedef {Object} ConfirmedTransaction
- * @property {number} slot The slot during which the transaction was processed
- * @property {Transaction} transaction The details of the transaction
- * @property {ConfirmedTransactionMeta|null} meta Metadata produced from the transaction
- * @property {number|null|undefined} blockTime The unix timestamp of when the transaction was processed
  */
 export type ConfirmedTransaction = {
+  /** The slot during which the transaction was processed */
   slot: number;
+  /** The details of the transaction */
   transaction: Transaction;
+  /** Metadata produced from the transaction */
   meta: ConfirmedTransactionMeta | null;
+  /** The unix timestamp of when the transaction was processed */
   blockTime?: number | null;
 };
 
@@ -540,122 +558,183 @@ export type PartiallyDecodedInstruction = {
 
 /**
  * A parsed transaction message account
- *
- * @typedef {Object} ParsedMessageAccount
- * @property {PublicKey} pubkey Public key of the account
- * @property {boolean} signer Indicates if the account signed the transaction
- * @property {boolean} writable Indicates if the account is writable for this transaction
  */
 export type ParsedMessageAccount = {
+  /** Public key of the account */
   pubkey: PublicKey;
+  /** Indicates if the account signed the transaction */
   signer: boolean;
+  /** Indicates if the account is writable for this transaction */
   writable: boolean;
 };
 
 /**
  * A parsed transaction instruction
- *
- * @typedef {Object} ParsedInstruction
- * @property {string} program Name of the program for this instruction
- * @property {PublicKey} programId ID of the program for this instruction
- * @property {any} parsed Parsed instruction info
  */
 export type ParsedInstruction = {
+  /** Name of the program for this instruction */
   program: string;
+  /** ID of the program for this instruction */
   programId: PublicKey;
+  /** Parsed instruction info */
   parsed: any;
 };
 
 /**
  * A parsed transaction message
- *
- * @typedef {Object} ParsedMessage
- * @property {Array<ParsedMessageAccount>} accountKeys Accounts used in the instructions
- * @property {Array<ParsedInstruction | PartiallyDecodedInstruction>} instructions The atomically executed instructions for the transaction
- * @property {string} recentBlockhash Recent blockhash
  */
 export type ParsedMessage = {
+  /** Accounts used in the instructions */
   accountKeys: ParsedMessageAccount[];
+  /** The atomically executed instructions for the transaction */
   instructions: (ParsedInstruction | PartiallyDecodedInstruction)[];
+  /** Recent blockhash */
   recentBlockhash: string;
 };
 
 /**
  * A parsed transaction
- *
- * @typedef {Object} ParsedTransaction
- * @property {Array<string>} signatures Signatures for the transaction
- * @property {ParsedMessage} message Message of the transaction
  */
 export type ParsedTransaction = {
+  /** Signatures for the transaction */
   signatures: Array<string>;
+  /** Message of the transaction */
   message: ParsedMessage;
 };
 
 /**
  * A parsed and confirmed transaction on the ledger
- *
- * @typedef {Object} ParsedConfirmedTransaction
- * @property {number} slot The slot during which the transaction was processed
- * @property {ParsedTransaction} transaction The details of the transaction
- * @property {ConfirmedTransactionMeta|null} meta Metadata produced from the transaction
- * @property {number|null|undefined} blockTime The unix timestamp of when the transaction was processed
  */
 export type ParsedConfirmedTransaction = {
+  /** The slot during which the transaction was processed */
   slot: number;
+  /** The details of the transaction */
   transaction: ParsedTransaction;
+  /** Metadata produced from the transaction */
   meta: ParsedConfirmedTransactionMeta | null;
+  /** The unix timestamp of when the transaction was processed */
   blockTime?: number | null;
 };
 
 /**
+ * A processed block fetched from the RPC API
+ */
+export type BlockResponse = {
+  /** Blockhash of this block */
+  blockhash: Blockhash;
+  /** Blockhash of this block's parent */
+  previousBlockhash: Blockhash;
+  /** Slot index of this block's parent */
+  parentSlot: number;
+  /** Vector of transactions with status meta and original message */
+  transactions: Array<{
+    /** The transaction */
+    transaction: {
+      /** The transaction message */
+      message: Message;
+      /** The transaction signatures */
+      signatures: string[];
+    };
+    /** Metadata produced from the transaction */
+    meta: ConfirmedTransactionMeta | null;
+  }>;
+  /** Vector of block rewards */
+  rewards?: Array<{
+    /** Public key of reward recipient */
+    pubkey: string;
+    /** Reward value in lamports */
+    lamports: number;
+    /** Account balance after reward is applied */
+    postBalance: number | null;
+    /** Type of reward received */
+    rewardType: string | null;
+  }>;
+  /** The unix timestamp of when the block was processed */
+  blockTime: number | null;
+};
+
+/**
  * A ConfirmedBlock on the ledger
- *
- * @typedef {Object} ConfirmedBlock
- * @property {Blockhash} blockhash Blockhash of this block
- * @property {Blockhash} previousBlockhash Blockhash of this block's parent
- * @property {number} parentSlot Slot index of this block's parent
- * @property {Array<object>} transactions Vector of transactions and status metas
- * @property {Array<object>} rewards Vector of block rewards
- * @property {number|null} blockTime The unix timestamp of when the block was processed
  */
 export type ConfirmedBlock = {
+  /** Blockhash of this block */
   blockhash: Blockhash;
+  /** Blockhash of this block's parent */
   previousBlockhash: Blockhash;
+  /** Slot index of this block's parent */
   parentSlot: number;
+  /** Vector of transactions and status metas */
   transactions: Array<{
     transaction: Transaction;
     meta: ConfirmedTransactionMeta | null;
   }>;
+  /** Vector of block rewards */
   rewards?: Array<{
     pubkey: string;
     lamports: number;
     postBalance: number | null;
     rewardType: string | null;
   }>;
+  /** The unix timestamp of when the block was processed */
+  blockTime: number | null;
+};
+
+/**
+ * A ConfirmedBlock on the ledger with signatures only
+ */
+export type ConfirmedBlockSignatures = {
+  /** Blockhash of this block */
+  blockhash: Blockhash;
+  /** Blockhash of this block's parent */
+  previousBlockhash: Blockhash;
+  /** Slot index of this block's parent */
+  parentSlot: number;
+  /** Vector of signatures */
+  signatures: Array<string>;
+  /** The unix timestamp of when the block was processed */
   blockTime: number | null;
 };
 
 /**
  * A performance sample
- *
- * @typedef {Object} PerfSample
- * @property {number} slot Slot number of sample
- * @property {number} numTransactions Number of transactions in a sample window
- * @property {number} numSlots Number of slots in a sample window
- * @property {number} samplePeriodSecs Sample window in seconds
  */
 export type PerfSample = {
+  /** Slot number of sample */
   slot: number;
+  /** Number of transactions in a sample window */
   numTransactions: number;
+  /** Number of slots in a sample window */
   numSlots: number;
+  /** Sample window in seconds */
   samplePeriodSecs: number;
 };
 
-function createRpcClient(url: string, useHttps: boolean): RpcClient {
+function createRpcClient(
+  url: string,
+  useHttps: boolean,
+  httpHeaders?: HttpHeaders,
+  fetchMiddleware?: FetchMiddleware,
+  disableRetryOnRateLimit?: boolean,
+): RpcClient {
   let agentManager: AgentManager | undefined;
   if (!process.env.BROWSER) {
     agentManager = new AgentManager(useHttps);
+  }
+
+  let fetchWithMiddleware: (url: string, options: any) => Promise<Response>;
+
+  if (fetchMiddleware) {
+    fetchWithMiddleware = (url: string, options: any) => {
+      return new Promise<Response>((resolve, reject) => {
+        fetchMiddleware(url, options, async (url: string, options: any) => {
+          try {
+            resolve(await fetch(url, options));
+          } catch (error) {
+            reject(error);
+          }
+        });
+      });
+    };
   }
 
   const clientBrowser = new RpcClient(async (request, callback) => {
@@ -664,9 +743,12 @@ function createRpcClient(url: string, useHttps: boolean): RpcClient {
       method: 'POST',
       body: request,
       agent,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: Object.assign(
+        {
+          'Content-Type': 'application/json',
+        },
+        httpHeaders || {},
+      ),
     };
 
     try {
@@ -674,8 +756,16 @@ function createRpcClient(url: string, useHttps: boolean): RpcClient {
       let res: Response;
       let waitTime = 500;
       for (;;) {
-        res = await fetch(url, options);
+        if (fetchWithMiddleware) {
+          res = await fetchWithMiddleware(url, options);
+        } else {
+          res = await fetch(url, options);
+        }
+
         if (res.status !== 429 /* Too many requests */) {
+          break;
+        }
+        if (disableRetryOnRateLimit === true) {
           break;
         }
         too_many_requests_retries -= 1;
@@ -722,6 +812,9 @@ function createRpcRequest(client: RpcClient): RpcRequest {
 function createRpcBatchRequest(client: RpcClient): RpcBatchRequest {
   return (requests: RpcParams[]) => {
     return new Promise((resolve, reject) => {
+      // Do nothing if requests is empty
+      if (requests.length === 0) resolve([]);
+
       const batch = requests.map((params: RpcParams) => {
         return client.request(params.methodName, params.args);
       });
@@ -764,17 +857,15 @@ const SlotRpcResult = jsonRpcResult(number());
 
 /**
  * Supply
- *
- * @typedef {Object} Supply
- * @property {number} total Total supply in lamports
- * @property {number} circulating Circulating supply in lamports
- * @property {number} nonCirculating Non-circulating supply in lamports
- * @property {Array<PublicKey>} nonCirculatingAccounts List of non-circulating account addresses
  */
 export type Supply = {
+  /** Total supply in lamports */
   total: number;
+  /** Circulating supply in lamports */
   circulating: number;
+  /** Non-circulating supply in lamports */
   nonCirculating: number;
+  /** List of non-circulating account addresses */
   nonCirculatingAccounts: Array<PublicKey>;
 };
 
@@ -793,17 +884,15 @@ const GetSupplyRpcResult = jsonRpcResultAndContext(
 /**
  * Token amount object which returns a token amount in different formats
  * for various client use cases.
- *
- * @typedef {Object} TokenAmount
- * @property {string} amount Raw amount of tokens as string ignoring decimals
- * @property {number} decimals Number of decimals configured for token's mint
- * @property {number | null} uiAmount Token amount as float, accounts for decimals
- * @property {string | undefined} uiAmountString Token amount as string, accounts for decimals
  */
 export type TokenAmount = {
+  /** Raw amount of tokens as string ignoring decimals */
   amount: string;
+  /** Number of decimals configured for token's mint */
   decimals: number;
+  /** Token amount as float, accounts for decimals */
   uiAmount: number | null;
+  /** Token amount as string, accounts for decimals */
   uiAmountString?: string;
 };
 
@@ -819,19 +908,17 @@ const TokenAmountResult = pick({
 
 /**
  * Token address and balance.
- *
- * @typedef {Object} TokenAccountBalancePair
- * @property {PublicKey} address Address of the token account
- * @property {string} amount Raw amount of tokens as string ignoring decimals
- * @property {number} decimals Number of decimals configured for token's mint
- * @property {number | null} uiAmount Token amount as float, accounts for decimals
- * @property {string | undefined} uiAmountString Token amount as string, accounts for decimals
  */
 export type TokenAccountBalancePair = {
+  /** Address of the token account */
   address: PublicKey;
+  /** Raw amount of tokens as string ignoring decimals */
   amount: string;
+  /** Number of decimals configured for token's mint */
   decimals: number;
+  /** Token amount as float, accounts for decimals */
   uiAmount: number | null;
+  /** Token amount as string, accounts for decimals */
   uiAmountString?: string;
 };
 
@@ -894,10 +981,6 @@ const GetParsedTokenAccountsByOwner = jsonRpcResultAndContext(
 
 /**
  * Pair of an account address and its balance
- *
- * @typedef {Object} AccountBalancePair
- * @property {PublicKey} address
- * @property {number} lamports
  */
 export type AccountBalancePair = {
   address: PublicKey;
@@ -978,17 +1061,25 @@ const StakeActivationResult = pick({
 });
 
 /**
- * Expected JSON RPC response for the "getConfirmedSignaturesForAddress" message
- */
-const GetConfirmedSignaturesForAddressRpcResult = jsonRpcResult(
-  array(string()),
-);
-
-/**
  * Expected JSON RPC response for the "getConfirmedSignaturesForAddress2" message
  */
 
 const GetConfirmedSignaturesForAddress2RpcResult = jsonRpcResult(
+  array(
+    pick({
+      signature: string(),
+      slot: number(),
+      err: TransactionErrorResult,
+      memo: nullable(string()),
+      blockTime: optional(nullable(number())),
+    }),
+  ),
+);
+
+/**
+ * Expected JSON RPC response for the "getSignaturesForAddress" message
+ */
+const GetSignaturesForAddressRpcResult = jsonRpcResult(
   array(
     pick({
       signature: string(),
@@ -1039,6 +1130,112 @@ const SlotInfoResult = pick({
 const SlotNotificationResult = pick({
   subscription: number(),
   result: SlotInfoResult,
+});
+
+/**
+ * Slot updates which can be used for tracking the live progress of a cluster.
+ * - `"firstShredReceived"`: connected node received the first shred of a block.
+ * Indicates that a new block that is being produced.
+ * - `"completed"`: connected node has received all shreds of a block. Indicates
+ * a block was recently produced.
+ * - `"optimisticConfirmation"`: block was optimistically confirmed by the
+ * cluster. It is not guaranteed that an optimistic confirmation notification
+ * will be sent for every finalized blocks.
+ * - `"root"`: the connected node rooted this block.
+ * - `"createdBank"`: the connected node has started validating this block.
+ * - `"frozen"`: the connected node has validated this block.
+ * - `"dead"`: the connected node failed to validate this block.
+ */
+export type SlotUpdate =
+  | {
+      type: 'firstShredReceived';
+      slot: number;
+      timestamp: number;
+    }
+  | {
+      type: 'completed';
+      slot: number;
+      timestamp: number;
+    }
+  | {
+      type: 'createdBank';
+      slot: number;
+      timestamp: number;
+      parent: number;
+    }
+  | {
+      type: 'frozen';
+      slot: number;
+      timestamp: number;
+      stats: {
+        numTransactionEntries: number;
+        numSuccessfulTransactions: number;
+        numFailedTransactions: number;
+        maxTransactionsPerEntry: number;
+      };
+    }
+  | {
+      type: 'dead';
+      slot: number;
+      timestamp: number;
+      err: string;
+    }
+  | {
+      type: 'optimisticConfirmation';
+      slot: number;
+      timestamp: number;
+    }
+  | {
+      type: 'root';
+      slot: number;
+      timestamp: number;
+    };
+
+/**
+ * @internal
+ */
+const SlotUpdateResult = union([
+  pick({
+    type: union([
+      literal('firstShredReceived'),
+      literal('completed'),
+      literal('optimisticConfirmation'),
+      literal('root'),
+    ]),
+    slot: number(),
+    timestamp: number(),
+  }),
+  pick({
+    type: literal('createdBank'),
+    parent: number(),
+    slot: number(),
+    timestamp: number(),
+  }),
+  pick({
+    type: literal('frozen'),
+    slot: number(),
+    timestamp: number(),
+    stats: pick({
+      numTransactionEntries: number(),
+      numSuccessfulTransactions: number(),
+      numFailedTransactions: number(),
+      maxTransactionsPerEntry: number(),
+    }),
+  }),
+  pick({
+    type: literal('dead'),
+    slot: number(),
+    timestamp: number(),
+    err: string(),
+  }),
+]);
+
+/**
+ * Expected JSON RPC response for the "slotsUpdatesNotification" message
+ */
+const SlotUpdateNotificationResult = pick({
+  subscription: number(),
+  result: SlotUpdateResult,
 });
 
 /**
@@ -1113,9 +1310,6 @@ const GetSignatureStatusesRpcResult = jsonRpcResultAndContext(
  */
 const GetMinimumBalanceForRentExemptionRpcResult = jsonRpcResult(number());
 
-/**
- * @internal
- */
 const ConfirmedTransactionResult = pick({
   signatures: array(string()),
   message: pick({
@@ -1135,15 +1329,6 @@ const ConfirmedTransactionResult = pick({
     recentBlockhash: string(),
   }),
 });
-
-const TransactionFromConfirmed = coerce(
-  instance(Transaction),
-  ConfirmedTransactionResult,
-  result => {
-    const {message, signatures} = result;
-    return Transaction.populate(new Message(message), signatures);
-  },
-);
 
 const ParsedInstructionResult = pick({
   parsed: unknown(),
@@ -1266,7 +1451,7 @@ const ParsedConfirmedTransactionMetaResult = pick({
 /**
  * Expected JSON RPC response for the "getConfirmedBlock" message
  */
-export const GetConfirmedBlockRpcResult = jsonRpcResult(
+const GetConfirmedBlockRpcResult = jsonRpcResult(
   nullable(
     pick({
       blockhash: string(),
@@ -1274,7 +1459,7 @@ export const GetConfirmedBlockRpcResult = jsonRpcResult(
       parentSlot: number(),
       transactions: array(
         pick({
-          transaction: TransactionFromConfirmed,
+          transaction: ConfirmedTransactionResult,
           meta: nullable(ConfirmedTransactionMetaResult),
         }),
       ),
@@ -1294,15 +1479,30 @@ export const GetConfirmedBlockRpcResult = jsonRpcResult(
 );
 
 /**
+ * Expected JSON RPC response for the "getConfirmedBlockSignatures" message
+ */
+const GetConfirmedBlockSignaturesRpcResult = jsonRpcResult(
+  nullable(
+    pick({
+      blockhash: string(),
+      previousBlockhash: string(),
+      parentSlot: number(),
+      signatures: array(string()),
+      blockTime: nullable(number()),
+    }),
+  ),
+);
+
+/**
  * Expected JSON RPC response for the "getConfirmedTransaction" message
  */
 const GetConfirmedTransactionRpcResult = jsonRpcResult(
   nullable(
     pick({
       slot: number(),
-      transaction: TransactionFromConfirmed,
       meta: ConfirmedTransactionMetaResult,
       blockTime: optional(nullable(number())),
+      transaction: ConfirmedTransactionResult,
     }),
   ),
 );
@@ -1372,68 +1572,117 @@ const SendTransactionRpcResult = jsonRpcResult(string());
 
 /**
  * Information about the latest slot being processed by a node
- *
- * @typedef {Object} SlotInfo
- * @property {number} slot Currently processing slot
- * @property {number} parent Parent of the current slot
- * @property {number} root The root block of the current slot's fork
  */
 export type SlotInfo = {
+  /** Currently processing slot */
   slot: number;
+  /** Parent of the current slot */
   parent: number;
+  /** The root block of the current slot's fork */
   root: number;
 };
 
 /**
  * Parsed account data
- *
- * @typedef {Object} ParsedAccountData
- * @property {string} program Name of the program that owns this account
- * @property {any} parsed Parsed account data
- * @property {number} space Space used by account data
  */
 export type ParsedAccountData = {
+  /** Name of the program that owns this account */
   program: string;
+  /** Parsed account data */
   parsed: any;
+  /** Space used by account data */
   space: number;
 };
 
 /**
  * Stake Activation data
- *
- * @typedef {Object} StakeActivationData
- * @property {string} state: <string - the stake account's activation state, one of: active, inactive, activating, deactivating
- * @property {number} active: stake active during the epoch
- * @property {number} inactive: stake inactive during the epoch
  */
 export type StakeActivationData = {
+  /** the stake account's activation state */
   state: 'active' | 'inactive' | 'activating' | 'deactivating';
+  /** stake active during the epoch */
   active: number;
+  /** stake inactive during the epoch */
   inactive: number;
 };
 
 /**
+ * Data slice argument for getProgramAccounts
+ */
+export type DataSlice = {
+  /** offset of data slice */
+  offset: number;
+  /** length of data slice */
+  length: number;
+};
+
+/**
+ * Memory comparison filter for getProgramAccounts
+ */
+export type MemcmpFilter = {
+  memcmp: {
+    /** offset into program account data to start comparison */
+    offset: number;
+    /** data to match, as base-58 encoded string and limited to less than 129 bytes */
+    bytes: string;
+  };
+};
+
+/**
+ * Data size comparison filter for getProgramAccounts
+ */
+export type DataSizeFilter = {
+  /** Size of data for program account data length comparison */
+  dataSize: number;
+};
+
+/**
+ * A filter object for getProgramAccounts
+ */
+export type GetProgramAccountsFilter = MemcmpFilter | DataSizeFilter;
+
+/**
+ * Configuration object for getProgramAccounts requests
+ */
+export type GetProgramAccountsConfig = {
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /** Optional encoding for account data (default base64)
+   * To use "jsonParsed" encoding, please refer to `getParsedProgramAccounts` in connection.ts
+   * */
+  encoding?: 'base64';
+  /** Optional data slice to limit the returned account data */
+  dataSlice?: DataSlice;
+  /** Optional array of filters to apply to accounts */
+  filters?: GetProgramAccountsFilter[];
+};
+
+/**
+ * Configuration object for getParsedProgramAccounts
+ */
+export type GetParsedProgramAccountsConfig = {
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /** Optional array of filters to apply to accounts */
+  filters?: GetProgramAccountsFilter[];
+};
+
+/**
  * Information describing an account
- *
- * @typedef {Object} AccountInfo
- * @property {number} lamports Number of lamports assigned to the account
- * @property {PublicKey} owner Identifier of the program that owns the account
- * @property {T} data Optional data assigned to the account
- * @property {boolean} executable `true` if this account's data contains a loaded program
  */
 export type AccountInfo<T> = {
+  /** `true` if this account's data contains a loaded program */
   executable: boolean;
+  /** Identifier of the program that owns the account */
   owner: PublicKey;
+  /** Number of lamports assigned to the account */
   lamports: number;
+  /** Optional data assigned to the account */
   data: T;
 };
 
 /**
  * Account information identified by pubkey
- *
- * @typedef {Object} KeyedAccountInfo
- * @property {PublicKey} accountId
- * @property {AccountInfo<Buffer>} accountInfo
  */
 export type KeyedAccountInfo = {
   accountId: PublicKey;
@@ -1479,6 +1728,7 @@ type ProgramAccountSubscriptionInfo = {
   callback: ProgramAccountChangeCallback;
   commitment?: Commitment;
   subscriptionId: SubscriptionId | null; // null when there's no current server subscription id
+  filters?: GetProgramAccountsFilter[];
 };
 
 /**
@@ -1491,6 +1741,19 @@ export type SlotChangeCallback = (slotInfo: SlotInfo) => void;
  */
 type SlotSubscriptionInfo = {
   callback: SlotChangeCallback;
+  subscriptionId: SubscriptionId | null; // null when there's no current server subscription id
+};
+
+/**
+ * Callback function for slot update notifications
+ */
+export type SlotUpdateCallback = (slotUpdate: SlotUpdate) => void;
+
+/**
+ * @private
+ */
+type SlotUpdateSubscriptionInfo = {
+  callback: SlotUpdateCallback;
   subscriptionId: SubscriptionId | null; // null when there's no current server subscription id
 };
 
@@ -1567,8 +1830,6 @@ const LogsResult = pick({
 
 /**
  * Logs result.
- *
- * @typedef {Object} Logs.
  */
 export type Logs = {
   err: TransactionError | null;
@@ -1606,8 +1867,6 @@ type LogsSubscriptionInfo = {
 
 /**
  * Signature result
- *
- * @typedef {Object} SignatureResult
  */
 export type SignatureResult = {
   err: TransactionError | null;
@@ -1615,10 +1874,8 @@ export type SignatureResult = {
 
 /**
  * Transaction error
- *
- * @typedef {Object} TransactionError
  */
-export type TransactionError = {};
+export type TransactionError = {} | string;
 
 /**
  * Transaction confirmation status
@@ -1649,20 +1906,48 @@ export type SignatureStatus = {
 
 /**
  * A confirmed signature with its status
- *
- * @typedef {Object} ConfirmedSignatureInfo
- * @property {string} signature the transaction signature
- * @property {number} slot when the transaction was processed
- * @property {TransactionError | null} err error, if any
- * @property {string | null} memo memo associated with the transaction, if any
- * @property {number | null | undefined} blockTime The unix timestamp of when the transaction was processed
  */
 export type ConfirmedSignatureInfo = {
+  /** the transaction signature */
   signature: string;
+  /** when the transaction was processed */
   slot: number;
+  /** error, if any */
   err: TransactionError | null;
+  /** memo associated with the transaction, if any */
   memo: string | null;
+  /** The unix timestamp of when the transaction was processed */
   blockTime?: number | null;
+};
+
+/**
+ * An object defining headers to be passed to the RPC server
+ */
+export type HttpHeaders = {[header: string]: string};
+
+/**
+ * A callback used to augment the outgoing HTTP request
+ */
+export type FetchMiddleware = (
+  url: string,
+  options: any,
+  fetch: Function,
+) => void;
+
+/**
+ * Configuration for instantiating a Connection
+ */
+export type ConnectionConfig = {
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /** Optional endpoint URL to the fullnode JSON RPC PubSub WebSocket Endpoint */
+  wsEndpoint?: string;
+  /** Optional HTTP headers object */
+  httpHeaders?: HttpHeaders;
+  /** Optional fetch middleware callback */
+  fetchMiddleware?: FetchMiddleware;
+  /** Optional Disable retring calls when server responds with HTTP 429 (Too Many Requests) */
+  disableRetryOnRateLimit?: boolean;
 };
 
 /**
@@ -1671,6 +1956,7 @@ export type ConfirmedSignatureInfo = {
 export class Connection {
   /** @internal */ _commitment?: Commitment;
   /** @internal */ _rpcEndpoint: string;
+  /** @internal */ _rpcWsEndpoint: string;
   /** @internal */ _rpcClient: RpcClient;
   /** @internal */ _rpcRequest: RpcRequest;
   /** @internal */ _rpcBatchRequest: RpcBatchRequest;
@@ -1690,6 +1976,11 @@ export class Connection {
     lastFetch: number;
     simulatedSignatures: Array<string>;
     transactionSignatures: Array<string>;
+  } = {
+    recentBlockhash: null,
+    lastFetch: 0,
+    transactionSignatures: [],
+    simulatedSignatures: [],
   };
 
   /** @internal */ _accountChangeSubscriptionCounter: number = 0;
@@ -1722,41 +2013,52 @@ export class Connection {
     [id: number]: LogsSubscriptionInfo;
   } = {};
 
+  /** @internal */ _slotUpdateSubscriptionCounter: number = 0;
+  /** @internal */ _slotUpdateSubscriptions: {
+    [id: number]: SlotUpdateSubscriptionInfo;
+  } = {};
+
   /**
    * Establish a JSON RPC connection
    *
    * @param endpoint URL to the fullnode JSON RPC endpoint
-   * @param commitment optional default commitment level
+   * @param commitmentOrConfig optional default commitment level or optional ConnectionConfig configuration object
    */
-  constructor(endpoint: string, commitment?: Commitment) {
-    this._rpcEndpoint = endpoint;
-
-    let url = urlParse(endpoint);
+  constructor(
+    endpoint: string,
+    commitmentOrConfig?: Commitment | ConnectionConfig,
+  ) {
+    let url = new URL(endpoint);
     const useHttps = url.protocol === 'https:';
 
-    this._rpcClient = createRpcClient(url.href, useHttps);
+    let wsEndpoint;
+    let httpHeaders;
+    let fetchMiddleware;
+    let disableRetryOnRateLimit;
+    if (commitmentOrConfig && typeof commitmentOrConfig === 'string') {
+      this._commitment = commitmentOrConfig;
+    } else if (commitmentOrConfig) {
+      this._commitment = commitmentOrConfig.commitment;
+      wsEndpoint = commitmentOrConfig.wsEndpoint;
+      httpHeaders = commitmentOrConfig.httpHeaders;
+      fetchMiddleware = commitmentOrConfig.fetchMiddleware;
+      disableRetryOnRateLimit = commitmentOrConfig.disableRetryOnRateLimit;
+    }
+
+    this._rpcEndpoint = endpoint;
+    this._rpcWsEndpoint = wsEndpoint || makeWebsocketUrl(endpoint);
+
+    this._rpcClient = createRpcClient(
+      url.toString(),
+      useHttps,
+      httpHeaders,
+      fetchMiddleware,
+      disableRetryOnRateLimit,
+    );
     this._rpcRequest = createRpcRequest(this._rpcClient);
     this._rpcBatchRequest = createRpcBatchRequest(this._rpcClient);
-    this._commitment = commitment;
-    this._blockhashInfo = {
-      recentBlockhash: null,
-      lastFetch: 0,
-      transactionSignatures: [],
-      simulatedSignatures: [],
-    };
 
-    url.protocol = useHttps ? 'wss:' : 'ws:';
-    url.host = '';
-    // Only shift the port by +1 as a convention for ws(s) only if given endpoint
-    // is explictly specifying the endpoint port (HTTP-based RPC), assuming
-    // we're directly trying to connect to solana-validator's ws listening port.
-    // When the endpoint omits the port, we're connecting to the protocol
-    // default ports: http(80) or https(443) and it's assumed we're behind a reverse
-    // proxy which manages WebSocket upgrade and backend port redirection.
-    if (url.port !== null) {
-      url.port = String(Number(url.port) + 1);
-    }
-    this._rpcWebSocket = new RpcWebSocketClient(urlFormat(url), {
+    this._rpcWebSocket = new RpcWebSocketClient(this._rpcWsEndpoint, {
       autoconnect: false,
       max_reconnects: Infinity,
     });
@@ -1774,6 +2076,10 @@ export class Connection {
     this._rpcWebSocket.on(
       'slotNotification',
       this._wsOnSlotNotification.bind(this),
+    );
+    this._rpcWebSocket.on(
+      'slotsUpdatesNotification',
+      this._wsOnSlotUpdatesNotification.bind(this),
     );
     this._rpcWebSocket.on(
       'signatureNotification',
@@ -2105,6 +2411,28 @@ export class Connection {
   }
 
   /**
+   * Fetch all the account info for multiple accounts specified by an array of public keys
+   */
+  async getMultipleAccountsInfo(
+    publicKeys: PublicKey[],
+    commitment?: Commitment,
+  ): Promise<(AccountInfo<Buffer> | null)[]> {
+    const keys = publicKeys.map(key => key.toBase58());
+    const args = this._buildArgs([keys], commitment, 'base64');
+    const unsafeRes = await this._rpcRequest('getMultipleAccounts', args);
+    const res = create(
+      unsafeRes,
+      jsonRpcResultAndContext(array(nullable(AccountInfoResult))),
+    );
+    if ('error' in res) {
+      throw new Error(
+        'failed to get info for accounts ' + keys + ': ' + res.error.message,
+      );
+    }
+    return res.result.value;
+  }
+
+  /**
    * Returns epoch activation information for a stake account that has been delegated
    */
   async getStakeActivation(
@@ -2138,9 +2466,34 @@ export class Connection {
    */
   async getProgramAccounts(
     programId: PublicKey,
-    commitment?: Commitment,
+    configOrCommitment?: GetProgramAccountsConfig | Commitment,
   ): Promise<Array<{pubkey: PublicKey; account: AccountInfo<Buffer>}>> {
-    const args = this._buildArgs([programId.toBase58()], commitment, 'base64');
+    const extra: Pick<GetProgramAccountsConfig, 'dataSlice' | 'filters'> = {};
+
+    let commitment;
+    let encoding;
+    if (configOrCommitment) {
+      if (typeof configOrCommitment === 'string') {
+        commitment = configOrCommitment;
+      } else {
+        commitment = configOrCommitment.commitment;
+        encoding = configOrCommitment.encoding;
+
+        if (configOrCommitment.dataSlice) {
+          extra.dataSlice = configOrCommitment.dataSlice;
+        }
+        if (configOrCommitment.filters) {
+          extra.filters = configOrCommitment.filters;
+        }
+      }
+    }
+
+    const args = this._buildArgs(
+      [programId.toBase58()],
+      commitment,
+      encoding || 'base64',
+      extra,
+    );
     const unsafeRes = await this._rpcRequest('getProgramAccounts', args);
     const res = create(unsafeRes, jsonRpcResult(array(KeyedAccountInfoResult)));
     if ('error' in res) {
@@ -2161,17 +2514,33 @@ export class Connection {
    */
   async getParsedProgramAccounts(
     programId: PublicKey,
-    commitment?: Commitment,
+    configOrCommitment?: GetParsedProgramAccountsConfig | Commitment,
   ): Promise<
     Array<{
       pubkey: PublicKey;
       account: AccountInfo<Buffer | ParsedAccountData>;
     }>
   > {
+    const extra: Pick<GetParsedProgramAccountsConfig, 'filters'> = {};
+
+    let commitment;
+    if (configOrCommitment) {
+      if (typeof configOrCommitment === 'string') {
+        commitment = configOrCommitment;
+      } else {
+        commitment = configOrCommitment.commitment;
+
+        if (configOrCommitment.filters) {
+          extra.filters = configOrCommitment.filters;
+        }
+      }
+    }
+
     const args = this._buildArgs(
       [programId.toBase58()],
       commitment,
       'jsonParsed',
+      extra,
     );
     const unsafeRes = await this._rpcRequest('getProgramAccounts', args);
     const res = create(
@@ -2317,6 +2686,25 @@ export class Connection {
   }
 
   /**
+   * Fetch `limit` number of slot leaders starting from `startSlot`
+   *
+   * @param startSlot fetch slot leaders starting from this slot
+   * @param limit number of slot leaders to return
+   */
+  async getSlotLeaders(
+    startSlot: number,
+    limit: number,
+  ): Promise<Array<PublicKey>> {
+    const args = [startSlot, limit];
+    const unsafeRes = await this._rpcRequest('getSlotLeaders', args);
+    const res = create(unsafeRes, jsonRpcResult(array(PublicKeyFromString)));
+    if ('error' in res) {
+      throw new Error('failed to get slot leaders: ' + res.error.message);
+    }
+    return res.result;
+  }
+
+  /**
    * Fetch the current status of a signature
    */
   async getSignatureStatus(
@@ -2366,15 +2754,17 @@ export class Connection {
 
   /**
    * Fetch the current total currency supply of the cluster in lamports
+   *
+   * @deprecated Deprecated since v1.2.8. Please use {@link getSupply} instead.
    */
   async getTotalSupply(commitment?: Commitment): Promise<number> {
     const args = this._buildArgs([], commitment);
-    const unsafeRes = await this._rpcRequest('getTotalSupply', args);
-    const res = create(unsafeRes, jsonRpcResult(number()));
+    const unsafeRes = await this._rpcRequest('getSupply', args);
+    const res = create(unsafeRes, GetSupplyRpcResult);
     if ('error' in res) {
       throw new Error('failed to get total supply: ' + res.error.message);
     }
-    return res.result;
+    return res.result.value.total;
   }
 
   /**
@@ -2388,6 +2778,30 @@ export class Connection {
     const res = create(unsafeRes, GetInflationGovernorRpcResult);
     if ('error' in res) {
       throw new Error('failed to get inflation: ' + res.error.message);
+    }
+    return res.result;
+  }
+
+  /**
+   * Fetch the inflation reward for a list of addresses for an epoch
+   */
+  async getInflationReward(
+    addresses: PublicKey[],
+    epoch?: number,
+    commitment?: Commitment,
+  ): Promise<(InflationReward | null)[]> {
+    const args = this._buildArgs(
+      [addresses.map(pubkey => pubkey.toBase58())],
+      commitment,
+      undefined,
+      {
+        epoch,
+      },
+    );
+    const unsafeRes = await this._rpcRequest('getInflationReward', args);
+    const res = create(unsafeRes, GetInflationRewardResult);
+    if ('error' in res) {
+      throw new Error('failed to get inflation reward: ' + res.error.message);
     }
     return res.result;
   }
@@ -2414,7 +2828,14 @@ export class Connection {
     if ('error' in res) {
       throw new Error('failed to get epoch schedule: ' + res.error.message);
     }
-    return res.result;
+    const epochSchedule = res.result;
+    return new EpochSchedule(
+      epochSchedule.slotsPerEpoch,
+      epochSchedule.leaderScheduleSlotOffset,
+      epochSchedule.warmup,
+      epochSchedule.firstNormalEpoch,
+      epochSchedule.firstNormalSlot,
+    );
   }
 
   /**
@@ -2543,12 +2964,119 @@ export class Connection {
   }
 
   /**
-   * Fetch a list of Transactions and transaction statuses from the cluster
-   * for a confirmed block
+   * Fetch a processed block from the cluster.
    */
-  async getConfirmedBlock(slot: number): Promise<ConfirmedBlock> {
-    const unsafeRes = await this._rpcRequest('getConfirmedBlock', [slot]);
+  async getBlock(
+    slot: number,
+    opts?: {commitment?: Finality},
+  ): Promise<BlockResponse | null> {
+    const args = this._buildArgsAtLeastConfirmed(
+      [slot],
+      opts && opts.commitment,
+    );
+    const unsafeRes = await this._rpcRequest('getConfirmedBlock', args);
     const res = create(unsafeRes, GetConfirmedBlockRpcResult);
+
+    if ('error' in res) {
+      throw new Error('failed to get confirmed block: ' + res.error.message);
+    }
+
+    const result = res.result;
+    if (!result) return result;
+
+    return {
+      ...result,
+      transactions: result.transactions.map(({transaction, meta}) => {
+        const message = new Message(transaction.message);
+        return {
+          meta,
+          transaction: {
+            ...transaction,
+            message,
+          },
+        };
+      }),
+    };
+  }
+
+  /**
+   * Fetch a processed transaction from the cluster.
+   */
+  async getTransaction(
+    signature: string,
+    opts?: {commitment?: Finality},
+  ): Promise<TransactionResponse | null> {
+    const args = this._buildArgsAtLeastConfirmed(
+      [signature],
+      opts && opts.commitment,
+    );
+    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', args);
+    const res = create(unsafeRes, GetConfirmedTransactionRpcResult);
+    if ('error' in res) {
+      throw new Error(
+        'failed to get confirmed transaction: ' + res.error.message,
+      );
+    }
+
+    const result = res.result;
+    if (!result) return result;
+
+    return {
+      ...result,
+      transaction: {
+        ...result.transaction,
+        message: new Message(result.transaction.message),
+      },
+    };
+  }
+
+  /**
+   * Fetch a list of Transactions and transaction statuses from the cluster
+   * for a confirmed block.
+   *
+   * @deprecated Deprecated since v1.13.0. Please use {@link getBlock} instead.
+   */
+  async getConfirmedBlock(
+    slot: number,
+    commitment?: Finality,
+  ): Promise<ConfirmedBlock> {
+    const result = await this.getBlock(slot, {commitment});
+    if (!result) {
+      throw new Error('Confirmed block ' + slot + ' not found');
+    }
+
+    return {
+      ...result,
+      transactions: result.transactions.map(({transaction, meta}) => {
+        return {
+          meta,
+          transaction: Transaction.populate(
+            transaction.message,
+            transaction.signatures,
+          ),
+        };
+      }),
+    };
+  }
+
+  /**
+   * Fetch a list of Signatures from the cluster for a confirmed block, excluding rewards
+   */
+  async getConfirmedBlockSignatures(
+    slot: number,
+    commitment?: Finality,
+  ): Promise<ConfirmedBlockSignatures> {
+    const args = this._buildArgsAtLeastConfirmed(
+      [slot],
+      commitment,
+      undefined,
+      {
+        transactionDetails: 'signatures',
+        rewards: false,
+      },
+    );
+    const unsafeRes = await this._rpcRequest('getConfirmedBlock', args);
+    const res = create(unsafeRes, GetConfirmedBlockSignaturesRpcResult);
     if ('error' in res) {
       throw new Error('failed to get confirmed block: ' + res.error.message);
     }
@@ -2564,17 +3092,15 @@ export class Connection {
    */
   async getConfirmedTransaction(
     signature: TransactionSignature,
+    commitment?: Finality,
   ): Promise<ConfirmedTransaction | null> {
-    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', [
-      signature,
-    ]);
-    const res = create(unsafeRes, GetConfirmedTransactionRpcResult);
-    if ('error' in res) {
-      throw new Error(
-        'failed to get confirmed transaction: ' + res.error.message,
-      );
-    }
-    return res.result;
+    const result = await this.getTransaction(signature, {commitment});
+    if (!result) return result;
+    const {message, signatures} = result.transaction;
+    return {
+      ...result,
+      transaction: Transaction.populate(message, signatures),
+    };
   }
 
   /**
@@ -2582,11 +3108,14 @@ export class Connection {
    */
   async getParsedConfirmedTransaction(
     signature: TransactionSignature,
+    commitment?: Finality,
   ): Promise<ParsedConfirmedTransaction | null> {
-    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', [
-      signature,
+    const args = this._buildArgsAtLeastConfirmed(
+      [signature],
+      commitment,
       'jsonParsed',
-    ]);
+    );
+    const unsafeRes = await this._rpcRequest('getConfirmedTransaction', args);
     const res = create(unsafeRes, GetParsedConfirmedTransactionRpcResult);
     if ('error' in res) {
       throw new Error(
@@ -2601,11 +3130,17 @@ export class Connection {
    */
   async getParsedConfirmedTransactions(
     signatures: TransactionSignature[],
+    commitment?: Finality,
   ): Promise<(ParsedConfirmedTransaction | null)[]> {
     const batch = signatures.map(signature => {
+      const args = this._buildArgsAtLeastConfirmed(
+        [signature],
+        commitment,
+        'jsonParsed',
+      );
       return {
         methodName: 'getConfirmedTransaction',
-        args: [signature, 'jsonParsed'],
+        args,
       };
     });
 
@@ -2627,6 +3162,8 @@ export class Connection {
    * Fetch a list of all the confirmed signatures for transactions involving an address
    * within a specified slot range. Max range allowed is 10,000 slots.
    *
+   * @deprecated Deprecated since v1.3. Please use {@link getConfirmedSignaturesForAddress2} instead.
+   *
    * @param address queried address
    * @param startSlot start slot, inclusive
    * @param endSlot end slot, inclusive
@@ -2636,11 +3173,86 @@ export class Connection {
     startSlot: number,
     endSlot: number,
   ): Promise<Array<TransactionSignature>> {
-    const unsafeRes = await this._rpcRequest(
-      'getConfirmedSignaturesForAddress',
-      [address.toBase58(), startSlot, endSlot],
+    let options: any = {};
+
+    let firstAvailableBlock = await this.getFirstAvailableBlock();
+    while (!('until' in options)) {
+      startSlot--;
+      if (startSlot <= 0 || startSlot < firstAvailableBlock) {
+        break;
+      }
+
+      try {
+        const block = await this.getConfirmedBlockSignatures(
+          startSlot,
+          'finalized',
+        );
+        if (block.signatures.length > 0) {
+          options.until =
+            block.signatures[block.signatures.length - 1].toString();
+        }
+      } catch (err) {
+        if (err.message.includes('skipped')) {
+          continue;
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    let highestConfirmedRoot = await this.getSlot('finalized');
+    while (!('before' in options)) {
+      endSlot++;
+      if (endSlot > highestConfirmedRoot) {
+        break;
+      }
+
+      try {
+        const block = await this.getConfirmedBlockSignatures(endSlot);
+        if (block.signatures.length > 0) {
+          options.before =
+            block.signatures[block.signatures.length - 1].toString();
+        }
+      } catch (err) {
+        if (err.message.includes('skipped')) {
+          continue;
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    const confirmedSignatureInfo = await this.getConfirmedSignaturesForAddress2(
+      address,
+      options,
     );
-    const res = create(unsafeRes, GetConfirmedSignaturesForAddressRpcResult);
+    return confirmedSignatureInfo.map(info => info.signature);
+  }
+
+  /**
+   * Returns confirmed signatures for transactions involving an
+   * address backwards in time from the provided signature or most recent confirmed block
+   *
+   *
+   * @param address queried address
+   * @param options
+   */
+  async getConfirmedSignaturesForAddress2(
+    address: PublicKey,
+    options?: ConfirmedSignaturesForAddress2Options,
+    commitment?: Finality,
+  ): Promise<Array<ConfirmedSignatureInfo>> {
+    const args = this._buildArgsAtLeastConfirmed(
+      [address.toBase58()],
+      commitment,
+      undefined,
+      options,
+    );
+    const unsafeRes = await this._rpcRequest(
+      'getConfirmedSignaturesForAddress2',
+      args,
+    );
+    const res = create(unsafeRes, GetConfirmedSignaturesForAddress2RpcResult);
     if ('error' in res) {
       throw new Error(
         'failed to get confirmed signatures for address: ' + res.error.message,
@@ -2657,18 +3269,22 @@ export class Connection {
    * @param address queried address
    * @param options
    */
-  async getConfirmedSignaturesForAddress2(
+  async getSignaturesForAddress(
     address: PublicKey,
-    options?: ConfirmedSignaturesForAddress2Options,
+    options?: SignaturesForAddressOptions,
+    commitment?: Finality,
   ): Promise<Array<ConfirmedSignatureInfo>> {
-    const unsafeRes = await this._rpcRequest(
-      'getConfirmedSignaturesForAddress2',
-      [address.toBase58(), options],
+    const args = this._buildArgsAtLeastConfirmed(
+      [address.toBase58()],
+      commitment,
+      undefined,
+      options,
     );
-    const res = create(unsafeRes, GetConfirmedSignaturesForAddress2RpcResult);
+    const unsafeRes = await this._rpcRequest('getSignaturesForAddress', args);
+    const res = create(unsafeRes, GetSignaturesForAddressRpcResult);
     if ('error' in res) {
       throw new Error(
-        'failed to get confirmed signatures for address: ' + res.error.message,
+        'failed to get signatures for address: ' + res.error.message,
       );
     }
     return res.result;
@@ -2717,15 +3333,26 @@ export class Connection {
   }
 
   /**
-   * Request an allocation of lamports to the specified account
+   * Request an allocation of lamports to the specified address
+   *
+   * ```typescript
+   * import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
+   *
+   * (async () => {
+   *   const connection = new Connection("https://api.testnet.solana.com", "confirmed");
+   *   const myAddress = new PublicKey("2nr1bHFT86W9tGnyvmYW4vcHKsQB3sVQfnddasz4kExM");
+   *   const signature = await connection.requestAirdrop(myAddress, LAMPORTS_PER_SOL);
+   *   await connection.confirmTransaction(signature);
+   * })();
+   * ```
    */
   async requestAirdrop(
     to: PublicKey,
-    amount: number,
+    lamports: number,
   ): Promise<TransactionSignature> {
     const unsafeRes = await this._rpcRequest('requestAirdrop', [
       to.toBase58(),
-      amount,
+      lamports,
     ]);
     const res = create(unsafeRes, RequestAirdropRpcResult);
     if ('error' in res) {
@@ -2792,7 +3419,7 @@ export class Connection {
    */
   async simulateTransaction(
     transaction: Transaction,
-    signers?: Array<Account>,
+    signers?: Array<Signer>,
   ): Promise<RpcResponseAndContext<SimulatedTransactionResponse>> {
     if (transaction.nonceInfo && signers) {
       transaction.sign(...signers);
@@ -2808,16 +3435,20 @@ export class Connection {
           throw new Error('!signature'); // should never happen
         }
 
-        // If the signature of this transaction has not been seen before with the
-        // current recentBlockhash, all done.
         const signature = transaction.signature.toString('base64');
         if (
           !this._blockhashInfo.simulatedSignatures.includes(signature) &&
           !this._blockhashInfo.transactionSignatures.includes(signature)
         ) {
+          // The signature of this transaction has not been seen before with the
+          // current recentBlockhash, all done. Let's break
           this._blockhashInfo.simulatedSignatures.push(signature);
           break;
         } else {
+          // This transaction would be treated as duplicate (its derived signature
+          // matched to one of already recorded signatures).
+          // So, we must fetch a new blockhash for a different signature by disabling
+          // our cache not to wait for the cache expiration (BLOCKHASH_CACHE_TIMEOUT_MS).
           disableCache = true;
         }
       }
@@ -2839,7 +3470,19 @@ export class Connection {
     const unsafeRes = await this._rpcRequest('simulateTransaction', args);
     const res = create(unsafeRes, SimulatedTransactionResponseStruct);
     if ('error' in res) {
-      throw new Error('failed to simulate transaction: ' + res.error.message);
+      let logs;
+      if ('data' in res.error) {
+        logs = res.error.data.logs;
+        if (logs && Array.isArray(logs)) {
+          const traceIndent = '\n    ';
+          const logTrace = traceIndent + logs.join(traceIndent);
+          console.error(res.error.message, logTrace);
+        }
+      }
+      throw new SendTransactionError(
+        'failed to simulate transaction: ' + res.error.message,
+        logs,
+      );
     }
     return res.result;
   }
@@ -2849,7 +3492,7 @@ export class Connection {
    */
   async sendTransaction(
     transaction: Transaction,
-    signers: Array<Account>,
+    signers: Array<Signer>,
     options?: SendOptions,
   ): Promise<TransactionSignature> {
     if (transaction.nonceInfo) {
@@ -2863,13 +3506,17 @@ export class Connection {
           throw new Error('!signature'); // should never happen
         }
 
-        // If the signature of this transaction has not been seen before with the
-        // current recentBlockhash, all done.
         const signature = transaction.signature.toString('base64');
         if (!this._blockhashInfo.transactionSignatures.includes(signature)) {
+          // The signature of this transaction has not been seen before with the
+          // current recentBlockhash, all done. Let's break
           this._blockhashInfo.transactionSignatures.push(signature);
           break;
         } else {
+          // This transaction would be treated as duplicate (its derived signature
+          // matched to one of already recorded signatures).
+          // So, we must fetch a new blockhash for a different signature by disabling
+          // our cache not to wait for the cache expiration (BLOCKHASH_CACHE_TIMEOUT_MS).
           disableCache = true;
         }
       }
@@ -2919,15 +3566,19 @@ export class Connection {
     const unsafeRes = await this._rpcRequest('sendTransaction', args);
     const res = create(unsafeRes, SendTransactionRpcResult);
     if ('error' in res) {
+      let logs;
       if ('data' in res.error) {
-        const logs = res.error.data.logs;
+        logs = res.error.data.logs;
         if (logs && Array.isArray(logs)) {
           const traceIndent = '\n    ';
           const logTrace = traceIndent + logs.join(traceIndent);
           console.error(res.error.message, logTrace);
         }
       }
-      throw new Error('failed to send transaction: ' + res.error.message);
+      throw new SendTransactionError(
+        'failed to send transaction: ' + res.error.message,
+        logs,
+      );
     }
     return res.result;
   }
@@ -3024,13 +3675,16 @@ export class Connection {
     Object.values(this._programAccountChangeSubscriptions).forEach(
       s => (s.subscriptionId = null),
     );
+    Object.values(this._rootSubscriptions).forEach(
+      s => (s.subscriptionId = null),
+    );
     Object.values(this._signatureSubscriptions).forEach(
       s => (s.subscriptionId = null),
     );
     Object.values(this._slotSubscriptions).forEach(
       s => (s.subscriptionId = null),
     );
-    Object.values(this._rootSubscriptions).forEach(
+    Object.values(this._slotUpdateSubscriptions).forEach(
       s => (s.subscriptionId = null),
     );
   }
@@ -3046,6 +3700,9 @@ export class Connection {
       this._programAccountChangeSubscriptions,
     ).map(Number);
     const slotKeys = Object.keys(this._slotSubscriptions).map(Number);
+    const slotUpdateKeys = Object.keys(this._slotUpdateSubscriptions).map(
+      Number,
+    );
     const signatureKeys = Object.keys(this._signatureSubscriptions).map(Number);
     const rootKeys = Object.keys(this._rootSubscriptions).map(Number);
     const logsKeys = Object.keys(this._logsSubscriptions).map(Number);
@@ -3053,6 +3710,7 @@ export class Connection {
       accountKeys.length === 0 &&
       programKeys.length === 0 &&
       slotKeys.length === 0 &&
+      slotUpdateKeys.length === 0 &&
       signatureKeys.length === 0 &&
       rootKeys.length === 0 &&
       logsKeys.length === 0
@@ -3092,13 +3750,20 @@ export class Connection {
       this._subscribe(
         sub,
         'programSubscribe',
-        this._buildArgs([sub.programId], sub.commitment, 'base64'),
+        this._buildArgs([sub.programId], sub.commitment, 'base64', {
+          filters: sub.filters,
+        }),
       );
     }
 
     for (let id of slotKeys) {
       const sub = this._slotSubscriptions[id];
       this._subscribe(sub, 'slotSubscribe', []);
+    }
+
+    for (let id of slotUpdateKeys) {
+      const sub = this._slotUpdateSubscriptions[id];
+      this._subscribe(sub, 'slotsUpdatesSubscribe', []);
     }
 
     for (let id of signatureKeys) {
@@ -3209,12 +3874,14 @@ export class Connection {
    * @param programId Public key of the program to monitor
    * @param callback Function to invoke whenever the account is changed
    * @param commitment Specify the commitment level account changes must reach before notification
+   * @param filters The program account filters to pass into the RPC method
    * @return subscription id
    */
   onProgramAccountChange(
     programId: PublicKey,
     callback: ProgramAccountChangeCallback,
     commitment?: Commitment,
+    filters?: GetProgramAccountsFilter[],
   ): number {
     const id = ++this._programAccountChangeSubscriptionCounter;
     this._programAccountChangeSubscriptions[id] = {
@@ -3222,6 +3889,7 @@ export class Connection {
       callback,
       commitment,
       subscriptionId: null,
+      filters,
     };
     this._updateSubscriptions();
     return id;
@@ -3340,6 +4008,49 @@ export class Connection {
   /**
    * @internal
    */
+  _wsOnSlotUpdatesNotification(notification: Object) {
+    const res = create(notification, SlotUpdateNotificationResult);
+    for (const sub of Object.values(this._slotUpdateSubscriptions)) {
+      if (sub.subscriptionId === res.subscription) {
+        sub.callback(res.result);
+        return;
+      }
+    }
+  }
+
+  /**
+   * Register a callback to be invoked upon slot updates. {@link SlotUpdate}'s
+   * may be useful to track live progress of a cluster.
+   *
+   * @param callback Function to invoke whenever the slot updates
+   * @return subscription id
+   */
+  onSlotUpdate(callback: SlotUpdateCallback): number {
+    const id = ++this._slotUpdateSubscriptionCounter;
+    this._slotUpdateSubscriptions[id] = {
+      callback,
+      subscriptionId: null,
+    };
+    this._updateSubscriptions();
+    return id;
+  }
+
+  /**
+   * Deregister a slot update notification callback
+   *
+   * @param id subscription id to deregister
+   */
+  async removeSlotUpdateListener(id: number): Promise<void> {
+    if (this._slotUpdateSubscriptions[id]) {
+      const subInfo = this._slotUpdateSubscriptions[id];
+      delete this._slotUpdateSubscriptions[id];
+      await this._unsubscribe(subInfo, 'slotsUpdatesUnsubscribe');
+      this._updateSubscriptions();
+    } else {
+      throw new Error(`Unknown slot update id: ${id}`);
+    }
+  }
+
   _buildArgs(
     args: Array<any>,
     override?: Commitment,
@@ -3361,6 +4072,26 @@ export class Connection {
       args.push(options);
     }
     return args;
+  }
+
+  /**
+   * @internal
+   */
+  _buildArgsAtLeastConfirmed(
+    args: Array<any>,
+    override?: Finality,
+    encoding?: 'jsonParsed' | 'base64',
+    extra?: any,
+  ): Array<any> {
+    const commitment = override || this._commitment;
+    if (commitment && !['confirmed', 'finalized'].includes(commitment)) {
+      throw new Error(
+        'Using Connection with default commitment: `' +
+          this._commitment +
+          '`, but method requires at least `confirmed`',
+      );
+    }
+    return this._buildArgs(args, override, encoding, extra);
   }
 
   /**

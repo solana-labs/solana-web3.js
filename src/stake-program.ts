@@ -1,4 +1,4 @@
-import * as BufferLayout from 'buffer-layout';
+import * as BufferLayout from '@solana/buffer-layout';
 
 import {encodeData, decodeData, InstructionType} from './instruction';
 import * as Layout from './layout';
@@ -10,6 +10,7 @@ import {
   SYSVAR_STAKE_HISTORY_PUBKEY,
 } from './sysvar';
 import {Transaction, TransactionInstruction} from './transaction';
+import {toBuffer} from './util/to-buffer';
 
 /**
  * Address of the stake config account which configures the rate
@@ -58,6 +59,11 @@ export class Lockup {
     this.epoch = epoch;
     this.custodian = custodian;
   }
+
+  /**
+   * Default, inactive Lockup value
+   */
+  static default: Lockup = new Lockup(0, 0, PublicKey.default);
 }
 
 /**
@@ -71,7 +77,7 @@ export type CreateStakeAccountParams = {
   /** Authorities of the new stake account */
   authorized: Authorized;
   /** Lockup of the new stake account */
-  lockup: Lockup;
+  lockup?: Lockup;
   /** Funding amount */
   lamports: number;
 };
@@ -85,7 +91,7 @@ export type CreateStakeAccountWithSeedParams = {
   basePubkey: PublicKey;
   seed: string;
   authorized: Authorized;
-  lockup: Lockup;
+  lockup?: Lockup;
   lamports: number;
 };
 
@@ -95,7 +101,7 @@ export type CreateStakeAccountWithSeedParams = {
 export type InitializeStakeParams = {
   stakePubkey: PublicKey;
   authorized: Authorized;
-  lockup: Lockup;
+  lockup?: Lockup;
 };
 
 /**
@@ -159,6 +165,15 @@ export type WithdrawStakeParams = {
  */
 export type DeactivateStakeParams = {
   stakePubkey: PublicKey;
+  authorizedPubkey: PublicKey;
+};
+
+/**
+ * Merge stake instruction params
+ */
+export type MergeStakeParams = {
+  stakePubkey: PublicKey;
+  sourceStakePubKey: PublicKey;
   authorizedPubkey: PublicKey;
 };
 
@@ -325,6 +340,21 @@ export class StakeInstruction {
   }
 
   /**
+   * Decode a merge stake instruction and retrieve the instruction params.
+   */
+  static decodeMerge(instruction: TransactionInstruction): MergeStakeParams {
+    this.checkProgramId(instruction.programId);
+    this.checkKeyLength(instruction.keys, 3);
+    decodeData(STAKE_INSTRUCTION_LAYOUTS.Merge, instruction.data);
+
+    return {
+      stakePubkey: instruction.keys[0].pubkey,
+      sourceStakePubKey: instruction.keys[1].pubkey,
+      authorizedPubkey: instruction.keys[4].pubkey,
+    };
+  }
+
+  /**
    * Decode a withdraw stake instruction and retrieve the instruction params.
    */
   static decodeWithdraw(
@@ -396,10 +426,12 @@ export type StakeInstructionType =
   | 'Delegate'
   | 'Initialize'
   | 'Split'
-  | 'Withdraw';
+  | 'Withdraw'
+  | 'Merge';
 
 /**
  * An enumeration of valid stake InstructionType's
+ * @internal
  */
 export const STAKE_INSTRUCTION_LAYOUTS: {
   [type in StakeInstructionType]: InstructionType;
@@ -442,6 +474,10 @@ export const STAKE_INSTRUCTION_LAYOUTS: {
     index: 5,
     layout: BufferLayout.struct([BufferLayout.u32('instruction')]),
   },
+  Merge: {
+    index: 7,
+    layout: BufferLayout.struct([BufferLayout.u32('instruction')]),
+  },
   AuthorizeWithSeed: {
     index: 8,
     layout: BufferLayout.struct([
@@ -455,10 +491,10 @@ export const STAKE_INSTRUCTION_LAYOUTS: {
 });
 
 /**
- * @typedef {Object} StakeAuthorizationType
- * @property (index} The Stake Authorization index (from solana-stake-program)
+ * Stake authorization type
  */
 export type StakeAuthorizationType = {
+  /** The Stake Authorization index (from solana-stake-program) */
   index: number;
 };
 
@@ -486,9 +522,9 @@ export class StakeProgram {
   /**
    * Public key that identifies the Stake program
    */
-  static get programId(): PublicKey {
-    return new PublicKey('Stake11111111111111111111111111111111111111');
-  }
+  static programId: PublicKey = new PublicKey(
+    'Stake11111111111111111111111111111111111111',
+  );
 
   /**
    * Max space of a Stake account
@@ -497,25 +533,24 @@ export class StakeProgram {
    * `std::mem::size_of::<StakeState>()`:
    * https://docs.rs/solana-stake-program/1.4.4/solana_stake_program/stake_state/enum.StakeState.html
    */
-  static get space(): number {
-    return 200;
-  }
+  static space: number = 200;
 
   /**
    * Generate an Initialize instruction to add to a Stake Create transaction
    */
   static initialize(params: InitializeStakeParams): TransactionInstruction {
-    const {stakePubkey, authorized, lockup} = params;
+    const {stakePubkey, authorized, lockup: maybeLockup} = params;
+    const lockup: Lockup = maybeLockup || Lockup.default;
     const type = STAKE_INSTRUCTION_LAYOUTS.Initialize;
     const data = encodeData(type, {
       authorized: {
-        staker: authorized.staker.toBuffer(),
-        withdrawer: authorized.withdrawer.toBuffer(),
+        staker: toBuffer(authorized.staker.toBuffer()),
+        withdrawer: toBuffer(authorized.withdrawer.toBuffer()),
       },
       lockup: {
         unixTimestamp: lockup.unixTimestamp,
         epoch: lockup.epoch,
-        custodian: lockup.custodian.toBuffer(),
+        custodian: toBuffer(lockup.custodian.toBuffer()),
       },
     });
     const instructionData = {
@@ -616,7 +651,7 @@ export class StakeProgram {
 
     const type = STAKE_INSTRUCTION_LAYOUTS.Authorize;
     const data = encodeData(type, {
-      newAuthorized: newAuthorizedPubkey.toBuffer(),
+      newAuthorized: toBuffer(newAuthorizedPubkey.toBuffer()),
       stakeAuthorizationType: stakeAuthorizationType.index,
     });
 
@@ -652,10 +687,10 @@ export class StakeProgram {
 
     const type = STAKE_INSTRUCTION_LAYOUTS.AuthorizeWithSeed;
     const data = encodeData(type, {
-      newAuthorized: newAuthorizedPubkey.toBuffer(),
+      newAuthorized: toBuffer(newAuthorizedPubkey.toBuffer()),
       stakeAuthorizationType: stakeAuthorizationType.index,
       authoritySeed: authoritySeed,
-      authorityOwner: authorityOwner.toBuffer(),
+      authorityOwner: toBuffer(authorityOwner.toBuffer()),
     });
 
     const keys = [
@@ -741,16 +776,36 @@ export class StakeProgram {
   }
 
   /**
+   * Generate a Transaction that merges Stake accounts.
+   */
+  static merge(params: MergeStakeParams): Transaction {
+    const {stakePubkey, sourceStakePubKey, authorizedPubkey} = params;
+    const type = STAKE_INSTRUCTION_LAYOUTS.Merge;
+    const data = encodeData(type);
+
+    return new Transaction().add({
+      keys: [
+        {pubkey: stakePubkey, isSigner: false, isWritable: true},
+        {pubkey: sourceStakePubKey, isSigner: false, isWritable: true},
+        {pubkey: SYSVAR_CLOCK_PUBKEY, isSigner: false, isWritable: false},
+        {
+          pubkey: SYSVAR_STAKE_HISTORY_PUBKEY,
+          isSigner: false,
+          isWritable: false,
+        },
+        {pubkey: authorizedPubkey, isSigner: true, isWritable: false},
+      ],
+      programId: this.programId,
+      data,
+    });
+  }
+
+  /**
    * Generate a Transaction that withdraws deactivated Stake tokens.
    */
   static withdraw(params: WithdrawStakeParams): Transaction {
-    const {
-      stakePubkey,
-      authorizedPubkey,
-      toPubkey,
-      lamports,
-      custodianPubkey,
-    } = params;
+    const {stakePubkey, authorizedPubkey, toPubkey, lamports, custodianPubkey} =
+      params;
     const type = STAKE_INSTRUCTION_LAYOUTS.Withdraw;
     const data = encodeData(type, {lamports});
 

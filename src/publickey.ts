@@ -1,18 +1,38 @@
 import BN from 'bn.js';
 import bs58 from 'bs58';
+import {Buffer} from 'buffer';
 import nacl from 'tweetnacl';
 import {sha256} from 'crypto-hash';
-import {Buffer} from 'buffer';
+
+import {Struct, SOLANA_SCHEMA} from './util/borsh-schema';
+import {toBuffer} from './util/to-buffer';
 
 /**
  * Maximum length of derived pubkey seed
  */
 export const MAX_SEED_LENGTH = 32;
 
+type PublicKeyInitData =
+  | number
+  | string
+  | Buffer
+  | Uint8Array
+  | Array<number>
+  | PublicKeyData;
+
+type PublicKeyData = {
+  /** @internal */
+  _bn: BN;
+};
+
+function isPublicKeyData(value: PublicKeyInitData): value is PublicKeyData {
+  return (value as PublicKeyData)._bn !== undefined;
+}
+
 /**
  * A public key
  */
-export class PublicKey {
+export class PublicKey extends Struct {
   /** @internal */
   _bn: BN;
 
@@ -20,22 +40,32 @@ export class PublicKey {
    * Create a new PublicKey object
    * @param value ed25519 public key as buffer or base-58 encoded string
    */
-  constructor(value: number | string | Buffer | Uint8Array | Array<number>) {
-    if (typeof value === 'string') {
-      // assume base 58 encoding by default
-      const decoded = bs58.decode(value);
-      if (decoded.length != 32) {
+  constructor(value: PublicKeyInitData) {
+    super({});
+    if (isPublicKeyData(value)) {
+      this._bn = value._bn;
+    } else {
+      if (typeof value === 'string') {
+        // assume base 58 encoding by default
+        const decoded = bs58.decode(value);
+        if (decoded.length != 32) {
+          throw new Error(`Invalid public key input`);
+        }
+        this._bn = new BN(decoded);
+      } else {
+        this._bn = new BN(value);
+      }
+
+      if (this._bn.byteLength() > 32) {
         throw new Error(`Invalid public key input`);
       }
-      this._bn = new BN(decoded);
-    } else {
-      this._bn = new BN(value);
-    }
-
-    if (this._bn.byteLength() > 32) {
-      throw new Error(`Invalid public key input`);
     }
   }
+
+  /**
+   * Default public key value. (All zeros)
+   */
+  static default: PublicKey = new PublicKey('11111111111111111111111111111111');
 
   /**
    * Checks if two publicKeys are equal
@@ -48,7 +78,14 @@ export class PublicKey {
    * Return the base-58 representation of the public key
    */
   toBase58(): string {
-    return bs58.encode(this.toBuffer());
+    return bs58.encode(this.toBytes());
+  }
+
+  /**
+   * Return the byte array representation of the public key
+   */
+  toBytes(): Uint8Array {
+    return this.toBuffer();
   }
 
   /**
@@ -74,6 +111,8 @@ export class PublicKey {
 
   /**
    * Derive a public key from another key, a seed, and a program ID.
+   * The program ID will also serve as the owner of the public key, giving
+   * it permission to write data to the account.
    */
   static async createWithSeed(
     fromPublicKey: PublicKey,
@@ -99,9 +138,9 @@ export class PublicKey {
     let buffer = Buffer.alloc(0);
     seeds.forEach(function (seed) {
       if (seed.length > MAX_SEED_LENGTH) {
-        throw new Error(`Max seed length exceeded`);
+        throw new TypeError(`Max seed length exceeded`);
       }
-      buffer = Buffer.concat([buffer, Buffer.from(seed)]);
+      buffer = Buffer.concat([buffer, toBuffer(seed)]);
     });
     buffer = Buffer.concat([
       buffer,
@@ -134,6 +173,9 @@ export class PublicKey {
         const seedsWithNonce = seeds.concat(Buffer.from([nonce]));
         address = await this.createProgramAddress(seedsWithNonce, programId);
       } catch (err) {
+        if (err instanceof TypeError) {
+          throw err;
+        }
         nonce--;
         continue;
       }
@@ -141,7 +183,19 @@ export class PublicKey {
     }
     throw new Error(`Unable to find a viable program address nonce`);
   }
+
+  /**
+   * Check that a pubkey is on the ed25519 curve.
+   */
+  static isOnCurve(pubkey: Uint8Array): boolean {
+    return is_on_curve(pubkey) == 1;
+  }
 }
+
+SOLANA_SCHEMA.set(PublicKey, {
+  kind: 'struct',
+  fields: [['_bn', 'u256']],
+});
 
 // @ts-ignore
 let naclLowLevel = nacl.lowlevel;
@@ -195,22 +249,8 @@ function is_on_curve(p: any) {
 }
 let gf1 = naclLowLevel.gf([1]);
 let I = naclLowLevel.gf([
-  0xa0b0,
-  0x4a0e,
-  0x1b27,
-  0xc4ee,
-  0xe478,
-  0xad2f,
-  0x1806,
-  0x2f43,
-  0xd7a7,
-  0x3dfb,
-  0x0099,
-  0x2b4d,
-  0xdf0b,
-  0x4fc1,
-  0x2480,
-  0x2b83,
+  0xa0b0, 0x4a0e, 0x1b27, 0xc4ee, 0xe478, 0xad2f, 0x1806, 0x2f43, 0xd7a7,
+  0x3dfb, 0x0099, 0x2b4d, 0xdf0b, 0x4fc1, 0x2480, 0x2b83,
 ]);
 function neq25519(a: any, b: any) {
   var c = new Uint8Array(32),

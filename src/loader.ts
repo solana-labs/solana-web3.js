@@ -1,14 +1,21 @@
 import {Buffer} from 'buffer';
-import * as BufferLayout from 'buffer-layout';
+import * as BufferLayout from '@solana/buffer-layout';
 
-import {Account} from './account';
 import {PublicKey} from './publickey';
 import {Transaction, PACKET_DATA_SIZE} from './transaction';
 import {SYSVAR_RENT_PUBKEY} from './sysvar';
 import {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
 import {sleep} from './util/sleep';
 import type {Connection} from './connection';
+import type {Signer} from './keypair';
 import {SystemProgram} from './system-program';
+
+// Keep program chunks under PACKET_DATA_SIZE, leaving enough room for the
+// rest of the Transaction fields
+//
+// TODO: replace 300 with a proper constant for the size of the other
+// Transaction fields
+const CHUNK_SIZE = PACKET_DATA_SIZE - 300;
 
 /**
  * Program loader interface
@@ -22,14 +29,7 @@ export class Loader {
   /**
    * Amount of program data placed in each load Transaction
    */
-  static get chunkSize(): number {
-    // Keep program chunks under PACKET_DATA_SIZE, leaving enough room for the
-    // rest of the Transaction fields
-    //
-    // TODO: replace 300 with a proper constant for the size of the other
-    // Transaction fields
-    return PACKET_DATA_SIZE - 300;
-  }
+  static chunkSize: number = CHUNK_SIZE;
 
   /**
    * Minimum number of signatures required to load a program not including
@@ -58,8 +58,8 @@ export class Loader {
    */
   static async load(
     connection: Connection,
-    payer: Account,
-    program: Account,
+    payer: Signer,
+    program: Signer,
     programId: PublicKey,
     data: Buffer | Uint8Array | Array<number>,
   ): Promise<boolean> {

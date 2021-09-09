@@ -1,55 +1,56 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-import * as BufferLayout from 'buffer-layout';
+import * as BufferLayout from '@solana/buffer-layout';
 
 import {PublicKey} from './publickey';
 import type {Blockhash} from './blockhash';
 import * as Layout from './layout';
 import {PACKET_DATA_SIZE} from './transaction';
 import * as shortvec from './util/shortvec-encoding';
+import {toBuffer} from './util/to-buffer';
 
 /**
  * The message header, identifying signed and read-only account
- *
- * @typedef {Object} MessageHeader
- * @property {number} numRequiredSignatures The number of signatures required for this message to be considered valid. The
- * signatures must match the first `numRequiredSignatures` of `accountKeys`.
- * @property {number} numReadonlySignedAccounts: The last `numReadonlySignedAccounts` of the signed keys are read-only accounts
- * @property {number} numReadonlyUnsignedAccounts The last `numReadonlySignedAccounts` of the unsigned keys are read-only accounts
  */
 export type MessageHeader = {
+  /**
+   * The number of signatures required for this message to be considered valid. The
+   * signatures must match the first `numRequiredSignatures` of `accountKeys`.
+   */
   numRequiredSignatures: number;
+  /** The last `numReadonlySignedAccounts` of the signed keys are read-only accounts */
   numReadonlySignedAccounts: number;
+  /** The last `numReadonlySignedAccounts` of the unsigned keys are read-only accounts */
   numReadonlyUnsignedAccounts: number;
 };
 
 /**
  * An instruction to execute by a program
  *
- * @typedef {Object} CompiledInstruction
- * @property {number} programIdIndex Index into the transaction keys array indicating the program account that executes this instruction
- * @property {number[]} accounts Ordered indices into the transaction keys array indicating which accounts to pass to the program
- * @property {string} data The program input data encoded as base 58
+ * @property {number} programIdIndex
+ * @property {number[]} accounts
+ * @property {string} data
  */
 export type CompiledInstruction = {
+  /** Index into the transaction keys array indicating the program account that executes this instruction */
   programIdIndex: number;
+  /** Ordered indices into the transaction keys array indicating which accounts to pass to the program */
   accounts: number[];
+  /** The program input data encoded as base 58 */
   data: string;
 };
 
 /**
  * Message constructor arguments
- *
- * @typedef {Object} MessageArgs
- * @property {MessageHeader} header The message header, identifying signed and read-only `accountKeys`
- * @property {string[]} accounts All the account keys used by this transaction
- * @property {Blockhash} recentBlockhash The hash of a recent ledger block
- * @property {CompiledInstruction[]} instructions Instructions that will be executed in sequence and committed in one atomic transaction if all succeed.
  */
 export type MessageArgs = {
+  /** The message header, identifying signed and read-only `accountKeys` */
   header: MessageHeader;
+  /** All the account keys used by this transaction */
   accountKeys: string[];
+  /** The hash of a recent ledger block */
   recentBlockhash: Blockhash;
+  /** Instructions that will be executed in sequence and committed in one atomic transaction if all succeed. */
   instructions: CompiledInstruction[];
 };
 
@@ -160,7 +161,7 @@ export class Message {
         this.header.numReadonlyUnsignedAccounts,
       ]),
       keyCount: Buffer.from(keyCount),
-      keys: this.accountKeys.map(key => key.toBuffer()),
+      keys: this.accountKeys.map(key => toBuffer(key.toBytes())),
       recentBlockhash: bs58.decode(this.recentBlockhash),
     };
 

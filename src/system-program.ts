@@ -1,4 +1,4 @@
-import * as BufferLayout from 'buffer-layout';
+import * as BufferLayout from '@solana/buffer-layout';
 
 import {encodeData, decodeData, InstructionType} from './instruction';
 import * as Layout from './layout';
@@ -6,212 +6,199 @@ import {NONCE_ACCOUNT_LENGTH} from './nonce-account';
 import {PublicKey} from './publickey';
 import {SYSVAR_RECENT_BLOCKHASHES_PUBKEY, SYSVAR_RENT_PUBKEY} from './sysvar';
 import {Transaction, TransactionInstruction} from './transaction';
+import {toBuffer} from './util/to-buffer';
 
 /**
  * Create account system transaction params
- * @typedef {Object} CreateAccountParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} newAccountPubkey
- * @property {number} lamports
- * @property {number} space
- * @property {PublicKey} programId
  */
 export type CreateAccountParams = {
+  /** The account that will transfer lamports to the created account */
   fromPubkey: PublicKey;
+  /** Public key of the created account */
   newAccountPubkey: PublicKey;
+  /** Amount of lamports to transfer to the created account */
   lamports: number;
+  /** Amount of space in bytes to allocate to the created account */
   space: number;
+  /** Public key of the program to assign as the owner of the created account */
   programId: PublicKey;
 };
 
 /**
  * Transfer system transaction params
- * @typedef {Object} TransferParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} toPubkey
- * @property {number} lamports
  */
 export type TransferParams = {
+  /** Account that will transfer lamports */
   fromPubkey: PublicKey;
+  /** Account that will receive transferred lamports */
   toPubkey: PublicKey;
+  /** Amount of lamports to transfer */
   lamports: number;
 };
 
 /**
  * Assign system transaction params
- * @typedef {Object} AssignParams
- * @property {PublicKey} accountPubkey
- * @property {PublicKey} programId
  */
 export type AssignParams = {
+  /** Public key of the account which will be assigned a new owner */
   accountPubkey: PublicKey;
+  /** Public key of the program to assign as the owner */
   programId: PublicKey;
 };
 
 /**
  * Create account with seed system transaction params
- * @typedef {Object} CreateAccountWithSeedParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} newAccountPubkey
- * @property {PublicKey} basePubkey
- * @property {string} seed
- * @property {number} lamports
- * @property {number} space
- * @property {PublicKey} programId
  */
 export type CreateAccountWithSeedParams = {
+  /** The account that will transfer lamports to the created account */
   fromPubkey: PublicKey;
+  /** Public key of the created account. Must be pre-calculated with PublicKey.createWithSeed() */
   newAccountPubkey: PublicKey;
+  /** Base public key to use to derive the address of the created account. Must be the same as the base key used to create `newAccountPubkey` */
   basePubkey: PublicKey;
+  /** Seed to use to derive the address of the created account. Must be the same as the seed used to create `newAccountPubkey` */
   seed: string;
+  /** Amount of lamports to transfer to the created account */
   lamports: number;
+  /** Amount of space in bytes to allocate to the created account */
   space: number;
+  /** Public key of the program to assign as the owner of the created account */
   programId: PublicKey;
 };
 
 /**
  * Create nonce account system transaction params
- * @typedef {Object} CreateNonceAccountParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
- * @property {number} lamports
  */
 export type CreateNonceAccountParams = {
+  /** The account that will transfer lamports to the created nonce account */
   fromPubkey: PublicKey;
+  /** Public key of the created nonce account */
   noncePubkey: PublicKey;
+  /** Public key to set as authority of the created nonce account */
   authorizedPubkey: PublicKey;
+  /** Amount of lamports to transfer to the created nonce account */
   lamports: number;
 };
 
 /**
  * Create nonce account with seed system transaction params
- * @typedef {Object} CreateNonceAccountWithSeedParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
- * @property {PublicKey} basePubkey
- * @property {string} seed
- * @property {number} lamports
  */
 export type CreateNonceAccountWithSeedParams = {
+  /** The account that will transfer lamports to the created nonce account */
   fromPubkey: PublicKey;
+  /** Public key of the created nonce account */
   noncePubkey: PublicKey;
+  /** Public key to set as authority of the created nonce account */
   authorizedPubkey: PublicKey;
+  /** Amount of lamports to transfer to the created nonce account */
   lamports: number;
+  /** Base public key to use to derive the address of the nonce account */
   basePubkey: PublicKey;
+  /** Seed to use to derive the address of the nonce account */
   seed: string;
 };
 
 /**
  * Initialize nonce account system instruction params
- * @typedef {Object} InitializeNonceParams
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
  */
 export type InitializeNonceParams = {
+  /** Nonce account which will be initialized */
   noncePubkey: PublicKey;
+  /** Public key to set as authority of the initialized nonce account */
   authorizedPubkey: PublicKey;
 };
 
 /**
  * Advance nonce account system instruction params
- * @typedef {Object} AdvanceNonceParams
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
  */
 export type AdvanceNonceParams = {
+  /** Nonce account */
   noncePubkey: PublicKey;
+  /** Public key of the nonce authority */
   authorizedPubkey: PublicKey;
 };
 
 /**
  * Withdraw nonce account system transaction params
- * @typedef {Object} WithdrawNonceParams
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
- * @property {PublicKey} toPubkey
- * @property {number} lamports
  */
 export type WithdrawNonceParams = {
+  /** Nonce account */
   noncePubkey: PublicKey;
+  /** Public key of the nonce authority */
   authorizedPubkey: PublicKey;
+  /** Public key of the account which will receive the withdrawn nonce account balance */
   toPubkey: PublicKey;
+  /** Amount of lamports to withdraw from the nonce account */
   lamports: number;
 };
 
 /**
  * Authorize nonce account system transaction params
- * @typedef {Object} AuthorizeNonceParams
- * @property {PublicKey} noncePubkey
- * @property {PublicKey} authorizedPubkey
- * @property {PublicKey} newAuthorizedPubkey
  */
 export type AuthorizeNonceParams = {
+  /** Nonce account */
   noncePubkey: PublicKey;
+  /** Public key of the current nonce authority */
   authorizedPubkey: PublicKey;
+  /** Public key to set as the new nonce authority */
   newAuthorizedPubkey: PublicKey;
 };
 
 /**
  * Allocate account system transaction params
- * @typedef {Object} AllocateParams
- * @property {PublicKey} accountPubkey
- * @property {number} space
  */
 export type AllocateParams = {
+  /** Account to allocate */
   accountPubkey: PublicKey;
+  /** Amount of space in bytes to allocate */
   space: number;
 };
 
 /**
  * Allocate account with seed system transaction params
- * @typedef {Object} AllocateWithSeedParams
- * @property {PublicKey} accountPubkey
- * @property {PublicKey} basePubkey
- * @property {string} seed
- * @property {number} space
- * @property {PublicKey} programId
  */
 export type AllocateWithSeedParams = {
+  /** Account to allocate */
   accountPubkey: PublicKey;
+  /** Base public key to use to derive the address of the allocated account */
   basePubkey: PublicKey;
+  /** Seed to use to derive the address of the allocated account */
   seed: string;
+  /** Amount of space in bytes to allocate */
   space: number;
+  /** Public key of the program to assign as the owner of the allocated account */
   programId: PublicKey;
 };
 
 /**
  * Assign account with seed system transaction params
- * @typedef {Object} AssignWithSeedParams
- * @property {PublicKey} accountPubkey
- * @property {PublicKey} basePubkey
- * @property {string} seed
- * @property {PublicKey} programId
  */
 export type AssignWithSeedParams = {
+  /** Public key of the account which will be assigned a new owner */
   accountPubkey: PublicKey;
+  /** Base public key to use to derive the address of the assigned account */
   basePubkey: PublicKey;
+  /** Seed to use to derive the address of the assigned account */
   seed: string;
+  /** Public key of the program to assign as the owner */
   programId: PublicKey;
 };
 
 /**
  * Transfer with seed system transaction params
- * @typedef {Object} TransferWithSeedParams
- * @property {PublicKey} fromPubkey
- * @property {PublicKey} basePubkey
- * @property {PublicKey} toPubkey
- * @property {number} lamports
- * @property {string} seed
- * @property {PublicKey} programId
  */
 export type TransferWithSeedParams = {
+  /** Account that will transfer lamports */
   fromPubkey: PublicKey;
+  /** Base public key to use to derive the funding account address */
   basePubkey: PublicKey;
+  /** Account that will receive transferred lamports */
   toPubkey: PublicKey;
+  /** Amount of lamports to transfer */
   lamports: number;
+  /** Seed to use to derive the funding account address */
   seed: string;
+  /** Program id to use to derive the funding account address */
   programId: PublicKey;
 };
 
@@ -545,6 +532,7 @@ export type SystemInstructionType =
 
 /**
  * An enumeration of valid system InstructionType's
+ * @internal
  */
 export const SYSTEM_INSTRUCTION_LAYOUTS: {
   [type in SystemInstructionType]: InstructionType;
@@ -657,9 +645,9 @@ export class SystemProgram {
   /**
    * Public key that identifies the System program
    */
-  static get programId(): PublicKey {
-    return new PublicKey('11111111111111111111111111111111');
-  }
+  static programId: PublicKey = new PublicKey(
+    '11111111111111111111111111111111',
+  );
 
   /**
    * Generate a transaction instruction that creates a new account
@@ -669,7 +657,7 @@ export class SystemProgram {
     const data = encodeData(type, {
       lamports: params.lamports,
       space: params.space,
-      programId: params.programId.toBuffer(),
+      programId: toBuffer(params.programId.toBuffer()),
     });
 
     return new TransactionInstruction({
@@ -695,7 +683,7 @@ export class SystemProgram {
       data = encodeData(type, {
         lamports: params.lamports,
         seed: params.seed,
-        programId: params.programId.toBuffer(),
+        programId: toBuffer(params.programId.toBuffer()),
       });
       keys = [
         {pubkey: params.fromPubkey, isSigner: false, isWritable: true},
@@ -729,9 +717,9 @@ export class SystemProgram {
     if ('basePubkey' in params) {
       const type = SYSTEM_INSTRUCTION_LAYOUTS.AssignWithSeed;
       data = encodeData(type, {
-        base: params.basePubkey.toBuffer(),
+        base: toBuffer(params.basePubkey.toBuffer()),
         seed: params.seed,
-        programId: params.programId.toBuffer(),
+        programId: toBuffer(params.programId.toBuffer()),
       });
       keys = [
         {pubkey: params.accountPubkey, isSigner: false, isWritable: true},
@@ -739,7 +727,9 @@ export class SystemProgram {
       ];
     } else {
       const type = SYSTEM_INSTRUCTION_LAYOUTS.Assign;
-      data = encodeData(type, {programId: params.programId.toBuffer()});
+      data = encodeData(type, {
+        programId: toBuffer(params.programId.toBuffer()),
+      });
       keys = [{pubkey: params.accountPubkey, isSigner: true, isWritable: true}];
     }
 
@@ -759,11 +749,11 @@ export class SystemProgram {
   ): TransactionInstruction {
     const type = SYSTEM_INSTRUCTION_LAYOUTS.CreateWithSeed;
     const data = encodeData(type, {
-      base: params.basePubkey.toBuffer(),
+      base: toBuffer(params.basePubkey.toBuffer()),
       seed: params.seed,
       lamports: params.lamports,
       space: params.space,
-      programId: params.programId.toBuffer(),
+      programId: toBuffer(params.programId.toBuffer()),
     });
     let keys = [
       {pubkey: params.fromPubkey, isSigner: true, isWritable: true},
@@ -828,7 +818,7 @@ export class SystemProgram {
   ): TransactionInstruction {
     const type = SYSTEM_INSTRUCTION_LAYOUTS.InitializeNonceAccount;
     const data = encodeData(type, {
-      authorized: params.authorizedPubkey.toBuffer(),
+      authorized: toBuffer(params.authorizedPubkey.toBuffer()),
     });
     const instructionData = {
       keys: [
@@ -903,7 +893,7 @@ export class SystemProgram {
   static nonceAuthorize(params: AuthorizeNonceParams): TransactionInstruction {
     const type = SYSTEM_INSTRUCTION_LAYOUTS.AuthorizeNonceAccount;
     const data = encodeData(type, {
-      authorized: params.newAuthorizedPubkey.toBuffer(),
+      authorized: toBuffer(params.newAuthorizedPubkey.toBuffer()),
     });
 
     return new TransactionInstruction({
@@ -927,10 +917,10 @@ export class SystemProgram {
     if ('basePubkey' in params) {
       const type = SYSTEM_INSTRUCTION_LAYOUTS.AllocateWithSeed;
       data = encodeData(type, {
-        base: params.basePubkey.toBuffer(),
+        base: toBuffer(params.basePubkey.toBuffer()),
         seed: params.seed,
         space: params.space,
-        programId: params.programId.toBuffer(),
+        programId: toBuffer(params.programId.toBuffer()),
       });
       keys = [
         {pubkey: params.accountPubkey, isSigner: false, isWritable: true},

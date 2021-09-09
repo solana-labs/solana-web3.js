@@ -1,11 +1,14 @@
 import * as nacl from 'tweetnacl';
 import type {SignKeyPair as KeyPair} from 'tweetnacl';
+import type {Buffer} from 'buffer';
 
 import {toBuffer} from './util/to-buffer';
 import {PublicKey} from './publickey';
 
 /**
  * An account key pair (public and secret keys).
+ *
+ * @deprecated since v1.10.0, please use {@link Keypair} instead.
  */
 export class Account {
   /** @internal */

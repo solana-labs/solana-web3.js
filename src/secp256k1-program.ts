@@ -1,11 +1,11 @@
 import {Buffer} from 'buffer';
-import * as BufferLayout from 'buffer-layout';
+import * as BufferLayout from '@solana/buffer-layout';
 import secp256k1 from 'secp256k1';
-import assert from 'assert';
 import {keccak_256} from 'js-sha3';
 
 import {PublicKey} from './publickey';
 import {TransactionInstruction} from './transaction';
+import assert from './util/assert';
 import {toBuffer} from './util/to-buffer';
 
 const {publicKeyCreate, ecdsaSign} = secp256k1;
@@ -17,43 +17,33 @@ const SIGNATURE_OFFSETS_SERIALIZED_SIZE = 11;
 
 /**
  * Params for creating an secp256k1 instruction using a public key
- * @typedef {Object} CreateSecp256k1InstructionWithPublicKeyParams
- * @property {Buffer | Uint8Array | Array<number>} publicKey
- * @property {Buffer | Uint8Array | Array<number>} message
- * @property {Buffer | Uint8Array | Array<number>} signature
- * @property {number} recoveryId
  */
 export type CreateSecp256k1InstructionWithPublicKeyParams = {
   publicKey: Buffer | Uint8Array | Array<number>;
   message: Buffer | Uint8Array | Array<number>;
   signature: Buffer | Uint8Array | Array<number>;
   recoveryId: number;
+  instructionIndex?: number;
 };
 
 /**
  * Params for creating an secp256k1 instruction using an Ethereum address
- * @typedef {Object} CreateSecp256k1InstructionWithEthAddressParams
- * @property {Buffer | Uint8Array | Array<number>} ethAddress
- * @property {Buffer | Uint8Array | Array<number>} message
- * @property {Buffer | Uint8Array | Array<number>} signature
- * @property {number} recoveryId
  */
 export type CreateSecp256k1InstructionWithEthAddressParams = {
   ethAddress: Buffer | Uint8Array | Array<number> | string;
   message: Buffer | Uint8Array | Array<number>;
   signature: Buffer | Uint8Array | Array<number>;
   recoveryId: number;
+  instructionIndex?: number;
 };
 
 /**
  * Params for creating an secp256k1 instruction using a private key
- * @typedef {Object} CreateSecp256k1InstructionWithPrivateKeyParams
- * @property {Buffer | Uint8Array | Array<number>} privateKey
- * @property {Buffer | Uint8Array | Array<number>} message
  */
 export type CreateSecp256k1InstructionWithPrivateKeyParams = {
   privateKey: Buffer | Uint8Array | Array<number>;
   message: Buffer | Uint8Array | Array<number>;
+  instructionIndex?: number;
 };
 
 const SECP256K1_INSTRUCTION_LAYOUT = BufferLayout.struct([
@@ -79,9 +69,9 @@ export class Secp256k1Program {
   /**
    * Public key that identifies the secp256k1 program
    */
-  static get programId(): PublicKey {
-    return new PublicKey('KeccakSecp256k11111111111111111111111111111');
-  }
+  static programId: PublicKey = new PublicKey(
+    'KeccakSecp256k11111111111111111111111111111',
+  );
 
   /**
    * Construct an Ethereum address from a secp256k1 public key buffer.
@@ -111,12 +101,14 @@ export class Secp256k1Program {
   static createInstructionWithPublicKey(
     params: CreateSecp256k1InstructionWithPublicKeyParams,
   ): TransactionInstruction {
-    const {publicKey, message, signature, recoveryId} = params;
+    const {publicKey, message, signature, recoveryId, instructionIndex} =
+      params;
     return Secp256k1Program.createInstructionWithEthAddress({
       ethAddress: Secp256k1Program.publicKeyToEthAddress(publicKey),
       message,
       signature,
       recoveryId,
+      instructionIndex,
     });
   }
 
@@ -127,7 +119,13 @@ export class Secp256k1Program {
   static createInstructionWithEthAddress(
     params: CreateSecp256k1InstructionWithEthAddressParams,
   ): TransactionInstruction {
-    const {ethAddress: rawAddress, message, signature, recoveryId} = params;
+    const {
+      ethAddress: rawAddress,
+      message,
+      signature,
+      recoveryId,
+      instructionIndex = 0,
+    } = params;
 
     let ethAddress;
     if (typeof rawAddress === 'string') {
@@ -159,12 +157,12 @@ export class Secp256k1Program {
       {
         numSignatures,
         signatureOffset,
-        signatureInstructionIndex: 0,
+        signatureInstructionIndex: instructionIndex,
         ethAddressOffset,
-        ethAddressInstructionIndex: 0,
+        ethAddressInstructionIndex: instructionIndex,
         messageDataOffset,
         messageDataSize: message.length,
-        messageInstructionIndex: 0,
+        messageInstructionIndex: instructionIndex,
         signature: toBuffer(signature),
         ethAddress: toBuffer(ethAddress),
         recoveryId,
@@ -188,21 +186,15 @@ export class Secp256k1Program {
   static createInstructionWithPrivateKey(
     params: CreateSecp256k1InstructionWithPrivateKeyParams,
   ): TransactionInstruction {
-    const {privateKey: pkey, message} = params;
+    const {privateKey: pkey, message, instructionIndex} = params;
 
     assert(
       pkey.length === PRIVATE_KEY_BYTES,
       `Private key must be ${PRIVATE_KEY_BYTES} bytes but received ${pkey.length} bytes`,
     );
 
-    let privateKey;
-    if (Array.isArray(pkey)) {
-      privateKey = Uint8Array.from(pkey);
-    } else {
-      privateKey = pkey;
-    }
-
     try {
+      const privateKey = toBuffer(pkey);
       const publicKey = publicKeyCreate(privateKey, false).slice(1); // throw away leading byte
       const messageHash = Buffer.from(
         keccak_256.update(toBuffer(message)).digest(),
@@ -214,6 +206,7 @@ export class Secp256k1Program {
         message,
         signature,
         recoveryId,
+        instructionIndex,
       });
     } catch (error) {
       throw new Error(`Error creating instruction; ${error}`);

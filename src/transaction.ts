@@ -1,18 +1,18 @@
-import invariant from 'assert';
 import nacl from 'tweetnacl';
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 
-import type {CompiledInstruction} from './message';
 import {Message} from './message';
 import {PublicKey} from './publickey';
-import {Account} from './account';
 import * as shortvec from './util/shortvec-encoding';
-import type {Blockhash} from './blockhash';
 import {toBuffer} from './util/to-buffer';
+import invariant from './util/assert';
+import type {Signer} from './keypair';
+import type {Blockhash} from './blockhash';
+import type {CompiledInstruction} from './message';
 
 /**
- * @typedef {string} TransactionSignature
+ * Transaction signature as base-58 encoded string
  */
 export type TransactionSignature = string;
 
@@ -36,25 +36,18 @@ const SIGNATURE_LENGTH = 64;
 
 /**
  * Account metadata used to define instructions
- *
- * @typedef {Object} AccountMeta
- * @property {PublicKey} pubkey An account's public key
- * @property {boolean} isSigner True if an instruction requires a transaction signature matching `pubkey`
- * @property {boolean} isWritable True if the `pubkey` can be loaded as a read-write account.
  */
 export type AccountMeta = {
+  /** An account's public key */
   pubkey: PublicKey;
+  /** True if an instruction requires a transaction signature matching `pubkey` */
   isSigner: boolean;
+  /** True if the `pubkey` can be loaded as a read-write account. */
   isWritable: boolean;
 };
 
 /**
  * List of TransactionInstruction object fields that may be initialized at construction
- *
- * @typedef {Object} TransactionInstructionCtorFields
- * @property {Array<PublicKey>} keys
- * @property {PublicKey} programId
- * @property {?Buffer} data
  */
 export type TransactionInstructionCtorFields = {
   keys: Array<AccountMeta>;
@@ -64,13 +57,11 @@ export type TransactionInstructionCtorFields = {
 
 /**
  * Configuration object for Transaction.serialize()
- *
- * @typedef {Object} SerializeConfig
- * @property {boolean|undefined} requireAllSignatures Require all transaction signatures be present (default: true)
- * @property {boolean|undefined} verifySignatures Verify provided signatures (default: true)
  */
 export type SerializeConfig = {
+  /** Require all transaction signatures be present (default: true) */
   requireAllSignatures?: boolean;
+  /** Verify provided signatures (default: true) */
   verifySignatures?: boolean;
 };
 
@@ -104,9 +95,9 @@ export class TransactionInstruction {
 }
 
 /**
- * @internal
+ * Pair of signature and corresponding public key
  */
-type SignaturePubkeyPair = {
+export type SignaturePubkeyPair = {
   signature: Buffer | null;
   publicKey: PublicKey;
 };
@@ -114,28 +105,25 @@ type SignaturePubkeyPair = {
 /**
  * List of Transaction object fields that may be initialized at construction
  *
- * @typedef {Object} TransactionCtorFields
- * @property {?Blockhash} recentBlockhash A recent blockhash
- * @property {?PublicKey} feePayer The transaction fee payer
- * @property {?Array<SignaturePubkeyPair>} signatures One or more signatures
- *
  */
 type TransactionCtorFields = {
+  /** A recent blockhash */
   recentBlockhash?: Blockhash | null;
+  /** Optional nonce information used for offline nonce'd transactions */
   nonceInfo?: NonceInformation | null;
+  /** The transaction fee payer */
   feePayer?: PublicKey | null;
+  /** One or more signatures */
   signatures?: Array<SignaturePubkeyPair>;
 };
 
 /**
- * NonceInformation to be used to build a Transaction.
- *
- * @typedef {Object} NonceInformation
- * @property {Blockhash} nonce The current Nonce blockhash
- * @property {TransactionInstruction} nonceInstruction AdvanceNonceAccount Instruction
+ * Nonce information to be used to build an offline Transaction.
  */
 type NonceInformation = {
+  /** The current blockhash stored in the nonce */
   nonce: Blockhash;
+  /** AdvanceNonceAccount Instruction */
   nonceInstruction: TransactionInstruction;
 };
 
@@ -226,7 +214,7 @@ export class Transaction {
     }
 
     if (this.instructions.length < 1) {
-      throw new Error('No instructions provided');
+      console.warn('No instructions provided');
     }
 
     let feePayer: PublicKey;
@@ -446,7 +434,7 @@ export class Transaction {
   }
 
   /**
-   * Sign the Transaction with the specified accounts. Multiple signatures may
+   * Sign the Transaction with the specified signers. Multiple signatures may
    * be applied to a Transaction. The first signature is considered "primary"
    * and is used identify and confirm transactions.
    *
@@ -459,7 +447,7 @@ export class Transaction {
    *
    * The Transaction must be assigned a valid `recentBlockhash` before invoking this method
    */
-  sign(...signers: Array<Account>) {
+  sign(...signers: Array<Signer>) {
     if (signers.length === 0) {
       throw new Error('No signers');
     }
@@ -494,7 +482,7 @@ export class Transaction {
    *
    * All the caveats from the `sign` method apply to `partialSign`
    */
-  partialSign(...signers: Array<Account>) {
+  partialSign(...signers: Array<Signer>) {
     if (signers.length === 0) {
       throw new Error('No signers');
     }
@@ -519,7 +507,7 @@ export class Transaction {
   /**
    * @internal
    */
-  _partialSign(message: Message, ...signers: Array<Account>) {
+  _partialSign(message: Message, ...signers: Array<Signer>) {
     const signData = message.serialize();
     signers.forEach(signer => {
       const signature = nacl.sign.detached(signData, signer.secretKey);

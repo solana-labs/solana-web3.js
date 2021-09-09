@@ -24,17 +24,15 @@ type ConfigKey = {
 
 /**
  * Info used to identity validators.
- *
- * @typedef {Object} Info
- * @property {string} name validator name
- * @property {?string} website optional, validator website
- * @property {?string} details optional, extra information the validator chose to share
- * @property {?string} keybaseUsername optional, used to identify validators on keybase.io
  */
 export type Info = {
+  /** validator name */
   name: string;
+  /** optional, validator website */
   website?: string;
+  /** optional, extra information the validator chose to share */
   details?: string;
+  /** optional, used to identify validators on keybase.io */
   keybaseUsername?: string;
 };
 
@@ -96,8 +94,8 @@ export class ValidatorInfo {
 
     if (configKeys[0].publicKey.equals(VALIDATOR_INFO_KEY)) {
       if (configKeys[1].isSigner) {
-        const rawInfo = Layout.rustString().decode(Buffer.from(byteArray));
-        const info = JSON.parse(rawInfo);
+        const rawInfo: any = Layout.rustString().decode(Buffer.from(byteArray));
+        const info = JSON.parse(rawInfo as string);
         assertType(info, InfoString);
         return new ValidatorInfo(configKeys[1].publicKey, info);
       }

@@ -1,14 +1,14 @@
 import base58 from 'bs58';
-import invariant from 'assert';
 import {expect} from 'chai';
 
 import {
-  Account,
+  Keypair,
   Connection,
   Transaction,
   SystemProgram,
   LAMPORTS_PER_SOL,
 } from '../src';
+import invariant from '../src/util/assert';
 import {MOCK_PORT, url} from './url';
 import {helpers, mockRpcResponse, mockServer} from './mocks/rpc-http';
 import {stubRpcWebSocket, restoreRpcWebSocket} from './mocks/rpc-websockets';
@@ -33,9 +33,9 @@ describe('Transaction Payer', () => {
   }
 
   it('transaction-payer', async () => {
-    const accountPayer = new Account();
-    const accountFrom = new Account();
-    const accountTo = new Account();
+    const accountPayer = Keypair.generate();
+    const accountFrom = Keypair.generate();
+    const accountTo = Keypair.generate();
 
     await helpers.airdrop({
       connection,

@@ -1,9 +1,7 @@
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import typescript from 'rollup-plugin-ts';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
 import replace from '@rollup/plugin-replace';
 import {terser} from 'rollup-plugin-terser';
 
@@ -13,7 +11,6 @@ const extensions = ['.js', '.ts'];
 function generateConfig(configType, format) {
   const browser = configType === 'browser';
   const bundle = format === 'iife';
-  const generateTypescript = configType === 'typescript';
 
   const config = {
     input: 'src/index.ts',
@@ -25,11 +22,6 @@ function generateConfig(configType, format) {
         extensions,
         preferBuiltins: !browser,
       }),
-      generateTypescript
-        ? typescript({
-            browserslist: false,
-          })
-        : undefined,
       babel({
         exclude: '**/node_modules/**',
         extensions,
@@ -37,8 +29,11 @@ function generateConfig(configType, format) {
         plugins: bundle ? [] : ['@babel/plugin-transform-runtime'],
       }),
       replace({
-        'process.env.NODE_ENV': JSON.stringify(env),
-        'process.env.BROWSER': JSON.stringify(browser),
+        preventAssignment: true,
+        values: {
+          'process.env.NODE_ENV': JSON.stringify(env),
+          'process.env.BROWSER': JSON.stringify(browser),
+        },
       }),
     ],
     onwarn: function (warning, rollupWarn) {
@@ -55,13 +50,15 @@ function generateConfig(configType, format) {
     // Prevent dependencies from being bundled
     config.external = [
       /@babel\/runtime/,
+      '@solana/buffer-layout',
       'bn.js',
+      'borsh',
       'bs58',
-      'buffer-layout',
+      'buffer',
       'crypto-hash',
       'jayson/lib/client/browser',
       'js-sha3',
-      'node-fetch',
+      'cross-fetch',
       'rpc-websockets',
       'secp256k1',
       'superstruct',
@@ -84,15 +81,16 @@ function generateConfig(configType, format) {
           // Prevent dependencies from being bundled
           config.external = [
             /@babel\/runtime/,
+            '@solana/buffer-layout',
             'bn.js',
-            // Bundled for `Buffer` consistency
-            // 'bs58',
-            // 'buffer',
-            // 'buffer-layout',
+            'borsh',
+            'bs58',
+            'buffer',
             'crypto-hash',
+            'http',
+            'https',
             'jayson/lib/client/browser',
             'js-sha3',
-            'node-fetch',
             'rpc-websockets',
             'secp256k1',
             'superstruct',
@@ -102,6 +100,8 @@ function generateConfig(configType, format) {
           break;
         }
         case 'iife': {
+          config.external = ['http', 'https'];
+
           config.output = [
             {
               file: 'lib/index.iife.js',
@@ -127,7 +127,6 @@ function generateConfig(configType, format) {
       // TODO: Find a workaround to avoid resolving the following JSON file:
       // `node_modules/secp256k1/node_modules/elliptic/package.json`
       config.plugins.push(json());
-      config.plugins.push(nodePolyfills());
 
       break;
     case 'node':
@@ -144,12 +143,6 @@ function generateConfig(configType, format) {
         },
       ];
       break;
-    case 'typescript':
-      config.output = {
-        file: 'lib/types/index.d.ts',
-      };
-      config.plugins.push(json());
-      break;
     default:
       throw new Error(`Unknown configType: ${configType}`);
   }
@@ -159,7 +152,6 @@ function generateConfig(configType, format) {
 
 export default [
   generateConfig('node'),
-  generateConfig('typescript'),
   generateConfig('browser', 'esm'),
   generateConfig('browser', 'iife'),
 ];
