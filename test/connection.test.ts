@@ -2077,6 +2077,17 @@ describe('Connection', () => {
     );
   });
 
+  it('get blocks', async () => {
+    await mockRpcResponse({
+      method: 'getBlocks',
+      params: [0, 1],
+      value: [1, 2, 3, 4, 5],
+    });
+
+    const slotLeaders = await connection.getBlocks(0, 1);
+    expect(slotLeaders).to.have.length(5);
+  });
+
   it('get confirmed block signatures', async () => {
     await mockRpcResponse({
       method: 'getSlot',
