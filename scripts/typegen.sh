@@ -13,7 +13,7 @@ sed -i '$s/export {.*};/}/' lib/index.d.ts
 sed -i 's/declare/export/g' lib/index.d.ts
 
 # Prepend declare module line
-sed -i '2s;^;declare module "@solana/web3.js" {\n;' lib/index.d.ts
+sed -i '2s;^;declare module "@velas/web3" {\n;' lib/index.d.ts
 
 # Run prettier
 npx prettier --write lib/index.d.ts
