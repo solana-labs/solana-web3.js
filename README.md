@@ -8,13 +8,13 @@ This is the Velas Javascript API built on [JSON RPC API](https://docs.velas.com/
 ### Yarn
 
 ```
-$ yarn add @velas/web3.js
+$ yarn add @velas/web3
 ```
 
 ### npm
 
 ```
-$ npm install --save @velas/web3.js
+$ npm install --save @velas/web3
 ```
 
 ### Browser bundle
