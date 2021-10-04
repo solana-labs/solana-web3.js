@@ -2999,6 +2999,23 @@ export class Connection {
     };
   }
 
+  async getConfirmedBlocksWithLimit(slot: number, limit:number) {
+    const unsafeRes = await this._rpcRequest('getConfirmedBlocksWithLimit', [slot, limit]);
+
+    if (unsafeRes.error) {
+      throw new Error('failed to get confirmed block: ' + unsafeRes.error.message);
+    }
+
+    const result = unsafeRes.result;
+    assert(typeof result !== 'undefined');
+
+    if (!result) {
+      throw new Error('Confirmed block ' + slot + ' not found');
+    }
+
+    return unsafeRes;
+  }
+
   /**
    * Fetch a processed transaction from the cluster.
    */
