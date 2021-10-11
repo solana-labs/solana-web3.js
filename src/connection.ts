@@ -757,7 +757,7 @@ function createRpcClient(
       return new Promise<Response>((resolve, reject) => {
         fetchMiddleware(url, options, async (url: string, options: any) => {
           try {
-            const result = await fetch(url, options)
+            const result = await fetch(url, options);
             resolve(result);
             return result; // Pass result to middleware promise
           } catch (error) {
