@@ -2028,9 +2028,12 @@ export class Connection {
     endpoint: string,
     commitmentOrConfig?: Commitment | ConnectionConfig,
   ) {
-    let url = new URL(endpoint);
-    const useHttps = url.protocol === 'https:';
-
+    // This code is from solana repository. It uses URL object which adds troubles in react native
+    //let url = new URL(endpoint);
+    //const useHttps = url.protocol === 'https:';
+    let url = endpoint;
+    const useHttps = endpoint.startsWith('https:');
+    
     let wsEndpoint;
     let httpHeaders;
     let fetchMiddleware;
