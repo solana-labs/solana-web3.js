@@ -2397,21 +2397,49 @@ export class Connection {
   }
 
   /**
-   * Fetch all the account info for the specified public key
+   * Fetch the accounts for the specified owner key
    */
-  async getAccountInfo(
-    publicKey: PublicKey,
-    commitment?: Commitment,
-  ): Promise<AccountInfo<Buffer> | null> {
+  async getVelasAccountsByOwnerKey(
+    publicKey: string,
+  ): Promise<any> {
     try {
-      const res = await this.getAccountInfoAndContext(publicKey, commitment);
-      return res.value;
+      const res = await this._rpcRequest('getVelasAccountsByOwnerKey', [publicKey]);
+      return res.result.value
     } catch (e) {
-      throw new Error(
-        'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
-      );
+      throw new Error('failed to get account by owner key ' + publicKey + ': ' + e);
     }
   }
+
+  /**
+   * Fetch the accounts for the specified operational key
+   */
+     async getVelasAccountsByOperationalKey(
+      publicKey: string,
+    ): Promise<any> {
+      try {
+        const res = await this._rpcRequest('getVelasAccountsByOperationalKey', [publicKey]);
+        return res.result.value
+      } catch (e) {
+        throw new Error('failed to get account by operational key ' + publicKey + ': ' + e);
+      }
+    }
+
+    /**
+   * Fetch all the account info for the specified public key
+   */
+     async getAccountInfo(
+      publicKey: PublicKey,
+      commitment?: Commitment,
+    ): Promise<AccountInfo<Buffer> | null> {
+      try {
+        const res = await this.getAccountInfoAndContext(publicKey, commitment);
+        return res.value;
+      } catch (e) {
+        throw new Error(
+          'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
+        );
+      }
+    }
 
   /**
    * Fetch all the account info for multiple accounts specified by an array of public keys
