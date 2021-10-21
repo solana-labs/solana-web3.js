@@ -785,7 +785,7 @@ function createRpcClient(
       } else {
         callback(new Error(`${res.status} ${res.statusText}: ${text}`));
       }
-    } catch (err) {
+    } catch (err: any) {
       callback(err);
     } finally {
       agentManager && agentManager.requestEnd();
@@ -3211,7 +3211,7 @@ export class Connection {
           options.until =
             block.signatures[block.signatures.length - 1].toString();
         }
-      } catch (err) {
+      } catch (err: any) {
         if (err.message.includes('skipped')) {
           continue;
         } else {
@@ -3233,7 +3233,7 @@ export class Connection {
           options.before =
             block.signatures[block.signatures.length - 1].toString();
         }
-      } catch (err) {
+      } catch (err: any) {
         if (err.message.includes('skipped')) {
           continue;
         } else {
@@ -3657,7 +3657,7 @@ export class Connection {
           // eslint-disable-next-line require-atomic-updates
           sub.subscriptionId = id;
         }
-      } catch (err) {
+      } catch (err: any) {
         if (sub.subscriptionId === 'subscribing') {
           // eslint-disable-next-line require-atomic-updates
           sub.subscriptionId = null;
@@ -3679,7 +3679,7 @@ export class Connection {
       const unsubscribeId: number = subscriptionId;
       try {
         await this._rpcWebSocket.call(rpcMethod, [unsubscribeId]);
-      } catch (err) {
+      } catch (err: any) {
         console.error(`${rpcMethod} error:`, err.message);
       }
     }
