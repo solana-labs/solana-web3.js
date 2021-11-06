@@ -38,6 +38,7 @@ $ yarn add @solana/web3.js
 ```
 $ npm install --save @solana/web3.js
 ```
+<br>
 
 ### Browser bundle
 
