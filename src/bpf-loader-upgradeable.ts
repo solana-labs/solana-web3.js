@@ -5,7 +5,14 @@ import * as Layout from './layout';
 import {PublicKey} from './publickey';
 import {SystemProgram} from './system-program';
 import {SYSVAR_CLOCK_PUBKEY, SYSVAR_RENT_PUBKEY} from './sysvar';
-import {TransactionInstruction} from './transaction';
+import {
+  Transaction,
+  TransactionInstruction,
+  PACKET_DATA_SIZE,
+} from './transaction';
+import {sendAndConfirmTransaction} from './util/send-and-confirm-transaction';
+import type {Connection} from './connection';
+import type {Signer} from './keypair';
 
 export const BPF_LOADER_UPGRADEABLE_PROGRAM_ID = new PublicKey(
   'BPFLoaderUpgradeab1e11111111111111111111111',
@@ -24,6 +31,7 @@ export type BpfUpgradeableLoaderInstructionType =
 
 /**
  * An enumeration of valid system InstructionType's
+ * @internal
  */
 export const BPF_UPGRADEABLE_LOADER_INSTRUCTION_LAYOUTS: {
   [type in BpfUpgradeableLoaderInstructionType]: InstructionType;
@@ -45,6 +53,7 @@ export const BPF_UPGRADEABLE_LOADER_INSTRUCTION_LAYOUTS: {
     layout: BufferLayout.struct([
       BufferLayout.u32('instruction'),
       BufferLayout.u32('maxDataLen'),
+      BufferLayout.u32('maxDataLenPadding'),
     ]),
   },
   Upgrade: {
@@ -168,6 +177,15 @@ export class BpfLoaderUpgradeableProgram {
   static programId: PublicKey = BPF_LOADER_UPGRADEABLE_PROGRAM_ID;
 
   /**
+   * Derive programData address from program
+   */
+  static async getProgramDataAddress(program: PublicKey): Promise<PublicKey> {
+    return (
+      await PublicKey.findProgramAddress([program.toBuffer()], this.programId)
+    )[0];
+  }
+
+  /**
    * Generate a transaction instruction that initialize buffer account
    */
   static initializeBuffer(
@@ -220,17 +238,14 @@ export class BpfLoaderUpgradeableProgram {
       maxDataLen: params.maxDataLen,
     });
 
-    const programdataPubkey = (
-      await PublicKey.findProgramAddress(
-        [params.programPubkey.toBuffer()],
-        this.programId,
-      )
-    )[0];
+    const programDataPubkey = await this.getProgramDataAddress(
+      params.programPubkey,
+    );
 
     return new TransactionInstruction({
       keys: [
         {pubkey: params.payerPubkey, isSigner: true, isWritable: true},
-        {pubkey: programdataPubkey, isSigner: false, isWritable: true},
+        {pubkey: programDataPubkey, isSigner: false, isWritable: true},
         {pubkey: params.programPubkey, isSigner: false, isWritable: true},
         {pubkey: params.bufferPubkey, isSigner: false, isWritable: true},
         {pubkey: SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false},
@@ -254,16 +269,13 @@ export class BpfLoaderUpgradeableProgram {
     const type = BPF_UPGRADEABLE_LOADER_INSTRUCTION_LAYOUTS.Upgrade;
     const data = encodeData(type, {});
 
-    const programdataPubkey = (
-      await PublicKey.findProgramAddress(
-        [params.programPubkey.toBuffer()],
-        this.programId,
-      )
-    )[0];
+    const programDataPubkey = await this.getProgramDataAddress(
+      params.programPubkey,
+    );
 
     return new TransactionInstruction({
       keys: [
-        {pubkey: programdataPubkey, isSigner: false, isWritable: true},
+        {pubkey: programDataPubkey, isSigner: false, isWritable: true},
         {pubkey: params.programPubkey, isSigner: false, isWritable: true},
         {pubkey: params.bufferPubkey, isSigner: false, isWritable: true},
         {pubkey: params.spillPubkey, isSigner: true, isWritable: true},
@@ -313,15 +325,12 @@ export class BpfLoaderUpgradeableProgram {
     const type = BPF_UPGRADEABLE_LOADER_INSTRUCTION_LAYOUTS.SetAuthority;
     const data = encodeData(type, {});
 
-    const programdataPubkey = (
-      await PublicKey.findProgramAddress(
-        [params.programPubkey.toBuffer()],
-        this.programId,
-      )
-    )[0];
+    const programDataPubkey = await this.getProgramDataAddress(
+      params.programPubkey,
+    );
 
     const keys = [
-      {pubkey: programdataPubkey, isSigner: false, isWritable: true},
+      {pubkey: programDataPubkey, isSigner: false, isWritable: true},
       {
         pubkey: params.authorityPubkey,
         isSigner: true,
@@ -382,5 +391,309 @@ export class BpfLoaderUpgradeableProgram {
       programId: this.programId,
       data,
     });
+  }
+}
+
+/**
+ * BpfLoaderUpgradeable program interface
+ */
+export class BpfLoaderUpgradeable {
+  /**
+   * @internal
+   */
+  constructor() {}
+
+  /**
+   * Buffer account size without data
+   */
+  static BUFFER_HEADER_SIZE: number = 37; // Option<Pubkey>
+
+  /**
+   * Program account size
+   */
+  static BUFFER_PROGRAM_SIZE: number = 36; // Pubkey
+
+  /**
+   * ProgramData account size without data
+   */
+  static BUFFER_PROGRAM_DATA_HEADER_SIZE: number = 45; // usize + Option<Pubkey>
+
+  /**
+   * Maximal chunk of the data per transaction
+   */
+  static WRITE_CHUNK_SIZE: number = PACKET_DATA_SIZE - 316; // Data with 2 signatures
+
+  /**
+   * Get buffer account size
+   */
+  static getBufferAccountSize(programLen: number): number {
+    return this.BUFFER_HEADER_SIZE + programLen;
+  }
+
+  /**
+   * Create and initialize buffer account
+   */
+  static async createBuffer(
+    connection: Connection,
+    payer: Signer,
+    buffer: Signer,
+    authority: PublicKey,
+    lamports: number,
+    programLen: number,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      SystemProgram.createAccount({
+        fromPubkey: payer.publicKey,
+        newAccountPubkey: buffer.publicKey,
+        lamports,
+        space: this.getBufferAccountSize(programLen),
+        programId: BPF_LOADER_UPGRADEABLE_PROGRAM_ID,
+      }),
+    );
+    transaction.add(
+      BpfLoaderUpgradeableProgram.initializeBuffer({
+        bufferPubkey: buffer.publicKey,
+        authorityPubkey: authority,
+      }),
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, buffer], {
+      commitment: 'confirmed',
+    });
+  }
+
+  /**
+   * Update buffer authority
+   */
+  static async setBufferAuthority(
+    connection: Connection,
+    payer: Signer,
+    buffer: PublicKey,
+    authority: Signer,
+    newAuthority: PublicKey,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      BpfLoaderUpgradeableProgram.setBufferAuthority({
+        bufferPubkey: buffer,
+        authorityPubkey: authority.publicKey,
+        newAuthorityPubkey: newAuthority,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, authority],
+      {
+        commitment: 'confirmed',
+      },
+    );
+  }
+
+  /**
+   * Load programData to initialized buffer account
+   */
+  static async loadBuffer(
+    connection: Connection,
+    payer: Signer,
+    buffer: PublicKey,
+    authority: Signer,
+    programData: Buffer,
+    loadConcurrency: number = 10,
+  ) {
+    let bytesOffset = 0;
+    await Promise.all(
+      new Array(loadConcurrency).fill(null).map(async () => {
+        for (;;) {
+          const offset = bytesOffset;
+          bytesOffset += BpfLoaderUpgradeable.WRITE_CHUNK_SIZE;
+
+          const bytes = programData.slice(
+            offset,
+            offset + BpfLoaderUpgradeable.WRITE_CHUNK_SIZE,
+          );
+          if (bytes.length === 0) {
+            break;
+          }
+
+          const transaction: Transaction = new Transaction();
+          transaction.add(
+            BpfLoaderUpgradeableProgram.write({
+              offset,
+              bytes,
+              bufferPubkey: buffer,
+              authorityPubkey: authority.publicKey,
+            }),
+          );
+          await sendAndConfirmTransaction(
+            connection,
+            transaction,
+            [payer, authority],
+            {
+              commitment: 'confirmed',
+            },
+          );
+        }
+      }),
+    );
+  }
+
+  /**
+   * Close buffer account and withdraw funds
+   */
+  static async closeBuffer(
+    connection: Connection,
+    payer: Signer,
+    buffer: PublicKey,
+    authority: Signer,
+    recipient: PublicKey,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      BpfLoaderUpgradeableProgram.close({
+        closePubkey: buffer,
+        recipientPubkey: recipient,
+        authorityPubkey: authority.publicKey,
+        programPubkey: undefined,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, authority],
+      {
+        commitment: 'confirmed',
+      },
+    );
+  }
+
+  /**
+   * create program account from initialized buffer
+   */
+  static async deployProgram(
+    connection: Connection,
+    payer: Signer,
+    buffer: PublicKey,
+    bufferAuthority: Signer,
+    program: Signer,
+    programLamports: number,
+    maxDataLen: number,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      SystemProgram.createAccount({
+        fromPubkey: payer.publicKey,
+        newAccountPubkey: program.publicKey,
+        lamports: programLamports,
+        space: this.BUFFER_PROGRAM_SIZE,
+        programId: BPF_LOADER_UPGRADEABLE_PROGRAM_ID,
+      }),
+    );
+    transaction.add(
+      await BpfLoaderUpgradeableProgram.deployWithMaxProgramLen({
+        maxDataLen,
+        programPubkey: program.publicKey,
+        bufferPubkey: buffer,
+        upgradeAuthorityPubkey: bufferAuthority.publicKey,
+        payerPubkey: payer.publicKey,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, program, bufferAuthority],
+      {
+        commitment: 'confirmed',
+      },
+    );
+  }
+
+  /**
+   * Update program authority
+   */
+  static async setProgramAuthority(
+    connection: Connection,
+    payer: Signer,
+    program: PublicKey,
+    authority: Signer,
+    newAuthority: PublicKey | undefined,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      await BpfLoaderUpgradeableProgram.setUpgradeAuthority({
+        programPubkey: program,
+        authorityPubkey: authority.publicKey,
+        newAuthorityPubkey: newAuthority,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, authority],
+      {
+        commitment: 'confirmed',
+      },
+    );
+  }
+
+  /**
+   * Upgrade a program
+   */
+  static async upgradeProgram(
+    connection: Connection,
+    payer: Signer,
+    program: PublicKey,
+    authority: Signer,
+    buffer: PublicKey,
+    spill: PublicKey,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      await BpfLoaderUpgradeableProgram.upgrade({
+        programPubkey: program,
+        bufferPubkey: buffer,
+        spillPubkey: spill,
+        authorityPubkey: authority.publicKey,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, authority],
+      {
+        commitment: 'confirmed',
+      },
+    );
+  }
+
+  /**
+   * Close program account and withdraw funds
+   */
+  static async closeProgram(
+    connection: Connection,
+    payer: Signer,
+    program: PublicKey,
+    authority: Signer,
+    recipient: PublicKey,
+  ) {
+    const transaction: Transaction = new Transaction();
+    transaction.add(
+      BpfLoaderUpgradeableProgram.close({
+        closePubkey: await BpfLoaderUpgradeableProgram.getProgramDataAddress(
+          program,
+        ),
+        recipientPubkey: recipient,
+        authorityPubkey: authority.publicKey,
+        programPubkey: program,
+      }),
+    );
+    await sendAndConfirmTransaction(
+      connection,
+      transaction,
+      [payer, authority],
+      {
+        commitment: 'confirmed',
+      },
+    );
   }
 }
