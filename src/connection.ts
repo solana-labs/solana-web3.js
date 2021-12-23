@@ -2475,12 +2475,12 @@ export class Connection {
   }
 
   /**
-   * Fetch all the account info for multiple accounts specified by an array of public keys
+   * Fetch all the account info for multiple accounts specified by an array of public keys, return with context
    */
-  async getMultipleAccountsInfo(
+  async getMultipleAccountsInfoAndContext(
     publicKeys: PublicKey[],
     commitment?: Commitment,
-  ): Promise<(AccountInfo<Buffer> | null)[]> {
+  ): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>> {
     const keys = publicKeys.map(key => key.toBase58());
     const args = this._buildArgs([keys], commitment, 'base64');
     const unsafeRes = await this._rpcRequest('getMultipleAccounts', args);
@@ -2493,7 +2493,18 @@ export class Connection {
         'failed to get info for accounts ' + keys + ': ' + res.error.message,
       );
     }
-    return res.result.value;
+    return res.result;
+  }
+
+  /**
+   * Fetch all the account info for multiple accounts specified by an array of public keys
+   */
+  async getMultipleAccountsInfo(
+    publicKeys: PublicKey[],
+    commitment?: Commitment,
+  ): Promise<(AccountInfo<Buffer> | null)[]> {
+    const res = await this.getMultipleAccountsInfoAndContext(publicKeys, commitment)
+    return res.value;
   }
 
   /**
