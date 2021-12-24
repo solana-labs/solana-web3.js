@@ -2503,7 +2503,7 @@ export class Connection {
     publicKeys: PublicKey[],
     commitment?: Commitment,
   ): Promise<(AccountInfo<Buffer> | null)[]> {
-    const res = await this.getMultipleAccountsInfoAndContext(publicKeys, commitment)
+    const res = await this.getMultipleAccountsInfoAndContext(publicKeys, commitment);
     return res.value;
   }
 
