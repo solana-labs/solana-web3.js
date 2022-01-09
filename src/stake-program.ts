@@ -501,7 +501,7 @@ export type StakeAuthorizationType = {
 /**
  * An enumeration of valid StakeAuthorizationLayout's
  */
-export const StakeAuthorizationLayout = Object.freeze({
+export const StakeAuthorizationLayout: any = Object.freeze({
   Staker: {
     index: 0,
   },

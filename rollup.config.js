@@ -58,7 +58,7 @@ function generateConfig(configType, format) {
       'crypto-hash',
       'jayson/lib/client/browser',
       'js-sha3',
-      'cross-fetch',
+      'node-fetch',
       'rpc-websockets',
       'secp256k1',
       'superstruct',
@@ -87,10 +87,9 @@ function generateConfig(configType, format) {
             'bs58',
             'buffer',
             'crypto-hash',
-            'http',
-            'https',
             'jayson/lib/client/browser',
             'js-sha3',
+            // 'node-fetch', will resolve to whatwg-fetch
             'rpc-websockets',
             'secp256k1',
             'superstruct',
@@ -100,8 +99,6 @@ function generateConfig(configType, format) {
           break;
         }
         case 'iife': {
-          config.external = ['http', 'https'];
-
           config.output = [
             {
               file: 'lib/index.iife.js',
