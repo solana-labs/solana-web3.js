@@ -3879,6 +3879,22 @@ export class Connection {
   ): Promise<TransactionSignature> {
     if (transaction.nonceInfo) {
       transaction.sign(...signers);
+    } else if (transaction.recentBlockhash) {
+      let disableCache = this._disableBlockhashCaching;
+      for (;;) {
+        transaction.sign(...signers);
+        if (!transaction.signature) {
+          throw new Error('!signature'); // should never happen
+        }
+
+        const signature = transaction.signature.toString('base64');
+        if (!this._blockhashInfo.transactionSignatures.includes(signature)) {
+          this._blockhashInfo.transactionSignatures.push(signature);
+          break;
+        } else {
+          disableCache = true;
+        }
+      }
     } else {
       let disableCache = this._disableBlockhashCaching;
       for (;;) {
