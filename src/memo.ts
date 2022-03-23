@@ -1,3 +1,4 @@
+import {TransactionInstruction} from './transaction';
 import {PublicKey} from './publickey';
 
 export const MEMO_CONFIG = new PublicKey(
@@ -11,10 +12,10 @@ export const MEMO_CONFIG = new PublicKey(
  */
 
 export type BuildMemoParams = {
-  // requires a valid u8 input string
-  memo: string;
+  // requires a valid u8 input
+  memo: Uint8Array[];
   // requires  an array of public keys
-  signer_public_keys: PublicKey[];
+  signer_public_keys?: PublicKey[];
 };
 
 export class MemoProgram {
@@ -34,5 +35,16 @@ export class MemoProgram {
     return MemoProgram.id().equals(id);
   }
 
-  // static buildMemo(params: BuildMemoParams):
+  static buildMemo(params: BuildMemoParams): TransactionInstruction {
+    const {memo, signer_public_keys} = params;
+
+    let data;
+    let instructionData = {
+      programId: MemoProgram.id(),
+      data: data,
+      keys: [],
+    };
+
+    return new TransactionInstruction(instructionData);
+  }
 }
