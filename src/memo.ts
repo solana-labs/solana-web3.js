@@ -31,8 +31,12 @@ export class MemoProgram {
   }
 
   // Checks whether the given public key is same as the program id
-  static checkId(id: PublicKey): boolean {
-    return MemoProgram.id().equals(id);
+  static checkId(programId: PublicKey): boolean {
+    if (!programId.equals(MemoProgram.programId)) {
+      throw new Error('invalid instruction; programId is not MemoProgram');
+    }else{
+      return true;
+    }
   }
 
   static buildMemo(params: BuildMemoParams): TransactionInstruction {
