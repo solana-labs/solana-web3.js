@@ -1,3 +1,5 @@
+import {UTF8} from '@solana/buffer-layout';
+
 import {TransactionInstruction} from './transaction';
 import {PublicKey} from './publickey';
 
@@ -13,7 +15,7 @@ export const MEMO_CONFIG = new PublicKey(
 
 export type BuildMemoParams = {
   // requires a valid u8 input
-  memo: Uint8Array[];
+  memo: UTF8;
   // requires  an array of public keys
   signer_public_keys?: PublicKey[];
 };
@@ -34,19 +36,25 @@ export class MemoProgram {
   static checkId(programId: PublicKey): boolean {
     if (!programId.equals(MemoProgram.programId)) {
       throw new Error('invalid instruction; programId is not MemoProgram');
-    }else{
+    } else {
       return true;
     }
   }
 
   static buildMemo(params: BuildMemoParams): TransactionInstruction {
     const {memo, signer_public_keys} = params;
-
     let data;
+    let keys = [];
+    data = memo;
+    if (signer_public_keys) {
+      for (const key of signer_public_keys) {
+        keys.push({pubkey: key, isSigner: true, isWritable: true});
+      }
+    }
     let instructionData = {
       programId: MemoProgram.id(),
       data: data,
-      keys: [],
+      keys: keys,
     };
 
     return new TransactionInstruction(instructionData);
