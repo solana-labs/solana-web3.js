@@ -15,7 +15,7 @@ export const MEMO_CONFIG = new PublicKey(
 
 export type BuildMemoParams = {
   // requires a valid u8 input
-  memo: UTF8;
+  memo: String;
   // requires  an array of public keys
   signer_public_keys?: PublicKey[];
 };
@@ -43,20 +43,19 @@ export class MemoProgram {
 
   static buildMemo(params: BuildMemoParams): TransactionInstruction {
     const {memo, signer_public_keys} = params;
-    let data;
+
+    let data = Buffer.from(memo);
     let keys = [];
-    data = memo;
     if (signer_public_keys) {
       for (const key of signer_public_keys) {
         keys.push({pubkey: key, isSigner: true, isWritable: true});
       }
     }
-    let instructionData = {
-      programId: MemoProgram.id(),
-      data: data,
-      keys: keys,
-    };
 
-    return new TransactionInstruction(instructionData);
+    return new TransactionInstruction({
+      keys: keys,
+      programId: MemoProgram.id(),
+      data,
+    });
   }
 }
