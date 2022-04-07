@@ -6,7 +6,7 @@ import {TransactionInstruction} from '../src/transaction';
 import {Keypair} from '../src/keypair';
 import {PublicKey} from '../src/publickey';
 
-describe('Memo Tests', () => {
+describe('Memo', () => {
   it('Return programId', () => {
     const programId = MemoProgram.id();
     expect(programId.toString()).to.eq(

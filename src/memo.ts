@@ -1,22 +1,21 @@
-import {UTF8} from '@solana/buffer-layout';
-
 import {TransactionInstruction} from './transaction';
 import {PublicKey} from './publickey';
 
+/**
+ * Address of the memo program.
+ */
 export const MEMO_CONFIG = new PublicKey(
   'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
 );
-
-// Adding these functions https://docs.rs/spl-memo/latest/spl_memo/fn.build_memo.html
 
 /**
  *  Initialize build memo params
  */
 
 export type BuildMemoParams = {
-  // requires a valid u8 input
+  /** memo input */
   memo: String;
-  // requires  an array of public keys
+  /** signers of the transaction*/
   signer_public_keys?: PublicKey[];
 };
 
@@ -27,15 +26,17 @@ export class MemoProgram {
     'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
   );
 
-  // Returns the public key of program id
+  /** Returns the public key of program id */
   static id(): PublicKey {
     return MemoProgram.programId;
   }
 
-  // Checks whether the given public key is same as the program id
+  /** Checks whether the given public key is same as the program id */
   static checkId(id: PublicKey): boolean {
     return id.equals(MemoProgram.programId);
   }
+
+  /** Returns a transaction to the memo program*/
 
   static buildMemo(params: BuildMemoParams): TransactionInstruction {
     const {memo, signer_public_keys} = params;
