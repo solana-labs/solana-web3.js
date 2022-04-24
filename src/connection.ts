@@ -2090,6 +2090,7 @@ export type ConfirmedSignatureInfo = {
  * An object defining headers to be passed to the RPC server
  */
 export type HttpHeaders = {[header: string]: string};
+export type WsHeaders = {[header: string]: string};
 
 /**
  * A callback used to augment the outgoing HTTP request
@@ -2110,6 +2111,7 @@ export type ConnectionConfig = {
   wsEndpoint?: string;
   /** Optional HTTP headers object */
   httpHeaders?: HttpHeaders;
+  wsHeaders?: WsHeaders;
   /** Optional custom fetch function */
   fetch?: typeof crossFetch;
   /** Optional fetch middleware callback */
@@ -2204,6 +2206,7 @@ export class Connection {
 
     let wsEndpoint;
     let httpHeaders;
+    let wsHeaders;
     let fetch;
     let fetchMiddleware;
     let disableRetryOnRateLimit;
@@ -2215,6 +2218,7 @@ export class Connection {
         commitmentOrConfig.confirmTransactionInitialTimeout;
       wsEndpoint = commitmentOrConfig.wsEndpoint;
       httpHeaders = commitmentOrConfig.httpHeaders;
+      wsHeaders = commitmentOrConfig.wsHeaders;
       fetch = commitmentOrConfig.fetch;
       fetchMiddleware = commitmentOrConfig.fetchMiddleware;
       disableRetryOnRateLimit = commitmentOrConfig.disableRetryOnRateLimit;
@@ -2237,6 +2241,7 @@ export class Connection {
     this._rpcWebSocket = new RpcWebSocketClient(this._rpcWsEndpoint, {
       autoconnect: false,
       max_reconnects: Infinity,
+      headers: wsHeaders
     });
     this._rpcWebSocket.on('open', this._wsOnOpen.bind(this));
     this._rpcWebSocket.on('error', this._wsOnError.bind(this));
