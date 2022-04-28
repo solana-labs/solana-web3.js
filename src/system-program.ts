@@ -1,4 +1,5 @@
 import * as BufferLayout from '@solana/buffer-layout';
+import { u64 } from '@solana/buffer-layout-utils';
 
 import {
   encodeData,
@@ -38,7 +39,7 @@ export type TransferParams = {
   /** Account that will receive transferred lamports */
   toPubkey: PublicKey;
   /** Amount of lamports to transfer */
-  lamports: number;
+  lamports: number | bigint;
 };
 
 /**
@@ -200,7 +201,7 @@ export type TransferWithSeedParams = {
   /** Account that will receive transferred lamports */
   toPubkey: PublicKey;
   /** Amount of lamports to transfer */
-  lamports: number;
+  lamports: number | bigint;
   /** Seed to use to derive the funding account address */
   seed: string;
   /** Program id to use to derive the funding account address */
@@ -577,7 +578,7 @@ type SystemInstructionInputData = {
     authorized: Uint8Array;
   };
   Transfer: IInstructionInputData & {
-    lamports: number;
+    lamports: bigint;
   };
   TransferWithSeed: IInstructionInputData & {
     lamports: number;
@@ -618,7 +619,7 @@ export const SYSTEM_INSTRUCTION_LAYOUTS = Object.freeze<{
     index: 2,
     layout: BufferLayout.struct<SystemInstructionInputData['Transfer']>([
       BufferLayout.u32('instruction'),
-      BufferLayout.ns64('lamports'),
+      u64('lamports'),
     ]),
   },
   CreateWithSeed: {
@@ -756,7 +757,7 @@ export class SystemProgram {
       ];
     } else {
       const type = SYSTEM_INSTRUCTION_LAYOUTS.Transfer;
-      data = encodeData(type, {lamports: params.lamports});
+      data = encodeData(type, {lamports: BigInt(params.lamports)});
       keys = [
         {pubkey: params.fromPubkey, isSigner: true, isWritable: true},
         {pubkey: params.toPubkey, isSigner: false, isWritable: true},
