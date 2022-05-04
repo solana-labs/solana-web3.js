@@ -666,6 +666,11 @@ export type CompiledInnerInstruction = {
   instructions: CompiledInstruction[];
 };
 
+
+export type Status = {
+  Ok: string
+}
+
 /**
  * Metadata for a confirmed transaction on the ledger
  */
@@ -686,6 +691,8 @@ export type ConfirmedTransactionMeta = {
   postTokenBalances?: Array<TokenBalance> | null;
   /** The error result of transaction processing */
   err: TransactionError | null;
+  /** The status result of transaction
+  status: Status | null;
 };
 
 /**
