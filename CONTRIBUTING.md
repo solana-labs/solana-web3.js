@@ -27,3 +27,5 @@ https://mochajs.org/
 ### API Documentation
 TypeDoc is used to document the public API.  See
 https://typedoc.org/ for details.
+
+Contributing
