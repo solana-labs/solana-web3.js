@@ -79,6 +79,32 @@
 <pre><code class="language-js"><span class="hl-2">// `solanaWeb3` is provided in the global namespace by the `solanaWeb3.min.js` script bundle.</span><br/><span class="hl-0">console</span><span class="hl-1">.</span><span class="hl-10">log</span><span class="hl-1">(</span><span class="hl-0">solanaWeb3</span><span class="hl-1">);</span>
 </code></pre>
 
+<a href="#compatibility" id="compatibility" style="color: inherit; text-decoration: none;">
+  <h2>Compatibility</h2>
+</a>
+<p>This library requires a JavaScript runtime that supports <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt"><code>BigInt</code></a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Exponentiation">exponentiation operator</a>. Both are supported in the following runtimes:</p>
+<ul>
+<li>Browsers, by <a href="https://caniuse.com/bigint">release date</a>:<ul>
+<li>Chrome: May 2018</li>
+<li>Firefox: July 2019</li>
+<li>Safari: September 2020</li>
+<li>Mobile Safari: September 2020</li>
+<li>Edge: January 2020</li>
+<li>Opera: June 2018</li>
+<li>Samsung Internet: April 2019</li>
+</ul>
+</li>
+<li>Runtimes, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt">by version</a>:<ul>
+<li>Deno: &gt;=1.0</li>
+<li>Node: &gt;=10.4.0</li>
+</ul>
+</li>
+<li>React Native:<ul>
+<li>&gt;=0.7.0 using the <a href="https://reactnative.dev/blog/2022/07/08/hermes-as-the-default">Hermes</a> engine (<a href="https://solanacookbook.com/integrations/react-native.html#how-to-use-solana-web3-js-in-a-react-native-app">integration guide</a>):</li>
+</ul>
+</li>
+</ul>
+
 <a href="#flow-support-discontinued" id="flow-support-discontinued" style="color: inherit; text-decoration: none;">
   <h2>Flow Support (Discontinued)</h2>
 </a>
