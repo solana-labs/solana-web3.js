@@ -438,11 +438,6 @@ export type Commitment =
   | 'processed'
   | 'confirmed'
   | 'finalized'
-  | 'recent' // Deprecated as of v1.5.5
-  | 'single' // Deprecated as of v1.5.5
-  | 'singleGossip' // Deprecated as of v1.5.5
-  | 'root' // Deprecated as of v1.5.5
-  | 'max'; // Deprecated as of v1.5.5
 
 /**
  * A subset of Commitment levels, which are at least optimistically confirmed
