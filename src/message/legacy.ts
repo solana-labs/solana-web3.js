@@ -58,7 +58,7 @@ export type CompileLegacyArgs = {
  */
 export class Message {
   header: MessageHeader;
-  accountKeys: PublicKey[];
+  accountKeys: PublicKey[] | string[];
   recentBlockhash: Blockhash;
   instructions: CompiledInstruction[];
 
