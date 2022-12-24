@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>AddressLookupTableState | @solana/web3.js</title><meta name="description" content="Documentation for @solana/web3.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script async src="../assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>InflationRate | @solana/web3.js</title><meta name="description" content="Documentation for @solana/web3.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script async src="../assets/search.js" id="search-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M15.7824 13.833L12.6666 10.7177C12.5259 10.5771 12.3353 10.499 12.1353 10.499H11.6259C12.4884 9.39596 13.001 8.00859 13.001 6.49937C13.001 2.90909 10.0914 0 6.50048 0C2.90959 0 0 2.90909 0 6.49937C0 10.0896 2.90959 12.9987 6.50048 12.9987C8.00996 12.9987 9.39756 12.4863 10.5008 11.6239V12.1332C10.5008 12.3332 10.5789 12.5238 10.7195 12.6644L13.8354 15.7797C14.1292 16.0734 14.6042 16.0734 14.8948 15.7797L15.7793 14.8954C16.0731 14.6017 16.0731 14.1267 15.7824 13.833ZM6.50048 10.499C4.29094 10.499 2.50018 8.71165 2.50018 6.49937C2.50018 4.29021 4.28781 2.49976 6.50048 2.49976C8.71001 2.49976 10.5008 4.28708 10.5008 6.49937C10.5008 8.70852 8.71314 10.499 6.50048 10.499Z" fill="var(--color-text)"></path></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,24 +13,30 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">@solana/web3.js</a></li>
-<li><a href="AddressLookupTableState.html">AddressLookupTableState</a></li></ul>
-<h1>Type alias AddressLookupTableState</h1></div>
-<div class="tsd-signature">Address<wbr/>Lookup<wbr/>Table<wbr/>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span>addresses<span class="tsd-signature-symbol">: </span><a href="../classes/PublicKey.html" class="tsd-signature-type" data-tsd-kind="Class">PublicKey</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>authority<span class="tsd-signature-symbol">?: </span><a href="../classes/PublicKey.html" class="tsd-signature-type" data-tsd-kind="Class">PublicKey</a><span class="tsd-signature-symbol">; </span><br/><span>    </span>deactivationSlot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>lastExtendedSlot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>lastExtendedSlotStartIndex<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></div>
+<li><a href="InflationRate.html">InflationRate</a></li></ul>
+<h1>Type alias InflationRate</h1></div>
+<div class="tsd-signature">Inflation<wbr/>Rate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span>epoch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>foundation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>total<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>validator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></div>
 <div class="tsd-type-declaration">
 <h4>Type declaration</h4>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
-<h5>addresses<span class="tsd-signature-symbol">: </span><a href="../classes/PublicKey.html" class="tsd-signature-type" data-tsd-kind="Class">PublicKey</a><span class="tsd-signature-symbol">[]</span></h5></li>
+<h5>epoch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>epoch for which these values are valid</p>
+</div></li>
 <li class="tsd-parameter">
-<h5><code class="tsd-tag ts-flagOptional">Optional</code> authority<span class="tsd-signature-symbol">?: </span><a href="../classes/PublicKey.html" class="tsd-signature-type" data-tsd-kind="Class">PublicKey</a></h5></li>
+<h5>foundation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>inflation allocated to the foundation</p>
+</div></li>
 <li class="tsd-parameter">
-<h5>deactivation<wbr/>Slot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">bigint</span></h5></li>
+<h5>total<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>total inflation</p>
+</div></li>
 <li class="tsd-parameter">
-<h5>last<wbr/>Extended<wbr/>Slot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li>
-<li class="tsd-parameter">
-<h5>last<wbr/>Extended<wbr/>Slot<wbr/>Start<wbr/>Index<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5></li></ul></div><aside class="tsd-sources">
+<h5>validator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+<div class="tsd-comment tsd-typography"><p>inflation allocated to validators</p>
+</div></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/solana-labs/solana-web3.js/blob/1bcb7cc/src/programs/address-lookup-table/state.ts#L9">src/programs/address-lookup-table/state.ts:9</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/solana-labs/solana-web3.js/blob/1bcb7cc/src/connection.ts#L788">src/connection.ts:788</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -107,7 +113,7 @@
 <li class="tsd-kind-type-alias"><a href="AccountMeta.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Account<wbr/>Meta</a></li>
 <li class="tsd-kind-type-alias"><a href="AccountsModeBlockResponse.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Accounts<wbr/>Mode<wbr/>Block<wbr/>Response</a></li>
 <li class="tsd-kind-type-alias"><a href="AddressLookupTableAccountArgs.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Address<wbr/>Lookup<wbr/>Table<wbr/>Account<wbr/>Args</a></li>
-<li class="current tsd-kind-type-alias"><a href="AddressLookupTableState.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Address<wbr/>Lookup<wbr/>Table<wbr/>State</a></li>
+<li class="tsd-kind-type-alias"><a href="AddressLookupTableState.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Address<wbr/>Lookup<wbr/>Table<wbr/>State</a></li>
 <li class="tsd-kind-type-alias"><a href="AdvanceNonceParams.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Advance<wbr/>Nonce<wbr/>Params</a></li>
 <li class="tsd-kind-type-alias"><a href="AllocateParams.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Allocate<wbr/>Params</a></li>
 <li class="tsd-kind-type-alias"><a href="AllocateWithSeedParams.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Allocate<wbr/>With<wbr/>Seed<wbr/>Params</a></li>
@@ -202,7 +208,7 @@
 <li class="tsd-kind-type-alias"><a href="GetVersionedTransactionConfig.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Get<wbr/>Versioned<wbr/>Transaction<wbr/>Config</a></li>
 <li class="tsd-kind-type-alias"><a href="HttpHeaders.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Http<wbr/>Headers</a></li>
 <li class="tsd-kind-type-alias"><a href="InflationGovernor.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Inflation<wbr/>Governor</a></li>
-<li class="tsd-kind-type-alias"><a href="InflationRate.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Inflation<wbr/>Rate</a></li>
+<li class="current tsd-kind-type-alias"><a href="InflationRate.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Inflation<wbr/>Rate</a></li>
 <li class="tsd-kind-type-alias"><a href="InflationReward.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Inflation<wbr/>Reward</a></li>
 <li class="tsd-kind-type-alias"><a href="Info.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Info</a></li>
 <li class="tsd-kind-type-alias"><a href="InitializeAccountParams.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-4194304-path"></use><use href="#icon-4194304-text"></use></svg>Initialize<wbr/>Account<wbr/>Params</a></li>
