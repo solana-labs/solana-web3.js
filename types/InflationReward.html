@@ -15,7 +15,7 @@
 <li><a href="../modules.html">@solana/web3.js</a></li>
 <li><a href="InflationReward.html">InflationReward</a></li></ul>
 <h1>Type alias InflationReward</h1></div>
-<div class="tsd-signature">Inflation<wbr/>Reward<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span>amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>effectiveSlot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>epoch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>postBalance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></div>
+<div class="tsd-signature">Inflation<wbr/>Reward<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span><br/><span>    </span>amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>commission<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>effectiveSlot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>epoch<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>postBalance<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></div>
 <div class="tsd-comment tsd-typography"><p>The inflation reward for an epoch</p>
 </div>
 <div class="tsd-type-declaration">
@@ -24,6 +24,10 @@
 <li class="tsd-parameter">
 <h5>amount<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
 <div class="tsd-comment tsd-typography"><p>reward amount in lamports</p>
+</div></li>
+<li class="tsd-parameter">
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> commission<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+<div class="tsd-comment tsd-typography"><p>vote account commission when the reward was credited</p>
 </div></li>
 <li class="tsd-parameter">
 <h5>effective<wbr/>Slot<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
@@ -38,7 +42,7 @@
 <div class="tsd-comment tsd-typography"><p>post balance of the account in lamports</p>
 </div></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/solana-labs/solana-web3.js/blob/6364ee0/src/connection.ts#L761">src/connection.ts:761</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/solana-labs/solana-web3.js/blob/cfdf3f3/src/connection.ts#L761">src/connection.ts:761</a></li></ul></aside></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
