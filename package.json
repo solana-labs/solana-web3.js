@@ -82,7 +82,7 @@
     "@babel/preset-typescript": "^7.12.16",
     "@commitlint/config-conventional": "^17.0.2",
     "@rollup/plugin-alias": "^4.0.3",
-    "@rollup/plugin-babel": "^5.2.3",
+    "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-multi-entry": "^4.0.0",
