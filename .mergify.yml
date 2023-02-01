@@ -1,23 +1,61 @@
 pull_request_rules:
-  - name: automatic merge on CI success
+  - name: Add community label to outside contributions
     conditions:
-      - status-success=continuous-integration/travis-ci/pr
-      - label=automerge
+      - author≠@core-contributors
+      - author≠mergify[bot]
+      - author≠dependabot[bot]
+      - author≠github-actions[bot]
+    actions:
+      label:
+        add:
+          - community
+  - name: Request review of community contributions from community PR subscribers
+    conditions:
+      - author≠@core-contributors
+      - author≠mergify[bot]
+      - author≠dependabot[bot]
+      - author≠github-actions[bot]
+      # Only request reviews from the PR subscribers group if no one
+      # has reviewed the community PR yet. These checks only match
+      # reviewers with admin, write or maintain permission on the repository.
+      - '#approved-reviews-by=0'
+      - '#commented-reviews-by=0'
+      - '#changes-requested-reviews-by=0'
+      - '#review-requested=0'
+    actions:
+      request_reviews:
+        teams:
+          - '@solana-labs/community-pr-subscribers'
+  - name: Automatic merge (squash) on CI success
+    conditions:
+      - and:
+          - status-success=all-web3-checks
+          - status-success=web3-commit-lint
+          - label=automerge
+          - label!=no-automerge
     actions:
       merge:
-        method: rebase
-        strict: true
-  - name: remove automerge label on CI failure
+        method: squash
+  - name: Remove automerge label on CI failure
     conditions:
-      - status-failure=continuous-integration/travis-ci/pr
       - label=automerge
+      - '#status-failure!=0'
     actions:
       label:
         remove:
           - automerge
-  - name: remove outdated reviews
+      comment:
+        message: Automerge label removed due to a CI failure
+  - name: Remove outdated reviews
     conditions:
       - base=master
     actions:
       dismiss_reviews:
         changes_requested: true
+
+commands_restrictions:
+  # The author of copied PRs is the Mergify user.
+  # Restrict `copy` access to Core Contributors
+  copy:
+    conditions:
+      - author=@core-contributors
