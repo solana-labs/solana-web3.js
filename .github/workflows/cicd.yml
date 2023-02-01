@@ -16,15 +16,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "npm"
+          cache: 'yarn'
 
-      - name: Build
-        run: |
-          scripts/test.sh
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build & Test
+        run: scripts/test.sh
 
       - name: Publish NPM
-        run: |
-          npx semantic-release
+        run: npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
