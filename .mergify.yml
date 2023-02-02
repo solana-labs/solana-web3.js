@@ -30,7 +30,7 @@ pull_request_rules:
     conditions:
       - and:
           - status-success=all-web3-checks
-          - status-success=web3-commit-lint
+          - status-success="Validate commit message"
           - label=automerge
           - label!=no-automerge
     actions:
