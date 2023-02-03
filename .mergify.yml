@@ -46,12 +46,6 @@ pull_request_rules:
           - automerge
       comment:
         message: Automerge label removed due to a CI failure
-  - name: Remove outdated reviews
-    conditions:
-      - base=master
-    actions:
-      dismiss_reviews:
-        changes_requested: true
 
 commands_restrictions:
   # The author of copied PRs is the Mergify user.
