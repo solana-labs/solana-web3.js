@@ -1,0 +1,6 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Library (Legacy)",
+    "extends": "tsconfig/base.json",
+    "include": ["internal", "src"]
+}
