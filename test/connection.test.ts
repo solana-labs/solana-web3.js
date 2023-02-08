@@ -987,6 +987,27 @@ describe('Connection', function () {
     expect(slotLeaders[0]).to.be.instanceOf(PublicKey);
   });
 
+  it('get recent prioritization fee', async () => {
+    if (mockServer) {
+      const pubkey = Keypair.generate().publicKey;
+      await mockRpcResponse({
+        method: 'getRecentPrioritizationFees',
+        params: [[pubkey.toString()]],
+        value: [
+          {prioritizationFee: 12, slot: 89335},
+          {prioritizationFee: 0, slot: 89332},
+        ],
+      });
+
+      const recentPrioritizationFee =
+        await connection.getRecentPrioritizationFees([pubkey.toString()]);
+      expect(recentPrioritizationFee).to.eql([
+        {prioritizationFee: 12, slot: 89335},
+        {prioritizationFee: 0, slot: 89332},
+      ]);
+    }
+  });
+
   it('get cluster nodes', async () => {
     await mockRpcResponse({
       method: 'getClusterNodes',

@@ -2126,6 +2126,18 @@ const SignatureStatusResponse = pick({
 });
 
 /**
+ * Expected JSON RPC response for the "getRecentPrioritizationFees" message
+ */
+const GetRecentPrioritizationFees = jsonRpcResult(
+  array(
+    pick({
+      slot: number(),
+      prioritizationFee: number(),
+    }),
+  ),
+);
+
+/**
  * Expected JSON RPC response for the "getSignatureStatuses" message
  */
 const GetSignatureStatusesRpcResult = jsonRpcResultAndContext(
@@ -2882,6 +2894,16 @@ export type TransactionConfirmationStatus =
   | 'processed'
   | 'confirmed'
   | 'finalized';
+
+/**
+ * PrioritizationFee
+ */
+export type PrioritizationFee = {
+  /** when the transaction was processed */
+  slot: number;
+  /**  minimum prioritization fees from recent blocks */
+  prioritizationFee: number;
+};
 
 /**
  * Signature status
@@ -4086,6 +4108,27 @@ export class Connection {
       abortConfirmation();
     }
     return result;
+  }
+
+  /**
+   * Fetch the recent prioritization fees
+   */
+  async getRecentPrioritizationFees(
+    pubkeys?: Array<String>,
+  ): Promise<Array<PrioritizationFee>> {
+    const params: any[] = pubkeys ? [pubkeys] : [];
+    const unsafeRes = await this._rpcRequest(
+      'getRecentPrioritizationFees',
+      params,
+    );
+    const res = create(unsafeRes, GetRecentPrioritizationFees);
+    if ('error' in res) {
+      throw new SolanaJSONRPCError(
+        res.error,
+        'failed to get recent prioritization fees',
+      );
+    }
+    return res.result;
   }
 
   /**
