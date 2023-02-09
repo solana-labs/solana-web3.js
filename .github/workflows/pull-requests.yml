@@ -4,6 +4,11 @@ on:
   pull_request:
     branches: [master]
 
+env:
+  # Enables Turborepo Remote Caching.
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
   # Needed for grouping check-web3 strategies into one check for mergify
   all-web3-checks:
@@ -27,14 +32,19 @@ jobs:
           # Need to fetch the base SHA so that it can be compared with the head SHA.
           fetch-depth: 0
 
+      - name: Install package manager
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.26.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install
 
       - name: Check that commit message conforms to Semantic Release format
         if: ${{ github.event_name == 'pull_request' }}
@@ -56,14 +66,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install package manager
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.26.3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install
+
+      - name: Get Test Validator Latest Release
+        id: get-test-validator-version
+        run: |
+          echo "version=$(./scripts/get-latest-validator-release-version.sh)" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Cache Test Validator
+        id: cache-test-validator
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.local/share/solana
+          key: ${{ runner.os }}-test-validator-${{ steps.get-test-validator-version.outputs.version }}
+
+      - name: Install Test Validator
+        if: steps.cache-test-validator.outputs.cache-hit != 'true'
+        run: scripts/setup-test-validator.sh
 
       - name: Build & Test
-        run: scripts/test.sh
+        run: pnpm build

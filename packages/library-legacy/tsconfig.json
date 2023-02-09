@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Library (Legacy)",
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declarationDir": "declarations",
+    "module": "esnext",
+    "noImplicitReturns": true,
+    "outDir": "lib",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "extends": "tsconfig/base.json",
+  "include": ["src", "test"],
+  "exclude": ["declarations", "lib", "node_modules"]
+}

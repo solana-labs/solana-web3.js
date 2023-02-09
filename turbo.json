@@ -1,0 +1,86 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "pipeline": {
+        "clean": {
+            "outputs": [".nyc_output/**", "coverage/**", "dist/**", "lib/**"]
+        },
+        "compile:docs": {
+            "dependsOn": ["clean"],
+            "inputs": ["src/**"],
+            "outputs": ["doc/**"]
+        },
+        "compile:js": {
+            "dependsOn": ["clean", "^compile:js"],
+            "inputs": ["rollup.config.js", "tsconfig.*", "tsup.config.js", "src/**"],
+            "outputs": ["dist/**", "lib/**"]
+        },
+        "compile:typedefs": {
+            "dependsOn": ["clean", "compile:js"],
+            "inputs": ["rollup.config.types.js", "tsconfig.*", "tsup.config.js", "src/**"],
+            "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
+        },
+        "publish-packages": {
+            "dependsOn": [
+                "clean",
+                "compile:docs",
+                "compile:js",
+                "compile:typedefs",
+                "test:coverage",
+                "test:lint",
+                "test:prettier",
+                "test:typecheck",
+                "test:unit:browser",
+                "test:unit:node",
+                "test:live-with-test-validator",
+                "test:treeshakability:browser",
+                "test:treeshakability:native",
+                "test:treeshakability:node"
+            ],
+            "outputs": ["dist/**", "lib/**"]
+        },
+        "test:coverage": {
+            "dependsOn": ["test:unit:node"],
+            "inputs": [".nyc_output/**"],
+            "outputs": ["coverage/**"]
+        },
+        "test:lint": {
+            "inputs": ["internal/**", "src/**", "test/**"],
+            "outputs": []
+        },
+        "test:live-with-test-validator": {
+            "inputs": ["babel.config.json", "internal/jest/**", "src/**", "test/**"],
+            "outputs": []
+        },
+        "test:prettier": {
+            "inputs": ["internal/**", "src/**", "test/**"],
+            "outputs": []
+        },
+        "test:typecheck": {
+            "inputs": ["tsconfig.*", "internal/**", "src/**", "test/**"],
+            "outputs": []
+        },
+        "test:unit:browser": {
+            "inputs": ["internal/jest/**", "src/**"],
+            "outputs": []
+        },
+        "test:unit:node": {
+            "inputs": ["babel.config.json", "internal/jest/**", "src/**", "test/**"],
+            "outputs": []
+        },
+        "test:treeshakability:browser": {
+            "dependsOn": ["compile:js"],
+            "outputs": []
+        },
+        "test:treeshakability:native": {
+            "dependsOn": ["compile:js"],
+            "outputs": []
+        },
+        "test:treeshakability:node": {
+            "dependsOn": ["compile:js"],
+            "outputs": []
+        }
+    },
+    "remoteCache": {
+        "signature": true
+    }
+}
