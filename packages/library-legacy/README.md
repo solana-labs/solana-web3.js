@@ -1,51 +1,33 @@
-[![codecov][codecov-image]][codecov-url]
-<br>
 [![npm][npm-image]][npm-url]
 [![npm-downloads][npm-downloads-image]][npm-url]
-<br>
 [![semantic-release][semantic-release-image]][semantic-release-url]
+<br />
+[![codecov][codecov-image]][codecov-url]
 [![code-style-prettier][code-style-prettier-image]][code-style-prettier-url]
 
+[code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
+[code-style-prettier-url]: https://github.com/prettier/prettier
 [codecov-image]: https://codecov.io/gh/solana-labs/solana-web3.js/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/solana-labs/solana-web3.js
-[npm-image]: https://img.shields.io/npm/v/@solana/web3.js.svg?style=flat
 [npm-downloads-image]: https://img.shields.io/npm/dm/@solana/web3.js.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/web3.js.svg?style=flat
 [npm-url]: https://www.npmjs.com/package/@solana/web3.js
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-release-url]: https://github.com/semantic-release/semantic-release
-[code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
-[code-style-prettier-url]: https://github.com/prettier/prettier
 
-# Solana JavaScript API
+# Solana JavaScript SDK
 
-This is the Solana Javascript API built on the Solana [JSON RPC API](https://docs.solana.com/apps/jsonrpc-api)
-
-## Documentation and example
-
-- [The Solana Cookbook](https://solanacookbook.com/) has extensive task-based documentation using this library.
-- For more detail on individual functions, see the [latest API Documentation](https://solana-labs.github.io/solana-web3.js/)
+Use this to interact with accounts and programs on the Solana network through the Solana [JSON RPC API](https://docs.solana.com/apps/jsonrpc-api).
 
 ## Installation
 
-### pnpm
-
-```
-$ pnpm add @solana/web3.js
-```
-
-### Yarn
-
-```
-$ yarn add @solana/web3.js
-```
-
-### npm
+### For use in Node.js or a web application
 
 ```
 $ npm install --save @solana/web3.js
 ```
 
-### Browser bundle
+### For use in a browser, without a build system
 
 ```html
 <!-- Development (un-minified) -->
@@ -55,40 +37,20 @@ $ npm install --save @solana/web3.js
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 ```
 
-## Development Environment Setup
+## Documentation and examples
 
-Install the latest Solana release from https://docs.solana.com/cli/install-solana-cli-tools
+- [The Solana Cookbook](https://solanacookbook.com/) has extensive task-based documentation using this library.
+- For more detail on individual functions, see the [latest API Documentation](https://solana-labs.github.io/solana-web3.js)
 
-### Run test validator
+## Getting help
 
-**Use `solana-test-validator` from the latest Solana release**
+Have a question or a problem? Check the [Solana Stack Exchange](https://solana.stackexchange.com) to see if anyone else is having the same one. If not, [post a new question](https://solana.stackexchange.com/questions/ask).
 
-### SBF program development
+Include:
 
-**Use `cargo build-bpf` from the latest Solana release**
-
-## Usage
-
-### Javascript
-
-```js
-const solanaWeb3 = require('@solana/web3.js');
-console.log(solanaWeb3);
-```
-
-### ES6
-
-```js
-import * as solanaWeb3 from '@solana/web3.js';
-console.log(solanaWeb3);
-```
-
-### Browser bundle
-
-```js
-// `solanaWeb3` is provided in the global namespace by the `solanaWeb3.min.js` script bundle.
-console.log(solanaWeb3);
-```
+- A detailed description of what you're trying to achieve
+- Source code, if possible
+- The text of any errors you encountered, with stacktraces if available
 
 ## Compatibility
 
@@ -108,18 +70,51 @@ This library requires a JavaScript runtime that supports [`BigInt`](https://deve
 - React Native:
   - \>=0.7.0 using the [Hermes](https://reactnative.dev/blog/2022/07/08/hermes-as-the-default) engine ([integration guide](https://solanacookbook.com/integrations/react-native.html#how-to-use-solana-web3-js-in-a-react-native-app)):
 
-## Releases
+## Development environment setup
 
-Releases are available on [Github](https://github.com/solana-labs/solana-web3.js/releases)
-and [npmjs.com](https://www.npmjs.com/package/@solana/web3.js)
+### Testing
 
-Each Github release features a tarball containing API documentation and a
-minified version of the module suitable for direct use in a browser environment
-(`<script>` tag)
+#### Unit tests
+
+To run the full suite of unit tests, excute the following in the root:
+
+```shell
+$ npm test
+```
+
+#### Integration tests
+
+Integration tests require a validator client running on your machine.
+
+To install a test validator:
+
+```shell
+$ npm run test:live-with-test-validator:setup
+```
+
+To start the test validator and run all of the integration tests in live mode:
+
+```shell
+$ cd packages/library-legacy
+$ npm run test:live-with-test-validator
+```
+
+### Speed up build times with remote caching
+
+Cache build artifacts remotely so that you, others, and the CI server can take advantage of each others' build efforts.
+
+1. Log the Turborepo CLI into the Solana Vercel account
+   ```shell
+   pnpm turbo login
+   ```
+2. Link the repository to the remote cache
+   ```shell
+   pnpm turbo link
+   ```
 
 ## Contributing
 
-If you have an issue to report or would like to contribute a pull request, please do so against the monorepo at https://github.com/solana-labs/solana. We are not able to merge pull requests into the mirror repo https://github.com/solana-labs/solana-web3.js and issues filed there may go unnoticed.
+If you found a bug or would like to request a feature, please [file an issue](https://github.com/solana-labs/solana-web3.js/issues/new). If, based on the discussion on an issue you would like to offer a code change, please make a [pull request](https://github.com/solana-labs/solana-web3.js/compare). If neither of these describes what you would like to contribute, read the [getting help](#getting-help) section above.
 
 ## Disclaimer
 

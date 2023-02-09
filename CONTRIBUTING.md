@@ -2,7 +2,7 @@
 
 As a contributor, here are the guidelines we would like you to follow:
 
-- Ensure `npm run ok` passes before submitting a Pull Request
+- Ensure `npm run build` passes before submitting a Pull Request
 - Features and bug fixes should be covered by new test cases
 - Commits follow the [Angular commit convention](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
 
