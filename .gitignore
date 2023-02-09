@@ -1,29 +1,22 @@
-# IDE & OS specific
-.DS_Store
-.idea
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Logs
-logs
-*.log
-
-# Dependencies
+# dependencies
 node_modules
+.pnp
+.pnp.js
 
-# Coverage
+# testing
 coverage
-.nyc_output
 
-# Release
-lib
+# misc
+.DS_Store
+*.pem
 
-# Generated docs
-doc
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# VIM swap files
-*.sw*
-
-# `solana-test-validator` ledger location
-test-ledger/
-
-# TypeScript
-declarations
+# turbo
+.turbo

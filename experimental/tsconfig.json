@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "moduleResolution": "node",
-        "target": "es2020",
-        "typeRoots": ["./node_modules/@types"]
-    },
-    "include": ["internal", "src"]
-}

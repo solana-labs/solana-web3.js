@@ -1,0 +1,11 @@
+.eslintrc.js
+commitlint.config.js
+coverage/
+declarations/
+deploy/
+doc/
+lib/
+rollup.config.js
+test/.eslintrc.js
+test/dist/
+test/rollup.config.js
