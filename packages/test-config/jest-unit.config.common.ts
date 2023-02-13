@@ -4,8 +4,7 @@ const config: Config = {
     globals: {
         __DEV__: false,
     },
-    rootDir: '../../',
-    roots: ['<rootDir>src/'],
+    roots: ['<rootDir>/src/'],
     transform: {
         '^.+\\.(ts|js)$': [
             '@swc/jest',

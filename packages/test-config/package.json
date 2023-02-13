@@ -1,0 +1,22 @@
+{
+    "name": "test-config",
+    "version": "0.0.0",
+    "private": true,
+    "files": [
+        "jest-dev.config.ts",
+        "jest-lint.config.ts",
+        "jest-prettier.config.ts",
+        "jest-unit.config.browser.ts",
+        "jest-unit.config.node.ts"
+    ],
+    "peerDependencies": {
+        "jest": "^29.3.1",
+        "jest-environment-jsdom": "^29.3.1",
+        "jest-runner-eslint": "^1.1.0",
+        "jest-runner-prettier": "^1.0.0"
+    },
+    "devDependencies": {
+        "jest": "^29.3.1",
+        "tsconfig": "workspace:*"
+    }
+}
