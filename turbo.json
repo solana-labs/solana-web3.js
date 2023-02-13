@@ -44,27 +44,27 @@
             "outputs": ["coverage/**"]
         },
         "test:lint": {
-            "inputs": ["internal/**", "src/**", "test/**"],
+            "inputs": ["src/**", "test/**"],
             "outputs": []
         },
         "test:live-with-test-validator": {
-            "inputs": ["babel.config.json", "internal/jest/**", "src/**", "test/**"],
+            "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },
         "test:prettier": {
-            "inputs": ["internal/**", "src/**", "test/**"],
+            "inputs": ["src/**", "test/**"],
             "outputs": []
         },
         "test:typecheck": {
-            "inputs": ["tsconfig.*", "internal/**", "src/**", "test/**"],
+            "inputs": ["tsconfig.*", "src/**", "test/**"],
             "outputs": []
         },
         "test:unit:browser": {
-            "inputs": ["internal/jest/**", "src/**"],
+            "inputs": ["src/**"],
             "outputs": []
         },
         "test:unit:node": {
-            "inputs": ["babel.config.json", "internal/jest/**", "src/**", "test/**"],
+            "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },
         "test:treeshakability:browser": {
