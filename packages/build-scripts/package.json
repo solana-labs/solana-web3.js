@@ -4,7 +4,8 @@
     "private": true,
     "files": [
         "env-shim.ts",
-        "tsup.config.ts"
+        "tsup.config.library.ts",
+        "tsup.config.package.ts"
     ],
     "devDependencies": {
         "@types/node": "^18.11.10",

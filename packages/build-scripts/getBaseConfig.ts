@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig, Format, Options } from 'tsup';
+import { Format, Options } from 'tsup';
 
 type Platform =
     | 'browser'
@@ -7,7 +7,7 @@ type Platform =
     // React Native
     | 'native';
 
-function getBaseConfig(platform: Platform, format: Format[], options: Options): Options[] {
+export function getBaseConfig(platform: Platform, format: Format[], options: Options): Options[] {
     return [true, false].map<Options>(isDebugBuild => ({
         clean: true,
         define: {
@@ -48,9 +48,3 @@ function getBaseConfig(platform: Platform, format: Format[], options: Options): 
         treeshake: true,
     }));
 }
-
-export default defineConfig(options => [
-    ...getBaseConfig('node', ['cjs', 'esm'], options),
-    ...getBaseConfig('browser', ['cjs', 'esm', 'iife'], options),
-    ...getBaseConfig('native', ['esm'], options),
-]);
