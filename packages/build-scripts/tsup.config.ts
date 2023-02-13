@@ -1,3 +1,4 @@
+import path from 'path';
 import { defineConfig, Format, Options } from 'tsup';
 
 type Platform =
@@ -15,7 +16,8 @@ function getBaseConfig(platform: Platform, format: Format[], options: Options): 
             __REACTNATIVE__: `${platform === 'native'}`,
         },
         entry: [`./src/index.ts`],
-        esbuildOptions(options, { format }) {
+        esbuildOptions(options, fuck) {
+            const { format } = fuck;
             options.minify = format === 'iife' && !isDebugBuild;
             if (format === 'iife') {
                 options.define = {
@@ -23,7 +25,7 @@ function getBaseConfig(platform: Platform, format: Format[], options: Options): 
                     __DEV__: `${isDebugBuild}`,
                 };
             }
-            options.inject = ['./src/env-shim.ts'];
+            options.inject = [path.resolve(__dirname, 'env-shim.ts')];
         },
         format,
         globalName: 'solanaWeb3',

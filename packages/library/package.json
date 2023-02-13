@@ -36,7 +36,7 @@
         "web3"
     ],
     "scripts": {
-        "compile:js": "tsup",
+        "compile:js": "tsup --config build-scripts/tsup.config.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ./internal/jest/jest-dev.config.ts --watch",
         "test:lint": "jest -c ./internal/jest/jest-lint.config.ts --silent",
@@ -69,6 +69,7 @@
         "@typescript-eslint/eslint-plugin": "^5.43.0",
         "@typescript-eslint/parser": "^5.43.0",
         "agadoo": "^2.0.0",
+        "build-scripts": "workspace:*",
         "eslint": "^8.27.0",
         "eslint-plugin-jest": "^27.1.5",
         "eslint-plugin-react-hooks": "^4.6.0",
