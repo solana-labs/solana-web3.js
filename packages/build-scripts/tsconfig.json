@@ -1,0 +1,8 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "types": ["node"]
+    },
+    "display": "Build Scripts",
+    "extends": "tsconfig/base.json"
+}

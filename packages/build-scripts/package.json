@@ -1,0 +1,14 @@
+{
+    "name": "build-scripts",
+    "version": "0.0.0",
+    "private": true,
+    "files": [
+        "env-shim.ts",
+        "tsup.config.ts"
+    ],
+    "devDependencies": {
+        "@types/node": "^18.11.10",
+        "tsconfig": "workspace:*",
+        "tsup": "6.5.0"
+    }
+}
