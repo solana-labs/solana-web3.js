@@ -1,9 +1,12 @@
-import { Config } from 'jest';
+import { Config } from '@jest/types';
 import commonConfig from './jest-unit.config.common';
 
-const config: NonNullable<Config['projects']>[number] = {
+const config: Partial<Config.ProjectConfig> = {
     ...commonConfig,
-    displayName: 'Unit Test (Node)',
+    displayName: {
+        color: 'grey',
+        name: 'Unit Test (Node)',
+    },
     globals: {
         ...commonConfig.globals,
         __BROWSER__: false,
