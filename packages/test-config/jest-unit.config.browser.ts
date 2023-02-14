@@ -1,7 +1,7 @@
 import type { Config } from 'jest';
 import commonConfig from './jest-unit.config.common';
 
-const config: Config = {
+const config: NonNullable<Config['projects']>[number] = {
     ...commonConfig,
     displayName: 'Unit Test (Browser)',
     globals: {

@@ -1,7 +1,7 @@
 import { Config } from 'jest';
 import commonConfig from './jest-unit.config.common';
 
-const config: Config = {
+const config: NonNullable<Config['projects']>[number] = {
     ...commonConfig,
     displayName: 'Unit Test (Node)',
     globals: {
