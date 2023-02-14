@@ -1,7 +1,10 @@
-import type { Config } from 'jest';
+import type { Config } from '@jest/types';
 
-const config: NonNullable<Config['projects']>[number] = {
-    displayName: 'ESLint',
+const config: Partial<Config.ProjectConfig> = {
+    displayName: {
+        color: 'cyanBright',
+        name: 'ESLint',
+    },
     runner: 'eslint',
     testMatch: ['<rootDir>src/**/*.ts'],
 };
