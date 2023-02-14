@@ -1,6 +1,6 @@
 import type { Config } from 'jest';
 
-const config: Config = {
+const config: NonNullable<Config['projects']>[number] = {
     displayName: 'ESLint',
     runner: 'eslint',
     testMatch: ['<rootDir>src/**/*.ts'],

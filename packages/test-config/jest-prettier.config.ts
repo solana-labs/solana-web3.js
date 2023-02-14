@@ -1,6 +1,6 @@
 import type { Config } from 'jest';
 
-const config: Config = {
+const config: NonNullable<Config['projects']>[number] = {
     displayName: 'Prettier',
     moduleFileExtensions: ['js', 'ts', 'json', 'md'],
     runner: 'prettier',
