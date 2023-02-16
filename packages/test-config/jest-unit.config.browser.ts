@@ -1,7 +1,7 @@
 import type { Config } from '@jest/types';
 import commonConfig from './jest-unit.config.common';
 
-const config: Partial<Config.ProjectConfig> = {
+const config: Partial<Config.InitialProjectOptions> = {
     ...commonConfig,
     displayName: {
         color: 'grey',
