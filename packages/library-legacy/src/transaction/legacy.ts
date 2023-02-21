@@ -457,7 +457,17 @@ export class Transaction {
         return x.isWritable ? -1 : 1;
       }
       // Otherwise, sort by pubkey, stringwise.
-      return x.pubkey.toBase58().localeCompare(y.pubkey.toBase58());
+      const options = {
+        localeMatcher: 'best fit',
+        usage: 'sort',
+        sensitivity: 'variant',
+        ignorePunctuation: false,
+        numeric: false,
+        caseFirst: 'lower',
+      };
+      return x.pubkey
+        .toBase58()
+        .localeCompare(y.pubkey.toBase58(), 'en', options);
     });
 
     // Move fee payer to the front
