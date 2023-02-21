@@ -10,7 +10,7 @@ export class AgentManager {
   _useHttps: boolean;
 
   static _newAgent(useHttps: boolean): http.Agent | https.Agent {
-    const options = {keepAlive: true, maxSockets: 25};
+    const options = { keepAlive: true, maxSockets: 25 };
     if (useHttps) {
       return new https.Agent(options);
     } else {
@@ -36,7 +36,9 @@ export class AgentManager {
     this._activeRequests--;
     if (this._activeRequests === 0 && this._destroyTimeout === null) {
       this._destroyTimeout = setTimeout(() => {
-        this._agent.destroy();
+        if (this._agent.destroy) {
+          this._agent.destroy();
+        }
         this._agent = AgentManager._newAgent(this._useHttps);
       }, DESTROY_TIMEOUT_MS);
     }
