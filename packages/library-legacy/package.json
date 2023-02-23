@@ -69,7 +69,7 @@
     "fast-stable-stringify": "^1.0.0",
     "jayson": "^3.4.4",
     "node-fetch": "^2.6.7",
-    "rpc-websockets": "^7.5.0",
+    "rpc-websockets": "^7.5.1",
     "superstruct": "^0.14.2"
   },
   "devDependencies": {
