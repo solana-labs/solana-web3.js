@@ -4,6 +4,7 @@ const config: Partial<Config.InitialProjectOptions> = {
     globals: {
         __DEV__: false,
     },
+    restoreMocks: true,
     roots: ['<rootDir>/src/'],
     transform: {
         '^.+\\.(ts|js)$': [
