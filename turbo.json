@@ -56,6 +56,7 @@
             "outputs": []
         },
         "test:typecheck": {
+            "dependsOn": ["compile:js"],
             "inputs": ["tsconfig.*", "src/**", "test/**"],
             "outputs": []
         },
