@@ -1,8 +1,0 @@
-
-> @solana/web3.js@0.0.0-development build /home/sol/src/solana-web3.js/packages/library-legacy
-> pnpm run clean; cross-env NODE_ENV=production rollup -c; pnpm run type:gen
-
-
-> @solana/web3.js@0.0.0-development clean /home/sol/src/solana-web3.js/packages/library-legacy
-> rimraf ./coverage ./lib
-
