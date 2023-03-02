@@ -1,1 +1,1 @@
-export { default as rpc } from './rpc.js';
+export * from '@solana/keys';
