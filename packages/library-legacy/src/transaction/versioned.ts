@@ -90,6 +90,10 @@ export class VersionedTransaction {
     return new VersionedTransaction(message, signatures);
   }
 
+  /**
+   * NOTE: When the `sign()` method is called, all previously added transaction
+   * signatures will be fully replaced with new signatures created from the provided Signers.
+   */
   sign(signers: Array<Signer>) {
     const messageData = this.message.serialize();
     const signerPubkeys = this.message.staticAccountKeys.slice(
