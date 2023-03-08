@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Library (Legacy)",
+  "display": "@solana/web3.js",
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
