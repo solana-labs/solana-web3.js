@@ -9,10 +9,6 @@ logs
 # Dependencies
 node_modules
 
-# Coverage
-coverage
-.nyc_output
-
 # Release
 lib
 

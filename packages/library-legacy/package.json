@@ -41,10 +41,9 @@
     "compile:js": "cross-env NODE_ENV=production rollup -c",
     "compile:typedefs": "./scripts/typegen.sh",
     "build:fixtures": "set -ex; ./test/fixtures/noop-program/build.sh",
-    "clean": "rimraf .nyc_output/ ./coverage ./docs ./declarations ./lib",
+    "clean": "rimraf ./docs ./declarations ./lib",
     "dev": "cross-env NODE_ENV=development rollup -c --watch",
     "publish-packages": "semantic-release --repository-url git@github.com:solana-labs/solana-web3.js.git",
-    "test:coverage": "cat ./coverage/lcov.info | codecov",
     "test:lint": "eslint src/ test/ --ext .js,.ts",
     "test:lint:fix": "eslint src/ test/ --fix --ext .js,.ts",
     "test:live": "TEST_LIVE=1 pnpm run test:unit:node",
@@ -52,7 +51,7 @@
     "test:prettier": "prettier --check '{,{src,test}/**/}*.{j,t}s'",
     "test:prettier:fix": "prettier --write '{,{src,test}/**/}*.{j,t}s'",
     "test:typecheck": "tsc --noEmit",
-    "test:unit:node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\", \"target\": \"es2019\" }' nyc --reporter=lcov ts-mocha --require esm './test/**/*.test.ts'"
+    "test:unit:node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\", \"target\": \"es2019\" }' ts-mocha --require esm './test/**/*.test.ts'"
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
@@ -101,7 +100,6 @@
     "@typescript-eslint/parser": "^5.40.1",
     "chai": "^4.3.0",
     "chai-as-promised": "^7.1.1",
-    "codecov": "^3.0.4",
     "cross-env": "7.0.3",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
@@ -113,7 +111,6 @@
     "mockttp": "^3.6.2",
     "mz": "^2.7.0",
     "node-abort-controller": "^3.0.1",
-    "nyc": "^15.1.0",
     "prettier": "^2.3.0",
     "rimraf": "4.1.2",
     "rollup": "2.79.1",
