@@ -12,7 +12,7 @@ declare interface GetBlockHeightApi {
         transport: IJsonRpcTransport,
         config?: readonly {
             // Defaults to `finalized`
-            commitment?: Finality;
+            commitment?: Commitment;
             // The minimum slot that the request can be evaluated at
             minContextSlot?: Slot;
         }

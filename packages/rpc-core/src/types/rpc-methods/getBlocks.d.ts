@@ -12,7 +12,7 @@ declare interface GetBlocksApi {
         endSlotInclusive?: Slot,
         config?: readonly {
             // Defaults to `finalized`
-            commitment?: Exclude<Finality, 'processed'>;
+            commitment?: Exclude<Commitment, 'processed'>;
         }
     ): Promise<GetBlocksApiResponse>;
 }
