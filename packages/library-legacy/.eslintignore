@@ -1,6 +1,5 @@
 .eslintrc.js
 commitlint.config.js
-coverage/
 declarations/
 deploy/
 doc/

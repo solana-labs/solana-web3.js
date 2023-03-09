@@ -2,7 +2,7 @@
     "$schema": "https://turbo.build/schema.json",
     "pipeline": {
         "clean": {
-            "outputs": [".nyc_output/**", "coverage/**", "dist/**", "lib/**"]
+            "outputs": ["dist/**", "lib/**"]
         },
         "compile:docs": {
             "dependsOn": ["clean"],
@@ -25,7 +25,6 @@
                 "compile:docs",
                 "compile:js",
                 "compile:typedefs",
-                "test:coverage",
                 "test:lint",
                 "test:prettier",
                 "test:typecheck",
@@ -37,11 +36,6 @@
                 "test:treeshakability:node"
             ],
             "outputs": ["dist/**", "lib/**"]
-        },
-        "test:coverage": {
-            "dependsOn": ["test:unit:node"],
-            "inputs": [".nyc_output/**"],
-            "outputs": ["coverage/**"]
         },
         "test:lint": {
             "inputs": ["src/**", "test/**"],
