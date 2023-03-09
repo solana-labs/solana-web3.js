@@ -1,3 +1,8 @@
+declare type DataSlice = readonly {
+    offset: number;
+    length: number;
+};
+
 // TODO: Eventually move this into whatever package implements transactions
 declare type Finality = 'confirmed' | 'finalized' | 'processed';
 
