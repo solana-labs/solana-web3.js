@@ -399,6 +399,7 @@ importers:
       '@jest/types': ^29.4.2
       jest: ^29.4.2
       jest-environment-jsdom: ^29.4.2
+      jest-fetch-mock: ^3.0.3
       jest-runner-eslint: ^1.1.0
       jest-runner-prettier: ^1.0.0
       jest-watch-master: ^1.0.0
@@ -415,6 +416,7 @@ importers:
     devDependencies:
       '@jest/types': 29.4.2
       jest: 29.4.2
+      jest-fetch-mock: 3.0.3
       tsconfig: link:../tsconfig
 
   packages/tsconfig:
@@ -7203,6 +7205,15 @@ packages:
       jest-mock: 29.4.2
       jest-util: 29.4.2
 
+  /jest-fetch-mock/3.0.3:
+    resolution: {integrity: sha512-Ux1nWprtLrdrH4XwE7O7InRY6psIi3GOsqNESJgMJ+M5cv4A8Lh7SN9d2V2kKRZ8ebAfcd1LNyZguAOb6JiDqw==}
+    dependencies:
+      cross-fetch: 3.1.5
+      promise-polyfill: 8.3.0
+    transitivePeerDependencies:
+      - encoding
+    dev: true
+
   /jest-get-type/27.5.1:
     resolution: {integrity: sha512-2KY95ksYSaK7DMBWQn6dQz3kqAf3BB64y2udeG+hv4KfSOb9qwcYQstTJc1KCbsix+wLZWZYN8t7nwX3GOBLRw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -9117,6 +9128,10 @@ packages:
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
+    dev: true
+
+  /promise-polyfill/8.3.0:
+    resolution: {integrity: sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==}
     dev: true
 
   /prompts/2.4.2:
