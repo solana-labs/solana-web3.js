@@ -30,6 +30,9 @@ export function getBaseConfig(platform: Platform, format: Format[], options: Opt
         format,
         globalName: 'solanaWeb3',
         name: platform,
+        // Inline private, non-published packages.
+        // WARNING: This inlines packages recursively. Make sure these don't have deep dep trees.
+        noExternal: ['@solana/fetch-impl-browser'],
         onSuccess: options.watch ? 'tsc -p ./tsconfig.declarations.json' : undefined,
         outExtension({ format }) {
             let extension;
