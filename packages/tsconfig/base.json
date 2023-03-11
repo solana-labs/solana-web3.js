@@ -15,7 +15,8 @@
     "noUnusedParameters": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "target": "ES2020"
   },
   "exclude": ["node_modules"]
 }
