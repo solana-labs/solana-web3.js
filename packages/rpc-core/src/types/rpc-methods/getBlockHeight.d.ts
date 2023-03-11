@@ -1,15 +1,12 @@
-import { IJsonRpcTransport } from '@solana/rpc-transport';
-
 type GetBlockHeightApiResponse =
     // TODO(solana-labs/solana/issues/30341) Represent as bigint
     number;
 
-declare interface GetBlockHeightApi {
+export interface GetBlockHeightApi {
     /**
      * Returns the current block height of the node
      */
     getBlockHeight(
-        transport: IJsonRpcTransport,
         config?: readonly {
             // Defaults to `finalized`
             commitment?: Commitment;
