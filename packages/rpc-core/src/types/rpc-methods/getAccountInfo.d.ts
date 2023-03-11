@@ -1,5 +1,4 @@
 import { Base58EncodedAddress } from '@solana/keys';
-import { IJsonRPCTransport } from '../../rpc';
 
 type Base64EncodedBytes = string & { readonly __base64EncodedBytes: unique symbol };
 type Base64EncodedZStdCompressedBytes = string & { readonly __base64EncodedZStdCompressedBytes: unique symbol };
@@ -59,12 +58,11 @@ type GetAccountInfoApiBase64EncodingCommonConfig = readonly {
     dataSlice?: DataSlice;
 };
 
-declare interface GetAccountInfoApi {
+export interface GetAccountInfoApi {
     /**
      * Returns all information associated with the account of provided public key
      */
     getAccountInfo(
-        transport: IJsonRPCTransport,
         address: Base58EncodedAddress,
         config?: readonly {
             encoding: 'base64';
@@ -73,7 +71,6 @@ declare interface GetAccountInfoApi {
             GetAccountInfoApiBase64EncodingCommonConfig
     ): Promise<GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedData>;
     getAccountInfo(
-        transport: IJsonRPCTransport,
         address: Base58EncodedAddress,
         config?: readonly {
             encoding: 'base64+zstd';
@@ -82,7 +79,6 @@ declare interface GetAccountInfoApi {
             GetAccountInfoApiBase64EncodingCommonConfig
     ): Promise<GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedZStdCompressedData>;
     getAccountInfo(
-        transport: IJsonRPCTransport,
         address: Base58EncodedAddress,
         config?: readonly {
             encoding: 'jsonParsed';
