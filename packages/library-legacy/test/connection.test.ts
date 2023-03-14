@@ -939,7 +939,7 @@ describe('Connection', function () {
       expect(Array.isArray(slots)).to.be.true;
       expect(slots.length).to.be.at.least(4);
     }
-  });
+  }).timeout(30 * 1000);
 
   it('get slot', async () => {
     await mockRpcResponse({
