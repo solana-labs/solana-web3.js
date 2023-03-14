@@ -15,7 +15,7 @@
             "outputs": ["dist/**", "lib/**"]
         },
         "compile:typedefs": {
-            "dependsOn": ["clean", "compile:js"],
+            "dependsOn": ["clean", "compile:js", "^compile:typedefs"],
             "inputs": ["rollup.config.types.js", "tsconfig.*", "src/**"],
             "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
         },
@@ -50,7 +50,7 @@
             "outputs": []
         },
         "test:typecheck": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["compile:js", "compile:typedefs"],
             "inputs": ["tsconfig.*", "src/**", "test/**"],
             "outputs": []
         },
