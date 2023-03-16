@@ -16,8 +16,8 @@ export function getBaseConfig(platform: Platform, format: Format[], options: Opt
             __REACTNATIVE__: `${platform === 'native'}`,
         },
         entry: [`./src/index.ts`],
-        esbuildOptions(options, fuck) {
-            const { format } = fuck;
+        esbuildOptions(options, context) {
+            const { format } = context;
             options.minify = format === 'iife' && !isDebugBuild;
             if (format === 'iife') {
                 options.define = {
