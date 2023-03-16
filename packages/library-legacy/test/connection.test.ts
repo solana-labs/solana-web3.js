@@ -2588,17 +2588,124 @@ describe('Connection', function () {
   });
 
   it('get block height', async () => {
-    const commitment: Commitment = 'confirmed';
-
     await mockRpcResponse({
       method: 'getBlockHeight',
-      params: [{commitment: commitment}],
+      params: [{commitment: 'confirmed'}],
       value: 10,
     });
 
-    const blockHeight = await connection.getBlockHeight(commitment);
+    const blockHeight = await connection.getBlockHeight('confirmed');
     expect(blockHeight).to.be.a('number');
   });
+
+  if (!process.env.TEST_LIVE) {
+    it('identical get block height calls get coalesced', async () => {
+      // This is equivalent to asserting that `getBlockHeight` only gets called once.
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        value: 10,
+      });
+
+      const [blockHeightA, blockHeightB, blockHeightC] = await Promise.all([
+        connection.getBlockHeight('confirmed'),
+        connection.getBlockHeight({commitment: 'confirmed'}),
+        connection.getBlockHeight('confirmed'),
+      ]);
+      expect(blockHeightA).to.be.a('number');
+      expect(blockHeightB).to.be.a('number');
+      expect(blockHeightC).to.be.a('number');
+    });
+
+    it('get block height calls whose args are in different orders but functionally identical get coalesced', async () => {
+      // This is equivalent to asserting that `getBlockHeight` only gets called once.
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed', minContextSlot: 5}],
+        value: 10,
+      });
+
+      const [blockHeightA, blockHeightB] = await Promise.all([
+        connection.getBlockHeight({commitment: 'confirmed', minContextSlot: 5}),
+        connection.getBlockHeight({minContextSlot: 5, commitment: 'confirmed'}),
+      ]);
+      expect(blockHeightA).to.be.a('number');
+      expect(blockHeightB).to.be.a('number');
+    });
+
+    it('get block height calls with different params do not get coalesced', async () => {
+      // This is equivalent to asserting that `getBlockHeight` gets called three times.
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        value: 10,
+      });
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'finalized'}],
+        value: 10,
+      });
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed', minContextSlot: 5}],
+        value: 10,
+      });
+
+      const [blockHeightA, blockHeightB, blockHeightC] = await Promise.all([
+        connection.getBlockHeight('confirmed'),
+        connection.getBlockHeight('finalized'),
+        connection.getBlockHeight({commitment: 'confirmed', minContextSlot: 5}),
+      ]);
+      expect(blockHeightA).to.be.a('number');
+      expect(blockHeightB).to.be.a('number');
+      expect(blockHeightC).to.be.a('number');
+    });
+
+    it('get block height calls that fail bubble up to each coalesced caller', async () => {
+      // This is equivalent to asserting that `getBlockHeight` only gets called once.
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        error: {
+          message: 'Something bad happened',
+        },
+      });
+
+      const blockHeightPromiseA = connection.getBlockHeight('confirmed');
+      const blockHeightPromiseB = connection.getBlockHeight({
+        commitment: 'confirmed',
+      });
+      const blockHeightPromiseC = connection.getBlockHeight('confirmed');
+      await expect(blockHeightPromiseA).to.eventually.be.rejected;
+      await expect(blockHeightPromiseB).to.eventually.be.rejected;
+      await expect(blockHeightPromiseC).to.eventually.be.rejected;
+    });
+
+    it('follow on calls to get block height generate new network requests', async () => {
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        value: 10,
+      });
+      await expect(connection.getBlockHeight('confirmed')).to.eventually.eq(10);
+      // Second call with identical options should make a *new* request, since the first has completed
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        error: {
+          message: 'Try again',
+        },
+      });
+      await expect(connection.getBlockHeight('confirmed')).to.be.rejected;
+      // Third call identical to the second, failed one, should also make a new request.
+      await mockRpcResponse({
+        method: 'getBlockHeight',
+        params: [{commitment: 'confirmed'}],
+        value: 11,
+      });
+      await expect(connection.getBlockHeight('confirmed')).to.eventually.eq(11);
+    });
+  }
 
   it('get block production', async () => {
     const commitment: Commitment = 'processed';
