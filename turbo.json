@@ -50,7 +50,7 @@
             "outputs": []
         },
         "test:typecheck": {
-            "dependsOn": ["compile:js", "compile:typedefs"],
+            "dependsOn": ["^compile:typedefs"],
             "inputs": ["tsconfig.*", "src/**", "test/**"],
             "outputs": []
         },
@@ -63,15 +63,15 @@
             "outputs": []
         },
         "test:treeshakability:browser": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "outputs": []
         },
         "test:treeshakability:native": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "outputs": []
         },
         "test:treeshakability:node": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "outputs": []
         }
     },
