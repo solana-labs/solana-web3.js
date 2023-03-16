@@ -5696,7 +5696,7 @@ export class Connection {
       }
 
       const wireTransaction = transaction.serialize();
-      return await this.sendRawTransaction(wireTransaction, options);
+      return await this.sendRawTransaction(wireTransaction, signersOrOptions);
     }
 
     if (signersOrOptions === undefined || !Array.isArray(signersOrOptions)) {
