@@ -7,7 +7,7 @@ const config: Partial<Config.InitialProjectOptions> = {
     },
     restoreMocks: true,
     roots: ['<rootDir>/src/'],
-    setupFiles: [path.resolve(__dirname, 'setup-fetch-mock.ts')],
+    setupFilesAfterEnv: [path.resolve(__dirname, 'setup-fetch-mock.ts')],
     transform: {
         '^.+\\.(ts|js)$': [
             '@swc/jest',
