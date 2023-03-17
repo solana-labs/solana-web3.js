@@ -20,7 +20,8 @@
         "jest-watch-typeahead": "^2.2.2"
     },
     "devDependencies": {
-        "@jest/types": "^29.4.2",
+        "@jest/types": "^29.5.0",
+        "@types/jest": "^29.5.0",
         "jest": "^29.5.0",
         "jest-fetch-mock": "^3.0.3",
         "tsconfig": "workspace:*"
