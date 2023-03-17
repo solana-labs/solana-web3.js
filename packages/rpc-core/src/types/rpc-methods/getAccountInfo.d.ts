@@ -12,10 +12,10 @@ type GetAccountInfoApiResponseBase = Readonly<{
     }>;
     value: Readonly<{
         executable: boolean;
-        lamports: number; // TODO(solana-labs/solana/issues/30341) Represent as bigint
+        lamports: U64UnsafeBeyond2Pow53Minus1;
         owner: Base64EncodedAddress;
-        rentEpoch: number; // TODO(solana-labs/solana/issues/30341) Represent as bigint
-        space: number; // TODO(solana-labs/solana/issues/30341) Represent as bigint
+        rentEpoch: U64UnsafeBeyond2Pow53Minus1;
+        space: U64UnsafeBeyond2Pow53Minus1;
     }> | null;
 }>;
 
@@ -38,7 +38,7 @@ type GetAccountInfoApiResponseWithJsonData = Readonly<{
                   // Name of the program that owns this account.
                   program: string;
                   parsed: unknown;
-                  space: number; // TODO(solana-labs/solana/issues/30341) Represent as bigint
+                  space: U64UnsafeBeyond2Pow53Minus1;
               }>
             // If `jsonParsed` encoding is requested but a parser cannot be found for the given
             // account the `data` field falls back to `base64`.

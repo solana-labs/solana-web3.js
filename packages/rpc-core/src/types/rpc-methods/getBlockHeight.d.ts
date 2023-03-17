@@ -1,6 +1,4 @@
-type GetBlockHeightApiResponse =
-    // TODO(solana-labs/solana/issues/30341) Represent as bigint
-    number;
+type GetBlockHeightApiResponse = U64UnsafeBeyond2Pow53Minus1;
 
 export interface GetBlockHeightApi {
     /**

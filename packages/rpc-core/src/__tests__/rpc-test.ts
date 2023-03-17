@@ -15,7 +15,7 @@ describe('rpc', () => {
         });
     });
     describe('a method call with params', () => {
-        const params = [1, undefined, { commitment: 'finalized' }] as const;
+        const params = [1n, undefined, { commitment: 'finalized' }] as const;
         beforeEach(async () => {
             await rpc.getBlocks(transport, ...params);
         });
