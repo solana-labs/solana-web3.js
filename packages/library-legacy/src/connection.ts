@@ -4739,28 +4739,40 @@ export class Connection {
   /*
    * Returns the current block height of the node
    */
-  async getBlockHeight(
-    commitmentOrConfig?: Commitment | GetBlockHeightConfig,
-  ): Promise<number> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
-    const args = this._buildArgs(
-      [],
-      commitment,
-      undefined /* encoding */,
-      config,
-    );
-    const unsafeRes = await this._rpcRequest('getBlockHeight', args);
-    const res = create(unsafeRes, jsonRpcResult(number()));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        'failed to get block height information',
+  getBlockHeight = (() => {
+    const requestPromises: {[hash: string]: Promise<number>} = {};
+    return async (
+      commitmentOrConfig?: Commitment | GetBlockHeightConfig,
+    ): Promise<number> => {
+      const {commitment, config} =
+        extractCommitmentFromConfig(commitmentOrConfig);
+      const args = this._buildArgs(
+        [],
+        commitment,
+        undefined /* encoding */,
+        config,
       );
-    }
-
-    return res.result;
-  }
+      const requestHash = fastStableStringify(args);
+      requestPromises[requestHash] =
+        requestPromises[requestHash] ??
+        (async () => {
+          try {
+            const unsafeRes = await this._rpcRequest('getBlockHeight', args);
+            const res = create(unsafeRes, jsonRpcResult(number()));
+            if ('error' in res) {
+              throw new SolanaJSONRPCError(
+                res.error,
+                'failed to get block height information',
+              );
+            }
+            return res.result;
+          } finally {
+            delete requestPromises[requestHash];
+          }
+        })();
+      return await requestPromises[requestHash];
+    };
+  })();
 
   /*
    * Returns recent block production information from the current or previous epoch
