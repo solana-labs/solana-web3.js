@@ -64,7 +64,7 @@
     "bn.js": "^5.0.0",
     "borsh": "^0.7.0",
     "bs58": "^4.0.1",
-    "buffer": "6.0.1",
+    "buffer": "6.0.3",
     "fast-stable-stringify": "^1.0.0",
     "jayson": "^3.4.4",
     "node-fetch": "^2.6.7",

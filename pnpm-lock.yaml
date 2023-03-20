@@ -230,7 +230,7 @@ importers:
       bn.js: ^5.0.0
       borsh: ^0.7.0
       bs58: ^4.0.1
-      buffer: 6.0.1
+      buffer: 6.0.3
       chai: ^4.3.0
       chai-as-promised: ^7.1.1
       cross-env: 7.0.3
@@ -276,7 +276,7 @@ importers:
       bn.js: 5.2.1
       borsh: 0.7.0
       bs58: 4.0.1
-      buffer: 6.0.1
+      buffer: 6.0.3
       fast-stable-stringify: 1.0.0
       jayson: 3.6.6
       node-fetch: 2.6.7
@@ -4521,6 +4521,7 @@ packages:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+    dev: true
 
   /buffer/6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
