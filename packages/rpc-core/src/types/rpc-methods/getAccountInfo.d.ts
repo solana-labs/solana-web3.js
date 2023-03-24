@@ -13,7 +13,7 @@ type GetAccountInfoApiResponseBase = Readonly<{
     value: Readonly<{
         executable: boolean;
         lamports: U64UnsafeBeyond2Pow53Minus1;
-        owner: Base64EncodedAddress;
+        owner: Base58EncodedAddress;
         rentEpoch: U64UnsafeBeyond2Pow53Minus1;
         space: U64UnsafeBeyond2Pow53Minus1;
     }> | null;
