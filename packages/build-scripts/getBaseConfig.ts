@@ -28,7 +28,7 @@ export function getBaseConfig(platform: Platform, format: Format[], options: Opt
             options.inject = [path.resolve(__dirname, 'env-shim.ts')];
         },
         format,
-        globalName: 'solanaWeb3',
+        globalName: 'globalThis.solanaWeb3',
         name: platform,
         // Inline private, non-published packages.
         // WARNING: This inlines packages recursively. Make sure these don't have deep dep trees.
