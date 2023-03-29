@@ -1,6 +1,8 @@
 import { makeHttpRequest } from '../http-request';
 import { SolanaHttpError } from '../http-request-errors';
 
+import fetchMock from 'jest-fetch-mock';
+
 describe('makeHttpRequest', () => {
     describe('when the endpoint returns a non-200 status code', () => {
         beforeEach(() => {
