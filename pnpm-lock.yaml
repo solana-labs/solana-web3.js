@@ -572,6 +572,12 @@ importers:
       '@solana/fetch-impl-browser':
         specifier: workspace:*
         version: link:../fetch-impl-browser
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
+      '@solana/rpc-core':
+        specifier: workspace:*
+        version: link:../rpc-core
       node-fetch:
         specifier: ^2.6.7
         version: 2.6.7

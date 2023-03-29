@@ -1,15 +1,19 @@
-import { IJsonRpcTransport } from '..';
 import { createJsonRpcTransport } from '../json-rpc-transport';
+import { Transport } from '../json-rpc-transport-types';
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 
 jest.mock('../params-patcher');
+
+interface TestRpcApi {
+    someMethod(...args: unknown[]): unknown;
+}
 
 // FIXME(solana-labs/solana/issues/30341) The JSON RPC was designed to communicate JavaScript
 // `Numbers` over the wire, which puts values over `Number.MAX_SAFE_INTEGER` at risk of rounding
 // errors. This test exercises the warning handler for such integer overflows.
 describe('Solana JSON-RPC params patcher', () => {
     let onIntegerOverflow: jest.Mock;
-    let transport: IJsonRpcTransport;
+    let transport: Transport<TestRpcApi>;
     const url = 'fake://url';
     beforeEach(() => {
         onIntegerOverflow = jest.fn();
@@ -23,7 +27,7 @@ describe('Solana JSON-RPC params patcher', () => {
             });
         });
         it('calls `onIntegerOverflow` with the offending method name', () => {
-            transport.send('someMethod', [1n]);
+            transport.someMethod(1n);
             expect(onIntegerOverflow).toHaveBeenCalled();
             expect(onIntegerOverflow.mock.calls[0][0]).toBe('someMethod');
         });
@@ -33,7 +37,7 @@ describe('Solana JSON-RPC params patcher', () => {
             (patchParamsForSolanaLabsRpc as jest.Mock).mockImplementation(params => params);
         });
         it('does not call `onIntegerOverflow`', () => {
-            transport.send('someMethod', [1n]);
+            transport.someMethod(1n);
             expect(onIntegerOverflow).not.toHaveBeenCalled();
         });
     });
