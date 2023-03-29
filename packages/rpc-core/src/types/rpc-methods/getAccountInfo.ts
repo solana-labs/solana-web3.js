@@ -1,4 +1,5 @@
 import { Base58EncodedAddress } from '@solana/keys';
+import { Commitment, DataSlice, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type Base64EncodedBytes = string & { readonly __base64EncodedBytes: unique symbol };
 type Base64EncodedZStdCompressedBytes = string & { readonly __base64EncodedZStdCompressedBytes: unique symbol };
@@ -46,17 +47,17 @@ type GetAccountInfoApiResponseWithJsonData = Readonly<{
     }> | null;
 }>;
 
-type GetAccountInfoApiCommonConfig = readonly {
+type GetAccountInfoApiCommonConfig = Readonly<{
     // Defaults to `finalized`
     commitment?: Commitment;
     // The minimum slot that the request can be evaluated at
     minContextSlot?: Slot;
-};
+}>;
 
-type GetAccountInfoApiBase64EncodingCommonConfig = readonly {
+type GetAccountInfoApiBase64EncodingCommonConfig = Readonly<{
     // Limit the returned account data using the provided "offset: <usize>" and "length: <usize>" fields.
     dataSlice?: DataSlice;
-};
+}>;
 
 export interface GetAccountInfoApi {
     /**
@@ -64,25 +65,25 @@ export interface GetAccountInfoApi {
      */
     getAccountInfo(
         address: Base58EncodedAddress,
-        config?: readonly {
+        config?: Readonly<{
             encoding: 'base64';
-        } &
+        }> &
             GetAccountInfoApiCommonConfig &
             GetAccountInfoApiBase64EncodingCommonConfig
-    ): Promise<GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedData>;
+    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedData;
     getAccountInfo(
         address: Base58EncodedAddress,
-        config?: readonly {
+        config?: Readonly<{
             encoding: 'base64+zstd';
-        } &
+        }> &
             GetAccountInfoApiCommonConfig &
             GetAccountInfoApiBase64EncodingCommonConfig
-    ): Promise<GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedZStdCompressedData>;
+    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithEncodedZStdCompressedData;
     getAccountInfo(
         address: Base58EncodedAddress,
-        config?: readonly {
+        config?: Readonly<{
             encoding: 'jsonParsed';
-        } &
+        }> &
             GetAccountInfoApiCommonConfig
-    ): Promise<GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithJsonData>;
+    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithJsonData;
 }

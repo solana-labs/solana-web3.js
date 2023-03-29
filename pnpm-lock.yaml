@@ -493,9 +493,6 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      '@solana/rpc-transport':
-        specifier: workspace:*
-        version: link:../rpc-transport
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^0.0.4
