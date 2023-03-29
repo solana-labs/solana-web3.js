@@ -1,9 +1,4 @@
-let _nextMessageId = 0;
-function getNextMessageId() {
-    const id = _nextMessageId;
-    _nextMessageId = (_nextMessageId + 1) % Number.MAX_SAFE_INTEGER;
-    return id;
-}
+import { getNextMessageId } from './json-rpc-message-id';
 
 export function createJsonRpcMessage<TParams>(method: string, params: TParams) {
     return {
