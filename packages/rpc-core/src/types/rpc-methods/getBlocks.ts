@@ -1,3 +1,5 @@
+import { Slot, Commitment } from './common';
+
 type GetBlocksApiResponse = Slot[];
 
 export interface GetBlocksApi {
@@ -7,9 +9,9 @@ export interface GetBlocksApi {
     getBlocks(
         startSlot: Slot,
         endSlotInclusive?: Slot,
-        config?: readonly {
+        config?: Readonly<{
             // Defaults to `finalized`
             commitment?: Exclude<Commitment, 'processed'>;
-        }
-    ): Promise<GetBlocksApiResponse>;
+        }>
+    ): GetBlocksApiResponse;
 }
