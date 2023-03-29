@@ -22,7 +22,7 @@ function visitNode<T>(value: T, keyPath: KeyPath, onIntegerOverflow?: IntegerOve
         // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the Solana
         // JSON RPC implementation so that we can throw away this entire patcher instead of unsafely
         // downcasting `bigints` to `numbers`.
-        if (onIntegerOverflow && value > Number.MAX_SAFE_INTEGER) {
+        if (onIntegerOverflow && (value > Number.MAX_SAFE_INTEGER || value < -Number.MAX_SAFE_INTEGER)) {
             onIntegerOverflow(keyPath, value);
         }
         return Number(value) as TypescriptBug33014;

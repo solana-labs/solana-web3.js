@@ -43,4 +43,40 @@ describe('patchParamsForSolanaLabsRpc', () => {
             });
         });
     });
+    describe('with respect to integer overflows', () => {
+        let onIntegerOverflow: (keyPath: (number | string)[], value: bigint) => void;
+        beforeEach(() => {
+            onIntegerOverflow = jest.fn();
+        });
+        Object.entries({
+            'value above `Number.MAX_SAFE_INTEGER`': BigInt(Number.MAX_SAFE_INTEGER) + 1n,
+            'value below `Number.MAX_SAFE_INTEGER`': -BigInt(Number.MAX_SAFE_INTEGER) - 1n,
+        }).forEach(([description, value]) => {
+            it('calls `onIntegerOverflow` when passed a value ' + description, () => {
+                patchParamsForSolanaLabsRpc(value, onIntegerOverflow);
+                expect(onIntegerOverflow).toHaveBeenCalledWith(
+                    [], // Equivalent to `params`
+                    value
+                );
+            });
+            it('calls `onIntegerOverflow` when passed a nested array having a value ' + description, () => {
+                patchParamsForSolanaLabsRpc([1, 2, [3, value]], onIntegerOverflow);
+                expect(onIntegerOverflow).toHaveBeenCalledWith(
+                    [2, 1], // Equivalent to `params[2][1]`.
+                    value
+                );
+            });
+            it('calls `onIntegerOverflow` when passed a nested object having a value ' + description, () => {
+                patchParamsForSolanaLabsRpc({ a: 1, b: { b1: 2, b2: value } }, onIntegerOverflow);
+                expect(onIntegerOverflow).toHaveBeenCalledWith(
+                    ['b', 'b2'], // Equivalent to `params.b.b2`.
+                    value
+                );
+            });
+            it('does not call `onIntegerOverflow` when passed `Number.MAX_SAFE_INTEGER`', () => {
+                patchParamsForSolanaLabsRpc(BigInt(Number.MAX_SAFE_INTEGER), onIntegerOverflow);
+                expect(onIntegerOverflow).not.toHaveBeenCalled();
+            });
+        });
+    });
 });
