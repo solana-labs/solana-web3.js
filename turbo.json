@@ -61,7 +61,7 @@
         },
         "test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["babel.config.json", "src/**", "test/**"],
+            "inputs": ["src/**"],
             "outputs": []
         },
         "test:treeshakability:browser": {
@@ -74,6 +74,11 @@
         },
         "test:treeshakability:node": {
             "dependsOn": ["^compile:js"],
+            "outputs": []
+        },
+        "@solana/web3.js#test:unit:node": {
+            "dependsOn": ["^compile:js"],
+            "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         }
     },
