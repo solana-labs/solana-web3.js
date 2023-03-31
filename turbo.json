@@ -55,10 +55,12 @@
             "outputs": []
         },
         "test:unit:browser": {
+            "dependsOn": ["^compile:js"],
             "inputs": ["src/**"],
             "outputs": []
         },
         "test:unit:node": {
+            "dependsOn": ["^compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },
