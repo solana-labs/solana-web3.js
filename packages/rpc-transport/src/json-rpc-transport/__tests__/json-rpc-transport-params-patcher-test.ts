@@ -1,8 +1,8 @@
-import { createJsonRpcTransport } from '../json-rpc-transport';
+import { createJsonRpcTransport } from '..';
 import { Transport } from '../json-rpc-transport-types';
-import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { patchParamsForSolanaLabsRpc } from '../../params-patcher';
 
-jest.mock('../params-patcher');
+jest.mock('../../params-patcher');
 
 interface TestRpcApi {
     someMethod(...args: unknown[]): unknown;

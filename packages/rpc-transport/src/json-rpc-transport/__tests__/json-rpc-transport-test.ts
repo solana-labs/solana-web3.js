@@ -1,11 +1,11 @@
-import { makeHttpRequest } from '../http-request';
+import { makeHttpRequest } from '../../http-request';
 import { SolanaJsonRpcError } from '../json-rpc-errors';
 import { createJsonRpcMessage } from '../json-rpc-message';
 import { getNextMessageId } from '../json-rpc-message-id';
-import { createJsonRpcTransport } from '../json-rpc-transport';
+import { createJsonRpcTransport } from '..';
 import { Transport } from '../json-rpc-transport-types';
 
-jest.mock('../http-request');
+jest.mock('../../http-request');
 jest.mock('../json-rpc-message-id');
 
 interface TestRpcApi {
