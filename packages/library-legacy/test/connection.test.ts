@@ -4436,6 +4436,39 @@ describe('Connection', function () {
     expect(fee).to.eq(5000);
   });
 
+  it('get recent prioritization fee', async () => {
+    if (mockServer) {
+      const pubkey = Keypair.generate().publicKey;
+      await mockRpcResponse({
+        method: 'getRecentPrioritizationFees',
+        params: [[pubkey.toBase58()]],
+        value: [
+          {
+            slot: 348127,
+            prioritizationFee: 500,
+          },
+          {
+            slot: 348128,
+            prioritizationFee: 0,
+          },
+        ],
+      });
+
+      const recentPrioritizationFee =
+        await connection.getRecentPrioritizationFees([pubkey]);
+      expect(recentPrioritizationFee).to.eql([
+        {
+          slot: 348127,
+          prioritizationFee: 500,
+        },
+        {
+          slot: 348128,
+          prioritizationFee: 0,
+        },
+      ]);
+    }
+  });
+
   it('get block time', async () => {
     await mockRpcResponse({
       method: 'getBlockTime',
