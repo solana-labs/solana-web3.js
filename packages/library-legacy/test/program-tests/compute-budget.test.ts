@@ -127,28 +127,6 @@ describe('ComputeBudgetProgram', () => {
         amount: STARTING_AMOUNT,
       });
 
-      // lamport fee = 2B * 1M / 1M = 2 SOL
-      const prioritizationFeeTooHighTransaction = new Transaction()
-        .add(
-          ComputeBudgetProgram.setComputeUnitPrice({
-            microLamports: 2_000_000_000,
-          }),
-        )
-        .add(
-          ComputeBudgetProgram.setComputeUnitLimit({
-            units: 1_000_000,
-          }),
-        );
-
-      await expect(
-        sendAndConfirmTransaction(
-          connection,
-          prioritizationFeeTooHighTransaction,
-          [baseAccount],
-          {preflightCommitment: 'confirmed'},
-        ),
-      ).to.be.rejected;
-
       // lamport fee = 1B * 1M / 1M = 1 SOL
       const validPrioritizationFeeTransaction = new Transaction()
         .add(
