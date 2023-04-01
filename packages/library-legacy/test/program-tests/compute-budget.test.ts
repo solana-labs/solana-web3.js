@@ -3,9 +3,11 @@ import chaiAsPromised from 'chai-as-promised';
 
 import {
   Keypair,
+  PublicKey,
   Connection,
   LAMPORTS_PER_SOL,
   Transaction,
+  TransactionInstruction,
   ComputeBudgetProgram,
   ComputeBudgetInstruction,
   sendAndConfirmTransaction,
@@ -83,8 +85,14 @@ describe('ComputeBudgetProgram', () => {
         amount: STARTING_AMOUNT,
       });
 
+      const memoInstruction = new TransactionInstruction({
+        data: Buffer.alloc(0),
+        keys: [],
+        programId: new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
+      });
       async function expectRequestHeapFailure(bytes: number) {
         const requestHeapFrameTransaction = new Transaction().add(
+          memoInstruction,
           ComputeBudgetProgram.requestHeapFrame({bytes}),
         );
         await expect(
@@ -94,7 +102,7 @@ describe('ComputeBudgetProgram', () => {
             [baseAccount],
             {preflightCommitment: 'confirmed'},
           ),
-        ).to.be.rejected;
+        ).to.be.rejectedWith(/invalid instruction data/);
       }
       const NOT_MULTIPLE_OF_1024 = 33 * 1024 + 1;
       const BELOW_MIN = 1024;
@@ -105,6 +113,7 @@ describe('ComputeBudgetProgram', () => {
 
       const VALID_BYTES = 33 * 1024;
       const requestHeapFrameTransaction = new Transaction().add(
+        memoInstruction,
         ComputeBudgetProgram.requestHeapFrame({bytes: VALID_BYTES}),
       );
       await sendAndConfirmTransaction(
@@ -167,9 +176,9 @@ describe('ComputeBudgetProgram', () => {
         [baseAccount],
         {preflightCommitment: 'confirmed'},
       );
-      expect(await connection.getBalance(baseAccount.publicKey)).to.be.at.most(
-        STARTING_AMOUNT - FEE_AMOUNT,
-      );
+      expect(
+        await connection.getBalance(baseAccount.publicKey, 'finalized'),
+      ).to.be.at.most(STARTING_AMOUNT - FEE_AMOUNT);
     });
   }
 });
