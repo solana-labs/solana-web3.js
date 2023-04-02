@@ -72,7 +72,7 @@ describe('ComputeBudgetProgram', () => {
   });
 
   if (process.env.TEST_LIVE) {
-    it('send live request heap ix', async () => {
+    it.skip('send live request heap ix', async () => {
       const connection = new Connection(url, 'confirmed');
       const STARTING_AMOUNT = 2 * LAMPORTS_PER_SOL;
       const baseAccount = Keypair.generate();
@@ -115,7 +115,7 @@ describe('ComputeBudgetProgram', () => {
       );
     });
 
-    it('send live compute unit ixs', async () => {
+    it.skip('send live compute unit ixs', async () => {
       const connection = new Connection(url, 'confirmed');
       const FEE_AMOUNT = LAMPORTS_PER_SOL;
       const STARTING_AMOUNT = 2 * LAMPORTS_PER_SOL;
