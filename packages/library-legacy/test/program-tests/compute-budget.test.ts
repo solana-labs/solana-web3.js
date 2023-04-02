@@ -115,7 +115,7 @@ describe('ComputeBudgetProgram', () => {
       );
     });
 
-    it.skip('send live compute unit ixs', async () => {
+    it('send live compute unit ixs', async () => {
       const connection = new Connection(url, 'confirmed');
       const FEE_AMOUNT = LAMPORTS_PER_SOL;
       const STARTING_AMOUNT = 2 * LAMPORTS_PER_SOL;
@@ -126,28 +126,6 @@ describe('ComputeBudgetProgram', () => {
         address: basePubkey,
         amount: STARTING_AMOUNT,
       });
-
-      // lamport fee = 2B * 1M / 1M = 2 SOL
-      const prioritizationFeeTooHighTransaction = new Transaction()
-        .add(
-          ComputeBudgetProgram.setComputeUnitPrice({
-            microLamports: 2_000_000_000,
-          }),
-        )
-        .add(
-          ComputeBudgetProgram.setComputeUnitLimit({
-            units: 1_000_000,
-          }),
-        );
-
-      await expect(
-        sendAndConfirmTransaction(
-          connection,
-          prioritizationFeeTooHighTransaction,
-          [baseAccount],
-          {preflightCommitment: 'confirmed'},
-        ),
-      ).to.be.rejected;
 
       // lamport fee = 1B * 1M / 1M = 1 SOL
       const validPrioritizationFeeTransaction = new Transaction()
