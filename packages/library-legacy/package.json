@@ -47,7 +47,7 @@
     "test:lint": "eslint src/ test/ --ext .js,.ts",
     "test:lint:fix": "eslint src/ test/ --fix --ext .js,.ts",
     "test:live": "TEST_LIVE=1 pnpm run test:unit:node",
-    "test:live-with-test-validator": "start-server-and-test '$HOME/.local/share/solana/install/active_release/bin/solana-test-validator --reset --quiet' http://127.0.0.1:8899/health test:live",
+    "test:live-with-test-validator": "start-server-and-test '../../scripts/start-shared-test-validator.sh' http://127.0.0.1:8899/health test:live",
     "test:prettier": "prettier --check '{,{src,test}/**/}*.{j,t}s'",
     "test:prettier:fix": "prettier --write '{,{src,test}/**/}*.{j,t}s'",
     "test:typecheck": "tsc --noEmit",
