@@ -1,8 +1,8 @@
-import { makeHttpRequest } from './http-request';
+import { makeHttpRequest } from '../http-request';
 import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
 import { ArmedBatchTransport, ArmedTransport, Transport } from './json-rpc-transport-types';
-import { patchParamsForSolanaLabsRpc } from './params-patcher';
+import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 
 interface IHasIdentifier {
     readonly id: number;
