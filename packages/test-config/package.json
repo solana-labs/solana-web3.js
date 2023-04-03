@@ -16,7 +16,7 @@
         "jest-dev-server": "^8.0.5",
         "jest-environment-jsdom": "^29.5.0",
         "jest-fetch-mock": "^3.0.3",
-        "jest-runner-eslint": "^1.1.0",
+        "jest-runner-eslint": "^2.0.0",
         "jest-runner-prettier": "^1.0.0",
         "jest-watch-master": "^1.0.0",
         "jest-watch-select-projects": "^2.0.0",
