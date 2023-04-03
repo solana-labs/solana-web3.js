@@ -473,8 +473,8 @@ importers:
         specifier: ^3.7.0
         version: 3.7.0(chai@4.3.6)(sinon@15.0.1)
       start-server-and-test:
-        specifier: ^1.12.0
-        version: 1.15.3
+        specifier: ^2.0.0
+        version: 2.0.0
       ts-mocha:
         specifier: ^10.0.0
         version: 10.0.0(mocha@10.2.0)
@@ -10456,8 +10456,8 @@ packages:
     dependencies:
       escape-string-regexp: 2.0.0
 
-  /start-server-and-test@1.15.3:
-    resolution: {integrity: sha512-4GqkqghvUR9cJ8buvtgkyT0AHgVwCJ5EN8eDEhe9grTChGwWUxGm2nqfSeE9+0PZkLRdFqcwTwxVHe1y3ViutQ==}
+  /start-server-and-test@2.0.0:
+    resolution: {integrity: sha512-UqKLw0mJbfrsG1jcRLTUlvuRi9sjNuUiDOLI42r7R5fA9dsFoywAy9DoLXNYys9B886E4RCKb+qM1Gzu96h7DQ==}
     engines: {node: '>=6'}
     hasBin: true
     dependencies:
