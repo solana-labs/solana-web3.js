@@ -16,7 +16,7 @@ describe('getBlockHeight', () => {
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            it.failing('returns the block height as a bigint', async () => {
+            it('returns the block height as a bigint', async () => {
                 expect.assertions(1);
                 const blockHeight = await transport.getBlockHeight({ commitment }).send();
                 expect(blockHeight).toEqual(expect.any(BigInt));
@@ -24,7 +24,7 @@ describe('getBlockHeight', () => {
         });
     });
     describe('when called with a `minContextSlot` of 0', () => {
-        it.failing('returns the block height as a bigint', async () => {
+        it('returns the block height as a bigint', async () => {
             expect.assertions(1);
             const blockHeight = await transport.getBlockHeight({ minContextSlot: 0n }).send();
             expect(blockHeight).toEqual(expect.any(BigInt));
