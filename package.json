@@ -4,7 +4,7 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "turbo run compile:docs compile:js compile:typedefs test:lint test:prettier test:typecheck test:unit:browser test:unit:node test:live-with-test-validator test:treeshakability:browser test:treeshakability:native test:treeshakability:node",
+        "build": "turbo run build",
         "lint": "turbo run test:lint",
         "publish-packages": "turbo run publish-packages",
         "test": "turbo run test:unit:browser test:unit:node",
