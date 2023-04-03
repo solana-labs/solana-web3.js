@@ -191,6 +191,9 @@ importers:
       typescript:
         specifier: ^4.9
         version: 4.9.5
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
 
   packages/library:
     dependencies:
@@ -276,6 +279,9 @@ importers:
       typescript:
         specifier: ^4.9
         version: 4.9.4
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
 
   packages/library-legacy:
     dependencies:
@@ -572,6 +578,9 @@ importers:
       typescript:
         specifier: ^4.9
         version: 4.9.5
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
 
   packages/rpc-transport:
     dependencies:
@@ -666,6 +675,9 @@ importers:
       typescript:
         specifier: ^4.9
         version: 4.9.5
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
 
   packages/test-config:
     dependencies:
@@ -5293,6 +5305,17 @@ packages:
       - encoding
     dev: true
 
+  /cross-spawn@6.0.5:
+    resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
+    engines: {node: '>=4.8'}
+    dependencies:
+      nice-try: 1.0.5
+      path-key: 2.0.1
+      semver: 5.7.1
+      shebang-command: 1.2.0
+      which: 1.3.1
+    dev: true
+
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -6770,6 +6793,14 @@ packages:
       through2: 4.0.2
     dev: true
 
+  /git-rev-sync@1.12.0:
+    resolution: {integrity: sha512-LAeWoK54irAVyq/dHjkq13bYw8vsItGVCgZZbFFJv256DIK+VkLqXBjVvwtTgVWegOy7JVwD+w2uk63x+iLB6g==}
+    dependencies:
+      escape-string-regexp: 1.0.5
+      graceful-fs: 4.1.11
+      shelljs: 0.7.7
+    dev: true
+
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -6878,6 +6909,11 @@ packages:
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
+    dev: true
+
+  /graceful-fs@4.1.11:
+    resolution: {integrity: sha512-9x6DLUuW+ROFdMTII9ec9t/FK8va6kYcC8/LggumssLM8kNv7IdFl3VrNUqgir2tJuBVxBga1QBoRziZacO5Zg==}
+    engines: {node: '>=0.4.0'}
     dev: true
 
   /graceful-fs@4.2.10:
@@ -7169,6 +7205,11 @@ packages:
       get-intrinsic: 1.1.1
       has: 1.0.3
       side-channel: 1.0.4
+    dev: true
+
+  /interpret@1.4.0:
+    resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
+    engines: {node: '>= 0.10'}
     dev: true
 
   /into-stream@6.0.0:
@@ -9088,6 +9129,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: true
 
+  /nice-try@1.0.5:
+    resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
+    dev: true
+
   /nise@5.1.4:
     resolution: {integrity: sha512-8+Ib8rRJ4L0o3kfmyVCL7gzrohyDe0cMFTBa2d364yIrEGMEoetznKJx899YxjybU6bL9SQkYPSBBs1gyYs8Xg==}
     dependencies:
@@ -9283,6 +9328,10 @@ packages:
       call-bind: 1.0.2
       define-properties: 1.1.3
       es-abstract: 1.19.1
+    dev: true
+
+  /on-error-resume-next@1.1.0:
+    resolution: {integrity: sha512-XhWMbmKV0+W95yLJjT1Z9zdkKiPUjDn63YYsji1pdvKqaa7pq4coeHaHEXPsa36SFlffOyOlPK/0rn6Njfb+LA==}
     dev: true
 
   /on-finished@2.3.0:
@@ -9508,6 +9557,11 @@ packages:
   /path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
+
+  /path-key@2.0.1:
+    resolution: {integrity: sha512-fEHGKCSmUSDPv4uoj8AlD+joPlq3peND+HRYyxFz4KPw4z926S/b8rIuFs2FYJg3BwsxJf6A9/3eIdLaYC+9Dw==}
+    engines: {node: '>=4'}
+    dev: true
 
   /path-key@3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -9840,6 +9894,13 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: true
+
+  /rechoir@0.6.2:
+    resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      resolve: 1.22.1
     dev: true
 
   /redent@3.0.0:
@@ -10253,15 +10314,37 @@ packages:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
     dev: true
 
+  /shebang-command@1.2.0:
+    resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      shebang-regex: 1.0.0
+    dev: true
+
   /shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
     dependencies:
       shebang-regex: 3.0.0
 
+  /shebang-regex@1.0.0:
+    resolution: {integrity: sha512-wpoSFAxys6b2a2wHZ1XpDSgD7N9iVjg29Ph9uV/uaP9Ex/KXlkTZTeddxDPSYQpgvzKLGJke2UU0AzoGCjNIvQ==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
   /shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
+
+  /shelljs@0.7.7:
+    resolution: {integrity: sha512-5ZXTlakejjdxXAnFl23pgPDzCcyPoshqMVWYqMH8HiP1R+i4auEKHabljL6XQlhQV58jkSRTR33Fq7OlxyLLTg==}
+    engines: {node: '>=0.11.0'}
+    hasBin: true
+    dependencies:
+      glob: 7.2.3
+      interpret: 1.4.0
+      rechoir: 0.6.2
+    dev: true
 
   /shiki@0.11.1:
     resolution: {integrity: sha512-EugY9VASFuDqOexOgXR18ZV+TbFrQHeCpEYaXamO+SZlsnT/2LxuLBX25GGtIrwaEVFXUAbUQ601SWE2rMwWHA==}
@@ -11424,6 +11507,18 @@ packages:
   /vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+    dev: true
+
+  /version-from-git@1.1.1:
+    resolution: {integrity: sha512-R8kAZ+EFJcqG5HGrfjk7bSBAWKB3AE/Dnh21llvNg6CWJIPJAKsYNLR7lvYrCwu33A3TU4UljPLpp577UxgL3w==}
+    hasBin: true
+    dependencies:
+      chalk: 2.4.2
+      commander: 2.20.3
+      cross-spawn: 6.0.5
+      git-rev-sync: 1.12.0
+      on-error-resume-next: 1.1.0
+      semver: 5.7.1
     dev: true
 
   /vm2@3.9.13:

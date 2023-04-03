@@ -37,6 +37,7 @@
             "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
         },
         "publish-packages": {
+            "cache": false,
             "dependsOn": ["build"],
             "outputs": []
         },
