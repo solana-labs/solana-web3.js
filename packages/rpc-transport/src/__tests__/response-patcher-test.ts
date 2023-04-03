@@ -1,4 +1,8 @@
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
+import * as allowedNumericValuesModule from '../response-patcher-allowed-numeric-values';
+import { KEYPATH_WILDCARD } from '../response-patcher-types';
+
+jest.mock('../response-patcher-allowed-numeric-values');
 
 describe('patchResponseForSolanaLabsRpc', () => {
     [10n, '10', null, undefined, Symbol()].forEach(input => {
@@ -32,6 +36,37 @@ describe('patchResponseForSolanaLabsRpc', () => {
                 a: BigInt(input.a),
                 b: input.b,
                 c: { c1: input.c.c1, c2: BigInt(input.c.c2) },
+            });
+        });
+    });
+    describe('where allowlisted numeric values are concerned', () => {
+        Object.entries({
+            'nested array of numeric responses': {
+                allowedKeyPaths: [[0], [1, 1], [1, 2, 1]],
+                expectation: [10, [10n, 10, [10n, 10]]],
+                input: [10, [10, 10, [10, 10]]],
+            },
+            'nested array of numeric responses with wildcard': {
+                allowedKeyPaths: [[KEYPATH_WILDCARD], [2, KEYPATH_WILDCARD]],
+                expectation: [1, [2n], [3, 33, 333], 4],
+                input: [1, [2], [3, 33, 333], 4],
+            },
+            'nested object of numeric responses': {
+                allowedKeyPaths: [['a'], ['b', 'b2', 'b2_1'], ['b', 'b2', 'b2_3']],
+                expectation: { a: 10, b: { b1: 10n, b2: { b2_1: 10, b2_2: 10n, b2_3: 10 } } },
+                input: { a: 10, b: { b1: 10, b2: { b2_1: 10, b2_2: 10, b2_3: 10 } } },
+            },
+            'numeric response': { allowedKeyPaths: [[]], expectation: 10, input: 10 },
+        }).forEach(([description, { allowedKeyPaths, expectation, input }]) => {
+            it(`performs no \`bigint\` upcasts on ${description} when the allowlist is of the form \`${JSON.stringify(
+                allowedKeyPaths
+            )}\``, () => {
+                (
+                    allowedNumericValuesModule.ALLOWED_NUMERIC_KEYPATHS as jest.MockedObject<
+                        typeof allowedNumericValuesModule.ALLOWED_NUMERIC_KEYPATHS
+                    >
+                ).getBlocks = allowedKeyPaths;
+                expect(patchResponseForSolanaLabsRpc(input, 'getBlocks')).toStrictEqual(expectation);
             });
         });
     });
