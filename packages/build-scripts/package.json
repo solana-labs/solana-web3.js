@@ -10,6 +10,6 @@
     "devDependencies": {
         "@types/node": "^18.11.10",
         "tsconfig": "workspace:*",
-        "tsup": "6.5.0"
+        "tsup": "6.7.0"
     }
 }
