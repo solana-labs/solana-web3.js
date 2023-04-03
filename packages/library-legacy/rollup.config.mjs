@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import path from 'path';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
 const env = process.env.NODE_ENV;
 const extensions = ['.js', '.ts'];
