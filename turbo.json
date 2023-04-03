@@ -1,6 +1,23 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "pipeline": {
+        "build": {
+            "dependsOn": [
+                "compile:docs",
+                "compile:js",
+                "compile:typedefs",
+                "test:lint",
+                "test:prettier",
+                "test:typecheck",
+                "test:unit:browser",
+                "test:unit:node",
+                "test:live-with-test-validator",
+                "test:treeshakability:browser",
+                "test:treeshakability:native",
+                "test:treeshakability:node"
+            ],
+            "outputs": ["dist/**", "lib/**"]
+        },
         "clean": {
             "outputs": ["dist/**", "lib/**"]
         },
@@ -20,22 +37,8 @@
             "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
         },
         "publish-packages": {
-            "dependsOn": [
-                "clean",
-                "compile:docs",
-                "compile:js",
-                "compile:typedefs",
-                "test:lint",
-                "test:prettier",
-                "test:typecheck",
-                "test:unit:browser",
-                "test:unit:node",
-                "test:live-with-test-validator",
-                "test:treeshakability:browser",
-                "test:treeshakability:native",
-                "test:treeshakability:node"
-            ],
-            "outputs": ["dist/**", "lib/**"]
+            "dependsOn": ["build"],
+            "outputs": []
         },
         "test:lint": {
             "inputs": ["src/**", "test/**"],
