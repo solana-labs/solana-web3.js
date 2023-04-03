@@ -14,6 +14,7 @@ const config: Config = {
         'jest-watch-typeahead/filename',
         'jest-watch-typeahead/testname',
     ],
+    workerThreads: true,
 };
 
 export default config;
