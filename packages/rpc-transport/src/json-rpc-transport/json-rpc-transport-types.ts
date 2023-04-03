@@ -2,10 +2,10 @@
  * Public API.
  */
 export type Transport<TApi> = TransportMethods<TApi>;
-export type ArmedTransport<Api, TResponse> = ArmedTransportMethods<Api, TResponse> & {
+export type ArmedTransport<TApi, TResponse> = ArmedTransportMethods<TApi, TResponse> & {
     send(): Promise<TResponse>;
 };
-export type ArmedBatchTransport<Api, TResponses extends unknown[]> = ArmedBatchTransportMethods<Api, TResponses> & {
+export type ArmedBatchTransport<TApi, TResponses extends unknown[]> = ArmedBatchTransportMethods<TApi, TResponses> & {
     sendBatch(): Promise<TResponses>;
 };
 
@@ -15,13 +15,7 @@ export type ArmedBatchTransport<Api, TResponses extends unknown[]> = ArmedBatchT
 type TransportMethods<TApi> = {
     [TMethodName in keyof TApi]: ArmedTransportReturner<TApi, ApiMethodImplementations<TApi, TMethodName>>;
 };
-type ArmedTransportMethods<TApi, TResponse> = {
-    [TMethodName in keyof TApi]: ArmedBatchTransportReturner<
-        TApi,
-        ApiMethodImplementations<TApi, TMethodName>,
-        [TResponse]
-    >;
-};
+type ArmedTransportMethods<TApi, TResponse> = ArmedBatchTransportMethods<TApi, [TResponse]>;
 type ArmedBatchTransportMethods<TApi, TResponses extends unknown[]> = {
     [TMethodName in keyof TApi]: ArmedBatchTransportReturner<
         TApi,
