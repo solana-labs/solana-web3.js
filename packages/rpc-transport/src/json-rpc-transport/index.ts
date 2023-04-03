@@ -3,9 +3,13 @@ import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
 import { ArmedBatchTransport, ArmedTransport, Transport } from './json-rpc-transport-types';
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 
 interface IHasIdentifier {
     readonly id: number;
+}
+interface IHasMethod {
+    readonly method: string;
 }
 type JsonRpcResponse<TResponse> = IHasIdentifier &
     Readonly<{ result: TResponse } | { error: { code: number; message: string; data?: unknown } }>;
@@ -113,17 +117,27 @@ function makeProxy<TRpcApi, TResponseOrResponses>(
     });
 }
 
-function processResponse<TResponse>(response: JsonRpcResponse<TResponse>) {
+function processResponse<TResponse>(response: JsonRpcResponse<TResponse>, methodName: string) {
     if ('error' in response) {
         throw new SolanaJsonRpcError(response.error);
     } else {
-        return response.result as TResponse;
+        const patchedResponse = patchResponseForSolanaLabsRpc(
+            response.result as TResponse,
+            methodName as never // FIXME: Untangle these types by moving the patcher into `rpc-core`
+        );
+        return patchedResponse;
     }
 }
 
-function sendPayload<TResponses extends unknown[]>(payload: IHasIdentifier[], url: string): Promise<TResponses>;
-function sendPayload<TResponse>(payload: IHasIdentifier, url: string): Promise<TResponse>;
-async function sendPayload<TResponseOrResponses>(payload: IHasIdentifier | IHasIdentifier[], url: string) {
+function sendPayload<TResponses extends unknown[]>(
+    payload: (IHasIdentifier & IHasMethod)[],
+    url: string
+): Promise<TResponses>;
+function sendPayload<TResponse>(payload: IHasIdentifier & IHasMethod, url: string): Promise<TResponse>;
+async function sendPayload<TResponseOrResponses>(
+    payload: (IHasIdentifier & IHasMethod) | (IHasIdentifier & IHasMethod)[],
+    url: string
+) {
     const responseOrResponses = await makeHttpRequest<
         TResponseOrResponses extends unknown[]
             ? JsonRpcBatchResponse<TResponseOrResponses>
@@ -137,9 +151,9 @@ async function sendPayload<TResponseOrResponses>(payload: IHasIdentifier | IHasI
         const requestOrder = (payload as IHasIdentifier[]).map(p => p.id);
         return responseOrResponses
             .sort((a, b) => requestOrder.indexOf(a.id) - requestOrder.indexOf(b.id))
-            .map(processResponse);
+            .map((response, ii) => processResponse(response, (payload as IHasMethod[])[ii].method));
     } else {
-        return processResponse(responseOrResponses);
+        return processResponse(responseOrResponses, (payload as IHasMethod).method);
     }
 }
 

@@ -1,4 +1,5 @@
 import { makeHttpRequest } from '../../http-request';
+import { patchResponseForSolanaLabsRpc } from '../../response-patcher';
 import { SolanaJsonRpcError } from '../json-rpc-errors';
 import { createJsonRpcMessage } from '../json-rpc-message';
 import { getNextMessageId } from '../json-rpc-message-id';
@@ -6,6 +7,7 @@ import { createJsonRpcTransport } from '..';
 import { Transport } from '../json-rpc-transport-types';
 
 jest.mock('../../http-request');
+jest.mock('../../response-patcher');
 jest.mock('../json-rpc-message-id');
 
 interface TestRpcApi {
@@ -26,6 +28,7 @@ describe('JSON-RPC 2.0 transport', () => {
         );
         let counter = 0;
         (getNextMessageId as jest.Mock).mockImplementation(() => counter++);
+        (patchResponseForSolanaLabsRpc as jest.Mock).mockImplementation(p => p);
     });
     it('sends a request to a JSON-RPC 2.0 endpoint', () => {
         transport.someMethod(123).send();
