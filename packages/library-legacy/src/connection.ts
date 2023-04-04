@@ -4498,8 +4498,8 @@ export class Connection {
   async getRecentPrioritizationFees(
     publicKeys?: PublicKey[],
   ): Promise<RecentPrioritizationFees[]> {
-    const keys = publicKeys ? publicKeys?.map(key => key.toBase58()) : [];
-    const args = this._buildArgs([keys]);
+    const keys = publicKeys?.map(key => key.toBase58());
+    const args = this._buildArgs(keys?.length ? [keys] : []);
     const unsafeRes = await this._rpcRequest(
       'getRecentPrioritizationFees',
       args,
