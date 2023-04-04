@@ -788,6 +788,34 @@ const GetInflationRewardResult = jsonRpcResult(
   ),
 );
 
+export type RecentPrioritizationFees = {
+  /** slot in which the fee was observed */
+  slot: number;
+  /** the per-compute-unit fee paid by at least one successfully landed transaction, specified in increments of 0.000001 lamports*/
+  prioritizationFee: number;
+};
+
+/**
+ * Configuration object for changing `getRecentPrioritizationFees` query behavior
+ */
+export type GetRecentPrioritizationFeesConfig = {
+  /**
+   * If this parameter is provided, the response will reflect a fee to land a transaction locking
+   * all of the provided accounts as writable.
+   */
+  lockedWritableAccounts?: PublicKey[];
+};
+
+/**
+ * Expected JSON RPC response for the "getRecentPrioritizationFees" message
+ */
+const GetRecentPrioritizationFeesResult = array(
+  pick({
+    slot: number(),
+    prioritizationFee: number(),
+  }),
+);
+
 export type InflationRate = {
   /** total inflation */
   total: number;
@@ -1661,6 +1689,13 @@ const GetInflationGovernorRpcResult = jsonRpcResult(GetInflationGovernorResult);
  * Expected JSON RPC response for the "getInflationRate" message
  */
 const GetInflationRateRpcResult = jsonRpcResult(GetInflationRateResult);
+
+/**
+ * Expected JSON RPC response for the "getRecentPrioritizationFees" message
+ */
+const GetRecentPrioritizationFeesRpcResult = jsonRpcResult(
+  GetRecentPrioritizationFeesResult,
+);
 
 /**
  * Expected JSON RPC response for the "getEpochInfo" message
@@ -4468,6 +4503,27 @@ export class Connection {
     return res.result;
   }
 
+  /**
+   * Fetch a list of prioritization fees from recent blocks.
+   */
+  async getRecentPrioritizationFees(
+    config?: GetRecentPrioritizationFeesConfig,
+  ): Promise<RecentPrioritizationFees[]> {
+    const accounts = config?.lockedWritableAccounts?.map(key => key.toBase58());
+    const args = this._buildArgs(accounts?.length ? [accounts] : []);
+    const unsafeRes = await this._rpcRequest(
+      'getRecentPrioritizationFees',
+      args,
+    );
+    const res = create(unsafeRes, GetRecentPrioritizationFeesRpcResult);
+    if ('error' in res) {
+      throw new SolanaJSONRPCError(
+        res.error,
+        'failed to get recent prioritization fees',
+      );
+    }
+    return res.result;
+  }
   /**
    * Fetch a recent blockhash from the cluster
    * @return {Promise<{blockhash: Blockhash, feeCalculator: FeeCalculator}>}

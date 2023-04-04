@@ -4436,6 +4436,34 @@ describe('Connection', function () {
     expect(fee).to.eq(5000);
   });
 
+  it('get recent prioritization fee', async () => {
+    const pubkey = Keypair.generate().publicKey;
+    await mockRpcResponse({
+      method: 'getRecentPrioritizationFees',
+      params: [[pubkey.toBase58()]],
+      value: [
+        {
+          slot: 348127,
+          prioritizationFee: 500,
+        },
+        {
+          slot: 348128,
+          prioritizationFee: 0,
+        },
+      ],
+    });
+
+    const recentPrioritizationFees =
+      await connection.getRecentPrioritizationFees({
+        lockedWritableAccounts: [pubkey],
+      });
+    expect(recentPrioritizationFees).to.be.an('array');
+    for (const prioritizationFee of recentPrioritizationFees) {
+      expect(prioritizationFee.prioritizationFee).to.be.a('number');
+      expect(prioritizationFee.slot).to.be.a('number');
+    }
+  });
+
   it('get block time', async () => {
     await mockRpcResponse({
       method: 'getBlockTime',
