@@ -96,7 +96,7 @@
   <h4>Unit tests</h4>
 </a>
 <p>To run the full suite of unit tests, excute the following in the root:</p>
-<pre><code class="language-shell"><span class="hl-1">$ npm </span><span class="hl-8">test</span>
+<pre><code class="language-shell"><span class="hl-1">$ </span><span class="hl-8">npm</span><span class="hl-1"> </span><span class="hl-8">test</span>
 </code></pre>
 
 <a href="#integration-tests" id="integration-tests" style="color: inherit; text-decoration: none;">
@@ -104,10 +104,10 @@
 </a>
 <p>Integration tests require a validator client running on your machine.</p>
 <p>To install a test validator:</p>
-<pre><code class="language-shell"><span class="hl-1">$ npm run test:live-with-test-validator:setup</span>
+<pre><code class="language-shell"><span class="hl-1">$ </span><span class="hl-8">npm</span><span class="hl-1"> </span><span class="hl-8">run</span><span class="hl-1"> </span><span class="hl-8">test:live-with-test-validator:setup</span>
 </code></pre>
 <p>To start the test validator and run all of the integration tests in live mode:</p>
-<pre><code class="language-shell"><span class="hl-1">$ </span><span class="hl-8">cd</span><span class="hl-1"> packages/library-legacy</span><br/><span class="hl-1">$ npm run test:live-with-test-validator</span>
+<pre><code class="language-shell"><span class="hl-1">$ </span><span class="hl-8">cd</span><span class="hl-1"> </span><span class="hl-8">packages/library-legacy</span><br/><span class="hl-1">$ </span><span class="hl-8">npm</span><span class="hl-1"> </span><span class="hl-8">run</span><span class="hl-1"> </span><span class="hl-8">test:live-with-test-validator</span>
 </code></pre>
 
 <a href="#speed-up-build-times-with-remote-caching" id="speed-up-build-times-with-remote-caching" style="color: inherit; text-decoration: none;">
@@ -115,10 +115,10 @@
 </a>
 <p>Cache build artifacts remotely so that you, others, and the CI server can take advantage of each others&#39; build efforts.</p>
 <ol>
-<li>Log the Turborepo CLI into the Solana Vercel account<pre><code class="language-shell"><span class="hl-1">pnpm turbo login</span>
+<li>Log the Turborepo CLI into the Solana Vercel account<pre><code class="language-shell"><span class="hl-1">pnpm </span><span class="hl-8">turbo</span><span class="hl-1"> </span><span class="hl-8">login</span>
 </code></pre>
 </li>
-<li>Link the repository to the remote cache<pre><code class="language-shell"><span class="hl-1">pnpm turbo link</span>
+<li>Link the repository to the remote cache<pre><code class="language-shell"><span class="hl-1">pnpm </span><span class="hl-8">turbo</span><span class="hl-1"> </span><span class="hl-8">link</span>
 </code></pre>
 </li>
 </ol>
