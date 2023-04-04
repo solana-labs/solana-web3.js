@@ -59,8 +59,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1(eslint@8.37.0)(typescript@5.0.3)
       agadoo:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^3.0.0
+        version: 3.0.0
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -138,8 +138,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1(eslint@8.37.0)(typescript@5.0.3)
       agadoo:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^3.0.0
+        version: 3.0.0
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -226,8 +226,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1(eslint@8.37.0)(typescript@5.0.3)
       agadoo:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^3.0.0
+        version: 3.0.0
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -525,8 +525,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1(eslint@8.37.0)(typescript@5.0.3)
       agadoo:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^3.0.0
+        version: 3.0.0
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -619,8 +619,8 @@ importers:
         specifier: ^5.57.1
         version: 5.57.1(eslint@8.37.0)(typescript@5.0.3)
       agadoo:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^3.0.0
+        version: 3.0.0
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -3966,13 +3966,13 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  /agadoo@2.0.0:
-    resolution: {integrity: sha512-68aFhseH51ZBKYKkQNxwDi1hJwTnywBjHWg068qFnMkpXShhOazNzJUPRvaLQjrqhT3EOUth5G9mt1A0/dGhOw==}
+  /agadoo@3.0.0:
+    resolution: {integrity: sha512-gq+fjT3Ilrhb88Jf+vYMjdO/+3znYfa7vJ4IMLPFsBPUxglnr40Ed3yCLrW6IABdJAedB94b2BkqR6I04lh3dg==}
     hasBin: true
     dependencies:
-      acorn: 7.4.1
-      rollup: 1.32.1
-      rollup-plugin-virtual: 1.0.1
+      '@rollup/plugin-virtual': 3.0.1(rollup@3.20.2)
+      acorn: 8.8.2
+      rollup: 3.20.2
     dev: true
 
   /agent-base@6.0.2:
@@ -9501,24 +9501,10 @@ packages:
       rollup-plugin-inject: 3.0.2
     dev: true
 
-  /rollup-plugin-virtual@1.0.1:
-    resolution: {integrity: sha512-HCTBpV8MwP5lNzZrHD2moVxHIToHU1EkzkKGVj6Z0DcgUfxrxrZmeQirQeLz2yhnkJqRjwiVywK9CS8jDYakrw==}
-    deprecated: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-virtual.
-    dev: true
-
   /rollup-pluginutils@2.8.2:
     resolution: {integrity: sha512-EEp9NhnUkwY8aif6bxgovPHMoMoNr2FulJziTndpt5H9RdwC47GSGuII9XxpSdzVGM0GWrNPHV6ie1LTNJPaLQ==}
     dependencies:
       estree-walker: 0.6.1
-    dev: true
-
-  /rollup@1.32.1:
-    resolution: {integrity: sha512-/2HA0Ec70TvQnXdzynFffkjA6XN+1e2pEv/uKS5Ulca40g2L7KuOE3riasHoNVHOsFD5KKZgDsMk1CP3Tw9s+A==}
-    hasBin: true
-    dependencies:
-      '@types/estree': 1.0.0
-      '@types/node': 18.11.17
-      acorn: 7.4.1
     dev: true
 
   /rollup@3.20.2:
