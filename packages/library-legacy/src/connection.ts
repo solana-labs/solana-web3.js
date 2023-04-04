@@ -4496,10 +4496,14 @@ export class Connection {
    * Fetch a list of prioritization fees from recent blocks.
    */
   async getRecentPrioritizationFees(
-    publicKeys?: PublicKey[],
+    /**
+     * If this parameter is provided, the response will reflect a fee to land a transaction locking
+     * all of the provided accounts as writable.
+     */
+    lockedWritableAccounts?: PublicKey[],
   ): Promise<RecentPrioritizationFees[]> {
-    const keys = publicKeys?.map(key => key.toBase58());
-    const args = this._buildArgs(keys?.length ? [keys] : []);
+    const accounts = lockedWritableAccounts?.map(key => key.toBase58());
+    const args = this._buildArgs(accounts?.length ? [accounts] : []);
     const unsafeRes = await this._rpcRequest(
       'getRecentPrioritizationFees',
       args,
