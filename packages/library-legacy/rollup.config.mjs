@@ -150,6 +150,7 @@ function generateConfig(configType, format) {
                 configType === 'react-native' ? 'native' : 'browser.cjs'
               }.js`,
               format: 'cjs',
+              interop: 'compat',
               sourcemap: true,
             },
             configType === 'browser'
@@ -199,6 +200,7 @@ function generateConfig(configType, format) {
         {
           file: 'lib/index.cjs.js',
           format: 'cjs',
+          interop: 'compat',
           sourcemap: true,
         },
         {
