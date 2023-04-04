@@ -4,7 +4,7 @@ set -e
 pnpm tsc -p tsconfig.d.json -d
 
 # Flatten typescript declarations
-pnpm rollup -c rollup.config.types.js
+pnpm rollup -c rollup.config.types.mjs
 
 # Replace export with closing brace for module declaration
 sed -i.bak '$s/export {.*};/}/' lib/index.d.ts
