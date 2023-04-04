@@ -1,8 +1,9 @@
 name: 'Lock inactive threads'
 
 on:
+  # Chosen to be just before London wakes up and way past San Francisco's bedtime.
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 8 * * 1-5' # This is in UTC.
   workflow_dispatch:
 
 permissions:
