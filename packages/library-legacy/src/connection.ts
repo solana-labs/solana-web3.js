@@ -796,6 +796,17 @@ export type RecentPrioritizationFees = {
 };
 
 /**
+ * Configuration object for changing `getRecentPrioritizationFees` query behavior
+ */
+export type GetRecentPrioritizationFeesConfig = {
+  /**
+   * If this parameter is provided, the response will reflect a fee to land a transaction locking
+   * all of the provided accounts as writable.
+   */
+  lockedWritableAccounts?: PublicKey[];
+};
+
+/**
  * Expected JSON RPC response for the "getRecentPrioritizationFees" message
  */
 const GetRecentPrioritizationFeesResult = array(
@@ -4496,13 +4507,9 @@ export class Connection {
    * Fetch a list of prioritization fees from recent blocks.
    */
   async getRecentPrioritizationFees(
-    /**
-     * If this parameter is provided, the response will reflect a fee to land a transaction locking
-     * all of the provided accounts as writable.
-     */
-    lockedWritableAccounts?: PublicKey[],
+    config?: GetRecentPrioritizationFeesConfig,
   ): Promise<RecentPrioritizationFees[]> {
-    const accounts = lockedWritableAccounts?.map(key => key.toBase58());
+    const accounts = config?.lockedWritableAccounts?.map(key => key.toBase58());
     const args = this._buildArgs(accounts?.length ? [accounts] : []);
     const unsafeRes = await this._rpcRequest(
       'getRecentPrioritizationFees',

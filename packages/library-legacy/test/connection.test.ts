@@ -4454,7 +4454,9 @@ describe('Connection', function () {
     });
 
     const recentPrioritizationFees =
-      await connection.getRecentPrioritizationFees([pubkey]);
+      await connection.getRecentPrioritizationFees({
+        lockedWritableAccounts: [pubkey],
+      });
     expect(recentPrioritizationFees).to.be.an('array');
     for (const prioritizationFee of recentPrioritizationFees) {
       expect(prioritizationFee.prioritizationFee).to.be.a('number');
