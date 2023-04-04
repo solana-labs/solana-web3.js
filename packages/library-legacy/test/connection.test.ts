@@ -4437,26 +4437,11 @@ describe('Connection', function () {
   });
 
   it('get recent prioritization fee', async () => {
-    if (mockServer) {
-      const pubkey = Keypair.generate().publicKey;
-      await mockRpcResponse({
-        method: 'getRecentPrioritizationFees',
-        params: [[pubkey.toBase58()]],
-        value: [
-          {
-            slot: 348127,
-            prioritizationFee: 500,
-          },
-          {
-            slot: 348128,
-            prioritizationFee: 0,
-          },
-        ],
-      });
-
-      const recentPrioritizationFee =
-        await connection.getRecentPrioritizationFees([pubkey]);
-      expect(recentPrioritizationFee).to.eql([
+    const pubkey = Keypair.generate().publicKey;
+    await mockRpcResponse({
+      method: 'getRecentPrioritizationFees',
+      params: [[pubkey.toBase58()]],
+      value: [
         {
           slot: 348127,
           prioritizationFee: 500,
@@ -4465,7 +4450,15 @@ describe('Connection', function () {
           slot: 348128,
           prioritizationFee: 0,
         },
-      ]);
+      ],
+    });
+
+    const recentPrioritizationFees =
+      await connection.getRecentPrioritizationFees([pubkey]);
+    expect(recentPrioritizationFees).to.be.an('array');
+    for (const prioritizationFee of recentPrioritizationFees) {
+      expect(prioritizationFee.prioritizationFee).to.be.a('number');
+      expect(prioritizationFee.slot).to.be.a('number');
     }
   });
 
