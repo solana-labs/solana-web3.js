@@ -72,7 +72,7 @@ describe('ComputeBudgetProgram', () => {
   });
 
   if (process.env.TEST_LIVE) {
-    it.skip('send live request heap ix', async () => {
+    it('send live request heap ix', async () => {
       const connection = new Connection(url, 'confirmed');
       const STARTING_AMOUNT = 2 * LAMPORTS_PER_SOL;
       const baseAccount = Keypair.generate();
@@ -85,6 +85,7 @@ describe('ComputeBudgetProgram', () => {
 
       async function expectRequestHeapFailure(bytes: number) {
         const requestHeapFrameTransaction = new Transaction().add(
+          ComputeBudgetProgram.setComputeUnitLimit({units: 1_000_000}),
           ComputeBudgetProgram.requestHeapFrame({bytes}),
         );
         await expect(
@@ -94,7 +95,7 @@ describe('ComputeBudgetProgram', () => {
             [baseAccount],
             {preflightCommitment: 'confirmed'},
           ),
-        ).to.be.rejected;
+        ).to.be.rejectedWith(/invalid instruction data/);
       }
       const NOT_MULTIPLE_OF_1024 = 33 * 1024 + 1;
       const BELOW_MIN = 1024;
@@ -105,6 +106,7 @@ describe('ComputeBudgetProgram', () => {
 
       const VALID_BYTES = 33 * 1024;
       const requestHeapFrameTransaction = new Transaction().add(
+        ComputeBudgetProgram.setComputeUnitLimit({units: 1_000_000}),
         ComputeBudgetProgram.requestHeapFrame({bytes: VALID_BYTES}),
       );
       await sendAndConfirmTransaction(
@@ -113,6 +115,28 @@ describe('ComputeBudgetProgram', () => {
         [baseAccount],
         {preflightCommitment: 'confirmed'},
       );
+    });
+
+    it('send live request heap ix without consuming compute units', async () => {
+      const connection = new Connection(url, 'confirmed');
+      const baseAccount = Keypair.generate();
+      await helpers.airdrop({
+        connection,
+        address: baseAccount.publicKey,
+        amount: 0.1 * LAMPORTS_PER_SOL,
+      });
+      const requestHeapFrameTransaction = new Transaction().add(
+        // No instruction here, implies that the transaction consumes no units.
+        ComputeBudgetProgram.requestHeapFrame({bytes: 33 * 1024}),
+      );
+      await expect(
+        sendAndConfirmTransaction(
+          connection,
+          requestHeapFrameTransaction,
+          [baseAccount],
+          {preflightCommitment: 'confirmed'},
+        ),
+      ).to.be.rejectedWith(/Computational budget exceeded/);
     });
 
     it.skip('send live compute unit ixs', async () => {
