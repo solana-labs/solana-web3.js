@@ -1,11 +1,10 @@
-type IntegerOverflowHandler = (keyPath: KeyPath, value: bigint) => void;
-type KeyPath = (number | string)[];
+type IntegerOverflowHandler = (keyPath: (number | string)[], value: bigint) => void;
 type Patched<T> = T extends object ? { [Property in keyof T]: Patched<T[Property]> } : T extends bigint ? number : T;
 // FIXME(https://github.com/microsoft/TypeScript/issues/33014)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TypescriptBug33014 = any;
 
-function visitNode<T>(value: T, keyPath: KeyPath, onIntegerOverflow?: IntegerOverflowHandler): Patched<T> {
+function visitNode<T>(value: T, keyPath: (number | string)[], onIntegerOverflow?: IntegerOverflowHandler): Patched<T> {
     if (Array.isArray(value)) {
         return value.map((element, ii) =>
             visitNode(element, [...keyPath, ii], onIntegerOverflow)

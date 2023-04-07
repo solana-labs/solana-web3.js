@@ -2,7 +2,7 @@ export class SolanaJsonRpcIntegerOverflowError extends Error {
     readonly methodName: string;
     readonly keyPath: (number | string)[];
     readonly value: bigint;
-    constructor(methodName: string, keyPath: (string | number)[], value: bigint) {
+    constructor(methodName: string, keyPath: (number | string)[], value: bigint) {
         const argPosition = (typeof keyPath[0] === 'number' ? keyPath[0] : parseInt(keyPath[0], 10)) + 1;
         let ordinal = '';
         const lastDigit = argPosition % 10;

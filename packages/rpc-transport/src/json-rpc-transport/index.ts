@@ -1,163 +1,135 @@
 import { makeHttpRequest } from '../http-request';
 import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
-import { ArmedBatchTransport, ArmedTransport, Transport } from './json-rpc-transport-types';
-import { patchParamsForSolanaLabsRpc } from '../params-patcher';
-import { patchResponseForSolanaLabsRpc } from '../response-patcher';
+import {
+    ArmedBatchTransport,
+    ArmedBatchTransportOwnMethods,
+    ArmedTransport,
+    ArmedTransportOwnMethods,
+    Transport,
+    TransportConfig,
+    TransportRequest,
+} from './json-rpc-transport-types';
 
 interface IHasIdentifier {
     readonly id: number;
-}
-interface IHasMethod {
-    readonly method: string;
 }
 type JsonRpcResponse<TResponse> = IHasIdentifier &
     Readonly<{ result: TResponse } | { error: { code: number; message: string; data?: unknown } }>;
 type JsonRpcBatchResponse<TResponses extends unknown[]> = [
     ...{ [P in keyof TResponses]: JsonRpcResponse<TResponses[P]> }
 ];
-type JsonRpcMessage = ReturnType<typeof createJsonRpcMessage>;
+type TransportRequestBatch<T> = { [P in keyof T]: TransportRequest<T[P]> };
 
-type TransportConfig = Readonly<{
-    onIntegerOverflow?: (method: string, keyPath: (number | string)[], value: bigint) => void;
-    url: string;
-}>;
-
-function createArmedJsonRpcTransport<TRpcApi extends object, TResponse>(
-    transportConfig: TransportConfig,
-    pendingMessage: JsonRpcMessage
-) {
-    const { url } = transportConfig;
-    const transport = {
+function createArmedJsonRpcTransport<TRpcMethods, TResponse>(
+    transportConfig: TransportConfig<TRpcMethods>,
+    pendingRequest: TransportRequest<TResponse>
+): ArmedTransport<TRpcMethods, TResponse> {
+    const overrides = {
         async send(): Promise<TResponse> {
-            return await sendPayload(pendingMessage, url);
+            const { methodName, params, responseProcessor } = pendingRequest;
+            const payload = createJsonRpcMessage(methodName, params);
+            const response = await makeHttpRequest<JsonRpcResponse<unknown>>({
+                payload,
+                url: transportConfig.url,
+            });
+            if ('error' in response) {
+                throw new SolanaJsonRpcError(response.error);
+            } else {
+                return (responseProcessor ? responseProcessor(response.result) : response.result) as TResponse;
+            }
         },
-    } as ArmedTransport<TRpcApi, TResponse>;
-    return makeProxy<TRpcApi, TResponse>(transport, transportConfig, pendingMessage);
+    };
+    return makeProxy(transportConfig, overrides, pendingRequest);
 }
 
-function createArmedBatchJsonRpcTransport<TRpcApi extends object, TResponses extends unknown[]>(
-    transportConfig: TransportConfig,
-    pendingMessages: JsonRpcMessage[]
-) {
-    const { url } = transportConfig;
-    const transport = {
+function createArmedBatchJsonRpcTransport<TRpcMethods, TResponses extends unknown[]>(
+    transportConfig: TransportConfig<TRpcMethods>,
+    pendingRequests: TransportRequestBatch<TResponses>
+): ArmedBatchTransport<TRpcMethods, TResponses> {
+    const overrides = {
         async sendBatch(): Promise<TResponses> {
-            return await sendPayload(pendingMessages, url);
+            const payload = pendingRequests.map(({ methodName, params }) => createJsonRpcMessage(methodName, params));
+            const responses = await makeHttpRequest<JsonRpcBatchResponse<unknown[]>>({
+                payload,
+                url: transportConfig.url,
+            });
+            const requestOrder = payload.map(p => p.id);
+            return responses
+                .sort((a, b) => requestOrder.indexOf(a.id) - requestOrder.indexOf(b.id))
+                .map((response, ii) => {
+                    if ('error' in response) {
+                        throw new SolanaJsonRpcError(response.error);
+                    } else {
+                        const { responseProcessor } = pendingRequests[ii];
+                        return responseProcessor ? responseProcessor(response.result) : response.result;
+                    }
+                }) as TResponses;
         },
-    } as ArmedBatchTransport<TRpcApi, TResponses>;
-    return makeProxy<TRpcApi, TResponses>(transport, transportConfig, pendingMessages);
+    };
+    return makeProxy(transportConfig, overrides, pendingRequests);
 }
 
-function makeProxy<TRpcApi, TResponses extends unknown[]>(
-    transport: ArmedBatchTransport<TRpcApi, TResponses>,
-    transportConfig: TransportConfig,
-    pendingRequests: JsonRpcMessage[]
-): ArmedBatchTransport<TRpcApi, TResponses>;
-function makeProxy<TRpcApi, TResponse>(
-    transport: ArmedTransport<TRpcApi, TResponse>,
-    transportConfig: TransportConfig,
-    pendingRequest: JsonRpcMessage
-): ArmedTransport<TRpcApi, TResponse>;
-function makeProxy<TRpcApi>(transport: Transport<TRpcApi>, transportConfig: TransportConfig): Transport<TRpcApi>;
-function makeProxy<TRpcApi, TResponseOrResponses>(
-    transport:
-        | Transport<TRpcApi>
-        | (TResponseOrResponses extends unknown[]
-              ? ArmedBatchTransport<TRpcApi, TResponseOrResponses>
-              : ArmedTransport<TRpcApi, TResponseOrResponses>),
-    transportConfig: TransportConfig,
-    pendingRequestOrRequests?: JsonRpcMessage | JsonRpcMessage[]
+function makeProxy<TRpcMethods, TResponses extends unknown[]>(
+    transportConfig: TransportConfig<TRpcMethods>,
+    overrides: ArmedBatchTransportOwnMethods<TResponses>,
+    pendingRequests: TransportRequestBatch<TResponses>
+): ArmedBatchTransport<TRpcMethods, TResponses>;
+function makeProxy<TRpcMethods, TResponse>(
+    transportConfig: TransportConfig<TRpcMethods>,
+    overrides: ArmedTransportOwnMethods<TResponse>,
+    pendingRequest: TransportRequest<TResponse>
+): ArmedTransport<TRpcMethods, TResponse>;
+function makeProxy<TRpcMethods>(transportConfig: TransportConfig<TRpcMethods>): Transport<TRpcMethods>;
+function makeProxy<TRpcMethods, TResponseOrResponses>(
+    transportConfig: TransportConfig<TRpcMethods>,
+    overrides?: TResponseOrResponses extends unknown[]
+        ? ArmedBatchTransportOwnMethods<TResponseOrResponses>
+        : ArmedTransportOwnMethods<TResponseOrResponses>,
+    pendingRequestOrRequests?: TResponseOrResponses extends unknown[]
+        ? TransportRequestBatch<TResponseOrResponses>
+        : TransportRequest<TResponseOrResponses>
 ):
-    | Transport<TRpcApi>
+    | Transport<TRpcMethods>
     | (TResponseOrResponses extends unknown[]
-          ? ArmedBatchTransport<TRpcApi, TResponseOrResponses>
-          : ArmedTransport<TRpcApi, TResponseOrResponses>) {
-    const { onIntegerOverflow } = transportConfig;
-    return new Proxy(transport, {
+          ? ArmedBatchTransport<TRpcMethods, TResponseOrResponses>
+          : ArmedTransport<TRpcMethods, TResponseOrResponses>) {
+    return new Proxy(transportConfig.api, {
         defineProperty() {
             return false;
         },
         deleteProperty() {
             return false;
         },
-        get<TMethodName extends keyof typeof transport>(
-            ...args: Parameters<NonNullable<ProxyHandler<typeof transport>['get']>>
-        ) {
-            const [target, p] = args;
-            return p in target
-                ? Reflect.get(...args)
-                : function (
-                      ...params: Parameters<
-                          (typeof transport)[TMethodName] extends (...args: unknown[]) => unknown
-                              ? (typeof transport)[TMethodName]
-                              : never
-                      >
-                  ) {
-                      const methodName = p.toString();
-                      const patchedParams = patchParamsForSolanaLabsRpc(
-                          params,
-                          onIntegerOverflow
-                              ? (keyPath, value) => {
-                                    onIntegerOverflow(methodName, keyPath, value);
-                                }
-                              : undefined
-                      );
-                      const newMessage = createJsonRpcMessage(methodName, patchedParams);
-                      if (pendingRequestOrRequests == null) {
-                          return createArmedJsonRpcTransport(transportConfig, newMessage);
-                      } else {
-                          const nextPendingMessages = Array.isArray(pendingRequestOrRequests)
-                              ? [...pendingRequestOrRequests, newMessage]
-                              : [pendingRequestOrRequests, newMessage];
-                          return createArmedBatchJsonRpcTransport(transportConfig, nextPendingMessages);
-                      }
-                  };
+        get(target, p, receiver) {
+            if (overrides && Reflect.has(overrides, p)) {
+                return Reflect.get(overrides, p, receiver);
+            }
+            return function (...rawParams: unknown[]) {
+                const methodName = p.toString();
+                const createTransportRequest = Reflect.get(target, methodName, receiver);
+                const newRequest = createTransportRequest
+                    ? createTransportRequest(...rawParams)
+                    : { methodName, params: rawParams };
+                if (pendingRequestOrRequests == null) {
+                    return createArmedJsonRpcTransport(transportConfig, newRequest);
+                } else {
+                    const nextPendingRequests = Array.isArray(pendingRequestOrRequests)
+                        ? [...pendingRequestOrRequests, newRequest]
+                        : [pendingRequestOrRequests, newRequest];
+                    return createArmedBatchJsonRpcTransport(transportConfig, nextPendingRequests);
+                }
+            };
         },
-    });
+    }) as
+        | Transport<TRpcMethods>
+        | (TResponseOrResponses extends unknown[]
+              ? ArmedBatchTransport<TRpcMethods, TResponseOrResponses>
+              : ArmedTransport<TRpcMethods, TResponseOrResponses>);
 }
 
-function processResponse<TResponse>(response: JsonRpcResponse<TResponse>, methodName: string) {
-    if ('error' in response) {
-        throw new SolanaJsonRpcError(response.error);
-    } else {
-        const patchedResponse = patchResponseForSolanaLabsRpc(
-            response.result as TResponse,
-            methodName as never // FIXME: Untangle these types by moving the patcher into `rpc-core`
-        );
-        return patchedResponse;
-    }
-}
-
-function sendPayload<TResponses extends unknown[]>(
-    payload: (IHasIdentifier & IHasMethod)[],
-    url: string
-): Promise<TResponses>;
-function sendPayload<TResponse>(payload: IHasIdentifier & IHasMethod, url: string): Promise<TResponse>;
-async function sendPayload<TResponseOrResponses>(
-    payload: (IHasIdentifier & IHasMethod) | (IHasIdentifier & IHasMethod)[],
-    url: string
-) {
-    const responseOrResponses = await makeHttpRequest<
-        TResponseOrResponses extends unknown[]
-            ? JsonRpcBatchResponse<TResponseOrResponses>
-            : JsonRpcResponse<TResponseOrResponses>
-    >({
-        payload,
-        url,
-    });
-
-    if (Array.isArray(responseOrResponses)) {
-        const requestOrder = (payload as IHasIdentifier[]).map(p => p.id);
-        return responseOrResponses
-            .sort((a, b) => requestOrder.indexOf(a.id) - requestOrder.indexOf(b.id))
-            .map((response, ii) => processResponse(response, (payload as IHasMethod[])[ii].method));
-    } else {
-        return processResponse(responseOrResponses, (payload as IHasMethod).method);
-    }
-}
-
-export function createJsonRpcTransport<TRpcApi extends object>(transportConfig: TransportConfig) {
-    const transport = {} as Transport<TRpcApi>;
-    return makeProxy<TRpcApi>(transport, transportConfig);
+export function createJsonRpcTransport<TRpcMethods>(
+    transportConfig: TransportConfig<TRpcMethods>
+): Transport<TRpcMethods> {
+    return makeProxy(transportConfig);
 }

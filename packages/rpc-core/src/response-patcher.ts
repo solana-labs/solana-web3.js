@@ -1,10 +1,8 @@
+import { createSolanaRpcApi } from './index';
 import { ALLOWED_NUMERIC_KEYPATHS } from './response-patcher-allowed-numeric-values';
-import { KeyPathWildcard, KEYPATH_WILDCARD } from './response-patcher-types';
-
-import { SolanaJsonRpcApi } from '@solana/rpc-core';
+import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
 
 export type KeyPath = ReadonlyArray<KeyPathWildcard | number | string | KeyPath>;
-type Patched<T> = T extends object ? { [Property in keyof T]: Patched<T[Property]> } : T extends number ? bigint : T;
 // FIXME(https://github.com/microsoft/TypeScript/issues/33014)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TypescriptBug33014 = any;
@@ -15,7 +13,7 @@ function getNextAllowedKeypaths(keyPaths: readonly KeyPath[], property: number |
         .map(keyPath => keyPath.slice(1));
 }
 
-function visitNode<T>(value: T, allowedKeypaths: readonly KeyPath[]): Patched<T> {
+function visitNode<T>(value: unknown, allowedKeypaths: readonly KeyPath[]): T {
     if (Array.isArray(value)) {
         return value.map((element, ii) => {
             const nextAllowedKeypaths = getNextAllowedKeypaths(allowedKeypaths, ii);
@@ -23,11 +21,9 @@ function visitNode<T>(value: T, allowedKeypaths: readonly KeyPath[]): Patched<T>
         }) as TypescriptBug33014;
     } else if (typeof value === 'object' && value !== null) {
         const out = {} as TypescriptBug33014;
-        for (const propName in value) {
-            if (Object.prototype.hasOwnProperty.call(value, propName)) {
-                const nextAllowedKeypaths = getNextAllowedKeypaths(allowedKeypaths, propName);
-                out[propName] = visitNode(value[propName], nextAllowedKeypaths);
-            }
+        for (const [propName, innerValue] of Object.entries(value)) {
+            const nextAllowedKeypaths = getNextAllowedKeypaths(allowedKeypaths, propName);
+            out[propName] = visitNode(innerValue, nextAllowedKeypaths);
         }
         return out as TypescriptBug33014;
     } else if (
@@ -45,6 +41,10 @@ function visitNode<T>(value: T, allowedKeypaths: readonly KeyPath[]): Patched<T>
     }
 }
 
-export function patchResponseForSolanaLabsRpc<T>(response: T, methodName?: keyof SolanaJsonRpcApi): Patched<T> {
-    return visitNode(response, (methodName && ALLOWED_NUMERIC_KEYPATHS[methodName]) ?? []);
+export function patchResponseForSolanaLabsRpc<T>(
+    rawResponse: unknown,
+    methodName?: keyof ReturnType<typeof createSolanaRpcApi>
+): T {
+    const allowedKeypaths = methodName ? ALLOWED_NUMERIC_KEYPATHS[methodName] : undefined;
+    return visitNode(rawResponse, allowedKeypaths ?? []);
 }

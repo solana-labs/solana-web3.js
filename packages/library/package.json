@@ -65,11 +65,11 @@
     ],
     "dependencies": {
         "@solana/keys": "workspace:*",
+        "@solana/rpc-core": "workspace:*",
         "@solana/rpc-transport": "workspace:*"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.0",
-        "@solana/rpc-core": "workspace:*",
         "@swc/core": "^1.3.18",
         "@swc/jest": "^0.2.23",
         "@types/jest": "^29.5.0",

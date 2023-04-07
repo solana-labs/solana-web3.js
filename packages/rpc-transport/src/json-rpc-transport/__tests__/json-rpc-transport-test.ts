@@ -1,25 +1,28 @@
 import { makeHttpRequest } from '../../http-request';
-import { patchResponseForSolanaLabsRpc } from '../../response-patcher';
+import { createJsonRpcTransport } from '../index';
 import { SolanaJsonRpcError } from '../json-rpc-errors';
 import { createJsonRpcMessage } from '../json-rpc-message';
 import { getNextMessageId } from '../json-rpc-message-id';
-import { createJsonRpcTransport } from '..';
-import { Transport } from '../json-rpc-transport-types';
+import { IRpcApi, Transport, TransportRequest } from '../json-rpc-transport-types';
 
 jest.mock('../../http-request');
-jest.mock('../../response-patcher');
 jest.mock('../json-rpc-message-id');
 
-interface TestRpcApi {
+interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;
-    someOtherMethod(...args: unknown[]): unknown;
 }
 
+const FAKE_URL = 'fake://url';
+
 describe('JSON-RPC 2.0 transport', () => {
-    let transport: Transport<TestRpcApi>;
-    const url = 'fake://url';
+    let transport: Transport<TestRpcMethods>;
     beforeEach(() => {
-        transport = createJsonRpcTransport<TestRpcApi>({ url });
+        transport = createJsonRpcTransport({
+            api: {
+                // Note the lack of method implementations in the base case.
+            } as IRpcApi<TestRpcMethods>,
+            url: FAKE_URL,
+        });
         (makeHttpRequest as jest.Mock).mockImplementation(
             () =>
                 new Promise(_ => {
@@ -28,23 +31,22 @@ describe('JSON-RPC 2.0 transport', () => {
         );
         let counter = 0;
         (getNextMessageId as jest.Mock).mockImplementation(() => counter++);
-        (patchResponseForSolanaLabsRpc as jest.Mock).mockImplementation(p => p);
     });
     it('sends a request to a JSON-RPC 2.0 endpoint', () => {
         transport.someMethod(123).send();
         expect(makeHttpRequest).toHaveBeenCalledWith({
             payload: { ...createJsonRpcMessage('someMethod', [123]), id: expect.any(Number) },
-            url,
+            url: FAKE_URL,
         });
     });
     it('sends a batch of requests to a JSON-RPC 2.0 endpoint', () => {
-        transport.someMethod(123).someOtherMethod(456).sendBatch();
+        transport.someMethod(123).someMethod(456).sendBatch();
         expect(makeHttpRequest).toHaveBeenCalledWith({
             payload: [
                 { ...createJsonRpcMessage('someMethod', [123]), id: expect.any(Number) },
-                { ...createJsonRpcMessage('someOtherMethod', [456]), id: expect.any(Number) },
+                { ...createJsonRpcMessage('someMethod', [456]), id: expect.any(Number) },
             ],
-            url,
+            url: FAKE_URL,
         });
     });
     it('returns results from a JSON-RPC 2.0 endpoint', async () => {
@@ -56,7 +58,7 @@ describe('JSON-RPC 2.0 transport', () => {
     it('returns a batch of results from a JSON-RPC 2.0 endpoint', async () => {
         expect.assertions(2);
         (makeHttpRequest as jest.Mock).mockResolvedValueOnce([{ result: 123 }, { result: 456 }]);
-        const [resultA, resultB] = await transport.someMethod().someOtherMethod().sendBatch();
+        const [resultA, resultB] = await transport.someMethod().someMethod().sendBatch();
         expect(resultA).toBe(123);
         expect(resultB).toBe(456);
     });
@@ -73,7 +75,7 @@ describe('JSON-RPC 2.0 transport', () => {
             { id: startId, result: 123 },
             { id: startId + 1, result: 456 },
         ]);
-        const [resultA, resultB, resultC] = await transport.someMethod().someOtherMethod().someMethod().sendBatch();
+        const [resultA, resultB, resultC] = await transport.someMethod().someMethod().someMethod().sendBatch();
         expect(resultA).toBe(123);
         expect(resultB).toBe(456);
         expect(resultC).toBe(789);
@@ -99,9 +101,66 @@ describe('JSON-RPC 2.0 transport', () => {
             { error: { code: 123, data: 'abc', message: 'o no' }, id: startId },
             { id: startId + 1, result: 123 },
         ]);
-        const sendBatchPromise = transport.someMethod().someOtherMethod().someMethod().sendBatch();
+        const sendBatchPromise = transport.someMethod().someMethod().someMethod().sendBatch();
         await expect(sendBatchPromise).rejects.toThrow(SolanaJsonRpcError);
         await expect(sendBatchPromise).rejects.toThrow(/o no/);
         await expect(sendBatchPromise).rejects.toMatchObject({ code: 123, data: 'abc' });
+    });
+    describe('when calling a method having a concrete implementation', () => {
+        let transport: Transport<TestRpcMethods>;
+        beforeEach(() => {
+            transport = createJsonRpcTransport({
+                api: {
+                    someMethod(...params: unknown[]): TransportRequest<unknown> {
+                        return {
+                            methodName: 'someMethodAugmented',
+                            params: [...params, 'augmented', 'params'],
+                        };
+                    },
+                } as IRpcApi<TestRpcMethods>,
+                url: FAKE_URL,
+            });
+        });
+        it('converts the returned request to a JSON-RPC 2.0 message and sends it to the endpoint', () => {
+            transport.someMethod(123).send();
+            expect(makeHttpRequest).toHaveBeenCalledWith({
+                payload: {
+                    ...createJsonRpcMessage('someMethodAugmented', [123, 'augmented', 'params']),
+                    id: expect.any(Number),
+                },
+                url: FAKE_URL,
+            });
+        });
+    });
+    describe('when calling a method whose concrete implementation returns a response processor', () => {
+        let responseProcessor: jest.Mock;
+        let transport: Transport<TestRpcMethods>;
+        beforeEach(() => {
+            responseProcessor = jest.fn(response => `${response} processed response`);
+            transport = createJsonRpcTransport({
+                api: {
+                    someMethod(...params: unknown[]): TransportRequest<unknown> {
+                        return {
+                            methodName: 'someMethod',
+                            params,
+                            responseProcessor,
+                        };
+                    },
+                } as IRpcApi<TestRpcMethods>,
+                url: FAKE_URL,
+            });
+        });
+        it('calls the response processor with the response from the JSON-RPC 2.0 endpoint', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
+            await transport.someMethod().send();
+            expect(responseProcessor).toHaveBeenCalledWith(123);
+        });
+        it('returns the processed response', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
+            const result = await transport.someMethod().send();
+            expect(result).toBe('123 processed response');
+        });
     });
 });

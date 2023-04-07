@@ -1,11 +1,8 @@
 import { createDefaultRpc } from '../rpc';
 import { SolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error';
 
-import { SolanaJsonRpcApi } from '@solana/rpc-core';
-import { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
-
 describe('RPC', () => {
-    let transport: Transport<SolanaJsonRpcApi>;
+    let transport: ReturnType<typeof createDefaultRpc>;
     beforeEach(() => {
         transport = createDefaultRpc('fake://url');
     });
