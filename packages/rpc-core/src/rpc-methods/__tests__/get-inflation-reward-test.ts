@@ -1,18 +1,19 @@
-import { createJsonRpcTransport } from '..';
-import { SolanaJsonRpcError, SolanaJsonRpcErrorCode } from '../json-rpc-errors';
-import { Transport } from '../json-rpc-transport-types';
-
-import { SolanaJsonRpcApi } from '@solana/rpc-core';
-import { Commitment } from '@solana/rpc-core/dist/types/types/rpc-methods/common';
-
+import { createJsonRpcTransport } from '@solana/rpc-transport';
+import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-errors';
+import type { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
 import fetchMock from 'jest-fetch-mock';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
+import { Commitment } from '../common';
 
 describe('getInflationReward', () => {
-    let transport: Transport<SolanaJsonRpcApi>;
+    let transport: Transport<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        transport = createJsonRpcTransport<SolanaJsonRpcApi>({ url: 'http://127.0.0.1:8899' });
+        transport = createJsonRpcTransport({
+            api: createSolanaRpcApi(),
+            url: 'http://127.0.0.1:8899',
+        });
     });
     [{ minContextSlot: 0n }, null].forEach(minContextConfig => {
         describe(`when called with ${
@@ -31,31 +32,31 @@ describe('getInflationReward', () => {
     });
     describe('when called with an `epoch` higher than the highest epoch available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const sendPromise = transport
                 .getInflationReward([], {
                     epoch: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(sendPromise).rejects.toThrow(SolanaJsonRpcError);
             await expect(sendPromise).rejects.toMatchObject({
-                code: SolanaJsonRpcErrorCode.JSON_RPC_SERVER_ERROR_BLOCK_NOT_AVAILABLE,
+                code: -32004 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_SERVER_ERROR_BLOCK_NOT_AVAILABLE'],
                 message: expect.any(String),
+                name: 'SolanaJsonRpcError',
             });
         });
     });
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const sendPromise = transport
                 .getInflationReward([], {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(sendPromise).rejects.toThrow(SolanaJsonRpcError);
             await expect(sendPromise).rejects.toMatchObject({
-                code: SolanaJsonRpcErrorCode.JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                code: -32016 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
                 message: expect.any(String),
+                name: 'SolanaJsonRpcError',
             });
         });
     });

@@ -1,46 +1,74 @@
 /**
  * Public API.
  */
-export type Transport<TApi> = TransportMethods<TApi>;
-export type ArmedTransport<TApi, TResponse> = ArmedTransportMethods<TApi, TResponse> & {
+export type IRpcApi<TRpcMethods> = {
+    [MethodName in keyof TRpcMethods]: TRpcMethods[MethodName] extends Callable
+        ? (...rawParams: unknown[]) => TransportRequest<ReturnType<TRpcMethods[MethodName]>>
+        : never;
+};
+export type Transport<TRpcMethods> = TransportMethods<TRpcMethods>;
+export type TransportConfig<TRpcMethods> = Readonly<{
+    api: IRpcApi<TRpcMethods>;
+    url: string;
+}>;
+export type TransportRequest<TResponse> = {
+    methodName: string;
+    params: unknown[];
+    responseProcessor?: (response: unknown) => TResponse;
+};
+export interface ArmedTransportOwnMethods<TResponse> {
     send(): Promise<TResponse>;
-};
-export type ArmedBatchTransport<TApi, TResponses extends unknown[]> = ArmedBatchTransportMethods<TApi, TResponses> & {
+}
+export type ArmedTransport<TRpcMethods, TResponse> = ArmedTransportMethods<TRpcMethods, TResponse> &
+    ArmedTransportOwnMethods<TResponse>;
+export interface ArmedBatchTransportOwnMethods<TResponses> {
     sendBatch(): Promise<TResponses>;
-};
+}
+export type ArmedBatchTransport<TRpcMethods, TResponses extends unknown[]> = ArmedBatchTransportMethods<
+    TRpcMethods,
+    TResponses
+> &
+    ArmedBatchTransportOwnMethods<TResponses>;
 
 /**
  * Private transport-building types.
  */
-type TransportMethods<TApi> = {
-    [TMethodName in keyof TApi]: ArmedTransportReturner<TApi, ApiMethodImplementations<TApi, TMethodName>>;
+type TransportMethods<TRpcMethods> = {
+    [TMethodName in keyof TRpcMethods]: ArmedTransportReturner<
+        TRpcMethods,
+        ApiMethodImplementations<TRpcMethods, TMethodName>
+    >;
 };
-type ArmedTransportMethods<TApi, TResponse> = ArmedBatchTransportMethods<TApi, [TResponse]>;
-type ArmedBatchTransportMethods<TApi, TResponses extends unknown[]> = {
-    [TMethodName in keyof TApi]: ArmedBatchTransportReturner<
-        TApi,
-        ApiMethodImplementations<TApi, TMethodName>,
+type ArmedTransportMethods<TRpcMethods, TResponse> = ArmedBatchTransportMethods<TRpcMethods, [TResponse]>;
+type ArmedBatchTransportMethods<TRpcMethods, TResponses extends unknown[]> = {
+    [TMethodName in keyof TRpcMethods]: ArmedBatchTransportReturner<
+        TRpcMethods,
+        ApiMethodImplementations<TRpcMethods, TMethodName>,
         TResponses
     >;
 };
-type ApiMethodImplementations<TApi, TMethod extends keyof TApi> = Overloads<TApi[TMethod]>;
-type ArmedTransportReturner<TApi, TMethodImplementations> = UnionToIntersection<
+type ApiMethodImplementations<TRpcMethods, TMethod extends keyof TRpcMethods> = Overloads<TRpcMethods[TMethod]>;
+type ArmedTransportReturner<TRpcMethods, TMethodImplementations> = UnionToIntersection<
     Flatten<{
-        // Check that this property of the TApi interface is, in fact, a function.
+        // Check that this property of the TRpcMethods interface is, in fact, a function.
         [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedTransport<TApi, ReturnType<TMethodImplementations[P]>>
+              ) => ArmedTransport<TRpcMethods, ReturnType<TMethodImplementations[P]>>
             : never;
     }>
 >;
-type ArmedBatchTransportReturner<TApi, TMethodImplementations, TResponses extends unknown[]> = UnionToIntersection<
+type ArmedBatchTransportReturner<
+    TRpcMethods,
+    TMethodImplementations,
+    TResponses extends unknown[]
+> = UnionToIntersection<
     Flatten<{
-        // Check that this property of the TApi interface is, in fact, a function.
+        // Check that this property of the TRpcMethods interface is, in fact, a function.
         [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedBatchTransport<TApi, [...TResponses, ReturnType<TMethodImplementations[P]>]>
+              ) => ArmedBatchTransport<TRpcMethods, [...TResponses, ReturnType<TMethodImplementations[P]>]>
             : never;
     }>
 >;
