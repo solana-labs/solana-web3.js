@@ -139,7 +139,7 @@ describe('ComputeBudgetProgram', () => {
       ).to.be.rejectedWith(/Computational budget exceeded/);
     });
 
-    it.skip('send live compute unit ixs', async () => {
+    it('send live compute unit ixs', async () => {
       const connection = new Connection(url, 'confirmed');
       const FEE_AMOUNT = LAMPORTS_PER_SOL;
       const STARTING_AMOUNT = 2 * LAMPORTS_PER_SOL;
