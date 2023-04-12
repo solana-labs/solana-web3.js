@@ -4,7 +4,7 @@ import type { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transp
 import fetchMock from 'jest-fetch-mock';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
 import { Commitment } from '../common';
-import { assertIsBase58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/keys';
 
 describe('getBalance', () => {
     let transport: Transport<SolanaRpcMethods>;
@@ -22,25 +22,28 @@ describe('getBalance', () => {
             it('returns a balance of zero for a new address', async () => {
                 expect.assertions(1);
                 // This key is random, don't re-use in any tests that affect balance
-                const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH';
-                assertIsBase58EncodedAddress(publicKey);
-                const balance = await transport.getBalance(publicKey).send();
-                expect(balance.value).toEqual(BigInt(0));
+                const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
+                const balancePromise = transport.getBalance(publicKey).send();
+                await expect(balancePromise).resolves.toHaveProperty('value', BigInt(0));
             });
         });
     });
 
     describe('returns a non-zero balance for an address with lamports', () => {
-        // TODO: requires requestAirdrop or something else that can give an address lamports
-        it.todo('returns the correct balance after an airdrop');
+        it('returns the correct balance for a fixture account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc.json
+            const publicKey = '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress;
+            const balancePromise = transport.getBalance(publicKey).send();
+            await expect(balancePromise).resolves.toHaveProperty('value', BigInt(5_000_000));
+        });
     });
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             // This key is random, don't re-use in any tests that affect balance
-            const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH';
-            assertIsBase58EncodedAddress(publicKey);
+            const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
             const sendPromise = transport
                 .getBalance(publicKey, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.

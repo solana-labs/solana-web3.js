@@ -12,3 +12,10 @@ export type Slot = U64UnsafeBeyond2Pow53Minus1;
 // truncated or rounded because of a downcast to JavaScript `number` between your calling code and
 // the JSON-RPC transport.
 export type U64UnsafeBeyond2Pow53Minus1 = bigint;
+
+export type RpcResponse<TValue> = Readonly<{
+    context: Readonly<{
+        slot: Slot;
+    }>;
+    value: TValue;
+}>;
