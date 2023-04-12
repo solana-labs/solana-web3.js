@@ -7,9 +7,8 @@ type Platform =
     // React Native
     | 'native';
 
-export function getBaseConfig(platform: Platform, format: Format[], options: Options): Options[] {
+export function getBaseConfig(platform: Platform, format: Format[], _options: Options): Options[] {
     return [true, false].map<Options>(isDebugBuild => ({
-        clean: true,
         define: {
             __BROWSER__: `${platform === 'browser'}`,
             __NODEJS__: `${platform === 'node'}`,
@@ -32,8 +31,7 @@ export function getBaseConfig(platform: Platform, format: Format[], options: Opt
         name: platform,
         // Inline private, non-published packages.
         // WARNING: This inlines packages recursively. Make sure these don't have deep dep trees.
-        noExternal: ['@solana/fetch-impl-browser'],
-        onSuccess: options.watch ? 'tsc -p ./tsconfig.declarations.json' : undefined,
+        noExternal: ['fetch-impl-browser'],
         outExtension({ format }) {
             let extension;
             if (format === 'iife') {

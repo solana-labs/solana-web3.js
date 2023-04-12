@@ -3,7 +3,7 @@
     "compilerOptions": {
         "lib": ["DOM"]
     },
-    "display": "@solana/fetch-impl-browser",
+    "display": "Fetch Implementation (Browser)",
     "extends": "tsconfig/base.json",
     "include": ["src"]
 }

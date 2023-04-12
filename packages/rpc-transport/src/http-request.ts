@@ -1,6 +1,6 @@
-import fetchImplBrowser from '@solana/fetch-impl-browser';
 import { SolanaHttpError } from './http-request-errors';
 
+import fetchImplBrowser from 'fetch-impl-browser';
 import fetchImplNode from 'node-fetch';
 
 type Config = Readonly<{
