@@ -4,12 +4,14 @@
 # Multiple callers can invoke this script.
 # Only the first caller will start the test validator.
 # Only the last caller to release the lock will shut the validator down.
-
-EXCLUSIVE_LOCK_FILE="/var/lock/.solanatestvalidator.exclusivelock"
-SHARED_LOCK_FILE="/var/lock/.solanatestvalidator.sharedlock"
+LOCK_DIR="/tmp/lock"
+EXCLUSIVE_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.exclusivelock"
+SHARED_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.sharedlock"
 TEST_VALIDATOR=$HOME/.local/share/solana/install/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
 FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
+
+mkdir -p $LOCK_DIR
 
 (
   trap : INT # Resume execution any time we receive SIGINT
@@ -23,7 +25,7 @@ FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
       wait
     else
       echo "Sharing lock on already running test validator (PID $(pidof $TEST_VALIDATOR))"
-      sleep infinity
+      sleep 86400000; # 1000 days
     fi
   ) 200>$EXCLUSIVE_LOCK_FILE
   validator_pid=$(pidof $TEST_VALIDATOR)

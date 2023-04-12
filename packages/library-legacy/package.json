@@ -41,7 +41,7 @@
     "compile:js": "cross-env NODE_ENV=production rollup -c",
     "compile:typedefs": "./scripts/typegen.sh",
     "build:fixtures": "set -ex; ./test/fixtures/noop-program/build.sh",
-    "clean": "rimraf ./docs ./declarations ./lib",
+    "clean": "rimraf ./doc ./declarations ./lib",
     "dev": "cross-env NODE_ENV=development rollup -c --watch",
     "publish-packages": "semantic-release --repository-url git@github.com:solana-labs/solana-web3.js.git",
     "test:lint": "eslint src/ test/ --ext .js,.ts",
