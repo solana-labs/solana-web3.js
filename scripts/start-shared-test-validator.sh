@@ -24,7 +24,7 @@ mkdir -p $LOCK_DIR
       wait
     else
       echo "Sharing lock on already running test validator (PID $(pidof $TEST_VALIDATOR))"
-      while true; do sleep 86400; done
+      sleep 86400000; # 1000 days
     fi
   ) 200>$EXCLUSIVE_LOCK_FILE
   validator_pid=$(pidof $TEST_VALIDATOR)
