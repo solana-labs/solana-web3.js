@@ -1,7 +1,7 @@
 {
-    "name": "@solana/fetch-impl-browser",
-    "version": "0.0.0-development",
-    "description": "A browser fork of the fetch implementation used by @solana/rpc-transport",
+    "name": "fetch-impl-browser",
+    "version": "0.0.0",
+    "private": true,
     "main": "./dist/index.browser.cjs",
     "module": "./dist/index.browser.js",
     "types": "./dist/types/index.d.ts",
@@ -10,12 +10,6 @@
         "./dist/"
     ],
     "sideEffects": false,
-    "keywords": [
-        "blockchain",
-        "solana",
-        "web3"
-    ],
-    "private": true,
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.browser.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
@@ -24,15 +18,6 @@
         "test:prettier": "jest -c node_modules/test-config/jest-prettier.config.ts --rootDir . --silent",
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:typecheck": "tsc --noEmit"
-    },
-    "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/solana-labs/solana-web3.js"
-    },
-    "bugs": {
-        "url": "http://github.com/solana-labs/solana-web3.js/issues"
     },
     "browserslist": [
         "supports bigint and not dead",
