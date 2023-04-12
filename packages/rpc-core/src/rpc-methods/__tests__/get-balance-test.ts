@@ -29,11 +29,11 @@ describe('getBalance', () => {
         });
     });
 
-    describe('returns a non-zero balance for an address with lamports', () => {
-        it('returns the correct balance for a fixture account', async () => {
+    describe('given an account with a non-zero balance', () => {
+        // See scripts/fixtures/4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc.json
+        const publicKey = '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress;
+        it('returns the correct balance', async () => {
             expect.assertions(1);
-            // See scripts/fixtures/4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc.json
-            const publicKey = '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress;
             const balancePromise = transport.getBalance(publicKey).send();
             await expect(balancePromise).resolves.toHaveProperty('value', BigInt(5_000_000));
         });
