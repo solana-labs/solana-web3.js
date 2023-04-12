@@ -9,6 +9,7 @@ EXCLUSIVE_LOCK_FILE="/var/lock/.solanatestvalidator.exclusivelock"
 SHARED_LOCK_FILE="/var/lock/.solanatestvalidator.sharedlock"
 TEST_VALIDATOR=$HOME/.local/share/solana/install/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
+FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
 
 (
   trap : INT # Resume execution any time we receive SIGINT
@@ -16,7 +17,7 @@ TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test
   flock -s 200 || exit 1
   (
     if flock -nx 200; then
-      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet >/dev/null &
+      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --account-dir $FIXTURE_ACCOUNTS_DIR >/dev/null &
       validator_pid=$!
       echo "Started test validator (PID $validator_pid)"
       wait
