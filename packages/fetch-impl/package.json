@@ -1,22 +1,39 @@
 {
-    "name": "fetch-impl-browser",
+    "name": "fetch-impl",
     "version": "0.0.0",
     "private": true,
-    "main": "./dist/index.browser.cjs",
-    "module": "./dist/index.browser.js",
-    "types": "./dist/types/index.d.ts",
+    "exports": {
+        "browser": {
+            "import": "./dist/index.browser.js",
+            "require": "./dist/index.browser.cjs",
+            "types": "./dist/types/index.browser.d.ts"
+        },
+        "node": {
+            "import": "./dist/index.node.js",
+            "require": "./dist/index.node.cjs",
+            "types": "./dist/types/index.node.d.ts"
+        }
+    },
+    "browser": {
+        "./dist/index.node.cjs": "./dist/index.browser.cjs",
+        "./dist/index.node.js": "./dist/index.browser.js"
+    },
+    "main": "./dist/index.node.cjs",
+    "module": "./dist/index.node.js",
+    "types": "./dist/types/index.node.d.ts",
     "type": "module",
     "files": [
         "./dist/"
     ],
     "sideEffects": false,
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.browser.ts",
+        "compile:js": "tsup",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
         "test:lint": "jest -c node_modules/test-config/jest-lint.config.ts --rootDir . --silent",
         "test:prettier": "jest -c node_modules/test-config/jest-prettier.config.ts --rootDir . --silent",
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
+        "test:treeshakability:node": "agadoo dist/index.node.js",
         "test:typecheck": "tsc --noEmit"
     },
     "browserslist": [
@@ -28,11 +45,9 @@
         "@swc/core": "^1.3.18",
         "@swc/jest": "^0.2.23",
         "@types/jest": "^29.5.0",
-        "@types/node-fetch": "2",
         "@typescript-eslint/eslint-plugin": "^5.57.1",
         "@typescript-eslint/parser": "^5.57.1",
         "agadoo": "^3.0.0",
-        "build-scripts": "workspace:*",
         "eslint": "^8.37.0",
         "eslint-plugin-jest": "^27.1.5",
         "eslint-plugin-react-hooks": "^4.6.0",
@@ -49,5 +64,8 @@
         "tsup": "6.7.0",
         "turbo": "^1.6.3",
         "typescript": "^5.0.3"
+    },
+    "peerDependencies": {
+        "node-fetch": "^3.3.1"
     }
 }

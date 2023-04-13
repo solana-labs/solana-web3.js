@@ -26,12 +26,16 @@ export function getBaseConfig(platform: Platform, format: Format[], _options: Op
             }
             options.inject = [path.resolve(__dirname, 'env-shim.ts')];
         },
+        external: [
+            // Despite inlining `fetch-impl`, do not recursively inline `node-fetch`.
+            'node-fetch',
+        ],
         format,
         globalName: 'globalThis.solanaWeb3',
         name: platform,
         // Inline private, non-published packages.
         // WARNING: This inlines packages recursively. Make sure these don't have deep dep trees.
-        noExternal: ['fetch-impl-browser'],
+        noExternal: ['fetch-impl'],
         outExtension({ format }) {
             let extension;
             if (format === 'iife') {
