@@ -576,9 +576,9 @@ importers:
 
   packages/rpc-transport:
     dependencies:
-      fetch-impl:
-        specifier: workspace:*
-        version: link:../fetch-impl
+      node-fetch:
+        specifier: ^3.3.1
+        version: 3.3.1
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.0
@@ -616,6 +616,9 @@ importers:
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
+      fetch-impl:
+        specifier: workspace:*
+        version: link:../fetch-impl
       jest:
         specifier: ^29.5.0
         version: 29.5.0(@types/node@18.15.11)(ts-node@10.9.1)

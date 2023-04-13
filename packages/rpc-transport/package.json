@@ -73,6 +73,7 @@
         "eslint-plugin-jest": "^27.1.5",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
+        "fetch-impl": "workspace:*",
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0",
         "jest-fetch-mock": "^3.0.3",
@@ -96,6 +97,6 @@
         ]
     },
     "dependencies": {
-        "fetch-impl": "workspace:*"
+        "node-fetch": "^3.3.1"
     }
 }
