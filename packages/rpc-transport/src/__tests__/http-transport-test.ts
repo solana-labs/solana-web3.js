@@ -44,13 +44,35 @@ describe('makeHttpRequest', () => {
                 })
             );
         });
-        it('sets the content type header to `application/json`', () => {
+        it('sets the content type header to `application/json; charset=utf-8`', () => {
             makeHttpRequest({ payload: 123, url: 'fake://url' });
             expect(fetchMock).toHaveBeenCalledWith(
                 expect.anything(),
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        'Content-type': 'application/json',
+                        'Content-Type': 'application/json; charset=utf-8',
+                    }),
+                })
+            );
+        });
+        it('sets the content length header to the length of the JSON-stringified payload', () => {
+            makeHttpRequest({
+                payload:
+                    // Shruggie: https://emojipedia.org/person-shrugging/
+                    '\xAF\\\x5F\x28\u30C4\x29\x5F\x2F\xAF' +
+                    ' ' +
+                    // https://emojipedia.org/waving-hand-medium-skin-tone/
+                    '\u{1F44B}\u{1F3FD}' +
+                    ' ' +
+                    // https://tinyurl.com/bdemuf3r
+                    '\u{1F469}\u{1F3FB}\u200D\u2764\uFE0F\u200D\u{1F469}\u{1F3FF}',
+                url: 'fake://url',
+            });
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        'Content-Length': '30',
                     }),
                 })
             );
