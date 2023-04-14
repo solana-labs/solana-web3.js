@@ -44,6 +44,17 @@ describe('makeHttpRequest', () => {
                 })
             );
         });
+        it('sets the accept header to `application/json`', () => {
+            makeHttpRequest({ payload: 123, url: 'fake://url' });
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        Accept: 'application/json',
+                    }),
+                })
+            );
+        });
         it('sets the content type header to `application/json; charset=utf-8`', () => {
             makeHttpRequest({ payload: 123, url: 'fake://url' });
             expect(fetchMock).toHaveBeenCalledWith(
