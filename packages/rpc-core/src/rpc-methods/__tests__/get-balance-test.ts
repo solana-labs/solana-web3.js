@@ -1,7 +1,7 @@
 import { createJsonRpcTransport } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-errors';
 import type { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
-import fetchMock from 'jest-fetch-mock';
+import fetchMock from 'jest-fetch-mock-fork';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
 import { Commitment } from '../common';
 import { Base58EncodedAddress } from '@solana/keys';

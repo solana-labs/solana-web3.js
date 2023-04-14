@@ -1,7 +1,7 @@
 import { makeHttpRequest } from '../http-request';
 import { SolanaHttpError } from '../http-request-errors';
 
-import fetchMock from 'jest-fetch-mock';
+import fetchMock from 'jest-fetch-mock-fork';
 
 describe('makeHttpRequest', () => {
     describe('when the endpoint returns a non-200 status code', () => {
@@ -63,6 +63,52 @@ describe('makeHttpRequest', () => {
                     method: 'POST',
                 })
             );
+        });
+    });
+    describe('when invoked with an already-aborted `AbortSignal`', () => {
+        let abortSignal: AbortSignal;
+        beforeEach(() => {
+            fetchMock.once(JSON.stringify({ ok: true }));
+            const abortController = new AbortController();
+            abortController.abort('I got bored waiting');
+            abortSignal = abortController.signal;
+        });
+        it('rejects with an `AbortError`', async () => {
+            expect.assertions(1);
+            await expect(() => makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' })).rejects.toThrow();
+        });
+    });
+    describe('when it receives an abort signal mid-request', () => {
+        let abortController: AbortController;
+        let abortSignal: AbortSignal;
+        beforeEach(() => {
+            fetchMock.resetMocks();
+            fetchMock.dontMock();
+            abortController = new AbortController();
+            abortSignal = abortController.signal;
+        });
+        it('rejects with an `AbortError`', async () => {
+            expect.assertions(1);
+            const sendPromise = makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' });
+            abortController.abort('I got bored waiting');
+            await expect(sendPromise).rejects.toThrow();
+        });
+    });
+    describe('when it receives an abort signal after responding', () => {
+        let abortController: AbortController;
+        let abortSignal: AbortSignal;
+        beforeEach(() => {
+            fetchMock.once(JSON.stringify({ ok: true }));
+            abortController = new AbortController();
+            abortSignal = abortController.signal;
+        });
+        it('resolves with the response', async () => {
+            expect.assertions(1);
+            const sendPromise = makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' });
+            abortController.abort('I got bored waiting');
+            await expect(sendPromise).resolves.toMatchObject({
+                ok: true,
+            });
         });
     });
 });

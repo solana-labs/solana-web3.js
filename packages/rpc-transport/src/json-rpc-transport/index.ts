@@ -6,6 +6,7 @@ import {
     ArmedBatchTransportOwnMethods,
     ArmedTransport,
     ArmedTransportOwnMethods,
+    SendOptions,
     Transport,
     TransportConfig,
     TransportRequest,
@@ -26,10 +27,11 @@ function createArmedJsonRpcTransport<TRpcMethods, TResponse>(
     pendingRequest: TransportRequest<TResponse>
 ): ArmedTransport<TRpcMethods, TResponse> {
     const overrides = {
-        async send(): Promise<TResponse> {
+        async send(options?: SendOptions): Promise<TResponse> {
             const { methodName, params, responseProcessor } = pendingRequest;
             const payload = createJsonRpcMessage(methodName, params);
             const response = await makeHttpRequest<JsonRpcResponse<unknown>>({
+                abortSignal: options?.abortSignal,
                 payload,
                 url: transportConfig.url,
             });
@@ -48,9 +50,10 @@ function createArmedBatchJsonRpcTransport<TRpcMethods, TResponses extends unknow
     pendingRequests: TransportRequestBatch<TResponses>
 ): ArmedBatchTransport<TRpcMethods, TResponses> {
     const overrides = {
-        async sendBatch(): Promise<TResponses> {
+        async sendBatch(options?: SendOptions): Promise<TResponses> {
             const payload = pendingRequests.map(({ methodName, params }) => createJsonRpcMessage(methodName, params));
             const responses = await makeHttpRequest<JsonRpcBatchResponse<unknown[]>>({
+                abortSignal: options?.abortSignal,
                 payload,
                 url: transportConfig.url,
             });
