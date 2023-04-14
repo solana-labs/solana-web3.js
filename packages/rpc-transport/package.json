@@ -76,7 +76,7 @@
         "fetch-impl": "workspace:*",
         "jest": "^29.5.0",
         "jest-environment-jsdom": "^29.5.0",
-        "jest-fetch-mock": "^3.0.3",
+        "jest-fetch-mock-fork": "^3.0.4",
         "jest-runner-eslint": "^2.0.0",
         "jest-runner-prettier": "^1.0.0",
         "postcss": "^8.4.12",

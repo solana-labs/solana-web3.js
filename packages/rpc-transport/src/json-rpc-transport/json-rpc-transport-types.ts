@@ -6,6 +6,9 @@ export type IRpcApi<TRpcMethods> = {
         ? (...rawParams: unknown[]) => TransportRequest<ReturnType<TRpcMethods[MethodName]>>
         : never;
 };
+export type SendOptions = Readonly<{
+    abortSignal?: AbortSignal;
+}>;
 export type Transport<TRpcMethods> = TransportMethods<TRpcMethods>;
 export type TransportConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
@@ -17,12 +20,12 @@ export type TransportRequest<TResponse> = {
     responseProcessor?: (response: unknown) => TResponse;
 };
 export interface ArmedTransportOwnMethods<TResponse> {
-    send(): Promise<TResponse>;
+    send(options?: SendOptions): Promise<TResponse>;
 }
 export type ArmedTransport<TRpcMethods, TResponse> = ArmedTransportMethods<TRpcMethods, TResponse> &
     ArmedTransportOwnMethods<TResponse>;
 export interface ArmedBatchTransportOwnMethods<TResponses> {
-    sendBatch(): Promise<TResponses>;
+    sendBatch(options?: SendOptions): Promise<TResponses>;
 }
 export type ArmedBatchTransport<TRpcMethods, TResponses extends unknown[]> = ArmedBatchTransportMethods<
     TRpcMethods,

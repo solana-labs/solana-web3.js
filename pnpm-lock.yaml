@@ -540,9 +540,9 @@ importers:
       jest-environment-jsdom:
         specifier: ^29.5.0
         version: 29.5.0
-      jest-fetch-mock:
-        specifier: ^3.0.3
-        version: 3.0.3
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
       jest-runner-eslint:
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
@@ -625,9 +625,9 @@ importers:
       jest-environment-jsdom:
         specifier: ^29.5.0
         version: 29.5.0
-      jest-fetch-mock:
-        specifier: ^3.0.3
-        version: 3.0.3
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
       jest-runner-eslint:
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
@@ -692,9 +692,9 @@ importers:
       jest-dev-server:
         specifier: ^8.0.5
         version: 8.0.5
-      jest-fetch-mock:
-        specifier: ^3.0.3
-        version: 3.0.3
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -7051,10 +7051,11 @@ packages:
       jest-mock: 29.5.0
       jest-util: 29.5.0
 
-  /jest-fetch-mock@3.0.3:
-    resolution: {integrity: sha512-Ux1nWprtLrdrH4XwE7O7InRY6psIi3GOsqNESJgMJ+M5cv4A8Lh7SN9d2V2kKRZ8ebAfcd1LNyZguAOb6JiDqw==}
+  /jest-fetch-mock-fork@3.0.4:
+    resolution: {integrity: sha512-1VNwBvy8j1JhSKpgY8fp1fM1CTN8p+0tjSzL00Z88y+s68r1tsOywDqDv0PdylEpMtd1h70281lKHMugvsi4tQ==}
     dependencies:
       cross-fetch: 3.1.5
+      domexception: 2.0.1
       promise-polyfill: 8.3.0
     transitivePeerDependencies:
       - encoding
