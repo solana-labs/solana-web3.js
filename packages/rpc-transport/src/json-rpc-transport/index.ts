@@ -1,4 +1,5 @@
 import { makeHttpRequest } from '../http-request';
+import { assertIsAllowedHttpRequestHeaders } from '../http-request-headers';
 import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
 import {
@@ -31,8 +32,9 @@ function createArmedJsonRpcTransport<TRpcMethods, TResponse>(
             const { methodName, params, responseProcessor } = pendingRequest;
             const payload = createJsonRpcMessage(methodName, params);
             const response = await makeHttpRequest<JsonRpcResponse<unknown>>({
-                abortSignal: options?.abortSignal,
+                headers: transportConfig.headers,
                 payload,
+                signal: options?.abortSignal,
                 url: transportConfig.url,
             });
             if ('error' in response) {
@@ -53,8 +55,9 @@ function createArmedBatchJsonRpcTransport<TRpcMethods, TResponses extends unknow
         async sendBatch(options?: SendOptions): Promise<TResponses> {
             const payload = pendingRequests.map(({ methodName, params }) => createJsonRpcMessage(methodName, params));
             const responses = await makeHttpRequest<JsonRpcBatchResponse<unknown[]>>({
-                abortSignal: options?.abortSignal,
+                headers: transportConfig.headers,
                 payload,
+                signal: options?.abortSignal,
                 url: transportConfig.url,
             });
             const requestOrder = payload.map(p => p.id);
@@ -134,5 +137,8 @@ function makeProxy<TRpcMethods, TResponseOrResponses>(
 export function createJsonRpcTransport<TRpcMethods>(
     transportConfig: TransportConfig<TRpcMethods>
 ): Transport<TRpcMethods> {
+    if (__DEV__ && transportConfig.headers) {
+        assertIsAllowedHttpRequestHeaders(transportConfig.headers);
+    }
     return makeProxy(transportConfig);
 }

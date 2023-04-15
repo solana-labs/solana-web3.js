@@ -4,7 +4,7 @@ import { SolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error
 describe('RPC', () => {
     let transport: ReturnType<typeof createDefaultRpc>;
     beforeEach(() => {
-        transport = createDefaultRpc('fake://url');
+        transport = createDefaultRpc({ url: 'fake://url' });
     });
     describe('with respect to integer overflows', () => {
         it('does not throw when called with a value up to `Number.MAX_SAFE_INTEGER`', () => {

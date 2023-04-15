@@ -12,6 +12,9 @@ interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;
 }
 
+const CUSTOM_HEADERS = {
+    'My-Custom-Header': 'custom',
+} as const;
 const FAKE_URL = 'fake://url';
 
 describe('JSON-RPC 2.0 transport', () => {
@@ -21,6 +24,7 @@ describe('JSON-RPC 2.0 transport', () => {
             api: {
                 // Note the lack of method implementations in the base case.
             } as IRpcApi<TestRpcMethods>,
+            headers: CUSTOM_HEADERS,
             url: FAKE_URL,
         });
         (makeHttpRequest as jest.Mock).mockImplementation(
@@ -35,6 +39,7 @@ describe('JSON-RPC 2.0 transport', () => {
     it('sends a request to a JSON-RPC 2.0 endpoint', () => {
         transport.someMethod(123).send();
         expect(makeHttpRequest).toHaveBeenCalledWith({
+            headers: CUSTOM_HEADERS,
             payload: { ...createJsonRpcMessage('someMethod', [123]), id: expect.any(Number) },
             url: FAKE_URL,
         });
@@ -42,6 +47,7 @@ describe('JSON-RPC 2.0 transport', () => {
     it('sends a batch of requests to a JSON-RPC 2.0 endpoint', () => {
         transport.someMethod(123).someMethod(456).sendBatch();
         expect(makeHttpRequest).toHaveBeenCalledWith({
+            headers: CUSTOM_HEADERS,
             payload: [
                 { ...createJsonRpcMessage('someMethod', [123]), id: expect.any(Number) },
                 { ...createJsonRpcMessage('someMethod', [456]), id: expect.any(Number) },
@@ -161,6 +167,28 @@ describe('JSON-RPC 2.0 transport', () => {
             (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
             const result = await transport.someMethod().send();
             expect(result).toBe('123 processed response');
+        });
+    });
+    describe('when a forbidden header is supplied in configuration', () => {
+        let configureTransportWithForbiddenHeaders: () => void;
+        beforeEach(() => {
+            configureTransportWithForbiddenHeaders = () => {
+                createJsonRpcTransport({
+                    api: {} as IRpcApi<TestRpcMethods>,
+                    headers: { 'sEc-FeTcH-mOdE': 'no-cors' },
+                    url: FAKE_URL,
+                });
+            };
+        });
+        it('throws in dev mode', () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (globalThis as any).__DEV__ = true;
+            expect(configureTransportWithForbiddenHeaders).toThrow(/This header is forbidden:/);
+        });
+        it('does not throw in non-dev mode', () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (globalThis as any).__DEV__ = false;
+            expect(configureTransportWithForbiddenHeaders).not.toThrow();
         });
     });
 });

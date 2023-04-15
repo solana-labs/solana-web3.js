@@ -1,3 +1,5 @@
+import { AllowedHttpRequestHeaders } from '../http-request-headers';
+
 /**
  * Public API.
  */
@@ -12,6 +14,7 @@ export type SendOptions = Readonly<{
 export type Transport<TRpcMethods> = TransportMethods<TRpcMethods>;
 export type TransportConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
+    headers?: AllowedHttpRequestHeaders;
     url: string;
 }>;
 export type TransportRequest<TResponse> = {
