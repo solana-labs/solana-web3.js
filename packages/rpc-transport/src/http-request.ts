@@ -9,10 +9,12 @@ type Config = Readonly<{
 }>;
 
 export async function makeHttpRequest<TResponse>({ abortSignal, payload, url }: Config): Promise<TResponse> {
+    const body = JSON.stringify(payload);
     const requestInfo = {
-        body: JSON.stringify(payload),
+        body,
         headers: {
-            'Content-type': 'application/json',
+            'Content-Length': body.length.toString(),
+            'Content-Type': 'application/json; charset=utf-8',
         },
         method: 'POST',
         signal: abortSignal,
