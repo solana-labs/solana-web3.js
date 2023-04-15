@@ -13,6 +13,7 @@ export async function makeHttpRequest<TResponse>({ abortSignal, payload, url }: 
     const requestInfo = {
         body,
         headers: {
+            Accept: 'application/json',
             'Content-Length': body.length.toString(),
             'Content-Type': 'application/json; charset=utf-8',
         },
