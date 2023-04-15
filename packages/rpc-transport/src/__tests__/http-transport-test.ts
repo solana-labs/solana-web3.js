@@ -50,7 +50,7 @@ describe('makeHttpRequest', () => {
                 expect.anything(),
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        Accept: 'application/json',
+                        accept: 'application/json',
                     }),
                 })
             );
@@ -61,7 +61,7 @@ describe('makeHttpRequest', () => {
                 expect.anything(),
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        'Content-Type': 'application/json; charset=utf-8',
+                        'content-type': 'application/json; charset=utf-8',
                     }),
                 })
             );
@@ -83,7 +83,7 @@ describe('makeHttpRequest', () => {
                 expect.anything(),
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        'Content-Length': '30',
+                        'content-length': '30',
                     }),
                 })
             );
@@ -108,7 +108,9 @@ describe('makeHttpRequest', () => {
         });
         it('rejects with an `AbortError`', async () => {
             expect.assertions(1);
-            await expect(() => makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' })).rejects.toThrow();
+            await expect(() =>
+                makeHttpRequest({ payload: 123, signal: abortSignal, url: 'fake://url' })
+            ).rejects.toThrow();
         });
     });
     describe('when it receives an abort signal mid-request', () => {
@@ -122,7 +124,7 @@ describe('makeHttpRequest', () => {
         });
         it('rejects with an `AbortError`', async () => {
             expect.assertions(1);
-            const sendPromise = makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' });
+            const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal, url: 'fake://url' });
             abortController.abort('I got bored waiting');
             await expect(sendPromise).rejects.toThrow();
         });
@@ -137,11 +139,61 @@ describe('makeHttpRequest', () => {
         });
         it('resolves with the response', async () => {
             expect.assertions(1);
-            const sendPromise = makeHttpRequest({ abortSignal, payload: 123, url: 'fake://url' });
+            const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal, url: 'fake://url' });
             abortController.abort('I got bored waiting');
             await expect(sendPromise).resolves.toMatchObject({
                 ok: true,
             });
+        });
+    });
+    describe('user-supplied headers', () => {
+        beforeEach(() => {
+            fetchMock.once(JSON.stringify({ ok: true }));
+        });
+        it('is impossible to override the `Accept` header', () => {
+            makeHttpRequest({
+                headers: { aCcEpT: 'text/html' },
+                payload: 123,
+                url: 'fake://url',
+            });
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        accept: 'application/json',
+                    }),
+                })
+            );
+        });
+        it('is impossible to override the `Content-Length` header', () => {
+            makeHttpRequest({
+                headers: { 'cOnTeNt-LeNgTh': '420' },
+                payload: 123,
+                url: 'fake://url',
+            });
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        'content-length': '3',
+                    }),
+                })
+            );
+        });
+        it('is impossible to override the `Content-Type` header', () => {
+            makeHttpRequest({
+                headers: { 'cOnTeNt-TyPe': 'text/html' },
+                payload: 123,
+                url: 'fake://url',
+            });
+            expect(fetchMock).toHaveBeenCalledWith(
+                expect.anything(),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        'content-type': 'application/json; charset=utf-8',
+                    }),
+                })
+            );
         });
     });
 });

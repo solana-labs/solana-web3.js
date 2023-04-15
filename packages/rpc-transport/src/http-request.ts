@@ -1,24 +1,28 @@
 import { SolanaHttpError } from './http-request-errors';
+import { AllowedHttpRequestHeaders, normalizeHeaders } from './http-request-headers';
 
 import fetchImpl from 'fetch-impl';
 
 type Config = Readonly<{
-    abortSignal?: AbortSignal;
+    headers?: AllowedHttpRequestHeaders;
     payload: unknown;
+    signal?: AbortSignal;
     url: string;
 }>;
 
-export async function makeHttpRequest<TResponse>({ abortSignal, payload, url }: Config): Promise<TResponse> {
+export async function makeHttpRequest<TResponse>({ headers, payload, signal, url }: Config): Promise<TResponse> {
     const body = JSON.stringify(payload);
     const requestInfo = {
         body,
         headers: {
-            Accept: 'application/json',
-            'Content-Length': body.length.toString(),
-            'Content-Type': 'application/json; charset=utf-8',
+            ...(headers && (normalizeHeaders(headers) as Record<string, string>)),
+            // Keep these headers lowercase so they will override any user-supplied headers above.
+            accept: 'application/json',
+            'content-length': body.length.toString(),
+            'content-type': 'application/json; charset=utf-8',
         },
         method: 'POST',
-        signal: abortSignal,
+        signal,
     };
     const response = await fetchImpl(url, requestInfo);
     if (!response.ok) {
