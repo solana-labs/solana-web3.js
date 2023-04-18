@@ -1,1 +1,2 @@
-export * from './json-rpc-transport';
+export * from './json-rpc';
+export * from './transports/http/http-transport';

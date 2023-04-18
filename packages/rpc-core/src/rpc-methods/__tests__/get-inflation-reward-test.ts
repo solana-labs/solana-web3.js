@@ -1,18 +1,18 @@
-import { createJsonRpcTransport } from '@solana/rpc-transport';
-import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-errors';
-import type { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
+import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
+import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
+import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
 import { Commitment } from '../common';
 
 describe('getInflationReward', () => {
-    let transport: Transport<SolanaRpcMethods>;
+    let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        transport = createJsonRpcTransport({
+        rpc = createJsonRpc<SolanaRpcMethods>({
             api: createSolanaRpcApi(),
-            url: 'http://127.0.0.1:8899',
+            transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });
     [{ minContextSlot: 0n }, null].forEach(minContextConfig => {
@@ -33,7 +33,7 @@ describe('getInflationReward', () => {
     describe('when called with an `epoch` higher than the highest epoch available', () => {
         it('throws an error', async () => {
             expect.assertions(1);
-            const sendPromise = transport
+            const sendPromise = rpc
                 .getInflationReward([], {
                     epoch: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
@@ -48,7 +48,7 @@ describe('getInflationReward', () => {
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
             expect.assertions(1);
-            const sendPromise = transport
+            const sendPromise = rpc
                 .getInflationReward([], {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })

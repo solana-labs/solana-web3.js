@@ -1,7 +1,4 @@
-import {
-    IRpcApi,
-    TransportRequest,
-} from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
+import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { patchParamsForSolanaLabsRpc } from './params-patcher';
 import { patchResponseForSolanaLabsRpc } from './response-patcher';
 import { GetAccountInfoApi } from './rpc-methods/getAccountInfo';
@@ -37,7 +34,7 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
                 ...rawParams: Parameters<
                     SolanaRpcMethods[TMethodName] extends CallableFunction ? SolanaRpcMethods[TMethodName] : never
                 >
-            ): TransportRequest<ReturnType<SolanaRpcMethods[TMethodName]>> {
+            ): RpcRequest<ReturnType<SolanaRpcMethods[TMethodName]>> {
                 const handleIntegerOverflow = config?.onIntegerOverflow;
                 const params = patchParamsForSolanaLabsRpc(
                     rawParams,
