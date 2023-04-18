@@ -1,4 +1,5 @@
 import path from 'path';
+import { env } from 'node:process';
 import { Format, Options } from 'tsup';
 
 type Platform =
@@ -13,6 +14,7 @@ export function getBaseConfig(platform: Platform, format: Format[], _options: Op
             __BROWSER__: `${platform === 'browser'}`,
             __NODEJS__: `${platform === 'node'}`,
             __REACTNATIVE__: `${platform === 'native'}`,
+            __VERSION__: `"${env.npm_package_version}"`,
         },
         entry: [`./src/index.ts`],
         esbuildOptions(options, context) {

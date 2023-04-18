@@ -1,17 +1,19 @@
-export type AllowedHttpRequestHeaders = Readonly<{ [headerName: string]: string }> & {
-    // Someone can still sneak a forbidden header past Typescript if they do something like
-    // fOo-BaR, but at that point they deserve the runtime failure.
-    [K in DisallowedHeaders | ForbiddenHeaders as
-        | K // `Foo-Bar`
-        | Capitalize<Lowercase<K>> // `Foo-bar`
-        | Lowercase<K> // `foo-bar`
-        | Uncapitalize<K> // `foo-Bar`
-        // `FOO-BAR`
-        | Uppercase<K>]?: never;
-};
+export type AllowedHttpRequestHeaders = Readonly<
+    { [headerName: string]: string } & {
+        // Someone can still sneak a forbidden header past Typescript if they do something like
+        // fOo-BaR, but at that point they deserve the runtime failure.
+        [K in DisallowedHeaders | ForbiddenHeaders as
+            | K // `Foo-Bar`
+            | Capitalize<Lowercase<K>> // `Foo-bar`
+            | Lowercase<K> // `foo-bar`
+            | Uncapitalize<K> // `foo-Bar`
+            // `FOO-BAR`
+            | Uppercase<K>]?: never;
+    }
+>;
 // These are headers that we simply don't allow the developer to override because they're
 // fundamental to the operation of the JSON-RPC transport.
-type DisallowedHeaders = 'Accept' | 'Content-Length' | 'Content-Type';
+type DisallowedHeaders = 'Accept' | 'Content-Length' | 'Content-Type' | 'Solana-Client';
 type ForbiddenHeaders =
     | 'Accept-Charset'
     | 'Accept-Encoding'
