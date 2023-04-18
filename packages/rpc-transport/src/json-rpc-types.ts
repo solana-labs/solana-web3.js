@@ -1,80 +1,71 @@
-import { AllowedHttpRequestHeaders } from '../http-request-headers';
+import { IRpcTransport } from './transports/transport-types';
 
 /**
  * Public API.
  */
 export type IRpcApi<TRpcMethods> = {
     [MethodName in keyof TRpcMethods]: TRpcMethods[MethodName] extends Callable
-        ? (...rawParams: unknown[]) => TransportRequest<ReturnType<TRpcMethods[MethodName]>>
+        ? (...rawParams: unknown[]) => RpcRequest<ReturnType<TRpcMethods[MethodName]>>
         : never;
 };
 export type SendOptions = Readonly<{
     abortSignal?: AbortSignal;
 }>;
-export type Transport<TRpcMethods> = TransportMethods<TRpcMethods>;
-export type TransportConfig<TRpcMethods> = Readonly<{
+export type Rpc<TRpcMethods> = RpcMethods<TRpcMethods>;
+export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
-    headers?: AllowedHttpRequestHeaders;
-    url: string;
+    transport: IRpcTransport;
 }>;
-export type TransportRequest<TResponse> = {
+export type RpcRequest<TResponse> = {
     methodName: string;
     params: unknown[];
     responseProcessor?: (response: unknown) => TResponse;
 };
-export interface ArmedTransportOwnMethods<TResponse> {
+export interface ArmedRpcOwnMethods<TResponse> {
     send(options?: SendOptions): Promise<TResponse>;
 }
-export type ArmedTransport<TRpcMethods, TResponse> = ArmedTransportMethods<TRpcMethods, TResponse> &
-    ArmedTransportOwnMethods<TResponse>;
-export interface ArmedBatchTransportOwnMethods<TResponses> {
+export type ArmedRpc<TRpcMethods, TResponse> = ArmedRpcMethods<TRpcMethods, TResponse> & ArmedRpcOwnMethods<TResponse>;
+export interface ArmedBatchRpcOwnMethods<TResponses> {
     sendBatch(options?: SendOptions): Promise<TResponses>;
 }
-export type ArmedBatchTransport<TRpcMethods, TResponses extends unknown[]> = ArmedBatchTransportMethods<
-    TRpcMethods,
-    TResponses
-> &
-    ArmedBatchTransportOwnMethods<TResponses>;
+export type ArmedBatchRpc<TRpcMethods, TResponses extends unknown[]> = ArmedBatchRpcMethods<TRpcMethods, TResponses> &
+    ArmedBatchRpcOwnMethods<TResponses>;
 
 /**
- * Private transport-building types.
+ * Private RPC-building types.
  */
-type TransportMethods<TRpcMethods> = {
-    [TMethodName in keyof TRpcMethods]: ArmedTransportReturner<
+type RpcMethods<TRpcMethods> = {
+    [TMethodName in keyof TRpcMethods]: ArmedRpcReturner<
         TRpcMethods,
         ApiMethodImplementations<TRpcMethods, TMethodName>
     >;
 };
-type ArmedTransportMethods<TRpcMethods, TResponse> = ArmedBatchTransportMethods<TRpcMethods, [TResponse]>;
-type ArmedBatchTransportMethods<TRpcMethods, TResponses extends unknown[]> = {
-    [TMethodName in keyof TRpcMethods]: ArmedBatchTransportReturner<
+type ArmedRpcMethods<TRpcMethods, TResponse> = ArmedBatchRpcMethods<TRpcMethods, [TResponse]>;
+type ArmedBatchRpcMethods<TRpcMethods, TResponses extends unknown[]> = {
+    [TMethodName in keyof TRpcMethods]: ArmedBatchRpcReturner<
         TRpcMethods,
         ApiMethodImplementations<TRpcMethods, TMethodName>,
         TResponses
     >;
 };
 type ApiMethodImplementations<TRpcMethods, TMethod extends keyof TRpcMethods> = Overloads<TRpcMethods[TMethod]>;
-type ArmedTransportReturner<TRpcMethods, TMethodImplementations> = UnionToIntersection<
+type ArmedRpcReturner<TRpcMethods, TMethodImplementations> = UnionToIntersection<
     Flatten<{
         // Check that this property of the TRpcMethods interface is, in fact, a function.
         [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedTransport<TRpcMethods, ReturnType<TMethodImplementations[P]>>
+              ) => ArmedRpc<TRpcMethods, ReturnType<TMethodImplementations[P]>>
             : never;
     }>
 >;
-type ArmedBatchTransportReturner<
-    TRpcMethods,
-    TMethodImplementations,
-    TResponses extends unknown[]
-> = UnionToIntersection<
+type ArmedBatchRpcReturner<TRpcMethods, TMethodImplementations, TResponses extends unknown[]> = UnionToIntersection<
     Flatten<{
         // Check that this property of the TRpcMethods interface is, in fact, a function.
         [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedBatchTransport<TRpcMethods, [...TResponses, ReturnType<TMethodImplementations[P]>]>
+              ) => ArmedBatchRpc<TRpcMethods, [...TResponses, ReturnType<TMethodImplementations[P]>]>
             : never;
     }>
 >;

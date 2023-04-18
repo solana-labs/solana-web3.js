@@ -1,19 +1,19 @@
-import { createJsonRpcTransport } from '@solana/rpc-transport';
-import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-errors';
-import type { Transport } from '@solana/rpc-transport/dist/types/json-rpc-transport/json-rpc-transport-types';
+import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
+import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
+import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
 import { Commitment } from '../common';
 import { Base58EncodedAddress } from '@solana/keys';
 
 describe('getBalance', () => {
-    let transport: Transport<SolanaRpcMethods>;
+    let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        transport = createJsonRpcTransport({
+        rpc = createJsonRpc<SolanaRpcMethods>({
             api: createSolanaRpcApi(),
-            url: 'http://127.0.0.1:8899',
+            transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });
 
@@ -23,7 +23,7 @@ describe('getBalance', () => {
                 expect.assertions(1);
                 // This key is random, don't re-use in any tests that affect balance
                 const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
-                const balancePromise = transport.getBalance(publicKey).send();
+                const balancePromise = rpc.getBalance(publicKey).send();
                 await expect(balancePromise).resolves.toHaveProperty('value', BigInt(0));
             });
         });
@@ -34,7 +34,7 @@ describe('getBalance', () => {
         const publicKey = '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress;
         it('returns the correct balance', async () => {
             expect.assertions(1);
-            const balancePromise = transport.getBalance(publicKey).send();
+            const balancePromise = rpc.getBalance(publicKey).send();
             await expect(balancePromise).resolves.toHaveProperty('value', BigInt(5_000_000));
         });
     });
@@ -44,7 +44,7 @@ describe('getBalance', () => {
             expect.assertions(1);
             // This key is random, don't re-use in any tests that affect balance
             const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
-            const sendPromise = transport
+            const sendPromise = rpc
                 .getBalance(publicKey, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })

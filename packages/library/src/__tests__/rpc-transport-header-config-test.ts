@@ -1,16 +1,16 @@
-import { createDefaultRpc } from '../rpc';
+import { createDefaultRpcTransport } from '../rpc-transport';
 
-import { createJsonRpcTransport } from '@solana/rpc-transport';
+import { createHttpTransport } from '@solana/rpc-transport';
 
 jest.mock('@solana/rpc-transport');
 
-describe('RPC custom HTTP header config', () => {
+describe('createDefaultRpcTransport', () => {
     it('adds configured headers to each request with downcased property names', () => {
-        createDefaultRpc({
+        createDefaultRpcTransport({
             headers: { aUtHoRiZaTiOn: 'Picard, 4 7 Alpha Tango' },
             url: 'fake://url',
         });
-        expect(createJsonRpcTransport).toHaveBeenCalledWith(
+        expect(createHttpTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     authorization: 'Picard, 4 7 Alpha Tango',
@@ -19,8 +19,8 @@ describe('RPC custom HTTP header config', () => {
         );
     });
     it('adds a `solana-client` header with the current NPM package version by default', () => {
-        createDefaultRpc({ url: 'fake://url' });
-        expect(createJsonRpcTransport).toHaveBeenCalledWith(
+        createDefaultRpcTransport({ url: 'fake://url' });
+        expect(createHttpTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     // Version is defined in `setup-define-version-constant.ts`
@@ -30,11 +30,11 @@ describe('RPC custom HTTP header config', () => {
         );
     });
     it('makes it impossible to override the `solana-client` header', () => {
-        createDefaultRpc({
+        createDefaultRpcTransport({
             headers: { 'sOlAnA-cLiEnT': 'fakeversion' },
             url: 'fake://url',
         });
-        expect(createJsonRpcTransport).toHaveBeenCalledWith(
+        expect(createHttpTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     // Version is defined in `setup-define-version-constant.ts`
@@ -42,7 +42,7 @@ describe('RPC custom HTTP header config', () => {
                 }),
             })
         );
-        expect(createJsonRpcTransport).toHaveBeenCalledWith(
+        expect(createHttpTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.not.objectContaining({
                     'sOlAnA-cLiEnT': 'fakeversion',

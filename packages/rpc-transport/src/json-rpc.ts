@@ -1,17 +1,15 @@
-import { makeHttpRequest } from '../http-request';
-import { assertIsAllowedHttpRequestHeaders } from '../http-request-headers';
 import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
 import {
-    ArmedBatchTransport,
-    ArmedBatchTransportOwnMethods,
-    ArmedTransport,
-    ArmedTransportOwnMethods,
+    ArmedBatchRpc,
+    ArmedBatchRpcOwnMethods,
+    ArmedRpc,
+    ArmedRpcOwnMethods,
     SendOptions,
-    Transport,
-    TransportConfig,
-    TransportRequest,
-} from './json-rpc-transport-types';
+    Rpc,
+    RpcConfig,
+    RpcRequest,
+} from './json-rpc-types';
 
 interface IHasIdentifier {
     readonly id: number;
@@ -21,21 +19,19 @@ type JsonRpcResponse<TResponse> = IHasIdentifier &
 type JsonRpcBatchResponse<TResponses extends unknown[]> = [
     ...{ [P in keyof TResponses]: JsonRpcResponse<TResponses[P]> }
 ];
-type TransportRequestBatch<T> = { [P in keyof T]: TransportRequest<T[P]> };
+type RpcRequestBatch<T> = { [P in keyof T]: RpcRequest<T[P]> };
 
-function createArmedJsonRpcTransport<TRpcMethods, TResponse>(
-    transportConfig: TransportConfig<TRpcMethods>,
-    pendingRequest: TransportRequest<TResponse>
-): ArmedTransport<TRpcMethods, TResponse> {
+function createArmedJsonRpc<TRpcMethods, TResponse>(
+    rpcConfig: RpcConfig<TRpcMethods>,
+    pendingRequest: RpcRequest<TResponse>
+): ArmedRpc<TRpcMethods, TResponse> {
     const overrides = {
         async send(options?: SendOptions): Promise<TResponse> {
             const { methodName, params, responseProcessor } = pendingRequest;
             const payload = createJsonRpcMessage(methodName, params);
-            const response = await makeHttpRequest<JsonRpcResponse<unknown>>({
-                headers: transportConfig.headers,
+            const response = await rpcConfig.transport<JsonRpcResponse<unknown>>({
                 payload,
                 signal: options?.abortSignal,
-                url: transportConfig.url,
             });
             if ('error' in response) {
                 throw new SolanaJsonRpcError(response.error);
@@ -44,21 +40,19 @@ function createArmedJsonRpcTransport<TRpcMethods, TResponse>(
             }
         },
     };
-    return makeProxy(transportConfig, overrides, pendingRequest);
+    return makeProxy(rpcConfig, overrides, pendingRequest);
 }
 
-function createArmedBatchJsonRpcTransport<TRpcMethods, TResponses extends unknown[]>(
-    transportConfig: TransportConfig<TRpcMethods>,
-    pendingRequests: TransportRequestBatch<TResponses>
-): ArmedBatchTransport<TRpcMethods, TResponses> {
+function createArmedBatchJsonRpc<TRpcMethods, TResponses extends unknown[]>(
+    rpcConfig: RpcConfig<TRpcMethods>,
+    pendingRequests: RpcRequestBatch<TResponses>
+): ArmedBatchRpc<TRpcMethods, TResponses> {
     const overrides = {
         async sendBatch(options?: SendOptions): Promise<TResponses> {
             const payload = pendingRequests.map(({ methodName, params }) => createJsonRpcMessage(methodName, params));
-            const responses = await makeHttpRequest<JsonRpcBatchResponse<unknown[]>>({
-                headers: transportConfig.headers,
+            const responses = await rpcConfig.transport<JsonRpcBatchResponse<unknown[]>>({
                 payload,
                 signal: options?.abortSignal,
-                url: transportConfig.url,
             });
             const requestOrder = payload.map(p => p.id);
             return responses
@@ -73,34 +67,34 @@ function createArmedBatchJsonRpcTransport<TRpcMethods, TResponses extends unknow
                 }) as TResponses;
         },
     };
-    return makeProxy(transportConfig, overrides, pendingRequests);
+    return makeProxy(rpcConfig, overrides, pendingRequests);
 }
 
 function makeProxy<TRpcMethods, TResponses extends unknown[]>(
-    transportConfig: TransportConfig<TRpcMethods>,
-    overrides: ArmedBatchTransportOwnMethods<TResponses>,
-    pendingRequests: TransportRequestBatch<TResponses>
-): ArmedBatchTransport<TRpcMethods, TResponses>;
+    rpcConfig: RpcConfig<TRpcMethods>,
+    overrides: ArmedBatchRpcOwnMethods<TResponses>,
+    pendingRequests: RpcRequestBatch<TResponses>
+): ArmedBatchRpc<TRpcMethods, TResponses>;
 function makeProxy<TRpcMethods, TResponse>(
-    transportConfig: TransportConfig<TRpcMethods>,
-    overrides: ArmedTransportOwnMethods<TResponse>,
-    pendingRequest: TransportRequest<TResponse>
-): ArmedTransport<TRpcMethods, TResponse>;
-function makeProxy<TRpcMethods>(transportConfig: TransportConfig<TRpcMethods>): Transport<TRpcMethods>;
+    rpcConfig: RpcConfig<TRpcMethods>,
+    overrides: ArmedRpcOwnMethods<TResponse>,
+    pendingRequest: RpcRequest<TResponse>
+): ArmedRpc<TRpcMethods, TResponse>;
+function makeProxy<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMethods>;
 function makeProxy<TRpcMethods, TResponseOrResponses>(
-    transportConfig: TransportConfig<TRpcMethods>,
+    rpcConfig: RpcConfig<TRpcMethods>,
     overrides?: TResponseOrResponses extends unknown[]
-        ? ArmedBatchTransportOwnMethods<TResponseOrResponses>
-        : ArmedTransportOwnMethods<TResponseOrResponses>,
+        ? ArmedBatchRpcOwnMethods<TResponseOrResponses>
+        : ArmedRpcOwnMethods<TResponseOrResponses>,
     pendingRequestOrRequests?: TResponseOrResponses extends unknown[]
-        ? TransportRequestBatch<TResponseOrResponses>
-        : TransportRequest<TResponseOrResponses>
+        ? RpcRequestBatch<TResponseOrResponses>
+        : RpcRequest<TResponseOrResponses>
 ):
-    | Transport<TRpcMethods>
+    | Rpc<TRpcMethods>
     | (TResponseOrResponses extends unknown[]
-          ? ArmedBatchTransport<TRpcMethods, TResponseOrResponses>
-          : ArmedTransport<TRpcMethods, TResponseOrResponses>) {
-    return new Proxy(transportConfig.api, {
+          ? ArmedBatchRpc<TRpcMethods, TResponseOrResponses>
+          : ArmedRpc<TRpcMethods, TResponseOrResponses>) {
+    return new Proxy(rpcConfig.api, {
         defineProperty() {
             return false;
         },
@@ -113,32 +107,27 @@ function makeProxy<TRpcMethods, TResponseOrResponses>(
             }
             return function (...rawParams: unknown[]) {
                 const methodName = p.toString();
-                const createTransportRequest = Reflect.get(target, methodName, receiver);
-                const newRequest = createTransportRequest
-                    ? createTransportRequest(...rawParams)
+                const createRpcRequest = Reflect.get(target, methodName, receiver);
+                const newRequest = createRpcRequest
+                    ? createRpcRequest(...rawParams)
                     : { methodName, params: rawParams };
                 if (pendingRequestOrRequests == null) {
-                    return createArmedJsonRpcTransport(transportConfig, newRequest);
+                    return createArmedJsonRpc(rpcConfig, newRequest);
                 } else {
                     const nextPendingRequests = Array.isArray(pendingRequestOrRequests)
                         ? [...pendingRequestOrRequests, newRequest]
                         : [pendingRequestOrRequests, newRequest];
-                    return createArmedBatchJsonRpcTransport(transportConfig, nextPendingRequests);
+                    return createArmedBatchJsonRpc(rpcConfig, nextPendingRequests);
                 }
             };
         },
     }) as
-        | Transport<TRpcMethods>
+        | Rpc<TRpcMethods>
         | (TResponseOrResponses extends unknown[]
-              ? ArmedBatchTransport<TRpcMethods, TResponseOrResponses>
-              : ArmedTransport<TRpcMethods, TResponseOrResponses>);
+              ? ArmedBatchRpc<TRpcMethods, TResponseOrResponses>
+              : ArmedRpc<TRpcMethods, TResponseOrResponses>);
 }
 
-export function createJsonRpcTransport<TRpcMethods>(
-    transportConfig: TransportConfig<TRpcMethods>
-): Transport<TRpcMethods> {
-    if (__DEV__ && transportConfig.headers) {
-        assertIsAllowedHttpRequestHeaders(transportConfig.headers);
-    }
-    return makeProxy(transportConfig);
+export function createJsonRpc<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMethods> {
+    return makeProxy(rpcConfig);
 }
