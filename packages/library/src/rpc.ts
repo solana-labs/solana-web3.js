@@ -27,6 +27,7 @@ export function createDefaultRpc(config: Omit<TransportConfig<SolanaRpcMethods>,
         headers: {
             ...(config.headers ? normalizeHeaders(config.headers) : undefined),
             ...({
+                // Keep these headers lowercase so they will override any user-supplied headers above.
                 'solana-client': `js/${__VERSION__}` ?? 'UNKNOWN',
             } as { [overrideHeader: string]: string }),
         },
