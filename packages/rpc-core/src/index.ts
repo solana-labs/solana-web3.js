@@ -6,6 +6,13 @@ import { GetBlockHeightApi } from './rpc-methods/getBlockHeight';
 import { GetBlocksApi } from './rpc-methods/getBlocks';
 import { GetInflationRewardApi } from './rpc-methods/getInflationReward';
 import { GetBalanceApi } from './rpc-methods/getBalance';
+import { GetFirstAvailableBlockApi } from './rpc-methods/getFirstAvailableBlock';
+import { GetMaxRetransmitSlotApi } from './rpc-methods/getMaxRetransmitSlot';
+import { GetMaxShredInsertSlotApi } from './rpc-methods/getMaxShredInsertSlot';
+import { GetStakeMinimumDelegationApi } from './rpc-methods/getStakeMinimumDelegation';
+import { GetSlotApi } from './rpc-methods/getSlot';
+import { GetTransactionCountApi } from './rpc-methods/getTransactionCount';
+import { MinimumLedgerSlotApi } from './rpc-methods/minimumLedgerSlot';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -15,7 +22,14 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetBalanceApi &
     GetBlockHeightApi &
     GetBlocksApi &
-    GetInflationRewardApi;
+    GetFirstAvailableBlockApi &
+    GetInflationRewardApi &
+    GetMaxRetransmitSlotApi &
+    GetMaxShredInsertSlotApi &
+    GetSlotApi &
+    GetStakeMinimumDelegationApi &
+    GetTransactionCountApi &
+    MinimumLedgerSlotApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
