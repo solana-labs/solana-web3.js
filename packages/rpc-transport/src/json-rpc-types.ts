@@ -1,71 +1,48 @@
 import { IRpcTransport } from './transports/transport-types';
 
 /**
- * Public API.
+ * Public RPC API.
  */
 export type IRpcApi<TRpcMethods> = {
     [MethodName in keyof TRpcMethods]: TRpcMethods[MethodName] extends Callable
         ? (...rawParams: unknown[]) => RpcRequest<ReturnType<TRpcMethods[MethodName]>>
         : never;
 };
-export type SendOptions = Readonly<{
-    abortSignal?: AbortSignal;
-}>;
 export type Rpc<TRpcMethods> = RpcMethods<TRpcMethods>;
 export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
     transport: IRpcTransport;
 }>;
+
+/**
+ * Public pending RPC request API.
+ */
 export type RpcRequest<TResponse> = {
     methodName: string;
     params: unknown[];
     responseProcessor?: (response: unknown) => TResponse;
 };
-export interface ArmedRpcOwnMethods<TResponse> {
+export type PendingRpcRequest<TResponse> = {
     send(options?: SendOptions): Promise<TResponse>;
-}
-export type ArmedRpc<TRpcMethods, TResponse> = ArmedRpcMethods<TRpcMethods, TResponse> & ArmedRpcOwnMethods<TResponse>;
-export interface ArmedBatchRpcOwnMethods<TResponses> {
-    sendBatch(options?: SendOptions): Promise<TResponses>;
-}
-export type ArmedBatchRpc<TRpcMethods, TResponses extends unknown[]> = ArmedBatchRpcMethods<TRpcMethods, TResponses> &
-    ArmedBatchRpcOwnMethods<TResponses>;
+};
+export type SendOptions = Readonly<{
+    abortSignal?: AbortSignal;
+}>;
 
 /**
  * Private RPC-building types.
  */
 type RpcMethods<TRpcMethods> = {
-    [TMethodName in keyof TRpcMethods]: ArmedRpcReturner<
-        TRpcMethods,
-        ApiMethodImplementations<TRpcMethods, TMethodName>
-    >;
-};
-type ArmedRpcMethods<TRpcMethods, TResponse> = ArmedBatchRpcMethods<TRpcMethods, [TResponse]>;
-type ArmedBatchRpcMethods<TRpcMethods, TResponses extends unknown[]> = {
-    [TMethodName in keyof TRpcMethods]: ArmedBatchRpcReturner<
-        TRpcMethods,
-        ApiMethodImplementations<TRpcMethods, TMethodName>,
-        TResponses
-    >;
+    [TMethodName in keyof TRpcMethods]: PendingRpcRequestBuilder<ApiMethodImplementations<TRpcMethods, TMethodName>>;
 };
 type ApiMethodImplementations<TRpcMethods, TMethod extends keyof TRpcMethods> = Overloads<TRpcMethods[TMethod]>;
-type ArmedRpcReturner<TRpcMethods, TMethodImplementations> = UnionToIntersection<
+type PendingRpcRequestBuilder<TMethodImplementations> = UnionToIntersection<
     Flatten<{
         // Check that this property of the TRpcMethods interface is, in fact, a function.
         [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedRpc<TRpcMethods, ReturnType<TMethodImplementations[P]>>
-            : never;
-    }>
->;
-type ArmedBatchRpcReturner<TRpcMethods, TMethodImplementations, TResponses extends unknown[]> = UnionToIntersection<
-    Flatten<{
-        // Check that this property of the TRpcMethods interface is, in fact, a function.
-        [P in keyof TMethodImplementations]: TMethodImplementations[P] extends Callable
-            ? (
-                  ...args: Parameters<TMethodImplementations[P]>
-              ) => ArmedBatchRpc<TRpcMethods, [...TResponses, ReturnType<TMethodImplementations[P]>]>
+              ) => PendingRpcRequest<ReturnType<TMethodImplementations[P]>>
             : never;
     }>
 >;
