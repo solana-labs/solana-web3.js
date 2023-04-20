@@ -1,6 +1,6 @@
-import { Commitment, RpcResponse, Slot } from './common';
+import { Commitment, Slot } from './common';
 
-type GetSlotApiResponse = RpcResponse<Slot>;
+type GetSlotApiResponse = Slot;
 
 export interface GetSlotApi {
     /**

@@ -1,6 +1,6 @@
-import { RpcResponse, Slot } from './common';
+import { Slot } from './common';
 
-type GetMaxShredInsertSlotApiResponse = RpcResponse<Slot>;
+type GetMaxShredInsertSlotApiResponse = Slot;
 
 export interface GetMaxShredInsertSlotApi {
     /**

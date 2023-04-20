@@ -1,6 +1,6 @@
-import { RpcResponse, Slot } from './common';
+import { Slot } from './common';
 
-type GetMaxRetransmitSlotApiResponse = RpcResponse<Slot>;
+type GetMaxRetransmitSlotApiResponse = Slot;
 
 export interface GetMaxRetransmitSlotApi {
     /**

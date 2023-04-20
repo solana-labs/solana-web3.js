@@ -1,6 +1,6 @@
-import { RpcResponse, Slot } from './common';
+import { Slot } from './common';
 
-type GetFirstAvailableBlockApiResponse = RpcResponse<Slot>;
+type GetFirstAvailableBlockApiResponse = Slot;
 
 export interface GetFirstAvailableBlockApi {
     /**
