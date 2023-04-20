@@ -84,6 +84,11 @@
             "dependsOn": ["^compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
+        },
+        "@solana/web3.js-experimental#publish-packages": {
+            "cache": false,
+            "dependsOn": ["build", "@solana/web3.js#publish-packages"],
+            "outputs": []
         }
     },
     "remoteCache": {
