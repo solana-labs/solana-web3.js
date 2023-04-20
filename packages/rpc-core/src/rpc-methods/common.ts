@@ -19,3 +19,5 @@ export type RpcResponse<TValue> = Readonly<{
     }>;
     value: TValue;
 }>;
+
+export type Lamports = U64UnsafeBeyond2Pow53Minus1 & { readonly __lamports: unique symbol };
