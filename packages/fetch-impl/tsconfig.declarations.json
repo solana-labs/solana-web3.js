@@ -7,5 +7,5 @@
         "outDir": "./dist/types"
     },
     "extends": "./tsconfig.json",
-    "include": ["src"]
+    "include": ["src/index.browser.ts"]
 }
