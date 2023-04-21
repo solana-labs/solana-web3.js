@@ -62,11 +62,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/library-legacy/doc
-
-      - name: Upload Experimental library build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: library-dist
-          path: |
-            ./packages/library/dist/
-            ./packages/library/package.json
