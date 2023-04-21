@@ -12,10 +12,6 @@ jobs:
     name: Compare Bundle Size
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./packages/library
-
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
