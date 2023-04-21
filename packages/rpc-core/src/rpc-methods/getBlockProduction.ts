@@ -1,30 +1,46 @@
 import { Base58EncodedAddress } from '@solana/keys';
 import { Commitment, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
-type NumberOfLeaderSlots = number;
-type NumberOfBlocksProduced = number;
+type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
+type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;
 
-type Range = Readonly<{
+type SlotRange = Readonly<{
     firstSlot: U64UnsafeBeyond2Pow53Minus1;
     lastSlot: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-type GetBlockProductionApiResponse = RpcResponse<{
-    byIdentity: Readonly<{
-        [address: string]: [NumberOfLeaderSlots, NumberOfBlocksProduced];
+type GetBlockProductionApiConfigBase = Readonly<{
+    commitment?: Commitment;
+    range?: SlotRange;
+}>;
+
+type GetBlockProductionApiResponseBase = RpcResponse<{
+    range: SlotRange;
+}>;
+
+type GetBlockProductionApiResponseWithAllIdentities = Readonly<{
+    value: Readonly<{
+        byIdentity: Record<Base58EncodedAddress, [NumberOfLeaderSlots, NumberOfBlocksProduced]>;
     }>;
-    range: Range;
+}>;
+
+type GetBlockProductionApiResponseWithSingleIdentity<TIdentity extends string> = Readonly<{
+    value: Readonly<{
+        byIdentity: Readonly<{ [TAddress in TIdentity]?: [NumberOfLeaderSlots, NumberOfBlocksProduced] }>;
+    }>;
 }>;
 
 export interface GetBlockProductionApi {
     /**
      * Returns recent block production information from the current or previous epoch.
      */
+    getBlockProduction<TIdentity extends Base58EncodedAddress>(
+        config: GetBlockProductionApiConfigBase &
+            Readonly<{
+                identity: TIdentity;
+            }>
+    ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithSingleIdentity<TIdentity>;
     getBlockProduction(
-        config?: Readonly<{
-            commitment?: Commitment;
-            identity?: Base58EncodedAddress;
-            range?: Range;
-        }>
-    ): GetBlockProductionApiResponse;
+        config?: GetBlockProductionApiConfigBase
+    ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithAllIdentities;
 }

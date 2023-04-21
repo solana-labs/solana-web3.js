@@ -6,7 +6,7 @@ import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
 import { Commitment } from '../common';
 import { Base58EncodedAddress } from '@solana/keys';
 
-describe('getBalance', () => {
+describe('getBlockProduction', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
@@ -35,10 +35,8 @@ describe('getBalance', () => {
 
             it('has the latest context slot as the last slot', async () => {
                 expect.assertions(1);
-                const blockProductionPromise = rpc.getBlockProduction({ commitment }).send();
-                await expect(blockProductionPromise).resolves.toSatisfy(
-                    rpcResponse => rpcResponse.context.slot === rpcResponse.value.range.lastSlot
-                );
+                const blockProduction = await rpc.getBlockProduction({ commitment }).send();
+                expect(blockProduction.value.range.lastSlot).toBe(blockProduction.context.slot);
             });
         });
     });
@@ -72,7 +70,7 @@ describe('getBalance', () => {
                 })
                 .send();
             await expect(blockProductionPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_SERVER_ERROR_LAST_SLOT_TOO_LARGE'],
+                code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
                 message: expect.any(String),
                 name: 'SolanaJsonRpcError',
             });
