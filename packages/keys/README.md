@@ -23,16 +23,16 @@ import { assertIsBase58EncodedAddress } from '@solana/web3.js`;
 
 // Imagine a function that fetches an account's balance when a user submits a form.
 function handleSubmit() {
-  // We know only that what the user typed conforms to the `string` type.
-  const address: string = accountAddressInput.value;
-  try {
-    // If this type assertion function doesn't throw, then
-    // Typescript will upcast `address` to `Base58EncodedAddress`.
-    assertIsBase58EncodedAddress(address);
-    // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
-    const balanceInLamports = await rpc.getBalance(address);
-  } catch (e) {
-    // `address` turned out not to be a base58-encoded address
-  }
+    // We know only that what the user typed conforms to the `string` type.
+    const address: string = accountAddressInput.value;
+    try {
+        // If this type assertion function doesn't throw, then
+        // Typescript will upcast `address` to `Base58EncodedAddress`.
+        assertIsBase58EncodedAddress(address);
+        // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
+        const balanceInLamports = await rpc.getBalance(address);
+    } catch (e) {
+        // `address` turned out not to be a base58-encoded address
+    }
 }
 ```
