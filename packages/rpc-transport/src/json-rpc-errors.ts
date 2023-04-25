@@ -1,6 +1,7 @@
 // Keep in sync with https://github.com/solana-labs/solana/blob/master/rpc-client-api/src/custom_error.rs
 // Typescript `enums` thwart tree-shaking. See https://bargsten.org/jsts/enums/
 export const SolanaJsonRpcErrorCode = {
+    JSON_RPC_INVALID_PARAMS: -32602,
     JSON_RPC_SCAN_ERROR: -32012,
     JSON_RPC_SERVER_ERROR_BLOCK_CLEANED_UP: -32001,
     JSON_RPC_SERVER_ERROR_BLOCK_NOT_AVAILABLE: -32004,

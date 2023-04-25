@@ -2,10 +2,11 @@ import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-t
 import { patchParamsForSolanaLabsRpc } from './params-patcher';
 import { patchResponseForSolanaLabsRpc } from './response-patcher';
 import { GetAccountInfoApi } from './rpc-methods/getAccountInfo';
+import { GetBalanceApi } from './rpc-methods/getBalance';
 import { GetBlockHeightApi } from './rpc-methods/getBlockHeight';
+import { GetBlockProductionApi } from './rpc-methods/getBlockProduction';
 import { GetBlocksApi } from './rpc-methods/getBlocks';
 import { GetInflationRewardApi } from './rpc-methods/getInflationReward';
-import { GetBalanceApi } from './rpc-methods/getBalance';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -14,6 +15,7 @@ type Config = Readonly<{
 export type SolanaRpcMethods = GetAccountInfoApi &
     GetBalanceApi &
     GetBlockHeightApi &
+    GetBlockProductionApi &
     GetBlocksApi &
     GetInflationRewardApi;
 
