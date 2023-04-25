@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '@solana/keys';
-import { Commitment, DataSlice, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment, DataSlice, LamportsUnsafeBeyond2Pow53Minus1, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type Base58EncodedBytes = string & { readonly __base58EncodedBytes: unique symbol };
 type Base64EncodedBytes = string & { readonly __base64EncodedBytes: unique symbol };
@@ -15,7 +15,7 @@ type GetAccountInfoApiResponseBase = Readonly<{
     }>;
     value: Readonly<{
         executable: boolean;
-        lamports: U64UnsafeBeyond2Pow53Minus1;
+        lamports: LamportsUnsafeBeyond2Pow53Minus1;
         owner: Base58EncodedAddress;
         rentEpoch: U64UnsafeBeyond2Pow53Minus1;
         space: U64UnsafeBeyond2Pow53Minus1;

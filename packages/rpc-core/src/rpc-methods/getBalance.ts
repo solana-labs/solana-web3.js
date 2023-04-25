@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/keys';
-import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, RpcResponse, Slot } from './common';
 
-type GetBalanceApiResponse = RpcResponse<U64UnsafeBeyond2Pow53Minus1>;
+type GetBalanceApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 
 export interface GetBalanceApi {
     /**

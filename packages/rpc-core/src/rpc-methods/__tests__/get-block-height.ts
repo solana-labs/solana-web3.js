@@ -17,18 +17,18 @@ describe('getBlockHeight', () => {
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            it('returns the block height as a bigint', async () => {
+            it('returns the result as a bigint', async () => {
                 expect.assertions(1);
-                const blockHeight = await rpc.getBlockHeight({ commitment }).send();
-                expect(blockHeight).toEqual(expect.any(BigInt));
+                const result = await rpc.getBlockHeight({ commitment }).send();
+                expect(result).toEqual(expect.any(BigInt));
             });
         });
     });
     describe('when called with a `minContextSlot` of 0', () => {
-        it('returns the block height as a bigint', async () => {
+        it('returns the result as a bigint', async () => {
             expect.assertions(1);
-            const blockHeight = await rpc.getBlockHeight({ minContextSlot: 0n }).send();
-            expect(blockHeight).toEqual(expect.any(BigInt));
+            const result = await rpc.getBlockHeight({ minContextSlot: 0n }).send();
+            expect(result).toEqual(expect.any(BigInt));
         });
     });
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {

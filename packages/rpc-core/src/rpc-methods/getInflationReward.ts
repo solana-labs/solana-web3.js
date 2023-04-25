@@ -1,17 +1,17 @@
 import { Base58EncodedAddress } from '@solana/keys';
-import { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetInflationRewardApiResponse = Readonly<{
     // Reward amount in lamports
-    amount: U64UnsafeBeyond2Pow53Minus1;
+    amount: LamportsUnsafeBeyond2Pow53Minus1;
     // Vote account commission when the reward was credited
     commission: number;
     // The slot in which the rewards are effective
-    effectiveSlot: U64UnsafeBeyond2Pow53Minus1;
+    effectiveSlot: Slot;
     // Epoch for which reward occured
     epoch: U64UnsafeBeyond2Pow53Minus1;
     // Post balance of the account in lamports
-    postBalance: U64UnsafeBeyond2Pow53Minus1;
+    postBalance: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
 export interface GetInflationRewardApi {
