@@ -100,3 +100,12 @@ jobs:
 
       - name: Build & Test
         run: pnpm build
+
+      - name: Upload Experimental library build artifacts
+        if: matrix.node == '16'
+        uses: actions/upload-artifact@v3
+        with:
+          name: library-dist
+          path: |
+            ./packages/library/dist/
+            ./packages/library/package.json
