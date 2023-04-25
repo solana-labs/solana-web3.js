@@ -50,12 +50,12 @@ If you would like to modify the inputs to a given method call before they are se
 const api = {
     getBlocks(startSlot: number, endSlot: number): ReadonlyArray<number> {
         return {
-            // Optionally pre-process the method name, 
+            // Optionally pre-process the method name,
             methodName: 'getBlocksInRange',
             // Pre-process the inputs any way you like.
             params: [assertIsInteger(startSlot), assertIsInteger(endSlot)],
             // Provide an optional function to modify the response.
-            responseProcessor: (response) => ({
+            responseProcessor: response => ({
                 confirmedBlocks: response,
                 queryRange: [startSlot, endSlot],
             }),
