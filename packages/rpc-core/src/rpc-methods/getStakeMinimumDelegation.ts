@@ -1,6 +1,6 @@
-import { RpcResponse, Lamports, Commitment } from './common';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, RpcResponse } from './common';
 
-type GetStakeMinimumDelegationApiResponse = RpcResponse<Lamports>;
+type GetStakeMinimumDelegationApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 
 export interface GetStakeMinimumDelegationApi {
     /**
