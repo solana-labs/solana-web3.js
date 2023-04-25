@@ -24,7 +24,7 @@ describe('getBlockProduction', () => {
                 const blockProductionPromise = rpc.getBlockProduction({ commitment }).send();
                 await expect(blockProductionPromise).resolves.toMatchObject({
                     value: expect.objectContaining({
-                        byIdentity: expect.toBeObject(),
+                        byIdentity: expect.any(Object),
                         range: expect.objectContaining({
                             firstSlot: expect.any(BigInt),
                             lastSlot: expect.any(BigInt),
@@ -52,7 +52,7 @@ describe('getBlockProduction', () => {
             const blockProductionPromise = rpc.getBlockProduction({ identity }).send();
             await expect(blockProductionPromise).resolves.toMatchObject({
                 value: expect.objectContaining({
-                    byIdentity: expect.toBeEmptyObject(),
+                    byIdentity: {},
                 }),
             });
         });
