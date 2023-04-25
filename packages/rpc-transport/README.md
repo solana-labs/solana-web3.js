@@ -37,7 +37,7 @@ Crucially, this object does not _need_ to provide _implementations_ of those met
 Absent a concrete implementation, `@solana/rpc-transport` will simply send the function name and its arguments to the RPC as the JSON-RPC method and params. For example, if no concrete implementation for `getBlocks` is provided in `api`, the following call:
 
 ```ts
-rpc.getBlocks(1, 20);
+rpc.getBlocks(1, 20).send();
 ```
 
 &hellip;will result in an RPC call whose `method` is `getBlocks` and whose `params` are `[1, 20]`.

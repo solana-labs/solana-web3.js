@@ -44,7 +44,7 @@ function handleSubmit() {
         // Typescript will upcast `address` to `Base58EncodedAddress`.
         assertIsBase58EncodedAddress(address);
         // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
-        const balanceInLamports = await rpc.getBalance(address);
+        const balanceInLamports = await rpc.getBalance(address).send();
     } catch (e) {
         // `address` turned out not to be a base58-encoded address
     }

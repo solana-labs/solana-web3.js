@@ -62,8 +62,9 @@ const devnetRpc = createSolanaRpc({ transport: devnetTransport });
 Now, you can use it to call methods on your RPC server. For instance, here is how you would fetch an account's balance.
 
 ```ts
-const balanceInLamports = await devnetRpc.getBalance('11111111111111111111111111111111' as Base58EncodedAddress);
-console.log('Balance of account 11111111111111111111111111111111 in Lamports', balanceInLamports);
+const systemProgramAddress = '11111111111111111111111111111111' as Base58EncodedAddress;
+const balanceInLamports = await devnetRpc.getBalance(systemProgramAddress).send();
+console.log('Balance of System Program account in Lamports', balanceInLamports);
 ```
 
 ### Transactions
@@ -90,7 +91,7 @@ function handleSubmit() {
         // Typescript will upcast `address` to `Base58EncodedAddress`.
         assertIsBase58EncodedAddress(address);
         // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
-        const balanceInLamports = await rpc.getBalance(address);
+        const balanceInLamports = await rpc.getBalance(address).send();
     } catch (e) {
         // `address` turned out not to be a base58-encoded address
     }
