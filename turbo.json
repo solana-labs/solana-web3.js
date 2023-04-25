@@ -38,7 +38,7 @@
         },
         "publish-packages": {
             "cache": false,
-            "dependsOn": ["build"],
+            "dependsOn": ["build", "^publish-packages"],
             "outputs": []
         },
         "test:lint": {
@@ -87,7 +87,7 @@
         },
         "@solana/web3.js-experimental#publish-packages": {
             "cache": false,
-            "dependsOn": ["build", "@solana/web3.js#publish-packages"],
+            "dependsOn": ["build", "^publish-packages", "@solana/web3.js#publish-packages"],
             "outputs": []
         }
     },
