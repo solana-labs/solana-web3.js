@@ -24,3 +24,5 @@ export type RpcResponse<TValue> = Readonly<{
     }>;
     value: TValue;
 }>;
+
+export type Blockhash = string & { readonly __blockhash: unique symbol };
