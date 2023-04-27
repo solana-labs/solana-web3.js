@@ -51,6 +51,25 @@ describe('patchResponseForSolanaLabsRpc', () => {
                 expectation: [1, [2n], [3, 33, 333], 4],
                 input: [1, [2], [3, 33, 333], 4],
             },
+            'nested array of objects with numeric responses': {
+                allowedKeyPaths: [['a', 'b', KEYPATH_WILDCARD, 'c']],
+                expectation: {
+                    a: {
+                        b: [
+                            { c: 5, d: 5n },
+                            { c: 10, d: 10n },
+                        ],
+                    },
+                },
+                input: {
+                    a: {
+                        b: [
+                            { c: 5, d: 5 },
+                            { c: 10, d: 10 },
+                        ],
+                    },
+                },
+            },
             'nested object of numeric responses': {
                 allowedKeyPaths: [['a'], ['b', 'b2', 'b2_1'], ['b', 'b2', 'b2_3']],
                 expectation: { a: 10, b: { b1: 10n, b2: { b2_1: 10, b2_2: 10n, b2_3: 10 } } },
