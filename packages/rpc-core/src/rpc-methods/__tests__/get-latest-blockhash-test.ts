@@ -2,10 +2,10 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
-import { SolanaRpcMethods, createSolanaRpcApi } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 import { Commitment } from '../common';
 
-describe('getTransactionCount', () => {
+describe('getLatestBlockhash', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
@@ -15,27 +15,27 @@ describe('getTransactionCount', () => {
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });
+
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            it('returns the result as a bigint', async () => {
+            it('returns the blockhash and block height', async () => {
                 expect.assertions(1);
-                const result = await rpc.getTransactionCount({ commitment }).send();
-                expect(result).toEqual(expect.any(BigInt));
+                const blockhashPromise = rpc.getLatestBlockhash({ commitment }).send();
+                await expect(blockhashPromise).resolves.toMatchObject({
+                    value: {
+                        blockhash: expect.any(String),
+                        lastValidBlockHeight: expect.any(BigInt),
+                    },
+                });
             });
         });
     });
-    describe('when called with a `minContextSlot` of 0', () => {
-        it('returns the result as a bigint', async () => {
-            expect.assertions(1);
-            const result = await rpc.getTransactionCount({ minContextSlot: 0n }).send();
-            expect(result).toEqual(expect.any(BigInt));
-        });
-    });
+
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             const sendPromise = rpc
-                .getTransactionCount({
+                .getLatestBlockhash({
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();

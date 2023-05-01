@@ -61,7 +61,8 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/keys": "workspace:*"
+        "@solana/keys": "workspace:*",
+        "bs58": "^5.0.0"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.0",
