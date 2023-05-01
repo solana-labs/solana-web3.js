@@ -1,4 +1,4 @@
-import { createSolanaRpcApi } from './index';
+import { createSolanaRpcApi } from './rpc-methods';
 import { ALLOWED_NUMERIC_KEYPATHS } from './response-patcher-allowed-numeric-values';
 import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
 
