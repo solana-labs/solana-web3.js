@@ -1,20 +1,20 @@
 import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { patchParamsForSolanaLabsRpc } from './params-patcher';
-import { patchResponseForSolanaLabsRpc } from './response-patcher';
-import { GetAccountInfoApi } from './rpc-methods/getAccountInfo';
-import { GetBalanceApi } from './rpc-methods/getBalance';
-import { GetBlockHeightApi } from './rpc-methods/getBlockHeight';
-import { GetBlockProductionApi } from './rpc-methods/getBlockProduction';
-import { GetBlocksApi } from './rpc-methods/getBlocks';
-import { GetFirstAvailableBlockApi } from './rpc-methods/getFirstAvailableBlock';
-import { GetInflationRewardApi } from './rpc-methods/getInflationReward';
-import { GetMaxRetransmitSlotApi } from './rpc-methods/getMaxRetransmitSlot';
-import { GetMaxShredInsertSlotApi } from './rpc-methods/getMaxShredInsertSlot';
-import { GetSlotApi } from './rpc-methods/getSlot';
-import { GetStakeMinimumDelegationApi } from './rpc-methods/getStakeMinimumDelegation';
-import { GetTransactionCountApi } from './rpc-methods/getTransactionCount';
-import { MinimumLedgerSlotApi } from './rpc-methods/minimumLedgerSlot';
-import { GetLatestBlockhashApi } from './rpc-methods/getLatestBlockhash';
+import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { patchResponseForSolanaLabsRpc } from '../response-patcher';
+import { GetAccountInfoApi } from './getAccountInfo';
+import { GetBalanceApi } from './getBalance';
+import { GetBlockHeightApi } from './getBlockHeight';
+import { GetBlockProductionApi } from './getBlockProduction';
+import { GetBlocksApi } from './getBlocks';
+import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
+import { GetInflationRewardApi } from './getInflationReward';
+import { GetLatestBlockhashApi } from './getLatestBlockhash';
+import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
+import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
+import { GetSlotApi } from './getSlot';
+import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
+import { GetTransactionCountApi } from './getTransactionCount';
+import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -27,14 +27,13 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetBlocksApi &
     GetFirstAvailableBlockApi &
     GetInflationRewardApi &
+    GetLatestBlockhashApi &
     GetMaxRetransmitSlotApi &
     GetMaxShredInsertSlotApi &
     GetSlotApi &
     GetStakeMinimumDelegationApi &
     GetTransactionCountApi &
-    MinimumLedgerSlotApi &
-    GetLatestBlockhashApi;
-
+    MinimumLedgerSlotApi;
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
         defineProperty() {

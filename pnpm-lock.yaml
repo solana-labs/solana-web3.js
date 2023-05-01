@@ -497,6 +497,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
+      bs58:
+        specifier: ^5.0.0
+        version: 5.0.0
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.0
