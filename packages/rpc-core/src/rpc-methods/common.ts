@@ -24,6 +24,3 @@ export type RpcResponse<TValue> = Readonly<{
     }>;
     value: TValue;
 }>;
-
-// TODO: Eventually move this into whatever package implements transactions
-export type TransactionSignature = string & { readonly __sig: unique symbol };
