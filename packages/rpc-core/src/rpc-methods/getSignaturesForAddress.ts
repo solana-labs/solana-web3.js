@@ -1,5 +1,6 @@
 import { Base58EncodedAddress } from '@solana/keys';
 import { Commitment, RpcResponse, Slot, TransactionSignature, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { TransactionError } from '../transaction-error';
 
 type GetSignaturesForAddressTransaction = RpcResponse<{
     /** transaction signature as base-58 encoded string */
@@ -7,7 +8,7 @@ type GetSignaturesForAddressTransaction = RpcResponse<{
     /** The slot that contains the block with the transaction */
     slot: Slot;
     /** Error if transaction failed, null if transaction succeeded. */
-    err: object | null;
+    err: TransactionError | null;
     /** Memo associated with the transaction, null if no memo is present */
     memo: string | null;
     /** estimated production time, as Unix timestamp (seconds since the Unix epoch) of when transaction was processed. null if not available. */
