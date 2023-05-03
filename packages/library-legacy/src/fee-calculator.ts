@@ -14,5 +14,5 @@ export const FeeCalculatorLayout = BufferLayout.nu64('lamportsPerSignature');
  */
 export interface FeeCalculator {
   /** Cost in lamports to validate a signature. */
-  lamportsPerSignature: number;
+  lamportsPerSignature: string;
 }

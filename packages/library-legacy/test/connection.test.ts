@@ -97,7 +97,7 @@ async function mockNonceAccountResponse(
     params: [nonceAccountPubkey, {encoding: 'base64'}],
     value: {
       owner: SystemProgram.programId.toBase58(),
-      lamports: LAMPORTS_PER_SOL,
+      lamports: LAMPORTS_PER_SOL.toString(),
       data: [mockNonceAccountData.toString('base64'), 'base64'],
       executable: false,
       rentEpoch: 20,
