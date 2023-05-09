@@ -1,5 +1,4 @@
-import {sha512} from '@noble/hashes/sha512';
-import * as ed25519 from '@noble/ed25519';
+import {ed25519} from '@noble/curves/ed25519';
 
 /**
  * A 64 byte secret key, the first 32 bytes of which is the
@@ -16,8 +15,6 @@ export interface Ed25519Keypair {
   secretKey: Ed25519SecretKey;
 }
 
-ed25519.utils.sha512Sync = (...m) => sha512(ed25519.utils.concatBytes(...m));
-
 export const generatePrivateKey = ed25519.utils.randomPrivateKey;
 export const generateKeypair = (): Ed25519Keypair => {
   const privateScalar = ed25519.utils.randomPrivateKey();
@@ -30,17 +27,17 @@ export const generateKeypair = (): Ed25519Keypair => {
     secretKey,
   };
 };
-export const getPublicKey = ed25519.sync.getPublicKey;
+export const getPublicKey = ed25519.getPublicKey;
 export function isOnCurve(publicKey: Uint8Array): boolean {
   try {
-    ed25519.Point.fromHex(publicKey, true /* strict */);
+    ed25519.ExtendedPoint.fromHex(publicKey);
     return true;
   } catch {
     return false;
   }
 }
 export const sign = (
-  message: Parameters<typeof ed25519.sync.sign>[0],
+  message: Parameters<typeof ed25519.sign>[0],
   secretKey: Ed25519SecretKey,
-) => ed25519.sync.sign(message, secretKey.slice(0, 32));
-export const verify = ed25519.sync.verify;
+) => ed25519.sign(message, secretKey.slice(0, 32));
+export const verify = ed25519.verify;
