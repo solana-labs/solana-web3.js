@@ -19,6 +19,7 @@ import { GetSlotApi } from './getSlot';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
 import { GetTransactionCountApi } from './getTransactionCount';
+import { GetVoteAccountsApi } from './getVoteAccounts';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 
 type Config = Readonly<{
@@ -43,6 +44,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
     GetTransactionCountApi &
+    GetVoteAccountsApi &
     MinimumLedgerSlotApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
