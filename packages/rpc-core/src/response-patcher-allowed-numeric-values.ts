@@ -10,4 +10,5 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     Record<keyof ReturnType<typeof createSolanaRpcApi>, readonly KeyPath[]>
 > = {
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
+    getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
 };
