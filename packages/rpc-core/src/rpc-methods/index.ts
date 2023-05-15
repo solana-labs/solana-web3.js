@@ -15,6 +15,7 @@ import { GetSlotApi } from './getSlot';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetTransactionCountApi } from './getTransactionCount';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
+import { GetEpochInfoApi } from './getEpochInfo';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -33,7 +34,8 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSlotApi &
     GetStakeMinimumDelegationApi &
     GetTransactionCountApi &
-    MinimumLedgerSlotApi;
+    MinimumLedgerSlotApi &
+    GetEpochInfoApi;
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
         defineProperty() {
