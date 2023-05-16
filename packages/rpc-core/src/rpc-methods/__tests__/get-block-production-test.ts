@@ -48,7 +48,8 @@ describe('getBlockProduction', () => {
         it('returns an empty byIdentity if the identity is not a block producer', async () => {
             expect.assertions(1);
             // Randomly generated address, assumed not to be a block producer
-            const identity = '9NmqDDZa7mH1DBM4zeq9cm7VcRn2un1i2TwuMvjBoVhU' as Base58EncodedAddress;
+            const identity =
+                '9NmqDDZa7mH1DBM4zeq9cm7VcRn2un1i2TwuMvjBoVhU' as Base58EncodedAddress<'9NmqDDZa7mH1DBM4zeq9cm7VcRn2un1i2TwuMvjBoVhU'>;
             const blockProductionPromise = rpc.getBlockProduction({ identity }).send();
             await expect(blockProductionPromise).resolves.toMatchObject({
                 value: expect.objectContaining({

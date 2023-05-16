@@ -22,7 +22,8 @@ describe('getBalance', () => {
             it('returns a balance of zero for a new address', async () => {
                 expect.assertions(1);
                 // This key is random, don't re-use in any tests that affect balance
-                const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
+                const publicKey =
+                    '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress<'4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH'>;
                 const balancePromise = rpc.getBalance(publicKey).send();
                 await expect(balancePromise).resolves.toHaveProperty('value', BigInt(0));
             });
@@ -31,7 +32,8 @@ describe('getBalance', () => {
 
     describe('given an account with a non-zero balance', () => {
         // See scripts/fixtures/4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc.json
-        const publicKey = '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress;
+        const publicKey =
+            '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress<'4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc'>;
         it('returns the correct balance', async () => {
             expect.assertions(1);
             const balancePromise = rpc.getBalance(publicKey).send();
@@ -43,7 +45,8 @@ describe('getBalance', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             // This key is random, don't re-use in any tests that affect balance
-            const publicKey = '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress;
+            const publicKey =
+                '4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH' as Base58EncodedAddress<'4BfxgLzn6pEuVB2ynBMqckHFdYD8VNcrheDFFCB6U5TH'>;
             const sendPromise = rpc
                 .getBalance(publicKey, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
