@@ -17,6 +17,7 @@ import { GetTransactionCountApi } from './getTransactionCount';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 import { GetEpochInfoApi } from './getEpochInfo';
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
+import { GetBlockTimeApi } from './getBlockTime';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -27,6 +28,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetBlockHeightApi &
     GetBlockProductionApi &
     GetBlocksApi &
+    GetBlockTimeApi &
     GetEpochInfoApi &
     GetFirstAvailableBlockApi &
     GetInflationRewardApi &

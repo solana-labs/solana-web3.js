@@ -13,6 +13,8 @@ export type LamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __lamports: u
 
 export type Slot = U64UnsafeBeyond2Pow53Minus1;
 
+export type UnixTimestamp = number & { readonly __unixTimestamp: unique symbol };
+
 // FIXME(solana-labs/solana/issues/30341) Beware that any value above 9007199254740991 may be
 // truncated or rounded because of a downcast to JavaScript `number` between your calling code and
 // the JSON-RPC transport.
