@@ -246,7 +246,7 @@ export interface GetTransactionApi {
         };
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
+        config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding?: 'json';
             }>
