@@ -5,19 +5,20 @@ import { GetAccountInfoApi } from './getAccountInfo';
 import { GetBalanceApi } from './getBalance';
 import { GetBlockHeightApi } from './getBlockHeight';
 import { GetBlockProductionApi } from './getBlockProduction';
+import { GetBlockTimeApi } from './getBlockTime';
 import { GetBlocksApi } from './getBlocks';
+import { GetEpochInfoApi } from './getEpochInfo';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
+import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
 import { GetSlotApi } from './getSlot';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
+import { GetSupplyApi } from './getSupply';
 import { GetTransactionCountApi } from './getTransactionCount';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
-import { GetEpochInfoApi } from './getEpochInfo';
-import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
-import { GetBlockTimeApi } from './getBlockTime';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -38,6 +39,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetRecentPerformanceSamplesApi &
     GetSlotApi &
     GetStakeMinimumDelegationApi &
+    GetSupplyApi &
     GetTransactionCountApi &
     MinimumLedgerSlotApi;
 
