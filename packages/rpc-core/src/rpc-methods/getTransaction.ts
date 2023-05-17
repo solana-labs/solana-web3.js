@@ -77,17 +77,17 @@ type TransactionMetaBase = Readonly<{
     /** fee this transaction was charged */
     fee: LamportsUnsafeBeyond2Pow53Minus1;
     /** array of account balances from before the transaction was processed */
-    preBalances: [U64UnsafeBeyond2Pow53Minus1];
+    preBalances: readonly U64UnsafeBeyond2Pow53Minus1[];
     /** array of account balances after the transaction was processed */
-    postBalances: [U64UnsafeBeyond2Pow53Minus1];
+    postBalances: readonly U64UnsafeBeyond2Pow53Minus1[];
     /** List of token balances from before the transaction was processed or omitted if token balance recording was not yet enabled during this transaction */
-    preTokenBalances?: [TokenBalance];
+    preTokenBalances?: readonly TokenBalance[];
     /** List of token balances from after the transaction was processed or omitted if token balance recording was not yet enabled during this transaction */
-    postTokenBalances?: [TokenBalance];
+    postTokenBalances?: readonly TokenBalance[];
     /** array of string log messages or null if log message recording was not enabled during this transaction */
-    logMessages: [string] | null;
+    logMessages: readonly string[] | null;
     /** transaction-level rewards */
-    rewards: [TransactionReward] | null;
+    rewards: readonly TransactionReward[] | null;
     /**
      * Transaction status
      * @deprecated
@@ -103,39 +103,39 @@ type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */
     accountKey: Base58EncodedAddress;
     /** List of indices used to load addresses of writable accounts from a lookup table. */
-    writableIndexes: [number];
+    writableIndexes: readonly number[];
     /** List of indices used to load addresses of readonly accounts from a lookup table. */
-    readableIndexes: [number];
+    readableIndexes: readonly number[];
 }>;
 
 type TransactionBase = Readonly<{
     message: {
         recentBlockhash: Blockhash;
     };
-    signatures: [Base58EncodedBytes];
+    signatures: readonly Base58EncodedBytes[];
 }>;
 
 type TransactionInstruction = Readonly<{
     programIdIndex: number;
-    accounts: [number];
+    accounts: readonly number[];
     data: Base58EncodedBytes;
 }>;
 
 type TransactionJson = TransactionBase &
     Readonly<{
         message: {
-            accountKeys: [Base58EncodedAddress];
+            accountKeys: readonly Base58EncodedAddress[];
             header: {
                 numReadonlySignedAccounts: number;
                 numReadonlyUnsignedAccounts: number;
                 numRequiredSignatures: number;
             };
-            instructions: [TransactionInstruction];
+            instructions: readonly TransactionInstruction[];
         };
     }>;
 
 type TransactionInstructionNoParser = Readonly<{
-    accounts: [Base58EncodedAddress];
+    accounts: readonly Base58EncodedAddress[];
     data: Base58EncodedBytes;
     programId: Base58EncodedAddress;
 }>;
@@ -160,7 +160,7 @@ type TransactionJsonParsed = TransactionJson &
                     writable: boolean;
                 }
             ];
-            instructions: [ParsedTransactionInstruction | TransactionInstructionNoParser];
+            instructions: readonly (ParsedTransactionInstruction | TransactionInstructionNoParser)[];
         };
     }>;
 
@@ -177,27 +177,27 @@ type GetTransactionApiResponseBase = Readonly<{
 
 type TransactionMetaLoadedAddresses = Readonly<{
     loadedAddresses: {
-        writable: [Base58EncodedAddress];
-        readonly: [Base58EncodedAddress];
+        writable: readonly Base58EncodedAddress[];
+        readonly: readonly Base58EncodedAddress[];
     };
 }>;
 
 type InnerInstructions<InstructionType> = Readonly<{
     index: number;
-    instructions: [InstructionType];
+    instructions: readonly InstructionType[];
 }>;
 
 type TransactionMetaInnerInstructionsNotParsed = Readonly<{
-    innerInstructions: [InnerInstructions<TransactionInstruction>];
+    innerInstructions: readonly InnerInstructions<TransactionInstruction>[];
 }>;
 
 type TransactionMetaInnerInstructionsParsed = Readonly<{
-    innerInstructions: [InnerInstructions<TransactionInstructionNoParser | ParsedTransactionInstruction>];
+    innerInstructions: readonly InnerInstructions<TransactionInstructionNoParser | ParsedTransactionInstruction>[];
 }>;
 
 type TransactionAddressTableLookups = Readonly<{
     message: Readonly<{
-        addressTableLookups?: [AddressTableLookup] | null;
+        addressTableLookups?: readonly AddressTableLookup[] | null;
     }>;
 }>;
 
