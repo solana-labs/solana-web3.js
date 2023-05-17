@@ -226,7 +226,9 @@ export interface GetTransactionApi {
             }>
     ): GetTransactionApiResponseBase &
         (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            meta: TransactionMetaBase &
+                TransactionMetaInnerInstructionsNotParsed &
+                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
             transaction: Base64EncodedDataResponse;
         };
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
@@ -237,7 +239,9 @@ export interface GetTransactionApi {
             }>
     ): GetTransactionApiResponseBase &
         (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            meta: TransactionMetaBase &
+                TransactionMetaInnerInstructionsNotParsed &
+                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
             transaction: Base58EncodedDataResponse;
         };
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
@@ -248,7 +252,9 @@ export interface GetTransactionApi {
             }>
     ): GetTransactionApiResponseBase &
         (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            meta: TransactionMetaBase &
+                TransactionMetaInnerInstructionsNotParsed &
+                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
             transaction: TransactionJson & TransactionAddressTableLookups;
         };
 }
