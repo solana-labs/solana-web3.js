@@ -1,10 +1,12 @@
 import bs58 from 'bs58';
 
-export type Base58EncodedAddress = string & { readonly __base58EncodedAddress: unique symbol };
+export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
+    readonly __base58EncodedAddress: unique symbol;
+};
 
 export function assertIsBase58EncodedAddress(
     putativeBase58EncodedAddress: string
-): asserts putativeBase58EncodedAddress is Base58EncodedAddress {
+): asserts putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
     try {
         // Fast-path; see if the input string is of an acceptable length.
         if (
