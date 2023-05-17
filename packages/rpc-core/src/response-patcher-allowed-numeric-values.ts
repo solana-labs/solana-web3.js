@@ -9,6 +9,7 @@ import { KEYPATH_WILDCARD } from './response-patcher-types';
 export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     Record<keyof ReturnType<typeof createSolanaRpcApi>, readonly KeyPath[]>
 > = {
+    getBlockTime: [[]],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
 };
