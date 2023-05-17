@@ -1,4 +1,5 @@
-import { Slot, UnixTimestamp } from './common';
+import { UnixTimestamp } from '../unix-timestamp';
+import { Slot } from './common';
 
 /** Estimated production time, as Unix timestamp (seconds since the Unix epoch) */
 type GetBlockTimeApiResponse = UnixTimestamp;
