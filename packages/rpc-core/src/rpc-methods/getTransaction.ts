@@ -6,6 +6,7 @@ import {
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
     Slot,
+    TransactionVersion,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 import { TransactionError } from '../transaction-error';
@@ -164,8 +165,9 @@ type TransactionJsonParsed = TransactionJson &
         };
     }>;
 
-type GetTransactionCommonConfig = Readonly<{
+type GetTransactionCommonConfig<TMaxSupportedTransactionVersion> = Readonly<{
     commitment?: Commitment;
+    maxSupportedTransactionVersion?: TMaxSupportedTransactionVersion;
 }>;
 
 type GetTransactionApiResponseBase = Readonly<{
@@ -205,99 +207,48 @@ export interface GetTransactionApi {
     /**
      * Returns transaction details for a confirmed transaction
      */
-    getTransaction(
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
-            Readonly<{
-                encoding: 'json';
-                maxSupportedTransactionVersion: number;
-            }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
-        transaction: TransactionJson & TransactionAddressTableLookups;
-        version: number;
-    };
-    getTransaction(
-        address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
-            Readonly<{
-                encoding: 'jsonParsed';
-                maxSupportedTransactionVersion: number;
-            }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsParsed;
-        transaction: TransactionJsonParsed & TransactionAddressTableLookups;
-        version: number;
-    };
-    getTransaction(
-        address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
-            Readonly<{
-                encoding: 'base64';
-                maxSupportedTransactionVersion: number;
-            }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
-        transaction: Base64EncodedDataResponse;
-        version: number;
-    };
-    getTransaction(
-        address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
-            Readonly<{
-                encoding: 'base58';
-                maxSupportedTransactionVersion: number;
-            }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
-        transaction: Base58EncodedDataResponse;
-        version: number;
-    };
-    getTransaction(
-        address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
-            Readonly<{
-                encoding: 'json';
-            }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsNotParsed;
-        transaction: TransactionJson;
-    };
-    getTransaction(
-        address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
+        config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsParsed;
-        transaction: TransactionJsonParsed;
-    };
-    getTransaction(
+    ): GetTransactionApiResponseBase &
+        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
+            meta: TransactionMetaBase & TransactionMetaInnerInstructionsParsed;
+            transaction: TransactionJsonParsed & TransactionAddressTableLookups;
+        };
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
+        config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base64';
             }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsNotParsed;
-        transaction: Base64EncodedDataResponse;
-    };
-    getTransaction(
+    ): GetTransactionApiResponseBase &
+        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
+            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            transaction: Base64EncodedDataResponse;
+        };
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
-        config: GetTransactionCommonConfig &
+        config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base58';
             }>
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsNotParsed;
-        transaction: Base58EncodedDataResponse;
-    };
-    getTransaction(
+    ): GetTransactionApiResponseBase &
+        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
+            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            transaction: Base58EncodedDataResponse;
+        };
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
-        config?: GetTransactionCommonConfig
-    ): GetTransactionApiResponseBase & {
-        meta: TransactionMetaBase & TransactionMetaInnerInstructionsNotParsed;
-        transaction: TransactionJson;
-    };
+        config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
+            Readonly<{
+                encoding?: 'json';
+            }>
+    ): GetTransactionApiResponseBase &
+        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
+            meta: TransactionMetaBase & TransactionMetaLoadedAddresses & TransactionMetaInnerInstructionsNotParsed;
+            transaction: TransactionJson & TransactionAddressTableLookups;
+        };
 }
