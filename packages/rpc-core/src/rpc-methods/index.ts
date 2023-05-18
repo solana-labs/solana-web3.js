@@ -14,6 +14,7 @@ import { GetLatestBlockhashApi } from './getLatestBlockhash';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
+import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
 import { GetSlotApi } from './getSlot';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
@@ -37,6 +38,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetMaxRetransmitSlotApi &
     GetMaxShredInsertSlotApi &
     GetRecentPerformanceSamplesApi &
+    GetSignaturesForAddressApi &
     GetSlotApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
