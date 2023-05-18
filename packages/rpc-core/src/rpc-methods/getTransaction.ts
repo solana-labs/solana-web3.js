@@ -11,6 +11,7 @@ import {
 } from './common';
 import { TransactionError } from '../transaction-error';
 import { Blockhash } from '../blockhash';
+import { UnixTimestamp } from '../unix-timestamp';
 
 type TokenBalance = Readonly<{
     /** Index of the account in which the token balance is provided for. */
@@ -173,8 +174,8 @@ type GetTransactionCommonConfig<TMaxSupportedTransactionVersion> = Readonly<{
 type GetTransactionApiResponseBase = Readonly<{
     /** the slot this transaction was processed in */
     slot: Slot;
-    /** estimated production time, as Unix timestamp (seconds since the Unix epoch) of when the transaction was processed. null if not available */
-    blockTime: U64UnsafeBeyond2Pow53Minus1 | null;
+    /** estimated production time of when the transaction was processed. null if not available */
+    blockTime: UnixTimestamp | null;
 }>;
 
 type TransactionMetaLoadedAddresses = Readonly<{
@@ -213,48 +214,76 @@ export interface GetTransactionApi {
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): GetTransactionApiResponseBase &
-        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase & TransactionMetaInnerInstructionsParsed;
-            transaction: TransactionJsonParsed & TransactionAddressTableLookups;
-        };
+    ):
+        | (GetTransactionApiResponseBase &
+              (TMaxSupportedTransactionVersion extends void
+                  ? Record<string, never>
+                  : { version: TransactionVersion }) & {
+                  meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
+                  transaction: TransactionJsonParsed & TransactionAddressTableLookups;
+              })
+        | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base64';
             }>
-    ): GetTransactionApiResponseBase &
-        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase &
-                TransactionMetaInnerInstructionsNotParsed &
-                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
-            transaction: Base64EncodedDataResponse;
-        };
+    ):
+        | (GetTransactionApiResponseBase &
+              (TMaxSupportedTransactionVersion extends void
+                  ? Record<string, never>
+                  : { version: TransactionVersion }) & {
+                  meta:
+                      | (TransactionMetaBase &
+                            TransactionMetaInnerInstructionsNotParsed &
+                            (TMaxSupportedTransactionVersion extends void
+                                ? Record<string, never>
+                                : TransactionMetaLoadedAddresses))
+                      | null;
+                  transaction: Base64EncodedDataResponse;
+              })
+        | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base58';
             }>
-    ): GetTransactionApiResponseBase &
-        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase &
-                TransactionMetaInnerInstructionsNotParsed &
-                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
-            transaction: Base58EncodedDataResponse;
-        };
+    ):
+        | (GetTransactionApiResponseBase &
+              (TMaxSupportedTransactionVersion extends void
+                  ? Record<string, never>
+                  : { version: TransactionVersion }) & {
+                  meta:
+                      | (TransactionMetaBase &
+                            TransactionMetaInnerInstructionsNotParsed &
+                            (TMaxSupportedTransactionVersion extends void
+                                ? Record<string, never>
+                                : TransactionMetaLoadedAddresses))
+                      | null;
+                  transaction: Base58EncodedDataResponse;
+              })
+        | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding?: 'json';
             }>
-    ): GetTransactionApiResponseBase &
-        (TMaxSupportedTransactionVersion extends void ? Record<string, never> : { version: TransactionVersion }) & {
-            meta: TransactionMetaBase &
-                TransactionMetaInnerInstructionsNotParsed &
-                (TMaxSupportedTransactionVersion extends void ? Record<string, never> : TransactionMetaLoadedAddresses);
-            transaction: TransactionJson & TransactionAddressTableLookups;
-        };
+    ):
+        | (GetTransactionApiResponseBase &
+              (TMaxSupportedTransactionVersion extends void
+                  ? Record<string, never>
+                  : { version: TransactionVersion }) & {
+                  meta:
+                      | (TransactionMetaBase &
+                            TransactionMetaInnerInstructionsNotParsed &
+                            (TMaxSupportedTransactionVersion extends void
+                                ? Record<string, never>
+                                : TransactionMetaLoadedAddresses))
+                      | null;
+                  transaction: TransactionJson & TransactionAddressTableLookups;
+              })
+        | null;
 }
