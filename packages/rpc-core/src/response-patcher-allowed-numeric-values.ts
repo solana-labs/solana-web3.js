@@ -12,4 +12,8 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     getBlockTime: [[]],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
+    getVoteAccounts: [
+        ['current', KEYPATH_WILDCARD, 'commission'],
+        ['delinquent', KEYPATH_WILDCARD, 'commission'],
+    ],
 };
