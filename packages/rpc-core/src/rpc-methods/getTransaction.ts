@@ -41,9 +41,9 @@ type TransactionRewardBase = Readonly<{
     /** The public key of the account that received the reward */
     pubkey: Base58EncodedAddress;
     /** number of reward lamports credited or debited by the account */
-    lamports: U64UnsafeBeyond2Pow53Minus1;
+    lamports: LamportsUnsafeBeyond2Pow53Minus1;
     /** account balance in lamports after the reward was applied */
-    postBalance: U64UnsafeBeyond2Pow53Minus1;
+    postBalance: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
 type TransactionRewardWithoutCommission = TransactionRewardBase &
@@ -79,9 +79,9 @@ type TransactionMetaBase = Readonly<{
     /** fee this transaction was charged */
     fee: LamportsUnsafeBeyond2Pow53Minus1;
     /** array of account balances from before the transaction was processed */
-    preBalances: readonly U64UnsafeBeyond2Pow53Minus1[];
+    preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
     /** array of account balances after the transaction was processed */
-    postBalances: readonly U64UnsafeBeyond2Pow53Minus1[];
+    postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
     /** List of token balances from before the transaction was processed or omitted if token balance recording was not yet enabled during this transaction */
     preTokenBalances?: readonly TokenBalance[];
     /** List of token balances from after the transaction was processed or omitted if token balance recording was not yet enabled during this transaction */
@@ -136,7 +136,7 @@ type TransactionJson = TransactionBase &
         };
     }>;
 
-type TransactionInstructionNoParser = Readonly<{
+type PartiallyDecodedTransactionInstruction = Readonly<{
     accounts: readonly Base58EncodedAddress[];
     data: Base58EncodedBytes;
     programId: Base58EncodedAddress;
@@ -162,7 +162,7 @@ type TransactionJsonParsed = TransactionJson &
                     writable: boolean;
                 }
             ];
-            instructions: readonly (ParsedTransactionInstruction | TransactionInstructionNoParser)[];
+            instructions: readonly (ParsedTransactionInstruction | PartiallyDecodedTransactionInstruction)[];
         };
     }>;
 
@@ -185,9 +185,9 @@ type TransactionMetaLoadedAddresses = Readonly<{
     };
 }>;
 
-type InnerInstructions<InstructionType> = Readonly<{
+type InnerInstructions<TInstructionType> = Readonly<{
     index: number;
-    instructions: readonly InstructionType[];
+    instructions: readonly TInstructionType[];
 }>;
 
 type TransactionMetaInnerInstructionsNotParsed = Readonly<{
@@ -195,7 +195,9 @@ type TransactionMetaInnerInstructionsNotParsed = Readonly<{
 }>;
 
 type TransactionMetaInnerInstructionsParsed = Readonly<{
-    innerInstructions: readonly InnerInstructions<TransactionInstructionNoParser | ParsedTransactionInstruction>[];
+    innerInstructions: readonly InnerInstructions<
+        PartiallyDecodedTransactionInstruction | ParsedTransactionInstruction
+    >[];
 }>;
 
 type TransactionAddressTableLookups = Readonly<{
