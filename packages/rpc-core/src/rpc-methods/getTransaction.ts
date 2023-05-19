@@ -1,4 +1,8 @@
 import { Base58EncodedAddress } from '@solana/keys';
+
+import { Blockhash } from '../blockhash';
+import { TransactionError } from '../transaction-error';
+import { UnixTimestamp } from '../unix-timestamp';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
@@ -9,9 +13,6 @@ import {
     TransactionVersion,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
-import { TransactionError } from '../transaction-error';
-import { Blockhash } from '../blockhash';
-import { UnixTimestamp } from '../unix-timestamp';
 
 type TokenBalance = Readonly<{
     /** Index of the account in which the token balance is provided for. */

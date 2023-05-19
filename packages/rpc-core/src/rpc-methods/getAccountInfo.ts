@@ -1,4 +1,5 @@
 import { Base58EncodedAddress } from '@solana/keys';
+
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
