@@ -145,7 +145,7 @@ type PartiallyDecodedTransactionInstruction = Readonly<{
 type ParsedTransactionInstruction = Readonly<{
     parsed: {
         type: string;
-        info: object;
+        info?: object;
     };
     program: string;
     programId: Base58EncodedAddress;
