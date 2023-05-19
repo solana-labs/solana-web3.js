@@ -1,14 +1,15 @@
+import type { Agent as NodeHttpAgent } from 'node:http';
+import type { Agent as NodeHttpsAgent } from 'node:https';
+
+import fetchImpl from 'fetch-impl';
+
+import { IRpcTransport } from '../transport-types';
 import { SolanaHttpError } from './http-transport-errors';
 import {
     AllowedHttpRequestHeaders,
     assertIsAllowedHttpRequestHeaders,
     normalizeHeaders,
 } from './http-transport-headers';
-import { IRpcTransport } from '../transport-types';
-
-import fetchImpl from 'fetch-impl';
-import type { Agent as NodeHttpAgent } from 'node:http';
-import type { Agent as NodeHttpsAgent } from 'node:https';
 
 type Config = Readonly<{
     headers?: AllowedHttpRequestHeaders;

@@ -1,4 +1,5 @@
 import type { Config } from '@jest/types';
+
 import commonConfig from './jest-unit.config.common';
 
 const config: Partial<Config.InitialProjectOptions> = {

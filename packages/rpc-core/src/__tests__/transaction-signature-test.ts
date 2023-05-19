@@ -1,4 +1,5 @@
 import bs58 from 'bs58';
+
 import { assertIsTransactionSignature } from '../transaction-signature';
 
 describe('assertIsTransactionSignature()', () => {

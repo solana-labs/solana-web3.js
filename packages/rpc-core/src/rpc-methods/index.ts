@@ -1,12 +1,13 @@
 import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-types';
+
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 import { GetAccountInfoApi } from './getAccountInfo';
 import { GetBalanceApi } from './getBalance';
 import { GetBlockHeightApi } from './getBlockHeight';
 import { GetBlockProductionApi } from './getBlockProduction';
-import { GetBlockTimeApi } from './getBlockTime';
 import { GetBlocksApi } from './getBlocks';
+import { GetBlockTimeApi } from './getBlockTime';
 import { GetEpochInfoApi } from './getEpochInfo';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetInflationRewardApi } from './getInflationReward';

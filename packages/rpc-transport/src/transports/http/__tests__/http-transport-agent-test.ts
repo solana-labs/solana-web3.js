@@ -1,7 +1,7 @@
+import fetchMock from 'jest-fetch-mock-fork';
+
 import { IRpcTransport } from '../../transport-types';
 import { createHttpTransport } from '../http-transport';
-
-import fetchMock from 'jest-fetch-mock-fork';
 
 describe('createHttpTransport and HTTP agent config', () => {
     let agent: jest.Mock;

@@ -1,7 +1,8 @@
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
-import { SolanaRpcMethods, createSolanaRpcApi } from '../index';
+
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 describe('getMaxShredInsertSlot', () => {
     let rpc: Rpc<SolanaRpcMethods>;

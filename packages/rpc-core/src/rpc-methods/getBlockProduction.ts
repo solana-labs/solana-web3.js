@@ -1,4 +1,5 @@
 import { Base58EncodedAddress } from '@solana/keys';
+
 import { Commitment, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;

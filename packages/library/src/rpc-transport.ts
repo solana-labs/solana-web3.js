@@ -1,5 +1,6 @@
 import { createHttpTransport } from '@solana/rpc-transport';
 import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+
 import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
 

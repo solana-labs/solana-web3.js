@@ -1,4 +1,4 @@
-import { U64UnsafeBeyond2Pow53Minus1, Commitment, Slot } from './common';
+import { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetTransactionCountApiResponse = U64UnsafeBeyond2Pow53Minus1;
 
