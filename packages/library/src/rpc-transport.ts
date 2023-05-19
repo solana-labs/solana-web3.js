@@ -1,5 +1,7 @@
 import { createHttpTransport } from '@solana/rpc-transport';
 import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
+import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
 
 /**
  * Lowercasing header names makes it easier to override user-supplied headers.
@@ -15,14 +17,17 @@ function normalizeHeaders<T extends Record<string, string>>(
 }
 
 export function createDefaultRpcTransport(config: Parameters<typeof createHttpTransport>[0]): IRpcTransport {
-    return createHttpTransport({
-        ...config,
-        headers: {
-            ...(config.headers ? normalizeHeaders(config.headers) : undefined),
-            ...({
-                // Keep these headers lowercase so they will override any user-supplied headers above.
-                'solana-client': `js/${__VERSION__}` ?? 'UNKNOWN',
-            } as { [overrideHeader: string]: string }),
-        },
-    });
+    return getRpcTransportWithRequestCoalescing(
+        createHttpTransport({
+            ...config,
+            headers: {
+                ...(config.headers ? normalizeHeaders(config.headers) : undefined),
+                ...({
+                    // Keep these headers lowercase so they will override any user-supplied headers above.
+                    'solana-client': `js/${__VERSION__}` ?? 'UNKNOWN',
+                } as { [overrideHeader: string]: string }),
+            },
+        }),
+        getSolanaRpcPayloadDeduplicationKey
+    );
 }
