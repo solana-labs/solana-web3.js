@@ -202,7 +202,7 @@ type TransactionMetaInnerInstructionsParsed = Readonly<{
 
 type TransactionAddressTableLookups = Readonly<{
     message: Readonly<{
-        addressTableLookups?: readonly AddressTableLookup[] | null;
+        addressTableLookups: readonly AddressTableLookup[];
     }>;
 }>;
 
@@ -222,7 +222,10 @@ export interface GetTransactionApi {
                   ? Record<string, never>
                   : { version: TransactionVersion }) & {
                   meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
-                  transaction: TransactionJsonParsed & TransactionAddressTableLookups;
+                  transaction: TransactionJsonParsed &
+                      (TMaxSupportedTransactionVersion extends void
+                          ? Record<string, never>
+                          : TransactionAddressTableLookups);
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
@@ -285,7 +288,10 @@ export interface GetTransactionApi {
                                 ? Record<string, never>
                                 : TransactionMetaLoadedAddresses))
                       | null;
-                  transaction: TransactionJson & TransactionAddressTableLookups;
+                  transaction: TransactionJson &
+                      (TMaxSupportedTransactionVersion extends void
+                          ? Record<string, never>
+                          : TransactionAddressTableLookups);
               })
         | null;
 }
