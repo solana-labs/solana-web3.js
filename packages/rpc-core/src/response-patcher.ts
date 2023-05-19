@@ -1,6 +1,6 @@
-import { createSolanaRpcApi } from './rpc-methods';
 import { ALLOWED_NUMERIC_KEYPATHS } from './response-patcher-allowed-numeric-values';
 import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
+import { createSolanaRpcApi } from './rpc-methods';
 
 export type KeyPath = ReadonlyArray<KeyPathWildcard | number | string | KeyPath>;
 // FIXME(https://github.com/microsoft/TypeScript/issues/33014)

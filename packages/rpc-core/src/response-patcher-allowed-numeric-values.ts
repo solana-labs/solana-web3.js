@@ -1,6 +1,6 @@
-import { createSolanaRpcApi } from './rpc-methods';
 import { KeyPath } from './response-patcher';
 import { KEYPATH_WILDCARD } from './response-patcher-types';
+import { createSolanaRpcApi } from './rpc-methods';
 
 /**
  * These are keypaths at the end of which you will find a numeric value that should *not* be upcast

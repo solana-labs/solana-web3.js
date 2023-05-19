@@ -1,4 +1,5 @@
 import bs58 from 'bs58';
+
 import { assertIsBlockhash } from '../blockhash';
 
 describe('base58', () => {

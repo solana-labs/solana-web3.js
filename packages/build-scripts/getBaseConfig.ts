@@ -1,5 +1,6 @@
-import path from 'path';
 import { env } from 'node:process';
+
+import path from 'path';
 import { Format, Options } from 'tsup';
 
 type Platform =

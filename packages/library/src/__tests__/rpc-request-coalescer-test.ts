@@ -1,4 +1,5 @@
 import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+
 import { getRpcTransportWithRequestCoalescing } from '../rpc-request-coalescer';
 
 describe('RPC request coalescer', () => {

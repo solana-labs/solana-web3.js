@@ -1,4 +1,5 @@
 import { Base58EncodedAddress } from '@solana/keys';
+
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetInflationRewardApiResponse = Readonly<{

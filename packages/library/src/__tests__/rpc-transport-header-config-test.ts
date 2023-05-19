@@ -1,6 +1,6 @@
-import { createDefaultRpcTransport } from '../rpc-transport';
-
 import { createHttpTransport } from '@solana/rpc-transport';
+
+import { createDefaultRpcTransport } from '../rpc-transport';
 
 jest.mock('@solana/rpc-transport');
 

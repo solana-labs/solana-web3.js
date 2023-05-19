@@ -1,7 +1,7 @@
-import { createHttpTransport } from '../http-transport';
-import { IRpcTransport } from '../../transport-types';
-
 import fetchMock from 'jest-fetch-mock-fork';
+
+import { IRpcTransport } from '../../transport-types';
+import { createHttpTransport } from '../http-transport';
 
 describe('createHttpTransport and `AbortSignal`', () => {
     let makeHttpRequest: IRpcTransport;

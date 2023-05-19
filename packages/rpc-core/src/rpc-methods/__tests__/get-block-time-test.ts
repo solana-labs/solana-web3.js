@@ -2,6 +2,7 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 describe('getBlockTime', () => {
@@ -18,11 +19,6 @@ describe('getBlockTime', () => {
     describe('when called with a currently available block', () => {
         // TODO: either use getFirstAvailableBlock when implemented, or we'll need a way to control the ledger
         it.todo('returns a block time');
-
-        // it('returns a block time', async () => {
-        //     const blockTimePromise = rpc.getBlockTime(0n).send();
-        //     await expect(blockTimePromise).resolves.toEqual(expect.any(Number));
-        // })
     });
 
     describe('when called with a block that has been cleaned up', () => {

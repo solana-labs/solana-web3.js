@@ -1,4 +1,5 @@
 import bs58 from 'bs58';
+
 import { assertIsBase58EncodedAddress } from '../base58';
 
 describe('base58', () => {

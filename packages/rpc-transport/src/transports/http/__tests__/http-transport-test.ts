@@ -1,8 +1,8 @@
+import fetchMock from 'jest-fetch-mock-fork';
+
+import { IRpcTransport } from '../../transport-types';
 import { createHttpTransport } from '../http-transport';
 import { SolanaHttpError } from '../http-transport-errors';
-import { IRpcTransport } from '../../transport-types';
-
-import fetchMock from 'jest-fetch-mock-fork';
 
 describe('createHttpTransport', () => {
     let makeHttpRequest: IRpcTransport;

@@ -13,7 +13,7 @@
     },
     "devDependencies": {
         "@commitlint/config-conventional": "^17.0.2",
-        "@solana/eslint-config-solana": "^1.0.0",
+        "@solana/eslint-config-solana": "^1.0.1",
         "@solana/prettier-config-solana": "^0.0.2",
         "commitlint": "^17.4.2",
         "eslint-config-turbo": "^0.0.7",

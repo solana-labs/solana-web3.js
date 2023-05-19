@@ -1,4 +1,4 @@
-import { Slot, Commitment } from './common';
+import { Commitment, Slot } from './common';
 
 type GetBlocksApiResponse = Slot[];
 

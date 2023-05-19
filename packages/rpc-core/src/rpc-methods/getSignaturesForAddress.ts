@@ -1,7 +1,8 @@
 import { Base58EncodedAddress } from '@solana/keys';
-import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';
+import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetSignaturesForAddressTransaction = RpcResponse<{
     /** transaction signature as base-58 encoded string */
