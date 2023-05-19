@@ -151,7 +151,7 @@ type ParsedTransactionInstruction = Readonly<{
     programId: Base58EncodedAddress;
 }>;
 
-type TransactionJsonParsed = TransactionJson &
+type TransactionJsonParsed = TransactionBase &
     Readonly<{
         message: {
             accountKeys: [
