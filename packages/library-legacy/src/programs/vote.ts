@@ -366,8 +366,10 @@ export class VoteProgram {
    * This is generated from the solana-vote-program VoteState struct as
    * `VoteState::size_of()`:
    * https://docs.rs/solana-vote-program/1.9.5/solana_vote_program/vote_state/struct.VoteState.html#method.size_of
+   *
+   * KEEP IN SYNC WITH `VoteState::size_of()` in https://github.com/solana-labs/solana/blob/a474cb24b9238f5edcc982f65c0b37d4a1046f7e/sdk/program/src/vote/state/mod.rs#L340-L342
    */
-  static space: number = 3731;
+  static space: number = process.env.TEST_LIVE ? 3762 : 3731;
 
   /**
    * Generate an Initialize instruction.
