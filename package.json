@@ -22,6 +22,6 @@
     "engines": {
         "node": ">=14.0.0"
     },
-    "packageManager": "pnpm@7.17.0",
+    "packageManager": "pnpm@8.5.1",
     "prettier": "@solana/prettier-config-solana"
 }
