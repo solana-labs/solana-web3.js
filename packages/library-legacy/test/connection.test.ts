@@ -749,6 +749,36 @@ describe('Connection', function () {
         });
       expect(programAccountsDoMatchFilter).to.have.length(2);
     }
+
+    {
+      await mockRpcResponse({
+        method: 'getProgramAccounts',
+        params: [
+          programId.publicKey.toBase58(),
+          {
+            commitment: 'confirmed',
+            withContext: true,
+          },
+        ],
+        value: {
+          context: {
+            slot: 11,
+          },
+          value: [],
+        },
+      });
+      const programAccountsWithContext = await connection.getProgramAccounts(
+        programId.publicKey,
+        {
+          commitment: 'confirmed',
+          withContext: true,
+        },
+      );
+      expect(programAccountsWithContext).to.have.nested.property(
+        'context.slot',
+      );
+      expect(programAccountsWithContext).to.have.property('value');
+    }
   }).timeout(30 * 1000);
 
   it('get balance', async () => {

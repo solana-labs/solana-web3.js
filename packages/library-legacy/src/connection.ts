@@ -2685,7 +2685,15 @@ export type GetProgramAccountsConfig = {
   filters?: GetProgramAccountsFilter[];
   /** The minimum slot that the request can be evaluated at */
   minContextSlot?: number;
+  /** wrap the result in an RpcResponse JSON object */
+  withContext?: boolean;
 };
+
+export type GetProgramAccountsResponse = readonly Readonly<{
+  account: AccountInfo<Buffer>;
+  /** the account Pubkey as base-58 encoded string */
+  pubkey: PublicKey;
+}>[];
 
 /**
  * Configuration object for getParsedProgramAccounts
@@ -3336,17 +3344,13 @@ export class Connection {
   /**
    * Fetch all the token accounts owned by the specified account
    *
-   * @return {Promise<RpcResponseAndContext<Array<{pubkey: PublicKey, account: AccountInfo<Buffer>}>>>}
+   * @return {Promise<RpcResponseAndContext<GetProgramAccountsResponse>}
    */
   async getTokenAccountsByOwner(
     ownerAddress: PublicKey,
     filter: TokenAccountsFilter,
     commitmentOrConfig?: Commitment | GetTokenAccountsByOwnerConfig,
-  ): Promise<
-    RpcResponseAndContext<
-      Array<{pubkey: PublicKey; account: AccountInfo<Buffer>}>
-    >
-  > {
+  ): Promise<RpcResponseAndContext<GetProgramAccountsResponse>> {
     const {commitment, config} =
       extractCommitmentFromConfig(commitmentOrConfig);
     let _args: any[] = [ownerAddress.toBase58()];
@@ -3623,8 +3627,22 @@ export class Connection {
    */
   async getProgramAccounts(
     programId: PublicKey,
+    configOrCommitment?: GetProgramAccountsConfig &
+      Readonly<{withContext: true}>,
+  ): Promise<RpcResponseAndContext<GetProgramAccountsResponse>>;
+  // eslint-disable-next-line no-dupe-class-members
+  async getProgramAccounts(
+    programId: PublicKey,
     configOrCommitment?: GetProgramAccountsConfig | Commitment,
-  ): Promise<Array<{pubkey: PublicKey; account: AccountInfo<Buffer>}>> {
+  ): Promise<GetProgramAccountsResponse>;
+  // eslint-disable-next-line no-dupe-class-members
+  async getProgramAccounts(
+    programId: PublicKey,
+    configOrCommitment?: GetProgramAccountsConfig | Commitment,
+  ): Promise<
+    | GetProgramAccountsResponse
+    | RpcResponseAndContext<GetProgramAccountsResponse>
+  > {
     const {commitment, config} =
       extractCommitmentFromConfig(configOrCommitment);
     const {encoding, ...configWithoutEncoding} = config || {};
@@ -3635,7 +3653,11 @@ export class Connection {
       configWithoutEncoding,
     );
     const unsafeRes = await this._rpcRequest('getProgramAccounts', args);
-    const res = create(unsafeRes, jsonRpcResult(array(KeyedAccountInfoResult)));
+    const baseSchema = array(KeyedAccountInfoResult);
+    const res =
+      configWithoutEncoding.withContext === true
+        ? create(unsafeRes, jsonRpcResultAndContext(baseSchema))
+        : create(unsafeRes, jsonRpcResult(baseSchema));
     if ('error' in res) {
       throw new SolanaJSONRPCError(
         res.error,
