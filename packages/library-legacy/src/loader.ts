@@ -3,6 +3,7 @@ import * as BufferLayout from '@solana/buffer-layout';
 
 import {PublicKey} from './publickey';
 import {Transaction, PACKET_DATA_SIZE} from './transaction';
+import {MS_PER_SLOT} from './timing';
 import {SYSVAR_RENT_PUBKEY} from './sysvar';
 import {sendAndConfirmTransaction} from './utils/send-and-confirm-transaction';
 import {sleep} from './utils/sleep';
@@ -220,14 +221,42 @@ export class Loader {
         programId,
         data,
       });
-      await sendAndConfirmTransaction(
-        connection,
+      const deployCommitment = 'processed';
+      const finalizeSignature = await connection.sendTransaction(
         transaction,
         [payer, program],
-        {
-          commitment: 'confirmed',
-        },
+        {preflightCommitment: deployCommitment},
       );
+      const {context, value} = await connection.confirmTransaction(
+        {
+          signature: finalizeSignature,
+          lastValidBlockHeight: transaction.lastValidBlockHeight!,
+          blockhash: transaction.recentBlockhash!,
+        },
+        deployCommitment,
+      );
+      if (value.err) {
+        throw value.err;
+      }
+      // We prevent programs from being usable until the slot after their deployment.
+      // See https://github.com/solana-labs/solana/pull/29654
+      while (
+        true // eslint-disable-line no-constant-condition
+      ) {
+        try {
+          const currentSlot = await connection.getSlot({
+            commitment: deployCommitment,
+          });
+          if (currentSlot > context.slot) {
+            break;
+          }
+        } catch {
+          /* empty */
+        }
+        await new Promise(resolve =>
+          setTimeout(resolve, Math.round(MS_PER_SLOT / 2)),
+        );
+      }
     }
 
     // success
