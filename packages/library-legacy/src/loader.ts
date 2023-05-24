@@ -236,7 +236,9 @@ export class Loader {
         deployCommitment,
       );
       if (value.err) {
-        throw value.err;
+        throw new Error(
+          `Transaction ${finalizeSignature} failed (${JSON.stringify(value)})`,
+        );
       }
       // We prevent programs from being usable until the slot after their deployment.
       // See https://github.com/solana-labs/solana/pull/29654
