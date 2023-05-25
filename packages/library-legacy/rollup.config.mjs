@@ -70,6 +70,7 @@ function generateConfig(configType, format) {
         values: {
           'process.env.NODE_ENV': JSON.stringify(env),
           'process.env.BROWSER': JSON.stringify(browser),
+          'process.env.TEST_LIVE': JSON.stringify(false),
           'process.env.npm_package_version': JSON.stringify(
             process.env.npm_package_version,
           ),
