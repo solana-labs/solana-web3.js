@@ -438,8 +438,8 @@ importers:
         specifier: ^10.1.0
         version: 10.2.0
       mockttp:
-        specifier: ^3.6.2
-        version: 3.6.2
+        specifier: ^3.7.5
+        version: 3.7.5
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -2382,8 +2382,8 @@ packages:
       '@hapi/hoek': 9.2.1
     dev: true
 
-  /@httptoolkit/httpolyglot@2.1.0:
-    resolution: {integrity: sha512-IkTpczmtH8XM/vAL5SL2/aLJYVD1m9KOMZEfl5AaI+xve7EBrj7NRPztk4YKC364tes3cnzCFg5JMjVpVqzWUw==}
+  /@httptoolkit/httpolyglot@2.1.1:
+    resolution: {integrity: sha512-TvJOb/9dYmOD1U8sErFKCy5BxQc7kbLuvvRLfsTr+NN9kQGNGRNyenC00mJxUn2ld/WtxPMNup3JICHPUOPXDg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/node': 16.18.11
@@ -5746,6 +5746,7 @@ packages:
   /express-graphql@0.11.0(graphql@15.8.0):
     resolution: {integrity: sha512-IMYmF2aIBKKfo8c+EENBNR8FAy91QHboxfaHe1omCyb49GJXsToUgcjjIF/PfWJdzn0Ofp6JJvcsODQJrqpz2g==}
     engines: {node: '>= 10.x'}
+    deprecated: This package is no longer maintained. We recommend using `graphql-http` instead. Please consult the migration document https://github.com/graphql/graphql-http#migrating-express-grpahql.
     peerDependencies:
       graphql: ^14.7.0 || ^15.3.0
     dependencies:
@@ -8449,14 +8450,14 @@ packages:
       yargs-unparser: 2.0.0
     dev: true
 
-  /mockttp@3.6.2:
-    resolution: {integrity: sha512-IJ1tIvymIhyPRv6oOVuJkTlGblFY0sBZPCeajFEAh46EXJ1T+NOi3lzZChpyX3n24FMZWnZ/H5bxfH/mSBfh0w==}
+  /mockttp@3.7.5:
+    resolution: {integrity: sha512-QSg3qef5xrTcAU8fBlPdK0xcd0uXM0yQh9QPnM163DJw76ctOFJghrJ4Lcjr7Ti2rQ7SeFICo4zANujUClNOrQ==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     dependencies:
       '@graphql-tools/schema': 8.5.1(graphql@15.8.0)
       '@graphql-tools/utils': 8.13.1(graphql@15.8.0)
-      '@httptoolkit/httpolyglot': 2.1.0
+      '@httptoolkit/httpolyglot': 2.1.1
       '@httptoolkit/subscriptions-transport-ws': 0.11.2(graphql@15.8.0)
       '@httptoolkit/websocket-stream': 6.0.1
       '@types/cors': 2.8.12
@@ -8488,6 +8489,7 @@ packages:
       performance-now: 2.1.0
       portfinder: 1.0.28
       read-tls-client-hello: 1.0.1
+      semver: 5.7.1
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.1
       uuid: 8.3.2
