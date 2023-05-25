@@ -108,7 +108,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "esm": "^3.2.25",
     "mocha": "^10.1.0",
-    "mockttp": "^3.6.2",
+    "mockttp": "^3.7.5",
     "mz": "^2.7.0",
     "node-abort-controller": "^3.0.1",
     "prettier": "^2.3.0",
