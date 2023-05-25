@@ -2,7 +2,8 @@ import { Base58EncodedAddress } from '@solana/keys';
 
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';
-import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { UnixTimestamp } from '../unix-timestamp';
+import { Commitment, RpcResponse, Slot } from './common';
 
 type GetSignaturesForAddressTransaction = RpcResponse<{
     /** transaction signature as base-58 encoded string */
@@ -13,8 +14,8 @@ type GetSignaturesForAddressTransaction = RpcResponse<{
     err: TransactionError | null;
     /** Memo associated with the transaction, null if no memo is present */
     memo: string | null;
-    /** estimated production time, as Unix timestamp (seconds since the Unix epoch) of when transaction was processed. null if not available. */
-    blockTime: U64UnsafeBeyond2Pow53Minus1 | null;
+    /** estimated production time of when transaction was processed. null if not available. */
+    blockTime: UnixTimestamp | null;
     /** The transaction's cluster confirmation status */
     confirmationStatus: Commitment | null;
 }>;
