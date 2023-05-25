@@ -192,13 +192,13 @@ type InnerInstructions<TInstructionType> = Readonly<{
 }>;
 
 type TransactionMetaInnerInstructionsNotParsed = Readonly<{
-    innerInstructions: readonly InnerInstructions<TransactionInstruction>[];
+    innerInstructions?: readonly InnerInstructions<TransactionInstruction>[] | null;
 }>;
 
 type TransactionMetaInnerInstructionsParsed = Readonly<{
-    innerInstructions: readonly InnerInstructions<
-        PartiallyDecodedTransactionInstruction | ParsedTransactionInstruction
-    >[];
+    innerInstructions?:
+        | readonly InnerInstructions<PartiallyDecodedTransactionInstruction | ParsedTransactionInstruction>[]
+        | null;
 }>;
 
 type TransactionAddressTableLookups = Readonly<{
