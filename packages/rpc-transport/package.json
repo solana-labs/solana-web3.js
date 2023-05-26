@@ -81,7 +81,7 @@
         "jest-runner-eslint": "^2.0.0",
         "jest-runner-prettier": "^1.0.0",
         "postcss": "^8.4.12",
-        "prettier": "^2.7.1",
+        "prettier": "^2.8.8",
         "test-config": "workspace:*",
         "ts-node": "^10.9.1",
         "tsconfig": "workspace:*",

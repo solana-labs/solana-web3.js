@@ -29,7 +29,7 @@ export const SolanaJSONRPCErrorCode = {
   JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED: -32016,
 } as const;
 export type SolanaJSONRPCErrorCodeEnum =
-  typeof SolanaJSONRPCErrorCode[keyof typeof SolanaJSONRPCErrorCode];
+  (typeof SolanaJSONRPCErrorCode)[keyof typeof SolanaJSONRPCErrorCode];
 
 export class SolanaJSONRPCError extends Error {
   code: SolanaJSONRPCErrorCodeEnum | unknown;
