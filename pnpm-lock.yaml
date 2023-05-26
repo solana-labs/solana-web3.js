@@ -12,7 +12,7 @@ importers:
         version: 1.0.1(@typescript-eslint/eslint-plugin@5.57.1)(@typescript-eslint/parser@5.57.1)(eslint-plugin-jest@27.2.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.37.0)(typescript@5.0.3)
       '@solana/prettier-config-solana':
         specifier: ^0.0.2
-        version: 0.0.2(prettier@2.8.7)
+        version: 0.0.2(prettier@2.8.8)
       commitlint:
         specifier: ^17.4.2
         version: 17.4.2
@@ -88,13 +88,13 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.3)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       postcss:
         specifier: ^8.4.12
         version: 8.4.21
       prettier:
-        specifier: ^2.7.1
-        version: 2.8.3
+        specifier: ^2.8.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -164,13 +164,13 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.4)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       postcss:
         specifier: ^8.4.12
         version: 8.4.21
       prettier:
-        specifier: ^2.7.1
-        version: 2.8.4
+        specifier: ^2.8.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -252,13 +252,13 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.3)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       postcss:
         specifier: ^8.4.12
         version: 8.4.21
       prettier:
-        specifier: ^2.7.1
-        version: 2.8.3
+        specifier: ^2.8.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -430,7 +430,7 @@ importers:
         version: 10.1.0(eslint@8.37.0)
       eslint-plugin-prettier:
         specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.5.0)(eslint@8.37.0)(prettier@2.6.2)
+        version: 4.2.1(eslint-config-prettier@8.5.0)(eslint@8.37.0)(prettier@2.8.8)
       esm:
         specifier: ^3.2.25
         version: 3.2.25
@@ -447,8 +447,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       prettier:
-        specifier: ^2.3.0
-        version: 2.6.2
+        specifier: ^2.8.8
+        version: 2.8.8
       rimraf:
         specifier: 5.0.1
         version: 5.0.1
@@ -554,13 +554,13 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.4)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       postcss:
         specifier: ^8.4.12
         version: 8.4.21
       prettier:
-        specifier: ^2.7.1
-        version: 2.8.4
+        specifier: ^2.8.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -638,13 +638,13 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.4)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       postcss:
         specifier: ^8.4.12
         version: 8.4.21
       prettier:
-        specifier: ^2.7.1
-        version: 2.8.4
+        specifier: ^2.8.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -674,7 +674,7 @@ importers:
         version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.5.0)(prettier@2.8.7)
+        version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
       jest-watch-master:
         specifier: ^1.0.0
         version: 1.0.0(jest-validate@29.5.0)(jest@29.5.0)
@@ -3292,12 +3292,12 @@ packages:
       typescript: 5.0.3
     dev: true
 
-  /@solana/prettier-config-solana@0.0.2(prettier@2.8.7):
+  /@solana/prettier-config-solana@0.0.2(prettier@2.8.8):
     resolution: {integrity: sha512-F/e2UIJwb30Y8QjR9nr/OrJiCc8yjMkiP9Ctk4VYg+8jODNP31dx6s9mn4sbMFVYA0Km5EPZLN2xsZacBy0y/A==}
     peerDependencies:
       prettier: ^2.8.7
     dependencies:
-      prettier: 2.8.7
+      prettier: 2.8.8
     dev: true
 
   /@solana/spl-token@0.3.7(@solana/web3.js@1.75.0):
@@ -5476,7 +5476,7 @@ packages:
       rambda: 7.2.1
     dev: true
 
-  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.5.0)(eslint@8.37.0)(prettier@2.6.2):
+  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.5.0)(eslint@8.37.0)(prettier@2.8.8):
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -5489,7 +5489,7 @@ packages:
     dependencies:
       eslint: 8.37.0
       eslint-config-prettier: 8.5.0(eslint@8.37.0)
-      prettier: 2.6.2
+      prettier: 2.8.8
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -7400,7 +7400,7 @@ packages:
       - '@jest/test-result'
       - jest-runner
 
-  /jest-runner-prettier@1.0.0(jest@29.5.0)(prettier@2.8.3):
+  /jest-runner-prettier@1.0.0(jest@29.5.0)(prettier@2.8.8):
     resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
     peerDependencies:
       jest: '>= 27.0.0'
@@ -7412,53 +7412,12 @@ packages:
       jest-diff: 27.5.1
       jest-runner: 27.5.1
       p-limit: 4.0.0
-      prettier: 2.8.3
+      prettier: 2.8.8
     transitivePeerDependencies:
       - bufferutil
       - canvas
       - supports-color
       - utf-8-validate
-    dev: true
-
-  /jest-runner-prettier@1.0.0(jest@29.5.0)(prettier@2.8.4):
-    resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
-    peerDependencies:
-      jest: '>= 27.0.0'
-      prettier: '>= 1.8'
-    dependencies:
-      create-jest-runner: 0.8.0
-      emphasize: 5.0.0
-      jest: 29.5.0(@types/node@18.15.12)(ts-node@10.9.1)
-      jest-diff: 27.5.1
-      jest-runner: 27.5.1
-      p-limit: 4.0.0
-      prettier: 2.8.4
-    transitivePeerDependencies:
-      - bufferutil
-      - canvas
-      - supports-color
-      - utf-8-validate
-    dev: true
-
-  /jest-runner-prettier@1.0.0(jest@29.5.0)(prettier@2.8.7):
-    resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
-    peerDependencies:
-      jest: '>= 27.0.0'
-      prettier: '>= 1.8'
-    dependencies:
-      create-jest-runner: 0.8.0
-      emphasize: 5.0.0
-      jest: 29.5.0(@types/node@18.15.12)(ts-node@10.9.1)
-      jest-diff: 27.5.1
-      jest-runner: 27.5.1
-      p-limit: 4.0.0
-      prettier: 2.8.7
-    transitivePeerDependencies:
-      - bufferutil
-      - canvas
-      - supports-color
-      - utf-8-validate
-    dev: false
 
   /jest-runner@27.5.1:
     resolution: {integrity: sha512-g4NPsM4mFCOwFKXO4p/H/kWGdJp9V8kURY2lX8Me2drgXqG7rrZAx5kv+5H7wtt/cdFIjhqYx1HrlqWHaOvDaQ==}
@@ -9130,26 +9089,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier@2.6.2:
-    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: true
-
-  /prettier@2.8.3:
-    resolution: {integrity: sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: true
-
-  /prettier@2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: true
-
-  /prettier@2.8.7:
-    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
+  /prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
