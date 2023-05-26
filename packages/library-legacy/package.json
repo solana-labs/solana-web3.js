@@ -123,7 +123,7 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.0.0",
     "tsconfig": "workspace:*",
-    "tslib": "^2.1.0",
+    "tslib": "^2.5.2",
     "typedoc": "^0.23.28",
     "typescript": "^5.0.3"
   }
