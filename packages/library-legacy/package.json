@@ -65,7 +65,7 @@
     "bs58": "^4.0.1",
     "buffer": "6.0.3",
     "fast-stable-stringify": "^1.0.0",
-    "jayson": "^3.4.4",
+    "jayson": "^4.1.0",
     "node-fetch": "^2.6.7",
     "rpc-websockets": "^7.5.1",
     "superstruct": "^0.14.2"
