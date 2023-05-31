@@ -125,6 +125,6 @@
     "tsconfig": "workspace:*",
     "tslib": "^2.5.2",
     "typedoc": "^0.23.28",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   }
 }
