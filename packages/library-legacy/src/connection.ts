@@ -3627,7 +3627,7 @@ export class Connection {
    */
   async getProgramAccounts(
     programId: PublicKey,
-    configOrCommitment?: GetProgramAccountsConfig &
+    configOrCommitment: GetProgramAccountsConfig &
       Readonly<{withContext: true}>,
   ): Promise<RpcResponseAndContext<GetProgramAccountsResponse>>;
   // eslint-disable-next-line no-dupe-class-members
