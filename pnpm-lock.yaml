@@ -5,8 +5,8 @@ importers:
   .:
     devDependencies:
       '@commitlint/config-conventional':
-        specifier: ^17.0.2
-        version: 17.0.2
+        specifier: ^17.6.5
+        version: 17.6.5
       '@solana/eslint-config-solana':
         specifier: ^1.0.1
         version: 1.0.1(@typescript-eslint/eslint-plugin@5.57.1)(@typescript-eslint/parser@5.57.1)(eslint-plugin-jest@27.2.1)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.37.0)(typescript@5.0.4)
@@ -1929,8 +1929,8 @@ packages:
       - '@swc/wasm'
     dev: true
 
-  /@commitlint/config-conventional@17.0.2:
-    resolution: {integrity: sha512-MfP0I/JbxKkzo+HXWB7B3WstGS4BiniotU3d3xQ9gK8cR0DbeZ4MuyGCWF65YDyrcDTS3WlrJ3ndSPA1pqhoPw==}
+  /@commitlint/config-conventional@17.6.5:
+    resolution: {integrity: sha512-Xl9H9KLl86NZm5CYNTNF9dcz1xelE/EbvhWIWcYxG/rn3UWYWdWmmnX2q6ZduNdLFSGbOxzUpIx61j5zxbeXxg==}
     engines: {node: '>=v14'}
     dependencies:
       conventional-changelog-conventionalcommits: 5.0.0
