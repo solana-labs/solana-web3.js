@@ -84,8 +84,8 @@ importers:
         specifier: ^29.5.0
         version: 29.5.0
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
@@ -160,8 +160,8 @@ importers:
         specifier: ^29.5.0
         version: 29.5.0
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
@@ -248,8 +248,8 @@ importers:
         specifier: ^29.5.0
         version: 29.5.0
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
@@ -550,8 +550,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
@@ -634,8 +634,8 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.37.0)(jest@29.5.0)
+        specifier: ^2.1.0
+        version: 2.1.0(eslint@8.37.0)(jest@29.5.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.5.0)(prettier@2.8.8)
@@ -5164,6 +5164,13 @@ packages:
     dependencies:
       is-obj: 2.0.0
 
+  /dot-prop@6.0.1:
+    resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
+    engines: {node: '>=10'}
+    dependencies:
+      is-obj: 2.0.0
+    dev: true
+
   /duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
     dependencies:
@@ -7438,6 +7445,25 @@ packages:
     transitivePeerDependencies:
       - '@jest/test-result'
       - jest-runner
+    dev: false
+
+  /jest-runner-eslint@2.1.0(eslint@8.37.0)(jest@29.5.0):
+    resolution: {integrity: sha512-5gQOLej+HLDNzxrqOxg+l/ZY6hAHYhzO7gs3eOR+PQz14wpDuLDIivn+xJ8uwHW2tYM/37NGskqwBe5RbbJPEw==}
+    engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      eslint: ^7 || ^8
+      jest: ^27 || ^28 || ^29
+    dependencies:
+      chalk: 4.1.2
+      cosmiconfig: 7.0.1
+      create-jest-runner: 0.11.2
+      dot-prop: 6.0.1
+      eslint: 8.37.0
+      jest: 29.5.0(@types/node@18.15.12)(ts-node@10.9.1)
+    transitivePeerDependencies:
+      - '@jest/test-result'
+      - jest-runner
+    dev: true
 
   /jest-runner-prettier@1.0.0(jest@29.5.0)(prettier@2.8.8):
     resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
