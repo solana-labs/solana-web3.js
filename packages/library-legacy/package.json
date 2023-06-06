@@ -83,7 +83,7 @@
     "@rollup/plugin-multi-entry": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-replace": "^5.0.2",
-    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-terser": "^0.4.3",
     "@solana/spl-token": "^0.3.7",
     "@types/bn.js": "^5.1.0",
     "@types/bs58": "^4.0.1",
