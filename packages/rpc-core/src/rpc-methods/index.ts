@@ -24,6 +24,7 @@ import { GetTransactionApi } from './getTransaction';
 import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
+import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -47,6 +48,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSlotApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
+    GetTokenLargestAccountsApi &
     GetTransactionApi &
     GetTransactionCountApi &
     GetVoteAccountsApi &
