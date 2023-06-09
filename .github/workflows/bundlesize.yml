@@ -25,7 +25,7 @@ jobs:
       - name: Install package manager
         uses: pnpm/action-setup@v2
         with:
-          version: 7.26.3
+          version: 8.6.1
           run_install: false
 
       - name: Download built bundles
