@@ -704,6 +704,12 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
 
+  packages/test-matchers:
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.5.1
+        version: 29.5.1
+
   packages/tsconfig: {}
 
 packages:
