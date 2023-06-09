@@ -36,7 +36,7 @@ jobs:
       - name: Install package manager
         uses: pnpm/action-setup@v2
         with:
-          version: 7.26.3
+          version: 8.6.1
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -70,7 +70,7 @@ jobs:
       - name: Install package manager
         uses: pnpm/action-setup@v2
         with:
-          version: 7.26.3
+          version: 8.6.1
 
       - name: Setup Node
         uses: actions/setup-node@v3
