@@ -29,3 +29,14 @@ export function assertIsBase58EncodedAddress(
         });
     }
 }
+
+export function getBase58EncodedAddressComparator(): (x: string, y: string) => number {
+    return new Intl.Collator('en', {
+        caseFirst: 'lower',
+        ignorePunctuation: false,
+        localeMatcher: 'best fit',
+        numeric: false,
+        sensitivity: 'variant',
+        usage: 'sort',
+    }).compare;
+}
