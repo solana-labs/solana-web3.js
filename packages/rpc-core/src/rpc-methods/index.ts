@@ -9,6 +9,7 @@ import { GetBlockProductionApi } from './getBlockProduction';
 import { GetBlocksApi } from './getBlocks';
 import { GetBlockTimeApi } from './getBlockTime';
 import { GetEpochInfoApi } from './getEpochInfo';
+import { GetEpochScheduleApi } from './getEpochSchedule';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
@@ -23,7 +24,6 @@ import { GetTransactionApi } from './getTransaction';
 import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
-import { GetEpochScheduleApi } from './getEpochSchedule';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
