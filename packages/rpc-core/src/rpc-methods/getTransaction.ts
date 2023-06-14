@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
+import { StringifiedBigInt } from '../stringified-bigint';
 import { TransactionError } from '../transaction-error';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
@@ -25,7 +26,7 @@ type TokenBalance = Readonly<{
     programId?: Base58EncodedAddress;
     uiTokenAmount: {
         /** Raw amount of tokens as a string, ignoring decimals. */
-        amount: string;
+        amount: StringifiedBigInt;
         /** Number of decimals configured for token's mint. */
         decimals: number;
         /**
@@ -197,8 +198,8 @@ type TransactionMetaInnerInstructionsNotParsed = Readonly<{
 
 type TransactionMetaInnerInstructionsParsed = Readonly<{
     innerInstructions?:
-        | readonly InnerInstructions<PartiallyDecodedTransactionInstruction | ParsedTransactionInstruction>[]
-        | null;
+    | readonly InnerInstructions<PartiallyDecodedTransactionInstruction | ParsedTransactionInstruction>[]
+    | null;
 }>;
 
 type TransactionAddressTableLookups = Readonly<{
@@ -219,15 +220,15 @@ export interface GetTransactionApi {
             }>
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
-                  ? Record<string, never>
-                  : { version: TransactionVersion }) & {
-                  meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
-                  transaction: TransactionJsonParsed &
-                      (TMaxSupportedTransactionVersion extends void
-                          ? Record<string, never>
-                          : TransactionAddressTableLookups);
-              })
+            (TMaxSupportedTransactionVersion extends void
+                ? Record<string, never>
+                : { version: TransactionVersion }) & {
+                    meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
+                    transaction: TransactionJsonParsed &
+                    (TMaxSupportedTransactionVersion extends void
+                        ? Record<string, never>
+                        : TransactionAddressTableLookups);
+                })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
@@ -237,18 +238,18 @@ export interface GetTransactionApi {
             }>
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
-                  ? Record<string, never>
-                  : { version: TransactionVersion }) & {
-                  meta:
-                      | (TransactionMetaBase &
-                            TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
-                                ? Record<string, never>
-                                : TransactionMetaLoadedAddresses))
-                      | null;
-                  transaction: Base64EncodedDataResponse;
-              })
+            (TMaxSupportedTransactionVersion extends void
+                ? Record<string, never>
+                : { version: TransactionVersion }) & {
+                    meta:
+                    | (TransactionMetaBase &
+                        TransactionMetaInnerInstructionsNotParsed &
+                        (TMaxSupportedTransactionVersion extends void
+                            ? Record<string, never>
+                            : TransactionMetaLoadedAddresses))
+                    | null;
+                    transaction: Base64EncodedDataResponse;
+                })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
@@ -258,18 +259,18 @@ export interface GetTransactionApi {
             }>
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
-                  ? Record<string, never>
-                  : { version: TransactionVersion }) & {
-                  meta:
-                      | (TransactionMetaBase &
-                            TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
-                                ? Record<string, never>
-                                : TransactionMetaLoadedAddresses))
-                      | null;
-                  transaction: Base58EncodedDataResponse;
-              })
+            (TMaxSupportedTransactionVersion extends void
+                ? Record<string, never>
+                : { version: TransactionVersion }) & {
+                    meta:
+                    | (TransactionMetaBase &
+                        TransactionMetaInnerInstructionsNotParsed &
+                        (TMaxSupportedTransactionVersion extends void
+                            ? Record<string, never>
+                            : TransactionMetaLoadedAddresses))
+                    | null;
+                    transaction: Base58EncodedDataResponse;
+                })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
         address: Base58EncodedAddress,
@@ -279,20 +280,20 @@ export interface GetTransactionApi {
             }>
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
-                  ? Record<string, never>
-                  : { version: TransactionVersion }) & {
-                  meta:
-                      | (TransactionMetaBase &
-                            TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
-                                ? Record<string, never>
-                                : TransactionMetaLoadedAddresses))
-                      | null;
-                  transaction: TransactionJson &
-                      (TMaxSupportedTransactionVersion extends void
-                          ? Record<string, never>
-                          : TransactionAddressTableLookups);
-              })
+            (TMaxSupportedTransactionVersion extends void
+                ? Record<string, never>
+                : { version: TransactionVersion }) & {
+                    meta:
+                    | (TransactionMetaBase &
+                        TransactionMetaInnerInstructionsNotParsed &
+                        (TMaxSupportedTransactionVersion extends void
+                            ? Record<string, never>
+                            : TransactionMetaLoadedAddresses))
+                    | null;
+                    transaction: TransactionJson &
+                    (TMaxSupportedTransactionVersion extends void
+                        ? Record<string, never>
+                        : TransactionAddressTableLookups);
+                })
         | null;
 }
