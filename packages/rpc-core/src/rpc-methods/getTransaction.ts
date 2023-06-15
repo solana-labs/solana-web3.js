@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
+import { StringifiedBigInt } from '../stringified-bigint';
 import { TransactionError } from '../transaction-error';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
@@ -25,7 +26,7 @@ type TokenBalance = Readonly<{
     programId?: Base58EncodedAddress;
     uiTokenAmount: {
         /** Raw amount of tokens as a string, ignoring decimals. */
-        amount: string;
+        amount: StringifiedBigInt;
         /** Number of decimals configured for token's mint. */
         decimals: number;
         /**
