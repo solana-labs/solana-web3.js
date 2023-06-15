@@ -26,7 +26,6 @@ import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 
-
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
