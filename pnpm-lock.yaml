@@ -800,6 +800,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
+      '@solana/rpc-core':
+        specifier: workspace:*
+        version: link:../rpc-core
       '@swc/core':
         specifier: ^1.3.18
         version: 1.3.18
