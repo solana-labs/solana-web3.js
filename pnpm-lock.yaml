@@ -790,6 +790,13 @@ importers:
         version: 29.5.1
 
   packages/transactions:
+    dependencies:
+      '@metaplex-foundation/umi':
+        specifier: link:/home/sol/src/umi-git/packages/umi/
+        version: link:../../../umi-git/packages/umi
+      '@metaplex-foundation/umi-serializer-data-view':
+        specifier: link:/home/sol/src/umi-git/packages/umi-serializer-data-view/
+        version: link:../../../umi-git/packages/umi-serializer-data-view
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.0
