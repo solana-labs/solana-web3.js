@@ -38,7 +38,7 @@ function stubRpcWebSocket(
     }
   });
   stub(socket, 'call');
-  return socket as SinonStubbedInstance<Client>;
+  return socket as unknown as SinonStubbedInstance<Client>;
 }
 
 describe('Subscriptions', () => {
@@ -442,7 +442,7 @@ describe('Subscriptions', () => {
             describe('when a notification is published', () => {
               beforeEach(() => {
                 publishNotificationForServerSubscriptionId(
-                  stubbedSocket,
+                  stubbedSocket as unknown as Client,
                   serverSubscriptionId,
                 );
               });
@@ -506,7 +506,7 @@ describe('Subscriptions', () => {
               describe('when a notification is published before the unsubscribe is acknowledged by the server', () => {
                 beforeEach(() => {
                   publishNotificationForServerSubscriptionId(
-                    stubbedSocket,
+                    stubbedSocket as unknown as Client,
                     serverSubscriptionId,
                   );
                 });
@@ -591,7 +591,7 @@ describe('Subscriptions', () => {
               describe('when a notification is published', () => {
                 beforeEach(() => {
                   publishNotificationForServerSubscriptionId(
-                    stubbedSocket,
+                    stubbedSocket as unknown as Client,
                     serverSubscriptionId,
                   );
                 });
@@ -613,7 +613,7 @@ describe('Subscriptions', () => {
                 describe('when a notification is published', () => {
                   beforeEach(() => {
                     publishNotificationForServerSubscriptionId(
-                      stubbedSocket,
+                      stubbedSocket as unknown as Client,
                       serverSubscriptionId,
                     );
                   });
@@ -646,7 +646,7 @@ describe('Subscriptions', () => {
                 describe('when a notification for the first subscription is published', () => {
                   beforeEach(() => {
                     publishNotificationForServerSubscriptionId(
-                      stubbedSocket,
+                      stubbedSocket as unknown as Client,
                       serverSubscriptionId,
                     );
                   });
@@ -660,7 +660,7 @@ describe('Subscriptions', () => {
                 describe('when a notification for the second subscription is published', () => {
                   beforeEach(() => {
                     publishNotificationForServerSubscriptionId(
-                      stubbedSocket,
+                      stubbedSocket as unknown as Client,
                       secondServerSubscriptionId,
                     );
                   });
@@ -733,7 +733,7 @@ describe('Subscriptions', () => {
                   describe('when a notification is published', () => {
                     beforeEach(() => {
                       publishNotificationForServerSubscriptionId(
-                        stubbedSocket,
+                        stubbedSocket as unknown as Client,
                         serverSubscriptionId,
                       );
                     });
