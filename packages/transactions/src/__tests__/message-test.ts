@@ -31,4 +31,10 @@ describe('compileMessage', () => {
             expect(message.lifetimeToken).toBe('abc');
         });
     });
+    describe('versions', () => {
+        it('compiles the version', () => {
+            const message = compileMessage(baseTx);
+            expect(message).toHaveProperty('version', 0);
+        });
+    });
 });
