@@ -1,6 +1,7 @@
 import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
 import { ITransactionWithBlockhashLifetime } from './blockhash';
 import { getCompiledMessageHeader } from './compile-header';
+import { getCompiledInstructions } from './compile-instructions';
 import { getCompiledLifetimeToken } from './compile-lifetime-token';
 import { IDurableNonceTransaction } from './durable-nonce';
 import { ITransactionWithFeePayer } from './fee-payer';
@@ -15,6 +16,7 @@ export function compileMessage(
     const orderedAccounts = getOrderedAccountsFromAddressMap(addressMap);
     return {
         header: getCompiledMessageHeader(orderedAccounts),
+        instructions: getCompiledInstructions(transaction.instructions, orderedAccounts),
         lifetimeToken: getCompiledLifetimeToken(transaction.lifetimeConstraint),
         version: transaction.version,
     };

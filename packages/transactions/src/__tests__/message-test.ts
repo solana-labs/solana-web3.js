@@ -2,12 +2,14 @@ import { Base58EncodedAddress } from '@solana/keys';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
 import { getCompiledMessageHeader } from '../compile-header';
+import { getCompiledInstructions } from '../compile-instructions';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileMessage } from '../message';
 import { BaseTransaction } from '../types';
 
 jest.mock('../compile-header');
+jest.mock('../compile-instructions');
 jest.mock('../compile-lifetime-token');
 
 const MOCK_LIFETIME_CONSTRAINT =
@@ -36,6 +38,20 @@ describe('compileMessage', () => {
             const message = compileMessage(baseTx);
             expect(getCompiledMessageHeader).toHaveBeenCalled();
             expect(message.header).toBe(expectedCompiledMessageHeader);
+        });
+    });
+    describe('instructions', () => {
+        const expectedInstructions = [] as ReturnType<typeof getCompiledInstructions>;
+        beforeEach(() => {
+            jest.mocked(getCompiledInstructions).mockReturnValue(expectedInstructions);
+        });
+        it('sets `instructions` to the return value of `getCompiledInstructions`', () => {
+            const message = compileMessage(baseTx);
+            expect(getCompiledInstructions).toHaveBeenCalledWith(
+                baseTx.instructions,
+                expect.any(Array) /* orderedAccounts */
+            );
+            expect(message.instructions).toBe(expectedInstructions);
         });
     });
     describe('lifetime constraints', () => {
