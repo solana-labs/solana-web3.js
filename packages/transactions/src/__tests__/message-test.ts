@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/keys';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
+import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { getCompiledMessageHeader } from '../compile-header';
 import { getCompiledInstructions } from '../compile-instructions';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
@@ -9,6 +10,7 @@ import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileMessage } from '../message';
 import { BaseTransaction } from '../types';
 
+jest.mock('../compile-address-table-lookups');
 jest.mock('../compile-header');
 jest.mock('../compile-instructions');
 jest.mock('../compile-lifetime-token');
@@ -26,6 +28,30 @@ describe('compileMessage', () => {
             lifetimeConstraint: MOCK_LIFETIME_CONSTRAINT,
             version: 0,
         };
+    });
+    describe('address table lookups', () => {
+        const expectedAddressTableLookups = [] as ReturnType<typeof getCompiledAddressTableLookups>;
+        beforeEach(() => {
+            jest.mocked(getCompiledAddressTableLookups).mockReturnValue(expectedAddressTableLookups);
+        });
+        describe("when the transaction version is `'legacy'`", () => {
+            beforeEach(() => {
+                baseTx = { ...baseTx, version: 'legacy' };
+            });
+            it('does not set `addressTableLookups`', () => {
+                const message = compileMessage(baseTx);
+                expect(message).not.toHaveProperty('addressTableLookups');
+            });
+            it('does not call  `getCompiledAddressTableLookups`', () => {
+                compileMessage(baseTx);
+                expect(getCompiledAddressTableLookups).not.toHaveBeenCalled();
+            });
+        });
+        it('sets `addressTableLookups` to the return value of `getCompiledAddressTableLookups`', () => {
+            const message = compileMessage(baseTx);
+            expect(getCompiledAddressTableLookups).toHaveBeenCalled();
+            expect(message.addressTableLookups).toBe(expectedAddressTableLookups);
+        });
     });
     describe('message header', () => {
         const expectedCompiledMessageHeader = {

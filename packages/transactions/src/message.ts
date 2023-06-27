@@ -1,5 +1,6 @@
 import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
 import { ITransactionWithBlockhashLifetime } from './blockhash';
+import { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { getCompiledMessageHeader } from './compile-header';
 import { getCompiledInstructions } from './compile-instructions';
 import { getCompiledLifetimeToken } from './compile-lifetime-token';
@@ -16,6 +17,9 @@ export function compileMessage(
     const addressMap = getAddressMapFromInstructions(transaction.feePayer, transaction.instructions);
     const orderedAccounts = getOrderedAccountsFromAddressMap(addressMap);
     return {
+        ...(transaction.version !== 'legacy'
+            ? { addressTableLookups: getCompiledAddressTableLookups(orderedAccounts) }
+            : null),
         header: getCompiledMessageHeader(orderedAccounts),
         instructions: getCompiledInstructions(transaction.instructions, orderedAccounts),
         lifetimeToken: getCompiledLifetimeToken(transaction.lifetimeConstraint),
