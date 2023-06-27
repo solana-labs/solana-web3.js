@@ -11,5 +11,6 @@ export function compileMessage(
 ) {
     return {
         lifetimeToken: getCompiledLifetimeToken(transaction.lifetimeConstraint),
+        version: transaction.version,
     };
 }
