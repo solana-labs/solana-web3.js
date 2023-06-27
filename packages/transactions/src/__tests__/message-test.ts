@@ -1,11 +1,13 @@
 import { Base58EncodedAddress } from '@solana/keys';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
+import { getCompiledMessageHeader } from '../compile-header';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileMessage } from '../message';
 import { BaseTransaction } from '../types';
 
+jest.mock('../compile-header');
 jest.mock('../compile-lifetime-token');
 
 const MOCK_LIFETIME_CONSTRAINT =
@@ -20,6 +22,21 @@ describe('compileMessage', () => {
             lifetimeConstraint: MOCK_LIFETIME_CONSTRAINT,
             version: 0,
         };
+    });
+    describe('message header', () => {
+        const expectedCompiledMessageHeader = {
+            numReadonlyNonSignerAccounts: 0,
+            numReadonlySignerAccounts: 0,
+            numSignerAccounts: 1,
+        } as const;
+        beforeEach(() => {
+            jest.mocked(getCompiledMessageHeader).mockReturnValue(expectedCompiledMessageHeader);
+        });
+        it('sets `header` to the return value of `getCompiledMessageHeader`', () => {
+            const message = compileMessage(baseTx);
+            expect(getCompiledMessageHeader).toHaveBeenCalled();
+            expect(message.header).toBe(expectedCompiledMessageHeader);
+        });
     });
     describe('lifetime constraints', () => {
         beforeEach(() => {
