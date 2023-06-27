@@ -43,7 +43,9 @@
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:native": "agadoo dist/index.node.js",
         "test:treeshakability:node": "agadoo dist/index.native.js",
-        "test:typecheck": "tsc --noEmit"
+        "test:typecheck": "tsc --noEmit",
+        "test:unit:browser": "jest -c node_modules/test-config/jest-unit.config.browser.ts --rootDir . --silent",
+        "test:unit:node": "jest -c node_modules/test-config/jest-unit.config.node.ts --rootDir . --silent"
     },
     "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
     "license": "MIT",
