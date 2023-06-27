@@ -4,6 +4,7 @@ import { ITransactionWithBlockhashLifetime } from '../blockhash';
 import { getCompiledMessageHeader } from '../compile-header';
 import { getCompiledInstructions } from '../compile-instructions';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
+import { getCompiledStaticAccounts } from '../compile-static-accounts';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileMessage } from '../message';
 import { BaseTransaction } from '../types';
@@ -11,6 +12,7 @@ import { BaseTransaction } from '../types';
 jest.mock('../compile-header');
 jest.mock('../compile-instructions');
 jest.mock('../compile-lifetime-token');
+jest.mock('../compile-static-accounts');
 
 const MOCK_LIFETIME_CONSTRAINT =
     'SOME_CONSTRAINT' as unknown as ITransactionWithBlockhashLifetime['lifetimeConstraint'];
@@ -62,6 +64,17 @@ describe('compileMessage', () => {
             const message = compileMessage(baseTx);
             expect(getCompiledLifetimeToken).toHaveBeenCalledWith('SOME_CONSTRAINT');
             expect(message.lifetimeToken).toBe('abc');
+        });
+    });
+    describe('static accounts', () => {
+        const expectedStaticAccounts = [] as ReturnType<typeof getCompiledStaticAccounts>;
+        beforeEach(() => {
+            jest.mocked(getCompiledStaticAccounts).mockReturnValue(expectedStaticAccounts);
+        });
+        it('sets `staticAccounts` to the return value of `getCompiledStaticAccounts`', () => {
+            const message = compileMessage(baseTx);
+            expect(getCompiledStaticAccounts).toHaveBeenCalled();
+            expect(message.staticAccounts).toBe(expectedStaticAccounts);
         });
     });
     describe('versions', () => {
