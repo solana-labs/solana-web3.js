@@ -61,8 +61,7 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@metaplex-foundation/umi": "link:/home/sol/src/umi-git/packages/umi/",
-        "@metaplex-foundation/umi-serializer-data-view": "link:/home/sol/src/umi-git/packages/umi-serializer-data-view/"
+        "@metaplex-foundation/umi-serializers": "^0.8.2"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.0",
