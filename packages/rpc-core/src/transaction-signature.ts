@@ -1,4 +1,4 @@
-import bs58 from 'bs58';
+import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
 
 export type TransactionSignature = string & { readonly __sig: unique symbol };
 
@@ -16,7 +16,7 @@ export function assertIsTransactionSignature(
             throw new Error('Expected input string to decode to a byte array of length 64.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = bs58.decode(putativeTransactionSignature);
+        const bytes = base58.serialize(putativeTransactionSignature);
         const numBytes = bytes.byteLength;
         if (numBytes !== 64) {
             throw new Error(`Expected input string to decode to a byte array of length 64. Actual length: ${numBytes}`);

@@ -1,4 +1,4 @@
-import bs58 from 'bs58';
+import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
 
 export type Blockhash = string & { readonly __blockhash: unique symbol };
 
@@ -14,7 +14,7 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
             throw new Error('Expected input string to decode to a byte array of length 32.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = bs58.decode(putativeBlockhash);
+        const bytes = base58.serialize(putativeBlockhash);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
             throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);

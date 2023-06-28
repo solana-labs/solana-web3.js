@@ -186,9 +186,9 @@ importers:
 
   packages/keys:
     dependencies:
-      bs58:
-        specifier: ^5.0.0
-        version: 5.0.0
+      '@metaplex-foundation/umi-serializers-encodings':
+        specifier: ^0.8.2
+        version: 0.8.2
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.1
@@ -573,12 +573,12 @@ importers:
 
   packages/rpc-core:
     dependencies:
+      '@metaplex-foundation/umi-serializers-encodings':
+        specifier: ^0.8.2
+        version: 0.8.2
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      bs58:
-        specifier: ^5.0.0
-        version: 5.0.0
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.1
@@ -3201,6 +3201,16 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
+  /@metaplex-foundation/umi-serializers-core@0.8.2:
+    resolution: {integrity: sha512-grncCh1iyMmoWuFowulLMaoQOdetnVVa+m7CXXxEQ340ygnH3ls8WWBHHnP338309DCsRN2J+pPbqwkOHF/3yA==}
+    dev: false
+
+  /@metaplex-foundation/umi-serializers-encodings@0.8.2:
+    resolution: {integrity: sha512-Em9oxKSHlY30upbQ40V5zV82+gIfKqYpcGkoHAM5ensDx6G0JKLthooazLdSp1hHOP5QfwOpL+Srj76MXyoq4Q==}
+    dependencies:
+      '@metaplex-foundation/umi-serializers-core': 0.8.2
+    dev: false
+
   /@noble/curves@1.0.0:
     resolution: {integrity: sha512-2upgEu0iLiDVDZkNLeFV2+ht0BAVgQnEmCk6JsOch9Rp8xfkMCbvbAZlA2pBHQc73dbl+vFOXfqkf4uemdn0bw==}
     dependencies:
@@ -5091,10 +5101,6 @@ packages:
     dependencies:
       safe-buffer: 5.2.1
 
-  /base-x@4.0.0:
-    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
-    dev: false
-
   /base64-arraybuffer@0.1.5:
     resolution: {integrity: sha512-437oANT9tP582zZMwSvZGy2nmSeAb8DW2me3y+Uv1Wp2Rulr8Mqlyrv3E7MLxmsiaPSMMDmiDVzgE+e8zlMx9g==}
     engines: {node: '>= 0.6.0'}
@@ -5232,12 +5238,6 @@ packages:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
     dependencies:
       base-x: 3.0.9
-
-  /bs58@5.0.0:
-    resolution: {integrity: sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==}
-    dependencies:
-      base-x: 4.0.0
-    dev: false
 
   /bser@2.1.1:
     resolution: {integrity: sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==}
