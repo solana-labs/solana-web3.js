@@ -61,8 +61,8 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/keys": "workspace:*",
-        "bs58": "^5.0.0"
+        "@metaplex-foundation/umi-serializers-encodings": "^0.8.2",
+        "@solana/keys": "workspace:*"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.1",

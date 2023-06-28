@@ -1,4 +1,4 @@
-import bs58 from 'bs58';
+import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
 
 export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
     readonly __base58EncodedAddress: unique symbol;
@@ -18,7 +18,7 @@ export function assertIsBase58EncodedAddress(
             throw new Error('Expected input string to decode to a byte array of length 32.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = bs58.decode(putativeBase58EncodedAddress);
+        const bytes = base58.serialize(putativeBase58EncodedAddress);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
             throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);

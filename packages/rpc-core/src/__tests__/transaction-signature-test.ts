@@ -1,4 +1,4 @@
-import bs58 from 'bs58';
+import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
 
 import { assertIsTransactionSignature } from '../transaction-signature';
 
@@ -43,7 +43,7 @@ describe('assertIsTransactionSignature()', () => {
     [64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88].forEach(
         len => {
             it(`attempts to decode input strings of exactly ${len} characters`, () => {
-                const decodeMethod = jest.spyOn(bs58, 'decode');
+                const decodeMethod = jest.spyOn(base58, 'serialize');
                 try {
                     assertIsTransactionSignature('1'.repeat(len));
                     // eslint-disable-next-line no-empty
@@ -53,7 +53,7 @@ describe('assertIsTransactionSignature()', () => {
         }
     );
     it('does not attempt to decode too-short input strings', () => {
-        const decodeMethod = jest.spyOn(bs58, 'decode');
+        const decodeMethod = jest.spyOn(base58, 'serialize');
         try {
             assertIsTransactionSignature(
                 // 63 bytes [0, ..., 0]
@@ -64,7 +64,7 @@ describe('assertIsTransactionSignature()', () => {
         expect(decodeMethod).not.toHaveBeenCalled();
     });
     it('does not attempt to decode too-long input strings', () => {
-        const decodeMethod = jest.spyOn(bs58, 'decode');
+        const decodeMethod = jest.spyOn(base58, 'serialize');
         try {
             assertIsTransactionSignature(
                 // 65 bytes [0, 255, ..., 255]
