@@ -35,15 +35,16 @@ describe('compileMessage', () => {
             jest.mocked(getCompiledAddressTableLookups).mockReturnValue(expectedAddressTableLookups);
         });
         describe("when the transaction version is `'legacy'`", () => {
+            let legacyBaseTx: typeof baseTx & Readonly<{ version: 'legacy' }>;
             beforeEach(() => {
-                baseTx = { ...baseTx, version: 'legacy' };
+                legacyBaseTx = { ...baseTx, version: 'legacy' };
             });
             it('does not set `addressTableLookups`', () => {
-                const message = compileMessage(baseTx);
+                const message = compileMessage(legacyBaseTx);
                 expect(message).not.toHaveProperty('addressTableLookups');
             });
-            it('does not call  `getCompiledAddressTableLookups`', () => {
-                compileMessage(baseTx);
+            it('does not call `getCompiledAddressTableLookups`', () => {
+                compileMessage(legacyBaseTx);
                 expect(getCompiledAddressTableLookups).not.toHaveBeenCalled();
             });
         });
