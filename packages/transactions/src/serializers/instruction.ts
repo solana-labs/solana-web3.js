@@ -5,22 +5,22 @@ import { getCompiledInstructions } from '../compile-instructions';
 type Instruction = ReturnType<typeof getCompiledInstructions>[number];
 
 export function getInstructionCodec(): Serializer<Instruction> {
-    return struct([
-        [
-            'programAddressIndex',
-            u8(
-                __DEV__
-                    ? {
-                          description:
-                              'The index of the program being called, according to the ' +
-                              'well-ordered accounts list for this transaction',
-                      }
-                    : undefined
-            ),
-        ],
-        [
-            'addressIndices',
-            mapSerializer(
+    return mapSerializer<Instruction, Required<Instruction>>(
+        struct([
+            [
+                'programAddressIndex',
+                u8(
+                    __DEV__
+                        ? {
+                              description:
+                                  'The index of the program being called, according to the ' +
+                                  'well-ordered accounts list for this transaction',
+                          }
+                        : undefined
+                ),
+            ],
+            [
+                'addressIndices',
                 array(
                     u8({
                         description: __DEV__
@@ -37,20 +37,35 @@ export function getInstructionCodec(): Serializer<Instruction> {
                         size: shortU16(),
                     }
                 ),
-                (value: number[] | undefined) => value ?? [],
-                value => (value.length ? value : undefined)
-            ),
-        ],
-        [
-            'data',
-            mapSerializer(
+            ],
+            [
+                'data',
                 bytes({
                     description: __DEV__ ? 'An optional buffer of data passed to the instruction' : '',
                     size: shortU16(),
                 }),
-                (value: Uint8Array | undefined) => value ?? new Uint8Array(0),
-                (value: Uint8Array) => (value.byteLength ? value : undefined)
-            ),
-        ],
-    ]);
+            ],
+        ]),
+        (value: Instruction) => {
+            if (value.addressIndices !== undefined && value.data !== undefined) {
+                return value as Required<Instruction>;
+            }
+            return {
+                ...value,
+                addressIndices: value.addressIndices ?? [],
+                data: value.data ?? new Uint8Array(0),
+            } as Required<Instruction>;
+        },
+        (value: Required<Instruction>) => {
+            if (value.addressIndices.length && value.data.byteLength) {
+                return value;
+            }
+            const { addressIndices, data, ...rest } = value;
+            return {
+                ...rest,
+                ...(addressIndices.length ? { addressIndices } : null),
+                ...(data.byteLength ? { data } : null),
+            };
+        }
+    );
 }

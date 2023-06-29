@@ -105,7 +105,7 @@ describe('Instruction codec', () => {
                     4,
                 ])
             )[0]
-        ).toHaveProperty('addressIndices', undefined);
+        ).not.toHaveProperty('addressIndices');
     });
     it('omits the `data` property when the instruction data is zero-length', () => {
         expect(
@@ -121,6 +121,6 @@ describe('Instruction codec', () => {
                     0, // Compact-u16 length
                 ])
             )[0]
-        ).toHaveProperty('data', undefined);
+        ).not.toHaveProperty('data');
     });
 });
