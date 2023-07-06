@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { Config } from '@jest/types';
 
 import commonConfig from './jest-unit.config.common';
@@ -14,6 +16,7 @@ const config: Partial<Config.InitialProjectOptions> = {
         __NODEJS__: true,
         __REACTNATIVE__: false,
     },
+    setupFilesAfterEnv: [...(commonConfig.setupFilesAfterEnv ?? []), path.resolve(__dirname, 'setup-node-crypto.ts')],
 };
 
 export default config;
