@@ -1,4 +1,4 @@
-import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
+import { base58, Serializer, string } from '@metaplex-foundation/umi-serializers';
 
 export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
     readonly __base58EncodedAddress: unique symbol;
@@ -28,6 +28,18 @@ export function assertIsBase58EncodedAddress(
             cause: e,
         });
     }
+}
+
+export function getBase58EncodedAddressCodec(
+    config?: Readonly<{
+        description: string;
+    }>
+): Serializer<Base58EncodedAddress> {
+    return string({
+        description: config?.description ?? (__DEV__ ? 'A 32-byte account address' : ''),
+        encoding: base58,
+        size: 32,
+    }) as unknown as Serializer<Base58EncodedAddress>;
 }
 
 export function getBase58EncodedAddressComparator(): (x: string, y: string) => number {

@@ -61,7 +61,7 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@metaplex-foundation/umi-serializers-encodings": "^0.8.2"
+        "@metaplex-foundation/umi-serializers": "^0.8.2"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.1",

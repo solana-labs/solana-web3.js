@@ -186,7 +186,7 @@ importers:
 
   packages/keys:
     dependencies:
-      '@metaplex-foundation/umi-serializers-encodings':
+      '@metaplex-foundation/umi-serializers':
         specifier: ^0.8.2
         version: 0.8.2
     devDependencies:
@@ -794,6 +794,9 @@ importers:
       '@metaplex-foundation/umi-serializers':
         specifier: ^0.8.2
         version: 0.8.2
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.0
@@ -801,9 +804,6 @@ importers:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
-      '@solana/keys':
-        specifier: workspace:*
-        version: link:../keys
       '@solana/rpc-core':
         specifier: workspace:*
         version: link:../rpc-core
