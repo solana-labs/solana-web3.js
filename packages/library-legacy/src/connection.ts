@@ -4621,10 +4621,9 @@ export class Connection {
    */
   async isBlockhashValid(
     blockhash: Blockhash,
-    commitmentOrConfig?: Commitment | IsBlockhashValidConfig,
+    rawConfig?: IsBlockhashValidConfig,
   ): Promise<RpcResponseAndContext<boolean>> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
+    const {commitment, config} = extractCommitmentFromConfig(rawConfig);
     const args = this._buildArgs(
       [blockhash],
       commitment,
@@ -4636,7 +4635,7 @@ export class Connection {
     if ('error' in res) {
       throw new SolanaJSONRPCError(
         res.error,
-        'failed to fetch is blockhash valid',
+        'failed to determine if the blockhash `' + blockhash + '`is valid',
       );
     }
     return res.result;
