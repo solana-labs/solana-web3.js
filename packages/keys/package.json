@@ -60,6 +60,9 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "engine": {
+        "node": ">=17.4"
+    },
     "dependencies": {
         "@metaplex-foundation/umi-serializers": "^0.8.2"
     },
