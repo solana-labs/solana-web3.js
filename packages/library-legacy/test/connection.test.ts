@@ -4376,6 +4376,24 @@ describe('Connection', function () {
     }
   });
 
+  it('is blockhash valid', async () => {
+    const blockhash = 'FDeS2dHPUQgAsLZpExG7WUFiMHRcVGgUAeiJr8rfXR1K';
+    for (const isBlockhashValid of [true, false]) {
+      await mockRpcResponse({
+        method: 'isBlockhashValid',
+        params: [blockhash, {commitment: 'confirmed'}],
+        value: isBlockhashValid,
+        withContext: true,
+      });
+
+      const isBlockhashValidRpcResult = await connection.isBlockhashValid(
+        blockhash,
+        'confirmed',
+      );
+      expect(isBlockhashValidRpcResult.value).to.eq(isBlockhashValid);
+    }
+  });
+
   it('get fee calculator', async () => {
     const {blockhash} = await helpers.recentBlockhash({connection});
     await mockRpcResponse({
