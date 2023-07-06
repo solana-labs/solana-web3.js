@@ -59,8 +59,8 @@ jobs:
     strategy:
       matrix:
         node:
-          - '14'
-          - '16'
+          - 'current'
+          - 'lts/*'
 
     name: Build & Test on Node ${{ matrix.node }}
     steps:
@@ -75,7 +75,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -102,7 +102,7 @@ jobs:
         run: pnpm build
 
       - name: Upload Experimental library build artifacts
-        if: matrix.node == '16'
+        if: matrix.node == 'current'
         uses: actions/upload-artifact@v3
         with:
           name: library-dist
