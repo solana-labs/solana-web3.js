@@ -1,4 +1,5 @@
-import { generateSecretKey } from '../secrets';
+import { Base58EncodedAddress } from '../base58';
+import { generateSecretKey, getPublicKeyFromSecretKey } from '../secrets';
 
 describe('generateSecretKey', () => {
     it('stores a new key in an internal cache', () => {
@@ -128,5 +129,19 @@ describe('generateSecretKey', () => {
                 secretKey['\u{1f5dd}'] = 123;
             }).toThrow();
         });
+    });
+});
+
+describe('getPublicKeyFromSecretKey', () => {
+    it('returns the public key that corresponds to a given secret key', () => {
+        const secretKeyBytes = new Uint8Array([
+            83, 147, 250, 112, 140, 37, 29, 73, 156, 38, 185, 76, 163, 8, 178, 225, 172, 53, 120, 108, 127, 191, 103, 8,
+            160, 170, 183, 186, 246, 1, 227, 158,
+        ]);
+        jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(secretKeyBytes);
+        const secretKey = generateSecretKey();
+        expect(getPublicKeyFromSecretKey(secretKey)).toBe(
+            'CD1pJqV9a6YUrpGyXj7oDnHEYcKDigKD4rVG6B4dGTcf' as Base58EncodedAddress<'CD1pJqV9a6YUrpGyXj7oDnHEYcKDigKD4rVG6B4dGTcf'>
+        );
     });
 });

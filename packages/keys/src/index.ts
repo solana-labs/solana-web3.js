@@ -18,4 +18,4 @@ export * from './base58';
  * ┳┻|⊂ﾉ
  * ┻┳|
  */
-export { generateSecretKey } from './secrets';
+export { generateSecretKey, getPublicKeyFromSecretKey } from './secrets';

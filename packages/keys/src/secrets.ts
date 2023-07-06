@@ -13,6 +13,10 @@
  * private keys as they are written to the cache, without alerting you to its presence or affecting
  * the regular operation of the cache.
  */
+import { ed25519 } from '@noble/curves/ed25519';
+
+import { Base58EncodedAddress, getBase58EncodedAddressCodec } from './base58';
+
 type SecretKey = symbol & { readonly __secretKey: unique symbol };
 
 const KEY_GLYPH = '\u{1f5dd}';
@@ -68,6 +72,37 @@ function getWeakMapSupportsSymbolKeys(): boolean {
     } catch {
         return false;
     }
+}
+
+/**
+ * Given a `SecretKey` object, this function returns the secret bytes associated with it.
+ *
+ *   |￣￣￣￣￣￣￣￣￣￣￣|
+ *   |     DON'T EXPORT     |
+ *   |   THIS METHOD FROM   |
+ *   |     @solana/keys     |
+ *   |＿＿＿＿＿＿＿＿＿＿＿|
+ *   (\__/) ||
+ *   (•ㅅ•) ||
+ *   /    づ
+ */
+function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(secretKey: SecretKey): Uint8Array {
+    const bytes = storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.get(secretKey);
+    if (!bytes) {
+        // TODO: Coded error.
+        throw new Error(
+            'Could not find secret key material for ' +
+                (typeof secretKey === 'symbol' ? secretKey.toString() : `{${KEY_GLYPH}: "${secretKey[KEY_GLYPH]}"}`)
+        );
+    }
+    return bytes;
+}
+
+export function getPublicKeyFromSecretKey(secretKey: SecretKey): Base58EncodedAddress {
+    const secretKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(secretKey);
+    const publicKeyBytes = ed25519.getPublicKey(secretKeyBytes);
+    const [base58EncodedAddress] = getBase58EncodedAddressCodec().deserialize(publicKeyBytes);
+    return base58EncodedAddress;
 }
 
 /**
