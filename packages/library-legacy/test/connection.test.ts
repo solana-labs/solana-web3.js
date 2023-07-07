@@ -4388,7 +4388,7 @@ describe('Connection', function () {
 
       const isBlockhashValidRpcResult = await connection.isBlockhashValid(
         blockhash,
-        'confirmed',
+        {commitment: 'confirmed'},
       );
       expect(isBlockhashValidRpcResult.value).to.eq(isBlockhashValid);
     }
