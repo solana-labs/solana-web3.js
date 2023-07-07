@@ -624,6 +624,16 @@ export type GetLatestBlockhashConfig = {
 };
 
 /**
+ * Configuration object for changing `isBlockhashValid` query behavior
+ */
+export type IsBlockhashValidConfig = {
+  /** The level of commitment desired */
+  commitment?: Commitment;
+  /** The minimum slot that the request can be evaluated at */
+  minContextSlot?: number;
+};
+
+/**
  * Configuration object for changing `getSlot` query behavior
  */
 export type GetSlotConfig = {
@@ -2560,6 +2570,11 @@ const GetLatestBlockhashRpcResult = jsonRpcResultAndContext(
     lastValidBlockHeight: number(),
   }),
 );
+
+/**
+ * Expected JSON RPC response for the "isBlockhashValid" message
+ */
+const IsBlockhashValidRpcResult = jsonRpcResultAndContext(boolean());
 
 const PerfSampleResult = pick({
   slot: number(),
@@ -4597,6 +4612,31 @@ export class Connection {
     const res = create(unsafeRes, GetLatestBlockhashRpcResult);
     if ('error' in res) {
       throw new SolanaJSONRPCError(res.error, 'failed to get latest blockhash');
+    }
+    return res.result;
+  }
+
+  /**
+   * Returns whether a blockhash is still valid or not
+   */
+  async isBlockhashValid(
+    blockhash: Blockhash,
+    rawConfig?: IsBlockhashValidConfig,
+  ): Promise<RpcResponseAndContext<boolean>> {
+    const {commitment, config} = extractCommitmentFromConfig(rawConfig);
+    const args = this._buildArgs(
+      [blockhash],
+      commitment,
+      undefined /* encoding */,
+      config,
+    );
+    const unsafeRes = await this._rpcRequest('isBlockhashValid', args);
+    const res = create(unsafeRes, IsBlockhashValidRpcResult);
+    if ('error' in res) {
+      throw new SolanaJSONRPCError(
+        res.error,
+        'failed to determine if the blockhash `' + blockhash + '`is valid',
+      );
     }
     return res.result;
   }
