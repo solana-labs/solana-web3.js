@@ -9,6 +9,7 @@ import { createSolanaRpcApi } from './rpc-methods';
 export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     Record<keyof ReturnType<typeof createSolanaRpcApi>, readonly KeyPath[]>
 > = {
+    getAccountInfo: [['value', 'data', 'parsed', 'info', 'stake', 'delegation', 'warmupCooldownRate']],
     getBlockTime: [[]],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
