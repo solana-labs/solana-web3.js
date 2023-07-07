@@ -4378,7 +4378,7 @@ describe('Connection', function () {
 
   it('is blockhash valid', async () => {
     const blockhash = 'FDeS2dHPUQgAsLZpExG7WUFiMHRcVGgUAeiJr8rfXR1K';
-    for (const isBlockhashValid of [true, false]) {
+    for (const isBlockhashValid of mockServer ? [true, false] : [false]) {
       await mockRpcResponse({
         method: 'isBlockhashValid',
         params: [blockhash, {commitment: 'confirmed'}],
@@ -4390,6 +4390,7 @@ describe('Connection', function () {
         blockhash,
         {commitment: 'confirmed'},
       );
+
       expect(isBlockhashValidRpcResult.value).to.eq(isBlockhashValid);
     }
   });
