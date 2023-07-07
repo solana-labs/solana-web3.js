@@ -24,6 +24,7 @@ import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
 import { GetTransactionApi } from './getTransaction';
 import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
+import { IsBlockhashValidApi } from './isBlockhashValid';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 
 type Config = Readonly<{
@@ -52,6 +53,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetTransactionApi &
     GetTransactionCountApi &
     GetVoteAccountsApi &
+    IsBlockhashValidApi &
     MinimumLedgerSlotApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
