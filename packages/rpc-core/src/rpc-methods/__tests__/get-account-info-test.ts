@@ -137,12 +137,11 @@ describe('getAccountInfo', () => {
         });
 
         describe('for an account with parse-able JSON data', () => {
-            it('returns parsed JSON data', async () => {
+            it('returns parsed JSON data for AddressLookupTable account', async () => {
                 expect.assertions(1);
-                //See scripts/fixtures/CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN.json
-                // This is a base64 encoded stake account
+                // See scripts/fixtures/address-lookup-table-account.json
                 const publicKey =
-                    'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Base58EncodedAddress<'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN'>;
+                    '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n' as Base58EncodedAddress<'2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n'>;
 
                 const accountInfo = await rpc
                     .getAccountInfo(publicKey, {
@@ -155,16 +154,364 @@ describe('getAccountInfo', () => {
                         data: expect.objectContaining({
                             parsed: expect.objectContaining({
                                 info: {
-                                    meta: expect.any(Object),
-                                    stake: expect.any(Object),
+                                    addresses: expect.any(Array),
+                                    authority: expect.any(String),
+                                    deactivationSlot: expect.any(String),
+                                    lastExtendedSlot: expect.any(String),
+                                    lastExtendedSlotStartIndex: expect.any(Number),
                                 },
-                                type: 'delegated',
+                                type: 'lookupTable',
                             }),
-                            program: 'stake',
+                            program: 'address-lookup-table',
                             space: expect.any(BigInt),
                         }),
                     }),
                 });
+            });
+
+            it('returns parsed JSON data for BpfLoaderUpgradeable account', async () => {
+                expect.assertions(1);
+                // See scripts/fixtures/bpf-upgradeable-loader-program-account.json
+                const publicKey =
+                    'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Base58EncodedAddress<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
+
+                const accountInfo = await rpc
+                    .getAccountInfo(publicKey, {
+                        encoding: 'jsonParsed',
+                    })
+                    .send();
+
+                expect(accountInfo).toMatchObject({
+                    value: expect.objectContaining({
+                        data: expect.objectContaining({
+                            parsed: expect.objectContaining({
+                                info: {
+                                    programData: expect.any(String),
+                                },
+                                type: 'program',
+                            }),
+                            program: 'bpf-upgradeable-loader',
+                            space: expect.any(BigInt),
+                        }),
+                    }),
+                });
+            });
+        });
+
+        it('returns parsed JSON data for Config validator account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/config-validator-account.json
+            const publicKey =
+                'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY' as Base58EncodedAddress<'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                configData: expect.any(Object),
+                                keys: expect.any(Array),
+                            },
+                            type: 'validatorInfo',
+                        }),
+                        program: 'config',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        // Not sure how to find an example of this to use for a fixture
+        it('returns parsed JSON data for Config stake account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/config-stake-account.json
+            const publicKey =
+                'StakeConfig11111111111111111111111111111111' as Base58EncodedAddress<'StakeConfig11111111111111111111111111111111'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                slashPenalty: expect.any(Number),
+                                warmupCooldownRate: expect.any(Number),
+                            },
+                            type: 'stakeConfig',
+                        }),
+                        program: 'config',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for Nonce account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/nonce-account.json
+            const publicKey =
+                'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU' as Base58EncodedAddress<'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                authority: expect.any(String),
+                                blockhash: expect.any(String),
+                                feeCalculator: expect.any(Object),
+                            },
+                            type: 'initialized',
+                        }),
+                        program: 'nonce',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for SPL Token mint account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-account.json
+            const publicKey =
+                'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                decimals: expect.any(Number),
+                                freezeAuthority: null,
+                                isInitialized: expect.any(Boolean),
+                                mintAuthority: expect.any(String),
+                                supply: expect.any(String),
+                            },
+                            type: 'mint',
+                        }),
+                        program: 'spl-token',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for SPL Token token account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-account.json
+            const publicKey =
+                'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Base58EncodedAddress<'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                isNative: false,
+                                mint: expect.any(String),
+                                owner: expect.any(String),
+                                state: 'initialized',
+                                tokenAmount: {
+                                    amount: expect.any(String),
+                                    decimals: expect.any(Number),
+                                    uiAmount: expect.any(Number),
+                                    uiAmountString: expect.any(String),
+                                },
+                            },
+                            type: 'account',
+                        }),
+                        program: 'spl-token',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for SPL token multisig account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-account.json
+            const publicKey =
+                '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88' as Base58EncodedAddress<'4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                isInitialized: expect.any(Boolean),
+                                numRequiredSigners: expect.any(Number),
+                                numValidSigners: expect.any(Number),
+                                signers: expect.any(Array),
+                            },
+                            type: 'multisig',
+                        }),
+                        program: 'spl-token',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for SPL Token 22 mint account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-22-mint-account.json
+            const publicKey =
+                'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo' as Base58EncodedAddress<'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                decimals: expect.any(Number),
+                                extensions: expect.any(Array),
+                                freezeAuthority: expect.any(String),
+                                isInitialized: expect.any(Boolean),
+                                mintAuthority: expect.any(String),
+                                supply: expect.any(String),
+                            },
+                            type: 'mint',
+                        }),
+                        program: 'spl-token-2022',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for Stake account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/stake-account.json
+            const publicKey =
+                'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Base58EncodedAddress<'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                meta: expect.any(Object),
+                                stake: expect.any(Object),
+                            },
+                            type: 'delegated',
+                        }),
+                        program: 'stake',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for Sysvar rent account', async () => {
+            expect.assertions(1);
+            // Sysvar accounts don't need a fixture
+            const publicKey =
+                'SysvarRent111111111111111111111111111111111' as Base58EncodedAddress<'SysvarRent111111111111111111111111111111111'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                burnPercent: expect.any(Number),
+                                exemptionThreshold: expect.any(Number),
+                                lamportsPerByteYear: expect.any(String),
+                            },
+                            type: 'rent',
+                        }),
+                        program: 'sysvar',
+                        space: expect.any(BigInt),
+                    }),
+                }),
+            });
+        });
+
+        it('returns parsed JSON data for Vote account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/vote-account.json
+            const publicKey =
+                '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress<'4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'>;
+
+            const accountInfo = await rpc
+                .getAccountInfo(publicKey, {
+                    encoding: 'jsonParsed',
+                })
+                .send();
+
+            expect(accountInfo).toMatchObject({
+                value: expect.objectContaining({
+                    data: expect.objectContaining({
+                        parsed: expect.objectContaining({
+                            info: {
+                                authorizedVoters: expect.any(Array),
+                                authorizedWithdrawer: expect.any(String),
+                                commission: expect.any(Number),
+                                epochCredits: expect.any(Array),
+                                lastTimestamp: expect.any(Object),
+                                nodePubkey: expect.any(String),
+                                priorVoters: expect.any(Array),
+                                rootSlot: expect.any(BigInt),
+                                votes: expect.any(Array),
+                            },
+                            type: 'vote',
+                        }),
+                        program: 'vote',
+                        space: expect.any(BigInt),
+                    }),
+                }),
             });
         });
     });
