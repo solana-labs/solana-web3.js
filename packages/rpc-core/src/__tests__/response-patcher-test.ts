@@ -18,6 +18,12 @@ describe('patchResponseForSolanaLabsRpc', () => {
             expect(patchResponseForSolanaLabsRpc(input)).toBe(BigInt(input));
         });
     });
+    describe('given a non-integer `number` as input', () => {
+        const input = 10.5;
+        it('returns the value as-is', () => {
+            expect(patchResponseForSolanaLabsRpc(input)).toBe(input);
+        });
+    });
     describe('given an array as input', () => {
         const input = [10, 10n, '10', ['10', [10n, 10], 10]] as const;
         it('casts the numbers in the array to a `bigint`, recursively', () => {
