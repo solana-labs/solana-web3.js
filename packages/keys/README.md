@@ -24,6 +24,12 @@ This type represents a string that validates as a Solana address or public key. 
 
 Whenever you need to validate an arbitrary string as a base58-encoded address, use the `assertIsBase58EncodedAddress()` function in this package.
 
+### `Ed25519Signature`
+
+This type represents a 64-byte Ed25519 signature of some data with a private key.
+
+Whenever you need to verify that a particular signature is, in fact, the one that would have been produced by signing some known bytes using the private key associated with some known public key, use the `verifySignature()` function in this package.
+
 ## Functions
 
 ### `assertIsBase58EncodedAddress()`
@@ -69,4 +75,28 @@ Given a public `CryptoKey`, this method will return its associated `Base58Encode
 import { getBase58EncodedAddressFromPublicKey } from '@solana/keys';
 
 const address = await getBase58EncodedAddressFromPublicKey(publicKey);
+```
+
+### `signBytes()`
+
+Given a private `CryptoKey` and a `Uint8Array` of bytes, this method will return the 64-byte Ed25519 signature of that data as a `Uint8Array`.
+
+```ts
+import { signBytes } from '@solana/keys';
+
+const data = new Uint8Array([1, 2, 3]);
+const signature = await signBytes(privateKey, data);
+```
+
+### `verifySignature()`
+
+Given a public `CryptoKey`, an `Ed25519Signature`, and a `Uint8Array` of bytes, this method will return `true` if the signature was produced by signing the bytes using the private key associated with the public key, and `false` otherwise.
+
+```ts
+import { verifySignature } from '@solana/keys';
+
+const data = new Uint8Array([1, 2, 3]);
+if (!(await verifySignature(publicKey, signature, data))) {
+    throw new Error('The data were *not* signed by the private key associated with `publicKey`');
+}
 ```
