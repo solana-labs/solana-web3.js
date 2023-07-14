@@ -69,6 +69,34 @@ function createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(
     });
 }
 
+function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key: CryptoKey): Uint8Array {
+    const secretKeyBytes = storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.get(key);
+    if (secretKeyBytes === undefined) {
+        // TODO: Coded error.
+        throw new Error('Could not find secret key material associated with this `CryptoKey`');
+    }
+    return secretKeyBytes;
+}
+
+export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): JsonWebKey;
+export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer;
+export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer | JsonWebKey {
+    switch (format) {
+        case 'raw': {
+            if (key.extractable === false) {
+                throw new DOMException('key is not extractable', 'InvalidAccessException');
+            }
+            if (key.type !== 'public') {
+                throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
+            }
+            const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+            return publicKeyBytes;
+        }
+        default:
+            throw new Error(`Exporting polyfilled Ed25519 keys in the "${format}" format is unimplemented`);
+    }
+}
+
 /**
  * This function generates a key pair and stores the secret bytes associated with it in a
  * module-private cache. Instead of vending the actual secret bytes, it returns a `CryptoKeyPair`

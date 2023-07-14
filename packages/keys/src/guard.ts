@@ -37,7 +37,13 @@ export async function assertKeyGenerationIsAvailable() {
     }
     if (!(await isEd25519CurveSupported(globalThis.crypto.subtle))) {
         // TODO: Coded error.
-        throw new Error('This runtime does not support the generation of Ed25519 keypairs');
+        throw new Error(
+            'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +
+                'import `@solana/webcrypto-ed25519-polyfill` before generating keys in ' +
+                'environments that do not support Ed25519.\n\nFor a list of runtimes that ' +
+                'currently support Ed25519 operations, visit ' +
+                'https://github.com/WICG/webcrypto-secure-curves/issues/20'
+        );
     }
 }
 
