@@ -30,7 +30,9 @@ function visitNode<T>(value: unknown, allowedKeypaths: readonly KeyPath[]): T {
         typeof value === 'number' &&
         // The presence of an allowed keypath on the route to this value implies it's allowlisted;
         // Upcast the value to `bigint` unless an allowed keypath is present.
-        allowedKeypaths.length === 0
+        allowedKeypaths.length === 0 &&
+        // Only try to upcast an Integer to `bigint`
+        Number.isInteger(value)
     ) {
         // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the Solana
         // JSON RPC implementation so that we can throw away this entire patcher instead of unsafely

@@ -9,7 +9,55 @@ import { createSolanaRpcApi } from './rpc-methods';
 export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     Record<keyof ReturnType<typeof createSolanaRpcApi>, readonly KeyPath[]>
 > = {
-    getAccountInfo: [['value', 'data', 'parsed', 'info', 'stake', 'delegation', 'warmupCooldownRate']],
+    getAccountInfo: [
+        // parsed AddressTableLookup account
+        ['value', 'data', 'parsed', 'info', 'lastExtendedSlotStartIndex'],
+        // parsed Config account
+        ['value', 'data', 'parsed', 'info', 'slashPenalty'],
+        ['value', 'data', 'parsed', 'info', 'warmupCooldownRate'],
+        // parsed Token/Token22 token account
+        ['value', 'data', 'parsed', 'info', 'tokenAmount', 'decimals'],
+        ['value', 'data', 'parsed', 'info', 'tokenAmount', 'uiAmount'],
+        ['value', 'data', 'parsed', 'info', 'rentExemptReserve', 'decimals'],
+        ['value', 'data', 'parsed', 'info', 'delegatedAmount', 'decimals'],
+        [
+            'value',
+            'data',
+            'parsed',
+            'info',
+            'extensions',
+            KEYPATH_WILDCARD,
+            'state',
+            'olderTransferFee',
+            'transferFeeBasisPoints',
+        ],
+        [
+            'value',
+            'data',
+            'parsed',
+            'info',
+            'extensions',
+            KEYPATH_WILDCARD,
+            'state',
+            'newerTransferFee',
+            'transferFeeBasisPoints',
+        ],
+        ['value', 'data', 'parsed', 'info', 'extensions', KEYPATH_WILDCARD, 'state', 'preUpdateAverageRate'],
+        ['value', 'data', 'parsed', 'info', 'extensions', KEYPATH_WILDCARD, 'state', 'currentRate'],
+        // parsed Token/Token22 mint account
+        ['value', 'data', 'parsed', 'info', 'decimals'],
+        // parsed Token/Token22 multisig account
+        ['value', 'data', 'parsed', 'info', 'numRequiredSigners'],
+        ['value', 'data', 'parsed', 'info', 'numValidSigners'],
+        // parsed Stake account
+        ['value', 'data', 'parsed', 'info', 'stake', 'delegation', 'warmupCooldownRate'],
+        // parsed Sysvar rent account
+        ['value', 'data', 'parsed', 'info', 'exemptionThreshold'],
+        ['value', 'data', 'parsed', 'info', 'burnPercent'],
+        // parsed Vote account
+        ['value', 'data', 'parsed', 'info', 'commission'],
+        ['value', 'data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
+    ],
     getBlockTime: [[]],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
