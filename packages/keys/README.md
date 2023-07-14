@@ -50,3 +50,7 @@ function handleSubmit() {
     }
 }
 ```
+
+### `generateKeyPair()`
+
+Generates an Ed25519 public/private key pair for use with other methods in this package that accept `CryptoKey` objects.
