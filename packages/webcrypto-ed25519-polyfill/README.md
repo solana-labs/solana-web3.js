@@ -35,4 +35,9 @@ const keyPair = await crypto.subtle.generateKey('Ed25519', false, ['sign']);
 const publicKeyBytes = await crypto.subtle.exportKey('raw', keyPair.publicKey);
 const data = new Uint8Array([1, 2, 3]);
 const signature = await crypto.subtle.sign('Ed25519', keyPair.privateKey, data);
+if (await crypto.subtle.verify('Ed25519', keyPair.publicKey, signature, data)) {
+    console.log('Data was signed using the private key associated with this public key');
+} else {
+    throw new Error('Signature verification error');
+}
 ```

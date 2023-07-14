@@ -126,3 +126,15 @@ export function signPolyfill(key: CryptoKey, data: BufferSource): ArrayBuffer {
     const signature = ed25519.sign(payload, privateKeyBytes);
     return signature;
 }
+
+export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: BufferSource): boolean {
+    if (key.type !== 'public' || !key.usages.includes('verify')) {
+        throw new DOMException('Unable to use this key to verify', 'InvalidAccessError');
+    }
+    const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+    try {
+        return ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), publicKeyBytes);
+    } catch {
+        return false;
+    }
+}
