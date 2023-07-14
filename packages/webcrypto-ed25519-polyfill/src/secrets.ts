@@ -80,3 +80,7 @@ export function generateKeyPolyfill(extractable: boolean, keyUsages: readonly Ke
     const keyPair = createKeyPairFromBytes(privateKeyBytes, extractable, keyUsages);
     return keyPair;
 }
+
+export function isPolyfilledKey(key: CryptoKey): boolean {
+    return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key);
+}
