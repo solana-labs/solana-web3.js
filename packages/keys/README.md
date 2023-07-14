@@ -33,7 +33,7 @@ Client applications primarily deal with addresses and public keys in the form of
 From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsBase58EncodedAddress` function.
 
 ```ts
-import { assertIsBase58EncodedAddress } from '@solana/web3.js`;
+import { assertIsBase58EncodedAddress } from '@solana/keys';
 
 // Imagine a function that fetches an account's balance when a user submits a form.
 function handleSubmit() {
@@ -54,3 +54,19 @@ function handleSubmit() {
 ### `generateKeyPair()`
 
 Generates an Ed25519 public/private key pair for use with other methods in this package that accept `CryptoKey` objects.
+
+```ts
+import { generateKeyPair } from '@solana/keys';
+
+const { privateKey, publicKey } = await generateKeyPair();
+```
+
+### `getBase58EncodedAddressFromPublicKey()`
+
+Given a public `CryptoKey`, this method will return its associated `Base58EncodedAddress`.
+
+```ts
+import { getBase58EncodedAddressFromPublicKey } from '@solana/keys';
+
+const address = await getBase58EncodedAddressFromPublicKey(publicKey);
+```
