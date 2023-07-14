@@ -24,6 +24,10 @@ const PROHIBITED_KEY_USAGES = new Set<KeyUsage>([
     'wrapKey',
 ]);
 
+function bufferSourceToUint8Array(data: BufferSource): Uint8Array {
+    return data instanceof Uint8Array ? data : new Uint8Array(ArrayBuffer.isView(data) ? data.buffer : data);
+}
+
 let storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT: WeakMap<CryptoKey, Uint8Array> | undefined;
 function createKeyPairFromBytes(
     bytes: Uint8Array,
@@ -111,4 +115,14 @@ export function generateKeyPolyfill(extractable: boolean, keyUsages: readonly Ke
 
 export function isPolyfilledKey(key: CryptoKey): boolean {
     return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key);
+}
+
+export function signPolyfill(key: CryptoKey, data: BufferSource): ArrayBuffer {
+    if (key.type !== 'private' || !key.usages.includes('sign')) {
+        throw new DOMException('Unable to use this key to sign', 'InvalidAccessError');
+    }
+    const privateKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
+    const payload = bufferSourceToUint8Array(data);
+    const signature = ed25519.sign(payload, privateKeyBytes);
+    return signature;
 }

@@ -33,4 +33,6 @@ import '@solana/webcrypto-ed25519-polyfill';
 // Now you can do this, in environments that do not otherwise support Ed25519.
 const keyPair = await crypto.subtle.generateKey('Ed25519', false, ['sign']);
 const publicKeyBytes = await crypto.subtle.exportKey('raw', keyPair.publicKey);
+const data = new Uint8Array([1, 2, 3]);
+const signature = await crypto.subtle.sign('Ed25519', keyPair.privateKey, data);
 ```

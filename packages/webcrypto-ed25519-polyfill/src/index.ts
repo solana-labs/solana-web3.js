@@ -1,4 +1,4 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey } from './secrets';
+import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill } from './secrets';
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
@@ -84,4 +84,20 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             return generateKeyPolyfill(extractable, keyUsages);
         }
     }) as SubtleCrypto['generateKey'];
+
+    /**
+     * Override `SubtleCrypto#sign`
+     */
+    const originalSign = originalSubtleCrypto.sign as SubtleCrypto['sign'] | undefined;
+    originalSubtleCrypto.sign = (async (...args: Parameters<SubtleCrypto['sign']>) => {
+        const [_, key] = args;
+        if (isPolyfilledKey(key)) {
+            const [_, ...rest] = args;
+            return signPolyfill(...rest);
+        } else if (originalSign) {
+            return await originalSign.apply(originalSubtleCrypto, args);
+        } else {
+            throw new TypeError('No native `sign` function exists to handle this call');
+        }
+    }) as SubtleCrypto['sign'];
 }
