@@ -97,12 +97,12 @@
     "@types/node-fetch": "2",
     "@types/sinon": "^10.0.0",
     "@types/sinon-chai": "^3.2.8",
-    "@typescript-eslint/eslint-plugin": "^5.57.1",
-    "@typescript-eslint/parser": "^5.57.1",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
     "cross-env": "7.0.3",
-    "eslint": "^8.37.0",
+    "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-mocha": "^10.1.0",
@@ -126,6 +126,6 @@
     "tsconfig": "workspace:*",
     "tslib": "^2.5.2",
     "typedoc": "^0.23.28",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   }
 }

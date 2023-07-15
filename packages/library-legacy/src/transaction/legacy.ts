@@ -464,7 +464,7 @@ export class Transaction {
         ignorePunctuation: false,
         numeric: false,
         caseFirst: 'lower',
-      };
+      } as Intl.CollatorOptions;
       return x.pubkey
         .toBase58()
         .localeCompare(y.pubkey.toBase58(), 'en', options);
