@@ -19,7 +19,7 @@ export class Keypair {
    * Create a new keypair instance.
    * Generate random keypair if no {@link Ed25519Keypair} is provided.
    *
-   * @param keypair ed25519 keypair
+   * @param {Ed25519Keypair} keypair ed25519 keypair
    */
   constructor(keypair?: Ed25519Keypair) {
     this._keypair = keypair ?? generateKeypair();
@@ -27,6 +27,8 @@ export class Keypair {
 
   /**
    * Generate a new random keypair
+   *
+   * @returns {Keypair} Keypair
    */
   static generate(): Keypair {
     return new Keypair(generateKeypair());
@@ -42,7 +44,9 @@ export class Keypair {
    * @throws error if the provided secret key is invalid and validation is not skipped.
    *
    * @param secretKey secret key byte array
-   * @param options: skip secret key validation
+   * @param options skip secret key validation
+   *
+   * @returns {Keypair} Keypair
    */
   static fromSecretKey(
     secretKey: Uint8Array,
@@ -68,6 +72,8 @@ export class Keypair {
    * Generate a keypair from a 32 byte seed.
    *
    * @param seed seed byte array
+   *
+   * @returns {Keypair} Keypair
    */
   static fromSeed(seed: Uint8Array): Keypair {
     const publicKey = getPublicKey(seed);
@@ -79,6 +85,8 @@ export class Keypair {
 
   /**
    * The public key for this keypair
+   *
+   * @returns {PublicKey} PublicKey
    */
   get publicKey(): PublicKey {
     return new PublicKey(this._keypair.publicKey);
@@ -86,6 +94,7 @@ export class Keypair {
 
   /**
    * The raw secret key for this keypair
+   * @returns {Uint8Array} Secret key in an array of Uint8 bytes
    */
   get secretKey(): Uint8Array {
     return new Uint8Array(this._keypair.secretKey);
