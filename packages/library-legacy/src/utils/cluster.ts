@@ -15,7 +15,10 @@ export type Cluster = 'devnet' | 'testnet' | 'mainnet-beta';
 
 /**
  * Retrieves the RPC API URL for the specified cluster
- * @param {cluster} - The cluster name of the RPC API URL to use. Possible options: 'devnet' | 'testnet' | 'mainnet-beta'
+ * @param {Cluster} [cluster="devnet"] - The cluster name of the RPC API URL to use. Possible options: 'devnet' | 'testnet' | 'mainnet-beta'
+ * @param {boolean} [tls="http"] - Use TLS when connecting to cluster.
+ *
+ * @returns {string} URL string of the RPC endpoint
  */
 export function clusterApiUrl(cluster?: Cluster, tls?: boolean): string {
   const key = tls === false ? 'http' : 'https';
