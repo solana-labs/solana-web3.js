@@ -52,7 +52,7 @@ jobs:
       - name: Publish NPM
         run: |
           pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
-          pnpm publish-packages
+          pnpm publish-packages --concurrency=100%
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
