@@ -99,7 +99,7 @@ jobs:
         run: scripts/setup-test-validator.sh
 
       - name: Build & Test
-        run: pnpm build
+        run: pnpm build --concurrency=100%
 
       - name: Upload Experimental library build artifacts
         if: matrix.node == 'current'
