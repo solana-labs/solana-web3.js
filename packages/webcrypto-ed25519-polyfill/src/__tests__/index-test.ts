@@ -3,55 +3,16 @@ import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, 
 jest.mock('../secrets');
 
 describe('exportKey() polyfill', () => {
-    let oldIsSecureContext: boolean;
     let originalExportKey: SubtleCrypto['exportKey'];
     beforeEach(() => {
         jest.spyOn(globalThis.crypto?.subtle, 'exportKey');
         originalExportKey = globalThis.crypto?.subtle?.exportKey;
-        if (__BROWSER__) {
-            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
-            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
-            if (globalThis.isSecureContext !== undefined) {
-                oldIsSecureContext = globalThis.isSecureContext;
-            }
-        }
     });
     afterEach(() => {
         globalThis.crypto.subtle.exportKey = originalExportKey;
-        if (oldIsSecureContext !== undefined) {
-            globalThis.isSecureContext = oldIsSecureContext;
-        }
     });
-    describe('when required in a secure context with no `exportKey` function', () => {
+    describe('when imported', () => {
         beforeEach(() => {
-            globalThis.isSecureContext = true;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            globalThis.crypto.subtle.exportKey = undefined;
-            jest.isolateModules(() => {
-                require('../index');
-            });
-        });
-        afterEach(() => {
-            globalThis.crypto.subtle.exportKey = originalExportKey;
-        });
-        it('delegates `exportKey` calls to the polyfill when supplied a polyfill-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
-            const mockPublicKey = {} as CryptoKey;
-            await globalThis.crypto.subtle.exportKey('raw', mockPublicKey);
-            expect(exportKeyPolyfill).toHaveBeenCalledWith('raw', mockPublicKey);
-        });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
-            const mockPublicKey = {} as CryptoKey;
-            await expect(() => globalThis.crypto.subtle.exportKey('raw', mockPublicKey)).rejects.toThrow();
-        });
-    });
-    describe('when required in a secure context', () => {
-        beforeEach(() => {
-            globalThis.isSecureContext = true;
             jest.isolateModules(() => {
                 require('../index');
             });
@@ -80,7 +41,33 @@ describe('exportKey() polyfill', () => {
             expect(globalThis.crypto.subtle.exportKey).not.toBe(originalExportKey);
         });
     });
-    describe('when required in an insecure context', () => {
+    describe('when imported with no `exportKey` function', () => {
+        beforeEach(() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.exportKey = undefined;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.exportKey = originalExportKey;
+        });
+        it('delegates `exportKey` calls to the polyfill when supplied a polyfill-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
+            const mockPublicKey = {} as CryptoKey;
+            await globalThis.crypto.subtle.exportKey('raw', mockPublicKey);
+            expect(exportKeyPolyfill).toHaveBeenCalledWith('raw', mockPublicKey);
+        });
+        it('fatals when supplied a native-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
+            const mockPublicKey = {} as CryptoKey;
+            await expect(() => globalThis.crypto.subtle.exportKey('raw', mockPublicKey)).rejects.toThrow();
+        });
+    });
+    describe('when imported in an insecure context', () => {
         beforeEach(() => {
             globalThis.isSecureContext = false;
             jest.isolateModules(() => {
@@ -100,27 +87,15 @@ describe('exportKey() polyfill', () => {
 });
 
 describe('generateKey() polyfill', () => {
-    let oldIsSecureContext: boolean;
     let originalGenerateKey: SubtleCrypto['generateKey'];
     beforeEach(() => {
         jest.spyOn(globalThis.crypto?.subtle, 'generateKey');
         originalGenerateKey = globalThis.crypto?.subtle?.generateKey;
-        if (__BROWSER__) {
-            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
-            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
-            if (globalThis.isSecureContext !== undefined) {
-                oldIsSecureContext = globalThis.isSecureContext;
-            }
-        }
-        globalThis.isSecureContext = true;
     });
     afterEach(() => {
         globalThis.crypto.subtle.generateKey = originalGenerateKey;
-        if (oldIsSecureContext !== undefined) {
-            globalThis.isSecureContext = oldIsSecureContext;
-        }
     });
-    describe('when required in an environment with no `generateKey` function', () => {
+    describe('when imported in an environment with no `generateKey` function', () => {
         beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -165,7 +140,7 @@ describe('generateKey() polyfill', () => {
             expect(keyPair).toBe(mockKeyPair);
         });
     });
-    describe('when required in an environment that does not support Ed25519', () => {
+    describe('when imported in an environment that does not support Ed25519', () => {
         beforeEach(() => {
             const originalGenerateKeyImpl = originalGenerateKey;
             (originalGenerateKey as jest.Mock).mockImplementation(async (...args) => {
@@ -204,7 +179,7 @@ describe('generateKey() polyfill', () => {
             expect(keyPair).toBe(mockKeyPair);
         });
     });
-    describe('when required in an environment that supports Ed25519', () => {
+    describe('when imported in an environment that supports Ed25519', () => {
         beforeEach(() => {
             jest.isolateModules(() => {
                 require('../index');
@@ -262,7 +237,7 @@ describe('generateKey() polyfill', () => {
             expect(generateKeyPolyfill).not.toHaveBeenCalled();
         });
     });
-    describe('when required in an insecure context', () => {
+    describe('when imported in an insecure context', () => {
         beforeEach(() => {
             globalThis.isSecureContext = false;
             jest.isolateModules(() => {
@@ -282,57 +257,16 @@ describe('generateKey() polyfill', () => {
 });
 
 describe('sign() polyfill', () => {
-    let oldIsSecureContext: boolean;
     let originalSign: SubtleCrypto['sign'];
     beforeEach(() => {
         jest.spyOn(globalThis.crypto?.subtle, 'sign');
         originalSign = globalThis.crypto?.subtle?.sign;
-        if (__BROWSER__) {
-            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
-            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
-            if (globalThis.isSecureContext !== undefined) {
-                oldIsSecureContext = globalThis.isSecureContext;
-            }
-        }
     });
     afterEach(() => {
         globalThis.crypto.subtle.sign = originalSign;
-        if (oldIsSecureContext !== undefined) {
-            globalThis.isSecureContext = oldIsSecureContext;
-        }
     });
-    describe('when required in a secure context with no `sign` function', () => {
+    describe('when imported', () => {
         beforeEach(() => {
-            globalThis.isSecureContext = true;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            globalThis.crypto.subtle.sign = undefined;
-            jest.isolateModules(() => {
-                require('../index');
-            });
-        });
-        afterEach(() => {
-            globalThis.crypto.subtle.sign = originalSign;
-        });
-        it('delegates `sign` calls to the polyfill when supplied a polyfill-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
-            const mockPrivateKey = {} as CryptoKey;
-            const mockData = new Uint8Array([1, 2, 3]);
-            await globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData);
-            expect(signPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockData);
-        });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
-            const mockPrivateKey = {} as CryptoKey;
-            const mockData = new Uint8Array([1, 2, 3]);
-            await expect(() => globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData)).rejects.toThrow();
-        });
-    });
-    describe('when required in a secure context', () => {
-        beforeEach(() => {
-            globalThis.isSecureContext = true;
             jest.isolateModules(() => {
                 require('../index');
             });
@@ -363,7 +297,35 @@ describe('sign() polyfill', () => {
             expect(globalThis.crypto.subtle.sign).not.toBe(originalSign);
         });
     });
-    describe('when required in an insecure context', () => {
+    describe('when imported with no `sign` function', () => {
+        beforeEach(() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.sign = undefined;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.sign = originalSign;
+        });
+        it('delegates `sign` calls to the polyfill when supplied a polyfill-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            await globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData);
+            expect(signPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockData);
+        });
+        it('fatals when supplied a native-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            await expect(() => globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData)).rejects.toThrow();
+        });
+    });
+    describe('when imported in an insecure context', () => {
         beforeEach(() => {
             globalThis.isSecureContext = false;
             jest.isolateModules(() => {
@@ -383,61 +345,16 @@ describe('sign() polyfill', () => {
 });
 
 describe('verify() polyfill', () => {
-    let oldIsSecureContext: boolean;
     let originalVerify: SubtleCrypto['verify'];
     beforeEach(() => {
         jest.spyOn(globalThis.crypto?.subtle, 'verify');
         originalVerify = globalThis.crypto?.subtle?.verify;
-        if (__BROWSER__) {
-            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
-            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
-            if (globalThis.isSecureContext !== undefined) {
-                oldIsSecureContext = globalThis.isSecureContext;
-            }
-        }
     });
     afterEach(() => {
         globalThis.crypto.subtle.verify = originalVerify;
-        if (oldIsSecureContext !== undefined) {
-            globalThis.isSecureContext = oldIsSecureContext;
-        }
     });
-    describe('when required in a secure context with no `verify` function', () => {
+    describe('when imported', () => {
         beforeEach(() => {
-            globalThis.isSecureContext = true;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            globalThis.crypto.subtle.verify = undefined;
-            jest.isolateModules(() => {
-                require('../index');
-            });
-        });
-        afterEach(() => {
-            globalThis.crypto.subtle.verify = originalVerify;
-        });
-        it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
-            const mockPrivateKey = {} as CryptoKey;
-            const mockData = new Uint8Array([1, 2, 3]);
-            const mockSignature = new Uint8Array(Array(64).fill(1));
-            await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
-            expect(verifyPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockSignature, mockData);
-        });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
-            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
-            const mockPrivateKey = {} as CryptoKey;
-            const mockData = new Uint8Array([1, 2, 3]);
-            const mockSignature = new Uint8Array(Array(64).fill(1));
-            await expect(() =>
-                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData)
-            ).rejects.toThrow();
-        });
-    });
-    describe('when required in a secure context', () => {
-        beforeEach(() => {
-            globalThis.isSecureContext = true;
             jest.isolateModules(() => {
                 require('../index');
             });
@@ -470,7 +387,39 @@ describe('verify() polyfill', () => {
             expect(globalThis.crypto.subtle.verify).not.toBe(originalVerify);
         });
     });
-    describe('when required in an insecure context', () => {
+    describe('when imported with no `verify` function', () => {
+        beforeEach(() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.verify = undefined;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.verify = originalVerify;
+        });
+        it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
+            expect(verifyPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockSignature, mockData);
+        });
+        it('fatals when supplied a native-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            await expect(() =>
+                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData)
+            ).rejects.toThrow();
+        });
+    });
+    describe('when imported in an insecure context', () => {
         beforeEach(() => {
             globalThis.isSecureContext = false;
             jest.isolateModules(() => {

@@ -5,14 +5,6 @@ import {
 } from '../guard';
 
 describe('assertKeyExporterIsAvailable()', () => {
-    let cachedIsSecureContext: boolean;
-    beforeEach(async () => {
-        cachedIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = cachedIsSecureContext;
-    });
     it('resolves to `undefined` without throwing', async () => {
         expect.assertions(1);
         await expect(assertKeyExporterIsAvailable()).resolves.toBeUndefined();
@@ -48,10 +40,7 @@ describe('assertKeyExporterIsAvailable()', () => {
 
 describe('assertKeyGenerationIsAvailable()', () => {
     let assertKeyGenerationIsAvailable: typeof import('../guard').assertKeyGenerationIsAvailable;
-    let cachedIsSecureContext: boolean;
     beforeEach(async () => {
-        cachedIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
         await jest.isolateModulesAsync(async () => {
             const guardModulePromise =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -59,9 +48,6 @@ describe('assertKeyGenerationIsAvailable()', () => {
                 import('../guard');
             assertKeyGenerationIsAvailable = (await guardModulePromise).assertKeyGenerationIsAvailable;
         });
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = cachedIsSecureContext;
     });
     it('resolves to `undefined` without throwing', async () => {
         expect.assertions(1);
@@ -131,14 +117,6 @@ describe('assertKeyGenerationIsAvailable()', () => {
 });
 
 describe('assertSigningCapabilityIsAvailable()', () => {
-    let cachedIsSecureContext: boolean;
-    beforeEach(async () => {
-        cachedIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = cachedIsSecureContext;
-    });
     it('resolves to `undefined` without throwing', async () => {
         expect.assertions(1);
         await expect(assertSigningCapabilityIsAvailable()).resolves.toBeUndefined();
@@ -173,14 +151,6 @@ describe('assertSigningCapabilityIsAvailable()', () => {
 });
 
 describe('assertVerificationCapabilityIsAvailable()', () => {
-    let cachedIsSecureContext: boolean;
-    beforeEach(async () => {
-        cachedIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = cachedIsSecureContext;
-    });
     it('resolves to `undefined` without throwing', async () => {
         expect.assertions(1);
         await expect(assertVerificationCapabilityIsAvailable()).resolves.toBeUndefined();

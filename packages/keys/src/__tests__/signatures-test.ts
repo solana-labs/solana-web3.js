@@ -49,14 +49,6 @@ const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
 ]);
 
 describe('sign', () => {
-    let oldIsSecureContext: boolean;
-    beforeEach(() => {
-        oldIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = oldIsSecureContext;
-    });
     it('produces the expected signature given a private key', async () => {
         expect.assertions(1);
         const privateKey = await crypto.subtle.importKey(
@@ -81,7 +73,6 @@ describe('sign', () => {
 
 describe('verify', () => {
     let mockPublicKey: CryptoKey;
-    let oldIsSecureContext: boolean;
     beforeEach(async () => {
         mockPublicKey = await crypto.subtle.importKey(
             'raw',
@@ -90,11 +81,6 @@ describe('verify', () => {
             /* extractable */ false,
             ['verify']
         );
-        oldIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = oldIsSecureContext;
     });
     it('returns `true` when the correct signature is supplied for a given payload', async () => {
         expect.assertions(1);
