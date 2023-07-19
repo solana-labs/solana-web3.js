@@ -15,7 +15,11 @@ const config: Partial<Config.InitialProjectOptions> = {
         __NODEJS__: false,
         __REACTNATIVE__: false,
     },
-    setupFilesAfterEnv: [...(commonConfig.setupFilesAfterEnv ?? []), path.resolve(__dirname, 'setup-text-encoder.ts')],
+    setupFilesAfterEnv: [
+        ...(commonConfig.setupFilesAfterEnv ?? []),
+        path.resolve(__dirname, 'setup-secure-context.ts'),
+        path.resolve(__dirname, 'setup-text-encoder.ts'),
+    ],
     testEnvironment: 'jsdom',
     testEnvironmentOptions: {},
 };
