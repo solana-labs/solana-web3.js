@@ -1,4 +1,4 @@
-import { generateKeyPolyfill } from '../secrets';
+import { generateKeyPolyfill, isPolyfilledKey } from '../secrets';
 
 describe('generateKeyPolyfill', () => {
     it('stores secret key bytes in an internal cache', () => {
@@ -86,5 +86,32 @@ describe('generateKeyPolyfill', () => {
                 generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
             }).toThrow();
         });
+    });
+});
+
+describe('isPolyfilledKey', () => {
+    it('returns true when given a public key produced with generateKeyPolyfill()', () => {
+        const key = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
+        expect(isPolyfilledKey(key.publicKey)).toBe(true);
+    });
+    it('returns true when given a private key produced with generateKeyPolyfill()', () => {
+        const key = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
+        expect(isPolyfilledKey(key.privateKey)).toBe(true);
+    });
+    it('returns false when given a public key produced with the native keygen', async () => {
+        expect.assertions(1);
+        const key = (await crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
+            'sign',
+            'verify',
+        ])) as CryptoKeyPair;
+        expect(isPolyfilledKey(key.publicKey)).toBe(false);
+    });
+    it('returns false when given a private key produced with the native keygen', async () => {
+        expect.assertions(1);
+        const key = (await crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
+            'sign',
+            'verify',
+        ])) as CryptoKeyPair;
+        expect(isPolyfilledKey(key.privateKey)).toBe(false);
     });
 });
