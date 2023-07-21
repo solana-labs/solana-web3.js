@@ -1,5 +1,4 @@
-import { Blockhash } from '@solana/rpc-core';
-
+import { Blockhash } from '../blockhash';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 
 describe('getCompiledLifetimeToken', () => {

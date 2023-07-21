@@ -1,4 +1,5 @@
-import { Blockhash } from '../blockhash';
+import { Blockhash } from '@solana/transactions';
+
 import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetLatestBlockhashApiResponse = RpcResponse<{
