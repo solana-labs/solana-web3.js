@@ -5,3 +5,4 @@ export * from './fee-payer';
 export * from './instructions';
 export * from './signatures';
 export * from './types';
+export * from './wire-transaction';
