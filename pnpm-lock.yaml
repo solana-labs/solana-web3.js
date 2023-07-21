@@ -785,6 +785,9 @@ importers:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
+      wait-on:
+        specifier: ^7.0.1
+        version: 7.0.1(debug@4.3.4)
 
   packages/test-matchers:
     devDependencies:

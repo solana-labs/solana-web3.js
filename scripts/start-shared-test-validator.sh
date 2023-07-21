@@ -6,6 +6,7 @@
 # Only the last caller to release the lock will shut the validator down.
 LOCK_DIR="/tmp/lock"
 EXCLUSIVE_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.exclusivelock"
+READY_FLAG_FILE="$LOCK_DIR/.solanatestvalidator.ready"
 SHARED_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.sharedlock"
 TEST_VALIDATOR=$HOME/.local/share/solana/install/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
@@ -19,8 +20,21 @@ mkdir -p $LOCK_DIR
   flock -s 200 || exit 1
   (
     if flock -nx 200; then
+      rm -f $READY_FLAG_FILE
+      echo "Starting test validator"
       $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --account-dir $FIXTURE_ACCOUNTS_DIR >/dev/null &
       validator_pid=$!
+      echo "Waiting for test validator to form first root (PID $validator_pid)"
+      until \
+        curl http://localhost:8899 \
+          --silent \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[{"commitment":"finalized"}]}' \
+        | grep "\"result\":\s*[^0]" > /dev/null \
+      ; do sleep 0.2 && echo -n .; done
+      touch $READY_FLAG_FILE
+      echo ""
       echo "Started test validator (PID $validator_pid)"
       wait
     else

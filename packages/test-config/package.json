@@ -28,6 +28,7 @@
         "jest": "^29.6.1",
         "jest-dev-server": "^9.0.0",
         "jest-fetch-mock-fork": "^3.0.4",
-        "tsconfig": "workspace:*"
+        "tsconfig": "workspace:*",
+        "wait-on": "^7.0.1"
     }
 }
