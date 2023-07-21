@@ -19,7 +19,7 @@ mkdir -p $LOCK_DIR
   flock -s 200 || exit 1
   (
     if flock -nx 200; then
-      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --account-dir $FIXTURE_ACCOUNTS_DIR >/dev/null &
+      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --warp-slot 32 --account-dir $FIXTURE_ACCOUNTS_DIR >/dev/null &
       validator_pid=$!
       echo "Started test validator (PID $validator_pid)"
       wait
