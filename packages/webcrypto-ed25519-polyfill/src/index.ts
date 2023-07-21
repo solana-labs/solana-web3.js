@@ -1,4 +1,4 @@
-import { generateKeyPolyfill } from './secrets';
+import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey } from './secrets';
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
@@ -7,6 +7,21 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     const originalCryptoObject = (globalThis.crypto ||= {} as Crypto);
     const originalSubtleCrypto = ((originalCryptoObject as Crypto & { subtle: SubtleCrypto }).subtle ||=
         {} as SubtleCrypto);
+
+    /**
+     * Override `SubtleCrypto#exportKey`
+     */
+    const originalExportKey = originalSubtleCrypto.exportKey as SubtleCrypto['exportKey'] | undefined;
+    originalSubtleCrypto.exportKey = (async (...args: Parameters<SubtleCrypto['exportKey']>) => {
+        const [_, key] = args;
+        if (isPolyfilledKey(key)) {
+            return exportKeyPolyfill(...args);
+        } else if (originalExportKey) {
+            return await originalExportKey.apply(originalSubtleCrypto, args);
+        } else {
+            throw new TypeError('No native `exportKey` function exists to handle this call');
+        }
+    }) as SubtleCrypto['exportKey'];
 
     /**
      * Override `SubtleCrypto#generateKey`
