@@ -6,8 +6,8 @@ import {
     getBase58EncodedAddressFromPublicKey,
     signBytes,
 } from '@solana/keys';
-import { Blockhash } from '@solana/rpc-core';
 
+import { Blockhash } from '../blockhash';
 import { CompiledMessage, compileMessage } from '../message';
 import { signTransaction } from '../signatures';
 

@@ -1,4 +1,4 @@
-import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
+import { base58 } from '@metaplex-foundation/umi-serializers';
 
 export type TransactionSignature = string & { readonly __sig: unique symbol };
 

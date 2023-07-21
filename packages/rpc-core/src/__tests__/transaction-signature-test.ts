@@ -1,4 +1,4 @@
-import { base58 } from '@metaplex-foundation/umi-serializers-encodings';
+import { base58 } from '@metaplex-foundation/umi-serializers';
 
 import { assertIsTransactionSignature } from '../transaction-signature';
 

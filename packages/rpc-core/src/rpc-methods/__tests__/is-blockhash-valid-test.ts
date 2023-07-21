@@ -1,8 +1,8 @@
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Blockhash } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Blockhash } from '../../blockhash';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
