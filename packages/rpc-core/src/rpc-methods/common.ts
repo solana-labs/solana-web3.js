@@ -34,3 +34,5 @@ export type Base64EncodedZStdCompressedBytes = string & { readonly __base64Encod
 export type Base58EncodedDataResponse = [Base58EncodedBytes, 'base58'];
 export type Base64EncodedDataResponse = [Base64EncodedBytes, 'base64'];
 export type Base64EncodedZStdCompressedDataResponse = [Base64EncodedZStdCompressedBytes, 'base64+zstd'];
+
+export type Base58EncodedTransactionSignature = string & { readonly __base58EncodedSignature: unique symbol };
