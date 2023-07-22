@@ -3444,14 +3444,21 @@ export class Connection {
    * The type `GetAccountInfoApiResponseWithDefaultData` is not exported
    */
   private castToAccountInfoBuffer(res: any | null): AccountInfo<Buffer> | null {
-    return (
-      res.value && {
-        executable: res.value.executable,
-        owner: new PublicKey(res.value.owner),
-        lamports: Number(res.value.lamports),
-        data: Buffer.from(bs58.decode(res.value.data)),
-      }
-    );
+    if (res) {
+      const data = res.data
+        ? Buffer.from(bs58.decode(res.data))
+        : Buffer.alloc(0);
+      return (
+        res && {
+          executable: res.executable,
+          owner: new PublicKey(res.owner),
+          lamports: Number(res.lamports),
+          data,
+          rentEpoch: Number(res.rentEpoch),
+        }
+      );
+    }
+    return null;
   }
 
   /**
@@ -3848,7 +3855,7 @@ export class Connection {
     mintAddress: PublicKey,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<Array<TokenAccountBalancePair>>> {
-    /** EXPERIMENTAL: ❌ TODO */
+    /** EXPERIMENTAL: ✅ */
     return await this._EXPERIMENTAL_solanaRpc
       .getTokenLargestAccounts(
         mintAddress.toBase58() as Base58EncodedAddress,
@@ -3864,16 +3871,6 @@ export class Connection {
       .catch(e => {
         throw new SolanaJSONRPCError(e, 'failed to get token largest accounts');
       });
-    // const args = this._buildArgs([mintAddress.toBase58()], commitment);
-    // const unsafeRes = await this._rpcRequest('getTokenLargestAccounts', args);
-    // const res = create(unsafeRes, GetTokenLargestAccountsResult);
-    // if ('error' in res) {
-    //   throw new SolanaJSONRPCError(
-    //     res.error,
-    //     'failed to get token largest accounts',
-    //   );
-    // }
-    // return res.result;
   }
 
   /**
@@ -3969,7 +3966,7 @@ export class Connection {
         this.castToExperimentalAccountInfoConfig(commitmentOrConfig),
       )
       .send()
-      .then(this.castToAccountInfoBuffer)
+      .then(res => this.castToAccountInfoBuffer(res.value))
       .catch(e => {
         throw new Error(
           'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
@@ -5051,7 +5048,7 @@ export class Connection {
     blockhash: Blockhash,
     rawConfig?: IsBlockhashValidConfig,
   ): Promise<RpcResponseAndContext<boolean>> {
-    /** EXPERIMENTAL: 🏷️ Not available yet */
+    /** EXPERIMENTAL: ❌ TODO */
     // This method is available but does not return context.
     // return await this._EXPERIMENTAL_solanaRpc
     //   .isBlockhashValid(
@@ -5320,33 +5317,6 @@ export class Connection {
             'failed to get block height information',
           );
         });
-      // const {commitment, config} =
-      //   extractCommitmentFromConfig(commitmentOrConfig);
-      // const args = this._buildArgs(
-      //   [],
-      //   commitment,
-      //   undefined /* encoding */,
-      //   config,
-      // );
-      // const requestHash = fastStableStringify(args);
-      // requestPromises[requestHash] =
-      //   requestPromises[requestHash] ??
-      //   (async () => {
-      //     try {
-      //       const unsafeRes = await this._rpcRequest('getBlockHeight', args);
-      //       const res = create(unsafeRes, jsonRpcResult(number()));
-      //       if ('error' in res) {
-      //         throw new SolanaJSONRPCError(
-      //           res.error,
-      //           'failed to get block height information',
-      //         );
-      //       }
-      //       return res.result;
-      //     } finally {
-      //       delete requestPromises[requestHash];
-      //     }
-      //   })();
-      // return await requestPromises[requestHash];
     };
   })();
 
@@ -5356,7 +5326,7 @@ export class Connection {
   async getBlockProduction(
     configOrCommitment?: GetBlockProductionConfig | Commitment,
   ): Promise<RpcResponseAndContext<BlockProduction>> {
-    /** EXPERIMENTAL: 🏷️ Not available yet */
+    /** EXPERIMENTAL: ❌ TODO */
     // This one exists but it requires `lastSlot` and I'm not sure what to put.
     // return await this._EXPERIMENTAL_solanaRpc
     //   .getBlockProduction(
@@ -5653,16 +5623,6 @@ export class Connection {
       .catch(e => {
         throw new SolanaJSONRPCError(e, 'failed to get blocks');
       });
-    // const args = this._buildArgsAtLeastConfirmed(
-    //   endSlot !== undefined ? [startSlot, endSlot] : [startSlot],
-    //   commitment,
-    // );
-    // const unsafeRes = await this._rpcRequest('getBlocks', args);
-    // const res = create(unsafeRes, jsonRpcResult(array(number())));
-    // if ('error' in res) {
-    //   throw new SolanaJSONRPCError(res.error, 'failed to get blocks');
-    // }
-    // return res.result;
   }
 
   /**
@@ -6121,17 +6081,6 @@ export class Connection {
           `failed to get stake minimum delegation`,
         );
       });
-    // const {commitment, config: configArg} = extractCommitmentFromConfig(config);
-    // const args = this._buildArgs([], commitment, 'base64', configArg);
-    // const unsafeRes = await this._rpcRequest('getStakeMinimumDelegation', args);
-    // const res = create(unsafeRes, jsonRpcResultAndContext(number()));
-    // if ('error' in res) {
-    //   throw new SolanaJSONRPCError(
-    //     res.error,
-    //     `failed to get stake minimum delegation`,
-    //   );
-    // }
-    // return res.result;
   }
 
   /**
