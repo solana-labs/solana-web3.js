@@ -209,6 +209,8 @@ export class Transaction {
 
   /**
    * The first (payer) Transaction signature
+   *
+   * @returns {Buffer | null} Buffer of payer's signature
    */
   get signature(): Buffer | null {
     if (this.signatures.length > 0) {
@@ -335,6 +337,8 @@ export class Transaction {
 
   /**
    * Add one or more instructions to this Transaction
+   *
+   * @param {Array< Transaction | TransactionInstruction | TransactionInstructionCtorFields >} items - Instructions to add to the Transaction
    */
   add(
     ...items: Array<
@@ -594,6 +598,10 @@ export class Transaction {
 
   /**
    * Get the estimated fee associated with a transaction
+   *
+   * @param {Connection} connection Connection to RPC Endpoint.
+   *
+   * @returns {Promise<number | null>} The estimated fee for the transaction
    */
   async getEstimatedFee(connection: Connection): Promise<number | null> {
     return (await connection.getFeeForMessage(this.compileMessage())).value;
@@ -641,6 +649,8 @@ export class Transaction {
    * rejected.
    *
    * The Transaction must be assigned a valid `recentBlockhash` before invoking this method
+   *
+   * @param {Array<Signer>} signers Array of signers that will sign the transaction
    */
   sign(...signers: Array<Signer>) {
     if (signers.length === 0) {
@@ -675,6 +685,8 @@ export class Transaction {
    * instructions.
    *
    * All the caveats from the `sign` method apply to `partialSign`
+   *
+   * @param {Array<Signer>} signers Array of signers that will sign the transaction
    */
   partialSign(...signers: Array<Signer>) {
     if (signers.length === 0) {
@@ -713,6 +725,9 @@ export class Transaction {
    * Add an externally created signature to a transaction. The public key
    * must correspond to either the fee payer or a signer account in the transaction
    * instructions.
+   *
+   * @param {PublicKey} pubkey Public key that will be added to the transaction.
+   * @param {Buffer} signature An externally created signature to add to the transaction.
    */
   addSignature(pubkey: PublicKey, signature: Buffer) {
     this._compile(); // Ensure signatures array is populated
@@ -739,6 +754,8 @@ export class Transaction {
    * Verify signatures of a Transaction
    * Optional parameter specifies if we're expecting a fully signed Transaction or a partially signed one.
    * If no boolean is provided, we expect a fully signed Transaction by default.
+   *
+   * @param {boolean} [requireAllSignatures=true] Require a fully signed Transaction
    */
   verifySignatures(requireAllSignatures?: boolean): boolean {
     return this._verifySignatures(
@@ -770,6 +787,10 @@ export class Transaction {
 
   /**
    * Serialize the Transaction in the wire format.
+   *
+   * @param {Buffer} [config] Config of transaction.
+   *
+   * @returns {Buffer} Signature of transaction in wire format.
    */
   serialize(config?: SerializeConfig): Buffer {
     const {requireAllSignatures, verifySignatures} = Object.assign(
@@ -849,6 +870,10 @@ export class Transaction {
 
   /**
    * Parse a wire transaction into a Transaction object.
+   *
+   * @param {Buffer | Uint8Array | Array<number>} buffer Signature of wire Transaction
+   *
+   * @returns {Transaction} Transaction associated with the signature
    */
   static from(buffer: Buffer | Uint8Array | Array<number>): Transaction {
     // Slice up wire data
@@ -867,6 +892,11 @@ export class Transaction {
 
   /**
    * Populate Transaction object from message and signatures
+   *
+   * @param {Message} message Message of transaction
+   * @param {Array<string>} signatures List of signatures to assign to the transaction
+   *
+   * @returns {Transaction} The populated Transaction
    */
   static populate(
     message: Message,
