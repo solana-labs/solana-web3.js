@@ -1,4 +1,4 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill } from './secrets';
+import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from './secrets';
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
@@ -100,4 +100,20 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             throw new TypeError('No native `sign` function exists to handle this call');
         }
     }) as SubtleCrypto['sign'];
+
+    /**
+     * Override `SubtleCrypto#verify`
+     */
+    const originalVerify = originalSubtleCrypto.verify as SubtleCrypto['verify'] | undefined;
+    originalSubtleCrypto.verify = (async (...args: Parameters<SubtleCrypto['verify']>) => {
+        const [_, key] = args;
+        if (isPolyfilledKey(key)) {
+            const [_, ...rest] = args;
+            return verifyPolyfill(...rest);
+        } else if (originalVerify) {
+            return await originalVerify.apply(originalSubtleCrypto, args);
+        } else {
+            throw new TypeError('No native `verify` function exists to handle this call');
+        }
+    }) as SubtleCrypto['verify'];
 }

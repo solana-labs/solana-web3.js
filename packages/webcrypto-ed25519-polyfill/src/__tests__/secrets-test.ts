@@ -1,4 +1,4 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill } from '../secrets';
+import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from '../secrets';
 
 const MOCK_DATA = new Uint8Array([1, 2, 3]);
 const MOCK_DATA_SIGNATURE = new Uint8Array([
@@ -183,5 +183,46 @@ describe('signPolyfill', () => {
         expect.assertions(1);
         const signature = await signPolyfill(privateKey, MOCK_DATA);
         expect(signature).toHaveLength(64);
+    });
+});
+
+describe('verifyPolyfill', () => {
+    let publicKey: CryptoKey;
+    beforeEach(() => {
+        jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
+        publicKey = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']).publicKey;
+    });
+    it('throws when the key supplied has no "verify" usage', () => {
+        const mockKey = { type: 'public', usages: ['sign'] } as unknown as CryptoKey;
+        const mockSignature = new Uint8Array(Array(64).fill(1));
+        expect(() => verifyPolyfill(mockKey, mockSignature, MOCK_DATA)).toThrow(/Unable to use this key to verify/);
+    });
+    it.each(['private', 'secret'] as KeyType[])('throws when a %s key is supplied', type => {
+        const mockKey = { type, usages: ['verify'] } as unknown as CryptoKey;
+        const mockSignature = new Uint8Array(Array(64).fill(1));
+        expect(() => verifyPolyfill(mockKey, mockSignature, MOCK_DATA)).toThrow(/Unable to use this key to verify/);
+    });
+    it('returns `true` when the correct signature is supplied for a given payload', async () => {
+        expect.assertions(1);
+        const result = await verifyPolyfill(publicKey, MOCK_DATA_SIGNATURE, MOCK_DATA);
+        expect(result).toBe(true);
+    });
+    it('returns `false` when a bad signature is supplied for a given payload', async () => {
+        expect.assertions(1);
+        const badSignature = new Uint8Array(Array(64).fill(1));
+        const result = await verifyPolyfill(publicKey, badSignature, MOCK_DATA);
+        expect(result).toBe(false);
+    });
+    it('returns `false` when the signature 65 bytes long', async () => {
+        expect.assertions(1);
+        const badSignature = new Uint8Array([...MOCK_DATA_SIGNATURE, 1]);
+        const result = await verifyPolyfill(publicKey, badSignature, MOCK_DATA);
+        expect(result).toBe(false);
+    });
+    it('returns `false` when the signature 63 bytes long', async () => {
+        expect.assertions(1);
+        const badSignature = MOCK_DATA_SIGNATURE.slice(0, 63);
+        const result = await verifyPolyfill(publicKey, badSignature, MOCK_DATA);
+        expect(result).toBe(false);
     });
 });

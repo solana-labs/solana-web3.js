@@ -1,4 +1,4 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill } from '../secrets';
+import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from '../secrets';
 
 jest.mock('../secrets');
 
@@ -377,6 +377,113 @@ describe('sign() polyfill', () => {
         } else {
             it('overrides `exportKey`', () => {
                 expect(globalThis.crypto.subtle.sign).not.toBe(originalSign);
+            });
+        }
+    });
+});
+
+describe('verify() polyfill', () => {
+    let oldIsSecureContext: boolean;
+    let originalVerify: SubtleCrypto['verify'];
+    beforeEach(() => {
+        jest.spyOn(globalThis.crypto?.subtle, 'verify');
+        originalVerify = globalThis.crypto?.subtle?.verify;
+        if (__BROWSER__) {
+            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
+            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
+            if (globalThis.isSecureContext !== undefined) {
+                oldIsSecureContext = globalThis.isSecureContext;
+            }
+        }
+    });
+    afterEach(() => {
+        globalThis.crypto.subtle.verify = originalVerify;
+        if (oldIsSecureContext !== undefined) {
+            globalThis.isSecureContext = oldIsSecureContext;
+        }
+    });
+    describe('when required in a secure context with no `verify` function', () => {
+        beforeEach(() => {
+            globalThis.isSecureContext = true;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.verify = undefined;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.verify = originalVerify;
+        });
+        it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
+            expect(verifyPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockSignature, mockData);
+        });
+        it('fatals when supplied a native-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            await expect(() =>
+                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData)
+            ).rejects.toThrow();
+        });
+    });
+    describe('when required in a secure context', () => {
+        beforeEach(() => {
+            globalThis.isSecureContext = true;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(true);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
+            expect(verifyPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockSignature, mockData);
+        });
+        it('delegates `verify` calls to the original implementation when supplied a native-generated key', async () => {
+            expect.assertions(1);
+            (isPolyfilledKey as jest.Mock).mockReturnValue(false);
+            const mockPrivateKey = {} as CryptoKey;
+            const mockData = new Uint8Array([1, 2, 3]);
+            const mockSignature = new Uint8Array(Array(64).fill(1));
+            try {
+                // This will fail because the key is a mock. We are only interested in whether the
+                // native implementation was *called* so this is OK.
+                await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
+            } catch {
+                /* empty */
+            }
+            expect(originalVerify).toHaveBeenCalledWith('Ed25519', mockPrivateKey, mockSignature, mockData);
+        });
+        it('overrides `verify`', () => {
+            expect(globalThis.crypto.subtle.verify).not.toBe(originalVerify);
+        });
+    });
+    describe('when required in an insecure context', () => {
+        beforeEach(() => {
+            globalThis.isSecureContext = false;
+            jest.isolateModules(() => {
+                require('../index');
+            });
+        });
+        if (__BROWSER__) {
+            it('does not override `exportKey`', () => {
+                expect(globalThis.crypto.subtle.verify).toBe(originalVerify);
+            });
+        } else {
+            it('overrides `exportKey`', () => {
+                expect(globalThis.crypto.subtle.verify).not.toBe(originalVerify);
             });
         }
     });
