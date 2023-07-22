@@ -7,14 +7,6 @@ const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
 ]);
 
 describe('getBase58EncodedAddressFromPublicKey', () => {
-    let oldIsSecureContext: boolean;
-    beforeEach(() => {
-        oldIsSecureContext = globalThis.isSecureContext;
-        globalThis.isSecureContext = true;
-    });
-    afterEach(() => {
-        globalThis.isSecureContext = oldIsSecureContext;
-    });
     it('returns the public key that corresponds to a given secret key', async () => {
         expect.assertions(1);
         const publicKey = await crypto.subtle.importKey(

@@ -1,22 +1,6 @@
 import { generateKeyPair } from '../key-pair';
 
 describe('generateKeyPair', () => {
-    let oldIsSecureContext: boolean;
-    beforeEach(() => {
-        if (__BROWSER__) {
-            // FIXME: JSDOM does not set `isSecureContext` or otherwise allow you to configure it.
-            // Some discussion: https://github.com/jsdom/jsdom/issues/2751#issuecomment-846613392
-            if (globalThis.isSecureContext !== undefined) {
-                oldIsSecureContext = globalThis.isSecureContext;
-            }
-            globalThis.isSecureContext = true;
-        }
-    });
-    afterEach(() => {
-        if (oldIsSecureContext !== undefined) {
-            globalThis.isSecureContext = oldIsSecureContext;
-        }
-    });
     it.each(['private', 'public'])('generates an ed25519 %s `CryptoKey`', async type => {
         expect.assertions(1);
         const keyPair = await generateKeyPair();
