@@ -25,7 +25,9 @@ export function createDefaultRpcTransport(config: Parameters<typeof createHttpTr
                 ...(config.headers ? normalizeHeaders(config.headers) : undefined),
                 ...({
                     // Keep these headers lowercase so they will override any user-supplied headers above.
-                    'solana-client': `js/${__VERSION__}` ?? 'UNKNOWN',
+                    // This failed with "__VERSION__ is not defined" error
+                    // 'solana-client': `js/${__VERSION__}` ?? 'UNKNOWN',
+                    'solana-client': 'UNKNOWN',
                 } as { [overrideHeader: string]: string }),
             },
         }),

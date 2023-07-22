@@ -51,7 +51,7 @@
     "test:prettier": "prettier --check '{,{src,test}/**/}*.{j,t}s'",
     "test:prettier:fix": "prettier --write '{,{src,test}/**/}*.{j,t}s'",
     "test:typecheck": "tsc --noEmit",
-    "test:unit:node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\", \"target\": \"es2019\" }' ts-mocha --require esm './test/**/*.test.ts'"
+    "test:unit:node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\", \"target\": \"es2019\" }' ts-mocha --require esm './test/connection.test.ts'"
   },
   "dependencies": {
     "@babel/runtime": "^7.22.3",

@@ -58,6 +58,18 @@ import type {Blockhash} from './blockhash';
 import type {FeeCalculator} from './fee-calculator';
 import type {TransactionSignature} from './transaction';
 import type {CompiledInstruction} from './message';
+/** EXPERIMENTAL: Imports */
+import {Base58EncodedAddress} from '../../keys';
+import {SolanaRpcMethods} from '../../rpc-core/src';
+import {Blockhash as EXPERIMENTAL_Blockhash} from '../../rpc-core/src/blockhash';
+import {
+  Commitment as EXPERIMENTAL_Commitment,
+  Slot,
+  U64UnsafeBeyond2Pow53Minus1,
+} from '../../rpc-core/src/rpc-methods/common';
+import {createDefaultRpcTransport, createSolanaRpc} from '../../library/src';
+import type {IRpcTransport} from '../../rpc-transport/dist/types/transports/transport-types';
+import type {Rpc} from '../../rpc-transport/dist/types/json-rpc-types';
 
 const PublicKeyFromString = coerce(
   instance(PublicKey),
@@ -1742,18 +1754,6 @@ export type Supply = {
 };
 
 /**
- * Expected JSON RPC response for the "getSupply" message
- */
-const GetSupplyRpcResult = jsonRpcResultAndContext(
-  pick({
-    total: number(),
-    circulating: number(),
-    nonCirculating: number(),
-    nonCirculatingAccounts: array(PublicKeyFromString),
-  }),
-);
-
-/**
  * Token amount object which returns a token amount in different formats
  * for various client use cases.
  */
@@ -3110,6 +3110,13 @@ export class Connection {
     new Set();
 
   /**
+   * WARNING: Experimental API, may change!
+   * The following are to test the new experimental web3.js API.
+   */
+  /** @internal */ _EXPERIMENTAL_rpcTransport: IRpcTransport;
+  /** @internal */ _EXPERIMENTAL_solanaRpc: Rpc<SolanaRpcMethods>;
+
+  /**
    * Establish a JSON RPC connection
    *
    * @param endpoint URL to the fullnode JSON RPC endpoint
@@ -3188,6 +3195,371 @@ export class Connection {
       'logsNotification',
       this._wsOnLogsNotification.bind(this),
     );
+    /** Experimental */
+    this._EXPERIMENTAL_rpcTransport = createDefaultRpcTransport({
+      url: endpoint,
+    });
+    this._EXPERIMENTAL_solanaRpc = createSolanaRpc({
+      transport: this._EXPERIMENTAL_rpcTransport,
+    });
+  }
+
+  /**
+   * EXPERIMENTAL: Configuration argument converters
+   * The following are converters to the new experimental web3.js API.
+   * They're designed to be _temporary_ configuration converters to
+   * allow for drop-in replacements for the existing API.
+   */
+
+  /**
+   * EXPERIMENTAL
+   * Cast the legacy `Commitment | *Config` arg to
+   * `Readonly<{ commitment?: Commitment; minContextSlot?: Slot; }>`
+   */
+  private castToExperimentalCommitment(
+    commitmentOrConfig?:
+      | Commitment
+      | {
+          commitment?: Commitment | undefined;
+          minContextSlot?: number | undefined;
+        },
+  ): Readonly<{commitment?: EXPERIMENTAL_Commitment; minContextSlot?: Slot}> {
+    if (typeof commitmentOrConfig === 'string') {
+      return {commitment: commitmentOrConfig as EXPERIMENTAL_Commitment};
+    } else if (commitmentOrConfig) {
+      const minContextSlot = commitmentOrConfig.minContextSlot
+        ? BigInt(commitmentOrConfig.minContextSlot)
+        : undefined;
+      return {
+        commitment: commitmentOrConfig.commitment as EXPERIMENTAL_Commitment,
+        minContextSlot,
+      };
+    } else {
+      return {
+        commitment: this._commitment as EXPERIMENTAL_Commitment,
+      };
+    }
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the legacy `GetSupplyConfig | Commitment` arg to
+   * `Readonly<{ commitment?: Commitment; excludeNonCirculatingAccountsList?: boolean; }>`
+   */
+  private castToExperimentalSupplyConfig(
+    config?: GetSupplyConfig | Commitment,
+  ): Readonly<{
+    commitment?: EXPERIMENTAL_Commitment;
+    excludeNonCirculatingAccountsList?: boolean;
+  }> {
+    if (typeof config === 'string') {
+      return {commitment: config as EXPERIMENTAL_Commitment};
+    } else if (config) {
+      return {
+        commitment: config.commitment as EXPERIMENTAL_Commitment,
+        excludeNonCirculatingAccountsList:
+          config.excludeNonCirculatingAccountsList,
+      };
+    } else {
+      return {
+        commitment: this._commitment as EXPERIMENTAL_Commitment,
+      };
+    }
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the legacy `Commitment | GetAccountInfoConfig` arg to
+   * `Readonly<{ commitment?: Commitment; minContextSlot?: Slot; }>`
+   */
+  private castToExperimentalAccountInfoConfig(
+    commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+  ): Readonly<{
+    commitment?: EXPERIMENTAL_Commitment;
+    minContextSlot?: Slot;
+    dataSlice?: DataSlice;
+  }> {
+    if (typeof commitmentOrConfig === 'string') {
+      return {commitment: commitmentOrConfig as EXPERIMENTAL_Commitment};
+    } else if (commitmentOrConfig) {
+      const minContextSlot = commitmentOrConfig.minContextSlot
+        ? BigInt(commitmentOrConfig.minContextSlot)
+        : undefined;
+      return {
+        commitment: commitmentOrConfig.commitment as EXPERIMENTAL_Commitment,
+        minContextSlot,
+        dataSlice: commitmentOrConfig.dataSlice,
+      };
+    } else {
+      return {
+        commitment: this._commitment as EXPERIMENTAL_Commitment,
+      };
+    }
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the legacy `Commitment | GetAccountInfoConfig` arg to
+   * `Readonly<{
+   *    commitment?: Commitment;
+   *    epoch?: U64UnsafeBeyond2Pow53Minus1;
+   *    minContextSlot?: Slot;
+   * }>`
+   */
+  private castToExperimentalInflationRewardConfig(
+    maybeEpoch?: number,
+    commitmentOrConfig?: Commitment | GetInflationRewardConfig,
+  ): Readonly<{
+    commitment?: EXPERIMENTAL_Commitment;
+    epoch?: U64UnsafeBeyond2Pow53Minus1;
+    minContextSlot?: Slot;
+  }> {
+    const epoch = maybeEpoch
+      ? (BigInt(maybeEpoch) as U64UnsafeBeyond2Pow53Minus1)
+      : undefined;
+    if (typeof commitmentOrConfig === 'string') {
+      return {
+        commitment: commitmentOrConfig as EXPERIMENTAL_Commitment,
+        epoch,
+      };
+    } else if (commitmentOrConfig) {
+      const minContextSlot = commitmentOrConfig.minContextSlot
+        ? BigInt(commitmentOrConfig.minContextSlot)
+        : undefined;
+      return {
+        commitment: commitmentOrConfig.commitment as EXPERIMENTAL_Commitment,
+        epoch,
+        minContextSlot,
+      };
+    } else {
+      return {
+        commitment: this._commitment as EXPERIMENTAL_Commitment,
+        epoch,
+      };
+    }
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the legacy `GetBlockProductionConfig | Commitment` arg to
+   * `GetBlockProductionApiConfigBase`
+   */
+  private castToExperimentalGetBlockProductionConfig(
+    commitmentOrConfig?: GetBlockProductionConfig | Commitment,
+  ):
+    | Readonly<{
+        commitment?: Commitment;
+        range?: Readonly<{
+          firstSlot: U64UnsafeBeyond2Pow53Minus1;
+          lastSlot: U64UnsafeBeyond2Pow53Minus1;
+        }>;
+      }>
+    | Readonly<{
+        commitment?: Commitment;
+        range?: Readonly<{
+          firstSlot: U64UnsafeBeyond2Pow53Minus1;
+          lastSlot: U64UnsafeBeyond2Pow53Minus1;
+        }>;
+        identity: Base58EncodedAddress;
+      }> {
+    if (typeof commitmentOrConfig === 'string') {
+      return {commitment: commitmentOrConfig};
+    } else if (commitmentOrConfig) {
+      const lastSlot = commitmentOrConfig.range?.lastSlot
+        ? BigInt(commitmentOrConfig.range.lastSlot)
+        : undefined;
+      const range = commitmentOrConfig.range
+        ? {
+            firstSlot: BigInt(commitmentOrConfig.range.firstSlot),
+            lastSlot,
+          }
+        : undefined;
+      if (commitmentOrConfig.identity) {
+        return {
+          commitment: commitmentOrConfig.commitment,
+          range,
+          identity: commitmentOrConfig.identity as Base58EncodedAddress,
+        };
+      } else {
+        return {
+          commitment: commitmentOrConfig.commitment,
+          range,
+        };
+      }
+    } else {
+      return {
+        commitment: this._commitment,
+      };
+    }
+  }
+
+  /**
+   * EXPERIMENTAL: Return type converters
+   * The following are converters from the new experimental web3.js API.
+   * They're designed to be _temporary_ return type converters to
+   * allow for drop-in replacements for the existing API.
+   */
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetSupplyApiResponseWithNonCirculatingAccounts`
+   * response to the legacy `RpcResponseAndContext<Supply>`
+   *
+   * The type `GetSupplyApiResponseWithNonCirculatingAccounts` is not exported
+   */
+  private castToRpcResponseAndContextWithSupply(
+    res: any,
+  ): RpcResponseAndContext<Supply> {
+    return {
+      context: {
+        slot: Number(res.context.slot),
+      },
+      value: {
+        total: Number(res.value.total),
+        circulating: Number(res.value.circulating),
+        nonCirculating: Number(res.value.nonCirculating),
+        nonCirculatingAccounts: res.value.nonCirculatingAccounts.map(
+          (a: string) => new PublicKey(a),
+        ),
+      },
+    };
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetAccountInfoApiResponseWithDefaultData`
+   * response to the legacy `AccountInfo<Buffer>`
+   *
+   * The type `GetAccountInfoApiResponseWithDefaultData` is not exported
+   */
+  private castToRpcResponseAndContextWithAccountInfoBuffer(
+    res: any | null,
+  ): AccountInfo<Buffer> | null {
+    return (
+      res.value && {
+        executable: res.value.executable,
+        owner: new PublicKey(res.value.owner),
+        lamports: Number(res.value.lamports),
+        data: Buffer.from(bs58.decode(res.value.data)),
+      }
+    );
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetVoteAccountsApiResponse<TVoteSupply>`
+   * response to the legacy `VoteAccountStatus`
+   *
+   * The type `GetVoteAccountsApiResponse<TVoteSupply>` is not exported
+   */
+  private castToVoteAccountStatus(res: any): VoteAccountStatus {
+    return {
+      current: res.current.map((a: any) => {
+        return {
+          activatedStake: Number(a.activatedStake),
+          lastVote: Number(a.lastVote),
+          ...a,
+        };
+      }),
+      delinquent: res.delinquent.map((a: any) => {
+        return {
+          activatedStake: Number(a.activatedStake),
+          lastVote: Number(a.lastVote),
+          ...a,
+        };
+      }),
+    };
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetInflationRewardApiResponse`
+   * response to the legacy `InflationReward`
+   *
+   * The type `GetInflationRewardApiResponse` is not exported
+   */
+  private castToInflationReward(res: any): (InflationReward | null)[] {
+    return res.map((a: any) => {
+      return (
+        a && {
+          epoch: Number(a.epoch),
+          effectiveSlot: Number(a.effectiveSlot),
+          amount: Number(a.amount),
+          postBalance: Number(a.postBalance),
+          commission: Number(a.commission),
+        }
+      );
+    });
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetEpochInfoApiResponse`
+   * response to the legacy `EpochInfo`
+   *
+   * The type `GetEpochInfoApiResponse` is not exported
+   */
+  private castToEpochInfo(res: any): EpochInfo {
+    return {
+      epoch: Number(res.epoch),
+      slotIndex: Number(res.slotIndex),
+      slotsInEpoch: Number(res.slotsInEpoch),
+      absoluteSlot: Number(res.absoluteSlot),
+      blockHeight: Number(res.blockHeight),
+      transactionCount: res.transactionCount
+        ? Number(res.transactionCount)
+        : undefined,
+    };
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetEpochScheduleApiResponse`
+   * response to the legacy `EpochSchedule`
+   *
+   * The type `GetEpochScheduleApiResponse` is not exported
+   */
+  private castToEpochSchedule(res: any): EpochSchedule {
+    return new EpochSchedule(
+      Number(res.slotsPerEpoch),
+      Number(res.leaderScheduleSlotOffset),
+      res.warmup,
+      Number(res.firstNormalEpoch),
+      Number(res.firstNormalSlot),
+    );
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetRecentPerformanceSamplesApiResponse`
+   * response to the legacy `PerfSample`
+   *
+   * The type `GetRecentPerformanceSamplesApiResponse` is not exported
+   */
+  private castToPerfSampleArray(res: any): Array<PerfSample> {
+    return res.map((a: any) => {
+      return {
+        slot: Number(a.slot),
+        numTransactions: Number(a.numTransactions),
+        numSlots: Number(a.numSlots),
+        samplePeriodSecs: a.samplePeriodSecs,
+      };
+    });
+  }
+
+  /**
+   * EXPERIMENTAL
+   * Cast the experimental `GetLatestBlockhashApiResponse`
+   * response to the legacy `BlockhashWithExpiryBlockHeight`
+   *
+   * The type `GetLatestBlockhashApiResponse` is not exported
+   */
+  private castToBlockhashWithExpiryBlockHeight(
+    res: any,
+  ): BlockhashWithExpiryBlockHeight {
+    return {
+      blockhash: res.blockhash as Blockhash,
+      lastValidBlockHeight: Number(res.lastValidBlockHeight),
+    };
   }
 
   /**
@@ -3238,8 +3610,14 @@ export class Connection {
     publicKey: PublicKey,
     commitmentOrConfig?: Commitment | GetBalanceConfig,
   ): Promise<number> {
-    return await this.getBalanceAndContext(publicKey, commitmentOrConfig)
-      .then(x => x.value)
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getBalance(
+        publicKey.toBase58() as Base58EncodedAddress,
+        this.castToExperimentalCommitment(commitmentOrConfig),
+      )
+      .send()
+      .then(x => Number(x.value))
       .catch(e => {
         throw new Error(
           'failed to get balance of account ' + publicKey.toBase58() + ': ' + e,
@@ -3251,15 +3629,17 @@ export class Connection {
    * Fetch the estimated production time of a block
    */
   async getBlockTime(slot: number): Promise<number | null> {
-    const unsafeRes = await this._rpcRequest('getBlockTime', [slot]);
-    const res = create(unsafeRes, jsonRpcResult(nullable(number())));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        `failed to get block time for slot ${slot}`,
-      );
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getBlockTime(BigInt(slot))
+      .send()
+      .then(x => Number(x))
+      .catch(e => {
+        throw new SolanaJSONRPCError(
+          e,
+          `failed to get block time for slot ${slot}`,
+        );
+      });
   }
 
   /**
@@ -3267,30 +3647,28 @@ export class Connection {
    * This value may increase over time if the node is configured to purge older ledger data
    */
   async getMinimumLedgerSlot(): Promise<number> {
-    const unsafeRes = await this._rpcRequest('minimumLedgerSlot', []);
-    const res = create(unsafeRes, jsonRpcResult(number()));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        'failed to get minimum ledger slot',
-      );
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .minimumLedgerSlot()
+      .send()
+      .then(x => Number(x))
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get minimum ledger slot');
+      });
   }
 
   /**
    * Fetch the slot of the lowest confirmed block that has not been purged from the ledger
    */
   async getFirstAvailableBlock(): Promise<number> {
-    const unsafeRes = await this._rpcRequest('getFirstAvailableBlock', []);
-    const res = create(unsafeRes, SlotRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        'failed to get first available block',
-      );
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getFirstAvailableBlock()
+      .send()
+      .then(x => Number(x))
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get first available block');
+      });
   }
 
   /**
@@ -3299,26 +3677,14 @@ export class Connection {
   async getSupply(
     config?: GetSupplyConfig | Commitment,
   ): Promise<RpcResponseAndContext<Supply>> {
-    let configArg: GetSupplyConfig = {};
-    if (typeof config === 'string') {
-      configArg = {commitment: config};
-    } else if (config) {
-      configArg = {
-        ...config,
-        commitment: (config && config.commitment) || this.commitment,
-      };
-    } else {
-      configArg = {
-        commitment: this.commitment,
-      };
-    }
-
-    const unsafeRes = await this._rpcRequest('getSupply', [configArg]);
-    const res = create(unsafeRes, GetSupplyRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get supply');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getSupply(this.castToExperimentalSupplyConfig(config))
+      .send()
+      .then(this.castToRpcResponseAndContextWithSupply)
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get supply');
+      });
   }
 
   /**
@@ -3328,6 +3694,7 @@ export class Connection {
     tokenMintAddress: PublicKey,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<TokenAmount>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const args = this._buildArgs([tokenMintAddress.toBase58()], commitment);
     const unsafeRes = await this._rpcRequest('getTokenSupply', args);
     const res = create(unsafeRes, jsonRpcResultAndContext(TokenAmountResult));
@@ -3344,6 +3711,7 @@ export class Connection {
     tokenAddress: PublicKey,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<TokenAmount>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const args = this._buildArgs([tokenAddress.toBase58()], commitment);
     const unsafeRes = await this._rpcRequest('getTokenAccountBalance', args);
     const res = create(unsafeRes, jsonRpcResultAndContext(TokenAmountResult));
@@ -3366,6 +3734,7 @@ export class Connection {
     filter: TokenAccountsFilter,
     commitmentOrConfig?: Commitment | GetTokenAccountsByOwnerConfig,
   ): Promise<RpcResponseAndContext<GetProgramAccountsResponse>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const {commitment, config} =
       extractCommitmentFromConfig(commitmentOrConfig);
     let _args: any[] = [ownerAddress.toBase58()];
@@ -3401,6 +3770,7 @@ export class Connection {
       Array<{pubkey: PublicKey; account: AccountInfo<ParsedAccountData>}>
     >
   > {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     let _args: any[] = [ownerAddress.toBase58()];
     if ('mint' in filter) {
       _args.push({mint: filter.mint.toBase58()});
@@ -3426,6 +3796,7 @@ export class Connection {
   async getLargestAccounts(
     config?: GetLargestAccountsConfig,
   ): Promise<RpcResponseAndContext<Array<AccountBalancePair>>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const arg = {
       ...config,
       commitment: (config && config.commitment) || this.commitment,
@@ -3447,6 +3818,7 @@ export class Connection {
     mintAddress: PublicKey,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<Array<TokenAccountBalancePair>>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const args = this._buildArgs([mintAddress.toBase58()], commitment);
     const unsafeRes = await this._rpcRequest('getTokenLargestAccounts', args);
     const res = create(unsafeRes, GetTokenLargestAccountsResult);
@@ -3466,6 +3838,7 @@ export class Connection {
     publicKey: PublicKey,
     commitmentOrConfig?: Commitment | GetAccountInfoConfig,
   ): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>> {
+    /** EXPERIMENTAL: ❌ */
     const {commitment, config} =
       extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
@@ -3497,6 +3870,7 @@ export class Connection {
   ): Promise<
     RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>
   > {
+    /** EXPERIMENTAL: ❌ */
     const {commitment, config} =
       extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
@@ -3526,17 +3900,19 @@ export class Connection {
     publicKey: PublicKey,
     commitmentOrConfig?: Commitment | GetAccountInfoConfig,
   ): Promise<AccountInfo<Buffer> | null> {
-    try {
-      const res = await this.getAccountInfoAndContext(
-        publicKey,
-        commitmentOrConfig,
-      );
-      return res.value;
-    } catch (e) {
-      throw new Error(
-        'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
-      );
-    }
+    /** EXPERIMENTAL: ❌ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getAccountInfo(
+        publicKey.toBase58() as Base58EncodedAddress,
+        this.castToExperimentalAccountInfoConfig(commitmentOrConfig),
+      )
+      .send()
+      .then(this.castToRpcResponseAndContextWithAccountInfoBuffer)
+      .catch(e => {
+        throw new Error(
+          'failed to get info about account ' + publicKey.toBase58() + ': ' + e,
+        );
+      });
   }
 
   /**
@@ -4176,13 +4552,16 @@ export class Connection {
    * Return the list of nodes that are currently participating in the cluster
    */
   async getVoteAccounts(commitment?: Commitment): Promise<VoteAccountStatus> {
-    const args = this._buildArgs([], commitment);
-    const unsafeRes = await this._rpcRequest('getVoteAccounts', args);
-    const res = create(unsafeRes, GetVoteAccounts);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get vote accounts');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getVoteAccounts(
+        commitment && {commitment: commitment as EXPERIMENTAL_Commitment},
+      )
+      .send()
+      .then(this.castToVoteAccountStatus)
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get vote accounts');
+      });
   }
 
   /**
@@ -4191,20 +4570,14 @@ export class Connection {
   async getSlot(
     commitmentOrConfig?: Commitment | GetSlotConfig,
   ): Promise<number> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
-    const args = this._buildArgs(
-      [],
-      commitment,
-      undefined /* encoding */,
-      config,
-    );
-    const unsafeRes = await this._rpcRequest('getSlot', args);
-    const res = create(unsafeRes, jsonRpcResult(number()));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get slot');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getSlot(this.castToExperimentalCommitment(commitmentOrConfig))
+      .send()
+      .then(x => Number(x))
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get slot');
+      });
   }
 
   /**
@@ -4213,6 +4586,7 @@ export class Connection {
   async getSlotLeader(
     commitmentOrConfig?: Commitment | GetSlotLeaderConfig,
   ): Promise<string> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const {commitment, config} =
       extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
@@ -4239,13 +4613,14 @@ export class Connection {
     startSlot: number,
     limit: number,
   ): Promise<Array<PublicKey>> {
-    const args = [startSlot, limit];
-    const unsafeRes = await this._rpcRequest('getSlotLeaders', args);
-    const res = create(unsafeRes, jsonRpcResult(array(PublicKeyFromString)));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get slot leaders');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getSlotLeaders(BigInt(startSlot), limit)
+      .send()
+      .then(x => x.map(a => new PublicKey(a)))
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get slot leaders');
+      });
   }
 
   /**
@@ -4255,6 +4630,7 @@ export class Connection {
     signature: TransactionSignature,
     config?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<SignatureStatus | null>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const {context, value: values} = await this.getSignatureStatuses(
       [signature],
       config,
@@ -4271,6 +4647,7 @@ export class Connection {
     signatures: Array<TransactionSignature>,
     config?: SignatureStatusConfig,
   ): Promise<RpcResponseAndContext<Array<SignatureStatus | null>>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const params: any[] = [signatures];
     if (config) {
       params.push(config);
@@ -4289,23 +4666,16 @@ export class Connection {
   async getTransactionCount(
     commitmentOrConfig?: Commitment | GetTransactionCountConfig,
   ): Promise<number> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
-    const args = this._buildArgs(
-      [],
-      commitment,
-      undefined /* encoding */,
-      config,
-    );
-    const unsafeRes = await this._rpcRequest('getTransactionCount', args);
-    const res = create(unsafeRes, jsonRpcResult(number()));
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        'failed to get transaction count',
-      );
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getTransactionCount(
+        this.castToExperimentalCommitment(commitmentOrConfig),
+      )
+      .send()
+      .then(x => Number(x))
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get transaction count');
+      });
   }
 
   /**
@@ -4314,6 +4684,7 @@ export class Connection {
    * @deprecated Deprecated since v1.2.8. Please use {@link getSupply} instead.
    */
   async getTotalSupply(commitment?: Commitment): Promise<number> {
+    /** EXPERIMENTAL: 🪦 Deprecated */
     const result = await this.getSupply({
       commitment,
       excludeNonCirculatingAccountsList: true,
@@ -4327,6 +4698,7 @@ export class Connection {
   async getInflationGovernor(
     commitment?: Commitment,
   ): Promise<InflationGovernor> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const args = this._buildArgs([], commitment);
     const unsafeRes = await this._rpcRequest('getInflationGovernor', args);
     const res = create(unsafeRes, GetInflationGovernorRpcResult);
@@ -4344,29 +4716,24 @@ export class Connection {
     epoch?: number,
     commitmentOrConfig?: Commitment | GetInflationRewardConfig,
   ): Promise<(InflationReward | null)[]> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
-    const args = this._buildArgs(
-      [addresses.map(pubkey => pubkey.toBase58())],
-      commitment,
-      undefined /* encoding */,
-      {
-        ...config,
-        epoch: epoch != null ? epoch : config?.epoch,
-      },
-    );
-    const unsafeRes = await this._rpcRequest('getInflationReward', args);
-    const res = create(unsafeRes, GetInflationRewardResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get inflation reward');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getInflationReward(
+        addresses.map(address => address.toBase58() as Base58EncodedAddress),
+        this.castToExperimentalInflationRewardConfig(epoch, commitmentOrConfig),
+      )
+      .send()
+      .then(this.castToInflationReward)
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get inflation reward');
+      });
   }
 
   /**
    * Fetch the specific inflation values for the current epoch
    */
   async getInflationRate(): Promise<InflationRate> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const unsafeRes = await this._rpcRequest('getInflationRate', []);
     const res = create(unsafeRes, GetInflationRateRpcResult);
     if ('error' in res) {
@@ -4381,39 +4748,28 @@ export class Connection {
   async getEpochInfo(
     commitmentOrConfig?: Commitment | GetEpochInfoConfig,
   ): Promise<EpochInfo> {
-    const {commitment, config} =
-      extractCommitmentFromConfig(commitmentOrConfig);
-    const args = this._buildArgs(
-      [],
-      commitment,
-      undefined /* encoding */,
-      config,
-    );
-    const unsafeRes = await this._rpcRequest('getEpochInfo', args);
-    const res = create(unsafeRes, GetEpochInfoRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get epoch info');
-    }
-    return res.result;
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getEpochInfo(this.castToExperimentalCommitment(commitmentOrConfig))
+      .send()
+      .then(this.castToEpochInfo)
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get epoch info');
+      });
   }
 
   /**
    * Fetch the Epoch Schedule parameters
    */
   async getEpochSchedule(): Promise<EpochSchedule> {
-    const unsafeRes = await this._rpcRequest('getEpochSchedule', []);
-    const res = create(unsafeRes, GetEpochScheduleRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get epoch schedule');
-    }
-    const epochSchedule = res.result;
-    return new EpochSchedule(
-      epochSchedule.slotsPerEpoch,
-      epochSchedule.leaderScheduleSlotOffset,
-      epochSchedule.warmup,
-      epochSchedule.firstNormalEpoch,
-      epochSchedule.firstNormalSlot,
-    );
+    /** EXPERIMENTAL: ✅ */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getEpochSchedule()
+      .send()
+      .then(this.castToEpochSchedule)
+      .catch(e => {
+        throw new SolanaJSONRPCError(e, 'failed to get epoch schedule');
+      });
   }
 
   /**
@@ -4421,6 +4777,7 @@ export class Connection {
    * @return {Promise<RpcResponseAndContext<LeaderSchedule>>}
    */
   async getLeaderSchedule(): Promise<LeaderSchedule> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const unsafeRes = await this._rpcRequest('getLeaderSchedule', []);
     const res = create(unsafeRes, GetLeaderScheduleRpcResult);
     if ('error' in res) {
@@ -4437,6 +4794,7 @@ export class Connection {
     dataLength: number,
     commitment?: Commitment,
   ): Promise<number> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const args = this._buildArgs([dataLength], commitment);
     const unsafeRes = await this._rpcRequest(
       'getMinimumBalanceForRentExemption',
@@ -4462,6 +4820,7 @@ export class Connection {
       feeCalculator: FeeCalculator;
     }>
   > {
+    /** EXPERIMENTAL: 🪦 Deprecated */
     const args = this._buildArgs([], commitment);
     const unsafeRes = await this._rpcRequest('getRecentBlockhash', args);
     const res = create(unsafeRes, GetRecentBlockhashAndContextRpcResult);
@@ -4478,19 +4837,17 @@ export class Connection {
   async getRecentPerformanceSamples(
     limit?: number,
   ): Promise<Array<PerfSample>> {
-    const unsafeRes = await this._rpcRequest(
-      'getRecentPerformanceSamples',
-      limit ? [limit] : [],
-    );
-    const res = create(unsafeRes, GetRecentPerformanceSamplesRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(
-        res.error,
-        'failed to get recent performance samples',
-      );
-    }
-
-    return res.result;
+    /** EXPERIMENTAL: 🏷️ Not available yet */
+    return await this._EXPERIMENTAL_solanaRpc
+      .getRecentPerformanceSamples(limit)
+      .send()
+      .then(this.castToPerfSampleArray)
+      .catch(e => {
+        throw new SolanaJSONRPCError(
+          e,
+          'failed to get recent performance samples',
+        );
+      });
   }
 
   /**
@@ -4502,6 +4859,7 @@ export class Connection {
     blockhash: Blockhash,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<FeeCalculator | null>> {
+    /** EXPERIMENTAL: 🪦 Deprecated */
     const args = this._buildArgs([blockhash], commitment);
     const unsafeRes = await this._rpcRequest(
       'getFeeCalculatorForBlockhash',
@@ -4526,6 +4884,7 @@ export class Connection {
     message: VersionedMessage,
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<number | null>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const wireMessage = toBuffer(message.serialize()).toString('base64');
     const args = this._buildArgs([wireMessage], commitment);
     const unsafeRes = await this._rpcRequest('getFeeForMessage', args);
@@ -4546,6 +4905,7 @@ export class Connection {
   async getRecentPrioritizationFees(
     config?: GetRecentPrioritizationFeesConfig,
   ): Promise<RecentPrioritizationFees[]> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const accounts = config?.lockedWritableAccounts?.map(key => key.toBase58());
     const args = this._buildArgs(accounts?.length ? [accounts] : []);
     const unsafeRes = await this._rpcRequest(
@@ -4570,6 +4930,7 @@ export class Connection {
   async getRecentBlockhash(
     commitment?: Commitment,
   ): Promise<{blockhash: Blockhash; feeCalculator: FeeCalculator}> {
+    /** EXPERIMENTAL: 🪦 Deprecated */
     try {
       const res = await this.getRecentBlockhashAndContext(commitment);
       return res.value;
@@ -4585,6 +4946,11 @@ export class Connection {
   async getLatestBlockhash(
     commitmentOrConfig?: Commitment | GetLatestBlockhashConfig,
   ): Promise<BlockhashWithExpiryBlockHeight> {
+    /** EXPERIMENTAL: ❌ */
+    // return await this._EXPERIMENTAL_solanaRpc
+    //   .getLatestBlockhash(this.castToExperimentalCommitment(commitmentOrConfig))
+    //   .send()
+    //   .then(this.castToBlockhashWithExpiryBlockHeight);
     try {
       const res = await this.getLatestBlockhashAndContext(commitmentOrConfig);
       return res.value;
@@ -4623,6 +4989,21 @@ export class Connection {
     blockhash: Blockhash,
     rawConfig?: IsBlockhashValidConfig,
   ): Promise<RpcResponseAndContext<boolean>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
+    // This method is available but does not return context.
+    // return await this._EXPERIMENTAL_solanaRpc
+    //   .isBlockhashValid(
+    //     blockhash as EXPERIMENTAL_Blockhash,
+    //     this.castToExperimentalCommitment(rawConfig),
+    //   )
+    //   .send()
+    //   .then()
+    //   .catch(e => {
+    //     throw new SolanaJSONRPCError(
+    //       e,
+    //       'failed to determine if the blockhash `' + blockhash + '`is valid',
+    //     );
+    //   });
     const {commitment, config} = extractCommitmentFromConfig(rawConfig);
     const args = this._buildArgs(
       [blockhash],
@@ -4645,6 +5026,7 @@ export class Connection {
    * Fetch the node version
    */
   async getVersion(): Promise<Version> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const unsafeRes = await this._rpcRequest('getVersion', []);
     const res = create(unsafeRes, jsonRpcResult(VersionResult));
     if ('error' in res) {
@@ -4657,6 +5039,7 @@ export class Connection {
    * Fetch the genesis hash
    */
   async getGenesisHash(): Promise<string> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const unsafeRes = await this._rpcRequest('getGenesisHash', []);
     const res = create(unsafeRes, jsonRpcResult(string()));
     if ('error' in res) {
@@ -4730,6 +5113,7 @@ export class Connection {
     | VersionedNoneModeBlockResponse
     | null
   > {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
     const {commitment, config} = extractCommitmentFromConfig(rawConfig);
     const args = this._buildArgsAtLeastConfirmed(
       [slot],
@@ -4898,6 +5282,20 @@ export class Connection {
   async getBlockProduction(
     configOrCommitment?: GetBlockProductionConfig | Commitment,
   ): Promise<RpcResponseAndContext<BlockProduction>> {
+    /** EXPERIMENTAL: 🏷️ Not available yet */
+    // This one exists but it requires `lastSlot` and I'm not sure what to put.
+    // return await this._EXPERIMENTAL_solanaRpc
+    //   .getBlockProduction(
+    //     this.castToExperimentalGetBlockProductionConfig(configOrCommitment),
+    //   )
+    //   .send()
+    //   .then()
+    //   .catch(e => {
+    //     throw new SolanaJSONRPCError(
+    //       e,
+    //       'failed to get block production information',
+    //     );
+    //   });
     let extra: Omit<GetBlockProductionConfig, 'commitment'> | undefined;
     let commitment: Commitment | undefined;
 

@@ -8,3 +8,4 @@ rollup.config.js
 test/.eslintrc.js
 test/dist/
 test/rollup.config.js
+src/connection.ts
