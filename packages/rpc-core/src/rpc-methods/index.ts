@@ -27,6 +27,7 @@ import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { IsBlockhashValidApi } from './isBlockhashValid';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
+import { SendTransactionApi } from './sendTransaction';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -56,7 +57,8 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetTransactionCountApi &
     GetVoteAccountsApi &
     IsBlockhashValidApi &
-    MinimumLedgerSlotApi;
+    MinimumLedgerSlotApi &
+    SendTransactionApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
