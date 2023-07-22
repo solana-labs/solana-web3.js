@@ -277,6 +277,9 @@ importers:
       '@solana/rpc-transport':
         specifier: workspace:*
         version: link:../rpc-transport
+      '@solana/transactions':
+        specifier: workspace:*
+        version: link:../transactions
       fast-stable-stringify:
         specifier: ^1.0.0
         version: 1.0.0

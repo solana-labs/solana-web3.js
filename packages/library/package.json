@@ -68,6 +68,7 @@
         "@solana/keys": "workspace:*",
         "@solana/rpc-core": "workspace:*",
         "@solana/rpc-transport": "workspace:*",
+        "@solana/transactions": "workspace:*",
         "fast-stable-stringify": "^1.0.0"
     },
     "devDependencies": {
