@@ -27,6 +27,7 @@ import { GetTransactionCountApi } from './getTransactionCount';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { IsBlockhashValidApi } from './isBlockhashValid';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
+import { RequestAirdropApi } from './requestAirdrop';
 import { SendTransactionApi } from './sendTransaction';
 
 type Config = Readonly<{
@@ -58,6 +59,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetVoteAccountsApi &
     IsBlockhashValidApi &
     MinimumLedgerSlotApi &
+    RequestAirdropApi &
     SendTransactionApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
