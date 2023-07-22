@@ -1,6 +1,6 @@
 import { Base58EncodedAddress } from '@solana/keys';
+import { Blockhash } from '@solana/transactions';
 
-import { Blockhash } from '../blockhash';
 import { StringifiedBigInt } from '../stringified-bigint';
 import { TransactionError } from '../transaction-error';
 import { UnixTimestamp } from '../unix-timestamp';
