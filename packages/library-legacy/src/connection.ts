@@ -5959,21 +5959,6 @@ export class Connection {
       .catch(e => {
         throw new SolanaJSONRPCError(e, 'failed to get signatures for address');
       });
-    // const args = this._buildArgsAtLeastConfirmed(
-    //   [address.toBase58()],
-    //   commitment,
-    //   undefined,
-    //   options,
-    // );
-    // const unsafeRes = await this._rpcRequest('getSignaturesForAddress', args);
-    // const res = create(unsafeRes, GetSignaturesForAddressRpcResult);
-    // if ('error' in res) {
-    //   throw new SolanaJSONRPCError(
-    //     res.error,
-    //     'failed to get signatures for address',
-    //   );
-    // }
-    // return res.result;
   }
 
   async getAddressLookupTable(
