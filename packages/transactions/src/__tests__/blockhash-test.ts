@@ -1,5 +1,6 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
-import { assertIsBlockhash } from '@solana/transactions';
+
+import { assertIsBlockhash } from '../blockhash';
 
 describe('assertIsBlockhash()', () => {
     it('throws when supplied a non-base58 string', () => {
