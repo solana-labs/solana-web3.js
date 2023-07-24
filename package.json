@@ -17,7 +17,7 @@
         "@solana/prettier-config-solana": "^0.0.2",
         "commitlint": "^17.6.7",
         "eslint-config-turbo": "^0.0.7",
-        "turbo": "^1.9.1"
+        "turbo": "^1.10.10"
     },
     "engines": {
         "node": ">=14.0.0"
