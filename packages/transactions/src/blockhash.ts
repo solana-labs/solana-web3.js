@@ -1,5 +1,9 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
 
+import { IDurableNonceTransaction } from './durable-nonce';
+import { ITransactionWithSignatures } from './signatures';
+import { BaseTransaction } from './types';
+
 export type Blockhash = string & { readonly __blockhash: unique symbol };
 
 type BlockhashLifetimeConstraint = Readonly<{
@@ -33,4 +37,46 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
             cause: e,
         });
     }
+}
+
+export function setTransactionLifetimeUsingBlockhash<TTransaction extends BaseTransaction & IDurableNonceTransaction>(
+    blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+): Omit<TTransaction, keyof ITransactionWithSignatures | 'lifetimeConstraint'> & ITransactionWithBlockhashLifetime;
+export function setTransactionLifetimeUsingBlockhash<
+    TTransaction extends BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+>(
+    blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithBlockhashLifetime;
+export function setTransactionLifetimeUsingBlockhash(
+    blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+) {
+    if (
+        'lifetimeConstraint' in transaction &&
+        transaction.lifetimeConstraint.blockhash === blockhashLifetimeConstraint.blockhash &&
+        transaction.lifetimeConstraint.lastValidBlockHeight === blockhashLifetimeConstraint.lastValidBlockHeight
+    ) {
+        return transaction;
+    }
+    let out;
+    if ('signatures' in transaction) {
+        // The implication of the lifetime constraint changing is that any existing signatures are invalid.
+        const {
+            signatures: _, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...unsignedTransaction
+        } = transaction;
+        out = {
+            ...unsignedTransaction,
+            lifetimeConstraint: blockhashLifetimeConstraint,
+        };
+    } else {
+        out = {
+            ...transaction,
+            lifetimeConstraint: blockhashLifetimeConstraint,
+        };
+    }
+    Object.freeze(out);
+    return out;
 }

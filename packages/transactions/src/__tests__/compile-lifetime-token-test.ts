@@ -1,5 +1,6 @@
 import { Blockhash } from '../blockhash';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
+import { Nonce } from '../durable-nonce';
 
 describe('getCompiledLifetimeToken', () => {
     it('compiles a recent blockhash lifetime constraint', () => {
@@ -11,7 +12,7 @@ describe('getCompiledLifetimeToken', () => {
     });
     it('compiles a nonce lifetime constraint', () => {
         const token = getCompiledLifetimeToken({
-            nonce: 'abc',
+            nonce: 'abc' as Nonce,
         });
         expect(token).toBe('abc');
     });
