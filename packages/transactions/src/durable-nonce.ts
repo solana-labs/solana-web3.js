@@ -3,6 +3,7 @@ import { ReadonlyAccount, ReadonlySignerAccount, WritableAccount } from '@solana
 import { Base58EncodedAddress } from '@solana/keys';
 
 import { BaseTransaction } from './types';
+import { getUnsignedTransaction } from './unsigned-transaction';
 
 type AdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
@@ -19,6 +20,15 @@ type AdvanceNonceAccountInstruction<
 type AdvanceNonceAccountInstructionData = Uint8Array & {
     readonly __advanceNonceAccountInstructionData: unique symbol;
 };
+type DurableNonceConfig<
+    TNonceAccountAddress extends string = string,
+    TNonceAuthorityAddress extends string = string,
+    TNonceValue extends string = string
+> = Readonly<{
+    readonly nonce: Nonce<TNonceValue>;
+    readonly nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>;
+    readonly nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>;
+}>;
 export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __nonce: unique symbol };
 type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
     nonce: Nonce<TNonceValue>;
@@ -49,6 +59,27 @@ export function assertIsDurableNonceTransaction(
         // TODO: Coded error.
         throw new Error('Transaction is not a durable nonce transaction');
     }
+}
+
+function createAdvanceNonceAccountInstruction<
+    TNonceAccountAddress extends string = string,
+    TNonceAuthorityAddress extends string = string
+>(
+    nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>,
+    nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>
+): AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
+    return {
+        accounts: [
+            { address: nonceAccountAddress, role: AccountRole.WRITABLE },
+            {
+                address: RECENT_BLOCKHASHES_SYSVAR_ADDRESS,
+                role: AccountRole.READONLY,
+            },
+            { address: nonceAuthorityAddress, role: AccountRole.READONLY_SIGNER },
+        ],
+        data: new Uint8Array([4, 0, 0, 0]) as AdvanceNonceAccountInstructionData,
+        programAddress: SYSTEM_PROGRAM_ADDRESS,
+    };
 }
 
 function isAdvanceNonceAccountInstruction(instruction: IInstruction): instruction is AdvanceNonceAccountInstruction {
@@ -85,4 +116,41 @@ function isDurableNonceTransaction(
         transaction.instructions[0] != null &&
         isAdvanceNonceAccountInstruction(transaction.instructions[0])
     );
+}
+
+export function setTransactionLifetimeUsingDurableNonce<
+    TTransaction extends BaseTransaction,
+    TNonceAccountAddress extends string = string,
+    TNonceAuthorityAddress extends string = string,
+    TNonceValue extends string = string
+>(
+    {
+        nonce,
+        nonceAccountAddress,
+        nonceAuthorityAddress,
+    }: DurableNonceConfig<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>,
+    transaction: TTransaction | (TTransaction & IDurableNonceTransaction)
+): TTransaction & IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
+    const isAlreadyDurableNonceTransaction = isDurableNonceTransaction(transaction);
+    if (
+        isAlreadyDurableNonceTransaction &&
+        transaction.lifetimeConstraint.nonce === nonce &&
+        transaction.instructions[0].accounts[0].address === nonceAccountAddress &&
+        transaction.instructions[0].accounts[2].address === nonceAuthorityAddress
+    ) {
+        return transaction as TTransaction &
+            IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+    }
+    const out = {
+        ...getUnsignedTransaction(transaction),
+        instructions: [
+            createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+            ...(isAlreadyDurableNonceTransaction ? transaction.instructions.slice(1) : transaction.instructions),
+        ],
+        lifetimeConstraint: {
+            nonce,
+        },
+    } as TTransaction & IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+    Object.freeze(out);
+    return out;
 }
