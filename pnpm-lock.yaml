@@ -444,8 +444,8 @@ importers:
         specifier: ^0.4.3
         version: 0.4.3(rollup@3.26.2)
       '@solana/spl-token':
-        specifier: ^0.3.7
-        version: 0.3.7(@solana/web3.js@1.77.3)
+        specifier: ^0.3.8
+        version: 0.3.8(@solana/web3.js@1.77.3)
       '@types/bn.js':
         specifier: ^5.1.0
         version: 5.1.0
@@ -3831,8 +3831,8 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@solana/spl-token@0.3.7(@solana/web3.js@1.77.3):
-    resolution: {integrity: sha512-bKGxWTtIw6VDdCBngjtsGlKGLSmiu/8ghSt/IOYJV24BsymRbgq7r12GToeetpxmPaZYLddKwAz7+EwprLfkfg==}
+  /@solana/spl-token@0.3.8(@solana/web3.js@1.77.3):
+    resolution: {integrity: sha512-ogwGDcunP9Lkj+9CODOWMiVJEdRtqHAtX2rWF62KxnnSWtMZtV9rDhTrZFshiyJmxDnRL/1nKE1yJHg4jjs3gg==}
     engines: {node: '>=16'}
     peerDependencies:
       '@solana/web3.js': ^1.47.4
@@ -3857,7 +3857,7 @@ packages:
       '@solana/buffer-layout': 4.0.0
       agentkeepalive: 4.2.1
       bigint-buffer: 1.1.5
-      bn.js: 5.0.0
+      bn.js: 5.2.1
       borsh: 0.7.0
       bs58: 4.0.1
       buffer: 6.0.3
@@ -4887,6 +4887,7 @@ packages:
 
   /bn.js@5.0.0:
     resolution: {integrity: sha512-bVwDX8AF+72fIUNuARelKAlQUNtPOfG2fRxorbVvFk4zpHbqLrPdOGfVg5vrKwVzLLePqPBiATaOZNELQzmS0A==}
+    dev: false
 
   /bn.js@5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
