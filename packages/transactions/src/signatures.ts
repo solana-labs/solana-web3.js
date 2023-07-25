@@ -7,7 +7,7 @@ export interface IFullySignedTransaction extends ITransactionWithSignatures {
     readonly __fullySignedTransaction: unique symbol;
 }
 export interface ITransactionWithSignatures {
-    readonly signatures: { readonly [publicKey: Base58EncodedAddress]: Ed25519Signature };
+    readonly signatures: Readonly<Record<Base58EncodedAddress, Ed25519Signature>>;
 }
 
 async function getCompiledMessageSignature(message: CompiledMessage, secretKey: CryptoKey) {
