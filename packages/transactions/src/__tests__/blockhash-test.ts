@@ -1,6 +1,15 @@
+import 'test-matchers/toBeFrozenObject';
+
 import { base58 } from '@metaplex-foundation/umi-serializers';
 
-import { assertIsBlockhash } from '../blockhash';
+import {
+    assertIsBlockhash,
+    Blockhash,
+    ITransactionWithBlockhashLifetime,
+    setTransactionLifetimeUsingBlockhash,
+} from '../blockhash';
+import { ITransactionWithSignatures } from '../signatures';
+import { BaseTransaction } from '../types';
 
 describe('assertIsBlockhash()', () => {
     it('throws when supplied a non-base58 string', () => {
@@ -55,5 +64,81 @@ describe('assertIsBlockhash()', () => {
             // eslint-disable-next-line no-empty
         } catch {}
         expect(decodeMethod).not.toHaveBeenCalled();
+    });
+});
+
+describe('setTransactionLifetimeUsingBlockhash', () => {
+    let baseTx: BaseTransaction;
+    const BLOCKHASH_CONSTRAINT_A = {
+        blockhash: 'F7vmkY3DTaxfagttWjQweib42b6ZHADSx94Tw8gHx3W7' as Blockhash,
+        lastValidBlockHeight: 123n,
+    };
+    const BLOCKHASH_CONSTRAINT_B = {
+        blockhash: '6bjroqDcZgTv6Vavhqf81oBHTv3aMnX19UTB51YhAZnN' as Blockhash,
+        lastValidBlockHeight: 123n,
+    };
+    beforeEach(() => {
+        baseTx = {
+            instructions: [],
+            version: 0,
+        };
+    });
+    it('sets the lifetime constraint on the transaction to the supplied blockhash lifetime constraint', () => {
+        const txWithBlockhashLifetimeConstraint = setTransactionLifetimeUsingBlockhash(BLOCKHASH_CONSTRAINT_A, baseTx);
+        expect(txWithBlockhashLifetimeConstraint).toHaveProperty('lifetimeConstraint', BLOCKHASH_CONSTRAINT_A);
+    });
+    describe('given a transaction with a blockhash lifetime already set', () => {
+        let txWithBlockhashLifetimeConstraint: BaseTransaction & ITransactionWithBlockhashLifetime;
+        beforeEach(() => {
+            txWithBlockhashLifetimeConstraint = {
+                ...baseTx,
+                lifetimeConstraint: BLOCKHASH_CONSTRAINT_A,
+            };
+        });
+        it('sets the new blockhash lifetime constraint on the transaction when it differs from the existing one', () => {
+            const txWithBlockhashLifetimeConstraintB = setTransactionLifetimeUsingBlockhash(
+                BLOCKHASH_CONSTRAINT_B,
+                txWithBlockhashLifetimeConstraint
+            );
+            expect(txWithBlockhashLifetimeConstraintB).toHaveProperty('lifetimeConstraint', BLOCKHASH_CONSTRAINT_B);
+        });
+        it('returns the original transaction when trying to set the same blockhash lifetime constraint again', () => {
+            const txWithSameBlockhashLifetimeConstraint = setTransactionLifetimeUsingBlockhash(
+                BLOCKHASH_CONSTRAINT_A,
+                txWithBlockhashLifetimeConstraint
+            );
+            expect(txWithBlockhashLifetimeConstraint).toBe(txWithSameBlockhashLifetimeConstraint);
+        });
+        describe('given that transaction also has signatures', () => {
+            let txWithBlockhashLifetimeConstraintAndSignatures: BaseTransaction &
+                ITransactionWithBlockhashLifetime &
+                ITransactionWithSignatures;
+            beforeEach(() => {
+                txWithBlockhashLifetimeConstraintAndSignatures = {
+                    ...txWithBlockhashLifetimeConstraint,
+                    signatures: {},
+                };
+            });
+            it('does not clear the signatures when the blockhash lifetime constraint is the same as the current one', () => {
+                expect(
+                    setTransactionLifetimeUsingBlockhash(
+                        BLOCKHASH_CONSTRAINT_A,
+                        txWithBlockhashLifetimeConstraintAndSignatures
+                    )
+                ).toHaveProperty('signatures', txWithBlockhashLifetimeConstraintAndSignatures.signatures);
+            });
+            it('clears the signatures when the blockhash lifetime constraint is different than the current one', () => {
+                expect(
+                    setTransactionLifetimeUsingBlockhash(
+                        BLOCKHASH_CONSTRAINT_B,
+                        txWithBlockhashLifetimeConstraintAndSignatures
+                    )
+                ).not.toHaveProperty('signatures');
+            });
+        });
+    });
+    it('freezes the object', () => {
+        const txWithBlockhashLifetimeConstraint = setTransactionLifetimeUsingBlockhash(BLOCKHASH_CONSTRAINT_A, baseTx);
+        expect(txWithBlockhashLifetimeConstraint).toBeFrozenObject();
     });
 });

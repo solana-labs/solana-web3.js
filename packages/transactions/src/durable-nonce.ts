@@ -16,18 +16,20 @@ type AdvanceNonceAccountInstruction<
 type AdvanceNonceAccountInstructionData = Uint8Array & {
     readonly __advanceNonceAccountInstructionData: unique symbol;
 };
-type NonceLifetimeConstraint = Readonly<{
-    nonce: string;
+export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __nonce: unique symbol };
+type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
+    nonce: Nonce<TNonceValue>;
 }>;
 
 export interface IDurableNonceTransaction<
     TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string
+    TNonceAuthorityAddress extends string = string,
+    TNonceValue extends string = string
 > {
     readonly instructions: [
         // The first instruction *must* be the system program's `AdvanceNonceAccount` instruction.
         AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
         ...IInstruction[]
     ];
-    readonly lifetimeConstraint: NonceLifetimeConstraint;
+    readonly lifetimeConstraint: NonceLifetimeConstraint<TNonceValue>;
 }
