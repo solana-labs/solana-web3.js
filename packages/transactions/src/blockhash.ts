@@ -3,6 +3,7 @@ import { base58 } from '@metaplex-foundation/umi-serializers';
 import { IDurableNonceTransaction } from './durable-nonce';
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
+import { getUnsignedTransaction } from './unsigned-transaction';
 
 export type Blockhash = string & { readonly __blockhash: unique symbol };
 
@@ -60,23 +61,10 @@ export function setTransactionLifetimeUsingBlockhash(
     ) {
         return transaction;
     }
-    let out;
-    if ('signatures' in transaction) {
-        // The implication of the lifetime constraint changing is that any existing signatures are invalid.
-        const {
-            signatures: _, // eslint-disable-line @typescript-eslint/no-unused-vars
-            ...unsignedTransaction
-        } = transaction;
-        out = {
-            ...unsignedTransaction,
-            lifetimeConstraint: blockhashLifetimeConstraint,
-        };
-    } else {
-        out = {
-            ...transaction,
-            lifetimeConstraint: blockhashLifetimeConstraint,
-        };
-    }
+    const out = {
+        ...getUnsignedTransaction(transaction),
+        lifetimeConstraint: blockhashLifetimeConstraint,
+    };
     Object.freeze(out);
     return out;
 }

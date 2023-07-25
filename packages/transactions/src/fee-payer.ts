@@ -2,6 +2,7 @@ import { Base58EncodedAddress } from '@solana/keys';
 
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
+import { getUnsignedTransaction } from './unsigned-transaction';
 
 export interface ITransactionWithFeePayer<TAddress extends string = string> {
     readonly feePayer: Base58EncodedAddress<TAddress>;
@@ -20,23 +21,10 @@ export function setTransactionFeePayer<TFeePayerAddress extends string, TTransac
     if ('feePayer' in transaction && feePayer === transaction.feePayer) {
         return transaction;
     }
-    let out;
-    if ('signatures' in transaction) {
-        // The implication of the fee payer changing is that any existing signatures are invalid.
-        const {
-            signatures: _, // eslint-disable-line @typescript-eslint/no-unused-vars
-            ...unsignedTransaction
-        } = transaction;
-        out = {
-            ...unsignedTransaction,
-            feePayer,
-        };
-    } else {
-        out = {
-            ...transaction,
-            feePayer,
-        };
-    }
+    const out = {
+        ...getUnsignedTransaction(transaction),
+        feePayer,
+    };
     Object.freeze(out);
     return out;
 }
