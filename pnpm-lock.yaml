@@ -33,7 +33,7 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
 
   packages/fetch-impl:
     dependencies:
@@ -45,11 +45,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.0.0)(@typescript-eslint/parser@6.0.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -100,13 +100,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -120,11 +120,11 @@ importers:
         specifier: workspace:*
         version: link:../keys
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.23
-        version: 0.2.23(@swc/core@1.3.18)
+        version: 0.2.23(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -166,13 +166,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -190,11 +190,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.0.0)(@typescript-eslint/parser@6.0.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -245,13 +245,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -284,11 +284,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.0.0)(@typescript-eslint/parser@6.0.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -339,13 +339,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -556,7 +556,7 @@ importers:
         version: 10.0.0(mocha@10.2.0)
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -589,11 +589,11 @@ importers:
         specifier: workspace:*
         version: link:../transactions
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -647,13 +647,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -667,11 +667,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.0.0)(@typescript-eslint/parser@6.0.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -731,13 +731,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -807,11 +807,11 @@ importers:
         specifier: workspace:*
         version: link:../instructions
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.23
-        version: 0.2.23(@swc/core@1.3.18)
+        version: 0.2.23(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -856,13 +856,13 @@ importers:
         version: link:../test-matchers
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -882,11 +882,11 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.0.0)(@typescript-eslint/parser@6.0.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@swc/core':
-        specifier: ^1.3.18
-        version: 1.3.18
+        specifier: ^1.3.71
+        version: 1.3.71
       '@swc/jest':
         specifier: ^0.2.26
-        version: 0.2.26(@swc/core@1.3.18)
+        version: 0.2.26(@swc/core@1.3.71)
       '@types/jest':
         specifier: ^29.5.3
         version: 29.5.3
@@ -934,13 +934,13 @@ importers:
         version: link:../test-config
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+        version: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
         specifier: 6.7.0
-        version: 6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -2480,7 +2480,7 @@ packages:
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
       resolve-from: 5.0.0
-      ts-node: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+      ts-node: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       typescript: 5.1.6
     transitivePeerDependencies:
       - '@swc/core'
@@ -3873,122 +3873,126 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@swc/core-darwin-arm64@1.3.18:
-    resolution: {integrity: sha512-4UEQ+LyzDFTszEy4LCU50h4cjVNJcNwD87aVBT/8i6YXj5dyMki/TrkIQ6Bhv7g5beg2GRncB2ndjN66r8I8+w==}
+  /@swc/core-darwin-arm64@1.3.71:
+    resolution: {integrity: sha512-xOm0hDbcO2ShwQu1CjLtq3fwrG9AvhuE0s8vtBc8AsamYExHmR8bo6GQHJUtfPG1FVPk5a8xoQSd1fs09FQjLg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@swc/core-darwin-x64@1.3.18:
-    resolution: {integrity: sha512-DSCd7eVr+4ukffNnvhrFmUoCF0VLOXPgGmdwm6u0irLWOLtr2VZNZcf7UF+t/Y9jPKmXz3OY6lVgwtjxZhiklQ==}
+  /@swc/core-darwin-x64@1.3.71:
+    resolution: {integrity: sha512-9sbDXBWgM22w/3Ll5kPhXMPkOiHRoqwMOyxLJBfGtIMnFlh5O+NRN3umRerK3pe4Q6/7hj2M5V+crEHYrXmuxg==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
 
-  /@swc/core-linux-arm-gnueabihf@1.3.18:
-    resolution: {integrity: sha512-9dy6qJiWAls9OrBvrWbFDbjEkuOPrEP6OsKyrQWTMqLjCLwgLa3g4yC0YtPdUa/A8uyNVKtRcq+NXoKW+mP/QQ==}
+  /@swc/core-linux-arm-gnueabihf@1.3.71:
+    resolution: {integrity: sha512-boKdMZsfKvhBs0FDeqH7KQj0lfYe0wCtrL1lv50oYMEeLajY9o4U5xSmc61Sg4HRXjlbR6dlM2cFfL84t7NpAA==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@swc/core-linux-arm64-gnu@1.3.18:
-    resolution: {integrity: sha512-8FZjiUSM4JBQTD4sV7Y6BNMdo0oDlqa8xYVaAimuIBL8ixD/Fb+0GIxKdB59yKRVQyuXJRa6Pwzd7zk3wY5T0Q==}
+  /@swc/core-linux-arm64-gnu@1.3.71:
+    resolution: {integrity: sha512-yDatyHYMiOVwhyIA/LBwknPs2CUtLYWEMzPZjgLc+56PbgPs3oiEbNWeVUND5onPrfDQgK7NK1y8JeiXZqTgGQ==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@swc/core-linux-arm64-musl@1.3.18:
-    resolution: {integrity: sha512-0zNqfFeAHZp37lu+lTVvZKfDM10EIoYJtv9sWz+0EA5mkzwj4NtC3ialTIjcPAyJ9Oq4zBtToW2hv7qEtyBHZw==}
+  /@swc/core-linux-arm64-musl@1.3.71:
+    resolution: {integrity: sha512-xAdCA0L/hoa0ULL5SR4sMZCxkWk7C90DOU7wJalNVG9qNWYICfq3G7AR0E9Ohphzqyahfb5QJED/nA7N0+XwbQ==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@swc/core-linux-x64-gnu@1.3.18:
-    resolution: {integrity: sha512-PA3Cc97Kc6W6RtpBLeJaoXLCRL5dJLYd2dszf+f5hGHHJybh6eXGIU0ZkZr898NUHoL8fT6Mg6I4JCNImq/yBg==}
+  /@swc/core-linux-x64-gnu@1.3.71:
+    resolution: {integrity: sha512-j94qLXP/yqhu2afnABAq/xrJIU8TEqcNkp1TlsAeO3R2nVLYL1w4XX8GW71SPnXmd2bwF102c3Cfv/2ilf2y2A==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@swc/core-linux-x64-musl@1.3.18:
-    resolution: {integrity: sha512-RiZXHwED8cfD/zoBG01iY8YZtOF/8t9XHZ1JqCx9PWOMjXD3Vc8F2I7bp1Qg6ahzWEaP+2+/rqGO1kSwaJjJLw==}
+  /@swc/core-linux-x64-musl@1.3.71:
+    resolution: {integrity: sha512-YiyU848ql6dLlmt0BHccGAaZ36Cf61VzCAMDKID/gd72snvzWcMCHrwSRW0gEFNXHsjBJrmNl+SLYZHfqoGwUA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     optional: true
 
-  /@swc/core-win32-arm64-msvc@1.3.18:
-    resolution: {integrity: sha512-G1Lu/sP+v34lwsGFreklnCdxygMLmobyLY31cNPd0i47ZwgrGowuTV34Mcqfc4AWRkayqVAIlb/WWIZ1+qemcA==}
+  /@swc/core-win32-arm64-msvc@1.3.71:
+    resolution: {integrity: sha512-1UsJ+6hnIRe/PVdgDPexvgGaN4KpBncT/bAOqlWc9XC7KeBXAWcGA08LrPUz2Ei00DJXzR622IGZVEYOHNkUOw==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@swc/core-win32-ia32-msvc@1.3.18:
-    resolution: {integrity: sha512-Uu+m5BPemw5ZiG6LaF+pP0qFQuIXF55wMZNa0Dbl/16hF7ci6q941MT6CqeK5LQQ52FVVqeYO5lDk5CggaA3Mw==}
+  /@swc/core-win32-ia32-msvc@1.3.71:
+    resolution: {integrity: sha512-KnuI89+zojR9lDFELdQYZpxzPZ6pBfLwJfWTSGatnpL1ZHhIsV3tK1jwqIdJK1zkRxpBwc6p6FzSZdZwCSpnJw==}
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@swc/core-win32-x64-msvc@1.3.18:
-    resolution: {integrity: sha512-9o8uFNsPmWB5FFQSDCsI/KVBSHuAILEwB/hMvbUxKtZeSWAQTm5BqbNPi6X11KJ3MdyoJn7zPejj3grL3dcd/w==}
+  /@swc/core-win32-x64-msvc@1.3.71:
+    resolution: {integrity: sha512-Pcw7fFirpaBOZsU8fhO48ZCb7NxIjuLnLRPrHqWQ4Mapx1+w9ZNdGya2DKP9n8EAiUrJO20WDsrBNMT2MQSWkA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     optional: true
 
-  /@swc/core@1.3.18:
-    resolution: {integrity: sha512-VChk3ldLhmVoX3Hd2M3Y4j960T0lo2Zus60iZoWST6P65RVPt8BatFVVPAB9dABy1dB5zn1BCpHlH85yXVysQw==}
+  /@swc/core@1.3.71:
+    resolution: {integrity: sha512-T8dqj+SV/S8laW/FGmKHhCGw1o4GRUvJ2jHfbYgEwiJpeutT9uavHvG02t39HJvObBJ52EZs/krGtni4U5928Q==}
     engines: {node: '>=10'}
-    hasBin: true
     requiresBuild: true
+    peerDependencies:
+      '@swc/helpers': ^0.5.0
+    peerDependenciesMeta:
+      '@swc/helpers':
+        optional: true
     optionalDependencies:
-      '@swc/core-darwin-arm64': 1.3.18
-      '@swc/core-darwin-x64': 1.3.18
-      '@swc/core-linux-arm-gnueabihf': 1.3.18
-      '@swc/core-linux-arm64-gnu': 1.3.18
-      '@swc/core-linux-arm64-musl': 1.3.18
-      '@swc/core-linux-x64-gnu': 1.3.18
-      '@swc/core-linux-x64-musl': 1.3.18
-      '@swc/core-win32-arm64-msvc': 1.3.18
-      '@swc/core-win32-ia32-msvc': 1.3.18
-      '@swc/core-win32-x64-msvc': 1.3.18
+      '@swc/core-darwin-arm64': 1.3.71
+      '@swc/core-darwin-x64': 1.3.71
+      '@swc/core-linux-arm-gnueabihf': 1.3.71
+      '@swc/core-linux-arm64-gnu': 1.3.71
+      '@swc/core-linux-arm64-musl': 1.3.71
+      '@swc/core-linux-x64-gnu': 1.3.71
+      '@swc/core-linux-x64-musl': 1.3.71
+      '@swc/core-win32-arm64-msvc': 1.3.71
+      '@swc/core-win32-ia32-msvc': 1.3.71
+      '@swc/core-win32-x64-msvc': 1.3.71
 
-  /@swc/jest@0.2.23(@swc/core@1.3.18):
+  /@swc/jest@0.2.23(@swc/core@1.3.71):
     resolution: {integrity: sha512-ZLj17XjHbPtNsgqjm83qizENw05emLkKGu3WuPUttcy9hkngl0/kcc7fDbcSBpADS0GUtsO+iKPjZFWVAtJSlA==}
     engines: {npm: '>= 7.0.0'}
     peerDependencies:
       '@swc/core': '*'
     dependencies:
       '@jest/create-cache-key-function': 27.5.1
-      '@swc/core': 1.3.18
+      '@swc/core': 1.3.71
       jsonc-parser: 3.2.0
     dev: true
 
-  /@swc/jest@0.2.26(@swc/core@1.3.18):
+  /@swc/jest@0.2.26(@swc/core@1.3.71):
     resolution: {integrity: sha512-7lAi7q7ShTO3E5Gt1Xqf3pIhRbERxR1DUxvtVa9WKzIB+HGQ7wZP5sYx86zqnaEoKKGhmOoZ7gyW0IRu8Br5+A==}
     engines: {npm: '>= 7.0.0'}
     peerDependencies:
       '@swc/core': '*'
     dependencies:
       '@jest/create-cache-key-function': 27.5.1
-      '@swc/core': 1.3.18
+      '@swc/core': 1.3.71
       jsonc-parser: 3.2.0
     dev: true
 
@@ -5421,7 +5425,7 @@ packages:
     dependencies:
       '@types/node': 20.4.4
       cosmiconfig: 8.2.0
-      ts-node: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+      ts-node: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       typescript: 5.1.6
     dev: true
 
@@ -7783,7 +7787,7 @@ packages:
       pretty-format: 29.6.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+      ts-node: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -9854,7 +9858,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.12
-      ts-node: 10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6)
+      ts-node: 10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6)
       yaml: 1.10.2
     dev: true
 
@@ -11136,7 +11140,7 @@ packages:
       tsconfig-paths: 3.14.2
     dev: true
 
-  /ts-node@10.9.1(@swc/core@1.3.18)(@types/node@20.4.4)(typescript@5.1.6):
+  /ts-node@10.9.1(@swc/core@1.3.71)(@types/node@20.4.4)(typescript@5.1.6):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -11151,7 +11155,7 @@ packages:
         optional: true
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
-      '@swc/core': 1.3.18
+      '@swc/core': 1.3.71
       '@tsconfig/node10': 1.0.9
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
@@ -11199,7 +11203,7 @@ packages:
     resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
     dev: true
 
-  /tsup@6.7.0(@swc/core@1.3.18)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6):
+  /tsup@6.7.0(@swc/core@1.3.71)(postcss@8.4.12)(ts-node@10.9.1)(typescript@5.1.6):
     resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
     engines: {node: '>=14.18'}
     hasBin: true
@@ -11215,7 +11219,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@swc/core': 1.3.18
+      '@swc/core': 1.3.71
       bundle-require: 4.0.1(esbuild@0.17.19)
       cac: 6.7.14
       chokidar: 3.5.3
