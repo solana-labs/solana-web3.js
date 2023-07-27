@@ -31,7 +31,7 @@ import {JSONRPCError} from 'jayson';
 
 import {EpochSchedule} from './epoch-schedule';
 import {SendTransactionError, SolanaJSONRPCError} from './errors';
-import fetchImpl, {Response} from './fetch-impl';
+import fetchImpl from './fetch-impl';
 import {DurableNonce, NonceAccount} from './nonce-account';
 import {PublicKey} from './publickey';
 import {Signer} from './keypair';
