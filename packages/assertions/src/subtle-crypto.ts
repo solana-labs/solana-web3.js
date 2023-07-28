@@ -29,6 +29,14 @@ async function isEd25519CurveSupported(subtle: SubtleCrypto): Promise<boolean> {
     }
 }
 
+export async function assertDigestCapabilityIsAvailable() {
+    assertIsSecureContext();
+    if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.digest !== 'function') {
+        // TODO: Coded error.
+        throw new Error('No digest implementation could be found');
+    }
+}
+
 export async function assertKeyGenerationIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.generateKey !== 'function') {
