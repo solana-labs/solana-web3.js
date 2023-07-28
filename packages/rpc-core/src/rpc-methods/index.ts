@@ -58,6 +58,8 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     IsBlockhashValidApi &
     MinimumLedgerSlotApi;
 
+export type { Commitment } from './common';
+
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
         defineProperty() {
