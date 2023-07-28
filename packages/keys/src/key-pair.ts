@@ -1,4 +1,4 @@
-import { assertKeyGenerationIsAvailable } from './guard';
+import { assertKeyGenerationIsAvailable } from '@solana/assertions';
 
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
     await assertKeyGenerationIsAvailable();

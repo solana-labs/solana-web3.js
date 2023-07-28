@@ -1,7 +1,7 @@
 {
-    "name": "@solana/keys",
+    "name": "@solana/assertions",
     "version": "2.0.0-development",
-    "description": "Helpers for generating and transforming key material",
+    "description": "Helpers for asserting that a JavaScript environment supports certain features necessary for the operation of the Solana JavaScript SDK",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -63,14 +63,10 @@
     "engine": {
         "node": ">=17.4"
     },
-    "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.5",
-        "@solana/assertions": "workspace:*"
-    },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
         "@swc/core": "^1.3.71",
-        "@swc/jest": "^0.2.27",
+        "@swc/jest": "^0.2.26",
         "@types/jest": "^29.5.3",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
