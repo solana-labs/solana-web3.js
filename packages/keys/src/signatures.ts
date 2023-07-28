@@ -1,4 +1,4 @@
-import { assertSigningCapabilityIsAvailable, assertVerificationCapabilityIsAvailable } from './guard';
+import { assertSigningCapabilityIsAvailable, assertVerificationCapabilityIsAvailable } from '@solana/assertions';
 
 export type Ed25519Signature = Uint8Array & { readonly __ed25519Signature: unique symbol };
 

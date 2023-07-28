@@ -1,5 +1,6 @@
+import { assertKeyExporterIsAvailable } from '@solana/assertions';
+
 import { Base58EncodedAddress, getBase58EncodedAddressCodec } from './base58';
-import { assertKeyExporterIsAvailable } from './guard';
 
 export async function getBase58EncodedAddressFromPublicKey(publicKey: CryptoKey): Promise<Base58EncodedAddress> {
     await assertKeyExporterIsAvailable();
