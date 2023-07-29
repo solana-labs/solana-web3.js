@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Blockhash } from '@solana/transactions';
+import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { StringifiedBigInt } from '../stringified-bigint';
 import { TransactionError } from '../transaction-error';
@@ -11,7 +11,6 @@ import {
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
     Slot,
-    TransactionVersion,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 

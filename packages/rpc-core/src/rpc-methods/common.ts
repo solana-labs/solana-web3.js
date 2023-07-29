@@ -1,4 +1,3 @@
-// TODO: Eventually move this into whatever package implements transactions
 export type Commitment = 'confirmed' | 'finalized' | 'processed';
 
 export type DataSlice = Readonly<{
@@ -24,8 +23,6 @@ export type RpcResponse<TValue> = Readonly<{
     }>;
     value: TValue;
 }>;
-
-export type TransactionVersion = 'legacy' | 0;
 
 export type Base58EncodedBytes = string & { readonly __base58EncodedBytes: unique symbol };
 export type Base64EncodedBytes = string & { readonly __base64EncodedBytes: unique symbol };
