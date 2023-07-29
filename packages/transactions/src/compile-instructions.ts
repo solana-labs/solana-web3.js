@@ -1,5 +1,5 @@
+import { Base58EncodedAddress } from '@solana/addresses';
 import { IInstruction } from '@solana/instructions';
-import { Base58EncodedAddress } from '@solana/keys';
 
 import { OrderedAccounts } from './accounts';
 

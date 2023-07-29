@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { StringifiedBigInt } from '../stringified-bigint';
 import { Commitment, RpcResponse } from './common';

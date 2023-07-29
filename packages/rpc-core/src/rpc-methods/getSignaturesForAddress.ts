@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';

@@ -1,4 +1,4 @@
-import { getBase58EncodedAddressFromPublicKey } from '../pubkey';
+import { getBase58EncodedAddressFromPublicKey } from '../public-key';
 
 // Corresponds to address `DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct`
 const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([

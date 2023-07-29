@@ -8,7 +8,7 @@ import {
     struct,
     StructToSerializerTuple,
 } from '@metaplex-foundation/umi-serializers';
-import { getBase58EncodedAddressCodec } from '@solana/keys';
+import { getBase58EncodedAddressCodec } from '@solana/addresses';
 
 import { CompiledMessage } from '../message';
 import { getAddressTableLookupCodec } from './address-table-lookup';

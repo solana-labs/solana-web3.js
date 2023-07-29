@@ -62,6 +62,7 @@
     ],
     "dependencies": {
         "@metaplex-foundation/umi-serializers": "^0.8.5",
+        "@solana/addresses": "workspace:*",
         "@solana/keys": "workspace:*"
     },
     "devDependencies": {

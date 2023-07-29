@@ -1,3 +1,4 @@
+export * from '@solana/addresses';
 export * from '@solana/instructions';
 export * from '@solana/keys';
 export * from '@solana/transactions';

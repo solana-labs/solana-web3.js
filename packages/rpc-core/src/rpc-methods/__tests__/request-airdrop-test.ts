@@ -1,5 +1,5 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';

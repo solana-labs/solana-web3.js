@@ -1,5 +1,6 @@
+import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
-import { Base58EncodedAddress, Ed25519Signature } from '@solana/keys';
+import { Ed25519Signature } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
 import { getBase64EncodedWireTransaction } from '../wire-transaction';

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, RpcResponse, Slot } from './common';
 

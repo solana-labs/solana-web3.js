@@ -1,5 +1,5 @@
+import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
 import { AccountRole, IAccountLookupMeta, IInstruction } from '@solana/instructions';
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/keys';
 
 import {
     ADDRESS_MAP_TYPE_PROPERTY as TYPE,
