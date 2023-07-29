@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';

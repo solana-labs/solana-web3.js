@@ -1,3 +1,4 @@
+import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
 import {
     AccountRole,
     IAccountLookupMeta,
@@ -13,7 +14,6 @@ import {
     WritableAccountLookup,
     WritableSignerAccount,
 } from '@solana/instructions';
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/keys';
 
 export const enum AddressMapEntryType {
     FEE_PAYER,

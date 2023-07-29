@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { Base58EncodedTransactionSignature, Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from './common';
 

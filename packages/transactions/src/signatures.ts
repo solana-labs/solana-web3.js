@@ -1,4 +1,5 @@
-import { Base58EncodedAddress, Ed25519Signature, getBase58EncodedAddressFromPublicKey, signBytes } from '@solana/keys';
+import { Base58EncodedAddress, getBase58EncodedAddressFromPublicKey } from '@solana/addresses';
+import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { CompiledMessage, compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';

@@ -1,6 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer';
 import { ITransactionWithSignatures } from '../signatures';

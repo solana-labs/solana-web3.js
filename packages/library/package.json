@@ -64,6 +64,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/addresses": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-core": "workspace:*",

@@ -1,5 +1,5 @@
+import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/keys';
 
 import { OrderedAccounts } from './accounts';
 

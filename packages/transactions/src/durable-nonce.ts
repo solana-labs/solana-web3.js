@@ -1,6 +1,6 @@
+import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, IInstruction, IInstructionWithAccounts, IInstructionWithData } from '@solana/instructions';
 import { ReadonlyAccount, ReadonlySignerAccount, WritableAccount } from '@solana/instructions/dist/types/accounts';
-import { Base58EncodedAddress } from '@solana/keys';
 
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';

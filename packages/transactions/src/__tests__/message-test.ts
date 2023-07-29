@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';

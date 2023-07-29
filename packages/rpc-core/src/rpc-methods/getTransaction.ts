@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { Blockhash } from '@solana/transactions';
 
 import { StringifiedBigInt } from '../stringified-bigint';

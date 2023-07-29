@@ -1,5 +1,5 @@
 import { Serializer } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress } from '@solana/keys';
+import { Base58EncodedAddress } from '@solana/addresses';
 
 import { CompiledMessage } from '../../message';
 import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
