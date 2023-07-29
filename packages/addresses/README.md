@@ -60,3 +60,24 @@ import { getBase58EncodedAddressFromPublicKey } from '@solana/addresses';
 
 const address = await getBase58EncodedAddressFromPublicKey(publicKey);
 ```
+
+### `getProgramDerivedAddress()`
+
+Given a program's `Base58EncodedAddress` and up to 16 `Seeds`, this method will return the program derived address (PDA) associated with each.
+
+```ts
+import { getBase58EncodedAddressCodec, getProgramDerivedAddress } from '@solana/addresses';
+
+const { serialize } = getBase58EncodedAddressCodec();
+const { bumpSeed, pda } = await getProgramDerivedAddress({
+    programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Base58EncodedAddress,
+    seeds: [
+        // Owner
+        serialize('9fYLFVoVqwH37C3dyPi6cpeobfbQ2jtLpN5HgAYDDdkm' as Base58EncodedAddress),
+        // Token program
+        serialize('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress),
+        // Mint
+        serialize('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' as Base58EncodedAddress),
+    ],
+});
+```
