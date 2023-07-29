@@ -1,8 +1,43 @@
 import {
+    assertDigestCapabilityIsAvailable,
     assertKeyExporterIsAvailable,
     assertSigningCapabilityIsAvailable,
     assertVerificationCapabilityIsAvailable,
 } from '../subtle-crypto';
+
+describe('assertDigestCapabilityIsAvailable()', () => {
+    it('resolves to `undefined` without throwing', async () => {
+        expect.assertions(1);
+        await expect(assertDigestCapabilityIsAvailable()).resolves.toBeUndefined();
+    });
+    if (__BROWSER__) {
+        describe('when in an insecure browser context', () => {
+            beforeEach(() => {
+                globalThis.isSecureContext = false;
+            });
+            it('rejects', async () => {
+                expect.assertions(1);
+                await expect(() => assertDigestCapabilityIsAvailable()).rejects.toThrow();
+            });
+        });
+    }
+    describe('when `SubtleCrypto::digest` is not available', () => {
+        let oldDigest: InstanceType<typeof SubtleCrypto>['digest'];
+        beforeEach(() => {
+            oldDigest = globalThis.crypto.subtle.digest;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.digest = undefined;
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.digest = oldDigest;
+        });
+        it('rejects', async () => {
+            expect.assertions(1);
+            await expect(assertDigestCapabilityIsAvailable()).rejects.toThrow();
+        });
+    });
+});
 
 describe('assertKeyExporterIsAvailable()', () => {
     it('resolves to `undefined` without throwing', async () => {
