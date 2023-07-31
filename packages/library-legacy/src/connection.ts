@@ -4547,7 +4547,7 @@ export class Connection {
     config?: GetRecentPrioritizationFeesConfig,
   ): Promise<RecentPrioritizationFees[]> {
     const accounts = config?.lockedWritableAccounts?.map(key => key.toBase58());
-    const args = this._buildArgs(accounts?.length ? [accounts] : []);
+    const args = accounts?.length ? [accounts] : [];
     const unsafeRes = await this._rpcRequest(
       'getRecentPrioritizationFees',
       args,
