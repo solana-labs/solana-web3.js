@@ -64,6 +64,19 @@ describe('getAccountInfo', () => {
         });
     });
 
+    describe('when called with an account that does not exist', () => {
+        it('returns a null RPC response', async () => {
+            expect.assertions(1);
+            // randomly generated
+            const publicKey =
+                'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV' as Base58EncodedAddress<'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV'>;
+            const accountInfoPromise = rpc.getAccountInfo(publicKey).send();
+            await expect(accountInfoPromise).resolves.toMatchObject({
+                value: null,
+            });
+        });
+    });
+
     describe('when called with base58 encoding', () => {
         it('returns account info with annotated base58 encoding', async () => {
             expect.assertions(1);
