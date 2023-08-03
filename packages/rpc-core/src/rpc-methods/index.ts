@@ -11,6 +11,7 @@ import { GetBlockTimeApi } from './getBlockTime';
 import { GetEpochInfoApi } from './getEpochInfo';
 import { GetEpochScheduleApi } from './getEpochSchedule';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
+import { GetGenesisHashApi } from './getGenesisHash';
 import { GetHealthApi } from './getHealth';
 import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
@@ -44,6 +45,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetEpochInfoApi &
     GetEpochScheduleApi &
     GetFirstAvailableBlockApi &
+    GetGenesisHashApi &
     GetHealthApi &
     GetInflationRewardApi &
     GetLatestBlockhashApi &
