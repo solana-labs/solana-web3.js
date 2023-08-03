@@ -64,8 +64,8 @@
         "@metaplex-foundation/umi-serializers": "^0.8.5"
     },
     "devDependencies": {
-        "@solana/eslint-config-solana": "^1.0.2",
         "@solana/addresses": "workspace:*",
+        "@solana/eslint-config-solana": "^1.0.2",
         "@solana/rpc-transport": "workspace:*",
         "@solana/transactions": "workspace:*",
         "@swc/jest": "^0.2.27",
@@ -77,6 +77,7 @@
         "eslint": "^8.45.0",
         "eslint-plugin-jest": "^27.2.3",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
+        "fs": "0.0.1-security",
         "jest": "^29.6.1",
         "jest-environment-jsdom": "^29.6.2",
         "jest-fetch-mock-fork": "^3.0.4",
