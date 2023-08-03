@@ -14,6 +14,7 @@ import { GetEpochInfoApi } from './getEpochInfo';
 import { GetEpochScheduleApi } from './getEpochSchedule';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetHealthApi } from './getHealth';
+import { GetHighestSnapshotSlotApi } from './getHighestSnapshotSlot';
 import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
@@ -49,6 +50,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetEpochScheduleApi &
     GetFirstAvailableBlockApi &
     GetHealthApi &
+    GetHighestSnapshotSlotApi &
     GetInflationRewardApi &
     GetLatestBlockhashApi &
     GetMaxRetransmitSlotApi &
