@@ -4,7 +4,6 @@ import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 import { GetAccountInfoApi } from './getAccountInfo';
 import { GetBalanceApi } from './getBalance';
-import { GetBlockCommitmentApi } from './getBlockCommitment';
 import { GetBlockHeightApi } from './getBlockHeight';
 import { GetBlockProductionApi } from './getBlockProduction';
 import { GetBlocksApi } from './getBlocks';
@@ -40,7 +39,6 @@ type Config = Readonly<{
 
 export type SolanaRpcMethods = GetAccountInfoApi &
     GetBalanceApi &
-    GetBlockCommitmentApi &
     GetBlockHeightApi &
     GetBlockProductionApi &
     GetBlocksApi &
