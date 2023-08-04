@@ -8,6 +8,7 @@ import { GetBlockCommitmentApi } from './getBlockCommitment';
 import { GetBlockHeightApi } from './getBlockHeight';
 import { GetBlockProductionApi } from './getBlockProduction';
 import { GetBlocksApi } from './getBlocks';
+import { GetBlocksWithLimitApi } from './getBlocksWithLimit';
 import { GetBlockTimeApi } from './getBlockTime';
 import { GetClusterNodesApi } from './getClusterNodes';
 import { GetEpochInfoApi } from './getEpochInfo';
@@ -45,6 +46,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetBlockHeightApi &
     GetBlockProductionApi &
     GetBlocksApi &
+    GetBlocksWithLimitApi &
     GetBlockTimeApi &
     GetClusterNodesApi &
     GetEpochInfoApi &
