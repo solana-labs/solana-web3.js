@@ -1,4 +1,4 @@
-import { Commitment, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment } from './common';
 
 type GetInflationGovernorApiResponse = Readonly<{
     /** The initial inflation percentage from time 0 */
@@ -6,7 +6,7 @@ type GetInflationGovernorApiResponse = Readonly<{
     /** Percentage of total inflation allocated to the foundation */
     foundation: number; // Until we land on best type for `f64`
     /** Duration of foundation pool inflation in years */
-    foundationTerm: U64UnsafeBeyond2Pow53Minus1; // Until we land on best type for `f64`
+    foundationTerm: number; // Until we land on best type for `f64`
     /**
      * Rate per year at which inflation is lowered.
      * (Rate reduction is derived using the target

@@ -23,7 +23,7 @@ describe('getInflationGovernor', () => {
                 const result = await rpc.getInflationGovernor({ commitment }).send();
                 expect(result).toMatchObject({
                     foundation: expect.any(Number),
-                    foundationTerm: expect.any(BigInt),
+                    foundationTerm: expect.any(Number),
                     initial: expect.any(Number),
                     taper: expect.any(Number),
                     terminal: expect.any(Number),
