@@ -18,6 +18,7 @@ import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetGenesisHashApi } from './getGenesisHash';
 import { GetHealthApi } from './getHealth';
 import { GetHighestSnapshotSlotApi } from './getHighestSnapshotSlot';
+import { GetIdentityApi } from './getIdentity';
 import { GetInflationGovernorApi } from './getInflationGovernor';
 import { GetInflationRateApi } from './getInflationRate';
 import { GetInflationRewardApi } from './getInflationReward';
@@ -67,6 +68,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetGenesisHashApi &
     GetHealthApi &
     GetHighestSnapshotSlotApi &
+    GetIdentityApi &
     GetInflationGovernorApi &
     GetInflationRateApi &
     GetInflationRewardApi &
