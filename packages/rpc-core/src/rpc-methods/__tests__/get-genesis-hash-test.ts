@@ -7,7 +7,7 @@ import path from 'path';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validator.log');
-const genesisHashPattern = /genesis hash: ([\d\w]{44})/;
+const genesisHashPattern = /genesis hash: ([\d\w]{32,})/;
 
 describe('getGenesisHash', () => {
     let rpc: Rpc<SolanaRpcMethods>;
