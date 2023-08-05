@@ -61,6 +61,10 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     getBlockTime: [[]],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
+    getTokenAccountBalance: [
+        ['value', 'decimals'],
+        ['value', 'uiAmount'],
+    ],
     getTokenLargestAccounts: [
         ['value', KEYPATH_WILDCARD, 'decimals'],
         ['value', KEYPATH_WILDCARD, 'uiAmount'],

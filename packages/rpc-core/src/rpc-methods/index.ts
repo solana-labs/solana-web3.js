@@ -27,6 +27,7 @@ import { GetSlotApi } from './getSlot';
 import { GetSlotLeadersApi } from './getSlotLeaders';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
+import { GetTokenAccountBalanceApi } from './getTokenAccountBalance';
 import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
 import { GetTransactionApi } from './getTransaction';
 import { GetTransactionCountApi } from './getTransactionCount';
@@ -65,6 +66,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSlotLeadersApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
+    GetTokenAccountBalanceApi &
     GetTokenLargestAccountsApi &
     GetTransactionApi &
     GetTransactionCountApi &
