@@ -24,6 +24,7 @@ import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
 import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
 import { GetSlotApi } from './getSlot';
+import { GetSlotLeaderApi } from './getSlotLeader';
 import { GetSlotLeadersApi } from './getSlotLeaders';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
@@ -62,6 +63,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetRecentPerformanceSamplesApi &
     GetSignaturesForAddressApi &
     GetSlotApi &
+    GetSlotLeaderApi &
     GetSlotLeadersApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
