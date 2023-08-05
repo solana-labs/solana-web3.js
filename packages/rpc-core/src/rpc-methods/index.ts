@@ -23,6 +23,7 @@ import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
 import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
+import { GetSignatureStatusesApi } from './getSignatureStatuses';
 import { GetSlotApi } from './getSlot';
 import { GetSlotLeadersApi } from './getSlotLeaders';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
@@ -61,6 +62,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetMaxShredInsertSlotApi &
     GetRecentPerformanceSamplesApi &
     GetSignaturesForAddressApi &
+    GetSignatureStatusesApi &
     GetSlotApi &
     GetSlotLeadersApi &
     GetStakeMinimumDelegationApi &
