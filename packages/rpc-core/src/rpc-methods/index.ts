@@ -21,6 +21,7 @@ import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
+import { GetMinimumBalanceForRentExemptionApi } from './getMinimumBalanceForRentExemption';
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
 import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
 import { GetSlotApi } from './getSlot';
@@ -59,6 +60,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetLatestBlockhashApi &
     GetMaxRetransmitSlotApi &
     GetMaxShredInsertSlotApi &
+    GetMinimumBalanceForRentExemptionApi &
     GetRecentPerformanceSamplesApi &
     GetSignaturesForAddressApi &
     GetSlotApi &
