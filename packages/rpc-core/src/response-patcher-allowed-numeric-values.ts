@@ -83,6 +83,7 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
         ['transaction', 'message', 'header', 'numReadonlyUnsignedAccounts'],
         ['transaction', 'message', 'header', 'numRequiredSignatures'],
     ],
+    getVersion: [['feature-set']],
     getVoteAccounts: [
         ['current', KEYPATH_WILDCARD, 'commission'],
         ['delinquent', KEYPATH_WILDCARD, 'commission'],
