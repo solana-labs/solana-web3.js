@@ -18,18 +18,18 @@ describe('getSlotLeader', () => {
 
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            describe('when called with no `mintContextSlot`', () => {
+            describe('when called with no `minContextSlot`', () => {
                 it('returns the node public key', async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader().send();
+                    const res = await rpc.getSlotLeader({ commitment }).send();
                     expect(res).toEqual(expect.any(String));
                 });
             });
 
-            describe('when called with a valid `mintContextSlot`', () => {
+            describe('when called with a valid `minContextSlot`', () => {
                 it('returns the node public key', async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader({ minContextSlot: 0n }).send();
+                    const res = await rpc.getSlotLeader({ commitment, minContextSlot: 0n }).send();
                     expect(res).toEqual(expect.any(String));
                 });
             });
