@@ -8,7 +8,7 @@ describe('Instruction codec', () => {
     it('serializes an instruction according to spec', () => {
         expect(
             instruction.serialize({
-                addressIndices: [1, 2],
+                accountIndices: [1, 2],
                 data: new Uint8Array([4, 5, 6]),
                 programAddressIndex: 7,
             })
@@ -28,7 +28,7 @@ describe('Instruction codec', () => {
             ])
         );
     });
-    it('serializes a zero-length compact array when `addressIndices` is `undefined`', () => {
+    it('serializes a zero-length compact array when `accountIndices` is `undefined`', () => {
         expect(
             instruction.serialize({
                 data: new Uint8Array([3, 4]),
@@ -50,7 +50,7 @@ describe('Instruction codec', () => {
     it('serializes a zero-length compact array when `data` is `undefined`', () => {
         expect(
             instruction.serialize({
-                addressIndices: [3, 4],
+                accountIndices: [3, 4],
                 programAddressIndex: 1,
             })
         ).toEqual(
@@ -86,12 +86,12 @@ describe('Instruction codec', () => {
                 ])
             )[0]
         ).toEqual({
-            addressIndices: [3, 4],
+            accountIndices: [3, 4],
             data: new Uint8Array([6, 7, 8, 9, 10]),
             programAddressIndex: 1,
         });
     });
-    it('omits the `addressIndices` property when the indices data is zero-length', () => {
+    it('omits the `accountIndices` property when the indices data is zero-length', () => {
         expect(
             instruction.deserialize(
                 new Uint8Array([
@@ -105,7 +105,7 @@ describe('Instruction codec', () => {
                     4,
                 ])
             )[0]
-        ).not.toHaveProperty('addressIndices');
+        ).not.toHaveProperty('accountIndices');
     });
     it('omits the `data` property when the instruction data is zero-length', () => {
         expect(

@@ -27,7 +27,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                 },
                 instructions: [
                     { programAddressIndex: 44 },
-                    { addressIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
+                    { accountIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
                 ],
                 lifetimeToken: '3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL', // decodes to [33{32}]
                 staticAccounts: [
@@ -259,7 +259,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                 },
                 instructions: [
                     { programAddressIndex: 44 },
-                    { addressIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
+                    { accountIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
                 ],
                 lifetimeToken: '3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL', // decodes to [33{32}]
                 staticAccounts: [
@@ -337,7 +337,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                 },
                 instructions: [
                     { programAddressIndex: 44 },
-                    { addressIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
+                    { accountIndices: [77, 66], data: new Uint8Array([7, 8, 9]), programAddressIndex: 55 },
                 ],
                 lifetimeToken: '3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL', // decodes to [33{32}]
                 staticAccounts: [
