@@ -18,6 +18,7 @@ import { GetGenesisHashApi } from './getGenesisHash';
 import { GetHealthApi } from './getHealth';
 import { GetHighestSnapshotSlotApi } from './getHighestSnapshotSlot';
 import { GetInflationRewardApi } from './getInflationReward';
+import { GetLargestAccountsApi } from './getLargestAccounts';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
@@ -56,6 +57,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetHealthApi &
     GetHighestSnapshotSlotApi &
     GetInflationRewardApi &
+    GetLargestAccountsApi &
     GetLatestBlockhashApi &
     GetMaxRetransmitSlotApi &
     GetMaxShredInsertSlotApi &
