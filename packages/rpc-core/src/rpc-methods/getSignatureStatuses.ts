@@ -50,7 +50,7 @@ export interface GetSignatureStatusesApi {
          * An array of transaction signatures to confirm,
          * as base-58 encoded strings (up to a maximum of 256)
          */
-        signatures?: TransactionSignature[],
+        signatures: TransactionSignature[],
         config?: Readonly<{
             /**
              * if `true` - a Solana node will search its ledger cache for any
