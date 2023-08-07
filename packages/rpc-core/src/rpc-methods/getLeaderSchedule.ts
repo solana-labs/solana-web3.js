@@ -18,24 +18,32 @@ import { Commitment, Slot } from './common';
  * }
  * ```
  */
-type GetLeaderScheduleApiResponse = Readonly<{
+type GetLeaderScheduleApiResponseBase = Readonly<{
     [key: Base58EncodedAddress]: Slot[];
-}> | null;
+}>;
 
 export interface GetLeaderScheduleApi {
     /**
-     * Returns the current block height of the node
+     * Fetch the leader schedule for the epoch that corresponds to the provided slot.
+     * If unspecified, the leader schedule for the current epoch is fetched
+     *
+     * When a slot is provided, the leader schedule for the epoch that corresponds
+     * to the provided slot is returned, and this can be null if the slot corresponds
+     * to an epoch that does not exist
      */
     getLeaderSchedule(
-        /**
-         * Fetch the leader schedule for the epoch that corresponds to the provided slot.
-         * If unspecified, the leader schedule for the current epoch is fetched
-         */
-        slot?: Slot,
+        slot: Slot,
         config?: Readonly<{
             commitment?: Commitment;
             /** Only return results for this validator identity (base58 encoded address) */
             identity?: Base58EncodedAddress;
         }>
-    ): GetLeaderScheduleApiResponse;
+    ): GetLeaderScheduleApiResponseBase | null;
+    getLeaderSchedule(
+        config?: Readonly<{
+            commitment?: Commitment;
+            /** Only return results for this validator identity (base58 encoded address) */
+            identity?: Base58EncodedAddress;
+        }>
+    ): GetLeaderScheduleApiResponseBase;
 }
