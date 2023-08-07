@@ -33,7 +33,8 @@ describe('getTokenSupply', () => {
                     value: {
                         amount: expect.any(String),
                         decimals: expect.any(Number),
-                        uiAmount: expect.anything(), // Number or null
+                        // This can be Number or null, but we're using a fixture so it should be Number
+                        uiAmount: expect.any(Number),
                         uiAmountString: expect.any(String),
                     },
                 });
