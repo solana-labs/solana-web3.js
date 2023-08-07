@@ -30,6 +30,7 @@ import { GetRecentPrioritizationFeesApi } from './getRecentPrioritizationFees';
 import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
 import { GetSignatureStatusesApi } from './getSignatureStatuses';
 import { GetSlotApi } from './getSlot';
+import { GetSlotLeaderApi } from './getSlotLeader';
 import { GetSlotLeadersApi } from './getSlotLeaders';
 import { GetStakeActivationApi } from './getStakeActivation';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
@@ -77,6 +78,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSignaturesForAddressApi &
     GetSignatureStatusesApi &
     GetSlotApi &
+    GetSlotLeaderApi &
     GetSlotLeadersApi &
     GetStakeActivationApi &
     GetStakeMinimumDelegationApi &
