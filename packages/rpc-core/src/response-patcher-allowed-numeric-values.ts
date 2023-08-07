@@ -67,6 +67,10 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
         ['value', KEYPATH_WILDCARD, 'decimals'],
         ['value', KEYPATH_WILDCARD, 'uiAmount'],
     ],
+    getTokenSupply: [
+        ['value', 'decimals'],
+        ['value', 'uiAmount'],
+    ],
     getTransaction: [
         ['meta', 'preTokenBalances', KEYPATH_WILDCARD, 'accountIndex'],
         ['meta', 'preTokenBalances', KEYPATH_WILDCARD, 'uiTokenAmount', 'decimals'],
