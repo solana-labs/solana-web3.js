@@ -13,6 +13,7 @@ import { GetBlockTimeApi } from './getBlockTime';
 import { GetClusterNodesApi } from './getClusterNodes';
 import { GetEpochInfoApi } from './getEpochInfo';
 import { GetEpochScheduleApi } from './getEpochSchedule';
+import { GetFeeForMessageApi } from './getFeeForMessage';
 import { GetFirstAvailableBlockApi } from './getFirstAvailableBlock';
 import { GetGenesisHashApi } from './getGenesisHash';
 import { GetHealthApi } from './getHealth';
@@ -57,6 +58,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetClusterNodesApi &
     GetEpochInfoApi &
     GetEpochScheduleApi &
+    GetFeeForMessageApi &
     GetFirstAvailableBlockApi &
     GetGenesisHashApi &
     GetHealthApi &
