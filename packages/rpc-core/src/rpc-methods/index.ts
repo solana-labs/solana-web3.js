@@ -26,6 +26,7 @@ import { GetMinimumBalanceForRentExemptionApi } from './getMinimumBalanceForRent
 import { GetRecentPerformanceSamplesApi } from './getRecentPerformanceSamples';
 import { GetRecentPrioritizationFeesApi } from './getRecentPrioritizationFees';
 import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
+import { GetSignatureStatusesApi } from './getSignatureStatuses';
 import { GetSlotApi } from './getSlot';
 import { GetSlotLeadersApi } from './getSlotLeaders';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
@@ -68,6 +69,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetRecentPerformanceSamplesApi &
     GetRecentPrioritizationFeesApi &
     GetSignaturesForAddressApi &
+    GetSignatureStatusesApi &
     GetSlotApi &
     GetSlotLeadersApi &
     GetStakeMinimumDelegationApi &
