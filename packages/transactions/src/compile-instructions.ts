@@ -4,7 +4,7 @@ import { IInstruction } from '@solana/instructions';
 import { OrderedAccounts } from './accounts';
 
 type CompiledInstruction = Readonly<{
-    addressIndices?: number[];
+    accountIndices?: number[];
     data?: Uint8Array;
     programAddressIndex: number;
 }>;

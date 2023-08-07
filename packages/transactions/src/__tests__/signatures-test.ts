@@ -37,7 +37,7 @@ describe('signTransaction', () => {
             },
             instructions: [
                 {
-                    addressIndices: [/* mockPublicKeyAddressB */ 1, /* mockPublicKeyAddressC */ 2],
+                    accountIndices: [/* mockPublicKeyAddressB */ 1, /* mockPublicKeyAddressC */ 2],
                     programAddressIndex: 3 /* system program */,
                 },
             ],

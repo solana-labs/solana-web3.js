@@ -20,7 +20,7 @@ export function getInstructionCodec(): Serializer<Instruction> {
                 ),
             ],
             [
-                'addressIndices',
+                'accountIndices',
                 array(
                     u8({
                         description: __DEV__
@@ -47,23 +47,23 @@ export function getInstructionCodec(): Serializer<Instruction> {
             ],
         ]),
         (value: Instruction) => {
-            if (value.addressIndices !== undefined && value.data !== undefined) {
+            if (value.accountIndices !== undefined && value.data !== undefined) {
                 return value as Required<Instruction>;
             }
             return {
                 ...value,
-                addressIndices: value.addressIndices ?? [],
+                accountIndices: value.accountIndices ?? [],
                 data: value.data ?? new Uint8Array(0),
             } as Required<Instruction>;
         },
         (value: Required<Instruction>) => {
-            if (value.addressIndices.length && value.data.byteLength) {
+            if (value.accountIndices.length && value.data.byteLength) {
                 return value;
             }
-            const { addressIndices, data, ...rest } = value;
+            const { accountIndices, data, ...rest } = value;
             return {
                 ...rest,
-                ...(addressIndices.length ? { addressIndices } : null),
+                ...(accountIndices.length ? { accountIndices } : null),
                 ...(data.byteLength ? { data } : null),
             };
         }
