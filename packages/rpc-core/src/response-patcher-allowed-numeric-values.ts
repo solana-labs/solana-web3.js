@@ -60,6 +60,7 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     ],
     getBlockTime: [[]],
     getInflationGovernor: [['initial'], ['foundation'], ['foundationTerm'], ['taper'], ['terminal']],
+    getInflationRate: [['foundation'], ['total'], ['validator']],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
     getTokenLargestAccounts: [
