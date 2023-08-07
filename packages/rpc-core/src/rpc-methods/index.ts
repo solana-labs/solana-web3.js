@@ -29,6 +29,7 @@ import { GetSignaturesForAddressApi } from './getSignaturesForAddress';
 import { GetSignatureStatusesApi } from './getSignatureStatuses';
 import { GetSlotApi } from './getSlot';
 import { GetSlotLeadersApi } from './getSlotLeaders';
+import { GetStakeActivationApi } from './getStakeActivation';
 import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
 import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
@@ -72,6 +73,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSignatureStatusesApi &
     GetSlotApi &
     GetSlotLeadersApi &
+    GetStakeActivationApi &
     GetStakeMinimumDelegationApi &
     GetSupplyApi &
     GetTokenLargestAccountsApi &
