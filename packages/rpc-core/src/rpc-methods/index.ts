@@ -30,6 +30,7 @@ import { GetSupplyApi } from './getSupply';
 import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
 import { GetTransactionApi } from './getTransaction';
 import { GetTransactionCountApi } from './getTransactionCount';
+import { GetVersionApi } from './getVersion';
 import { GetVoteAccountsApi } from './getVoteAccounts';
 import { IsBlockhashValidApi } from './isBlockhashValid';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
@@ -68,6 +69,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetTokenLargestAccountsApi &
     GetTransactionApi &
     GetTransactionCountApi &
+    GetVersionApi &
     GetVoteAccountsApi &
     IsBlockhashValidApi &
     MinimumLedgerSlotApi &
