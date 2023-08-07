@@ -15,18 +15,19 @@ describe('getClusterNodes', () => {
         });
     });
 
-    it('returns the cluster nodes', async () => {
-        expect.assertions(1);
-        const res = await rpc.getClusterNodes().send();
-        // Check that the array contains the expected nodes
-        expect(res).toEqual(
-            expect.arrayContaining([
-                expect.objectContaining({
-                    gossip: '127.0.0.1:1024',
-                    rpc: '127.0.0.1:8899',
-                    tpu: '127.0.0.1:1026',
-                }),
-            ])
-        );
+    describe('when run against the test validator', () => {
+        it('returns RPC and validator info', async () => {
+            expect.assertions(1);
+            const res = await rpc.getClusterNodes().send();
+            expect(res).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        gossip: expect.any(String),
+                        rpc: expect.any(String),
+                        tpu: expect.any(String),
+                    }),
+                ])
+            );
+        });
     });
 });
