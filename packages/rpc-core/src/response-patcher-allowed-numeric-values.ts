@@ -59,6 +59,7 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
         ['value', 'data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
     ],
     getBlockTime: [[]],
+    getInflationGovernor: [['initial'], ['foundation'], ['foundationTerm'], ['taper'], ['terminal']],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
     getTokenLargestAccounts: [
