@@ -59,6 +59,10 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
         ['value', 'data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
     ],
     getBlockTime: [[]],
+    getClusterNodes: [
+        [KEYPATH_WILDCARD, 'featureSet'],
+        [KEYPATH_WILDCARD, 'shredVersion'],
+    ],
     getInflationGovernor: [['initial'], ['foundation'], ['foundationTerm'], ['taper'], ['terminal']],
     getInflationRate: [['foundation'], ['total'], ['validator']],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
