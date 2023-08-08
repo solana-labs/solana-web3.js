@@ -23,6 +23,7 @@ import { GetInflationGovernorApi } from './getInflationGovernor';
 import { GetInflationRateApi } from './getInflationRate';
 import { GetInflationRewardApi } from './getInflationReward';
 import { GetLatestBlockhashApi } from './getLatestBlockhash';
+import { GetLeaderScheduleApi } from './getLeaderSchedule';
 import { GetMaxRetransmitSlotApi } from './getMaxRetransmitSlot';
 import { GetMaxShredInsertSlotApi } from './getMaxShredInsertSlot';
 import { GetMinimumBalanceForRentExemptionApi } from './getMinimumBalanceForRentExemption';
@@ -74,6 +75,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetInflationRateApi &
     GetInflationRewardApi &
     GetLatestBlockhashApi &
+    GetLeaderScheduleApi &
     GetMaxRetransmitSlotApi &
     GetMaxShredInsertSlotApi &
     GetMinimumBalanceForRentExemptionApi &
