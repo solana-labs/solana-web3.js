@@ -8,22 +8,18 @@ import {
     Commitment,
     DataSlice,
     LamportsUnsafeBeyond2Pow53Minus1,
+    RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
-type GetAccountInfoApiResponseBase = Readonly<{
-    context: Readonly<{
-        slot: Slot;
-    }>;
-    value: Readonly<{
-        executable: boolean;
-        lamports: LamportsUnsafeBeyond2Pow53Minus1;
-        owner: Base58EncodedAddress;
-        rentEpoch: U64UnsafeBeyond2Pow53Minus1;
-        space: U64UnsafeBeyond2Pow53Minus1;
-    }> | null;
-}>;
+type GetAccountInfoApiResponseBase = RpcResponse<{
+    executable: boolean;
+    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    owner: Base58EncodedAddress;
+    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
+    space: U64UnsafeBeyond2Pow53Minus1;
+} | null>;
 
 type GetAccountInfoApiResponseWithDefaultData = Readonly<{
     value: Readonly<{

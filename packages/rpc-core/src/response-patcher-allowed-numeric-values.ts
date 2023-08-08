@@ -66,6 +66,67 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     getInflationGovernor: [['initial'], ['foundation'], ['foundationTerm'], ['taper'], ['terminal']],
     getInflationRate: [['foundation'], ['total'], ['validator']],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
+    getMultipleAccounts: [
+        // parsed AddressTableLookup account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'lastExtendedSlotStartIndex'],
+        // parsed Config account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'slashPenalty'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'warmupCooldownRate'],
+        // parsed Token/Token22 token account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'tokenAmount', 'decimals'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'tokenAmount', 'uiAmount'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'rentExemptReserve', 'decimals'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'delegatedAmount', 'decimals'],
+        [
+            'value',
+            KEYPATH_WILDCARD,
+            'data',
+            'parsed',
+            'info',
+            'extensions',
+            KEYPATH_WILDCARD,
+            'state',
+            'olderTransferFee',
+            'transferFeeBasisPoints',
+        ],
+        [
+            'value',
+            KEYPATH_WILDCARD,
+            'data',
+            'parsed',
+            'info',
+            'extensions',
+            KEYPATH_WILDCARD,
+            'state',
+            'newerTransferFee',
+            'transferFeeBasisPoints',
+        ],
+        [
+            'value',
+            KEYPATH_WILDCARD,
+            'data',
+            'parsed',
+            'info',
+            'extensions',
+            KEYPATH_WILDCARD,
+            'state',
+            'preUpdateAverageRate',
+        ],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'extensions', KEYPATH_WILDCARD, 'state', 'currentRate'],
+        // parsed Token/Token22 mint account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'decimals'],
+        // parsed Token/Token22 multisig account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'numRequiredSigners'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'numValidSigners'],
+        // parsed Stake account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'stake', 'delegation', 'warmupCooldownRate'],
+        // parsed Sysvar rent account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'exemptionThreshold'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'burnPercent'],
+        // parsed Vote account
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'commission'],
+        ['value', KEYPATH_WILDCARD, 'data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
+    ],
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
     getTokenAccountBalance: [
         ['value', 'decimals'],
