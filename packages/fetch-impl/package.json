@@ -46,7 +46,7 @@
         "@types/jest": "^29.5.3",
         "@types/node-fetch": "^2.6.4",
         "@typescript-eslint/eslint-plugin": "^6.3.0",
-        "@typescript-eslint/parser": "^6.0.0",
+        "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
         "eslint": "^8.45.0",
         "eslint-plugin-jest": "^27.2.3",
