@@ -61,7 +61,7 @@
     "agentkeepalive": "^4.3.0",
     "bigint-buffer": "^1.1.5",
     "bn.js": "^5.2.1",
-    "borsh": "^0.7.0",
+    "borsh": "^1.0.0",
     "bs58": "^4.0.1",
     "buffer": "6.0.3",
     "fast-stable-stringify": "^1.0.0",
