@@ -12,19 +12,19 @@ const genesisHashPattern = /genesis hash: ([\d\w]{32,})/;
 async function getGenesisHashFromLogFile() {
     return new Promise<string | undefined>((resolve, reject) => {
         const logFileStream = fs.createReadStream(logFilePath, { end: 64 * 1024 });
-        logFileStream.on('error', e => reject(e))
+        logFileStream.on('error', e => reject(e));
 
         logFileStream.on('data', data => {
             const chunk = data.toString('utf-8');
             const expectedGenesisHash = chunk.match(genesisHashPattern)?.[1];
             if (expectedGenesisHash) {
                 logFileStream.destroy();
-                resolve(expectedGenesisHash)
+                resolve(expectedGenesisHash);
             }
-        })
+        });
 
         logFileStream.on('end', () => resolve(undefined));
-    })
+    });
 }
 
 describe('getGenesisHash', () => {
