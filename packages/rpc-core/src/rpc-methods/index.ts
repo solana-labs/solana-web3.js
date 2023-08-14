@@ -42,6 +42,7 @@ import { GetStakeMinimumDelegationApi } from './getStakeMinimumDelegation';
 import { GetSupplyApi } from './getSupply';
 import { GetTokenAccountBalanceApi } from './getTokenAccountBalance';
 import { GetTokenAccountsByDelegateApi } from './getTokenAccountsByDelegate';
+import { GetTokenAccountsByOwnerApi } from './getTokenAccountsByOwner';
 import { GetTokenLargestAccountsApi } from './getTokenLargestAccounts';
 import { GetTokenSupplyApi } from './getTokenSupply';
 import { GetTransactionApi } from './getTransaction';
@@ -97,6 +98,7 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     GetSupplyApi &
     GetTokenAccountBalanceApi &
     GetTokenAccountsByDelegateApi &
+    GetTokenAccountsByOwnerApi &
     GetTokenLargestAccountsApi &
     GetTokenSupplyApi &
     GetTransactionApi &
