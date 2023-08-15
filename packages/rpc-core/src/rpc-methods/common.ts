@@ -1,3 +1,8 @@
+import { Base58EncodedAddress } from '@solana/addresses';
+
+import { StringifiedBigInt } from '../stringified-bigint';
+import { StringifiedNumber } from '../stringified-number';
+
 export type Commitment = 'confirmed' | 'finalized' | 'processed';
 
 export type DataSlice = Readonly<{
@@ -40,3 +45,25 @@ export type Base64EncodedDataResponse = [Base64EncodedBytes, 'base64'];
 export type Base64EncodedZStdCompressedDataResponse = [Base64EncodedZStdCompressedBytes, 'base64+zstd'];
 
 export type Base58EncodedTransactionSignature = string & { readonly __base58EncodedSignature: unique symbol };
+
+type TokenAmount = Readonly<{
+    amount: StringifiedBigInt;
+    decimals: number;
+    uiAmount: number | null;
+    uiAmountString: StringifiedNumber;
+}>;
+
+type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
+
+export type TokenAccount = Readonly<{
+    mint: Base58EncodedAddress;
+    owner: Base58EncodedAddress;
+    tokenAmount: TokenAmount;
+    delegate?: Base58EncodedAddress;
+    state: TokenAccountState;
+    isNative: boolean;
+    rentExemptReserve?: TokenAmount;
+    delegatedAmount?: TokenAmount;
+    closeAuthority?: Base58EncodedAddress;
+    extensions?: unknown[];
+}>;
