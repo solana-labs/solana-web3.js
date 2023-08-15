@@ -1,47 +1,19 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
 import {
-    Base58EncodedBytes,
-    Base58EncodedDataResponse,
-    Base64EncodedDataResponse,
-    Base64EncodedZStdCompressedDataResponse,
+    AccountInfoBase,
+    AccountInfoWithBase58Bytes,
+    AccountInfoWithBase58EncodedData,
+    AccountInfoWithBase64EncodedData,
+    AccountInfoWithBase64EncodedZStdCompressedData,
+    AccountInfoWithPubkey,
     Commitment,
     DataSlice,
-    LamportsUnsafeBeyond2Pow53Minus1,
     RpcResponse,
     Slot,
     TokenAccount,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
-
-type TokenAccountInfoBase = Readonly<{
-    /** indicates if the account contains a program (and is strictly read-only) */
-    executable: boolean;
-    /** number of lamports assigned to this account */
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    /** pubkey of the program this account has been assigned to */
-    owner: Base58EncodedAddress;
-    /** the epoch at which this account will next owe rent */
-    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
-    /** the data size of the account */
-    space: U64UnsafeBeyond2Pow53Minus1;
-}>;
-
-type TokenAccountInfoWithDefaultData = Readonly<{
-    data: Base58EncodedBytes;
-}>;
-
-type TokenAccountInfoWithBase58EncodedData_DEPRECATED = Readonly<{
-    data: Base58EncodedDataResponse;
-}>;
-
-type TokenAccountInfoWithBase64EncodedData = Readonly<{
-    data: Base64EncodedDataResponse;
-}>;
-
-type TokenAccountInfoWithBase64EncodedZStdCompressedData = Readonly<{
-    data: Base64EncodedZStdCompressedDataResponse;
-}>;
 
 type TokenAccountInfoWithJsonData = Readonly<{
     data: Readonly<{
@@ -53,11 +25,6 @@ type TokenAccountInfoWithJsonData = Readonly<{
         parsed: unknown;
         space: U64UnsafeBeyond2Pow53Minus1;
     }>;
-}>;
-
-type TokenAccountWithPubkey<TAccount extends TokenAccountInfoBase> = Readonly<{
-    account: TAccount;
-    pubkey: Base58EncodedAddress;
 }>;
 
 type MintFilter = Readonly<{
@@ -95,7 +62,7 @@ export interface GetTokenAccountsByDelegateApi {
             Readonly<{
                 encoding: 'base64';
             }>
-    ): RpcResponse<TokenAccountWithPubkey<TokenAccountInfoBase & TokenAccountInfoWithBase64EncodedData>[]>;
+    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getTokenAccountsByDelegate(
         program: Base58EncodedAddress,
@@ -105,9 +72,7 @@ export interface GetTokenAccountsByDelegateApi {
             Readonly<{
                 encoding: 'base64+zstd';
             }>
-    ): RpcResponse<
-        TokenAccountWithPubkey<TokenAccountInfoBase & TokenAccountInfoWithBase64EncodedZStdCompressedData>[]
-    >;
+    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getTokenAccountsByDelegate(
         program: Base58EncodedAddress,
@@ -116,7 +81,7 @@ export interface GetTokenAccountsByDelegateApi {
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): RpcResponse<TokenAccountWithPubkey<TokenAccountInfoBase & TokenAccountInfoWithJsonData>[]>;
+    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
     getTokenAccountsByDelegate(
         program: Base58EncodedAddress,
@@ -126,11 +91,11 @@ export interface GetTokenAccountsByDelegateApi {
             Readonly<{
                 encoding: 'base58';
             }>
-    ): RpcResponse<TokenAccountWithPubkey<TokenAccountInfoBase & TokenAccountInfoWithBase58EncodedData_DEPRECATED>[]>;
+    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getTokenAccountsByDelegate(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
         config?: GetTokenAccountsByDelegateApiCommonConfig & GetTokenAccountsByDelegateApiSliceableCommonConfig
-    ): RpcResponse<TokenAccountWithPubkey<TokenAccountInfoBase & TokenAccountInfoWithDefaultData>[]>;
+    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
 }

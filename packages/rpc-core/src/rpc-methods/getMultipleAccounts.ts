@@ -1,54 +1,18 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
 import {
-    Base58EncodedDataResponse,
-    Base64EncodedDataResponse,
-    Base64EncodedZStdCompressedDataResponse,
+    AccountInfoBase,
+    AccountInfoWithBase58EncodedData,
+    AccountInfoWithBase64EncodedData,
+    AccountInfoWithBase64EncodedZStdCompressedData,
+    AccountInfoWithJsonData,
     Commitment,
     DataSlice,
-    LamportsUnsafeBeyond2Pow53Minus1,
     RpcResponse,
     Slot,
-    U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
-type GetMultipleAccountsApiResponseBase = {
-    /** indicates if the account contains a program (and is strictly read-only) */
-    executable: boolean;
-    /** number of lamports assigned to this account */
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    /** pubkey of the program this account has been assigned to */
-    owner: Base58EncodedAddress;
-    /** the epoch at which this account will next owe rent */
-    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
-    /** the data size of the account */
-    space: U64UnsafeBeyond2Pow53Minus1;
-} | null;
-
-type GetMultipleAccountsApiResponseWithBase58EncodedData_DEPRECATED = Readonly<{
-    data: Base58EncodedDataResponse;
-}>;
-
-type GetMultipleAccountsApiResponseWithBase64EncodedData = Readonly<{
-    data: Base64EncodedDataResponse;
-}>;
-
-type GetMultipleAccountsApiResponseWithBase64EncodedZStdCompressedData = Readonly<{
-    data: Base64EncodedZStdCompressedDataResponse;
-}>;
-
-type GetMultipleAccountsApiResponseWithJsonData = Readonly<{
-    data:
-        | Readonly<{
-              /** Name of the program that owns this account. */
-              program: string;
-              parsed: unknown;
-              space: U64UnsafeBeyond2Pow53Minus1;
-          }>
-        // If `jsonParsed` encoding is requested but a parser cannot be found for the given
-        // account the `data` field falls back to `base64`.
-        | Base64EncodedDataResponse;
-}>;
+type GetMultipleAccountsApiResponseBase = AccountInfoBase | null;
 
 type GetMultipleAccountsApiCommonConfig = Readonly<{
     /** Defaults to `finalized` */
@@ -74,7 +38,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base64';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & GetMultipleAccountsApiResponseWithBase64EncodedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedData)[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -83,9 +47,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base64+zstd';
             }>
-    ): RpcResponse<
-        (GetMultipleAccountsApiResponseBase & GetMultipleAccountsApiResponseWithBase64EncodedZStdCompressedData)[]
-    >;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedZStdCompressedData)[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -93,7 +55,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & GetMultipleAccountsApiResponseWithJsonData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithJsonData)[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -102,12 +64,10 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base58';
             }>
-    ): RpcResponse<
-        (GetMultipleAccountsApiResponseBase & GetMultipleAccountsApiResponseWithBase58EncodedData_DEPRECATED)[]
-    >;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase58EncodedData)[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
         config?: GetMultipleAccountsApiCommonConfig
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & GetMultipleAccountsApiResponseWithBase64EncodedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedData)[]>;
 }
