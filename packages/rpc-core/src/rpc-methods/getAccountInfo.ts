@@ -1,63 +1,22 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
 import {
-    Base58EncodedBytes,
-    Base58EncodedDataResponse,
-    Base64EncodedDataResponse,
-    Base64EncodedZStdCompressedDataResponse,
+    AccountInfoBase,
+    AccountInfoWithBase58Bytes,
+    AccountInfoWithBase58EncodedData,
+    AccountInfoWithBase64EncodedData,
+    AccountInfoWithBase64EncodedZStdCompressedData,
+    AccountInfoWithJsonData,
     Commitment,
     DataSlice,
-    LamportsUnsafeBeyond2Pow53Minus1,
     RpcResponse,
     Slot,
-    U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
-type GetAccountInfoApiResponseBase = RpcResponse<{
-    executable: boolean;
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    owner: Base58EncodedAddress;
-    rentEpoch: U64UnsafeBeyond2Pow53Minus1;
-    space: U64UnsafeBeyond2Pow53Minus1;
-} | null>;
+type GetAccountInfoApiResponseBase = RpcResponse<AccountInfoBase | null>;
 
-type GetAccountInfoApiResponseWithDefaultData = Readonly<{
-    value: Readonly<{
-        data: Base58EncodedBytes;
-    }> | null;
-}>;
-
-type GetAccountInfoApiResponseWithBase58EncodedData_DEPRECATED = Readonly<{
-    value: Readonly<{
-        data: Base58EncodedDataResponse;
-    }> | null;
-}>;
-
-type GetAccountInfoApiResponseWithBase64EncodedData = Readonly<{
-    value: Readonly<{
-        data: Base64EncodedDataResponse;
-    }> | null;
-}>;
-
-type GetAccountInfoApiResponseWithBase64EncodedZStdCompressedData = Readonly<{
-    value: Readonly<{
-        data: Base64EncodedZStdCompressedDataResponse;
-    }> | null;
-}>;
-
-type GetAccountInfoApiResponseWithJsonData = Readonly<{
-    value: Readonly<{
-        data:
-            | Readonly<{
-                  // Name of the program that owns this account.
-                  program: string;
-                  parsed: unknown;
-                  space: U64UnsafeBeyond2Pow53Minus1;
-              }>
-            // If `jsonParsed` encoding is requested but a parser cannot be found for the given
-            // account the `data` field falls back to `base64`.
-            | Base64EncodedDataResponse;
-    }> | null;
+type NestInRpcResponseOrNull<T> = Readonly<{
+    value: T | null;
 }>;
 
 type GetAccountInfoApiCommonConfig = Readonly<{
@@ -83,7 +42,7 @@ export interface GetAccountInfoApi {
             Readonly<{
                 encoding: 'base64';
             }>
-    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithBase64EncodedData;
+    ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedData>;
     getAccountInfo(
         address: Base58EncodedAddress,
         config: GetAccountInfoApiCommonConfig &
@@ -91,14 +50,14 @@ export interface GetAccountInfoApi {
             Readonly<{
                 encoding: 'base64+zstd';
             }>
-    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithBase64EncodedZStdCompressedData;
+    ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedZStdCompressedData>;
     getAccountInfo(
         address: Base58EncodedAddress,
         config: GetAccountInfoApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithJsonData;
+    ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithJsonData>;
     getAccountInfo(
         address: Base58EncodedAddress,
         config: GetAccountInfoApiCommonConfig &
@@ -106,9 +65,9 @@ export interface GetAccountInfoApi {
             Readonly<{
                 encoding: 'base58';
             }>
-    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithBase58EncodedData_DEPRECATED;
+    ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58EncodedData>;
     getAccountInfo(
         address: Base58EncodedAddress,
         config?: GetAccountInfoApiCommonConfig
-    ): GetAccountInfoApiResponseBase & GetAccountInfoApiResponseWithDefaultData;
+    ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58Bytes>;
 }

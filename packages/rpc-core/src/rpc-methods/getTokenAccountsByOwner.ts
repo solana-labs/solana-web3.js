@@ -39,63 +39,63 @@ type ProgramIdFilter = Readonly<{
 
 type AccountsFilter = MintFilter | ProgramIdFilter;
 
-type GetTokenAccountsByDelegateApiCommonConfig = Readonly<{
+type GetTokenAccountsByOwnerApiCommonConfig = Readonly<{
     /** @default "finalized" */
     commitment?: Commitment;
     /** The minimum slot that the request can be evaluated at */
     minContextSlot?: Slot;
 }>;
 
-type GetTokenAccountsByDelegateApiSliceableCommonConfig = Readonly<{
+type GetTokenAccountsByOwnerApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
-export interface GetTokenAccountsByDelegateApi {
+export interface GetTokenAccountsByOwnerApi {
     /**
-     * Returns all SPL Token accounts by approved Delegate.
+     * Returns all SPL Token accounts by token owner.
      */
-    getTokenAccountsByDelegate(
+    getTokenAccountsByOwner(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
-        config: GetTokenAccountsByDelegateApiCommonConfig &
-            GetTokenAccountsByDelegateApiSliceableCommonConfig &
+        config: GetTokenAccountsByOwnerApiCommonConfig &
+            GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64';
             }>
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
-    getTokenAccountsByDelegate(
+    getTokenAccountsByOwner(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
-        config: GetTokenAccountsByDelegateApiCommonConfig &
-            GetTokenAccountsByDelegateApiSliceableCommonConfig &
+        config: GetTokenAccountsByOwnerApiCommonConfig &
+            GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
             }>
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
-    getTokenAccountsByDelegate(
+    getTokenAccountsByOwner(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
-        config: GetTokenAccountsByDelegateApiCommonConfig &
+        config: GetTokenAccountsByOwnerApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
-    getTokenAccountsByDelegate(
+    getTokenAccountsByOwner(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
-        config: GetTokenAccountsByDelegateApiCommonConfig &
-            GetTokenAccountsByDelegateApiSliceableCommonConfig &
+        config: GetTokenAccountsByOwnerApiCommonConfig &
+            GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base58';
             }>
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
-    getTokenAccountsByDelegate(
+    getTokenAccountsByOwner(
         program: Base58EncodedAddress,
         filter: AccountsFilter,
-        config?: GetTokenAccountsByDelegateApiCommonConfig & GetTokenAccountsByDelegateApiSliceableCommonConfig
+        config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
 }
