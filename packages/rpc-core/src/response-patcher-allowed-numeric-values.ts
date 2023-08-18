@@ -149,6 +149,7 @@ export function getAllowedNumericKeypaths(): AllowedNumericKeypaths {
                 ['current', KEYPATH_WILDCARD, 'commission'],
                 ['delinquent', KEYPATH_WILDCARD, 'commission'],
             ],
+            simulateTransaction: jsonParsedAccountsConfigs.map(c => ['value', 'accounts', KEYPATH_WILDCARD, ...c]),
         };
     }
     return memoizedKeypaths;
