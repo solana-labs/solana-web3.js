@@ -20,7 +20,7 @@ export type LamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __lamports: u
 // the JSON-RPC transport.
 //
 // Spefically being used to denote micro-lamports, which are 0.000001 lamports.
-export type MicroLamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __lamports: unique symbol };
+export type MicroLamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __microLamports: unique symbol };
 
 export type Slot = U64UnsafeBeyond2Pow53Minus1;
 
