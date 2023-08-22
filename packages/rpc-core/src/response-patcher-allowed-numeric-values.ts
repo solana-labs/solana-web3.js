@@ -56,17 +56,17 @@ export const ALLOWED_NUMERIC_KEYPATHS: Partial<
     getInflationRate: [['foundation'], ['total'], ['validator']],
     getInflationReward: [[KEYPATH_WILDCARD, 'commission']],
     getMultipleAccounts: jsonParsedAccountsConfigs.map(c => ['value', KEYPATH_WILDCARD, ...c]),
-    getProgramAccounts: jsonParsedAccountsConfigs.flatMap(c => ([
+    getProgramAccounts: jsonParsedAccountsConfigs.flatMap(c => [
         ['value', KEYPATH_WILDCARD, 'account', ...c],
-        [KEYPATH_WILDCARD, 'account', ...c]
-    ])),
+        [KEYPATH_WILDCARD, 'account', ...c],
+    ]),
     getRecentPerformanceSamples: [[KEYPATH_WILDCARD, 'samplePeriodSecs']],
     getTokenAccountBalance: [
         ['value', 'decimals'],
         ['value', 'uiAmount'],
     ],
-    getTokenAccountsByDelegate: jsonParsedTokenAccountsConfigs.map(c => (['value', KEYPATH_WILDCARD, 'account', ...c])),
-    getTokenAccountsByOwner: jsonParsedTokenAccountsConfigs.map(c => (['value', KEYPATH_WILDCARD, 'account', ...c])),
+    getTokenAccountsByDelegate: jsonParsedTokenAccountsConfigs.map(c => ['value', KEYPATH_WILDCARD, 'account', ...c]),
+    getTokenAccountsByOwner: jsonParsedTokenAccountsConfigs.map(c => ['value', KEYPATH_WILDCARD, 'account', ...c]),
     getTokenLargestAccounts: [
         ['value', KEYPATH_WILDCARD, 'decimals'],
         ['value', KEYPATH_WILDCARD, 'uiAmount'],
