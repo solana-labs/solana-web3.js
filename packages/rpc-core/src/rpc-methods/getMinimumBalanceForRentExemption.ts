@@ -1,6 +1,6 @@
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
-type GetMinimumBalanceForRentExemptionApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
+type GetMinimumBalanceForRentExemptionApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
 
 export interface GetMinimumBalanceForRentExemptionApi {
     /**
