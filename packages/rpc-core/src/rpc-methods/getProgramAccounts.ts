@@ -34,107 +34,84 @@ type GetProgramAccountsApiCommonConfig = Readonly<{
     filters?: (GetProgramAccountsMemcmpFilter | GetProgramAccountsDatasizeFilter)[];
 }>;
 
+type GetProgramAccountsApiContextConfig = Readonly<{
+    withContext?: boolean;
+}>;
+
 type GetProgramAccountsApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
+
+type GetProgramAccountsApiResponseWithContextConfig<
+    TContextConfig extends GetProgramAccountsApiContextConfig | void,
+    TResponse,
+> = TContextConfig extends object
+    ? TContextConfig['withContext'] extends true
+        ? RpcResponse<TResponse>
+        : TResponse
+    : TResponse;
+
 export interface GetProgramAccountsApi {
     /**
      * Returns the account information for a list of Pubkeys.
      */
-    getProgramAccounts(
+    getProgramAccounts<TContextConfig extends GetProgramAccountsApiContextConfig>(
         program: Base58EncodedAddress,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
+            TContextConfig &
             Readonly<{
                 encoding: 'base64';
-                withContext: true;
-            }>
-    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
+            }>,
+    ): GetProgramAccountsApiResponseWithContextConfig<
+        TContextConfig,
+        AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]
+    >;
 
-    getProgramAccounts(
+    getProgramAccounts<TContextConfig extends GetProgramAccountsApiContextConfig>(
         program: Base58EncodedAddress,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
-            Readonly<{
-                encoding: 'base64';
-                withContext?: boolean;
-            }>
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[];
-
-    getProgramAccounts(
-        program: Base58EncodedAddress,
-        config: GetProgramAccountsApiCommonConfig &
-            GetProgramAccountsApiSliceableCommonConfig &
+            TContextConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-                withContext: true;
-            }>
-    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
+            }>,
+    ): GetProgramAccountsApiResponseWithContextConfig<
+        TContextConfig,
+        AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]
+    >;
 
-    getProgramAccounts(
+    getProgramAccounts<TContextConfig extends GetProgramAccountsApiContextConfig>(
         program: Base58EncodedAddress,
         config: GetProgramAccountsApiCommonConfig &
-            GetProgramAccountsApiSliceableCommonConfig &
-            Readonly<{
-                encoding: 'base64+zstd';
-                withContext?: boolean;
-            }>
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[];
-
-    getProgramAccounts(
-        program: Base58EncodedAddress,
-        config: GetProgramAccountsApiCommonConfig &
+            TContextConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-                withContext: true;
-            }>
-    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[]>;
+            }>,
+    ): GetProgramAccountsApiResponseWithContextConfig<
+        TContextConfig,
+        AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[]
+    >;
 
-    getProgramAccounts(
-        program: Base58EncodedAddress,
-        config: GetProgramAccountsApiCommonConfig &
-            Readonly<{
-                encoding: 'jsonParsed';
-                withContext?: boolean;
-            }>
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[];
-
-    getProgramAccounts(
+    getProgramAccounts<TContextConfig extends GetProgramAccountsApiContextConfig>(
         program: Base58EncodedAddress,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
+            TContextConfig &
             Readonly<{
                 encoding: 'base58';
-                withContext: true;
-            }>
-    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
+            }>,
+    ): GetProgramAccountsApiResponseWithContextConfig<
+        TContextConfig,
+        AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]
+    >;
 
-    getProgramAccounts(
+    getProgramAccounts<TContextConfig extends GetProgramAccountsApiContextConfig>(
         program: Base58EncodedAddress,
-        config: GetProgramAccountsApiCommonConfig &
-            GetProgramAccountsApiSliceableCommonConfig &
-            Readonly<{
-                encoding: 'base58';
-                withContext?: boolean;
-            }>
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[];
-
-    getProgramAccounts(
-        program: Base58EncodedAddress,
-        config: GetProgramAccountsApiCommonConfig &
-            GetProgramAccountsApiSliceableCommonConfig &
-            Readonly<{
-                withContext: true;
-            }>
-    ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
-
-    getProgramAccounts(
-        program: Base58EncodedAddress,
-        config?: GetProgramAccountsApiCommonConfig &
-            GetProgramAccountsApiSliceableCommonConfig &
-            Readonly<{
-                withContext?: boolean;
-            }>
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[];
+        config?: GetProgramAccountsApiCommonConfig & GetProgramAccountsApiSliceableCommonConfig & TContextConfig,
+    ): GetProgramAccountsApiResponseWithContextConfig<
+        TContextConfig,
+        AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]
+    >;
 }

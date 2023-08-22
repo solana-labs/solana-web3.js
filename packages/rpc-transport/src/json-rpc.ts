@@ -2,6 +2,8 @@ import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
 import { PendingRpcRequest, Rpc, RpcConfig, RpcRequest, SendOptions } from './json-rpc-types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Callable = (...args: any[]) => any;
 interface IHasIdentifier {
     readonly id: number;
 }
@@ -38,7 +40,13 @@ function makeProxy<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMeth
             return false;
         },
         get(target, p, receiver) {
-            return function (...rawParams: unknown[]) {
+            return function (
+                ...rawParams: typeof p extends keyof TRpcMethods
+                    ? TRpcMethods[typeof p] extends Callable
+                        ? Parameters<TRpcMethods[typeof p]>
+                        : never
+                    : never
+            ) {
                 const methodName = p.toString();
                 const createRpcRequest = Reflect.get(target, methodName, receiver);
                 const newRequest = createRpcRequest
