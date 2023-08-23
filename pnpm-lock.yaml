@@ -80,10 +80,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -143,10 +143,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -222,10 +222,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -279,10 +279,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -346,10 +346,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -431,10 +431,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -605,8 +605,8 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0(eslint@8.45.0)
       eslint-plugin-prettier:
-        specifier: ^5.0.0
-        version: 5.0.0(eslint-config-prettier@8.9.0)(eslint@8.45.0)(prettier@3.0.1)
+        specifier: ^4.0.0
+        version: 4.0.0(eslint-config-prettier@8.9.0)(eslint@8.45.0)(prettier@2.8.8)
       esm:
         specifier: ^3.2.25
         version: 3.2.25
@@ -623,8 +623,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       rimraf:
         specifier: 5.0.1
         version: 5.0.1
@@ -727,10 +727,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -799,10 +799,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -829,7 +829,7 @@ importers:
         version: 2.0.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       jest-watch-master:
         specifier: ^1.0.0
         version: 1.0.0(jest-validate@29.6.1)(jest@29.6.1)
@@ -915,10 +915,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -984,10 +984,10 @@ importers:
         version: 2.1.0(eslint@8.45.0)(jest@29.6.1)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.6.1)(prettier@3.0.1)
+        version: 1.0.0(jest@29.6.1)(prettier@2.8.8)
       prettier:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^2.8
+        version: 2.8.8
       test-config:
         specifier: workspace:*
         version: link:../test-config
@@ -3396,18 +3396,6 @@ packages:
     dev: true
     optional: true
 
-  /@pkgr/utils@2.4.2:
-    resolution: {integrity: sha512-POgTXhjrTfbTV63DiFXav4lBHiICLKKwDeaKn9Nphwj7WH6m0hMMCaJkMyRWjgtPFyRKRVoMXXjczsTQRDEhYw==}
-    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
-    dependencies:
-      cross-spawn: 7.0.3
-      fast-glob: 3.3.1
-      is-glob: 4.0.3
-      open: 9.1.0
-      picocolors: 1.0.0
-      tslib: 2.6.1
-    dev: true
-
   /@pnpm/config.env-replace@1.1.0:
     resolution: {integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w==}
     engines: {node: '>=12.22.0'}
@@ -4886,11 +4874,6 @@ packages:
     resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
     dev: true
 
-  /big-integer@1.6.51:
-    resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
-    engines: {node: '>=0.6'}
-    dev: true
-
   /bigint-buffer@1.1.5:
     resolution: {integrity: sha512-trfYco6AoZ+rKhKnxA0hgX0HAbVP/s808/EuDSe2JDzUnCp/xAsli35Orvk67UrTEcwuxZqYZDmfA2RXJgxVvA==}
     engines: {node: '>= 10.0.0'}
@@ -4970,13 +4953,6 @@ packages:
     resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
     dev: true
 
-  /bplist-parser@0.2.0:
-    resolution: {integrity: sha512-z0M+byMThzQmD9NILRniCUXYsYpjwnlO8N5uCFaCqIOpqRsJCrQL9NK3JsD67CN5a08nF5oIL2bD6loTdHOuKw==}
-    engines: {node: '>= 5.10.0'}
-    dependencies:
-      big-integer: 1.6.51
-    dev: true
-
   /brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -5045,13 +5021,6 @@ packages:
   /builtin-modules@3.3.0:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
-    dev: true
-
-  /bundle-name@3.0.0:
-    resolution: {integrity: sha512-PKA4BeSvBpQKQ8iPOGCSiell+N8P+Tf1DlwqmYhpe2gAhKPHn8EYOxVT+ShuGmhg8lN8XiSlS80yiExKXrURlw==}
-    engines: {node: '>=12'}
-    dependencies:
-      run-applescript: 5.0.0
     dev: true
 
   /bundle-require@4.0.1(esbuild@0.18.17):
@@ -5685,29 +5654,6 @@ packages:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
 
-  /default-browser-id@3.0.0:
-    resolution: {integrity: sha512-OZ1y3y0SqSICtE8DE4S8YOE9UZOJ8wO16fKWVP5J1Qz42kV9jcnMVFrEE/noXb/ss3Q4pZIH79kxofzyNNtUNA==}
-    engines: {node: '>=12'}
-    dependencies:
-      bplist-parser: 0.2.0
-      untildify: 4.0.0
-    dev: true
-
-  /default-browser@4.0.0:
-    resolution: {integrity: sha512-wX5pXO1+BrhMkSbROFsyxUm0i/cJEScyNhA4PPxc41ICuv05ZZB/MX28s8aZx6xjmatvebIapF6hLEKEcpneUA==}
-    engines: {node: '>=14.16'}
-    dependencies:
-      bundle-name: 3.0.0
-      default-browser-id: 3.0.0
-      execa: 7.1.1
-      titleize: 3.0.0
-    dev: true
-
-  /define-lazy-prop@3.0.0:
-    resolution: {integrity: sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==}
-    engines: {node: '>=12'}
-    dev: true
-
   /define-properties@1.2.0:
     resolution: {integrity: sha512-xvqAVKGfT1+UAvPwKTVw/njhdQ8ZhXK4lI0bCIuCMrp2up9nPnaDftrLtmpTazqd1o+UY4zgzU+avtMbDP+ldA==}
     engines: {node: '>= 0.4'}
@@ -6183,25 +6129,21 @@ packages:
       rambda: 7.5.0
     dev: true
 
-  /eslint-plugin-prettier@5.0.0(eslint-config-prettier@8.9.0)(eslint@8.45.0)(prettier@3.0.1):
-    resolution: {integrity: sha512-AgaZCVuYDXHUGxj/ZGu1u8H8CYgDY3iG6w5kUFw4AzMVXzB7VvbKgYR4nATIN+OvUrghMbiDLeimVjVY5ilq3w==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  /eslint-plugin-prettier@4.0.0(eslint-config-prettier@8.9.0)(eslint@8.45.0)(prettier@2.8.8):
+    resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
+    engines: {node: '>=6.0.0'}
     peerDependencies:
-      '@types/eslint': '>=8.0.0'
-      eslint: '>=8.0.0'
+      eslint: '>=7.28.0'
       eslint-config-prettier: '*'
-      prettier: '>=3.0.0'
+      prettier: '>=2.0.0'
     peerDependenciesMeta:
-      '@types/eslint':
-        optional: true
       eslint-config-prettier:
         optional: true
     dependencies:
       eslint: 8.45.0
       eslint-config-prettier: 8.9.0(eslint@8.45.0)
-      prettier: 3.0.1
+      prettier: 2.8.8
       prettier-linter-helpers: 1.0.0
-      synckit: 0.8.5
     dev: true
 
   /eslint-plugin-react-hooks@4.6.0(eslint@8.45.0):
@@ -7455,18 +7397,6 @@ packages:
       has-tostringtag: 1.0.0
     dev: true
 
-  /is-docker@2.2.1:
-    resolution: {integrity: sha512-F+i2BKsFrH66iaUFc0woD8sLy8getkwTwtOBjvs56Cx4CgJDeKQeqfz8wAYiSb8JOprWhHH5p77PbmYCvvUuXQ==}
-    engines: {node: '>=8'}
-    hasBin: true
-    dev: true
-
-  /is-docker@3.0.0:
-    resolution: {integrity: sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    hasBin: true
-    dev: true
-
   /is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
@@ -7484,14 +7414,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-extglob: 2.1.1
-
-  /is-inside-container@1.0.0:
-    resolution: {integrity: sha512-KIYLCCJghfHZxqjYBE7rEy0OBuTd5xCHS7tHVgvCLkx7StIoaxwNW3hCALgEUjFfeRk+MG/Qxmp/vtETEF3tRA==}
-    engines: {node: '>=14.16'}
-    hasBin: true
-    dependencies:
-      is-docker: 3.0.0
-    dev: true
 
   /is-module@1.0.0:
     resolution: {integrity: sha512-51ypPSPCoTEIN9dy5Oy+h4pShgJmPCygKfyRCISBI+JoWT/2oJvK8QPxmwv7b/p239jXrm9M1mlQbyKJ5A152g==}
@@ -7622,13 +7544,6 @@ packages:
   /is-windows@0.2.0:
     resolution: {integrity: sha512-n67eJYmXbniZB7RF4I/FTjK1s6RPOCTxhYrVYLRaCt3lF0mpWZPKr3T2LSZAqyjQsxR2qMmGYXXzK0YWwcPM1Q==}
     engines: {node: '>=0.10.0'}
-    dev: true
-
-  /is-wsl@2.2.0:
-    resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
-    engines: {node: '>=8'}
-    dependencies:
-      is-docker: 2.2.1
     dev: true
 
   /isarray@0.0.1:
@@ -8300,7 +8215,7 @@ packages:
       - jest-runner
     dev: true
 
-  /jest-runner-prettier@1.0.0(jest@29.6.1)(prettier@3.0.1):
+  /jest-runner-prettier@1.0.0(jest@29.6.1)(prettier@2.8.8):
     resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
     peerDependencies:
       jest: '>= 27.0.0'
@@ -8312,7 +8227,7 @@ packages:
       jest-diff: 27.5.1
       jest-runner: 27.5.1
       p-limit: 4.0.0
-      prettier: 3.0.1
+      prettier: 2.8.8
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -9705,16 +9620,6 @@ packages:
       mimic-fn: 4.0.0
     dev: true
 
-  /open@9.1.0:
-    resolution: {integrity: sha512-OS+QTnw1/4vrf+9hh1jc1jnYjzSG4ttTBB8UxOwAnInG3Uo4ssetzC1ihqaIHjLJnA5GGlRl6QlZXOTQhRBUvg==}
-    engines: {node: '>=14.16'}
-    dependencies:
-      default-browser: 4.0.0
-      define-lazy-prop: 3.0.0
-      is-inside-container: 1.0.0
-      is-wsl: 2.2.0
-    dev: true
-
   /optionator@0.9.3:
     resolution: {integrity: sha512-JjCoypp+jKn1ttEFExxhetCKeJt9zhAgAve5FXHixTvFDW/5aEktX9bufBKLRRMdU7bNtpLfcGu94B3cdEJgjg==}
     engines: {node: '>= 0.8.0'}
@@ -10049,12 +9954,6 @@ packages:
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: true
-
-  /prettier@3.0.1:
-    resolution: {integrity: sha512-fcOWSnnpCrovBsmFZIGIy9UqK2FaI7Hqax+DIO0A9UxeVoY4iweyaFjS5TavZN97Hfehph0nhsZnjlVKzEQSrQ==}
-    engines: {node: '>=14'}
     hasBin: true
 
   /pretty-format@27.5.1:
@@ -10501,13 +10400,6 @@ packages:
     optionalDependencies:
       bufferutil: 4.0.7
       utf-8-validate: 5.0.10
-
-  /run-applescript@5.0.0:
-    resolution: {integrity: sha512-XcT5rBksx1QdIhlFOCtgZkB99ZEouFZ1E2Kc2LHqNW13U3/74YGdkQRmThTwxy4QIyookibDKYZOPqX//6BlAg==}
-    engines: {node: '>=12'}
-    dependencies:
-      execa: 5.1.1
-    dev: true
 
   /run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -11137,14 +11029,6 @@ packages:
   /symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  /synckit@0.8.5:
-    resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    dependencies:
-      '@pkgr/utils': 2.4.2
-      tslib: 2.6.1
-    dev: true
-
   /temp-dir@3.0.0:
     resolution: {integrity: sha512-nHc6S/bwIilKHNRgK/3jlhDoIHcp45YgyiwcAk46Tr0LfEqGBVpmiAyuiuxeVE44m3mXnEeVhaipLOEWmH+Njw==}
     engines: {node: '>=14.16'}
@@ -11221,11 +11105,6 @@ packages:
 
   /through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
-
-  /titleize@3.0.0:
-    resolution: {integrity: sha512-KxVu8EYHDPBdUYdKZdKtU2aj2XfEx9AfjXxE/Aj0vT06w2icA09Vus1rh6eSu1y01akYg6BjIK/hxyLJINoMLQ==}
-    engines: {node: '>=12'}
-    dev: true
 
   /tmpl@1.0.5:
     resolution: {integrity: sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==}
@@ -11650,11 +11529,6 @@ packages:
   /unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
-    dev: true
-
-  /untildify@4.0.0:
-    resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
-    engines: {node: '>=8'}
     dev: true
 
   /update-browserslist-db@1.0.11(browserslist@4.21.9):

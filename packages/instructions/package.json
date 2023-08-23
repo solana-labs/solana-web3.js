@@ -74,7 +74,7 @@
         "jest": "^29.6.1",
         "jest-runner-eslint": "^2.1.0",
         "jest-runner-prettier": "^1.0.0",
-        "prettier": "^3.0.1",
+        "prettier": "^2.8",
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "7.2.0",
