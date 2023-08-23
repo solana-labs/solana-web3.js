@@ -39,7 +39,6 @@ describe('getAccountInfo', () => {
                         lamports: expect.any(BigInt),
                         owner: expect.any(String),
                         rentEpoch: expect.any(BigInt),
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -176,7 +175,6 @@ describe('getAccountInfo', () => {
                                 type: 'lookupTable',
                             }),
                             program: 'address-lookup-table',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -204,7 +202,6 @@ describe('getAccountInfo', () => {
                                 type: 'program',
                             }),
                             program: 'bpf-upgradeable-loader',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -233,7 +230,6 @@ describe('getAccountInfo', () => {
                                 type: 'validatorInfo',
                             }),
                             program: 'config',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -262,7 +258,6 @@ describe('getAccountInfo', () => {
                                 type: 'stakeConfig',
                             }),
                             program: 'config',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -292,7 +287,6 @@ describe('getAccountInfo', () => {
                                 type: 'initialized',
                             }),
                             program: 'nonce',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -324,7 +318,6 @@ describe('getAccountInfo', () => {
                                 type: 'mint',
                             }),
                             program: 'spl-token',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -361,7 +354,6 @@ describe('getAccountInfo', () => {
                                 type: 'account',
                             }),
                             program: 'spl-token',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -392,7 +384,6 @@ describe('getAccountInfo', () => {
                                 type: 'multisig',
                             }),
                             program: 'spl-token',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -425,7 +416,6 @@ describe('getAccountInfo', () => {
                                 type: 'mint',
                             }),
                             program: 'spl-token-2022',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -454,7 +444,6 @@ describe('getAccountInfo', () => {
                                 type: 'delegated',
                             }),
                             program: 'stake',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -484,7 +473,6 @@ describe('getAccountInfo', () => {
                                 type: 'rent',
                             }),
                             program: 'sysvar',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });
@@ -520,7 +508,6 @@ describe('getAccountInfo', () => {
                                 type: 'vote',
                             }),
                             program: 'vote',
-                            space: expect.any(BigInt),
                         }),
                     }),
                 });

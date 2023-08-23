@@ -45,7 +45,6 @@ describe('getMultipleAccounts', () => {
                         lamports: expect.any(BigInt),
                         owner: expect.any(String),
                         rentEpoch: expect.any(BigInt),
-                        space: expect.any(BigInt),
                     });
                 });
             });
@@ -101,7 +100,6 @@ describe('getMultipleAccounts', () => {
                 lamports: expect.any(BigInt),
                 owner: expect.any(String),
                 rentEpoch: expect.any(BigInt),
-                space: expect.any(BigInt),
             });
             expect(multipleAccounts.value[1]).toBeNull();
         });
@@ -224,7 +222,6 @@ describe('getMultipleAccounts', () => {
                             type: 'lookupTable',
                         }),
                         program: 'address-lookup-table',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -250,7 +247,6 @@ describe('getMultipleAccounts', () => {
                             type: 'program',
                         }),
                         program: 'bpf-upgradeable-loader',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -277,7 +273,6 @@ describe('getMultipleAccounts', () => {
                             type: 'validatorInfo',
                         }),
                         program: 'config',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -304,7 +299,6 @@ describe('getMultipleAccounts', () => {
                             type: 'stakeConfig',
                         }),
                         program: 'config',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -332,7 +326,6 @@ describe('getMultipleAccounts', () => {
                             type: 'initialized',
                         }),
                         program: 'nonce',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -362,7 +355,6 @@ describe('getMultipleAccounts', () => {
                             type: 'mint',
                         }),
                         program: 'spl-token',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -397,7 +389,6 @@ describe('getMultipleAccounts', () => {
                             type: 'account',
                         }),
                         program: 'spl-token',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -426,7 +417,6 @@ describe('getMultipleAccounts', () => {
                             type: 'multisig',
                         }),
                         program: 'spl-token',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -457,7 +447,6 @@ describe('getMultipleAccounts', () => {
                             type: 'mint',
                         }),
                         program: 'spl-token-2022',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -484,7 +473,6 @@ describe('getMultipleAccounts', () => {
                             type: 'delegated',
                         }),
                         program: 'stake',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -512,7 +500,6 @@ describe('getMultipleAccounts', () => {
                             type: 'rent',
                         }),
                         program: 'sysvar',
-                        space: expect.any(BigInt),
                     }),
                 });
             });
@@ -546,7 +533,6 @@ describe('getMultipleAccounts', () => {
                             type: 'vote',
                         }),
                         program: 'vote',
-                        space: expect.any(BigInt),
                     }),
                 });
             });

@@ -40,7 +40,6 @@ describe('getProgramAccounts', () => {
                         lamports: expect.any(BigInt),
                         owner: expect.any(String),
                         rentEpoch: expect.any(BigInt),
-                        space: expect.any(BigInt),
                     }),
                     pubkey: expect.any(String),
                 });
@@ -94,7 +93,6 @@ describe('getProgramAccounts', () => {
                     lamports: expect.any(BigInt),
                     owner: expect.any(String),
                     rentEpoch: expect.any(BigInt),
-                    space: expect.any(BigInt),
                 }),
                 pubkey: expect.any(String),
             });
@@ -105,7 +103,6 @@ describe('getProgramAccounts', () => {
                     lamports: expect.any(BigInt),
                     owner: expect.any(String),
                     rentEpoch: expect.any(BigInt),
-                    space: expect.any(BigInt),
                 }),
                 pubkey: expect.any(String),
             });
