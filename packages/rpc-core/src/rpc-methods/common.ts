@@ -55,8 +55,6 @@ export type AccountInfoBase = Readonly<{
     owner: Base58EncodedAddress;
     /** the epoch at which this account will next owe rent */
     rentEpoch: U64UnsafeBeyond2Pow53Minus1;
-    /** the data size of the account */
-    space: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
 /** @deprecated */
