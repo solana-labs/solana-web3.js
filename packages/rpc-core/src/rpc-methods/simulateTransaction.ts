@@ -17,7 +17,7 @@ import {
 type SimulateTransactionConfigBase = Readonly<{
     /**
      * Commitment level to simulate the transaction at
-     * @default finalized
+     * @defaultValue finalized
      * */
     commitment?: Commitment;
     /** The minimum slot that the request can be evaluated at */
