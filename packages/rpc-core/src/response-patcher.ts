@@ -1,4 +1,4 @@
-import { ALLOWED_NUMERIC_KEYPATHS } from './response-patcher-allowed-numeric-values';
+import { getAllowedNumericKeypaths } from './response-patcher-allowed-numeric-values';
 import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
 import { createSolanaRpcApi } from './rpc-methods';
 
@@ -47,6 +47,6 @@ export function patchResponseForSolanaLabsRpc<T>(
     rawResponse: unknown,
     methodName?: keyof ReturnType<typeof createSolanaRpcApi>
 ): T {
-    const allowedKeypaths = methodName ? ALLOWED_NUMERIC_KEYPATHS[methodName] : undefined;
+    const allowedKeypaths = methodName ? getAllowedNumericKeypaths()[methodName] : undefined;
     return visitNode(rawResponse, allowedKeypaths ?? []);
 }

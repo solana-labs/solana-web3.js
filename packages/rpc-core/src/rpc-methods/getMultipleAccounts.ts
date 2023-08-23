@@ -38,7 +38,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base64';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -47,7 +47,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base64+zstd';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedZStdCompressedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedZStdCompressedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -55,7 +55,7 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'jsonParsed';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithJsonData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithJsonData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
@@ -64,10 +64,10 @@ export interface GetMultipleAccountsApi {
             Readonly<{
                 encoding: 'base58';
             }>
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase58EncodedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase58EncodedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Base58EncodedAddress[],
         config?: GetMultipleAccountsApiCommonConfig
-    ): RpcResponse<(GetMultipleAccountsApiResponseBase & AccountInfoWithBase64EncodedData)[]>;
+    ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
 }

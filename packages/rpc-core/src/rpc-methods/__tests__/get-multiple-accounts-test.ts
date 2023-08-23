@@ -138,7 +138,7 @@ describe('getMultipleAccounts', () => {
                 })
                 .send();
 
-            expect(accountInfo.value[0].data).toStrictEqual(['2Uw1bpnsXxu3e', 'base58']);
+            expect(accountInfo.value[0]?.data).toStrictEqual(['2Uw1bpnsXxu3e', 'base58']);
         });
     });
 
@@ -156,7 +156,7 @@ describe('getMultipleAccounts', () => {
                 })
                 .send();
 
-            expect(accountInfo.value[0].data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
+            expect(accountInfo.value[0]?.data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
         });
     });
 
@@ -174,7 +174,7 @@ describe('getMultipleAccounts', () => {
                 })
                 .send();
 
-            expect(accountInfo.value[0].data).toStrictEqual(['KLUv/QBYSQAAdGVzdCBkYXRh', 'base64+zstd']);
+            expect(accountInfo.value[0]?.data).toStrictEqual(['KLUv/QBYSQAAdGVzdCBkYXRh', 'base64+zstd']);
         });
     });
 
@@ -192,7 +192,7 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
-                expect(accountInfo.value[0].data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
+                expect(accountInfo.value[0]?.data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
             });
         });
 
@@ -549,7 +549,7 @@ describe('getMultipleAccounts', () => {
 
             const accountInfo = await rpc.getMultipleAccounts([publicKey], {}).send();
 
-            expect(accountInfo.value[0].data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
+            expect(accountInfo.value[0]?.data).toStrictEqual(['dGVzdCBkYXRh', 'base64']);
         });
     });
 
@@ -571,7 +571,7 @@ describe('getMultipleAccounts', () => {
                 })
                 .send();
 
-            expect(accountInfo.value[0].data).toStrictEqual(['dGVzdCA=', 'base64']);
+            expect(accountInfo.value[0]?.data).toStrictEqual(['dGVzdCA=', 'base64']);
         });
     });
 });
