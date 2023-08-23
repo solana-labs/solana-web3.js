@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getBase58EncodedAddressFromPublicKey } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { CompiledMessage, compileMessage } from './message';
@@ -23,7 +23,7 @@ export async function signTransaction<TTransaction extends Parameters<typeof com
 ): Promise<TTransaction & ITransactionWithSignatures> {
     const compiledMessage = compileMessage(transaction);
     const [signerPublicKey, signature] = await Promise.all([
-        getBase58EncodedAddressFromPublicKey(keyPair.publicKey),
+        getAddressFromPublicKey(keyPair.publicKey),
         getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
     ]);
     const nextSignatures = {

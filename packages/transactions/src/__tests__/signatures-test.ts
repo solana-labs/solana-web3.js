@@ -1,10 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
-import {
-    Base58EncodedAddress,
-    getBase58EncodedAddressCodec,
-    getBase58EncodedAddressFromPublicKey,
-} from '@solana/addresses';
+import { Base58EncodedAddress, getAddressFromPublicKey, getBase58EncodedAddressCodec } from '@solana/addresses';
 import { signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
@@ -50,7 +46,7 @@ describe('signTransaction', () => {
             ],
             version: 0,
         } as CompiledMessage);
-        (getBase58EncodedAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
+        (getAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
             switch (publicKey) {
                 case mockKeyPairA.publicKey:
                     return mockPublicKeyAddressA;

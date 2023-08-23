@@ -1,4 +1,4 @@
-import { getBase58EncodedAddressFromPublicKey } from '../public-key';
+import { getAddressFromPublicKey } from '../public-key';
 
 // Corresponds to address `DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct`
 const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
@@ -6,7 +6,7 @@ const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
     0x0e, 0x36, 0x71, 0x74, 0x32, 0x8d, 0x1a, 0xf7, 0xee, 0x7e, 0x04, 0x76, 0x19,
 ]);
 
-describe('getBase58EncodedAddressFromPublicKey', () => {
+describe('getAddressFromPublicKey', () => {
     it('returns the public key that corresponds to a given secret key', async () => {
         expect.assertions(1);
         const publicKey = await crypto.subtle.importKey(
@@ -16,9 +16,7 @@ describe('getBase58EncodedAddressFromPublicKey', () => {
             /* extractable */ true,
             ['verify']
         );
-        await expect(getBase58EncodedAddressFromPublicKey(publicKey)).resolves.toBe(
-            'DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct'
-        );
+        await expect(getAddressFromPublicKey(publicKey)).resolves.toBe('DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct');
     });
     it('throws when the public key is non-extractable', async () => {
         expect.assertions(1);
@@ -29,7 +27,7 @@ describe('getBase58EncodedAddressFromPublicKey', () => {
             /* extractable */ false,
             ['verify']
         );
-        await expect(() => getBase58EncodedAddressFromPublicKey(publicKey)).rejects.toThrow();
+        await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
     });
     it('throws when called with a secret', async () => {
         expect.assertions(1);
@@ -41,7 +39,7 @@ describe('getBase58EncodedAddressFromPublicKey', () => {
             true,
             ['encrypt', 'decrypt']
         );
-        await expect(() => getBase58EncodedAddressFromPublicKey(publicKey)).rejects.toThrow();
+        await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
     });
     it.each([
         { __variant: 'P256', name: 'ECDSA', namedCurve: 'P-256' },
@@ -62,7 +60,7 @@ describe('getBase58EncodedAddressFromPublicKey', () => {
     ])('throws when called with a $name/$__variant public key', async algorithm => {
         expect.assertions(1);
         const { publicKey } = await crypto.subtle.generateKey(algorithm, true, ['sign', 'verify']);
-        await expect(() => getBase58EncodedAddressFromPublicKey(publicKey)).rejects.toThrow();
+        await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
     });
     it('throws when called with a private key', async () => {
         expect.assertions(1);
@@ -77,6 +75,6 @@ describe('getBase58EncodedAddressFromPublicKey', () => {
             /* extractable */ false,
             ['sign']
         );
-        await expect(() => getBase58EncodedAddressFromPublicKey(mockPrivateKey)).rejects.toThrow();
+        await expect(() => getAddressFromPublicKey(mockPrivateKey)).rejects.toThrow();
     });
 });

@@ -51,14 +51,14 @@ function handleSubmit() {
 }
 ```
 
-### `getBase58EncodedAddressFromPublicKey()`
+### `getAddressFromPublicKey()`
 
 Given a public `CryptoKey`, this method will return its associated `Base58EncodedAddress`.
 
 ```ts
-import { getBase58EncodedAddressFromPublicKey } from '@solana/addresses';
+import { getAddressFromPublicKey } from '@solana/addresses';
 
-const address = await getBase58EncodedAddressFromPublicKey(publicKey);
+const address = await getAddressFromPublicKey(publicKey);
 ```
 
 ### `getProgramDerivedAddress()`
