@@ -1,6 +1,7 @@
+import { open } from 'node:fs/promises';
+
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import fs from 'fs';
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
@@ -10,21 +11,14 @@ const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validato
 const genesisHashPattern = /genesis hash: ([\d\w]{32,})/;
 
 async function getGenesisHashFromLogFile() {
-    return new Promise<string | undefined>((resolve, reject) => {
-        const logFileStream = fs.createReadStream(logFilePath, { end: 64 * 1024 });
-        logFileStream.on('error', e => reject(e));
-
-        logFileStream.on('data', data => {
-            const chunk = data.toString('utf-8');
-            const expectedGenesisHash = chunk.match(genesisHashPattern)?.[1];
-            if (expectedGenesisHash) {
-                logFileStream.destroy();
-                resolve(expectedGenesisHash);
-            }
-        });
-
-        logFileStream.on('end', () => resolve(undefined));
-    });
+    const file = await open(logFilePath);
+    for await (const line of file.readLines({ encoding: 'utf-8' })) {
+        const match = line.match(genesisHashPattern);
+        if (match) {
+            return match[1];
+        }
+    }
+    throw new Error(`Genesis hash not found in logfile \`${logFilePath}\``);
 }
 
 describe('getGenesisHash', () => {
