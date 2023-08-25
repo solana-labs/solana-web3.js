@@ -40,7 +40,7 @@ type ProgramIdFilter = Readonly<{
 type AccountsFilter = MintFilter | ProgramIdFilter;
 
 type GetTokenAccountsByOwnerApiCommonConfig = Readonly<{
-    /** @default "finalized" */
+    /** @defaultValue "finalized" */
     commitment?: Commitment;
     /** The minimum slot that the request can be evaluated at */
     minContextSlot?: Slot;

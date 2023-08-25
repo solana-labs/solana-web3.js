@@ -53,6 +53,7 @@ import { IsBlockhashValidApi } from './isBlockhashValid';
 import { MinimumLedgerSlotApi } from './minimumLedgerSlot';
 import { RequestAirdropApi } from './requestAirdrop';
 import { SendTransactionApi } from './sendTransaction';
+import { SimulateTransactionApi } from './simulateTransaction';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
@@ -108,7 +109,8 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     IsBlockhashValidApi &
     MinimumLedgerSlotApi &
     RequestAirdropApi &
-    SendTransactionApi;
+    SendTransactionApi &
+    SimulateTransactionApi;
 
 export type { Commitment } from './common';
 
