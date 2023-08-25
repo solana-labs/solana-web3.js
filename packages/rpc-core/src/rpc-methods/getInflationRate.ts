@@ -1,14 +1,14 @@
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetInflationRateApiResponse = Readonly<{
     /** Epoch for which these values are valid */
     epoch: U64UnsafeBeyond2Pow53Minus1;
     /** Inflation allocated to the foundation */
-    foundation: number; // Until we land on best type for `f64`
+    foundation: F64UnsafeSeeDocumentation;
     /** Total inflation */
-    total: number; // Until we land on best type for `f64`
+    total: F64UnsafeSeeDocumentation;
     /** Inflation allocated to validators */
-    validator: number; // Until we land on best type for `f64`
+    validator: F64UnsafeSeeDocumentation;
 }>;
 
 export interface GetInflationRateApi {

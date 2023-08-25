@@ -1,20 +1,20 @@
-import { Commitment } from './common';
+import { Commitment, F64UnsafeSeeDocumentation } from './common';
 
 type GetInflationGovernorApiResponse = Readonly<{
     /** The initial inflation percentage from time 0 */
-    initial: number; // Until we land on best type for `f64`
+    initial: F64UnsafeSeeDocumentation;
     /** Percentage of total inflation allocated to the foundation */
-    foundation: number; // Until we land on best type for `f64`
+    foundation: F64UnsafeSeeDocumentation;
     /** Duration of foundation pool inflation in years */
-    foundationTerm: number; // Until we land on best type for `f64`
+    foundationTerm: F64UnsafeSeeDocumentation;
     /**
      * Rate per year at which inflation is lowered.
      * (Rate reduction is derived using the target
      * slot time in genesis config)
      */
-    taper: number; // Until we land on best type for `f64`
+    taper: F64UnsafeSeeDocumentation;
     /** Terminal inflation percentage */
-    terminal: number; // Until we land on best type for `f64`
+    terminal: F64UnsafeSeeDocumentation;
 }>;
 
 export interface GetInflationGovernorApi {
