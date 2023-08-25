@@ -34,15 +34,14 @@ describe('getSignatureStatuses', () => {
     });
 
     describe('when called with no transaction signature provided', () => {
-        it('throws an error', async () => {
+        it('returns an empty list', async () => {
             expect.assertions(1);
-            const signatureStatusPromise = rpc
-                .getSignatureStatuses(['invalid_signature' as TransactionSignature])
-                .send();
-            await expect(signatureStatusPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-                message: expect.any(String),
-                name: 'SolanaJsonRpcError',
+            const signatureStatusPromise = rpc.getSignatureStatuses([]).send();
+            await expect(signatureStatusPromise).resolves.toMatchObject({
+                context: {
+                    slot: expect.any(BigInt),
+                },
+                value: [],
             });
         });
     });

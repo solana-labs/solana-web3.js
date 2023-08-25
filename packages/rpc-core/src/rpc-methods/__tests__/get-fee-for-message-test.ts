@@ -77,7 +77,6 @@ describe('getFeeForMessage', () => {
                     expect.assertions(1);
                     const latestBlockhash = await rpc.getLatestBlockhash().send();
                     const message = getMockTransactionMessage(latestBlockhash.value.blockhash);
-                    console.log('Printing mock message', message);
                     const result = await rpc.getFeeForMessage(message, { commitment }).send();
                     expect(result).toMatchObject({
                         context: {
