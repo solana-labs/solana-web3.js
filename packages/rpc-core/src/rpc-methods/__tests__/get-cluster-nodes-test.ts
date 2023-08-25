@@ -1,15 +1,68 @@
+import { open } from 'node:fs/promises';
+
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validator.log');
+
+// TPU does not seem to be reliably matchable from the log file
+const featureSetPattern = /feat:([\d]+)/;
+const gossipPattern = /local gossip address: [\d.]+:([\d]+)/;
+const pubkeyPattern = /identity: ([\w]{32,})/;
+const rpcPattern = /rpc bound to [\d.]+:([\d]+)/;
+const shredVersionPattern = /shred_version: ([\d]+)/;
+const versionPattern = /solana-validator ([\d.]+)/;
+
+async function getNodeInfoFromLogFile() {
+    const file = await open(logFilePath);
+    let featureSet: number | undefined;
+    let gossip: string | undefined;
+    let pubkey: string | undefined;
+    let rpc: string | undefined;
+    let shredVersion: number | undefined;
+    let version: string | undefined;
+    for await (const line of file.readLines({ encoding: 'utf-8' })) {
+        const featureSetMatch = line.match(featureSetPattern);
+        if (featureSetMatch) {
+            featureSet = parseInt(featureSetMatch[1]);
+        }
+        const gossipMatch = line.match(gossipPattern);
+        if (gossipMatch) {
+            gossip = '127.0.0.1:' + gossipMatch[1];
+        }
+        const pubkeyMatch = line.match(pubkeyPattern);
+        if (pubkeyMatch) {
+            pubkey = pubkeyMatch[1];
+        }
+        const rpcMatch = line.match(rpcPattern);
+        if (rpcMatch) {
+            rpc = '127.0.0.1:' + rpcMatch[1];
+        }
+        const shredVersionMatch = line.match(shredVersionPattern);
+        if (shredVersionMatch) {
+            shredVersion = parseInt(shredVersionMatch[1]);
+        }
+        const versionMatch = line.match(versionPattern);
+        if (versionMatch) {
+            version = versionMatch[1];
+        }
+        if (featureSet && gossip && pubkey && rpc && shredVersion && version) {
+            return [featureSet, gossip, pubkey, rpc, shredVersion, version] as const;
+        }
+    }
+    throw new Error(`Node info not found in logfile \`${logFilePath}\``);
+}
+
 describe('getClusterNodes', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let mockRpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        mockRpc = createJsonRpc<SolanaRpcMethods>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
@@ -18,16 +71,17 @@ describe('getClusterNodes', () => {
     describe('when run against the test validator', () => {
         it('returns RPC and validator info', async () => {
             expect.assertions(1);
-            const res = await rpc.getClusterNodes().send();
-            expect(res).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining({
-                        gossip: expect.any(String),
-                        rpc: expect.any(String),
-                        tpu: expect.any(String),
-                    }),
-                ])
-            );
+            const [featureSet, gossip, pubkey, rpc, shredVersion, version] = await getNodeInfoFromLogFile();
+            const res = await mockRpc.getClusterNodes().send();
+            expect(res[0]).toMatchObject({
+                featureSet,
+                gossip,
+                pubkey,
+                rpc,
+                shredVersion,
+                tpu: expect.any(String), // TPU not in regex
+                version,
+            });
         });
     });
 });
