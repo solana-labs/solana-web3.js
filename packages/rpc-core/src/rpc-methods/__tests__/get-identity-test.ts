@@ -1,10 +1,30 @@
+import { open } from 'node:fs/promises';
+
 import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
-import validatorIdentityBytes from '../../../../../test-ledger/validator-keypair.json';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+
+const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
+
+async function getValidatorAddress() {
+    const file = await open(validatorKeypairPath);
+    let secretKey: Uint8Array | undefined;
+    for await (const line of file.readLines({ encoding: 'binary' })) {
+        secretKey = new Uint8Array(JSON.parse(line));
+        break; // Only need the first line
+    }
+    if (secretKey) {
+        const publicKey = secretKey.slice(32, 64);
+        const expectedAddress = base58.deserialize(publicKey)[0];
+        return expectedAddress as Base58EncodedAddress;
+    }
+    throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
+}
 
 describe('getIdentity', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -19,9 +39,7 @@ describe('getIdentity', () => {
 
     it('returns the identity of the currently running local validator', async () => {
         expect.assertions(1);
-        const secretKey = new Uint8Array(validatorIdentityBytes);
-        const publicKey = secretKey.slice(32, 64);
-        const expectedAddress = base58.deserialize(publicKey)[0];
+        const expectedAddress = await getValidatorAddress();
         const identityPromise = rpc.getIdentity().send();
         await expect(identityPromise).resolves.toMatchObject({
             identity: expectedAddress,
