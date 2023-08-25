@@ -3,17 +3,28 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import assert from 'assert';
+import { open } from 'fs/promises';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
-import validatorIdentityBytes from '../../../../../test-ledger/validator-keypair.json';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
-function getValidatorAddress(): Base58EncodedAddress {
-    const secretKey = new Uint8Array(validatorIdentityBytes);
-    const publicKey = secretKey.slice(32, 64);
-    const address = base58.deserialize(publicKey)[0];
-    return address as Base58EncodedAddress;
+const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
+
+async function getValidatorAddress() {
+    const file = await open(validatorKeypairPath);
+    let secretKey: Uint8Array | undefined;
+    for await (const line of file.readLines({ encoding: 'binary' })) {
+        secretKey = new Uint8Array(JSON.parse(line));
+        break; // Only need the first line
+    }
+    if (secretKey) {
+        const publicKey = secretKey.slice(32, 64);
+        const expectedAddress = base58.deserialize(publicKey)[0];
+        return expectedAddress as Base58EncodedAddress;
+    }
+    throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
 }
 
 describe('getLeaderSchedule', () => {
@@ -63,7 +74,7 @@ describe('getLeaderSchedule', () => {
             describe('when called with an account that is a validator identity and no slot', () => {
                 it('returns the leader schedule for only the specified node in the current epoch', async () => {
                     expect.assertions(1);
-                    const identity = getValidatorAddress();
+                    const identity = await getValidatorAddress();
                     const res = await rpc
                         .getLeaderSchedule({
                             commitment,
@@ -80,7 +91,7 @@ describe('getLeaderSchedule', () => {
             describe('when called with an account that is a validator identity and a valid slot', () => {
                 it('returns the leader schedule for only the specified node in the epoch corresponding to the provided slot', async () => {
                     expect.assertions(1);
-                    const identity = getValidatorAddress();
+                    const identity = await getValidatorAddress();
                     const res = await rpc
                         .getLeaderSchedule(0n, {
                             commitment,
