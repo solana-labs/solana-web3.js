@@ -1,6 +1,6 @@
 type GetVersionApiResponse = Readonly<{
     /** Unique identifier of the current software's feature set */
-    'feature-set': number;
+    'feature-set': number; // `u32`
     /** Software version of `solana-core` */
     'solana-core': string;
 }>;

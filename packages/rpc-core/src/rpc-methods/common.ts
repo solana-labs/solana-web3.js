@@ -93,7 +93,7 @@ export type AccountInfoWithPubkey<TAccount extends AccountInfoBase> = Readonly<{
     pubkey: Base58EncodedAddress;
 }>;
 
-type TokenAmount = Readonly<{
+export type TokenAmount = Readonly<{
     amount: StringifiedBigInt;
     decimals: number;
     uiAmount: number | null;

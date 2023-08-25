@@ -1,7 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { StringifiedBigInt } from '../stringified-bigint';
 import { TransactionError } from '../transaction-error';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
@@ -11,6 +10,7 @@ import {
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
     Slot,
+    TokenAmount,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
@@ -23,19 +23,7 @@ type TokenBalance = Readonly<{
     owner?: Base58EncodedAddress;
     /** Pubkey of the Token program that owns the account. */
     programId?: Base58EncodedAddress;
-    uiTokenAmount: {
-        /** Raw amount of tokens as a string, ignoring decimals. */
-        amount: StringifiedBigInt;
-        /** Number of decimals configured for token's mint. */
-        decimals: number;
-        /**
-         * Token amount as a float, accounting for decimals.
-         * @deprecated
-         */
-        uiAmount: number | null;
-        /** Token amount as a string, accounting for decimals. */
-        uiAmountString: string;
-    };
+    uiTokenAmount: TokenAmount;
 }>;
 
 type TransactionRewardBase = Readonly<{

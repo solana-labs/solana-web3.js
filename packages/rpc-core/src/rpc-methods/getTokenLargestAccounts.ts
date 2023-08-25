@@ -1,25 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { StringifiedBigInt } from '../stringified-bigint';
-import { Commitment, RpcResponse } from './common';
+import { Commitment, RpcResponse, TokenAmount } from './common';
 
-type GetTokenLargestAccountsApiResponse = RpcResponse<
-    {
-        /** the address of the token account */
-        address: Base58EncodedAddress;
-        /** the raw token account balance without decimals, a string representation of u64 */
-        amount: StringifiedBigInt;
-        /** number of base 10 digits to the right of the decimal place */
-        decimals: number;
-        /**
-         * the token account balance, using mint-prescribed decimals
-         * @deprecated
-         */
-        uiAmount: number | null;
-        /** the token account balance as a string, using mint-prescribed decimals */
-        uiAmountString: string;
-    }[]
->;
+type GetTokenLargestAccountsApiResponse = RpcResponse<TokenAmount & { address: Base58EncodedAddress }[]>;
 
 export interface GetTokenLargestAccountsApi {
     /**
