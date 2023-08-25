@@ -1,20 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, RpcResponse } from './common';
+import { Commitment, RpcResponse, TokenAmount } from './common';
 
-type GetTokenSupplyApiResponse = RpcResponse<{
-    /**
-     * The raw total token supply without decimals,
-     * a string representation of u64
-     */
-    amount: string;
-    /** Number of base 10 digits to the right of the decimal place */
-    decimals: number;
-    /** @deprecated The total token supply, using mint-prescribed decimals */
-    uiAmount: number | null;
-    /** The total token supply as a string, using mint-prescribed decimals */
-    uiAmountString: string;
-}>;
+type GetTokenSupplyApiResponse = RpcResponse<TokenAmount>;
 
 export interface GetTokenSupplyApi {
     /**
