@@ -1,6 +1,6 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Blockhash } from '@solana/transactions';
 
-type GetGenesisHashApiResponse = Base58EncodedAddress;
+type GetGenesisHashApiResponse = Blockhash;
 
 export interface GetGenesisHashApi {
     /**
