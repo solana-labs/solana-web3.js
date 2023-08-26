@@ -26,6 +26,7 @@
     "packageManager": "pnpm@8.5.1",
     "pnpm": {
         "overrides": {
+            "jsdom": "^22",
             "shelljs": ">=0.8.5"
         }
     },

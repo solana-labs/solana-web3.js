@@ -14,7 +14,7 @@
     "peerDependencies": {
         "jest": "^29.6.1",
         "jest-dev-server": "^9.0.0",
-        "jest-environment-jsdom": "^29.6.0",
+        "jest-environment-jsdom": "^29.6.4",
         "jest-fetch-mock-fork": "^3.0.4",
         "jest-runner-eslint": "^2.0.0",
         "jest-runner-prettier": "^1.0.0",

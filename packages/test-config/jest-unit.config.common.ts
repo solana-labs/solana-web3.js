@@ -2,6 +2,7 @@ import { Config } from '@jest/types';
 import path from 'path';
 
 const config: Partial<Config.InitialProjectOptions> = {
+    resetMocks: true,
     restoreMocks: true,
     roots: ['<rootDir>/src/'],
     setupFilesAfterEnv: [
