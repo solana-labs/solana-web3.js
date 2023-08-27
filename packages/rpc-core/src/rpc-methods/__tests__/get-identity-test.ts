@@ -13,17 +13,21 @@ const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger
 
 async function getValidatorAddress() {
     const file = await open(validatorKeypairPath);
-    let secretKey: Uint8Array | undefined;
-    for await (const line of file.readLines({ encoding: 'binary' })) {
-        secretKey = new Uint8Array(JSON.parse(line));
-        break; // Only need the first line
+    try {
+        let secretKey: Uint8Array | undefined;
+        for await (const line of file.readLines({ encoding: 'binary' })) {
+            secretKey = new Uint8Array(JSON.parse(line));
+            break; // Only need the first line
+        }
+        if (secretKey) {
+            const publicKey = secretKey.slice(32, 64);
+            const expectedAddress = base58.deserialize(publicKey)[0];
+            return expectedAddress as Base58EncodedAddress;
+        }
+        throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
+    } finally {
+        await file.close();
     }
-    if (secretKey) {
-        const publicKey = secretKey.slice(32, 64);
-        const expectedAddress = base58.deserialize(publicKey)[0];
-        return expectedAddress as Base58EncodedAddress;
-    }
-    throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
 }
 
 describe('getIdentity', () => {
