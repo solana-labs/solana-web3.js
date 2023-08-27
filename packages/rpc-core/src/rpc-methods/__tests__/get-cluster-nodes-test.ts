@@ -19,42 +19,46 @@ const versionPattern = /solana-validator ([\d.]+)/;
 
 async function getNodeInfoFromLogFile() {
     const file = await open(logFilePath);
-    let featureSet: number | undefined;
-    let gossip: string | undefined;
-    let pubkey: string | undefined;
-    let rpc: string | undefined;
-    let shredVersion: number | undefined;
-    let version: string | undefined;
-    for await (const line of file.readLines({ encoding: 'utf-8' })) {
-        const featureSetMatch = line.match(featureSetPattern);
-        if (featureSetMatch) {
-            featureSet = parseInt(featureSetMatch[1]);
+    try {
+        let featureSet: number | undefined;
+        let gossip: string | undefined;
+        let pubkey: string | undefined;
+        let rpc: string | undefined;
+        let shredVersion: number | undefined;
+        let version: string | undefined;
+        for await (const line of file.readLines({ encoding: 'utf-8' })) {
+            const featureSetMatch = line.match(featureSetPattern);
+            if (featureSetMatch) {
+                featureSet = parseInt(featureSetMatch[1]);
+            }
+            const gossipMatch = line.match(gossipPattern);
+            if (gossipMatch) {
+                gossip = '127.0.0.1:' + gossipMatch[1];
+            }
+            const pubkeyMatch = line.match(pubkeyPattern);
+            if (pubkeyMatch) {
+                pubkey = pubkeyMatch[1];
+            }
+            const rpcMatch = line.match(rpcPattern);
+            if (rpcMatch) {
+                rpc = '127.0.0.1:' + rpcMatch[1];
+            }
+            const shredVersionMatch = line.match(shredVersionPattern);
+            if (shredVersionMatch) {
+                shredVersion = parseInt(shredVersionMatch[1]);
+            }
+            const versionMatch = line.match(versionPattern);
+            if (versionMatch) {
+                version = versionMatch[1];
+            }
+            if (featureSet && gossip && pubkey && rpc && shredVersion && version) {
+                return [featureSet, gossip, pubkey, rpc, shredVersion, version] as const;
+            }
         }
-        const gossipMatch = line.match(gossipPattern);
-        if (gossipMatch) {
-            gossip = '127.0.0.1:' + gossipMatch[1];
-        }
-        const pubkeyMatch = line.match(pubkeyPattern);
-        if (pubkeyMatch) {
-            pubkey = pubkeyMatch[1];
-        }
-        const rpcMatch = line.match(rpcPattern);
-        if (rpcMatch) {
-            rpc = '127.0.0.1:' + rpcMatch[1];
-        }
-        const shredVersionMatch = line.match(shredVersionPattern);
-        if (shredVersionMatch) {
-            shredVersion = parseInt(shredVersionMatch[1]);
-        }
-        const versionMatch = line.match(versionPattern);
-        if (versionMatch) {
-            version = versionMatch[1];
-        }
-        if (featureSet && gossip && pubkey && rpc && shredVersion && version) {
-            return [featureSet, gossip, pubkey, rpc, shredVersion, version] as const;
-        }
+        throw new Error(`Node info not found in logfile \`${logFilePath}\``);
+    } finally {
+        await file.close();
     }
-    throw new Error(`Node info not found in logfile \`${logFilePath}\``);
 }
 
 describe('getClusterNodes', () => {

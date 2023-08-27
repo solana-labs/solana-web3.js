@@ -13,22 +13,26 @@ const versionPattern = /solana-validator ([\d.]+)/;
 
 async function getVersionFromLogFile() {
     const file = await open(logFilePath);
-    let version: string | undefined;
-    let featureSet: number | undefined;
-    for await (const line of file.readLines({ encoding: 'utf-8' })) {
-        const featureSetMatch = line.match(featureSetPattern);
-        if (featureSetMatch) {
-            featureSet = parseInt(featureSetMatch[1]);
+    try {
+        let version: string | undefined;
+        let featureSet: number | undefined;
+        for await (const line of file.readLines({ encoding: 'utf-8' })) {
+            const featureSetMatch = line.match(featureSetPattern);
+            if (featureSetMatch) {
+                featureSet = parseInt(featureSetMatch[1]);
+            }
+            const versionMatch = line.match(versionPattern);
+            if (versionMatch) {
+                version = versionMatch[1];
+            }
+            if (version && featureSet) {
+                return [featureSet, version];
+            }
         }
-        const versionMatch = line.match(versionPattern);
-        if (versionMatch) {
-            version = versionMatch[1];
-        }
-        if (version && featureSet) {
-            return [featureSet, version];
-        }
+        throw new Error(`Version info not found in logfile \`${logFilePath}\``);
+    } finally {
+        await file.close();
     }
-    throw new Error(`Version info not found in logfile \`${logFilePath}\``);
 }
 
 describe('getVersion', () => {
