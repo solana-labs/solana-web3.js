@@ -21,7 +21,7 @@ describe('getTokenAccountsByDelegate', () => {
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             it('returns RPC response with account info', async () => {
-                expect.assertions(1);
+                expect.assertions(3);
                 // Delegate for fixtures/spl-token-token-account-delegated.json
                 const delegate =
                     'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -30,7 +30,7 @@ describe('getTokenAccountsByDelegate', () => {
                 const tokenProgram =
                     'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-                const accountInfoPromise = rpc
+                const accountInfos = await rpc
                     .getTokenAccountsByDelegate(
                         delegate,
                         { programId: tokenProgram },
@@ -41,22 +41,25 @@ describe('getTokenAccountsByDelegate', () => {
                     )
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                expect(accountInfos).toMatchObject({
                     context: expect.objectContaining({
-                        slot: expect.any(BigInt),
+                        slot: expect.any(BigInt), // Changes
                     }),
-                    value: [
-                        {
-                            account: {
-                                data: [expect.any(String), 'base64'],
-                                executable: expect.any(Boolean),
-                                lamports: expect.any(BigInt),
-                                owner: expect.any(String),
-                                rentEpoch: expect.any(BigInt),
-                            },
-                            pubkey: expect.any(String),
-                        },
-                    ],
+                    value: expect.any(Array),
+                });
+                expect(accountInfos.value).toHaveLength(1);
+                expect(accountInfos.value[0]).toMatchObject({
+                    account: {
+                        data: [
+                            'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                            'base64',
+                        ],
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                        rentEpoch: 0n,
+                    },
+                    pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                 });
             });
         });
@@ -129,7 +132,7 @@ describe('getTokenAccountsByDelegate', () => {
 
     describe('when called with a mint that has a delegated token account', () => {
         it('returns RPC response with account info', async () => {
-            expect.assertions(1);
+            expect.assertions(3);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -138,7 +141,7 @@ describe('getTokenAccountsByDelegate', () => {
             const mint =
                 '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M' as Base58EncodedAddress<'4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M'>;
 
-            const accountInfoPromise = rpc
+            const accountInfos = await rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { mint },
@@ -148,18 +151,25 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
-                    expect.objectContaining({
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64'],
-                            executable: expect.any(Boolean),
-                            lamports: expect.any(BigInt),
-                            owner: expect.any(String),
-                            rentEpoch: expect.any(BigInt),
-                        }),
-                    }),
-                ],
+            expect(accountInfos).toMatchObject({
+                context: expect.objectContaining({
+                    slot: expect.any(BigInt), // Changes
+                }),
+                value: expect.any(Array),
+            });
+            expect(accountInfos.value).toHaveLength(1);
+            expect(accountInfos.value[0]).toMatchObject({
+                account: {
+                    data: [
+                        'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                        'base64',
+                    ],
+                    executable: false,
+                    lamports: 10290815n,
+                    owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                    rentEpoch: 0n,
+                },
+                pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
             });
         });
     });
@@ -230,7 +240,7 @@ describe('getTokenAccountsByDelegate', () => {
 
     describe('when called with base64 encoding', () => {
         it('returns RPC Response with account info with annotated base64 encoding', async () => {
-            expect.assertions(1);
+            expect.assertions(3);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -238,7 +248,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfos = await rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -248,22 +258,32 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
-                    {
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64'],
-                        }),
-                        pubkey: expect.any(String),
-                    },
-                ],
+            expect(accountInfos).toMatchObject({
+                context: expect.objectContaining({
+                    slot: expect.any(BigInt), // Changes
+                }),
+                value: expect.any(Array),
+            });
+            expect(accountInfos.value).toHaveLength(1);
+            expect(accountInfos.value[0]).toMatchObject({
+                account: {
+                    data: [
+                        'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                        'base64',
+                    ],
+                    executable: false,
+                    lamports: 10290815n,
+                    owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                    rentEpoch: 0n,
+                },
+                pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
             });
         });
     });
 
     describe('when called with base64+zstd encoding', () => {
         it('returns RPC Response with account info with annotated base64+zstd encoding', async () => {
-            expect.assertions(1);
+            expect.assertions(3);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -271,7 +291,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfos = await rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -281,22 +301,32 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
-                    {
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64+zstd'],
-                        }),
-                        pubkey: expect.any(String),
-                    },
-                ],
+            expect(accountInfos).toMatchObject({
+                context: expect.objectContaining({
+                    slot: expect.any(BigInt), // Changes
+                }),
+                value: expect.any(Array),
+            });
+            expect(accountInfos.value).toHaveLength(1);
+            expect(accountInfos.value[0]).toMatchObject({
+                account: {
+                    data: [
+                        'KLUv/QBY5QMANAczNAkYBRovZ+6aKhcbDD09U5eAwRphJQ+v9fRxRl14BiwMvrPWGScC1sOOBlIjsgVf9PimkadS+JM3J8fn+ZRLABCl1OgAAAABAAAA375jFs2IhYz7PHEdi5XYXKsiZkfaX3fJMhQ+juAPDokBAOh2SBcAAgDBoy4Hzg==',
+                        'base64+zstd',
+                    ],
+                    executable: false,
+                    lamports: 10290815n,
+                    owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                    rentEpoch: 0n,
+                },
+                pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
             });
         });
     });
 
     describe('when called with jsonParsed encoding', () => {
         it('returns RPC response with parsed JSON data for SPL Token token account', async () => {
-            expect.assertions(1);
+            expect.assertions(3);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -304,7 +334,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfos = await rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -314,40 +344,40 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
-                    {
-                        account: expect.objectContaining({
-                            data: {
-                                parsed: {
-                                    info: expect.objectContaining({
-                                        delegate,
-                                        delegatedAmount: {
-                                            amount: expect.any(String),
-                                            decimals: expect.any(Number),
-                                            uiAmount: expect.any(Number),
-                                            uiAmountString: expect.any(String),
-                                        },
-                                        isNative: expect.any(Boolean),
-                                        mint: expect.any(String),
-                                        owner: expect.any(String),
-                                        state: expect.any(String),
-                                        tokenAmount: {
-                                            amount: expect.any(String),
-                                            decimals: expect.any(Number),
-                                            uiAmount: expect.any(Number),
-                                            uiAmountString: expect.any(String),
-                                        },
-                                    }),
-                                    type: 'account',
+            expect(accountInfos).toMatchObject({
+                context: expect.objectContaining({
+                    slot: expect.any(BigInt), // Changes
+                }),
+                value: expect.any(Array),
+            });
+            expect(accountInfos.value).toHaveLength(1);
+            expect(accountInfos.value[0]).toMatchObject({
+                account: {
+                    data: {
+                        parsed: {
+                            info: {
+                                isNative: false,
+                                mint: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
+                                owner: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
+                                state: 'initialized',
+                                tokenAmount: {
+                                    amount: '1000000000000',
+                                    decimals: 9,
+                                    uiAmount: 1000,
+                                    uiAmountString: '1000',
                                 },
-                                program: 'spl-token',
-                                space: 165n,
                             },
-                        }),
-                        pubkey: expect.any(String),
+                            type: 'account',
+                        },
+                        program: 'spl-token',
+                        space: 165n,
                     },
-                ],
+                    executable: false,
+                    lamports: 10290815n,
+                    owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                    rentEpoch: 0n,
+                },
+                pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
             });
         });
     });

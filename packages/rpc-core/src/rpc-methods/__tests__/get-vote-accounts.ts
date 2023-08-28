@@ -3,8 +3,7 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../common';
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { Commitment, createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 describe('getVoteAccounts', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -21,10 +20,22 @@ describe('getVoteAccounts', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             it('returns current and delinquent vote accounts', async () => {
                 expect.assertions(1);
-                const voteAccountsPromise = rpc.getVoteAccounts().send();
-                await expect(voteAccountsPromise).resolves.toMatchObject({
-                    current: expect.any(Array),
-                    delinquent: expect.any(Array),
+                const voteAccounts = await rpc.getVoteAccounts().send();
+                expect(voteAccounts).toMatchObject({
+                    current: expect.arrayContaining([
+                        {
+                            // Fixture
+                            activatedStake: expect.any(BigInt), // Changes
+                            commission: 50,
+                            epochCredits: expect.any(Array), // Changes
+                            epochVoteAccount: true,
+                            lastVote: expect.any(BigInt), // Changes
+                            nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                            rootSlot: expect.any(BigInt), // Changes
+                            votePubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
+                        },
+                    ]),
+                    delinquent: expect.any(Array), // Changes
                 });
             });
 
