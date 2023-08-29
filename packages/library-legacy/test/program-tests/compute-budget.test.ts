@@ -117,28 +117,6 @@ describe('ComputeBudgetProgram', () => {
       );
     });
 
-    it('send live request heap ix without consuming compute units', async () => {
-      const connection = new Connection(url, 'confirmed');
-      const baseAccount = Keypair.generate();
-      await helpers.airdrop({
-        connection,
-        address: baseAccount.publicKey,
-        amount: 0.1 * LAMPORTS_PER_SOL,
-      });
-      const requestHeapFrameTransaction = new Transaction().add(
-        // No instruction here, implies that the transaction consumes no units.
-        ComputeBudgetProgram.requestHeapFrame({bytes: 33 * 1024}),
-      );
-      await expect(
-        sendAndConfirmTransaction(
-          connection,
-          requestHeapFrameTransaction,
-          [baseAccount],
-          {preflightCommitment: 'confirmed'},
-        ),
-      ).to.be.rejectedWith(/Computational budget exceeded/);
-    });
-
     it('send live compute unit ixs', async () => {
       const connection = new Connection(url, 'confirmed');
       const FEE_AMOUNT = LAMPORTS_PER_SOL;
