@@ -2,10 +2,10 @@ import { base58, base64, fixSerializer } from '@metaplex-foundation/umi-serializ
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { Blockhash } from '@solana/transactions';
+import { Blockhash, SerializedMessageBytesBase64 } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Base64EncodedBytes, Commitment } from '../common';
+import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 // See scripts/fixtures/send-transaction-fee-payer.json
@@ -50,7 +50,7 @@ function getMockTransactionMessage(blockhash: Blockhash) {
         0x00, // Number of address table lookups
     ]);
     const messageBase64 = base64.deserialize(message)[0];
-    return messageBase64 as Base64EncodedBytes;
+    return messageBase64 as SerializedMessageBytesBase64;
 }
 
 describe('getFeeForMessage', () => {
@@ -114,7 +114,7 @@ describe('getFeeForMessage', () => {
     describe('when called with an invalid message', () => {
         it('throws an error', async () => {
             expect.assertions(1);
-            const sendPromise = rpc.getFeeForMessage('someInvalidMessage' as Base64EncodedBytes).send();
+            const sendPromise = rpc.getFeeForMessage('someInvalidMessage' as SerializedMessageBytesBase64).send();
             await expect(sendPromise).rejects.toMatchObject({
                 code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
                 message: expect.any(String),
