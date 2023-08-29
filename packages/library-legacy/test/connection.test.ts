@@ -351,16 +351,14 @@ describe('Connection', function () {
         lamports: LAMPORTS_PER_SOL,
         data: Buffer.from([]),
         executable: false,
-        rentEpoch: Math.pow(2, 64) - 1,
-        space: 0,
+        rentEpoch: 0,
       },
       {
         owner: new PublicKey('11111111111111111111111111111111'),
         lamports: LAMPORTS_PER_SOL,
         data: Buffer.from([]),
         executable: false,
-        rentEpoch: Math.pow(2, 64) - 1,
-        space: 0,
+        rentEpoch: 0,
       },
     ];
 
