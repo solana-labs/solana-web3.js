@@ -155,13 +155,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n' as Base58EncodedAddress<'2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -253,13 +253,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY' as Base58EncodedAddress<'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -290,13 +290,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'StakeConfig11111111111111111111111111111111' as Base58EncodedAddress<'StakeConfig11111111111111111111111111111111'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -318,13 +318,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU' as Base58EncodedAddress<'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -347,13 +347,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -378,13 +378,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Base58EncodedAddress<'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -414,13 +414,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88' as Base58EncodedAddress<'4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -452,13 +452,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo' as Base58EncodedAddress<'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -510,13 +510,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Base58EncodedAddress<'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -563,13 +563,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     'SysvarRent111111111111111111111111111111111' as Base58EncodedAddress<'SysvarRent111111111111111111111111111111111'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {
@@ -597,13 +597,13 @@ describe('getAccountInfo', () => {
                 const publicKey =
                     '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress<'4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'>;
 
-                const accountInfo = await rpc
+                const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
                         encoding: 'jsonParsed',
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                await expect(accountInfoPromise).resolves.toMatchObject({
                     value: {
                         data: {
                             parsed: {

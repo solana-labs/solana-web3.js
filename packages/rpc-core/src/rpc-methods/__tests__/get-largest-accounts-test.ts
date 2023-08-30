@@ -55,8 +55,8 @@ describe('getLargestAccounts', () => {
                     // TODO: Test validator does not write this keypair to JSON
                     // See solana-labs/solana/pull/33014
                     const stakeAddress = expect.any(String);
-                    const largestAcounts = await rpc.getLargestAccounts({ commitment }).send();
-                    expect(largestAcounts).toMatchObject({
+                    const largestAcountsPromise = rpc.getLargestAccounts({ commitment }).send();
+                    await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },
@@ -157,8 +157,8 @@ describe('getLargestAccounts', () => {
                     // TODO: Test validator does not write this keypair to JSON
                     // See solana-labs/solana/pull/33014
                     const stakeAddress = expect.any(String);
-                    const largestAcounts = await rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
-                    expect(largestAcounts).toMatchObject({
+                    const largestAcountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
+                    await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },

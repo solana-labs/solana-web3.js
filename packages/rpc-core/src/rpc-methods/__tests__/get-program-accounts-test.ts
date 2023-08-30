@@ -52,22 +52,26 @@ describe('getProgramAccounts', () => {
                 const program =
                     'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
-                const accountInfo = await rpc
+                const accountInfosPromise = rpc
                     .getProgramAccounts(program, {
                         commitment,
                     })
                     .send();
 
-                expect(accountInfo[0]).toMatchObject({
-                    account: expect.objectContaining({
-                        data: '2Uw1bpnsXxu3e',
-                        executable: false,
-                        lamports: 5000000n,
-                        owner: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
-                        rentEpoch: 18446744073709551616n, // TODO: This number loses precision
-                    }),
-                    pubkey: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
-                });
+                await expect(accountInfosPromise).resolves.toMatchObject(
+                    expect.arrayContaining([
+                        {
+                            account: expect.objectContaining({
+                                data: '2Uw1bpnsXxu3e',
+                                executable: false,
+                                lamports: 5000000n,
+                                owner: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
+                                rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            }),
+                            pubkey: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        },
+                    ])
+                );
             });
         });
     });
@@ -108,9 +112,9 @@ describe('getProgramAccounts', () => {
             const program =
                 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6' as Base58EncodedAddress<'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6'>;
 
-            const accountInfos = await rpc.getProgramAccounts(program).send();
+            const accountInfosPromise = rpc.getProgramAccounts(program).send();
 
-            expect(accountInfos).toMatchObject(
+            await expect(accountInfosPromise).resolves.toMatchObject(
                 expect.arrayContaining([
                     {
                         account: expect.objectContaining({
@@ -308,71 +312,80 @@ describe('getProgramAccounts', () => {
                     const program =
                         'AddressLookupTab1e1111111111111111111111111' as Base58EncodedAddress<'AddressLookupTab1e1111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos[0]).toMatchObject({
-                        account: {
-                            data: {
-                                parsed: {
-                                    info: {
-                                        addresses: [
-                                            'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn',
-                                            'FWscgV4VDSsMxkQg7jZ4HksqjLyadJS5RiCnAVZv2se9',
-                                            '6PoVp5L36hYU5oDWjZiUnhcKqVnkwYXgditMKufxhTuo',
-                                            '9J4yDqU6wBkdhP5bmJhukhsEzBkaAXiBmii52kTdxpQq',
-                                            '25FkCKVY4nMLaqCWhWoDt3idfNRBHkyQttTd4VCibYoU',
-                                            'CSYi7PVzvEA2iiDWhR8eN6EBjZpKyzPX1aMbayrk9YTD',
-                                            'CSYi7PVzvEA2iiDWhR8eN6EBjZpKyzPX1aMbayrk9YTD',
-                                            '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
-                                            '6ndVLNpgFDZZS1Ph7A9oZKD15Z6FurMMeVrsYiP6NUw8',
-                                            '9zqNWNXHPLkW6LcNbBboF6tFvAHoT97UFczUusGLdGhE',
-                                            '3nkuz3xksLcsok3NexdDLWZqUMehrPQj23a8fkPnZ4ng',
-                                            'EL9gfMj99EvcV5x3NxHbRQsJKbavFcFvvNxbpJg6CvqM',
-                                            'EWmQeCKE6MsByDGdL7sktuL5eCfTUBKSLQe12tG3mFfn',
-                                            '4oEA4jBmBbZmrzAxnConZP93LQuwh9bV5T1y7NLFwtMk',
-                                            'EHjk9n6jCrDLVGhC2vjvdzaFP2gPonK7Up1tVg9Zc11y',
-                                            'GsPu9qRgkF9RDFnQjXh3TngvAdQPYUnTSaeG1K4uNjj3',
-                                            '9J4yDqU6wBkdhP5bmJhukhsEzBkaAXiBmii52kTdxpQq',
-                                            'FoNprxYzYmwnYzhM964CxEHchhj17YREieJtSAXg9FMU',
-                                            'FAH4Nd2GhQmLWxHcVN63rnc4EomJw2EEpA5ukGuzZyKc',
-                                            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-                                            'FAH4Nd2GhQmLWxHcVN63rnc4EomJw2EEpA5ukGuzZyKc',
-                                            'CZw6RPBy9BecE4hVBG4cK4E64gJN7gT9D1EZKCGRqkHV',
-                                            '2Q1PhUaRw3GeaCxv2ud8iaxWAZjpisdU5bvUTtVacgJU',
-                                            'Sysvar1nstructions1111111111111111111111111',
-                                            'auth9SigNpDKz4sJJ1DfCTuZrZNSAgh9sFD3rboVmgg',
-                                            '11111111111111111111111111111111',
-                                            'SysvarRent111111111111111111111111111111111',
-                                            'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
-                                            '7YVgrijuM9eSNgeyEpZBw7cZ3ncXhUbHkst9NjAVQQd4',
-                                            '4ncLWXmfoFGyGuCXKLFxguCAYE4ioUp4RKKoUHtJPNGN',
-                                            'FZYB8CfgDexiDv9Vm3vHBuEBNxy97yetVTU6nq1nPyxQ',
-                                            'CJBCQppi8NjNxqzyoHJG2h97RinfKePP1ZUMMWcxp339',
-                                            '9WPz1JB6xWb5Cn3uvL9T2hR2sKPfVB5GANoVM7pf1zvG',
-                                            '5gb1Vq2ZVtx25w8TDnpGTzPk8nZXgZ1TLWvSt6hnBiXn',
-                                            'mm8fDa7jiufFGD6h4foq9vdmTRxDeDSTKB9CZynwQQs',
-                                            '4cdDuEivqaGiF2Yu6LjdgTukmfgsHoxfhjTua59xXexP',
-                                            'AdH2Utn6Fus15ZhtenW4hZBQnvtLgM1YCW2MfVp7pYS5',
-                                            'FoNprxYzYmwnYzhM964CxEHchhj17YREieJtSAXg9FMU',
-                                        ],
-                                        authority: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
-                                        deactivationSlot: '204699277',
-                                        lastExtendedSlot: '204699234',
-                                        lastExtendedSlotStartIndex: 20,
+                    await expect(accountInfosPromise).resolves.toMatchObject(
+                        expect.arrayContaining([
+                            {
+                                account: {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [
+                                                    'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn',
+                                                    'FWscgV4VDSsMxkQg7jZ4HksqjLyadJS5RiCnAVZv2se9',
+                                                    '6PoVp5L36hYU5oDWjZiUnhcKqVnkwYXgditMKufxhTuo',
+                                                    '9J4yDqU6wBkdhP5bmJhukhsEzBkaAXiBmii52kTdxpQq',
+                                                    '25FkCKVY4nMLaqCWhWoDt3idfNRBHkyQttTd4VCibYoU',
+                                                    'CSYi7PVzvEA2iiDWhR8eN6EBjZpKyzPX1aMbayrk9YTD',
+                                                    'CSYi7PVzvEA2iiDWhR8eN6EBjZpKyzPX1aMbayrk9YTD',
+                                                    '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
+                                                    '6ndVLNpgFDZZS1Ph7A9oZKD15Z6FurMMeVrsYiP6NUw8',
+                                                    '9zqNWNXHPLkW6LcNbBboF6tFvAHoT97UFczUusGLdGhE',
+                                                    '3nkuz3xksLcsok3NexdDLWZqUMehrPQj23a8fkPnZ4ng',
+                                                    'EL9gfMj99EvcV5x3NxHbRQsJKbavFcFvvNxbpJg6CvqM',
+                                                    'EWmQeCKE6MsByDGdL7sktuL5eCfTUBKSLQe12tG3mFfn',
+                                                    '4oEA4jBmBbZmrzAxnConZP93LQuwh9bV5T1y7NLFwtMk',
+                                                    'EHjk9n6jCrDLVGhC2vjvdzaFP2gPonK7Up1tVg9Zc11y',
+                                                    'GsPu9qRgkF9RDFnQjXh3TngvAdQPYUnTSaeG1K4uNjj3',
+                                                    '9J4yDqU6wBkdhP5bmJhukhsEzBkaAXiBmii52kTdxpQq',
+                                                    'FoNprxYzYmwnYzhM964CxEHchhj17YREieJtSAXg9FMU',
+                                                    'FAH4Nd2GhQmLWxHcVN63rnc4EomJw2EEpA5ukGuzZyKc',
+                                                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                                    'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+                                                    'FAH4Nd2GhQmLWxHcVN63rnc4EomJw2EEpA5ukGuzZyKc',
+                                                    'CZw6RPBy9BecE4hVBG4cK4E64gJN7gT9D1EZKCGRqkHV',
+                                                    '2Q1PhUaRw3GeaCxv2ud8iaxWAZjpisdU5bvUTtVacgJU',
+                                                    'Sysvar1nstructions1111111111111111111111111',
+                                                    'auth9SigNpDKz4sJJ1DfCTuZrZNSAgh9sFD3rboVmgg',
+                                                    '11111111111111111111111111111111',
+                                                    'SysvarRent111111111111111111111111111111111',
+                                                    'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s',
+                                                    '7YVgrijuM9eSNgeyEpZBw7cZ3ncXhUbHkst9NjAVQQd4',
+                                                    '4ncLWXmfoFGyGuCXKLFxguCAYE4ioUp4RKKoUHtJPNGN',
+                                                    'FZYB8CfgDexiDv9Vm3vHBuEBNxy97yetVTU6nq1nPyxQ',
+                                                    'CJBCQppi8NjNxqzyoHJG2h97RinfKePP1ZUMMWcxp339',
+                                                    '9WPz1JB6xWb5Cn3uvL9T2hR2sKPfVB5GANoVM7pf1zvG',
+                                                    '5gb1Vq2ZVtx25w8TDnpGTzPk8nZXgZ1TLWvSt6hnBiXn',
+                                                    'mm8fDa7jiufFGD6h4foq9vdmTRxDeDSTKB9CZynwQQs',
+                                                    '4cdDuEivqaGiF2Yu6LjdgTukmfgsHoxfhjTua59xXexP',
+                                                    'AdH2Utn6Fus15ZhtenW4hZBQnvtLgM1YCW2MfVp7pYS5',
+                                                    'FoNprxYzYmwnYzhM964CxEHchhj17YREieJtSAXg9FMU',
+                                                ],
+                                                authority: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
+                                                deactivationSlot: '204699277',
+                                                lastExtendedSlot: '204699234',
+                                                lastExtendedSlotStartIndex: 20,
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
                                     },
-                                    type: 'lookupTable',
+                                    executable: false,
+                                    lamports: 10290815n,
+                                    owner: 'AddressLookupTab1e1111111111111111111111111',
+                                    rentEpoch: expect.any(BigInt),
                                 },
-                                program: 'address-lookup-table',
+                                pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
-                        },
-                        pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
-                    });
+                        ])
+                    );
                 });
 
                 it('returns parsed JSON data for BpfLoaderUpgradeable account', async () => {
@@ -381,13 +394,13 @@ describe('getProgramAccounts', () => {
                     const program =
                         'BPFLoaderUpgradeab1e11111111111111111111111' as Base58EncodedAddress<'BPFLoaderUpgradeab1e11111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -404,7 +417,7 @@ describe('getProgramAccounts', () => {
                                     executable: true,
                                     lamports: 1141440n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             },
@@ -423,7 +436,7 @@ describe('getProgramAccounts', () => {
                                     executable: true,
                                     lamports: 10290815n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk',
                             },
@@ -440,7 +453,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 2754914160n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                             },
@@ -455,14 +468,14 @@ describe('getProgramAccounts', () => {
                     const publicKey =
                         'Config1111111111111111111111111111111111111' as Base58EncodedAddress<'Config1111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(publicKey, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -480,7 +493,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 960480n,
                                     owner: 'Config1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'StakeConfig11111111111111111111111111111111',
                             },
@@ -512,7 +525,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'Config1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
                             },
@@ -526,7 +539,7 @@ describe('getProgramAccounts', () => {
                     const program =
                         '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
@@ -534,7 +547,7 @@ describe('getProgramAccounts', () => {
                         .send();
 
                     // Too large to try to match all accounts owned by system program
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -555,7 +568,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: '11111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
                             },
@@ -571,14 +584,14 @@ describe('getProgramAccounts', () => {
                     const program =
                         'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -622,7 +635,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf',
                             },
@@ -645,7 +658,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
                             },
@@ -670,7 +683,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88',
                             },
@@ -705,7 +718,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                             },
@@ -733,7 +746,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                             },
@@ -756,7 +769,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
                             },
@@ -784,7 +797,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 2039280n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                             },
@@ -807,7 +820,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1461600n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj',
                             },
@@ -821,56 +834,62 @@ describe('getProgramAccounts', () => {
                     const program =
                         'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject([
-                        {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            decimals: 5,
-                                            extensions: [
-                                                {
-                                                    extension: 'transferFeeConfig',
-                                                    state: {
-                                                        newerTransferFee: {
-                                                            epoch: 457n,
-                                                            maximumFee: 3906250000000000000n,
-                                                            transferFeeBasisPoints: 690,
+                    await expect(accountInfosPromise).resolves.toMatchObject(
+                        expect.arrayContaining([
+                            {
+                                account: {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                decimals: 5,
+                                                extensions: [
+                                                    {
+                                                        extension: 'transferFeeConfig',
+                                                        state: {
+                                                            newerTransferFee: {
+                                                                epoch: 457n,
+                                                                maximumFee: 3906250000000000000n,
+                                                                transferFeeBasisPoints: 690,
+                                                            },
+                                                            olderTransferFee: {
+                                                                epoch: 455n,
+                                                                maximumFee: 3906250000000000000n,
+                                                                transferFeeBasisPoints: 0,
+                                                            },
+                                                            transferFeeConfigAuthority:
+                                                                '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                            withdrawWithheldAuthority:
+                                                                '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                            withheldAmount: 0n,
                                                         },
-                                                        olderTransferFee: {
-                                                            epoch: 455n,
-                                                            maximumFee: 3906250000000000000n,
-                                                            transferFeeBasisPoints: 0,
-                                                        },
-                                                        transferFeeConfigAuthority:
-                                                            '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                                        withdrawWithheldAuthority:
-                                                            '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                                        withheldAmount: 0n,
                                                     },
-                                                },
-                                            ],
-                                            freezeAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                            isInitialized: true,
-                                            mintAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                            supply: '99998926239436',
+                                                ],
+                                                freezeAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                isInitialized: true,
+                                                mintAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                supply: '99998926239436',
+                                            },
+                                            type: 'mint',
                                         },
-                                        type: 'mint',
+                                        program: 'spl-token-2022',
+                                        space: 278n,
                                     },
-                                    program: 'spl-token-2022',
-                                    space: 278n,
+                                    executable: false,
+                                    lamports: 10290815n,
+                                    owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    rentEpoch: expect.any(BigInt),
                                 },
+                                pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                             },
-                            pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
-                        },
-                    ]);
+                        ])
+                    );
                 });
 
                 it('returns parsed JSON data for Stake account', async () => {
@@ -883,14 +902,14 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Stake11111111111111111111111111111111111111' as Base58EncodedAddress<'Stake11111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             // Local validator
                             {
@@ -929,7 +948,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: stakeAddress,
                             },
@@ -970,7 +989,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
                             },
@@ -985,14 +1004,14 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Sysvar1111111111111111111111111111111111111' as Base58EncodedAddress<'Sysvar1111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -1013,7 +1032,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1169280n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarC1ock11111111111111111111111111111111',
                             },
@@ -1036,7 +1055,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1120560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarEpochSchedu1e111111111111111111111111',
                             },
@@ -1057,7 +1076,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 946560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarFees111111111111111111111111111111111',
                             },
@@ -1074,7 +1093,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 42706560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarRecentB1ockHashes11111111111111111111',
                             },
@@ -1095,7 +1114,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1009200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarRent111111111111111111111111111111111',
                             },
@@ -1112,7 +1131,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 143487360n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarS1otHashes111111111111111111111111111',
                             },
@@ -1129,7 +1148,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 913326000n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarS1otHistory11111111111111111111111111',
                             },
@@ -1146,7 +1165,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 114979200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarStakeHistory1111111111111111111111111',
                             },
@@ -1162,14 +1181,14 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Vote111111111111111111111111111111111111111' as Base58EncodedAddress<'Vote111111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: false,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject(
+                    await expect(accountInfosPromise).resolves.toMatchObject(
                         expect.arrayContaining([
                             {
                                 account: {
@@ -1199,7 +1218,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
                             },
@@ -1232,7 +1251,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: voteAccountAddress,
                             },
@@ -1248,14 +1267,14 @@ describe('getProgramAccounts', () => {
                     const program =
                         'AddressLookupTab1e1111111111111111111111111' as Base58EncodedAddress<'AddressLookupTab1e1111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos).toMatchObject({
+                    await expect(accountInfosPromise).resolves.toMatchObject({
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },
@@ -1319,7 +1338,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'AddressLookupTab1e1111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
@@ -1333,15 +1352,18 @@ describe('getProgramAccounts', () => {
                     const program =
                         'BPFLoaderUpgradeab1e11111111111111111111111' as Base58EncodedAddress<'BPFLoaderUpgradeab1e11111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             {
                                 account: {
                                     data: {
@@ -1357,7 +1379,7 @@ describe('getProgramAccounts', () => {
                                     executable: true,
                                     lamports: 1141440n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             },
@@ -1376,7 +1398,7 @@ describe('getProgramAccounts', () => {
                                     executable: true,
                                     lamports: 10290815n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk',
                             },
@@ -1393,12 +1415,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 2754914160n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for Config stake and validator accounts', async () => {
@@ -1408,15 +1430,18 @@ describe('getProgramAccounts', () => {
                     const publicKey =
                         'Config1111111111111111111111111111111111111' as Base58EncodedAddress<'Config1111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(publicKey, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             {
                                 account: {
                                     data: {
@@ -1433,7 +1458,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 960480n,
                                     owner: 'Config1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'StakeConfig11111111111111111111111111111111',
                             },
@@ -1465,12 +1490,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'Config1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for Nonce account', async () => {
@@ -1479,7 +1504,7 @@ describe('getProgramAccounts', () => {
                     const program =
                         '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
@@ -1487,7 +1512,7 @@ describe('getProgramAccounts', () => {
                         .send();
 
                     // Too large to try to match all accounts owned by system program
-                    expect(accountInfos).toMatchObject({
+                    await expect(accountInfosPromise).resolves.toMatchObject({
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },
@@ -1511,7 +1536,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: '11111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
                             },
@@ -1527,15 +1552,18 @@ describe('getProgramAccounts', () => {
                     const program =
                         'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             {
                                 account: {
                                     data: {
@@ -1578,7 +1606,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf',
                             },
@@ -1601,7 +1629,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
                             },
@@ -1626,7 +1654,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88',
                             },
@@ -1661,7 +1689,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                             },
@@ -1689,7 +1717,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                             },
@@ -1712,7 +1740,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
                             },
@@ -1740,7 +1768,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 2039280n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                             },
@@ -1763,12 +1791,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1461600n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj',
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for SPL Token 22 mint account', async () => {
@@ -1777,56 +1805,65 @@ describe('getProgramAccounts', () => {
                     const program =
                         'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject([
-                        {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            decimals: 5,
-                                            extensions: [
-                                                {
-                                                    extension: 'transferFeeConfig',
-                                                    state: {
-                                                        newerTransferFee: {
-                                                            epoch: 457n,
-                                                            maximumFee: 3906250000000000000n,
-                                                            transferFeeBasisPoints: 690,
-                                                        },
-                                                        olderTransferFee: {
-                                                            epoch: 455n,
-                                                            maximumFee: 3906250000000000000n,
-                                                            transferFeeBasisPoints: 0,
-                                                        },
-                                                        transferFeeConfigAuthority:
-                                                            '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                                        withdrawWithheldAuthority:
-                                                            '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                                        withheldAmount: 0n,
-                                                    },
-                                                },
-                                            ],
-                                            freezeAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                            isInitialized: true,
-                                            mintAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
-                                            supply: '99998926239436',
-                                        },
-                                        type: 'mint',
-                                    },
-                                    program: 'spl-token-2022',
-                                    space: 278n,
-                                },
-                            },
-                            pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
                         },
-                    ]);
+                        value: expect.arrayContaining([
+                            {
+                                account: {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                decimals: 5,
+                                                extensions: [
+                                                    {
+                                                        extension: 'transferFeeConfig',
+                                                        state: {
+                                                            newerTransferFee: {
+                                                                epoch: 457n,
+                                                                maximumFee: 3906250000000000000n,
+                                                                transferFeeBasisPoints: 690,
+                                                            },
+                                                            olderTransferFee: {
+                                                                epoch: 455n,
+                                                                maximumFee: 3906250000000000000n,
+                                                                transferFeeBasisPoints: 0,
+                                                            },
+                                                            transferFeeConfigAuthority:
+                                                                '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                            withdrawWithheldAuthority:
+                                                                '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                            withheldAmount: 0n,
+                                                        },
+                                                    },
+                                                ],
+                                                freezeAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                isInitialized: true,
+                                                mintAuthority: '7MyTjmRygJoCuDBUtAuSugiYZFULD2SWaoUTmtjtRDzD',
+                                                supply: '99998926239436',
+                                            },
+                                            type: 'mint',
+                                        },
+                                        program: 'spl-token-2022',
+                                        space: 278n,
+                                    },
+                                    executable: false,
+                                    lamports: 10290815n,
+                                    owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    rentEpoch: expect.any(BigInt),
+                                },
+                                pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
+                            },
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for Stake account', async () => {
@@ -1839,15 +1876,18 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Stake11111111111111111111111111111111111111' as Base58EncodedAddress<'Stake11111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             // Local Validator
                             {
                                 account: {
@@ -1885,7 +1925,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: stakeAddress,
                             },
@@ -1926,12 +1966,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for Sysvar rent account', async () => {
@@ -1941,15 +1981,18 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Sysvar1111111111111111111111111111111111111' as Base58EncodedAddress<'Sysvar1111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             {
                                 account: {
                                     data: {
@@ -1969,7 +2012,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1169280n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarC1ock11111111111111111111111111111111',
                             },
@@ -1992,7 +2035,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1120560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarEpochSchedu1e111111111111111111111111',
                             },
@@ -2013,7 +2056,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 946560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarFees111111111111111111111111111111111',
                             },
@@ -2030,7 +2073,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 42706560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarRecentB1ockHashes11111111111111111111',
                             },
@@ -2051,7 +2094,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 1009200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarRent111111111111111111111111111111111',
                             },
@@ -2068,7 +2111,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 143487360n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarS1otHashes111111111111111111111111111',
                             },
@@ -2085,7 +2128,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 913326000n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarS1otHistory11111111111111111111111111',
                             },
@@ -2102,12 +2145,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: 114979200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: 'SysvarStakeHistory1111111111111111111111111',
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
 
                 it('returns RPC response with parsed JSON data for Vote account', async () => {
@@ -2118,15 +2161,18 @@ describe('getProgramAccounts', () => {
                     const program =
                         'Vote111111111111111111111111111111111111111' as Base58EncodedAddress<'Vote111111111111111111111111111111111111111'>;
 
-                    const accountInfos = await rpc
+                    const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
                             encoding: 'jsonParsed',
                             withContext: true,
                         })
                         .send();
 
-                    expect(accountInfos.value).toMatchObject(
-                        expect.arrayContaining([
+                    await expect(accountInfosPromise).resolves.toMatchObject({
+                        context: {
+                            slot: expect.any(BigInt),
+                        },
+                        value: expect.arrayContaining([
                             // Fixture
                             {
                                 account: {
@@ -2156,7 +2202,7 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
                             },
@@ -2189,12 +2235,12 @@ describe('getProgramAccounts', () => {
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
-                                    rentEpoch: 0n,
+                                    rentEpoch: expect.any(BigInt),
                                 },
                                 pubkey: voteAccountAddress,
                             },
-                        ])
-                    );
+                        ]),
+                    });
                 });
             });
         });

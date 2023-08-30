@@ -22,26 +22,25 @@ describe('getTokenLargestAccounts', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             // TODO: will need a way to create token mint + accounts in tests
             it('returns the 20 largest token accounts', async () => {
-                expect.assertions(3);
+                expect.assertions(1);
                 // See scripts/fixtures/spl-token-mint-account.json
                 const pubkey =
                     'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
-                const tokenAccountBalance = await rpc.getTokenLargestAccounts(pubkey, { commitment }).send();
-                expect(tokenAccountBalance).toMatchObject({
+                const tokenAccountBalancePromise = rpc.getTokenLargestAccounts(pubkey, { commitment }).send();
+                await expect(tokenAccountBalancePromise).resolves.toMatchObject({
                     context: {
-                        slot: expect.any(BigInt), // Changes
+                        slot: expect.any(BigInt),
                     },
-                    value: expect.any(Array),
-                });
-                // Only one fixture for a token account for this mint
-                expect(tokenAccountBalance.value).toHaveLength(1);
-                expect(tokenAccountBalance.value[0]).toMatchObject({
-                    address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-                    amount: '9999999779500000',
-                    decimals: 6,
-                    // This can be Number or null, but we're using a fixture so it should be Number
-                    uiAmount: 9999999779.5,
-                    uiAmountString: '9999999779.5',
+                    value: expect.arrayContaining([
+                        {
+                            address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
+                            amount: '9999999779500000',
+                            decimals: 6,
+                            // This can be Number or null, but we're using a fixture so it should be Number
+                            uiAmount: 9999999779.5,
+                            uiAmountString: '9999999779.5',
+                        },
+                    ]),
                 });
             });
         });

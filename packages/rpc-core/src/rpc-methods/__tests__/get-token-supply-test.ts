@@ -25,8 +25,8 @@ describe('getTokenSupply', () => {
                 // See scripts/fixtures/spl-token-mint-account.json
                 const pubkey =
                     'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
-                const tokenAccountBalance = await rpc.getTokenSupply(pubkey, { commitment }).send();
-                expect(tokenAccountBalance).toMatchObject({
+                const tokenAccountBalancePromise = rpc.getTokenSupply(pubkey, { commitment }).send();
+                await expect(tokenAccountBalancePromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt), // Changes
                     },

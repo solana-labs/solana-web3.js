@@ -48,8 +48,8 @@ describe('getSlotLeader', () => {
                 // This will always be the local validator
                 it("returns the leader's address", async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader({ commitment }).send();
-                    expect(res).toEqual(await getValidatorAddress());
+                    const slotLeaderPromise = rpc.getSlotLeader({ commitment }).send();
+                    await expect(slotLeaderPromise).resolves.toEqual(await getValidatorAddress());
                 });
             });
 
@@ -57,8 +57,8 @@ describe('getSlotLeader', () => {
                 // This will always be the local validator
                 it("returns the leader's address", async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader({ commitment, minContextSlot: 0n }).send();
-                    expect(res).toEqual(await getValidatorAddress());
+                    const slotLeaderPromise = rpc.getSlotLeader({ commitment, minContextSlot: 0n }).send();
+                    await expect(slotLeaderPromise).resolves.toEqual(await getValidatorAddress());
                 });
             });
         });

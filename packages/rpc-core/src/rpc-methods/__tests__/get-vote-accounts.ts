@@ -20,8 +20,8 @@ describe('getVoteAccounts', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             it('returns current and delinquent vote accounts', async () => {
                 expect.assertions(1);
-                const voteAccounts = await rpc.getVoteAccounts().send();
-                expect(voteAccounts).toMatchObject({
+                const voteAccountsPromise = rpc.getVoteAccounts().send();
+                await expect(voteAccountsPromise).resolves.toMatchObject({
                     current: expect.arrayContaining([
                         {
                             // Fixture
