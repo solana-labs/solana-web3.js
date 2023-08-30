@@ -1,3 +1,5 @@
+import 'test-matchers/nullableBigInt';
+
 import { open } from 'node:fs/promises';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
@@ -1170,7 +1172,7 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.any(BigInt), // Changes
+                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
                                             },
                                             type: 'vote',
@@ -1203,7 +1205,7 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.any(BigInt), // Changes
+                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
                                             },
                                             type: 'vote',
@@ -2117,7 +2119,7 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.any(BigInt), // Changes
+                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
                                             },
                                             type: 'vote',
@@ -2150,7 +2152,7 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.any(BigInt), // Changes
+                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
                                             },
                                             type: 'vote',
