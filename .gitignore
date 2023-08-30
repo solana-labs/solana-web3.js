@@ -21,5 +21,6 @@ yarn-error.log*
 # Sapling SCM
 .sl
 
-# `solana-test-validator` ledger location
+# `solana-test-validator`
+.solana/
 test-ledger/
