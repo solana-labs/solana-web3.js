@@ -85,7 +85,6 @@
         "jest-runner-prettier": "^1.0.0",
         "prettier": "^2.8",
         "test-config": "workspace:*",
-        "test-matchers": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "7.2.0",
         "typescript": "^5.1.6",

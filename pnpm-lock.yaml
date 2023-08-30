@@ -736,9 +736,6 @@ importers:
       test-config:
         specifier: workspace:*
         version: link:../test-config
-      test-matchers:
-        specifier: workspace:*
-        version: link:../test-matchers
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig

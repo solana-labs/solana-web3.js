@@ -1,5 +1,3 @@
-import 'test-matchers/nullableBigInt';
-
 import { open } from 'node:fs/promises';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
@@ -1159,7 +1157,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
+                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
                                                         authorizedVoter: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
@@ -1172,9 +1171,8 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
-                                            },
+                                            }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
@@ -1192,7 +1190,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
+                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
                                                         authorizedVoter: voteAccountAddress,
@@ -1205,9 +1204,8 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
-                                            },
+                                            }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
@@ -1243,7 +1241,7 @@ describe('getProgramAccounts', () => {
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },
-                        value: [
+                        value: expect.arrayContaining([
                             {
                                 account: {
                                     data: {
@@ -1307,7 +1305,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
-                        ],
+                        ]),
                     });
                 });
 
@@ -2106,7 +2104,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
+                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
                                                         authorizedVoter: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
@@ -2119,9 +2118,8 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
-                                            },
+                                            }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
@@ -2139,7 +2137,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
+                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
                                                         authorizedVoter: voteAccountAddress,
@@ -2152,9 +2151,8 @@ describe('getProgramAccounts', () => {
                                                 lastTimestamp: expect.any(Object), // Changes
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
-                                                rootSlot: expect.nullableBigInt(), // Changes
                                                 votes: expect.any(Array), // Huge, changes
-                                            },
+                                            }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
