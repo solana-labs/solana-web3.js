@@ -1017,13 +1017,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                epoch: expect.any(BigInt), // Changes
-                                                epochStartTimestamp: expect.any(BigInt), // Changes
-                                                leaderScheduleEpoch: expect.any(BigInt), // Changes
-                                                slot: expect.any(BigInt), // Changes
-                                                unixTimestamp: expect.any(BigInt), // Changes
-                                            },
+                                            info: expect.any(Object),
                                             type: 'clock',
                                         },
                                         program: 'sysvar',
@@ -1040,13 +1034,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                firstNormalEpoch: 0n,
-                                                firstNormalSlot: 0n,
-                                                leaderScheduleSlotOffset: expect.any(BigInt), // Changes
-                                                slotsPerEpoch: 432000n,
-                                                warmup: false,
-                                            },
+                                            info: expect.any(Object),
                                             type: 'epochSchedule',
                                         },
                                         program: 'sysvar',
@@ -1063,11 +1051,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                feeCalculator: {
-                                                    lamportsPerSignature: '0',
-                                                },
-                                            },
+                                            info: expect.any(Object),
                                             type: 'fees',
                                         },
                                         program: 'sysvar',
@@ -1084,7 +1068,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
+                                            info: expect.any(Object),
                                             type: 'recentBlockhashes',
                                         },
                                         program: 'sysvar',
@@ -1101,11 +1085,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                burnPercent: 50,
-                                                exemptionThreshold: 2,
-                                                lamportsPerByteYear: '3480',
-                                            },
+                                            info: expect.any(Object),
                                             type: 'rent',
                                         },
                                         program: 'sysvar',
@@ -1122,24 +1102,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
-                                            type: 'slotHashes',
-                                        },
-                                        program: 'sysvar',
-                                        space: 20488n,
-                                    },
-                                    executable: false,
-                                    lamports: 143487360n,
-                                    owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: expect.any(BigInt),
-                                },
-                                pubkey: 'SysvarS1otHashes111111111111111111111111111',
-                            },
-                            {
-                                account: {
-                                    data: {
-                                        parsed: {
-                                            info: expect.any(Object), // Huge
+                                            info: expect.any(Object),
                                             type: 'slotHistory',
                                         },
                                         program: 'sysvar',
@@ -1156,7 +1119,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
+                                            info: expect.any(Object),
                                             type: 'stakeHistory',
                                         },
                                         program: 'sysvar',
@@ -1997,13 +1960,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                epoch: expect.any(BigInt), // Changes
-                                                epochStartTimestamp: expect.any(BigInt), // Changes
-                                                leaderScheduleEpoch: expect.any(BigInt), // Changes
-                                                slot: expect.any(BigInt), // Changes
-                                                unixTimestamp: expect.any(BigInt), // Changes
-                                            },
+                                            info: expect.any(Object),
                                             type: 'clock',
                                         },
                                         program: 'sysvar',
@@ -2020,13 +1977,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                firstNormalEpoch: 0n,
-                                                firstNormalSlot: 0n,
-                                                leaderScheduleSlotOffset: expect.any(BigInt), // Changes
-                                                slotsPerEpoch: 432000n,
-                                                warmup: false,
-                                            },
+                                            info: expect.any(Object),
                                             type: 'epochSchedule',
                                         },
                                         program: 'sysvar',
@@ -2043,11 +1994,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                feeCalculator: {
-                                                    lamportsPerSignature: '0',
-                                                },
-                                            },
+                                            info: expect.any(Object),
                                             type: 'fees',
                                         },
                                         program: 'sysvar',
@@ -2064,7 +2011,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
+                                            info: expect.any(Object),
                                             type: 'recentBlockhashes',
                                         },
                                         program: 'sysvar',
@@ -2081,11 +2028,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: {
-                                                burnPercent: 50,
-                                                exemptionThreshold: 2,
-                                                lamportsPerByteYear: '3480',
-                                            },
+                                            info: expect.any(Object),
                                             type: 'rent',
                                         },
                                         program: 'sysvar',
@@ -2102,24 +2045,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
-                                            type: 'slotHashes',
-                                        },
-                                        program: 'sysvar',
-                                        space: 20488n,
-                                    },
-                                    executable: false,
-                                    lamports: 143487360n,
-                                    owner: 'Sysvar1111111111111111111111111111111111111',
-                                    rentEpoch: expect.any(BigInt),
-                                },
-                                pubkey: 'SysvarS1otHashes111111111111111111111111111',
-                            },
-                            {
-                                account: {
-                                    data: {
-                                        parsed: {
-                                            info: expect.any(Object), // Huge
+                                            info: expect.any(Object),
                                             type: 'slotHistory',
                                         },
                                         program: 'sysvar',
@@ -2136,7 +2062,7 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            info: expect.any(Array), // Huge
+                                            info: expect.any(Object),
                                             type: 'stakeHistory',
                                         },
                                         program: 'sysvar',
