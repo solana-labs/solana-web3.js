@@ -18,7 +18,7 @@ type AdvanceNonceAccountInstruction<
     > &
     IInstructionWithData<AdvanceNonceAccountInstructionData>;
 type AdvanceNonceAccountInstructionData = Uint8Array & {
-    readonly __advanceNonceAccountInstructionData: unique symbol;
+    readonly __brand: unique symbol;
 };
 type DurableNonceConfig<
     TNonceAccountAddress extends string = string,
@@ -29,7 +29,7 @@ type DurableNonceConfig<
     readonly nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>;
     readonly nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>;
 }>;
-export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __nonce: unique symbol };
+export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __brand: unique symbol };
 type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
     nonce: Nonce<TNonceValue>;
 }>;

@@ -1,4 +1,4 @@
-export type UnixTimestamp = number & { readonly __unixTimestamp: unique symbol };
+export type UnixTimestamp = number & { readonly __brand: unique symbol };
 
 export function assertIsUnixTimestamp(putativeTimestamp: number): asserts putativeTimestamp is UnixTimestamp {
     // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_epoch_timestamps_and_invalid_date

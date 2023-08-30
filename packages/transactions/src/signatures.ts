@@ -5,7 +5,7 @@ import { CompiledMessage, compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
 
 export interface IFullySignedTransaction extends ITransactionWithSignatures {
-    readonly __fullySignedTransaction: unique symbol;
+    readonly __brand: unique symbol;
 }
 export interface ITransactionWithSignatures {
     readonly signatures: Readonly<Record<Base58EncodedAddress, Ed25519Signature>>;

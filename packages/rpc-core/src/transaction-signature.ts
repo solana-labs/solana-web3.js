@@ -1,6 +1,6 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
 
-export type TransactionSignature = string & { readonly __sig: unique symbol };
+export type TransactionSignature = string & { readonly __brand: unique symbol };
 
 export function assertIsTransactionSignature(
     putativeTransactionSignature: string
