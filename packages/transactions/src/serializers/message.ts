@@ -11,6 +11,7 @@ import {
 import { getBase58EncodedAddressCodec } from '@solana/addresses';
 
 import { CompiledMessage } from '../message';
+import { SerializedMessageBytes } from '../types';
 import { getAddressTableLookupCodec } from './address-table-lookup';
 import { getMessageHeaderCodec } from './header';
 import { getInstructionCodec } from './instruction';
@@ -42,9 +43,9 @@ function deserialize(bytes: Uint8Array, offset = 0): [CompiledMessage, number] {
     ];
 }
 
-function serialize(compiledMessage: CompiledMessage) {
+function serialize(compiledMessage: CompiledMessage): SerializedMessageBytes {
     if (compiledMessage.version === 'legacy') {
-        return struct(getPreludeStructSerializerTuple()).serialize(compiledMessage);
+        return struct(getPreludeStructSerializerTuple()).serialize(compiledMessage) as SerializedMessageBytes;
     } else {
         return mapSerializer(
             struct([
@@ -60,7 +61,7 @@ function serialize(compiledMessage: CompiledMessage) {
                     addressTableLookups: value.addressTableLookups ?? [],
                 } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
             }
-        ).serialize(compiledMessage);
+        ).serialize(compiledMessage) as SerializedMessageBytes;
     }
 }
 
