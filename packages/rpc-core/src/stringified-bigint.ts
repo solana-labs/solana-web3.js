@@ -1,4 +1,4 @@
-export type StringifiedBigInt = string & { readonly __bigint: unique symbol };
+export type StringifiedBigInt = string & { readonly __brand: unique symbol };
 
 export function assertIsStringifiedBigInt(putativeBigInt: string): asserts putativeBigInt is StringifiedBigInt {
     try {

@@ -1,4 +1,4 @@
-export type StringifiedNumber = string & { readonly __number: unique symbol };
+export type StringifiedNumber = string & { readonly __brand: unique symbol };
 
 export function assertIsStringifiedNumber(putativeNumber: string): asserts putativeNumber is StringifiedNumber {
     if (Number.isNaN(Number(putativeNumber))) {

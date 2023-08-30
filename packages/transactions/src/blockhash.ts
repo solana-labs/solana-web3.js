@@ -5,7 +5,7 @@ import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';
 
-export type Blockhash = string & { readonly __blockhash: unique symbol };
+export type Blockhash = string & { readonly __brand: unique symbol };
 
 type BlockhashLifetimeConstraint = Readonly<{
     blockhash: Blockhash;

@@ -1,7 +1,7 @@
 import { base58, Serializer, string } from '@metaplex-foundation/umi-serializers';
 
 export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
-    readonly __base58EncodedAddress: unique symbol;
+    readonly __brand: unique symbol;
 };
 
 export function assertIsBase58EncodedAddress(

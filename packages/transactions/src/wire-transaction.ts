@@ -1,7 +1,7 @@
 import { getTransactionEncoder } from './serializers/transaction';
 
 export type Base64EncodedWireTransaction = string & {
-    readonly __base64EncodedWireTransaction: unique symbol;
+    readonly __brand: unique symbol;
 };
 
 export function getBase64EncodedWireTransaction(

@@ -1,3 +1,3 @@
-export type KeyPathWildcard = { readonly __keyPathWildcard: unique symbol };
+export type KeyPathWildcard = { readonly __brand: unique symbol };
 
 export const KEYPATH_WILDCARD = {} as KeyPathWildcard;

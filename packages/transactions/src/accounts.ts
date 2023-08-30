@@ -30,7 +30,7 @@ type FeePayerAccountEntry = Omit<WritableSignerAccount, 'address'> & {
 type LookupTableAccountEntry = Omit<ReadonlyAccountLookup | WritableAccountLookup, 'address'> & {
     [TYPE]: AddressMapEntryType.LOOKUP_TABLE;
 };
-export type OrderedAccounts = (IAccountMeta | IAccountLookupMeta)[] & { readonly __orderedAccounts: unique symbol };
+export type OrderedAccounts = (IAccountMeta | IAccountLookupMeta)[] & { readonly __brand: unique symbol };
 type StaticAccountEntry = Omit<
     ReadonlyAccount | ReadonlySignerAccount | WritableAccount | WritableSignerAccount,
     'address'
