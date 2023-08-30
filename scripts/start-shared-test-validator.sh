@@ -7,7 +7,7 @@
 LOCK_DIR="/tmp/lock"
 EXCLUSIVE_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.exclusivelock"
 SHARED_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.sharedlock"
-TEST_VALIDATOR=$HOME/.local/share/solana/install/active_release/bin/solana-test-validator
+TEST_VALIDATOR=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/.solana/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
 FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
 
