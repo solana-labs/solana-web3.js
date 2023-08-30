@@ -78,12 +78,14 @@
         "jest-fetch-mock-fork": "^3.0.4",
         "jest-runner-eslint": "^2.1.0",
         "jest-runner-prettier": "^1.0.0",
+        "jest-websocket-mock": "^2.4.1",
         "prettier": "^2.8",
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "7.2.0",
         "typescript": "^5.1.6",
-        "version-from-git": "^1.1.1"
+        "version-from-git": "^1.1.1",
+        "ws-impl": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
