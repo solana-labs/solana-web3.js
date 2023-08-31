@@ -407,6 +407,7 @@ describe('getProgramAccounts', () => {
                                     data: {
                                         parsed: {
                                             info: {
+                                                // Token 2022 data account
                                                 programData: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                                             },
                                             type: 'program',
@@ -455,6 +456,7 @@ describe('getProgramAccounts', () => {
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
                                 },
+                                // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                             },
                         ])
@@ -1332,6 +1334,7 @@ describe('getProgramAccounts', () => {
                                     data: {
                                         parsed: {
                                             info: {
+                                                // Token 2022 data account
                                                 programData: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                                             },
                                             type: 'program',
@@ -1380,6 +1383,7 @@ describe('getProgramAccounts', () => {
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
                                 },
+                                // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                             },
                         ]),

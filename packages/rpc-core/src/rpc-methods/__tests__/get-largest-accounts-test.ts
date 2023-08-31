@@ -52,23 +52,12 @@ describe('getLargestAccounts', () => {
                     const faucetAddress = await getNodeAddress(faucetKeypairPath);
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
-                    // TODO: Test validator does not write this keypair to JSON
-                    // See solana-labs/solana/pull/33014
-                    const stakeAddress = expect.any(String);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment }).send();
                     await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
                             slot: expect.any(BigInt), // Changes
                         },
                         value: expect.arrayContaining([
-                            {
-                                address: expect.any(String), // Local keypair
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: stakeAddress,
-                                lamports: expect.any(BigInt), // Changes
-                            },
                             {
                                 address: voteAccountAddress,
                                 lamports: expect.any(BigInt), // Changes
@@ -79,22 +68,6 @@ describe('getLargestAccounts', () => {
                             },
                             {
                                 address: validatorAddress,
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'So11111111111111111111111111111111111111112',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                 lamports: expect.any(BigInt), // Changes
                             },
                         ]),
@@ -110,9 +83,6 @@ describe('getLargestAccounts', () => {
                     const faucetAddress = await getNodeAddress(faucetKeypairPath);
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
-                    // TODO: Test validator does not write this keypair to JSON
-                    // See solana-labs/solana/pull/33014
-                    const stakeAddress = expect.any(String);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
                     await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
@@ -120,14 +90,6 @@ describe('getLargestAccounts', () => {
                         },
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
-                            {
-                                address: expect.any(String), // Local keypair
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: stakeAddress,
-                                lamports: expect.any(BigInt), // Changes
-                            },
                             {
                                 address: voteAccountAddress,
                                 lamports: expect.any(BigInt), // Changes
@@ -138,22 +100,6 @@ describe('getLargestAccounts', () => {
                             },
                             {
                                 address: validatorAddress,
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'So11111111111111111111111111111111111111112',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                 lamports: expect.any(BigInt), // Changes
                             },
                         ]),
