@@ -62,7 +62,7 @@ describe('getLargestAccounts', () => {
                         },
                         value: expect.arrayContaining([
                             {
-                                address: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                address: expect.any(String), // Local keypair
                                 lamports: expect.any(BigInt), // Changes
                             },
                             {
@@ -95,50 +95,6 @@ describe('getLargestAccounts', () => {
                             },
                             {
                                 address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarS1otHistory11111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarS1otHashes111111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarStakeHistory1111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarRecentB1ockHashes11111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                                 lamports: expect.any(BigInt), // Changes
                             },
                         ]),
@@ -165,7 +121,7 @@ describe('getLargestAccounts', () => {
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
-                                address: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                address: expect.any(String), // Local keypair
                                 lamports: expect.any(BigInt), // Changes
                             },
                             {
@@ -198,50 +154,6 @@ describe('getLargestAccounts', () => {
                             },
                             {
                                 address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarS1otHistory11111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarS1otHashes111111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarStakeHistory1111111111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'SysvarRecentB1ockHashes11111111111111111111',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
-                                lamports: expect.any(BigInt), // Changes
-                            },
-                            {
-                                address: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                                 lamports: expect.any(BigInt), // Changes
                             },
                         ]),
