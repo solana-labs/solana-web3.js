@@ -1,6 +1,9 @@
 import WS from 'jest-websocket-mock';
+import { Client } from 'mock-socket';
 
 import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection';
+
+const MOCK_SEND_BUFFER_HIGH_WATERMARK = 42069;
 
 describe('RpcWebSocketConnection', () => {
     let abortController: AbortController;
@@ -16,6 +19,7 @@ describe('RpcWebSocketConnection', () => {
             jsonProtocol: true,
         });
         connection = await createWebSocketConnection({
+            sendBufferHighWatermark: MOCK_SEND_BUFFER_HIGH_WATERMARK,
             signal: abortController.signal,
             url: 'wss://fake',
         });
@@ -27,6 +31,7 @@ describe('RpcWebSocketConnection', () => {
     it('does not resolve until the socket is open', async () => {
         expect.assertions(2);
         const freshConnectionPromise = createWebSocketConnection({
+            sendBufferHighWatermark: 0,
             signal: abortController.signal,
             url: 'wss://fake',
         });
@@ -109,5 +114,56 @@ describe('RpcWebSocketConnection', () => {
         await ws.closed;
         expect(client).toHaveProperty('readyState', WebSocket.CLOSED);
         await expect(connection.send({ some: 'message' })).resolves.toBeUndefined();
+    });
+    describe('given the send buffer is filled past the high watermark', () => {
+        let client: Client;
+        let oldBufferedAmount: number;
+        beforeEach(async () => {
+            client = await ws.connected;
+            oldBufferedAmount = client.bufferedAmount;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (client as any).bufferedAmount = MOCK_SEND_BUFFER_HIGH_WATERMARK + 1;
+        });
+        afterEach(() => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (client as any).bufferedAmount = oldBufferedAmount;
+        });
+        it('queues messages until the buffer falls to the high watermark', async () => {
+            expect.assertions(2);
+            let resolved = false;
+            connection.send({ some: 'message' }).then(() => {
+                resolved = true;
+            });
+            await Promise.resolve(); // Flush Promise queue.
+            expect(resolved).toBe(false);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (client as any).bufferedAmount = MOCK_SEND_BUFFER_HIGH_WATERMARK;
+            await expect(ws).toReceiveMessage({ some: 'message' });
+        });
+        it('protects against modification of the message while queued', async () => {
+            expect.assertions(1);
+            const message = { some: 'message' };
+            connection.send(message);
+            message.some = 'modified message';
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (client as any).bufferedAmount = MOCK_SEND_BUFFER_HIGH_WATERMARK;
+            await expect(ws).toReceiveMessage({ some: 'message' });
+        });
+        it('fatals when the connection is closed while a message is queued', async () => {
+            expect.assertions(1);
+            const sendPromise = connection.send({ some: 'message' });
+            abortController.abort();
+            await expect(sendPromise).rejects.toThrow();
+        });
+        it('fatals when the connection encounters an error while a message is queued', async () => {
+            expect.assertions(1);
+            const sendPromise = connection.send({ some: 'message' });
+            ws.error({
+                code: 1006 /* abnormal closure */,
+                reason: 'o no',
+                wasClean: false,
+            });
+            await expect(sendPromise).rejects.toThrow();
+        });
     });
 });
