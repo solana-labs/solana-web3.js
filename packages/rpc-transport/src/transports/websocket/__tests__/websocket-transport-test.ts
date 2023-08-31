@@ -9,7 +9,10 @@ describe('createWebSocketTransport', () => {
     let ws: WS;
     beforeEach(() => {
         abortController = new AbortController();
-        transport = createWebSocketTransport({ url: 'wss://fake' });
+        transport = createWebSocketTransport({
+            sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+            url: 'wss://fake',
+        });
         ws = new WS('wss://fake', {
             jsonProtocol: true,
         });
@@ -36,7 +39,10 @@ describe('createWebSocketTransport', () => {
     });
     it('throws if the socket fails to construct because of a malformed URL', async () => {
         expect.assertions(1);
-        const badTransport = createWebSocketTransport({ url: 'https://notasocket' });
+        const badTransport = createWebSocketTransport({
+            sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+            url: 'https://notasocket',
+        });
         await expect(badTransport({ signal: abortController.signal })).rejects.toThrow();
     });
     it('throws if the socket fails to connect', async () => {

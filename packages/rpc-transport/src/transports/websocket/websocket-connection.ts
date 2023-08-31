@@ -1,6 +1,7 @@
 import WebSocket from 'ws-impl';
 
 type Config = Readonly<{
+    sendBufferHighWatermark: number;
     signal: AbortSignal;
     url: string;
 }>;
@@ -20,7 +21,11 @@ export type RpcWebSocketConnection = Readonly<{
     [Symbol.asyncIterator](): AsyncGenerator<unknown>;
 }>;
 
-export async function createWebSocketConnection({ signal, url }: Config): Promise<RpcWebSocketConnection> {
+export async function createWebSocketConnection({
+    sendBufferHighWatermark,
+    signal,
+    url,
+}: Config): Promise<RpcWebSocketConnection> {
     return new Promise((resolve, reject) => {
         signal.addEventListener('abort', handleAbort, { once: true });
         const iteratorState: Map<IteratorKey, IteratorState> = new Map();
@@ -30,6 +35,7 @@ export async function createWebSocketConnection({ signal, url }: Config): Promis
             }
         }
         function handleClose(ev: CloseEvent) {
+            bufferDrainWatcher?.onCancel();
             signal.removeEventListener('abort', handleAbort);
             webSocket.removeEventListener('close', handleClose);
             webSocket.removeEventListener('error', handleError);
@@ -54,11 +60,48 @@ export async function createWebSocketConnection({ signal, url }: Config): Promis
             }
         }
         let hasConnected = false;
+        let bufferDrainWatcher: Readonly<{ onCancel(): void; promise: Promise<void> }> | undefined;
         function handleOpen() {
             hasConnected = true;
             resolve({
                 async send(payload: unknown) {
                     const message = JSON.stringify(payload);
+                    if (
+                        !bufferDrainWatcher &&
+                        webSocket.readyState === WebSocket.OPEN &&
+                        webSocket.bufferedAmount > sendBufferHighWatermark
+                    ) {
+                        let onCancel: () => void;
+                        const promise = new Promise<void>((resolve, reject) => {
+                            const intervalId = setInterval(() => {
+                                if (
+                                    webSocket.readyState !== WebSocket.OPEN ||
+                                    !(webSocket.bufferedAmount > sendBufferHighWatermark)
+                                ) {
+                                    clearInterval(intervalId);
+                                    bufferDrainWatcher = undefined;
+                                    resolve();
+                                }
+                            }, 16);
+                            onCancel = () => {
+                                bufferDrainWatcher = undefined;
+                                clearInterval(intervalId);
+                                reject(
+                                    // TODO: Coded error
+                                    new Error('WebSocket was closed before payload could be sent')
+                                );
+                            };
+                        });
+                        bufferDrainWatcher = {
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            onCancel,
+                            promise,
+                        };
+                    }
+                    if (bufferDrainWatcher) {
+                        await bufferDrainWatcher.promise;
+                    }
                     webSocket.send(message);
                 },
                 async *[Symbol.asyncIterator]() {
