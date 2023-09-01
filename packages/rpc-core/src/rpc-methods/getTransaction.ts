@@ -9,6 +9,7 @@ import {
     Base64EncodedDataResponse,
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Reward,
     Slot,
     TokenAmount,
     U64UnsafeBeyond2Pow53Minus1,
@@ -25,32 +26,6 @@ type TokenBalance = Readonly<{
     programId?: Base58EncodedAddress;
     uiTokenAmount: TokenAmount;
 }>;
-
-type TransactionRewardBase = Readonly<{
-    /** The public key of the account that received the reward */
-    pubkey: Base58EncodedAddress;
-    /** number of reward lamports credited or debited by the account */
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    /** account balance in lamports after the reward was applied */
-    postBalance: LamportsUnsafeBeyond2Pow53Minus1;
-}>;
-
-type TransactionRewardWithoutCommission = TransactionRewardBase &
-    Readonly<{
-        /** type of reward */
-        rewardType: 'fee' | 'rent';
-    }>;
-
-/** Commission is present only for voting and staking rewards */
-type TransactionRewardWithCommission = TransactionRewardBase &
-    Readonly<{
-        /** type of reward */
-        rewardType: 'voting' | 'staking';
-        /** vote account commission when the reward was credited */
-        commission: number;
-    }>;
-
-type TransactionReward = TransactionRewardWithoutCommission | TransactionRewardWithCommission;
 
 /** @deprecated */
 type TransactionStatus = { Ok: null } | { Err: TransactionError };
@@ -78,7 +53,7 @@ type TransactionMetaBase = Readonly<{
     /** array of string log messages or null if log message recording was not enabled during this transaction */
     logMessages: readonly string[] | null;
     /** transaction-level rewards */
-    rewards: readonly TransactionReward[] | null;
+    rewards: readonly Reward[] | null;
     /**
      * Transaction status
      * @deprecated
