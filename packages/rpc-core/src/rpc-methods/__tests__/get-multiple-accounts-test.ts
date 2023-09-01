@@ -41,7 +41,7 @@ describe('getMultipleAccounts', () => {
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: ['dGVzdCBkYXRh', 'base64'],
                             executable: false,
@@ -56,7 +56,7 @@ describe('getMultipleAccounts', () => {
                             owner: '11111111111111111111111111111111',
                             rentEpoch: 18446744073709551616n, // TODO: This number loses precision
                         },
-                    ]),
+                    ],
                 });
             });
         });
@@ -226,11 +226,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -291,7 +292,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'AddressLookupTab1e1111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -307,11 +308,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -328,7 +330,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -344,11 +346,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -378,7 +381,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'Config1111111111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -394,11 +397,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -416,7 +420,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'Config1111111111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -432,11 +436,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -457,7 +462,7 @@ describe('getMultipleAccounts', () => {
                             owner: '11111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -473,11 +478,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -498,7 +504,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -514,11 +520,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -544,7 +551,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -560,11 +567,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -587,7 +595,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -603,11 +611,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -650,7 +659,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -666,11 +675,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -708,7 +718,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'Stake11111111111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -724,11 +734,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -747,7 +758,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'Sysvar1111111111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
 
@@ -763,11 +774,12 @@ describe('getMultipleAccounts', () => {
                     })
                     .send();
 
+                // Length 1
                 await expect(multipleAccountsPromise).resolves.toMatchObject({
                     context: {
                         slot: expect.any(BigInt),
                     },
-                    value: expect.arrayContaining([
+                    value: [
                         {
                             data: {
                                 parsed: {
@@ -1246,7 +1258,7 @@ describe('getMultipleAccounts', () => {
                             owner: 'Vote111111111111111111111111111111111111111',
                             rentEpoch: 0n,
                         },
-                    ]),
+                    ],
                 });
             });
         });
