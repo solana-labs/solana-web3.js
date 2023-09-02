@@ -7,6 +7,13 @@ type PDAInput = Readonly<{
     programAddress: Base58EncodedAddress;
     seeds: Seed[];
 }>;
+
+type SeedInput = Readonly<{
+    baseAddress: Base58EncodedAddress;
+    programAddress: Base58EncodedAddress;
+    seed: Seed;
+}>;
+
 type Seed = string | Uint8Array;
 
 const MAX_SEED_LENGTH = 32;
@@ -75,4 +82,35 @@ export async function getProgramDerivedAddress({ programAddress, seeds }: PDAInp
     }
     // TODO: Coded error.
     throw new Error('Unable to find a viable program address bump seed');
+}
+
+export async function createAddressWithSeed({
+    baseAddress,
+    programAddress,
+    seed,
+}: SeedInput): Promise<Base58EncodedAddress> {
+    const { serialize, deserialize } = getBase58EncodedAddressCodec();
+
+    const seedBytes = typeof seed === 'string' ? new TextEncoder().encode(seed) : seed;
+    if (seedBytes.byteLength > MAX_SEED_LENGTH) {
+        // TODO: Coded error.
+        throw new Error(`The seed exceeds the maximum length of 32 bytes`);
+    }
+
+    const programAddressBytes = serialize(programAddress);
+    if (
+        programAddressBytes.length >= PDA_MARKER_BYTES.length &&
+        programAddressBytes.slice(-PDA_MARKER_BYTES.length).every((byte, index) => byte === PDA_MARKER_BYTES[index])
+    ) {
+        // TODO: Coded error.
+        throw new Error(`programAddress cannot end with the PDA marker`);
+    }
+
+    const addressBytesBuffer = await crypto.subtle.digest(
+        'SHA-256',
+        new Uint8Array([...serialize(baseAddress), ...seedBytes, ...programAddressBytes])
+    );
+    const addressBytes = new Uint8Array(addressBytesBuffer);
+
+    return deserialize(addressBytes)[0];
 }
