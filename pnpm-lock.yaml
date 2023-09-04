@@ -572,8 +572,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       '@types/sinon-chai':
-        specifier: ^3.2.8
-        version: 3.2.8
+        specifier: ^3.2.9
+        version: 3.2.9
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.3.0
         version: 6.3.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
@@ -4227,8 +4227,8 @@ packages:
       '@types/node': 20.5.7
     dev: true
 
-  /@types/sinon-chai@3.2.8:
-    resolution: {integrity: sha512-d4ImIQbT/rKMG8+AXpmcan5T2/PNeSjrYhvkwet6z0p8kzYtfgA32xzOBlbU0yqJfq+/0Ml805iFoODO0LP5/g==}
+  /@types/sinon-chai@3.2.9:
+    resolution: {integrity: sha512-/19t63pFYU0ikrdbXKBWj9PCdnKyTd0Qkz0X91Ta081cYsq90OxYdcWwK/dwEoDa6dtXgj2HJfmzgq+QZTHdmQ==}
     dependencies:
       '@types/chai': 4.3.5
       '@types/sinon': 10.0.0
