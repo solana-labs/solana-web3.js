@@ -15,8 +15,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.3.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.2.3)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
       '@solana/prettier-config-solana':
-        specifier: ^0.0.2
-        version: 0.0.2(prettier@2.8.8)
+        specifier: ^0.0.3
+        version: 0.0.3(prettier@3.0.3)
       commitlint:
         specifier: ^17.6.7
         version: 17.6.7
@@ -3839,12 +3839,12 @@ packages:
       typescript: 5.1.6
     dev: true
 
-  /@solana/prettier-config-solana@0.0.2(prettier@2.8.8):
-    resolution: {integrity: sha512-F/e2UIJwb30Y8QjR9nr/OrJiCc8yjMkiP9Ctk4VYg+8jODNP31dx6s9mn4sbMFVYA0Km5EPZLN2xsZacBy0y/A==}
+  /@solana/prettier-config-solana@0.0.3(prettier@3.0.3):
+    resolution: {integrity: sha512-69lOncqTcp7Q/yQIU7R4/nQ6Ejir0TlYiUMcOM/z1PHsiDRF6qL+Jzfy8J9j5euDAR5VCoh0kM5lzaB/sdWgCA==}
     peerDependencies:
-      prettier: ^2.8.7
+      prettier: ^3.0.2
     dependencies:
-      prettier: 2.8.8
+      prettier: 3.0.3
     dev: true
 
   /@solana/spl-token@0.3.8(@solana/web3.js@1.77.3):
@@ -10007,6 +10007,12 @@ packages:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
+
+  /prettier@3.0.3:
+    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
 
   /pretty-format@27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}
