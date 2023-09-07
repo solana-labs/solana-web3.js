@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '../base58';
-import { getProgramDerivedAddress } from '../program-derived-address';
+import { createAddressWithSeed, getProgramDerivedAddress } from '../computed-address';
 
 describe('getProgramDerivedAddress()', () => {
     it('fatals when supplied more than 16 seeds', async () => {
@@ -138,4 +138,40 @@ describe('getProgramDerivedAddress()', () => {
     it.todo(
         'fatals when supplied a combination of program address and seeds for which no off-curve point can be found'
     );
+});
+
+describe('createAddressWithSeed', () => {
+    it('returns an address that is the SHA-256 hash of the concatenated base address, seed, and program address', async () => {
+        expect.assertions(2);
+        const baseAddress = 'Bh1uUDP3ApWLeccVNHwyQKpnfGQbuE2UECbGA6M4jiZJ' as Base58EncodedAddress;
+        const programAddress = 'FGrddpvjBUAG6VdV4fR8Q2hEZTHS6w4SEveVBgfwbfdm' as Base58EncodedAddress;
+        const expectedAddress = 'HUKxCeXY6gZohFJFARbLE6L6C9wDEHz1SfK8ENM7QY7z' as Base58EncodedAddress;
+
+        await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).resolves.toEqual(
+            expectedAddress
+        );
+
+        await expect(
+            createAddressWithSeed({ baseAddress, programAddress, seed: new Uint8Array([0x73, 0x65, 0x65, 0x64]) })
+        ).resolves.toEqual(expectedAddress);
+    });
+    it('fails when the seed is longer than 32 bytes', async () => {
+        expect.assertions(1);
+        const baseAddress = 'Bh1uUDP3ApWLeccVNHwyQKpnfGQbuE2UECbGA6M4jiZJ' as Base58EncodedAddress;
+        const programAddress = 'FGrddpvjBUAG6VdV4fR8Q2hEZTHS6w4SEveVBgfwbfdm' as Base58EncodedAddress;
+
+        await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'a'.repeat(33) })).rejects.toThrow(
+            'The seed exceeds the maximum length of 32 bytes'
+        );
+    });
+    it('fails with a malicious programAddress meant to produce an address that would collide with a PDA', async () => {
+        expect.assertions(1);
+        const baseAddress = 'Bh1uUDP3ApWLeccVNHwyQKpnfGQbuE2UECbGA6M4jiZJ' as Base58EncodedAddress;
+        // The ending bytes of this address decode to the ASCII string 'ProgramDerivedAddress'
+        const programAddress = '4vJ9JU1bJJE96FbKdjWme2JfVK1knU936FHTDZV7AC2' as Base58EncodedAddress;
+
+        await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).rejects.toThrow(
+            'programAddress cannot end with the PDA marker'
+        );
+    });
 });
