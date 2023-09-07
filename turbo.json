@@ -41,6 +41,10 @@
             "dependsOn": ["build", "^publish-packages"],
             "outputs": []
         },
+        "style:fix": {
+            "inputs": ["src/**"],
+            "outputs": []
+        },
         "test:lint": {
             "inputs": ["src/**", "test/**"],
             "outputs": []
