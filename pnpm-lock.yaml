@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   shelljs: '>=0.8.5'
@@ -538,6 +542,15 @@ importers:
       '@rollup/plugin-terser':
         specifier: ^0.4.3
         version: 0.4.3(rollup@3.27.2)
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
+      '@solana/rpc-core':
+        specifier: workspace:*
+        version: link:../rpc-core
+      '@solana/rpc-transport':
+        specifier: workspace:*
+        version: link:../rpc-transport
       '@solana/spl-token':
         specifier: ^0.3.8
         version: 0.3.8(@solana/web3.js@1.77.3)
@@ -11967,7 +11980,3 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

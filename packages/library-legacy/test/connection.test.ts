@@ -6004,7 +6004,7 @@ describe('Connection', function () {
             commitment: 'confirmed',
           }),
         ).to.be.rejectedWith(
-          'failed to get transaction: Transaction version (0) is not supported',
+          'failed to get transaction: JSON-RPC 2.0 error (-32015): Transaction version (0) is not supported',
         );
       });
 
