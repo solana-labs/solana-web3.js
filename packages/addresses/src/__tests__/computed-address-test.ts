@@ -167,6 +167,7 @@ describe('createAddressWithSeed', () => {
     it('fails with a malicious programAddress meant to produce an address that would collide with a PDA', async () => {
         expect.assertions(1);
         const baseAddress = 'Bh1uUDP3ApWLeccVNHwyQKpnfGQbuE2UECbGA6M4jiZJ' as Base58EncodedAddress;
+        // The ending bytes of this address decode to the ASCII string 'ProgramDerivedAddress'
         const programAddress = '4vJ9JU1bJJE96FbKdjWme2JfVK1knU936FHTDZV7AC2' as Base58EncodedAddress;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).rejects.toThrow(
