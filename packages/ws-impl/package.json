@@ -63,6 +63,6 @@
         "typescript": "^5.1.6"
     },
     "peerDependencies": {
-        "ws": "^8.13.0"
+        "ws": "^8.14.0"
     }
 }
