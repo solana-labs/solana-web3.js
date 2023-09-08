@@ -98,17 +98,15 @@ describe('RpcWebSocketConnection', () => {
         connection.send({ some: 'message' });
         await expect(ws).toReceiveMessage({ some: 'message' });
     });
-    // See https://github.com/thoov/mock-socket/pull/382
-    it.failing('does not fatal when sending a message to a closing connection', async () => {
-        expect.assertions(1);
+    it('does not fatal when sending a message to a closing connection', async () => {
+        expect.assertions(2);
         const client = getLatestClient();
         abortController.abort();
         expect(client).toHaveProperty('readyState', WebSocket.CLOSING);
         await expect(connection.send({ some: 'message' })).resolves.toBeUndefined();
     });
-    // See https://github.com/thoov/mock-socket/pull/382
-    it.failing('does not fatal when sending a message to a closed connection', async () => {
-        expect.assertions(1);
+    it('does not fatal when sending a message to a closed connection', async () => {
+        expect.assertions(2);
         const client = getLatestClient();
         abortController.abort();
         await ws.closed;

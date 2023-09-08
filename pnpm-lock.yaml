@@ -1,7 +1,12 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
+  mock-socket: ^9.3.0
   shelljs: '>=0.8.5'
 
 importers:
@@ -8614,7 +8619,7 @@ packages:
     resolution: {integrity: sha512-M/T3U5qYGoX69846gj1fFUCx8GeaOQRly2zu9mUzxDKU4iXceBwn4AHxxeCc7W6Wn98WxQNtfO+0gr7LYUGrzg==}
     dependencies:
       jest-diff: 29.6.1
-      mock-socket: 9.2.1
+      mock-socket: 9.3.0
     dev: true
 
   /jest-worker@27.5.1:
@@ -9272,8 +9277,8 @@ packages:
       yargs-unparser: 2.0.0
     dev: true
 
-  /mock-socket@9.2.1:
-    resolution: {integrity: sha512-aw9F9T9G2zpGipLLhSNh6ZpgUyUl4frcVmRN08uE1NWPWg43Wx6+sGPDbQ7E5iFZZDJW5b5bypMeAEHqTbIFag==}
+  /mock-socket@9.3.0:
+    resolution: {integrity: sha512-TFaQaIxXbzNke3z9nhSnMJFQn8l7QPmF+Luhh8MPHqkmr6B4fPquOTSILCjGUyxDBPv9AFxuaTGmRINDHDmkdQ==}
     engines: {node: '>= 8'}
     dev: true
 
@@ -11967,7 +11972,3 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

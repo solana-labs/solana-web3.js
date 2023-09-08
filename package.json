@@ -28,6 +28,7 @@
     "pnpm": {
         "overrides": {
             "jsdom": "^22",
+            "mock-socket": "^9.3.0",
             "shelljs": ">=0.8.5"
         }
     },
