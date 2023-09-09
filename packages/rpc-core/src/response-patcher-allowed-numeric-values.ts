@@ -67,7 +67,7 @@ export function getAllowedNumericKeypaths(): AllowedNumericKeypaths {
         ];
         memoizedKeypaths = {
             getAccountInfo: jsonParsedAccountsConfigs.map(c => ['value', ...c]),
-            getBlock: [['blockTime']],
+            getBlock: [['blockTime'], ['rewards', KEYPATH_WILDCARD, 'commission']],
             getBlockTime: [[]],
             getClusterNodes: [
                 [KEYPATH_WILDCARD, 'featureSet'],

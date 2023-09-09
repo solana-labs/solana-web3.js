@@ -11,24 +11,10 @@ import {
     LamportsUnsafeBeyond2Pow53Minus1,
     Reward,
     Slot,
-    TokenAmount,
+    TokenBalance,
+    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
-
-type TokenBalance = Readonly<{
-    /** Index of the account in which the token balance is provided for. */
-    accountIndex: number;
-    /** Pubkey of the token's mint. */
-    mint: Base58EncodedAddress;
-    /** Pubkey of token balance's owner. */
-    owner?: Base58EncodedAddress;
-    /** Pubkey of the Token program that owns the account. */
-    programId?: Base58EncodedAddress;
-    uiTokenAmount: TokenAmount;
-}>;
-
-/** @deprecated */
-type TransactionStatus = { Ok: null } | { Err: TransactionError };
 
 type ReturnData = {
     /** the program that generated the return data */

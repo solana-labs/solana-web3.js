@@ -2,6 +2,7 @@ import { Base58EncodedAddress } from '@solana/addresses';
 
 import { StringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber } from '../stringified-number';
+import { TransactionError } from '../transaction-error';
 
 export type Commitment = 'confirmed' | 'finalized' | 'processed';
 
@@ -32,7 +33,7 @@ export type U64UnsafeBeyond2Pow53Minus1 = bigint;
 // FIXME(solana-labs/solana/issues/30341) Beware that any value outside of range
 // +/- 9007199254740991 may be truncated or rounded because of a downcast to JavaScript `number`
 // between your calling code and the JSON-RPC transport.
-export type LamportsPlusOrMinusAsI64Unsafe = bigint;
+export type SignedLamportsAsI64Unsafe = bigint;
 
 // FIXME(solana-labs/solana/issues/30341)
 // <https://stackoverflow.com/questions/45929493/node-js-maximum-safe-floating-point-number/57225494#57225494>
@@ -114,6 +115,18 @@ export type TokenAmount = Readonly<{
     uiAmountString: StringifiedNumber;
 }>;
 
+export type TokenBalance = Readonly<{
+    /** Index of the account in which the token balance is provided for. */
+    accountIndex: number;
+    /** Pubkey of the token's mint. */
+    mint: Base58EncodedAddress;
+    /** Pubkey of token balance's owner. */
+    owner?: Base58EncodedAddress;
+    /** Pubkey of the Token program that owns the account. */
+    programId?: Base58EncodedAddress;
+    uiTokenAmount: TokenAmount;
+}>;
+
 type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
 
 export type TokenAccount = Readonly<{
@@ -133,7 +146,7 @@ type RewardBase = Readonly<{
     /** The public key of the account that received the reward */
     pubkey: Base58EncodedAddress;
     /** number of reward lamports credited or debited by the account */
-    lamports: LamportsPlusOrMinusAsI64Unsafe;
+    lamports: SignedLamportsAsI64Unsafe;
     /** account balance in lamports after the reward was applied */
     postBalance: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
@@ -152,3 +165,6 @@ export type Reward =
               /** vote account commission when the reward was credited */
               commission: number;
           }>);
+
+/** @deprecated */
+export type TransactionStatus = { Ok: null } | { Err: TransactionError };
