@@ -44,12 +44,14 @@ export function setTransactionLifetimeUsingBlockhash<TTransaction extends BaseTr
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Omit<TTransaction, keyof ITransactionWithSignatures | 'lifetimeConstraint'> & ITransactionWithBlockhashLifetime;
+
 export function setTransactionLifetimeUsingBlockhash<
     TTransaction extends BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithBlockhashLifetime;
+
 export function setTransactionLifetimeUsingBlockhash(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
