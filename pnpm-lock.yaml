@@ -750,6 +750,13 @@ importers:
         version: 1.1.1
 
   packages/rpc-transport:
+    dependencies:
+      node-fetch:
+        specifier: ^2.6.7
+        version: 2.6.12
+      ws:
+        specifier: ^8.14.0
+        version: 8.14.0
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
@@ -1015,8 +1022,8 @@ importers:
   packages/ws-impl:
     dependencies:
       ws:
-        specifier: ^8.13.0
-        version: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+        specifier: ^8.14.0
+        version: 8.14.0
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
@@ -11871,6 +11878,19 @@ packages:
     dependencies:
       bufferutil: 4.0.7
       utf-8-validate: 5.0.10
+
+  /ws@8.14.0:
+    resolution: {integrity: sha512-WR0RJE9Ehsio6U4TuM+LmunEsjQ5ncHlw4sn9ihD6RoJKZrVyH9FWV3dmnwu8B2aNib1OvG2X6adUCyFpQyWcg==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}
