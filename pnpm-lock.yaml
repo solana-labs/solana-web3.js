@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.0
@@ -616,8 +612,8 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0
       mockttp:
-        specifier: ^3.9.1
-        version: 3.9.1
+        specifier: ^3.9.2
+        version: 3.9.2
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -9287,8 +9283,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mockttp@3.9.1:
-    resolution: {integrity: sha512-KugYTPH0Cjc+T6Rn88lCDnms/Qs+E3x/fNqwRxrRQABmHTNIaINA6I8Xq1ij0BoNj9E+LBTgGG+LuAQ/g1xvEg==}
+  /mockttp@3.9.2:
+    resolution: {integrity: sha512-DM24cqpXr9PtSbIv12GxEYH0yHEa6m6V8Pnl29akbwarLvQnvIBkLAoFG0x9pkQl5H57T6qjpNWuoFsL9dD4sw==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     dependencies:
@@ -9326,7 +9322,7 @@ packages:
       performance-now: 2.1.0
       portfinder: 1.0.28
       read-tls-client-hello: 1.0.1
-      semver: 7.5.3
+      semver: 7.5.4
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.2
       uuid: 8.3.2
@@ -11990,3 +11986,7 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
