@@ -10,6 +10,7 @@ import {
     Base58EncodedBytes,
     Base64EncodedDataResponse,
     Commitment,
+    RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
@@ -73,7 +74,7 @@ type AccountsConfigWithBase64Encoding = Readonly<{
     };
 }>;
 
-type SimulateTransactionApiResponseBase = Readonly<{
+type SimulateTransactionApiResponseBase = RpcResponse<{
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
     /** Array of log messages the transaction instructions output during execution, null if simulation failed before the transaction was able to execute (for example due to an invalid blockhash or signature verification failure) */
@@ -89,7 +90,7 @@ type SimulateTransactionApiResponseBase = Readonly<{
     }> | null;
 }>;
 
-type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Readonly<{
+type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = RpcResponse<{
     /** Array of accounts with the same length as the `accounts.addresses` array in the request */
     accounts: (T | null)[];
 }>;
