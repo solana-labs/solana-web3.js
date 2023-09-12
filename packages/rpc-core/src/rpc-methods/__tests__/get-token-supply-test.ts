@@ -7,9 +7,6 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
-// See scripts/fixtures/spl-token-mint-account.json
-const tokenMintAddress = 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress;
-
 describe('getTokenSupply', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -25,17 +22,20 @@ describe('getTokenSupply', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             it('returns total token supply', async () => {
                 expect.assertions(1);
-                const tokenAccountBalancePromise = rpc.getTokenSupply(tokenMintAddress, { commitment }).send();
+                // See scripts/fixtures/spl-token-mint-account.json
+                const pubkey =
+                    'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+                const tokenAccountBalancePromise = rpc.getTokenSupply(pubkey, { commitment }).send();
                 await expect(tokenAccountBalancePromise).resolves.toMatchObject({
                     context: {
-                        slot: expect.any(BigInt),
+                        slot: expect.any(BigInt), // Changes
                     },
                     value: {
-                        amount: expect.any(String),
-                        decimals: expect.any(Number),
+                        amount: '1690580887590527729',
+                        decimals: 6,
                         // This can be Number or null, but we're using a fixture so it should be Number
-                        uiAmount: expect.any(Number),
-                        uiAmountString: expect.any(String),
+                        uiAmount: 1690580887590.5278,
+                        uiAmountString: '1690580887590.527729',
                     },
                 });
             });

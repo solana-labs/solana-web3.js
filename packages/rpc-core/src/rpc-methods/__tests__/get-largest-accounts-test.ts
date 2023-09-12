@@ -1,9 +1,37 @@
+import { open } from 'node:fs/promises';
+
+import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+
+const faucetKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/faucet-keypair.json');
+const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
+const voteAccountKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/vote-account-keypair.json');
+
+async function getNodeAddress(path: string) {
+    const file = await open(path);
+    try {
+        let secretKey: Uint8Array | undefined;
+        for await (const line of file.readLines({ encoding: 'binary' })) {
+            secretKey = new Uint8Array(JSON.parse(line));
+            break; // Only need the first line
+        }
+        if (secretKey) {
+            const publicKey = secretKey.slice(32, 64);
+            const expectedAddress = base58.deserialize(publicKey)[0];
+            return expectedAddress as Base58EncodedAddress;
+        }
+        throw new Error(`Failed to read keypair file \`${path}\``);
+    } finally {
+        await file.close();
+    }
+}
 
 describe('getLargestAccounts', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -21,15 +49,26 @@ describe('getLargestAccounts', () => {
             describe('when called without filter', () => {
                 it('returns a list of the largest accounts', async () => {
                     expect.assertions(1);
+                    const faucetAddress = await getNodeAddress(faucetKeypairPath);
+                    const validatorAddress = await getNodeAddress(validatorKeypairPath);
+                    const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment }).send();
                     await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
-                            slot: expect.any(BigInt),
+                            slot: expect.any(BigInt), // Changes
                         },
                         value: expect.arrayContaining([
                             {
-                                address: expect.any(String),
-                                lamports: expect.any(BigInt),
+                                address: voteAccountAddress,
+                                lamports: expect.any(BigInt), // Changes
+                            },
+                            {
+                                address: faucetAddress,
+                                lamports: expect.any(BigInt), // Changes
+                            },
+                            {
+                                address: validatorAddress,
+                                lamports: expect.any(BigInt), // Changes
                             },
                         ]),
                     });
@@ -37,17 +76,31 @@ describe('getLargestAccounts', () => {
             });
 
             describe('when called with the `circulating` filter', () => {
+                // TODO: This will always the same as above until we can mock
+                // non-circulating accounts with the test validator.
                 it('returns a list of the largest circulating accounts', async () => {
                     expect.assertions(1);
+                    const faucetAddress = await getNodeAddress(faucetKeypairPath);
+                    const validatorAddress = await getNodeAddress(validatorKeypairPath);
+                    const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
                     await expect(largestAcountsPromise).resolves.toMatchObject({
                         context: {
-                            slot: expect.any(BigInt),
+                            slot: expect.any(BigInt), // Changes
                         },
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
-                                address: expect.any(String),
-                                lamports: expect.any(BigInt),
+                                address: voteAccountAddress,
+                                lamports: expect.any(BigInt), // Changes
+                            },
+                            {
+                                address: faucetAddress,
+                                lamports: expect.any(BigInt), // Changes
+                            },
+                            {
+                                address: validatorAddress,
+                                lamports: expect.any(BigInt), // Changes
                             },
                         ]),
                     });

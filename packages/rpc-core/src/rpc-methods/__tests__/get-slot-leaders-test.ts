@@ -1,9 +1,35 @@
+import { open } from 'node:fs/promises';
+
+import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+
+const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
+
+async function getValidatorAddress() {
+    const file = await open(validatorKeypairPath);
+    try {
+        let secretKey: Uint8Array | undefined;
+        for await (const line of file.readLines({ encoding: 'binary' })) {
+            secretKey = new Uint8Array(JSON.parse(line));
+            break; // Only need the first line
+        }
+        if (secretKey) {
+            const publicKey = secretKey.slice(32, 64);
+            const expectedAddress = base58.deserialize(publicKey)[0];
+            return expectedAddress as Base58EncodedAddress;
+        }
+        throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
+    } finally {
+        await file.close();
+    }
+}
 
 describe('getSlotLeaders', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -17,13 +43,14 @@ describe('getSlotLeaders', () => {
     });
 
     describe('when called with a valid slot', () => {
+        // This will always be the local validator
         it('returns the node public keys', async () => {
             expect.assertions(2);
             const minimumLedgerSlot = (await rpc.minimumLedgerSlot().send()) as bigint;
 
             const result = await rpc.getSlotLeaders(minimumLedgerSlot, 3).send();
             expect(Array.isArray(result)).toBe(true);
-            expect(typeof result[0]).toBe('string');
+            expect(result[0]).toEqual(await getValidatorAddress());
         });
     });
 

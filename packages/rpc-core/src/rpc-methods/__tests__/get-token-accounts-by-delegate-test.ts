@@ -30,7 +30,7 @@ describe('getTokenAccountsByDelegate', () => {
                 const tokenProgram =
                     'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-                const accountInfoPromise = rpc
+                const accountInfosPromise = rpc
                     .getTokenAccountsByDelegate(
                         delegate,
                         { programId: tokenProgram },
@@ -41,22 +41,25 @@ describe('getTokenAccountsByDelegate', () => {
                     )
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
-                    context: expect.objectContaining({
+                await expect(accountInfosPromise).resolves.toMatchObject({
+                    context: {
                         slot: expect.any(BigInt),
-                    }),
-                    value: [
+                    },
+                    value: expect.arrayContaining([
                         {
                             account: {
-                                data: [expect.any(String), 'base64'],
-                                executable: expect.any(Boolean),
-                                lamports: expect.any(BigInt),
-                                owner: expect.any(String),
-                                rentEpoch: expect.any(BigInt),
+                                data: [
+                                    'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                                    'base64',
+                                ],
+                                executable: false,
+                                lamports: 10290815n,
+                                owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                rentEpoch: 0n,
                             },
-                            pubkey: expect.any(String),
+                            pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                         },
-                    ],
+                    ]),
                 });
             });
         });
@@ -138,7 +141,7 @@ describe('getTokenAccountsByDelegate', () => {
             const mint =
                 '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M' as Base58EncodedAddress<'4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M'>;
 
-            const accountInfoPromise = rpc
+            const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { mint },
@@ -148,18 +151,25 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
-                    expect.objectContaining({
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64'],
-                            executable: expect.any(Boolean),
-                            lamports: expect.any(BigInt),
-                            owner: expect.any(String),
-                            rentEpoch: expect.any(BigInt),
-                        }),
-                    }),
-                ],
+            await expect(accountInfosPromise).resolves.toMatchObject({
+                context: {
+                    slot: expect.any(BigInt),
+                },
+                value: expect.arrayContaining([
+                    {
+                        account: {
+                            data: [
+                                'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                                'base64',
+                            ],
+                            executable: false,
+                            lamports: 10290815n,
+                            owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            rentEpoch: 0n,
+                        },
+                        pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
+                    },
+                ]),
             });
         });
     });
@@ -238,7 +248,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -248,15 +258,25 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
+            await expect(accountInfosPromise).resolves.toMatchObject({
+                context: {
+                    slot: expect.any(BigInt),
+                },
+                value: expect.arrayContaining([
                     {
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64'],
-                        }),
-                        pubkey: expect.any(String),
+                        account: {
+                            data: [
+                                'MzQJGAUaL2fumioXGww9PVOXgMEaYSUPr/X0cUZdeAYsDL6z1hknAtbDjgZSI7IFX/T4ppGnUviTNyfH5/mUSwAQpdToAAAAAQAAAN++YxbNiIWM+zxxHYuV2FyrImZH2l93yTIUPo7gDw6JAQAAAAAAAAAAAAAAAADodkgXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+                                'base64',
+                            ],
+                            executable: false,
+                            lamports: 10290815n,
+                            owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            rentEpoch: 0n,
+                        },
+                        pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                     },
-                ],
+                ]),
             });
         });
     });
@@ -271,7 +291,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -281,15 +301,25 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
+            await expect(accountInfosPromise).resolves.toMatchObject({
+                context: {
+                    slot: expect.any(BigInt),
+                },
+                value: expect.arrayContaining([
                     {
-                        account: expect.objectContaining({
-                            data: [expect.any(String), 'base64+zstd'],
-                        }),
-                        pubkey: expect.any(String),
+                        account: {
+                            data: [
+                                'KLUv/QBY5QMANAczNAkYBRovZ+6aKhcbDD09U5eAwRphJQ+v9fRxRl14BiwMvrPWGScC1sOOBlIjsgVf9PimkadS+JM3J8fn+ZRLABCl1OgAAAABAAAA375jFs2IhYz7PHEdi5XYXKsiZkfaX3fJMhQ+juAPDokBAOh2SBcAAgDBoy4Hzg==',
+                                'base64+zstd',
+                            ],
+                            executable: false,
+                            lamports: 10290815n,
+                            owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            rentEpoch: 0n,
+                        },
+                        pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                     },
-                ],
+                ]),
             });
         });
     });
@@ -304,7 +334,7 @@ describe('getTokenAccountsByDelegate', () => {
             const tokenProgram =
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
-            const accountInfoPromise = rpc
+            const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
                     delegate,
                     { programId: tokenProgram },
@@ -314,40 +344,47 @@ describe('getTokenAccountsByDelegate', () => {
                 )
                 .send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
-                value: [
+            await expect(accountInfosPromise).resolves.toMatchObject({
+                context: {
+                    slot: expect.any(BigInt),
+                },
+                value: expect.arrayContaining([
                     {
-                        account: expect.objectContaining({
+                        account: {
                             data: {
                                 parsed: {
-                                    info: expect.objectContaining({
-                                        delegate,
+                                    info: {
+                                        delegate: 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL',
                                         delegatedAmount: {
-                                            amount: expect.any(String),
-                                            decimals: expect.any(Number),
-                                            uiAmount: expect.any(Number),
-                                            uiAmountString: expect.any(String),
+                                            amount: '100000000000',
+                                            decimals: 9,
+                                            uiAmount: 100,
+                                            uiAmountString: '100',
                                         },
-                                        isNative: expect.any(Boolean),
-                                        mint: expect.any(String),
-                                        owner: expect.any(String),
-                                        state: expect.any(String),
+                                        isNative: false,
+                                        mint: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
+                                        owner: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
+                                        state: 'initialized',
                                         tokenAmount: {
-                                            amount: expect.any(String),
-                                            decimals: expect.any(Number),
-                                            uiAmount: expect.any(Number),
-                                            uiAmountString: expect.any(String),
+                                            amount: '1000000000000',
+                                            decimals: 9,
+                                            uiAmount: 1000,
+                                            uiAmountString: '1000',
                                         },
-                                    }),
+                                    },
                                     type: 'account',
                                 },
                                 program: 'spl-token',
                                 space: 165n,
                             },
-                        }),
-                        pubkey: expect.any(String),
+                            executable: false,
+                            lamports: 10290815n,
+                            owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            rentEpoch: 0n,
+                        },
+                        pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                     },
-                ],
+                ]),
             });
         });
     });

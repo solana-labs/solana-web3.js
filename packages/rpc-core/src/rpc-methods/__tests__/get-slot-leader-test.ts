@@ -1,9 +1,35 @@
+import { open } from 'node:fs/promises';
+
+import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import path from 'path';
 
 import { Commitment, createSolanaRpcApi, SolanaRpcMethods } from '../index';
+
+const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
+
+async function getValidatorAddress() {
+    const file = await open(validatorKeypairPath);
+    try {
+        let secretKey: Uint8Array | undefined;
+        for await (const line of file.readLines({ encoding: 'binary' })) {
+            secretKey = new Uint8Array(JSON.parse(line));
+            break; // Only need the first line
+        }
+        if (secretKey) {
+            const publicKey = secretKey.slice(32, 64);
+            const expectedAddress = base58.deserialize(publicKey)[0];
+            return expectedAddress as Base58EncodedAddress;
+        }
+        throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
+    } finally {
+        await file.close();
+    }
+}
 
 describe('getSlotLeader', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -19,18 +45,20 @@ describe('getSlotLeader', () => {
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             describe('when called with no `minContextSlot`', () => {
-                it('returns the node public key', async () => {
+                // This will always be the local validator
+                it("returns the leader's address", async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader({ commitment }).send();
-                    expect(res).toEqual(expect.any(String));
+                    const slotLeaderPromise = rpc.getSlotLeader({ commitment }).send();
+                    await expect(slotLeaderPromise).resolves.toEqual(await getValidatorAddress());
                 });
             });
 
             describe('when called with a valid `minContextSlot`', () => {
-                it('returns the node public key', async () => {
+                // This will always be the local validator
+                it("returns the leader's address", async () => {
                     expect.assertions(1);
-                    const res = await rpc.getSlotLeader({ commitment, minContextSlot: 0n }).send();
-                    expect(res).toEqual(expect.any(String));
+                    const slotLeaderPromise = rpc.getSlotLeader({ commitment, minContextSlot: 0n }).send();
+                    await expect(slotLeaderPromise).resolves.toEqual(await getValidatorAddress());
                 });
             });
         });

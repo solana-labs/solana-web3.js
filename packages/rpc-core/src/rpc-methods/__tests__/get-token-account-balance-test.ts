@@ -7,9 +7,6 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
-// See scripts/fixtures/spl-token-token-account.json
-const tokenAccountAddress = 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Base58EncodedAddress;
-
 describe('getTokenAccountBalance', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -25,19 +22,19 @@ describe('getTokenAccountBalance', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             it('returns token account balance', async () => {
                 expect.assertions(1);
-                const tokenAccountBalancePromise = rpc
-                    .getTokenAccountBalance(tokenAccountAddress, { commitment })
-                    .send();
+                // See scripts/fixtures/spl-token-token-account.json
+                const publicKey =
+                    'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Base58EncodedAddress<'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca'>;
+                const tokenAccountBalancePromise = rpc.getTokenAccountBalance(publicKey, { commitment }).send();
                 await expect(tokenAccountBalancePromise).resolves.toMatchObject({
                     context: {
-                        slot: expect.any(BigInt),
+                        slot: expect.any(BigInt), // Changes
                     },
                     value: {
-                        amount: expect.any(String),
-                        decimals: expect.any(Number),
-                        // This can be Number or null, but we're using a fixture so it should be Number
-                        uiAmount: expect.any(Number),
-                        uiAmountString: expect.any(String),
+                        amount: '9999999779500000',
+                        decimals: 6,
+                        uiAmount: 9999999779.5,
+                        uiAmountString: '9999999779.5',
                     },
                 });
             });
