@@ -31,8 +31,8 @@ importers:
   packages/addresses:
     dependencies:
       '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.9
+        version: 0.8.9
       '@solana/assertions':
         specifier: workspace:*
         version: link:../assertions
@@ -669,8 +669,8 @@ importers:
   packages/rpc-core:
     dependencies:
       '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.9
+        version: 0.8.9
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
@@ -879,8 +879,8 @@ importers:
   packages/transactions:
     dependencies:
       '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.5
-        version: 0.8.5
+        specifier: ^0.8.9
+        version: 0.8.9
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
@@ -3287,40 +3287,40 @@ packages:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@metaplex-foundation/umi-options@0.8.5:
-    resolution: {integrity: sha512-MYLmc6SPkIIeiG7xReAxHyTRWrIvKNCgFExPtvBazggCYev9sLpTOD0RmV5iYL9M2JVEMMgNtN2iJmhIGsSYyg==}
+  /@metaplex-foundation/umi-options@0.8.9:
+    resolution: {integrity: sha512-jSQ61sZMPSAk/TXn8v8fPqtz3x8d0/blVZXLLbpVbo2/T5XobiI6/MfmlUosAjAUaQl6bHRF8aIIqZEFkJiy4A==}
     dev: false
 
-  /@metaplex-foundation/umi-public-keys@0.8.2:
-    resolution: {integrity: sha512-66ZXWJAFtdfc228q61fPtdi5o3ILqinhdf84rT2lYy21SzoLNcveqm4sbp5pDJ482hBU6xAs8W6xeGpzTTBRDw==}
+  /@metaplex-foundation/umi-public-keys@0.8.9:
+    resolution: {integrity: sha512-CxMzN7dgVGOq9OcNCJe2casKUpJ3RmTVoOvDFyeoTQuK+vkZ1YSSahbqC1iGuHEtKTLSjtWjKvUU6O7zWFTw3Q==}
     dependencies:
-      '@metaplex-foundation/umi-serializers-encodings': 0.8.2
+      '@metaplex-foundation/umi-serializers-encodings': 0.8.9
     dev: false
 
-  /@metaplex-foundation/umi-serializers-core@0.8.2:
-    resolution: {integrity: sha512-grncCh1iyMmoWuFowulLMaoQOdetnVVa+m7CXXxEQ340ygnH3ls8WWBHHnP338309DCsRN2J+pPbqwkOHF/3yA==}
+  /@metaplex-foundation/umi-serializers-core@0.8.9:
+    resolution: {integrity: sha512-WT82tkiYJ0Qmscp7uTj1Hz6aWQPETwaKLAENAUN5DeWghkuBKtuxyBKVvEOuoXerJSdhiAk0e8DWA4cxcTTQ/w==}
     dev: false
 
-  /@metaplex-foundation/umi-serializers-encodings@0.8.2:
-    resolution: {integrity: sha512-Em9oxKSHlY30upbQ40V5zV82+gIfKqYpcGkoHAM5ensDx6G0JKLthooazLdSp1hHOP5QfwOpL+Srj76MXyoq4Q==}
+  /@metaplex-foundation/umi-serializers-encodings@0.8.9:
+    resolution: {integrity: sha512-N3VWLDTJ0bzzMKcJDL08U3FaqRmwlN79FyE4BHj6bbAaJ9LEHjDQ9RJijZyWqTm0jE7I750fU7Ow5EZL38Xi6Q==}
     dependencies:
-      '@metaplex-foundation/umi-serializers-core': 0.8.2
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
     dev: false
 
-  /@metaplex-foundation/umi-serializers-numbers@0.8.2:
-    resolution: {integrity: sha512-STQEKGjkFXmG5okZHw9z3mXpHGf6SAcH5xr0K49mb5NIOY9icW9YZEVaccIhUpwYykMXgUI3IEetR2Rmrvhs0Q==}
+  /@metaplex-foundation/umi-serializers-numbers@0.8.9:
+    resolution: {integrity: sha512-NtBf1fnVNQJHFQjLFzRu2i9GGnigb9hOm/Gfrk628d0q0tRJB7BOM3bs5C61VAs7kJs4yd+pDNVAERJkknQ7Lg==}
     dependencies:
-      '@metaplex-foundation/umi-serializers-core': 0.8.2
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
     dev: false
 
-  /@metaplex-foundation/umi-serializers@0.8.5:
-    resolution: {integrity: sha512-mCOdcV2KfyFtf9zfA/4VXQR+QULQY0R76V9QISjOxf+b9ltxZy5q84VMuDLHTk12RTHnTaKnxrfk125acqaPpA==}
+  /@metaplex-foundation/umi-serializers@0.8.9:
+    resolution: {integrity: sha512-Sve8Etm3zqvLSUfza+MYRkjTnCpiaAFT7VWdqeHzA3n58P0AfT3p74RrZwVt/UFkxI+ln8BslwBDJmwzcPkuHw==}
     dependencies:
-      '@metaplex-foundation/umi-options': 0.8.5
-      '@metaplex-foundation/umi-public-keys': 0.8.2
-      '@metaplex-foundation/umi-serializers-core': 0.8.2
-      '@metaplex-foundation/umi-serializers-encodings': 0.8.2
-      '@metaplex-foundation/umi-serializers-numbers': 0.8.2
+      '@metaplex-foundation/umi-options': 0.8.9
+      '@metaplex-foundation/umi-public-keys': 0.8.9
+      '@metaplex-foundation/umi-serializers-core': 0.8.9
+      '@metaplex-foundation/umi-serializers-encodings': 0.8.9
+      '@metaplex-foundation/umi-serializers-numbers': 0.8.9
     dev: false
 
   /@noble/curves@1.0.0:

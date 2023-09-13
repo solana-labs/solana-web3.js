@@ -62,7 +62,7 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.5",
+        "@metaplex-foundation/umi-serializers": "^0.8.9",
         "@solana/addresses": "workspace:*",
         "@solana/keys": "workspace:*"
     },

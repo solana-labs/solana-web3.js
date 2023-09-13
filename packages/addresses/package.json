@@ -65,7 +65,7 @@
         "node": ">=17.4"
     },
     "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.5",
+        "@metaplex-foundation/umi-serializers": "^0.8.9",
         "@solana/assertions": "workspace:*"
     },
     "devDependencies": {
