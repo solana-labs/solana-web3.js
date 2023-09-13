@@ -649,21 +649,12 @@ export interface GetBlockApi {
     // transactionDetails=full (default), encoding=json (default), rewards=missing/true, maxSupportedTransactionVersion=missing
     getBlock(
         slot: Slot,
-        config: GetBlockCommonConfig &
+        config?: GetBlockCommonConfig &
             Readonly<{
                 encoding?: 'json';
                 rewards?: boolean;
                 transactionDetails?: 'full';
             }>
-    ):
-        | (GetBlockApiResponseBase &
-              GetBlockApiResponseWithRewards &
-              GetBlockApiResponseWithTransactions<TransactionForFullJson<void>>)
-        | null;
-    // Optional configs
-    getBlock(
-        slot: Slot,
-        config?: GetBlockCommonConfig
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
