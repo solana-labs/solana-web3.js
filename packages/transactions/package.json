@@ -71,7 +71,7 @@
         "@solana/instructions": "workspace:*",
         "@swc/jest": "^0.2.28",
         "@types/jest": "^29.5.3",
-        "@typescript-eslint/eslint-plugin": "^6.3.0",
+        "@typescript-eslint/eslint-plugin": "^6.7.0",
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
         "build-scripts": "workspace:*",
