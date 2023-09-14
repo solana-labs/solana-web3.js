@@ -11,13 +11,23 @@ export interface ITransactionWithFeePayer<TAddress extends string = string> {
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayer: Base58EncodedAddress<TFeePayerAddress>,
     transaction:
+        | (TTransaction & ITransactionWithSignatures)
+        | (TTransaction & ITransactionWithFeePayer<TFeePayerAddress> & ITransactionWithSignatures)
+): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithFeePayer<TFeePayerAddress>;
+
+export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
+    feePayer: Base58EncodedAddress<TFeePayerAddress>,
+    transaction: TTransaction | (TTransaction & ITransactionWithFeePayer<TFeePayerAddress>)
+): TTransaction & ITransactionWithFeePayer<TFeePayerAddress>;
+
+export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
+    feePayer: Base58EncodedAddress<TFeePayerAddress>,
+    transaction:
         | TTransaction
         | (TTransaction & ITransactionWithFeePayer<TFeePayerAddress>)
         | (TTransaction & ITransactionWithSignatures)
         | (TTransaction & ITransactionWithFeePayer<TFeePayerAddress> & ITransactionWithSignatures)
-):
-    | (TTransaction & ITransactionWithFeePayer<TFeePayerAddress>)
-    | (Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithFeePayer<TFeePayerAddress>) {
+) {
     if ('feePayer' in transaction && feePayer === transaction.feePayer) {
         return transaction;
     }
