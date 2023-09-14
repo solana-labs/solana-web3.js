@@ -1,4 +1,5 @@
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
+import { Commitment, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetMinimumBalanceForRentExemptionApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
 

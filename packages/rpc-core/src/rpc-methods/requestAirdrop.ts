@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Base58EncodedTransactionSignature, Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from './common';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
+import { Base58EncodedTransactionSignature, Commitment } from './common';
 
 type RequestAirdropConfig = Readonly<{
     commitment?: Commitment;

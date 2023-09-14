@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { TransactionError } from '../transaction-error';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
@@ -8,7 +9,6 @@ import {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Commitment,
-    LamportsUnsafeBeyond2Pow53Minus1,
     Reward,
     Slot,
     TokenBalance,
