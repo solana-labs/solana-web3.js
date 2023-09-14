@@ -7,7 +7,7 @@ import {
     setTransactionLifetimeUsingBlockhash,
 } from '@solana/transactions';
 
-import { pipeTransaction } from '../pipe';
+import { pipe } from '../pipe';
 
 const feePayer =
     '2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2' as Base58EncodedAddress<'2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2'>;
@@ -37,15 +37,15 @@ function setBlockhashAgain<T extends BaseTransaction>(tx: T) {
     return setTransactionLifetimeUsingBlockhash(secondBlockhashLifetime, tx);
 }
 
-describe('`pipeTransaction`', () => {
-    describe('using `pipeTransaction()` with pre-built setup functions', () => {
+describe('`pipe`', () => {
+    describe('using `pipe()` with pre-built setup functions', () => {
         it('can create a transaction', () => {
             expect.assertions(2);
-            const tx1 = pipeTransaction(
+            const tx1 = pipe(
                 //
                 createTransaction({ version: 'legacy' })
             );
-            const tx2 = pipeTransaction(
+            const tx2 = pipe(
                 //
                 createTransaction({ version: 0 })
             );
@@ -54,7 +54,7 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction and set the fee payer', () => {
             expect.assertions(2);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 setFeePayer
@@ -64,12 +64,12 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction and set a recent blockhash', () => {
             expect.assertions(4);
-            const tx1 = pipeTransaction(
+            const tx1 = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 setBlockhash
             );
-            const tx2 = pipeTransaction(
+            const tx2 = pipe(
                 //
                 createTransaction({ version: 0 }),
                 setBlockhash
@@ -81,7 +81,7 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction, set the fee payer, then set a recent blockhash', () => {
             expect.assertions(3);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 setFeePayer,
@@ -93,20 +93,20 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction, set a recent blockhash, then set the fee payer', () => {
             expect.assertions(3);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 setBlockhash,
                 setFeePayer
             );
-            expect(tx.version).toBe(0);
+            expect(tx.version).toBe('legacy');
             expect(tx.lifetimeConstraint).toBe(blockhashLifetime);
             expect(tx.feePayer).toBe(feePayer);
         });
         describe('when more than one fee payer is set in the same pipe', () => {
             it('uses the last fee payer', () => {
                 expect.assertions(3);
-                const tx = pipeTransaction(
+                const tx = pipe(
                     //
                     createTransaction({ version: 'legacy' }),
                     setFeePayer,
@@ -121,7 +121,7 @@ describe('`pipeTransaction`', () => {
         describe('when more than one blockhash is set in the same pipe', () => {
             it('uses the last blockhash', () => {
                 expect.assertions(3);
-                const tx = pipeTransaction(
+                const tx = pipe(
                     //
                     createTransaction({ version: 'legacy' }),
                     setBlockhash,
@@ -135,10 +135,10 @@ describe('`pipeTransaction`', () => {
         });
     });
 
-    describe('using `pipeTransactionTransaction()` with arrow functions', () => {
+    describe('using `pipeTransaction()` with arrow functions', () => {
         it('can create a transaction and set the fee payer', () => {
             expect.assertions(2);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 tx => setTransactionFeePayer(feePayer, tx)
@@ -148,7 +148,7 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction and set a recent blockhash', () => {
             expect.assertions(2);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 tx => setTransactionLifetimeUsingBlockhash(blockhashLifetime, tx)
@@ -159,7 +159,7 @@ describe('`pipeTransaction`', () => {
 
         it('can create a transaction, set the fee payer, then set a recent blockhash', () => {
             expect.assertions(3);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 tx => setTransactionFeePayer(feePayer, tx),
@@ -171,7 +171,7 @@ describe('`pipeTransaction`', () => {
         });
         it('can create a transaction, set a recent blockhash, then set the fee payer', () => {
             expect.assertions(3);
-            const tx = pipeTransaction(
+            const tx = pipe(
                 //
                 createTransaction({ version: 'legacy' }),
                 tx => setTransactionLifetimeUsingBlockhash(blockhashLifetime, tx),
@@ -184,7 +184,7 @@ describe('`pipeTransaction`', () => {
         describe('when more than one fee payer is set in the same pipe', () => {
             it('uses the last fee payer', () => {
                 expect.assertions(3);
-                const tx = pipeTransaction(
+                const tx = pipe(
                     //
                     createTransaction({ version: 'legacy' }),
                     tx => setTransactionFeePayer(feePayer, tx),
@@ -199,7 +199,7 @@ describe('`pipeTransaction`', () => {
         describe('when more than one blockhash is set in the same pipe', () => {
             it('uses the last blockhash', () => {
                 expect.assertions(3);
-                const tx = pipeTransaction(
+                const tx = pipe(
                     //
                     createTransaction({ version: 'legacy' }),
                     tx => setTransactionLifetimeUsingBlockhash(blockhashLifetime, tx),
