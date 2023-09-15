@@ -1,4 +1,4 @@
-import { IRpcTransport } from './transports/transport-types';
+import { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-types';
 
 /**
  * Public RPC API.
@@ -8,10 +8,20 @@ export type IRpcApi<TRpcMethods> = {
         ? (...rawParams: unknown[]) => RpcRequest<ReturnType<TRpcMethods[MethodName]>>
         : never;
 };
+export type IRpcSubscriptionsApi<TRpcMethods> = {
+    [MethodName in keyof TRpcMethods]: TRpcMethods[MethodName] extends Callable
+        ? (...rawParams: unknown[]) => RpcSubscription<ReturnType<TRpcMethods[MethodName]>>
+        : never;
+};
 export type Rpc<TRpcMethods> = RpcMethods<TRpcMethods>;
+export type RpcSubscriptions<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods>;
 export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
     transport: IRpcTransport;
+}>;
+export type RpcSubscriptionConfig<TRpcMethods> = Readonly<{
+    api: IRpcSubscriptionsApi<TRpcMethods>;
+    transport: IRpcWebSocketTransport;
 }>;
 
 /**
@@ -22,10 +32,22 @@ export type RpcRequest<TResponse> = {
     params: unknown[];
     responseProcessor?: (response: unknown) => TResponse;
 };
+export type RpcSubscription<TResponse> = {
+    params: unknown[];
+    responseProcessor?: (response: unknown) => TResponse;
+    subscribeMethodName: string;
+    unsubscribeMethodName: string;
+};
 export type PendingRpcRequest<TResponse> = {
     send(options?: SendOptions): Promise<TResponse>;
 };
+export type PendingRpcSubscription<TNotification> = {
+    subscribe(options?: SubscribeOptions): Promise<AsyncIterable<TNotification>>;
+};
 export type SendOptions = Readonly<{
+    abortSignal?: AbortSignal;
+}>;
+export type SubscribeOptions = Readonly<{
     abortSignal?: AbortSignal;
 }>;
 
@@ -35,6 +57,11 @@ export type SendOptions = Readonly<{
 type RpcMethods<TRpcMethods> = {
     [TMethodName in keyof TRpcMethods]: PendingRpcRequestBuilder<ApiMethodImplementations<TRpcMethods, TMethodName>>;
 };
+type RpcSubscriptionMethods<TRpcSubscriptionMethods> = {
+    [TMethodName in keyof TRpcSubscriptionMethods]: PendingRpcSubscriptionBuilder<
+        ApiMethodImplementations<TRpcSubscriptionMethods, TMethodName>
+    >;
+};
 type ApiMethodImplementations<TRpcMethods, TMethod extends keyof TRpcMethods> = Overloads<TRpcMethods[TMethod]>;
 type PendingRpcRequestBuilder<TMethodImplementations> = UnionToIntersection<
     Flatten<{
@@ -43,6 +70,16 @@ type PendingRpcRequestBuilder<TMethodImplementations> = UnionToIntersection<
             ? (
                   ...args: Parameters<TMethodImplementations[P]>
               ) => PendingRpcRequest<ReturnType<TMethodImplementations[P]>>
+            : never;
+    }>
+>;
+type PendingRpcSubscriptionBuilder<TSubscriptionMethodImplementations> = UnionToIntersection<
+    Flatten<{
+        // Check that this property of the TRpcSubscriptionMethods interface is, in fact, a function.
+        [P in keyof TSubscriptionMethodImplementations]: TSubscriptionMethodImplementations[P] extends Callable
+            ? (
+                  ...args: Parameters<TSubscriptionMethodImplementations[P]>
+              ) => PendingRpcSubscription<ReturnType<TSubscriptionMethodImplementations[P]>>
             : never;
     }>
 >;
