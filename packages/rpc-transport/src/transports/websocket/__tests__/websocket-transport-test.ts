@@ -1,54 +1,119 @@
-import WS from 'jest-websocket-mock';
-
 import { IRpcWebSocketTransport } from '../../transport-types';
+import { createWebSocketConnection } from '../websocket-connection';
 import { createWebSocketTransport } from '../websocket-transport';
 
+jest.mock('../websocket-connection');
+
 describe('createWebSocketTransport', () => {
+    it.each(['gopher://', 'http://', 'https://', 'mailto:'])('throws if the URL begins with `%s`', protocol => {
+        expect(() => {
+            createWebSocketTransport({
+                sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+                url: `${protocol}socket`,
+            });
+        }).toThrow(`'${protocol.split(':')[0]}:' is not allowed`);
+    });
+    it('throws if the URL has no protocol', () => {
+        expect(() => {
+            createWebSocketTransport({
+                sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+                url: `garbage`,
+            });
+        }).toThrow("'garbage' is invalid");
+    });
+    it.each(['ws://', 'wss://', 'ws:', 'wss:', 'wS://', 'wSs://'])(
+        'does not throw if the URL begins with `%s`',
+        protocol => {
+            expect(() => {
+                createWebSocketTransport({
+                    sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+                    url: `${protocol}socket`,
+                });
+            }).not.toThrow();
+        }
+    );
+});
+
+describe('IRpcWebSocketTransport', () => {
     let abortController: AbortController;
-    let transport: IRpcWebSocketTransport;
-    let ws: WS;
-    beforeEach(() => {
+    let iterator: jest.Mock;
+    let send: jest.Mock;
+    let sendWebSocketMessage: IRpcWebSocketTransport;
+    beforeEach(async () => {
         abortController = new AbortController();
-        transport = createWebSocketTransport({
+        iterator = jest.fn();
+        send = jest.fn();
+        jest.mocked(createWebSocketConnection).mockResolvedValue({
+            [Symbol.asyncIterator]: iterator,
+            send,
+        });
+        sendWebSocketMessage = createWebSocketTransport({
             sendBufferHighWatermark: Number.POSITIVE_INFINITY,
             url: 'wss://fake',
         });
-        ws = new WS('wss://fake', {
-            jsonProtocol: true,
-        });
     });
-    afterEach(() => {
-        WS.clean();
-    });
-    it('connects to the server', async () => {
+    it('creates a connection when called', () => {
         expect.assertions(1);
-        transport({ signal: abortController.signal });
-        await expect(ws.connected).resolves.toMatchObject({ readyState: WebSocket.OPEN });
+        sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
+        expect(createWebSocketConnection).toHaveBeenCalled();
     });
     it('suspends until the socket is connected', async () => {
         expect.assertions(2);
-        const transportPromise = transport({ signal: abortController.signal });
-        expect(ws.server.clients()[0]).toHaveProperty('readyState', WebSocket.CONNECTING);
-        await transportPromise;
-        expect(ws.server.clients()[0]).toHaveProperty('readyState', WebSocket.OPEN);
+        let resolveConnection: CallableFunction;
+        jest.mocked(createWebSocketConnection).mockReturnValue(
+            new Promise(r => {
+                resolveConnection = r;
+            })
+        );
+        const transportPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
+        await expect(Promise.race([transportPromise, 'pending'])).resolves.toBe('pending');
+        // https://github.com/microsoft/TypeScript/issues/11498
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        resolveConnection({
+            [Symbol.asyncIterator]: iterator,
+            send,
+        });
+        await Promise.resolve(); // Advance past the connection promise.
+        await Promise.resolve(); // Advance past the `send()` promise.
+        await expect(Promise.race([transportPromise, 'pending'])).resolves.not.toBe('pending');
     });
-    it('throws synchronously if the signal is already aborted', async () => {
+    it('forwards messages to the underlying connection', async () => {
+        expect.assertions(1);
+        const connection = await sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
+        send.mockClear();
+        connection.send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED('ping');
+        expect(send).toHaveBeenCalledWith('ping');
+    });
+    it('throws if the signal is already aborted', async () => {
         expect.assertions(1);
         abortController.abort();
-        await expect(transport({ signal: abortController.signal })).rejects.toThrow('operation was aborted');
+        await expect(sendWebSocketMessage({ payload: 'hello', signal: abortController.signal })).rejects.toThrow(
+            'operation was aborted'
+        );
     });
-    it('throws if the socket fails to construct because of a malformed URL', async () => {
+    it('throws if the signal is aborted after the socket connects but before the message is sent', async () => {
         expect.assertions(1);
-        const badTransport = createWebSocketTransport({
-            sendBufferHighWatermark: Number.POSITIVE_INFINITY,
-            url: 'https://notasocket',
+        jest.mocked(createWebSocketConnection).mockImplementation(async () => {
+            abortController.abort();
+            return {
+                [Symbol.asyncIterator]: iterator,
+                send,
+            };
         });
-        await expect(badTransport({ signal: abortController.signal })).rejects.toThrow();
+        const sendPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
+        await expect(sendPromise).rejects.toThrow('operation was aborted');
+    });
+    it('throws if the send fatals', async () => {
+        expect.assertions(1);
+        send.mockRejectedValue(new Error('o no'));
+        const sendPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
+        await expect(sendPromise).rejects.toThrow();
     });
     it('throws if the socket fails to connect', async () => {
         expect.assertions(1);
-        const connectionPromise = transport({ signal: abortController.signal });
-        ws.error({ code: 1006, reason: 'o no', wasClean: false });
+        jest.mocked(createWebSocketConnection).mockRejectedValue(new Error('o no'));
+        const connectionPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
         await expect(connectionPromise).rejects.toThrow();
     });
 });
