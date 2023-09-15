@@ -1,5 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { StringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber } from '../stringified-number';
 import { TransactionError } from '../transaction-error';
@@ -10,11 +11,6 @@ export type DataSlice = Readonly<{
     offset: number;
     length: number;
 }>;
-
-// FIXME(solana-labs/solana/issues/30341) Beware that any value above 9007199254740991 may be
-// truncated or rounded because of a downcast to JavaScript `number` between your calling code and
-// the JSON-RPC transport.
-export type LamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __brand: unique symbol };
 
 // FIXME(solana-labs/solana/issues/30341) Beware that any value above 9007199254740991 may be
 // truncated or rounded because of a downcast to JavaScript `number` between your calling code and

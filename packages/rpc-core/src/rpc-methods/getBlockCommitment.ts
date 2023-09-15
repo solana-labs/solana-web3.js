@@ -1,4 +1,5 @@
-import { LamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
+import { Slot } from './common';
 
 type GetBlockCommitmentApiResponse = Readonly<{
     commitment: LamportsUnsafeBeyond2Pow53Minus1[] | null;

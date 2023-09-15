@@ -2,13 +2,13 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '../../lamports';
 import { TransactionError } from '../../transaction-error';
 import { SolanaRpcMethods } from '..';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
-    LamportsUnsafeBeyond2Pow53Minus1,
     Reward,
     TokenBalance,
     TransactionStatus,
