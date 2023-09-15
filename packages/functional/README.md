@@ -21,4 +21,4 @@ is also exported as part of the Solana JavaScript SDK
 
 ## Functions
 
-- `pipe`: A functional utility function for piping a value through various functions
+`pipe`: A functional utility function for piping a value through various functions

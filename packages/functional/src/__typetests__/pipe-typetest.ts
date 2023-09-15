@@ -290,3 +290,24 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
     value satisfies { a: number; b?: string; c?: boolean };
     assertNotAProperty(value, 'd');
 }
+
+// Nested pipes
+{
+    const value = pipe(
+        { a: 1 },
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true }),
+        value => ({ ...value, d: pipe({}, value => ({ ...value, e: 1 })) })
+    );
+    value satisfies { a: number; b?: string; c?: boolean; d: { e: number } };
+}
+{
+    const value = pipe(
+        { a: 1 },
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true }),
+        value => ({ ...value, d: pipe({}, value => ({ ...value, e: 1 })) }),
+        value => ({ ...value, d: pipe(value.d, value => ({ ...value, f: 'test' })) })
+    );
+    value satisfies { a: number; b?: string; c?: boolean; d: { e: number; f: string } };
+}

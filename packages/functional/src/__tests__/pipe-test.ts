@@ -262,4 +262,121 @@ describe('pipe', () => {
             ).toThrow('test error');
         });
     });
+    describe('nested pipes', () => {
+        it('can pipe a single value from a nested pipe of a single value', () => {
+            expect.assertions(1);
+            expect(pipe(pipe(pipe(1)))).toBe(1);
+        });
+        it('can pipe a single value from a nested pipe of multiple functions', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    pipe(
+                        pipe(
+                            1,
+                            value => value + 1,
+                            value => value * 2,
+                            value => value - 1
+                        )
+                    )
+                )
+            ).toBe(3);
+        });
+        it('can pipe multiple functions on a nested pipe of multiple functions', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    pipe(
+                        pipe(
+                            1,
+                            value => value + 1,
+                            value => value * 2,
+                            value => value - 1
+                        )
+                    ),
+                    value => value.toString(),
+                    value => value + '!'
+                )
+            ).toBe('3!');
+        });
+        it('can pipe an initial value through multiple functions, apply a nested pipe of multiple functions, then apply more functions', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    1,
+                    value => value + 1,
+                    value => value * 2,
+                    value => value - 1,
+                    value =>
+                        pipe(
+                            value,
+                            value => value.toString(),
+                            value => value + '!'
+                        ),
+                    value => value + '##',
+                    value => value.repeat(2)
+                )
+            ).toBe('3!##3!##');
+        });
+    });
+    it('can pipe an initial object through multiple functions, apply a nested pipe of multiple functions, then apply more functions', () => {
+        expect.assertions(1);
+        expect(
+            pipe(
+                { a: 1 },
+                value => ({ ...value, b: 2 }),
+                value => ({ ...value, c: 3 }),
+                value => ({ ...value, d: 4 }),
+                value =>
+                    pipe(
+                        value,
+                        value => ({ ...value, e: 5 }),
+                        value => ({ ...value, f: 6 }),
+                        value => ({ ...value, g: 7 })
+                    ),
+                value => ({ ...value, h: 8 }),
+                value => ({ ...value, i: 9 }),
+                value => ({ ...value, j: 10 })
+            )
+        ).toEqual({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 });
+    });
+    it('can pipe an initial object through multiple functions, apply a nested pipe of multiple functions to one field, then apply more functions', () => {
+        expect.assertions(1);
+        expect(
+            pipe(
+                { a: 1 },
+                value => ({ ...value, b: 2 }),
+                value => ({ ...value, c: 3 }),
+                value => ({
+                    ...value,
+                    d: pipe(
+                        [] as string[],
+                        d => {
+                            d.push('test');
+                            return d;
+                        },
+                        d => {
+                            d.push('test again');
+                            return d;
+                        },
+                        d => {
+                            d.push('test a third time');
+                            return d;
+                        }
+                    ),
+                }),
+                value => ({ ...value, e: 5 }),
+                value => ({ ...value, f: 6 }),
+                value => ({ ...value, g: 7 })
+            )
+        ).toEqual({
+            a: 1,
+            b: 2,
+            c: 3,
+            d: ['test', 'test again', 'test a third time'],
+            e: 5,
+            f: 6,
+            g: 7,
+        });
+    });
 });
