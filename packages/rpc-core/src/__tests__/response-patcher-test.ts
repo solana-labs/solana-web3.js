@@ -1,5 +1,5 @@
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
-import { getAllowedNumericKeypaths } from '../response-patcher-allowed-numeric-values';
+import { getAllowedNumericKeypathsForResponse } from '../response-patcher-allowed-numeric-values';
 import { KEYPATH_WILDCARD } from '../response-patcher-types';
 
 jest.mock('../response-patcher-allowed-numeric-values');
@@ -86,7 +86,7 @@ describe('patchResponseForSolanaLabsRpc', () => {
             it(`performs no \`bigint\` upcasts on ${description} when the allowlist is of the form \`${JSON.stringify(
                 allowedKeyPaths
             )}\``, () => {
-                jest.mocked(getAllowedNumericKeypaths).mockReturnValue({ getBlocks: allowedKeyPaths });
+                jest.mocked(getAllowedNumericKeypathsForResponse).mockReturnValue({ getBlocks: allowedKeyPaths });
                 expect(patchResponseForSolanaLabsRpc(input, 'getBlocks')).toStrictEqual(expectation);
             });
         });
