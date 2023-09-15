@@ -19,10 +19,6 @@ specific to Solana application components. It can be used standalone, but it
 is also exported as part of the Solana JavaScript SDK
 [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
-## Types
-
-TODO
-
 ## Functions
 
-TODO
+- `pipe`: A functional utility function for piping a value through various functions
