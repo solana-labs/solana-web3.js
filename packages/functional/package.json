@@ -61,16 +61,8 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.5",
-        "@solana/addresses": "workspace:*",
-        "@solana/keys": "workspace:*"
-    },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
-        "@solana/addresses": "workspace:*",
-        "@solana/instructions": "workspace:*",
-        "@solana/transactions": "workspace:*",
         "@swc/jest": "^0.2.28",
         "@types/jest": "^29.5.3",
         "@typescript-eslint/eslint-plugin": "^6.3.0",
