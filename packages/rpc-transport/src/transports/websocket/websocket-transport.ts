@@ -1,5 +1,5 @@
 import { IRpcWebSocketTransport } from '../transport-types';
-import { createWebSocketConnection, RpcWebSocketConnection } from './websocket-connection';
+import { createWebSocketConnection } from './websocket-connection';
 
 type Config = Readonly<{
     sendBufferHighWatermark: number;
@@ -7,12 +7,26 @@ type Config = Readonly<{
 }>;
 
 export function createWebSocketTransport({ sendBufferHighWatermark, url }: Config): IRpcWebSocketTransport {
-    return async function ({ signal }: Parameters<IRpcWebSocketTransport>[0]) {
-        signal.throwIfAborted();
-        return (await createWebSocketConnection({
+    if (/^wss?:/i.test(url) === false) {
+        const protocolMatch = url.match(/^([^:]+):/);
+        throw new DOMException(
+            protocolMatch
+                ? `Failed to construct 'WebSocket': The URL's scheme must be either 'ws' or 'wss'. '${protocolMatch[1]}:' is not allowed.`
+                : `Failed to construct 'WebSocket': The URL '${url}' is invalid.`
+        );
+    }
+    return async function sendWebSocketMessage({ payload, signal }: Parameters<IRpcWebSocketTransport>[0]) {
+        signal?.throwIfAborted();
+        const connection = await createWebSocketConnection({
             sendBufferHighWatermark,
             signal,
             url,
-        })) as RpcWebSocketConnection;
+        });
+        signal?.throwIfAborted();
+        await connection.send(payload);
+        return {
+            [Symbol.asyncIterator]: connection[Symbol.asyncIterator].bind(connection),
+            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: connection.send.bind(connection),
+        };
     };
 }
