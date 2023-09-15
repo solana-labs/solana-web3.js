@@ -59,6 +59,7 @@ describe('IRpcWebSocketTransport', () => {
     });
     it('suspends until the socket is connected', async () => {
         expect.assertions(2);
+        jest.useFakeTimers();
         let resolveConnection: CallableFunction;
         jest.mocked(createWebSocketConnection).mockReturnValue(
             new Promise(r => {
@@ -74,8 +75,7 @@ describe('IRpcWebSocketTransport', () => {
             [Symbol.asyncIterator]: iterator,
             send,
         });
-        await Promise.resolve(); // Advance past the connection promise.
-        await Promise.resolve(); // Advance past the `send()` promise.
+        await jest.runAllTimersAsync();
         await expect(Promise.race([transportPromise, 'pending'])).resolves.not.toBe('pending');
     });
     it('forwards messages to the underlying connection', async () => {
