@@ -130,6 +130,113 @@ describe('pipe', () => {
             ).toBe('abcd');
         });
     });
+    describe('appending or creating arrays on objects', () => {
+        function addOrAppend(obj: { a: number; b?: string; c?: boolean; d?: string[] }, value: string) {
+            if (obj.d) {
+                return { ...obj, d: [...obj.d, value] };
+            } else {
+                return { ...obj, d: [value] };
+            }
+        }
+        function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
+            if (obj.d) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { d, ...rest } = obj;
+                return rest;
+            } else {
+                return obj;
+            }
+        }
+        it('can create the array', () => {
+            expect.assertions(1);
+            expect(pipe({ a: 1 }, value => addOrAppend(value, 'test'))).toEqual({ a: 1, d: ['test'] });
+        });
+        it('can append to the array', () => {
+            expect.assertions(1);
+            expect(pipe({ a: 1, d: ['test'] }, value => addOrAppend(value, 'test'))).toEqual({
+                a: 1,
+                d: ['test', 'test'],
+            });
+        });
+        it('can create and append to the array', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    { a: 1, b: 'test' },
+                    value => addOrAppend(value, 'test'),
+                    value => addOrAppend(value, 'test again')
+                )
+            ).toEqual({
+                a: 1,
+                b: 'test',
+                d: ['test', 'test again'],
+            });
+        });
+        it('can create and append to the array multiple times', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    { a: 1, b: 'test' },
+                    value => addOrAppend(value, 'test'),
+                    value => addOrAppend(value, 'test again'),
+                    value => addOrAppend(value, 'test again'),
+                    value => addOrAppend(value, 'test again')
+                )
+            ).toEqual({
+                a: 1,
+                b: 'test',
+                d: ['test', 'test again', 'test again', 'test again'],
+            });
+        });
+        it('can create the array, do some other operations, then append to the array', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    { a: 1, b: 'test' },
+                    value => addOrAppend(value, 'test'),
+                    value => addOrAppend(value, 'test again'),
+                    value => ({ ...value, b: value.b + '!' }),
+                    value => addOrAppend(value, 'test again')
+                )
+            ).toEqual({
+                a: 1,
+                b: 'test!',
+                d: ['test', 'test again', 'test again'],
+            });
+        });
+        it('can create the array, append to it, do some other operations, then drop it', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    { a: 1, b: 'test' },
+                    value => addOrAppend(value, 'test'),
+                    value => addOrAppend(value, 'test again'),
+                    value => ({ ...value, b: value.b + '!' }),
+                    value => dropArray(value)
+                )
+            ).toEqual({
+                a: 1,
+                b: 'test!',
+            });
+        });
+        it('can create the array, append to it, do some other operations, then drop it, then create/append to it again', () => {
+            expect.assertions(1);
+            expect(
+                pipe(
+                    { a: 1, b: 'test' },
+                    value => addOrAppend(value, 'test'),
+                    value => addOrAppend(value, 'test again'),
+                    value => ({ ...value, b: value.b + '!' }),
+                    value => dropArray(value),
+                    value => addOrAppend(value, 'test again')
+                )
+            ).toEqual({
+                a: 1,
+                b: 'test!',
+                d: ['test again'],
+            });
+        });
+    });
     describe('capturing errors', () => {
         function throws(_a: string): string {
             throw new Error('test error');

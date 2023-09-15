@@ -1,5 +1,10 @@
 import { pipe } from '../pipe';
 
+function assertNotAProperty<T extends object, TPropName extends string>(
+    _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },
+    _propName: TPropName
+): void {}
+
 // Single-value primitives
 {
     const value = pipe(true);
@@ -225,4 +230,63 @@ import { pipe } from '../pipe';
         value => ({ ...value, c: true })
     );
     value satisfies { a: number; b: string; c: boolean };
+}
+
+// Functions that append or create arrays on objects
+function addOrAppend(obj: { a: number; b?: string; c?: boolean; d?: string[] }, value: string) {
+    if (obj.d) {
+        return { ...obj, d: [...obj.d, value] };
+    } else {
+        return { ...obj, d: [value] };
+    }
+}
+function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
+    if (obj.d) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { d, ...rest } = obj;
+        return rest;
+    } else {
+        return obj;
+    }
+}
+{
+    const value = pipe(
+        { a: 1 },
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true }),
+        value => addOrAppend(value, 'test')
+    );
+    value satisfies { a: number; b?: string; c?: boolean; d: string[] };
+}
+{
+    const value = pipe(
+        { a: 1 },
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true }),
+        value => addOrAppend(value, 'test'),
+        value => addOrAppend(value, 'test again'),
+        value => addOrAppend(value, 'test a third time')
+    );
+    value satisfies { a: number; b?: string; c?: boolean; d: string[] };
+}
+{
+    const value = pipe(
+        { a: 1 },
+        value => addOrAppend(value, 'test'),
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true })
+    );
+    value satisfies { a: number; b?: string; c?: boolean; d: string[] };
+}
+{
+    const value = pipe(
+        { a: 1 },
+        value => addOrAppend(value, 'test'),
+        value => addOrAppend(value, 'test again'),
+        value => ({ ...value, b: 'test' }),
+        value => ({ ...value, c: true }),
+        value => dropArray(value)
+    );
+    value satisfies { a: number; b?: string; c?: boolean };
+    assertNotAProperty(value, 'd');
 }
