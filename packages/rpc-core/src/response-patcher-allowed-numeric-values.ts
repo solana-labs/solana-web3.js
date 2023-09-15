@@ -1,17 +1,32 @@
 import { KeyPath } from './response-patcher';
 import { KEYPATH_WILDCARD } from './response-patcher-types';
 import { createSolanaRpcApi } from './rpc-methods';
+import { createSolanaRpcSubscriptionsApi } from './rpc-subscriptions';
 
-type AllowedNumericKeypaths = Partial<Record<keyof ReturnType<typeof createSolanaRpcApi>, readonly KeyPath[]>>;
+type AllowedNumericKeypaths<TApi> = Partial<Record<keyof TApi, readonly KeyPath[]>>;
 
-let memoizedKeypaths: AllowedNumericKeypaths;
+let memoizedNotificationKeypaths: AllowedNumericKeypaths<ReturnType<typeof createSolanaRpcSubscriptionsApi>>;
+let memoizedResponseKeypaths: AllowedNumericKeypaths<ReturnType<typeof createSolanaRpcApi>>;
 
 /**
  * These are keypaths at the end of which you will find a numeric value that should *not* be upcast
  * to a `bigint`. These are values that are legitimately defined as `u8` or `usize` on the backend.
  */
-export function getAllowedNumericKeypaths(): AllowedNumericKeypaths {
-    if (!memoizedKeypaths) {
+export function getAllowedNumericKeypathsForNotification(): AllowedNumericKeypaths<
+    ReturnType<typeof createSolanaRpcSubscriptionsApi>
+> {
+    if (!memoizedNotificationKeypaths) {
+        memoizedNotificationKeypaths = {};
+    }
+    return memoizedNotificationKeypaths;
+}
+
+/**
+ * These are keypaths at the end of which you will find a numeric value that should *not* be upcast
+ * to a `bigint`. These are values that are legitimately defined as `u8` or `usize` on the backend.
+ */
+export function getAllowedNumericKeypathsForResponse(): AllowedNumericKeypaths<ReturnType<typeof createSolanaRpcApi>> {
+    if (!memoizedResponseKeypaths) {
         // Numeric values nested in `jsonParsed` accounts
         const jsonParsedTokenAccountsConfigs = [
             // parsed Token/Token22 token account
@@ -65,7 +80,7 @@ export function getAllowedNumericKeypaths(): AllowedNumericKeypaths {
             ['data', 'parsed', 'info', 'commission'],
             ['data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
         ];
-        memoizedKeypaths = {
+        memoizedResponseKeypaths = {
             getAccountInfo: jsonParsedAccountsConfigs.map(c => ['value', ...c]),
             getBlock: [
                 ['blockTime'],
@@ -241,5 +256,5 @@ export function getAllowedNumericKeypaths(): AllowedNumericKeypaths {
             simulateTransaction: jsonParsedAccountsConfigs.map(c => ['value', 'accounts', KEYPATH_WILDCARD, ...c]),
         };
     }
-    return memoizedKeypaths;
+    return memoizedResponseKeypaths;
 }
