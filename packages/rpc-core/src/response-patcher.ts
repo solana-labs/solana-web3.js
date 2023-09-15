@@ -57,7 +57,7 @@ export function patchResponseForSolanaLabsRpc<T>(
 
 export function patchResponseForSolanaLabsRpcSubscriptions<T>(
     rawResponse: unknown,
-    methodName?: keyof (ReturnType<typeof createSolanaRpcApi> & ReturnType<typeof createSolanaRpcSubscriptionsApi>)
+    methodName?: keyof ReturnType<typeof createSolanaRpcSubscriptionsApi>
 ): T {
     const allowedKeypaths = methodName ? getAllowedNumericKeypathsForNotification()[methodName] : undefined;
     return visitNode(rawResponse, allowedKeypaths ?? []);

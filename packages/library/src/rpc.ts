@@ -19,8 +19,6 @@ export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0]
 export function createSolanaRpcSubscriptions(
     config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
 ): RpcSubscriptions<SolanaRpcSubscriptions> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     return createJsonSubscriptionRpc({
         ...config,
         api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
