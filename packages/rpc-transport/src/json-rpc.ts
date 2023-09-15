@@ -5,7 +5,7 @@ import { PendingRpcRequest, Rpc, RpcConfig, RpcRequest, SendOptions } from './js
 interface IHasIdentifier {
     readonly id: number;
 }
-type JsonRpcResponse<TResponse> = IHasIdentifier &
+export type JsonRpcResponse<TResponse> = IHasIdentifier &
     Readonly<{ result: TResponse } | { error: { code: number; message: string; data?: unknown } }>;
 
 function createPendingRpcRequest<TRpcMethods, TResponse>(

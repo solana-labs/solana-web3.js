@@ -787,6 +787,9 @@ importers:
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
       fetch-impl:
         specifier: workspace:*
         version: link:../fetch-impl
