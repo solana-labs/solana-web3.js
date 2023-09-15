@@ -501,8 +501,8 @@ importers:
         specifier: ^7.22.10
         version: 7.22.10
       '@babel/plugin-proposal-class-properties':
-        specifier: ^7.12.1
-        version: 7.12.1(@babel/core@7.22.10)
+        specifier: ^7.18.6
+        version: 7.18.6(@babel/core@7.22.10)
       '@babel/plugin-proposal-private-methods':
         specifier: ^7.18.6
         version: 7.18.6(@babel/core@7.22.10)
@@ -1400,8 +1400,10 @@ packages:
       '@babel/plugin-transform-optional-chaining': 7.22.5(@babel/core@7.22.10)
     dev: true
 
-  /@babel/plugin-proposal-class-properties@7.12.1(@babel/core@7.22.10):
-    resolution: {integrity: sha512-cKp3dlQsFsEs5CWKnN7BnSHOd0EOW8EKpEjkoz1pO2E5KzIDNV9Ros1b0CnmbVgAGXJubOYVBOGCT1OmJwOI7w==}
+  /@babel/plugin-proposal-class-properties@7.18.6(@babel/core@7.22.10):
+    resolution: {integrity: sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==}
+    engines: {node: '>=6.9.0'}
+    deprecated: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
