@@ -2,12 +2,13 @@ import { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport/dis
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
+import { SlotNotificationsApi } from './slot-notifications';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
-export type SolanaRpcSubscriptions = never;
+export type SolanaRpcSubscriptions = SlotNotificationsApi;
 
 export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscriptionsApi<SolanaRpcSubscriptions> {
     return new Proxy({} as IRpcSubscriptionsApi<SolanaRpcSubscriptions>, {
@@ -21,7 +22,7 @@ export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscripti
             ...args: Parameters<NonNullable<ProxyHandler<IRpcSubscriptionsApi<SolanaRpcSubscriptions>>['get']>>
         ) {
             const [_, p] = args;
-            const notificationName = p.toString() as string;
+            const notificationName = p.toString() as keyof SolanaRpcSubscriptions;
             return function (
                 ...rawParams: Parameters<
                     SolanaRpcSubscriptions[TNotificationName] extends CallableFunction
