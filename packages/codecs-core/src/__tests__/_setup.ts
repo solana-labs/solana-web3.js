@@ -19,16 +19,22 @@ export const base16: Codec<string> = {
     },
 };
 
-export const utf8: Codec<string> = {
-    description: 'utf8',
+const alphabet = '_abcdefghijklmnopqrstuvwxyz';
+export const a1z26: Codec<string> = {
+    description: 'a1z26',
     fixedSize: null,
     maxSize: null,
     encode(value: string) {
-        return new TextEncoder().encode(value);
+        if (!value.match(/^[_abcdefghijklmnopqrstuvwxyz]*$/)) {
+            throw new Error('Invalid a1z26 string');
+        }
+        return Uint8Array.from([...value].map(char => alphabet.indexOf(char)));
     },
-    decode(buffer, offset = 0) {
-        const value = new TextDecoder().decode(buffer.slice(offset));
-        // eslint-disable-next-line no-control-regex
-        return [value.replace(/\u0000/g, ''), buffer.length];
+    decode(bytes, offset = 0) {
+        const slice = bytes.slice(offset);
+        if (slice.some(byte => byte > 26)) {
+            throw new Error('Invalid a1z26 string');
+        }
+        return [[...slice].map(byte => alphabet[byte]).join(''), bytes.length];
     },
 };
