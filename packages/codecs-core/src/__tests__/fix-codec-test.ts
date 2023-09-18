@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec } from '../codec';
 import { fixCodec } from '../fixCodec';
-import { a1z26, base16 } from './_setup';
+import { a1z26, base16 } from './__setup__';
 
 describe('fixCodec', () => {
     it('can fix a codec to a given amount of bytes', () => {

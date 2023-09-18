@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { fixCodec } from '../fixCodec';
 import { reverseCodec } from '../reverseCodec';
-import { base16 } from './_setup';
+import { base16 } from './__setup__';
 
 describe('reverseCodec', () => {
     it('can reverse the bytes of a fixed-size codec', () => {
