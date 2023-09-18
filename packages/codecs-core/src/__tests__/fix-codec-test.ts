@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec } from '../codec';
-import { fixCodec } from '../fixCodec';
+import { fixCodec, fixDecoder, fixEncoder } from '../fixCodec';
 import { a1z26, base16 } from './__setup__';
 
 describe('fixCodec', () => {
@@ -60,5 +60,38 @@ describe('fixCodec', () => {
         // And we can decode it back.
         const hydrated = u24.decode(buf);
         expect(hydrated).toStrictEqual([42, 3]);
+    });
+});
+
+describe('fixEncoder', () => {
+    it('can fix an encoder to a given amount of bytes', () => {
+        const b = (s: string) => base16.encode(s);
+
+        expect(fixEncoder(a1z26, 42).description).toBe('fixed(42, a1z26)');
+        expect(fixEncoder(a1z26, 42, 'my fixed').description).toBe('my fixed');
+        expect(fixEncoder(a1z26, 12).fixedSize).toBe(12);
+        expect(fixEncoder(a1z26, 12).maxSize).toBe(12);
+
+        expect(fixEncoder(a1z26, 10).encode('helloworld')).toStrictEqual(b('08050c0c0f170f120c04'));
+        expect(fixEncoder(a1z26, 5).encode('helloworld')).toStrictEqual(b('08050c0c0f'));
+        expect(fixEncoder(a1z26, 10).encode('hello')).toStrictEqual(b('08050c0c0f0000000000'));
+    });
+});
+
+describe('fixDecoder', () => {
+    it('can fix a decoder to a given amount of bytes', () => {
+        const b = (s: string) => base16.encode(s);
+
+        expect(fixDecoder(a1z26, 42).description).toBe('fixed(42, a1z26)');
+        expect(fixDecoder(a1z26, 42, 'my fixed').description).toBe('my fixed');
+        expect(fixDecoder(a1z26, 12).fixedSize).toBe(12);
+        expect(fixDecoder(a1z26, 12).maxSize).toBe(12);
+
+        expect(fixDecoder(a1z26, 10).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['helloworld', 10]);
+        expect(fixDecoder(a1z26, 5).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['hello', 5]);
+        expect(fixDecoder(a1z26, 10).decode(b('08050c0c0f0000000000'))).toStrictEqual(['hello_____', 10]);
+        expect(() => fixDecoder(a1z26, 10).decode(b('08050c0c0f'))).toThrow(
+            'Codec [fixCodec] expected 10 bytes, got 5.'
+        );
     });
 });
