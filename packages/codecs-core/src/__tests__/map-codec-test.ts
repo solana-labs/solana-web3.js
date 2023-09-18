@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { Codec } from '../codec';
-import { mapCodec } from '../mapCodec';
+import { Codec, Decoder, Encoder } from '../codec';
+import { mapCodec, mapDecoder, mapEncoder } from '../mapCodec';
 
 const numberCodec: Codec<number> = {
     description: 'number',
@@ -137,5 +137,41 @@ describe('mapCodec', () => {
 
         const bufferC = mappedCodec.encode([42, 'Hello world']);
         expect(mappedCodec.decode(bufferC)[0]).toStrictEqual([42, 'xxxxxxxxxxx']);
+    });
+});
+
+describe('mapEncoder', () => {
+    it('can map an encoder to another encoder', () => {
+        const encoderA: Encoder<number> = {
+            description: 'A',
+            fixedSize: 1,
+            maxSize: 1,
+            encode: (value: number) => new Uint8Array([value]),
+        };
+
+        const encoderB = mapEncoder(encoderA, (value: string): number => value.length);
+
+        expect(encoderB.description).toBe('A');
+        expect(encoderB.fixedSize).toBe(1);
+        expect(encoderB.maxSize).toBe(1);
+        expect(encoderB.encode('helloworld')).toStrictEqual(new Uint8Array([10]));
+    });
+});
+
+describe('mapDecoder', () => {
+    it('can map an encoder to another encoder', () => {
+        const decoder: Decoder<number> = {
+            description: 'A',
+            fixedSize: 1,
+            maxSize: 1,
+            decode: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
+        };
+
+        const decoderB = mapDecoder(decoder, (value: number): string => 'x'.repeat(value));
+
+        expect(decoderB.description).toBe('A');
+        expect(decoderB.fixedSize).toBe(1);
+        expect(decoderB.maxSize).toBe(1);
+        expect(decoderB.decode(new Uint8Array([10]))).toStrictEqual(['xxxxxxxxxx', 1]);
     });
 });
