@@ -1,37 +1,37 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec } from '../codec';
 import { fixCodec } from '../fixCodec';
-import { base16, utf8 } from './_setup';
+import { a1z26, base16 } from './_setup';
 
 describe('fixCodec', () => {
     it('can fix a codec to a given amount of bytes', () => {
         const b = (s: string) => base16.encode(s);
-        const s = (size: number) => fixCodec(utf8, size);
+        const s = (size: number) => fixCodec(a1z26, size);
 
         // Description matches the fixed definition.
-        expect(fixCodec(utf8, 42).description).toBe('fixed(42, utf8)');
+        expect(fixCodec(a1z26, 42).description).toBe('fixed(42, a1z26)');
 
         // Description can be overridden.
-        expect(fixCodec(utf8, 42, 'my fixed').description).toBe('my fixed');
+        expect(fixCodec(a1z26, 42, 'my fixed').description).toBe('my fixed');
 
         // Fixed and max sizes.
-        expect(fixCodec(utf8, 12).fixedSize).toBe(12);
-        expect(fixCodec(utf8, 12).maxSize).toBe(12);
-        expect(fixCodec(utf8, 42).fixedSize).toBe(42);
-        expect(fixCodec(utf8, 42).maxSize).toBe(42);
+        expect(fixCodec(a1z26, 12).fixedSize).toBe(12);
+        expect(fixCodec(a1z26, 12).maxSize).toBe(12);
+        expect(fixCodec(a1z26, 42).fixedSize).toBe(42);
+        expect(fixCodec(a1z26, 42).maxSize).toBe(42);
 
         // Buffer size === fixed size.
-        expect(s(12).encode('Hello world!')).toStrictEqual(b('48656c6c6f20776f726c6421'));
-        expect(s(12).decode(b('48656c6c6f20776f726c6421'))).toStrictEqual(['Hello world!', 12]);
+        expect(s(10).encode('helloworld')).toStrictEqual(b('08050c0c0f170f120c04'));
+        expect(s(10).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['helloworld', 10]);
 
         // Buffer size > fixed size => truncated.
-        expect(s(5).encode('Hello world!')).toStrictEqual(b('48656c6c6f'));
-        expect(s(5).decode(b('48656c6c6f20776f726c6421'))).toStrictEqual(['Hello', 5]);
+        expect(s(5).encode('helloworld')).toStrictEqual(b('08050c0c0f'));
+        expect(s(5).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['hello', 5]);
 
         // Buffer size < fixed size => padded.
-        expect(s(12).encode('Hello')).toStrictEqual(b('48656c6c6f00000000000000'));
-        expect(s(12).decode(b('48656c6c6f00000000000000'))).toStrictEqual(['Hello', 12]);
-        expect(() => s(12).decode(b('48656c6c6f'))).toThrow('Codec [fixCodec] expected 12 bytes, got 5.');
+        expect(s(10).encode('hello')).toStrictEqual(b('08050c0c0f0000000000'));
+        expect(s(10).decode(b('08050c0c0f0000000000'))).toStrictEqual(['hello_____', 10]);
+        expect(() => s(10).decode(b('08050c0c0f'))).toThrow('Codec [fixCodec] expected 10 bytes, got 5.');
     });
 
     it('can fix a codec that requires a minimum amount of bytes', () => {
