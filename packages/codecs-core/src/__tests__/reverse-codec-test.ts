@@ -1,6 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { Decoder, Encoder } from '../codec';
 import { fixCodec } from '../fixCodec';
-import { reverseCodec } from '../reverseCodec';
+import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverseCodec';
 import { base16 } from './__setup__';
 
 describe('reverseCodec', () => {
@@ -29,5 +30,41 @@ describe('reverseCodec', () => {
 
         // Variable-size codec.
         expect(() => reverseCodec(base16)).toThrow('Cannot reverse a codec of variable size');
+    });
+});
+
+describe('reverseEncoder', () => {
+    it('can reverse the bytes of a fixed-size encoder', () => {
+        const encoder: Encoder<number> = {
+            description: 'u16',
+            fixedSize: 2,
+            maxSize: 2,
+            encode: (value: number) => new Uint8Array([value, 0]),
+        };
+
+        const reversedEncoder = reverseEncoder(encoder);
+        expect(reversedEncoder.description).toBe('u16');
+        expect(reversedEncoder.fixedSize).toBe(2);
+        expect(reversedEncoder.maxSize).toBe(2);
+        expect(reversedEncoder.encode(42)).toStrictEqual(new Uint8Array([0, 42]));
+        expect(() => reverseEncoder(base16)).toThrow('Cannot reverse a codec of variable size');
+    });
+});
+
+describe('reverseDecoder', () => {
+    it('can reverse the bytes of a fixed-size decoder', () => {
+        const decoder: Decoder<string> = {
+            description: 'u16',
+            fixedSize: 2,
+            maxSize: 2,
+            decode: (bytes: Uint8Array, offset = 0) => [`${bytes[offset]}-${bytes[offset + 1]}`, offset + 2],
+        };
+
+        const reversedDecoder = reverseDecoder(decoder);
+        expect(reversedDecoder.description).toBe('u16');
+        expect(reversedDecoder.fixedSize).toBe(2);
+        expect(reversedDecoder.maxSize).toBe(2);
+        expect(reversedDecoder.decode(new Uint8Array([42, 0]))).toStrictEqual(['0-42', 2]);
+        expect(() => reverseDecoder(base16)).toThrow('Cannot reverse a codec of variable size');
     });
 });

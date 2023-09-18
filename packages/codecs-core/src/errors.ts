@@ -18,7 +18,7 @@ export class ExpectedFixedSizeCodecError extends Error {
     readonly name: string = 'ExpectedFixedSizeCodecError';
 
     constructor(message?: string) {
-        message ??= 'Expected a fixed-size coded, got a variable-size one.';
+        message ??= 'Expected a fixed-size codec, got a variable-size one.';
         super(message);
     }
 }
