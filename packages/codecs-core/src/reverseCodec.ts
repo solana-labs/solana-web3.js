@@ -1,21 +1,14 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { assertFixedSizeCodec } from './assertions';
 import { mergeBytes } from './bytes';
-import { Codec, CodecData, Decoder, Encoder } from './codec';
-import { ExpectedFixedSizeCodecError } from './errors';
+import { Codec, Decoder, Encoder } from './codec';
 import { joinEncoderAndDecoder } from './joinEncoderAndDecoder';
-
-function assertFixedSize(data: CodecData): asserts data is CodecData & { fixedSize: number } {
-    const fixedSize = data.fixedSize;
-    if (fixedSize === null) {
-        throw new ExpectedFixedSizeCodecError('Cannot reverse a codec of variable size.');
-    }
-}
 
 /**
  * Reverses the bytes of a fixed-size encoder.
  */
 export function reverseEncoder<T>(encoder: Encoder<T>): Encoder<T> {
-    assertFixedSize(encoder);
+    assertFixedSizeCodec(encoder, 'Cannot reverse a codec of variable size.');
     return {
         ...encoder,
         encode: (value: T) => encoder.encode(value).reverse(),
@@ -26,7 +19,7 @@ export function reverseEncoder<T>(encoder: Encoder<T>): Encoder<T> {
  * Reverses the bytes of a fixed-size decoder.
  */
 export function reverseDecoder<T>(decoder: Decoder<T>): Decoder<T> {
-    assertFixedSize(decoder);
+    assertFixedSizeCodec(decoder, 'Cannot reverse a codec of variable size.');
     return {
         ...decoder,
         decode: (bytes: Uint8Array, offset = 0) => {
