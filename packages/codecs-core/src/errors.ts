@@ -22,3 +22,7 @@ export class ExpectedFixedSizeCodecError extends Error {
         super(message);
     }
 }
+
+export class IncompatibleEncoderAndDecoderError extends Error {
+    readonly name: string = 'IncompatibleEncoderAndDecoderError';
+}
