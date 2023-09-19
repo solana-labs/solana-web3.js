@@ -17,7 +17,7 @@ type NumberFactorySharedInput = {
 };
 
 type NumberFactoryEncoderInput<T> = NumberFactorySharedInput & {
-    range: [number | bigint, number | bigint];
+    range?: [number | bigint, number | bigint];
     set: (view: DataView, value: T, littleEndian?: boolean) => void;
 };
 
