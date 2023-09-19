@@ -142,4 +142,57 @@ describe('getWebSocketTransportWithAutoping', () => {
         jest.advanceTimersByTime(MOCK_INTERVAL_MS);
         expect(send).not.toHaveBeenCalled();
     });
+    if (__BROWSER__) {
+        it('stops pinging the connection when it goes offline', async () => {
+            expect.assertions(1);
+            await transport({ payload: 'hi', signal: new AbortController().signal });
+            globalThis.window.dispatchEvent(new Event('offline'));
+            jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+            expect(send).not.toHaveBeenCalled();
+        });
+        describe('when the network connection is offline to start', () => {
+            beforeEach(() => {
+                const originalNavigator = globalThis.navigator;
+                jest.spyOn(globalThis, 'navigator', 'get').mockImplementation(() => ({
+                    ...originalNavigator,
+                    onLine: false,
+                }));
+            });
+            it('does not ping the connection', async () => {
+                expect.assertions(1);
+                await transport({ payload: 'hi', signal: new AbortController().signal });
+                jest.advanceTimersByTime(MOCK_INTERVAL_MS);
+                expect(send).not.toHaveBeenCalled();
+            });
+            it('pings the connection immediately when the connection comes back online', async () => {
+                expect.assertions(1);
+                await transport({ payload: 'hi', signal: new AbortController().signal });
+                jest.advanceTimersByTime(500);
+                globalThis.window.dispatchEvent(new Event('online'));
+                expect(send).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        jsonrpc: '2.0',
+                        method: 'ping',
+                    })
+                );
+            });
+            it('pings the connection interval milliseconds after the connection comes back online', async () => {
+                expect.assertions(3);
+                await transport({ payload: 'hi', signal: new AbortController().signal });
+                jest.advanceTimersByTime(500);
+                globalThis.window.dispatchEvent(new Event('online'));
+                send.mockClear();
+                expect(send).not.toHaveBeenCalled();
+                jest.advanceTimersByTime(MOCK_INTERVAL_MS - 1);
+                expect(send).not.toHaveBeenCalled();
+                jest.advanceTimersByTime(1);
+                expect(send).toHaveBeenCalledWith(
+                    expect.objectContaining({
+                        jsonrpc: '2.0',
+                        method: 'ping',
+                    })
+                );
+            });
+        });
+    }
 });
