@@ -1,3 +1,4 @@
+export * from './assertions';
 export * from './bytes';
 export * from './codec';
 export * from './errors';

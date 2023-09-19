@@ -1,13 +1,13 @@
-export class DecodingEmptyBufferError extends Error {
-    readonly name: string = 'DecodingEmptyBufferError';
+export class EmptyBufferCodecError extends Error {
+    readonly name: string = 'EmptyBufferCodecError';
 
     constructor(codec: string) {
         super(`Codec [${codec}] cannot decode empty buffers.`);
     }
 }
 
-export class NotEnoughBytesToDecodeError extends Error {
-    readonly name: string = 'NotEnoughBytesToDecodeError';
+export class NotEnoughBytesCodecError extends Error {
+    readonly name: string = 'NotEnoughBytesCodecError';
 
     constructor(codec: string, expected: bigint | number, actual: bigint | number) {
         super(`Codec [${codec}] expected ${expected} bytes, got ${actual}.`);
