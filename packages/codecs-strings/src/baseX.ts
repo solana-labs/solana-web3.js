@@ -17,7 +17,7 @@ export const getBaseXEncoder = (alphabet: string): Encoder<string> => {
         maxSize: null,
         encode(value: string): Uint8Array {
             // Check if the value is valid.
-            assertValidBaseString(value, alphabet);
+            assertValidBaseString(alphabet, value);
             if (value === '') return new Uint8Array();
 
             // Handle leading zeroes.
