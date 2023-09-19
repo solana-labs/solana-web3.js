@@ -2,16 +2,14 @@ import { getBase16Codec } from '../base16';
 import { getBase64Codec } from '../base64';
 
 describe('getBase64Codec', () => {
-    it('can encode base 64 strings', () => {
-        const base64 = getBase64Codec();
-        const base16 = getBase16Codec();
+    const base64 = getBase64Codec();
+    const base16 = getBase16Codec();
 
+    it('can encode base 64 strings', () => {
         expect(base64.encode('')).toStrictEqual(new Uint8Array([]));
-        expect(base64.encode('A')).toStrictEqual(new Uint8Array([]));
         expect(base64.decode(new Uint8Array([]))).toStrictEqual(['', 0]);
 
         expect(base64.encode('AA')).toStrictEqual(new Uint8Array([0]));
-        expect(base64.encode('AA=')).toStrictEqual(new Uint8Array([0]));
         expect(base64.encode('AA==')).toStrictEqual(new Uint8Array([0]));
         expect(base64.decode(new Uint8Array([0]))).toStrictEqual(['AA==', 1]);
 
@@ -39,4 +37,16 @@ describe('getBase64Codec', () => {
         expect(base16.decode(base64.encode(base64TokenData))[0]).toStrictEqual(base16TokenData);
         expect(base64.decode(base16.encode(base16TokenData))[0]).toStrictEqual(base64TokenData);
     });
+
+    if (__BROWSER__) {
+        it('fails if base64 strings do not have the expected padding', () => {
+            expect(() => base64.encode('A')).toThrow('Expected a string of base 64, got [A].');
+            expect(() => base64.encode('AA=')).toThrow('Expected a string of base 64, got [AA=].');
+        });
+    } else {
+        it('tolerate base64 string with less padding than expected', () => {
+            expect(base64.encode('A')).toStrictEqual(new Uint8Array([]));
+            expect(base64.encode('AA=')).toStrictEqual(new Uint8Array([0]));
+        });
+    }
 });
