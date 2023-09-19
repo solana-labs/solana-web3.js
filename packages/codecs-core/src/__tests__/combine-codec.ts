@@ -1,8 +1,8 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Decoder, Encoder } from '../codec';
-import { joinEncoderAndDecoder } from '../joinEncoderAndDecoder';
+import { combineCodec } from '../combine-codec';
 
-describe('joinEncoderAndDecoder', () => {
+describe('combineCodec', () => {
     const mockEncode: Encoder<number>['encode'] = () => new Uint8Array([]);
     const mockDecode: Decoder<number>['decode'] = (_bytes: Uint8Array, offset = 0) => [42, offset];
 
@@ -21,7 +21,7 @@ describe('joinEncoderAndDecoder', () => {
             decode: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         };
 
-        const u8Codec: Codec<number> = joinEncoderAndDecoder(u8Encoder, u8Decoder);
+        const u8Codec: Codec<number> = combineCodec(u8Encoder, u8Decoder);
 
         expect(u8Codec.description).toBe('u8');
         expect(u8Codec.fixedSize).toBe(1);
@@ -45,7 +45,7 @@ describe('joinEncoderAndDecoder', () => {
             decode: (bytes: Uint8Array, offset = 0) => [BigInt(bytes[offset]), offset + 1],
         };
 
-        const u8Codec: Codec<number | bigint, bigint> = joinEncoderAndDecoder(u8Encoder, u8Decoder);
+        const u8Codec: Codec<number | bigint, bigint> = combineCodec(u8Encoder, u8Decoder);
 
         expect(u8Codec.description).toBe('u8');
         expect(u8Codec.fixedSize).toBe(1);
@@ -57,21 +57,21 @@ describe('joinEncoderAndDecoder', () => {
 
     it('cannot join encoders and decoders with sizes or descriptions', () => {
         expect(() =>
-            joinEncoderAndDecoder(
+            combineCodec(
                 { description: 'u8', fixedSize: 1, maxSize: 1, encode: mockEncode },
                 { description: 'u8', fixedSize: 2, maxSize: 1, decode: mockDecode }
             )
         ).toThrow('Encoder and decoder must have the same fixed size, got [1] and [2]');
 
         expect(() =>
-            joinEncoderAndDecoder(
+            combineCodec(
                 { description: 'u8', fixedSize: 1, maxSize: 1, encode: mockEncode },
                 { description: 'u8', fixedSize: 1, maxSize: null, decode: mockDecode }
             )
         ).toThrow('Encoder and decoder must have the same max size, got [1] and [null]');
 
         expect(() =>
-            joinEncoderAndDecoder(
+            combineCodec(
                 { description: 'u8', fixedSize: 1, maxSize: 1, encode: mockEncode },
                 { description: 'u16', fixedSize: 1, maxSize: 1, decode: mockDecode }
             )
@@ -79,7 +79,7 @@ describe('joinEncoderAndDecoder', () => {
     });
 
     it('can override the description of the joined codec', () => {
-        const myCodec = joinEncoderAndDecoder(
+        const myCodec = combineCodec(
             { description: 'u8', fixedSize: 1, maxSize: 1, encode: mockEncode },
             { description: 'u16', fixedSize: 1, maxSize: 1, decode: mockDecode },
             'myCustomDescription'

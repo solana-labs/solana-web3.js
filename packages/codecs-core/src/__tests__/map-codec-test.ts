@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Decoder, Encoder } from '../codec';
-import { mapCodec, mapDecoder, mapEncoder } from '../mapCodec';
+import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
 
 const numberCodec: Codec<number> = {
     description: 'number',

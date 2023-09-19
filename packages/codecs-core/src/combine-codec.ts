@@ -7,7 +7,7 @@ import { IncompatibleEncoderAndDecoderError } from './errors';
  * The encoder and decoder must have the same fixed size, max size and description.
  * If a description is provided, it will override the encoder and decoder descriptions.
  */
-export function joinEncoderAndDecoder<From, To extends From = From>(
+export function combineCodec<From, To extends From = From>(
     encoder: Encoder<From>,
     decoder: Decoder<To>,
     description?: string

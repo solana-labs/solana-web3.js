@@ -2,7 +2,7 @@
 import { assertFixedSizeCodec } from './assertions';
 import { mergeBytes } from './bytes';
 import { Codec, Decoder, Encoder } from './codec';
-import { joinEncoderAndDecoder } from './joinEncoderAndDecoder';
+import { combineCodec } from './combine-codec';
 
 /**
  * Reverses the bytes of a fixed-size encoder.
@@ -37,5 +37,5 @@ export function reverseDecoder<T>(decoder: Decoder<T>): Decoder<T> {
  * Reverses the bytes of a fixed-size codec.
  */
 export function reverseCodec<T, U extends T = T>(codec: Codec<T, U>): Codec<T, U> {
-    return joinEncoderAndDecoder(reverseEncoder(codec), reverseDecoder(codec));
+    return combineCodec(reverseEncoder(codec), reverseDecoder(codec));
 }
