@@ -1,5 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { assertDecodedBufferHasEnoughBytes } from './assertions';
+import { assertBufferHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
 import { Codec, CodecData, Decoder, Encoder } from './codec';
 import { combineCodec } from './combine-codec';
@@ -40,7 +40,7 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, descripti
             // Slice the buffer to the fixed size.
             buffer = buffer.slice(offset, offset + fixedBytes);
             // Ensure we have enough bytes.
-            assertDecodedBufferHasEnoughBytes('fixCodec', buffer, fixedBytes);
+            assertBufferHasEnoughBytesForCodec('fixCodec', buffer, fixedBytes);
             // If the nested decoder is fixed-size, pad and truncate the buffer accordingly.
             if (decoder.fixedSize !== null) {
                 buffer = fixBytes(buffer, decoder.fixedSize);
