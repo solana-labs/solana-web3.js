@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec } from '../codec';
-import { fixCodec, fixDecoder, fixEncoder } from '../fixCodec';
+import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
 import { a1z26, base16 } from './__setup__';
 
 describe('fixCodec', () => {

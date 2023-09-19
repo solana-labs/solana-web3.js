@@ -1,8 +1,8 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { fixBytes } from './bytes';
 import { Codec, CodecData, Decoder, Encoder } from './codec';
+import { combineCodec } from './combine-codec';
 import { NotEnoughBytesError } from './errors';
-import { joinEncoderAndDecoder } from './joinEncoderAndDecoder';
 
 function fixCodecHelper(data: CodecData, fixedBytes: number, description?: string): CodecData {
     return {
@@ -66,8 +66,5 @@ export function fixCodec<T, U extends T = T>(
     fixedBytes: number,
     description?: string
 ): Codec<T, U> {
-    return joinEncoderAndDecoder(
-        fixEncoder(codec, fixedBytes, description),
-        fixDecoder(codec, fixedBytes, description)
-    );
+    return combineCodec(fixEncoder(codec, fixedBytes, description), fixDecoder(codec, fixedBytes, description));
 }

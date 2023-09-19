@@ -1,7 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Decoder, Encoder } from '../codec';
-import { fixCodec } from '../fixCodec';
-import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverseCodec';
+import { fixCodec } from '../fix-codec';
+import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
 import { base16 } from './__setup__';
 
 describe('reverseCodec', () => {
