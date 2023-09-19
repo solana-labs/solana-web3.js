@@ -6,8 +6,8 @@ export class DecodingEmptyBufferError extends Error {
     }
 }
 
-export class NotEnoughBytesError extends Error {
-    readonly name: string = 'NotEnoughBytesError';
+export class NotEnoughBytesToDecodeError extends Error {
+    readonly name: string = 'NotEnoughBytesToDecodeError';
 
     constructor(codec: string, expected: bigint | number, actual: bigint | number) {
         super(`Codec [${codec}] expected ${expected} bytes, got ${actual}.`);

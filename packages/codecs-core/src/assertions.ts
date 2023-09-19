@@ -1,5 +1,23 @@
 import { CodecData } from './codec';
-import { ExpectedFixedSizeCodecError } from './errors';
+import { DecodingEmptyBufferError, ExpectedFixedSizeCodecError, NotEnoughBytesToDecodeError } from './errors';
+
+/**
+ * Asserts that a given buffer is not empty.
+ */
+export function assertDecodedBufferIsNotEmpty(codecName: string, buffer: Uint8Array) {
+    if (buffer.length === 0) {
+        throw new DecodingEmptyBufferError(codecName);
+    }
+}
+
+/**
+ * Asserts that a given buffer has enough bytes to decode.
+ */
+export function assertDecodedBufferHasEnoughBytes(codecName: string, buffer: Uint8Array, expected: number) {
+    if (buffer.length < expected) {
+        throw new NotEnoughBytesToDecodeError(codecName, expected, buffer.length);
+    }
+}
 
 /**
  * Asserts that a given codec is fixed-size codec.
