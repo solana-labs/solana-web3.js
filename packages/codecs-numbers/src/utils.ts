@@ -7,7 +7,7 @@ import {
     Encoder,
 } from '@solana/codecs-core';
 
-import { assertCodecNumberIsBetween } from './assertions';
+import { assertNumberIsBetweenForCodec } from './assertions';
 import { Endian, NumberCodecOptions, SingleByteNumberCodecOptions } from './common';
 
 type NumberFactorySharedInput = {
@@ -51,7 +51,7 @@ export function numberEncoderFactory<T extends number | bigint>(input: NumberFac
         maxSize: codecData.maxSize,
         encode(value: T): Uint8Array {
             if (input.range) {
-                assertCodecNumberIsBetween(input.name, input.range[0], input.range[1], value);
+                assertNumberIsBetweenForCodec(input.name, input.range[0], input.range[1], value);
             }
             const buffer = new ArrayBuffer(input.size);
             input.set(new DataView(buffer), value, codecData.littleEndian);
