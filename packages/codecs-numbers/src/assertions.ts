@@ -3,7 +3,7 @@ import { NumberOutOfRangeCodecError } from './errors';
 /**
  * Asserts that a given buffer is not empty.
  */
-export function assertCodecNumberIsBetween(
+export function assertNumberIsBetweenForCodec(
     codecName: string,
     min: number | bigint,
     max: number | bigint,
