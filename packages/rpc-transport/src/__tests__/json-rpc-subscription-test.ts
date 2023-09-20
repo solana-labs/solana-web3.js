@@ -13,16 +13,22 @@ interface TestRpcSubscriptionNotifications {
 }
 
 describe('JSON-RPC 2.0 Subscriptions', () => {
-    let createWebSocketConnection: IRpcWebSocketTransport;
+    let createWebSocketConnection: jest.MockedFn<IRpcWebSocketTransport>;
+    let iterable: jest.Mock<AsyncGenerator<unknown, void>>;
     let rpc: RpcSubscriptions<TestRpcSubscriptionNotifications>;
+    let send: jest.Mock<(payload: unknown) => Promise<void>>;
     beforeEach(() => {
         jest.mocked(getNextMessageId).mockReturnValue(0);
-        createWebSocketConnection = jest.fn(
-            () =>
-                new Promise(() => {
-                    /* never resolve */
-                })
-        );
+        iterable = jest.fn().mockImplementation(async function* () {
+            yield await new Promise(() => {
+                /* never resolve */
+            });
+        });
+        send = jest.fn().mockResolvedValue(undefined);
+        createWebSocketConnection = jest.fn().mockResolvedValue({
+            [Symbol.asyncIterator]: iterable,
+            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: send,
+        });
         rpc = createJsonSubscriptionRpc({
             api: {
                 // Note the lack of method implementations in the base case.
@@ -41,35 +47,72 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             })
         );
     });
-    it('returns from the iterator when aborted', async () => {
+    it('returns from the iterator when the connection iterator returns', async () => {
         expect.assertions(1);
-        jest.useFakeTimers();
-        const abortController = new AbortController();
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: 42 /* subscription id */ };
-            },
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            return;
         });
-        const thingNotifications = await rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
-        await jest.runAllTimersAsync();
+        const thingNotifications = await rpc.thingNotifications(123).subscribe();
         const iterator = thingNotifications[Symbol.asyncIterator]();
         const thingNotificationPromise = iterator.next();
-        abortController.abort();
         await expect(thingNotificationPromise).resolves.toMatchObject({
             done: true,
             value: undefined,
         });
     });
+    it('throws from the iterator when the connection iterator throws', async () => {
+        expect.assertions(1);
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            throw new Error('o no');
+        });
+        const thingNotifications = await rpc.thingNotifications(123).subscribe();
+        const iterator = thingNotifications[Symbol.asyncIterator]();
+        const thingNotificationPromise = iterator.next();
+        await expect(thingNotificationPromise).rejects.toThrow('o no');
+    });
+    it('aborts the connection when aborting the subscription before the subscription has been established', async () => {
+        expect.assertions(2);
+        jest.useFakeTimers();
+        iterable.mockImplementation(async function* () {
+            yield await new Promise(() => {
+                /* never resolve */
+            });
+        });
+        const abortController = new AbortController();
+        rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
+        const [{ signal: connectionAbortSignal }] = createWebSocketConnection.mock.lastCall!;
+        expect(connectionAbortSignal).toHaveProperty('aborted', false);
+        abortController.abort();
+        await jest.runAllTimersAsync();
+        expect(connectionAbortSignal).toHaveProperty('aborted', true);
+    });
+    it('aborts the connection when aborting given an established subscription', async () => {
+        expect.assertions(2);
+        jest.useFakeTimers();
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            yield await new Promise(() => {
+                /* never resolve */
+            });
+        });
+        const abortController = new AbortController();
+        await rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
+        const [{ signal: connectionAbortSignal }] = createWebSocketConnection.mock.lastCall!;
+        expect(connectionAbortSignal).toHaveProperty('aborted', false);
+        abortController.abort();
+        await jest.runAllTimersAsync();
+        expect(connectionAbortSignal).toHaveProperty('aborted', true);
+    });
     it('sends an unsubscribe request to the transport when aborted given an established subscription', async () => {
         expect.assertions(1);
         const abortController = new AbortController();
-        const send = jest.fn(async () => {});
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: send,
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: 42 /* subscription id */ };
-            },
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            yield await new Promise(() => {
+                /* never resolve */
+            });
         });
         await rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
         abortController.abort();
@@ -82,52 +125,74 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     });
     it('does not send an unsubscribe request to the transport when aborted if the subscription has not yet been established', async () => {
         expect.assertions(1);
+        jest.useFakeTimers();
         const abortController = new AbortController();
         rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
         abortController.abort();
-        expect(createWebSocketConnection).not.toHaveBeenCalledWith(
+        expect(send).not.toHaveBeenCalledWith(
             expect.objectContaining({
-                payload: expect.objectContaining({
-                    method: 'thingUnsubscribe',
-                }),
+                method: 'thingUnsubscribe',
             })
         );
     });
-    it('does not send an unsubscribe request to the transport when the server fatals given an established subscription', async () => {
+    it('does not send an unsubscribe request to the transport when aborted after the connection iterator returns given an established subscription', async () => {
         expect.assertions(1);
+        jest.useFakeTimers();
         const abortController = new AbortController();
-        let killServer: () => void;
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: 42 /* subscription id */ };
-                yield new Promise((_, reject) => {
-                    killServer = reject;
+        let returnFromConnection: () => void;
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            try {
+                yield await new Promise((_, reject) => {
+                    returnFromConnection = reject;
                 });
-            },
+            } catch {
+                return;
+            }
         });
         await rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
         // FIXME: https://github.com/microsoft/TypeScript/issues/11498
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        killServer();
-        expect(createWebSocketConnection).not.toHaveBeenCalledWith(
+        returnFromConnection();
+        await jest.runAllTimersAsync();
+        abortController.abort();
+        expect(send).not.toHaveBeenCalledWith(
             expect.objectContaining({
-                payload: expect.objectContaining({
-                    method: 'thingUnsubscribe',
-                }),
+                method: 'thingUnsubscribe',
+            })
+        );
+    });
+    it('does not send an unsubscribe request to the transport when aborted after the connection iterator fatals given an established subscription', async () => {
+        expect.assertions(1);
+        jest.useFakeTimers();
+        const abortController = new AbortController();
+        let killConnection: () => void;
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            yield await new Promise((_, reject) => {
+                killConnection = reject;
+            });
+        });
+        await rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
+        // FIXME: https://github.com/microsoft/TypeScript/issues/11498
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        killConnection(new Error('o no'));
+        await jest.runAllTimersAsync();
+        abortController.abort();
+        expect(send).not.toHaveBeenCalledWith(
+            expect.objectContaining({
+                method: 'thingUnsubscribe',
             })
         );
     });
     it('delivers only messages destined for a particular subscription', async () => {
         expect.assertions(1);
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: 42 /* subscription id */ };
-                yield { params: { result: 123, subscription: 41 } };
-                yield { params: { result: 456, subscription: 42 } };
-            },
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: 42 /* subscription id */ };
+            yield { params: { result: 123, subscription: 41 } };
+            yield { params: { result: 456, subscription: 42 } };
         });
         const thingNotifications = await rpc.thingNotifications().subscribe();
         const iterator = thingNotifications[Symbol.asyncIterator]();
@@ -137,11 +202,8 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         'fatals when the subscription id returned from the server is `%s`',
         async subscriptionId => {
             expect.assertions(1);
-            jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-                async *[Symbol.asyncIterator]() {
-                    yield { id: 0, result: subscriptionId /* subscription id */ };
-                },
+            iterable.mockImplementation(async function* () {
+                yield { id: 0, result: subscriptionId /* subscription id */ };
             });
             const thingNotificationsPromise = rpc.thingNotifications().subscribe();
             await expect(thingNotificationsPromise).rejects.toThrow('Failed to obtain a subscription id');
@@ -161,25 +223,19 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     });
     it('fatals when the server fails to respond with a subscription id', async () => {
         expect.assertions(1);
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: undefined /* subscription id */ };
-            },
+        iterable.mockImplementation(async function* () {
+            yield { id: 0, result: undefined /* subscription id */ };
         });
         const subscribePromise = rpc.thingNotifications().subscribe();
         await expect(subscribePromise).rejects.toThrow(/Failed to obtain a subscription id from the server/);
     });
     it('fatals when the server responds with an error', async () => {
         expect.assertions(3);
-        jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield {
-                    error: { code: 123, data: 'abc', message: 'o no' },
-                    id: 0,
-                };
-            },
+        iterable.mockImplementation(async function* () {
+            yield {
+                error: { code: 123, data: 'abc', message: 'o no' },
+                id: 0,
+            };
         });
         const subscribePromise = rpc.thingNotifications().subscribe();
         await expect(subscribePromise).rejects.toThrow(SolanaJsonRpcError);
@@ -188,34 +244,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     });
     it('throws errors when the connection fails to construct', async () => {
         expect.assertions(1);
-        jest.mocked(createWebSocketConnection).mockRejectedValue(new Error('o no'));
+        createWebSocketConnection.mockRejectedValue(new Error('o no'));
         const subscribePromise = rpc.thingNotifications().subscribe();
         await expect(subscribePromise).rejects.toThrow(/o no/);
-    });
-    it('passes thrown errors from the connection iterable through its own iterable', async () => {
-        expect.assertions(1);
-        jest.useFakeTimers();
-        let killServer: () => void;
-        jest.mocked(createWebSocketConnection).mockResolvedValue({
-            send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-            async *[Symbol.asyncIterator]() {
-                yield { id: 0, result: 42 /* subscription id */ };
-                yield await new Promise((_, reject) => {
-                    killServer = reject;
-                });
-            },
-        });
-        const thingNotifications = await rpc.thingNotifications(123).subscribe();
-        const thingNotificationsPromise = (async () => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            for await (const _ of thingNotifications);
-        })();
-        await jest.runAllTimersAsync();
-        // FIXME: https://github.com/microsoft/TypeScript/issues/11498
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        killServer(new Error('o no'));
-        await expect(thingNotificationsPromise).rejects.toThrow(/o no/);
     });
     describe('when calling a method having a concrete implementation', () => {
         let rpc: RpcSubscriptions<TestRpcSubscriptionNotifications>;
@@ -248,12 +279,11 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             expect.assertions(1);
             jest.useFakeTimers();
             const abortController = new AbortController();
-            const send = jest.fn(async () => {});
-            jest.mocked(createWebSocketConnection).mockResolvedValue({
-                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: send,
-                async *[Symbol.asyncIterator]() {
-                    yield { id: 0, result: 42 /* subscription id */ };
-                },
+            iterable.mockImplementation(async function* () {
+                yield { id: 0, result: 42 /* subscription id */ };
+                yield new Promise(() => {
+                    /* never resolve */
+                });
             });
             await rpc.nonConformingNotif(123).subscribe({ abortSignal: abortController.signal });
             await jest.runAllTimersAsync();
@@ -282,12 +312,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         });
         it('calls the response processor with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
-            jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-                async *[Symbol.asyncIterator]() {
-                    yield { id: 0, result: 42 /* subscription id */ };
-                    yield { params: { result: 123, subscription: 42 } };
-                },
+            iterable.mockImplementation(async function* () {
+                yield { id: 0, result: 42 /* subscription id */ };
+                yield { params: { result: 123, subscription: 42 } };
             });
             const thingNotifications = await rpc.thingNotifications().subscribe();
             await thingNotifications[Symbol.asyncIterator]().next();
@@ -295,12 +322,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         });
         it('returns the processed response', async () => {
             expect.assertions(1);
-            jest.mocked(createWebSocketConnection).mockResolvedValueOnce({
-                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: jest.fn(async () => {}),
-                async *[Symbol.asyncIterator]() {
-                    yield { id: 0, result: 42 /* subscription id */ };
-                    yield { params: { result: 123, subscription: 42 } };
-                },
+            iterable.mockImplementation(async function* () {
+                yield { id: 0, result: 42 /* subscription id */ };
+                yield { params: { result: 123, subscription: 42 } };
             });
             const thingNotifications = await rpc.thingNotifications().subscribe();
             await expect(thingNotifications[Symbol.asyncIterator]().next()).resolves.toHaveProperty(

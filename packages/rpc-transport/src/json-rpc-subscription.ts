@@ -17,14 +17,16 @@ type JsonRpcNotification<TNotification> = Readonly<{
 }>;
 type SubscriptionId = number;
 
-function registerIterableFatal(iterable: AsyncIterable<unknown>, catchFn: CallableFunction) {
+function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: CallableFunction) {
     (async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             for await (const _ of iterable);
-        } catch (e) {
-            // Run the catch function if the iterator throws.
-            catchFn(e);
+        } catch {
+            /* empty */
+        } finally {
+            // Run the cleanup function.
+            cleanupFn();
         }
     })();
 }
@@ -57,10 +59,10 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
                 payload: subscribeMessage,
                 signal: connectionAbortController.signal,
             });
-            function handleConnectionFatal() {
+            function handleConnectionCleanup() {
                 options?.abortSignal?.removeEventListener('abort', handleCleanup);
             }
-            registerIterableFatal(connection, handleConnectionFatal);
+            registerIterableCleanup(connection, handleConnectionCleanup);
             /**
              * STEP 2: Wait for the acknowledgement from the server with the subscription id.
              */
