@@ -1,5 +1,6 @@
 export * from './array';
 export * from './array-like-codec-size';
+export * from './bit-array';
 export * from './boolean';
 export * from './data-enum';
 export * from './errors';
