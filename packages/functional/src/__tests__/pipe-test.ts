@@ -70,6 +70,28 @@ describe('pipe', () => {
             )
         ).toBe('3!');
     });
+    describe('mutating objects', () => {
+        it('will not mutate an object directly', () => {
+            const startObj = {
+                hello: 'world',
+            };
+            const endObj = pipe(startObj, obj => {
+                obj.hello = 'there';
+                return obj;
+            });
+            expect(startObj).toBe(endObj);
+        });
+        it('will mutate a cloned object', () => {
+            const startObj = {
+                hello: 'world',
+            };
+            const endObj = pipe(startObj, obj => {
+                const newObj = { ...obj, hello: 'there' };
+                return newObj;
+            });
+            expect(endObj).toMatchObject({ hello: 'there' });
+        });
+    });
     describe('combining objects', () => {
         function combine<T extends object, U extends object>(a: T, b: U): T & U {
             return { ...a, ...b };
