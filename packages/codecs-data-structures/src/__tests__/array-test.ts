@@ -86,7 +86,7 @@ describe('getArrayCodec', () => {
         expect(arrayU64.decode(b('0200000000000000'))).toStrictEqual([[2n], 8]);
 
         // It fails with variable size items.
-        expect(() => array(string(), remainder)).toThrow('Serializers of "remainder" size must have fixed-size items');
+        expect(() => array(string(), remainder)).toThrow('Codecs of "remainder" size must have fixed-size items');
     });
 
     it('has the right description', () => {
