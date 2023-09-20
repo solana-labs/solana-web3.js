@@ -2,7 +2,6 @@ import { pipe } from '../pipe';
 
 describe('pipe', () => {
     it('can pipe a single value', () => {
-        expect.assertions(6);
         expect(pipe(true)).toBe(true);
         expect(pipe('test')).toBe('test');
         expect(pipe(1)).toBe(1);
@@ -11,11 +10,9 @@ describe('pipe', () => {
         expect(pipe(undefined)).toBeUndefined();
     });
     it('can pipe a single function', () => {
-        expect.assertions(1);
         expect(pipe('test', value => value.toUpperCase())).toBe('TEST');
     });
     it('can pipe multiple functions', () => {
-        expect.assertions(3);
         expect(
             pipe(
                 'test',
@@ -42,7 +39,6 @@ describe('pipe', () => {
         ).toBe(3);
     });
     it('can pipe multiple functions with different types', () => {
-        expect.assertions(3);
         expect(
             pipe(
                 1,
@@ -97,11 +93,9 @@ describe('pipe', () => {
             return { ...a, ...b };
         }
         it('can combine two objects', () => {
-            expect.assertions(1);
             expect(pipe({ a: 1 }, value => combine(value, { b: 2 }))).toEqual({ a: 1, b: 2 });
         });
         it('can combine four objects', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1 },
@@ -117,11 +111,9 @@ describe('pipe', () => {
             return [...a, ...b];
         }
         it('can combine two arrays', () => {
-            expect.assertions(1);
             expect(pipe([1], value => combine(value, [2]))).toEqual([1, 2]);
         });
         it('can combine four arrays', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     [1],
@@ -137,11 +129,9 @@ describe('pipe', () => {
             return a + b;
         }
         it('can combine two strings', () => {
-            expect.assertions(1);
             expect(pipe('a', value => combine(value, 'b'))).toBe('ab');
         });
         it('can combine four strings', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     'a',
@@ -170,18 +160,15 @@ describe('pipe', () => {
             }
         }
         it('can create the array', () => {
-            expect.assertions(1);
             expect(pipe({ a: 1 }, value => addOrAppend(value, 'test'))).toEqual({ a: 1, d: ['test'] });
         });
         it('can append to the array', () => {
-            expect.assertions(1);
             expect(pipe({ a: 1, d: ['test'] }, value => addOrAppend(value, 'test'))).toEqual({
                 a: 1,
                 d: ['test', 'test'],
             });
         });
         it('can create and append to the array', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1, b: 'test' },
@@ -195,7 +182,6 @@ describe('pipe', () => {
             });
         });
         it('can create and append to the array multiple times', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1, b: 'test' },
@@ -211,7 +197,6 @@ describe('pipe', () => {
             });
         });
         it('can create the array, do some other operations, then append to the array', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1, b: 'test' },
@@ -227,7 +212,6 @@ describe('pipe', () => {
             });
         });
         it('can create the array, append to it, do some other operations, then drop it', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1, b: 'test' },
@@ -242,7 +226,6 @@ describe('pipe', () => {
             });
         });
         it('can create the array, append to it, do some other operations, then drop it, then create/append to it again', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     { a: 1, b: 'test' },
@@ -264,15 +247,12 @@ describe('pipe', () => {
             throw new Error('test error');
         }
         it('can capture errors', () => {
-            expect.assertions(1);
             expect(() => pipe('init', throws)).toThrow('test error');
         });
         it('can capture errors with multiple throws', () => {
-            expect.assertions(1);
             expect(() => pipe('init', throws, throws, throws)).toThrow('test error');
         });
         it('can capture errors when throw occurs early in pipe', () => {
-            expect.assertions(1);
             expect(() =>
                 pipe(
                     'init',
@@ -286,11 +266,9 @@ describe('pipe', () => {
     });
     describe('nested pipes', () => {
         it('can pipe a single value from a nested pipe of a single value', () => {
-            expect.assertions(1);
             expect(pipe(pipe(pipe(1)))).toBe(1);
         });
         it('can pipe a single value from a nested pipe of multiple functions', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     pipe(
@@ -305,7 +283,6 @@ describe('pipe', () => {
             ).toBe(3);
         });
         it('can pipe multiple functions on a nested pipe of multiple functions', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     pipe(
@@ -322,7 +299,6 @@ describe('pipe', () => {
             ).toBe('3!');
         });
         it('can pipe an initial value through multiple functions, apply a nested pipe of multiple functions, then apply more functions', () => {
-            expect.assertions(1);
             expect(
                 pipe(
                     1,
@@ -342,7 +318,6 @@ describe('pipe', () => {
         });
     });
     it('can pipe an initial object through multiple functions, apply a nested pipe of multiple functions, then apply more functions', () => {
-        expect.assertions(1);
         expect(
             pipe(
                 { a: 1 },
@@ -363,7 +338,6 @@ describe('pipe', () => {
         ).toEqual({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 });
     });
     it('can pipe an initial object through multiple functions, apply a nested pipe of multiple functions to one field, then apply more functions', () => {
-        expect.assertions(1);
         expect(
             pipe(
                 { a: 1 },
