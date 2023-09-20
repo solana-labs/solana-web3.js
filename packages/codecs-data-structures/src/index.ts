@@ -6,4 +6,5 @@ export * from './map';
 export * from './nullable';
 export * from './set';
 export * from './struct';
+export * from './tuple';
 export * from './unit';
