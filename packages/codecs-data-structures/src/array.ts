@@ -19,7 +19,7 @@ import {
 } from './array-like-codec-size';
 import { InvalidNumberOfItemsCodecError } from './errors';
 
-/** Defines the options for array serializers. */
+/** Defines the options for array codecs. */
 export type ArrayCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
     /**
      * The size of the array.
@@ -30,7 +30,7 @@ export type ArrayCodecOptions<TPrefix extends NumberCodec | NumberEncoder | Numb
 
 function arrayCodecHelper(item: CodecData, size: ArrayLikeCodecSize<CodecData>, description?: string): CodecData {
     if (size === 'remainder' && item.fixedSize === null) {
-        throw new ExpectedFixedSizeCodecError('Serializers of "remainder" size must have fixed-size items.');
+        throw new ExpectedFixedSizeCodecError('Codecs of "remainder" size must have fixed-size items.');
     }
 
     return {
