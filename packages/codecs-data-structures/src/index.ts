@@ -4,6 +4,7 @@ export * from './boolean';
 export * from './errors';
 export * from './map';
 export * from './nullable';
+export * from './scalar-enum';
 export * from './set';
 export * from './struct';
 export * from './tuple';
