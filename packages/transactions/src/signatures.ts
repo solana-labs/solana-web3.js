@@ -24,11 +24,15 @@ export async function signTransaction<TTransaction extends Parameters<typeof com
     const compiledMessage = compileMessage(transaction);
     const nextSignatures: Record<Base58EncodedAddress, Ed25519Signature> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
-    for (const keyPair of keyPairs) {
-        const [signerPublicKey, signature] = await Promise.all([
-            getAddressFromPublicKey(keyPair.publicKey),
-            getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
-        ]);
+    const publicKeySignaturePairs = await Promise.all(
+        keyPairs.map(keyPair =>
+            Promise.all([
+                getAddressFromPublicKey(keyPair.publicKey),
+                getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
+            ])
+        )
+    );
+    for (const [signerPublicKey, signature] of publicKeySignaturePairs) {
         nextSignatures[signerPublicKey] = signature;
     }
     const out = {
