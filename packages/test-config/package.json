@@ -12,7 +12,7 @@
         "test-validator-teardown.js"
     ],
     "peerDependencies": {
-        "jest": "^29.6.1",
+        "jest": "^29.7.0",
         "jest-dev-server": "^9.0.0",
         "jest-environment-jsdom": "^29.6.4",
         "jest-fetch-mock-fork": "^3.0.4",
@@ -24,8 +24,8 @@
     },
     "devDependencies": {
         "@jest/types": "^29.6.1",
-        "@types/jest": "^29.5.3",
-        "jest": "^29.6.1",
+        "@types/jest": "^29.5.5",
+        "jest": "^29.7.0",
         "jest-dev-server": "^9.0.0",
         "jest-fetch-mock-fork": "^3.0.4",
         "tsconfig": "workspace:*"
