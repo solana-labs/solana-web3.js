@@ -18,9 +18,3 @@ function isJsonRpcPayload(payload: unknown): payload is Readonly<{ method: strin
 export function getSolanaRpcPayloadDeduplicationKey(payload: unknown): string | undefined {
     return isJsonRpcPayload(payload) ? fastStableStringify([payload.method, payload.params]) : undefined;
 }
-
-export function getSolanaRpcSubscriptionPayloadDeduplicationKey(payload: unknown): string | undefined {
-    return isJsonRpcPayload(payload) && payload.method.endsWith('Subscribe')
-        ? fastStableStringify([payload.method, payload.params])
-        : undefined;
-}
