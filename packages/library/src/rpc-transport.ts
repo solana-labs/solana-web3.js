@@ -1,3 +1,4 @@
+import { pipe } from '@solana/functional';
 import { createHttpTransport } from '@solana/rpc-transport';
 import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
 
@@ -18,7 +19,7 @@ function normalizeHeaders<T extends Record<string, string>>(
 }
 
 export function createDefaultRpcTransport(config: Parameters<typeof createHttpTransport>[0]): IRpcTransport {
-    return getRpcTransportWithRequestCoalescing(
+    return pipe(
         createHttpTransport({
             ...config,
             headers: {
@@ -29,6 +30,6 @@ export function createDefaultRpcTransport(config: Parameters<typeof createHttpTr
                 } as { [overrideHeader: string]: string }),
             },
         }),
-        getSolanaRpcPayloadDeduplicationKey
+        transport => getRpcTransportWithRequestCoalescing(transport, getSolanaRpcPayloadDeduplicationKey)
     );
 }
