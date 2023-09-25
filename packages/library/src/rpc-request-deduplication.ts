@@ -2,11 +2,25 @@
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
 
-export function getSolanaRpcPayloadDeduplicationKey(payload: unknown): string | undefined {
+function isJsonRpcPayload(payload: unknown): payload is Readonly<{ method: string; params: unknown }> {
     if (payload == null || typeof payload !== 'object' || Array.isArray(payload)) {
-        return;
+        return false;
     }
-    if ('jsonrpc' in payload && payload.jsonrpc === '2.0' && 'method' in payload && 'params' in payload) {
-        return fastStableStringify([payload.method, payload.params]);
-    }
+    return (
+        'jsonrpc' in payload &&
+        payload.jsonrpc === '2.0' &&
+        'method' in payload &&
+        typeof payload.method === 'string' &&
+        'params' in payload
+    );
+}
+
+export function getSolanaRpcPayloadDeduplicationKey(payload: unknown): string | undefined {
+    return isJsonRpcPayload(payload) ? fastStableStringify([payload.method, payload.params]) : undefined;
+}
+
+export function getSolanaRpcSubscriptionPayloadDeduplicationKey(payload: unknown): string | undefined {
+    return isJsonRpcPayload(payload) && payload.method.endsWith('Subscribe')
+        ? fastStableStringify([payload.method, payload.params])
+        : undefined;
 }
