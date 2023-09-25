@@ -1,3 +1,4 @@
+import { pipe } from '@solana/functional';
 import { createWebSocketTransport } from '@solana/rpc-transport';
 import { IRpcWebSocketTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
 
@@ -17,17 +18,23 @@ export function createDefaultRpcSubscriptionsTransport(
     }
 ): IRpcWebSocketTransport {
     const { getShard, intervalMs, ...rest } = config;
-    return getWebSocketTransportWithAutoping({
-        intervalMs: intervalMs ?? 5_000,
-        transport: getWebSocketTransportWithConnectionSharding({
-            getShard,
-            transport: createWebSocketTransport({
-                ...rest,
-                sendBufferHighWatermark:
-                    config.sendBufferHighWatermark ??
-                    // Let 128KB of data into the WebSocket buffer before buffering it in the app.
-                    131_072,
-            }),
+    return pipe(
+        createWebSocketTransport({
+            ...rest,
+            sendBufferHighWatermark:
+                config.sendBufferHighWatermark ??
+                // Let 128KB of data into the WebSocket buffer before buffering it in the app.
+                131_072,
         }),
-    });
+        transport =>
+            getWebSocketTransportWithAutoping({
+                intervalMs: intervalMs ?? 5_000,
+                transport,
+            }),
+        transport =>
+            getWebSocketTransportWithConnectionSharding({
+                getShard,
+                transport,
+            })
+    );
 }
