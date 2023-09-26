@@ -2,6 +2,7 @@ export * from './array';
 export * from './array-like-codec-size';
 export * from './bit-array';
 export * from './boolean';
+export * from './bytes';
 export * from './data-enum';
 export * from './errors';
 export * from './map';
