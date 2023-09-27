@@ -31,8 +31,8 @@ describe('getShortU16Codec', () => {
         // Assert re-serialization.
         const codec = shortU16();
         for (let i = 0; i <= 0b1111111111111111; i += 1) {
-            const buffer = codec.encode(i);
-            expect(codec.decode(buffer)[0]).toBe(i);
+            const bytes = codec.encode(i);
+            expect(codec.decode(bytes)[0]).toBe(i);
         }
     });
 

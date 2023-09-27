@@ -1,6 +1,6 @@
 import {
-    assertBufferHasEnoughBytesForCodec,
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayHasEnoughBytesForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     CodecData,
     Decoder,
     Encoder,
@@ -50,9 +50,9 @@ export function numberEncoderFactory<T extends number | bigint>(input: NumberFac
             if (input.range) {
                 assertNumberIsBetweenForCodec(input.name, input.range[0], input.range[1], value);
             }
-            const buffer = new ArrayBuffer(input.size);
-            input.set(new DataView(buffer), value, codecData.littleEndian);
-            return new Uint8Array(buffer);
+            const arrayBuffer = new ArrayBuffer(input.size);
+            input.set(new DataView(arrayBuffer), value, codecData.littleEndian);
+            return new Uint8Array(arrayBuffer);
         },
         fixedSize: codecData.fixedSize,
         maxSize: codecData.maxSize,
@@ -64,10 +64,9 @@ export function numberDecoderFactory<T extends number | bigint>(input: NumberFac
 
     return {
         decode(bytes, offset = 0): [T, number] {
-            const slice = bytes.slice(offset, offset + input.size);
-            assertBufferIsNotEmptyForCodec(codecData.description, slice);
-            assertBufferHasEnoughBytesForCodec(codecData.description, slice, input.size);
-            const view = new DataView(toArrayBuffer(slice));
+            assertByteArrayIsNotEmptyForCodec(codecData.description, bytes, offset);
+            assertByteArrayHasEnoughBytesForCodec(codecData.description, input.size, bytes, offset);
+            const view = new DataView(toArrayBuffer(bytes, offset, input.size));
             return [input.get(view, codecData.littleEndian), offset + input.size];
         },
         description: codecData.description,
@@ -77,9 +76,11 @@ export function numberDecoderFactory<T extends number | bigint>(input: NumberFac
 }
 
 /**
- * Helper function to ensure that the array buffer is converted properly from a Uint8Array
+ * Helper function to ensure that the ArrayBuffer is converted properly from a Uint8Array
  * Source: https://stackoverflow.com/questions/37228285/uint8array-to-arraybuffer
  */
-function toArrayBuffer(array: Uint8Array): ArrayBuffer {
-    return array.buffer.slice(array.byteOffset, array.byteLength + array.byteOffset);
+function toArrayBuffer(bytes: Uint8Array, offset?: number, length?: number): ArrayBuffer {
+    const bytesOffset = bytes.byteOffset + (offset ?? 0);
+    const bytesLength = length ?? bytes.byteLength;
+    return bytes.buffer.slice(bytesOffset, bytesOffset + bytesLength);
 }

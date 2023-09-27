@@ -1,6 +1,5 @@
 export * from './assertions';
 export * from './common';
-export * from './errors';
 export * from './f32';
 export * from './f64';
 export * from './i128';

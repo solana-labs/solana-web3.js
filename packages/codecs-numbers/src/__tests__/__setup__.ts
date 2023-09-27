@@ -1,7 +1,5 @@
 import { Codec, Encoder } from '@solana/codecs-core';
 
-import { NumberOutOfRangeCodecError } from '../errors';
-
 export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decodedNumber?: T): void => {
     // Serialize.
     const actualBytes = codec.encode(number);
@@ -20,21 +18,17 @@ export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decode
 };
 
 export const assertRangeError = <T>(encoder: Encoder<T>, number: T): void => {
-    expect(() => encoder.encode(number)).toThrow(NumberOutOfRangeCodecError);
+    expect(() => encoder.encode(number)).toThrow('expected number to be between');
 };
 
 export const base16: Codec<string> = {
-    decode(buffer, offset = 0) {
-        const value = buffer.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-        return [value, buffer.length];
+    decode(bytes, offset = 0) {
+        const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+        return [value, bytes.length];
     },
     description: 'base16',
     encode(value: string) {
-        const lowercaseValue = value.toLowerCase();
-        if (!lowercaseValue.match(/^[0123456789abcdef]*$/)) {
-            throw new Error('Invalid base16 string');
-        }
-        const matches = lowercaseValue.match(/.{1,2}/g);
+        const matches = value.toLowerCase().match(/.{1,2}/g);
         return Uint8Array.from(matches ? matches.map((byte: string) => parseInt(byte, 16)) : []);
     },
     fixedSize: null,

@@ -1,15 +1,14 @@
-import { NumberOutOfRangeCodecError } from './errors';
-
 /**
- * Asserts that a given buffer is not empty.
+ * Asserts that a given number is between a given range.
  */
 export function assertNumberIsBetweenForCodec(
-    codecName: string,
+    codecDescription: string,
     min: number | bigint,
     max: number | bigint,
     value: number | bigint
 ) {
     if (value < min || value > max) {
-        throw new NumberOutOfRangeCodecError(codecName, min, max, value);
+        // TODO: Coded error.
+        throw new Error(`Codec [${codecDescription}] expected number to be between ${min} and ${max}, got ${value}.`);
     }
 }
