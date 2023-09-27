@@ -2,6 +2,7 @@ import { pipe } from '@solana/functional';
 import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
+    createSolanaRpcSubscriptionsApi_UNSTABLE,
     SolanaRpcMethods,
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
@@ -43,6 +44,6 @@ export function createSolanaRpcSubscriptions_UNSTABLE(
 ): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
     return createJsonSubscriptionRpc({
         ...config,
-        api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
+        api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
     });
 }

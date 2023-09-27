@@ -63,3 +63,11 @@ export function createSolanaRpcSubscriptionsApi(
         },
     });
 }
+
+export function createSolanaRpcSubscriptionsApi_UNSTABLE(
+    config?: Config
+): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    return createSolanaRpcSubscriptionsApi(config) as IRpcSubscriptionsApi<
+        SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
+    >;
+}

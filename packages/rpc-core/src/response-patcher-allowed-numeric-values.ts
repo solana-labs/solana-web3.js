@@ -20,9 +20,7 @@ export function getAllowedNumericKeypathsForNotification(): AllowedNumericKeypat
     IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>
 > {
     if (!memoizedNotificationKeypaths) {
-        memoizedNotificationKeypaths = {
-            slotsUpdatesNotifications: [['timestamp']],
-        };
+        memoizedNotificationKeypaths = {};
     }
     return memoizedNotificationKeypaths;
 }

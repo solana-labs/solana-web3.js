@@ -2,8 +2,7 @@
 
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 
-import { Slot } from '../../rpc-methods/common';
-import { UnixTimestamp } from '../../unix-timestamp';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
 import { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications';
 
 async () => {
@@ -12,7 +11,7 @@ async () => {
     type TNotification = Readonly<{
         parent?: Slot;
         slot: Slot;
-        timestamp: UnixTimestamp;
+        timestamp: U64UnsafeBeyond2Pow53Minus1;
         type:
             | 'completed'
             | 'createdBank'

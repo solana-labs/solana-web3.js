@@ -1,11 +1,10 @@
-import { Slot } from '../rpc-methods/common';
-import { UnixTimestamp } from '../unix-timestamp';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
 
 type SlotsUpdatesNotificationsApiNotification = Readonly<{
     // Only present for 'createdBank' and notifications
     parent?: Slot;
     slot: Slot;
-    timestamp: UnixTimestamp;
+    timestamp: U64UnsafeBeyond2Pow53Minus1;
     type: 'completed' | 'createdBank' | 'dead' | 'firstShredReceived' | 'frozen' | 'optimisticConfirmation' | 'root';
 }>;
 
