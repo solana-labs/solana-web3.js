@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Encoder } from '@solana/codecs-core';
 
 import { NumberOutOfRangeCodecError } from '../errors';
@@ -25,9 +24,11 @@ export const assertRangeError = <T>(encoder: Encoder<T>, number: T): void => {
 };
 
 export const base16: Codec<string> = {
+    decode(buffer, offset = 0) {
+        const value = buffer.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+        return [value, buffer.length];
+    },
     description: 'base16',
-    fixedSize: null,
-    maxSize: null,
     encode(value: string) {
         const lowercaseValue = value.toLowerCase();
         if (!lowercaseValue.match(/^[0123456789abcdef]*$/)) {
@@ -36,8 +37,6 @@ export const base16: Codec<string> = {
         const matches = lowercaseValue.match(/.{1,2}/g);
         return Uint8Array.from(matches ? matches.map((byte: string) => parseInt(byte, 16)) : []);
     },
-    decode(buffer, offset = 0) {
-        const value = buffer.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-        return [value, buffer.length];
-    },
+    fixedSize: null,
+    maxSize: null,
 };

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { BaseCodecOptions, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { assertNumberIsBetweenForCodec } from './assertions';
@@ -14,8 +13,6 @@ export type ShortU16CodecOptions = BaseCodecOptions;
  */
 export const getShortU16Encoder = (options: ShortU16CodecOptions = {}): Encoder<number> => ({
     description: options.description ?? 'shortU16',
-    fixedSize: null,
-    maxSize: 3,
     encode: (value: number): Uint8Array => {
         assertNumberIsBetweenForCodec('shortU16', 0, 65535, value);
         const bytes = [0];
@@ -36,6 +33,8 @@ export const getShortU16Encoder = (options: ShortU16CodecOptions = {}): Encoder<
         }
         return new Uint8Array(bytes);
     },
+    fixedSize: null,
+    maxSize: 3,
 });
 
 /**
@@ -43,9 +42,6 @@ export const getShortU16Encoder = (options: ShortU16CodecOptions = {}): Encoder<
  * @see {@link getShortU16Codec} for a more detailed description.
  */
 export const getShortU16Decoder = (options: ShortU16CodecOptions = {}): Decoder<number> => ({
-    description: options.description ?? 'shortU16',
-    fixedSize: null,
-    maxSize: 3,
     decode: (bytes: Uint8Array, offset = 0): [number, number] => {
         let value = 0;
         let byteCount = 0;
@@ -62,6 +58,9 @@ export const getShortU16Decoder = (options: ShortU16CodecOptions = {}): Decoder<
         }
         return [value, offset + byteCount];
     },
+    description: options.description ?? 'shortU16',
+    fixedSize: null,
+    maxSize: 3,
 });
 
 /**
