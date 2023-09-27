@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {
     assertBufferHasEnoughBytesForCodec,
     BaseCodecOptions,
@@ -29,8 +28,6 @@ export const getBitArrayEncoder = (size: number, options: BitArrayCodecOptions |
     const backwardSuffix = backward ? '; backward' : '';
     return {
         description: parsedOptions.description ?? `bitArray(${size}${backwardSuffix})`,
-        fixedSize: size,
-        maxSize: size,
         encode(value: boolean[]) {
             const bytes: number[] = [];
 
@@ -49,6 +46,8 @@ export const getBitArrayEncoder = (size: number, options: BitArrayCodecOptions |
 
             return new Uint8Array(bytes);
         },
+        fixedSize: size,
+        maxSize: size,
     };
 };
 
@@ -63,9 +62,6 @@ export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions |
     const backward = parsedOptions.backward ?? false;
     const backwardSuffix = backward ? '; backward' : '';
     return {
-        description: parsedOptions.description ?? `bitArray(${size}${backwardSuffix})`,
-        fixedSize: size,
-        maxSize: size,
         decode(bytes, offset = 0) {
             const booleans: boolean[] = [];
             let slice = bytes.slice(offset, offset + size);
@@ -86,6 +82,9 @@ export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions |
 
             return [booleans, offset + size];
         },
+        description: parsedOptions.description ?? `bitArray(${size}${backwardSuffix})`,
+        fixedSize: size,
+        maxSize: size,
     };
 };
 

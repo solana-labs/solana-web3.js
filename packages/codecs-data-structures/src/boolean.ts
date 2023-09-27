@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {
     assertBufferIsNotEmptyForCodec,
     assertFixedSizeCodec,
@@ -30,9 +29,9 @@ export function getBooleanEncoder(options: BooleanCodecOptions<NumberEncoder> = 
 
     return {
         description: options.description ?? `bool(${size.description})`,
+        encode: (value: boolean) => size.encode(value ? 1 : 0),
         fixedSize: size.fixedSize,
         maxSize: size.fixedSize,
-        encode: (value: boolean) => size.encode(value ? 1 : 0),
     };
 }
 
@@ -46,14 +45,14 @@ export function getBooleanDecoder(options: BooleanCodecOptions<NumberDecoder> = 
     assertFixedSizeCodec(size, 'Codec [bool] requires a fixed size.');
 
     return {
-        description: options.description ?? `bool(${size.description})`,
-        fixedSize: size.fixedSize,
-        maxSize: size.fixedSize,
         decode: (bytes: Uint8Array, offset = 0) => {
             assertBufferIsNotEmptyForCodec('bool', bytes.slice(offset));
             const [value, vOffset] = size.decode(bytes, offset);
             return [value === 1, vOffset];
         },
+        description: options.description ?? `bool(${size.description})`,
+        fixedSize: size.fixedSize,
+        maxSize: size.fixedSize,
     };
 }
 

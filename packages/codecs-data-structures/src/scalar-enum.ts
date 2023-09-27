@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {
     assertBufferIsNotEmptyForCodec,
     BaseCodecOptions,
@@ -81,8 +80,6 @@ export function getScalarEnumEncoder<T>(
         scalarEnumCoderHelper(constructor, prefix, options.description);
     return {
         description,
-        fixedSize,
-        maxSize,
         encode: (value: T) => {
             const isInvalidNumber = typeof value === 'number' && (value < minRange || value > maxRange);
             const isInvalidString = typeof value === 'string' && !stringValues.includes(value);
@@ -94,6 +91,8 @@ export function getScalarEnumEncoder<T>(
             if (valueIndex >= 0) return prefix.encode(valueIndex);
             return prefix.encode(enumKeys.indexOf(value as string));
         },
+        fixedSize,
+        maxSize,
     };
 }
 
@@ -114,9 +113,6 @@ export function getScalarEnumDecoder<T>(
         options.description
     );
     return {
-        description,
-        fixedSize,
-        maxSize,
         decode: (bytes: Uint8Array, offset = 0) => {
             assertBufferIsNotEmptyForCodec('enum', bytes.slice(offset));
             const [value, newOffset] = prefix.decode(bytes, offset);
@@ -127,6 +123,9 @@ export function getScalarEnumDecoder<T>(
             }
             return [(isNumericEnum ? valueAsNumber : enumValues[valueAsNumber]) as T, offset];
         },
+        description,
+        fixedSize,
+        maxSize,
     };
 }
 

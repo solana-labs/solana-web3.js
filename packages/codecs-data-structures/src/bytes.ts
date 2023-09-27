@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {
     assertBufferHasEnoughBytesForCodec,
     assertBufferIsNotEmptyForCodec,
@@ -37,9 +36,9 @@ export function getBytesEncoder(options: BytesCodecOptions<NumberEncoder> = {}):
 
     const byteEncoder: Encoder<Uint8Array> = {
         description,
+        encode: (value: Uint8Array) => value,
         fixedSize: null,
         maxSize: null,
-        encode: (value: Uint8Array) => value,
     };
 
     if (size === 'variable') {
@@ -71,13 +70,13 @@ export function getBytesDecoder(options: BytesCodecOptions<NumberDecoder> = {}):
     const description = options.description ?? `bytes(${sizeDescription})`;
 
     const byteDecoder: Decoder<Uint8Array> = {
-        description,
-        fixedSize: null,
-        maxSize: null,
         decode: (bytes: Uint8Array, offset = 0) => {
             const slice = bytes.slice(offset);
             return [slice, offset + slice.length];
         },
+        description,
+        fixedSize: null,
+        maxSize: null,
     };
 
     if (size === 'variable') {

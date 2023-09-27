@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { BaseCodecOptions, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 /** Defines the options for unit codecs. */
@@ -12,9 +11,9 @@ export type UnitSerializerOptions = BaseCodecOptions;
 export function getUnitEncoder(options: UnitSerializerOptions = {}): Encoder<void> {
     return {
         description: options.description ?? 'unit',
+        encode: () => new Uint8Array(),
         fixedSize: 0,
         maxSize: 0,
-        encode: () => new Uint8Array(),
     };
 }
 
@@ -25,10 +24,10 @@ export function getUnitEncoder(options: UnitSerializerOptions = {}): Encoder<voi
  */
 export function getUnitDecoder(options: UnitSerializerOptions = {}): Decoder<void> {
     return {
+        decode: (_bytes: Uint8Array, offset = 0) => [undefined, offset],
         description: options.description ?? 'unit',
         fixedSize: 0,
         maxSize: 0,
-        decode: (_bytes: Uint8Array, offset = 0) => [undefined, offset],
     };
 }
 
