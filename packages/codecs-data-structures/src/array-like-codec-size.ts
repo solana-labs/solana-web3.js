@@ -1,7 +1,6 @@
-import { CodecData, ExpectedFixedSizeCodecError, Offset } from '@solana/codecs-core';
+import { CodecData, Offset } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { InvalidArrayLikeRemainderSizeCodecError, UnrecognizedArrayLikeCodecSizeError } from './errors';
 import { sumCodecSizes } from './utils';
 
 /**
@@ -12,7 +11,7 @@ import { sumCodecSizes } from './utils';
  * - a {@link NumberCodec} that prefixes its content with its size.
  * - a fixed number of items.
  * - or `'remainder'` to infer the number of items by dividing
- *   the rest of the buffer by the fixed size of its item.
+ *   the rest of the byte array by the fixed size of its item.
  *   Note that this option is only available for fixed-size items.
  */
 export type ArrayLikeCodecSize<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder | CodecData> =
@@ -38,16 +37,23 @@ export function decodeArrayLikeCodecSize(
     if (size === 'remainder') {
         const childrenSize = sumCodecSizes(childrenSizes);
         if (childrenSize === null) {
-            throw new ExpectedFixedSizeCodecError('Codecs of "remainder" size must have fixed-size items.');
+            // TODO: Coded error.
+            throw new Error('Codecs of "remainder" size must have fixed-size items.');
         }
         const remainder = bytes.slice(offset).length;
         if (remainder % childrenSize !== 0) {
-            throw new InvalidArrayLikeRemainderSizeCodecError(remainder, childrenSize);
+            // TODO: Coded error.
+            throw new Error(
+                `The remainder of the byte array (${remainder} bytes) cannot be split into chunks of ${childrenSize} bytes. ` +
+                    `Codecs of "remainder" size must have a remainder that is a multiple of its item size. ` +
+                    `In other words, ${remainder} modulo ${childrenSize} should be equal to zero.`
+            );
         }
         return [remainder / childrenSize, offset];
     }
 
-    throw new UnrecognizedArrayLikeCodecSizeError(size);
+    // TODO: Coded error.
+    throw new Error(`Unrecognized array-like codec size: ${JSON.stringify(size)}`);
 }
 
 export function getArrayLikeCodecSizeDescription(size: ArrayLikeCodecSize<CodecData>): string {

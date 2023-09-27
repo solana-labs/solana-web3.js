@@ -1,5 +1,5 @@
 import {
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     BaseCodecOptions,
     Codec,
     CodecData,
@@ -8,8 +8,6 @@ import {
     Encoder,
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
-
-import { EnumDiscriminatorOutOfRangeError, InvalidScalarEnumVariantError } from './errors';
 
 /**
  * Defines a scalar enum as a type from its constructor.
@@ -84,7 +82,13 @@ export function getScalarEnumEncoder<T>(
             const isInvalidNumber = typeof value === 'number' && (value < minRange || value > maxRange);
             const isInvalidString = typeof value === 'string' && !stringValues.includes(value);
             if (isInvalidNumber || isInvalidString) {
-                throw new InvalidScalarEnumVariantError(value, stringValues, minRange, maxRange);
+                // TODO: Coded error.
+                throw new Error(
+                    `Invalid scalar enum variant. ` +
+                        `Expected one of [${stringValues.join(', ')}] ` +
+                        `or a number between ${minRange} and ${maxRange}, ` +
+                        `got "${value}".`
+                );
             }
             if (typeof value === 'number') return prefix.encode(value);
             const valueIndex = enumValues.indexOf(value);
@@ -114,12 +118,16 @@ export function getScalarEnumDecoder<T>(
     );
     return {
         decode: (bytes: Uint8Array, offset = 0) => {
-            assertBufferIsNotEmptyForCodec('enum', bytes.slice(offset));
+            assertByteArrayIsNotEmptyForCodec('enum', bytes, offset);
             const [value, newOffset] = prefix.decode(bytes, offset);
             const valueAsNumber = Number(value);
             offset = newOffset;
             if (valueAsNumber < minRange || valueAsNumber > maxRange) {
-                throw new EnumDiscriminatorOutOfRangeError(valueAsNumber, minRange, maxRange);
+                // TODO: Coded error.
+                throw new Error(
+                    `Enum discriminator out of range. ` +
+                        `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`
+                );
             }
             return [(isNumericEnum ? valueAsNumber : enumValues[valueAsNumber]) as T, offset];
         },

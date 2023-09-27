@@ -1,6 +1,6 @@
 import {
-    assertBufferHasEnoughBytesForCodec,
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayHasEnoughBytesForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     BaseCodecOptions,
     Codec,
     combineCodec,
@@ -15,10 +15,10 @@ import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-number
 /** Defines the options for bytes codecs. */
 export type BytesCodecOptions<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
     /**
-     * The size of the buffer. It can be one of the following:
-     * - a {@link NumberSerializer} that prefixes the buffer with its size.
+     * The size of the byte array. It can be one of the following:
+     * - a {@link NumberSerializer} that prefixes the byte array with its size.
      * - a fixed number of bytes.
-     * - or `'variable'` to use the rest of the buffer.
+     * - or `'variable'` to use the rest of the byte array.
      * @defaultValue `'variable'`
      */
     size?: TSize | number | 'variable';
@@ -90,13 +90,13 @@ export function getBytesDecoder(options: BytesCodecOptions<NumberDecoder> = {}):
     return {
         ...byteDecoder,
         decode: (bytes: Uint8Array, offset = 0) => {
-            assertBufferIsNotEmptyForCodec('bytes', bytes.slice(offset));
+            assertByteArrayIsNotEmptyForCodec('bytes', bytes, offset);
             const [lengthBigInt, lengthOffset] = size.decode(bytes, offset);
             const length = Number(lengthBigInt);
             offset = lengthOffset;
-            const contentBuffer = bytes.slice(offset, offset + length);
-            assertBufferHasEnoughBytesForCodec('bytes', contentBuffer, length);
-            const [value, contentOffset] = byteDecoder.decode(contentBuffer);
+            const contentBytes = bytes.slice(offset, offset + length);
+            assertByteArrayHasEnoughBytesForCodec('bytes', length, contentBytes);
+            const [value, contentOffset] = byteDecoder.decode(contentBytes);
             offset += contentOffset;
             return [value, offset];
         },

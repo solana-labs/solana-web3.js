@@ -1,13 +1,4 @@
-import {
-    BaseCodecOptions,
-    Codec,
-    CodecData,
-    combineCodec,
-    Decoder,
-    Encoder,
-    ExpectedFixedSizeCodecError,
-    mergeBytes,
-} from '@solana/codecs-core';
+import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 import {
@@ -17,7 +8,7 @@ import {
     getArrayLikeCodecSizeFromChildren,
     getArrayLikeCodecSizePrefix,
 } from './array-like-codec-size';
-import { InvalidNumberOfItemsCodecError } from './errors';
+import { assertValidNumberOfItemsForCodec } from './assertions';
 
 /** Defines the options for Map codecs. */
 export type MapCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
@@ -35,7 +26,8 @@ function mapCodecHelper(
     description?: string
 ): CodecData {
     if (size === 'remainder' && (key.fixedSize === null || value.fixedSize === null)) {
-        throw new ExpectedFixedSizeCodecError('Codecs of "remainder" size must have fixed-size items.');
+        // TODO: Coded error.
+        throw new Error('Codecs of "remainder" size must have fixed-size items.');
     }
 
     return {
@@ -62,8 +54,8 @@ export function getMapEncoder<K, V>(
     return {
         ...mapCodecHelper(key, value, size, options.description),
         encode: (map: Map<K, V>) => {
-            if (typeof size === 'number' && map.size !== size) {
-                throw new InvalidNumberOfItemsCodecError('map', size, map.size);
+            if (typeof size === 'number') {
+                assertValidNumberOfItemsForCodec('map', size, map.size);
             }
             const itemBytes = Array.from(map, ([k, v]) => mergeBytes([key.encode(k), value.encode(v)]));
             return mergeBytes([getArrayLikeCodecSizePrefix(size, map.size), ...itemBytes]);

@@ -1,5 +1,5 @@
 import {
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     BaseCodecOptions,
     Codec,
     CodecData,
@@ -10,7 +10,6 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { EnumDiscriminatorOutOfRangeError, InvalidDataEnumVariantError } from './errors';
 import { maxCodecSizes, sumCodecSizes } from './utils';
 
 /**
@@ -132,9 +131,11 @@ export function getDataEnumEncoder<T extends DataEnum>(
         encode: (variant: T) => {
             const discriminator = variants.findIndex(([key]) => variant.__kind === key);
             if (discriminator < 0) {
-                throw new InvalidDataEnumVariantError(
-                    variant.__kind,
-                    variants.map(([key]) => key)
+                // TODO: Coded error.
+                throw new Error(
+                    `Invalid data enum variant. ` +
+                        `Expected one of [${variants.map(([key]) => key).join(', ')}], ` +
+                        `got "${variant.__kind}".`
                 );
             }
             const variantPrefix = prefix.encode(discriminator);
@@ -159,12 +160,16 @@ export function getDataEnumDecoder<T extends DataEnum>(
     return {
         ...dataEnumCodecHelper(variants, prefix, options.description),
         decode: (bytes: Uint8Array, offset = 0) => {
-            assertBufferIsNotEmptyForCodec('dataEnum', bytes.slice(offset));
+            assertByteArrayIsNotEmptyForCodec('dataEnum', bytes, offset);
             const [discriminator, dOffset] = prefix.decode(bytes, offset);
             offset = dOffset;
             const variantField = variants[Number(discriminator)] ?? null;
             if (!variantField) {
-                throw new EnumDiscriminatorOutOfRangeError(discriminator, 0, variants.length - 1);
+                // TODO: Coded error.
+                throw new Error(
+                    `Enum discriminator out of range. ` +
+                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`
+                );
             }
             const [variant, vOffset] = variantField[1].decode(bytes, offset);
             offset = vOffset;

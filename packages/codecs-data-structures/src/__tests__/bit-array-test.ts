@@ -58,7 +58,7 @@ describe('getBitArrayCodec', () => {
         expect(bitArray(1).encode(a('000000001'))).toStrictEqual(b('00'));
         expect(bitArray(1).decode(b('00'))).toStrictEqual([a('00000000'), 1]);
 
-        // It fails if the buffer is too short.
+        // It fails if the byte array is too short.
         expect(() => bitArray(3).decode(b('ff'))).toThrow('Codec [bitArray] expected 3 bytes, got 1');
     });
 

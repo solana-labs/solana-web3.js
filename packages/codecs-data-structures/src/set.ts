@@ -1,13 +1,4 @@
-import {
-    BaseCodecOptions,
-    Codec,
-    CodecData,
-    combineCodec,
-    Decoder,
-    Encoder,
-    ExpectedFixedSizeCodecError,
-    mergeBytes,
-} from '@solana/codecs-core';
+import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 import {
@@ -17,7 +8,7 @@ import {
     getArrayLikeCodecSizeFromChildren,
     getArrayLikeCodecSizePrefix,
 } from './array-like-codec-size';
-import { InvalidNumberOfItemsCodecError } from './errors';
+import { assertValidNumberOfItemsForCodec } from './assertions';
 
 /** Defines the options for set codecs. */
 export type SetCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
@@ -30,7 +21,8 @@ export type SetCodecOptions<TPrefix extends NumberCodec | NumberEncoder | Number
 
 function setCodecHelper(item: CodecData, size: ArrayLikeCodecSize<CodecData>, description?: string): CodecData {
     if (size === 'remainder' && item.fixedSize === null) {
-        throw new ExpectedFixedSizeCodecError('Codecs of "remainder" size must have fixed-size items.');
+        // TODO: Coded error.
+        throw new Error('Codecs of "remainder" size must have fixed-size items.');
     }
 
     return {
@@ -52,7 +44,7 @@ export function getSetEncoder<T>(item: Encoder<T>, options: SetCodecOptions<Numb
         ...setCodecHelper(item, size, options.description),
         encode: (set: Set<T>) => {
             if (typeof size === 'number' && set.size !== size) {
-                throw new InvalidNumberOfItemsCodecError('set', size, set.size);
+                assertValidNumberOfItemsForCodec('set', size, set.size);
             }
             const itemBytes = Array.from(set, value => item.encode(value));
             return mergeBytes([getArrayLikeCodecSizePrefix(size, set.size), ...itemBytes]);

@@ -1,5 +1,5 @@
 import {
-    assertBufferHasEnoughBytesForCodec,
+    assertByteArrayHasEnoughBytesForCodec,
     BaseCodecOptions,
     Codec,
     combineCodec,
@@ -63,10 +63,10 @@ export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions |
     const backwardSuffix = backward ? '; backward' : '';
     return {
         decode(bytes, offset = 0) {
+            assertByteArrayHasEnoughBytesForCodec('bitArray', size, bytes, offset);
             const booleans: boolean[] = [];
             let slice = bytes.slice(offset, offset + size);
             slice = backward ? slice.reverse() : slice;
-            assertBufferHasEnoughBytesForCodec('bitArray', slice, size);
 
             slice.forEach(byte => {
                 for (let i = 0; i < 8; i += 1) {

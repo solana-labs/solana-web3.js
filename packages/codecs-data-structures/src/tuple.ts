@@ -1,6 +1,6 @@
 import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 
-import { InvalidNumberOfItemsCodecError } from './errors';
+import { assertValidNumberOfItemsForCodec } from './assertions';
 import { sumCodecSizes } from './utils';
 
 /** Defines the options for tuple codecs. */
@@ -42,9 +42,7 @@ export function getTupleEncoder<T extends AnyArray>(
     return {
         ...tupleCodecHelper(items, options.description),
         encode: (value: T) => {
-            if (value.length !== items.length) {
-                throw new InvalidNumberOfItemsCodecError('tuple', items.length, value.length);
-            }
+            assertValidNumberOfItemsForCodec('tuple', items.length, value.length);
             return mergeBytes(items.map((item, index) => item.encode(value[index])));
         },
     };

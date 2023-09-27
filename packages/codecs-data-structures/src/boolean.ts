@@ -1,5 +1,5 @@
 import {
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     assertFixedSizeCodec,
     BaseCodecOptions,
     Codec,
@@ -46,7 +46,7 @@ export function getBooleanDecoder(options: BooleanCodecOptions<NumberDecoder> = 
 
     return {
         decode: (bytes: Uint8Array, offset = 0) => {
-            assertBufferIsNotEmptyForCodec('bool', bytes.slice(offset));
+            assertByteArrayIsNotEmptyForCodec('bool', bytes, offset);
             const [value, vOffset] = size.decode(bytes, offset);
             return [value === 1, vOffset];
         },
