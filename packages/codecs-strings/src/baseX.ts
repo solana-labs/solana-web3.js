@@ -55,15 +55,15 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
     const base = alphabet.length;
     const baseBigInt = BigInt(base);
     return {
-        decode(buffer, offset = 0): [string, number] {
-            if (buffer.length === 0) return ['', 0];
+        decode(rawBytes, offset = 0): [string, number] {
+            const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
+            if (bytes.length === 0) return ['', 0];
 
             // Handle leading zeroes.
-            const bytes = buffer.slice(offset);
             let trailIndex = bytes.findIndex(n => n !== 0);
             trailIndex = trailIndex === -1 ? bytes.length : trailIndex;
             const leadingZeroes = alphabet[0].repeat(trailIndex);
-            if (trailIndex === bytes.length) return [leadingZeroes, buffer.length];
+            if (trailIndex === bytes.length) return [leadingZeroes, rawBytes.length];
 
             // From bytes to base10.
             let base10Number = bytes.slice(trailIndex).reduce((sum, byte) => sum * 256n + BigInt(byte), 0n);
@@ -75,7 +75,7 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
                 base10Number /= baseBigInt;
             }
 
-            return [leadingZeroes + tailChars.join(''), buffer.length];
+            return [leadingZeroes + tailChars.join(''), rawBytes.length];
         },
         description: `base${base}`,
         fixedSize: null,

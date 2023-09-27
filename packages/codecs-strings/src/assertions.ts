@@ -1,10 +1,9 @@
-import { InvalidBaseStringError } from './errors';
-
 /**
- * Asserts that a given buffer is not empty.
+ * Asserts that a given string matches a given alphabet.
  */
-export function assertValidBaseString(alphabet: string, value: string, rawValue = value) {
-    if (!value.match(new RegExp(`^[${alphabet}]*$`))) {
-        throw new InvalidBaseStringError(rawValue, alphabet.length);
+export function assertValidBaseString(alphabet: string, testValue: string, givenValue = testValue) {
+    if (!testValue.match(new RegExp(`^[${alphabet}]*$`))) {
+        // TODO: Coded error.
+        throw new Error(`Expected a string of base ${alphabet.length}, got [${givenValue}].`);
     }
 }

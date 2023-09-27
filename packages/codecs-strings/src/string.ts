@@ -1,6 +1,6 @@
 import {
-    assertBufferHasEnoughBytesForCodec,
-    assertBufferIsNotEmptyForCodec,
+    assertByteArrayHasEnoughBytesForCodec,
+    assertByteArrayIsNotEmptyForCodec,
     BaseCodecOptions,
     Codec,
     CodecData,
@@ -24,7 +24,7 @@ export type StringCodecOptions<
      * The size of the string. It can be one of the following:
      * - a {@link NumberCodec} that prefixes the string with its size.
      * - a fixed number of bytes.
-     * - or `'variable'` to use the rest of the buffer.
+     * - or `'variable'` to use the rest of the byte array.
      * @defaultValue u32 prefix.
      */
     size?: TPrefix | number | 'variable';
@@ -77,14 +77,14 @@ export const getStringDecoder = (options: StringCodecOptions<NumberDecoder, Deco
     }
 
     return {
-        decode: (buffer: Uint8Array, offset = 0) => {
-            assertBufferIsNotEmptyForCodec('string', buffer.slice(offset));
-            const [lengthBigInt, lengthOffset] = size.decode(buffer, offset);
+        decode: (bytes: Uint8Array, offset = 0) => {
+            assertByteArrayIsNotEmptyForCodec('string', bytes, offset);
+            const [lengthBigInt, lengthOffset] = size.decode(bytes, offset);
             const length = Number(lengthBigInt);
             offset = lengthOffset;
-            const contentBuffer = buffer.slice(offset, offset + length);
-            assertBufferHasEnoughBytesForCodec('string', contentBuffer, length);
-            const [value, contentOffset] = encoding.decode(contentBuffer);
+            const contentBytes = bytes.slice(offset, offset + length);
+            assertByteArrayHasEnoughBytesForCodec('string', length, contentBytes);
+            const [value, contentOffset] = encoding.decode(contentBytes);
             offset += contentOffset;
             return [value, offset];
         },

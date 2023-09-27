@@ -17,9 +17,9 @@ export const getUtf8Encoder = (): Encoder<string> => {
 export const getUtf8Decoder = (): Decoder<string> => {
     let textDecoder: TextDecoder;
     return {
-        decode(buffer, offset = 0) {
-            const value = (textDecoder ||= new TextDecoder()).decode(buffer.slice(offset));
-            return [removeNullCharacters(value), buffer.length];
+        decode(bytes, offset = 0) {
+            const value = (textDecoder ||= new TextDecoder()).decode(bytes.slice(offset));
+            return [removeNullCharacters(value), bytes.length];
         },
         description: 'utf8',
         fixedSize: null,

@@ -17,9 +17,9 @@ export const getBase16Encoder = (): Encoder<string> => ({
 
 /** Decodes strings in base16. */
 export const getBase16Decoder = (): Decoder<string> => ({
-    decode(buffer, offset = 0) {
-        const value = buffer.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-        return [value, buffer.length];
+    decode(bytes, offset = 0) {
+        const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+        return [value, bytes.length];
     },
     description: 'base16',
     fixedSize: null,

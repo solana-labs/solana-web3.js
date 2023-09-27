@@ -1,7 +1,6 @@
 import { combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
 
 import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
-import { InvalidBaseStringError } from './errors';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -17,7 +16,8 @@ export const getBase64Encoder = (): Encoder<string> => {
                         .map(c => c.charCodeAt(0));
                     return new Uint8Array(bytes);
                 } catch (e) {
-                    throw new InvalidBaseStringError(value, 64, e as Error);
+                    // TODO: Coded error.
+                    throw new Error(`Expected a string of base 64, got [${value}].`);
                 }
             },
             fixedSize: null,
@@ -32,10 +32,10 @@ export const getBase64Encoder = (): Encoder<string> => {
 export const getBase64Decoder = (): Decoder<string> => {
     if (__BROWSER__) {
         return {
-            decode(buffer, offset = 0) {
-                const slice = buffer.slice(offset);
+            decode(bytes, offset = 0) {
+                const slice = bytes.slice(offset);
                 const value = (btoa as Window['btoa'])(String.fromCharCode(...slice));
-                return [value, buffer.length];
+                return [value, bytes.length];
             },
             description: `base64`,
             fixedSize: null,
