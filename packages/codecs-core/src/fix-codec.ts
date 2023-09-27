@@ -1,4 +1,4 @@
-import { assertBufferHasEnoughBytesForCodec } from './assertions';
+import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
 import { Codec, CodecData, Decoder, Encoder } from './codec';
 import { combineCodec } from './combine-codec';
@@ -35,17 +35,18 @@ export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number, descripti
 export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, description?: string): Decoder<T> {
     return {
         ...fixCodecHelper(decoder, fixedBytes, description),
-        decode: (buffer: Uint8Array, offset = 0) => {
-            // Slice the buffer to the fixed size.
-            buffer = buffer.slice(offset, offset + fixedBytes);
-            // Ensure we have enough bytes.
-            assertBufferHasEnoughBytesForCodec('fixCodec', buffer, fixedBytes);
-            // If the nested decoder is fixed-size, pad and truncate the buffer accordingly.
+        decode: (bytes: Uint8Array, offset = 0) => {
+            assertByteArrayHasEnoughBytesForCodec('fixCodec', fixedBytes, bytes, offset);
+            // Slice the byte array to the fixed size if necessary.
+            if (offset > 0 || bytes.length > fixedBytes) {
+                bytes = bytes.slice(offset, offset + fixedBytes);
+            }
+            // If the nested decoder is fixed-size, pad and truncate the byte array accordingly.
             if (decoder.fixedSize !== null) {
-                buffer = fixBytes(buffer, decoder.fixedSize);
+                bytes = fixBytes(bytes, decoder.fixedSize);
             }
             // Decode the value using the nested decoder.
-            const [value] = decoder.decode(buffer, 0);
+            const [value] = decoder.decode(bytes, 0);
             return [value, offset + fixedBytes];
         },
     };

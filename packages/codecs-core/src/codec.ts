@@ -31,7 +31,7 @@ export type Decoder<T> = CodecData & {
      * The function that decodes a value from bytes.
      * It returns the decoded value and the number of bytes read.
      */
-    decode: (buffer: Uint8Array, offset?: Offset) => [T, Offset];
+    decode: (bytes: Uint8Array, offset?: Offset) => [T, Offset];
 };
 
 /**

@@ -19,22 +19,22 @@ describe('fixCodec', () => {
         expect(fixCodec(a1z26, 42).fixedSize).toBe(42);
         expect(fixCodec(a1z26, 42).maxSize).toBe(42);
 
-        // Buffer size === fixed size.
+        // Byte array size === fixed size.
         expect(s(10).encode('helloworld')).toStrictEqual(b('08050c0c0f170f120c04'));
         expect(s(10).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['helloworld', 10]);
 
-        // Buffer size > fixed size => truncated.
+        // Byte array size > fixed size => truncated.
         expect(s(5).encode('helloworld')).toStrictEqual(b('08050c0c0f'));
         expect(s(5).decode(b('08050c0c0f170f120c04'))).toStrictEqual(['hello', 5]);
 
-        // Buffer size < fixed size => padded.
+        // Byte array size < fixed size => padded.
         expect(s(10).encode('hello')).toStrictEqual(b('08050c0c0f0000000000'));
         expect(s(10).decode(b('08050c0c0f0000000000'))).toStrictEqual(['hello_____', 10]);
         expect(() => s(10).decode(b('08050c0c0f'))).toThrow('Codec [fixCodec] expected 10 bytes, got 5.');
     });
 
     it('can fix a codec that requires a minimum amount of bytes', () => {
-        // Given a mock `u32` codec that ensures the buffer is 4 bytes long.
+        // Given a mock `u32` codec that ensures the byte array is 4 bytes long.
         const u32: Codec<number> = {
             decode(bytes, offset = 0): [number, number] {
                 // eslint-disable-next-line jest/no-conditional-in-test

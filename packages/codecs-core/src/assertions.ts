@@ -1,21 +1,28 @@
 import { CodecData } from './codec';
-import { EmptyBufferCodecError, ExpectedFixedSizeCodecError, NotEnoughBytesCodecError } from './errors';
 
 /**
- * Asserts that a given buffer is not empty.
+ * Asserts that a given byte array is not empty.
  */
-export function assertBufferIsNotEmptyForCodec(codecName: string, buffer: Uint8Array) {
-    if (buffer.length === 0) {
-        throw new EmptyBufferCodecError(codecName);
+export function assertByteArrayIsNotEmptyForCodec(codecDescription: string, bytes: Uint8Array, offset = 0) {
+    if (bytes.length - offset <= 0) {
+        // TODO: Coded error.
+        throw new Error(`Codec [${codecDescription}] cannot decode empty byte arrays.`);
     }
 }
 
 /**
- * Asserts that a given buffer has enough bytes to decode.
+ * Asserts that a given byte array has enough bytes to decode.
  */
-export function assertBufferHasEnoughBytesForCodec(codecName: string, buffer: Uint8Array, expected: number) {
-    if (buffer.length < expected) {
-        throw new NotEnoughBytesCodecError(codecName, expected, buffer.length);
+export function assertByteArrayHasEnoughBytesForCodec(
+    codecDescription: string,
+    expected: number,
+    bytes: Uint8Array,
+    offset = 0
+) {
+    const bytesLength = bytes.length - offset;
+    if (bytesLength < expected) {
+        // TODO: Coded error.
+        throw new Error(`Codec [${codecDescription}] expected ${expected} bytes, got ${bytesLength}.`);
     }
 }
 
@@ -26,8 +33,8 @@ export function assertFixedSizeCodec(
     data: Pick<CodecData, 'fixedSize'>,
     message?: string
 ): asserts data is { fixedSize: number } {
-    const fixedSize = data.fixedSize;
-    if (fixedSize === null) {
-        throw new ExpectedFixedSizeCodecError(message);
+    if (data.fixedSize === null) {
+        // TODO: Coded error.
+        throw new Error(message ?? 'Expected a fixed-size codec, got a variable-size one.');
     }
 }
