@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Decoder, Encoder } from './codec';
 import { IncompatibleEncoderAndDecoderError } from './errors';
 
@@ -32,10 +31,10 @@ export function combineCodec<From, To extends From = From>(
     }
 
     return {
+        decode: decoder.decode,
         description: description ?? encoder.description,
+        encode: encoder.encode,
         fixedSize: encoder.fixedSize,
         maxSize: encoder.maxSize,
-        encode: encoder.encode,
-        decode: decoder.decode,
     };
 }

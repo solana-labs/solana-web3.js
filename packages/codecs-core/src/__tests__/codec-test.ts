@@ -1,18 +1,17 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Decoder, Encoder } from '../codec';
 
 describe('Encoder', () => {
     it('can define Encoder instances', () => {
         const myEncoder: Encoder<string> = {
             description: 'myEncoder',
-            fixedSize: 32,
-            maxSize: 32,
             encode: (value: string) => {
                 const buffer = new Uint8Array(32).fill(0);
                 const charCodes = [...value.slice(0, 32)].map(char => Math.min(char.charCodeAt(0), 255));
                 buffer.set(new Uint8Array(charCodes));
                 return buffer;
             },
+            fixedSize: 32,
+            maxSize: 32,
         };
 
         expect(myEncoder.description).toBe('myEncoder');
@@ -28,14 +27,14 @@ describe('Encoder', () => {
 describe('Decoder', () => {
     it('can define Decoder instances', () => {
         const myDecoder: Decoder<string> = {
-            description: 'myDecoder',
-            fixedSize: 32,
-            maxSize: 32,
             decode: (buffer: Uint8Array, offset = 0) => {
                 const slice = buffer.slice(offset, offset + 32);
                 const str = [...slice].map(charCode => String.fromCharCode(charCode)).join('');
                 return [str, offset + 32];
             },
+            description: 'myDecoder',
+            fixedSize: 32,
+            maxSize: 32,
         };
 
         expect(myDecoder.description).toBe('myDecoder');
@@ -48,20 +47,20 @@ describe('Decoder', () => {
 describe('Codec', () => {
     it('can define Codec instances', () => {
         const myCodec: Codec<string> = {
+            decode: (buffer: Uint8Array, offset = 0) => {
+                const slice = buffer.slice(offset, offset + 32);
+                const str = [...slice].map(charCode => String.fromCharCode(charCode)).join('');
+                return [str, offset + 32];
+            },
             description: 'myCodec',
-            fixedSize: 32,
-            maxSize: 32,
             encode: (value: string) => {
                 const buffer = new Uint8Array(32).fill(0);
                 const charCodes = [...value.slice(0, 32)].map(char => Math.min(char.charCodeAt(0), 255));
                 buffer.set(new Uint8Array(charCodes));
                 return buffer;
             },
-            decode: (buffer: Uint8Array, offset = 0) => {
-                const slice = buffer.slice(offset, offset + 32);
-                const str = [...slice].map(charCode => String.fromCharCode(charCode)).join('');
-                return [str, offset + 32];
-            },
+            fixedSize: 32,
+            maxSize: 32,
         };
 
         expect(myCodec.description).toBe('myCodec');

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Decoder, Encoder } from '../codec';
 import { fixCodec } from '../fix-codec';
 import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
@@ -37,9 +36,9 @@ describe('reverseEncoder', () => {
     it('can reverse the bytes of a fixed-size encoder', () => {
         const encoder: Encoder<number> = {
             description: 'u16',
+            encode: (value: number) => new Uint8Array([value, 0]),
             fixedSize: 2,
             maxSize: 2,
-            encode: (value: number) => new Uint8Array([value, 0]),
         };
 
         const reversedEncoder = reverseEncoder(encoder);
@@ -54,10 +53,10 @@ describe('reverseEncoder', () => {
 describe('reverseDecoder', () => {
     it('can reverse the bytes of a fixed-size decoder', () => {
         const decoder: Decoder<string> = {
+            decode: (bytes: Uint8Array, offset = 0) => [`${bytes[offset]}-${bytes[offset + 1]}`, offset + 2],
             description: 'u16',
             fixedSize: 2,
             maxSize: 2,
-            decode: (bytes: Uint8Array, offset = 0) => [`${bytes[offset]}-${bytes[offset + 1]}`, offset + 2],
         };
 
         const reversedDecoder = reverseDecoder(decoder);

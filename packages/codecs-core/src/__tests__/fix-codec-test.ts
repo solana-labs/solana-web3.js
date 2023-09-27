@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec } from '../codec';
 import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
 import { a1z26, base16 } from './__setup__';
@@ -37,10 +36,6 @@ describe('fixCodec', () => {
     it('can fix a codec that requires a minimum amount of bytes', () => {
         // Given a mock `u32` codec that ensures the buffer is 4 bytes long.
         const u32: Codec<number> = {
-            description: 'u32',
-            fixedSize: 4,
-            maxSize: 4,
-            encode: (value: number) => new Uint8Array([value, 0, 0, 0]),
             decode(bytes, offset = 0): [number, number] {
                 // eslint-disable-next-line jest/no-conditional-in-test
                 if (bytes.slice(offset).length < offset + 4) {
@@ -48,6 +43,10 @@ describe('fixCodec', () => {
                 }
                 return [bytes.slice(offset)[0], offset + 4];
             },
+            description: 'u32',
+            encode: (value: number) => new Uint8Array([value, 0, 0, 0]),
+            fixedSize: 4,
+            maxSize: 4,
         };
 
         // When we synthesize a `u24` from that `u32` using `fixCodec`.

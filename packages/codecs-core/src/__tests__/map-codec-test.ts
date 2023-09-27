@@ -1,13 +1,12 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, Decoder, Encoder } from '../codec';
 import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
 
 const numberCodec: Codec<number> = {
+    decode: (buffer: Uint8Array): [number, number] => [buffer[0], 1],
     description: 'number',
+    encode: (value: number) => new Uint8Array([value]),
     fixedSize: 1,
     maxSize: 1,
-    encode: (value: number) => new Uint8Array([value]),
-    decode: (buffer: Uint8Array): [number, number] => [buffer[0], 1],
 };
 
 describe('mapCodec', () => {
@@ -73,14 +72,14 @@ describe('mapCodec', () => {
         // Create Codec<Strict>.
         type Strict = { discriminator: number; label: string };
         const strictCodec: Codec<Strict> = {
-            description: 'Strict',
-            fixedSize: 2,
-            maxSize: 2,
-            encode: (value: Strict) => new Uint8Array([value.discriminator, value.label.length]),
             decode: (buffer: Uint8Array): [Strict, number] => [
                 { discriminator: buffer[0], label: 'x'.repeat(buffer[1]) },
                 1,
             ],
+            description: 'Strict',
+            encode: (value: Strict) => new Uint8Array([value.discriminator, value.label.length]),
+            fixedSize: 2,
+            maxSize: 2,
         };
 
         const bufferA = strictCodec.encode({ discriminator: 5, label: 'Hello world' });
@@ -116,11 +115,11 @@ describe('mapCodec', () => {
 
     it('can loosen a tuple codec', () => {
         const codec: Codec<[number, string]> = {
+            decode: (buffer: Uint8Array): [[number, string], number] => [[buffer[0], 'x'.repeat(buffer[1])], 2],
             description: 'Tuple',
+            encode: (value: [number, string]) => new Uint8Array([value[0], value[1].length]),
             fixedSize: 2,
             maxSize: 2,
-            encode: (value: [number, string]) => new Uint8Array([value[0], value[1].length]),
-            decode: (buffer: Uint8Array): [[number, string], number] => [[buffer[0], 'x'.repeat(buffer[1])], 2],
         };
 
         const bufferA = codec.encode([42, 'Hello world']);
@@ -144,9 +143,9 @@ describe('mapEncoder', () => {
     it('can map an encoder to another encoder', () => {
         const encoderA: Encoder<number> = {
             description: 'A',
+            encode: (value: number) => new Uint8Array([value]),
             fixedSize: 1,
             maxSize: 1,
-            encode: (value: number) => new Uint8Array([value]),
         };
 
         const encoderB = mapEncoder(encoderA, (value: string): number => value.length);
@@ -161,10 +160,10 @@ describe('mapEncoder', () => {
 describe('mapDecoder', () => {
     it('can map an encoder to another encoder', () => {
         const decoder: Decoder<number> = {
+            decode: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
             description: 'A',
             fixedSize: 1,
             maxSize: 1,
-            decode: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         };
 
         const decoderB = mapDecoder(decoder, (value: number): string => 'x'.repeat(value));

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { assertFixedSizeCodec } from './assertions';
 import { mergeBytes } from './bytes';
 import { Codec, Decoder, Encoder } from './codec';

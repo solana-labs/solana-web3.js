@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { assertBufferHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
 import { Codec, CodecData, Decoder, Encoder } from './codec';
