@@ -2,6 +2,7 @@ import { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport/dis
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
+import { AccountNotificationsApi } from './account-notifications';
 import { LogsNotificationsApi } from './logs-notifications';
 import { RootNotificationsApi } from './root-notifications';
 import { SignatureNotificationsApi } from './signature-notifications';
@@ -13,7 +14,8 @@ type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
-export type SolanaRpcSubscriptions = LogsNotificationsApi &
+export type SolanaRpcSubscriptions = AccountNotificationsApi &
+    LogsNotificationsApi &
     RootNotificationsApi &
     SignatureNotificationsApi &
     SlotNotificationsApi;
