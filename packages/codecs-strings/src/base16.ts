@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { assertValidBaseString } from './assertions';
@@ -6,25 +5,25 @@ import { assertValidBaseString } from './assertions';
 /** Encodes strings in base16. */
 export const getBase16Encoder = (): Encoder<string> => ({
     description: 'base16',
-    fixedSize: null,
-    maxSize: null,
     encode(value: string) {
         const lowercaseValue = value.toLowerCase();
         assertValidBaseString('0123456789abcdef', lowercaseValue, value);
         const matches = lowercaseValue.match(/.{1,2}/g);
         return Uint8Array.from(matches ? matches.map((byte: string) => parseInt(byte, 16)) : []);
     },
+    fixedSize: null,
+    maxSize: null,
 });
 
 /** Decodes strings in base16. */
 export const getBase16Decoder = (): Decoder<string> => ({
-    description: 'base16',
-    fixedSize: null,
-    maxSize: null,
     decode(buffer, offset = 0) {
         const value = buffer.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
         return [value, buffer.length];
     },
+    description: 'base16',
+    fixedSize: null,
+    maxSize: null,
 });
 
 /** Encodes and decodes strings in base16. */

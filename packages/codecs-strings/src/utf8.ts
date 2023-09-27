@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { removeNullCharacters } from './null-characters';
@@ -8,9 +7,9 @@ export const getUtf8Encoder = (): Encoder<string> => {
     let textEncoder: TextEncoder;
     return {
         description: 'utf8',
+        encode: (value: string) => new Uint8Array((textEncoder ||= new TextEncoder()).encode(value)),
         fixedSize: null,
         maxSize: null,
-        encode: (value: string) => new Uint8Array((textEncoder ||= new TextEncoder()).encode(value)),
     };
 };
 
@@ -18,13 +17,13 @@ export const getUtf8Encoder = (): Encoder<string> => {
 export const getUtf8Decoder = (): Decoder<string> => {
     let textDecoder: TextDecoder;
     return {
-        description: 'utf8',
-        fixedSize: null,
-        maxSize: null,
         decode(buffer, offset = 0) {
             const value = (textDecoder ||= new TextDecoder()).decode(buffer.slice(offset));
             return [removeNullCharacters(value), buffer.length];
         },
+        description: 'utf8',
+        fixedSize: null,
+        maxSize: null,
     };
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
 
 import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
@@ -11,8 +10,6 @@ export const getBase64Encoder = (): Encoder<string> => {
     if (__BROWSER__) {
         return {
             description: `base64`,
-            fixedSize: null,
-            maxSize: null,
             encode(value: string): Uint8Array {
                 try {
                     const bytes = (atob as Window['atob'])(value)
@@ -23,6 +20,8 @@ export const getBase64Encoder = (): Encoder<string> => {
                     throw new InvalidBaseStringError(value, 64, e as Error);
                 }
             },
+            fixedSize: null,
+            maxSize: null,
         };
     }
 
@@ -33,14 +32,14 @@ export const getBase64Encoder = (): Encoder<string> => {
 export const getBase64Decoder = (): Decoder<string> => {
     if (__BROWSER__) {
         return {
-            description: `base64`,
-            fixedSize: null,
-            maxSize: null,
             decode(buffer, offset = 0) {
                 const slice = buffer.slice(offset);
                 const value = (btoa as Window['btoa'])(String.fromCharCode(...slice));
                 return [value, buffer.length];
             },
+            description: `base64`,
+            fixedSize: null,
+            maxSize: null,
         };
     }
 

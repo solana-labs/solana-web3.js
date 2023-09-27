@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {
     assertBufferHasEnoughBytesForCodec,
     assertBufferIsNotEmptyForCodec,
@@ -53,13 +52,13 @@ export const getStringEncoder = (options: StringCodecOptions<NumberEncoder, Enco
 
     return {
         description,
-        fixedSize: null,
-        maxSize: null,
         encode: (value: string) => {
             const contentBytes = encoding.encode(value);
             const lengthBytes = size.encode(contentBytes.length);
             return mergeBytes([lengthBytes, contentBytes]);
         },
+        fixedSize: null,
+        maxSize: null,
     };
 };
 
@@ -78,9 +77,6 @@ export const getStringDecoder = (options: StringCodecOptions<NumberDecoder, Deco
     }
 
     return {
-        description,
-        fixedSize: null,
-        maxSize: null,
         decode: (buffer: Uint8Array, offset = 0) => {
             assertBufferIsNotEmptyForCodec('string', buffer.slice(offset));
             const [lengthBigInt, lengthOffset] = size.decode(buffer, offset);
@@ -92,6 +88,9 @@ export const getStringDecoder = (options: StringCodecOptions<NumberDecoder, Deco
             offset += contentOffset;
             return [value, offset];
         },
+        description,
+        fixedSize: null,
+        maxSize: null,
     };
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { assertValidBaseString } from './assertions';
@@ -13,8 +12,6 @@ export const getBaseXEncoder = (alphabet: string): Encoder<string> => {
     const baseBigInt = BigInt(base);
     return {
         description: `base${base}`,
-        fixedSize: null,
-        maxSize: null,
         encode(value: string): Uint8Array {
             // Check if the value is valid.
             assertValidBaseString(alphabet, value);
@@ -44,6 +41,8 @@ export const getBaseXEncoder = (alphabet: string): Encoder<string> => {
             }
             return Uint8Array.from(leadingZeroes.concat(tailBytes));
         },
+        fixedSize: null,
+        maxSize: null,
     };
 };
 
@@ -56,9 +55,6 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
     const base = alphabet.length;
     const baseBigInt = BigInt(base);
     return {
-        description: `base${base}`,
-        fixedSize: null,
-        maxSize: null,
         decode(buffer, offset = 0): [string, number] {
             if (buffer.length === 0) return ['', 0];
 
@@ -81,6 +77,9 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
 
             return [leadingZeroes + tailChars.join(''), buffer.length];
         },
+        description: `base${base}`,
+        fixedSize: null,
+        maxSize: null,
     };
 };
 
