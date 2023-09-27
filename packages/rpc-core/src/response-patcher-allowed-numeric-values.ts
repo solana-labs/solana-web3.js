@@ -22,6 +22,7 @@ export function getAllowedNumericKeypathsForNotification(): AllowedNumericKeypat
     if (!memoizedNotificationKeypaths) {
         memoizedNotificationKeypaths = {
             slotsUpdatesNotifications: [['timestamp']],
+            voteNotifications: [['timestamp']],
         };
     }
     return memoizedNotificationKeypaths;

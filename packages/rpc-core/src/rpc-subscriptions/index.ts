@@ -5,13 +5,14 @@ import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher'
 import { RootNotificationsApi } from './root-notifications';
 import { SlotNotificationsApi } from './slot-notifications';
 import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
+import { VoteNotificationsApi } from './vote-notifications';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
 export type SolanaRpcSubscriptions = RootNotificationsApi & SlotNotificationsApi;
-export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi;
+export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
 export function createSolanaRpcSubscriptionsApi(
     config?: Config
