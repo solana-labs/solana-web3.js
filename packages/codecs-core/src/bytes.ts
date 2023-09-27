@@ -1,11 +1,21 @@
 /**
  * Concatenates an array of `Uint8Array`s into a single `Uint8Array`.
+ * Reuses the original byte array when applicable.
  */
-export const mergeBytes = (bytesArr: Uint8Array[]): Uint8Array => {
-    const totalLength = bytesArr.reduce((total, arr) => total + arr.length, 0);
+export const mergeBytes = (byteArrays: Uint8Array[]): Uint8Array => {
+    const nonEmptyByteArrays = byteArrays.filter(arr => arr.length);
+    if (nonEmptyByteArrays.length === 0) {
+        return byteArrays.length ? byteArrays[0] : new Uint8Array();
+    }
+
+    if (nonEmptyByteArrays.length === 1) {
+        return nonEmptyByteArrays[0];
+    }
+
+    const totalLength = nonEmptyByteArrays.reduce((total, arr) => total + arr.length, 0);
     const result = new Uint8Array(totalLength);
     let offset = 0;
-    bytesArr.forEach(arr => {
+    nonEmptyByteArrays.forEach(arr => {
         result.set(arr, offset);
         offset += arr.length;
     });
@@ -28,4 +38,5 @@ export const padBytes = (bytes: Uint8Array, length: number): Uint8Array => {
  * If the array is longer than the specified length, it is truncated.
  * If the array is shorter than the specified length, it is padded with zeroes.
  */
-export const fixBytes = (bytes: Uint8Array, length: number): Uint8Array => padBytes(bytes.slice(0, length), length);
+export const fixBytes = (bytes: Uint8Array, length: number): Uint8Array =>
+    padBytes(bytes.length <= length ? bytes : bytes.slice(0, length), length);
