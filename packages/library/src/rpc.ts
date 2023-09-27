@@ -47,3 +47,12 @@ export function createSolanaRpcSubscriptions_UNSTABLE(
         api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
     });
 }
+
+export function createSolanaRpcSubscriptions_UNSTABLE(
+    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
+): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    return createJsonSubscriptionRpc({
+        ...config,
+        api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
+    });
+}
