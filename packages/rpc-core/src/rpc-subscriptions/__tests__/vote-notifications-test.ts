@@ -35,7 +35,7 @@ describe('voteNotifications', () => {
                 signature: expect.any(String),
                 slots: expect.arrayContaining([expect.any(BigInt)]),
                 // TODO: Test for null. It appears this is maybe non-deterministic? Seems to maybe occur on delayed votes?
-                timestamp: expect.any(Number),
+                timestamp: expect.any(BigInt),
                 votePubkey: expect.any(String),
             })
         );
