@@ -18,18 +18,23 @@ async function getCompiledMessageSignature(message: CompiledMessage, secretKey: 
 }
 
 export async function signTransaction<TTransaction extends Parameters<typeof compileMessage>[0]>(
-    keyPair: CryptoKeyPair,
+    keyPairs: CryptoKeyPair[],
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Promise<TTransaction & ITransactionWithSignatures> {
     const compiledMessage = compileMessage(transaction);
-    const [signerPublicKey, signature] = await Promise.all([
-        getAddressFromPublicKey(keyPair.publicKey),
-        getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
-    ]);
-    const nextSignatures = {
-        ...('signatures' in transaction ? transaction.signatures : null),
-        ...({ [signerPublicKey]: signature } as ITransactionWithSignatures['signatures']),
-    };
+    const nextSignatures: Record<Base58EncodedAddress, Ed25519Signature> =
+        'signatures' in transaction ? { ...transaction.signatures } : {};
+    const publicKeySignaturePairs = await Promise.all(
+        keyPairs.map(keyPair =>
+            Promise.all([
+                getAddressFromPublicKey(keyPair.publicKey),
+                getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
+            ])
+        )
+    );
+    for (const [signerPublicKey, signature] of publicKeySignaturePairs) {
+        nextSignatures[signerPublicKey] = signature;
+    }
     const out = {
         ...transaction,
         signatures: nextSignatures,
