@@ -4,6 +4,7 @@ import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
 import { AccountNotificationsApi } from './account-notifications';
 import { LogsNotificationsApi } from './logs-notifications';
+import { ProgramNotificationsApi } from './program-notifications';
 import { RootNotificationsApi } from './root-notifications';
 import { SignatureNotificationsApi } from './signature-notifications';
 import { SlotNotificationsApi } from './slot-notifications';
@@ -16,6 +17,7 @@ type Config = Readonly<{
 
 export type SolanaRpcSubscriptions = AccountNotificationsApi &
     LogsNotificationsApi &
+    ProgramNotificationsApi &
     RootNotificationsApi &
     SignatureNotificationsApi &
     SlotNotificationsApi;

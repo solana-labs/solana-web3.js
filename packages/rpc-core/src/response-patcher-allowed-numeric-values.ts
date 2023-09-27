@@ -58,6 +58,10 @@ export function getAllowedNumericKeypathsForNotification(): AllowedNumericKeypat
     if (!memoizedNotificationKeypaths) {
         memoizedNotificationKeypaths = {
             accountNotifications: jsonParsedAccountsConfigs.map(c => ['value', ...c]),
+            programNotifications: jsonParsedAccountsConfigs.flatMap(c => [
+                ['value', KEYPATH_WILDCARD, 'account', ...c],
+                [KEYPATH_WILDCARD, 'account', ...c],
+            ]),
         };
     }
     return memoizedNotificationKeypaths;
