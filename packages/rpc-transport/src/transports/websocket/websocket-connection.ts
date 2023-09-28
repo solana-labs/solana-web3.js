@@ -21,6 +21,12 @@ export type RpcWebSocketConnection = Readonly<{
     [Symbol.asyncIterator](): AsyncGenerator<unknown>;
 }>;
 
+const EXPLICIT_ABORT_TOKEN = Symbol(
+    __DEV__
+        ? "This symbol is thrown from a socket's iterator when the connection is explicity aborted by the user"
+        : undefined
+);
+
 export async function createWebSocketConnection({
     sendBufferHighWatermark,
     signal,
@@ -29,7 +35,21 @@ export async function createWebSocketConnection({
     return new Promise((resolve, reject) => {
         signal.addEventListener('abort', handleAbort, { once: true });
         const iteratorState: Map<IteratorKey, IteratorState> = new Map();
+        function errorAndClearAllIteratorStates(reason: unknown) {
+            const errorCallbacks = [...iteratorState.values()]
+                .filter((state): state is Extract<IteratorState, { __hasPolled: true }> => state.__hasPolled)
+                .map(({ onError }) => onError);
+            iteratorState.clear();
+            errorCallbacks.forEach(cb => {
+                try {
+                    cb(reason);
+                } catch {
+                    /* empty */
+                }
+            });
+        }
         function handleAbort() {
+            errorAndClearAllIteratorStates(EXPLICIT_ABORT_TOKEN);
             if (webSocket.readyState !== WebSocket.CLOSED && webSocket.readyState !== WebSocket.CLOSING) {
                 webSocket.close(1000);
             }
@@ -41,15 +61,7 @@ export async function createWebSocketConnection({
             webSocket.removeEventListener('error', handleError);
             webSocket.removeEventListener('open', handleOpen);
             webSocket.removeEventListener('message', handleMessage);
-            iteratorState.forEach((state, iteratorKey) => {
-                if (state.__hasPolled) {
-                    const { onError } = state;
-                    iteratorState.delete(iteratorKey);
-                    onError(ev);
-                } else {
-                    iteratorState.delete(iteratorKey);
-                }
-            });
+            errorAndClearAllIteratorStates(ev);
         }
         function handleError(ev: Event) {
             if (!hasConnected) {
@@ -127,22 +139,15 @@ export async function createWebSocketConnection({
                                 yield* queuedMessages;
                             } else {
                                 try {
-                                    yield await new Promise((onMessage, onError) => {
+                                    yield await new Promise((resolve, reject) => {
                                         iteratorState.set(iteratorKey, {
                                             __hasPolled: true,
-                                            onError,
-                                            onMessage,
+                                            onError: reject,
+                                            onMessage: resolve,
                                         });
                                     });
                                 } catch (e) {
-                                    if (
-                                        e !== null &&
-                                        typeof e === 'object' &&
-                                        'type' in e &&
-                                        e.type === 'close' &&
-                                        'wasClean' in e &&
-                                        e.wasClean
-                                    ) {
+                                    if (e === EXPLICIT_ABORT_TOKEN) {
                                         return;
                                     } else {
                                         // TODO: Coded error.
