@@ -1,12 +1,21 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
-import { createTransaction, ITransactionWithFeePayer, setTransactionFeePayer, Transaction } from '@solana/transactions';
+import {
+    Blockhash,
+    createTransaction,
+    ITransactionWithBlockhashLifetime,
+    ITransactionWithFeePayer,
+    setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+    Transaction,
+} from '@solana/transactions';
 import { AddressLookupTableAccount, MessageAccountKeys, VersionedTransaction } from '@solana/web3.js';
 
-export function fromOldVersionedTransaction(
+export function fromOldVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
+    lastValidBlockHeight: bigint,
     addressLookupTableAccounts?: AddressLookupTableAccount[]
-): Transaction & ITransactionWithFeePayer {
+): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
     let accountKeys: MessageAccountKeys;
     // eslint-disable-next-line no-useless-catch
     try {
@@ -21,13 +30,20 @@ export function fromOldVersionedTransaction(
     // TODO: coded error
     if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
 
-    // TODO: lifetime constraint
-
     // TODO: instructions
 
     // TODO: signatures?
 
-    return pipe(createTransaction({ version: transaction.version }), tx =>
-        setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx)
+    return pipe(
+        createTransaction({ version: transaction.version }),
+        tx => setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx),
+        tx =>
+            setTransactionLifetimeUsingBlockhash(
+                {
+                    blockhash: transaction.message.recentBlockhash as Blockhash,
+                    lastValidBlockHeight,
+                },
+                tx
+            )
     );
 }
