@@ -30,6 +30,8 @@ export function getBaseConfig(platform: Platform, format: Format[], _options: Op
             options.inject = [path.resolve(__dirname, 'env-shim.ts')];
         },
         external: [
+            // Despite inlining `text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
+            'fastestsmallesttextencoderdecoder',
             // Despite inlining `fetch-impl`, do not recursively inline `node-fetch`.
             'node-fetch',
             // Despite inlining `ws-impl`, do not recursively inline `ws`.
@@ -40,7 +42,7 @@ export function getBaseConfig(platform: Platform, format: Format[], _options: Op
         name: platform,
         // Inline private, non-published packages.
         // WARNING: This inlines packages recursively. Make sure these don't have deep dep trees.
-        noExternal: ['fetch-impl', 'ws-impl'],
+        noExternal: ['fetch-impl', 'text-encoding-impl', 'ws-impl'],
         outExtension({ format }) {
             let extension;
             if (format === 'iife') {
