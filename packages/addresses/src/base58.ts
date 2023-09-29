@@ -4,6 +4,27 @@ export type Base58EncodedAddress<TAddress extends string = string> = TAddress & 
     readonly __brand: unique symbol;
 };
 
+export function isBase58EncodedAddress(
+    putativeBase58EncodedAddress: string
+): putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
+    // Fast-path; see if the input string is of an acceptable length.
+    if (
+        // Lowest address (32 bytes of zeroes)
+        putativeBase58EncodedAddress.length < 32 ||
+        // Highest address (32 bytes of 255)
+        putativeBase58EncodedAddress.length > 44
+    ) {
+        return false;
+    }
+    // Slow-path; actually attempt to decode the input string.
+    const bytes = base58.serialize(putativeBase58EncodedAddress);
+    const numBytes = bytes.byteLength;
+    if (numBytes !== 32) {
+        return false;
+    }
+    return true;
+}
+
 export function assertIsBase58EncodedAddress(
     putativeBase58EncodedAddress: string
 ): asserts putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
@@ -28,6 +49,13 @@ export function assertIsBase58EncodedAddress(
             cause: e,
         });
     }
+}
+
+export function address<TAddress extends string = string>(
+    putativeBase58EncodedAddress: TAddress
+): Base58EncodedAddress<TAddress> {
+    assertIsBase58EncodedAddress(putativeBase58EncodedAddress);
+    return putativeBase58EncodedAddress as Base58EncodedAddress<TAddress>;
 }
 
 export function getBase58EncodedAddressCodec(

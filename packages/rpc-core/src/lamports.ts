@@ -6,6 +6,10 @@ export type LamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __brand: uniq
 // Largest possible value to be represented by a u64
 const maxU64Value = 18446744073709551615n; // 2n ** 64n - 1n
 
+export function isLamports(putativeLamports: bigint): putativeLamports is LamportsUnsafeBeyond2Pow53Minus1 {
+    return putativeLamports >= 0 && putativeLamports <= maxU64Value;
+}
+
 export function assertIsLamports(
     putativeLamports: bigint
 ): asserts putativeLamports is LamportsUnsafeBeyond2Pow53Minus1 {
@@ -18,4 +22,9 @@ export function assertIsLamports(
         // TODO: Coded error.
         throw new Error('Input number is too large to be represented as a 64-bit unsigned integer');
     }
+}
+
+export function lamports(putativeLamports: bigint): LamportsUnsafeBeyond2Pow53Minus1 {
+    assertIsLamports(putativeLamports);
+    return putativeLamports;
 }
