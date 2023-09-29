@@ -22,10 +22,14 @@ export function reverseDecoder<T>(decoder: Decoder<T>): Decoder<T> {
     return {
         ...decoder,
         decode: (bytes: Uint8Array, offset = 0) => {
+            const reverseEnd = offset + decoder.fixedSize;
+            if (offset === 0 && bytes.length === reverseEnd) {
+                return decoder.decode(bytes.reverse(), offset);
+            }
             const newBytes = mergeBytes([
-                bytes.slice(0, offset),
-                bytes.slice(offset, offset + decoder.fixedSize).reverse(),
-                bytes.slice(offset + decoder.fixedSize),
+                ...(offset === 0 ? [] : [bytes.slice(0, offset)]),
+                bytes.slice(offset, reverseEnd).reverse(),
+                ...(bytes.length === reverseEnd ? [] : [bytes.slice(reverseEnd)]),
             ]);
             return decoder.decode(newBytes, offset);
         },
