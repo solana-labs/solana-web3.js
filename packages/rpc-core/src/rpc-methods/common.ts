@@ -3,7 +3,6 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { StringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber } from '../stringified-number';
-import { TransactionError } from '../transaction-error';
 
 export type Commitment = 'confirmed' | 'finalized' | 'processed';
 
@@ -137,30 +136,3 @@ export type TokenAccount = Readonly<{
     closeAuthority?: Base58EncodedAddress;
     extensions?: unknown[];
 }>;
-
-type RewardBase = Readonly<{
-    /** The public key of the account that received the reward */
-    pubkey: Base58EncodedAddress;
-    /** number of reward lamports credited or debited by the account */
-    lamports: SignedLamportsAsI64Unsafe;
-    /** account balance in lamports after the reward was applied */
-    postBalance: LamportsUnsafeBeyond2Pow53Minus1;
-}>;
-
-export type Reward =
-    | (RewardBase &
-          Readonly<{
-              /** type of reward */
-              rewardType: 'fee' | 'rent';
-          }>)
-    /** Commission is present only for voting and staking rewards */
-    | (RewardBase &
-          Readonly<{
-              /** type of reward */
-              rewardType: 'voting' | 'staking';
-              /** vote account commission when the reward was credited */
-              commission: number;
-          }>);
-
-/** @deprecated */
-export type TransactionStatus = { Ok: null } | { Err: TransactionError };
