@@ -23,11 +23,11 @@ export const getBaseXResliceEncoder = (alphabet: string, bits: number): Encoder<
  * @see {@link getBaseXResliceCodec} for a more detailed description.
  */
 export const getBaseXResliceDecoder = (alphabet: string, bits: number): Decoder<string> => ({
-    decode(bytes, offset = 0): [string, number] {
-        bytes = offset === 0 ? bytes : bytes.slice(offset);
-        if (bytes.length === 0) return ['', 0];
+    decode(rawBytes, offset = 0): [string, number] {
+        const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
+        if (bytes.length === 0) return ['', rawBytes.length];
         const charIndices = reslice([...bytes], 8, bits, true);
-        return [charIndices.map(i => alphabet[i]).join(''), bytes.length];
+        return [charIndices.map(i => alphabet[i]).join(''), rawBytes.length];
     },
     description: `base${alphabet.length}`,
     fixedSize: null,
