@@ -18,7 +18,7 @@ export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decode
 };
 
 export const assertRangeError = <T>(encoder: Encoder<T>, number: T): void => {
-    expect(() => encoder.encode(number)).toThrow('expected number to be between');
+    expect(() => encoder.encode(number)).toThrow('expected number to be in the range');
 };
 
 export const base16: Codec<string> = {

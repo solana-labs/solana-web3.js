@@ -9,6 +9,8 @@ export function assertNumberIsBetweenForCodec(
 ) {
     if (value < min || value > max) {
         // TODO: Coded error.
-        throw new Error(`Codec [${codecDescription}] expected number to be between ${min} and ${max}, got ${value}.`);
+        throw new Error(
+            `Codec [${codecDescription}] expected number to be in the range [${min}, ${max}], got ${value}.`
+        );
     }
 }
