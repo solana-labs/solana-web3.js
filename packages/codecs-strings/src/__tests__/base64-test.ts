@@ -40,6 +40,7 @@ describe('getBase64Codec', () => {
 
     if (__BROWSER__) {
         it('fails if base64 strings do not have the expected padding', () => {
+            // This is because atob is not tolerant to missing padding.
             expect(() => base64.encode('A')).toThrow('Expected a string of base 64, got [A].');
             expect(() => base64.encode('AA=')).toThrow('Expected a string of base 64, got [AA=].');
         });

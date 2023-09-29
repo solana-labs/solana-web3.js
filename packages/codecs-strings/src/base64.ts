@@ -1,5 +1,6 @@
 import { combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
 
+import { assertValidBaseString } from './assertions';
 import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -25,6 +26,18 @@ export const getBase64Encoder = (): Encoder<string> => {
         };
     }
 
+    if (__NODEJS__) {
+        return {
+            description: `base64`,
+            encode(value: string): Uint8Array {
+                assertValidBaseString(alphabet, value.replace(/=/g, ''));
+                return new Uint8Array(Buffer.from(value, 'base64'));
+            },
+            fixedSize: null,
+            maxSize: null,
+        };
+    }
+
     return mapEncoder(getBaseXResliceEncoder(alphabet, 6), (value: string): string => value.replace(/=/g, ''));
 };
 
@@ -37,6 +50,15 @@ export const getBase64Decoder = (): Decoder<string> => {
                 const value = (btoa as Window['btoa'])(String.fromCharCode(...slice));
                 return [value, bytes.length];
             },
+            description: `base64`,
+            fixedSize: null,
+            maxSize: null,
+        };
+    }
+
+    if (__NODEJS__) {
+        return {
+            decode: (bytes, offset = 0) => [Buffer.from(bytes, offset).toString('base64'), bytes.length],
             description: `base64`,
             fixedSize: null,
             maxSize: null,
