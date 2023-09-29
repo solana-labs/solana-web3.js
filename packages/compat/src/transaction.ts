@@ -1,12 +1,14 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
+import { Ed25519Signature } from '@solana/keys';
 import {
     appendTransactionInstruction,
     Blockhash,
     createTransaction,
     ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
+    ITransactionWithSignatures,
     setTransactionFeePayer,
     setTransactionLifetimeUsingBlockhash,
     Transaction,
@@ -14,6 +16,7 @@ import {
 import {
     MessageAccountKeys,
     MessageCompiledInstruction,
+    PublicKey,
     VersionedMessage,
     VersionedTransaction,
 } from '@solana/web3.js';
@@ -67,10 +70,33 @@ function convertInstruction(
     };
 }
 
+function convertSignatures(
+    transaction: VersionedTransaction,
+    staticAccountKeys: PublicKey[]
+): ITransactionWithSignatures['signatures'] {
+    const signatures: Record<Base58EncodedAddress, Ed25519Signature> = {};
+
+    for (let i = 0; i < transaction.signatures.length; i++) {
+        const address = staticAccountKeys[i].toBase58() as Base58EncodedAddress;
+
+        // old web3js includes a fake all 0 signature if it hasn't been signed
+        // we don't do that for the new tx model. So just skip if it's all 0s
+        const allZeros = transaction.signatures[i].every(byte => byte === 0);
+        if (allZeros) continue;
+
+        const signature = transaction.signatures[i] as Ed25519Signature;
+        signatures[address] = signature;
+    }
+
+    return signatures;
+}
+
 export function fromOldVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
     lastValidBlockHeight: bigint
-): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
+):
+    | (Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime)
+    | (Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime & ITransactionWithSignatures) {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
@@ -96,7 +122,7 @@ export function fromOldVersionedTransactionWithBlockhash(
         convertInstruction(transaction.message, accountKeys, instruction)
     );
 
-    // TODO: signatures?
+    const signatures = convertSignatures(transaction, accountKeys.staticAccountKeys);
 
     return pipe(
         createTransaction({ version: transaction.version }),
@@ -105,6 +131,7 @@ export function fromOldVersionedTransactionWithBlockhash(
         tx =>
             instructions.reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
-            }, tx)
+            }, tx),
+        tx => (transaction.signatures.length ? { ...tx, signatures } : tx)
     );
 }

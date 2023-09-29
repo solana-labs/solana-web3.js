@@ -467,6 +467,9 @@ importers:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
