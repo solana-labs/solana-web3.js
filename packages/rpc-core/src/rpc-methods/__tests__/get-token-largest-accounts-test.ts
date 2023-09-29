@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getTokenLargestAccounts', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -27,11 +31,9 @@ describe('getTokenLargestAccounts', () => {
                 const pubkey =
                     'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
                 const tokenAccountBalancePromise = rpc.getTokenLargestAccounts(pubkey, { commitment }).send();
-                await expect(tokenAccountBalancePromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
-                    value: expect.arrayContaining([
+                await expect(tokenAccountBalancePromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: [
                         {
                             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                             amount: '9999999779500000',
@@ -40,7 +42,7 @@ describe('getTokenLargestAccounts', () => {
                             uiAmount: 9999999779.5,
                             uiAmountString: '9999999779.5',
                         },
-                    ]),
+                    ],
                 });
             });
         });

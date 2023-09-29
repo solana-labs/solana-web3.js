@@ -49,12 +49,12 @@ describe('getLeaderSchedule', () => {
                     expect.assertions(3);
                     const res = await rpc.getLeaderSchedule({ commitment }).send();
                     // Does not need null check (default slot)
-                    expect(res).toMatchObject(expect.any(Object));
+                    expect(res).toStrictEqual(expect.any(Object));
                     for (const key of Object.keys(res)) {
                         expect(typeof key).toBe('string');
                         // Needs typecasting to be used as accessor
                         const base58Key: Base58EncodedAddress = key as Base58EncodedAddress;
-                        expect(res[base58Key]).toMatchObject(expect.any(Array));
+                        expect(res[base58Key]).toStrictEqual(expect.any(Array));
                     }
                 });
             });
@@ -64,13 +64,13 @@ describe('getLeaderSchedule', () => {
                     expect.assertions(3);
                     const res = await rpc.getLeaderSchedule(0n, { commitment }).send();
                     // Needs null check (slot provided and may correspond to epoch that does not exist)
-                    expect(res).toMatchObject(expect.any(Object));
+                    expect(res).toStrictEqual(expect.any(Object));
                     assert(res);
                     for (const key of Object.keys(res)) {
                         expect(typeof key).toBe('string');
                         // Needs typecasting to be used as accessor
                         const base58Key: Base58EncodedAddress = key as Base58EncodedAddress;
-                        expect(res[base58Key]).toMatchObject(expect.any(Array));
+                        expect(res[base58Key]).toStrictEqual(expect.any(Array));
                     }
                 });
             });
@@ -86,7 +86,7 @@ describe('getLeaderSchedule', () => {
                         })
                         .send();
                     // Does not need null check (default slot)
-                    expect(res).toMatchObject({
+                    expect(res).toStrictEqual({
                         [identity]: expect.any(Array),
                     });
                 });
@@ -104,7 +104,7 @@ describe('getLeaderSchedule', () => {
                         .send();
                     // Needs null check (slot provided and may correspond to epoch that does not exist)
                     assert(res);
-                    expect(res).toMatchObject({
+                    expect(res).toStrictEqual({
                         [identity]: expect.any(Array),
                     });
                 });
@@ -121,7 +121,7 @@ describe('getLeaderSchedule', () => {
                         identity: 'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress,
                     })
                     .send();
-                expect(res).toMatchObject({});
+                expect(res).toStrictEqual({});
             });
         });
 
@@ -135,7 +135,7 @@ describe('getLeaderSchedule', () => {
                         identity: 'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Base58EncodedAddress,
                     })
                     .send();
-                expect(res).toMatchObject({});
+                expect(res).toStrictEqual({});
             });
         });
 

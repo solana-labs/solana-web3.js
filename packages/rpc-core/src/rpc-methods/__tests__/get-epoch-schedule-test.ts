@@ -18,7 +18,7 @@ describe('getEpochSchedule', () => {
     it('returns the epoch schedule', async () => {
         expect.assertions(1);
         const epochSchedulePromise = rpc.getEpochSchedule().send();
-        await expect(epochSchedulePromise).resolves.toMatchObject({
+        await expect(epochSchedulePromise).resolves.toStrictEqual({
             firstNormalEpoch: expect.any(BigInt),
             firstNormalSlot: expect.any(BigInt),
             leaderScheduleSlotOffset: expect.any(BigInt),

@@ -22,13 +22,10 @@ describe('slotNotifications', () => {
         expect.assertions(1);
         const slotNotifications = await rpc.slotNotifications().subscribe();
         const iterator = slotNotifications[Symbol.asyncIterator]();
-        await expect(iterator.next()).resolves.toHaveProperty(
-            'value',
-            expect.objectContaining({
-                parent: expect.any(BigInt),
-                root: expect.any(BigInt),
-                slot: expect.any(BigInt),
-            })
-        );
+        await expect(iterator.next()).resolves.toHaveProperty('value', {
+            parent: expect.any(BigInt),
+            root: expect.any(BigInt),
+            slot: expect.any(BigInt),
+        });
     });
 });

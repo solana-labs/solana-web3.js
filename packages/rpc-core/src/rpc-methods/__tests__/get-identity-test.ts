@@ -45,7 +45,7 @@ describe('getIdentity', () => {
         expect.assertions(1);
         const expectedAddress = await getValidatorAddress();
         const identityPromise = rpc.getIdentity().send();
-        await expect(identityPromise).resolves.toMatchObject({
+        await expect(identityPromise).resolves.toStrictEqual({
             identity: expectedAddress,
         });
     });

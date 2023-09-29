@@ -6,6 +6,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getLatestBlockhash', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -22,7 +26,8 @@ describe('getLatestBlockhash', () => {
             it('returns the blockhash and block height', async () => {
                 expect.assertions(1);
                 const blockhashPromise = rpc.getLatestBlockhash({ commitment }).send();
-                await expect(blockhashPromise).resolves.toMatchObject({
+                await expect(blockhashPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         blockhash: expect.any(String),
                         lastValidBlockHeight: expect.any(BigInt),

@@ -9,6 +9,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Base58EncodedBytes, Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 function getMockTransactionMessage({
     blockhash,
     feePayerAddressBytes,
@@ -193,14 +197,15 @@ describe('simulateTransaction', () => {
                     )
                     .send();
 
-                await expect(resultPromise).resolves.toMatchObject({
-                    value: expect.objectContaining({
+                await expect(resultPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: {
                         accounts: null,
                         err: null,
                         logs: expect.any(Array),
                         returnData: null,
                         unitsConsumed: expect.any(BigInt),
-                    }),
+                    },
                 });
             });
         });
@@ -300,14 +305,15 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: null,
                 err: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -337,14 +343,15 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: null,
                 err: 'BlockhashNotFound',
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -374,14 +381,15 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: null,
                 err: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -413,7 +421,9 @@ describe('simulateTransaction', () => {
 
         await expect(resultPromise).rejects.toMatchObject({
             code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            message: expect.stringContaining('invalid value: integer `126`, expected supported versions: [0]'),
+            message: expect.stringContaining(
+                'invalid value: integer `126`, expected a valid transaction message version'
+            ),
             name: 'SolanaJsonRpcError',
         });
     });
@@ -474,14 +484,15 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: null,
                 err: 'AccountNotFound',
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -517,8 +528,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     expect.objectContaining({
                         data: ['', 'base64'],
@@ -528,7 +540,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -564,8 +576,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     expect.objectContaining({
                         data: [expect.any(String), 'base64+zstd'],
@@ -575,7 +588,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -612,8 +625,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     expect.objectContaining({
                         data: expect.objectContaining({
@@ -639,7 +653,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -675,8 +689,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     expect.objectContaining({
                         // falls back to base64
@@ -687,7 +702,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -722,8 +737,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     expect.objectContaining({
                         data: ['', 'base64'],
@@ -733,7 +749,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -773,8 +789,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: [
                     null,
                     expect.objectContaining({
@@ -785,7 +802,7 @@ describe('simulateTransaction', () => {
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 
@@ -816,14 +833,15 @@ describe('simulateTransaction', () => {
             })
             .send();
 
-        await expect(resultPromise).resolves.toMatchObject({
-            value: expect.objectContaining({
+        await expect(resultPromise).resolves.toStrictEqual({
+            context: CONTEXT_MATCHER,
+            value: {
                 accounts: null,
                 err: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
-            }),
+            },
         });
     });
 });

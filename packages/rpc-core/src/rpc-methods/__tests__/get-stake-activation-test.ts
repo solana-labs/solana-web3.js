@@ -26,7 +26,7 @@ describe('getStakeActivation', () => {
             it('returns stake activation', async () => {
                 expect.assertions(1);
                 const stakeActivationPromise = rpc.getStakeActivation(stakeAccountAddress, { commitment }).send();
-                await expect(stakeActivationPromise).resolves.toMatchObject({
+                await expect(stakeActivationPromise).resolves.toStrictEqual({
                     active: expect.any(BigInt),
                     inactive: expect.any(BigInt),
                     state: expect.any(String),
