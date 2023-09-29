@@ -1,6 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
+import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
 import {
+    appendTransactionInstruction,
     Blockhash,
     createTransaction,
     ITransactionWithBlockhashLifetime,
@@ -9,41 +11,100 @@ import {
     setTransactionLifetimeUsingBlockhash,
     Transaction,
 } from '@solana/transactions';
-import { AddressLookupTableAccount, MessageAccountKeys, VersionedTransaction } from '@solana/web3.js';
+import {
+    MessageAccountKeys,
+    MessageCompiledInstruction,
+    VersionedMessage,
+    VersionedTransaction,
+} from '@solana/web3.js';
+
+function convertAccount(
+    message: VersionedMessage,
+    accountKeys: MessageAccountKeys,
+    accountIndex: number
+): IAccountMeta {
+    const accountPublicKey = accountKeys.get(accountIndex);
+    if (!accountPublicKey) {
+        // TODO coded error
+        throw new Error(`Could not find account address at index ${accountIndex}`);
+    }
+    const isSigner = message.isAccountSigner(accountIndex);
+    const isWritable = message.isAccountWritable(accountIndex);
+
+    const role = isSigner
+        ? isWritable
+            ? AccountRole.WRITABLE_SIGNER
+            : AccountRole.READONLY_SIGNER
+        : isWritable
+        ? AccountRole.WRITABLE
+        : AccountRole.READONLY;
+
+    return {
+        address: accountPublicKey.toBase58() as Base58EncodedAddress,
+        role,
+    };
+}
+
+function convertInstruction(
+    message: VersionedMessage,
+    accountKeys: MessageAccountKeys,
+    instruction: MessageCompiledInstruction
+): IInstruction {
+    const programAddressPublicKey = accountKeys.get(instruction.programIdIndex);
+    if (!programAddressPublicKey) {
+        // TODO coded error
+        throw new Error(`Could not find program address at index ${instruction.programIdIndex}`);
+    }
+
+    const accounts = instruction.accountKeyIndexes.map(accountIndex =>
+        convertAccount(message, accountKeys, accountIndex)
+    );
+
+    return {
+        programAddress: programAddressPublicKey.toBase58() as Base58EncodedAddress,
+        ...(accounts.length ? { accounts } : {}),
+        ...(instruction.data.length ? { data: instruction.data } : {}),
+    };
+}
 
 export function fromOldVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
-    lastValidBlockHeight: bigint,
-    addressLookupTableAccounts?: AddressLookupTableAccount[]
+    lastValidBlockHeight: bigint
 ): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
-    let accountKeys: MessageAccountKeys;
-    // eslint-disable-next-line no-useless-catch
-    try {
-        accountKeys = transaction.message.getAccountKeys({ addressLookupTableAccounts });
-    } catch (e) {
-        // TODO: coded error, don't just throw the legacy one
-        throw e;
+    // TODO: add support for address table lookups
+    // - will need to take `AddressLookupTableAccounts[]` as input
+    // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
+    if (transaction.message.addressTableLookups.length > 0) {
+        // TODO coded error
+        throw new Error('Cannot convert transaction with addressTableLookups');
     }
+
+    const accountKeys = transaction.message.getAccountKeys();
 
     // Fee payer is first account
     const feePayer = accountKeys.staticAccountKeys[0];
     // TODO: coded error
     if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
 
-    // TODO: instructions
+    // TOOD: add support for durable nonce transactions
+    const blockhashLifetime = {
+        blockhash: transaction.message.recentBlockhash as Blockhash,
+        lastValidBlockHeight,
+    };
+
+    const instructions = transaction.message.compiledInstructions.map(instruction =>
+        convertInstruction(transaction.message, accountKeys, instruction)
+    );
 
     // TODO: signatures?
 
     return pipe(
         createTransaction({ version: transaction.version }),
         tx => setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx),
+        tx => setTransactionLifetimeUsingBlockhash(blockhashLifetime, tx),
         tx =>
-            setTransactionLifetimeUsingBlockhash(
-                {
-                    blockhash: transaction.message.recentBlockhash as Blockhash,
-                    lastValidBlockHeight,
-                },
-                tx
-            )
+            instructions.reduce((acc, instruction) => {
+                return appendTransactionInstruction(instruction, acc);
+            }, tx)
     );
 }

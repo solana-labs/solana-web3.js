@@ -67,6 +67,7 @@
     "dependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/functional": "workspace:*",
+        "@solana/instructions": "workspace:*",
         "@solana/transactions": "workspace:*",
         "@solana/web3.js": "workspace:*"
     },
