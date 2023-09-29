@@ -58,7 +58,7 @@ describe('getBytesCodec', () => {
         expect(bytes({ size: 42 }).description).toBe('bytes(42)');
         expect(bytes({ size: 'variable' }).description).toBe('bytes(variable)');
         expect(bytes({ size: u16() }).description).toBe('bytes(u16(le))');
-        expect(bytes({ size: u16({ endian: Endian.Big }) }).description).toBe('bytes(u16(be))');
+        expect(bytes({ size: u16({ endian: Endian.BIG }) }).description).toBe('bytes(u16(be))');
 
         // Custom.
         expect(bytes({ description: 'My bytes' }).description).toBe('My bytes');
