@@ -29,7 +29,7 @@ function sharedNumberFactory(input: NumberFactorySharedInput): CodecData & { lit
     let defaultDescription: string = input.name;
 
     if (input.size > 1) {
-        littleEndian = !('endian' in input.options) || input.options.endian === Endian.Little;
+        littleEndian = !('endian' in input.options) || input.options.endian === Endian.LITTLE;
         defaultDescription += littleEndian ? '(le)' : '(be)';
     }
 

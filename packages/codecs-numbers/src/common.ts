@@ -16,13 +16,13 @@ export type SingleByteNumberCodecOptions = BaseCodecOptions;
 export type NumberCodecOptions = BaseCodecOptions & {
     /**
      * Whether the serializer should use little-endian or big-endian encoding.
-     * @defaultValue `Endian.Little`
+     * @defaultValue `Endian.LITTLE`
      */
     endian?: Endian;
 };
 
 /** Defines the endianness of a number serializer. */
 export enum Endian {
-    Little = 'le',
-    Big = 'be',
+    LITTLE,
+    BIG,
 }

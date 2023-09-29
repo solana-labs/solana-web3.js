@@ -10,7 +10,7 @@ describe('getI16Codec', () => {
     it('encodes and decodes i16 numbers', () => {
         expect.hasAssertions();
         const i16LE = i16();
-        const i16BE = i16({ endian: Endian.Big });
+        const i16BE = i16({ endian: Endian.BIG });
 
         assertValid(i16LE, 0, '0000');
         assertValid(i16BE, 0, '0000');
@@ -44,8 +44,8 @@ describe('getI16Codec', () => {
 
     it('has the right description', () => {
         expect(i16().description).toBe('i16(le)');
-        expect(i16({ endian: Endian.Little }).description).toBe('i16(le)');
-        expect(i16({ endian: Endian.Big }).description).toBe('i16(be)');
+        expect(i16({ endian: Endian.LITTLE }).description).toBe('i16(le)');
+        expect(i16({ endian: Endian.BIG }).description).toBe('i16(be)');
         expect(i16({ description: 'custom' }).description).toBe('custom');
     });
 

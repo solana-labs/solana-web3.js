@@ -9,7 +9,7 @@ describe('getF64Codec', () => {
     it('encodes and decodes f64 numbers', () => {
         expect.hasAssertions();
         const f64LE = f64();
-        const f64BE = f64({ endian: Endian.Big });
+        const f64BE = f64({ endian: Endian.BIG });
 
         assertValid(f64LE, 0, '0000000000000000');
         assertValid(f64BE, 0, '0000000000000000');
@@ -31,8 +31,8 @@ describe('getF64Codec', () => {
 
     it('has the right description', () => {
         expect(f64().description).toBe('f64(le)');
-        expect(f64({ endian: Endian.Little }).description).toBe('f64(le)');
-        expect(f64({ endian: Endian.Big }).description).toBe('f64(be)');
+        expect(f64({ endian: Endian.LITTLE }).description).toBe('f64(le)');
+        expect(f64({ endian: Endian.BIG }).description).toBe('f64(be)');
         expect(f64({ description: 'custom' }).description).toBe('custom');
     });
 

@@ -11,7 +11,7 @@ describe('getU64Codec', () => {
     it('encodes and decodes u64 numbers', () => {
         expect.hasAssertions();
         const u64LE = u64();
-        const u64BE = u64({ endian: Endian.Big });
+        const u64BE = u64({ endian: Endian.BIG });
 
         assertValid(u64LE, 1n, '0100000000000000');
         assertValid(u64BE, 1n, '0000000000000001');
@@ -43,8 +43,8 @@ describe('getU64Codec', () => {
 
     it('has the right description', () => {
         expect(u64().description).toBe('u64(le)');
-        expect(u64({ endian: Endian.Little }).description).toBe('u64(le)');
-        expect(u64({ endian: Endian.Big }).description).toBe('u64(be)');
+        expect(u64({ endian: Endian.LITTLE }).description).toBe('u64(le)');
+        expect(u64({ endian: Endian.BIG }).description).toBe('u64(be)');
         expect(u64({ description: 'custom' }).description).toBe('custom');
     });
 

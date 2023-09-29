@@ -10,7 +10,7 @@ describe('getI64Codec', () => {
     it('encodes and decodes i64 numbers', () => {
         expect.hasAssertions();
         const i64LE = i64();
-        const i64BE = i64({ endian: Endian.Big });
+        const i64BE = i64({ endian: Endian.BIG });
 
         assertValid(i64LE, 0n, '0000000000000000');
         assertValid(i64BE, 0n, '0000000000000000');
@@ -44,8 +44,8 @@ describe('getI64Codec', () => {
 
     it('has the right description', () => {
         expect(i64().description).toBe('i64(le)');
-        expect(i64({ endian: Endian.Little }).description).toBe('i64(le)');
-        expect(i64({ endian: Endian.Big }).description).toBe('i64(be)');
+        expect(i64({ endian: Endian.LITTLE }).description).toBe('i64(le)');
+        expect(i64({ endian: Endian.BIG }).description).toBe('i64(be)');
         expect(i64({ description: 'custom' }).description).toBe('custom');
     });
 

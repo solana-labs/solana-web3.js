@@ -11,7 +11,7 @@ describe('getU128Codec', () => {
     it('encodes and decodes u128 numbers', () => {
         expect.hasAssertions();
         const u128LE = u128();
-        const u128BE = u128({ endian: Endian.Big });
+        const u128BE = u128({ endian: Endian.BIG });
 
         assertValid(u128LE, 1n, '01000000000000000000000000000000');
         assertValid(u128BE, 1n, '00000000000000000000000000000001');
@@ -43,8 +43,8 @@ describe('getU128Codec', () => {
 
     it('has the right description', () => {
         expect(u128().description).toBe('u128(le)');
-        expect(u128({ endian: Endian.Little }).description).toBe('u128(le)');
-        expect(u128({ endian: Endian.Big }).description).toBe('u128(be)');
+        expect(u128({ endian: Endian.LITTLE }).description).toBe('u128(le)');
+        expect(u128({ endian: Endian.BIG }).description).toBe('u128(be)');
         expect(u128({ description: 'custom' }).description).toBe('custom');
     });
 

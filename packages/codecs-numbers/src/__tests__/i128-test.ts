@@ -10,7 +10,7 @@ describe('getI128Codec', () => {
     it('encodes and decodes i128 numbers', () => {
         expect.hasAssertions();
         const i128LE = i128();
-        const i128BE = i128({ endian: Endian.Big });
+        const i128BE = i128({ endian: Endian.BIG });
 
         assertValid(i128LE, 0n, '00000000000000000000000000000000');
         assertValid(i128BE, 0n, '00000000000000000000000000000000');
@@ -44,8 +44,8 @@ describe('getI128Codec', () => {
 
     it('has the right description', () => {
         expect(i128().description).toBe('i128(le)');
-        expect(i128({ endian: Endian.Little }).description).toBe('i128(le)');
-        expect(i128({ endian: Endian.Big }).description).toBe('i128(be)');
+        expect(i128({ endian: Endian.LITTLE }).description).toBe('i128(le)');
+        expect(i128({ endian: Endian.BIG }).description).toBe('i128(be)');
         expect(i128({ description: 'custom' }).description).toBe('custom');
     });
 
