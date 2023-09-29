@@ -1,5 +1,7 @@
 import { Codec } from '../codec';
 
+export const b = (s: string) => base16.encode(s);
+
 export const base16: Codec<string> = {
     decode(bytes, offset = 0) {
         const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
@@ -14,11 +16,16 @@ export const base16: Codec<string> = {
     maxSize: null,
 };
 
-const alphabet = '_abcdefghijklmnopqrstuvwxyz';
-export const a1z26: Codec<string> = {
-    decode: (bytes, offset = 0) => [[...bytes.slice(offset)].map(byte => alphabet[byte]).join(''), bytes.length],
-    description: 'a1z26',
-    encode: (value: string) => Uint8Array.from([...value].map(char => alphabet.indexOf(char))),
-    fixedSize: null,
-    maxSize: null,
-};
+export const getMockCodec = (
+    options: {
+        defaultValue?: string;
+        description?: string;
+        size?: number | null;
+    } = {}
+) => ({
+    decode: jest.fn().mockReturnValue([options.defaultValue ?? '', 0]),
+    description: options.description ?? 'mock',
+    encode: jest.fn().mockReturnValue(new Uint8Array()),
+    fixedSize: options.size ?? null,
+    maxSize: options.size ?? null,
+});
