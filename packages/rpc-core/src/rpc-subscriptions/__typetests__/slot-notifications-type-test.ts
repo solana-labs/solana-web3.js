@@ -7,7 +7,9 @@ import { SolanaRpcSubscriptions } from '../index';
 
 async () => {
     const rpcSubcriptions = null as unknown as RpcSubscriptions<SolanaRpcSubscriptions>;
-    const slotNotifications = await rpcSubcriptions.slotNotifications().subscribe();
+    const slotNotifications = await rpcSubcriptions
+        .slotNotifications()
+        .subscribe({ abortSignal: new AbortController().signal });
 
     slotNotifications satisfies AsyncIterable<
         Readonly<{
