@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "@solana/codecs-data-structures",
+    "extends": "tsconfig/base.json",
+    "include": ["src"],
+    "compilerOptions": {
+        "lib": ["DOM", "ES2017", "ES2022.Error"]
+    }
+}
