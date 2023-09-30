@@ -36,8 +36,8 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
     { params, subscribeMethodName, unsubscribeMethodName, responseProcessor }: RpcSubscription<TNotification>
 ): PendingRpcSubscription<TNotification> {
     return {
-        async subscribe(options?: SubscribeOptions): Promise<AsyncIterable<TNotification>> {
-            options?.abortSignal?.throwIfAborted();
+        async subscribe({ abortSignal }: SubscribeOptions): Promise<AsyncIterable<TNotification>> {
+            abortSignal.throwIfAborted();
             let subscriptionId: number | undefined;
             function handleCleanup() {
                 if (subscriptionId !== undefined) {
@@ -49,7 +49,7 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
                     connectionAbortController.abort();
                 }
             }
-            options?.abortSignal?.addEventListener('abort', handleCleanup);
+            abortSignal.addEventListener('abort', handleCleanup);
             /**
              * STEP 1: Send the subscribe message.
              */
@@ -60,7 +60,7 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
                 signal: connectionAbortController.signal,
             });
             function handleConnectionCleanup() {
-                options?.abortSignal?.removeEventListener('abort', handleCleanup);
+                abortSignal.removeEventListener('abort', handleCleanup);
             }
             registerIterableCleanup(connection, handleConnectionCleanup);
             /**

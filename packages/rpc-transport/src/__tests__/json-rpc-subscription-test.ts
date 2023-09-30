@@ -37,7 +37,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         });
     });
     it('sends a subscription request to the transport', () => {
-        rpc.thingNotifications(123).subscribe();
+        rpc.thingNotifications(123).subscribe({ abortSignal: new AbortController().signal });
         expect(createWebSocketConnection).toHaveBeenCalledWith(
             expect.objectContaining({
                 payload: {
@@ -53,7 +53,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             yield { id: 0, result: 42 /* subscription id */ };
             return;
         });
-        const thingNotifications = await rpc.thingNotifications(123).subscribe();
+        const thingNotifications = await rpc
+            .thingNotifications(123)
+            .subscribe({ abortSignal: new AbortController().signal });
         const iterator = thingNotifications[Symbol.asyncIterator]();
         const thingNotificationPromise = iterator.next();
         await expect(thingNotificationPromise).resolves.toMatchObject({
@@ -67,7 +69,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             yield { id: 0, result: 42 /* subscription id */ };
             throw new Error('o no');
         });
-        const thingNotifications = await rpc.thingNotifications(123).subscribe();
+        const thingNotifications = await rpc
+            .thingNotifications(123)
+            .subscribe({ abortSignal: new AbortController().signal });
         const iterator = thingNotifications[Symbol.asyncIterator]();
         const thingNotificationPromise = iterator.next();
         await expect(thingNotificationPromise).rejects.toThrow('o no');
@@ -194,7 +198,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             yield { params: { result: 123, subscription: 41 } };
             yield { params: { result: 456, subscription: 42 } };
         });
-        const thingNotifications = await rpc.thingNotifications().subscribe();
+        const thingNotifications = await rpc
+            .thingNotifications()
+            .subscribe({ abortSignal: new AbortController().signal });
         const iterator = thingNotifications[Symbol.asyncIterator]();
         await expect(iterator.next()).resolves.toHaveProperty('value', 456);
     });
@@ -205,13 +211,15 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             iterable.mockImplementation(async function* () {
                 yield { id: 0, result: subscriptionId /* subscription id */ };
             });
-            const thingNotificationsPromise = rpc.thingNotifications().subscribe();
+            const thingNotificationsPromise = rpc
+                .thingNotifications()
+                .subscribe({ abortSignal: new AbortController().signal });
             await expect(thingNotificationsPromise).rejects.toThrow('Failed to obtain a subscription id');
         }
     );
     it("fatals when called with a method that does not end in 'Notifications'", () => {
         expect(() => {
-            rpc.nonConformingNotif().subscribe();
+            rpc.nonConformingNotif().subscribe({ abortSignal: new AbortController().signal });
         }).toThrow();
     });
     it('fatals when called with an already aborted signal', async () => {
@@ -226,7 +234,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         iterable.mockImplementation(async function* () {
             yield { id: 0, result: undefined /* subscription id */ };
         });
-        const subscribePromise = rpc.thingNotifications().subscribe();
+        const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(/Failed to obtain a subscription id from the server/);
     });
     it('fatals when the server responds with an error', async () => {
@@ -237,7 +245,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 id: 0,
             };
         });
-        const subscribePromise = rpc.thingNotifications().subscribe();
+        const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(SolanaJsonRpcError);
         await expect(subscribePromise).rejects.toThrow(/o no/);
         await expect(subscribePromise).rejects.toMatchObject({ code: 123, data: 'abc' });
@@ -245,7 +253,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('throws errors when the connection fails to construct', async () => {
         expect.assertions(1);
         createWebSocketConnection.mockRejectedValue(new Error('o no'));
-        const subscribePromise = rpc.thingNotifications().subscribe();
+        const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(/o no/);
     });
     describe('when calling a method having a concrete implementation', () => {
@@ -265,7 +273,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             });
         });
         it('converts the returned subscription to a JSON-RPC 2.0 message and sends it to the transport', () => {
-            rpc.nonConformingNotif(123).subscribe();
+            rpc.nonConformingNotif(123).subscribe({ abortSignal: new AbortController().signal });
             expect(createWebSocketConnection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     payload: {
@@ -316,7 +324,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 yield { id: 0, result: 42 /* subscription id */ };
                 yield { params: { result: 123, subscription: 42 } };
             });
-            const thingNotifications = await rpc.thingNotifications().subscribe();
+            const thingNotifications = await rpc
+                .thingNotifications()
+                .subscribe({ abortSignal: new AbortController().signal });
             await thingNotifications[Symbol.asyncIterator]().next();
             expect(responseProcessor).toHaveBeenCalledWith(123);
         });
@@ -326,7 +336,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 yield { id: 0, result: 42 /* subscription id */ };
                 yield { params: { result: 123, subscription: 42 } };
             });
-            const thingNotifications = await rpc.thingNotifications().subscribe();
+            const thingNotifications = await rpc
+                .thingNotifications()
+                .subscribe({ abortSignal: new AbortController().signal });
             await expect(thingNotifications[Symbol.asyncIterator]().next()).resolves.toHaveProperty(
                 'value',
                 '123 processed response'

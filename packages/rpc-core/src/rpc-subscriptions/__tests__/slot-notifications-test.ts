@@ -20,7 +20,9 @@ describe('slotNotifications', () => {
 
     it('produces slot notifications', async () => {
         expect.assertions(1);
-        const slotNotifications = await rpc.slotNotifications().subscribe();
+        const slotNotifications = await rpc
+            .slotNotifications()
+            .subscribe({ abortSignal: new AbortController().signal });
         const iterator = slotNotifications[Symbol.asyncIterator]();
         await expect(iterator.next()).resolves.toHaveProperty('value', {
             parent: expect.any(BigInt),

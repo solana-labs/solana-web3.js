@@ -42,13 +42,13 @@ export type PendingRpcRequest<TResponse> = {
     send(options?: SendOptions): Promise<TResponse>;
 };
 export type PendingRpcSubscription<TNotification> = {
-    subscribe(options?: SubscribeOptions): Promise<AsyncIterable<TNotification>>;
+    subscribe(options: SubscribeOptions): Promise<AsyncIterable<TNotification>>;
 };
 export type SendOptions = Readonly<{
     abortSignal?: AbortSignal;
 }>;
 export type SubscribeOptions = Readonly<{
-    abortSignal?: AbortSignal;
+    abortSignal: AbortSignal;
 }>;
 
 /**
