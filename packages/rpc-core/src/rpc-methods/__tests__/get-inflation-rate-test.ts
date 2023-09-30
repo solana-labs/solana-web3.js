@@ -19,7 +19,7 @@ describe('getInflationRate', () => {
         it('returns the inflation rate result with expected formatting', async () => {
             expect.assertions(1);
             const result = await rpc.getInflationRate().send();
-            expect(result).toMatchObject({
+            expect(result).toStrictEqual({
                 epoch: expect.any(BigInt),
                 foundation: expect.any(Number),
                 total: expect.any(Number),

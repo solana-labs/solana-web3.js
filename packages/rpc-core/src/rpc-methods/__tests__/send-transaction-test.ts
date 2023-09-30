@@ -200,7 +200,9 @@ describe('sendTransaction', () => {
             .send();
         await expect(resultPromise).rejects.toMatchObject({
             code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            message: expect.stringContaining('invalid value: integer `126`, expected supported versions: [0]'),
+            message: expect.stringContaining(
+                'invalid value: integer `126`, expected a valid transaction message version'
+            ),
             name: 'SolanaJsonRpcError',
         });
     });

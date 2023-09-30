@@ -10,6 +10,10 @@ import path from 'path';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 const faucetKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/faucet-keypair.json');
 const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
 const voteAccountKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/vote-account-keypair.json');
@@ -53,10 +57,9 @@ describe('getLargestAccounts', () => {
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment }).send();
-                    await expect(largestAcountsPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt), // Changes
-                        },
+                    await expect(largestAcountsPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 address: voteAccountAddress,
@@ -84,10 +87,8 @@ describe('getLargestAccounts', () => {
                     const validatorAddress = await getNodeAddress(validatorKeypairPath);
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     const largestAcountsPromise = rpc.getLargestAccounts({ commitment, filter: 'circulating' }).send();
-                    await expect(largestAcountsPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt), // Changes
-                        },
+                    await expect(largestAcountsPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {

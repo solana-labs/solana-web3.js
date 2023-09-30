@@ -21,7 +21,7 @@ describe('getInflationGovernor', () => {
             it('returns the inflation governor result with expected formatting', async () => {
                 expect.assertions(1);
                 const result = await rpc.getInflationGovernor({ commitment }).send();
-                expect(result).toMatchObject({
+                expect(result).toStrictEqual({
                     foundation: expect.any(Number),
                     foundationTerm: expect.any(Number),
                     initial: expect.any(Number),

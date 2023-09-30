@@ -21,7 +21,10 @@ describe('getVoteAccounts', () => {
             it('returns current and delinquent vote accounts', async () => {
                 expect.assertions(1);
                 const voteAccountsPromise = rpc.getVoteAccounts().send();
-                await expect(voteAccountsPromise).resolves.toMatchObject({
+                await expect(voteAccountsPromise).resolves.toStrictEqual({
+                    // FIXME: The legacy vote account tests add vote accounts to the local validator
+                    //        (which is shared with this test) in such a way that makes a
+                    //        `toStrictEqual()` assertion impossible here.
                     current: expect.arrayContaining([
                         {
                             // Fixture
@@ -55,7 +58,7 @@ describe('getVoteAccounts', () => {
             const address =
                 '2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2' as Base58EncodedAddress<'2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2'>;
             const voteAccountsPromise = rpc.getVoteAccounts({ votePubkey: address }).send();
-            await expect(voteAccountsPromise).resolves.toMatchObject({
+            await expect(voteAccountsPromise).resolves.toStrictEqual({
                 current: [],
                 delinquent: [],
             });

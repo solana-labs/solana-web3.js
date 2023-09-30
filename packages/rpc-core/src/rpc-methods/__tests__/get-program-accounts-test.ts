@@ -11,6 +11,10 @@ import path from 'path';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
 const voteAccountKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/vote-account-keypair.json');
 
@@ -58,16 +62,18 @@ describe('getProgramAccounts', () => {
                     })
                     .send();
 
-                await expect(accountInfosPromise).resolves.toMatchObject(
+                await expect(accountInfosPromise).resolves.toStrictEqual(
+                    // We can't guarantee ordering is preserved across test runs
                     expect.arrayContaining([
                         {
-                            account: expect.objectContaining({
+                            account: {
                                 data: '2Uw1bpnsXxu3e',
                                 executable: false,
                                 lamports: 5000000n,
                                 owner: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                                 rentEpoch: 18446744073709551616n, // TODO: This number loses precision
-                            }),
+                                space: 9n,
+                            },
                             pubkey: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                         },
                     ])
@@ -114,26 +120,29 @@ describe('getProgramAccounts', () => {
 
             const accountInfosPromise = rpc.getProgramAccounts(program).send();
 
-            await expect(accountInfosPromise).resolves.toMatchObject(
+            await expect(accountInfosPromise).resolves.toStrictEqual(
+                // We can't guarantee ordering is preserved across test runs
                 expect.arrayContaining([
                     {
-                        account: expect.objectContaining({
+                        account: {
                             data: '2Uw1bpnsXxu3e',
                             executable: false,
                             lamports: 5000000n,
                             owner: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                             rentEpoch: 18446744073709551616n, // TODO: This number loses precision
-                        }),
+                            space: 9n,
+                        },
                         pubkey: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                     },
                     {
-                        account: expect.objectContaining({
+                        account: {
                             data: '2Uw1bpnsXxu3e',
                             executable: false,
                             lamports: 5000000n,
                             owner: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                             rentEpoch: 18446744073709551616n, // TODO: This number loses precision
-                        }),
+                            space: 9n,
+                        },
                         pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                     },
                 ])
@@ -319,7 +328,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -381,6 +391,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'AddressLookupTab1e1111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 1304n,
                                 },
                                 pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
@@ -400,7 +411,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -419,6 +431,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1141440n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 36n,
                                 },
                                 pubkey: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             },
@@ -438,6 +451,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 36n,
                                 },
                                 pubkey: 'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk',
                             },
@@ -455,6 +469,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 2754914160n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 395693n,
                                 },
                                 // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
@@ -477,7 +492,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -496,6 +512,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 960480n,
                                     owner: 'Config1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 10n,
                                 },
                                 pubkey: 'StakeConfig11111111111111111111111111111111',
                             },
@@ -528,6 +545,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'Config1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 643n,
                                 },
                                 pubkey: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
                             },
@@ -549,7 +567,8 @@ describe('getProgramAccounts', () => {
                         .send();
 
                     // Too large to try to match all accounts owned by system program
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -571,6 +590,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: '11111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 80n,
                                 },
                                 pubkey: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
                             },
@@ -593,7 +613,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -615,6 +636,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1000000000n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: 1n,
+                                    space: 82n,
                                 },
                                 pubkey: 'So11111111111111111111111111111111111111112',
                             },
@@ -638,6 +660,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf',
                             },
@@ -661,6 +684,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
                             },
@@ -686,6 +710,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 355n,
                                 },
                                 pubkey: '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88',
                             },
@@ -721,6 +746,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                             },
@@ -749,6 +775,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                             },
@@ -772,6 +799,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
                             },
@@ -800,6 +828,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 2039280n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                             },
@@ -823,6 +852,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1461600n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: 'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj',
                             },
@@ -843,7 +873,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -887,6 +918,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 278n,
                                 },
                                 pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                             },
@@ -911,7 +943,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             // Local validator
                             {
@@ -951,6 +984,7 @@ describe('getProgramAccounts', () => {
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 200n,
                                 },
                                 pubkey: stakeAddress,
                             },
@@ -992,6 +1026,7 @@ describe('getProgramAccounts', () => {
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 200n,
                                 },
                                 pubkey: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
                             },
@@ -1013,7 +1048,8 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
@@ -1029,6 +1065,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1169280n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 40n,
                                 },
                                 pubkey: 'SysvarC1ock11111111111111111111111111111111',
                             },
@@ -1046,6 +1083,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1120560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 33n,
                                 },
                                 pubkey: 'SysvarEpochSchedu1e111111111111111111111111',
                             },
@@ -1063,6 +1101,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 946560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 8n,
                                 },
                                 pubkey: 'SysvarFees111111111111111111111111111111111',
                             },
@@ -1080,6 +1119,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 42706560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 6008n,
                                 },
                                 pubkey: 'SysvarRecentB1ockHashes11111111111111111111',
                             },
@@ -1097,6 +1137,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1009200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 17n,
                                 },
                                 pubkey: 'SysvarRent111111111111111111111111111111111',
                             },
@@ -1114,6 +1155,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 913326000n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 131097n,
                                 },
                                 pubkey: 'SysvarS1otHistory11111111111111111111111111',
                             },
@@ -1131,6 +1173,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 114979200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 16392n,
                                 },
                                 pubkey: 'SysvarStakeHistory1111111111111111111111111',
                             },
@@ -1153,13 +1196,18 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
+                    // FIXME: The legacy vote account tests add vote accounts to the local validator
+                    //        (which is shared with this test) in such a way that makes a
+                    //        `toStrictEqual()` assertion impossible here.
                     await expect(accountInfosPromise).resolves.toMatchObject(
+                        // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
                                 account: {
                                     data: {
                                         parsed: {
-                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            // FIXME: We don't do a strict match here because `rootSlot` can sometimes be `null`
+                                            //        Install a matcher that can match 'BigInt OR null'. None of the builtins can.
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
@@ -1170,20 +1218,25 @@ describe('getProgramAccounts', () => {
                                                 authorizedWithdrawer: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 commission: 50,
                                                 epochCredits: expect.any(Array), // Huge, changes
-                                                lastTimestamp: expect.any(Object), // Changes
+                                                lastTimestamp: {
+                                                    slot: expect.any(BigInt),
+                                                    timestamp: expect.any(BigInt),
+                                                },
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
+                                                // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
                                             }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: expect.any(BigInt),
+                                        space: 3731n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 3731n,
                                 },
                                 pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
                             },
@@ -1192,7 +1245,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            // FIXME: We don't do a strict match here because `rootSlot` can sometimes be `null`
+                                            //        Install a matcher that can match 'BigInt OR null'. None of the builtins can.
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
@@ -1203,20 +1257,25 @@ describe('getProgramAccounts', () => {
                                                 authorizedWithdrawer: voteAccountAddress,
                                                 commission: 0,
                                                 epochCredits: expect.any(Array), // Huge, changes
-                                                lastTimestamp: expect.any(Object), // Changes
+                                                lastTimestamp: {
+                                                    slot: expect.any(BigInt),
+                                                    timestamp: expect.any(BigInt),
+                                                },
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
+                                                // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
                                             }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: expect.any(BigInt),
+                                        space: 3731n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 3731n,
                                 },
                                 pubkey: voteAccountAddress,
                             },
@@ -1239,10 +1298,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt), // Changes
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1304,6 +1362,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'AddressLookupTab1e1111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 1304n,
                                 },
                                 pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
@@ -1324,10 +1383,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1346,6 +1404,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1141440n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 36n,
                                 },
                                 pubkey: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             },
@@ -1365,6 +1424,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 36n,
                                 },
                                 pubkey: 'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk',
                             },
@@ -1382,6 +1442,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 2754914160n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 395693n,
                                 },
                                 // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
@@ -1404,10 +1465,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1426,6 +1486,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 960480n,
                                     owner: 'Config1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 10n,
                                 },
                                 pubkey: 'StakeConfig11111111111111111111111111111111',
                             },
@@ -1458,6 +1519,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'Config1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 643n,
                                 },
                                 pubkey: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
                             },
@@ -1479,10 +1541,9 @@ describe('getProgramAccounts', () => {
                         .send();
 
                     // Too large to try to match all accounts owned by system program
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt), // Changes
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1504,6 +1565,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: '11111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 80n,
                                 },
                                 pubkey: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
                             },
@@ -1526,10 +1588,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1551,6 +1612,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1000000000n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: 1n,
+                                    space: 82n,
                                 },
                                 pubkey: 'So11111111111111111111111111111111111111112',
                             },
@@ -1574,6 +1636,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf',
                             },
@@ -1597,6 +1660,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M',
                             },
@@ -1622,6 +1686,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 355n,
                                 },
                                 pubkey: '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88',
                             },
@@ -1657,6 +1722,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: '6uGCrvzPAta1nc6wP9oHvM6sRDu1kXTMuJSJvro4R4xS',
                             },
@@ -1685,6 +1751,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                             },
@@ -1708,6 +1775,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
                             },
@@ -1736,6 +1804,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 2039280n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 165n,
                                 },
                                 pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                             },
@@ -1759,6 +1828,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1461600n,
                                     owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 82n,
                                 },
                                 pubkey: 'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj',
                             },
@@ -1779,10 +1849,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1826,6 +1895,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 10290815n,
                                     owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 278n,
                                 },
                                 pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                             },
@@ -1850,10 +1920,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             // Local Validator
                             {
@@ -1893,6 +1962,7 @@ describe('getProgramAccounts', () => {
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 200n,
                                 },
                                 pubkey: stakeAddress,
                             },
@@ -1934,6 +2004,7 @@ describe('getProgramAccounts', () => {
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Stake11111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 200n,
                                 },
                                 pubkey: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
                             },
@@ -1955,10 +2026,9 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             {
                                 account: {
@@ -1974,6 +2044,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1169280n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 40n,
                                 },
                                 pubkey: 'SysvarC1ock11111111111111111111111111111111',
                             },
@@ -1991,6 +2062,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1120560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 33n,
                                 },
                                 pubkey: 'SysvarEpochSchedu1e111111111111111111111111',
                             },
@@ -2008,6 +2080,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 946560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 8n,
                                 },
                                 pubkey: 'SysvarFees111111111111111111111111111111111',
                             },
@@ -2025,6 +2098,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 42706560n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 6008n,
                                 },
                                 pubkey: 'SysvarRecentB1ockHashes11111111111111111111',
                             },
@@ -2042,6 +2116,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 1009200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 17n,
                                 },
                                 pubkey: 'SysvarRent111111111111111111111111111111111',
                             },
@@ -2059,6 +2134,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 913326000n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 131097n,
                                 },
                                 pubkey: 'SysvarS1otHistory11111111111111111111111111',
                             },
@@ -2076,6 +2152,7 @@ describe('getProgramAccounts', () => {
                                     lamports: 114979200n,
                                     owner: 'Sysvar1111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 16392n,
                                 },
                                 pubkey: 'SysvarStakeHistory1111111111111111111111111',
                             },
@@ -2098,17 +2175,20 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
+                    // FIXME: The legacy vote account tests add vote accounts to the local validator
+                    //        (which is shared with this test) in such a way that makes a
+                    //        `toStrictEqual()` assertion impossible here.
                     await expect(accountInfosPromise).resolves.toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                        context: CONTEXT_MATCHER,
+                        // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
                             // Fixture
                             {
                                 account: {
                                     data: {
                                         parsed: {
-                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            // FIXME: We don't do a strict match here because `rootSlot` can sometimes be `null`
+                                            //        Install a matcher that can match 'BigInt OR null'. None of the builtins can.
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
@@ -2119,20 +2199,25 @@ describe('getProgramAccounts', () => {
                                                 authorizedWithdrawer: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 commission: 50,
                                                 epochCredits: expect.any(Array), // Huge, changes
-                                                lastTimestamp: expect.any(Object), // Changes
+                                                lastTimestamp: {
+                                                    slot: expect.any(BigInt),
+                                                    timestamp: expect.any(BigInt),
+                                                },
                                                 nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                                 priorVoters: expect.any(Array), // Huge, changes
+                                                // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
                                             }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: expect.any(BigInt),
+                                        space: 3731n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 3731n,
                                 },
                                 pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
                             },
@@ -2141,7 +2226,8 @@ describe('getProgramAccounts', () => {
                                 account: {
                                     data: {
                                         parsed: {
-                                            // Note: `rootSlot` can be null in early test validator startup. Omitted.
+                                            // FIXME: We don't do a strict match here because `rootSlot` can sometimes be `null`
+                                            //        Install a matcher that can match 'BigInt OR null'. None of the builtins can.
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
@@ -2152,20 +2238,25 @@ describe('getProgramAccounts', () => {
                                                 authorizedWithdrawer: voteAccountAddress,
                                                 commission: 0,
                                                 epochCredits: expect.any(Array), // Huge, changes
-                                                lastTimestamp: expect.any(Object), // Changes
+                                                lastTimestamp: {
+                                                    slot: expect.any(BigInt),
+                                                    timestamp: expect.any(BigInt),
+                                                },
                                                 nodePubkey: validatorAddress,
                                                 priorVoters: expect.any(Array), // Huge, changes
+                                                // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
                                             }),
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: expect.any(BigInt),
+                                        space: 3731n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
+                                    space: 3731n,
                                 },
                                 pubkey: voteAccountAddress,
                             },

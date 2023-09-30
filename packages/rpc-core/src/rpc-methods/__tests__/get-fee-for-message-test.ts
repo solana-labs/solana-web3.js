@@ -8,6 +8,9 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
 // See scripts/fixtures/send-transaction-fee-payer.json
 const MOCK_PUBLIC_KEY_BYTES = // DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i
     // prettier-ignore
@@ -78,10 +81,8 @@ describe('getFeeForMessage', () => {
                     const latestBlockhash = await rpc.getLatestBlockhash().send();
                     const message = getMockTransactionMessage(latestBlockhash.value.blockhash);
                     const result = await rpc.getFeeForMessage(message, { commitment }).send();
-                    expect(result).toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    expect(result).toStrictEqual({
+                        context: CONTEXT_MATCHER,
                         value: expect.any(BigInt),
                     });
                 });
@@ -100,10 +101,8 @@ describe('getFeeForMessage', () => {
                         'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Blockhash
                     );
                     const result = await rpc.getFeeForMessage(message, { commitment }).send();
-                    expect(result).toMatchObject({
-                        context: {
-                            slot: expect.any(BigInt),
-                        },
+                    expect(result).toStrictEqual({
+                        context: CONTEXT_MATCHER,
                         value: null,
                     });
                 });

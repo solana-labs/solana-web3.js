@@ -22,7 +22,7 @@ describe('getEpochInfo', () => {
             it('returns epoch info', async () => {
                 expect.assertions(1);
                 const epochInfoPromise = rpc.getEpochInfo().send();
-                await expect(epochInfoPromise).resolves.toMatchObject({
+                await expect(epochInfoPromise).resolves.toStrictEqual({
                     absoluteSlot: expect.any(BigInt),
                     blockHeight: expect.any(BigInt),
                     epoch: expect.any(BigInt),

@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getAccountInfo', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -32,14 +36,16 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
-                    value: expect.objectContaining({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: {
                         data: '2Uw1bpnsXxu3e',
                         executable: false,
                         lamports: 5000000n,
                         owner: '11111111111111111111111111111111',
                         rentEpoch: 18446744073709551616n, // TODO: This number loses precision
-                    }),
+                        space: 9n,
+                    },
                 });
             });
         });
@@ -70,7 +76,8 @@ describe('getAccountInfo', () => {
             const publicKey =
                 'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV' as Base58EncodedAddress<'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV'>;
             const accountInfoPromise = rpc.getAccountInfo(publicKey).send();
-            await expect(accountInfoPromise).resolves.toMatchObject({
+            await expect(accountInfoPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: null,
             });
         });
@@ -161,7 +168,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -215,7 +223,13 @@ describe('getAccountInfo', () => {
                                 type: 'lookupTable',
                             },
                             program: 'address-lookup-table',
+                            space: 1304n,
                         },
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: 'AddressLookupTab1e1111111111111111111111111',
+                        rentEpoch: 0n,
+                        space: 1304n,
                     },
                 });
             });
@@ -232,7 +246,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                expect(accountInfo).toMatchObject({
+                expect(accountInfo).toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -242,7 +257,13 @@ describe('getAccountInfo', () => {
                                 type: 'program',
                             },
                             program: 'bpf-upgradeable-loader',
+                            space: 36n,
                         },
+                        executable: true,
+                        lamports: 10290815n,
+                        owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
+                        rentEpoch: 0n,
+                        space: 36n,
                     },
                 });
             });
@@ -259,12 +280,16 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
                                 info: {
-                                    configData: {},
+                                    configData: {
+                                        name: 'HoldTheNode',
+                                        website: 'https://holdthenode.com',
+                                    },
                                     keys: [
                                         {
                                             pubkey: 'Va1idator1nfo111111111111111111111111111111',
@@ -279,7 +304,13 @@ describe('getAccountInfo', () => {
                                 type: 'validatorInfo',
                             },
                             program: 'config',
+                            space: 643n,
                         },
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: 'Config1111111111111111111111111111111111111',
+                        rentEpoch: 0n,
+                        space: 643n,
                     },
                 });
             });
@@ -296,7 +327,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -307,7 +339,13 @@ describe('getAccountInfo', () => {
                                 type: 'stakeConfig',
                             },
                             program: 'config',
+                            space: 10n,
                         },
+                        executable: false,
+                        lamports: 960480n,
+                        owner: 'Config1111111111111111111111111111111111111',
+                        rentEpoch: 0n,
+                        space: 10n,
                     },
                 });
             });
@@ -324,19 +362,28 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
                                 info: {
                                     authority: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
                                     blockhash: 'TcVy2wVcs7WqWVopv8LAJBHQfqVYZrm8UDqjDvBFQt8',
-                                    feeCalculator: {},
+                                    feeCalculator: {
+                                        lamportsPerSignature: expect.stringMatching(/\d+/),
+                                    },
                                 },
                                 type: 'initialized',
                             },
                             program: 'nonce',
+                            space: 80n,
                         },
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: '11111111111111111111111111111111',
+                        rentEpoch: 0n,
+                        space: 80n,
                     },
                 });
             });
@@ -353,7 +400,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -367,7 +415,13 @@ describe('getAccountInfo', () => {
                                 type: 'mint',
                             },
                             program: 'spl-token',
+                            space: 82n,
                         },
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                        rentEpoch: 0n,
+                        space: 82n,
                     },
                 });
             });
@@ -384,7 +438,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -403,7 +458,13 @@ describe('getAccountInfo', () => {
                                 type: 'account',
                             },
                             program: 'spl-token',
+                            space: 165n,
                         },
+                        executable: false,
+                        lamports: 10290815n,
+                        owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                        rentEpoch: 0n,
+                        space: 165n,
                     },
                 });
             });
@@ -420,7 +481,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -442,6 +504,7 @@ describe('getAccountInfo', () => {
                         lamports: 10290815n,
                         owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                         rentEpoch: 0n,
+                        space: 355n,
                     },
                 });
             });
@@ -458,7 +521,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -500,6 +564,7 @@ describe('getAccountInfo', () => {
                         lamports: 10290815n,
                         owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                         rentEpoch: 0n,
+                        space: 278n,
                     },
                 });
             });
@@ -516,7 +581,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -553,6 +619,7 @@ describe('getAccountInfo', () => {
                         lamports: 10290815n,
                         owner: 'Stake11111111111111111111111111111111111111',
                         rentEpoch: 0n,
+                        space: 200n,
                     },
                 });
             });
@@ -569,7 +636,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -587,6 +655,7 @@ describe('getAccountInfo', () => {
                         lamports: 1009200n,
                         owner: 'Sysvar1111111111111111111111111111111111111',
                         rentEpoch: 0n,
+                        space: 17n,
                     },
                 });
             });
@@ -603,7 +672,8 @@ describe('getAccountInfo', () => {
                     })
                     .send();
 
-                await expect(accountInfoPromise).resolves.toMatchObject({
+                await expect(accountInfoPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         data: {
                             parsed: {
@@ -1081,6 +1151,7 @@ describe('getAccountInfo', () => {
                         lamports: 10290815n,
                         owner: 'Vote111111111111111111111111111111111111111',
                         rentEpoch: 0n,
+                        space: 3731n,
                     },
                 });
             });

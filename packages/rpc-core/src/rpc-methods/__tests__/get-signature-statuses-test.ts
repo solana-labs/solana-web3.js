@@ -6,6 +6,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { TransactionSignature } from '../../transaction-signature';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getSignatureStatuses', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -37,10 +41,8 @@ describe('getSignatureStatuses', () => {
         it('returns an empty list', async () => {
             expect.assertions(1);
             const signatureStatusPromise = rpc.getSignatureStatuses([]).send();
-            await expect(signatureStatusPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
+            await expect(signatureStatusPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [],
             });
         });
@@ -69,10 +71,8 @@ describe('getSignatureStatuses', () => {
                     '4Vx3PAb665jCLRpbpgKshZuwKP6TUgoSDDAbKEsyvkKhwrNDT6CE5d7MT1vEPkgEo1cmr7zsM8h724wRnjyCAoR3' as TransactionSignature,
                 ])
                 .send();
-            await expect(signatureStatusPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
+            await expect(signatureStatusPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [null],
             });
         });

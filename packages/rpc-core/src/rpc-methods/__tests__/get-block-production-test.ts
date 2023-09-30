@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getBlockProduction', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -23,14 +27,16 @@ describe('getBlockProduction', () => {
             it('returns block production data', async () => {
                 expect.assertions(1);
                 const blockProductionPromise = rpc.getBlockProduction({ commitment }).send();
-                await expect(blockProductionPromise).resolves.toMatchObject({
-                    value: expect.objectContaining({
+                await expect(blockProductionPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: {
+                        // FIXME: https://stackoverflow.com/questions/77204507/how-can-you-match-on-wildcard-object-keys-using-jest-matchers
                         byIdentity: expect.any(Object),
-                        range: expect.objectContaining({
+                        range: {
                             firstSlot: expect.any(BigInt),
                             lastSlot: expect.any(BigInt),
-                        }),
-                    }),
+                        },
+                    },
                 });
             });
 
@@ -53,9 +59,9 @@ describe('getBlockProduction', () => {
                 '9NmqDDZa7mH1DBM4zeq9cm7VcRn2un1i2TwuMvjBoVhU' as Base58EncodedAddress<'9NmqDDZa7mH1DBM4zeq9cm7VcRn2un1i2TwuMvjBoVhU'>;
             const blockProductionPromise = rpc.getBlockProduction({ identity }).send();
             await expect(blockProductionPromise).resolves.toMatchObject({
-                value: expect.objectContaining({
+                value: {
                     byIdentity: {},
-                }),
+                },
             });
         });
     });

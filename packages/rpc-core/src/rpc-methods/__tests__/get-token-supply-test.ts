@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getTokenSupply', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -26,10 +30,8 @@ describe('getTokenSupply', () => {
                 const pubkey =
                     'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
                 const tokenAccountBalancePromise = rpc.getTokenSupply(pubkey, { commitment }).send();
-                await expect(tokenAccountBalancePromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt), // Changes
-                    },
+                await expect(tokenAccountBalancePromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: {
                         amount: '1690580887590527729',
                         decimals: 6,

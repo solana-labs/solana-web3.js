@@ -77,13 +77,15 @@ describe('getClusterNodes', () => {
             expect.assertions(1);
             const [featureSet, gossip, pubkey, rpc, shredVersion, version] = await getNodeInfoFromLogFile();
             const res = await mockRpc.getClusterNodes().send();
-            expect(res[0]).toMatchObject({
+            expect(res[0]).toStrictEqual({
                 featureSet,
                 gossip,
                 pubkey,
+                pubsub: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 rpc,
                 shredVersion,
-                tpu: expect.any(String), // TPU not in regex
+                tpu: expect.stringMatching(/127.0.0.1(:\d+)?/),
+                tpuQuic: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 version,
             });
         });

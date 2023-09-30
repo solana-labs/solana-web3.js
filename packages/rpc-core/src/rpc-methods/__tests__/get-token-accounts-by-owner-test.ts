@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getTokenAccountsByOwner', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -41,11 +45,9 @@ describe('getTokenAccountsByOwner', () => {
                     )
                     .send();
 
-                await expect(accountInfosPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
-                    value: expect.arrayContaining([
+                await expect(accountInfosPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: [
                         {
                             account: {
                                 data: [
@@ -56,10 +58,11 @@ describe('getTokenAccountsByOwner', () => {
                                 lamports: 2039280n,
                                 owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                                 rentEpoch: 0n,
+                                space: 165n,
                             },
                             pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                         },
-                    ]),
+                    ],
                 });
             });
         });
@@ -104,7 +107,8 @@ describe('getTokenAccountsByOwner', () => {
                 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId: tokenProgram }).send();
-            await expect(accountInfoPromise).resolves.toMatchObject({
+            await expect(accountInfoPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [],
             });
         });
@@ -151,11 +155,9 @@ describe('getTokenAccountsByOwner', () => {
                 )
                 .send();
 
-            await expect(accountInfosPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
-                value: expect.arrayContaining([
+            await expect(accountInfosPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
+                value: [
                     {
                         account: {
                             data: [
@@ -166,10 +168,11 @@ describe('getTokenAccountsByOwner', () => {
                             lamports: 2039280n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 165n,
                         },
                         pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                     },
-                ]),
+                ],
             });
         });
     });
@@ -187,7 +190,8 @@ describe('getTokenAccountsByOwner', () => {
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { mint }).send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
+            await expect(accountInfoPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [],
             });
         });
@@ -226,7 +230,8 @@ describe('getTokenAccountsByOwner', () => {
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId }).send();
 
-            await expect(accountInfoPromise).resolves.toMatchObject({
+            await expect(accountInfoPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [],
             });
         });
@@ -258,11 +263,9 @@ describe('getTokenAccountsByOwner', () => {
                 )
                 .send();
 
-            await expect(accountInfosPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
-                value: expect.arrayContaining([
+            await expect(accountInfosPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
+                value: [
                     {
                         account: {
                             data: [
@@ -273,10 +276,11 @@ describe('getTokenAccountsByOwner', () => {
                             lamports: 2039280n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 165n,
                         },
                         pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                     },
-                ]),
+                ],
             });
         });
     });
@@ -301,11 +305,9 @@ describe('getTokenAccountsByOwner', () => {
                 )
                 .send();
 
-            await expect(accountInfosPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
-                value: expect.arrayContaining([
+            await expect(accountInfosPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
+                value: [
                     {
                         account: {
                             data: [
@@ -316,10 +318,11 @@ describe('getTokenAccountsByOwner', () => {
                             lamports: 2039280n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 165n,
                         },
                         pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                     },
-                ]),
+                ],
             });
         });
     });
@@ -344,11 +347,9 @@ describe('getTokenAccountsByOwner', () => {
                 )
                 .send();
 
-            await expect(accountInfosPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
-                value: expect.arrayContaining([
+            await expect(accountInfosPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
+                value: [
                     {
                         account: {
                             data: {
@@ -374,10 +375,11 @@ describe('getTokenAccountsByOwner', () => {
                             lamports: 2039280n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 165n,
                         },
                         pubkey: 'GoJdqNkvpf26BAX8cYsV3bb52kbBYt7vT5rqpPGGgK5F',
                     },
-                ]),
+                ],
             });
         });
     });

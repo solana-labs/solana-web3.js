@@ -5,6 +5,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getSupply', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -22,12 +26,14 @@ describe('getSupply', () => {
                 expect.assertions(1);
                 const supply = await rpc.getSupply({ commitment }).send();
 
-                expect(supply).toMatchObject({
-                    value: expect.objectContaining({
+                expect(supply).toStrictEqual({
+                    context: CONTEXT_MATCHER,
+                    value: {
                         circulating: expect.any(BigInt),
                         nonCirculating: expect.any(BigInt),
+                        nonCirculatingAccounts: expect.arrayContaining([expect.any(String)]),
                         total: expect.any(BigInt),
-                    }),
+                    },
                 });
 
                 // TODO: we don't reliably have non-circulating accounts in test validator yet

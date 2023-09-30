@@ -7,6 +7,10 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
+const CONTEXT_MATCHER = expect.objectContaining({
+    slot: expect.any(BigInt),
+});
+
 describe('getMultipleAccounts', () => {
     let rpc: Rpc<SolanaRpcMethods>;
     beforeEach(() => {
@@ -37,10 +41,8 @@ describe('getMultipleAccounts', () => {
                     )
                     .send();
 
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: ['dGVzdCBkYXRh', 'base64'],
@@ -48,6 +50,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 5000000n,
                             owner: '11111111111111111111111111111111',
                             rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            space: 9n,
                         },
                         {
                             data: ['', 'base64'],
@@ -55,6 +58,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 5000000n,
                             owner: '11111111111111111111111111111111',
                             rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            space: 0n,
                         },
                     ],
                 });
@@ -85,7 +89,8 @@ describe('getMultipleAccounts', () => {
             expect.assertions(1);
 
             const multipleAccountsPromise = rpc.getMultipleAccounts([]).send();
-            await expect(multipleAccountsPromise).resolves.toMatchObject({
+            await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [],
             });
         });
@@ -104,20 +109,19 @@ describe('getMultipleAccounts', () => {
                 ])
                 .send();
 
-            await expect(multipleAccountsPromise).resolves.toMatchObject({
-                context: {
-                    slot: expect.any(BigInt),
-                },
-                value: expect.arrayContaining([
+            await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
+                value: [
                     {
                         data: ['dGVzdCBkYXRh', 'base64'],
                         executable: false,
                         lamports: 5000000n,
                         owner: '11111111111111111111111111111111',
                         rentEpoch: 18446744073709551616n,
+                        space: 9n,
                     },
                     null,
-                ]),
+                ],
             });
         });
     });
@@ -135,7 +139,8 @@ describe('getMultipleAccounts', () => {
                 ])
                 .send();
 
-            await expect(multipleAccountsPromise).resolves.toMatchObject({
+            await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                context: CONTEXT_MATCHER,
                 value: [null, null],
             });
         });
@@ -227,10 +232,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -291,6 +294,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'AddressLookupTab1e1111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 1304n,
                         },
                     ],
                 });
@@ -309,10 +313,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -329,6 +331,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                             rentEpoch: 0n,
+                            space: 36n,
                         },
                     ],
                 });
@@ -347,10 +350,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -380,6 +381,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'Config1111111111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 643n,
                         },
                     ],
                 });
@@ -398,10 +400,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -419,6 +419,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 960480n,
                             owner: 'Config1111111111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 10n,
                         },
                     ],
                 });
@@ -437,10 +438,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -461,6 +460,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: '11111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 80n,
                         },
                     ],
                 });
@@ -479,10 +479,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -503,6 +501,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 82n,
                         },
                     ],
                 });
@@ -521,10 +520,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -550,6 +547,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 165n,
                         },
                     ],
                 });
@@ -568,10 +566,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -594,6 +590,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             rentEpoch: 0n,
+                            space: 355n,
                         },
                     ],
                 });
@@ -612,10 +609,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -658,6 +653,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                             rentEpoch: 0n,
+                            space: 278n,
                         },
                     ],
                 });
@@ -676,10 +672,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -717,6 +711,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'Stake11111111111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 200n,
                         },
                     ],
                 });
@@ -735,10 +730,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -757,6 +750,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 1009200n,
                             owner: 'Sysvar1111111111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 17n,
                         },
                     ],
                 });
@@ -775,10 +769,8 @@ describe('getMultipleAccounts', () => {
                     .send();
 
                 // Length 1
-                await expect(multipleAccountsPromise).resolves.toMatchObject({
-                    context: {
-                        slot: expect.any(BigInt),
-                    },
+                await expect(multipleAccountsPromise).resolves.toStrictEqual({
+                    context: CONTEXT_MATCHER,
                     value: [
                         {
                             data: {
@@ -1257,6 +1249,7 @@ describe('getMultipleAccounts', () => {
                             lamports: 10290815n,
                             owner: 'Vote111111111111111111111111111111111111111',
                             rentEpoch: 0n,
+                            space: 3731n,
                         },
                     ],
                 });
