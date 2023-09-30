@@ -74,21 +74,15 @@ function convertSignatures(
     transaction: VersionedTransaction,
     staticAccountKeys: PublicKey[]
 ): ITransactionWithSignatures['signatures'] {
-    const signatures: Record<Base58EncodedAddress, Ed25519Signature> = {};
-
-    for (let i = 0; i < transaction.signatures.length; i++) {
-        const address = staticAccountKeys[i].toBase58() as Base58EncodedAddress;
-
+    return transaction.signatures.reduce((acc, sig, index) => {
         // old web3js includes a fake all 0 signature if it hasn't been signed
         // we don't do that for the new tx model. So just skip if it's all 0s
-        const allZeros = transaction.signatures[i].every(byte => byte === 0);
-        if (allZeros) continue;
+        const allZeros = sig.every(byte => byte === 0);
+        if (allZeros) return acc;
 
-        const signature = transaction.signatures[i] as Ed25519Signature;
-        signatures[address] = signature;
-    }
-
-    return signatures;
+        const address = staticAccountKeys[index].toBase58() as Base58EncodedAddress;
+        return { ...acc, [address]: sig as Ed25519Signature };
+    }, {});
 }
 
 export function fromOldVersionedTransactionWithBlockhash(
