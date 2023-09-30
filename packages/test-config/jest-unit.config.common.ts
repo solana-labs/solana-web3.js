@@ -11,6 +11,7 @@ const config: Partial<Config.InitialProjectOptions> = {
         path.resolve(__dirname, 'setup-fetch-mock.ts'),
         path.resolve(__dirname, 'setup-webcrypto.ts'),
     ],
+    testPathIgnorePatterns: ['__setup__.ts'],
     transform: {
         '^.+\\.(ts|js)$': [
             '@swc/jest',
