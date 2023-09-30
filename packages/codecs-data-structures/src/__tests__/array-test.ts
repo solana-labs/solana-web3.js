@@ -95,7 +95,7 @@ describe('getArrayCodec', () => {
         expect(array(u8(), { size: 'remainder' }).description).toBe('array(u8; remainder)');
         expect(array(u8()).description).toBe('array(u8; u32(le))');
         expect(array(u8(), { size: u16() }).description).toBe('array(u8; u16(le))');
-        expect(array(u8(), { size: u16({ endian: Endian.Big }) }).description).toBe('array(u8; u16(be))');
+        expect(array(u8(), { size: u16({ endian: Endian.BIG }) }).description).toBe('array(u8; u16(be))');
 
         // Custom.
         expect(array(u8(), { description: 'My custom description' }).description).toBe('My custom description');

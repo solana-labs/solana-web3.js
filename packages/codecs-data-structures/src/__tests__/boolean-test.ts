@@ -26,7 +26,7 @@ describe('getBooleanCodec', () => {
     it('has the right description', () => {
         expect(boolean().description).toBe('bool(u8)');
         expect(boolean({ size: u32() }).description).toBe('bool(u32(le))');
-        expect(boolean({ size: u32({ endian: Endian.Big }) }).description).toBe('bool(u32(be))');
+        expect(boolean({ size: u32({ endian: Endian.BIG }) }).description).toBe('bool(u32(be))');
         expect(boolean({ description: 'My bool' }).description).toBe('My bool');
     });
 

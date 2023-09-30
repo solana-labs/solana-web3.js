@@ -97,7 +97,7 @@ describe('getStringCodec', () => {
         expect(string({ size: 42 }).description).toBe('string(utf8; 42)');
         expect(string({ size: 'variable' }).description).toBe('string(utf8; variable)');
         expect(string({ size: u16() }).description).toBe('string(utf8; u16(le))');
-        expect(string({ size: u16({ endian: Endian.Big }) }).description).toBe('string(utf8; u16(be))');
+        expect(string({ size: u16({ endian: Endian.BIG }) }).description).toBe('string(utf8; u16(be))');
 
         // Custom.
         expect(string({ description: 'My custom description' }).description).toBe('My custom description');

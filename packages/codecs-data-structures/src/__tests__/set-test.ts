@@ -95,7 +95,7 @@ describe('getSetCodec', () => {
         expect(set(u8(), { size: 'remainder' }).description).toBe('set(u8; remainder)');
         expect(set(u8()).description).toBe('set(u8; u32(le))');
         expect(set(u8(), { size: u16() }).description).toBe('set(u8; u16(le))');
-        expect(set(u8(), { size: u16({ endian: Endian.Big }) }).description).toBe('set(u8; u16(be))');
+        expect(set(u8(), { size: u16({ endian: Endian.BIG }) }).description).toBe('set(u8; u16(be))');
 
         // Custom.
         expect(set(u8(), { description: 'My custom description' }).description).toBe('My custom description');

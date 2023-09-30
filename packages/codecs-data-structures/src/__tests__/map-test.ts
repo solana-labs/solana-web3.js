@@ -110,7 +110,7 @@ describe('getMapCodec', () => {
         expect(map(u8(), u8()).description).toBe('map(u8, u8; u32(le))');
         expect(map(string(), u8()).description).toBe('map(string(utf8; u32(le)), u8; u32(le))');
         expect(map(u8(), u8(), { size: u16() }).description).toBe('map(u8, u8; u16(le))');
-        expect(map(u8(), u8(), { size: u16({ endian: Endian.Big }) }).description).toBe('map(u8, u8; u16(be))');
+        expect(map(u8(), u8(), { size: u16({ endian: Endian.BIG }) }).description).toBe('map(u8, u8; u16(be))');
 
         // Custom.
         expect(map(u8(), u8(), { description: 'My custom description' }).description).toBe('My custom description');
