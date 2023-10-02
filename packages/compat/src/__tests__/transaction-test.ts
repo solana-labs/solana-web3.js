@@ -1,9 +1,9 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
-import { ITransactionWithSignatures } from '@solana/transactions';
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 
+import { SignedVersionedTransaction } from '../signed-versioned-transaction';
 import { fromOldVersionedTransactionWithBlockhash } from '../transaction';
 
 describe('fromOldVersionedTransaction', () => {
@@ -177,15 +177,12 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToLegacyMessage()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
@@ -220,7 +217,7 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToLegacyMessage()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             const otherSignature1 = new Uint8Array(Array(64).fill(2));
@@ -230,10 +227,7 @@ describe('fromOldVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
@@ -270,7 +264,7 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToLegacyMessage()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             const otherSignature2 = new Uint8Array(Array(64).fill(3));
@@ -278,10 +272,7 @@ describe('fromOldVersionedTransaction', () => {
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
@@ -453,15 +444,12 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToV0Message()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
@@ -496,7 +484,7 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToV0Message()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             const otherSignature1 = new Uint8Array(Array(64).fill(2));
@@ -506,10 +494,7 @@ describe('fromOldVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
@@ -546,7 +531,7 @@ describe('fromOldVersionedTransaction', () => {
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
                 }).compileToV0Message()
-            );
+            ) as SignedVersionedTransaction;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             const otherSignature2 = new Uint8Array(Array(64).fill(3));
@@ -554,10 +539,7 @@ describe('fromOldVersionedTransaction', () => {
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
-            const transaction = fromOldVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
-            ) as ITransactionWithSignatures;
+            const transaction = fromOldVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
