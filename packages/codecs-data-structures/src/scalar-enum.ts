@@ -18,7 +18,7 @@ import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder }
  * type DirectionType = ScalarEnum<Direction>;
  * ```
  */
-export type ScalarEnum<T> = ({ [key: number | string]: string | number | T } | number | T) & object;
+export type ScalarEnum<T> = ({ [key: number | string]: string | number | T } | number | T) & NonNullable<unknown>;
 
 /** Defines the options for scalar enum codecs. */
 export type ScalarEnumCodecOptions<TDiscriminator extends NumberCodec | NumberEncoder | NumberDecoder> =
