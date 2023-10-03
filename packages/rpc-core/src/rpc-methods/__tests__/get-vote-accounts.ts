@@ -33,9 +33,9 @@ describe('getVoteAccounts', () => {
                             epochCredits: expect.any(Array), // Changes
                             epochVoteAccount: true,
                             lastVote: expect.any(BigInt), // Changes
-                            nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                            nodePubkey: '4BDqs4bkR1aqGG57jrgRcbMfhScxTiv3DU9BSCL6SUMd',
                             rootSlot: expect.any(BigInt), // Changes
-                            votePubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
+                            votePubkey: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                         },
                     ]),
                     delinquent: expect.any(Array), // Changes

@@ -1211,18 +1211,18 @@ describe('getProgramAccounts', () => {
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
-                                                        authorizedVoter: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                        authorizedVoter: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                                                         epoch: expect.any(BigInt), // Changes
                                                     },
                                                 ]),
-                                                authorizedWithdrawer: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                authorizedWithdrawer: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                                                 commission: 50,
                                                 epochCredits: expect.any(Array), // Huge, changes
                                                 lastTimestamp: {
                                                     slot: expect.any(BigInt),
                                                     timestamp: expect.any(BigInt),
                                                 },
-                                                nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                nodePubkey: '4BDqs4bkR1aqGG57jrgRcbMfhScxTiv3DU9BSCL6SUMd',
                                                 priorVoters: expect.any(Array), // Huge, changes
                                                 // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
@@ -1230,15 +1230,15 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
-                                pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
+                                pubkey: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                             },
                             // Local Validator
                             {
@@ -1269,13 +1269,13 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
                                 pubkey: voteAccountAddress,
                             },
@@ -2192,18 +2192,18 @@ describe('getProgramAccounts', () => {
                                             info: expect.objectContaining({
                                                 authorizedVoters: expect.arrayContaining([
                                                     {
-                                                        authorizedVoter: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                        authorizedVoter: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                                                         epoch: expect.any(BigInt), // Changes
                                                     },
                                                 ]),
-                                                authorizedWithdrawer: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                authorizedWithdrawer: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                                                 commission: 50,
                                                 epochCredits: expect.any(Array), // Huge, changes
                                                 lastTimestamp: {
                                                     slot: expect.any(BigInt),
                                                     timestamp: expect.any(BigInt),
                                                 },
-                                                nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                                nodePubkey: '4BDqs4bkR1aqGG57jrgRcbMfhScxTiv3DU9BSCL6SUMd',
                                                 priorVoters: expect.any(Array), // Huge, changes
                                                 // Note: `rootSlot` can be null in early test validator startup. Omitting
                                                 votes: expect.any(Array), // Huge, changes
@@ -2211,15 +2211,15 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
-                                pubkey: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
+                                pubkey: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                             },
                             // Local Validator
                             {
@@ -2250,13 +2250,13 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
                                 pubkey: voteAccountAddress,
                             },

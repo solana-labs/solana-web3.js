@@ -760,7 +760,7 @@ describe('getMultipleAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/vote-account.json
                 const publicKey =
-                    '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress<'4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'>;
+                    'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So' as Base58EncodedAddress<'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So'>;
 
                 const multipleAccountsPromise = rpc
                     .getMultipleAccounts([publicKey], {
@@ -778,478 +778,163 @@ describe('getMultipleAccounts', () => {
                                     info: {
                                         authorizedVoters: [
                                             {
-                                                authorizedVoter: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
-                                                epoch: 529n,
+                                                authorizedVoter: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
+                                                epoch: 0n,
                                             },
                                         ],
-                                        authorizedWithdrawer: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                        authorizedWithdrawer: 'GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So',
                                         commission: 50,
                                         epochCredits: [
                                             {
-                                                credits: '68697256',
-                                                epoch: 466n,
-                                                previousCredits: '68325825',
-                                            },
-                                            {
-                                                credits: '69068118',
-                                                epoch: 467n,
-                                                previousCredits: '68697256',
-                                            },
-                                            {
-                                                credits: '69430620',
-                                                epoch: 468n,
-                                                previousCredits: '69068118',
-                                            },
-                                            {
-                                                credits: '69794003',
-                                                epoch: 469n,
-                                                previousCredits: '69430620',
-                                            },
-                                            {
-                                                credits: '70159712',
-                                                epoch: 470n,
-                                                previousCredits: '69794003',
-                                            },
-                                            {
-                                                credits: '70501260',
-                                                epoch: 471n,
-                                                previousCredits: '70159712',
-                                            },
-                                            {
-                                                credits: '70912799',
-                                                epoch: 472n,
-                                                previousCredits: '70501260',
-                                            },
-                                            {
-                                                credits: '71344738',
-                                                epoch: 473n,
-                                                previousCredits: '70912799',
-                                            },
-                                            {
-                                                credits: '71771375',
-                                                epoch: 474n,
-                                                previousCredits: '71344738',
-                                            },
-                                            {
-                                                credits: '72199121',
-                                                epoch: 475n,
-                                                previousCredits: '71771375',
-                                            },
-                                            {
-                                                credits: '72610239',
-                                                epoch: 476n,
-                                                previousCredits: '72199121',
-                                            },
-                                            {
-                                                credits: '73037789',
-                                                epoch: 477n,
-                                                previousCredits: '72610239',
-                                            },
-                                            {
-                                                credits: '73467937',
-                                                epoch: 478n,
-                                                previousCredits: '73037789',
-                                            },
-                                            {
-                                                credits: '73899842',
-                                                epoch: 479n,
-                                                previousCredits: '73467937',
-                                            },
-                                            {
-                                                credits: '74331794',
-                                                epoch: 480n,
-                                                previousCredits: '73899842',
-                                            },
-                                            {
-                                                credits: '74763356',
-                                                epoch: 481n,
-                                                previousCredits: '74331794',
-                                            },
-                                            {
-                                                credits: '75191111',
-                                                epoch: 482n,
-                                                previousCredits: '74763356',
-                                            },
-                                            {
-                                                credits: '75622560',
-                                                epoch: 483n,
-                                                previousCredits: '75191111',
-                                            },
-                                            {
-                                                credits: '76053995',
-                                                epoch: 484n,
-                                                previousCredits: '75622560',
-                                            },
-                                            {
-                                                credits: '76485533',
-                                                epoch: 485n,
-                                                previousCredits: '76053995',
-                                            },
-                                            {
-                                                credits: '76917053',
-                                                epoch: 486n,
-                                                previousCredits: '76485533',
-                                            },
-                                            {
-                                                credits: '77348508',
-                                                epoch: 487n,
-                                                previousCredits: '76917053',
-                                            },
-                                            {
-                                                credits: '77780039',
-                                                epoch: 488n,
-                                                previousCredits: '77348508',
-                                            },
-                                            {
-                                                credits: '78211607',
-                                                epoch: 489n,
-                                                previousCredits: '77780039',
-                                            },
-                                            {
-                                                credits: '78643086',
-                                                epoch: 490n,
-                                                previousCredits: '78211607',
-                                            },
-                                            {
-                                                credits: '79074661',
-                                                epoch: 491n,
-                                                previousCredits: '78643086',
-                                            },
-                                            {
-                                                credits: '79506108',
-                                                epoch: 492n,
-                                                previousCredits: '79074661',
-                                            },
-                                            {
-                                                credits: '79937647',
-                                                epoch: 493n,
-                                                previousCredits: '79506108',
-                                            },
-                                            {
-                                                credits: '80369113',
-                                                epoch: 494n,
-                                                previousCredits: '79937647',
-                                            },
-                                            {
-                                                credits: '80800638',
-                                                epoch: 495n,
-                                                previousCredits: '80369113',
-                                            },
-                                            {
-                                                credits: '81231874',
-                                                epoch: 496n,
-                                                previousCredits: '80800638',
-                                            },
-                                            {
-                                                credits: '81663293',
-                                                epoch: 497n,
-                                                previousCredits: '81231874',
-                                            },
-                                            {
-                                                credits: '82094860',
-                                                epoch: 498n,
-                                                previousCredits: '81663293',
-                                            },
-                                            {
-                                                credits: '82526326',
-                                                epoch: 499n,
-                                                previousCredits: '82094860',
-                                            },
-                                            {
-                                                credits: '82952320',
-                                                epoch: 500n,
-                                                previousCredits: '82526326',
-                                            },
-                                            {
-                                                credits: '83383787',
-                                                epoch: 501n,
-                                                previousCredits: '82952320',
-                                            },
-                                            {
-                                                credits: '83813221',
-                                                epoch: 502n,
-                                                previousCredits: '83383787',
-                                            },
-                                            {
-                                                credits: '84244778',
-                                                epoch: 503n,
-                                                previousCredits: '83813221',
-                                            },
-                                            {
-                                                credits: '84676328',
-                                                epoch: 504n,
-                                                previousCredits: '84244778',
-                                            },
-                                            {
-                                                credits: '85103114',
-                                                epoch: 505n,
-                                                previousCredits: '84676328',
-                                            },
-                                            {
-                                                credits: '85534570',
-                                                epoch: 506n,
-                                                previousCredits: '85103114',
-                                            },
-                                            {
-                                                credits: '85966120',
-                                                epoch: 507n,
-                                                previousCredits: '85534570',
-                                            },
-                                            {
-                                                credits: '86396198',
-                                                epoch: 508n,
-                                                previousCredits: '85966120',
-                                            },
-                                            {
-                                                credits: '86827687',
-                                                epoch: 509n,
-                                                previousCredits: '86396198',
-                                            },
-                                            {
-                                                credits: '87259154',
-                                                epoch: 510n,
-                                                previousCredits: '86827687',
-                                            },
-                                            {
-                                                credits: '87690675',
-                                                epoch: 511n,
-                                                previousCredits: '87259154',
-                                            },
-                                            {
-                                                credits: '88122214',
-                                                epoch: 512n,
-                                                previousCredits: '87690675',
-                                            },
-                                            {
-                                                credits: '88553712',
-                                                epoch: 513n,
-                                                previousCredits: '88122214',
-                                            },
-                                            {
-                                                credits: '88985258',
-                                                epoch: 514n,
-                                                previousCredits: '88553712',
-                                            },
-                                            {
-                                                credits: '89416694',
-                                                epoch: 515n,
-                                                previousCredits: '88985258',
-                                            },
-                                            {
-                                                credits: '89843578',
-                                                epoch: 516n,
-                                                previousCredits: '89416694',
-                                            },
-                                            {
-                                                credits: '90258082',
-                                                epoch: 517n,
-                                                previousCredits: '89843578',
-                                            },
-                                            {
-                                                credits: '90689639',
-                                                epoch: 518n,
-                                                previousCredits: '90258082',
-                                            },
-                                            {
-                                                credits: '91121164',
-                                                epoch: 519n,
-                                                previousCredits: '90689639',
-                                            },
-                                            {
-                                                credits: '91552708',
-                                                epoch: 520n,
-                                                previousCredits: '91121164',
-                                            },
-                                            {
-                                                credits: '91984232',
-                                                epoch: 521n,
-                                                previousCredits: '91552708',
-                                            },
-                                            {
-                                                credits: '92415662',
-                                                epoch: 522n,
-                                                previousCredits: '91984232',
-                                            },
-                                            {
-                                                credits: '92847120',
-                                                epoch: 523n,
-                                                previousCredits: '92415662',
-                                            },
-                                            {
-                                                credits: '93278557',
-                                                epoch: 524n,
-                                                previousCredits: '92847120',
-                                            },
-                                            {
-                                                credits: '93710089',
-                                                epoch: 525n,
-                                                previousCredits: '93278557',
-                                            },
-                                            {
-                                                credits: '94141580',
-                                                epoch: 526n,
-                                                previousCredits: '93710089',
-                                            },
-                                            {
-                                                credits: '94569612',
-                                                epoch: 527n,
-                                                previousCredits: '94141580',
-                                            },
-                                            {
-                                                credits: '95001010',
-                                                epoch: 528n,
-                                                previousCredits: '94569612',
-                                            },
-                                            {
-                                                credits: '95357116',
-                                                epoch: 529n,
-                                                previousCredits: '95001010',
+                                                credits: '1446',
+                                                epoch: 0n,
+                                                previousCredits: '0',
                                             },
                                         ],
                                         lastTimestamp: {
-                                            slot: 228884530n,
-                                            timestamp: 1689090220n,
+                                            slot: 1476n,
+                                            timestamp: 1696376636n,
                                         },
-                                        nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                        nodePubkey: '4BDqs4bkR1aqGG57jrgRcbMfhScxTiv3DU9BSCL6SUMd',
                                         priorVoters: [],
-                                        rootSlot: 228884499n,
+                                        rootSlot: 1445n,
                                         votes: [
                                             {
                                                 confirmationCount: 31,
-                                                slot: 228884500n,
+                                                slot: 1446n,
                                             },
                                             {
                                                 confirmationCount: 30,
-                                                slot: 228884501n,
+                                                slot: 1447n,
                                             },
                                             {
                                                 confirmationCount: 29,
-                                                slot: 228884502n,
+                                                slot: 1448n,
                                             },
                                             {
                                                 confirmationCount: 28,
-                                                slot: 228884503n,
+                                                slot: 1449n,
                                             },
                                             {
                                                 confirmationCount: 27,
-                                                slot: 228884504n,
+                                                slot: 1450n,
                                             },
                                             {
                                                 confirmationCount: 26,
-                                                slot: 228884505n,
+                                                slot: 1451n,
                                             },
                                             {
                                                 confirmationCount: 25,
-                                                slot: 228884506n,
+                                                slot: 1452n,
                                             },
                                             {
                                                 confirmationCount: 24,
-                                                slot: 228884507n,
+                                                slot: 1453n,
                                             },
                                             {
                                                 confirmationCount: 23,
-                                                slot: 228884508n,
+                                                slot: 1454n,
                                             },
                                             {
                                                 confirmationCount: 22,
-                                                slot: 228884509n,
+                                                slot: 1455n,
                                             },
                                             {
                                                 confirmationCount: 21,
-                                                slot: 228884510n,
+                                                slot: 1456n,
                                             },
                                             {
                                                 confirmationCount: 20,
-                                                slot: 228884511n,
+                                                slot: 1457n,
                                             },
                                             {
                                                 confirmationCount: 19,
-                                                slot: 228884512n,
+                                                slot: 1458n,
                                             },
                                             {
                                                 confirmationCount: 18,
-                                                slot: 228884513n,
+                                                slot: 1459n,
                                             },
                                             {
                                                 confirmationCount: 17,
-                                                slot: 228884514n,
+                                                slot: 1460n,
                                             },
                                             {
                                                 confirmationCount: 16,
-                                                slot: 228884515n,
+                                                slot: 1461n,
                                             },
                                             {
                                                 confirmationCount: 15,
-                                                slot: 228884516n,
+                                                slot: 1462n,
                                             },
                                             {
                                                 confirmationCount: 14,
-                                                slot: 228884517n,
+                                                slot: 1463n,
                                             },
                                             {
                                                 confirmationCount: 13,
-                                                slot: 228884518n,
+                                                slot: 1464n,
                                             },
                                             {
                                                 confirmationCount: 12,
-                                                slot: 228884519n,
+                                                slot: 1465n,
                                             },
                                             {
                                                 confirmationCount: 11,
-                                                slot: 228884520n,
+                                                slot: 1466n,
                                             },
                                             {
                                                 confirmationCount: 10,
-                                                slot: 228884521n,
+                                                slot: 1467n,
                                             },
                                             {
                                                 confirmationCount: 9,
-                                                slot: 228884522n,
+                                                slot: 1468n,
                                             },
                                             {
                                                 confirmationCount: 8,
-                                                slot: 228884523n,
+                                                slot: 1469n,
                                             },
                                             {
                                                 confirmationCount: 7,
-                                                slot: 228884524n,
+                                                slot: 1470n,
                                             },
                                             {
                                                 confirmationCount: 6,
-                                                slot: 228884525n,
+                                                slot: 1471n,
                                             },
                                             {
                                                 confirmationCount: 5,
-                                                slot: 228884526n,
+                                                slot: 1472n,
                                             },
                                             {
                                                 confirmationCount: 4,
-                                                slot: 228884527n,
+                                                slot: 1473n,
                                             },
                                             {
                                                 confirmationCount: 3,
-                                                slot: 228884528n,
+                                                slot: 1474n,
                                             },
                                             {
                                                 confirmationCount: 2,
-                                                slot: 228884529n,
+                                                slot: 1475n,
                                             },
                                             {
                                                 confirmationCount: 1,
-                                                slot: 228884530n,
+                                                slot: 1476n,
                                             },
                                         ],
                                     },
                                     type: 'vote',
                                 },
                                 program: 'vote',
-                                space: 3731n,
+                                space: 3762n,
                             },
                             executable: false,
-                            lamports: 10290815n,
+                            lamports: 27074400n,
                             owner: 'Vote111111111111111111111111111111111111111',
                             rentEpoch: 0n,
-                            space: 3731n,
+                            space: 3762n,
                         },
                     ],
                 });

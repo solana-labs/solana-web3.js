@@ -599,7 +599,7 @@ describe('simulateTransaction', () => {
             rpc.getLatestBlockhash().send(),
         ]);
         const message = getMockTransactionMessageWithAdditionalAccount({
-            accountAddressBytes: base58.serialize('4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'), // see scripts/fixtures/vote-account.json
+            accountAddressBytes: base58.serialize('GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So'), // see scripts/fixtures/vote-account.json
             blockhash: latestBlockhash.blockhash,
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
@@ -616,7 +616,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress],
+                        addresses: ['GJS8gK24LDqsJm2JznSpy3yMyGccDiRMCqfeGGyQ79So' as Base58EncodedAddress],
                         encoding: 'jsonParsed',
                     },
                     commitment: 'processed',
