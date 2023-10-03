@@ -77,7 +77,7 @@ function convertSignatures(
     staticAccountKeys: PublicKey[]
 ): ITransactionWithSignatures['signatures'] {
     return transaction.signatures.reduce((acc, sig, index) => {
-        // old web3js includes a fake all 0 signature if it hasn't been signed
+        // legacy web3js includes a fake all 0 signature if it hasn't been signed
         // we don't do that for the new tx model. So just skip if it's all 0s
         const allZeros = sig.every(byte => byte === 0);
         if (allZeros) return acc;
@@ -87,17 +87,17 @@ function convertSignatures(
     }, {});
 }
 
-export function fromOldVersionedTransactionWithBlockhash(
+export function fromVersionedTransactionWithBlockhash(
     transaction: SignedVersionedTransaction,
     lastValidBlockHeight: bigint
 ): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime & ITransactionWithSignatures;
 
-export function fromOldVersionedTransactionWithBlockhash(
+export function fromVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
     lastValidBlockHeight: bigint
 ): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
 
-export function fromOldVersionedTransactionWithBlockhash(
+export function fromVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
     lastValidBlockHeight: bigint
 ): Transaction {
