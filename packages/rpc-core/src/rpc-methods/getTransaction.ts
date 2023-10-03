@@ -3,6 +3,7 @@ import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { TransactionError } from '../transaction-error';
+import { TransactionSignature } from '../transaction-signature';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
     Base58EncodedBytes,
@@ -161,7 +162,7 @@ export interface GetTransactionApi {
      * Returns transaction details for a confirmed transaction
      */
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        address: Base58EncodedAddress,
+        signature: TransactionSignature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'jsonParsed';
@@ -179,7 +180,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        address: Base58EncodedAddress,
+        signature: TransactionSignature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base64';
@@ -200,7 +201,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        address: Base58EncodedAddress,
+        signature: TransactionSignature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base58';
@@ -221,7 +222,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        address: Base58EncodedAddress,
+        signature: TransactionSignature,
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding?: 'json';
