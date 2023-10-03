@@ -83,7 +83,9 @@ function createAdvanceNonceAccountInstruction<
     };
 }
 
-function isAdvanceNonceAccountInstruction(instruction: IInstruction): instruction is AdvanceNonceAccountInstruction {
+export function isAdvanceNonceAccountInstruction(
+    instruction: IInstruction
+): instruction is AdvanceNonceAccountInstruction {
     return (
         instruction.programAddress === SYSTEM_PROGRAM_ADDRESS &&
         // Test for `AdvanceNonceAccount` instruction data
