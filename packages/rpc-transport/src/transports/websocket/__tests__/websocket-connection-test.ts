@@ -129,6 +129,17 @@ describe('RpcWebSocketConnection', () => {
                 value: undefined,
             });
         });
+        it('drops messages received between the time a connection is aborted and the time it closes', async () => {
+            expect.assertions(1);
+            const iterator = connection[Symbol.asyncIterator]();
+            const resultPromise = iterator.next();
+            abortController.abort();
+            ws.send({ some: 'message' });
+            await expect(resultPromise).resolves.toMatchObject({
+                done: true,
+                value: undefined,
+            });
+        });
         it('throws from the iterator when the connection encounters an error', async () => {
             expect.assertions(1);
             const iterator = connection[Symbol.asyncIterator]();
