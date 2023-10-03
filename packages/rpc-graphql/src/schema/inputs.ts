@@ -20,6 +20,24 @@ export const accountEncodingInputType = new GraphQLEnumType({
     },
 });
 
+export const blockTransactionDetailsInputType = new GraphQLEnumType({
+    name: 'BlockTransactionDetails',
+    values: {
+        accounts: {
+            value: 'accounts',
+        },
+        full: {
+            value: 'full',
+        },
+        none: {
+            value: 'none',
+        },
+        signatures: {
+            value: 'signatures',
+        },
+    },
+});
+
 export const commitmentInputType = new GraphQLEnumType({
     name: 'Commitment',
     values: {
