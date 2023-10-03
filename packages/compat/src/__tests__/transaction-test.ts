@@ -1,12 +1,12 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
-import { ITransactionWithSignatures } from '@solana/transactions';
+import { ITransactionWithSignatures, Nonce } from '@solana/transactions';
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 
-import { fromVersionedTransactionWithBlockhash } from '../transaction';
+import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDurableNonce } from '../transaction';
 
-describe('fromVersionedTransaction', () => {
+describe('fromVersionedTransactionWithBlockhash', () => {
     const U64_MAX = 2n ** 64n - 1n;
     const feePayerString = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK';
     const feePayerPublicKey = new PublicKey('7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK');
@@ -589,6 +589,502 @@ describe('fromVersionedTransaction', () => {
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash: blockhashString,
                 lastValidBlockHeight: 100n,
+            });
+        });
+    });
+});
+
+describe('fromVersionedTransactionWithDurableNonce', () => {
+    const nonce = '27kqzE1RifbyoFtibDRTjbnfZ894jsNpuR77JJkt3vgH' as Nonce;
+    const nonceAccountAddress = new PublicKey('DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm');
+    const nonceAuthorityAddress = new PublicKey('2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM');
+
+    const feePayerPublicKey = new PublicKey('7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK');
+
+    // /** An account's public key */
+    // pubkey: PublicKey;
+    // /** True if an instruction requires a transaction signature matching `pubkey` */
+    // isSigner: boolean;
+    // /** True if the `pubkey` can be loaded as a read-write account. */
+    // isWritable: boolean;
+
+    // A NonceAdvance instruction in old web3js TransactionInstruction form
+    function createNonceAdvanceInstruction(): TransactionInstruction {
+        return new TransactionInstruction({
+            data: Buffer.from([4, 0, 0, 0]),
+            keys: [
+                { isSigner: false, isWritable: true, pubkey: nonceAccountAddress },
+                {
+                    isSigner: false,
+                    isWritable: false,
+                    pubkey: new PublicKey('SysvarRecentB1ockHashes11111111111111111111'),
+                },
+                { isSigner: true, isWritable: false, pubkey: nonceAuthorityAddress },
+            ],
+            programId: new PublicKey('11111111111111111111111111111111'),
+        });
+    }
+
+    describe('for a transaction with `legacy` version', () => {
+        it('throws for a transaction with no instructions', () => {
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            expect(() => {
+                fromVersionedTransactionWithDurableNonce(oldTransaction);
+            }).toThrow('transaction with no instructions cannot be durable nonce transaction');
+        });
+
+        it('throws for a transaction with one instruction which is not advance nonce', () => {
+            const programId = new PublicKey('HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf');
+
+            const instruction = new TransactionInstruction({
+                keys: [],
+                programId,
+            });
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [instruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            expect(() => {
+                fromVersionedTransactionWithDurableNonce(oldTransaction);
+            }).toThrow('transaction first instruction is not advance nonce account instruction');
+        });
+
+        it('converts a transaction with one instruction which is advance nonce', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
+
+            const expectedInstruction: IInstruction = {
+                accounts: [
+                    {
+                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                        role: AccountRole.READONLY_SIGNER,
+                    },
+                ],
+                data: new Uint8Array([4, 0, 0, 0]),
+                programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+            };
+
+            expect(transaction.instructions).toStrictEqual([expectedInstruction]);
+        });
+
+        it('converts a durable nonce transaction with multiple instructions', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const instructions = [
+                nonceAdvanceInstruction,
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC'),
+                }),
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP'),
+                }),
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S'),
+                }),
+            ];
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions,
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
+
+            const expectedInstructions: IInstruction[] = [
+                {
+                    accounts: [
+                        {
+                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                            role: AccountRole.WRITABLE,
+                        },
+                        {
+                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                            role: AccountRole.READONLY,
+                        },
+                        {
+                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                            role: AccountRole.READONLY_SIGNER,
+                        },
+                    ],
+                    data: new Uint8Array([4, 0, 0, 0]),
+                    programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                },
+            ];
+
+            expect(transaction.instructions).toStrictEqual(expectedInstructions);
+        });
+
+        it('converts a durable nonce transaction with a single signer', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    // Note there's a bug in legacy web3js where if the feepayer
+                    // is the same as authorizedPubkey, it gets the wrong role
+                    // in the advance nonce instruction
+                    // So for our test just use a different account as fee payer
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            const signature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(nonceAuthorityAddress, signature);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as Ed25519Signature,
+            });
+        });
+
+        it('converts a durable nonce transaction with multiple signers', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const nonceAuthoritySignature = new Uint8Array(Array(64).fill(2));
+            oldTransaction.addSignature(nonceAuthorityAddress, nonceAuthoritySignature);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+            });
+        });
+
+        it('converts a partially signed durable nonce transaction with multiple signers', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const otherSigner1PublicKey = new PublicKey('BHPhpD7z7LqwDj2SFSWHoVWitXc9ycrgsftbAE1wpazj');
+
+            const accountMetasSigners = [
+                {
+                    isSigner: true,
+                    isWritable: false,
+                    pubkey: otherSigner1PublicKey,
+                },
+            ];
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [
+                        nonceAdvanceInstruction,
+                        new TransactionInstruction({
+                            keys: accountMetasSigners,
+                            programId: new PublicKey('HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf'),
+                        }),
+                    ],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToLegacyMessage()
+            );
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            // No signature for nonceAuthorityAddress
+            const otherSignature1 = new Uint8Array(Array(64).fill(3));
+
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+            oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)),
+                BHPhpD7z7LqwDj2SFSWHoVWitXc9ycrgsftbAE1wpazj: new Uint8Array(Array(64).fill(3)),
+            });
+        });
+    });
+
+    describe('for a transaction with `0` version', () => {
+        it('throws for a transaction with no instructions', () => {
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            expect(() => {
+                fromVersionedTransactionWithDurableNonce(oldTransaction);
+            }).toThrow('transaction with no instructions cannot be durable nonce transaction');
+        });
+
+        it('throws for a transaction with one instruction which is not advance nonce', () => {
+            const programId = new PublicKey('HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf');
+
+            const instruction = new TransactionInstruction({
+                keys: [],
+                programId,
+            });
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [instruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            expect(() => {
+                fromVersionedTransactionWithDurableNonce(oldTransaction);
+            }).toThrow('transaction first instruction is not advance nonce account instruction');
+        });
+
+        it('converts a transaction with one instruction which is advance nonce', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
+
+            const expectedInstruction: IInstruction = {
+                accounts: [
+                    {
+                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                        role: AccountRole.READONLY_SIGNER,
+                    },
+                ],
+                data: new Uint8Array([4, 0, 0, 0]),
+                programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+            };
+
+            expect(transaction.instructions).toStrictEqual([expectedInstruction]);
+        });
+
+        it('converts a durable nonce transaction with multiple instructions', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const instructions = [
+                nonceAdvanceInstruction,
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC'),
+                }),
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP'),
+                }),
+                new TransactionInstruction({
+                    keys: [],
+                    programId: new PublicKey('GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S'),
+                }),
+            ];
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions,
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
+
+            const expectedInstructions: IInstruction[] = [
+                {
+                    accounts: [
+                        {
+                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                            role: AccountRole.WRITABLE,
+                        },
+                        {
+                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                            role: AccountRole.READONLY,
+                        },
+                        {
+                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                            role: AccountRole.READONLY_SIGNER,
+                        },
+                    ],
+                    data: new Uint8Array([4, 0, 0, 0]),
+                    programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                },
+            ];
+
+            expect(transaction.instructions).toStrictEqual(expectedInstructions);
+        });
+
+        it('converts a durable nonce transaction with a single signer', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    // Note there's a bug in legacy web3js where if the feepayer
+                    // is the same as authorizedPubkey, it gets the wrong role
+                    // in the advance nonce instruction
+                    // So for our test just use a different account as fee payer
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            const signature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(nonceAuthorityAddress, signature);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as Ed25519Signature,
+            });
+        });
+
+        it('converts a durable nonce transaction with multiple signers', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [nonceAdvanceInstruction],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const nonceAuthoritySignature = new Uint8Array(Array(64).fill(2));
+            oldTransaction.addSignature(nonceAuthorityAddress, nonceAuthoritySignature);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+            });
+        });
+
+        it('converts a partially signed durable nonce transaction with multiple signers', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const otherSigner1PublicKey = new PublicKey('BHPhpD7z7LqwDj2SFSWHoVWitXc9ycrgsftbAE1wpazj');
+
+            const accountMetasSigners = [
+                {
+                    isSigner: true,
+                    isWritable: false,
+                    pubkey: otherSigner1PublicKey,
+                },
+            ];
+
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [
+                        nonceAdvanceInstruction,
+                        new TransactionInstruction({
+                            keys: accountMetasSigners,
+                            programId: new PublicKey('HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf'),
+                        }),
+                    ],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: nonce,
+                }).compileToV0Message()
+            );
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            // No signature for nonceAuthorityAddress
+            const otherSignature1 = new Uint8Array(Array(64).fill(3));
+
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+            oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
+
+            const transaction = fromVersionedTransactionWithDurableNonce(
+                oldTransaction
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)),
+                BHPhpD7z7LqwDj2SFSWHoVWitXc9ycrgsftbAE1wpazj: new Uint8Array(Array(64).fill(3)),
             });
         });
     });

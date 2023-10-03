@@ -186,7 +186,7 @@ export function fromVersionedTransactionWithDurableNonce(
         tx => setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx),
         tx => setTransactionLifetimeUsingDurableNonce(durableNonceLifetime, tx),
         tx =>
-            instructions.reduce((acc, instruction) => {
+            instructions.slice(1).reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
             }, tx),
         tx => (transaction.signatures.length ? { ...tx, signatures } : tx)
