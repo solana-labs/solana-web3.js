@@ -1,3 +1,4 @@
+import { pipe } from '@solana/functional';
 import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
@@ -6,8 +7,12 @@ import {
 } from '@solana/rpc-core';
 import { createJsonRpc, createJsonSubscriptionRpc } from '@solana/rpc-transport';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
+import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
 
 export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
     return createJsonRpc({
@@ -19,8 +24,15 @@ export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0]
 export function createSolanaRpcSubscriptions(
     config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
 ): RpcSubscriptions<SolanaRpcSubscriptions> {
-    return createJsonSubscriptionRpc({
-        ...config,
-        api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
-    });
+    return pipe(
+        createJsonSubscriptionRpc({
+            ...config,
+            api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
+        }),
+        rpcSubscriptions =>
+            getRpcSubscriptionsWithSubscriptionCoalescing({
+                getDeduplicationKey: (...args) => fastStableStringify(args),
+                rpcSubscriptions,
+            })
+    );
 }
