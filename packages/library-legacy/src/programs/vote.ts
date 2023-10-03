@@ -13,6 +13,8 @@ import {SYSVAR_CLOCK_PUBKEY, SYSVAR_RENT_PUBKEY} from '../sysvar';
 import {Transaction, TransactionInstruction} from '../transaction';
 import {toBuffer} from '../utils/to-buffer';
 
+console.log('vote.ts module factory', process.env.TEST_LIVE);
+
 /**
  * Vote account info
  */
@@ -369,7 +371,10 @@ export class VoteProgram {
    *
    * KEEP IN SYNC WITH `VoteState::size_of()` in https://github.com/solana-labs/solana/blob/a474cb24b9238f5edcc982f65c0b37d4a1046f7e/sdk/program/src/vote/state/mod.rs#L340-L342
    */
-  static space: number = process.env.TEST_LIVE ? 3762 : 3731;
+  static space: number = (() => {
+    console.log('>>> setting static', process.env.TEST_LIVE);
+    return process.env.TEST_LIVE ? 3762 : 3731;
+  })();
 
   /**
    * Generate an Initialize instruction.
@@ -406,6 +411,7 @@ export class VoteProgram {
    * Generate a transaction that creates a new Vote account.
    */
   static createAccount(params: CreateVoteAccountParams): Transaction {
+    console.log('>>> creating account', this.space, process.env.TEST_LIVE);
     const transaction = new Transaction();
     transaction.add(
       SystemProgram.createAccount({
