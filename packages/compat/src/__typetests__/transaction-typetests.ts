@@ -7,17 +7,17 @@ import {
 import { VersionedTransaction } from '@solana/web3.js';
 
 import { SignedVersionedTransaction } from '../signed-versioned-transaction';
-import { fromOldVersionedTransactionWithBlockhash } from '../transaction';
+import { fromVersionedTransactionWithBlockhash } from '../transaction';
 
 {
     const transaction = null as unknown as VersionedTransaction;
-    const returned = fromOldVersionedTransactionWithBlockhash(transaction, 0n);
+    const returned = fromVersionedTransactionWithBlockhash(transaction, 0n);
     returned satisfies Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
 }
 
 {
     const transaction = null as unknown as SignedVersionedTransaction;
-    const returned = fromOldVersionedTransactionWithBlockhash(transaction, 0n);
+    const returned = fromVersionedTransactionWithBlockhash(transaction, 0n);
     returned satisfies Transaction &
         ITransactionWithFeePayer &
         ITransactionWithBlockhashLifetime &
