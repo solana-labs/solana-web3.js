@@ -12,7 +12,7 @@ type TransactionStatusErr = Readonly<{
     Err: TransactionError;
 }>;
 
-type GetSignatureStatusesBase = Readonly<{
+type SignatureStatusResult = Readonly<{
     /**
      * Number of blocks since signature confirmation, null if rooted,
      * as well as finalized by a supermajority of the cluster
@@ -31,7 +31,9 @@ type GetSignatureStatusesBase = Readonly<{
      * @deprecated Transaction status
      */
     status: TransactionStatusOk | TransactionStatusErr;
-}> | null;
+}>;
+
+type GetSignatureStatusesBase = ReadonlyArray<SignatureStatusResult | null>;
 
 type GetSignatureStatusesApiResponse = RpcResponse<GetSignatureStatusesBase>;
 
