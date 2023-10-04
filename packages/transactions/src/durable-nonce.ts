@@ -2,7 +2,6 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, IInstruction, IInstructionWithAccounts, IInstructionWithData } from '@solana/instructions';
 import { ReadonlyAccount, ReadonlySignerAccount, WritableAccount } from '@solana/instructions/dist/types/accounts';
 
-import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';
 
@@ -131,8 +130,7 @@ export function setTransactionLifetimeUsingDurableNonce<
         nonceAuthorityAddress,
     }: DurableNonceConfig<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>,
     transaction: TTransaction | (TTransaction & IDurableNonceTransaction)
-): Omit<TTransaction, keyof ITransactionWithSignatures> &
-    IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
+): TTransaction & IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
     const isAlreadyDurableNonceTransaction = isDurableNonceTransaction(transaction);
     if (
         isAlreadyDurableNonceTransaction &&
