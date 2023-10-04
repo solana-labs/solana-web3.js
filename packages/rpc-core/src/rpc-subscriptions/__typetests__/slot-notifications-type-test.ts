@@ -2,7 +2,7 @@
 
 import { RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 
-import { U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
+import { Slot } from '../../rpc-methods/common';
 import { SolanaRpcSubscriptions } from '../index';
 
 async () => {
@@ -13,12 +13,12 @@ async () => {
 
     slotNotifications satisfies AsyncIterable<
         Readonly<{
-            parent: U64UnsafeBeyond2Pow53Minus1;
-            root: U64UnsafeBeyond2Pow53Minus1;
-            slot: U64UnsafeBeyond2Pow53Minus1;
+            parent: Slot;
+            root: Slot;
+            slot: Slot;
         }>
     >;
 
     // @ts-expect-error Takes no params.
-    rpcSubcriptions.slotNotifications({ commitment: 'finalized' });
+    rpcSubscriptions.slotNotifications({ commitment: 'finalized' });
 };
