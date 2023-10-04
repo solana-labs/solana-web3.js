@@ -7,8 +7,7 @@ import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransac
 import { fromVersionedTransactionWithBlockhash } from '../transaction';
 
 describe('fromVersionedTransaction', () => {
-    const lastValidBlockHeight = 1000n;
-
+    const U64_MAX = 2n ** 64n - 1n;
     const feePayerString = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK';
     const feePayerPublicKey = new PublicKey('7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK');
 
@@ -24,13 +23,13 @@ describe('fromVersionedTransaction', () => {
                 }).compileToLegacyMessage()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             expect(transaction.version).toBe('legacy');
             expect(transaction.feePayer).toEqual(feePayerString);
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash: blockhashString,
-                lastValidBlockHeight,
+                lastValidBlockHeight: U64_MAX,
             });
         });
 
@@ -50,7 +49,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToLegacyMessage()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
                 programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
@@ -101,7 +100,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToLegacyMessage()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -153,7 +152,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToLegacyMessage()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -183,8 +182,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -231,8 +229,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -279,8 +276,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -300,13 +296,13 @@ describe('fromVersionedTransaction', () => {
                 }).compileToV0Message()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             expect(transaction.version).toBe(0);
             expect(transaction.feePayer).toEqual(feePayerString);
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash: blockhashString,
-                lastValidBlockHeight,
+                lastValidBlockHeight: U64_MAX,
             });
         });
 
@@ -326,7 +322,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToV0Message()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
                 programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
@@ -377,7 +373,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToV0Message()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -429,7 +425,7 @@ describe('fromVersionedTransaction', () => {
                 }).compileToV0Message()
             );
 
-            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, lastValidBlockHeight);
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -459,8 +455,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -507,8 +502,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -555,8 +549,7 @@ describe('fromVersionedTransaction', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction,
-                lastValidBlockHeight
+                oldTransaction
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({

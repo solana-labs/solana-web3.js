@@ -4,5 +4,5 @@ import { VersionedTransaction } from '@solana/web3.js';
 import { fromVersionedTransactionWithBlockhash } from '../transaction';
 
 const transaction = null as unknown as VersionedTransaction;
-const returned = fromVersionedTransactionWithBlockhash(transaction, 0n);
+const returned = fromVersionedTransactionWithBlockhash(transaction);
 returned satisfies Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
