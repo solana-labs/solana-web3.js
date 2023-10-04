@@ -42,7 +42,7 @@ jobs:
         id: cache-test-validator
         uses: actions/cache@v3
         with:
-          path: /home/runner/.local/share/solana
+          path: .solana
           key: ${{ runner.os }}-test-validator-${{ steps.get-test-validator-version.outputs.version }}
 
       - name: Install Test Validator
