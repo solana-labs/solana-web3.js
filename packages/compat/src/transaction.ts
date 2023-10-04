@@ -21,8 +21,6 @@ import {
     VersionedTransaction,
 } from '@solana/web3.js';
 
-import { SignedVersionedTransaction } from './signed-versioned-transaction';
-
 function convertAccount(
     message: VersionedMessage,
     accountKeys: MessageAccountKeys,
@@ -88,19 +86,9 @@ function convertSignatures(
 }
 
 export function fromVersionedTransactionWithBlockhash(
-    transaction: SignedVersionedTransaction,
-    lastValidBlockHeight: bigint
-): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime & ITransactionWithSignatures;
-
-export function fromVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
     lastValidBlockHeight: bigint
-): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
-
-export function fromVersionedTransactionWithBlockhash(
-    transaction: VersionedTransaction,
-    lastValidBlockHeight: bigint
-): Transaction {
+): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
