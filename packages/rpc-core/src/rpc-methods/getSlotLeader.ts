@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from 'types';
 
-import { Commitment, Slot } from './common';
+import { Slot } from './common';
 
 export interface GetSlotLeaderApi {
     /**

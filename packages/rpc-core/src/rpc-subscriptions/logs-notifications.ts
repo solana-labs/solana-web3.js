@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from 'types';
 
-import { Commitment, RpcResponse } from '../rpc-methods/common';
+import { RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';
 

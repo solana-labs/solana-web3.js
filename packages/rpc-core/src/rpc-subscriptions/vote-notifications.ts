@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Blockhash } from '@solana/transactions';
+import { Blockhash } from 'types';
 
 import { Slot } from '../rpc-methods/common';
 import { TransactionSignature } from '../transaction-signature';

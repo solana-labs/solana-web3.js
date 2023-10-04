@@ -1,0 +1,6 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Common types",
+    "extends": "tsconfig/base.json",
+    "include": ["src"]
+}

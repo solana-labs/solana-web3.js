@@ -5,8 +5,6 @@ import { StringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber } from '../stringified-number';
 import { TransactionError } from '../transaction-error';
 
-export type Commitment = 'confirmed' | 'finalized' | 'processed';
-
 export type DataSlice = Readonly<{
     offset: number;
     length: number;

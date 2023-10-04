@@ -1,4 +1,6 @@
-import { Commitment, RpcResponse } from '../rpc-methods/common';
+import { Commitment } from 'types';
+
+import { RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';
 

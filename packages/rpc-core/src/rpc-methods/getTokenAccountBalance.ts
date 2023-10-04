@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from 'types';
 
-import { Commitment, RpcResponse, TokenAmount } from './common';
+import { RpcResponse, TokenAmount } from './common';
 
 type GetTokenAccountBalanceApiResponse = RpcResponse<TokenAmount>;
 

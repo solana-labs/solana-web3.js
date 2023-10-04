@@ -1,11 +1,10 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Blockhash } from 'types';
 
 import { IDurableNonceTransaction } from './durable-nonce';
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';
-
-export type Blockhash = string & { readonly __brand: unique symbol };
 
 type BlockhashLifetimeConstraint = Readonly<{
     blockhash: Blockhash;

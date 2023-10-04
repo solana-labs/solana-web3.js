@@ -1,10 +1,10 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Blockhash } from 'types';
 
 import {
     assertIsBlockhash,
-    Blockhash,
     ITransactionWithBlockhashLifetime,
     setTransactionLifetimeUsingBlockhash,
 } from '../blockhash';

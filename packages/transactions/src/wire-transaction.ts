@@ -1,8 +1,6 @@
-import { getTransactionEncoder } from './serializers/transaction';
+import { Base64EncodedWireTransaction } from 'types';
 
-export type Base64EncodedWireTransaction = string & {
-    readonly __brand: unique symbol;
-};
+import { getTransactionEncoder } from './serializers/transaction';
 
 export function getBase64EncodedWireTransaction(
     transaction: Parameters<ReturnType<typeof getTransactionEncoder>['serialize']>[0]

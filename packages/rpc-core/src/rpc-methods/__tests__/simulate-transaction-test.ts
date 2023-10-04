@@ -3,10 +3,10 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
+import { Base64EncodedWireTransaction, Commitment } from 'types';
 
-import { Base58EncodedBytes, Commitment } from '../common';
+import { Base58EncodedBytes } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({

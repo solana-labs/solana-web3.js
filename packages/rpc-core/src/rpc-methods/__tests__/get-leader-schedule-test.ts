@@ -6,8 +6,8 @@ import assert from 'assert';
 import { open } from 'fs/promises';
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
+import { Commitment } from 'types';
 
-import { Commitment } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');

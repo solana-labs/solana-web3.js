@@ -1,4 +1,6 @@
-import { Commitment, Slot } from './common';
+import { Commitment } from 'types';
+
+import { Slot } from './common';
 
 type GetBlocksWithLimitApiResponse = Slot[];
 

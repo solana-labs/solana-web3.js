@@ -1,4 +1,6 @@
-import { Transaction, TransactionVersion } from './types';
+import { TransactionVersion } from 'types';
+
+import { Transaction } from './types';
 
 type TransactionConfig<TVersion extends TransactionVersion> = Readonly<{
     version: TVersion;

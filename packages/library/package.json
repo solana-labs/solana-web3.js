@@ -93,6 +93,7 @@
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "7.2.0",
+        "types": "workspace:*",
         "typescript": "^5.2.2",
         "version-from-git": "^1.1.1"
     },

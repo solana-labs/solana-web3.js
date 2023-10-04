@@ -1,6 +1,6 @@
 import { Serializer } from '@metaplex-foundation/umi-serializers';
+import { TransactionVersion } from 'types';
 
-import { TransactionVersion } from '../types';
 import { getUnimplementedDecoder, getUnimplementedEncoder } from './unimplemented';
 
 const VERSION_FLAG_MASK = 0x80;

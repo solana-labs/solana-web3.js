@@ -1,4 +1,6 @@
-import { Commitment, F64UnsafeSeeDocumentation } from './common';
+import { Commitment } from 'types';
+
+import { F64UnsafeSeeDocumentation } from './common';
 
 type GetInflationGovernorApiResponse = Readonly<{
     /** The initial inflation percentage from time 0 */

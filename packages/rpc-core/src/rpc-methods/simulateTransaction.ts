@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Base64EncodedWireTransaction } from '@solana/transactions';
+import { Base64EncodedWireTransaction, Commitment } from 'types';
 
 import { TransactionError } from '../transaction-error';
 import {
@@ -9,7 +9,6 @@ import {
     AccountInfoWithJsonData,
     Base58EncodedBytes,
     Base64EncodedDataResponse,
-    Commitment,
     RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,

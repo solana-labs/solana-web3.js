@@ -1,6 +1,6 @@
-import { Blockhash } from '@solana/transactions';
+import { Blockhash, Commitment } from 'types';
 
-import { Commitment, RpcResponse, Slot } from './common';
+import { RpcResponse, Slot } from './common';
 
 type IsBlockhashValidApiResponse = RpcResponse<boolean>;
 

@@ -1,4 +1,5 @@
-import { Blockhash } from '../blockhash';
+import { Blockhash } from 'types';
+
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 import { Nonce } from '../durable-nonce';
 

@@ -2,8 +2,8 @@ import 'test-matchers/toBeFrozenObject';
 
 import { Base58EncodedAddress, getAddressFromPublicKey, getBase58EncodedAddressCodec } from '@solana/addresses';
 import { signBytes } from '@solana/keys';
+import { Blockhash } from 'types';
 
-import { Blockhash } from '../blockhash';
 import { CompiledMessage, compileMessage } from '../message';
 import { signTransaction } from '../signatures';
 

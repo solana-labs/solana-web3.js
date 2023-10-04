@@ -1,6 +1,6 @@
 import { Serializer } from '@metaplex-foundation/umi-serializers';
+import { TransactionVersion } from 'types';
 
-import { TransactionVersion } from '../../types';
 import {
     getTransactionVersionCodec,
     getTransactionVersionDecoder,

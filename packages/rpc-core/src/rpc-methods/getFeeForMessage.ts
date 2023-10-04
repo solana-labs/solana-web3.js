@@ -1,6 +1,7 @@
-import { SerializedMessageBytesBase64 } from '@solana/transactions';
+import { SerializedMessageBytesBase64 } from 'types';
+import { Commitment } from 'types';
 
-import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 /** Fee corresponding to the message at the specified blockhash */
 type GetFeeForMessageApiResponse = RpcResponse<U64UnsafeBeyond2Pow53Minus1 | null>;

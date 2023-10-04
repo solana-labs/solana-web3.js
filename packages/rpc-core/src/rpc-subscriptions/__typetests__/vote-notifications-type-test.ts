@@ -2,7 +2,7 @@
 
 import { Base58EncodedAddress } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { Blockhash } from '@solana/transactions';
+import { Blockhash } from 'types';
 
 import { Slot } from '../../rpc-methods/common';
 import { TransactionSignature } from '../../transaction-signature';

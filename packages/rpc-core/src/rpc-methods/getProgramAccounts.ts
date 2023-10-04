@@ -1,4 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from 'types';
 
 import {
     AccountInfoBase,
@@ -8,7 +9,6 @@ import {
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
     AccountInfoWithPubkey,
-    Commitment,
     DataSlice,
     RpcResponse,
     Slot,

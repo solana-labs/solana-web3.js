@@ -1,4 +1,4 @@
-import { Blockhash } from '@solana/transactions';
+import { Blockhash } from 'types';
 
 type GetGenesisHashApiResponse = Blockhash;
 

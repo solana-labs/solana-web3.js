@@ -2,8 +2,8 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { createJsonSubscriptionRpc, createWebSocketTransport } from '@solana/rpc-transport';
 import type { RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
+import { Commitment } from 'types';
 
-import { Commitment } from '../../rpc-methods/common';
 import { createSolanaRpcSubscriptionsApi, SolanaRpcSubscriptions } from '../index';
 
 describe('logsNotifications', () => {

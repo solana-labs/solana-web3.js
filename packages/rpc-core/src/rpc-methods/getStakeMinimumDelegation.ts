@@ -1,5 +1,7 @@
+import { Commitment } from 'types';
+
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
-import { Commitment, RpcResponse } from './common';
+import { RpcResponse } from './common';
 
 type GetStakeMinimumDelegationApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 

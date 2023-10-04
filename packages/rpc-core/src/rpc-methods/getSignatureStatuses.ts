@@ -1,6 +1,8 @@
+import { Commitment } from 'types';
+
 import { TransactionError } from '../transaction-error';
 import { TransactionSignature } from '../transaction-signature';
-import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 /** @deprecated */
 type TransactionStatusOk = Readonly<{
