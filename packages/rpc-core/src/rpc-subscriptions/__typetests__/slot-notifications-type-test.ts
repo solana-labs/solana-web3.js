@@ -20,5 +20,5 @@ async () => {
     >;
 
     // @ts-expect-error Takes no params.
-    rpcSubcriptions.slotNotifications({ commitment: 'finalized' });
+    rpcSubscriptions.slotNotifications({ commitment: 'finalized' });
 };
