@@ -2,6 +2,7 @@ import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
+import { ITransactionWithFeePayer } from './fee-payer';
 import { CompiledMessage, compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
 
@@ -65,6 +66,20 @@ async function getCompiledMessageSignature(message: CompiledMessage, secretKey: 
     const wireMessageBytes = getCompiledMessageEncoder().serialize(message);
     const signature = await signBytes(secretKey, wireMessageBytes);
     return signature;
+}
+
+export function getSignatureFromTransaction(
+    transaction: ITransactionWithFeePayer & ITransactionWithSignatures
+): TransactionSignature {
+    const signature = transaction.signatures[transaction.feePayer];
+    if (!signature) {
+        // TODO: Coded error.
+        throw new Error(
+            "Could not determine this transaction's signature. Make sure that the transaction " +
+                'has been signed by its fee payer.'
+        );
+    }
+    return signature as unknown as TransactionSignature;
 }
 
 export async function signTransaction<TTransaction extends Parameters<typeof compileMessage>[0]>(
