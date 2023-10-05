@@ -18,14 +18,14 @@ export type OptionOrNullable<T> = Option<T> | T | null;
  *
  * @see {@link Option}
  */
-export type Some<T> = { __option: 'Some'; value: T };
+export type Some<T> = Readonly<{ __option: 'Some'; value: T }>;
 
 /**
  * Represents an option of type `T` that has no value.
  *
  * @see {@link Option}
  */
-export type None = { __option: 'None' };
+export type None = Readonly<{ __option: 'None' }>;
 
 /**
  * Creates a new {@link Option} of type `T` that has a value.
