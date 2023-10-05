@@ -138,3 +138,25 @@ export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: Bu
         return false;
     }
 }
+
+export function importKeyPolyfill(
+  format: KeyFormat,
+  keyData: BufferSource,
+  extractable: boolean,
+  keyUsages: readonly KeyUsage[]
+): CryptoKeyPair {
+  const bytes = bufferSourceToUint8Array(keyData);
+
+  if (format !== "raw") {
+    throw new DOMException(
+      `Importing Ed25519 keys in the "${format}" format is unimplemented`,
+      "NotSupportedError"
+    );
+  }
+
+  if (!keyUsages.includes("sign") || !keyUsages.includes("verify")) {
+    throw new DOMException("Invalid keyUsages for Ed25519", "SyntaxError");
+  }
+
+  return createKeyPairFromBytes(bytes, extractable, keyUsages);
+}
