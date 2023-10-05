@@ -86,7 +86,8 @@ function convertSignatures(
 }
 
 export function fromVersionedTransactionWithBlockhash(
-    transaction: VersionedTransaction
+    transaction: VersionedTransaction,
+    lastValidBlockHeight?: bigint
 ): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
@@ -106,7 +107,7 @@ export function fromVersionedTransactionWithBlockhash(
     // TOOD: add support for durable nonce transactions
     const blockhashLifetime = {
         blockhash: transaction.message.recentBlockhash as Blockhash,
-        lastValidBlockHeight: 2n ** 64n - 1n, // U64 MAX
+        lastValidBlockHeight: lastValidBlockHeight ?? 2n ** 64n - 1n, // U64 MAX
     };
 
     const instructions = transaction.message.compiledInstructions.map(instruction =>
