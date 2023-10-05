@@ -284,6 +284,23 @@ describe('fromVersionedTransaction', () => {
                 '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)),
             });
         });
+
+        it('converts a transaction with a given lastValidBlockHeight', () => {
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: blockhashString,
+                }).compileToLegacyMessage()
+            );
+
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, 100n);
+
+            expect(transaction.lifetimeConstraint).toEqual({
+                blockhash: blockhashString,
+                lastValidBlockHeight: 100n,
+            });
+        });
     });
 
     describe('for a transaction with `0` version', () => {
@@ -555,6 +572,23 @@ describe('fromVersionedTransaction', () => {
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
                 '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)),
+            });
+        });
+
+        it('converts a transaction with a given lastValidBlockHeight', () => {
+            const oldTransaction = new VersionedTransaction(
+                new TransactionMessage({
+                    instructions: [],
+                    payerKey: feePayerPublicKey,
+                    recentBlockhash: blockhashString,
+                }).compileToV0Message()
+            );
+
+            const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, 100n);
+
+            expect(transaction.lifetimeConstraint).toEqual({
+                blockhash: blockhashString,
+                lastValidBlockHeight: 100n,
             });
         });
     });
