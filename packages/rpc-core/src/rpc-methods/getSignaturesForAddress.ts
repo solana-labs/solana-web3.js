@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { TransactionSignature } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
-import { TransactionSignature } from '../transaction-signature';
 import { UnixTimestamp } from '../unix-timestamp';
 import { Commitment, RpcResponse, Slot } from './common';
 

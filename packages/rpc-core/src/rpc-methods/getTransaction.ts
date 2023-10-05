@@ -1,9 +1,9 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
+import { TransactionSignature } from '@solana/transactions';
 
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { TransactionError } from '../transaction-error';
-import { TransactionSignature } from '../transaction-signature';
 import { UnixTimestamp } from '../unix-timestamp';
 import {
     Base58EncodedBytes,

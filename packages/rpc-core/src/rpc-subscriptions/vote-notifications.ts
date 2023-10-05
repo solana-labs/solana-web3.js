@@ -1,8 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { Blockhash } from '@solana/transactions';
+import { TransactionSignature } from '@solana/transactions';
 
 import { Slot } from '../rpc-methods/common';
-import { TransactionSignature } from '../transaction-signature';
 import { UnixTimestamp } from '../unix-timestamp';
 
 type VoteNotificationsApiNotification = Readonly<{

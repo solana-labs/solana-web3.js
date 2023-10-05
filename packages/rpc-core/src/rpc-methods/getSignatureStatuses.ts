@@ -1,5 +1,6 @@
+import { TransactionSignature } from '@solana/transactions';
+
 import { TransactionError } from '../transaction-error';
-import { TransactionSignature } from '../transaction-signature';
 import { Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 /** @deprecated */
