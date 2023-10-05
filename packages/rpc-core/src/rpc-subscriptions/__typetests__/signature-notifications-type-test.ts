@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
-import { TransactionSignature } from '../../transaction-signature';
 import { SignatureNotificationsApi } from '../signature-notifications';
 
 async () => {

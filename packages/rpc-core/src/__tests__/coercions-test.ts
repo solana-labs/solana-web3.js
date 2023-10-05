@@ -1,7 +1,8 @@
+import { TransactionSignature, transactionSignature } from '@solana/transactions';
+
 import { lamports, LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { StringifiedBigInt, stringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber, stringifiedNumber } from '../stringified-number';
-import { TransactionSignature, transactionSignature } from '../transaction-signature';
 import { UnixTimestamp, unixTimestamp } from '../unix-timestamp';
 
 describe('coercions', () => {

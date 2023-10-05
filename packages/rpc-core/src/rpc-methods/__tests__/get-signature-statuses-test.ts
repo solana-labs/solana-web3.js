@@ -1,9 +1,9 @@
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { TransactionSignature } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { TransactionSignature } from '../../transaction-signature';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
