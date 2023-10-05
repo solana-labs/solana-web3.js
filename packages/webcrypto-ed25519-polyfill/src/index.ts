@@ -116,4 +116,30 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             throw new TypeError('No native `verify` function exists to handle this call');
         }
     }) as SubtleCrypto['verify'];
+
+    /**
+     * Override `SubtleCrypto#importKey`
+     */
+    const originalImportKey = originalSubtleCrypto.importKey as
+      | SubtleCrypto["importKey"]
+      | undefined;
+    originalSubtleCrypto.importKey = (async (
+      ...args: Parameters<SubtleCrypto["importKey"]>
+    ) => {
+      const [format, keyData, algorithm, extractable, keyUsages] = args;
+      if (algorithm.name === "Ed25519") {
+        return await importKeyPolyfill(
+          format,
+          keyData,
+          extractable,
+          keyUsages as any
+        );
+      } else if (originalImportKey) {
+        return await originalImportKey.apply(originalSubtleCrypto, args);
+      } else {
+        throw new TypeError(
+          "No native `importKey` function exists to handle this call"
+        );
+      }
+    }) as SubtleCrypto["importKey"];
 }
