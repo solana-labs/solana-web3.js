@@ -1,0 +1,197 @@
+import { base64, publicKey } from '@metaplex-foundation/umi-serializers';
+import { Base58EncodedAddress } from '@solana/addresses';
+import { Nonce } from '@solana/transactions';
+
+import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
+
+const FOREVER_PROMISE = new Promise(() => {
+    /* never resolve */
+});
+
+describe('createNonceInvalidationPromiseFactory', () => {
+    function getBase64EncodedNonceAccountData(nonceValue: Nonce) {
+        // This is mostly fake; we just put the nonce value in the correct spot in the byte buffer
+        // without actually implementing the rest.
+        const NONCE_VALUE_OFFSET =
+            4 + // version(u32)
+            4 + // state(u32)
+            32; // nonce authority(pubkey)
+        const bytes = new Uint8Array(
+            NONCE_VALUE_OFFSET + // zeros up to the offset
+                32 // nonce value(pubkey)
+            // don't care about anything after this
+        );
+        bytes.set(publicKey().serialize(nonceValue), NONCE_VALUE_OFFSET);
+        return [base64.deserialize(bytes)[0], 'base64'];
+    }
+    let accountNotificationGenerator: jest.Mock;
+    let createPendingSubscription: jest.Mock;
+    let createSubscriptionIterable: jest.Mock;
+    let getAccountInfoMock: jest.Mock;
+    let getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;
+    beforeEach(() => {
+        jest.useFakeTimers();
+        accountNotificationGenerator = jest.fn().mockImplementation(async function* () {
+            yield await FOREVER_PROMISE;
+        });
+        getAccountInfoMock = jest.fn().mockReturnValue(FOREVER_PROMISE);
+        const rpc = {
+            getAccountInfo: () => ({
+                send: getAccountInfoMock,
+            }),
+        };
+        createSubscriptionIterable = jest.fn().mockResolvedValue({
+            [Symbol.asyncIterator]: accountNotificationGenerator,
+        });
+        createPendingSubscription = jest.fn().mockReturnValue({ subscribe: createSubscriptionIterable });
+        const rpcSubscriptions = {
+            accountNotifications: createPendingSubscription,
+        };
+        getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
+    });
+    it('calls the abort signal passed to the account info query when aborted', async () => {
+        expect.assertions(2);
+        const abortController = new AbortController();
+        getNonceInvalidationPromise({
+            abortSignal: abortController.signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await jest.runAllTimersAsync();
+        expect(getAccountInfoMock).toHaveBeenCalledWith({
+            abortSignal: expect.objectContaining({ aborted: false }),
+        });
+        abortController.abort();
+        expect(getAccountInfoMock).toHaveBeenCalledWith({
+            abortSignal: expect.objectContaining({ aborted: true }),
+        });
+    });
+    it('calls the abort signal passed to the account subscription when aborted', async () => {
+        expect.assertions(2);
+        const abortController = new AbortController();
+        getNonceInvalidationPromise({
+            abortSignal: abortController.signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        expect(createSubscriptionIterable).toHaveBeenCalledWith({
+            abortSignal: expect.objectContaining({ aborted: false }),
+        });
+        abortController.abort();
+        expect(createSubscriptionIterable).toHaveBeenCalledWith({
+            abortSignal: expect.objectContaining({ aborted: true }),
+        });
+    });
+    it('sets up a subscription for notifications about nonce account changes', async () => {
+        expect.assertions(2);
+        getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await jest.runAllTimersAsync();
+        expect(createPendingSubscription).toHaveBeenCalledWith('9'.repeat(44), {
+            commitment: 'finalized',
+            encoding: 'base64',
+        });
+        expect(createSubscriptionIterable).toHaveBeenCalled();
+    });
+    it('does not fire off the one shot query for the nonce value until the subscription is set up', async () => {
+        expect.assertions(2);
+        let setupSubscription;
+        createSubscriptionIterable.mockReturnValue(
+            new Promise(resolve => {
+                setupSubscription = resolve;
+            })
+        );
+        getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await jest.runAllTimersAsync();
+        expect(getAccountInfoMock).not.toHaveBeenCalled();
+        // FIXME: https://github.com/microsoft/TypeScript/issues/11498
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setupSubscription({
+            [Symbol.asyncIterator]: accountNotificationGenerator,
+        });
+        await jest.runAllTimersAsync();
+        expect(getAccountInfoMock).toHaveBeenCalled();
+    });
+    it('continues to pend when the nonce value returned by the one-shot query is the same as the expected one', async () => {
+        expect.assertions(1);
+        getAccountInfoMock.mockResolvedValue({
+            value: {
+                data: ['4'.repeat(44), 'base58'],
+            },
+        });
+        const invalidationPromise = getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await jest.runAllTimersAsync();
+        await expect(Promise.race([invalidationPromise, 'pending'])).resolves.toBe('pending');
+    });
+    it('fatals when the nonce value returned by the one-shot query is different than the expected one', async () => {
+        expect.assertions(1);
+        getAccountInfoMock.mockResolvedValue({
+            value: {
+                data: ['5'.repeat(44), 'base58'],
+            },
+        });
+        const invalidationPromise = getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await expect(invalidationPromise).rejects.toThrow(
+            'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
+                '`55555555555555555555555555555555555555555555`.'
+        );
+    });
+    it('continues to pend when the nonce value returned by the account subscription is the same as the expected one', async () => {
+        expect.assertions(1);
+        accountNotificationGenerator.mockImplementation(async function* () {
+            yield {
+                value: {
+                    data: getBase64EncodedNonceAccountData('4'.repeat(44) as Nonce),
+                },
+            };
+            yield FOREVER_PROMISE;
+        });
+        const invalidationPromise = getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await jest.runAllTimersAsync();
+        await expect(Promise.race([invalidationPromise, 'pending'])).resolves.toBe('pending');
+    });
+    it('fatals when the nonce value returned by the account subscription is different than the expected one', async () => {
+        expect.assertions(1);
+        accountNotificationGenerator.mockImplementation(async function* () {
+            yield { value: { data: getBase64EncodedNonceAccountData('5'.repeat(44) as Nonce) } };
+            yield FOREVER_PROMISE;
+        });
+        const invalidationPromise = getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+        });
+        await expect(invalidationPromise).rejects.toThrow(
+            'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
+                '`55555555555555555555555555555555555555555555`.'
+        );
+    });
+});
