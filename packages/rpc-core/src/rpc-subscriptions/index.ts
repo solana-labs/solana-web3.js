@@ -4,6 +4,7 @@ import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
 import { LogsNotificationsApi } from './logs-notifications';
 import { RootNotificationsApi } from './root-notifications';
+import { SignatureNotificationsApi } from './signature-notifications';
 import { SlotNotificationsApi } from './slot-notifications';
 import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
 import { VoteNotificationsApi } from './vote-notifications';
@@ -12,7 +13,10 @@ type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
-export type SolanaRpcSubscriptions = LogsNotificationsApi & RootNotificationsApi & SlotNotificationsApi;
+export type SolanaRpcSubscriptions = LogsNotificationsApi &
+    RootNotificationsApi &
+    SignatureNotificationsApi &
+    SlotNotificationsApi;
 export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
 export function createSolanaRpcSubscriptionsApi(
