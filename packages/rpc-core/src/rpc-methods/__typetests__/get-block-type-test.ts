@@ -9,11 +9,10 @@ import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
-    Reward,
     TokenBalance,
-    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from '../common';
+import { Reward, TransactionStatus } from '../common-transactions';
 
 function assertNotAProperty<T extends object, TPropName extends string>(
     _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },

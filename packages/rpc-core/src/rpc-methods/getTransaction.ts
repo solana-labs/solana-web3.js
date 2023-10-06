@@ -10,12 +10,11 @@ import {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Commitment,
-    Reward,
     Slot,
     TokenBalance,
-    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
+import { Reward, TransactionStatus } from './common-transactions';
 
 type ReturnData = {
     /** the program that generated the return data */
