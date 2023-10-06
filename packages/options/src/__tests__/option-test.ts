@@ -9,10 +9,10 @@ describe('Option', () => {
         expect(optionB).toStrictEqual({ __option: 'Some', value: null });
 
         const optionC: Option<unknown> = none();
-        expect(optionC).toStrictEqual({ __option: 'None' });
+        expect(optionC).toBe(none());
 
         const optionD: Option<string> = none<string>();
-        expect(optionD).toStrictEqual({ __option: 'None' });
+        expect(optionD).toBe(none());
     });
 
     it('can check if an option is Some or None', () => {
