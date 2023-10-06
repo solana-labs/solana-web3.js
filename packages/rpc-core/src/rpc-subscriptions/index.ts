@@ -3,6 +3,7 @@ import { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport/dis
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
 import { AccountNotificationsApi } from './account-notifications';
+import { BlockNotificationsApi } from './block-notifications';
 import { LogsNotificationsApi } from './logs-notifications';
 import { ProgramNotificationsApi } from './program-notifications';
 import { RootNotificationsApi } from './root-notifications';
@@ -16,6 +17,7 @@ type Config = Readonly<{
 }>;
 
 export type SolanaRpcSubscriptions = AccountNotificationsApi &
+    BlockNotificationsApi &
     LogsNotificationsApi &
     ProgramNotificationsApi &
     RootNotificationsApi &
