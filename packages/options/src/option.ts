@@ -39,8 +39,7 @@ export const some = <T>(value: T): Option<T> => ({ __option: 'Some', value });
  *
  * @see {@link Option}
  */
-const NONE = Object.freeze({ __option: 'None' });
-export const none = <T>(): Option<T> => NONE;
+export const none = <T>(): Option<T> => ({ __option: 'None' });
 
 /**
  * Whether the given data is an {@link Option}.
@@ -50,7 +49,7 @@ export const isOption = <T = unknown>(input: unknown): input is Option<T> =>
         input &&
         typeof input === 'object' &&
         '__option' in input &&
-        ((input.__option === 'Some' && 'value' in input) || input === NONE)
+        ((input.__option === 'Some' && 'value' in input) || input.__option === 'None')
     );
 
 /**
@@ -61,4 +60,4 @@ export const isSome = <T>(option: Option<T>): option is Some<T> => option.__opti
 /**
  * Whether the given {@link Option} is a {@link None}.
  */
-export const isNone = <T>(option: Option<T>): option is None => option === NONE;
+export const isNone = <T>(option: Option<T>): option is None => option.__option === 'None';
