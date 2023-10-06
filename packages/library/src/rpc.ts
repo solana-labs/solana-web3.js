@@ -2,8 +2,10 @@ import { pipe } from '@solana/functional';
 import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
+    createSolanaRpcSubscriptionsApi_UNSTABLE,
     SolanaRpcMethods,
     SolanaRpcSubscriptions,
+    SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
 import { createJsonRpc, createJsonSubscriptionRpc } from '@solana/rpc-transport';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -35,4 +37,13 @@ export function createSolanaRpcSubscriptions(
                 rpcSubscriptions,
             })
     );
+}
+
+export function createSolanaRpcSubscriptions_UNSTABLE(
+    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
+): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    return createJsonSubscriptionRpc({
+        ...config,
+        api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
+    });
 }

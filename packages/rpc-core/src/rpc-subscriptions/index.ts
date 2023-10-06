@@ -3,33 +3,48 @@ import { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport/dis
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
 import { SlotNotificationsApi } from './slot-notifications';
+import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
 export type SolanaRpcSubscriptions = SlotNotificationsApi;
+export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi;
 
-export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscriptionsApi<SolanaRpcSubscriptions> {
-    return new Proxy({} as IRpcSubscriptionsApi<SolanaRpcSubscriptions>, {
+export function createSolanaRpcSubscriptionsApi(
+    config?: Config
+): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    return new Proxy({} as IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>, {
         defineProperty() {
             return false;
         },
         deleteProperty() {
             return false;
         },
-        get<TNotificationName extends keyof IRpcSubscriptionsApi<SolanaRpcSubscriptions>>(
-            ...args: Parameters<NonNullable<ProxyHandler<IRpcSubscriptionsApi<SolanaRpcSubscriptions>>['get']>>
+        get<
+            TNotificationName extends keyof IRpcSubscriptionsApi<
+                SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
+            >
+        >(
+            ...args: Parameters<
+                NonNullable<
+                    ProxyHandler<IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>>['get']
+                >
+            >
         ) {
             const [_, p] = args;
-            const notificationName = p.toString() as keyof SolanaRpcSubscriptions;
+            const notificationName = p.toString() as keyof (SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable);
             return function (
                 ...rawParams: Parameters<
-                    SolanaRpcSubscriptions[TNotificationName] extends CallableFunction
-                        ? SolanaRpcSubscriptions[TNotificationName]
+                    (SolanaRpcSubscriptions &
+                        SolanaRpcSubscriptionsUnstable)[TNotificationName] extends CallableFunction
+                        ? (SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable)[TNotificationName]
                         : never
                 >
-            ): RpcSubscription<ReturnType<SolanaRpcSubscriptions[TNotificationName]>> {
+            ): RpcSubscription<
+                ReturnType<(SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable)[TNotificationName]>
+            > {
                 const handleIntegerOverflow = config?.onIntegerOverflow;
                 const params = patchParamsForSolanaLabsRpc(
                     rawParams,
@@ -47,4 +62,12 @@ export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscripti
             };
         },
     });
+}
+
+export function createSolanaRpcSubscriptionsApi_UNSTABLE(
+    config?: Config
+): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    return createSolanaRpcSubscriptionsApi(config) as IRpcSubscriptionsApi<
+        SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
+    >;
 }

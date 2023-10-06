@@ -1,11 +1,15 @@
+import { IRpcSubscriptionsApi } from '@solana/rpc-transport/dist/types/json-rpc-types';
+
 import { KeyPath } from './response-patcher';
 import { KEYPATH_WILDCARD } from './response-patcher-types';
 import { createSolanaRpcApi } from './rpc-methods';
-import { createSolanaRpcSubscriptionsApi } from './rpc-subscriptions';
+import { SolanaRpcSubscriptions, SolanaRpcSubscriptionsUnstable } from './rpc-subscriptions';
 
 type AllowedNumericKeypaths<TApi> = Partial<Record<keyof TApi, readonly KeyPath[]>>;
 
-let memoizedNotificationKeypaths: AllowedNumericKeypaths<ReturnType<typeof createSolanaRpcSubscriptionsApi>>;
+let memoizedNotificationKeypaths: AllowedNumericKeypaths<
+    IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>
+>;
 let memoizedResponseKeypaths: AllowedNumericKeypaths<ReturnType<typeof createSolanaRpcApi>>;
 
 /**
@@ -13,7 +17,7 @@ let memoizedResponseKeypaths: AllowedNumericKeypaths<ReturnType<typeof createSol
  * to a `bigint`. These are values that are legitimately defined as `u8` or `usize` on the backend.
  */
 export function getAllowedNumericKeypathsForNotification(): AllowedNumericKeypaths<
-    ReturnType<typeof createSolanaRpcSubscriptionsApi>
+    IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>
 > {
     if (!memoizedNotificationKeypaths) {
         memoizedNotificationKeypaths = {};
