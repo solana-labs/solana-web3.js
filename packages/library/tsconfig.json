@@ -1,5 +1,8 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": ["DOM", "ES2022.Error"]
+    },
     "display": "@solana/web3.js-experimental",
     "extends": "tsconfig/base.json",
     "include": ["internal", "src"]
