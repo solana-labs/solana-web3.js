@@ -144,19 +144,10 @@ export function importKeyPolyfill(
   keyData: BufferSource,
   extractable: boolean,
   keyUsages: readonly KeyUsage[]
-): CryptoKeyPair {
+): CryptoKey {
   const bytes = bufferSourceToUint8Array(keyData);
 
-  if (format !== "raw") {
-    throw new DOMException(
-      `Importing Ed25519 keys in the "${format}" format is unimplemented`,
-      "NotSupportedError"
-    );
-  }
+  const kp = createKeyPairFromBytes(bytes, extractable, keyUsages);
 
-  if (!keyUsages.includes("sign") || !keyUsages.includes("verify")) {
-    throw new DOMException("Invalid keyUsages for Ed25519", "SyntaxError");
-  }
-
-  return createKeyPairFromBytes(bytes, extractable, keyUsages);
+  return kp.privateKey;
 }
