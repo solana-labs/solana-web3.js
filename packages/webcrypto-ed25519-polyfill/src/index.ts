@@ -127,7 +127,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
       ...args: Parameters<SubtleCrypto["importKey"]>
     ) => {
       const [format, keyData, algorithm, extractable, keyUsages] = args;
-      if (algorithm.name === "Ed25519") {
+      if (algorithm === "Ed25519") {
         return await importKeyPolyfill(
           format,
           keyData,
