@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment } from '../commitment';
+import { U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type Epoch = U64UnsafeBeyond2Pow53Minus1;
 type Credits = U64UnsafeBeyond2Pow53Minus1;

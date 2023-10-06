@@ -7,7 +7,7 @@ import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { Commitment } from '../common';
+import { Commitment } from '../../commitment';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({

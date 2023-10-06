@@ -114,8 +114,6 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     SendTransactionApi &
     SimulateTransactionApi;
 
-export type { Commitment } from './common';
-
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
         defineProperty() {

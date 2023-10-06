@@ -1,7 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
+import { Commitment } from '../commitment';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
-import { Commitment, RpcResponse } from './common';
+import { RpcResponse } from './common';
 
 type GetSupplyConfig = Readonly<{
     commitment?: Commitment;

@@ -6,7 +6,8 @@ import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Base58EncodedBytes, Commitment } from '../common';
+import { Commitment } from '../../commitment';
+import { Base58EncodedBytes } from '../common';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({

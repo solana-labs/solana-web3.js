@@ -1,5 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
+import { Commitment } from '../commitment';
 import {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -7,7 +8,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    Commitment,
     RpcResponse,
 } from '../rpc-methods/common';
 

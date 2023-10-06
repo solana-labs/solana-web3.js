@@ -5,7 +5,7 @@ import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../common';
+import { Commitment } from '../../commitment';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 function getMockTransactionMessage({

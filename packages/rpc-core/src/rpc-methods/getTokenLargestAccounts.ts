@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, RpcResponse, TokenAmount } from './common';
+import { Commitment } from '../commitment';
+import { RpcResponse, TokenAmount } from './common';
 
 type GetTokenLargestAccountsApiResponse = RpcResponse<TokenAmount & { address: Base58EncodedAddress }[]>;
 

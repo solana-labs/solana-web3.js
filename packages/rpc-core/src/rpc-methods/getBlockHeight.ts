@@ -1,4 +1,5 @@
-import { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment } from '../commitment';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetBlockHeightApiResponse = U64UnsafeBeyond2Pow53Minus1;
 

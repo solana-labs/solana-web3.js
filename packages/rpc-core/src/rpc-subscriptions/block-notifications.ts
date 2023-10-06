@@ -1,6 +1,7 @@
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { Base58EncodedBytes, Commitment, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
+import { Commitment } from '../commitment';
+import { Base58EncodedBytes, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
 import {
     Reward,
     TransactionForAccounts,
