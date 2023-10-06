@@ -2,10 +2,10 @@
 
 import { Base58EncodedAddress } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
-import { TransactionSignature } from '../../transaction-signature';
 import { LogsNotificationsApi } from '../logs-notifications';
 
 async () => {

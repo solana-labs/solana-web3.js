@@ -1,8 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { TransactionSignature } from '@solana/transactions';
 
 import { Commitment, RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
-import { TransactionSignature } from '../transaction-signature';
 
 type LogsNotificationsApiNotification = RpcResponse<
     Readonly<{
