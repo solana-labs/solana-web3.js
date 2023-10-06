@@ -32,7 +32,7 @@ describe('slotsUpdatesNotifications', () => {
             'value',
             expect.objectContaining({
                 slot: expect.any(BigInt),
-                timestamp: expect.any(Number),
+                timestamp: expect.any(BigInt),
                 type: expect.any(String),
             })
         );
