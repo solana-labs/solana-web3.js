@@ -1,4 +1,10 @@
 import type { Commitment } from '@solana/rpc-core';
+import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
+import type { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
+import type { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
+import type { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
+import type { SlotNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/slot-notifications';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import {
     getSignatureFromTransaction,
     IDurableNonceTransaction,
@@ -16,6 +22,16 @@ interface BaseConfig {
     commitment: Commitment;
     getSignatureConfirmationPromise: ReturnType<typeof createSignatureConfirmationPromiseFactory>;
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures;
+}
+
+interface DefaultDurableNonceTransactionConfirmerConfig {
+    rpc: Rpc<GetSignatureStatusesApi & GetAccountInfoApi>;
+    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi & SignatureNotificationsApi>;
+}
+
+interface DefaultTransactionConfirmerConfig {
+    rpc: Rpc<GetSignatureStatusesApi>;
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
 }
 
 interface WaitForTransactionWithBlockhashLifetimeConfirmationConfig extends BaseConfig {
@@ -56,6 +72,43 @@ async function raceStrategies<TConfig extends BaseConfig>(
     } finally {
         abortController.abort();
     }
+}
+
+export function createDefaultDurableNonceTransactionConfirmer({
+    rpc,
+    rpcSubscriptions,
+}: DefaultDurableNonceTransactionConfirmerConfig) {
+    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
+    const getSignatureConfirmationPromise = createSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
+    return async function confirmTransaction(
+        config: Omit<
+            Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
+            'getNonceInvalidationPromise' | 'getSignatureConfirmationPromise'
+        >
+    ) {
+        await waitForDurableNonceTransactionConfirmation({
+            ...config,
+            getNonceInvalidationPromise,
+            getSignatureConfirmationPromise,
+        });
+    };
+}
+
+export function createDefaultTransactionConfirmer({ rpc, rpcSubscriptions }: DefaultTransactionConfirmerConfig) {
+    const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory(rpcSubscriptions);
+    const getSignatureConfirmationPromise = createSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
+    return async function confirmTransaction(
+        config: Omit<
+            Parameters<typeof waitForTransactionConfirmation>[0],
+            'getBlockHeightExceedencePromise' | 'getSignatureConfirmationPromise'
+        >
+    ) {
+        await waitForTransactionConfirmation({
+            ...config,
+            getBlockHeightExceedencePromise,
+            getSignatureConfirmationPromise,
+        });
+    };
 }
 
 export async function waitForDurableNonceTransactionConfirmation(
