@@ -5,3 +5,4 @@ export * from '@solana/transactions';
 export * from './rpc';
 export * from './rpc-transport';
 export * from './rpc-websocket-transport';
+export * from './transaction-confirmation-strategy-blockheight';
