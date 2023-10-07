@@ -1,3 +1,4 @@
+export * from './commitment';
 export * from './lamports';
 export * from './rpc-methods';
 export * from './rpc-subscriptions';

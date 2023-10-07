@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
+import { Commitment } from '../commitment';
 import { TransactionError } from '../transaction-error';
 import {
     AccountInfoBase,
@@ -9,7 +10,6 @@ import {
     AccountInfoWithJsonData,
     Base58EncodedBytes,
     Base64EncodedDataResponse,
-    Commitment,
     RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,

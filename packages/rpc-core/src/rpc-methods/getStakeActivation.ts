@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment } from '../commitment';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetStakeActivationApiResponse = Readonly<{
     /** Stake active during the epoch */

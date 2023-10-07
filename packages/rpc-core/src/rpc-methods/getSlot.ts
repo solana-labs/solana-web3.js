@@ -1,4 +1,5 @@
-import { Commitment, Slot } from './common';
+import { Commitment } from '../commitment';
+import { Slot } from './common';
 
 type GetSlotApiResponse = Slot;
 

@@ -1,6 +1,7 @@
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { Base58EncodedTransactionSignature, Commitment, Slot } from './common';
+import { Commitment } from '../commitment';
+import { Base58EncodedTransactionSignature, Slot } from './common';
 
 type SendTransactionConfig = Readonly<{
     skipPreflight?: boolean;

@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, Slot } from './common';
+import { Commitment } from '../commitment';
+import { Slot } from './common';
 
 /**
  * This return type is a dictionary of validator identities, as base-58 encoded

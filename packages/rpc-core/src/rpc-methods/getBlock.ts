@@ -1,7 +1,8 @@
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
+import { Commitment } from '../commitment';
 import { UnixTimestamp } from '../unix-timestamp';
-import { Base58EncodedBytes, Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Base58EncodedBytes, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 import {
     Reward,
     TransactionForAccounts,

@@ -4,8 +4,6 @@ import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { StringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber } from '../stringified-number';
 
-export type Commitment = 'confirmed' | 'finalized' | 'processed';
-
 export type DataSlice = Readonly<{
     offset: number;
     length: number;

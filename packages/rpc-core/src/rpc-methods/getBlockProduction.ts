@@ -1,6 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
-import { Commitment, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Commitment } from '../commitment';
+import { RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
 type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;
