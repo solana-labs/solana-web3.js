@@ -2,11 +2,11 @@ import 'test-matchers/toBeFrozenObject';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress, getAddressFromPublicKey, getBase58EncodedAddressCodec } from '@solana/addresses';
-import { signBytes } from '@solana/keys';
+import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
 import { CompiledMessage, compileMessage } from '../message';
-import { assertIsTransactionSignature, signTransaction } from '../signatures';
+import { assertIsTransactionSignature, getSignatureFromTransaction, signTransaction } from '../signatures';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
@@ -83,6 +83,33 @@ describe('assertIsTransactionSignature()', () => {
             // eslint-disable-next-line no-empty
         } catch {}
         expect(decodeMethod).not.toHaveBeenCalled();
+    });
+});
+
+describe('getSignatureFromTransaction', () => {
+    it("returns the signature associated with a transaction's fee payer", () => {
+        const transactionWithoutFeePayerSignature = {
+            feePayer: '123' as Base58EncodedAddress,
+            signatures: {
+                ['123' as Base58EncodedAddress]: 'abc' as unknown as Ed25519Signature,
+            } as const,
+        };
+        expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe('abc');
+    });
+    it('throws when supplied a transaction that has not been signed by the fee payer', () => {
+        const transactionWithoutFeePayerSignature = {
+            feePayer: '123' as Base58EncodedAddress,
+            signatures: {
+                // No signature by the fee payer.
+                ['456' as Base58EncodedAddress]: 'abc' as unknown as Ed25519Signature,
+            } as const,
+        };
+        expect(() => {
+            getSignatureFromTransaction(transactionWithoutFeePayerSignature);
+        }).toThrow(
+            "Could not determine this transaction's signature. Make sure that the transaction " +
+                'has been signed by its fee payer.'
+        );
     });
 });
 
