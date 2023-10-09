@@ -1,19 +1,22 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import type { Base58EncodedAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
-import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
-import { Ed25519Signature } from '@solana/keys';
+import { AccountRole } from '@solana/instructions';
+import type { IAccountMeta, IInstruction } from '@solana/instructions';
+import type { Ed25519Signature } from '@solana/keys';
 import {
     appendTransactionInstruction,
-    Blockhash,
     createTransaction,
+    setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+} from '@solana/transactions';
+import type {
+    Blockhash,
     ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
     ITransactionWithSignatures,
-    setTransactionFeePayer,
-    setTransactionLifetimeUsingBlockhash,
     Transaction,
 } from '@solana/transactions';
-import {
+import type {
     MessageAccountKeys,
     MessageCompiledInstruction,
     PublicKey,
@@ -39,8 +42,8 @@ function convertAccount(
             ? AccountRole.WRITABLE_SIGNER
             : AccountRole.READONLY_SIGNER
         : isWritable
-        ? AccountRole.WRITABLE
-        : AccountRole.READONLY;
+            ? AccountRole.WRITABLE
+            : AccountRole.READONLY;
 
     return {
         address: accountPublicKey.toBase58() as Base58EncodedAddress,

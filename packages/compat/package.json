@@ -65,12 +65,9 @@
         "node": ">=17.4"
     },
     "dependencies": {
-        "@solana/addresses": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
-        "@solana/keys": "workspace:*",
-        "@solana/transactions": "workspace:*",
-        "@solana/web3.js": "workspace:*"
+        "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
@@ -92,7 +89,10 @@
         "tsconfig": "workspace:*",
         "tsup": "7.2.0",
         "typescript": "^5.2.2",
-        "version-from-git": "^1.1.1"
+        "version-from-git": "^1.1.1",
+        "@solana/addresses": "workspace:*",
+        "@solana/keys": "workspace:*",
+        "@solana/web3.js": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
