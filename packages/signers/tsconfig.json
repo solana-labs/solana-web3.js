@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "@solana/signers",
+    "extends": "tsconfig/base.json",
+    "include": ["src"],
+    "compilerOptions": {
+        "lib": ["DOM", "ES2015"]
+    }
+}
