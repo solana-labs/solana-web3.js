@@ -1,3 +1,3 @@
 export * from './address';
-export * from './computed-address';
+export * from './program-derived-address';
 export * from './public-key';

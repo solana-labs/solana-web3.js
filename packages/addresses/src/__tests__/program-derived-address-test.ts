@@ -1,5 +1,5 @@
 import { Base58EncodedAddress } from '../address';
-import { createAddressWithSeed, getProgramDerivedAddress } from '../computed-address';
+import { createAddressWithSeed, getProgramDerivedAddress } from '../program-derived-address';
 
 describe('getProgramDerivedAddress()', () => {
     it('fatals when supplied more than 16 seeds', async () => {
@@ -31,10 +31,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'CZ3TbkgUYpDAJVEWpujQhDSgzNTeqbokrJmYa1j4HAZc' as Base58EncodedAddress,
                 seeds: [],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 255,
-            pda: '9tVtkyCGAHSDDBPwz7895aC3p2gJRjpu2v26o35FTUco',
-        });
+        ).resolves.toStrictEqual(['9tVtkyCGAHSDDBPwz7895aC3p2gJRjpu2v26o35FTUco', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and no seeds', async () => {
         expect.assertions(1);
@@ -43,10 +40,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'EfTbwNBrSqSuCNBhWUHsBoBdSMWgRU1S47daqRNgW7aK' as Base58EncodedAddress,
                 seeds: [],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 251,
-            pda: 'CKWT8KZ5GMzKpVRiAULWKPg1LiHt9U3NdAtbuTErHCTq',
-        });
+        ).resolves.toStrictEqual(['CKWT8KZ5GMzKpVRiAULWKPg1LiHt9U3NdAtbuTErHCTq', 251]);
     });
     it('returns a program derived address given a program address and a byte-array seed', async () => {
         expect.assertions(1);
@@ -55,10 +49,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'FD3PDEvpQ9JXq8tv7FpJPyZrCjWkCnAaTju16gFPdpqP' as Base58EncodedAddress,
                 seeds: [new Uint8Array([1, 2, 3])],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 255,
-            pda: '9Tj3hpMWacDiZoBe94sjwJQ72zsUVvEQYsrqyy2CfHky',
-        });
+        ).resolves.toStrictEqual(['9Tj3hpMWacDiZoBe94sjwJQ72zsUVvEQYsrqyy2CfHky', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a byte-array seed', async () => {
         expect.assertions(1);
@@ -67,10 +58,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: '9HT3iB4oX1aZPH5V8eNUGByKuwhfcKjBQ3x9rfEAuNeF' as Base58EncodedAddress,
                 seeds: [new Uint8Array([1, 2, 3])],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 251,
-            pda: 'EeTcRajHcPh74C5D4GqZePac1wYB7Dj9ChTaNHaTH77V',
-        });
+        ).resolves.toStrictEqual(['EeTcRajHcPh74C5D4GqZePac1wYB7Dj9ChTaNHaTH77V', 251]);
     });
     it('returns a program derived address given a program address and a string seed', async () => {
         expect.assertions(1);
@@ -79,10 +67,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'EKaNRGA37uiGRyRPMap5EZg9cmbT5mt7KWrGwKwAQ3rK' as Base58EncodedAddress,
                 seeds: ['hello'],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 255,
-            pda: '6V76gtKMCmVVjrx4sxR9uB868HtZbL3piKEmadC7rSgf',
-        });
+        ).resolves.toStrictEqual(['6V76gtKMCmVVjrx4sxR9uB868HtZbL3piKEmadC7rSgf', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a string seed', async () => {
         expect.assertions(1);
@@ -91,10 +76,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: '9PyoV2rqNtoboSvg2JD7GWhM5RQvHGwgdDvK7MCfpgX1' as Base58EncodedAddress,
                 seeds: ['hello'],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 251,
-            pda: 'E6npEurFu1UEbQFh1DsqBvny17XxUK2QPMgxD3Edn3aG',
-        });
+        ).resolves.toStrictEqual(['E6npEurFu1UEbQFh1DsqBvny17XxUK2QPMgxD3Edn3aG', 251]);
     });
     it('returns a program derived address given a program address and a UTF-8 string seed', async () => {
         expect.assertions(1);
@@ -103,10 +85,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'A5dcVPLJsE2vbf7hkqqyYkYDK9UjUfNxuwGtWF2m2vEz' as Base58EncodedAddress,
                 seeds: ['\uD83D\uDE80'],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 255,
-            pda: 'GYpAzW57Ex4Sw3rp4pq95QrjvtsDyqZsMhSZwqz3NMsE',
-        });
+        ).resolves.toStrictEqual(['GYpAzW57Ex4Sw3rp4pq95QrjvtsDyqZsMhSZwqz3NMsE', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a UTF-8 string seed', async () => {
         expect.assertions(1);
@@ -115,10 +94,7 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'H8gBP21L5ietkHgXcGbgQBCVVEdPUQyuP9Q5MPRLLSJu' as Base58EncodedAddress,
                 seeds: ['\uD83D\uDE80'],
             })
-        ).resolves.toStrictEqual({
-            bumpSeed: 251,
-            pda: '46v3JvPtEPeQmH3euXydEbxYD6yfxeZjWSzkkYvvM5Pp',
-        });
+        ).resolves.toStrictEqual(['46v3JvPtEPeQmH3euXydEbxYD6yfxeZjWSzkkYvvM5Pp', 251]);
     });
     it('returns the same result given a program address and two different seed inputs that concatenate to the same bytes', async () => {
         expect.assertions(1);
