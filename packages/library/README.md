@@ -80,10 +80,10 @@ Client applications primarily deal with addresses and public keys in the form of
 From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsBase58EncodedAddress` function.
 
 ```ts
-import { assertIsBase58EncodedAddress } from '@solana/web3.js`;
+import { assertIsBase58EncodedAddress } from '@solana/web3.js';
 
 // Imagine a function that fetches an account's balance when a user submits a form.
-function handleSubmit() {
+async function handleSubmit() {
     // We know only that what the user typed conforms to the `string` type.
     const address: string = accountAddressInput.value;
     try {
