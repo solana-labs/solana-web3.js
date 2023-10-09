@@ -1,4 +1,4 @@
-import { Commitment } from '../../rpc-methods';
+import { Commitment } from '../../commitment';
 
 describe('programNotifications', () => {
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {

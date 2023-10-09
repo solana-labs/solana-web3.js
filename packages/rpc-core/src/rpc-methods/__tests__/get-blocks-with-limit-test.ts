@@ -1,4 +1,4 @@
-import { Commitment } from '../index';
+import { Commitment } from '../../commitment';
 
 describe('getBlocksWithLimit', () => {
     (['confirmed', 'finalized'] as Exclude<Commitment, 'processed'>[]).forEach(commitment => {

@@ -1,4 +1,4 @@
-import { Commitment } from '../../rpc-methods';
+import { Commitment } from '../../commitment';
 
 describe('accountNotifications', () => {
     ([undefined, 'confirmed', 'finalized', 'processed'] as (Commitment | undefined)[]).forEach(commitment => {
