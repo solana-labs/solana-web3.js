@@ -8,7 +8,8 @@ import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { Commitment, createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { Commitment } from '../../commitment';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
 
