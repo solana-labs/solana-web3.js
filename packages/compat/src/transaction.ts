@@ -1,19 +1,22 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import type { Base58EncodedAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
-import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
-import { Ed25519Signature } from '@solana/keys';
-import {
-    appendTransactionInstruction,
+import type { IAccountMeta, IInstruction } from '@solana/instructions';
+import { AccountRole } from '@solana/instructions';
+import type { Ed25519Signature } from '@solana/keys';
+import type {
     Blockhash,
-    createTransaction,
     ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
     ITransactionWithSignatures,
-    setTransactionFeePayer,
-    setTransactionLifetimeUsingBlockhash,
     Transaction,
 } from '@solana/transactions';
 import {
+    appendTransactionInstruction,
+    createTransaction,
+    setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+} from '@solana/transactions';
+import type {
     MessageAccountKeys,
     MessageCompiledInstruction,
     PublicKey,
