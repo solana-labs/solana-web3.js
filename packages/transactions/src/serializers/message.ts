@@ -8,7 +8,7 @@ import {
     struct,
     StructToSerializerTuple,
 } from '@metaplex-foundation/umi-serializers';
-import { getBase58EncodedAddressCodec } from '@solana/addresses';
+import { getAddressCodec } from '@solana/addresses';
 
 import { CompiledMessage } from '../message';
 import { SerializedMessageBytes } from '../types';
@@ -71,7 +71,7 @@ function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMess
         ['header', getMessageHeaderCodec()],
         [
             'staticAccounts',
-            array(getBase58EncodedAddressCodec(), {
+            array(getAddressCodec(), {
                 description: __DEV__ ? 'A compact-array of static account addresses belonging to this transaction' : '',
                 size: shortU16(),
             }),

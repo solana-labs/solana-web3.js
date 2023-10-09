@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '../base58';
+import { Base58EncodedAddress } from '../address';
 import { createAddressWithSeed, getProgramDerivedAddress } from '../computed-address';
 
 describe('getProgramDerivedAddress()', () => {

@@ -4,7 +4,7 @@ export type Base58EncodedAddress<TAddress extends string = string> = TAddress & 
     readonly __brand: unique symbol;
 };
 
-export function isBase58EncodedAddress(
+export function isAddress(
     putativeBase58EncodedAddress: string
 ): putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
     // Fast-path; see if the input string is of an acceptable length.
@@ -25,7 +25,7 @@ export function isBase58EncodedAddress(
     return true;
 }
 
-export function assertIsBase58EncodedAddress(
+export function assertIsAddress(
     putativeBase58EncodedAddress: string
 ): asserts putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
     try {
@@ -54,11 +54,11 @@ export function assertIsBase58EncodedAddress(
 export function address<TAddress extends string = string>(
     putativeBase58EncodedAddress: TAddress
 ): Base58EncodedAddress<TAddress> {
-    assertIsBase58EncodedAddress(putativeBase58EncodedAddress);
+    assertIsAddress(putativeBase58EncodedAddress);
     return putativeBase58EncodedAddress as Base58EncodedAddress<TAddress>;
 }
 
-export function getBase58EncodedAddressCodec(
+export function getAddressCodec(
     config?: Readonly<{
         description: string;
     }>
@@ -70,7 +70,7 @@ export function getBase58EncodedAddressCodec(
     }) as unknown as Serializer<Base58EncodedAddress>;
 }
 
-export function getBase58EncodedAddressComparator(): (x: string, y: string) => number {
+export function getAddressComparator(): (x: string, y: string) => number {
     return new Intl.Collator('en', {
         caseFirst: 'lower',
         ignorePunctuation: false,

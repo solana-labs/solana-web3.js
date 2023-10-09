@@ -1,6 +1,6 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
 
-import { Base58EncodedAddress, getBase58EncodedAddressCodec } from './base58';
+import { Base58EncodedAddress, getAddressCodec } from './address';
 import { compressedPointBytesAreOnCurve } from './curve';
 
 type PDAInput = Readonly<{
@@ -42,7 +42,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: PDAInput):
         acc.push(...bytes);
         return acc;
     }, [] as number[]);
-    const base58EncodedAddressCodec = getBase58EncodedAddressCodec();
+    const base58EncodedAddressCodec = getAddressCodec();
     const programAddressBytes = base58EncodedAddressCodec.serialize(programAddress);
     const addressBytesBuffer = await crypto.subtle.digest(
         'SHA-256',
@@ -89,7 +89,7 @@ export async function createAddressWithSeed({
     programAddress,
     seed,
 }: SeedInput): Promise<Base58EncodedAddress> {
-    const { serialize, deserialize } = getBase58EncodedAddressCodec();
+    const { serialize, deserialize } = getAddressCodec();
 
     const seedBytes = typeof seed === 'string' ? new TextEncoder().encode(seed) : seed;
     if (seedBytes.byteLength > MAX_SEED_LENGTH) {

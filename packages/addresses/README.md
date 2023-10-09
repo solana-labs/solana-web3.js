@@ -22,18 +22,18 @@ This package contains utilities for generating account addresses. It can be used
 
 This type represents a string that validates as a Solana address. Functions that require well-formed addresses should specify their inputs in terms of this type.
 
-Whenever you need to validate an arbitrary string as a base58-encoded address, use the `assertIsBase58EncodedAddress()` function in this package.
+Whenever you need to validate an arbitrary string as a base58-encoded address, use the `assertIsAddress()` function in this package.
 
 ## Functions
 
-### `assertIsBase58EncodedAddress()`
+### `assertIsAddress()`
 
 Client applications primarily deal with addresses and public keys in the form of base58-encoded strings. Addresses returned from the RPC API conform to the type `Base58EncodedAddress`. You can use a value of that type wherever a base58-encoded address is expected.
 
-From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsBase58EncodedAddress` function.
+From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsAddress` function.
 
 ```ts
-import { assertIsBase58EncodedAddress } from '@solana/addresses';
+import { assertIsAddress } from '@solana/addresses';
 
 // Imagine a function that fetches an account's balance when a user submits a form.
 function handleSubmit() {
@@ -42,7 +42,7 @@ function handleSubmit() {
     try {
         // If this type assertion function doesn't throw, then
         // Typescript will upcast `address` to `Base58EncodedAddress`.
-        assertIsBase58EncodedAddress(address);
+        assertIsAddress(address);
         // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
         const balanceInLamports = await rpc.getBalance(address).send();
     } catch (e) {
@@ -66,9 +66,9 @@ const address = await getAddressFromPublicKey(publicKey);
 Given a program's `Base58EncodedAddress` and up to 16 `Seeds`, this method will return the program derived address (PDA) associated with each.
 
 ```ts
-import { getBase58EncodedAddressCodec, getProgramDerivedAddress } from '@solana/addresses';
+import { getAddressCodec, getProgramDerivedAddress } from '@solana/addresses';
 
-const { serialize } = getBase58EncodedAddressCodec();
+const { serialize } = getAddressCodec();
 const { bumpSeed, pda } = await getProgramDerivedAddress({
     programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Base58EncodedAddress,
     seeds: [

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
 import { OrderedAccounts } from '../accounts';
@@ -20,7 +20,7 @@ function getMockAddress() {
 
 describe('getCompiledAddressTableLookups', () => {
     it('returns address table lookups in lexical order', () => {
-        const sortedAddresses = [...MOCK_ADDRESSES].sort(getBase58EncodedAddressComparator());
+        const sortedAddresses = [...MOCK_ADDRESSES].sort(getAddressComparator());
         const orderedAccounts = [
             {
                 address: getMockAddress(),

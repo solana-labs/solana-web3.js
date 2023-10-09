@@ -1,22 +1,17 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
 
-import {
-    assertIsBase58EncodedAddress,
-    Base58EncodedAddress,
-    getBase58EncodedAddressCodec,
-    getBase58EncodedAddressComparator,
-} from '../base58';
+import { assertIsAddress, Base58EncodedAddress, getAddressCodec, getAddressComparator } from '../address';
 
-describe('base58', () => {
-    describe('assertIsBase58EncodedAddress()', () => {
+describe('Base58EncodedAddress', () => {
+    describe('assertIsAddress()', () => {
         it('throws when supplied a non-base58 string', () => {
             expect(() => {
-                assertIsBase58EncodedAddress('not-a-base-58-encoded-string');
+                assertIsAddress('not-a-base-58-encoded-string');
             }).toThrow();
         });
         it('throws when the decoded byte array has a length other than 32 bytes', () => {
             expect(() => {
-                assertIsBase58EncodedAddress(
+                assertIsAddress(
                     // 31 bytes [128, ..., 128]
                     '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM'
                 );
@@ -24,17 +19,17 @@ describe('base58', () => {
         });
         it('does not throw when supplied a base-58 encoded address', () => {
             expect(() => {
-                assertIsBase58EncodedAddress('11111111111111111111111111111111');
+                assertIsAddress('11111111111111111111111111111111');
             }).not.toThrow();
         });
         it('returns undefined when supplied a base-58 encoded address', () => {
-            expect(assertIsBase58EncodedAddress('11111111111111111111111111111111')).toBeUndefined();
+            expect(assertIsAddress('11111111111111111111111111111111')).toBeUndefined();
         });
         [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {
             it(`attempts to decode input strings of exactly ${len} characters`, () => {
                 const decodeMethod = jest.spyOn(base58, 'serialize');
                 try {
-                    assertIsBase58EncodedAddress('1'.repeat(len));
+                    assertIsAddress('1'.repeat(len));
                     // eslint-disable-next-line no-empty
                 } catch {}
                 expect(decodeMethod).toHaveBeenCalled();
@@ -43,7 +38,7 @@ describe('base58', () => {
         it('does not attempt to decode too-short input strings', () => {
             const decodeMethod = jest.spyOn(base58, 'serialize');
             try {
-                assertIsBase58EncodedAddress(
+                assertIsAddress(
                     // 31 bytes [0, ..., 0]
                     '1111111111111111111111111111111' // 31 characters
                 );
@@ -54,7 +49,7 @@ describe('base58', () => {
         it('does not attempt to decode too-long input strings', () => {
             const decodeMethod = jest.spyOn(base58, 'serialize');
             try {
-                assertIsBase58EncodedAddress(
+                assertIsAddress(
                     // 33 bytes [0, 255, ..., 255]
                     '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG' // 45 characters
                 );
@@ -63,10 +58,10 @@ describe('base58', () => {
             expect(decodeMethod).not.toHaveBeenCalled();
         });
     });
-    describe('getBase58EncodedAddressCodec', () => {
-        let address: ReturnType<typeof getBase58EncodedAddressCodec>;
+    describe('getAddressCodec', () => {
+        let address: ReturnType<typeof getAddressCodec>;
         beforeEach(() => {
-            address = getBase58EncodedAddressCodec();
+            address = getAddressCodec();
         });
         it('serializes a base58 encoded address into a 32-byte buffer', () => {
             expect(
@@ -99,7 +94,7 @@ describe('base58', () => {
             expect(() => address.deserialize(tooShortBuffer)).toThrow();
         });
     });
-    describe('getBase58EncodedAddressComparator', () => {
+    describe('getAddressComparator', () => {
         it('sorts base 58 addresses', () => {
             expect(
                 // These addresses were chosen such that sorting these conventionally (ie. using
@@ -117,7 +112,7 @@ describe('base58', () => {
                     'BKggsVVp7yLmXtPuBDtC3FXBzvLyyye3Q2tFKUUGCHLj',
                     'Ds72joawSKQ9nCDAAmGMKFiwiY6HR7PDzYDHDzZom3tj',
                     'F1zKr4ZUYo5UAnH1fvYaD6R7ne137NYfS1r5HrCb8NpF',
-                ].sort(getBase58EncodedAddressComparator())
+                ].sort(getAddressComparator())
             ).toEqual([
                 '6JYSQqSHY1E5JDwEfgWMieozqA1KCwiP2cH69to9eWKH',
                 '7grJ9YUAEHxckLFqCY7fq8cM1UrragNSuPH1dvwJ8EEK',
