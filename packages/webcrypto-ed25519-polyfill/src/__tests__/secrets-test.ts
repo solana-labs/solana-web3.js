@@ -1,4 +1,11 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from '../secrets';
+import {
+    exportKeyPolyfill,
+    importKeyPolyfill,
+    generateKeyPolyfill,
+    isPolyfilledKey,
+    signPolyfill,
+    verifyPolyfill,
+} from '../secrets';
 
 const MOCK_DATA = new Uint8Array([1, 2, 3]);
 const MOCK_DATA_SIGNATURE = new Uint8Array([
@@ -41,6 +48,27 @@ describe('exportKeyPolyfill', () => {
         jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
         const { publicKey } = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
         expect(exportKeyPolyfill('raw', publicKey)).toEqual(MOCK_PUBLIC_KEY_BYTES);
+    });
+});
+
+describe('importKeyPolyfill', () => {
+    const PKCS8_HEADER = new Uint8Array([
+        0x30, 0x2e, 0x02, 0x01, 0x00, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x04, 0x22, 0x04, 0x20,
+    ]);
+    const pkcs8PrivateKey = new Uint8Array([...PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
+    it('stores secret key bytes in an internal cache', () => {
+        const weakMapSetSpy = jest.spyOn(WeakMap.prototype, 'set');
+        importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
+        expect(weakMapSetSpy).toHaveBeenCalledWith(expect.anything(), MOCK_SECRET_KEY_BYTES);
+    });
+    it('signs and verifies bytes', () => {
+        const privateKey = importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
+
+        const signature = signPolyfill(privateKey, MOCK_DATA);
+
+        const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
+
+        expect(verifyPolyfill(publicKey, signature, MOCK_DATA)).toBe(true);
     });
 });
 
