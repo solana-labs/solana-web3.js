@@ -120,26 +120,16 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
      * Override `SubtleCrypto#importKey`
      */
-    const originalImportKey = originalSubtleCrypto.importKey as
-      | SubtleCrypto["importKey"]
-      | undefined;
-    originalSubtleCrypto.importKey = (async (
-      ...args: Parameters<SubtleCrypto["importKey"]>
-    ) => {
-      const [format, keyData, algorithm, extractable, keyUsages] = args;
-      if (algorithm === "Ed25519") {
-        return await importKeyPolyfill(
-          format,
-          keyData,
-          extractable,
-          keyUsages as any
-        );
-      } else if (originalImportKey) {
-        return await originalImportKey.apply(originalSubtleCrypto, args);
-      } else {
-        throw new TypeError(
-          "No native `importKey` function exists to handle this call"
-        );
-      }
-    }) as SubtleCrypto["importKey"];
+    const originalImportKey = originalSubtleCrypto.importKey as SubtleCrypto['importKey'] | undefined;
+    originalSubtleCrypto.importKey = (async (...args: Parameters<SubtleCrypto['importKey']>) => {
+        const [format, keyData, algorithm, extractable, keyUsages] = args;
+
+        if (algorithm === 'Ed25519') {
+            return await importKeyPolyfill(format, keyData, extractable, keyUsages);
+        } else if (originalImportKey) {
+            return await originalImportKey.apply(originalSubtleCrypto, args);
+        } else {
+            throw new TypeError('No native `importKey` function exists to handle this call');
+        }
+    }) as SubtleCrypto['importKey'];
 }

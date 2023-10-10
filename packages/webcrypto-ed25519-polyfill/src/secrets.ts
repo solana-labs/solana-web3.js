@@ -131,23 +131,54 @@ export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: Bu
     if (key.type !== 'public' || !key.usages.includes('verify')) {
         throw new DOMException('Unable to use this key to verify', 'InvalidAccessError');
     }
-    const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+    const storedBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
     try {
-        return ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), publicKeyBytes);
+        return (
+            ed25519.verify(
+                bufferSourceToUint8Array(signature),
+                bufferSourceToUint8Array(data),
+                ed25519.getPublicKey(storedBytes)
+            ) || ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), storedBytes)
+        );
     } catch {
         return false;
     }
 }
 
 export function importKeyPolyfill(
-  format: KeyFormat,
-  keyData: BufferSource,
-  extractable: boolean,
-  keyUsages: readonly KeyUsage[]
+    format: KeyFormat,
+    keyData: BufferSource,
+    extractable: boolean,
+    keyUsages: readonly KeyUsage[]
 ): CryptoKey {
-  const bytes = bufferSourceToUint8Array(keyData);
+    const type =
+        // could be more rigorous
+        format === 'pkcs8' ? 'private' : 'public';
 
-  const kp = createKeyPairFromBytes(bytes, extractable, keyUsages);
+    const bytes = bufferSourceToUint8Array(keyData);
 
-  return kp.privateKey;
+    const keyBytes =
+        format === 'pkcs8'
+            ? // Remove header
+              bytes.slice(16)
+            : bytes;
+
+    if (type === 'public') {
+        const publicKey = {
+            [Symbol.toStringTag]: 'CryptoKey',
+            algorithm: Object.freeze({ name: 'Ed25519' }),
+            extractable,
+            type: 'public' as KeyType,
+            usages: [...keyUsages],
+        };
+
+        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+        cache.set(publicKey, keyBytes);
+
+        return publicKey;
+    } else {
+        const kp = createKeyPairFromBytes(keyBytes, extractable, keyUsages);
+
+        return kp.privateKey;
+    }
 }
