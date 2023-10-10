@@ -12,7 +12,7 @@ const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validato
 // TPU does not seem to be reliably matchable from the log file
 const featureSetPattern = /feat:([\d]+)/;
 const gossipPattern = /local gossip address: [\d.]+:([\d]+)/;
-const pubkeyPattern = /identity: ([\w]{32,})/;
+const pubkeyPattern = /identity pubkey: ([\w]{32,})/;
 const rpcPattern = /rpc bound to [\d.]+:([\d]+)/;
 const shredVersionPattern = /shred_version: ([\d]+)/;
 const versionPattern = /solana-validator ([\d.]+)/;

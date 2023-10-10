@@ -463,13 +463,13 @@ describe('getProgramAccounts', () => {
                                             type: 'programData',
                                         },
                                         program: 'bpf-upgradeable-loader',
-                                        space: 395693n,
+                                        space: 518437n,
                                     },
                                     executable: false,
-                                    lamports: 2754914160n,
+                                    lamports: 3609212400n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 395693n,
+                                    space: 518437n,
                                 },
                                 // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
@@ -1196,10 +1196,7 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    // FIXME: The legacy vote account tests add vote accounts to the local validator
-                    //        (which is shared with this test) in such a way that makes a
-                    //        `toStrictEqual()` assertion impossible here.
-                    await expect(accountInfosPromise).resolves.toMatchObject(
+                    await expect(accountInfosPromise).resolves.toStrictEqual(
                         // We can't guarantee ordering is preserved across test runs
                         expect.arrayContaining([
                             {
@@ -1269,13 +1266,13 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
                                 pubkey: voteAccountAddress,
                             },
@@ -1436,13 +1433,13 @@ describe('getProgramAccounts', () => {
                                             type: 'programData',
                                         },
                                         program: 'bpf-upgradeable-loader',
-                                        space: 395693n,
+                                        space: 518437n,
                                     },
                                     executable: false,
-                                    lamports: 2754914160n,
+                                    lamports: 3609212400n,
                                     owner: 'BPFLoaderUpgradeab1e11111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 395693n,
+                                    space: 518437n,
                                 },
                                 // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
@@ -2175,10 +2172,7 @@ describe('getProgramAccounts', () => {
                         })
                         .send();
 
-                    // FIXME: The legacy vote account tests add vote accounts to the local validator
-                    //        (which is shared with this test) in such a way that makes a
-                    //        `toStrictEqual()` assertion impossible here.
-                    await expect(accountInfosPromise).resolves.toMatchObject({
+                    await expect(accountInfosPromise).resolves.toStrictEqual({
                         context: CONTEXT_MATCHER,
                         // We can't guarantee ordering is preserved across test runs
                         value: expect.arrayContaining([
@@ -2250,13 +2244,13 @@ describe('getProgramAccounts', () => {
                                             type: 'vote',
                                         },
                                         program: 'vote',
-                                        space: 3731n,
+                                        space: 3762n,
                                     },
                                     executable: false,
                                     lamports: expect.any(BigInt), // Changes
                                     owner: 'Vote111111111111111111111111111111111111111',
                                     rentEpoch: expect.any(BigInt),
-                                    space: 3731n,
+                                    space: 3762n,
                                 },
                                 pubkey: voteAccountAddress,
                             },
