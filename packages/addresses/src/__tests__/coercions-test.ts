@@ -1,4 +1,4 @@
-import { address, Base58EncodedAddress } from '../base58';
+import { address, Base58EncodedAddress } from '../address';
 
 describe('coercions', () => {
     describe('address', () => {

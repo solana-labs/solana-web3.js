@@ -77,10 +77,10 @@ Unimplemented.
 
 Client applications primarily deal with addresses and public keys in the form of base58-encoded strings. Addresses and public keys returned from the RPC API conform to the type `Base58EncodedAddress`. You can use a value of that type wherever a base58-encoded address or key is expected.
 
-From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsBase58EncodedAddress` function.
+From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsAddress` function.
 
 ```ts
-import { assertIsBase58EncodedAddress } from '@solana/web3.js';
+import { assertIsAddress } from '@solana/web3.js';
 
 // Imagine a function that fetches an account's balance when a user submits a form.
 async function handleSubmit() {
@@ -89,7 +89,7 @@ async function handleSubmit() {
     try {
         // If this type assertion function doesn't throw, then
         // Typescript will upcast `address` to `Base58EncodedAddress`.
-        assertIsBase58EncodedAddress(address);
+        assertIsAddress(address);
         // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
         const balanceInLamports = await rpc.getBalance(address).send();
     } catch (e) {

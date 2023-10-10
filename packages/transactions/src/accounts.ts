@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
 import {
     AccountRole,
     IAccountLookupMeta,
@@ -85,7 +85,7 @@ export function getAddressMapFromInstructions(
             }
             return { [TYPE]: AddressMapEntryType.STATIC, role: AccountRole.READONLY };
         });
-        let addressComparator: ReturnType<typeof getBase58EncodedAddressComparator>;
+        let addressComparator: ReturnType<typeof getAddressComparator>;
         if (!instruction.accounts) {
             continue;
         }
@@ -109,7 +109,7 @@ export function getAddressMapFromInstructions(
                                     // Consider using the new LOOKUP_TABLE if its address is different...
                                     entry.lookupTableAddress !== accountMeta.lookupTableAddress &&
                                     // ...and sorts before the existing one.
-                                    (addressComparator ||= getBase58EncodedAddressComparator())(
+                                    (addressComparator ||= getAddressComparator())(
                                         accountMeta.lookupTableAddress,
                                         entry.lookupTableAddress
                                     ) < 0;
@@ -203,7 +203,7 @@ export function getAddressMapFromInstructions(
 }
 
 export function getOrderedAccountsFromAddressMap(addressMap: AddressMap): OrderedAccounts {
-    let addressComparator: ReturnType<typeof getBase58EncodedAddressComparator>;
+    let addressComparator: ReturnType<typeof getAddressComparator>;
     const orderedAccounts: (IAccountMeta | IAccountLookupMeta)[] = Object.entries(addressMap)
         .sort(([leftAddress, leftEntry], [rightAddress, rightEntry]) => {
             // STEP 1: Rapid precedence check. Fee payer, then static addresses, then lookups.
@@ -228,7 +228,7 @@ export function getOrderedAccountsFromAddressMap(addressMap: AddressMap): Ordere
                 return leftIsWritable ? -1 : 1;
             }
             // STEP 3: Sort by address.
-            addressComparator ||= getBase58EncodedAddressComparator();
+            addressComparator ||= getAddressComparator();
             if (
                 leftEntry[TYPE] === AddressMapEntryType.LOOKUP_TABLE &&
                 rightEntry[TYPE] === AddressMapEntryType.LOOKUP_TABLE &&

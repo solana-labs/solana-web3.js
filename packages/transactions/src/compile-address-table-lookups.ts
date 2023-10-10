@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
 import { OrderedAccounts } from './accounts';
@@ -29,7 +29,7 @@ export function getCompiledAddressTableLookups(orderedAccounts: OrderedAccounts)
         }
     }
     return Object.keys(index)
-        .sort(getBase58EncodedAddressComparator())
+        .sort(getAddressComparator())
         .map(lookupTableAddress => ({
             lookupTableAddress: lookupTableAddress as Base58EncodedAddress,
             ...index[lookupTableAddress as unknown as Base58EncodedAddress],

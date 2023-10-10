@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getBase58EncodedAddressComparator } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
 import { AccountRole, IAccountLookupMeta, IInstruction } from '@solana/instructions';
 
 import {
@@ -410,7 +410,7 @@ describe('getAddressMapFromInstructions', () => {
         'creates one $endRole lut entry given matching $aRole and $bRole lut addresses from different lookup tables, preferring the table with the lower address when it $instructionOrder.0',
         ({ aRole, bRole, expectedEntry, instructionOrder: [_, orderInstructions] }) => {
             const commonAddress = getMockAddress();
-            const sortedAddresses = MOCK_ADDRESSES.slice(0, 2).sort(getBase58EncodedAddressComparator());
+            const sortedAddresses = MOCK_ADDRESSES.slice(0, 2).sort(getAddressComparator());
             const lowerLutMeta = {
                 addressIndex: 9,
                 lookupTableAddress: sortedAddresses[0], // Address which sorts lower.
@@ -440,7 +440,7 @@ describe('getAddressMapFromInstructions', () => {
 describe('getOrderedAccountsFromAddressMap', () => {
     let sortedAddresses: Base58EncodedAddress[];
     beforeEach(() => {
-        sortedAddresses = [...MOCK_ADDRESSES].sort(getBase58EncodedAddressComparator());
+        sortedAddresses = [...MOCK_ADDRESSES].sort(getAddressComparator());
     });
     it.each(['READONLY', 'WRITABLE', 'READONLY_SIGNER', 'WRITABLE_SIGNER'] as AccountRoleEnumName[])(
         'puts the fee payer before %s static addresses',

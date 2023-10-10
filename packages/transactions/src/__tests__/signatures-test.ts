@@ -1,7 +1,7 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress, getAddressFromPublicKey, getBase58EncodedAddressCodec } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressCodec, getAddressFromPublicKey } from '@solana/addresses';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
@@ -161,7 +161,7 @@ describe('signTransaction', () => {
                     return '99999999999999999999999999999999' as Base58EncodedAddress<'99999999999999999999999999999999'>;
             }
         });
-        (getBase58EncodedAddressCodec as jest.Mock).mockReturnValue({
+        (getAddressCodec as jest.Mock).mockReturnValue({
             serialize: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
         });
         (signBytes as jest.Mock).mockImplementation(async secretKey => {

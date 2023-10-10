@@ -1,5 +1,5 @@
 import { array, Serializer, shortU16, struct, StructToSerializerTuple, u8 } from '@metaplex-foundation/umi-serializers';
-import { getBase58EncodedAddressCodec } from '@solana/addresses';
+import { getAddressCodec } from '@solana/addresses';
 
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 
@@ -10,7 +10,7 @@ export function getAddressTableLookupCodec(): Serializer<AddressTableLookup> {
         [
             [
                 'lookupTableAddress',
-                getBase58EncodedAddressCodec(
+                getAddressCodec(
                     __DEV__
                         ? {
                               description:
