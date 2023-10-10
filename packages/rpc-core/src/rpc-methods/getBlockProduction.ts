@@ -1,14 +1,14 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
 import { Commitment } from '../commitment';
-import { RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
 type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;
 
 type SlotRange = Readonly<{
-    firstSlot: U64UnsafeBeyond2Pow53Minus1;
-    lastSlot: U64UnsafeBeyond2Pow53Minus1;
+    firstSlot: Slot;
+    lastSlot: Slot;
 }>;
 
 type GetBlockProductionApiConfigBase = Readonly<{

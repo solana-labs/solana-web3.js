@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 
 import { Commitment } from '../commitment';
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type Epoch = U64UnsafeBeyond2Pow53Minus1;
 type Credits = U64UnsafeBeyond2Pow53Minus1;
@@ -25,7 +25,7 @@ type VoteAccount<TVotePubkey extends Base58EncodedAddress> = Readonly<{
     /** Latest history of earned credits for up to five epochs */
     epochCredits: readonly EpochCredit[];
     /** Current root slot for this vote account */
-    rootSlot: U64UnsafeBeyond2Pow53Minus1;
+    rootSlot: Slot;
 }>;
 
 type GetVoteAccountsApiResponse<TVotePubkey extends Base58EncodedAddress> = Readonly<{
