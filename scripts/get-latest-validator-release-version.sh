@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 (
     set -e
-    version=$(curl -s -N https://api.github.com/repos/solana-labs/solana/releases/latest \
-      | grep -m 1 \"tag_name\" \
-      | sed -ne 's/^ *"tag_name": "\([^"]*\)",$/\1/p')
+    version=$(curl -s "https://api.github.com/repos/solana-labs/solana/releases" | \
+      grep '"tag_name": "v1.17.' | \
+      sort -t. -k3,3nr | \
+      head -n1 | \
+      awk -F\" '{print $4}')
     if [ -z $version ]; then
       exit 3
     fi
