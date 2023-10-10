@@ -1,9 +1,63 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
 
-import { Base58EncodedAddress, getAddressCodec } from './address';
+import { assertIsAddress, Base58EncodedAddress, getAddressCodec, isAddress } from './address';
 import { compressedPointBytesAreOnCurve } from './curve';
 
-type PDAInput = Readonly<{
+/**
+ * An address derived from a program address and a set of seeds.
+ * It includes the bump seed used to derive the address and
+ * ensure the address is not on the Ed25519 curve.
+ */
+export type ProgramDerivedAddress<TAddress extends string = string> = Readonly<
+    [Base58EncodedAddress<TAddress>, ProgramDerivedAddressBump]
+>;
+
+/**
+ * A number between 0 and 255, inclusive.
+ */
+export type ProgramDerivedAddressBump = number & {
+    readonly __brand: unique symbol;
+};
+
+/**
+ * Returns true if the input value is a program derived address.
+ */
+export function isProgramDerivedAddress<TAddress extends string = string>(
+    value: unknown
+): value is ProgramDerivedAddress<TAddress> {
+    return (
+        Array.isArray(value) &&
+        value.length === 2 &&
+        typeof value[0] === 'string' &&
+        typeof value[1] === 'number' &&
+        value[1] >= 0 &&
+        value[1] <= 255 &&
+        isAddress(value[0])
+    );
+}
+
+/**
+ * Fails if the input value is not a program derived address.
+ */
+export function assertIsProgramDerivedAddress<TAddress extends string = string>(
+    value: unknown
+): asserts value is ProgramDerivedAddress<TAddress> {
+    const validFormat =
+        Array.isArray(value) && value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'number';
+    if (!validFormat) {
+        // TODO: Coded error.
+        throw new Error(
+            `Expected given program derived address to have the following format: [Base58EncodedAddress, ProgramDerivedAddressBump].`
+        );
+    }
+    if (value[1] < 0 || value[1] > 255) {
+        // TODO: Coded error.
+        throw new Error(`Expected program derived address bump to be in the range [0, 255], got: ${value[1]}.`);
+    }
+    assertIsAddress(value[0]);
+}
+
+type ProgramDerivedAddressInput = Readonly<{
     programAddress: Base58EncodedAddress;
     seeds: Seed[];
 }>;
@@ -26,7 +80,10 @@ const PDA_MARKER_BYTES = [
 // TODO: Coded error.
 class PointOnCurveError extends Error {}
 
-async function createProgramDerivedAddress({ programAddress, seeds }: PDAInput): Promise<Base58EncodedAddress> {
+async function createProgramDerivedAddress({
+    programAddress,
+    seeds,
+}: ProgramDerivedAddressInput): Promise<Base58EncodedAddress> {
     await assertDigestCapabilityIsAvailable();
     if (seeds.length > MAX_SEEDS) {
         // TODO: Coded error.
@@ -56,22 +113,18 @@ async function createProgramDerivedAddress({ programAddress, seeds }: PDAInput):
     return base58EncodedAddressCodec.deserialize(addressBytes)[0];
 }
 
-export async function getProgramDerivedAddress({ programAddress, seeds }: PDAInput): Promise<
-    Readonly<{
-        bumpSeed: number;
-        pda: Base58EncodedAddress;
-    }>
-> {
+export async function getProgramDerivedAddress({
+    programAddress,
+    seeds,
+}: ProgramDerivedAddressInput): Promise<ProgramDerivedAddress> {
     let bumpSeed = 255;
     while (bumpSeed > 0) {
         try {
-            return {
-                bumpSeed,
-                pda: await createProgramDerivedAddress({
-                    programAddress,
-                    seeds: [...seeds, new Uint8Array([bumpSeed])],
-                }),
-            };
+            const address = await createProgramDerivedAddress({
+                programAddress,
+                seeds: [...seeds, new Uint8Array([bumpSeed])],
+            });
+            return [address, bumpSeed as ProgramDerivedAddressBump];
         } catch (e) {
             if (e instanceof PointOnCurveError) {
                 bumpSeed--;
