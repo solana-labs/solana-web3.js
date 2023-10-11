@@ -4,6 +4,7 @@ import { graphql, GraphQLObjectType, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
 import { accountQuery, accountTypes } from './schema/account';
+import { blockQuery, blockTypes } from './schema/block';
 import { transactionQuery, transactionTypes } from './schema/transaction';
 
 export interface RpcGraphQL {
@@ -21,11 +22,12 @@ export function createRpcGraphQL(rpc: Rpc<SolanaRpcMethods>): RpcGraphQL {
         query: new GraphQLObjectType({
             fields: {
                 ...accountQuery,
+                ...blockQuery,
                 ...transactionQuery,
             },
             name: 'RootQuery',
         }),
-        types: [...accountTypes, ...transactionTypes],
+        types: [...accountTypes, ...blockTypes, ...transactionTypes],
     });
     return {
         context,

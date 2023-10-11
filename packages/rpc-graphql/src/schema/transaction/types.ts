@@ -2,7 +2,7 @@ import { GraphQLInterfaceType, GraphQLList, GraphQLObjectType, GraphQLScalarType
 
 import { bigint, boolean, list, number, object, string, type } from '../picks';
 
-const tokenBalance = new GraphQLObjectType({
+export const tokenBalance = new GraphQLObjectType({
     fields: {
         accountIndex: number(),
         mint: string(),
@@ -13,7 +13,7 @@ const tokenBalance = new GraphQLObjectType({
     name: 'TokenBalance',
 });
 
-const transactionStatus = new GraphQLUnionType({
+export const transactionStatus = new GraphQLUnionType({
     name: 'TransactionStatus',
     types: [
         new GraphQLObjectType({
@@ -31,7 +31,7 @@ const transactionStatus = new GraphQLUnionType({
     ],
 });
 
-const reward = new GraphQLObjectType({
+export const reward = new GraphQLObjectType({
     fields: {
         commission: number(),
         lamports: bigint(),
@@ -51,7 +51,7 @@ const addressTableLookup = new GraphQLObjectType({
     name: 'AddressTableLookup',
 });
 
-const returnData = new GraphQLObjectType({
+export const returnData = new GraphQLObjectType({
     fields: {
         data: string(),
         programId: string(),
@@ -68,7 +68,7 @@ const transactionInstruction = new GraphQLObjectType({
     name: 'TransactionInstruction',
 });
 
-const transactionMetaLoadedAddresses = new GraphQLObjectType({
+export const transactionMetaLoadedAddresses = new GraphQLObjectType({
     fields: {
         readonly: list(string()), // Base58 encoded addresses
         writable: list(string()), // Base58 encoded addresses
