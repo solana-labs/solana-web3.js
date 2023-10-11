@@ -69,6 +69,7 @@
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/rpc-core": "workspace:*",
         "@solana/rpc-transport": "workspace:*",
+        "@solana/transactions": "workspace:*",
         "@swc/jest": "^0.2.28",
         "@types/jest": "^29.5.3",
         "@typescript-eslint/eslint-plugin": "^6.3.0",
