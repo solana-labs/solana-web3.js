@@ -42,3 +42,33 @@ export const dataSliceInputType = new GraphQLInputObjectType({
     },
     name: 'DataSliceConfig',
 });
+
+export const maxSupportedTransactionVersionInputType = new GraphQLEnumType({
+    name: 'MaxSupportedTransactionVersion',
+    values: {
+        legacy: {
+            value: 'legacy',
+        },
+        zero: {
+            value: '0',
+        },
+    },
+});
+
+export const transactionEncodingInputType = new GraphQLEnumType({
+    name: 'TransactionEncoding',
+    values: {
+        base58: {
+            value: 'base58',
+        },
+        base64: {
+            value: 'base64',
+        },
+        json: {
+            value: 'json',
+        },
+        jsonParsed: {
+            value: 'jsonParsed',
+        },
+    },
+});
