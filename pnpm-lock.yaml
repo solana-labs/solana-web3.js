@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.0
@@ -30,12 +34,15 @@ importers:
 
   packages/addresses:
     dependencies:
-      '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.9
-        version: 0.8.9
       '@solana/assertions':
         specifier: workspace:*
         version: link:../assertions
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
@@ -13110,7 +13117,3 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

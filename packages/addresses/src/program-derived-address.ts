@@ -100,7 +100,7 @@ async function createProgramDerivedAddress({
         return acc;
     }, [] as number[]);
     const base58EncodedAddressCodec = getAddressCodec();
-    const programAddressBytes = base58EncodedAddressCodec.serialize(programAddress);
+    const programAddressBytes = base58EncodedAddressCodec.encode(programAddress);
     const addressBytesBuffer = await crypto.subtle.digest(
         'SHA-256',
         new Uint8Array([...seedBytes, ...programAddressBytes, ...PDA_MARKER_BYTES])
@@ -110,7 +110,7 @@ async function createProgramDerivedAddress({
         // TODO: Coded error.
         throw new PointOnCurveError('Invalid seeds; point must fall off the Ed25519 curve');
     }
-    return base58EncodedAddressCodec.deserialize(addressBytes)[0];
+    return base58EncodedAddressCodec.decode(addressBytes)[0];
 }
 
 export async function getProgramDerivedAddress({
@@ -142,7 +142,7 @@ export async function createAddressWithSeed({
     programAddress,
     seed,
 }: SeedInput): Promise<Base58EncodedAddress> {
-    const { serialize, deserialize } = getAddressCodec();
+    const { encode, decode } = getAddressCodec();
 
     const seedBytes = typeof seed === 'string' ? new TextEncoder().encode(seed) : seed;
     if (seedBytes.byteLength > MAX_SEED_LENGTH) {
@@ -150,7 +150,7 @@ export async function createAddressWithSeed({
         throw new Error(`The seed exceeds the maximum length of 32 bytes`);
     }
 
-    const programAddressBytes = serialize(programAddress);
+    const programAddressBytes = encode(programAddress);
     if (
         programAddressBytes.length >= PDA_MARKER_BYTES.length &&
         programAddressBytes.slice(-PDA_MARKER_BYTES.length).every((byte, index) => byte === PDA_MARKER_BYTES[index])
@@ -161,9 +161,9 @@ export async function createAddressWithSeed({
 
     const addressBytesBuffer = await crypto.subtle.digest(
         'SHA-256',
-        new Uint8Array([...serialize(baseAddress), ...seedBytes, ...programAddressBytes])
+        new Uint8Array([...encode(baseAddress), ...seedBytes, ...programAddressBytes])
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
 
-    return deserialize(addressBytes)[0];
+    return decode(addressBytes)[0];
 }
