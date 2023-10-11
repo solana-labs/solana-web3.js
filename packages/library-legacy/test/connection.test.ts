@@ -5060,7 +5060,7 @@ describe('Connection', function () {
           LARGE_EPOCH,
         ),
       ).to.be.rejectedWith(
-        `failed to get Stake Activation ${newStakeAccount.publicKey.toBase58()}: Invalid param: epoch ${LARGE_EPOCH} has not yet started`,
+        `failed to get Stake Activation ${newStakeAccount.publicKey.toBase58()}: Invalid param: epoch ${LARGE_EPOCH}. Only the current epoch (0) is supported`,
       );
 
       const activationState = await connection.getStakeActivation(
