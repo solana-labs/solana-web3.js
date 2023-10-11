@@ -1,6 +1,6 @@
 import { assertKeyExporterIsAvailable } from '@solana/assertions';
 
-import { Base58EncodedAddress, getAddressCodec } from './address';
+import { Base58EncodedAddress, getAddressDecoder } from './address';
 
 export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Base58EncodedAddress> {
     await assertKeyExporterIsAvailable();
@@ -9,6 +9,6 @@ export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Bas
         throw new Error('The `CryptoKey` must be an `Ed25519` public key');
     }
     const publicKeyBytes = await crypto.subtle.exportKey('raw', publicKey);
-    const [base58EncodedAddress] = getAddressCodec().deserialize(new Uint8Array(publicKeyBytes));
+    const [base58EncodedAddress] = getAddressDecoder().decode(new Uint8Array(publicKeyBytes));
     return base58EncodedAddress;
 }
