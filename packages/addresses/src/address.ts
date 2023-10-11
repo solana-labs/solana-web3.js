@@ -1,8 +1,22 @@
-import { base58, Serializer, string } from '@metaplex-foundation/umi-serializers';
+import { Codec, combineCodec, Decoder, Encoder, mapEncoder } from '@solana/codecs-core';
+import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
 export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
     readonly __brand: unique symbol;
 };
+
+let memoizedBase58Encoder: Encoder<string> | undefined;
+let memoizedBase58Decoder: Decoder<string> | undefined;
+
+function getMemoizedBase58Encoder(): Encoder<string> {
+    if (!memoizedBase58Encoder) memoizedBase58Encoder = getBase58Encoder();
+    return memoizedBase58Encoder;
+}
+
+function getMemoizedBase58Decoder(): Decoder<string> {
+    if (!memoizedBase58Decoder) memoizedBase58Decoder = getBase58Decoder();
+    return memoizedBase58Decoder;
+}
 
 export function isAddress(
     putativeBase58EncodedAddress: string
@@ -17,7 +31,8 @@ export function isAddress(
         return false;
     }
     // Slow-path; actually attempt to decode the input string.
-    const bytes = base58.serialize(putativeBase58EncodedAddress);
+    const base58Encoder = getMemoizedBase58Encoder();
+    const bytes = base58Encoder.encode(putativeBase58EncodedAddress);
     const numBytes = bytes.byteLength;
     if (numBytes !== 32) {
         return false;
@@ -39,7 +54,8 @@ export function assertIsAddress(
             throw new Error('Expected input string to decode to a byte array of length 32.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = base58.serialize(putativeBase58EncodedAddress);
+        const base58Encoder = getMemoizedBase58Encoder();
+        const bytes = base58Encoder.encode(putativeBase58EncodedAddress);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
             throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);
@@ -58,16 +74,27 @@ export function address<TAddress extends string = string>(
     return putativeBase58EncodedAddress as Base58EncodedAddress<TAddress>;
 }
 
-export function getAddressCodec(
-    config?: Readonly<{
-        description: string;
-    }>
-): Serializer<Base58EncodedAddress> {
-    return string({
-        description: config?.description ?? (__DEV__ ? 'A 32-byte account address' : ''),
-        encoding: base58,
+export function getAddressEncoder(config?: Readonly<{ description: string }>): Encoder<Base58EncodedAddress> {
+    return mapEncoder(
+        getStringEncoder({
+            description: config?.description ?? 'Base58EncodedAddress',
+            encoding: getMemoizedBase58Encoder(),
+            size: 32,
+        }),
+        putativeAddress => address(putativeAddress)
+    );
+}
+
+export function getAddressDecoder(config?: Readonly<{ description: string }>): Decoder<Base58EncodedAddress> {
+    return getStringDecoder({
+        description: config?.description ?? 'Base58EncodedAddress',
+        encoding: getMemoizedBase58Decoder(),
         size: 32,
-    }) as unknown as Serializer<Base58EncodedAddress>;
+    }) as Decoder<Base58EncodedAddress>;
+}
+
+export function getAddressCodec(config?: Readonly<{ description: string }>): Codec<Base58EncodedAddress> {
+    return combineCodec(getAddressEncoder(config), getAddressDecoder(config));
 }
 
 export function getAddressComparator(): (x: string, y: string) => number {
