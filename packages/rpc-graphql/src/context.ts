@@ -4,12 +4,14 @@ import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { createGraphQLCache, GraphQLCache } from './cache';
 import { AccountQueryArgs } from './schema/account/query';
 import { BlockQueryArgs } from './schema/block';
+import { ProgramAccountsQueryArgs } from './schema/program-accounts';
 import { TransactionQueryArgs } from './schema/transaction/query';
 
 export interface RpcGraphQLContext {
     cache: GraphQLCache;
     resolveAccount(args: AccountQueryArgs): ReturnType<typeof resolveAccount>;
     resolveBlock(args: BlockQueryArgs): ReturnType<typeof resolveBlock>;
+    resolveProgramAccounts(args: ProgramAccountsQueryArgs): ReturnType<typeof resolveProgramAccounts>;
     resolveTransaction(args: TransactionQueryArgs): ReturnType<typeof resolveTransaction>;
     rpc: Rpc<SolanaRpcMethods>;
 }
@@ -78,6 +80,50 @@ async function resolveBlock(
     return block;
 }
 
+async function resolveProgramAccounts(
+    { programAddress, encoding = 'jsonParsed', ...config }: ProgramAccountsQueryArgs,
+    cache: GraphQLCache,
+    rpc: Rpc<SolanaRpcMethods>
+) {
+    const requestConfig = { encoding, ...config };
+
+    const cached = cache.get(programAddress, requestConfig);
+    if (cached !== null) {
+        return cached;
+    }
+
+    const programAccounts = await rpc
+        .getProgramAccounts(programAddress, requestConfig as Parameters<SolanaRpcMethods['getProgramAccounts']>[1])
+        .send()
+        .then(res => {
+            if ('value' in res) {
+                return res.value as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
+            }
+            return res as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
+        })
+        .catch(e => {
+            throw e;
+        });
+
+    const queryResponse = programAccounts.map(programAccount => {
+        const [data, responseEncoding] = Array.isArray(programAccount.account.data)
+            ? encoding === 'jsonParsed'
+                ? [programAccount.account.data[0], 'base64']
+                : [programAccount.account.data[0], encoding]
+            : [programAccount.account.data, 'jsonParsed'];
+        const pubkey = programAccount.pubkey;
+        const account = { ...programAccount.account, data, encoding: responseEncoding };
+        return {
+            account,
+            pubkey,
+        };
+    });
+
+    cache.insert(programAddress, requestConfig, queryResponse);
+
+    return queryResponse;
+}
+
 async function resolveTransaction(
     { signature, encoding = 'jsonParsed', ...config }: TransactionQueryArgs,
     cache: GraphQLCache,
@@ -133,6 +179,9 @@ export function createSolanaGraphQLContext(rpc: Rpc<SolanaRpcMethods>): RpcGraph
         },
         resolveBlock(args) {
             return resolveBlock(args, this.cache, this.rpc);
+        },
+        resolveProgramAccounts(args) {
+            return resolveProgramAccounts(args, this.cache, this.rpc);
         },
         resolveTransaction(args) {
             return resolveTransaction(args, this.cache, this.rpc);

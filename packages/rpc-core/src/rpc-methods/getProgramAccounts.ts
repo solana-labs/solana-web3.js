@@ -10,20 +10,11 @@ import {
     AccountInfoWithJsonData,
     AccountInfoWithPubkey,
     DataSlice,
+    GetProgramAccountsDatasizeFilter,
+    GetProgramAccountsMemcmpFilter,
     RpcResponse,
     Slot,
-    U64UnsafeBeyond2Pow53Minus1,
 } from './common';
-
-type GetProgramAccountsMemcmpFilter = Readonly<{
-    offset: U64UnsafeBeyond2Pow53Minus1;
-    bytes: string;
-    encoding: 'base58' | 'base64';
-}>;
-
-type GetProgramAccountsDatasizeFilter = Readonly<{
-    dataSize: U64UnsafeBeyond2Pow53Minus1;
-}>;
 
 type GetProgramAccountsApiCommonConfig = Readonly<{
     /** @defaultValue "finalized" */
