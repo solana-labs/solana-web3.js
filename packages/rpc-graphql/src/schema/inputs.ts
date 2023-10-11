@@ -1,6 +1,6 @@
 import { GraphQLEnumType, GraphQLInputObjectType } from 'graphql';
 
-import { number } from './picks';
+import { bigint, number, string } from './picks';
 
 export const accountEncodingInputType = new GraphQLEnumType({
     name: 'AccountEncoding',
@@ -71,6 +71,16 @@ export const maxSupportedTransactionVersionInputType = new GraphQLEnumType({
             value: '0',
         },
     },
+});
+
+export const programAccountFilterInputType = new GraphQLInputObjectType({
+    fields: {
+        bytes: bigint(),
+        dataSize: bigint(),
+        encoding: string(),
+        offset: bigint(),
+    },
+    name: 'ProgramAccountFilter',
 });
 
 export const transactionEncodingInputType = new GraphQLEnumType({
