@@ -37,7 +37,7 @@ function createKeyPairFromBytes(
     const keyPair = createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(extractable, keyUsages);
     const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
     cache.set(keyPair.privateKey, bytes);
-    cache.set(keyPair.publicKey, bytes);
+    cache.set(keyPair.publicKey, ed25519.getPublicKey(bytes));
     return keyPair;
 }
 
@@ -93,7 +93,7 @@ export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffe
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
-            const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+            const publicKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
             return publicKeyBytes;
         }
         default:
@@ -133,13 +133,7 @@ export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: Bu
     }
     const storedBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
     try {
-        return (
-            ed25519.verify(
-                bufferSourceToUint8Array(signature),
-                bufferSourceToUint8Array(data),
-                ed25519.getPublicKey(storedBytes)
-            ) || ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), storedBytes)
-        );
+        return ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), storedBytes);
     } catch {
         return false;
     }
@@ -151,34 +145,39 @@ export function importKeyPolyfill(
     extractable: boolean,
     keyUsages: readonly KeyUsage[]
 ): CryptoKey {
-    const type =
-        // could be more rigorous
-        format === 'pkcs8' ? 'private' : 'public';
+    if (keyUsages.length === 0) {
+        throw new DOMException('Usages cannot be empty when creating a key.', 'SyntaxError');
+    }
+    if (keyUsages.some(usage => PROHIBITED_KEY_USAGES.has(usage))) {
+        throw new DOMException('Unsupported key usage for an Ed25519 key.', 'SyntaxError');
+    }
 
     const bytes = bufferSourceToUint8Array(keyData);
 
-    const keyBytes =
-        format === 'pkcs8'
-            ? // Remove header
-              bytes.slice(16)
-            : bytes;
+    switch (format) {
+        case 'raw': {
+            const publicKey = {
+                [Symbol.toStringTag]: 'CryptoKey',
+                algorithm: Object.freeze({ name: 'Ed25519' }),
+                extractable: true,
+                type: 'public' as KeyType,
+                usages: Object.freeze(keyUsages.filter(usage => usage === 'verify')) as KeyUsage[],
+            };
 
-    if (type === 'public') {
-        const publicKey = {
-            [Symbol.toStringTag]: 'CryptoKey',
-            algorithm: Object.freeze({ name: 'Ed25519' }),
-            extractable,
-            type: 'public' as KeyType,
-            usages: [...keyUsages],
-        };
+            const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+            cache.set(publicKey, bytes);
 
-        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
-        cache.set(publicKey, keyBytes);
+            return publicKey;
+        }
+        case 'pkcs8': {
+            // Ignore pkcs8 header proceeding the secret bytes
+            const keyBytes = bytes.slice(-32);
+            const kp = createKeyPairFromBytes(keyBytes, extractable, keyUsages);
 
-        return publicKey;
-    } else {
-        const kp = createKeyPairFromBytes(keyBytes, extractable, keyUsages);
-
-        return kp.privateKey;
+            return kp.privateKey;
+        }
+        default: {
+            throw new TypeError(`Cannot import key with ${format} format.`);
+        }
     }
 }

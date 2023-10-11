@@ -21,6 +21,39 @@ const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
     166, 132, 114, 186, 49, 163, 23, 12, 11, 14, 119, 219, 102, 96, 26, 226, 91, 97, 238, 217, 236, 84, 232, 204, 62,
     212, 179, 252, 20, 37, 179, 52,
 ]);
+const MOCK_PKCS8_HEADER =
+    // prettier-ignore
+    new Uint8Array([
+        /**
+         * PKCS#8 header
+         */
+        0x30, // ASN.1 sequence tag
+        0x2e, // Length of sequence (46 more bytes)
+
+            0x02, // ASN.1 integer tag
+            0x01, // Length of integer
+                0x00, // Version number
+
+            0x30, // ASN.1 sequence tag
+            0x05, // Length of sequence
+                0x06, // ASN.1 object identifier tag
+                0x03, // Length of object identifier
+                    // Edwards curve algorithms identifier https://oid-rep.orange-labs.fr/get/1.3.101.112
+                        0x2b, // iso(1) / identified-organization(3) (The first node is multiplied by the decimal 40 and the result is added to the value of the second node)
+                        0x65, // thawte(101)
+                    // Ed25519 identifier
+                        0x70, // id-Ed25519(112)
+
+        /**
+         * Private key payload
+         */
+        0x04, // ASN.1 octet string tag
+        0x22, // String length (34 more bytes)
+
+            // Private key bytes as octet string
+            0x04, // ASN.1 octet string tag
+            0x20  // String length (32 bytes)
+    ]);
 
 describe('exportKeyPolyfill', () => {
     it.each(['jwk', 'pkcs8', 'spki'] as const)('throws an unimplemented error when the format is %s', format => {
@@ -52,10 +85,7 @@ describe('exportKeyPolyfill', () => {
 });
 
 describe('importKeyPolyfill', () => {
-    const PKCS8_HEADER = new Uint8Array([
-        0x30, 0x2e, 0x02, 0x01, 0x00, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x04, 0x22, 0x04, 0x20,
-    ]);
-    const pkcs8PrivateKey = new Uint8Array([...PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
+    const pkcs8PrivateKey = new Uint8Array([...MOCK_PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
     it('stores secret key bytes in an internal cache', () => {
         const weakMapSetSpy = jest.spyOn(WeakMap.prototype, 'set');
         importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
@@ -69,6 +99,27 @@ describe('importKeyPolyfill', () => {
         const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
 
         expect(verifyPolyfill(publicKey, signature, MOCK_DATA)).toBe(true);
+    });
+    it.each([true, false])('has correct extractability', extractability => {
+        const privateKey = importKeyPolyfill('pkcs8', pkcs8PrivateKey, extractability, ['sign']);
+        expect(privateKey.extractable).toBe(extractability);
+
+        const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, extractability, ['verify']);
+        expect(publicKey.extractable).toBe(true);
+    });
+    describe('correct properties are present', () => {
+        const privateKey = importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
+        const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, true, ['verify']);
+        it.each([publicKey, privateKey])(`has the algorithm "Ed25519"`, key => {
+            expect(key).toHaveProperty(['algorithm', 'name'], 'Ed25519');
+        });
+        it.each([publicKey, privateKey])('has the string tag "CryptoKey"', key => {
+            expect(key).toHaveProperty([Symbol.toStringTag], 'CryptoKey');
+        });
+        it(`has the correct type`, () => {
+            expect(publicKey).toHaveProperty(['type'], 'public');
+            expect(privateKey).toHaveProperty(['type'], 'private');
+        });
     });
 });
 
