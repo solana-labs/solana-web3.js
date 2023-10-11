@@ -45,8 +45,8 @@
         "test:treeshakability:native": "agadoo dist/index.native.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
         "test:typecheck": "tsc --noEmit",
-        "test:unit:browser": "jest -c node_modules/test-config/jest-unit.config.browser.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent --passWithNoTests",
-        "test:unit:node": "jest -c node_modules/test-config/jest-unit.config.node.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent --passWithNoTests"
+        "test:unit:browser": "jest -c node_modules/test-config/jest-unit.config.browser.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent",
+        "test:unit:node": "jest -c node_modules/test-config/jest-unit.config.node.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent"
     },
     "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
     "license": "MIT",

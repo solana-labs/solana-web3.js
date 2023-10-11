@@ -3,6 +3,7 @@ import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { graphql, GraphQLObjectType, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
+import { accountQuery, accountTypes } from './schema/account';
 
 export interface RpcGraphQL {
     context: RpcGraphQLContext;
@@ -18,11 +19,11 @@ export function createRpcGraphQL(rpc: Rpc<SolanaRpcMethods>): RpcGraphQL {
     const schema = new GraphQLSchema({
         query: new GraphQLObjectType({
             fields: {
-                /** Root queries */
+                ...accountQuery,
             },
             name: 'RootQuery',
         }),
-        types: [],
+        types: [...accountTypes],
     });
     return {
         context,
