@@ -1,4 +1,11 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from './secrets';
+import {
+    importKeyPolyfill,
+    exportKeyPolyfill,
+    generateKeyPolyfill,
+    isPolyfilledKey,
+    signPolyfill,
+    verifyPolyfill,
+} from './secrets';
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
@@ -124,12 +131,41 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     originalSubtleCrypto.importKey = (async (...args: Parameters<SubtleCrypto['importKey']>) => {
         const [format, keyData, algorithm, extractable, keyUsages] = args;
 
-        if (algorithm === 'Ed25519') {
-            return await importKeyPolyfill(format, keyData, extractable, keyUsages);
-        } else if (originalImportKey) {
-            return await originalImportKey.apply(originalSubtleCrypto, args);
+        // States to handle:
+        // importkey does not exist
+        // importkey exists and supports Ed25519
+        // importkey exists and doesn't support Ed25519
+
+        if (!originalImportKey) {
+            if (algorithm === 'Ed25519') {
+                return importKeyPolyfill(format, keyData, extractable, keyUsages);
+            } else {
+                throw new TypeError('No native `importKey` function exists to handle this call');
+            }
+        } else if (algorithm === 'Ed25519') {
+            return originalImportKey
+                .apply(originalSubtleCrypto, args)
+                .then(res => {
+                    if (__DEV__) {
+                        console.warn(
+                            '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
+                                'environment that supports Ed25519 key manipulation ' +
+                                'natively. Falling back to the native implementation. ' +
+                                'Consider including this polyfill only in environments where ' +
+                                'Ed25519 is not supported.'
+                        );
+                    }
+                    return res;
+                })
+                .catch(err => {
+                    if (err.name === 'NotSupportedError') {
+                        return importKeyPolyfill(format, keyData, extractable, keyUsages);
+                    } else {
+                        throw err;
+                    }
+                });
         } else {
-            throw new TypeError('No native `importKey` function exists to handle this call');
+            return originalImportKey.apply(originalSubtleCrypto, args);
         }
     }) as SubtleCrypto['importKey'];
 }
