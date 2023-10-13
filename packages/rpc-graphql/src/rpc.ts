@@ -22,14 +22,14 @@ export function createRpcGraphQL(rpc: Rpc<SolanaRpcMethods>): RpcGraphQL {
     const schema = new GraphQLSchema({
         query: new GraphQLObjectType({
             fields: {
-                ...accountQuery,
-                ...blockQuery,
-                ...programAccountsQuery,
-                ...transactionQuery,
+                ...accountQuery(),
+                ...blockQuery(),
+                ...programAccountsQuery(),
+                ...transactionQuery(),
             },
             name: 'RootQuery',
         }),
-        types: [...accountTypes, ...blockTypes, ...transactionTypes],
+        types: [...accountTypes(), ...blockTypes(), ...transactionTypes()],
     });
     return {
         context,

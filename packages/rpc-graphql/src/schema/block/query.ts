@@ -19,17 +19,17 @@ export type BlockQueryArgs = {
 /**
  * Block root query for GraphQL
  */
-export const blockQuery = {
+export const blockQuery = () => ({
     block: {
         args: {
-            commitment: type(commitmentInputType),
-            encoding: type(transactionEncodingInputType),
+            commitment: type(commitmentInputType()),
+            encoding: type(transactionEncodingInputType()),
             maxSupportedTransactionVersion: string(),
             rewards: boolean(),
             slot: nonNull(bigint()),
-            transactionDetails: type(blockTransactionDetailsInputType),
+            transactionDetails: type(blockTransactionDetailsInputType()),
         },
         resolve: (_parent: unknown, args: BlockQueryArgs, context: RpcGraphQLContext) => context.resolveBlock(args),
-        type: blockInterface,
+        type: blockInterface(),
     },
-};
+});

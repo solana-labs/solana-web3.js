@@ -2,101 +2,108 @@ import { GraphQLEnumType, GraphQLInputObjectType } from 'graphql';
 
 import { bigint, number, string } from './picks';
 
-export const accountEncodingInputType = new GraphQLEnumType({
-    name: 'AccountEncoding',
-    values: {
-        base58: {
-            value: 'base58',
+export const accountEncodingInputType = () =>
+    new GraphQLEnumType({
+        name: 'AccountEncoding',
+        values: {
+            base58: {
+                value: 'base58',
+            },
+            base64: {
+                value: 'base64',
+            },
+            base64Zstd: {
+                value: 'base64+zstd',
+            },
+            jsonParsed: {
+                value: 'jsonParsed',
+            },
         },
-        base64: {
-            value: 'base64',
-        },
-        base64Zstd: {
-            value: 'base64+zstd',
-        },
-        jsonParsed: {
-            value: 'jsonParsed',
-        },
-    },
-});
+    });
 
-export const blockTransactionDetailsInputType = new GraphQLEnumType({
-    name: 'BlockTransactionDetails',
-    values: {
-        accounts: {
-            value: 'accounts',
+export const blockTransactionDetailsInputType = () =>
+    new GraphQLEnumType({
+        name: 'BlockTransactionDetails',
+        values: {
+            accounts: {
+                value: 'accounts',
+            },
+            full: {
+                value: 'full',
+            },
+            none: {
+                value: 'none',
+            },
+            signatures: {
+                value: 'signatures',
+            },
         },
-        full: {
-            value: 'full',
-        },
-        none: {
-            value: 'none',
-        },
-        signatures: {
-            value: 'signatures',
-        },
-    },
-});
+    });
 
-export const commitmentInputType = new GraphQLEnumType({
-    name: 'Commitment',
-    values: {
-        confirmed: {
-            value: 'confirmed',
+export const commitmentInputType = () =>
+    new GraphQLEnumType({
+        name: 'Commitment',
+        values: {
+            confirmed: {
+                value: 'confirmed',
+            },
+            finalized: {
+                value: 'finalized',
+            },
+            processed: {
+                value: 'processed',
+            },
         },
-        finalized: {
-            value: 'finalized',
-        },
-        processed: {
-            value: 'processed',
-        },
-    },
-});
+    });
 
-export const dataSliceInputType = new GraphQLInputObjectType({
-    fields: {
-        length: number(),
-        offset: number(),
-    },
-    name: 'DataSliceConfig',
-});
+export const dataSliceInputType = () =>
+    new GraphQLInputObjectType({
+        fields: {
+            length: number(),
+            offset: number(),
+        },
+        name: 'DataSliceConfig',
+    });
 
-export const maxSupportedTransactionVersionInputType = new GraphQLEnumType({
-    name: 'MaxSupportedTransactionVersion',
-    values: {
-        legacy: {
-            value: 'legacy',
+export const maxSupportedTransactionVersionInputType = () =>
+    new GraphQLEnumType({
+        name: 'MaxSupportedTransactionVersion',
+        values: {
+            legacy: {
+                value: 'legacy',
+            },
+            zero: {
+                value: '0',
+            },
         },
-        zero: {
-            value: '0',
-        },
-    },
-});
+    });
 
-export const programAccountFilterInputType = new GraphQLInputObjectType({
-    fields: {
-        bytes: bigint(),
-        dataSize: bigint(),
-        encoding: string(),
-        offset: bigint(),
-    },
-    name: 'ProgramAccountFilter',
-});
+export const programAccountFilterInputType = () =>
+    new GraphQLInputObjectType({
+        fields: {
+            bytes: bigint(),
+            dataSize: bigint(),
+            encoding: string(),
+            offset: bigint(),
+        },
+        name: 'ProgramAccountFilter',
+    });
 
-export const transactionEncodingInputType = new GraphQLEnumType({
-    name: 'TransactionEncoding',
-    values: {
-        base58: {
-            value: 'base58',
+export const transactionEncodingInputType = () =>
+    new GraphQLEnumType({
+        name: 'TransactionEncoding',
+        values: {
+            base58: {
+                value: 'base58',
+            },
+            base64: {
+                value: 'base64',
+            },
+            json: {
+                value: 'json',
+            },
+            jsonParsed: {
+                value: 'jsonParsed',
+            },
         },
-        base64: {
-            value: 'base64',
-        },
-        json: {
-            value: 'json',
-        },
-        jsonParsed: {
-            value: 'jsonParsed',
-        },
-    },
-});
+    });

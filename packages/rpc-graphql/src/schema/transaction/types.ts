@@ -2,369 +2,377 @@ import { GraphQLInterfaceType, GraphQLList, GraphQLObjectType, GraphQLScalarType
 
 import { bigint, boolean, list, number, object, string, type } from '../picks';
 
-export const tokenBalance = new GraphQLObjectType({
-    fields: {
-        accountIndex: number(),
-        mint: string(),
-        owner: string(),
-        programId: string(),
-        uiAmountString: string(),
-    },
-    name: 'TokenBalance',
-});
+export const tokenBalance = () =>
+    new GraphQLObjectType({
+        fields: {
+            accountIndex: number(),
+            mint: string(),
+            owner: string(),
+            programId: string(),
+            uiAmountString: string(),
+        },
+        name: 'TokenBalance',
+    });
 
-export const transactionStatus = new GraphQLUnionType({
-    name: 'TransactionStatus',
-    types: [
-        new GraphQLObjectType({
-            fields: {
-                Err: string(),
-            },
-            name: 'TransactionStatusError',
-        }),
-        new GraphQLObjectType({
-            fields: {
-                Ok: string(),
-            },
-            name: 'TransactionStatusOk',
-        }),
-    ],
-});
+export const transactionStatus = () =>
+    new GraphQLUnionType({
+        name: 'TransactionStatus',
+        types: [
+            new GraphQLObjectType({
+                fields: {
+                    Err: string(),
+                },
+                name: 'TransactionStatusError',
+            }),
+            new GraphQLObjectType({
+                fields: {
+                    Ok: string(),
+                },
+                name: 'TransactionStatusOk',
+            }),
+        ],
+    });
 
-export const reward = new GraphQLObjectType({
-    fields: {
-        commission: number(),
-        lamports: bigint(),
-        postBalance: bigint(),
-        pubkey: string(),
-        rewardType: string(),
-    },
-    name: 'Reward',
-});
+export const reward = () =>
+    new GraphQLObjectType({
+        fields: {
+            commission: number(),
+            lamports: bigint(),
+            postBalance: bigint(),
+            pubkey: string(),
+            rewardType: string(),
+        },
+        name: 'Reward',
+    });
 
-const addressTableLookup = new GraphQLObjectType({
-    fields: {
-        accountKey: string(),
-        readableIndexes: list(number()),
-        writableIndexes: list(number()),
-    },
-    name: 'AddressTableLookup',
-});
+const addressTableLookup = () =>
+    new GraphQLObjectType({
+        fields: {
+            accountKey: string(),
+            readableIndexes: list(number()),
+            writableIndexes: list(number()),
+        },
+        name: 'AddressTableLookup',
+    });
 
-export const returnData = new GraphQLObjectType({
-    fields: {
-        data: string(),
-        programId: string(),
-    },
-    name: 'ReturnData',
-});
+export const returnData = () =>
+    new GraphQLObjectType({
+        fields: {
+            data: string(),
+            programId: string(),
+        },
+        name: 'ReturnData',
+    });
 
-const transactionInstruction = new GraphQLObjectType({
-    fields: {
-        accounts: list(number()),
-        data: string(),
-        programIdIndex: number(),
-    },
-    name: 'TransactionInstruction',
-});
+const transactionInstruction = () =>
+    new GraphQLObjectType({
+        fields: {
+            accounts: list(number()),
+            data: string(),
+            programIdIndex: number(),
+        },
+        name: 'TransactionInstruction',
+    });
 
-export const transactionMetaLoadedAddresses = new GraphQLObjectType({
-    fields: {
-        readonly: list(string()), // Base58 encoded addresses
-        writable: list(string()), // Base58 encoded addresses
-    },
-    name: 'TransactionMetaLoadedAddresses',
-});
+export const transactionMetaLoadedAddresses = () =>
+    new GraphQLObjectType({
+        fields: {
+            readonly: list(string()), // Base58 encoded addresses
+            writable: list(string()), // Base58 encoded addresses
+        },
+        name: 'TransactionMetaLoadedAddresses',
+    });
 
 /**
  * Interface for a parsed transaction instruction
  */
-const parsedTransactionInstructionInterface = new GraphQLInterfaceType({
-    fields: {
-        programId: string(),
-    },
-    name: 'ParsedTransactionInstruction',
-    resolveType(instruction) {
-        if (instruction.program === 'address-lookup-table') {
-            if (instruction.info.type === 'createLookupTable') {
-                return 'CreateLookupTableInstruction';
-            }
-            if (instruction.info.type === 'freezeLookupTable') {
-                return 'FreezeLookupTableInstruction';
-            }
-            if (instruction.info.type === 'extendLookupTable') {
-                return 'ExtendLookupTableInstruction';
-            }
-            if (instruction.info.type === 'deactivateLookupTable') {
-                return 'DeactivateLookupTableInstruction';
-            }
-            if (instruction.info.type === 'closeLookupTable') {
-                return 'CloseLookupTableInstruction';
-            }
-        }
-        if (instruction.program === 'bpf-loader') {
-            if (instruction.info.type === 'write') {
-                return 'BpfLoaderWriteInstruction';
-            }
-            if (instruction.info.type === 'finalize') {
-                return 'BpfLoaderFinalizeInstruction';
-            }
-        }
-        if (instruction.program === 'bpf-upgradeable-loader') {
-            if (instruction.info.type === 'initializeBuffer') {
-                return 'BpfUpgradeableLoaderInitializeBufferInstruction';
-            }
-            if (instruction.info.type === 'write') {
-                return 'BpfUpgradeableLoaderWriteInstruction';
-            }
-            if (instruction.info.type === 'deployWithMaxDataLen') {
-                return 'BpfUpgradeableLoaderDeployWithMaxDataLenInstruction';
-            }
-            if (instruction.info.type === 'upgrade') {
-                return 'BpfUpgradeableLoaderUpgradeInstruction';
-            }
-            if (instruction.info.type === 'setAuthority') {
-                return 'BpfUpgradeableLoaderSetAuthorityInstruction';
-            }
-            if (instruction.info.type === 'setAuthorityChecked') {
-                return 'BpfUpgradeableLoaderSetAuthorityCheckedInstruction';
-            }
-            if (instruction.info.type === 'close') {
-                return 'BpfUpgradeableLoaderCloseInstruction';
-            }
-            if (instruction.info.type === 'extendProgram') {
-                return 'BpfUpgradeableLoaderExtendProgramInstruction';
-            }
-        }
-        if (instruction.program === 'spl-associated-token-account') {
-            if (instruction.info.type === 'create') {
-                return 'SplAssociatedTokenCreateInstruction';
-            }
-            if (instruction.info.type === 'createIdempotent') {
-                return 'SplAssociatedTokenCreateIdempotentInstruction';
-            }
-            if (instruction.info.type === 'recoverNested') {
-                return 'SplAssociatedTokenRecoverNestedInstruction';
-            }
-        }
-        if (instruction.program === 'spl-memo') {
-            return 'SplMemoInstruction';
-        }
-        if (instruction.program === 'spl-token') {
-            if (instruction.info.type === 'initializeMint') {
-                return 'SplTokenInitializeMintInstruction';
-            }
-            if (instruction.info.type === 'initializeMint2') {
-                return 'SplTokenInitializeMint2Instruction';
-            }
-            if (instruction.info.type === 'initializeAccount') {
-                return 'SplTokenInitializeAccountInstruction';
-            }
-            if (instruction.info.type === 'initializeAccount2') {
-                return 'SplTokenInitializeAccount2Instruction';
-            }
-            if (instruction.info.type === 'initializeAccount3') {
-                return 'SplTokenInitializeAccount3Instruction';
-            }
-            if (instruction.info.type === 'initializeMultisig') {
-                return 'SplTokenInitializeMultisigInstruction';
-            }
-            if (instruction.info.type === 'initializeMultisig2') {
-                return 'SplTokenInitializeMultisig2Instruction';
-            }
-            if (instruction.info.type === 'transfer') {
-                return 'SplTokenTransferInstruction';
-            }
-            if (instruction.info.type === 'approve') {
-                return 'SplTokenApproveInstruction';
-            }
-            if (instruction.info.type === 'revoke') {
-                return 'SplTokenRevokeInstruction';
-            }
-            if (instruction.info.type === 'setAuthority') {
-                return 'SplTokenSetAuthorityInstruction';
-            }
-            if (instruction.info.type === 'mintTo') {
-                return 'SplTokenMintToInstruction';
-            }
-            if (instruction.info.type === 'burn') {
-                return 'SplTokenBurnInstruction';
-            }
-            if (instruction.info.type === 'closeAccount') {
-                return 'SplTokenCloseAccountInstruction';
-            }
-            if (instruction.info.type === 'freezeAccount') {
-                return 'SplTokenFreezeAccountInstruction';
-            }
-            if (instruction.info.type === 'thawAccount') {
-                return 'SplTokenThawAccountInstruction';
-            }
-            if (instruction.info.type === 'transferChecked') {
-                return 'SplTokenTransferCheckedInstruction';
-            }
-            if (instruction.info.type === 'approveChecked') {
-                return 'SplTokenApproveCheckedInstruction';
-            }
-            if (instruction.info.type === 'mintToChecked') {
-                return 'SplTokenMintToCheckedInstruction';
-            }
-            if (instruction.info.type === 'burnChecked') {
-                return 'SplTokenBurnCheckedInstruction';
-            }
-            if (instruction.info.type === 'syncNative') {
-                return 'SplTokenSyncNativeInstruction';
-            }
-            if (instruction.info.type === 'getAccountDataSize') {
-                return 'SplTokenGetAccountDataSizeInstruction';
-            }
-            if (instruction.info.type === 'initializeImmutableOwner') {
-                return 'SplTokenInitializeImmutableOwnerInstruction';
-            }
-            if (instruction.info.type === 'amountToUiAmount') {
-                return 'SplTokenAmountToUiAmountInstruction';
-            }
-            if (instruction.info.type === 'uiAmountToAmount') {
-                return 'SplTokenUiAmountToAmountInstruction';
-            }
-            if (instruction.info.type === 'initializeMintCloseAuthority') {
-                return 'SplTokenInitializeMintCloseAuthorityInstruction';
-            }
-        }
-        if (instruction.program === 'stake') {
-            if (instruction.info.type === 'initialize') {
-                return 'StakeInitializeInstruction';
-            }
-            if (instruction.info.type === 'authorize') {
-                return 'StakeAuthorizeInstruction';
-            }
-            if (instruction.info.type === 'delegate') {
-                return 'StakeDelegateStakeInstruction';
-            }
-            if (instruction.info.type === 'split') {
-                return 'StakeSplitInstruction';
-            }
-            if (instruction.info.type === 'withdraw') {
-                return 'StakeWithdrawInstruction';
-            }
-            if (instruction.info.type === 'deactivate') {
-                return 'StakeDeactivateInstruction';
-            }
-            if (instruction.info.type === 'setLockup') {
-                return 'StakeSetLockupInstruction';
-            }
-            if (instruction.info.type === 'merge') {
-                return 'StakeMergeInstruction';
-            }
-            if (instruction.info.type === 'authorizeWithSeed') {
-                return 'StakeAuthorizeWithSeedInstruction';
-            }
-            if (instruction.info.type === 'initializeChecked') {
-                return 'StakeInitializeCheckedInstruction';
-            }
-            if (instruction.info.type === 'authorizeChecked') {
-                return 'StakeAuthorizeCheckedInstruction';
-            }
-            if (instruction.info.type === 'authorizeCheckedWithSeed') {
-                return 'StakeAuthorizeCheckedWithSeedInstruction';
-            }
-            if (instruction.info.type === 'setLockupChecked') {
-                return 'StakeSetLockupCheckedInstruction';
-            }
-            if (instruction.info.type === 'deactivateDelinquent') {
-                return 'StakeDeactivateDelinquentInstruction';
-            }
-            if (instruction.info.type === 'redelegate') {
-                return 'StakeRedelegateInstruction';
-            }
-        }
-        if (instruction.program === 'system') {
-            if (instruction.info.type === 'createAccount') {
-                return 'CreateAccountInstruction';
-            }
-            if (instruction.info.type === 'assign') {
-                return 'AssignInstruction';
-            }
-            if (instruction.info.type === 'transfer') {
-                return 'TransferInstruction';
-            }
-            if (instruction.info.type === 'createAccountWithSeed') {
-                return 'CreateAccountWithSeedInstruction';
-            }
-            if (instruction.info.type === 'advanceNonceAccount') {
-                return 'AdvanceNonceAccountInstruction';
-            }
-            if (instruction.info.type === 'withdrawNonceAccount') {
-                return 'WithdrawNonceAccountInstruction';
-            }
-            if (instruction.info.type === 'initializeNonceAccount') {
-                return 'InitializeNonceAccountInstruction';
-            }
-            if (instruction.info.type === 'authorizeNonceAccount') {
-                return 'AuthorizeNonceAccountInstruction';
-            }
-            if (instruction.info.type === 'upgradeNonceAccount') {
-                return 'UpgradeNonceAccountInstruction';
-            }
-            if (instruction.info.type === 'allocate') {
-                return 'AllocateInstruction';
-            }
-            if (instruction.info.type === 'allocateWithSeed') {
-                return 'AllocateWithSeedInstruction';
-            }
-            if (instruction.info.type === 'assignWithSeed') {
-                return 'AssignWithSeedInstruction';
-            }
-            if (instruction.info.type === 'transferWithSeed') {
-                return 'TransferWithSeedInstruction';
-            }
-        }
-        if (instruction.program === 'vote') {
-            if (instruction.info.type === 'initialize') {
-                return 'VoteInitializeAccountInstruction';
-            }
-            if (instruction.info.type === 'authorize') {
-                return 'VoteAuthorizeInstruction';
-            }
-            if (instruction.info.type === 'authorizeWithSeed') {
-                return 'VoteAuthorizeWithSeedInstruction';
-            }
-            if (instruction.info.type === 'authorizeCheckedWithSeed') {
-                return 'VoteAuthorizeCheckedWithSeedInstruction';
-            }
-            if (instruction.info.type === 'vote') {
-                return 'VoteVoteInstruction';
-            }
-            if (instruction.info.type === 'updatevotestate') {
-                return 'VoteUpdateVoteStateInstruction';
-            }
-            if (instruction.info.type === 'updatevotestateswitch') {
-                return 'VoteUpdateVoteStateSwitchInstruction';
-            }
-            if (instruction.info.type === 'compactupdatevotestate') {
-                return 'VoteCompactUpdateVoteStateInstruction';
-            }
-            if (instruction.info.type === 'compactupdatevotestateswitch') {
-                return 'VoteCompactUpdateVoteStateSwitchInstruction';
-            }
-            if (instruction.info.type === 'withdraw') {
-                return 'VoteWithdrawInstruction';
-            }
-            if (instruction.info.type === 'updateValidatorIdentity') {
-                return 'VoteUpdateValidatorIdentityInstruction';
-            }
-            if (instruction.info.type === 'updateCommission') {
-                return 'VoteUpdateCommissionInstruction';
-            }
-            if (instruction.info.type === 'voteSwitch') {
-                return 'VoteVoteSwitchInstruction';
-            }
-            if (instruction.info.type === 'authorizeChecked') {
-                return 'VoteAuthorizeCheckedInstruction';
-            }
-        }
-        return 'PartiallyDecodedInstruction';
-    },
-});
+const parsedTransactionInstructionInterface = () =>
+    new GraphQLInterfaceType({
+        fields: {
+            programId: string(),
+        },
+        name: 'ParsedTransactionInstruction',
+        resolveType(instruction) {
+            if (instruction.program === 'address-lookup-table') {
+                if (instruction.info.type === 'createLookupTable') {
+                    return 'CreateLookupTableInstruction';
+                }
+                if (instruction.info.type === 'freezeLookupTable') {
+                    return 'FreezeLookupTableInstruction';
+                }
+                if (instruction.info.type === 'extendLookupTable') {
+                    return 'ExtendLookupTableInstruction';
+                }
+                if (instruction.info.type === 'deactivateLookupTable') {
+                    return 'DeactivateLookupTableInstruction';
+                }
+                if (instruction.info.type === 'closeLookupTable') {
+                    return 'CloseLookupTableInstruction';
+                }
+            }
+            if (instruction.program === 'bpf-loader') {
+                if (instruction.info.type === 'write') {
+                    return 'BpfLoaderWriteInstruction';
+                }
+                if (instruction.info.type === 'finalize') {
+                    return 'BpfLoaderFinalizeInstruction';
+                }
+            }
+            if (instruction.program === 'bpf-upgradeable-loader') {
+                if (instruction.info.type === 'initializeBuffer') {
+                    return 'BpfUpgradeableLoaderInitializeBufferInstruction';
+                }
+                if (instruction.info.type === 'write') {
+                    return 'BpfUpgradeableLoaderWriteInstruction';
+                }
+                if (instruction.info.type === 'deployWithMaxDataLen') {
+                    return 'BpfUpgradeableLoaderDeployWithMaxDataLenInstruction';
+                }
+                if (instruction.info.type === 'upgrade') {
+                    return 'BpfUpgradeableLoaderUpgradeInstruction';
+                }
+                if (instruction.info.type === 'setAuthority') {
+                    return 'BpfUpgradeableLoaderSetAuthorityInstruction';
+                }
+                if (instruction.info.type === 'setAuthorityChecked') {
+                    return 'BpfUpgradeableLoaderSetAuthorityCheckedInstruction';
+                }
+                if (instruction.info.type === 'close') {
+                    return 'BpfUpgradeableLoaderCloseInstruction';
+                }
+                if (instruction.info.type === 'extendProgram') {
+                    return 'BpfUpgradeableLoaderExtendProgramInstruction';
+                }
+            }
+            if (instruction.program === 'spl-associated-token-account') {
+                if (instruction.info.type === 'create') {
+                    return 'SplAssociatedTokenCreateInstruction';
+                }
+                if (instruction.info.type === 'createIdempotent') {
+                    return 'SplAssociatedTokenCreateIdempotentInstruction';
+                }
+                if (instruction.info.type === 'recoverNested') {
+                    return 'SplAssociatedTokenRecoverNestedInstruction';
+                }
+            }
+            if (instruction.program === 'spl-memo') {
+                return 'SplMemoInstruction';
+            }
+            if (instruction.program === 'spl-token') {
+                if (instruction.info.type === 'initializeMint') {
+                    return 'SplTokenInitializeMintInstruction';
+                }
+                if (instruction.info.type === 'initializeMint2') {
+                    return 'SplTokenInitializeMint2Instruction';
+                }
+                if (instruction.info.type === 'initializeAccount') {
+                    return 'SplTokenInitializeAccountInstruction';
+                }
+                if (instruction.info.type === 'initializeAccount2') {
+                    return 'SplTokenInitializeAccount2Instruction';
+                }
+                if (instruction.info.type === 'initializeAccount3') {
+                    return 'SplTokenInitializeAccount3Instruction';
+                }
+                if (instruction.info.type === 'initializeMultisig') {
+                    return 'SplTokenInitializeMultisigInstruction';
+                }
+                if (instruction.info.type === 'initializeMultisig2') {
+                    return 'SplTokenInitializeMultisig2Instruction';
+                }
+                if (instruction.info.type === 'transfer') {
+                    return 'SplTokenTransferInstruction';
+                }
+                if (instruction.info.type === 'approve') {
+                    return 'SplTokenApproveInstruction';
+                }
+                if (instruction.info.type === 'revoke') {
+                    return 'SplTokenRevokeInstruction';
+                }
+                if (instruction.info.type === 'setAuthority') {
+                    return 'SplTokenSetAuthorityInstruction';
+                }
+                if (instruction.info.type === 'mintTo') {
+                    return 'SplTokenMintToInstruction';
+                }
+                if (instruction.info.type === 'burn') {
+                    return 'SplTokenBurnInstruction';
+                }
+                if (instruction.info.type === 'closeAccount') {
+                    return 'SplTokenCloseAccountInstruction';
+                }
+                if (instruction.info.type === 'freezeAccount') {
+                    return 'SplTokenFreezeAccountInstruction';
+                }
+                if (instruction.info.type === 'thawAccount') {
+                    return 'SplTokenThawAccountInstruction';
+                }
+                if (instruction.info.type === 'transferChecked') {
+                    return 'SplTokenTransferCheckedInstruction';
+                }
+                if (instruction.info.type === 'approveChecked') {
+                    return 'SplTokenApproveCheckedInstruction';
+                }
+                if (instruction.info.type === 'mintToChecked') {
+                    return 'SplTokenMintToCheckedInstruction';
+                }
+                if (instruction.info.type === 'burnChecked') {
+                    return 'SplTokenBurnCheckedInstruction';
+                }
+                if (instruction.info.type === 'syncNative') {
+                    return 'SplTokenSyncNativeInstruction';
+                }
+                if (instruction.info.type === 'getAccountDataSize') {
+                    return 'SplTokenGetAccountDataSizeInstruction';
+                }
+                if (instruction.info.type === 'initializeImmutableOwner') {
+                    return 'SplTokenInitializeImmutableOwnerInstruction';
+                }
+                if (instruction.info.type === 'amountToUiAmount') {
+                    return 'SplTokenAmountToUiAmountInstruction';
+                }
+                if (instruction.info.type === 'uiAmountToAmount') {
+                    return 'SplTokenUiAmountToAmountInstruction';
+                }
+                if (instruction.info.type === 'initializeMintCloseAuthority') {
+                    return 'SplTokenInitializeMintCloseAuthorityInstruction';
+                }
+            }
+            if (instruction.program === 'stake') {
+                if (instruction.info.type === 'initialize') {
+                    return 'StakeInitializeInstruction';
+                }
+                if (instruction.info.type === 'authorize') {
+                    return 'StakeAuthorizeInstruction';
+                }
+                if (instruction.info.type === 'delegate') {
+                    return 'StakeDelegateStakeInstruction';
+                }
+                if (instruction.info.type === 'split') {
+                    return 'StakeSplitInstruction';
+                }
+                if (instruction.info.type === 'withdraw') {
+                    return 'StakeWithdrawInstruction';
+                }
+                if (instruction.info.type === 'deactivate') {
+                    return 'StakeDeactivateInstruction';
+                }
+                if (instruction.info.type === 'setLockup') {
+                    return 'StakeSetLockupInstruction';
+                }
+                if (instruction.info.type === 'merge') {
+                    return 'StakeMergeInstruction';
+                }
+                if (instruction.info.type === 'authorizeWithSeed') {
+                    return 'StakeAuthorizeWithSeedInstruction';
+                }
+                if (instruction.info.type === 'initializeChecked') {
+                    return 'StakeInitializeCheckedInstruction';
+                }
+                if (instruction.info.type === 'authorizeChecked') {
+                    return 'StakeAuthorizeCheckedInstruction';
+                }
+                if (instruction.info.type === 'authorizeCheckedWithSeed') {
+                    return 'StakeAuthorizeCheckedWithSeedInstruction';
+                }
+                if (instruction.info.type === 'setLockupChecked') {
+                    return 'StakeSetLockupCheckedInstruction';
+                }
+                if (instruction.info.type === 'deactivateDelinquent') {
+                    return 'StakeDeactivateDelinquentInstruction';
+                }
+                if (instruction.info.type === 'redelegate') {
+                    return 'StakeRedelegateInstruction';
+                }
+            }
+            if (instruction.program === 'system') {
+                if (instruction.info.type === 'createAccount') {
+                    return 'CreateAccountInstruction';
+                }
+                if (instruction.info.type === 'assign') {
+                    return 'AssignInstruction';
+                }
+                if (instruction.info.type === 'transfer') {
+                    return 'TransferInstruction';
+                }
+                if (instruction.info.type === 'createAccountWithSeed') {
+                    return 'CreateAccountWithSeedInstruction';
+                }
+                if (instruction.info.type === 'advanceNonceAccount') {
+                    return 'AdvanceNonceAccountInstruction';
+                }
+                if (instruction.info.type === 'withdrawNonceAccount') {
+                    return 'WithdrawNonceAccountInstruction';
+                }
+                if (instruction.info.type === 'initializeNonceAccount') {
+                    return 'InitializeNonceAccountInstruction';
+                }
+                if (instruction.info.type === 'authorizeNonceAccount') {
+                    return 'AuthorizeNonceAccountInstruction';
+                }
+                if (instruction.info.type === 'upgradeNonceAccount') {
+                    return 'UpgradeNonceAccountInstruction';
+                }
+                if (instruction.info.type === 'allocate') {
+                    return 'AllocateInstruction';
+                }
+                if (instruction.info.type === 'allocateWithSeed') {
+                    return 'AllocateWithSeedInstruction';
+                }
+                if (instruction.info.type === 'assignWithSeed') {
+                    return 'AssignWithSeedInstruction';
+                }
+                if (instruction.info.type === 'transferWithSeed') {
+                    return 'TransferWithSeedInstruction';
+                }
+            }
+            if (instruction.program === 'vote') {
+                if (instruction.info.type === 'initialize') {
+                    return 'VoteInitializeAccountInstruction';
+                }
+                if (instruction.info.type === 'authorize') {
+                    return 'VoteAuthorizeInstruction';
+                }
+                if (instruction.info.type === 'authorizeWithSeed') {
+                    return 'VoteAuthorizeWithSeedInstruction';
+                }
+                if (instruction.info.type === 'authorizeCheckedWithSeed') {
+                    return 'VoteAuthorizeCheckedWithSeedInstruction';
+                }
+                if (instruction.info.type === 'vote') {
+                    return 'VoteVoteInstruction';
+                }
+                if (instruction.info.type === 'updatevotestate') {
+                    return 'VoteUpdateVoteStateInstruction';
+                }
+                if (instruction.info.type === 'updatevotestateswitch') {
+                    return 'VoteUpdateVoteStateSwitchInstruction';
+                }
+                if (instruction.info.type === 'compactupdatevotestate') {
+                    return 'VoteCompactUpdateVoteStateInstruction';
+                }
+                if (instruction.info.type === 'compactupdatevotestateswitch') {
+                    return 'VoteCompactUpdateVoteStateSwitchInstruction';
+                }
+                if (instruction.info.type === 'withdraw') {
+                    return 'VoteWithdrawInstruction';
+                }
+                if (instruction.info.type === 'updateValidatorIdentity') {
+                    return 'VoteUpdateValidatorIdentityInstruction';
+                }
+                if (instruction.info.type === 'updateCommission') {
+                    return 'VoteUpdateCommissionInstruction';
+                }
+                if (instruction.info.type === 'voteSwitch') {
+                    return 'VoteVoteSwitchInstruction';
+                }
+                if (instruction.info.type === 'authorizeChecked') {
+                    return 'VoteAuthorizeCheckedInstruction';
+                }
+            }
+            return 'PartiallyDecodedInstruction';
+        },
+    });
 
 /**
  * Builds JSON parsed instruction
@@ -386,25 +394,26 @@ const parsedTransactionInstructionType = (name: string, parsedInfoFields: Parame
             program: string(),
             programId: string(),
         },
-        interfaces: [parsedTransactionInstructionInterface],
+        interfaces: [parsedTransactionInstructionInterface()],
         name,
     });
 
-const partiallyDecodedTransactionInstruction = new GraphQLObjectType({
-    fields: {
-        accounts: list(string()),
-        data: string(),
-        programId: string(),
-    },
-    interfaces: [parsedTransactionInstructionInterface],
-    name: 'PartiallyDecodedInstruction',
-});
+const partiallyDecodedTransactionInstruction = () =>
+    new GraphQLObjectType({
+        fields: {
+            accounts: list(string()),
+            data: string(),
+            programId: string(),
+        },
+        interfaces: [parsedTransactionInstructionInterface()],
+        name: 'PartiallyDecodedInstruction',
+    });
 
 /**
  * Address Lookup Table program
  * @see https://github.com/solana-labs/solana/blob/7afb11f1e6daa3e9bd93cfe203211de5b14ba56a/transaction-status/src/parse_address_lookup_table.rs#L13
  */
-const parsedInstructionsAddressLookupTable = [
+const parsedInstructionsAddressLookupTable = () => [
     parsedTransactionInstructionType('CreateLookupTableInstruction', {
         bumpSeed: number(),
         lookupTableAccount: string(),
@@ -439,7 +448,7 @@ const parsedInstructionsAddressLookupTable = [
  * BPF Loader program
  * @see https://github.com/solana-labs/solana/blob/7afb11f1e6daa3e9bd93cfe203211de5b14ba56a/transaction-status/src/parse_bpf_loader.rs#L14
  */
-const parsedInstructionsBpfLoader = [
+const parsedInstructionsBpfLoader = () => [
     parsedTransactionInstructionType('BpfLoaderWriteInstruction', {
         account: string(),
         bytes: string(),
@@ -454,7 +463,7 @@ const parsedInstructionsBpfLoader = [
  * BPF Upgradeable Loader program
  * @see https://github.com/solana-labs/solana/blob/7afb11f1e6daa3e9bd93cfe203211de5b14ba56a/transaction-status/src/parse_bpf_loader.rs#L49
  */
-const parsedInstructionsBpfUpgradeableLoader = [
+const parsedInstructionsBpfUpgradeableLoader = () => [
     parsedTransactionInstructionType('BpfUpgradeableLoaderInitializeBufferInstruction', {
         account: string(),
     }),
@@ -512,7 +521,7 @@ const parsedInstructionsBpfUpgradeableLoader = [
  * SPL Associated Token Account program
  * @see https://github.com/solana-labs/solana/blob/1a2c0943db6519dc9519bfc74c2426332ba26850/transaction-status/src/parse_associated_token.rs#L17
  */
-const parsedInstructionsSplAssociatedToken = [
+const parsedInstructionsSplAssociatedToken = () => [
     parsedTransactionInstructionType('SplAssociatedTokenCreateInstruction', {
         account: string(),
         mint: string(),
@@ -544,21 +553,22 @@ const parsedInstructionsSplAssociatedToken = [
  * SPL Memo program
  * @see https://github.com/solana-labs/solana/blob/1a2c0943db6519dc9519bfc74c2426332ba26850/transaction-status/src/parse_instruction.rs#L146
  */
-const parsedInstructionSplMemo = new GraphQLObjectType({
-    fields: {
-        parsed: string(),
-        program: string(),
-        programId: string(),
-    },
-    interfaces: [parsedTransactionInstructionInterface],
-    name: 'SplMemoInstruction',
-});
+const parsedInstructionSplMemo = () =>
+    new GraphQLObjectType({
+        fields: {
+            parsed: string(),
+            program: string(),
+            programId: string(),
+        },
+        interfaces: [parsedTransactionInstructionInterface()],
+        name: 'SplMemoInstruction',
+    });
 
 /**
  * SPL Token program
  * @see https://github.com/solana-labs/solana/blob/d74de6780e2975472796a6a752b362152cd008a6/transaction-status/src/parse_token.rs#L29
  */
-const parsedInstructionsSplToken = [
+const parsedInstructionsSplToken = () => [
     parsedTransactionInstructionType('SplTokenInitializeMintInstruction', {
         decimals: number(),
         freezeAuthority: string(),
@@ -728,20 +738,21 @@ const parsedInstructionsSplToken = [
     // - MetadataPointerExtension
 ];
 
-const lockup = new GraphQLObjectType({
-    fields: {
-        custodian: string(),
-        epoch: bigint(),
-        unixTimestamp: bigint(),
-    },
-    name: 'Lockup',
-});
+const lockup = () =>
+    new GraphQLObjectType({
+        fields: {
+            custodian: string(),
+            epoch: bigint(),
+            unixTimestamp: bigint(),
+        },
+        name: 'Lockup',
+    });
 
 /**
  * Stake program
  * @see https://github.com/solana-labs/solana/blob/7afb11f1e6daa3e9bd93cfe203211de5b14ba56a/transaction-status/src/parse_stake.rs#L13
  */
-const parsedInstructionsStake = [
+const parsedInstructionsStake = () => [
     parsedTransactionInstructionType('StakeInitializeInstruction', {
         authorized: object('StakeInitializeInstructionAuthorized', {
             staker: string(),
@@ -791,7 +802,7 @@ const parsedInstructionsStake = [
     }),
     parsedTransactionInstructionType('StakeSetLockupInstruction', {
         custodian: string(),
-        lockup: type(lockup),
+        lockup: type(lockup()),
         stakeAccount: string(),
     }),
     parsedTransactionInstructionType('StakeMergeInstruction', {
@@ -837,7 +848,7 @@ const parsedInstructionsStake = [
     }),
     parsedTransactionInstructionType('StakeSetLockupCheckedInstruction', {
         custodian: string(),
-        lockup: type(lockup),
+        lockup: type(lockup()),
         stakeAccount: string(),
     }),
     parsedTransactionInstructionType('StakeDeactivateDelinquentInstruction', {
@@ -858,7 +869,7 @@ const parsedInstructionsStake = [
  * System program
  * @see https://github.com/solana-labs/solana/blob/d74de6780e2975472796a6a752b362152cd008a6/transaction-status/src/parse_system.rs#L13
  */
-const parsedInstructionsSystem = [
+const parsedInstructionsSystem = () => [
     parsedTransactionInstructionType('CreateAccountInstruction', {
         lamports: bigint(),
         newAccount: string(),
@@ -935,35 +946,37 @@ const parsedInstructionsSystem = [
     }),
 ];
 
-const vote = new GraphQLObjectType({
-    fields: {
-        hash: string(),
-        slots: list(bigint()),
-        timestamp: bigint(),
-    },
-    name: 'Vote',
-});
+const vote = () =>
+    new GraphQLObjectType({
+        fields: {
+            hash: string(),
+            slots: list(bigint()),
+            timestamp: bigint(),
+        },
+        name: 'Vote',
+    });
 
-const voteStateUpdate = new GraphQLObjectType({
-    fields: {
-        hash: string(),
-        lockouts: list(
-            object('VoteStateUpdateLockout', {
-                confirmationCount: number(),
-                slot: bigint(),
-            })
-        ),
-        root: bigint(),
-        timestamp: bigint(),
-    },
-    name: 'VoteStateUpdate',
-});
+const voteStateUpdate = () =>
+    new GraphQLObjectType({
+        fields: {
+            hash: string(),
+            lockouts: list(
+                object('VoteStateUpdateLockout', {
+                    confirmationCount: number(),
+                    slot: bigint(),
+                })
+            ),
+            root: bigint(),
+            timestamp: bigint(),
+        },
+        name: 'VoteStateUpdate',
+    });
 
 /**
  * Vote program
  * @see https://github.com/solana-labs/solana/blob/d74de6780e2975472796a6a752b362152cd008a6/transaction-status/src/parse_vote.rs#L12
  */
-const parsedInstructionsVote = [
+const parsedInstructionsVote = () => [
     parsedTransactionInstructionType('VoteInitializeAccountInstruction', {
         authorizedVoter: string(),
         authorizedWithdrawer: string(),
@@ -1001,7 +1014,7 @@ const parsedInstructionsVote = [
     parsedTransactionInstructionType('VoteVoteInstruction', {
         clockSysvar: string(),
         slotHashedSysvar: string(),
-        vote: type(vote),
+        vote: type(vote()),
         voteAccount: string(),
         voteAuthority: string(),
     }),
@@ -1009,25 +1022,25 @@ const parsedInstructionsVote = [
         hash: string(),
         voteAccount: string(),
         voteAuthority: string(),
-        voteStateUpdate: type(voteStateUpdate),
+        voteStateUpdate: type(voteStateUpdate()),
     }),
     parsedTransactionInstructionType('VoteUpdateVoteStateSwitchInstruction', {
         hash: string(),
         voteAccount: string(),
         voteAuthority: string(),
-        voteStateUpdate: type(voteStateUpdate),
+        voteStateUpdate: type(voteStateUpdate()),
     }),
     parsedTransactionInstructionType('VoteCompactUpdateVoteStateInstruction', {
         hash: string(),
         voteAccount: string(),
         voteAuthority: string(),
-        voteStateUpdate: type(voteStateUpdate),
+        voteStateUpdate: type(voteStateUpdate()),
     }),
     parsedTransactionInstructionType('VoteCompactUpdateVoteStateSwitchInstruction', {
         hash: string(),
         voteAccount: string(),
         voteAuthority: string(),
-        voteStateUpdate: type(voteStateUpdate),
+        voteStateUpdate: type(voteStateUpdate()),
     }),
     parsedTransactionInstructionType('VoteWithdrawInstruction', {
         destination: string(),
@@ -1049,7 +1062,7 @@ const parsedInstructionsVote = [
         clockSysvar: string(),
         hash: string(),
         slotHashesSysvar: string(),
-        vote: type(vote),
+        vote: type(vote()),
         voteAccount: string(),
         voteAuthority: string(),
     }),
@@ -1065,37 +1078,38 @@ const parsedInstructionsVote = [
 /**
  * The fields for the transaction meta interface
  */
-const transactionMetaInterfaceFields = {
+const transactionMetaInterfaceFields = () => ({
     computeUnitsConsumed: bigint(),
     err: string(),
     fee: bigint(),
     format: string(),
-    loadedAddresses: type(transactionMetaLoadedAddresses),
+    loadedAddresses: type(transactionMetaLoadedAddresses()),
     logMessages: list(string()),
     postBalances: list(bigint()),
-    postTokenBalances: list(type(tokenBalance)),
+    postTokenBalances: list(type(tokenBalance())),
     preBalances: list(bigint()),
-    preTokenBalances: list(type(tokenBalance)),
-    returnData: type(returnData),
-    rewards: list(type(reward)),
-    status: type(transactionStatus),
-};
+    preTokenBalances: list(type(tokenBalance())),
+    returnData: type(returnData()),
+    rewards: list(type(reward())),
+    status: type(transactionStatus()),
+});
 
 /**
  * Interface for a transaction meta
  */
-const transactionMetaInterface = new GraphQLInterfaceType({
-    fields: {
-        ...transactionMetaInterfaceFields,
-    },
-    name: 'TransactionMeta',
-    resolveType(meta) {
-        if (meta.format === 'parsed') {
-            return 'TransactionMetaParsed';
-        }
-        return 'TransactionMetaUnparsed';
-    },
-});
+const transactionMetaInterface = () =>
+    new GraphQLInterfaceType({
+        fields: {
+            ...transactionMetaInterfaceFields(),
+        },
+        name: 'TransactionMeta',
+        resolveType(meta) {
+            if (meta.format === 'parsed') {
+                return 'TransactionMetaParsed';
+            }
+            return 'TransactionMetaUnparsed';
+        },
+    });
 
 /**
  * Builds a transaction meta type
@@ -1112,45 +1126,47 @@ const transactionMetaType = (
     new GraphQLObjectType({
         description,
         fields: {
-            ...transactionMetaInterfaceFields,
+            ...transactionMetaInterfaceFields(),
             innerInstructions,
         },
-        interfaces: [transactionMetaInterface],
+        interfaces: [transactionMetaInterface()],
         name,
     });
 
-const transactionMetaUnparsed = transactionMetaType(
-    'TransactionMetaUnparsed',
-    'Non-parsed transaction meta',
-    list(
-        object('TransactionMetaInnerInstructionsUnparsed', {
-            index: number(),
-            instructions: list(
-                object('TransactionMetaInnerInstructionsUnparsedInstruction', {
-                    index: number(),
-                    instructions: list(type(transactionInstruction)),
-                })
-            ),
-        })
-    )
-);
+const transactionMetaUnparsed = () =>
+    transactionMetaType(
+        'TransactionMetaUnparsed',
+        'Non-parsed transaction meta',
+        list(
+            object('TransactionMetaInnerInstructionsUnparsed', {
+                index: number(),
+                instructions: list(
+                    object('TransactionMetaInnerInstructionsUnparsedInstruction', {
+                        index: number(),
+                        instructions: list(type(transactionInstruction())),
+                    })
+                ),
+            })
+        )
+    );
 
-const transactionMetaParsed = transactionMetaType(
-    'TransactionMetaParsed',
-    'Parsed transaction meta',
-    list(
-        object('TransactionMetaInnerInstructionsParsed', {
-            index: number(),
-            instructions: list(type(parsedTransactionInstructionInterface)),
-        })
-    )
-);
+const transactionMetaParsed = () =>
+    transactionMetaType(
+        'TransactionMetaParsed',
+        'Parsed transaction meta',
+        list(
+            object('TransactionMetaInnerInstructionsParsed', {
+                index: number(),
+                instructions: list(type(parsedTransactionInstructionInterface())),
+            })
+        )
+    );
 
 /**
  * The fields for the transaction message interface
  */
-const transactionMessageInterfaceFields = {
-    addressTableLookups: list(type(addressTableLookup)),
+const transactionMessageInterfaceFields = () => ({
+    addressTableLookups: list(type(addressTableLookup())),
     format: string(),
     header: object('TransactionJsonTransactionHeader', {
         numReadonlySignedAccounts: number(),
@@ -1158,23 +1174,24 @@ const transactionMessageInterfaceFields = {
         numRequiredSignatures: number(),
     }),
     recentBlockhash: string(),
-};
+});
 
 /**
  * Interface for a transaction message
  */
-const transactionMessageInterface = new GraphQLInterfaceType({
-    fields: {
-        ...transactionMessageInterfaceFields,
-    },
-    name: 'TransactionMessage',
-    resolveType(message) {
-        if (message.format === 'parsed') {
-            return 'TransactionMessageParsed';
-        }
-        return 'TransactionMessageUnparsed';
-    },
-});
+const transactionMessageInterface = () =>
+    new GraphQLInterfaceType({
+        fields: {
+            ...transactionMessageInterfaceFields(),
+        },
+        name: 'TransactionMessage',
+        resolveType(message) {
+            if (message.format === 'parsed') {
+                return 'TransactionMessageParsed';
+            }
+            return 'TransactionMessageUnparsed';
+        },
+    });
 
 /**
  * Builds a transaction message type
@@ -1193,77 +1210,81 @@ const transactionMessageType = (
     new GraphQLObjectType({
         description,
         fields: {
-            ...transactionMessageInterfaceFields,
+            ...transactionMessageInterfaceFields(),
             accountKeys,
             instructions,
         },
-        interfaces: [transactionMessageInterface],
+        interfaces: [transactionMessageInterface()],
         name,
     });
 
-const transactionMessageUnparsed = transactionMessageType(
-    'TransactionMessageUnparsed',
-    'Non-parsed transaction message',
-    list(string()),
-    list(type(transactionInstruction))
-);
+const transactionMessageUnparsed = () =>
+    transactionMessageType(
+        'TransactionMessageUnparsed',
+        'Non-parsed transaction message',
+        list(string()),
+        list(type(transactionInstruction()))
+    );
 
-const transactionMessageParsed = transactionMessageType(
-    'TransactionMessageParsed',
-    'Parsed transaction message',
-    list(
-        object('transactionMessageParsedAccountKey', {
-            pubkey: string(),
-            signer: boolean(),
-            source: string(),
-            writable: boolean(),
-        })
-    ),
-    list(type(parsedTransactionInstructionInterface))
-);
+const transactionMessageParsed = () =>
+    transactionMessageType(
+        'TransactionMessageParsed',
+        'Parsed transaction message',
+        list(
+            object('transactionMessageParsedAccountKey', {
+                pubkey: string(),
+                signer: boolean(),
+                source: string(),
+                writable: boolean(),
+            })
+        ),
+        list(type(parsedTransactionInstructionInterface()))
+    );
 
 /**
  * The standard transaction type, comprised of all the interfaces
  */
-const transactionTransaction = new GraphQLObjectType({
-    fields: {
-        message: type(transactionMessageInterface),
-        signatures: list(string()),
-    },
-    name: 'TransactionTransaction',
-});
+const transactionTransaction = () =>
+    new GraphQLObjectType({
+        fields: {
+            message: type(transactionMessageInterface()),
+            signatures: list(string()),
+        },
+        name: 'TransactionTransaction',
+    });
 
 /**
  * The fields for the transaction interface
  */
-const transactionInterfaceFields = {
+const transactionInterfaceFields = () => ({
     blockTime: bigint(),
     encoding: string(),
-    meta: type(transactionMetaInterface),
+    meta: type(transactionMetaInterface()),
     slot: bigint(),
-};
+});
 
 /**
  * Interface for a transaction
  */
-export const transactionInterface = new GraphQLInterfaceType({
-    fields: {
-        ...transactionInterfaceFields,
-    },
-    name: 'Transaction',
-    resolveType(transaction) {
-        if (transaction.encoding === 'base58') {
-            return 'TransactionBase58';
-        }
-        if (transaction.encoding === 'base64') {
-            return 'TransactionBase64';
-        }
-        if (transaction.encoding === 'json') {
-            return 'TransactionJson';
-        }
-        return 'TransactionJsonParsed';
-    },
-});
+export const transactionInterface = () =>
+    new GraphQLInterfaceType({
+        fields: {
+            ...transactionInterfaceFields(),
+        },
+        name: 'Transaction',
+        resolveType(transaction) {
+            if (transaction.encoding === 'base58') {
+                return 'TransactionBase58';
+            }
+            if (transaction.encoding === 'base64') {
+                return 'TransactionBase64';
+            }
+            if (transaction.encoding === 'json') {
+                return 'TransactionJson';
+            }
+            return 'TransactionJsonParsed';
+        },
+    });
 
 /**
  * Builds a transaction type
@@ -1280,46 +1301,46 @@ const transactionType = (
     new GraphQLObjectType({
         description,
         fields: {
-            ...transactionInterfaceFields,
+            ...transactionInterfaceFields(),
             transaction,
         },
-        interfaces: [transactionInterface],
+        interfaces: [transactionInterface()],
         name,
     });
 
-const transactionBase58 = transactionType('TransactionBase58', 'A Solana transaction as base58 encoded data', string());
+const transactionBase58 = () =>
+    transactionType('TransactionBase58', 'A Solana transaction as base58 encoded data', string());
 
-const transactionBase64 = transactionType('TransactionBase64', 'A Solana transaction as base64 encoded data', string());
+const transactionBase64 = () =>
+    transactionType('TransactionBase64', 'A Solana transaction as base64 encoded data', string());
 
-const transactionJson = transactionType(
-    'TransactionJson',
-    'A Solana transaction as a JSON object',
-    type(transactionTransaction)
-);
+const transactionJson = () =>
+    transactionType('TransactionJson', 'A Solana transaction as a JSON object', type(transactionTransaction()));
 
-const transactionJsonParsed = transactionType(
-    'TransactionJsonParsed',
-    'A Solana transaction as a parsed JSON object',
-    type(transactionTransaction)
-);
+const transactionJsonParsed = () =>
+    transactionType(
+        'TransactionJsonParsed',
+        'A Solana transaction as a parsed JSON object',
+        type(transactionTransaction())
+    );
 
-export const transactionTypes = [
-    partiallyDecodedTransactionInstruction,
-    ...parsedInstructionsAddressLookupTable,
-    ...parsedInstructionsBpfLoader,
-    ...parsedInstructionsBpfUpgradeableLoader,
-    ...parsedInstructionsStake,
-    ...parsedInstructionsSplAssociatedToken,
-    parsedInstructionSplMemo,
-    ...parsedInstructionsSplToken,
-    ...parsedInstructionsSystem,
-    ...parsedInstructionsVote,
-    transactionMetaUnparsed,
-    transactionMetaParsed,
-    transactionMessageUnparsed,
-    transactionMessageParsed,
-    transactionBase58,
-    transactionBase64,
-    transactionJson,
-    transactionJsonParsed,
+export const transactionTypes = () => [
+    partiallyDecodedTransactionInstruction(),
+    ...parsedInstructionsAddressLookupTable(),
+    ...parsedInstructionsBpfLoader(),
+    ...parsedInstructionsBpfUpgradeableLoader(),
+    ...parsedInstructionsStake(),
+    ...parsedInstructionsSplAssociatedToken(),
+    parsedInstructionSplMemo(),
+    ...parsedInstructionsSplToken(),
+    ...parsedInstructionsSystem(),
+    ...parsedInstructionsVote(),
+    transactionMetaUnparsed(),
+    transactionMetaParsed(),
+    transactionMessageUnparsed(),
+    transactionMessageParsed(),
+    transactionBase58(),
+    transactionBase64(),
+    transactionJson(),
+    transactionJsonParsed(),
 ];
