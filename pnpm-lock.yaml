@@ -1540,6 +1540,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
