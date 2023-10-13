@@ -24,6 +24,7 @@ import {
   tuple,
   unknown,
   any,
+  assign,
 } from 'superstruct';
 import type {Struct} from 'superstruct';
 import RpcClient from 'jayson/lib/client/browser';
@@ -991,9 +992,17 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
   }),
 );
 
+export type InstructionWithStackHeight =
+  | (ParsedInstruction & {
+      stackHeight?: number;
+    })
+  | (PartiallyDecodedInstruction & {
+      stackHeight?: number;
+    });
+
 export type ParsedInnerInstruction = {
   index: number;
-  instructions: (ParsedInstruction | PartiallyDecodedInstruction)[];
+  instructions: InstructionWithStackHeight[];
 };
 
 export type TokenBalance = {
@@ -2227,28 +2236,56 @@ const ParsedInstructionResult = pick({
   programId: PublicKeyFromString,
 });
 
+const OptionalStackHeight = pick({
+  stackHeight: optional(number()),
+});
+
+const ParsedInnerInstructionResult = assign(
+  ParsedInstructionResult,
+  OptionalStackHeight,
+);
+
 const RawInstructionResult = pick({
   accounts: array(PublicKeyFromString),
   data: string(),
   programId: PublicKeyFromString,
 });
 
+const RawInnerInstructionResult = assign(
+  ParsedInstructionResult,
+  OptionalStackHeight,
+);
+
 const InstructionResult = union([
   RawInstructionResult,
   ParsedInstructionResult,
 ]);
 
+const InnerInstructionResult = union([
+  RawInnerInstructionResult,
+  ParsedInnerInstructionResult,
+]);
+
+const UnknownParsedInstructionResult = pick({
+  parsed: unknown(),
+  program: string(),
+  programId: string(),
+});
+
+const UnknownRawInstructionResult = pick({
+  accounts: array(string()),
+  data: string(),
+  programId: string(),
+});
+
 const UnknownInstructionResult = union([
-  pick({
-    parsed: unknown(),
-    program: string(),
-    programId: string(),
-  }),
-  pick({
-    accounts: array(string()),
-    data: string(),
-    programId: string(),
-  }),
+  UnknownParsedInstructionResult,
+  UnknownRawInstructionResult,
+]);
+
+const UnknownInnerInstructionResult = union([
+  assign(UnknownParsedInstructionResult, OptionalStackHeight),
+  assign(UnknownRawInstructionResult, OptionalStackHeight),
 ]);
 
 const ParsedOrRawInstruction = coerce(
@@ -2259,6 +2296,18 @@ const ParsedOrRawInstruction = coerce(
       return create(value, RawInstructionResult);
     } else {
       return create(value, ParsedInstructionResult);
+    }
+  },
+);
+
+const ParsedOrRawInnerInstruction = coerce(
+  InnerInstructionResult,
+  UnknownInnerInstructionResult,
+  value => {
+    if ('accounts' in value) {
+      return create(value, RawInnerInstructionResult);
+    } else {
+      return create(value, ParsedInnerInstructionResult);
     }
   },
 );
@@ -2330,7 +2379,7 @@ const ParsedConfirmedTransactionMetaResult = pick({
       array(
         pick({
           index: number(),
-          instructions: array(ParsedOrRawInstruction),
+          instructions: array(ParsedOrRawInnerInstruction),
         }),
       ),
     ),
