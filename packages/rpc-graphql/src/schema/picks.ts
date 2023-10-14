@@ -26,15 +26,20 @@ type GraphQLType =
 export function boolean() {
     return { type: GraphQLBoolean };
 }
+
+let memoisedBigint: { type: GraphQLScalarType } | undefined;
 export function bigint() {
-    return { type: BigIntScalar() };
+    if (!memoisedBigint) memoisedBigint = { type: BigIntScalar() };
+    return memoisedBigint;
 }
+
 export function float() {
     return { type: GraphQLFloat };
 }
 export function number() {
     return { type: GraphQLInt };
 }
+
 export function string() {
     return { type: GraphQLString };
 }
