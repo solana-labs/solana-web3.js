@@ -23,11 +23,26 @@ type GraphQLType =
     | GraphQLScalarType
     | GraphQLUnionType;
 
-export const boolean = () => ({ type: GraphQLBoolean });
-export const bigint = () => ({ type: BigIntScalar });
-export const float = () => ({ type: GraphQLFloat });
-export const number = () => ({ type: GraphQLInt });
-export const string = () => ({ type: GraphQLString });
+export function boolean() {
+    return { type: GraphQLBoolean };
+}
+
+let memoisedBigint: { type: GraphQLScalarType } | undefined;
+export function bigint() {
+    if (!memoisedBigint) memoisedBigint = { type: BigIntScalar() };
+    return memoisedBigint;
+}
+
+export function float() {
+    return { type: GraphQLFloat };
+}
+export function number() {
+    return { type: GraphQLInt };
+}
+
+export function string() {
+    return { type: GraphQLString };
+}
 
 export function type<TFieldType extends GraphQLType>(
     fieldType: TFieldType

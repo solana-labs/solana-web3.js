@@ -18,16 +18,16 @@ export type AccountQueryArgs = {
 /**
  * Account root query for GraphQL
  */
-export const accountQuery = {
+export const accountQuery = () => ({
     account: {
         args: {
             address: nonNull(string()),
-            commitment: type(commitmentInputType),
-            dataSlice: type(dataSliceInputType),
-            encoding: type(accountEncodingInputType),
+            commitment: type(commitmentInputType()),
+            dataSlice: type(dataSliceInputType()),
+            encoding: type(accountEncodingInputType()),
             minContextSlot: bigint(),
         },
         resolve: (_parent: unknown, args: AccountQueryArgs, context: RpcGraphQLContext) => context.resolveAccount(args),
-        type: accountInterface,
+        type: accountInterface(),
     },
-};
+});

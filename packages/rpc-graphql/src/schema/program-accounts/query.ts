@@ -31,19 +31,19 @@ export type ProgramAccountsQueryArgs = {
 /**
  * Program accounts root query for GraphQL
  */
-export const programAccountsQuery = {
+export const programAccountsQuery = () => ({
     programAccounts: {
         args: {
-            commitment: type(commitmentInputType),
-            dataSlice: type(dataSliceInputType),
-            encoding: type(accountEncodingInputType),
-            filters: list(type(programAccountFilterInputType)),
+            commitment: type(commitmentInputType()),
+            dataSlice: type(dataSliceInputType()),
+            encoding: type(accountEncodingInputType()),
+            filters: list(type(programAccountFilterInputType())),
             minContextSlot: bigint(),
             programAddress: nonNull(string()),
             withContext: string(),
         },
         resolve: (_parent: unknown, args: ProgramAccountsQueryArgs, context: RpcGraphQLContext) =>
             context.resolveProgramAccounts(args),
-        type: new GraphQLList(programAccount),
+        type: new GraphQLList(programAccount()),
     },
-};
+});
