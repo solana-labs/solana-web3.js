@@ -1,7 +1,6 @@
-import { Serializer } from '@metaplex-foundation/umi-serializers';
+import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { TransactionVersion } from '../types';
-import { getUnimplementedDecoder, getUnimplementedEncoder } from './unimplemented';
 
 const VERSION_FLAG_MASK = 0x80;
 
@@ -11,7 +10,7 @@ const BASE_CONFIG = {
     maxSize: 1,
 } as const;
 
-function deserialize(bytes: Uint8Array, offset = 0): [TransactionVersion, number] {
+function decode(bytes: Uint8Array, offset = 0): [TransactionVersion, number] {
     const firstByte = bytes[offset];
     if ((firstByte & VERSION_FLAG_MASK) === 0) {
         // No version flag set; it's a legacy (unversioned) transaction.
@@ -22,7 +21,7 @@ function deserialize(bytes: Uint8Array, offset = 0): [TransactionVersion, number
     }
 }
 
-function serialize(value: TransactionVersion): Uint8Array {
+function encode(value: TransactionVersion): Uint8Array {
     if (value === 'legacy') {
         return new Uint8Array();
     }
@@ -33,26 +32,20 @@ function serialize(value: TransactionVersion): Uint8Array {
     return new Uint8Array([value | VERSION_FLAG_MASK]);
 }
 
-export function getTransactionVersionDecoder(): Serializer<TransactionVersion> {
+export function getTransactionVersionDecoder(): Decoder<TransactionVersion> {
     return {
         ...BASE_CONFIG,
-        deserialize,
-        serialize: getUnimplementedEncoder('TransactionVersion'),
+        decode,
     };
 }
 
-export function getTransactionVersionEncoder(): Serializer<TransactionVersion> {
+export function getTransactionVersionEncoder(): Encoder<TransactionVersion> {
     return {
         ...BASE_CONFIG,
-        deserialize: getUnimplementedDecoder('TransactionVersion'),
-        serialize,
+        encode,
     };
 }
 
-export function getTransactionVersionCodec(): Serializer<TransactionVersion> {
-    return {
-        ...BASE_CONFIG,
-        deserialize,
-        serialize,
-    };
+export function getTransactionVersionCodec(): Codec<TransactionVersion> {
+    return combineCodec(getTransactionVersionEncoder(), getTransactionVersionDecoder());
 }

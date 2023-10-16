@@ -11,7 +11,7 @@ import {
 import { Base58EncodedAddress, getAddressCodec } from '@solana/addresses';
 
 import { CompiledMessage } from '../message';
-import { SerializedMessageBytes } from '../types';
+import { SerializedMessageBytes, TransactionVersion } from '../types';
 import { getAddressTableLookupCodec } from './address-table-lookup';
 import { getMessageHeaderCodec } from './header';
 import { getInstructionCodec } from './instruction';
@@ -77,9 +77,21 @@ function addressSerializerCompat(): Serializer<Base58EncodedAddress> {
     };
 }
 
+// Temporary, will use getTransactionVersionCodec directly when everything else is migrated
+function transactionVersionSerializerCompat(): Serializer<TransactionVersion> {
+    const codec = getTransactionVersionCodec();
+    return {
+        description: codec.description,
+        deserialize: codec.decode,
+        fixedSize: codec.fixedSize,
+        maxSize: codec.maxSize,
+        serialize: codec.encode,
+    };
+}
+
 function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMessage, CompiledMessage> {
     return [
-        ['version', getTransactionVersionCodec()],
+        ['version', transactionVersionSerializerCompat()],
         ['header', getMessageHeaderCodec()],
         [
             'staticAccounts',
