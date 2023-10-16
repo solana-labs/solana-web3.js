@@ -1,16 +1,28 @@
 import { array, Serializer, shortU16, struct, StructToSerializerTuple, u8 } from '@metaplex-foundation/umi-serializers';
-import { getAddressCodec } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressCodec } from '@solana/addresses';
 
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 
 type AddressTableLookup = ReturnType<typeof getCompiledAddressTableLookups>[number];
+
+// Temporary, will use getAddressCodec directly when everything else is migrated
+function addressSerializerCompat(compat?: { description: string }): Serializer<Base58EncodedAddress> {
+    const codec = getAddressCodec();
+    return {
+        description: compat?.description ?? codec.description,
+        deserialize: codec.decode,
+        fixedSize: codec.fixedSize,
+        maxSize: codec.maxSize,
+        serialize: codec.encode,
+    };
+}
 
 export function getAddressTableLookupCodec(): Serializer<AddressTableLookup> {
     return struct(
         [
             [
                 'lookupTableAddress',
-                getAddressCodec(
+                addressSerializerCompat(
                     __DEV__
                         ? {
                               description:

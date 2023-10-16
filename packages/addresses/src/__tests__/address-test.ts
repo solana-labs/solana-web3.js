@@ -1,71 +1,123 @@
-import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Encoder } from '@solana/codecs-core';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
-import { assertIsAddress, Base58EncodedAddress, getAddressCodec, getAddressComparator } from '../address';
+import { Base58EncodedAddress, getAddressCodec, getAddressComparator } from '../address';
+
+jest.mock('@solana/codecs-strings', () => ({
+    ...jest.requireActual('@solana/codecs-strings'),
+    getBase58Decoder: jest.fn(),
+    getBase58Encoder: jest.fn(),
+}));
+
+// real implementations
+const originalBase58Module = jest.requireActual('@solana/codecs-strings');
+const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
+const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
 describe('Base58EncodedAddress', () => {
     describe('assertIsAddress()', () => {
-        it('throws when supplied a non-base58 string', () => {
-            expect(() => {
-                assertIsAddress('not-a-base-58-encoded-string');
-            }).toThrow();
-        });
-        it('throws when the decoded byte array has a length other than 32 bytes', () => {
-            expect(() => {
-                assertIsAddress(
-                    // 31 bytes [128, ..., 128]
-                    '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM'
-                );
-            }).toThrow();
-        });
-        it('does not throw when supplied a base-58 encoded address', () => {
-            expect(() => {
-                assertIsAddress('11111111111111111111111111111111');
-            }).not.toThrow();
-        });
-        it('returns undefined when supplied a base-58 encoded address', () => {
-            expect(assertIsAddress('11111111111111111111111111111111')).toBeUndefined();
-        });
-        [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {
-            it(`attempts to decode input strings of exactly ${len} characters`, () => {
-                const decodeMethod = jest.spyOn(base58, 'serialize');
-                try {
-                    assertIsAddress('1'.repeat(len));
-                    // eslint-disable-next-line no-empty
-                } catch {}
-                expect(decodeMethod).toHaveBeenCalled();
+        let assertIsAddress: typeof import('../address').assertIsAddress;
+        // Reload `assertIsAddress` before each test to reset memoized state
+        beforeEach(async () => {
+            await jest.isolateModulesAsync(async () => {
+                const base58ModulePromise =
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    import('../address');
+                assertIsAddress = (await base58ModulePromise).assertIsAddress;
             });
         });
-        it('does not attempt to decode too-short input strings', () => {
-            const decodeMethod = jest.spyOn(base58, 'serialize');
-            try {
-                assertIsAddress(
-                    // 31 bytes [0, ..., 0]
-                    '1111111111111111111111111111111' // 31 characters
-                );
-                // eslint-disable-next-line no-empty
-            } catch {}
-            expect(decodeMethod).not.toHaveBeenCalled();
+
+        describe('using the real base58 implementation', () => {
+            beforeEach(() => {
+                // use real implementation
+                jest.mocked(getBase58Encoder).mockReturnValue(originalGetBase58Encoder);
+            });
+            it('throws when supplied a non-base58 string', () => {
+                expect(() => {
+                    assertIsAddress('not-a-base-58-encoded-string');
+                }).toThrow();
+            });
+            it('throws when the decoded byte array has a length other than 32 bytes', () => {
+                expect(() => {
+                    assertIsAddress(
+                        // 31 bytes [128, ..., 128]
+                        '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM'
+                    );
+                }).toThrow();
+            });
+            it('does not throw when supplied a base-58 encoded address', () => {
+                expect(() => {
+                    assertIsAddress('11111111111111111111111111111111');
+                }).not.toThrow();
+            });
+            it('returns undefined when supplied a base-58 encoded address', () => {
+                expect(assertIsAddress('11111111111111111111111111111111')).toBeUndefined();
+            });
         });
-        it('does not attempt to decode too-long input strings', () => {
-            const decodeMethod = jest.spyOn(base58, 'serialize');
-            try {
-                assertIsAddress(
-                    // 33 bytes [0, 255, ..., 255]
-                    '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG' // 45 characters
-                );
-                // eslint-disable-next-line no-empty
-            } catch {}
-            expect(decodeMethod).not.toHaveBeenCalled();
+        describe('using a mock base58 implementation', () => {
+            const mockEncode = jest.fn();
+            beforeEach(() => {
+                // use mock implementation
+                mockEncode.mockClear();
+                jest.mocked(getBase58Encoder).mockReturnValue({ encode: mockEncode } as unknown as Encoder<string>);
+            });
+
+            [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {
+                it(`attempts to encode input strings of exactly ${len} characters`, () => {
+                    try {
+                        assertIsAddress('1'.repeat(len));
+                        // eslint-disable-next-line no-empty
+                    } catch {}
+                    expect(mockEncode).toHaveBeenCalled();
+                });
+            });
+            it('does not attempt to decode too-short input strings', () => {
+                try {
+                    assertIsAddress(
+                        // 31 bytes [0, ..., 0]
+                        '1111111111111111111111111111111' // 31 characters
+                    );
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(mockEncode).not.toHaveBeenCalled();
+            });
+            it('does not attempt to decode too-long input strings', () => {
+                try {
+                    assertIsAddress(
+                        // 33 bytes [0, 255, ..., 255]
+                        '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG' // 45 characters
+                    );
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(mockEncode).not.toHaveBeenCalled();
+            });
+            it('memoizes getBase58Encoder when called multiple times', () => {
+                try {
+                    assertIsAddress('1'.repeat(32));
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                try {
+                    assertIsAddress('1'.repeat(32));
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
+            });
         });
     });
+
     describe('getAddressCodec', () => {
         let address: ReturnType<typeof getAddressCodec>;
         beforeEach(() => {
+            // use real implementations
+            jest.mocked(getBase58Encoder).mockReturnValue(originalGetBase58Encoder);
+            jest.mocked(getBase58Decoder).mockReturnValue(originalGetBase58Decoder);
+
             address = getAddressCodec();
         });
         it('serializes a base58 encoded address into a 32-byte buffer', () => {
             expect(
-                address.serialize(
+                address.encode(
                     '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
                 )
             ).toEqual(
@@ -77,7 +129,7 @@ describe('Base58EncodedAddress', () => {
         });
         it('deserializes a byte buffer representing an address into a base58 encoded address', () => {
             expect(
-                address.deserialize(
+                address.decode(
                     new Uint8Array([
                         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
                         27, 28, 29, 30, 31, 32,
@@ -91,9 +143,36 @@ describe('Base58EncodedAddress', () => {
         });
         it('fatals when trying to deserialize a byte buffer shorter than 32-bytes', () => {
             const tooShortBuffer = new Uint8Array(Array(31).fill(0));
-            expect(() => address.deserialize(tooShortBuffer)).toThrow();
+            expect(() => address.decode(tooShortBuffer)).toThrow();
+        });
+        it('memoizes getBase58Encoder and getBase58Decoder when called multiple times', async () => {
+            expect.assertions(2);
+
+            // reload the module to reset memoized state
+            let getAddressCodec: typeof import('../address').getAddressCodec;
+            await jest.isolateModulesAsync(async () => {
+                const base58ModulePromise =
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    import('../address');
+                getAddressCodec = (await base58ModulePromise).getAddressCodec;
+            });
+
+            address = getAddressCodec!();
+            address.encode(
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+            );
+
+            address = getAddressCodec!();
+            address.encode(
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+            );
+
+            expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
+            expect(jest.mocked(getBase58Decoder)).toHaveBeenCalledTimes(1);
         });
     });
+
     describe('getAddressComparator', () => {
         it('sorts base 58 addresses', () => {
             expect(

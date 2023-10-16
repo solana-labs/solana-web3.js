@@ -162,7 +162,7 @@ describe('signTransaction', () => {
             }
         });
         (getAddressCodec as jest.Mock).mockReturnValue({
-            serialize: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
         });
         (signBytes as jest.Mock).mockImplementation(async secretKey => {
             switch (secretKey) {

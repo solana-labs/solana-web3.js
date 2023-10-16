@@ -8,7 +8,7 @@ import {
     struct,
     StructToSerializerTuple,
 } from '@metaplex-foundation/umi-serializers';
-import { getAddressCodec } from '@solana/addresses';
+import { Base58EncodedAddress, getAddressCodec } from '@solana/addresses';
 
 import { CompiledMessage } from '../message';
 import { SerializedMessageBytes } from '../types';
@@ -65,13 +65,25 @@ function serialize(compiledMessage: CompiledMessage): SerializedMessageBytes {
     }
 }
 
+// Temporary, will use getAddressCodec directly when everything else is migrated
+function addressSerializerCompat(): Serializer<Base58EncodedAddress> {
+    const codec = getAddressCodec();
+    return {
+        description: codec.description,
+        deserialize: codec.decode,
+        fixedSize: codec.fixedSize,
+        maxSize: codec.maxSize,
+        serialize: codec.encode,
+    };
+}
+
 function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMessage, CompiledMessage> {
     return [
         ['version', getTransactionVersionCodec()],
         ['header', getMessageHeaderCodec()],
         [
             'staticAccounts',
-            array(getAddressCodec(), {
+            array(addressSerializerCompat(), {
                 description: __DEV__ ? 'A compact-array of static account addresses belonging to this transaction' : '',
                 size: shortU16(),
             }),
