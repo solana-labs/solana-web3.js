@@ -290,7 +290,7 @@ export class AddressLookupTableProgram {
       },
       {
         pubkey: params.authority,
-        isSigner: true,
+        isSigner: false,
         isWritable: false,
       },
       {
