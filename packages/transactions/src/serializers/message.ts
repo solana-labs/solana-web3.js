@@ -8,10 +8,11 @@ import {
     struct,
     StructToSerializerTuple,
 } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress, getAddressCodec } from '@solana/addresses';
+import { getAddressCodec } from '@solana/addresses';
+import { Codec } from '@solana/codecs-core';
 
 import { CompiledMessage } from '../message';
-import { SerializedMessageBytes, TransactionVersion } from '../types';
+import { SerializedMessageBytes } from '../types';
 import { getAddressTableLookupCodec } from './address-table-lookup';
 import { getMessageHeaderCodec } from './header';
 import { getInstructionCodec } from './instruction';
@@ -65,21 +66,8 @@ function serialize(compiledMessage: CompiledMessage): SerializedMessageBytes {
     }
 }
 
-// Temporary, will use getAddressCodec directly when everything else is migrated
-function addressSerializerCompat(): Serializer<Base58EncodedAddress> {
-    const codec = getAddressCodec();
-    return {
-        description: codec.description,
-        deserialize: codec.decode,
-        fixedSize: codec.fixedSize,
-        maxSize: codec.maxSize,
-        serialize: codec.encode,
-    };
-}
-
-// Temporary, will use getTransactionVersionCodec directly when everything else is migrated
-function transactionVersionSerializerCompat(): Serializer<TransactionVersion> {
-    const codec = getTransactionVersionCodec();
+// Temporary, convert a codec to a serializer for compatiblity for now
+function toSerializer<T>(codec: Codec<T>): Serializer<T> {
     return {
         description: codec.description,
         deserialize: codec.decode,
@@ -91,11 +79,11 @@ function transactionVersionSerializerCompat(): Serializer<TransactionVersion> {
 
 function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMessage, CompiledMessage> {
     return [
-        ['version', transactionVersionSerializerCompat()],
-        ['header', getMessageHeaderCodec()],
+        ['version', toSerializer(getTransactionVersionCodec())],
+        ['header', toSerializer(getMessageHeaderCodec())],
         [
             'staticAccounts',
-            array(addressSerializerCompat(), {
+            array(toSerializer(getAddressCodec()), {
                 description: __DEV__ ? 'A compact-array of static account addresses belonging to this transaction' : '',
                 size: shortU16(),
             }),
