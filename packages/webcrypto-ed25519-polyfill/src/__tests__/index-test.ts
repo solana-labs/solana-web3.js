@@ -1,4 +1,11 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from '../secrets';
+import {
+    exportKeyPolyfill,
+    generateKeyPolyfill,
+    isPolyfilledKey,
+    signPolyfill,
+    verifyPolyfill,
+    importKeyPolyfill,
+} from '../secrets';
 
 jest.mock('../secrets');
 
@@ -461,5 +468,22 @@ describe('verify() polyfill', () => {
                 expect(globalThis.crypto.subtle.verify).not.toBe(originalVerify);
             });
         }
+    });
+});
+
+describe('importKey() polyfill', () => {
+    let originalImportKey: SubtleCrypto['importKey'];
+    beforeEach(() => {
+        jest.spyOn(globalThis.crypto?.subtle, 'importKey');
+        originalImportKey = globalThis.crypto?.subtle?.importKey;
+    });
+    afterEach(() => {
+        globalThis.crypto.subtle.importKey = originalImportKey;
+    });
+    describe('when imported', () => {
+        // TODO
+        it('is a test', () => {
+            expect(typeof importKeyPolyfill).toBe('function');
+        });
     });
 });
