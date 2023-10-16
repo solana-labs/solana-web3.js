@@ -1,12 +1,39 @@
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
 
-type SlotsUpdatesNotificationsApiNotification = Readonly<{
-    // Only present for 'createdBank' and notifications
-    parent?: Slot;
+type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     slot: Slot;
     timestamp: U64UnsafeBeyond2Pow53Minus1;
-    type: 'completed' | 'createdBank' | 'dead' | 'firstShredReceived' | 'frozen' | 'optimisticConfirmation' | 'root';
+    type: 'completed' | 'firstShredReceived' | 'optimisticConfirmation' | 'root';
 }>;
+
+type SlotsUpdatesNotificationsApiNotificationCreatedBank = SlotsUpdatesNotificationsApiNotificationBase &
+    Readonly<{
+        parent: Slot;
+        type: 'createdBank';
+    }>;
+
+type SlotsUpdatesNotificationsApiNotificationDead = SlotsUpdatesNotificationsApiNotificationBase &
+    Readonly<{
+        err: string;
+        type: 'dead';
+    }>;
+
+type SlotsUpdatesNotificationsApiNotificationFrozen = SlotsUpdatesNotificationsApiNotificationBase &
+    Readonly<{
+        stats: Readonly<{
+            maxTransactionsPerEntry: U64UnsafeBeyond2Pow53Minus1;
+            numFailedTransactions: U64UnsafeBeyond2Pow53Minus1;
+            numSuccessfulTransactions: U64UnsafeBeyond2Pow53Minus1;
+            numTransactionEntries: U64UnsafeBeyond2Pow53Minus1;
+        }>;
+        type: 'frozen';
+    }>;
+
+type SlotsUpdatesNotificationsApiNotification =
+    | SlotsUpdatesNotificationsApiNotificationBase
+    | SlotsUpdatesNotificationsApiNotificationCreatedBank
+    | SlotsUpdatesNotificationsApiNotificationDead
+    | SlotsUpdatesNotificationsApiNotificationFrozen;
 
 export interface SlotsUpdatesNotificationsApi {
     /**
