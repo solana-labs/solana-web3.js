@@ -101,7 +101,7 @@ function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMess
         ],
         [
             'instructions',
-            array(getInstructionCodec(), {
+            array(toSerializer(getInstructionCodec()), {
                 description: __DEV__ ? 'A compact-array of instructions belonging to this transaction' : '',
                 size: shortU16(),
             }),
