@@ -1,3 +1,4 @@
+import { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
 import type { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import type { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
@@ -7,7 +8,6 @@ import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/jso
 import {
     getSignatureFromTransaction,
     IDurableNonceTransaction,
-    ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
     ITransactionWithSignatures,
 } from '@solana/transactions';
@@ -35,7 +35,13 @@ interface WaitForDurableNonceTransactionConfirmationConfig extends BaseTransacti
 interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
     extends BaseTransactionConfirmationStrategyConfig {
     getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
-    transaction: ITransactionWithFeePayer & ITransactionWithSignatures & ITransactionWithBlockhashLifetime;
+    transaction: ITransactionWithFeePayer &
+        ITransactionWithSignatures &
+        Readonly<{
+            lifetimeConstraint: {
+                lastValidBlockHeight: Slot;
+            };
+        }>;
 }
 
 export function createDefaultDurableNonceTransactionConfirmer({
