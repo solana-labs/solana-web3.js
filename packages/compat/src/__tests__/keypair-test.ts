@@ -2,10 +2,10 @@ import { Keypair } from '@solana/web3.js';
 
 import { fromLegacyKeypair } from '../keypair';
 
-describe('keypair', () => {
+describe('fromLegacyKeypair', () => {
     const legacyKeypair = Keypair.generate();
-    let keyPair: CryptoKeyPair;
     describe.each(['public', 'private'])('%s key', type => {
+        let keyPair: CryptoKeyPair;
         beforeEach(async () => {
             keyPair = await fromLegacyKeypair(legacyKeypair);
         });
@@ -20,9 +20,10 @@ describe('keypair', () => {
         });
     });
     it.each([true, false])(
-        "sets the private key's `extractable` to `%s` when generating a key pair with the extractability `%s`",
+        "sets the private key's `extractable` accordingly when generating a key pair with the extractability `%s`",
         async extractable => {
-            expect.assertions(1), (keyPair = await fromLegacyKeypair(legacyKeypair, extractable));
+            expect.assertions(1);
+            const keyPair = await fromLegacyKeypair(legacyKeypair, extractable);
             expect(keyPair.privateKey).toHaveProperty('extractable', extractable);
         }
     );
