@@ -68,7 +68,7 @@ describe('generateKeyPolyfill', () => {
         });
     });
     it.each([true, false])(
-        "sets the private key's `extractable` to `false` when generating a key pair with the extractability `%s`",
+        "sets the private key's `extractable` accordingly when generating a key pair with the extractability `%s`",
         extractable => {
             const { privateKey } = generateKeyPolyfill(extractable, ['sign', 'verify']);
             expect(privateKey).toHaveProperty('extractable', extractable);
