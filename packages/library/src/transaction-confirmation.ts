@@ -83,7 +83,7 @@ export function createDefaultDurableNonceTransactionConfirmer({
         rpc,
         rpcSubscriptions
     );
-    return async function confirmTransaction(
+    return async function confirmDurableNonceTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
