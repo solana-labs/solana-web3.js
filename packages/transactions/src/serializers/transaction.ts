@@ -1,4 +1,5 @@
 import { array, bytes, Serializer, shortU16, struct } from '@metaplex-foundation/umi-serializers';
+import { Encoder } from '@solana/codecs-core';
 
 import { getCompiledTransaction } from '../compile-transaction';
 import { getCompiledMessageEncoder } from './message';
@@ -12,6 +13,17 @@ const BASE_CONFIG = {
 
 type SerializableTransaction = Parameters<typeof getCompiledTransaction>[0];
 
+// Temporary, convert a codec to a serializer for compatiblity for now
+function toSerializer<T>(encoder: Encoder<T>): Serializer<T> {
+    return {
+        description: encoder.description,
+        deserialize: getUnimplementedDecoder(encoder.description),
+        fixedSize: encoder.fixedSize,
+        maxSize: encoder.maxSize,
+        serialize: encoder.encode,
+    };
+}
+
 function serialize(transaction: SerializableTransaction) {
     const compiledTransaction = getCompiledTransaction(transaction);
     return struct([
@@ -22,7 +34,7 @@ function serialize(transaction: SerializableTransaction) {
                 size: shortU16(),
             }),
         ],
-        ['compiledMessage', getCompiledMessageEncoder()],
+        ['compiledMessage', toSerializer(getCompiledMessageEncoder())],
     ]).serialize(compiledTransaction);
 }
 

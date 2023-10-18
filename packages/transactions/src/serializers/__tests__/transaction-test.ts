@@ -31,7 +31,7 @@ describe('Transaction serializer', () => {
         } as CompiledMessage;
         mockCompiledWireMessage = new Uint8Array([1, 2, 3]);
         (getCompiledMessageEncoder as jest.Mock).mockReturnValue({
-            serialize: jest.fn().mockReturnValue(mockCompiledWireMessage),
+            encode: jest.fn().mockReturnValue(mockCompiledWireMessage),
         });
         (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
         transaction = getTransactionEncoder();
