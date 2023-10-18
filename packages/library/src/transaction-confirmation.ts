@@ -16,6 +16,7 @@ import {
 import { createBlockHeightExceedencePromiseFactory } from './transaction-confirmation-strategy-blockheight';
 import { createNonceInvalidationPromiseFactory } from './transaction-confirmation-strategy-nonce';
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
+import { getTimeoutPromise } from './transaction-confirmation-strategy-timeout';
 
 interface BaseConfig {
     abortSignal: AbortSignal;
@@ -34,6 +35,11 @@ interface DefaultRecentTransactionConfirmerConfig {
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
 }
 
+interface DefaultSignatureOnlyRecentTransactionConfirmerConfig {
+    rpc: Rpc<GetSignatureStatusesApi>;
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>;
+}
+
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseConfig {
     getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures & IDurableNonceTransaction;
@@ -42,6 +48,11 @@ interface WaitForDurableNonceTransactionConfirmationConfig extends BaseConfig {
 interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig extends BaseConfig {
     getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures & ITransactionWithBlockhashLifetime;
+}
+
+interface WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig extends BaseConfig {
+    getTimeoutPromise: typeof getTimeoutPromise;
+    timeoutMs?: number;
 }
 
 async function raceStrategies<TConfig extends BaseConfig>(
@@ -108,14 +119,36 @@ export function createDefaultRecentTransactionConfirmer({
     );
     return async function confirmRecentTransaction(
         config: Omit<
-            Parameters<typeof waitForRecentTransactionConfirmation>[0],
+            Parameters<typeof waitForRecentTransactionConfirmationUntilBlockheight>[0],
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >
     ) {
-        await waitForRecentTransactionConfirmation({
+        await waitForRecentTransactionConfirmationUntilBlockheight({
             ...config,
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
+        });
+    };
+}
+
+export async function createDefaultSignatureOnlyRecentTransactionConfirmer({
+    rpc,
+    rpcSubscriptions,
+}: DefaultSignatureOnlyRecentTransactionConfirmerConfig) {
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+        rpc,
+        rpcSubscriptions
+    );
+    return async function confirmSignatureOnlyRecentTransaction(
+        config: Omit<
+            Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],
+            'getRecentSignatureConfirmationPromise'
+        >
+    ) {
+        await waitForRecentTransactionConfirmationUntilTimeout({
+            ...config,
+            getRecentSignatureConfirmationPromise,
+            getTimeoutPromise,
         });
     };
 }
@@ -138,7 +171,7 @@ export async function waitForDurableNonceTransactionConfirmation(
     );
 }
 
-export async function waitForRecentTransactionConfirmation(
+export async function waitForRecentTransactionConfirmationUntilBlockheight(
     config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
 ): Promise<void> {
     await raceStrategies(
@@ -148,6 +181,22 @@ export async function waitForRecentTransactionConfirmation(
                 getBlockHeightExceedencePromise({
                     abortSignal,
                     lastValidBlockHeight: transaction.lifetimeConstraint.lastValidBlockHeight,
+                }),
+            ];
+        }
+    );
+}
+
+export async function waitForRecentTransactionConfirmationUntilTimeout(
+    config: WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig
+): Promise<void> {
+    await raceStrategies(
+        config,
+        function getSpecificStrategiesForRace({ abortSignal, commitment, getTimeoutPromise, timeoutMs }) {
+            return [
+                getTimeoutPromise({
+                    abortSignal,
+                    timeoutMs: timeoutMs ?? (commitment === 'processed' ? 30_000 : 60_000),
                 }),
             ];
         }
