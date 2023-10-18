@@ -5,7 +5,7 @@ import { Blockhash, IDurableNonceTransaction, Nonce } from '@solana/transactions
 
 import {
     waitForDurableNonceTransactionConfirmation,
-    waitForTransactionConfirmation,
+    waitForRecentTransactionConfirmation,
 } from '../transaction-confirmation';
 
 const FOREVER_PROMISE = new Promise(() => {
@@ -41,10 +41,10 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         } as const,
     } as const;
     let getNonceInvalidationPromise: jest.Mock<Promise<void>>;
-    let getSignatureConfirmationPromise: jest.Mock<Promise<void>>;
+    let getRecentSignatureConfirmationPromise: jest.Mock<Promise<void>>;
     beforeEach(() => {
         getNonceInvalidationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
-        getSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
+        getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
     });
     it('throws when the signal is already aborted', async () => {
         expect.assertions(1);
@@ -54,7 +54,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('aborted');
@@ -65,7 +65,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         expect(getNonceInvalidationPromise).toHaveBeenCalledWith({
@@ -87,16 +87,16 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         abortController.abort();
         expect(handleAbortOnBlockHeightExceedencePromise).toHaveBeenCalled();
     });
-    it('calls the abort signal passed to `getSignatureConfirmationPromise` when aborted', async () => {
+    it('calls the abort signal passed to `getRecentSignatureConfirmationPromise` when aborted', async () => {
         expect.assertions(1);
         const handleAbortOnSignatureConfirmationPromise = jest.fn();
-        getSignatureConfirmationPromise.mockImplementation(async ({ abortSignal }) => {
+        getRecentSignatureConfirmationPromise.mockImplementation(async ({ abortSignal }) => {
             abortSignal.addEventListener('abort', handleAbortOnSignatureConfirmationPromise);
             await FOREVER_PROMISE;
         });
@@ -105,22 +105,22 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         abortController.abort();
         expect(handleAbortOnSignatureConfirmationPromise).toHaveBeenCalled();
     });
-    it('calls `getSignatureConfirmationPromise` with the necessary input', async () => {
+    it('calls `getRecentSignatureConfirmationPromise` with the necessary input', async () => {
         expect.assertions(1);
         waitForDurableNonceTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
-        expect(getSignatureConfirmationPromise).toHaveBeenCalledWith({
+        expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
             signature: '4'.repeat(44),
@@ -139,7 +139,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
@@ -150,12 +150,12 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
         expect.assertions(1);
         getNonceInvalidationPromise.mockRejectedValue(new Error('o no'));
-        getSignatureConfirmationPromise.mockResolvedValue(undefined);
+        getRecentSignatureConfirmationPromise.mockResolvedValue(undefined);
         const commitmentPromise = waitForDurableNonceTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         await expect(commitmentPromise).resolves.toBeUndefined();
@@ -167,26 +167,26 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('o no');
     });
     it('throws when the signature confirmation promise throws', async () => {
         expect.assertions(1);
-        getSignatureConfirmationPromise.mockRejectedValue(new Error('o no'));
+        getRecentSignatureConfirmationPromise.mockRejectedValue(new Error('o no'));
         const commitmentPromise = waitForDurableNonceTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('o no');
     });
 });
 
-describe('waitForTransactionConfirmation', () => {
+describe('waitForRecentTransactionConfirmation', () => {
     const MOCK_TRANSACTION = {
         feePayer: '9'.repeat(44) as Base58EncodedAddress,
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
@@ -195,31 +195,31 @@ describe('waitForTransactionConfirmation', () => {
         } as const,
     } as const;
     let getBlockHeightExceedencePromise: jest.Mock<Promise<void>>;
-    let getSignatureConfirmationPromise: jest.Mock<Promise<void>>;
+    let getRecentSignatureConfirmationPromise: jest.Mock<Promise<void>>;
     beforeEach(() => {
         getBlockHeightExceedencePromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
-        getSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
+        getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
     });
     it('throws when the signal is already aborted', async () => {
         expect.assertions(1);
         const abortController = new AbortController();
         abortController.abort();
-        const commitmentPromise = waitForTransactionConfirmation({
+        const commitmentPromise = waitForRecentTransactionConfirmation({
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('aborted');
     });
     it('calls `getBlockHeightExceededPromise` with the necessary input', async () => {
         expect.assertions(1);
-        waitForTransactionConfirmation({
+        waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         expect(getBlockHeightExceedencePromise).toHaveBeenCalledWith({
@@ -227,16 +227,16 @@ describe('waitForTransactionConfirmation', () => {
             lastValidBlockHeight: MOCK_TRANSACTION.lifetimeConstraint.lastValidBlockHeight,
         });
     });
-    it('calls `getSignatureConfirmationPromise` with the necessary input', async () => {
+    it('calls `getRecentSignatureConfirmationPromise` with the necessary input', async () => {
         expect.assertions(1);
-        waitForTransactionConfirmation({
+        waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
-        expect(getSignatureConfirmationPromise).toHaveBeenCalledWith({
+        expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
             signature: '4'.repeat(44),
@@ -251,11 +251,11 @@ describe('waitForTransactionConfirmation', () => {
                 ['456' as Base58EncodedAddress]: '4'.repeat(44) as unknown as Ed25519Signature,
             } as const,
         };
-        const commitmentPromise = waitForTransactionConfirmation({
+        const commitmentPromise = waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
@@ -266,12 +266,12 @@ describe('waitForTransactionConfirmation', () => {
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
         expect.assertions(1);
         getBlockHeightExceedencePromise.mockRejectedValue(new Error('o no'));
-        getSignatureConfirmationPromise.mockResolvedValue(undefined);
-        const commitmentPromise = waitForTransactionConfirmation({
+        getRecentSignatureConfirmationPromise.mockResolvedValue(undefined);
+        const commitmentPromise = waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         await expect(commitmentPromise).resolves.toBeUndefined();
@@ -279,23 +279,23 @@ describe('waitForTransactionConfirmation', () => {
     it('throws when the block height exceedence promise throws', async () => {
         expect.assertions(1);
         getBlockHeightExceedencePromise.mockRejectedValue(new Error('o no'));
-        const commitmentPromise = waitForTransactionConfirmation({
+        const commitmentPromise = waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('o no');
     });
     it('throws when the signature confirmation promise throws', async () => {
         expect.assertions(1);
-        getSignatureConfirmationPromise.mockRejectedValue(new Error('o no'));
-        const commitmentPromise = waitForTransactionConfirmation({
+        getRecentSignatureConfirmationPromise.mockRejectedValue(new Error('o no'));
+        const commitmentPromise = waitForRecentTransactionConfirmation({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         await expect(commitmentPromise).rejects.toThrow('o no');
@@ -308,29 +308,29 @@ describe('waitForTransactionConfirmation', () => {
             await FOREVER_PROMISE;
         });
         const abortController = new AbortController();
-        waitForTransactionConfirmation({
+        waitForRecentTransactionConfirmation({
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         abortController.abort();
         expect(handleAbortOnBlockHeightExceedencePromise).toHaveBeenCalled();
     });
-    it('calls the abort signal passed to `getSignatureConfirmationPromise` when aborted', async () => {
+    it('calls the abort signal passed to `getRecentSignatureConfirmationPromise` when aborted', async () => {
         expect.assertions(1);
         const handleAbortOnSignatureConfirmationPromise = jest.fn();
-        getSignatureConfirmationPromise.mockImplementation(async ({ abortSignal }) => {
+        getRecentSignatureConfirmationPromise.mockImplementation(async ({ abortSignal }) => {
             abortSignal.addEventListener('abort', handleAbortOnSignatureConfirmationPromise);
             await FOREVER_PROMISE;
         });
         const abortController = new AbortController();
-        waitForTransactionConfirmation({
+        waitForRecentTransactionConfirmation({
             abortSignal: abortController.signal,
             commitment: 'finalized',
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
             transaction: MOCK_TRANSACTION,
         });
         abortController.abort();
