@@ -71,15 +71,16 @@ async function getCompiledMessageSignature(message: CompiledMessage, secretKey: 
 export function getSignatureFromTransaction(
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures
 ): TransactionSignature {
-    const signature = transaction.signatures[transaction.feePayer];
-    if (!signature) {
+    const signatureBytes = transaction.signatures[transaction.feePayer];
+    if (!signatureBytes) {
         // TODO: Coded error.
         throw new Error(
             "Could not determine this transaction's signature. Make sure that the transaction " +
                 'has been signed by its fee payer.'
         );
     }
-    return signature as unknown as TransactionSignature;
+    const transactionSignature = base58.deserialize(signatureBytes)[0];
+    return transactionSignature as TransactionSignature;
 }
 
 export async function signTransaction<TTransaction extends Parameters<typeof compileMessage>[0]>(
