@@ -91,17 +91,19 @@ describe('getSignatureFromTransaction', () => {
         const transactionWithoutFeePayerSignature = {
             feePayer: '123' as Base58EncodedAddress,
             signatures: {
-                ['123' as Base58EncodedAddress]: 'abc' as unknown as Ed25519Signature,
+                ['123' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
             } as const,
         };
-        expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe('abc');
+        expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe(
+            'BUguQsv2ZuHus54HAFzjdJHzZBkygAjKhEeYwSG19tUfUyvvz3worsdQCdAXDNjakJHioSiyxhFiDJrm8XpSXRA'
+        );
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', () => {
         const transactionWithoutFeePayerSignature = {
             feePayer: '123' as Base58EncodedAddress,
             signatures: {
                 // No signature by the fee payer.
-                ['456' as Base58EncodedAddress]: 'abc' as unknown as Ed25519Signature,
+                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
             } as const,
         };
         expect(() => {
