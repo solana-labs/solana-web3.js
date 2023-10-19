@@ -1,7 +1,7 @@
 import {
-    importKeyPolyfill,
     exportKeyPolyfill,
     generateKeyPolyfill,
+    importKeyPolyfill,
     isPolyfilledKey,
     signPolyfill,
     verifyPolyfill,
@@ -57,10 +57,10 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
                         if (__DEV__) {
                             console.warn(
                                 '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
-                                'environment that supports Ed25519 key manipulation ' +
-                                'natively. Falling back to the native implementation. ' +
-                                'Consider including this polyfill only in environments where ' +
-                                'Ed25519 is not supported.'
+                                    'environment that supports Ed25519 key manipulation ' +
+                                    'natively. Falling back to the native implementation. ' +
+                                    'Consider including this polyfill only in environments where ' +
+                                    'Ed25519 is not supported.'
                             );
                         }
                         if (originalSubtleCrypto.generateKey !== originalGenerateKey) {
@@ -151,10 +151,10 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
                         if (__DEV__) {
                             console.warn(
                                 '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
-                                'environment that supports Ed25519 key manipulation ' +
-                                'natively. Falling back to the native implementation. ' +
-                                'Consider including this polyfill only in environments where ' +
-                                'Ed25519 is not supported.'
+                                    'environment that supports Ed25519 key manipulation ' +
+                                    'natively. Falling back to the native implementation. ' +
+                                    'Consider including this polyfill only in environments where ' +
+                                    'Ed25519 is not supported.'
                             );
                         }
                         if (originalSubtleCrypto.importKey !== originalImportKey) {
@@ -185,6 +185,4 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             return importKeyPolyfill(format, keyData, extractable, keyUsages);
         }
     }) as SubtleCrypto['importKey'];
-
-
 }
