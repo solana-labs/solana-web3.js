@@ -90,7 +90,7 @@ describe('importKeyPolyfill', () => {
             expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify'])).not.toThrow();
         });
         it('fatals when keyUsages is empty', () => {
-            expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [])).toThrow();
+            expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [])).toThrow(); // TODO: tighten these up - check real impl errors match
         });
         it.each(['sign', 'decrypt', 'deriveBits', 'deriveKey', 'encrypt', 'unwrapKey', 'wrapKey'] as KeyUsage[])(
             'fatals when the usage `%s` is specified',
@@ -98,7 +98,7 @@ describe('importKeyPolyfill', () => {
                 expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [usage])).toThrow();
             }
         );
-        it.each([0, 1, 30, 31, 33, 34])('fatals when bytes is length `%d`', bytesLength => {
+        it.each([0, 1, 30, 31, 33, 34, 48])('fatals when bytes is length `%d`', bytesLength => {
             const keyData = new Uint8Array(Array(bytesLength).fill(0));
             expect(() => importKeyPolyfill('raw', keyData, false, ['verify'])).toThrow();
         });
@@ -150,8 +150,12 @@ describe('importKeyPolyfill', () => {
             expect(exported).toStrictEqual(MOCK_PUBLIC_KEY_BYTES);
         });
         it('can import a public key that was exported from a native generated key', async () => {
-            const keyPair = await crypto.subtle.generateKey('Ed25519', /* extractable */ true, ['verify', 'sign']) as CryptoKeyPair;
-            const publicKeyBytes = await crypto.subtle.exportKey('raw', keyPair.publicKey)
+            expect.assertions(1);
+            const keyPair = (await crypto.subtle.generateKey('Ed25519', /* extractable */ true, [
+                'verify',
+                'sign',
+            ])) as CryptoKeyPair;
+            const publicKeyBytes = await crypto.subtle.exportKey('raw', keyPair.publicKey);
             expect(() => importKeyPolyfill('raw', publicKeyBytes, false, ['verify'])).not.toThrow();
         });
         it('can import a public key that was exported from a polyfill generated key', () => {
@@ -161,35 +165,71 @@ describe('importKeyPolyfill', () => {
         });
     });
 
-    const pkcs8PrivateKey = new Uint8Array([...ED25519_PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
+    describe('when format is `pkcs8`', () => {
+        const mockSecretKeyWithHeader = new Uint8Array([...ED25519_PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
 
-    it('stores secret key bytes in an internal cache', () => {
-        const weakMapSetSpy = jest.spyOn(WeakMap.prototype, 'set');
-        importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
-        expect(weakMapSetSpy).toHaveBeenCalledWith(expect.anything(), MOCK_SECRET_KEY_BYTES);
-    });
-    it('signs and verifies bytes', () => {
-        const privateKey = importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
-
-        const signature = signPolyfill(privateKey, MOCK_DATA);
-        console.error({ signature });
-
-        const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
-        expect(verifyPolyfill(publicKey, signature, MOCK_DATA)).toBe(true);
-    });
-    describe('correct properties are present', () => {
-        const privateKey = importKeyPolyfill('pkcs8', pkcs8PrivateKey, false, ['sign']);
-        const publicKey = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, true, ['verify']);
-        it.each([publicKey, privateKey])(`has the algorithm "Ed25519"`, key => {
-            expect(key).toHaveProperty(['algorithm', 'name'], 'Ed25519');
+        it('allows importing valid private key bytes', () => {
+            expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign'])).not.toThrow();
         });
-        it.each([publicKey, privateKey])('has the string tag "CryptoKey"', key => {
+        it('fatals when keyUsages is empty', () => {
+            expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [])).toThrow(); // TODO: tighten these up - check real impl errors match
+        });
+        it.each(['verify', 'decrypt', 'deriveBits', 'deriveKey', 'encrypt', 'unwrapKey', 'wrapKey'] as KeyUsage[])(
+            'fatals when the usage `%s` is specified',
+            usage => {
+                expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [usage])).toThrow();
+            }
+        );
+        it.each([0, 1, 32, 46, 47, 49, 50])('fatals when bytes is length `%d`', bytesLength => {
+            const keyData = new Uint8Array(Array(bytesLength).fill(0));
+            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow();
+        });
+        it('fatals when the first 16 bytes are not the expected header', () => {
+            const keyData = new Uint8Array([...Array(16).fill(0), ...MOCK_SECRET_KEY_BYTES]);
+            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow();
+        });
+        it('has the string tag "CryptoKey"', () => {
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
             expect(key).toHaveProperty([Symbol.toStringTag], 'CryptoKey');
         });
-        it(`has the correct type`, () => {
-            expect(publicKey).toHaveProperty(['type'], 'public');
-            expect(privateKey).toHaveProperty(['type'], 'private');
+        it('has the type "private"', () => {
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            expect(key).toHaveProperty('type', 'private');
         });
+        it.each([true, false])(
+            'has extractable `%s` when importing a key with the extractability `%s`',
+            extractability => {
+                const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, extractability, ['sign']);
+                expect(key).toHaveProperty('extractable', extractability);
+            }
+        );
+        it('has the algorithm "Ed25519"', () => {
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            expect(key).toHaveProperty(['algorithm', 'name'], 'Ed25519');
+        });
+        it('has usages `["sign"]`', () => {
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            expect(key).toHaveProperty('usages', ['sign']);
+        });
+        it('stores private key bytes in an internal cache', () => {
+            const weakMapSetSpy = jest.spyOn(WeakMap.prototype, 'set');
+            importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            expect(weakMapSetSpy).toHaveBeenCalledWith(expect.anything(), MOCK_SECRET_KEY_BYTES);
+        });
+        it('imported key can be used to sign data', async () => {
+            expect.assertions(1);
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            const signature = await signPolyfill(key, MOCK_DATA);
+            expect(signature).toStrictEqual(MOCK_DATA_SIGNATURE);
+        });
+        // we don't have export pkcs8 keys yet
+        it.todo('imported key can be exported to return the same bytes');
+        it.todo('can import a private key that was exported from a native generated key');
+        it.todo('can import a private key that was exported from a polyfill generated key');
+    });
+
+    it.each(['jwk', 'spki'] as KeyFormat[])('fatals when format is %s', format => {
+        expect(() => importKeyPolyfill(format, new Uint8Array(), false, ['sign'])).toThrow(/format is unimplemented/);
     });
 });
 
@@ -314,6 +354,17 @@ describe('isPolyfilledKey', () => {
     it('returns false when given a public key produced with the native importKey', async () => {
         expect.assertions(1);
         const key = await crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', false, ['verify']);
+        expect(isPolyfilledKey(key)).toBe(false);
+    });
+    it('returns true when given a private key produced with importKeyPolyfill', () => {
+        const mockSecretKeyWithHeader = new Uint8Array([...ED25519_PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
+        const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+        expect(isPolyfilledKey(key)).toBe(true);
+    });
+    it('returns false when given a private key produced with the native importKey', async () => {
+        expect.assertions(1);
+        const mockSecretKeyWithHeader = new Uint8Array([...ED25519_PKCS8_HEADER, ...MOCK_SECRET_KEY_BYTES]);
+        const key = await crypto.subtle.importKey('pkcs8', mockSecretKeyWithHeader, 'Ed25519', false, ['sign']);
         expect(isPolyfilledKey(key)).toBe(false);
     });
 });

@@ -24,6 +24,40 @@ const PROHIBITED_KEY_USAGES = new Set<KeyUsage>([
     'wrapKey',
 ]);
 
+const ED25519_PKCS8_HEADER =
+    // prettier-ignore
+    new Uint8Array([
+        /**
+         * PKCS#8 header
+         */
+        0x30, // ASN.1 sequence tag
+        0x2e, // Length of sequence (46 more bytes)
+
+            0x02, // ASN.1 integer tag
+            0x01, // Length of integer
+                0x00, // Version number
+
+            0x30, // ASN.1 sequence tag
+            0x05, // Length of sequence
+                0x06, // ASN.1 object identifier tag
+                0x03, // Length of object identifier
+                    // Edwards curve algorithms identifier https://oid-rep.orange-labs.fr/get/1.3.101.112
+                        0x2b, // iso(1) / identified-organization(3) (The first node is multiplied by the decimal 40 and the result is added to the value of the second node)
+                        0x65, // thawte(101)
+                    // Ed25519 identifier
+                        0x70, // id-Ed25519(112)
+
+        /**
+         * Private key payload
+         */
+        0x04, // ASN.1 octet string tag
+        0x22, // String length (34 more bytes)
+
+            // Private key bytes as octet string
+            0x04, // ASN.1 octet string tag
+            0x20, // String length (32 bytes)
+    ]);
+
 function bufferSourceToUint8Array(data: BufferSource): Uint8Array {
     return data instanceof Uint8Array ? data : new Uint8Array(ArrayBuffer.isView(data) ? data.buffer : data);
 }
@@ -199,16 +233,23 @@ export function importKeyPolyfill(
         return publicKey;
     }
 
-    switch (format) {
-        case 'pkcs8': {
-            // Ignore pkcs8 header proceeding the secret bytes
-            const keyBytes = bytes.slice(-32);
-            const kp = createKeyPairFromBytes(keyBytes, extractable, keyUsages);
-
-            return kp.privateKey;
+    if (format === 'pkcs8') {
+        if (keyUsages.some(usage => usage === 'verify' || PROHIBITED_KEY_USAGES.has(usage))) {
+            throw new DOMException('Unsupported key usage for an Ed25519 key.', 'SyntaxError');
         }
-        default: {
-            throw new TypeError(`Cannot import key with ${format} format.`);
+        // 48 bytes: 16-byte PKCS8 header + 32 byte secret key
+        if (bytes.length !== 48) {
+            throw new DOMException('Invalid keyData', 'DataError');
         }
+        // Must start with exactly the Ed25519 pkcs8 header
+        const header = bytes.slice(0, 16);
+        if (!header.every((val, i) => val === ED25519_PKCS8_HEADER[i])) {
+            throw new DOMException('Invalid keyData', 'DataError');
+        }
+        const secretKeyBytes = bytes.slice(16);
+        const keyPair = createKeyPairFromBytes(secretKeyBytes, extractable, keyUsages);
+        return keyPair.privateKey;
     }
+
+    throw new Error(`Importing Ed25519 keys in the "${format}" format is unimplemented`);
 }
