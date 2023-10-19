@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
-import { Blockhash, IDurableNonceTransaction, Nonce } from '@solana/transactions';
+import { Blockhash, IDurableNonceTransaction, Nonce, TransactionSignature } from '@solana/transactions';
 
 import {
     waitForDurableNonceTransactionConfirmation,
@@ -37,7 +37,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         ],
         lifetimeConstraint: { nonce: 'xyz' as Nonce },
         signatures: {
-            ['9'.repeat(44) as Base58EncodedAddress]: '4'.repeat(44) as unknown as Ed25519Signature,
+            ['9'.repeat(44) as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
         } as const,
     } as const;
     let getNonceInvalidationPromise: jest.Mock<Promise<void>>;
@@ -123,7 +123,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
-            signature: '4'.repeat(44),
+            signature: '1111111111111111111111111111111111111111111111111111111111111111' as TransactionSignature,
         });
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', async () => {
@@ -132,7 +132,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             ...MOCK_DURABLE_NONCE_TRANSACTION,
             signatures: {
                 // Signature by someone other than the fee payer.
-                ['456' as Base58EncodedAddress]: '4'.repeat(44) as unknown as Ed25519Signature,
+                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
             } as const,
         };
         const commitmentPromise = waitForDurableNonceTransactionConfirmation({
@@ -191,7 +191,7 @@ describe('waitForRecentTransactionConfirmation', () => {
         feePayer: '9'.repeat(44) as Base58EncodedAddress,
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
         signatures: {
-            ['9'.repeat(44) as Base58EncodedAddress]: '4'.repeat(44) as unknown as Ed25519Signature,
+            ['9'.repeat(44) as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
         } as const,
     } as const;
     let getBlockHeightExceedencePromise: jest.Mock<Promise<void>>;
@@ -239,7 +239,7 @@ describe('waitForRecentTransactionConfirmation', () => {
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
-            signature: '4'.repeat(44),
+            signature: '1111111111111111111111111111111111111111111111111111111111111111' as TransactionSignature,
         });
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', async () => {
@@ -248,7 +248,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             ...MOCK_TRANSACTION,
             signatures: {
                 // Signature by someone other than the fee payer.
-                ['456' as Base58EncodedAddress]: '4'.repeat(44) as unknown as Ed25519Signature,
+                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
             } as const,
         };
         const commitmentPromise = waitForRecentTransactionConfirmation({
