@@ -1,6 +1,6 @@
 import { TransactionSignature } from '@solana/transactions';
 
-import { createSignatureConfirmationPromiseFactory } from '../transaction-confirmation-strategy-signature';
+import { createRecentSignatureConfirmationPromiseFactory } from '../transaction-confirmation-strategy-recent-signature';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
@@ -11,7 +11,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
     let createPendingSubscription: jest.Mock;
     let createSubscriptionIterable: jest.Mock;
     let getSignatureStatusesMock: jest.Mock;
-    let getSignatureConfirmationPromise: ReturnType<typeof createSignatureConfirmationPromiseFactory>;
+    let getSignatureConfirmationPromise: ReturnType<typeof createRecentSignatureConfirmationPromiseFactory>;
     beforeEach(() => {
         jest.useFakeTimers();
         signatureNotificationGenerator = jest.fn().mockImplementation(async function* () {
@@ -30,7 +30,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const rpcSubscriptions = {
             signatureNotifications: createPendingSubscription,
         };
-        getSignatureConfirmationPromise = createSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
+        getSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
     });
     it('sets up a subscription for notifications about signature changes', async () => {
         expect.assertions(2);

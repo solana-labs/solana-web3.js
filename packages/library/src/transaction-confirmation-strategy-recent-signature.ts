@@ -4,24 +4,28 @@ import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subsc
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
-type GetSignatureConfirmationPromiseFn = (config: {
+type GetRecentSignatureConfirmationPromiseFn = (config: {
     abortSignal: AbortSignal;
     commitment: Commitment;
     signature: TransactionSignature;
 }) => Promise<void>;
 
-export function createSignatureConfirmationPromiseFactory(
+export function createRecentSignatureConfirmationPromiseFactory(
     rpc: Rpc<GetSignatureStatusesApi>,
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>
-): GetSignatureConfirmationPromiseFn {
-    return async function getSignatureConfirmationPromise({ abortSignal: callerAbortSignal, commitment, signature }) {
+): GetRecentSignatureConfirmationPromiseFn {
+    return async function getRecentSignatureConfirmationPromise({
+        abortSignal: callerAbortSignal,
+        commitment,
+        signature,
+    }) {
         const abortController = new AbortController();
         function handleAbort() {
             abortController.abort();
         }
         callerAbortSignal.addEventListener('abort', handleAbort, { signal: abortController.signal });
         /**
-         * STEP 1: Set up a subscription for signature changes.
+         * STEP 1: Set up a subscription for status changes to a signature.
          */
         const signatureStatusNotifications = await rpcSubscriptions
             .signatureNotifications(signature, { commitment })
@@ -40,6 +44,7 @@ export function createSignatureConfirmationPromiseFactory(
         })();
         /**
          * STEP 2: Having subscribed for updates, make a one-shot request for the current status.
+         *         This will only yield a result if the signature is still in the status cache.
          */
         const signatureStatusLookupPromise = (async () => {
             const { value: signatureStatusResults } = await rpc

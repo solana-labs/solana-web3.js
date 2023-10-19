@@ -15,12 +15,12 @@ import {
 
 import { createBlockHeightExceedencePromiseFactory } from './transaction-confirmation-strategy-blockheight';
 import { createNonceInvalidationPromiseFactory } from './transaction-confirmation-strategy-nonce';
-import { createSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-signature';
+import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
 
 interface BaseConfig {
     abortSignal: AbortSignal;
     commitment: Commitment;
-    getSignatureConfirmationPromise: ReturnType<typeof createSignatureConfirmationPromiseFactory>;
+    getRecentSignatureConfirmationPromise: ReturnType<typeof createRecentSignatureConfirmationPromiseFactory>;
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures;
 }
 
@@ -29,14 +29,9 @@ interface DefaultDurableNonceTransactionConfirmerConfig {
     rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi & SignatureNotificationsApi>;
 }
 
-interface DefaultTransactionConfirmerConfig {
+interface DefaultRecentTransactionConfirmerConfig {
     rpc: Rpc<GetSignatureStatusesApi>;
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
-}
-
-interface WaitForTransactionWithBlockhashLifetimeConfirmationConfig extends BaseConfig {
-    getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
-    transaction: ITransactionWithFeePayer & ITransactionWithSignatures & ITransactionWithBlockhashLifetime;
 }
 
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseConfig {
@@ -44,11 +39,16 @@ interface WaitForDurableNonceTransactionConfirmationConfig extends BaseConfig {
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures & IDurableNonceTransaction;
 }
 
+interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig extends BaseConfig {
+    getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
+    transaction: ITransactionWithFeePayer & ITransactionWithSignatures & ITransactionWithBlockhashLifetime;
+}
+
 async function raceStrategies<TConfig extends BaseConfig>(
     config: TConfig,
     getSpecificStrategiesForRace: (config: TConfig) => readonly Promise<unknown>[]
 ) {
-    const { abortSignal: callerAbortSignal, commitment, getSignatureConfirmationPromise, transaction } = config;
+    const { abortSignal: callerAbortSignal, commitment, getRecentSignatureConfirmationPromise, transaction } = config;
     callerAbortSignal.throwIfAborted();
     const signature = getSignatureFromTransaction(transaction);
     const abortController = new AbortController();
@@ -62,7 +62,7 @@ async function raceStrategies<TConfig extends BaseConfig>(
             abortSignal: abortController.signal,
         });
         return await Promise.race([
-            getSignatureConfirmationPromise({
+            getRecentSignatureConfirmationPromise({
                 abortSignal: abortController.signal,
                 commitment,
                 signature,
@@ -79,34 +79,43 @@ export function createDefaultDurableNonceTransactionConfirmer({
     rpcSubscriptions,
 }: DefaultDurableNonceTransactionConfirmerConfig) {
     const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
-    const getSignatureConfirmationPromise = createSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+        rpc,
+        rpcSubscriptions
+    );
     return async function confirmTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
-            'getNonceInvalidationPromise' | 'getSignatureConfirmationPromise'
+            'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >
     ) {
         await waitForDurableNonceTransactionConfirmation({
             ...config,
             getNonceInvalidationPromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
         });
     };
 }
 
-export function createDefaultTransactionConfirmer({ rpc, rpcSubscriptions }: DefaultTransactionConfirmerConfig) {
+export function createDefaultRecentTransactionConfirmer({
+    rpc,
+    rpcSubscriptions,
+}: DefaultRecentTransactionConfirmerConfig) {
     const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory(rpcSubscriptions);
-    const getSignatureConfirmationPromise = createSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
-    return async function confirmTransaction(
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+        rpc,
+        rpcSubscriptions
+    );
+    return async function confirmRecentTransaction(
         config: Omit<
-            Parameters<typeof waitForTransactionConfirmation>[0],
-            'getBlockHeightExceedencePromise' | 'getSignatureConfirmationPromise'
+            Parameters<typeof waitForRecentTransactionConfirmation>[0],
+            'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >
     ) {
-        await waitForTransactionConfirmation({
+        await waitForRecentTransactionConfirmation({
             ...config,
             getBlockHeightExceedencePromise,
-            getSignatureConfirmationPromise,
+            getRecentSignatureConfirmationPromise,
         });
     };
 }
@@ -129,8 +138,8 @@ export async function waitForDurableNonceTransactionConfirmation(
     );
 }
 
-export async function waitForTransactionConfirmation(
-    config: WaitForTransactionWithBlockhashLifetimeConfirmationConfig
+export async function waitForRecentTransactionConfirmation(
+    config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
 ): Promise<void> {
     await raceStrategies(
         config,
