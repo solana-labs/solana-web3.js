@@ -71,7 +71,7 @@ function scalarEnumCoderHelper<T>(
  */
 export function getScalarEnumEncoder<T>(
     constructor: ScalarEnum<T>,
-    options: ScalarEnumCodecOptions<NumberCodec> = {}
+    options: ScalarEnumCodecOptions<NumberEncoder> = {}
 ): Encoder<T> {
     const prefix = options.size ?? getU8Encoder();
     const { description, fixedSize, maxSize, minRange, maxRange, stringValues, enumKeys, enumValues } =
@@ -108,7 +108,7 @@ export function getScalarEnumEncoder<T>(
  */
 export function getScalarEnumDecoder<T>(
     constructor: ScalarEnum<T>,
-    options: ScalarEnumCodecOptions<NumberCodec> = {}
+    options: ScalarEnumCodecOptions<NumberDecoder> = {}
 ): Decoder<T> {
     const prefix = options.size ?? getU8Decoder();
     const { description, fixedSize, maxSize, minRange, maxRange, isNumericEnum, enumValues } = scalarEnumCoderHelper(
