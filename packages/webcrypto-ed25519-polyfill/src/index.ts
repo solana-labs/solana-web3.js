@@ -57,10 +57,10 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
                         if (__DEV__) {
                             console.warn(
                                 '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
-                                    'environment that supports Ed25519 key manipulation ' +
-                                    'natively. Falling back to the native implementation. ' +
-                                    'Consider including this polyfill only in environments where ' +
-                                    'Ed25519 is not supported.'
+                                'environment that supports Ed25519 key manipulation ' +
+                                'natively. Falling back to the native implementation. ' +
+                                'Consider including this polyfill only in environments where ' +
+                                'Ed25519 is not supported.'
                             );
                         }
                         if (originalSubtleCrypto.generateKey !== originalGenerateKey) {
@@ -125,47 +125,66 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     }) as SubtleCrypto['verify'];
 
     /**
-     * Override `SubtleCrypto#importKey`
+     * Override `SubtleCrypto#generateKey`
      */
     const originalImportKey = originalSubtleCrypto.importKey as SubtleCrypto['importKey'] | undefined;
+    let originalImportKeySupportsEd25519: Promise<boolean> | boolean | undefined;
     originalSubtleCrypto.importKey = (async (...args: Parameters<SubtleCrypto['importKey']>) => {
-        const [format, keyData, algorithm, extractable, keyUsages] = args;
-
-        // States to handle:
-        // importkey does not exist
-        // importkey exists and supports Ed25519
-        // importkey exists and doesn't support Ed25519
-
-        if (!originalImportKey) {
-            if (algorithm === 'Ed25519') {
-                return importKeyPolyfill(format, keyData, extractable, keyUsages);
+        const [format, keyData, algorithm] = args;
+        if (algorithm !== 'Ed25519') {
+            if (originalImportKey) {
+                return await originalImportKey.apply(originalSubtleCrypto, args);
             } else {
                 throw new TypeError('No native `importKey` function exists to handle this call');
             }
-        } else if (algorithm === 'Ed25519') {
-            return originalImportKey
-                .apply(originalSubtleCrypto, args)
-                .then(res => {
-                    if (__DEV__) {
-                        console.warn(
-                            '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
+        }
+        let optimisticallyImportedKey;
+        if (originalImportKeySupportsEd25519 === undefined) {
+            originalImportKeySupportsEd25519 = new Promise(resolve => {
+                if (!originalImportKey) {
+                    resolve((originalImportKeySupportsEd25519 = false));
+                    return;
+                }
+                originalImportKey
+                    .apply(originalSubtleCrypto, args)
+                    .then(key => {
+                        if (__DEV__) {
+                            console.warn(
+                                '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
                                 'environment that supports Ed25519 key manipulation ' +
                                 'natively. Falling back to the native implementation. ' +
                                 'Consider including this polyfill only in environments where ' +
                                 'Ed25519 is not supported.'
-                        );
-                    }
-                    return res;
-                })
-                .catch(err => {
-                    if (err.name === 'NotSupportedError') {
-                        return importKeyPolyfill(format, keyData, extractable, keyUsages);
-                    } else {
-                        throw err;
-                    }
-                });
+                            );
+                        }
+                        if (originalSubtleCrypto.importKey !== originalImportKey) {
+                            originalSubtleCrypto.importKey = originalImportKey;
+                        }
+                        optimisticallyImportedKey = key;
+                        resolve((originalImportKeySupportsEd25519 = true));
+                    })
+                    .catch(() => {
+                        resolve((originalImportKeySupportsEd25519 = false));
+                    });
+            });
+        }
+        if (
+            typeof originalImportKey === 'boolean'
+                ? originalImportKeySupportsEd25519
+                : await originalImportKeySupportsEd25519
+        ) {
+            if (optimisticallyImportedKey) {
+                return optimisticallyImportedKey;
+            } else if (originalImportKey) {
+                return await originalImportKey.apply(originalSubtleCrypto, args);
+            } else {
+                throw new TypeError('No native `importKey` function exists to handle this call');
+            }
         } else {
-            return originalImportKey.apply(originalSubtleCrypto, args);
+            const [_format, _keyData, _algorithm, extractable, keyUsages] = args;
+            return importKeyPolyfill(format, keyData, extractable, keyUsages);
         }
     }) as SubtleCrypto['importKey'];
+
+
 }
