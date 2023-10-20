@@ -134,11 +134,6 @@ function getPublicKeyBytes(key: CryptoKey): Uint8Array {
     return publicKeyBytes;
 }
 
-function storePublicKeyBytes(key: CryptoKey, publicKeyBytes: Uint8Array) {
-    const cache = (publicKeyBytesStore ||= new WeakMap());
-    cache.set(key, publicKeyBytes);
-}
-
 export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): JsonWebKey;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer | JsonWebKey {
@@ -150,11 +145,7 @@ export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffe
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
-            const publicKeyBytesFromPublicKeyStore = publicKeyBytesStore?.get(key);
-            if (publicKeyBytesFromPublicKeyStore) return publicKeyBytesFromPublicKeyStore;
-
-            const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
-            storePublicKeyBytes(key, publicKeyBytes);
+            const publicKeyBytes = getPublicKeyBytes(key);
             return publicKeyBytes;
         }
         default:
