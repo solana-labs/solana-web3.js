@@ -1,70 +1,85 @@
-import { array, Serializer, shortU16, struct, StructToSerializerTuple, u8 } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress, getAddressCodec } from '@solana/addresses';
+import { getAddressDecoder, getAddressEncoder } from '@solana/addresses';
+import { type Codec, combineCodec, type Decoder, type Encoder } from '@solana/codecs-core';
+import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
+import { getShortU16Decoder, getShortU16Encoder, getU8Decoder, getU8Encoder } from '@solana/codecs-numbers';
 
-import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
+import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 
 type AddressTableLookup = ReturnType<typeof getCompiledAddressTableLookups>[number];
 
-// Temporary, will use getAddressCodec directly when everything else is migrated
-function addressSerializerCompat(compat?: { description: string }): Serializer<Base58EncodedAddress> {
-    const codec = getAddressCodec();
-    return {
-        description: compat?.description ?? codec.description,
-        deserialize: codec.decode,
-        fixedSize: codec.fixedSize,
-        maxSize: codec.maxSize,
-        serialize: codec.encode,
-    };
+const lookupTableAddressDescription = __DEV__
+    ? 'The address of the address lookup table account from which instruction addresses should be looked up'
+    : 'lookupTableAddress';
+
+const writableIndicesDescription = __DEV__
+    ? 'The indices of the accounts in the lookup table that should be loaded as writeable'
+    : 'writableIndices';
+
+const readableIndicesDescription = __DEV__
+    ? 'The indices of the accounts in the lookup table that should be loaded as read-only'
+    : 'readableIndices';
+
+const addressTableLookupDescription = __DEV__
+    ? 'A pointer to the address of an address lookup table, along with the ' +
+      'readonly/writeable indices of the addresses that should be loaded from it'
+    : 'addressTableLookup';
+
+let memoizedAddressTableLookupEncoder: Encoder<AddressTableLookup> | undefined;
+export function getAddressTableLookupEncoder(): Encoder<AddressTableLookup> {
+    if (!memoizedAddressTableLookupEncoder) {
+        memoizedAddressTableLookupEncoder = getStructEncoder(
+            [
+                ['lookupTableAddress', getAddressEncoder({ description: lookupTableAddressDescription })],
+                [
+                    'writableIndices',
+                    getArrayEncoder(getU8Encoder(), {
+                        description: writableIndicesDescription,
+                        size: getShortU16Encoder(),
+                    }) as Encoder<readonly number[]>,
+                ],
+                [
+                    'readableIndices',
+                    getArrayEncoder(getU8Encoder(), {
+                        description: readableIndicesDescription,
+                        size: getShortU16Encoder(),
+                    }) as Encoder<readonly number[]>,
+                ],
+            ],
+            { description: addressTableLookupDescription }
+        );
+    }
+
+    return memoizedAddressTableLookupEncoder;
 }
 
-export function getAddressTableLookupCodec(): Serializer<AddressTableLookup> {
-    return struct(
-        [
+let memoizedAddressTableLookupDecoder: Decoder<AddressTableLookup> | undefined;
+export function getAddressTableLookupDecoder(): Decoder<AddressTableLookup> {
+    if (!memoizedAddressTableLookupDecoder) {
+        memoizedAddressTableLookupDecoder = getStructDecoder(
             [
-                'lookupTableAddress',
-                addressSerializerCompat(
-                    __DEV__
-                        ? {
-                              description:
-                                  'The address of the address lookup table account from which ' +
-                                  'instruction addresses should be looked up',
-                          }
-                        : undefined
-                ),
+                ['lookupTableAddress', getAddressDecoder({ description: lookupTableAddressDescription })],
+                [
+                    'writableIndices',
+                    getArrayDecoder(getU8Decoder(), {
+                        description: writableIndicesDescription,
+                        size: getShortU16Decoder(),
+                    }),
+                ],
+                [
+                    'readableIndices',
+                    getArrayDecoder(getU8Decoder(), {
+                        description: readableIndicesDescription,
+                        size: getShortU16Decoder(),
+                    }),
+                ],
             ],
-            [
-                'writableIndices',
-                array(u8(), {
-                    ...(__DEV__
-                        ? {
-                              description:
-                                  'The indices of the accounts in the lookup table that should ' +
-                                  'be loaded as writeable',
-                          }
-                        : null),
-                    size: shortU16(),
-                }),
-            ],
-            [
-                'readableIndices',
-                array(u8(), {
-                    ...(__DEV__
-                        ? {
-                              description:
-                                  'The indices of the accounts in the lookup table that should ' +
-                                  'be loaded as read-only',
-                          }
-                        : undefined),
-                    size: shortU16(),
-                }),
-            ],
-        ] as StructToSerializerTuple<AddressTableLookup, AddressTableLookup>,
-        __DEV__
-            ? {
-                  description:
-                      'A pointer to the address of an address lookup table, along with the ' +
-                      'readonly/writeable indices of the addresses that should be loaded from it',
-              }
-            : undefined
-    );
+            { description: addressTableLookupDescription }
+        );
+    }
+
+    return memoizedAddressTableLookupDecoder;
+}
+
+export function getAddressTableLookupCodec(): Codec<AddressTableLookup> {
+    return combineCodec(getAddressTableLookupEncoder(), getAddressTableLookupDecoder());
 }

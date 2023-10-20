@@ -1,7 +1,13 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { base58 } from '@metaplex-foundation/umi-serializers';
-import { Base58EncodedAddress, getAddressCodec, getAddressFromPublicKey } from '@solana/addresses';
+import {
+    Base58EncodedAddress,
+    getAddressCodec,
+    getAddressDecoder,
+    getAddressEncoder,
+    getAddressFromPublicKey,
+} from '@solana/addresses';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
@@ -163,9 +169,6 @@ describe('signTransaction', () => {
                     return '99999999999999999999999999999999' as Base58EncodedAddress<'99999999999999999999999999999999'>;
             }
         });
-        (getAddressCodec as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
-        });
         (signBytes as jest.Mock).mockImplementation(async secretKey => {
             switch (secretKey) {
                 case mockKeyPairA.privateKey:
@@ -177,6 +180,13 @@ describe('signTransaction', () => {
                 default:
                     return new Uint8Array(Array(64).fill(0xff));
             }
+        });
+        (getAddressEncoder as jest.Mock).mockReturnValue({
+            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+        });
+        (getAddressDecoder as jest.Mock).mockReturnValue({});
+        (getAddressCodec as jest.Mock).mockReturnValue({
+            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
         });
     });
     it("returns a transaction object having the first signer's signature", async () => {

@@ -110,7 +110,8 @@ function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMess
 }
 
 function getAddressTableLookupsSerializer() {
-    return array(getAddressTableLookupCodec(), {
+    // temporary: will be changed to using codecs
+    return array(toSerializer(getAddressTableLookupCodec()), {
         ...(__DEV__ ? { description: 'A compact array of address table lookups belonging to this transaction' } : null),
         size: shortU16(),
     });
