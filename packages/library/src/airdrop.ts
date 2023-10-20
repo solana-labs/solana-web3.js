@@ -8,30 +8,43 @@ import { TransactionSignature } from '@solana/transactions';
 
 import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
 
-type Config = Readonly<{
-    abortSignal: AbortSignal;
-    commitment: Commitment;
-    lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    recipientAddress: Base58EncodedAddress;
+type AirdropRequesterConfig = Readonly<{
     rpc: Rpc<RequestAirdropApi & GetSignatureStatusesApi>;
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>;
 }>;
 
-export async function requestAndConfirmAirdrop({
-    abortSignal,
-    commitment,
-    lamports,
-    recipientAddress,
-    rpc,
-    rpcSubscriptions,
-}: Config): Promise<TransactionSignature> {
-    const airdropTransactionSignature = (await rpc
-        .requestAirdrop(recipientAddress, lamports, { commitment })
-        .send({ abortSignal })) as unknown as TransactionSignature;
+export function createDefaultAirdropRequester({ rpc, rpcSubscriptions }: AirdropRequesterConfig) {
     const confirmSignatureOnlyTransaction = createDefaultSignatureOnlyRecentTransactionConfirmer({
         rpc,
         rpcSubscriptions,
     });
+    return async function requestAirdrop(config: Parameters<typeof requestAndConfirmAirdrop>[0]) {
+        return await requestAndConfirmAirdrop({
+            ...config,
+            confirmSignatureOnlyTransaction,
+            rpc,
+        });
+    };
+}
+
+export async function requestAndConfirmAirdrop({
+    abortSignal,
+    commitment,
+    confirmSignatureOnlyTransaction,
+    lamports,
+    recipientAddress,
+    rpc,
+}: Readonly<{
+    abortSignal: AbortSignal;
+    commitment: Commitment;
+    confirmSignatureOnlyTransaction: ReturnType<typeof createDefaultSignatureOnlyRecentTransactionConfirmer>;
+    lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    recipientAddress: Base58EncodedAddress;
+    rpc: Rpc<RequestAirdropApi>;
+}>): Promise<TransactionSignature> {
+    const airdropTransactionSignature = (await rpc
+        .requestAirdrop(recipientAddress, lamports, { commitment })
+        .send({ abortSignal })) as unknown as TransactionSignature; // FIXME(#1709)
     await confirmSignatureOnlyTransaction({
         abortSignal,
         commitment,
