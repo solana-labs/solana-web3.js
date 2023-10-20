@@ -206,18 +206,14 @@ export function importKeyPolyfill(
     extractable: boolean,
     keyUsages: readonly KeyUsage[]
 ): CryptoKey {
-    if (keyUsages.length === 0) {
-        throw new DOMException('Usages cannot be empty when creating a key.', 'SyntaxError');
-    }
-
     const bytes = bufferSourceToUint8Array(keyData);
 
     if (format === 'raw') {
         if (keyUsages.some(usage => usage === 'sign' || PROHIBITED_KEY_USAGES.has(usage))) {
-            throw new DOMException('Unsupported key usage for an Ed25519 key.', 'SyntaxError');
+            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
         }
         if (bytes.length !== 32) {
-            throw new DOMException('Ed25519 raw keys must be exactly 32-bytes');
+            throw new DOMException('Ed25519 raw keys must be exactly 32-bytes', 'DataError');
         }
         const publicKey = {
             [Symbol.toStringTag]: 'CryptoKey',
@@ -235,7 +231,7 @@ export function importKeyPolyfill(
 
     if (format === 'pkcs8') {
         if (keyUsages.some(usage => usage === 'verify' || PROHIBITED_KEY_USAGES.has(usage))) {
-            throw new DOMException('Unsupported key usage for an Ed25519 key.', 'SyntaxError');
+            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
         }
         // 48 bytes: 16-byte PKCS8 header + 32 byte secret key
         if (bytes.length !== 48) {
@@ -247,8 +243,19 @@ export function importKeyPolyfill(
             throw new DOMException('Invalid keyData', 'DataError');
         }
         const secretKeyBytes = bytes.slice(16);
-        const keyPair = createKeyPairFromBytes(secretKeyBytes, extractable, keyUsages);
-        return keyPair.privateKey;
+
+        const privateKey = {
+            [Symbol.toStringTag]: 'CryptoKey',
+            algorithm: Object.freeze({ name: 'Ed25519' }),
+            extractable,
+            type: 'private',
+            usages: Object.freeze(keyUsages.filter(usage => usage === 'sign')) as KeyUsage[],
+        } as CryptoKey;
+
+        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+        cache.set(privateKey, secretKeyBytes);
+
+        return privateKey;
     }
 
     throw new Error(`Importing Ed25519 keys in the "${format}" format is unimplemented`);

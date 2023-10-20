@@ -89,18 +89,22 @@ describe('importKeyPolyfill', () => {
         it('allows importing valid public key bytes', () => {
             expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify'])).not.toThrow();
         });
-        it('fatals when keyUsages is empty', () => {
-            expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [])).toThrow(); // TODO: tighten these up - check real impl errors match
+        it('allows importing with empty keyUsages', () => {
+            expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [])).not.toThrow();
         });
         it.each(['sign', 'decrypt', 'deriveBits', 'deriveKey', 'encrypt', 'unwrapKey', 'wrapKey'] as KeyUsage[])(
             'fatals when the usage `%s` is specified',
             usage => {
-                expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [usage])).toThrow();
+                expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [usage])).toThrow(
+                    'Unsupported key usage for a Ed25519 key'
+                );
             }
         );
         it.each([0, 1, 30, 31, 33, 34, 48])('fatals when bytes is length `%d`', bytesLength => {
             const keyData = new Uint8Array(Array(bytesLength).fill(0));
-            expect(() => importKeyPolyfill('raw', keyData, false, ['verify'])).toThrow();
+            expect(() => importKeyPolyfill('raw', keyData, false, ['verify'])).toThrow(
+                'Ed25519 raw keys must be exactly 32-bytes'
+            );
         });
         it('has the string tag "CryptoKey"', () => {
             const key = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
@@ -171,22 +175,24 @@ describe('importKeyPolyfill', () => {
         it('allows importing valid private key bytes', () => {
             expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign'])).not.toThrow();
         });
-        it('fatals when keyUsages is empty', () => {
-            expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [])).toThrow(); // TODO: tighten these up - check real impl errors match
+        it('allows importing with empty keyUsages', () => {
+            expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [])).not.toThrow();
         });
         it.each(['verify', 'decrypt', 'deriveBits', 'deriveKey', 'encrypt', 'unwrapKey', 'wrapKey'] as KeyUsage[])(
             'fatals when the usage `%s` is specified',
             usage => {
-                expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [usage])).toThrow();
+                expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [usage])).toThrow(
+                    'Unsupported key usage for a Ed25519 key'
+                );
             }
         );
         it.each([0, 1, 32, 46, 47, 49, 50])('fatals when bytes is length `%d`', bytesLength => {
             const keyData = new Uint8Array(Array(bytesLength).fill(0));
-            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow();
+            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow('Invalid keyData');
         });
         it('fatals when the first 16 bytes are not the expected header', () => {
             const keyData = new Uint8Array([...Array(16).fill(0), ...MOCK_SECRET_KEY_BYTES]);
-            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow();
+            expect(() => importKeyPolyfill('pkcs8', keyData, false, ['sign'])).toThrow('Invalid keyData');
         });
         it('has the string tag "CryptoKey"', () => {
             const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
