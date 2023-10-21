@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 (
     set -e
-    version=$(curl -s "https://api.github.com/repos/solana-labs/solana/releases" | \
-      grep '"tag_name": "v1.17.' | \
-      sort -t. -k3,3nr | \
-      head -n1 | \
-      awk -F\" '{print $4}')
+    version=$(node -e \
+      'fetch("https://api.github.com/repos/solana-labs/solana/releases").then(res => res.json().then(rs => rs.filter(r => !r.prerelease && r.tag_name.startsWith("v1.17."))).then(x => console.log(x[0].tag_name)));'
+    )
     if [ -z $version ]; then
       exit 3
     fi
