@@ -17,7 +17,7 @@ import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
 
 export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
-    return createJsonRpc({
+    return createJsonRpc<SolanaRpcMethods>({
         ...config,
         api: createSolanaRpcApi(DEFAULT_RPC_CONFIG),
     });
@@ -27,7 +27,7 @@ export function createSolanaRpcSubscriptions(
     config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
 ): RpcSubscriptions<SolanaRpcSubscriptions> {
     return pipe(
-        createJsonSubscriptionRpc({
+        createJsonSubscriptionRpc<SolanaRpcSubscriptions>({
             ...config,
             api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
         }),
@@ -42,7 +42,7 @@ export function createSolanaRpcSubscriptions(
 export function createSolanaRpcSubscriptions_UNSTABLE(
     config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
 ): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
-    return createJsonSubscriptionRpc({
+    return createJsonSubscriptionRpc<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>({
         ...config,
         api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
     });

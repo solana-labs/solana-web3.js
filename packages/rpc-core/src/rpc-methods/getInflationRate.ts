@@ -15,8 +15,5 @@ export interface GetInflationRateApi {
     /**
      * Returns the current block height of the node
      */
-    getInflationRate(
-        // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
-        NO_CONFIG?: Record<string, never>
-    ): GetInflationRateApiResponse;
+    getInflationRate(): GetInflationRateApiResponse;
 }
