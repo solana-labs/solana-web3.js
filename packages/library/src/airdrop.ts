@@ -18,7 +18,9 @@ export function createDefaultAirdropRequester({ rpc, rpcSubscriptions }: Airdrop
         rpc,
         rpcSubscriptions,
     });
-    return async function requestAirdrop(config: Parameters<typeof requestAndConfirmAirdrop>[0]) {
+    return async function requestAirdrop(
+        config: Omit<Parameters<typeof requestAndConfirmAirdrop>[0], 'confirmSignatureOnlyTransaction' | 'rpc'>
+    ) {
         return await requestAndConfirmAirdrop({
             ...config,
             confirmSignatureOnlyTransaction,
@@ -35,7 +37,7 @@ export async function requestAndConfirmAirdrop({
     recipientAddress,
     rpc,
 }: Readonly<{
-    abortSignal: AbortSignal;
+    abortSignal?: AbortSignal;
     commitment: Commitment;
     confirmSignatureOnlyTransaction: ReturnType<typeof createDefaultSignatureOnlyRecentTransactionConfirmer>;
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
