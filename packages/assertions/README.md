@@ -18,6 +18,10 @@ This package contains utilities for asserting that a JavaScript environment supp
 
 ## Functions
 
+`assertDigestCapabilityIsAvailable()`
+
+Throws an exception unless `crypto.subtle.digest()` is available in the current JavaScript environment.
+
 `assertKeyExporterIsAvailable()`
 
 Throws an exception unless `crypto.subtle.exportKey()` is available in the current JavaScript environment.
