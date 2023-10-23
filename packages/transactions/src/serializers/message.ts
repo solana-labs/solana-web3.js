@@ -1,142 +1,169 @@
+import { getAddressDecoder, getAddressEncoder } from '@solana/addresses';
+import { Codec, combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
 import {
-    array,
-    base58,
-    mapSerializer,
-    Serializer,
-    shortU16,
-    string,
-    struct,
-    StructToSerializerTuple,
-} from '@metaplex-foundation/umi-serializers';
-import { getAddressCodec } from '@solana/addresses';
-import { Codec } from '@solana/codecs-core';
+    getArrayDecoder,
+    getArrayEncoder,
+    getStructDecoder,
+    getStructEncoder,
+    StructToDecoderTuple,
+    StructToEncoderTuple,
+} from '@solana/codecs-data-structures';
+import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
+import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
+import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { CompiledMessage } from '../message';
 import { SerializedMessageBytes } from '../types';
-import { getAddressTableLookupCodec } from './address-table-lookup';
-import { getMessageHeaderCodec } from './header';
-import { getInstructionCodec } from './instruction';
-import { getTransactionVersionCodec } from './transaction-version';
-import { getUnimplementedDecoder, getUnimplementedEncoder } from './unimplemented';
+import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
+import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
+import { getInstructionDecoder, getInstructionEncoder } from './instruction';
+import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
 
-const BASE_CONFIG = {
-    description: __DEV__ ? 'The wire format of a Solana transaction message' : '',
-    fixedSize: null,
-    maxSize: null,
-} as const;
+const staticAccountsDescription = __DEV__
+    ? 'A compact-array of static account addresses belonging to this transaction'
+    : 'staticAccounts';
+const lifetimeTokenDescription = __DEV__
+    ? 'A 32-byte token that specifies the lifetime of this transaction (eg. a ' +
+      'recent blockhash, or a durable nonce)'
+    : 'lifetimeToken';
+const instructionsDescription = __DEV__
+    ? 'A compact-array of instructions belonging to this transaction'
+    : 'instructions';
+const addressTableLookupsDescription = __DEV__
+    ? 'A compact array of address table lookups belonging to this transaction'
+    : 'addressTableLookups';
 
-function deserialize(bytes: Uint8Array, offset = 0): [CompiledMessage, number] {
-    const preludeAndOffset = struct(getPreludeStructSerializerTuple()).deserialize(bytes, offset);
-    const [prelude, endOfPreludeOffset] = preludeAndOffset;
-    if (prelude.version === 'legacy') {
-        return preludeAndOffset;
-    }
-    const [addressTableLookups, finalOffset] = getAddressTableLookupsSerializer().deserialize(
-        bytes,
-        endOfPreludeOffset
-    );
-    return [
-        {
-            ...prelude,
-            ...(addressTableLookups.length ? { addressTableLookups } : null),
-        },
-        finalOffset,
-    ];
+function getCompiledMessageLegacyEncoder(): Encoder<CompiledMessage> {
+    return getStructEncoder(getPreludeStructEncoderTuple());
 }
 
-function serialize(compiledMessage: CompiledMessage): SerializedMessageBytes {
-    if (compiledMessage.version === 'legacy') {
-        return struct(getPreludeStructSerializerTuple()).serialize(compiledMessage) as SerializedMessageBytes;
-    } else {
-        return mapSerializer(
-            struct([
-                ...getPreludeStructSerializerTuple(),
-                ['addressTableLookups', getAddressTableLookupsSerializer()],
-            ] as StructToSerializerTuple<CompiledMessage, CompiledMessage>),
-            (value: CompiledMessage) => {
-                if (value.version === 'legacy') {
-                    return value;
-                }
-                return {
-                    ...value,
-                    addressTableLookups: value.addressTableLookups ?? [],
-                } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
+function getCompiledMessageVersionedEncoder(): Encoder<CompiledMessage> {
+    return mapEncoder(
+        getStructEncoder([
+            ...getPreludeStructEncoderTuple(),
+            ['addressTableLookups', getAddressTableLookupArrayEncoder()],
+        ] as StructToEncoderTuple<CompiledMessage>),
+        (value: CompiledMessage) => {
+            if (value.version === 'legacy') {
+                return value;
             }
-        ).serialize(compiledMessage) as SerializedMessageBytes;
-    }
+            return {
+                ...value,
+                addressTableLookups: value.addressTableLookups ?? [],
+            } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
+        }
+    );
 }
 
-// Temporary, convert a codec to a serializer for compatiblity for now
-function toSerializer<T>(codec: Codec<T>): Serializer<T> {
-    return {
-        description: codec.description,
-        deserialize: codec.decode,
-        fixedSize: codec.fixedSize,
-        maxSize: codec.maxSize,
-        serialize: codec.encode,
-    };
-}
-
-function getPreludeStructSerializerTuple(): StructToSerializerTuple<CompiledMessage, CompiledMessage> {
+function getPreludeStructEncoderTuple(): StructToEncoderTuple<CompiledMessage> {
     return [
-        ['version', toSerializer(getTransactionVersionCodec())],
-        ['header', toSerializer(getMessageHeaderCodec())],
+        ['version', getTransactionVersionEncoder()],
+        ['header', getMessageHeaderEncoder()],
         [
             'staticAccounts',
-            array(toSerializer(getAddressCodec()), {
-                description: __DEV__ ? 'A compact-array of static account addresses belonging to this transaction' : '',
-                size: shortU16(),
+            getArrayEncoder(getAddressEncoder(), {
+                description: staticAccountsDescription,
+                size: getShortU16Encoder(),
             }),
         ],
         [
             'lifetimeToken',
-            string({
-                description: __DEV__
-                    ? 'A 32-byte token that specifies the lifetime of this transaction (eg. a ' +
-                      'recent blockhash, or a durable nonce)'
-                    : '',
-                encoding: base58,
+            getStringEncoder({
+                description: lifetimeTokenDescription,
+                encoding: getBase58Encoder(),
                 size: 32,
             }),
         ],
         [
             'instructions',
-            array(toSerializer(getInstructionCodec()), {
-                description: __DEV__ ? 'A compact-array of instructions belonging to this transaction' : '',
-                size: shortU16(),
+            getArrayEncoder(getInstructionEncoder(), {
+                description: instructionsDescription,
+                size: getShortU16Encoder(),
             }),
         ],
     ];
 }
 
-function getAddressTableLookupsSerializer() {
-    // temporary: will be changed to using codecs
-    return array(toSerializer(getAddressTableLookupCodec()), {
-        ...(__DEV__ ? { description: 'A compact array of address table lookups belonging to this transaction' } : null),
-        size: shortU16(),
+function getPreludeStructDecoderTuple(): StructToDecoderTuple<
+    CompiledMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
+> {
+    return [
+        ['version', getTransactionVersionDecoder() as Decoder<number>],
+        ['header', getMessageHeaderDecoder()],
+        [
+            'staticAccounts',
+            getArrayDecoder(getAddressDecoder(), {
+                description: staticAccountsDescription,
+                size: getShortU16Decoder(),
+            }),
+        ],
+        [
+            'lifetimeToken',
+            getStringDecoder({
+                description: lifetimeTokenDescription,
+                encoding: getBase58Decoder(),
+                size: 32,
+            }),
+        ],
+        [
+            'instructions',
+            getArrayDecoder(getInstructionDecoder(), {
+                description: instructionsDescription,
+                size: getShortU16Decoder(),
+            }),
+        ],
+        ['addressTableLookups', getAddressTableLookupArrayDecoder()],
+    ];
+}
+
+function getAddressTableLookupArrayEncoder() {
+    return getArrayEncoder(getAddressTableLookupEncoder(), {
+        description: addressTableLookupsDescription,
+        size: getShortU16Encoder(),
     });
 }
 
-export function getCompiledMessageEncoder(): Serializer<CompiledMessage> {
+function getAddressTableLookupArrayDecoder() {
+    return getArrayDecoder(getAddressTableLookupDecoder(), {
+        description: addressTableLookupsDescription,
+        size: getShortU16Decoder(),
+    });
+}
+
+const messageDescription = __DEV__ ? 'The wire format of a Solana transaction message' : 'message';
+
+export function getCompiledMessageEncoder(): Encoder<CompiledMessage> {
     return {
-        ...BASE_CONFIG,
-        deserialize: getUnimplementedDecoder('CompiledMessage'),
-        serialize,
+        description: messageDescription,
+        encode: compiledMessage => {
+            if (compiledMessage.version === 'legacy') {
+                return getCompiledMessageLegacyEncoder().encode(compiledMessage) as SerializedMessageBytes;
+            } else {
+                return getCompiledMessageVersionedEncoder().encode(compiledMessage) as SerializedMessageBytes;
+            }
+        },
+        fixedSize: null,
+        maxSize: null,
     };
 }
 
-export function getCompiledMessageDecoder(): Serializer<CompiledMessage> {
-    return {
-        ...BASE_CONFIG,
-        deserialize,
-        serialize: getUnimplementedEncoder('CompiledMessage'),
-    };
+export function getCompiledMessageDecoder(): Decoder<CompiledMessage> {
+    return mapDecoder(
+        getStructDecoder(getPreludeStructDecoderTuple(), {
+            description: messageDescription,
+        }),
+        ({ addressTableLookups, ...restOfMessage }) => {
+            if (restOfMessage.version === 'legacy' || !addressTableLookups?.length) {
+                return restOfMessage;
+            }
+            return { ...restOfMessage, addressTableLookups } as Exclude<
+                CompiledMessage,
+                { readonly version: 'legacy' }
+            >;
+        }
+    );
 }
 
-export function getCompiledMessageCodec(): Serializer<CompiledMessage> {
-    return {
-        ...BASE_CONFIG,
-        deserialize,
-        serialize,
-    };
+export function getCompiledMessageCodec(): Codec<CompiledMessage> {
+    return combineCodec(getCompiledMessageEncoder(), getCompiledMessageDecoder());
 }

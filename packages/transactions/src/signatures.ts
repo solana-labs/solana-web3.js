@@ -63,7 +63,7 @@ export function isTransactionSignature(
 }
 
 async function getCompiledMessageSignature(message: CompiledMessage, secretKey: CryptoKey) {
-    const wireMessageBytes = getCompiledMessageEncoder().serialize(message);
+    const wireMessageBytes = getCompiledMessageEncoder().encode(message);
     const signature = await signBytes(secretKey, wireMessageBytes);
     return signature;
 }

@@ -1,5 +1,5 @@
-import { Serializer } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Decoder, Encoder } from '@solana/codecs-core';
 
 import { CompiledMessage } from '../../message';
 import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
@@ -7,12 +7,12 @@ import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageE
 describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
     'Transaction message serializer %p',
     serializerFactory => {
-        let compiledMessage: Serializer<CompiledMessage>;
+        let compiledMessage: Encoder<CompiledMessage>;
         beforeEach(() => {
             compiledMessage = serializerFactory();
         });
         it('serializes a transaction according to the spec', () => {
-            const byteArray = compiledMessage.serialize({
+            const byteArray = compiledMessage.encode({
                 addressTableLookups: [
                     {
                         lookupTableAddress: '3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7' as Base58EncodedAddress, // decodes to [44{32}]
@@ -49,8 +49,8 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
 
                     /** STATIC ADDRESSES */
                     2, // Number of static accounts
-                        11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
-                        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
+                    11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
+                    22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
 
                     /** TRANSACTION LIFETIME TOKEN (ie. the blockhash) */
                     33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, // 3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL
@@ -58,32 +58,32 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                     /* INSTRUCTIONS */
                     2, // Number of instructions
 
-                        // First instruction
-                        44, // Program address index
-                        0, // Number of address indices
-                        0, // Length of instruction data
+                    // First instruction
+                    44, // Program address index
+                    0, // Number of address indices
+                    0, // Length of instruction data
 
-                        // Second instruction
-                        55, // Program address index
-                        2, // Number of address indices
-                            77, 66, // Address indices
-                        3, // Length of instruction data
-                            7, 8, 9, // Instruction data itself
+                    // Second instruction
+                    55, // Program address index
+                    2, // Number of address indices
+                    77, 66, // Address indices
+                    3, // Length of instruction data
+                    7, 8, 9, // Instruction data itself
 
                     /** ADDRESS TABLE LOOKUPS */
                     1, // Number of address table lookups
 
-                        // First address table lookup
-                        44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, // Address of lookup table 3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7
-                        2, // Number of writable indices
-                            66, 55, // Writable indices
-                        1, // Number of readonly indices
-                            77, // Readonly indices
+                    // First address table lookup
+                    44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, // Address of lookup table 3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7
+                    2, // Number of writable indices
+                    66, 55, // Writable indices
+                    1, // Number of readonly indices
+                    77, // Readonly indices
                 ])
             );
         });
         it('serializes a versioned transaction with `undefined` address table lookups', () => {
-            const byteArray = compiledMessage.serialize({
+            const byteArray = compiledMessage.encode({
                 /** `addressTableLookups` is not defined */
                 header: {
                     numReadonlyNonSignerAccounts: 1,
@@ -122,7 +122,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
         });
         it('omits the version header for `legacy` transactions', () => {
             expect(
-                compiledMessage.serialize({
+                compiledMessage.encode({
                     header: {
                         numReadonlyNonSignerAccounts: 1,
                         numReadonlySignerAccounts: 2,
@@ -156,7 +156,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
         });
         it('omits the address table lookups for `legacy` transactions', () => {
             expect(
-                getCompiledMessageCodec().serialize({
+                getCompiledMessageCodec().encode({
                     header: {
                         numReadonlyNonSignerAccounts: 1,
                         numReadonlySignerAccounts: 2,
@@ -194,7 +194,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
 describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
     'Transaction message deserializer %p',
     serializerFactory => {
-        let compiledMessage: Serializer<CompiledMessage>;
+        let compiledMessage: Decoder<CompiledMessage>;
         beforeEach(() => {
             compiledMessage = serializerFactory();
         });
@@ -212,8 +212,8 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
 
                     /** STATIC ADDRESSES */
                     2, // Number of static accounts
-                        11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
-                        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
+                    11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
+                    22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
 
                     /** TRANSACTION LIFETIME TOKEN (ie. the blockhash) */
                     33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, // 3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL
@@ -221,29 +221,29 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                     /* INSTRUCTIONS */
                     2, // Number of instructions
 
-                        // First instruction
-                        44, // Program address index
-                        0, // Number of address indices
-                        0, // Length of instruction data
+                    // First instruction
+                    44, // Program address index
+                    0, // Number of address indices
+                    0, // Length of instruction data
 
-                        // Second instruction
-                        55, // Program address index
-                        2, // Number of address indices
-                            77, 66, // Address indices
-                        3, // Length of instruction data
-                            7, 8, 9, // Instruction data itself
+                    // Second instruction
+                    55, // Program address index
+                    2, // Number of address indices
+                    77, 66, // Address indices
+                    3, // Length of instruction data
+                    7, 8, 9, // Instruction data itself
 
                     /** ADDRESS TABLE LOOKUPS */
                     1, // Number of address table lookups
 
-                        // First address table lookup
-                        44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, // Address of lookup table 3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7
-                        2, // Number of writable indices
-                            66, 55, // Writable indices
-                        1, // Number of readonly indices
-                            77, // Readonly indices
+                    // First address table lookup
+                    44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, // Address of lookup table 3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7
+                    2, // Number of writable indices
+                    66, 55, // Writable indices
+                    1, // Number of readonly indices
+                    77, // Readonly indices
                 ]);
-            const [message, offset] = compiledMessage.deserialize(byteArray);
+            const [message, offset] = compiledMessage.decode(byteArray);
             expect(message).toStrictEqual({
                 addressTableLookups: [
                     {
@@ -273,7 +273,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
         });
         it('omits the `addressTableLookups` property of a versioned transaction when the address table lookups are zero-length', () => {
             expect(
-                compiledMessage.deserialize(
+                compiledMessage.decode(
                     // prettier-ignore
                     new Uint8Array([
                         /** VERSION HEADER */
@@ -307,8 +307,8 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
 
                     /** STATIC ADDRESSES */
                     2, // Number of static accounts
-                        11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
-                        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
+                    11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, // k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn
+                    22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, // 2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z
 
                     /** TRANSACTION LIFETIME TOKEN (ie. the blockhash) */
                     33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 33, // 3EKkiwNLWqoUbzFkPrmKbtUB4EweE6f4STzevYUmezeL
@@ -316,19 +316,19 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                     /* INSTRUCTIONS */
                     2, // Number of instructions
 
-                        // First instruction
-                        44, // Program address index
-                        0, // Number of address indices
-                        0, // Length of instruction data
+                    // First instruction
+                    44, // Program address index
+                    0, // Number of address indices
+                    0, // Length of instruction data
 
-                        // Second instruction
-                        55, // Program address index
-                        2, // Number of address indices
-                            77, 66, // Address indices
-                        3, // Length of instruction data
-                            7, 8, 9, // Instruction data itself
+                    // Second instruction
+                    55, // Program address index
+                    2, // Number of address indices
+                    77, 66, // Address indices
+                    3, // Length of instruction data
+                    7, 8, 9, // Instruction data itself
                 ]);
-            const [message, offset] = compiledMessage.deserialize(byteArray);
+            const [message, offset] = compiledMessage.decode(byteArray);
             expect(message).toStrictEqual({
                 header: {
                     numReadonlyNonSignerAccounts: 1,
@@ -351,19 +351,3 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
         });
     }
 );
-
-describe('The transaction message decode-only factory', () => {
-    it('throws when you call `serialize`', () => {
-        expect(getCompiledMessageDecoder().serialize).toThrowErrorMatchingInlineSnapshot(
-            `"No encoder exists for CompiledMessage. Use \`getCompiledMessageEncoder()\` if you need a encoder, and \`getCompiledMessageCodec()\` if you need to both encode and decode CompiledMessage"`
-        );
-    });
-});
-
-describe('The transaction message encode-only factory', () => {
-    it('throws when you call `deserialize`', () => {
-        expect(getCompiledMessageEncoder().deserialize).toThrowErrorMatchingInlineSnapshot(
-            `"No decoder exists for CompiledMessage. Use \`getCompiledMessageDecoder()\` if you need a decoder, and \`getCompiledMessageCodec()\` if you need to both encode and decode CompiledMessage"`
-        );
-    });
-});
