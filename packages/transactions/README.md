@@ -14,7 +14,25 @@
 
 # @solana/transactions
 
-This package contains types for creating transactions. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains types and functions for creating transactions. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+
+Transactions are built one step at a time using the transform functions offered by this package. To make it more ergonmic to apply consecutive transforms to your transactions, consider using a pipelining helper like the one in `@solana/functional`.
+
+```ts
+import { pipe } from '@solana/functional';
+import {
+    appendTransactionInstruction,
+    setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+} from '@solana/transactions';
+
+const transferTransaction = pipe(
+    createTransaction({ version: 0 }),
+    tx => setTransactionFeePayer(myAddress, tx),
+    tx => setTransactionLifetimeUsingBlockhash(latestBlockhash, tx),
+    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx)
+);
+```
 
 ## Types
 
