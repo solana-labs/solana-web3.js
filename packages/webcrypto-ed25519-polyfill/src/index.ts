@@ -125,7 +125,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     }) as SubtleCrypto['verify'];
 
     /**
-     * Override `SubtleCrypto#generateKey`
+     * Override `SubtleCrypto#importKey`
      */
     const originalImportKey = originalSubtleCrypto.importKey as SubtleCrypto['importKey'] | undefined;
     let originalImportKeySupportsEd25519: Promise<boolean> | boolean | undefined;

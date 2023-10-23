@@ -148,11 +148,9 @@ describe('generateKey() polyfill', () => {
             expect.assertions(1);
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
-            const keyPair = await globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-                'sign',
-                'verify',
-            ]);
-            expect(keyPair).toBe(mockKeyPair);
+            await expect(
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+            ).resolves.toBe(mockKeyPair);
         });
     });
     describe('when imported in an environment that does not support Ed25519', () => {
@@ -189,11 +187,9 @@ describe('generateKey() polyfill', () => {
             expect.assertions(1);
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
-            const keyPair = await globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-                'sign',
-                'verify',
-            ]);
-            expect(keyPair).toBe(mockKeyPair);
+            await expect(
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+            ).resolves.toBe(mockKeyPair);
         });
     });
     describe('when imported in an environment that supports Ed25519', () => {
@@ -528,14 +524,11 @@ describe('importKey() polyfill', () => {
             expect.assertions(1);
             const mockKey = {};
             (importKeyPolyfill as jest.Mock).mockReturnValue(mockKey);
-            const keyPair = await globalThis.crypto.subtle.importKey(
-                'raw',
-                MOCK_PUBLIC_KEY_BYTES,
-                'Ed25519',
-                /* extractable */ false,
-                ['verify']
-            );
-            expect(keyPair).toBe(mockKey);
+            await expect(
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ])
+            ).resolves.toBe(mockKey);
         });
     });
     describe('when imported in an environment that does not support Ed25519', () => {
