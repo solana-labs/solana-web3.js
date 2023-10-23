@@ -24,6 +24,16 @@ This type represents a string that validates as a Solana address. Functions that
 
 Whenever you need to validate an arbitrary string as a base58-encoded address, use the `address()`, `assertIsAddress()`, or `isAddress()` functions in this package.
 
+### `ProgramDerivedAddress`
+
+This type represents the tuple of a program derived address and the bump seed used to ensure that the address, as derived, is not found on the Ed25519 curve.
+
+Whenever you need to validate an arbitrary tuple as one that represents a program derived address, use the `assertIsProgramDerivedAddress()` or `isProgramDerivedAddress()` functions in this package.
+
+### `ProgramDerivedAddressBump`
+
+This type represents an integer between 0-255 used as a seed when deriving a program derived address. The purpose of this value is to modify the derivation enough to ensure that the derived address does not find itself on the Ed25519 curve.
+
 ## Functions
 
 ### `address()`
@@ -68,6 +78,28 @@ function handleSubmit() {
         // `address` turned out not to be a base58-encoded address
     }
 }
+```
+
+### `assertIsProgramDerivedAddress()`
+
+In the event that you receive an address/bump-seed tuple from some untrusted source, you can assert that such an tuple conforms to the `ProgramDerivedAddress` type using this function.
+
+See [`assertIsAddress()`](#assertisaddress) for an example of how to use an assertion function.
+
+### `createAddressWithSeed()`
+
+Returns a base58-encoded address derived from some base address, some program address, and a seed string or byte array.
+
+```ts
+import { createAddressWithSeed } from '@solana/addresses';
+
+const derivedAddress = await createAddressWithSeed({
+    // The private key associated with this address will be able to sign for `derivedAddress`.
+    baseAddress: 'B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka' as Base58EncodedAddress,
+    // Only this program will be able to write data to this account.
+    programAddress: '445erYq578p2aERrGW9mn9KiYe3fuG6uHdcJ2LPPShGw' as Base58EncodedAddress,
+    seed: 'data-account',
+});
 ```
 
 ### `getAddressDecoder()`
@@ -150,3 +182,9 @@ if (isAddress(ownerAddress)) {
     setError(`${ownerAddress} is not an address`);
 }
 ```
+
+### `isProgramDerivedAddress()`
+
+This is a type guard that accepts a tuple as input. It will both return `true` if the tuple conforms to the `ProgramDerivedAddress` type and will refine the type for use in your program.
+
+See [`isAddress()`](#isaddress) for an example of how to use a type guard.
