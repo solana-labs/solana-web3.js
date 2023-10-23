@@ -34,10 +34,22 @@ const transferTransaction = pipe(
 );
 ```
 
-## Types
+## Creating transactions
 
-TODO
+### Types
 
-## Functions
+#### `TransactionVersion`
 
-TODO
+As Solana transactions acquire more capabilities their version will advance. This type is a union of all possible transaction versions.
+
+### Functions
+
+#### `createTransaction()`
+
+Given a `TransactionVersion` this method will return an empty transaction having the capabilities of that version.
+
+```ts
+import { createTransaction } from '@solana/transactions';
+
+const tx = createTransaction({ version: 0 });
+```
