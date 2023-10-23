@@ -53,3 +53,25 @@ import { createTransaction } from '@solana/transactions';
 
 const tx = createTransaction({ version: 0 });
 ```
+
+## Setting the fee payer
+
+### Types
+
+#### `ITransactionWithFeePayer`
+
+This type represents a transaction for which a fee payer has been declared. A transaction must conform to this type to be landed on the network.
+
+### Functions
+
+#### `setTransactionFeePayer()`
+
+Given a base58-encoded address of a system account, this method will return a new transaction having the same type as the one supplied plus the `ITransactionWithFeePayer` type.
+
+```ts
+import { address } from '@solana/addresses';
+import { setTransactionFeePayer } from '@solana/transactions';
+
+const myAddress = address('mpngsFd4tmbUfzDYJayjKZwZcaR7aWb2793J6grLsGu');
+const txPaidByMe = setTransactionFeePayer(myAddress, tx);
+```
