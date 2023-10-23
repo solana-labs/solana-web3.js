@@ -178,3 +178,44 @@ function handleSubmit() {
 From time to time you might acquire a transaction that you expect to be a durable nonce transaction, from an untrusted network API or user input. To assert that such an arbitrary transaction is in fact a durable nonce transaction, use the `assertIsDurableNonceTransaction` function.
 
 See [`assertIsBlockhash()`](#assertisblockhash) for an example of how to use an assertion function.
+
+## Adding instructions to a transaction
+
+### Types
+
+#### `IInstruction`
+
+This type represents an instruction to be issued to a program. Objects that conform to this type have a `programAddress` property that is the base58-encoded address of the program in question.
+
+#### `IInstructionWithAccounts`
+
+This type represents an instruction that specifies a list of accounts that a program may read from, write to, or require be signers of the transaction itself. Objects that conform to this type have an `accounts` property that is an array of `IAccountMeta | IAccountLookupMeta` in the order the instruction requires.
+
+#### `IInstructionWithData`
+
+This type represents an instruction that supplies some data as input to the program. Objects that conform to this type have a `data` property that can be any type of `Uint8Array`.
+
+### Functions
+
+#### `appendTransactionInstruction()`
+
+Given an instruction, this method will return a new transaction with that instruction having been added to the end of the list of existing instructions.
+
+```ts
+import { address } from '@solana/addresses';
+import { appendTransactionInstruction } from '@solana/transactions';
+
+const memoTransaction = appendTransactionInstruction(
+    {
+        data: new TextEncoder().encode('Hello world!'),
+        programAddress: address('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
+    },
+    tx
+);
+```
+
+#### `prependTransactionInstruction()`
+
+Given an instruction, this method will return a new transaction with that instruction having been added to the beginning of the list of existing instructions.
+
+See [`appendTransactionInstruction()`](#appendtransactioninstruction) for an example of how to use this function.
