@@ -75,3 +75,60 @@ import { setTransactionFeePayer } from '@solana/transactions';
 const myAddress = address('mpngsFd4tmbUfzDYJayjKZwZcaR7aWb2793J6grLsGu');
 const txPaidByMe = setTransactionFeePayer(myAddress, tx);
 ```
+
+## Defining a transaction's lifetime
+
+A signed transaction can be only be landed on the network if certain conditions are met:
+
+-   It includes the hash of a recent block
+-   It includes the value of an unused nonce known to the network
+
+These conditions define a transaction's lifetime, after which it can no longer be landed, even if signed.
+
+### Types
+
+#### `ITransactionWithBlockhashLifetime`
+
+This type represents a transaction whose lifetime is defined by the age of the blockhash it includes. Such a transaction can only be landed on the network if the current block height of the network is less than or equal to the value of `ITransactionWithBlockhashLifetime['lifetimeConstraint']['lastValidBlockHeight']`.
+
+#### `Blockhash`
+
+This type represents a string that is particularly known to be the base58-encoded value of a block.
+
+### Functions
+
+#### `setTransactionLifetimeUsingBlockhash()`
+
+Given a blockhash and the last block height at which that blockhash is considered usable to land transactions, this method will return a new transaction having the same type as the one supplied plus the `ITransactionWithBlockhashLifetime` type.
+
+```ts
+import { setTransactionLifetimeUsingBlockhash } from '@solana/transactions';
+
+const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+const txWithBlockhashLifetime = setTransactionLifetimeUsingBlockhash(latestBlockhash, tx);
+```
+
+#### `assertIsBlockhash()`
+
+Client applications primarily deal with blockhashes in the form of base58-encoded strings. Blockhashes returned from the RPC API conform to the type `Blockhash`. You can use a value of that type wherever a blockhash is expected.
+
+From time to time you might acquire a string, that you expect to validate as a blockhash, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded blockhash, use the `assertIsBlockhash` function.
+
+```ts
+import { assertIsBlockhash } from '@solana/transactions';
+
+// Imagine a function that asserts whether a user-supplied blockhash is valid or not.
+function handleSubmit() {
+    // We know only that what the user typed conforms to the `string` type.
+    const blockhash: string = blockhashInput.value;
+    try {
+        // If this type assertion function doesn't throw, then
+        // Typescript will upcast `blockhash` to `Blockhash`.
+        assertIsBlockhash(blockhash);
+        // At this point, `blockhash` is a `Blockhash` that can be used with the RPC.
+        const blockhashIsValid = await rpc.isBlockhashValid(blockhash).send();
+    } catch (e) {
+        // `blockhash` turned out not to be a base58-encoded blockhash
+    }
+}
+```
