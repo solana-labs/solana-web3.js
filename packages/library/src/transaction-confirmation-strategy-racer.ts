@@ -4,23 +4,27 @@ import { TransactionSignature } from '@solana/transactions';
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
 
 export interface BaseTransactionConfirmationStrategyConfig {
-    abortSignal: AbortSignal;
+    abortSignal?: AbortSignal;
     commitment: Commitment;
     getRecentSignatureConfirmationPromise: ReturnType<typeof createRecentSignatureConfirmationPromiseFactory>;
 }
 
+type WithNonNullableAbortSignal<T> = Omit<T, 'abortSignal'> & Readonly<{ abortSignal: AbortSignal }>;
+
 export async function raceStrategies<TConfig extends BaseTransactionConfirmationStrategyConfig>(
     signature: TransactionSignature,
     config: TConfig,
-    getSpecificStrategiesForRace: (config: TConfig) => readonly Promise<unknown>[]
+    getSpecificStrategiesForRace: (config: WithNonNullableAbortSignal<TConfig>) => readonly Promise<unknown>[]
 ) {
     const { abortSignal: callerAbortSignal, commitment, getRecentSignatureConfirmationPromise } = config;
-    callerAbortSignal.throwIfAborted();
+    callerAbortSignal?.throwIfAborted();
     const abortController = new AbortController();
-    function handleAbort() {
-        abortController.abort();
+    if (callerAbortSignal) {
+        const handleAbort = () => {
+            abortController.abort();
+        };
+        callerAbortSignal.addEventListener('abort', handleAbort, { signal: abortController.signal });
     }
-    callerAbortSignal.addEventListener('abort', handleAbort, { signal: abortController.signal });
     try {
         const specificStrategies = getSpecificStrategiesForRace({
             ...config,
