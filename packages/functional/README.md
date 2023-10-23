@@ -21,4 +21,29 @@ is also exported as part of the Solana JavaScript SDK
 
 ## Functions
 
-`pipe`: A functional utility function for piping a value through various functions
+### `pipe()`
+
+Until the [pipe operator](https://github.com/tc39/proposal-pipeline-operator) becomes part of JavaScript you can use this utility to create pipelines.
+
+```ts
+const add = (a, b) => a + b;
+const add10 = x => add(x, 10);
+const add100 = x => add(x, 100);
+const sum = pipe(1, add10, add100);
+sum === 111; // true
+```
+
+A pipeline is one solution to performing consecutive operations on a value using functions, such as you would when building a transaction.
+
+```ts
+const transferTransaction = pipe(
+    // The result of the first expression...
+    createTransaction({ version: 0 }),
+    // ...gets passed as the sole argument to the next function in the pipeline.
+    tx => setTransactionFeePayer(myAddress, tx),
+    // The return value of that function gets passed to the next...
+    tx => setTransactionLifetimeUsingBlockhash(latestBlockhash, tx),
+    // ...and so on.
+    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx)
+);
+```
