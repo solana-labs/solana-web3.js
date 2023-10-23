@@ -1,6 +1,6 @@
+import { Commitment } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { TransactionError } from '../transaction-error';
 import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 

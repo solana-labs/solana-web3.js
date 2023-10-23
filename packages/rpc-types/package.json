@@ -1,7 +1,7 @@
 {
-    "name": "@solana/rpc-core",
+    "name": "@solana/rpc-types",
     "version": "2.0.0-development",
-    "description": "A library for making calls to the Solana JSON RPC API",
+    "description": "Type definitions for values used in the Solana RPC, and helper functions for working with them",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -61,14 +61,8 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.9"
-    },
     "devDependencies": {
-        "@solana/addresses": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
-        "@solana/rpc-transport": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
         "@solana/transactions": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.6",

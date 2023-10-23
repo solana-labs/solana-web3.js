@@ -1,10 +1,10 @@
 import { base58, base64 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Commitment } from '@solana/rpc-core';
 import { Base64EncodedDataResponse } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
 import { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment } from '@solana/rpc-types';
 import { Nonce } from '@solana/transactions';
 
 type GetNonceInvalidationPromiseFn = (config: {

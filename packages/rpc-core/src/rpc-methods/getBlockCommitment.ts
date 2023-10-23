@@ -1,4 +1,5 @@
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+
 import { Slot } from './common';
 
 type GetBlockCommitmentApiResponse = Readonly<{

@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { TransactionError } from '../transaction-error';
 import {
     Base58EncodedBytes,

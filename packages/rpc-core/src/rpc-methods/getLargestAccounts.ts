@@ -1,7 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { Commitment } from '../commitment';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { RpcResponse } from './common';
 
 type GetLargestAccountsResponseItem = Readonly<{

@@ -1,6 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from '@solana/rpc-types';
 
-import { Commitment } from '../commitment';
 import { RpcResponse, TokenAmount } from './common';
 
 type GetTokenSupplyApiResponse = RpcResponse<TokenAmount>;

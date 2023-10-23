@@ -1,4 +1,4 @@
-import { Commitment } from '@solana/rpc-core';
+import { Commitment } from '@solana/rpc-types';
 
 type Config = Readonly<{
     abortSignal: AbortSignal;

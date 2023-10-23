@@ -1,6 +1,6 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from '@solana/rpc-types';
 
-import { Commitment } from '../commitment';
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type Epoch = U64UnsafeBeyond2Pow53Minus1;

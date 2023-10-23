@@ -1,4 +1,3 @@
-import { Commitment, commitmentComparator } from '@solana/rpc-core';
 import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { SendTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/sendTransaction';
@@ -6,6 +5,7 @@ import { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscri
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
 import { SlotNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/slot-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment, commitmentComparator } from '@solana/rpc-types';
 import {
     BaseTransaction,
     getBase64EncodedWireTransaction,

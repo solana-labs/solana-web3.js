@@ -1,7 +1,7 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { TransactionError } from '../transaction-error';
 import {
     AccountInfoBase,

@@ -1,6 +1,6 @@
+import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { Base58EncodedBytes, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
 import {
     Reward,
@@ -10,7 +10,6 @@ import {
     TransactionForFullJson,
     TransactionForFullJsonParsed,
 } from '../rpc-methods/common-transactions';
-import { UnixTimestamp } from '../unix-timestamp';
 
 // Subscription notification types
 

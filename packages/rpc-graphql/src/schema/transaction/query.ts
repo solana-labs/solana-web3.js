@@ -1,4 +1,4 @@
-import { Commitment } from '@solana/rpc-core';
+import { Commitment } from '@solana/rpc-types';
 import { TransactionSignature, TransactionVersion } from '@solana/transactions';
 
 import { RpcGraphQLContext } from '../../context';
