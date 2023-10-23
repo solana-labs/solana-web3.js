@@ -37,7 +37,7 @@ describe('Transaction serializer', () => {
         transaction = getTransactionEncoder();
     });
     it('serializes a transaction with no signatures', () => {
-        expect(transaction.serialize({} as Parameters<typeof transaction.serialize>[0])).toStrictEqual(
+        expect(transaction.encode({} as Parameters<typeof transaction.encode>[0])).toStrictEqual(
             new Uint8Array([
                 /** SIGNATURES */
                 2, // Length of signatures array
@@ -52,8 +52,8 @@ describe('Transaction serializer', () => {
     it('serializes a partially signed transaction', () => {
         const mockSignatureA = new Uint8Array(Array(64).fill(1));
         expect(
-            transaction.serialize({ signatures: { [addressA]: mockSignatureA } } as Parameters<
-                typeof transaction.serialize
+            transaction.encode({ signatures: { [addressA]: mockSignatureA } } as Parameters<
+                typeof transaction.encode
             >[0])
         ).toStrictEqual(
             new Uint8Array([
@@ -71,9 +71,9 @@ describe('Transaction serializer', () => {
         const mockSignatureA = new Uint8Array(Array(64).fill(1));
         const mockSignatureB = new Uint8Array(Array(64).fill(2));
         expect(
-            transaction.serialize({
+            transaction.encode({
                 signatures: { [addressA]: mockSignatureA, [addressB]: mockSignatureB },
-            } as Parameters<typeof transaction.serialize>[0])
+            } as Parameters<typeof transaction.encode>[0])
         ).toStrictEqual(
             new Uint8Array([
                 /** SIGNATURES */

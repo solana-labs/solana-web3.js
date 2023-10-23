@@ -5,9 +5,9 @@ export type Base64EncodedWireTransaction = string & {
 };
 
 export function getBase64EncodedWireTransaction(
-    transaction: Parameters<ReturnType<typeof getTransactionEncoder>['serialize']>[0]
+    transaction: Parameters<ReturnType<typeof getTransactionEncoder>['encode']>[0]
 ): Base64EncodedWireTransaction {
-    const wireTransactionBytes = getTransactionEncoder().serialize(transaction);
+    const wireTransactionBytes = getTransactionEncoder().encode(transaction);
     if (__NODEJS__) {
         return Buffer.from(wireTransactionBytes).toString('base64') as Base64EncodedWireTransaction;
     } else {

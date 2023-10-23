@@ -1,47 +1,39 @@
-import { array, bytes, Serializer, shortU16, struct } from '@metaplex-foundation/umi-serializers';
-import { Encoder } from '@solana/codecs-core';
+import { Encoder, mapEncoder } from '@solana/codecs-core';
+import { getArrayEncoder, getBytesEncoder, getStructEncoder } from '@solana/codecs-data-structures';
+import { getShortU16Encoder } from '@solana/codecs-numbers';
 
+import { ITransactionWithSignatures } from '..';
 import { getCompiledTransaction } from '../compile-transaction';
+import { compileMessage } from '../message';
 import { getCompiledMessageEncoder } from './message';
-import { getUnimplementedDecoder } from './unimplemented';
 
-const BASE_CONFIG = {
-    description: __DEV__ ? 'The wire format of a Solana transaction' : '',
-    fixedSize: null,
-    maxSize: null,
-} as const;
+const transactionDescription = __DEV__ ? 'The wire format of a Solana transaction' : 'transaction';
 
-type SerializableTransaction = Parameters<typeof getCompiledTransaction>[0];
+type CompilableTransaction = Parameters<typeof compileMessage>[0];
+type CompiledTransaction = ReturnType<typeof getCompiledTransaction>;
 
-// Temporary, convert a codec to a serializer for compatiblity for now
-function toSerializer<T>(encoder: Encoder<T>): Serializer<T> {
-    return {
-        description: encoder.description,
-        deserialize: getUnimplementedDecoder(encoder.description),
-        fixedSize: encoder.fixedSize,
-        maxSize: encoder.maxSize,
-        serialize: encoder.encode,
-    };
-}
+const signaturesDescription = __DEV__ ? 'A compact array of 64-byte, base-64 encoded Ed25519 signatures' : 'signatures';
 
-function serialize(transaction: SerializableTransaction) {
-    const compiledTransaction = getCompiledTransaction(transaction);
-    return struct([
+function getCompiledTransactionEncoder(): Encoder<CompiledTransaction> {
+    return getStructEncoder(
         [
-            'signatures',
-            array(bytes({ size: 64 }), {
-                ...(__DEV__ ? { description: 'A compact array of 64-byte, base-64 encoded Ed25519 signatures' } : null),
-                size: shortU16(),
-            }),
+            [
+                'signatures',
+                getArrayEncoder(getBytesEncoder({ size: 64 }), {
+                    description: signaturesDescription,
+                    size: getShortU16Encoder(),
+                }),
+            ],
+            ['compiledMessage', getCompiledMessageEncoder()],
         ],
-        ['compiledMessage', toSerializer(getCompiledMessageEncoder())],
-    ]).serialize(compiledTransaction);
+        {
+            description: transactionDescription,
+        }
+    );
 }
 
-export function getTransactionEncoder(): Serializer<SerializableTransaction> {
-    return {
-        ...BASE_CONFIG,
-        deserialize: getUnimplementedDecoder('CompiledMessage'),
-        serialize,
-    };
+export function getTransactionEncoder(): Encoder<
+    CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)
+> {
+    return mapEncoder(getCompiledTransactionEncoder(), getCompiledTransaction);
 }
