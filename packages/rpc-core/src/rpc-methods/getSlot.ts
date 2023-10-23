@@ -1,4 +1,5 @@
-import { Commitment } from '../commitment';
+import { Commitment } from '@solana/rpc-types';
+
 import { Slot } from './common';
 
 type GetSlotApiResponse = Slot;

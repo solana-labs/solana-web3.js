@@ -1,4 +1,5 @@
-import { UnixTimestamp } from '../unix-timestamp';
+import { UnixTimestamp } from '@solana/rpc-types';
+
 import { Slot } from './common';
 
 /** Estimated production time, as Unix timestamp (seconds since the Unix epoch) */

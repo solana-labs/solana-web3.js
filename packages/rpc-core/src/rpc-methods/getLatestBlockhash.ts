@@ -1,6 +1,6 @@
+import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetLatestBlockhashApiResponse = RpcResponse<{

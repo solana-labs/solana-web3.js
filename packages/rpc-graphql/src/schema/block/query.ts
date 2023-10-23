@@ -1,5 +1,5 @@
-import { Commitment } from '@solana/rpc-core';
 import { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
+import { Commitment } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
 import { RpcGraphQLContext } from '../../context';

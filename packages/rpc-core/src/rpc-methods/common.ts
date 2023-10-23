@@ -1,8 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
-import { StringifiedBigInt } from '../stringified-bigint';
-import { StringifiedNumber } from '../stringified-number';
+import { LamportsUnsafeBeyond2Pow53Minus1, StringifiedBigInt, StringifiedNumber } from '@solana/rpc-types';
 
 export type DataSlice = Readonly<{
     offset: number;

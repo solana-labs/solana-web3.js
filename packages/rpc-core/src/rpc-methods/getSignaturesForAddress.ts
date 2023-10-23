@@ -1,9 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { TransactionError } from '../transaction-error';
-import { UnixTimestamp } from '../unix-timestamp';
 import { RpcResponse, Slot } from './common';
 
 type GetSignaturesForAddressTransaction = RpcResponse<{

@@ -1,9 +1,9 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-core';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
 import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';

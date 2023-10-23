@@ -1,4 +1,4 @@
-import { Commitment } from '@solana/rpc-core';
+import { Commitment } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';

@@ -1,11 +1,11 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { Commitment } from '@solana/rpc-core';
 import {
     DataSlice,
     GetProgramAccountsDatasizeFilter,
     GetProgramAccountsMemcmpFilter,
     Slot,
 } from '@solana/rpc-core/dist/types/rpc-methods/common';
+import { Commitment } from '@solana/rpc-types';
 import { GraphQLList } from 'graphql';
 
 import { RpcGraphQLContext } from '../../context';

@@ -1,11 +1,9 @@
 import { Base58EncodedAddress } from '@solana/addresses';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 import { TransactionSignature } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { TransactionError } from '../transaction-error';
-import { UnixTimestamp } from '../unix-timestamp';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,

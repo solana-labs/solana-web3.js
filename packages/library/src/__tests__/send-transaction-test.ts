@@ -1,7 +1,7 @@
-import { Commitment } from '@solana/rpc-core';
 import { Base58EncodedTransactionSignature } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import { SendTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/sendTransaction';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment } from '@solana/rpc-types';
 import {
     Base64EncodedWireTransaction,
     BaseTransaction,

@@ -1,6 +1,6 @@
+import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { Commitment } from '../commitment';
 import { Base58EncodedTransactionSignature, Slot } from './common';
 
 type SendTransactionConfig = Readonly<{

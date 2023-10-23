@@ -1,6 +1,7 @@
 export * from '@solana/addresses';
 export * from '@solana/instructions';
 export * from '@solana/keys';
+export * from '@solana/rpc-types';
 export * from '@solana/transactions';
 export * from './airdrop';
 export * from './rpc';
