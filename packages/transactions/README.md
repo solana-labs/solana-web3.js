@@ -91,9 +91,17 @@ These conditions define a transaction's lifetime, after which it can no longer b
 
 This type represents a transaction whose lifetime is defined by the age of the blockhash it includes. Such a transaction can only be landed on the network if the current block height of the network is less than or equal to the value of `ITransactionWithBlockhashLifetime['lifetimeConstraint']['lastValidBlockHeight']`.
 
+#### `IDurableNonceTransaction`
+
+This type represents a transaction whose lifetime is defined by the value of a nonce it includes. Such a transaction can only be landed on the network if the nonce is known to the network and has not already been used to land a different transaction.
+
 #### `Blockhash`
 
 This type represents a string that is particularly known to be the base58-encoded value of a block.
+
+#### `Nonce`
+
+This type represents a string that is particularly known to be the base58-encoded value of a nonce.
 
 ### Functions
 
@@ -106,6 +114,38 @@ import { setTransactionLifetimeUsingBlockhash } from '@solana/transactions';
 
 const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
 const txWithBlockhashLifetime = setTransactionLifetimeUsingBlockhash(latestBlockhash, tx);
+```
+
+#### `setTransactionLifetimeUsingDurableNonce()`
+
+Given a nonce, the account where the value of the nonce is stored, and the address of the account authorized to consume that nonce, this method will return a new transaction having the same type as the one supplied plus the `IDurableNonceTransaction` type. In particular, this method _prepends_ an instruction to the transaction designed to consume (or &lsquo;advance&rsquo;) the nonce in the same transaction whose lifetime is defined by it.
+
+```ts
+import { setTransactionLifetimeUsingDurableNonce } from '@solana/transactions';
+
+const NONCE_VALUE_OFFSET =
+    4 + // version(u32)
+    4 + // state(u32)
+    32; // nonce authority(pubkey)
+// Then comes the nonce value.
+
+const nonceAccountAddress = address('EGtMh4yvXswwHhwVhyPxGrVV2TkLTgUqGodbATEPvojZ');
+const nonceAuthorityAddress = address('4KD1Rdrd89NG7XbzW3xsX9Aqnx2EExJvExiNme6g9iAT');
+const { value: nonceAccount } = await rpc
+    .getAccountInfo(nonceAccountAddress, {
+        dataSlice: { length: 32, offset: NONCE_VALUE_OFFSET },
+        encoding: 'base58',
+    })
+    .send();
+const nonce =
+    // This works because we asked for the exact slice of data representing the nonce
+    // value, and furthermore asked for it in `base58` encoding.
+    nonceAccount!.data[0] as unknown as Nonce;
+
+const durableNonceTransaction = setTransactionLifetimeUsingDurableNonce(
+    { nonce, nonceAccountAddress, nonceAuthorityAddress },
+    tx
+);
 ```
 
 #### `assertIsBlockhash()`
@@ -132,3 +172,9 @@ function handleSubmit() {
     }
 }
 ```
+
+#### `assertIsDurableNonceTransaction()`
+
+From time to time you might acquire a transaction that you expect to be a durable nonce transaction, from an untrusted network API or user input. To assert that such an arbitrary transaction is in fact a durable nonce transaction, use the `assertIsDurableNonceTransaction` function.
+
+See [`assertIsBlockhash()`](#assertisblockhash) for an example of how to use an assertion function.
