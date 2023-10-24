@@ -1,6 +1,5 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-
-import { Commitment } from '../../commitment';
+import { Commitment } from '@solana/rpc-types';
 
 describe('logsNotifications', () => {
     (

@@ -1,8 +1,8 @@
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../../commitment';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 describe('getStakeMinimumDelegation', () => {

@@ -2,10 +2,9 @@ import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../../commitment';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../../lamports';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 describe('requestAirdrop', () => {

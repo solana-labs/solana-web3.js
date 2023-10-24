@@ -2,8 +2,8 @@
 
 import { Base58EncodedAddress } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../../lamports';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,

@@ -2,10 +2,10 @@ import { base58, fixSerializer } from '@metaplex-foundation/umi-serializers';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../../commitment';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 function getMockTransactionMessage({

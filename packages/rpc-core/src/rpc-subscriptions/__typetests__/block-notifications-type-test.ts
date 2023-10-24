@@ -1,8 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '../../lamports';
 import { RpcResponse, Slot } from '../../rpc-methods/common';
 import {
     Base58EncodedBytes,
