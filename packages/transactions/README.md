@@ -219,3 +219,93 @@ const memoTransaction = appendTransactionInstruction(
 Given an instruction, this method will return a new transaction with that instruction having been added to the beginning of the list of existing instructions.
 
 See [`appendTransactionInstruction()`](#appendtransactioninstruction) for an example of how to use this function.
+
+## Signing transactions
+
+In order to be landed on the network, a transaction must be signed by all of the private keys belonging to accounts that are required signers of the transaction.
+
+Whether a transaction is ready to be signed or not is enforced for you at the type level. In order to be signable, a transaction must:
+
+-   have a version and a list of zero or more instructions (ie. conform to `BaseTransaction`)
+-   have a fee payer set (ie. conform to `ITransactionWithFeePayer`)
+-   have a lifetime specified (ie. conform to `ITransactionWithBlockhashLifetime | IDurableNonceTransaction`)
+
+### Types
+
+#### `ITransactionWithSignatures`
+
+This type represents a transaction that is signed by at least one of its required signers. This type of transaction can be serialized to wire format, but is unsuitable for use with functions designed to land transaction on the network.
+
+Expect any function that modifies a transaction (eg. `setTransactionFeePayer`, `appendTransactionInstruction`, et cetera) to delete a transaction's `signatures` property and unset this type.
+
+#### `IFullySignedTransaction`
+
+This type represents a transaction that is signed by all of its required signers. Being fully signed is a prerequisite of functions designed to land transactions on the network.
+
+Expect any function that modifies a transaction (eg. `setTransactionFeePayer`, `appendTransactionInstruction`, et cetera) to delete a transaction's `signatures` property and unset this type.
+
+#### `TransactionSignature`
+
+This type represents the base58-encoded signature of a transactions fee payer. This value uniquely identifies the transaction on the network.
+
+### Functions
+
+#### `assertIsTransactionSignature()`
+
+From time to time you might acquire a string that you expect to be the base58-encoded signature of a transaction, from an untrusted network API or user input. To assert that such an arbitrary string is in fact a transaction signature, use the `assertIsTransactionSignature` function.
+
+See [`assertIsBlockhash()`](#assertisblockhash) for an example of how to use an assertion function.
+
+#### `getSignatureFromTransaction()`
+
+Given a transaction signed by its fee payer, this method will return the `TransactionSignature` that uniquely identifies it. This string can be used to look up transactions at a later date, for example on a Solana block explorer.
+
+```ts
+import { getSignatureFromTransaction } from '@solana/transactions';
+
+const signature = getSignatureFromTransaction(tx);
+console.debug(`Inspect this transaction at https://explorer.solana.com/tx/${signature}`);
+```
+
+#### `isTransactionSignature()`
+
+This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `TransactionSignature` type and will refine the type for use in your program.
+
+```ts
+import { isTransactionSignature } from '@solana/transactions';
+
+if (isTransactionSignature(signature)) {
+    // At this point, `signature` has been refined to a
+    // `TransactionSignature` that can be used with the RPC.
+    const {
+        value: [status],
+    } = await rpc.getSignatureStatuses([signature]).send();
+    setSignatureStatus(status);
+} else {
+    setError(`${signature} is not a transaction signature`);
+}
+```
+
+#### `signTransaction()`
+
+Given an array of `CryptoKey` objects which are private keys pertaining to addresses that are required to sign a transaction, this method will return a new signed transaction having the same type as the one supplied plus the `ITransactionWithSignatures` type.
+
+```ts
+import { generateKeyPair } from '@solana/keys';
+import { signTransaction } from '@solana/transactions';
+
+const signedTransaction = await signTransaction([myPrivateKey], tx);
+```
+
+#### `transactionSignature()`
+
+This helper combines _asserting_ that a string is a transaction signature with _coercing_ it to the `TransactionSignature` type. It's best used with untrusted input.
+
+```ts
+import { transactionSignature } from '@solana/transactions';
+
+const signature = transactionSignature(userSuppliedSignature);
+const {
+    value: [status],
+} = await rpc.getSignatureStatuses([signature]).send();
+```
