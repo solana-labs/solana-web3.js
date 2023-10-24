@@ -309,3 +309,26 @@ const {
     value: [status],
 } = await rpc.getSignatureStatuses([signature]).send();
 ```
+
+## Serializing transactions
+
+Before sending a transaction to be landed on the network, you must serialize it in a particular way. You can use these types and functions to serialize a signed transaction into a binary format suitable for transit over the wire.
+
+### Types
+
+#### `Base64EncodedWireTransaction`
+
+This type represents the wire format of a transaction as a base64-encoded string.
+
+### Functions
+
+#### `getBase64EncodedWireTransaction()`
+
+Given a signed transaction, this method returns the transaction as a string that conforms to the `Base64EncodedWireTransaction` type.
+
+```ts
+import { getBase64EncodedWireTransaction, signTransaction } from '@solana/transactions';
+
+const serializedTransaction = getBase64EncodedWireTransaction(signedTransaction);
+const signature = await rpc.sendTransaction(serializedTransaction, { encoding: 'base64' }).send();
+```
