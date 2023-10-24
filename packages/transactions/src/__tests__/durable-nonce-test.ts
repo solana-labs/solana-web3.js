@@ -1,7 +1,7 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { Base58EncodedAddress } from '@solana/addresses';
-import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
+import { AccountRole, IInstruction, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 
 import { Blockhash, ITransactionWithBlockhashLifetime } from '../blockhash';
 import {
@@ -127,6 +127,29 @@ describe('assertIsDurableNonceTransaction()', () => {
     it('does not throw when supplied a durable nonce transaction', () => {
         expect(() => {
             assertIsDurableNonceTransaction({ ...durableNonceTx });
+        }).not.toThrow();
+    });
+    it('does not throw when the nonce authority is a writable signer', () => {
+        const advanceDurableNonceInstruction = createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT);
+        const { accounts } = advanceDurableNonceInstruction;
+        const updatedInstruction: IInstruction = {
+            ...advanceDurableNonceInstruction,
+            accounts: [
+                accounts[0],
+                accounts[1],
+                {
+                    ...accounts[2],
+                    role: AccountRole.WRITABLE_SIGNER,
+                },
+            ],
+        };
+        const transaction = {
+            instructions: [updatedInstruction],
+            lifetimeConstraint: { nonce: NONCE_CONSTRAINT.nonce } as IDurableNonceTransaction['lifetimeConstraint'],
+            version: 0,
+        } as const;
+        expect(() => {
+            assertIsDurableNonceTransaction({ ...transaction });
         }).not.toThrow();
     });
 });
