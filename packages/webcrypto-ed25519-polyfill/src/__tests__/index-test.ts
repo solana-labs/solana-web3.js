@@ -1,4 +1,11 @@
-import { exportKeyPolyfill, generateKeyPolyfill, isPolyfilledKey, signPolyfill, verifyPolyfill } from '../secrets';
+import {
+    exportKeyPolyfill,
+    generateKeyPolyfill,
+    importKeyPolyfill,
+    isPolyfilledKey,
+    signPolyfill,
+    verifyPolyfill,
+} from '../secrets';
 
 jest.mock('../secrets');
 
@@ -141,11 +148,9 @@ describe('generateKey() polyfill', () => {
             expect.assertions(1);
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
-            const keyPair = await globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-                'sign',
-                'verify',
-            ]);
-            expect(keyPair).toBe(mockKeyPair);
+            await expect(
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+            ).resolves.toBe(mockKeyPair);
         });
     });
     describe('when imported in an environment that does not support Ed25519', () => {
@@ -182,11 +187,9 @@ describe('generateKey() polyfill', () => {
             expect.assertions(1);
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
-            const keyPair = await globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
-                'sign',
-                'verify',
-            ]);
-            expect(keyPair).toBe(mockKeyPair);
+            await expect(
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+            ).resolves.toBe(mockKeyPair);
         });
     });
     describe('when imported in an environment that supports Ed25519', () => {
@@ -459,6 +462,229 @@ describe('verify() polyfill', () => {
         } else {
             it('overrides `exportKey`', () => {
                 expect(globalThis.crypto.subtle.verify).not.toBe(originalVerify);
+            });
+        }
+    });
+});
+
+describe('importKey() polyfill', () => {
+    let originalImportKey: SubtleCrypto['importKey'];
+
+    const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
+        0x1d, 0x0e, 0x93, 0x86, 0x4d, 0xcc, 0x81, 0x5f, 0xc3, 0xf2, 0x86, 0x18, 0x09, 0x11, 0xd0, 0x0a, 0x3f, 0xd2,
+        0x06, 0xde, 0x31, 0xa1, 0xc9, 0x42, 0x87, 0xcb, 0x43, 0xf0, 0x5f, 0xc9, 0xf2, 0xb5,
+    ]);
+
+    beforeEach(() => {
+        jest.spyOn(globalThis.crypto?.subtle, 'importKey');
+        originalImportKey = globalThis.crypto?.subtle?.importKey;
+    });
+    afterEach(() => {
+        globalThis.crypto.subtle.importKey = originalImportKey;
+    });
+    describe('when imported in an environment with no `importKey` function', () => {
+        beforeEach(async () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            globalThis.crypto.subtle.importKey = undefined;
+            await jest.isolateModulesAsync(async () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await import('../index');
+            });
+        });
+        afterEach(() => {
+            globalThis.crypto.subtle.importKey = originalImportKey;
+        });
+        it.each([
+            { __variant: 'P256', name: 'ECDSA', namedCurve: 'P-256' },
+            { __variant: 'P384', name: 'ECDSA', namedCurve: 'P-384' } as EcKeyGenParams,
+            { __variant: 'P521', name: 'ECDSA', namedCurve: 'P-521' } as EcKeyGenParams,
+            ...['RSASSA-PKCS1-v1_5', 'RSA-PSS'].flatMap(rsaAlgoName =>
+                ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'].map(
+                    hashName =>
+                        ({
+                            __variant: hashName,
+                            hash: { name: hashName },
+                            modulusLength: 2048,
+                            name: rsaAlgoName,
+                            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+                        } as RsaHashedKeyGenParams)
+                )
+            ),
+        ])('fatals when the algorithm is $name/$__variant', async algorithm => {
+            expect.assertions(1);
+            await expect(() =>
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, algorithm, /* extractable */ false, [
+                    'verify',
+                ])
+            ).rejects.toThrow();
+        });
+        it('delegates Ed25519 `importKey` calls to the polyfill', async () => {
+            expect.assertions(1);
+            const mockKey = {};
+            (importKeyPolyfill as jest.Mock).mockReturnValue(mockKey);
+            await expect(
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ])
+            ).resolves.toBe(mockKey);
+        });
+    });
+    describe('when imported in an environment that does not support Ed25519', () => {
+        beforeEach(async () => {
+            const originalImportKeyImpl = originalImportKey;
+            (originalImportKey as jest.Mock).mockImplementation(async (...args) => {
+                const [_format, _keyData, algorithm] = args;
+                if (algorithm === 'Ed25519') {
+                    throw new Error('Ed25519 not supported');
+                }
+                return await originalImportKeyImpl.apply(globalThis.crypto.subtle, args);
+            });
+            await jest.isolateModulesAsync(async () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await import('../index');
+            });
+        });
+        it('calls the original `importKey` once as a test when the algorithm is "Ed25519" but never again (parallel version)', async () => {
+            expect.assertions(1);
+            await Promise.all([
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ]),
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ]),
+            ]);
+            expect(originalImportKey).toHaveBeenCalledTimes(1);
+        });
+        it('calls the original `importKey` once as a test when the algorithm is "Ed25519" but never again (serial version)', async () => {
+            expect.assertions(1);
+            await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                'verify',
+            ]),
+                await globalThis.crypto.subtle.importKey(
+                    'raw',
+                    MOCK_PUBLIC_KEY_BYTES,
+                    'Ed25519',
+                    /* extractable */ false,
+                    ['verify']
+                ),
+                expect(originalImportKey).toHaveBeenCalledTimes(1);
+        });
+        it('delegates Ed25519 `generateKey` calls to the polyfill', async () => {
+            expect.assertions(1);
+            const mockKey = {};
+            (importKeyPolyfill as jest.Mock).mockReturnValue(mockKey);
+            const key = await globalThis.crypto.subtle.importKey(
+                'raw',
+                MOCK_PUBLIC_KEY_BYTES,
+                'Ed25519',
+                /* extractable */ false,
+                ['verify']
+            );
+            expect(key).toBe(mockKey);
+        });
+    });
+    describe('when imported in an environment that supports Ed25519', () => {
+        beforeEach(async () => {
+            await jest.isolateModulesAsync(async () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await import('../index');
+            });
+        });
+        it('overrides `importKey`', () => {
+            expect(globalThis.crypto.subtle.importKey).not.toBe(originalImportKey);
+        });
+        it.each([
+            { __variant: 'P256', name: 'ECDSA', namedCurve: 'P-256' },
+            { __variant: 'P384', name: 'ECDSA', namedCurve: 'P-384' } as EcKeyGenParams,
+            { __variant: 'P521', name: 'ECDSA', namedCurve: 'P-521' } as EcKeyGenParams,
+            ...['RSASSA-PKCS1-v1_5', 'RSA-PSS'].flatMap(rsaAlgoName =>
+                ['SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'].map(
+                    hashName =>
+                        ({
+                            __variant: hashName,
+                            hash: { name: hashName },
+                            modulusLength: 2048,
+                            name: rsaAlgoName,
+                            publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+                        } as RsaHashedKeyGenParams)
+                )
+            ),
+        ])('calls the original `importKey` when the algorithm is $name/$__variant', async algorithm => {
+            expect.assertions(1);
+            try {
+                await globalThis.crypto.subtle.importKey(
+                    'raw',
+                    MOCK_PUBLIC_KEY_BYTES,
+                    algorithm,
+                    /* extractable */ false,
+                    ['verify']
+                );
+            } catch {
+                // some of these won't work with our mock key data, we just want to make sure they're called
+            }
+            expect(originalImportKey).toHaveBeenCalled();
+        });
+        it('delegates the call to the original `importKey` when the algorithm is "Ed25519"', async () => {
+            expect.assertions(1);
+            const mockKey = {};
+            (originalImportKey as jest.Mock).mockResolvedValue(mockKey);
+            await expect(
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ])
+            ).resolves.toBe(mockKey);
+        });
+        it('calls the original `importKey` once per call to `importKey` when the algorithm is "Ed25519" (parallel version)', async () => {
+            expect.assertions(1);
+            await Promise.all([
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ]),
+                globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                    'verify',
+                ]),
+            ]);
+            expect(originalImportKey).toHaveBeenCalledTimes(2);
+        });
+        it('calls the original `importKey` once per call to `importKey` when the algorithm is "Ed25519" (serial version)', async () => {
+            expect.assertions(1);
+            await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                'verify',
+            ]);
+            await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                'verify',
+            ]);
+            expect(originalImportKey).toHaveBeenCalledTimes(2);
+        });
+        it('does not delegate `importKey` calls to the polyfill', async () => {
+            expect.assertions(1);
+            await globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
+                'verify',
+            ]);
+            expect(importKeyPolyfill).not.toHaveBeenCalled();
+        });
+    });
+    describe('when imported in an insecure context', () => {
+        beforeEach(async () => {
+            globalThis.isSecureContext = false;
+            await jest.isolateModulesAsync(async () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await import('../index');
+            });
+        });
+        if (__BROWSER__) {
+            it('does not override `importKey`', () => {
+                expect(globalThis.crypto.subtle.importKey).toBe(originalImportKey);
+            });
+        } else {
+            it('overrides `importKey`', () => {
+                expect(globalThis.crypto.subtle.importKey).not.toBe(originalImportKey);
             });
         }
     });

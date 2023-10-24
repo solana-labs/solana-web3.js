@@ -24,11 +24,49 @@ const PROHIBITED_KEY_USAGES = new Set<KeyUsage>([
     'wrapKey',
 ]);
 
+const ED25519_PKCS8_HEADER =
+    // prettier-ignore
+    new Uint8Array([
+        /**
+         * PKCS#8 header
+         */
+        0x30, // ASN.1 sequence tag
+        0x2e, // Length of sequence (46 more bytes)
+
+            0x02, // ASN.1 integer tag
+            0x01, // Length of integer
+                0x00, // Version number
+
+            0x30, // ASN.1 sequence tag
+            0x05, // Length of sequence
+                0x06, // ASN.1 object identifier tag
+                0x03, // Length of object identifier
+                    // Edwards curve algorithms identifier https://oid-rep.orange-labs.fr/get/1.3.101.112
+                        0x2b, // iso(1) / identified-organization(3) (The first node is multiplied by the decimal 40 and the result is added to the value of the second node)
+                        0x65, // thawte(101)
+                    // Ed25519 identifier
+                        0x70, // id-Ed25519(112)
+
+        /**
+         * Private key payload
+         */
+        0x04, // ASN.1 octet string tag
+        0x22, // String length (34 more bytes)
+
+            // Private key bytes as octet string
+            0x04, // ASN.1 octet string tag
+            0x20, // String length (32 bytes)
+    ]);
+
 function bufferSourceToUint8Array(data: BufferSource): Uint8Array {
     return data instanceof Uint8Array ? data : new Uint8Array(ArrayBuffer.isView(data) ? data.buffer : data);
 }
 
 let storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT: WeakMap<CryptoKey, Uint8Array> | undefined;
+
+// Map of public key bytes. These are the result of calling `ed25519.getPublicKey`
+let publicKeyBytesStore: WeakMap<CryptoKey, Uint8Array> | undefined;
+
 function createKeyPairFromBytes(
     bytes: Uint8Array,
     extractable: boolean,
@@ -82,6 +120,20 @@ function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key: CryptoKey): Uint8Arr
     return secretKeyBytes;
 }
 
+function getPublicKeyBytes(key: CryptoKey): Uint8Array {
+    // Try to find the key in the public key store first
+    const publicKeyStore = (publicKeyBytesStore ||= new WeakMap());
+    const fromPublicStore = publicKeyStore.get(key);
+    if (fromPublicStore) return fromPublicStore;
+
+    // If not available, get the key from the secrets store instead
+    const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+
+    // Store the public key bytes in the public key store for next time
+    publicKeyStore.set(key, publicKeyBytes);
+    return publicKeyBytes;
+}
+
 export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): JsonWebKey;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer | JsonWebKey {
@@ -93,7 +145,7 @@ export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffe
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
-            const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+            const publicKeyBytes = getPublicKeyBytes(key);
             return publicKeyBytes;
         }
         default:
@@ -114,7 +166,7 @@ export function generateKeyPolyfill(extractable: boolean, keyUsages: readonly Ke
 }
 
 export function isPolyfilledKey(key: CryptoKey): boolean {
-    return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key);
+    return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key) || !!publicKeyBytesStore?.has(key);
 }
 
 export function signPolyfill(key: CryptoKey, data: BufferSource): ArrayBuffer {
@@ -131,10 +183,71 @@ export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: Bu
     if (key.type !== 'public' || !key.usages.includes('verify')) {
         throw new DOMException('Unable to use this key to verify', 'InvalidAccessError');
     }
-    const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+    const publicKeyBytes = getPublicKeyBytes(key);
     try {
         return ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), publicKeyBytes);
     } catch {
         return false;
     }
+}
+
+export function importKeyPolyfill(
+    format: KeyFormat,
+    keyData: BufferSource,
+    extractable: boolean,
+    keyUsages: readonly KeyUsage[]
+): CryptoKey {
+    const bytes = bufferSourceToUint8Array(keyData);
+
+    if (format === 'raw') {
+        if (keyUsages.some(usage => usage === 'sign' || PROHIBITED_KEY_USAGES.has(usage))) {
+            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
+        }
+        if (bytes.length !== 32) {
+            throw new DOMException('Ed25519 raw keys must be exactly 32-bytes', 'DataError');
+        }
+        const publicKey = {
+            [Symbol.toStringTag]: 'CryptoKey',
+            algorithm: Object.freeze({ name: 'Ed25519' }),
+            extractable,
+            type: 'public',
+            usages: Object.freeze(keyUsages.filter(usage => usage === 'verify')) as KeyUsage[],
+        } as CryptoKey;
+
+        const cache = (publicKeyBytesStore ||= new WeakMap());
+        cache.set(publicKey, bytes);
+
+        return publicKey;
+    }
+
+    if (format === 'pkcs8') {
+        if (keyUsages.some(usage => usage === 'verify' || PROHIBITED_KEY_USAGES.has(usage))) {
+            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
+        }
+        // 48 bytes: 16-byte PKCS8 header + 32 byte secret key
+        if (bytes.length !== 48) {
+            throw new DOMException('Invalid keyData', 'DataError');
+        }
+        // Must start with exactly the Ed25519 pkcs8 header
+        const header = bytes.slice(0, 16);
+        if (!header.every((val, i) => val === ED25519_PKCS8_HEADER[i])) {
+            throw new DOMException('Invalid keyData', 'DataError');
+        }
+        const secretKeyBytes = bytes.slice(16);
+
+        const privateKey = {
+            [Symbol.toStringTag]: 'CryptoKey',
+            algorithm: Object.freeze({ name: 'Ed25519' }),
+            extractable,
+            type: 'private',
+            usages: Object.freeze(keyUsages.filter(usage => usage === 'sign')) as KeyUsage[],
+        } as CryptoKey;
+
+        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+        cache.set(privateKey, secretKeyBytes);
+
+        return privateKey;
+    }
+
+    throw new Error(`Importing Ed25519 keys in the "${format}" format is unimplemented`);
 }
