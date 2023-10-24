@@ -1,4 +1,4 @@
-import { Commitment } from '../../commitment';
+import { Commitment } from '@solana/rpc-types';
 
 describe('getBlocksWithLimit', () => {
     (['confirmed', 'finalized'] as Exclude<Commitment, 'processed'>[]).forEach(commitment => {

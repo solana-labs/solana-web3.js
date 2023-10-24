@@ -2,10 +2,10 @@
 
 import { Base58EncodedAddress } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionSignature } from '@solana/transactions';
 
 import { Slot } from '../../rpc-methods/common';
-import { UnixTimestamp } from '../../unix-timestamp';
 import { VoteNotificationsApi } from '../vote-notifications';
 
 async () => {

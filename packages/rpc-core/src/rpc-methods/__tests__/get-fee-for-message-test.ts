@@ -2,10 +2,10 @@ import { base58, base64, fixSerializer } from '@metaplex-foundation/umi-serializ
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { Commitment } from '@solana/rpc-types';
 import { Blockhash, SerializedMessageBytesBase64 } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Commitment } from '../../commitment';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({

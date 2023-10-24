@@ -1,8 +1,8 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { lamports } from '@solana/rpc-core';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { lamports } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
 import { requestAndConfirmAirdrop } from '../airdrop';

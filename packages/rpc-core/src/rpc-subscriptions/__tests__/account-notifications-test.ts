@@ -1,4 +1,4 @@
-import { Commitment } from '../../commitment';
+import { Commitment } from '@solana/rpc-types';
 
 describe('accountNotifications', () => {
     ([undefined, 'confirmed', 'finalized', 'processed'] as (Commitment | undefined)[]).forEach(commitment => {
