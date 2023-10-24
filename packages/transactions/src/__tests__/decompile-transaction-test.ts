@@ -2,9 +2,10 @@ import { Base58EncodedAddress } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 
-import { ITransactionWithSignatures } from '..';
 import { decompileTransaction } from '../decompile-transaction';
+import { Nonce } from '../durable-nonce';
 import { CompiledMessage } from '../message';
+import { ITransactionWithSignatures } from '../signatures';
 
 type CompiledTransaction = Readonly<{
     compiledMessage: CompiledMessage;
@@ -15,7 +16,7 @@ describe('decompileTransaction', () => {
     const U64_MAX = 2n ** 64n - 1n;
     const feePayer = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK' as Base58EncodedAddress;
 
-    describe('for a blockhash lifetime', () => {
+    describe('for a transaction with a blockhash lifetime', () => {
         const blockhash = 'J4yED2jcMAHyQUg61DBmm4njmEydUr2WqrV9cdEcDDgL';
 
         it('converts a transaction with no instructions', () => {
@@ -313,6 +314,374 @@ describe('decompileTransaction', () => {
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: 100n,
+            });
+        });
+    });
+
+    describe('for a transaction with a durable nonce lifetime', () => {
+        const nonce = '27kqzE1RifbyoFtibDRTjbnfZ894jsNpuR77JJkt3vgH' as Nonce;
+
+        // added as writable non-signer in the durable nonce instruction
+        const nonceAccountAddress = 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress;
+
+        // added as read-only signer in the durable nonce instruction
+        const nonceAuthorityAddress = '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress;
+
+        const systemProgramAddress = '11111111111111111111111111111111' as Base58EncodedAddress;
+        const recentBlockhashesSysvarAddress = 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress;
+
+        it('converts a transaction with one instruction which is advance nonce (fee payer is nonce authority)', () => {
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                        numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                        numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                1, // nonce account address
+                                3, // recent blockhashes sysvar
+                                0, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 2,
+                        },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        nonceAuthorityAddress,
+                        // no read-only signers
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction);
+
+            const expectedInstruction: IInstruction = {
+                accounts: [
+                    {
+                        address: nonceAccountAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: recentBlockhashesSysvarAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: nonceAuthorityAddress,
+                        role: AccountRole.WRITABLE_SIGNER,
+                    },
+                ],
+                data: new Uint8Array([4, 0, 0, 0]),
+                programAddress: systemProgramAddress,
+            };
+
+            expect(transaction.instructions).toStrictEqual([expectedInstruction]);
+            expect(transaction.feePayer).toStrictEqual(nonceAuthorityAddress);
+            expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
+        });
+
+        it('converts a transaction with one instruction which is advance nonce (fee payer is not nonce authority)', () => {
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                        numReadonlySignerAccounts: 1, // nonce authority
+                        numSignerAccounts: 2, // fee payer, nonce authority
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                2, // nonce account address
+                                4, // recent blockhashes sysvar
+                                1, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 3,
+                        },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        feePayer,
+                        // read-only signers
+                        nonceAuthorityAddress,
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction);
+
+            const expectedInstruction: IInstruction = {
+                accounts: [
+                    {
+                        address: nonceAccountAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: recentBlockhashesSysvarAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: nonceAuthorityAddress,
+                        role: AccountRole.READONLY_SIGNER,
+                    },
+                ],
+                data: new Uint8Array([4, 0, 0, 0]),
+                programAddress: systemProgramAddress,
+            };
+            expect(transaction.instructions).toStrictEqual([expectedInstruction]);
+        });
+
+        it('converts a durable nonce transaction with multiple instruction', () => {
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 4, // recent blockhashes sysvar, system program, 2 other program addresses
+                        numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                        numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                1, // nonce account address
+                                3, // recent blockhashes sysvar
+                                0, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 2,
+                        },
+                        {
+                            accountIndices: [0, 1],
+                            data: new Uint8Array([1, 2, 3, 4]),
+                            programAddressIndex: 4,
+                        },
+                        { programAddressIndex: 5 },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        nonceAuthorityAddress,
+                        // no read-only signers
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                        '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                        'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction);
+
+            const expectedInstructions: IInstruction[] = [
+                {
+                    accounts: [
+                        {
+                            address: nonceAccountAddress,
+                            role: AccountRole.WRITABLE,
+                        },
+                        {
+                            address: recentBlockhashesSysvarAddress,
+                            role: AccountRole.READONLY,
+                        },
+                        {
+                            address: nonceAuthorityAddress,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    data: new Uint8Array([4, 0, 0, 0]),
+                    programAddress: systemProgramAddress,
+                },
+                {
+                    accounts: [
+                        {
+                            address: nonceAuthorityAddress,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                        {
+                            address: nonceAccountAddress,
+                            role: AccountRole.WRITABLE,
+                        },
+                    ],
+                    data: new Uint8Array([1, 2, 3, 4]),
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                },
+                {
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                },
+            ];
+
+            expect(transaction.instructions).toStrictEqual(expectedInstructions);
+            expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
+        });
+
+        it('converts a durable nonce transaction with a single signer', () => {
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                        numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                        numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                1, // nonce account address
+                                3, // recent blockhashes sysvar
+                                0, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 2,
+                        },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        nonceAuthorityAddress,
+                        // no read-only signers
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [feePayerSignature],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                [nonceAuthorityAddress]: feePayerSignature,
+            });
+        });
+
+        it('converts a durable nonce transaction with multiple signers', () => {
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const authoritySignature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
+
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                        numReadonlySignerAccounts: 1, // nonce authority
+                        numSignerAccounts: 2, // fee payer, nonce authority
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                2, // nonce account address
+                                4, // recent blockhashes sysvar
+                                1, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 3,
+                        },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        feePayer,
+                        // read-only signers
+                        nonceAuthorityAddress,
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [feePayerSignature, authoritySignature],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                [feePayer]: feePayerSignature,
+                [nonceAuthorityAddress]: authoritySignature,
+            });
+        });
+
+        it('converts a partially signed durable nonce transaction with multiple signers', () => {
+            const extraSignerAddress = '9bXC3RtDN5MzDMWRCqjgVTeQK2anMhdkq1ZoGN1Tb1UE' as Base58EncodedAddress;
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const extraSignerSignature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
+
+            // Used in the signatures array for a missing signature
+            const noSignature = new Uint8Array(Array(64).fill(0)) as Ed25519Signature;
+
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                        numReadonlySignerAccounts: 2, // nonce authority, another signer
+                        numSignerAccounts: 3, // fee payer, nonce authority, another signer
+                    },
+                    instructions: [
+                        {
+                            accountIndices: [
+                                3, // nonce account address
+                                5, // recent blockhashes sysvar
+                                1, // nonce authority address
+                            ],
+                            data: new Uint8Array([4, 0, 0, 0]),
+                            programAddressIndex: 4,
+                        },
+                        {
+                            accountIndices: [2],
+                            programAddressIndex: 4,
+                        },
+                    ],
+                    lifetimeToken: nonce,
+                    staticAccounts: [
+                        // writable signers
+                        feePayer,
+                        // read-only signers
+                        nonceAuthorityAddress,
+                        extraSignerAddress,
+                        // writable non-signers
+                        nonceAccountAddress,
+                        // read-only non-signers
+                        systemProgramAddress,
+                        recentBlockhashesSysvarAddress,
+                    ],
+                    version: 0,
+                },
+                signatures: [feePayerSignature, noSignature, extraSignerSignature],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+
+            expect(transaction.signatures).toStrictEqual({
+                [extraSignerAddress]: extraSignerSignature,
+                [feePayer]: feePayerSignature,
             });
         });
     });
