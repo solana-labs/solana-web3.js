@@ -26,7 +26,7 @@ const PROHIBITED_KEY_USAGES = new Set<KeyUsage>([
 
 const ED25519_PKCS8_HEADER =
     // prettier-ignore
-    new Uint8Array([
+    [
         /**
          * PKCS#8 header
          */
@@ -56,7 +56,7 @@ const ED25519_PKCS8_HEADER =
             // Private key bytes as octet string
             0x04, // ASN.1 octet string tag
             0x20, // String length (32 bytes)
-    ]);
+    ];
 
 function bufferSourceToUint8Array(data: BufferSource): Uint8Array {
     return data instanceof Uint8Array ? data : new Uint8Array(ArrayBuffer.isView(data) ? data.buffer : data);
@@ -137,16 +137,23 @@ function getPublicKeyBytes(key: CryptoKey): Uint8Array {
 export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): JsonWebKey;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer;
 export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer | JsonWebKey {
+    if (key.extractable === false) {
+        throw new DOMException('key is not extractable', 'InvalidAccessException');
+    }
     switch (format) {
         case 'raw': {
-            if (key.extractable === false) {
-                throw new DOMException('key is not extractable', 'InvalidAccessException');
-            }
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
             const publicKeyBytes = getPublicKeyBytes(key);
             return publicKeyBytes;
+        }
+        case 'pkcs8': {
+            if (key.type !== 'private') {
+                throw new DOMException(`Unable to export a pkcs8 Ed25519 ${key.type} key`, 'InvalidAccessError');
+            }
+            const secretKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
+            return new Uint8Array([...ED25519_PKCS8_HEADER, ...secretKeyBytes]);
         }
         default:
             throw new Error(`Exporting polyfilled Ed25519 keys in the "${format}" format is unimplemented`);
