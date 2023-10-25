@@ -1,5 +1,11 @@
 import { Base58EncodedAddress } from '@solana/addresses';
-import { AccountRole, IInstruction, IInstructionWithAccounts, IInstructionWithData } from '@solana/instructions';
+import {
+    AccountRole,
+    IInstruction,
+    IInstructionWithAccounts,
+    IInstructionWithData,
+    isSignerRole,
+} from '@solana/instructions';
 import { ReadonlyAccount, ReadonlySignerAccount, WritableAccount } from '@solana/instructions/dist/types/accounts';
 
 import { ITransactionWithSignatures } from './signatures';
@@ -101,7 +107,7 @@ export function isAdvanceNonceAccountInstruction(
         instruction.accounts[1].role === AccountRole.READONLY &&
         // Third account is nonce authority account
         instruction.accounts[2].address != null &&
-        instruction.accounts[2].role === AccountRole.READONLY_SIGNER
+        isSignerRole(instruction.accounts[2].role)
     );
 }
 
