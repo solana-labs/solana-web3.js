@@ -5,8 +5,11 @@ import {
     IInstructionWithAccounts,
     IInstructionWithData,
     isSignerRole,
+    ReadonlyAccount,
+    ReadonlySignerAccount,
+    WritableAccount,
+    WritableSignerAccount,
 } from '@solana/instructions';
-import { ReadonlyAccount, ReadonlySignerAccount, WritableAccount } from '@solana/instructions/dist/types/accounts';
 
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
@@ -20,7 +23,7 @@ type AdvanceNonceAccountInstruction<
         readonly [
             WritableAccount<TNonceAccountAddress>,
             ReadonlyAccount<'SysvarRecentB1ockHashes11111111111111111111'>,
-            ReadonlySignerAccount<TNonceAuthorityAddress>
+            ReadonlySignerAccount<TNonceAuthorityAddress> | WritableSignerAccount<TNonceAuthorityAddress>
         ]
     > &
     IInstructionWithData<AdvanceNonceAccountInstructionData>;
@@ -127,6 +130,20 @@ function isDurableNonceTransaction(
     );
 }
 
+function isAdvanceNonceAccountInstructionForNonce<
+    TNonceAccountAddress extends Base58EncodedAddress = Base58EncodedAddress,
+    TNonceAuthorityAddress extends Base58EncodedAddress = Base58EncodedAddress
+>(
+    instruction: AdvanceNonceAccountInstruction,
+    nonceAccountAddress: TNonceAccountAddress,
+    nonceAuthorityAddress: TNonceAuthorityAddress
+): instruction is AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
+    return (
+        instruction.accounts[0].address === nonceAccountAddress &&
+        instruction.accounts[2].address === nonceAuthorityAddress
+    );
+}
+
 export function setTransactionLifetimeUsingDurableNonce<
     TTransaction extends BaseTransaction,
     TNonceAccountAddress extends string = string,
@@ -141,22 +158,39 @@ export function setTransactionLifetimeUsingDurableNonce<
     transaction: TTransaction | (TTransaction & IDurableNonceTransaction)
 ): Omit<TTransaction, keyof ITransactionWithSignatures> &
     IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
-    const isAlreadyDurableNonceTransaction = isDurableNonceTransaction(transaction);
-    if (
-        isAlreadyDurableNonceTransaction &&
-        transaction.lifetimeConstraint.nonce === nonce &&
-        transaction.instructions[0].accounts[0].address === nonceAccountAddress &&
-        transaction.instructions[0].accounts[2].address === nonceAuthorityAddress
-    ) {
-        return transaction as TTransaction &
-            IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+    let newInstructions: [
+        AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
+        ...IInstruction[]
+    ];
+
+    const firstInstruction = transaction.instructions[0];
+    if (firstInstruction && isAdvanceNonceAccountInstruction(firstInstruction)) {
+        if (isAdvanceNonceAccountInstructionForNonce(firstInstruction, nonceAccountAddress, nonceAuthorityAddress)) {
+            if (isDurableNonceTransaction(transaction) && transaction.lifetimeConstraint.nonce === nonce) {
+                return transaction as TTransaction &
+                    IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+            } else {
+                // we already have the right first instruction, leave it as-is
+                newInstructions = [firstInstruction, ...transaction.instructions.slice(1)];
+            }
+        } else {
+            // we have a different advance nonce instruction as the first instruction, replace it
+            newInstructions = [
+                createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+                ...transaction.instructions.slice(1),
+            ];
+        }
+    } else {
+        // we don't have an existing advance nonce instruction as the first instruction, prepend one
+        newInstructions = [
+            createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+            ...transaction.instructions,
+        ];
     }
+
     const out = {
         ...getUnsignedTransaction(transaction),
-        instructions: [
-            createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
-            ...(isAlreadyDurableNonceTransaction ? transaction.instructions.slice(1) : transaction.instructions),
-        ],
+        instructions: newInstructions,
         lifetimeConstraint: {
             nonce,
         },

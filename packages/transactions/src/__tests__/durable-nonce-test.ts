@@ -163,8 +163,8 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
     };
     const NONCE_CONSTRAINT_B = {
         nonce: '456' as Nonce,
-        nonceAccountAddress: '123' as Base58EncodedAddress,
-        nonceAuthorityAddress: '123' as Base58EncodedAddress,
+        nonceAccountAddress: '456' as Base58EncodedAddress,
+        nonceAuthorityAddress: '456' as Base58EncodedAddress,
     };
     beforeEach(() => {
         baseTx = {
@@ -182,6 +182,32 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
             createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
             baseTx.instructions[0],
         ]);
+    });
+    describe('given a transaction with an advance nonce account instruction but no nonce lifetime constraint', () => {
+        it('does not modify an `AdvanceNonceAccount` instruction if the existing one matches the constraint added', () => {
+            const instruction = createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A);
+            instruction.accounts[2].role = AccountRole.WRITABLE_SIGNER;
+            const transaction: BaseTransaction = { ...baseTx, instructions: [instruction, baseTx.instructions[0]] };
+            const durableNonceTxWithConstraintA = setTransactionLifetimeUsingDurableNonce(
+                NONCE_CONSTRAINT_A,
+                transaction
+            );
+            expect(durableNonceTxWithConstraintA.instructions).toEqual([instruction, baseTx.instructions[0]]);
+        });
+        it('replaces an `AdvanceNonceAccount` instruction if the existing one does not match the constraint added', () => {
+            const transaction: BaseTransaction = {
+                ...baseTx,
+                instructions: [createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_B), baseTx.instructions[0]],
+            };
+            const durableNonceTxWithConstraintA = setTransactionLifetimeUsingDurableNonce(
+                NONCE_CONSTRAINT_A,
+                transaction
+            );
+            expect(durableNonceTxWithConstraintA.instructions).toEqual([
+                createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
+                baseTx.instructions[0],
+            ]);
+        });
     });
     describe('given a durable nonce transaction', () => {
         let durableNonceTxWithConstraintA: BaseTransaction & IDurableNonceTransaction;
