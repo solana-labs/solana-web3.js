@@ -23,7 +23,9 @@ function createPendingRpcRequest<TRpcMethods, TResponse>(
             if ('error' in response) {
                 throw new SolanaJsonRpcError(response.error);
             } else {
-                return (responseTransformer ? responseTransformer(response.result) : response.result) as TResponse;
+                return (
+                    responseTransformer ? responseTransformer(response.result, methodName) : response.result
+                ) as TResponse;
             }
         },
     };
