@@ -68,6 +68,7 @@
         "@solana/codecs-data-structures": "workspace:*",
         "@solana/codecs-numbers": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
+        "@solana/functional": "workspace:*",
         "@solana/keys": "workspace:*"
     },
     "devDependencies": {

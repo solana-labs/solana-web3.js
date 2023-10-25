@@ -109,7 +109,6 @@ export function fromVersionedTransactionWithBlockhash(
     // TODO: coded error
     if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
 
-    // TOOD: add support for durable nonce transactions
     const blockhashLifetime = {
         blockhash: transaction.message.recentBlockhash as Blockhash,
         lastValidBlockHeight: lastValidBlockHeight ?? 2n ** 64n - 1n, // U64 MAX
