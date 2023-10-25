@@ -8,11 +8,18 @@ import {
     getAddressEncoder,
     getAddressFromPublicKey,
 } from '@solana/addresses';
+import { AccountRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
 import { CompiledMessage, compileMessage } from '../message';
-import { assertIsTransactionSignature, getSignatureFromTransaction, signTransaction } from '../signatures';
+import {
+    assertIsTransactionSignature,
+    assertTransactionIsFullySigned,
+    getSignatureFromTransaction,
+    ITransactionWithSignatures,
+    signTransaction,
+} from '../signatures';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
@@ -273,5 +280,240 @@ describe('signTransaction', () => {
     it('freezes the object', async () => {
         expect.assertions(1);
         await expect(signTransaction([mockKeyPairA], MOCK_TRANSACTION)).resolves.toBeFrozenObject();
+    });
+});
+
+describe('assertTransactionIsFullySigned', () => {
+    type SignedTransaction = Parameters<typeof compileMessage>[0] & ITransactionWithSignatures;
+
+    const mockProgramAddress = 'program' as Base58EncodedAddress;
+    const mockPublicKeyAddressA = 'A' as Base58EncodedAddress;
+    const mockSignatureA = new Uint8Array(0) as Ed25519Signature;
+    const mockPublicKeyAddressB = 'B' as Base58EncodedAddress;
+    const mockSignatureB = new Uint8Array(1) as Ed25519Signature;
+    const mockPublicKeyAddressC = 'C' as Base58EncodedAddress;
+    const mockSignatureC = new Uint8Array(2) as Ed25519Signature;
+
+    const mockBlockhashConstraint = {
+        blockhash: 'a' as Blockhash,
+        lastValidBlockHeight: 100n,
+    };
+
+    it('throws if the transaction has no signature for the fee payer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {},
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
+            'Transaction is missing signature for address `A`'
+        );
+    });
+
+    it('throws if the transaction has no signature for an instruction readonly signer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.READONLY_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
+            'Transaction is missing signature for address `B`'
+        );
+    });
+
+    it('throws if the transaction has no signature for an instruction writable signer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
+            'Transaction is missing signature for address `B`'
+        );
+    });
+
+    it('throws if the transaction has multiple instructions and one is missing a signer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressC,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+                [mockPublicKeyAddressB]: mockSignatureB,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
+            'Transaction is missing signature for address `C`'
+        );
+    });
+
+    it('does not throw if the transaction has no instructions and is signed by the fee payer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
+    });
+
+    it('does not throw if the transaction has an instruction and is signed by the fee payer and instruction signer', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+                [mockPublicKeyAddressB]: mockSignatureB,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
+    });
+
+    it('does not throw if the transaction has multiple instructions and is signed by all signers', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressC,
+                            role: AccountRole.WRITABLE_SIGNER,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+                [mockPublicKeyAddressB]: mockSignatureB,
+                [mockPublicKeyAddressC]: mockSignatureC,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
+    });
+
+    it('does not throw if the transaction has an instruction with a non-signer account', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: mockPublicKeyAddressB,
+                            role: AccountRole.WRITABLE,
+                        },
+                    ],
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
+    });
+
+    it('does not throw if the transaction has an instruction with no accounts', () => {
+        const transaction: SignedTransaction = {
+            feePayer: mockPublicKeyAddressA,
+            instructions: [
+                {
+                    programAddress: mockProgramAddress,
+                },
+            ],
+            lifetimeConstraint: mockBlockhashConstraint,
+            signatures: {
+                [mockPublicKeyAddressA]: mockSignatureA,
+            },
+            version: 0,
+        };
+
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
     });
 });

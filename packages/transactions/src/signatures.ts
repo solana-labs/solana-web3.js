@@ -1,5 +1,6 @@
 import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
+import { isSignerRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { ITransactionWithFeePayer } from './fee-payer';
@@ -112,4 +113,20 @@ export async function signTransaction<TTransaction extends Parameters<typeof com
 export function transactionSignature(putativeTransactionSignature: string): TransactionSignature {
     assertIsTransactionSignature(putativeTransactionSignature);
     return putativeTransactionSignature;
+}
+
+export function assertTransactionIsFullySigned<TTransaction extends Parameters<typeof compileMessage>[0]>(
+    transaction: TTransaction & ITransactionWithSignatures
+): asserts transaction is TTransaction & IFullySignedTransaction {
+    const signerAddressesFromInstructions = transaction.instructions
+        .flatMap(i => i.accounts?.filter(a => isSignerRole(a.role)) ?? [])
+        .map(a => a.address);
+    const requiredSigners = new Set([transaction.feePayer, ...signerAddressesFromInstructions]);
+
+    requiredSigners.forEach(address => {
+        if (!transaction.signatures[address]) {
+            // TODO coded error
+            throw new Error(`Transaction is missing signature for address \`${address}\``);
+        }
+    });
 }
