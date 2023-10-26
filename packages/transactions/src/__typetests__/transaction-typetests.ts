@@ -2,8 +2,10 @@ import { Base58EncodedAddress } from '@solana/addresses';
 
 import {
     appendTransactionInstruction,
+    assertTransactionIsFullySigned,
     Blockhash,
     IDurableNonceTransaction,
+    IFullySignedTransaction,
     ITransactionWithBlockhashLifetime,
     ITransactionWithSignatures,
     Nonce,
@@ -460,4 +462,11 @@ async () => {
         instructions: Transaction['instructions'];
     } & ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithSignatures;
+
+    // assertTransactionIsFullySigned
+    const transaction = {} as Parameters<typeof assertTransactionIsFullySigned>[0];
+    // @ts-expect-error Should not be fully signed
+    transaction satisfies IFullySignedTransaction;
+    assertTransactionIsFullySigned(transaction);
+    transaction satisfies IFullySignedTransaction;
 };
