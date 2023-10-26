@@ -94,7 +94,9 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
                             continue;
                         }
                         const notification = message.params.result as TNotification;
-                        yield responseTransformer ? responseTransformer(notification) : notification;
+                        yield responseTransformer
+                            ? responseTransformer(notification, subscribeMethodName)
+                            : notification;
                     }
                 },
             };

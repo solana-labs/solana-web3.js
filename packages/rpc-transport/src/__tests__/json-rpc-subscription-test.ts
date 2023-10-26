@@ -328,7 +328,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
             await thingNotifications[Symbol.asyncIterator]().next();
-            expect(responseTransformer).toHaveBeenCalledWith(123);
+            expect(responseTransformer).toHaveBeenCalledWith(123, 'thingSubscribe');
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

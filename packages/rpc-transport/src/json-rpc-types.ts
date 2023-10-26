@@ -30,7 +30,7 @@ export type RpcRequest<TResponse> = {
 };
 export type RpcSubscription<TResponse> = {
     params: unknown[];
-    responseTransformer?: (response: unknown) => TResponse;
+    responseTransformer?: (response: unknown, notificationName: string) => TResponse;
     subscribeMethodName: string;
     unsubscribeMethodName: string;
 };
