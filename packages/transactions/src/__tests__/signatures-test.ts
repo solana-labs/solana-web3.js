@@ -12,6 +12,7 @@ import { AccountRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
+import { CompilableTransaction } from '../compilable-transaction';
 import { CompiledMessage, compileMessage } from '../message';
 import {
     assertIsTransactionSignature,
@@ -284,7 +285,7 @@ describe('signTransaction', () => {
 });
 
 describe('assertTransactionIsFullySigned', () => {
-    type SignedTransaction = Parameters<typeof compileMessage>[0] & ITransactionWithSignatures;
+    type SignedTransaction = CompilableTransaction & ITransactionWithSignatures;
 
     const mockProgramAddress = 'program' as Base58EncodedAddress;
     const mockPublicKeyAddressA = 'A' as Base58EncodedAddress;
