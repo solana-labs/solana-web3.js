@@ -1,4 +1,5 @@
-import { base58, fixSerializer } from '@metaplex-foundation/umi-serializers';
+import { fixEncoder } from '@solana/codecs-core';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -19,7 +20,7 @@ function getMockTransactionMessage({
     memoString: string;
     version?: number;
 }) {
-    const blockhashBytes = fixSerializer(base58, 32).serialize(blockhash);
+    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     return new Uint8Array([
         /** VERSION HEADER */
@@ -142,7 +143,7 @@ describe('sendTransaction', () => {
                         { encoding: 'base64', preflightCommitment: commitment }
                     )
                     .send();
-                await expect(resultPromise).resolves.toEqual(base58.deserialize(signature)[0]);
+                await expect(resultPromise).resolves.toEqual(getBase58Decoder().decode(signature)[0]);
             });
         });
     });
@@ -269,7 +270,7 @@ describe('sendTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: base58.deserialize(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });

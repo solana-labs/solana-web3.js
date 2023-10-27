@@ -1177,14 +1177,16 @@ importers:
         version: 1.1.1
 
   packages/rpc-core:
-    dependencies:
-      '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.9
-        version: 0.8.9
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
