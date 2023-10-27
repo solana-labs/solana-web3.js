@@ -26,6 +26,7 @@ let memoisedAccountInterfaceFields: object | undefined;
 const accountInterfaceFields = () => {
     if (!memoisedAccountInterfaceFields) {
         memoisedAccountInterfaceFields = {
+            address: string(),
             encoding: string(),
             executable: boolean(),
             lamports: bigint(),
