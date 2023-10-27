@@ -1,5 +1,6 @@
-import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
+import { Decoder, Encoder } from '@solana/codecs-core';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { isSignerRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
@@ -16,9 +17,14 @@ export interface ITransactionWithSignatures {
 
 export type TransactionSignature = string & { readonly __brand: unique symbol };
 
+let base58Encoder: Encoder<string> | undefined;
+let base58Decoder: Decoder<string> | undefined;
+
 export function assertIsTransactionSignature(
     putativeTransactionSignature: string
 ): asserts putativeTransactionSignature is TransactionSignature {
+    if (!base58Encoder) base58Encoder = getBase58Encoder();
+
     try {
         // Fast-path; see if the input string is of an acceptable length.
         if (
@@ -30,7 +36,7 @@ export function assertIsTransactionSignature(
             throw new Error('Expected input string to decode to a byte array of length 64.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = base58.serialize(putativeTransactionSignature);
+        const bytes = base58Encoder.encode(putativeTransactionSignature);
         const numBytes = bytes.byteLength;
         if (numBytes !== 64) {
             throw new Error(`Expected input string to decode to a byte array of length 64. Actual length: ${numBytes}`);
@@ -45,6 +51,8 @@ export function assertIsTransactionSignature(
 export function isTransactionSignature(
     putativeTransactionSignature: string
 ): putativeTransactionSignature is TransactionSignature {
+    if (!base58Encoder) base58Encoder = getBase58Encoder();
+
     // Fast-path; see if the input string is of an acceptable length.
     if (
         // Lowest value (64 bytes of zeroes)
@@ -55,7 +63,7 @@ export function isTransactionSignature(
         return false;
     }
     // Slow-path; actually attempt to decode the input string.
-    const bytes = base58.serialize(putativeTransactionSignature);
+    const bytes = base58Encoder.encode(putativeTransactionSignature);
     const numBytes = bytes.byteLength;
     if (numBytes !== 64) {
         return false;
@@ -66,6 +74,8 @@ export function isTransactionSignature(
 export function getSignatureFromTransaction(
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures
 ): TransactionSignature {
+    if (!base58Decoder) base58Decoder = getBase58Decoder();
+
     const signatureBytes = transaction.signatures[transaction.feePayer];
     if (!signatureBytes) {
         // TODO: Coded error.
@@ -74,7 +84,7 @@ export function getSignatureFromTransaction(
                 'has been signed by its fee payer.'
         );
     }
-    const transactionSignature = base58.deserialize(signatureBytes)[0];
+    const transactionSignature = base58Decoder.decode(signatureBytes)[0];
     return transactionSignature as TransactionSignature;
 }
 
