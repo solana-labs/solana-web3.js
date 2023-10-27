@@ -1,4 +1,5 @@
-import { base58 } from '@metaplex-foundation/umi-serializers';
+import { Encoder } from '@solana/codecs-core';
+import { getBase58Encoder } from '@solana/codecs-strings';
 
 import { IDurableNonceTransaction } from './durable-nonce';
 import { ITransactionWithSignatures } from './signatures';
@@ -16,7 +17,10 @@ export interface ITransactionWithBlockhashLifetime {
     readonly lifetimeConstraint: BlockhashLifetimeConstraint;
 }
 
+let base58Encoder: Encoder<string> | undefined;
+
 export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBlockhash is Blockhash {
+    if (!base58Encoder) base58Encoder = getBase58Encoder();
     try {
         // Fast-path; see if the input string is of an acceptable length.
         if (
@@ -28,7 +32,7 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
             throw new Error('Expected input string to decode to a byte array of length 32.');
         }
         // Slow-path; actually attempt to decode the input string.
-        const bytes = base58.serialize(putativeBlockhash);
+        const bytes = base58Encoder.encode(putativeBlockhash);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
             throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);
