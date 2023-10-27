@@ -1,5 +1,5 @@
-import { base64, publicKey } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
+import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { Nonce } from '@solana/transactions';
 
 import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
@@ -21,8 +21,8 @@ describe('createNonceInvalidationPromiseFactory', () => {
                 32 // nonce value(pubkey)
             // don't care about anything after this
         );
-        bytes.set(publicKey().serialize(nonceValue), NONCE_VALUE_OFFSET);
-        return [base64.deserialize(bytes)[0], 'base64'];
+        bytes.set(getBase58Encoder().encode(nonceValue), NONCE_VALUE_OFFSET);
+        return [getBase64Decoder().decode(bytes)[0], 'base64'];
     }
     let accountNotificationGenerator: jest.Mock;
     let createPendingSubscription: jest.Mock;

@@ -1,5 +1,5 @@
-import { base58, base64 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
+import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
 import { Base64EncodedDataResponse } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
 import { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
@@ -41,10 +41,12 @@ export function createNonceInvalidationPromiseFactory(
         const accountNotifications = await rpcSubscriptions
             .accountNotifications(nonceAccountAddress, { commitment, encoding: 'base64' })
             .subscribe({ abortSignal: abortController.signal });
+        const base58Decoder = getBase58Decoder();
+        const base64Encoder = getBase64Encoder();
         function getNonceFromAccountData([base64EncodedBytes]: Base64EncodedDataResponse): Nonce {
-            const data = base64.serialize(base64EncodedBytes);
+            const data = base64Encoder.encode(base64EncodedBytes);
             const nonceValueBytes = data.slice(NONCE_VALUE_OFFSET, NONCE_VALUE_OFFSET + 32);
-            return base58.deserialize(nonceValueBytes)[0] as Nonce;
+            return base58Decoder.decode(nonceValueBytes)[0] as Nonce;
         }
         const nonceAccountDidAdvancePromise = (async () => {
             for await (const accountNotification of accountNotifications) {
