@@ -38,7 +38,11 @@ async function resolveAccount(
         });
 
     if (account === null) {
-        return null;
+        // Account does not exist
+        // Return only the address
+        return {
+            address,
+        };
     }
 
     const [data, responseEncoding] = Array.isArray(account.data)
@@ -48,6 +52,7 @@ async function resolveAccount(
         : [account.data, 'jsonParsed'];
     const queryResponse = {
         ...account,
+        address,
         data,
         encoding: responseEncoding,
     };

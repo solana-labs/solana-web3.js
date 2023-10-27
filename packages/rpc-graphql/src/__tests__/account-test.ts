@@ -60,6 +60,24 @@ describe('account', () => {
                 },
             });
         });
+        it("can query an account's address", async () => {
+            expect.assertions(1);
+            const source = `
+            query testQuery($address: String!, $commitment: Commitment) {
+                account(address: $address, commitment: $commitment) {
+                    address
+                }
+            }
+        `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
+                    },
+                },
+            });
+        });
         it('can query multiple fields', async () => {
             expect.assertions(1);
             const source = `
@@ -95,6 +113,7 @@ describe('account', () => {
             query testQuery($address: String!, $commitment: Commitment) {
                 account(address: $address, commitment: $commitment) {
                     owner {
+                        address
                         executable
                         lamports
                         rentEpoch
@@ -107,6 +126,7 @@ describe('account', () => {
                 data: {
                     account: {
                         owner: {
+                            address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             executable: true,
                             lamports: expect.any(BigInt),
                             rentEpoch: expect.any(BigInt),
@@ -128,7 +148,9 @@ describe('account', () => {
             query testQuery($address: String!, $commitment: Commitment) {
                 account(address: $address, commitment: $commitment) {
                     owner {
+                        address
                         owner {
+                            address
                             executable
                             lamports
                             rentEpoch
@@ -142,10 +164,53 @@ describe('account', () => {
                 data: {
                     account: {
                         owner: {
+                            address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             owner: {
+                                address: 'BPFLoader2111111111111111111111111111111111',
                                 executable: true,
                                 lamports: expect.any(BigInt),
                                 rentEpoch: expect.any(BigInt),
+                            },
+                        },
+                    },
+                },
+            });
+        });
+    });
+    describe('triple nested basic queries', () => {
+        // See scripts/fixtures/spl-token-token-account.json
+        const variableValues = {
+            address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
+            commitment: 'confirmed',
+        };
+        it("can perform a triple nested query for each account's owner", async () => {
+            expect.assertions(1);
+            const source = `
+            query testQuery($address: String!) {
+                account(address: $address) {
+                    owner {
+                        address
+                        owner {
+                            address
+                            owner {
+                                address
+                            }
+                        }
+                    }
+                }
+            }
+        `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        owner: {
+                            address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            owner: {
+                                address: 'BPFLoader2111111111111111111111111111111111',
+                                owner: {
+                                    address: 'NativeLoader1111111111111111111111111111111',
+                                },
                             },
                         },
                     },
