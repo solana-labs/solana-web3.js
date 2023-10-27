@@ -66,6 +66,7 @@
     },
     "dependencies": {
         "@solana/addresses": "workspace:*",
+        "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
