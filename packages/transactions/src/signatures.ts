@@ -4,7 +4,7 @@ import { isSignerRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
 import { ITransactionWithFeePayer } from './fee-payer';
-import { CompiledMessage, compileMessage } from './message';
+import { compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
 
 export interface IFullySignedTransaction extends ITransactionWithSignatures {
@@ -63,12 +63,6 @@ export function isTransactionSignature(
     return true;
 }
 
-async function getCompiledMessageSignature(message: CompiledMessage, secretKey: CryptoKey) {
-    const wireMessageBytes = getCompiledMessageEncoder().encode(message);
-    const signature = await signBytes(secretKey, wireMessageBytes);
-    return signature;
-}
-
 export function getSignatureFromTransaction(
     transaction: ITransactionWithFeePayer & ITransactionWithSignatures
 ): TransactionSignature {
@@ -91,12 +85,10 @@ export async function signTransaction<TTransaction extends Parameters<typeof com
     const compiledMessage = compileMessage(transaction);
     const nextSignatures: Record<Base58EncodedAddress, Ed25519Signature> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
+    const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);
     const publicKeySignaturePairs = await Promise.all(
         keyPairs.map(keyPair =>
-            Promise.all([
-                getAddressFromPublicKey(keyPair.publicKey),
-                getCompiledMessageSignature(compiledMessage, keyPair.privateKey),
-            ])
+            Promise.all([getAddressFromPublicKey(keyPair.publicKey), signBytes(keyPair.privateKey, wireMessageBytes)])
         )
     );
     for (const [signerPublicKey, signature] of publicKeySignaturePairs) {
