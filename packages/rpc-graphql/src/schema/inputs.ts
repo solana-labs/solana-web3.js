@@ -76,7 +76,7 @@ export const dataSliceInputType = () => {
                 length: number(),
                 offset: number(),
             },
-            name: 'DataSliceConfig',
+            name: 'DataSlice',
         });
     return memoisedDataSliceInputType;
 };

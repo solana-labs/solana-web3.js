@@ -573,4 +573,94 @@ describe('programAccounts', () => {
             });
         });
     });
+    describe('when called with a dataSlice', () => {
+        describe('when using base58 encoding', () => {
+            it('returns the correct slice of the data', async () => {
+                expect.assertions(1);
+                // See scripts/fixtures/gpa1.json
+                const variableValues = {
+                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
+                    commitment: 'confirmed',
+                    dataSlice: {
+                        length: 5,
+                        offset: 0,
+                    },
+                    encoding: 'base58',
+                };
+                const source = `
+                    query testQuery(
+                        $programAddress: String!,
+                        $commitment: Commitment,
+                        $dataSlice: DataSlice,
+                        $encoding: AccountEncoding,
+                    ) {
+                        programAccounts(
+                            programAddress: $programAddress,
+                            commitment: $commitment,
+                            dataSlice: $dataSlice,
+                            encoding: $encoding,
+                        ) {
+                            ... on AccountBase58 {
+                                data
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        programAccounts: expect.arrayContaining([
+                            {
+                                data: 'E8f4pET',
+                            },
+                        ]),
+                    },
+                });
+            });
+        });
+        describe('when using base64 encoding', () => {
+            it('returns the correct slice of the data', async () => {
+                expect.assertions(1);
+                // See scripts/fixtures/gpa1.json
+                const variableValues = {
+                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
+                    commitment: 'confirmed',
+                    dataSlice: {
+                        length: 5,
+                        offset: 0,
+                    },
+                    encoding: 'base64',
+                };
+                const source = `
+                    query testQuery(
+                        $programAddress: String!,
+                        $commitment: Commitment,
+                        $dataSlice: DataSlice,
+                        $encoding: AccountEncoding,
+                    ) {
+                        programAccounts(
+                            programAddress: $programAddress,
+                            commitment: $commitment,
+                            dataSlice: $dataSlice,
+                            encoding: $encoding,
+                        ) {
+                            ... on AccountBase64 {
+                                data
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        programAccounts: expect.arrayContaining([
+                            {
+                                data: 'dGVzdCA=',
+                            },
+                        ]),
+                    },
+                });
+            });
+        });
+    });
 });
