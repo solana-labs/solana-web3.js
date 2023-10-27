@@ -711,4 +711,57 @@ describe('account', () => {
             });
         });
     });
+    describe('when querying only an address', () => {
+        describe('in the first level', () => {
+            it('will not call the RPC for only an address', async () => {
+                expect.assertions(1);
+                const source = `
+                query testQuery {
+                    account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
+                        address
+                    }
+                }
+            `;
+                await rpcGraphQL.query(source);
+                expect(fetchMock).not.toHaveBeenCalled();
+            });
+        });
+        describe('in the second level', () => {
+            it('will not call the RPC for only an address', async () => {
+                expect.assertions(1);
+                const source = `
+                query testQuery {
+                    account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
+                        address
+                        owner {
+                            address
+                        }
+                    }
+                }
+            `;
+                await rpcGraphQL.query(source);
+                expect(fetchMock).toHaveBeenCalledTimes(1);
+            });
+        });
+        describe('in the third level', () => {
+            it('will not call the RPC for only an address', async () => {
+                expect.assertions(1);
+                const source = `
+                query testQuery {
+                    account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
+                        address
+                        owner {
+                            address
+                            owner {
+                                address
+                            }
+                        }
+                    }
+                }
+            `;
+                await rpcGraphQL.query(source);
+                expect(fetchMock).toHaveBeenCalledTimes(2);
+            });
+        });
+    });
 });

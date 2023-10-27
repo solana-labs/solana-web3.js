@@ -1,5 +1,6 @@
 import { SolanaRpcMethods } from '@solana/rpc-core';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { GraphQLResolveInfo } from 'graphql';
 
 import { createGraphQLCache, GraphQLCache } from './cache';
 import { AccountQueryArgs } from './schema/account/query';
@@ -9,7 +10,7 @@ import { TransactionQueryArgs } from './schema/transaction/query';
 
 export interface RpcGraphQLContext {
     cache: GraphQLCache;
-    resolveAccount(args: AccountQueryArgs): ReturnType<typeof resolveAccount>;
+    resolveAccount(args: AccountQueryArgs, info?: GraphQLResolveInfo): ReturnType<typeof resolveAccount>;
     resolveBlock(args: BlockQueryArgs): ReturnType<typeof resolveBlock>;
     resolveProgramAccounts(args: ProgramAccountsQueryArgs): ReturnType<typeof resolveProgramAccounts>;
     resolveTransaction(args: TransactionQueryArgs): ReturnType<typeof resolveTransaction>;
@@ -20,8 +21,23 @@ export interface RpcGraphQLContext {
 async function resolveAccount(
     { address, encoding = 'jsonParsed', ...config }: AccountQueryArgs,
     cache: GraphQLCache,
-    rpc: Rpc<SolanaRpcMethods>
+    rpc: Rpc<SolanaRpcMethods>,
+    info?: GraphQLResolveInfo
 ) {
+    // If a user only requests the account's address, don't call the RPC
+    if (info && info.fieldNodes[0].selectionSet) {
+        const selectionSet = info.fieldNodes[0].selectionSet;
+        const requestedFields = selectionSet.selections.map(field => {
+            if (field.kind === 'Field') {
+                return field.name.value;
+            }
+            return null;
+        });
+        if (requestedFields && requestedFields.length === 1 && requestedFields[0] === 'address') {
+            return { address };
+        }
+    }
+
     const requestConfig = { encoding, ...config };
 
     const cached = cache.get(address, requestConfig);
@@ -179,8 +195,8 @@ export function createSolanaGraphQLContext(rpc: Rpc<SolanaRpcMethods>): RpcGraph
     const cache = createGraphQLCache();
     return {
         cache,
-        resolveAccount(args) {
-            return resolveAccount(args, this.cache, this.rpc);
+        resolveAccount(args, info?) {
+            return resolveAccount(args, this.cache, this.rpc, info);
         },
         resolveBlock(args) {
             return resolveBlock(args, this.cache, this.rpc);
