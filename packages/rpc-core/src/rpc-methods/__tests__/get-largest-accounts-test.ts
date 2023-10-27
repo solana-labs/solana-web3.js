@@ -1,7 +1,7 @@
 import { open } from 'node:fs/promises';
 
-import { base58 } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
+import { getBase58Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment } from '@solana/rpc-types';
@@ -28,7 +28,7 @@ async function getNodeAddress(path: string) {
         }
         if (secretKey) {
             const publicKey = secretKey.slice(32, 64);
-            const expectedAddress = base58.deserialize(publicKey)[0];
+            const expectedAddress = getBase58Decoder().decode(publicKey)[0];
             return expectedAddress as Base58EncodedAddress;
         }
         throw new Error(`Failed to read keypair file \`${path}\``);

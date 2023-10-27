@@ -1,5 +1,6 @@
-import { base58, fixSerializer } from '@metaplex-foundation/umi-serializers';
 import { Base58EncodedAddress } from '@solana/addresses';
+import { fixEncoder } from '@solana/codecs-core';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -25,7 +26,7 @@ function getMockTransactionMessage({
     memoString: string;
     version?: number;
 }) {
-    const blockhashBytes = fixSerializer(base58, 32).serialize(blockhash);
+    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     return new Uint8Array([
         /** VERSION HEADER */
@@ -71,7 +72,7 @@ function getMockTransactionMessageWithAdditionalAccount({
     memoString: string;
     version?: number;
 }) {
-    const blockhashBytes = fixSerializer(base58, 32).serialize(blockhash);
+    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     return new Uint8Array([
         /** VERSION HEADER */
@@ -322,7 +323,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: base58.deserialize(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
@@ -360,7 +361,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: base58.deserialize(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
@@ -600,7 +601,7 @@ describe('simulateTransaction', () => {
             rpc.getLatestBlockhash().send(),
         ]);
         const message = getMockTransactionMessageWithAdditionalAccount({
-            accountAddressBytes: base58.serialize('4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'), // see scripts/fixtures/vote-account.json
+            accountAddressBytes: getBase58Encoder().encode('4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'), // see scripts/fixtures/vote-account.json
             blockhash: latestBlockhash.blockhash,
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
@@ -819,7 +820,7 @@ describe('simulateTransaction', () => {
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
         const signature = new Uint8Array(await crypto.subtle.sign('Ed25519', secretKey, message));
-        const [base58WireTransaction] = base58.deserialize(
+        const [base58WireTransaction] = getBase58Decoder().decode(
             Buffer.from(
                 new Uint8Array([
                     0x01, // Length of signatures

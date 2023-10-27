@@ -1,4 +1,5 @@
-import { base58, base64, fixSerializer } from '@metaplex-foundation/umi-serializers';
+import { fixEncoder } from '@solana/codecs-core';
+import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -21,7 +22,7 @@ const MOCK_PUBLIC_KEY_BYTES = // DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i
 
 function getMockTransactionMessage(blockhash: Blockhash) {
     const memoString = 'Hello from the web3.js tests!';
-    const blockhashBytes = fixSerializer(base58, 32).serialize(blockhash);
+    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     const message = new Uint8Array([
         /** VERSION HEADER */
@@ -52,7 +53,7 @@ function getMockTransactionMessage(blockhash: Blockhash) {
         /** ADDRESS TABLE LOOKUPS */
         0x00, // Number of address table lookups
     ]);
-    const messageBase64 = base64.deserialize(message)[0];
+    const [messageBase64] = getBase64Decoder().decode(message);
     return messageBase64 as SerializedMessageBytesBase64;
 }
 
