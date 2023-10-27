@@ -794,12 +794,12 @@ importers:
 
   packages/library:
     dependencies:
-      '@metaplex-foundation/umi-serializers':
-        specifier: ^0.8.9
-        version: 0.8.9
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional

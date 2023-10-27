@@ -65,14 +65,14 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@metaplex-foundation/umi-serializers": "^0.8.9",
         "@solana/addresses": "workspace:*",
+        "@solana/codecs-strings": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-core": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
         "@solana/rpc-transport": "workspace:*",
+        "@solana/rpc-types": "workspace:*",
         "@solana/transactions": "workspace:*",
         "fast-stable-stringify": "^1.0.0"
     },
