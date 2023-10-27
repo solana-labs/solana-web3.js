@@ -104,6 +104,7 @@ const accountType = (
         fields: {
             ...accountInterfaceFields(),
             data,
+            // Nested Account interface
             owner: {
                 args: {
                     commitment: type(commitmentInputType()),
@@ -171,7 +172,19 @@ const accountNonceAccount = () => {
             'NonceAccount',
             'A nonce account',
             accountDataJsonParsed('Nonce', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 blockhash: string(),
                 feeCalculator: object('NonceFeeCalculator', {
                     lamportsPerSignature: string(),
@@ -189,7 +202,19 @@ const accountLookupTable = () => {
             'An address lookup table account',
             accountDataJsonParsed('LookupTable', {
                 addresses: list(string()),
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 deactivationSlot: string(),
                 lastExtendedSlot: string(),
                 lastExtendedSlotStartIndex: number(),
@@ -208,7 +233,19 @@ const accountMint = () => {
                 decimals: number(),
                 freezeAuthority: string(),
                 isInitialized: boolean(),
-                mintAuthority: string(),
+                // Nested Account interface
+                mintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mintAuthority }, info),
+                    type: accountInterface(),
+                },
                 supply: string(),
             })
         );
@@ -224,7 +261,19 @@ const accountTokenAccount = () => {
             accountDataJsonParsed('TokenAccount', {
                 isNative: boolean(),
                 mint: string(),
-                owner: string(),
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 state: string(),
                 tokenAmount: type(tokenAmountType()),
             })
@@ -241,11 +290,47 @@ const accountStakeAccount = () => {
             accountDataJsonParsed('Stake', {
                 meta: object('StakeMeta', {
                     authorized: object('StakeMetaAuthorized', {
-                        staker: string(),
-                        withdrawer: string(),
+                        // Nested Account interface
+                        staker: {
+                            args: {
+                                commitment: type(commitmentInputType()),
+                                dataSlice: type(dataSliceInputType()),
+                                encoding: type(accountEncodingInputType()),
+                                minContextSlot: bigint(),
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            resolve: (parent: any, args, context: any, info) =>
+                                context.resolveAccount({ ...args, address: parent.staker }, info),
+                            type: accountInterface(),
+                        },
+                        // Nested Account interface
+                        withdrawer: {
+                            args: {
+                                commitment: type(commitmentInputType()),
+                                dataSlice: type(dataSliceInputType()),
+                                encoding: type(accountEncodingInputType()),
+                                minContextSlot: bigint(),
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            resolve: (parent: any, args, context: any, info) =>
+                                context.resolveAccount({ ...args, address: parent.withdrawer }, info),
+                            type: accountInterface(),
+                        },
                     }),
                     lockup: object('StakeMetaLockup', {
-                        custodian: string(),
+                        // Nested Account interface
+                        custodian: {
+                            args: {
+                                commitment: type(commitmentInputType()),
+                                dataSlice: type(dataSliceInputType()),
+                                encoding: type(accountEncodingInputType()),
+                                minContextSlot: bigint(),
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            resolve: (parent: any, args, context: any, info) =>
+                                context.resolveAccount({ ...args, address: parent.custodian }, info),
+                            type: accountInterface(),
+                        },
                         epoch: bigint(),
                         unixTimestamp: bigint(),
                     }),
@@ -257,7 +342,19 @@ const accountStakeAccount = () => {
                         activationEpoch: bigint(),
                         deactivationEpoch: bigint(),
                         stake: string(),
-                        voter: string(),
+                        // Nested Account interface
+                        voter: {
+                            args: {
+                                commitment: type(commitmentInputType()),
+                                dataSlice: type(dataSliceInputType()),
+                                encoding: type(accountEncodingInputType()),
+                                minContextSlot: bigint(),
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            resolve: (parent: any, args, context: any, info) =>
+                                context.resolveAccount({ ...args, address: parent.voter }, info),
+                            type: accountInterface(),
+                        },
                         warmupCooldownRate: number(),
                     }),
                 }),
@@ -275,11 +372,35 @@ const accountVoteAccount = () => {
             accountDataJsonParsed('Vote', {
                 authorizedVoters: list(
                     object('VoteAuthorizedVoter', {
-                        authorizedVoter: string(),
+                        // Nested Account interface
+                        authorizedVoter: {
+                            args: {
+                                commitment: type(commitmentInputType()),
+                                dataSlice: type(dataSliceInputType()),
+                                encoding: type(accountEncodingInputType()),
+                                minContextSlot: bigint(),
+                            },
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            resolve: (parent: any, args, context: any, info) =>
+                                context.resolveAccount({ ...args, address: parent.authorizedVoter }, info),
+                            type: accountInterface(),
+                        },
                         epoch: bigint(),
                     })
                 ),
-                authorizedWithdrawer: string(),
+                // Nested Account interface
+                authorizedWithdrawer: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorizedWithdrawer }, info),
+                    type: accountInterface(),
+                },
                 commission: number(),
                 epochCredits: list(
                     object('VoteEpochCredits', {
@@ -292,7 +413,19 @@ const accountVoteAccount = () => {
                     slot: bigint(),
                     timestamp: bigint(),
                 }),
-                nodePubkey: string(),
+                // Nested Account interface
+                node: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nodePubkey }, info),
+                    type: accountInterface(),
+                },
                 priorVoters: list(string()),
                 rootSlot: bigint(),
                 votes: list(
