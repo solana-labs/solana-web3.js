@@ -1,5 +1,7 @@
 import { GraphQLInterfaceType, GraphQLList, GraphQLObjectType, GraphQLScalarType, GraphQLUnionType } from 'graphql';
 
+import { accountInterface } from '../account';
+import { accountEncodingInputType, commitmentInputType, dataSliceInputType } from '../inputs';
 import { bigint, boolean, list, number, object, string, type } from '../picks';
 
 let memoisedTokenBalance: GraphQLObjectType | undefined;
@@ -8,8 +10,32 @@ export const tokenBalance = () => {
         memoisedTokenBalance = new GraphQLObjectType({
             fields: {
                 accountIndex: number(),
-                mint: string(),
-                owner: string(),
+                // Nested Account interface
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 programId: string(),
                 uiAmountString: string(),
             },
@@ -455,30 +481,198 @@ const parsedInstructionsAddressLookupTable = () => {
         memoisedParsedInstructionsAddressLookupTable = [
             parsedTransactionInstructionType('CreateLookupTableInstruction', {
                 bumpSeed: number(),
-                lookupTableAccount: string(),
-                lookupTableAuthority: string(),
-                payerAccount: string(),
+                // Nested Account interface
+                lookupTableAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                lookupTableAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                payerAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.payerAccount }, info),
+                    type: accountInterface(),
+                },
                 recentSlot: bigint(),
-                systemProgram: string(),
+                // Nested Account interface
+                systemProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.systemProgram }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('FreezeLookupTableInstruction', {
-                lookupTableAccount: string(),
-                lookupTableAuthority: string(),
+                // Nested Account interface
+                lookupTableAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                lookupTableAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('ExtendLookupTableInstruction', {
-                lookupTableAccount: string(),
-                lookupTableAuthority: string(),
+                // Nested Account interface
+                lookupTableAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                lookupTableAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAuthority }, info),
+                    type: accountInterface(),
+                },
                 newAddresses: list(string()),
-                payerAccount: string(),
-                systemProgram: string(),
+                // Nested Account interface
+                payerAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.payerAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                systemProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.systemProgram }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('DeactivateLookupTableInstruction', {
-                lookupTableAccount: string(),
-                lookupTableAuthority: string(),
+                // Nested Account interface
+                lookupTableAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                lookupTableAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('CloseLookupTableInstruction', {
-                lookupTableAccount: string(),
-                lookupTableAuthority: string(),
+                // Nested Account interface
+                lookupTableAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                lookupTableAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.lookupTableAuthority }, info),
+                    type: accountInterface(),
+                },
                 recipient: string(),
             }),
         ];
@@ -494,12 +688,36 @@ const parsedInstructionsBpfLoader = () => {
     if (!memoisedParsedInstructionsBpfLoader)
         memoisedParsedInstructionsBpfLoader = [
             parsedTransactionInstructionType('BpfLoaderWriteInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 bytes: string(),
                 offset: number(),
             }),
             parsedTransactionInstructionType('BpfLoaderFinalizeInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
             }),
         ];
     return memoisedParsedInstructionsBpfLoader;
@@ -514,55 +732,354 @@ const parsedInstructionsBpfUpgradeableLoader = () => {
     if (!memoisedParsedInstructionsBpfUpgradeableLoader)
         memoisedParsedInstructionsBpfUpgradeableLoader = [
             parsedTransactionInstructionType('BpfUpgradeableLoaderInitializeBufferInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderWriteInstruction', {
-                account: string(),
-                authority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 bytes: string(),
                 offset: number(),
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderDeployWithMaxDataLenInstruction', {
-                authority: string(),
-                bufferAccount: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                bufferAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.bufferAccount }, info),
+                    type: accountInterface(),
+                },
                 clockSysvar: string(),
                 maxDataLen: bigint(),
-                payerAccount: string(),
-                programAccount: string(),
-                programDataAccount: string(),
+                // Nested Account interface
+                payerAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.payerAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programDataAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programDataAccount }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderUpgradeInstruction', {
-                authority: string(),
-                bufferAccount: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                bufferAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.bufferAccount }, info),
+                    type: accountInterface(),
+                },
                 clockSysvar: string(),
-                programAccount: string(),
-                programDataAccount: string(),
+                // Nested Account interface
+                programAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programDataAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programDataAccount }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
-                spillAccount: string(),
+                // Nested Account interface
+                spillAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.spillAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderSetAuthorityInstruction', {
                 account: string(),
-                authority: string(),
-                newAuthority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderSetAuthorityCheckedInstruction', {
-                account: string(),
-                authority: string(),
-                newAuthority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderCloseInstruction', {
-                account: string(),
-                authority: string(),
-                programAccount: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programAccount }, info),
+                    type: accountInterface(),
+                },
                 recipient: string(),
             }),
             parsedTransactionInstructionType('BpfUpgradeableLoaderExtendProgramInstruction', {
                 additionalBytes: bigint(),
-                payerAccount: string(),
-                programAccount: string(),
-                programDataAccount: string(),
-                systemProgram: string(),
+                payerAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.payerAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                programDataAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.programDataAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                systemProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.systemProgram }, info),
+                    type: accountInterface(),
+                },
             }),
         ];
     return memoisedParsedInstructionsBpfUpgradeableLoader;
@@ -577,29 +1094,240 @@ const parsedInstructionsSplAssociatedToken = () => {
     if (!memoisedParsedInstructionsSplAssociatedToken)
         memoisedParsedInstructionsSplAssociatedToken = [
             parsedTransactionInstructionType('SplAssociatedTokenCreateInstruction', {
-                account: string(),
-                mint: string(),
-                source: string(),
-                systemProgram: string(),
-                tokenProgram: string(),
-                wallet: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
+                systemProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.systemProgram }, info),
+                    type: accountInterface(),
+                },
+                tokenProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.tokenProgram }, info),
+                    type: accountInterface(),
+                },
+                wallet: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.wallet }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplAssociatedTokenCreateIdempotentInstruction', {
-                account: string(),
-                mint: string(),
-                source: string(),
-                systemProgram: string(),
-                tokenProgram: string(),
-                wallet: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
+                systemProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.systemProgram }, info),
+                    type: accountInterface(),
+                },
+                tokenProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.tokenProgram }, info),
+                    type: accountInterface(),
+                },
+                wallet: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.wallet }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplAssociatedTokenRecoverNestedInstruction', {
-                destination: string(),
-                nestedMint: string(),
-                nestedOwner: string(),
-                nestedSource: string(),
-                ownerMint: string(),
-                tokenProgram: string(),
-                wallet: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
+                nestedMint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nestedMint }, info),
+                    type: accountInterface(),
+                },
+                nestedOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nestedOwner }, info),
+                    type: accountInterface(),
+                },
+                nestedSource: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nestedSource }, info),
+                    type: accountInterface(),
+                },
+                ownerMint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.ownerMint }, info),
+                    type: accountInterface(),
+                },
+                tokenProgram: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.tokenProgram }, info),
+                    type: accountInterface(),
+                },
+                wallet: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.wallet }, info),
+                    type: accountInterface(),
+                },
             }),
         ];
     return memoisedParsedInstructionsSplAssociatedToken;
@@ -634,155 +1362,1058 @@ const parsedInstructionsSplToken = () => {
         memoisedParsedInstructionsSplToken = [
             parsedTransactionInstructionType('SplTokenInitializeMintInstruction', {
                 decimals: number(),
-                freezeAuthority: string(),
-                mint: string(),
-                mintAuthority: string(),
+                freezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.freezeAuthority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                mintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mintAuthority }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('SplTokenInitializeMint2Instruction', {
                 decimals: number(),
-                freezeAuthority: string(),
-                mint: string(),
-                mintAuthority: string(),
+                freezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.freezeAuthority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                mintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mintAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenInitializeAccountInstruction', {
-                account: string(),
-                mint: string(),
-                owner: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('SplTokenInitializeAccount2Instruction', {
-                account: string(),
-                mint: string(),
-                owner: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('SplTokenInitializeAccount3Instruction', {
-                account: string(),
-                mint: string(),
-                owner: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenInitializeMultisigInstruction', {
                 m: number(),
-                multisig: string(),
+                // Nested Account interface
+                multisig: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisig }, info),
+                    type: accountInterface(),
+                },
                 rentSysvar: string(),
                 signers: list(string()),
             }),
             parsedTransactionInstructionType('SplTokenInitializeMultisig2Instruction', {
                 m: number(),
-                multisig: string(),
+                // Nested Account interface
+                multisig: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisig }, info),
+                    type: accountInterface(),
+                },
                 signers: list(string()),
             }),
             parsedTransactionInstructionType('SplTokenTransferInstruction', {
                 amount: string(),
-                authority: string(),
-                destination: string(),
-                multisigAuthority: string(),
-                source: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigAuthority }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenApproveInstruction', {
                 amount: string(),
-                delegate: string(),
-                multisigOwner: string(),
-                owner: string(),
-                source: string(),
+                // Nested Account interface
+                delegate: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.delegate }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigOwner }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenRevokeInstruction', {
-                multisigOwner: string(),
-                owner: string(),
-                source: string(),
+                // Nested Account interface
+                multisigOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigOwner }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenSetAuthorityInstruction', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 authorityType: string(),
-                multisigAuthority: string(),
-                newAuthority: string(),
+                // Nested Account interface
+                multisigAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenMintToInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 amount: string(),
-                authority: string(),
-                mint: string(),
-                mintAuthority: string(),
-                multisigMintAuthority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                mintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mintAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigMintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigMintAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenBurnInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 amount: string(),
-                authority: string(),
-                mint: string(),
-                multisigAuthority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenCloseAccountInstruction', {
-                account: string(),
-                destination: string(),
-                multisigOwner: string(),
-                owner: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigOwner }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenFreezeAccountInstruction', {
-                account: string(),
-                freezeAuthority: string(),
-                mint: string(),
-                multisigFreezeAuthority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                freezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.freezeAuthority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigFreezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigFreezeAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenThawAccountInstruction', {
-                account: string(),
-                freezeAuthority: string(),
-                mint: string(),
-                multisigFreezeAuthority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                freezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.freezeAuthority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigFreezeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigFreezeAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenTransferCheckedInstruction', {
-                authority: string(),
-                destination: string(),
-                mint: string(),
-                multisigAuthority: string(),
-                source: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigAuthority }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
                 tokenAmount: string(),
             }),
             parsedTransactionInstructionType('SplTokenApproveCheckedInstruction', {
-                delegate: string(),
-                mint: string(),
-                multisigOwner: string(),
-                owner: string(),
-                source: string(),
+                // Nested Account interface
+                delegate: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.delegate }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigOwner }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
                 tokenAmount: string(),
             }),
             parsedTransactionInstructionType('SplTokenMintToCheckedInstruction', {
-                account: string(),
-                authority: string(),
-                mint: string(),
-                mintAuthority: string(),
-                multisigMintAuthority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                mintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mintAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigMintAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigMintAuthority }, info),
+                    type: accountInterface(),
+                },
                 tokenAmount: string(),
             }),
             parsedTransactionInstructionType('SplTokenBurnCheckedInstruction', {
-                account: string(),
-                authority: string(),
-                mint: string(),
-                multisigAuthority: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                multisigAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.multisigAuthority }, info),
+                    type: accountInterface(),
+                },
                 tokenAmount: string(),
             }),
             parsedTransactionInstructionType('SplTokenSyncNativeInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenGetAccountDataSizeInstruction', {
                 extensionTypes: list(string()),
-                mint: string(),
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenInitializeImmutableOwnerInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenAmountToUiAmountInstruction', {
                 amount: string(),
-                mint: string(),
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('SplTokenUiAmountToAmountInstruction', {
-                mint: string(),
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
                 uiAmount: string(),
             }),
             parsedTransactionInstructionType('SplTokenInitializeMintCloseAuthorityInstruction', {
-                mint: string(),
-                newAuthority: string(),
+                mint: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.mint }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             // TODO: Extensions!
             // - TransferFeeExtension
@@ -808,7 +2439,19 @@ const lockup = () => {
     if (!memoisedLockup)
         memoisedLockup = new GraphQLObjectType({
             fields: {
-                custodian: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
                 epoch: bigint(),
                 unixTimestamp: bigint(),
             },
@@ -827,113 +2470,698 @@ const parsedInstructionsStake = () => {
         memoisedParsedInstructionsStake = [
             parsedTransactionInstructionType('StakeInitializeInstruction', {
                 authorized: object('StakeInitializeInstructionAuthorized', {
-                    staker: string(),
-                    withdrawer: string(),
+                    // Nested Account interface
+                    staker: {
+                        args: {
+                            commitment: type(commitmentInputType()),
+                            dataSlice: type(dataSliceInputType()),
+                            encoding: type(accountEncodingInputType()),
+                            minContextSlot: bigint(),
+                        },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        resolve: (parent: any, args, context: any, info) =>
+                            context.resolveAccount({ ...args, address: parent.staker }, info),
+                        type: accountInterface(),
+                    },
+                    // Nested Account interface
+                    withdrawer: {
+                        args: {
+                            commitment: type(commitmentInputType()),
+                            dataSlice: type(dataSliceInputType()),
+                            encoding: type(accountEncodingInputType()),
+                            minContextSlot: bigint(),
+                        },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        resolve: (parent: any, args, context: any, info) =>
+                            context.resolveAccount({ ...args, address: parent.withdrawer }, info),
+                        type: accountInterface(),
+                    },
                 }),
                 lockup: object('StakeInitializeInstructionLockup', {
-                    custodian: string(),
+                    // Nested Account interface
+                    custodian: {
+                        args: {
+                            commitment: type(commitmentInputType()),
+                            dataSlice: type(dataSliceInputType()),
+                            encoding: type(accountEncodingInputType()),
+                            minContextSlot: bigint(),
+                        },
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        resolve: (parent: any, args, context: any, info) =>
+                            context.resolveAccount({ ...args, address: parent.custodian }, info),
+                        type: accountInterface(),
+                    },
                     epoch: bigint(),
                     unixTimestamp: bigint(),
                 }),
                 rentSysvar: string(),
-                stakeAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeAuthorizeInstruction', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 authorityType: string(),
                 clockSysvar: string(),
-                custodian: string(),
-                newAuthority: string(),
-                stakeAccount: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeDelegateStakeInstruction', {
                 clockSysvar: string(),
-                stakeAccount: string(),
-                stakeAuthority: string(),
-                stakeConfigAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeConfigAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeConfigAccount }, info),
+                    type: accountInterface(),
+                },
                 stakeHistorySysvar: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeSplitInstruction', {
                 lamports: bigint(),
                 newSplitAccount: string(),
-                stakeAccount: string(),
-                stakeAuthority: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeWithdrawInstruction', {
                 clockSysvar: string(),
-                destination: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
                 lamports: bigint(),
-                stakeAccount: string(),
-                withdrawAuthority: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                withdrawAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.withdrawAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeDeactivateInstruction', {
                 clockSysvar: string(),
-                stakeAccount: string(),
-                stakeAuthority: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeSetLockupInstruction', {
-                custodian: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
                 lockup: type(lockup()),
-                stakeAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeMergeInstruction', {
                 clockSysvar: string(),
-                destination: string(),
-                source: string(),
-                stakeAuthority: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAuthority }, info),
+                    type: accountInterface(),
+                },
                 stakeHistorySysvar: string(),
             }),
             parsedTransactionInstructionType('StakeAuthorizeWithSeedInstruction', {
-                authorityBase: string(),
-                authorityOwner: string(),
+                // Nested Account interface
+                authorityBase: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityBase }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authorityOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityOwner }, info),
+                    type: accountInterface(),
+                },
                 authoritySeed: string(),
                 authorityType: string(),
                 clockSysvar: string(),
-                custodian: string(),
-                newAuthorized: string(),
-                stakeAccount: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthorized: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthorized }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeInitializeCheckedInstruction', {
                 rentSysvar: string(),
-                stakeAccount: string(),
-                staker: string(),
-                withdrawer: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                staker: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.staker }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                withdrawer: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.withdrawer }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeAuthorizeCheckedInstruction', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 authorityType: string(),
                 clockSysvar: string(),
-                custodian: string(),
-                newAuthority: string(),
-                stakeAccount: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeAuthorizeCheckedWithSeedInstruction', {
-                authorityBase: string(),
-                authorityOwner: string(),
+                // Nested Account interface
+                authorityBase: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityBase }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authorityOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityOwner }, info),
+                    type: accountInterface(),
+                },
                 authoritySeed: string(),
                 authorityType: string(),
                 clockSysvar: string(),
-                custodian: string(),
-                newAuthorized: string(),
-                stakeAccount: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                newAuthorized: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthorized }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeSetLockupCheckedInstruction', {
-                custodian: string(),
+                // Nested Account interface
+                custodian: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.custodian }, info),
+                    type: accountInterface(),
+                },
                 lockup: type(lockup()),
-                stakeAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeDeactivateDelinquentInstruction', {
                 referenceVoteAccount: string(),
-                stakeAccount: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('StakeRedelegateInstruction', {
                 newStakeAccount: string(),
-                stakeAccount: string(),
-                stakeAuthority: string(),
-                stakeConfigAccount: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                stakeAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                stakeConfigAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.stakeConfigAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
         ];
     return memoisedParsedInstructionsStake;
@@ -949,76 +3177,383 @@ const parsedInstructionsSystem = () => {
         memoisedParsedInstructionsSystem = [
             parsedTransactionInstructionType('CreateAccountInstruction', {
                 lamports: bigint(),
-                newAccount: string(),
-                owner: string(),
-                source: string(),
+                // Nested Account interface
+                newAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
                 space: bigint(),
             }),
             parsedTransactionInstructionType('AssignInstruction', {
-                owner: string(),
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('TransferInstruction', {
                 amount: string(),
                 lamports: number(),
-                source: string(),
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('CreateAccountWithSeedInstruction', {
                 base: string(),
                 lamports: bigint(),
-                owner: string(),
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 seed: string(),
                 space: bigint(),
             }),
             parsedTransactionInstructionType('AdvanceNonceAccountInstruction', {
-                nonceAccount: string(),
-                nonceAuthority: string(),
+                // Nested Account interface
+                nonceAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                nonceAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAuthority }, info),
+                    type: accountInterface(),
+                },
                 recentBlockhashesSysvar: string(),
             }),
             parsedTransactionInstructionType('WithdrawNonceAccountInstruction', {
-                destination: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
                 lamports: bigint(),
-                nonceAccount: string(),
-                nonceAuthority: string(),
+                // Nested Account interface
+                nonceAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                nonceAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAuthority }, info),
+                    type: accountInterface(),
+                },
                 recentBlockhashesSysvar: string(),
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('InitializeNonceAccountInstruction', {
-                nonceAccount: string(),
-                nonceAuthority: string(),
+                // Nested Account interface
+                nonceAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                nonceAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAuthority }, info),
+                    type: accountInterface(),
+                },
                 recentBlockhashesSysvar: string(),
                 rentSysvar: string(),
             }),
             parsedTransactionInstructionType('AuthorizeNonceAccountInstruction', {
-                newAuthorized: string(),
-                nonceAccount: string(),
-                nonceAuthority: string(),
+                // Nested Account interface
+                newAuthorized: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthorized }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                nonceAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                nonceAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('UpgradeNonceAccountInstruction', {
-                nonceAccount: string(),
+                // Nested Account interface
+                nonceAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.nonceAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('AllocateInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 space: bigint(),
             }),
             parsedTransactionInstructionType('AllocateWithSeedInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 base: string(),
-                owner: string(),
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 seed: string(),
                 space: bigint(),
             }),
             parsedTransactionInstructionType('AssignWithSeedInstruction', {
-                account: string(),
+                // Nested Account interface
+                account: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.account }, info),
+                    type: accountInterface(),
+                },
                 base: string(),
-                owner: string(),
+                // Nested Account interface
+                owner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.owner }, info),
+                    type: accountInterface(),
+                },
                 seed: string(),
             }),
             parsedTransactionInstructionType('TransferWithSeedInstruction', {
-                destination: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
                 lamports: bigint(),
-                source: string(),
-                sourceBase: string(),
-                sourceOwner: string(),
+                source: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.source }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                sourceBase: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.sourceBase }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                sourceOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.sourceOwner }, info),
+                    type: accountInterface(),
+                },
                 sourceSeed: string(),
             }),
         ];
@@ -1068,100 +3603,543 @@ const parsedInstructionsVote = () => {
     if (!memoisedParsedInstructionsVote)
         memoisedParsedInstructionsVote = [
             parsedTransactionInstructionType('VoteInitializeAccountInstruction', {
-                authorizedVoter: string(),
-                authorizedWithdrawer: string(),
+                // Nested Account interface
+                authorizedVoter: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorizedVoter }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authorizedWithdrawer: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorizedWithdrawer }, info),
+                    type: accountInterface(),
+                },
                 clockSysvar: string(),
                 commission: number(),
                 node: string(),
                 rentSysvar: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteAuthorizeInstruction', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 authorityType: string(),
                 clockSysvar: string(),
-                newAuthority: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteAuthorizeWithSeedInstruction', {
-                authorityBaseKey: string(),
-                authorityOwner: string(),
+                // Nested Account interface
+                authorityBaseKey: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityBaseKey }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authorityOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityOwner }, info),
+                    type: accountInterface(),
+                },
                 authoritySeed: string(),
                 authorityType: string(),
                 clockSysvar: string(),
-                newAuthority: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteAuthorizeCheckedWithSeedInstruction', {
-                authorityBaseKey: string(),
-                authorityOwner: string(),
+                // Nested Account interface
+                authorityBaseKey: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityBaseKey }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                authorityOwner: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authorityOwner }, info),
+                    type: accountInterface(),
+                },
                 authoritySeed: string(),
                 authorityType: string(),
                 clockSysvar: string(),
-                newAuthority: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteVoteInstruction', {
                 clockSysvar: string(),
                 slotHashedSysvar: string(),
                 vote: type(vote()),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteUpdateVoteStateInstruction', {
                 hash: string(),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
                 voteStateUpdate: type(voteStateUpdate()),
             }),
             parsedTransactionInstructionType('VoteUpdateVoteStateSwitchInstruction', {
                 hash: string(),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
                 voteStateUpdate: type(voteStateUpdate()),
             }),
             parsedTransactionInstructionType('VoteCompactUpdateVoteStateInstruction', {
                 hash: string(),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
                 voteStateUpdate: type(voteStateUpdate()),
             }),
             parsedTransactionInstructionType('VoteCompactUpdateVoteStateSwitchInstruction', {
                 hash: string(),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
                 voteStateUpdate: type(voteStateUpdate()),
             }),
             parsedTransactionInstructionType('VoteWithdrawInstruction', {
-                destination: string(),
+                destination: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.destination }, info),
+                    type: accountInterface(),
+                },
                 lamports: bigint(),
-                voteAccount: string(),
-                withdrawAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                withdrawAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.withdrawAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteUpdateValidatorIdentityInstruction', {
-                newValidatorIdentity: string(),
-                voteAccount: string(),
-                withdrawAuthority: string(),
+                // Nested Account interface
+                newValidatorIdentity: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newValidatorIdentity }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                withdrawAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.withdrawAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteUpdateCommissionInstruction', {
                 commission: string(),
-                voteAccount: string(),
-                withdrawAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                withdrawAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.withdrawAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteVoteSwitchInstruction', {
                 clockSysvar: string(),
                 hash: string(),
                 slotHashesSysvar: string(),
                 vote: type(vote()),
-                voteAccount: string(),
-                voteAuthority: string(),
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAuthority }, info),
+                    type: accountInterface(),
+                },
             }),
             parsedTransactionInstructionType('VoteAuthorizeCheckedInstruction', {
-                authority: string(),
+                // Nested Account interface
+                authority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.authority }, info),
+                    type: accountInterface(),
+                },
                 authorityType: string(),
                 clockSysvar: string(),
-                newAuthority: string(),
-                voteAccount: string(),
+                // Nested Account interface
+                newAuthority: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.newAuthority }, info),
+                    type: accountInterface(),
+                },
+                // Nested Account interface
+                voteAccount: {
+                    args: {
+                        commitment: type(commitmentInputType()),
+                        dataSlice: type(dataSliceInputType()),
+                        encoding: type(accountEncodingInputType()),
+                        minContextSlot: bigint(),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    resolve: (parent: any, args, context: any, info) =>
+                        context.resolveAccount({ ...args, address: parent.voteAccount }, info),
+                    type: accountInterface(),
+                },
             }),
         ];
     return memoisedParsedInstructionsVote;
