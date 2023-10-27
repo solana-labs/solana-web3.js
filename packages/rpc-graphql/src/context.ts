@@ -133,10 +133,11 @@ async function resolveProgramAccounts(
                 : [programAccount.account.data[0], encoding]
             : [programAccount.account.data, 'jsonParsed'];
         const pubkey = programAccount.pubkey;
-        const account = { ...programAccount.account, data, encoding: responseEncoding };
         return {
-            account,
-            pubkey,
+            ...programAccount.account,
+            address: pubkey,
+            data,
+            encoding: responseEncoding,
         };
     });
 
