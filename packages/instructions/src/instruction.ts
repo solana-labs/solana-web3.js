@@ -2,8 +2,11 @@ import { Address } from '@solana/addresses';
 
 import { IAccountLookupMeta, IAccountMeta } from './accounts';
 
-export interface IInstruction<TProgramAddress extends string = string> {
-    readonly accounts?: readonly (IAccountMeta | IAccountLookupMeta)[];
+export interface IInstruction<
+    TProgramAddress extends string = string,
+    TAccounts extends readonly (IAccountMeta | IAccountLookupMeta)[] = readonly (IAccountMeta | IAccountLookupMeta)[]
+> {
+    readonly accounts?: TAccounts;
     readonly data?: Uint8Array;
     readonly programAddress: Address<TProgramAddress>;
 }
