@@ -346,7 +346,10 @@ describe('account', () => {
                                     info {
                                         decimals
                                         isInitialized
-                                        mintAuthority
+                                        mintAuthority {
+                                            address
+                                            lamports
+                                        }
                                         supply
                                     }
                                     type
@@ -365,9 +368,12 @@ describe('account', () => {
                         data: {
                             parsed: {
                                 info: {
-                                    decimals: expect.any(Number),
-                                    isInitialized: expect.any(Boolean),
-                                    mintAuthority: expect.any(String),
+                                    decimals: 6,
+                                    isInitialized: true,
+                                    mintAuthority: {
+                                        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+                                        lamports: expect.any(BigInt),
+                                    },
                                     supply: expect.any(String),
                                 },
                                 type: 'mint',
@@ -394,7 +400,9 @@ describe('account', () => {
                                     info {
                                         isNative
                                         mint
-                                        owner
+                                        owner {
+                                            address
+                                        }
                                         state
                                         tokenAmount {
                                             amount
@@ -421,7 +429,9 @@ describe('account', () => {
                                 info: {
                                     isNative: expect.any(Boolean),
                                     mint: expect.any(String),
-                                    owner: expect.any(String),
+                                    owner: {
+                                        address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
+                                    },
                                     state: expect.any(String),
                                     tokenAmount: {
                                         amount: expect.any(String),
@@ -451,7 +461,9 @@ describe('account', () => {
                             data {
                                 parsed {
                                     info {
-                                        authority
+                                        authority {
+                                            address
+                                        }
                                         blockhash
                                         feeCalculator {
                                             lamportsPerSignature
@@ -473,7 +485,9 @@ describe('account', () => {
                         data: {
                             parsed: {
                                 info: {
-                                    authority: expect.any(String),
+                                    authority: {
+                                        address: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
+                                    },
                                     blockhash: expect.any(String),
                                     feeCalculator: {
                                         lamportsPerSignature: expect.any(String),
@@ -503,11 +517,17 @@ describe('account', () => {
                                     info {
                                         meta {
                                             authorized {
-                                                staker
-                                                withdrawer
+                                                staker {
+                                                    address
+                                                }
+                                                withdrawer {
+                                                    address
+                                                }
                                             }
                                             lockup {
-                                                custodian
+                                                custodian {
+                                                    address
+                                                }
                                                 epoch
                                                 unixTimestamp
                                             }
@@ -519,7 +539,9 @@ describe('account', () => {
                                                 activationEpoch
                                                 deactivationEpoch
                                                 stake
-                                                voter
+                                                voter {
+                                                    address
+                                                }
                                             }
                                         }
                                     }
@@ -541,11 +563,17 @@ describe('account', () => {
                                 info: {
                                     meta: {
                                         authorized: {
-                                            staker: expect.any(String),
-                                            withdrawer: expect.any(String),
+                                            staker: {
+                                                address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
+                                            },
+                                            withdrawer: {
+                                                address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
+                                            },
                                         },
                                         lockup: {
-                                            custodian: expect.any(String),
+                                            custodian: {
+                                                address: '11111111111111111111111111111111',
+                                            },
                                             epoch: expect.any(BigInt),
                                             unixTimestamp: expect.any(BigInt),
                                         },
@@ -557,7 +585,9 @@ describe('account', () => {
                                             activationEpoch: expect.any(BigInt),
                                             deactivationEpoch: expect.any(BigInt),
                                             stake: expect.any(String),
-                                            voter: expect.any(String),
+                                            voter: {
+                                                address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
+                                            },
                                         },
                                     },
                                 },
@@ -584,10 +614,14 @@ describe('account', () => {
                                 parsed {
                                     info {
                                         authorizedVoters {
-                                            authorizedVoter
+                                            authorizedVoter {
+                                                address
+                                            }
                                             epoch
                                         }
-                                        authorizedWithdrawer
+                                        authorizedWithdrawer {
+                                            address
+                                        }
                                         commission
                                         epochCredits {
                                             credits
@@ -598,7 +632,9 @@ describe('account', () => {
                                             slot
                                             timestamp
                                         }
-                                        nodePubkey
+                                        node {
+                                            address
+                                        }
                                         priorVoters
                                         rootSlot
                                         votes {
@@ -624,11 +660,15 @@ describe('account', () => {
                                 info: {
                                     authorizedVoters: expect.arrayContaining([
                                         {
-                                            authorizedVoter: expect.any(String),
+                                            authorizedVoter: {
+                                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                            },
                                             epoch: expect.any(BigInt),
                                         },
                                     ]),
-                                    authorizedWithdrawer: expect.any(String),
+                                    authorizedWithdrawer: {
+                                        address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                    },
                                     commission: expect.any(Number),
                                     epochCredits: expect.arrayContaining([
                                         {
@@ -641,7 +681,9 @@ describe('account', () => {
                                         slot: expect.any(BigInt),
                                         timestamp: expect.any(BigInt),
                                     },
-                                    nodePubkey: expect.any(String),
+                                    node: {
+                                        address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                    },
                                     priorVoters: expect.any(Array),
                                     rootSlot: expect.any(BigInt),
                                     votes: expect.arrayContaining([
@@ -674,7 +716,9 @@ describe('account', () => {
                                 parsed {
                                     info {
                                         addresses
-                                        authority
+                                        authority {
+                                            address
+                                        }
                                         deactivationSlot
                                         lastExtendedSlot
                                         lastExtendedSlotStartIndex
@@ -696,7 +740,9 @@ describe('account', () => {
                             parsed: {
                                 info: {
                                     addresses: expect.any(Array),
-                                    authority: expect.any(String),
+                                    authority: {
+                                        address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
+                                    },
                                     deactivationSlot: expect.any(String),
                                     lastExtendedSlot: expect.any(String),
                                     lastExtendedSlotStartIndex: expect.any(Number),

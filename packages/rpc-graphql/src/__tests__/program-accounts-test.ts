@@ -236,7 +236,9 @@ describe('programAccounts', () => {
                                     parsed {
                                         info {
                                             addresses
-                                            authority
+                                            authority {
+                                                address
+                                            }
                                             deactivationSlot
                                             lastExtendedSlot
                                             lastExtendedSlotStartIndex
@@ -258,7 +260,9 @@ describe('programAccounts', () => {
                                     parsed: {
                                         info: {
                                             addresses: expect.arrayContaining([expect.any(String)]),
-                                            authority: expect.any(String),
+                                            authority: {
+                                                address: expect.any(String),
+                                            },
                                             deactivationSlot: expect.any(String),
                                             lastExtendedSlot: expect.any(String),
                                             lastExtendedSlotStartIndex: expect.any(Number),
@@ -286,7 +290,9 @@ describe('programAccounts', () => {
                                         info {
                                             decimals
                                             isInitialized
-                                            mintAuthority
+                                            mintAuthority {
+                                                address
+                                            }
                                             supply
                                         }
                                     }
@@ -298,7 +304,9 @@ describe('programAccounts', () => {
                                         info {
                                             isNative
                                             mint
-                                            owner
+                                            owner {
+                                                address
+                                            }
                                             state
                                             tokenAmount {
                                                 amount
@@ -326,7 +334,9 @@ describe('programAccounts', () => {
                                         info: {
                                             decimals: expect.any(Number),
                                             isInitialized: expect.any(Boolean),
-                                            mintAuthority: expect.any(String),
+                                            mintAuthority: {
+                                                address: expect.any(String),
+                                            },
                                             supply: expect.any(String),
                                         },
                                     },
@@ -341,7 +351,9 @@ describe('programAccounts', () => {
                                         info: {
                                             isNative: expect.any(Boolean),
                                             mint: expect.any(String),
-                                            owner: expect.any(String),
+                                            owner: {
+                                                address: expect.any(String),
+                                            },
                                             state: expect.any(String),
                                             tokenAmount: expect.objectContaining({
                                                 amount: expect.any(String),
@@ -370,7 +382,9 @@ describe('programAccounts', () => {
                                 data {
                                     parsed {
                                         info {
-                                            authority
+                                            authority {
+                                                address
+                                            }
                                             blockhash
                                             feeCalculator {
                                                 lamportsPerSignature
@@ -392,7 +406,9 @@ describe('programAccounts', () => {
                                 data: {
                                     parsed: {
                                         info: {
-                                            authority: expect.any(String),
+                                            authority: {
+                                                address: expect.any(String),
+                                            },
                                             blockhash: expect.any(String),
                                             feeCalculator: {
                                                 lamportsPerSignature: expect.any(String),
@@ -421,11 +437,17 @@ describe('programAccounts', () => {
                                         info {
                                             meta {
                                                 authorized {
-                                                    staker
-                                                    withdrawer
+                                                    staker {
+                                                        address
+                                                    }
+                                                    withdrawer {
+                                                        address
+                                                    }
                                                 }
                                                 lockup {
-                                                    custodian
+                                                    custodian {
+                                                        address
+                                                    }
                                                     epoch
                                                     unixTimestamp
                                                 }
@@ -437,7 +459,9 @@ describe('programAccounts', () => {
                                                     activationEpoch
                                                     deactivationEpoch
                                                     stake
-                                                    voter
+                                                    voter {
+                                                        address
+                                                    }
                                                 }
                                             }
                                         }
@@ -459,11 +483,17 @@ describe('programAccounts', () => {
                                         info: {
                                             meta: {
                                                 authorized: {
-                                                    staker: expect.any(String),
-                                                    withdrawer: expect.any(String),
+                                                    staker: {
+                                                        address: expect.any(String),
+                                                    },
+                                                    withdrawer: {
+                                                        address: expect.any(String),
+                                                    },
                                                 },
                                                 lockup: {
-                                                    custodian: expect.any(String),
+                                                    custodian: {
+                                                        address: expect.any(String),
+                                                    },
                                                     epoch: expect.any(BigInt),
                                                     unixTimestamp: expect.any(BigInt),
                                                 },
@@ -475,7 +505,9 @@ describe('programAccounts', () => {
                                                     activationEpoch: expect.any(BigInt),
                                                     deactivationEpoch: expect.any(BigInt),
                                                     stake: expect.any(String),
-                                                    voter: expect.any(String),
+                                                    voter: {
+                                                        address: expect.any(String),
+                                                    },
                                                 },
                                             },
                                         },
@@ -501,10 +533,14 @@ describe('programAccounts', () => {
                                     parsed {
                                         info {
                                             authorizedVoters {
-                                                authorizedVoter
+                                                authorizedVoter {
+                                                    address
+                                                }
                                                 epoch
                                             }
-                                            authorizedWithdrawer
+                                            authorizedWithdrawer {
+                                                address
+                                            }
                                             commission
                                             epochCredits {
                                                 credits
@@ -515,7 +551,9 @@ describe('programAccounts', () => {
                                                 slot
                                                 timestamp
                                             }
-                                            nodePubkey
+                                            node {
+                                                address
+                                            }
                                             priorVoters
                                             rootSlot
                                             votes {
@@ -541,11 +579,15 @@ describe('programAccounts', () => {
                                         info: {
                                             authorizedVoters: expect.arrayContaining([
                                                 {
-                                                    authorizedVoter: expect.any(String),
+                                                    authorizedVoter: {
+                                                        address: expect.any(String),
+                                                    },
                                                     epoch: expect.any(BigInt),
                                                 },
                                             ]),
-                                            authorizedWithdrawer: expect.any(String),
+                                            authorizedWithdrawer: {
+                                                address: expect.any(String),
+                                            },
                                             commission: expect.any(Number),
                                             epochCredits: expect.arrayContaining([
                                                 {
@@ -558,7 +600,9 @@ describe('programAccounts', () => {
                                                 slot: expect.any(BigInt),
                                                 timestamp: expect.any(BigInt),
                                             },
-                                            nodePubkey: expect.any(String),
+                                            node: {
+                                                address: expect.any(String),
+                                            },
                                             priorVoters: expect.any(Array),
                                             rootSlot: expect.any(BigInt),
                                             votes: expect.arrayContaining([
