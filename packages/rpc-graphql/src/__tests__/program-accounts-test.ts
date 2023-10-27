@@ -30,16 +30,14 @@ describe('programAccounts', () => {
             const source = `
             query testQuery($programAddress: String!, $commitment: Commitment) {
                 programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    account {
-                        lamports
-                    }
+                    lamports
                 }
             }
         `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
-                    programAccounts: expect.arrayContaining([{ account: { lamports: expect.any(BigInt) } }]),
+                    programAccounts: expect.arrayContaining([{ lamports: expect.any(BigInt) }]),
                 },
             });
         });
@@ -48,16 +46,14 @@ describe('programAccounts', () => {
             const source = `
             query testQuery($programAddress: String!, $commitment: Commitment) {
                 programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    account {
-                        executable
-                    }
+                    executable
                 }
             }
         `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
-                    programAccounts: expect.arrayContaining([{ account: { executable: expect.any(Boolean) } }]),
+                    programAccounts: expect.arrayContaining([{ executable: expect.any(Boolean) }]),
                 },
             });
         });
@@ -66,11 +62,9 @@ describe('programAccounts', () => {
             const source = `
             query testQuery($programAddress: String!, $commitment: Commitment) {
                 programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    account {
-                        executable
-                        lamports
-                        rentEpoch
-                    }
+                    executable
+                    lamports
+                    rentEpoch
                 }
             }
         `;
@@ -79,11 +73,9 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                executable: expect.any(Boolean),
-                                lamports: expect.any(BigInt),
-                                rentEpoch: expect.any(BigInt),
-                            },
+                            executable: expect.any(Boolean),
+                            lamports: expect.any(BigInt),
+                            rentEpoch: expect.any(BigInt),
                         },
                     ]),
                 },
@@ -102,13 +94,11 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        account {
-                            ... on AccountBase58 {
-                                data
-                                executable
-                            }
-                        },
-                        pubkey
+                        ... on AccountBase58 {
+                            address
+                            data
+                            executable
+                        }
                     }
                 }
             `;
@@ -117,18 +107,14 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: '2Uw1bpnsXxu3e',
-                                executable: false,
-                            },
-                            pubkey: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            data: '2Uw1bpnsXxu3e',
+                            executable: false,
                         },
                         {
-                            account: {
-                                data: '2Uw1bpnsXxu3e',
-                                executable: false,
-                            },
-                            pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            data: '2Uw1bpnsXxu3e',
+                            executable: false,
                         },
                     ]),
                 },
@@ -145,13 +131,11 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        account {
-                            ... on AccountBase64 {
-                                data
-                                executable
-                            }
-                        },
-                        pubkey
+                        ... on AccountBase64 {
+                            address
+                            data
+                            executable
+                        }
                     }
                 }
             `;
@@ -160,18 +144,14 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: 'dGVzdCBkYXRh',
-                                executable: false,
-                            },
-                            pubkey: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            data: 'dGVzdCBkYXRh',
+                            executable: false,
                         },
                         {
-                            account: {
-                                data: 'dGVzdCBkYXRh',
-                                executable: false,
-                            },
-                            pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            data: 'dGVzdCBkYXRh',
+                            executable: false,
                         },
                     ]),
                 },
@@ -188,13 +168,11 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        account {
-                            ... on AccountBase64Zstd {
-                                data
-                                executable
-                            }
-                        },
-                        pubkey
+                        ... on AccountBase64Zstd {
+                            address
+                            data
+                            executable
+                        }
                     }
                 }
             `;
@@ -203,18 +181,14 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                                executable: false,
-                            },
-                            pubkey: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
+                            data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            executable: false,
                         },
                         {
-                            account: {
-                                data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                                executable: false,
-                            },
-                            pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
+                            data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            executable: false,
                         },
                     ]),
                 },
@@ -230,19 +204,17 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
-                        account {
-                            ... on LookupTableAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            addresses
-                                            authority {
-                                                address
-                                            }
-                                            deactivationSlot
-                                            lastExtendedSlot
-                                            lastExtendedSlotStartIndex
+                        ... on LookupTableAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        addresses
+                                        authority {
+                                            address
                                         }
+                                        deactivationSlot
+                                        lastExtendedSlot
+                                        lastExtendedSlotStartIndex
                                     }
                                 }
                             }
@@ -255,18 +227,16 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            addresses: expect.arrayContaining([expect.any(String)]),
-                                            authority: {
-                                                address: expect.any(String),
-                                            },
-                                            deactivationSlot: expect.any(String),
-                                            lastExtendedSlot: expect.any(String),
-                                            lastExtendedSlotStartIndex: expect.any(Number),
+                            data: {
+                                parsed: {
+                                    info: {
+                                        addresses: expect.arrayContaining([expect.any(String)]),
+                                        authority: {
+                                            address: expect.any(String),
                                         },
+                                        deactivationSlot: expect.any(String),
+                                        lastExtendedSlot: expect.any(String),
+                                        lastExtendedSlotStartIndex: expect.any(Number),
                                     },
                                 },
                             },
@@ -283,37 +253,35 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
-                        account {
-                            ... on MintAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            decimals
-                                            isInitialized
-                                            mintAuthority {
-                                                address
-                                            }
-                                            supply
+                        ... on MintAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        decimals
+                                        isInitialized
+                                        mintAuthority {
+                                            address
                                         }
+                                        supply
                                     }
                                 }
                             }
-                            ... on TokenAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            isNative
-                                            mint
-                                            owner {
-                                                address
-                                            }
-                                            state
-                                            tokenAmount {
-                                                amount
-                                                decimals
-                                                uiAmount
-                                                uiAmountString
-                                            }
+                        }
+                        ... on TokenAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        isNative
+                                        mint
+                                        owner {
+                                            address
+                                        }
+                                        state
+                                        tokenAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
                                         }
                                     }
                                 }
@@ -328,39 +296,35 @@ describe('programAccounts', () => {
                     programAccounts: expect.arrayContaining([
                         // Mint account
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            decimals: expect.any(Number),
-                                            isInitialized: expect.any(Boolean),
-                                            mintAuthority: {
-                                                address: expect.any(String),
-                                            },
-                                            supply: expect.any(String),
+                            data: {
+                                parsed: {
+                                    info: {
+                                        decimals: expect.any(Number),
+                                        isInitialized: expect.any(Boolean),
+                                        mintAuthority: {
+                                            address: expect.any(String),
                                         },
+                                        supply: expect.any(String),
                                     },
                                 },
                             },
                         },
                         // Token account
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            isNative: expect.any(Boolean),
-                                            mint: expect.any(String),
-                                            owner: {
-                                                address: expect.any(String),
-                                            },
-                                            state: expect.any(String),
-                                            tokenAmount: expect.objectContaining({
-                                                amount: expect.any(String),
-                                                decimals: expect.any(Number),
-                                                uiAmountString: expect.any(String),
-                                            }),
+                            data: {
+                                parsed: {
+                                    info: {
+                                        isNative: expect.any(Boolean),
+                                        mint: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
                                         },
+                                        state: expect.any(String),
+                                        tokenAmount: expect.objectContaining({
+                                            amount: expect.any(String),
+                                            decimals: expect.any(Number),
+                                            uiAmountString: expect.any(String),
+                                        }),
                                     },
                                 },
                             },
@@ -377,18 +341,16 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
-                        account {
-                            ... on NonceAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            authority {
-                                                address
-                                            }
-                                            blockhash
-                                            feeCalculator {
-                                                lamportsPerSignature
-                                            }
+                        ... on NonceAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        authority {
+                                            address
+                                        }
+                                        blockhash
+                                        feeCalculator {
+                                            lamportsPerSignature
                                         }
                                     }
                                 }
@@ -402,17 +364,15 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            authority: {
-                                                address: expect.any(String),
-                                            },
-                                            blockhash: expect.any(String),
-                                            feeCalculator: {
-                                                lamportsPerSignature: expect.any(String),
-                                            },
+                            data: {
+                                parsed: {
+                                    info: {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        blockhash: expect.any(String),
+                                        feeCalculator: {
+                                            lamportsPerSignature: expect.any(String),
                                         },
                                     },
                                 },
@@ -430,38 +390,36 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
-                        account {
-                            ... on StakeAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            meta {
-                                                authorized {
-                                                    staker {
-                                                        address
-                                                    }
-                                                    withdrawer {
-                                                        address
-                                                    }
+                        ... on StakeAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        meta {
+                                            authorized {
+                                                staker {
+                                                    address
                                                 }
-                                                lockup {
-                                                    custodian {
-                                                        address
-                                                    }
-                                                    epoch
-                                                    unixTimestamp
+                                                withdrawer {
+                                                    address
                                                 }
-                                                rentExemptReserve
                                             }
-                                            stake {
-                                                creditsObserved
-                                                delegation {
-                                                    activationEpoch
-                                                    deactivationEpoch
-                                                    stake
-                                                    voter {
-                                                        address
-                                                    }
+                                            lockup {
+                                                custodian {
+                                                    address
+                                                }
+                                                epoch
+                                                unixTimestamp
+                                            }
+                                            rentExemptReserve
+                                        }
+                                        stake {
+                                            creditsObserved
+                                            delegation {
+                                                activationEpoch
+                                                deactivationEpoch
+                                                stake
+                                                voter {
+                                                    address
                                                 }
                                             }
                                         }
@@ -477,37 +435,35 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            meta: {
-                                                authorized: {
-                                                    staker: {
-                                                        address: expect.any(String),
-                                                    },
-                                                    withdrawer: {
-                                                        address: expect.any(String),
-                                                    },
+                            data: {
+                                parsed: {
+                                    info: {
+                                        meta: {
+                                            authorized: {
+                                                staker: {
+                                                    address: expect.any(String),
                                                 },
-                                                lockup: {
-                                                    custodian: {
-                                                        address: expect.any(String),
-                                                    },
-                                                    epoch: expect.any(BigInt),
-                                                    unixTimestamp: expect.any(BigInt),
+                                                withdrawer: {
+                                                    address: expect.any(String),
                                                 },
-                                                rentExemptReserve: expect.any(String),
                                             },
-                                            stake: {
-                                                creditsObserved: expect.any(BigInt),
-                                                delegation: {
-                                                    activationEpoch: expect.any(BigInt),
-                                                    deactivationEpoch: expect.any(BigInt),
-                                                    stake: expect.any(String),
-                                                    voter: {
-                                                        address: expect.any(String),
-                                                    },
+                                            lockup: {
+                                                custodian: {
+                                                    address: expect.any(String),
+                                                },
+                                                epoch: expect.any(BigInt),
+                                                unixTimestamp: expect.any(BigInt),
+                                            },
+                                            rentExemptReserve: expect.any(String),
+                                        },
+                                        stake: {
+                                            creditsObserved: expect.any(BigInt),
+                                            delegation: {
+                                                activationEpoch: expect.any(BigInt),
+                                                deactivationEpoch: expect.any(BigInt),
+                                                stake: expect.any(String),
+                                                voter: {
+                                                    address: expect.any(String),
                                                 },
                                             },
                                         },
@@ -527,39 +483,37 @@ describe('programAccounts', () => {
             const source = `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
-                        account {
-                            ... on VoteAccount {
-                                data {
-                                    parsed {
-                                        info {
-                                            authorizedVoters {
-                                                authorizedVoter {
-                                                    address
-                                                }
-                                                epoch
-                                            }
-                                            authorizedWithdrawer {
+                        ... on VoteAccount {
+                            data {
+                                parsed {
+                                    info {
+                                        authorizedVoters {
+                                            authorizedVoter {
                                                 address
                                             }
-                                            commission
-                                            epochCredits {
-                                                credits
-                                                epoch
-                                                previousCredits
-                                            }
-                                            lastTimestamp {
-                                                slot
-                                                timestamp
-                                            }
-                                            node {
-                                                address
-                                            }
-                                            priorVoters
-                                            rootSlot
-                                            votes {
-                                                confirmationCount
-                                                slot
-                                            }
+                                            epoch
+                                        }
+                                        authorizedWithdrawer {
+                                            address
+                                        }
+                                        commission
+                                        epochCredits {
+                                            credits
+                                            epoch
+                                            previousCredits
+                                        }
+                                        lastTimestamp {
+                                            slot
+                                            timestamp
+                                        }
+                                        node {
+                                            address
+                                        }
+                                        priorVoters
+                                        rootSlot
+                                        votes {
+                                            confirmationCount
+                                            slot
                                         }
                                     }
                                 }
@@ -573,45 +527,43 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            account: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            authorizedVoters: expect.arrayContaining([
-                                                {
-                                                    authorizedVoter: {
-                                                        address: expect.any(String),
-                                                    },
-                                                    epoch: expect.any(BigInt),
+                            data: {
+                                parsed: {
+                                    info: {
+                                        authorizedVoters: expect.arrayContaining([
+                                            {
+                                                authorizedVoter: {
+                                                    address: expect.any(String),
                                                 },
-                                            ]),
-                                            authorizedWithdrawer: {
-                                                address: expect.any(String),
+                                                epoch: expect.any(BigInt),
                                             },
-                                            commission: expect.any(Number),
-                                            epochCredits: expect.arrayContaining([
-                                                {
-                                                    credits: expect.any(String),
-                                                    epoch: expect.any(BigInt),
-                                                    previousCredits: expect.any(String),
-                                                },
-                                            ]),
-                                            lastTimestamp: {
-                                                slot: expect.any(BigInt),
-                                                timestamp: expect.any(BigInt),
-                                            },
-                                            node: {
-                                                address: expect.any(String),
-                                            },
-                                            priorVoters: expect.any(Array),
-                                            rootSlot: expect.any(BigInt),
-                                            votes: expect.arrayContaining([
-                                                {
-                                                    confirmationCount: expect.any(Number),
-                                                    slot: expect.any(BigInt),
-                                                },
-                                            ]),
+                                        ]),
+                                        authorizedWithdrawer: {
+                                            address: expect.any(String),
                                         },
+                                        commission: expect.any(Number),
+                                        epochCredits: expect.arrayContaining([
+                                            {
+                                                credits: expect.any(String),
+                                                epoch: expect.any(BigInt),
+                                                previousCredits: expect.any(String),
+                                            },
+                                        ]),
+                                        lastTimestamp: {
+                                            slot: expect.any(BigInt),
+                                            timestamp: expect.any(BigInt),
+                                        },
+                                        node: {
+                                            address: expect.any(String),
+                                        },
+                                        priorVoters: expect.any(Array),
+                                        rootSlot: expect.any(BigInt),
+                                        votes: expect.arrayContaining([
+                                            {
+                                                confirmationCount: expect.any(Number),
+                                                slot: expect.any(BigInt),
+                                            },
+                                        ]),
                                     },
                                 },
                             },

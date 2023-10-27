@@ -9,6 +9,7 @@ import { Commitment } from '@solana/rpc-types';
 import { GraphQLList } from 'graphql';
 
 import { RpcGraphQLContext } from '../../context';
+import { accountInterface } from '../account';
 import {
     accountEncodingInputType,
     commitmentInputType,
@@ -16,7 +17,6 @@ import {
     programAccountFilterInputType,
 } from '../inputs';
 import { bigint, list, nonNull, string, type } from '../picks';
-import { programAccount } from './types';
 
 export type ProgramAccountsQueryArgs = {
     programAddress: Base58EncodedAddress;
@@ -44,6 +44,6 @@ export const programAccountsQuery = () => ({
         },
         resolve: (_parent: unknown, args: ProgramAccountsQueryArgs, context: RpcGraphQLContext) =>
             context.resolveProgramAccounts(args),
-        type: new GraphQLList(programAccount()),
+        type: new GraphQLList(accountInterface()),
     },
 });
