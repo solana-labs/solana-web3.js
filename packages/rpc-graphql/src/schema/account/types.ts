@@ -111,7 +111,8 @@ const accountType = (
                     encoding: type(accountEncodingInputType()),
                     minContextSlot: bigint(),
                 },
-                resolve: (parent, args, context) => context.resolveAccount({ ...args, address: parent.owner }),
+                resolve: (parent, args, context, info) =>
+                    context.resolveAccount({ ...args, address: parent.owner }, info),
                 type: accountInterface(),
             },
         },

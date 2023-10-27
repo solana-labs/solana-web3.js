@@ -27,7 +27,9 @@ export const accountQuery = () => ({
             encoding: type(accountEncodingInputType()),
             minContextSlot: bigint(),
         },
-        resolve: (_parent: unknown, args: AccountQueryArgs, context: RpcGraphQLContext) => context.resolveAccount(args),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        resolve: (_parent: unknown, args: AccountQueryArgs, context: RpcGraphQLContext, info: any) =>
+            context.resolveAccount(args, info),
         type: accountInterface(),
     },
 });
