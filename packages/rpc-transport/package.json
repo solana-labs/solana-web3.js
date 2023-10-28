@@ -90,7 +90,6 @@
         "ws-impl": "workspace:*"
     },
     "peerDependencies": {
-        "node-fetch": "^2.6.7",
         "ws": "^8.14.0"
     },
     "bundlewatch": {

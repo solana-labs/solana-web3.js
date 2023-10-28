@@ -1,8 +1,2 @@
-// When building the browser bundle, this import gets replaced by `globalThis.fetch`.
-import fetchImpl from 'node-fetch';
-
-export default typeof globalThis.fetch === 'function'
-    ? // The Fetch API is supported experimentally in Node 17.5+ and natively in Node 18+.
-      globalThis.fetch
-    : // Otherwise use the polyfill.
-      fetchImpl;
+// TODO(https://github.com/solana-labs/solana-web3.js/issues/1787) Write HTTP/2 implementation.
+export default globalThis.fetch; // The Fetch API is supported natively in Node 18+.
