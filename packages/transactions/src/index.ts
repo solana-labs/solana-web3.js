@@ -1,4 +1,5 @@
 export * from './blockhash';
+export * from './compilable-transaction';
 export * from './create-transaction';
 export * from './durable-nonce';
 export * from './fee-payer';

@@ -1,13 +1,10 @@
 import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
-import { ITransactionWithBlockhashLifetime } from './blockhash';
+import { CompilableTransaction } from './compilable-transaction';
 import { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { getCompiledMessageHeader } from './compile-header';
 import { getCompiledInstructions } from './compile-instructions';
 import { getCompiledLifetimeToken } from './compile-lifetime-token';
 import { getCompiledStaticAccounts } from './compile-static-accounts';
-import { IDurableNonceTransaction } from './durable-nonce';
-import { ITransactionWithFeePayer } from './fee-payer';
-import { BaseTransaction } from './types';
 
 type BaseCompiledMessage = Readonly<{
     header: ReturnType<typeof getCompiledMessageHeader>;
@@ -15,10 +12,6 @@ type BaseCompiledMessage = Readonly<{
     lifetimeToken: ReturnType<typeof getCompiledLifetimeToken>;
     staticAccounts: ReturnType<typeof getCompiledStaticAccounts>;
 }>;
-
-type CompilableTransaction = BaseTransaction &
-    ITransactionWithFeePayer &
-    (ITransactionWithBlockhashLifetime | IDurableNonceTransaction);
 
 export type CompiledMessage = LegacyCompiledMessage | VersionedCompiledMessage;
 

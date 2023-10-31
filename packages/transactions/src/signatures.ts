@@ -4,6 +4,7 @@ import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { isSignerRole } from '@solana/instructions';
 import { Ed25519Signature, signBytes } from '@solana/keys';
 
+import { CompilableTransaction } from './compilable-transaction';
 import { ITransactionWithFeePayer } from './fee-payer';
 import { compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
@@ -88,7 +89,7 @@ export function getSignatureFromTransaction(
     return transactionSignature as TransactionSignature;
 }
 
-export async function signTransaction<TTransaction extends Parameters<typeof compileMessage>[0]>(
+export async function signTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Promise<TTransaction & ITransactionWithSignatures> {
@@ -117,7 +118,7 @@ export function transactionSignature(putativeTransactionSignature: string): Tran
     return putativeTransactionSignature;
 }
 
-export function assertTransactionIsFullySigned<TTransaction extends Parameters<typeof compileMessage>[0]>(
+export function assertTransactionIsFullySigned<TTransaction extends CompilableTransaction>(
     transaction: TTransaction & ITransactionWithSignatures
 ): asserts transaction is TTransaction & IFullySignedTransaction {
     const signerAddressesFromInstructions = transaction.instructions

@@ -4,7 +4,8 @@ import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 
 import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash';
-import { getCompiledTransaction } from './compile-transaction';
+import { CompilableTransaction } from './compilable-transaction';
+import { CompiledTransaction } from './compile-transaction';
 import { createTransaction } from './create-transaction';
 import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce';
 import { setTransactionFeePayer } from './fee-payer';
@@ -12,9 +13,6 @@ import { appendTransactionInstruction } from './instructions';
 import { CompiledMessage } from './message';
 import { ITransactionWithSignatures } from './signatures';
 import { TransactionVersion } from './types';
-
-type CompiledTransaction = ReturnType<typeof getCompiledTransaction>;
-type CompilableTransaction = Parameters<typeof getCompiledTransaction>[0];
 
 function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
     const { header } = message;

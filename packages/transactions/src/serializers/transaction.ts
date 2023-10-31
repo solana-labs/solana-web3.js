@@ -10,14 +10,11 @@ import {
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { Ed25519Signature } from '@solana/keys';
 
-import { getCompiledTransaction } from '../compile-transaction';
+import { CompilableTransaction } from '../compilable-transaction';
+import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction';
 import { decompileTransaction } from '../decompile-transaction';
-import { compileMessage } from '../message';
 import { ITransactionWithSignatures } from '../signatures';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from './message';
-
-type CompilableTransaction = Parameters<typeof compileMessage>[0];
-type CompiledTransaction = ReturnType<typeof getCompiledTransaction>;
 
 const signaturesDescription = __DEV__ ? 'A compact array of 64-byte, base-64 encoded Ed25519 signatures' : 'signatures';
 const transactionDescription = __DEV__ ? 'The wire format of a Solana transaction' : 'transaction';
