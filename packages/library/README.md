@@ -747,9 +747,9 @@ Solana’s codecs libraries are broken up into modular components so you only ne
 Here’s an example of encoding and decoding a custom struct with some strings and numbers:
 
 ```tsx
-import { getStructEncoder } from "@solana/codecs-data-structures";
-import { getU8Encoder, getU64Encoder } from "@solana/codecs-numbers";
-import { getStringEncoder } from "@solana/codecs-strings";
+import { getStructCodec } from "@solana/codecs-data-structures";
+import { getU64Codec, getU8Codec } from "@solana/codecs-numbers";
+import { getStringCodec } from "@solana/codecs-strings";
 
 // Equivalent in Rust:
 // struct {
