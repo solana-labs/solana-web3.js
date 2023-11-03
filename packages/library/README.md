@@ -364,7 +364,51 @@ Another example of a possible customization for RPC transports is sharding. Here
 The transport library can also be used to implement custom retry logic on any request:
 
 ```tsx
-// TODO: Your turn; send us a pull request with an example.
+import { createDefaultRpcTransport } from "@solana/web3.js";
+import { IRpcTransport } from "@solana/rpc-transport/dist/types/transports/transport-types";
+import { createJsonRpc } from "@solana/rpc-transport";
+import { createSolanaRpcApi } from "@solana/rpc-core";
+
+// Set the maximum number of attempts to retry a request
+const MAX_ATTEMPTS = 4;
+
+// Create the default transport
+const defaultTransport = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
+
+// Sleep function to wait for a given number of milliseconds
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Calculate the delay for a given attempt
+function calculateRetryDelay(attempt: number): number {
+  // Exponential backoff with a maximum of 1.5 seconds
+  return Math.min(100 * Math.pow(2, attempt), 1500);
+}
+
+// A retrying transport that will retry up to MAX_ATTEMPTS times before failing
+async function retryingTransport<TResponse>(...args: Parameters<IRpcTransport>): Promise<TResponse> {
+  let requestError;
+  for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
+    try {
+      return await defaultTransport(...args);
+    } catch (err) {
+      requestError = err;
+      // Only sleep if we have more attempts remaining
+      if (attempts < MAX_ATTEMPTS - 1) {
+        const retryDelay = calculateRetryDelay(attempts);
+        await sleep(retryDelay);
+      }
+    }
+  }
+  throw requestError;
+}
+
+// Create the RPC client
+const rpc = createJsonRpc({
+  api: createSolanaRpcApi(),
+  transport: retryingTransport,
+});
 ```
 
 ### Failover
