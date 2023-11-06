@@ -1,36 +1,32 @@
-import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
+import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, signBytes } from '@solana/keys';
-import { CompilableTransaction, ITransactionWithSignatures, signTransaction } from '@solana/transactions';
+import { signTransaction } from '@solana/transactions';
 
-import { MessageSigner, SignedMessageResponse, isMessageSigner } from './message-signer';
-import { TransactionSigner, isTransactionSigner } from './transaction-signer';
+import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
+import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 
 /** Defines a signer capable of signing messages and transactions using a Crypto KeyPair. */
-export type KeyPairSigner<TAddress extends string = string> = MessageSigner<TAddress> &
-    TransactionSigner<TAddress> & { keyPair: CryptoKeyPair };
+export type KeyPairSigner<TAddress extends string = string> = MessagePartialSigner<TAddress> &
+    TransactionPartialSigner<TAddress> & { keyPair: CryptoKeyPair };
 
 /** Checks whether the provided value implements the {@link KeyPairSigner} interface. */
 export function isKeyPairSigner<TAddress extends string>(value: {
-    address: Base58EncodedAddress<TAddress>;
-}): value is KeyPairSigner<TAddress>;
-export function isKeyPairSigner(value: unknown): value is KeyPairSigner;
-export function isKeyPairSigner(value: unknown): value is KeyPairSigner {
+    address: Address<TAddress>;
+    [key: string]: unknown;
+}): value is KeyPairSigner<TAddress> {
     return (
-        !!value &&
-        typeof value === 'object' &&
         'keyPair' in value &&
         typeof value.keyPair === 'object' &&
-        isMessageSigner(value) &&
-        isTransactionSigner(value)
+        isMessagePartialSigner(value) &&
+        isTransactionPartialSigner(value)
     );
 }
 
 /** Asserts that the provided value implements the {@link KeyPairSigner} interface. */
 export function assertIsKeyPairSigner<TAddress extends string>(value: {
-    address: Base58EncodedAddress<TAddress>;
-}): asserts value is KeyPairSigner<TAddress>;
-export function assertIsKeyPairSigner(value: unknown): asserts value is KeyPairSigner;
-export function assertIsKeyPairSigner(value: unknown): asserts value is KeyPairSigner {
+    address: Address<TAddress>;
+    [key: string]: unknown;
+}): asserts value is KeyPairSigner<TAddress> {
     if (!isKeyPairSigner(value)) {
         // TODO: Coded error.
         throw new Error('The provided value does not implement the KeyPairSigner interface');
@@ -39,22 +35,18 @@ export function assertIsKeyPairSigner(value: unknown): asserts value is KeyPairS
 
 /** Creates a KeyPairSigner from the provided Crypto KeyPair. */
 export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<KeyPairSigner> {
+    const address = await getAddressFromPublicKey(keyPair.publicKey);
     return {
+        address,
         keyPair,
-        address: await getAddressFromPublicKey(keyPair.publicKey),
-        signMessage: async (messages: ReadonlyArray<Uint8Array>): Promise<ReadonlyArray<SignedMessageResponse>> => {
-            return Promise.all(
-                messages.map(async message => ({
-                    signature: await signBytes(keyPair.privateKey, message),
-                    signedMessage: message,
-                }))
-            );
-        },
-        signTransaction: async <TTransaction extends CompilableTransaction>(
-            transactions: ReadonlyArray<TTransaction>
-        ): Promise<ReadonlyArray<TTransaction & ITransactionWithSignatures>> => {
-            return Promise.all(transactions.map(transaction => signTransaction([keyPair], transaction)));
-        },
+        signMessage: messages => Promise.all(messages.map(message => signBytes(keyPair.privateKey, message))),
+        signTransaction: transactions =>
+            Promise.all(
+                transactions.map(async transaction => {
+                    const signedTransaction = await signTransaction([keyPair], transaction);
+                    return signedTransaction.signatures[address];
+                })
+            ),
     };
 }
 

@@ -18,6 +18,8 @@ This package provides an abstraction layer over signing messages and transaction
 
 You can think of signers as an abstract way to sign messages and transactions. This could be using a Crypto KeyPair, a wallet adapter in the browser, a Noop signer for testing purposes, or anything you want. Here's an example using a Crypto KeyPair signer:
 
+TODO: Update README with new API.
+
 ```ts
 import { getStringEncoder } from '@solana/codecs-strings';
 import { pipe } from '@solana/functional';
@@ -26,7 +28,7 @@ import { createTransaction } from '@solana/transactions';
 
 // Generate a key pair signer.
 const keyPairSigner = await generateKeyPairSigner();
-keyPairSigner.address; // Base58EncodedAddress;
+keyPairSigner.address; // Address;
 
 // Sign one or multiple messages.
 const myMessage = getStringEncoder().encode('Hello Signers!');
@@ -203,7 +205,7 @@ Defines a signer that uses a Crypto KeyPair to sign messages and transactions. I
 import { generateKeyPairSigner } from '@solana/signers';
 
 const myKeyPairSigner = generateKeyPairSigner();
-myKeyPairSigner.address; // Base58EncodedAddress;
+myKeyPairSigner.address; // Address;
 myKeyPairSigner.keyPair; // CryptoKeyPair;
 const [myMessageResponse] = await myKeyPairSigner.signMessage([myMessage]);
 const [mySignedTransaction] = await myKeyPairSigner.signTransaction([myTransaction]);

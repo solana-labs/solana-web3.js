@@ -15,7 +15,6 @@ describe('isTransactionSenderSigner', () => {
         } satisfies TransactionSenderSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSenderSigner(mySigner)).toBe(true);
-        expect(isTransactionSenderSigner(myAddress)).toBe(false);
         expect(isTransactionSenderSigner({ address: myAddress })).toBe(false);
         expect(isTransactionSenderSigner({ address: myAddress, signAndSendTransaction: 42 })).toBe(false);
     });
@@ -31,7 +30,6 @@ describe('assertIsTransactionSenderSigner', () => {
 
         const expectedMessage = 'The provided value does not implement the TransactionSenderSigner interface';
         expect(() => assertIsTransactionSenderSigner(mySigner)).not.toThrow();
-        expect(() => assertIsTransactionSenderSigner(myAddress)).toThrow(expectedMessage);
         expect(() => assertIsTransactionSenderSigner({ address: myAddress })).toThrow(expectedMessage);
         expect(() => assertIsTransactionSenderSigner({ address: myAddress, signAndSendTransaction: 42 })).toThrow(
             expectedMessage
