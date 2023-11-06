@@ -55,7 +55,7 @@ export interface GetTokenAccountsByOwnerApi {
      * Returns all SPL Token accounts by token owner.
      */
     getTokenAccountsByOwner(
-        program: Base58EncodedAddress,
+        owner: Base58EncodedAddress,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -65,7 +65,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getTokenAccountsByOwner(
-        program: Base58EncodedAddress,
+        owner: Base58EncodedAddress,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -75,7 +75,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getTokenAccountsByOwner(
-        program: Base58EncodedAddress,
+        owner: Base58EncodedAddress,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             Readonly<{
@@ -84,7 +84,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
     getTokenAccountsByOwner(
-        program: Base58EncodedAddress,
+        owner: Base58EncodedAddress,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -94,7 +94,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getTokenAccountsByOwner(
-        program: Base58EncodedAddress,
+        owner: Base58EncodedAddress,
         filter: AccountsFilter,
         config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
