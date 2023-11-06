@@ -7,6 +7,7 @@ const config: Partial<Config.InitialProjectOptions> = {
     },
     runner: 'eslint',
     testMatch: ['<rootDir>src/**/*.ts'],
+    testPathIgnorePatterns: ['README.md'],
 };
 
 export default config;
