@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -9,11 +9,11 @@ type PreviousCredits = U64UnsafeBeyond2Pow53Minus1;
 
 type EpochCredit = [Epoch, Credits, PreviousCredits];
 
-type VoteAccount<TVotePubkey extends Base58EncodedAddress> = Readonly<{
+type VoteAccount<TVotePubkey extends Address> = Readonly<{
     /** Vote account address */
     votePubkey: TVotePubkey;
     /** Validator identity */
-    nodePubkey: Base58EncodedAddress;
+    nodePubkey: Address;
     /** the stake, in lamports, delegated to this vote account and active in this epoch */
     activatedStake: U64UnsafeBeyond2Pow53Minus1;
     /** whether the vote account is staked for this epoch */
@@ -28,12 +28,12 @@ type VoteAccount<TVotePubkey extends Base58EncodedAddress> = Readonly<{
     rootSlot: Slot;
 }>;
 
-type GetVoteAccountsApiResponse<TVotePubkey extends Base58EncodedAddress> = Readonly<{
+type GetVoteAccountsApiResponse<TVotePubkey extends Address> = Readonly<{
     current: readonly VoteAccount<TVotePubkey>[];
     delinquent: readonly VoteAccount<TVotePubkey>[];
 }>;
 
-type GetVoteAccountsConfig<TVotePubkey extends Base58EncodedAddress> = Readonly<{
+type GetVoteAccountsConfig<TVotePubkey extends Address> = Readonly<{
     commitment?: Commitment;
     /** Only return results for this validator vote address */
     votePubkey?: TVotePubkey;
@@ -45,7 +45,7 @@ type GetVoteAccountsConfig<TVotePubkey extends Base58EncodedAddress> = Readonly<
 
 export interface GetVoteAccountsApi {
     /** Returns the account info and associated stake for all the voting accounts in the current bank. */
-    getVoteAccounts<TVoteAccount extends Base58EncodedAddress>(
+    getVoteAccounts<TVoteAccount extends Address>(
         config?: GetVoteAccountsConfig<TVoteAccount>
     ): GetVoteAccountsApiResponse<TVoteAccount>;
 }

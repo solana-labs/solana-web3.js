@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
 import { decompileTransaction } from '../../decompile-transaction';
@@ -12,14 +12,14 @@ jest.mock('../../decompile-transaction');
 
 let _nextMockAddress = 0;
 function getMockAddress() {
-    return `${_nextMockAddress++}` as Base58EncodedAddress;
+    return `${_nextMockAddress++}` as Address;
 }
 
 describe.each([getTransactionEncoder, getTransactionCodec])('Transaction serializer %p', serializerFactory => {
     let transaction: ReturnType<typeof getTransactionEncoder>;
 
-    let addressA: Base58EncodedAddress;
-    let addressB: Base58EncodedAddress;
+    let addressA: Address;
+    let addressB: Address;
     let mockCompiledMessage: CompiledMessage;
     let mockCompiledWireMessage: Uint8Array;
     beforeEach(() => {
@@ -98,8 +98,8 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
 describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deserializer %p', deserializerFactory => {
     let transaction: ReturnType<typeof getTransactionDecoder>;
 
-    let addressA: Base58EncodedAddress;
-    let addressB: Base58EncodedAddress;
+    let addressA: Address;
+    let addressB: Address;
     let mockCompiledMessage: CompiledMessage;
     let mockCompiledWireMessage: Uint8Array;
     let mockDecompiledTransaction: ReturnType<typeof decompileTransaction>;

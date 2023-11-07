@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -28,11 +28,11 @@ describe('getTokenAccountsByOwner', () => {
                 expect.assertions(1);
                 // Owner for fixtures/spl-token-token-account-owner.json
                 const owner =
-                    'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                    'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
                 // token program for above token account
                 const tokenProgram =
-                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
                 const accountInfosPromise = rpc
                     .getTokenAccountsByOwner(
@@ -73,11 +73,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // token program for above token account
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfoPromise = rpc
                 .getTokenAccountsByOwner(
@@ -101,10 +101,10 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // randomly generated
             const owner =
-                'GS2BpYHDF7p3NortvgvUFsFyqZGe7HjBPNkBiABccfN8' as Base58EncodedAddress<'GS2BpYHDF7p3NortvgvUFsFyqZGe7HjBPNkBiABccfN8'>;
+                'GS2BpYHDF7p3NortvgvUFsFyqZGe7HjBPNkBiABccfN8' as Address<'GS2BpYHDF7p3NortvgvUFsFyqZGe7HjBPNkBiABccfN8'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId: tokenProgram }).send();
             await expect(accountInfoPromise).resolves.toStrictEqual({
@@ -119,11 +119,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // randomly generated
             const mint =
-                'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4' as Base58EncodedAddress<'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4'>;
+                'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4' as Address<'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { mint }).send();
             await expect(accountInfoPromise).rejects.toMatchObject({
@@ -139,11 +139,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Mint at fixtures/spl-token-mint-account-with-owner.json (mint for above account)
             const mint =
-                '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf' as Base58EncodedAddress<'2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf'>;
+                '2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf' as Address<'2nBoNW5B9SdpJYEg9neii7ecCJFwh6UrbXS6HFxkK7Gf'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByOwner(
@@ -182,11 +182,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Mint at fixtures/spl-token-mint-no-token-accounts.json (not the same mint as above account)
             const mint =
-                'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj' as Base58EncodedAddress<'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj'>;
+                'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj' as Address<'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { mint }).send();
 
@@ -202,11 +202,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // randomly generated
             const programId =
-                'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Base58EncodedAddress<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
+                'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Address<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId }).send();
             await expect(accountInfoPromise).rejects.toMatchObject({
@@ -222,11 +222,11 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Token22 program (not the same as above account fixture)
             const programId =
-                'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+                'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId }).send();
 
@@ -248,10 +248,10 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByOwner(
@@ -290,10 +290,10 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByOwner(
@@ -332,10 +332,10 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByOwner(
@@ -395,10 +395,10 @@ describe('getTokenAccountsByOwner', () => {
             expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfo = await rpc
                 .getTokenAccountsByOwner(

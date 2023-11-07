@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getAddressFromPublicKey } from '@solana/addresses';
+import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { Decoder, Encoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { isSignerRole } from '@solana/instructions';
@@ -13,7 +13,7 @@ export interface IFullySignedTransaction extends ITransactionWithSignatures {
     readonly __brand: unique symbol;
 }
 export interface ITransactionWithSignatures {
-    readonly signatures: Readonly<Record<Base58EncodedAddress, Ed25519Signature>>;
+    readonly signatures: Readonly<Record<Address, Ed25519Signature>>;
 }
 
 export type TransactionSignature = string & { readonly __brand: unique symbol };
@@ -94,7 +94,7 @@ export async function signTransaction<TTransaction extends CompilableTransaction
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Promise<TTransaction & ITransactionWithSignatures> {
     const compiledMessage = compileMessage(transaction);
-    const nextSignatures: Record<Base58EncodedAddress, Ed25519Signature> =
+    const nextSignatures: Record<Address, Ed25519Signature> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
     const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);
     const publicKeySignaturePairs = await Promise.all(

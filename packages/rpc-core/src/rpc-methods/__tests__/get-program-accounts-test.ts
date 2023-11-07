@@ -1,6 +1,6 @@
 import { open } from 'node:fs/promises';
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
@@ -29,7 +29,7 @@ async function getNodeAddress(path: string) {
         if (secretKey) {
             const publicKey = secretKey.slice(32, 64);
             const expectedAddress = getBase58Decoder().decode(publicKey)[0];
-            return expectedAddress as Base58EncodedAddress;
+            return expectedAddress as Address;
         }
         throw new Error(`Failed to read keypair file \`${path}\``);
     } finally {
@@ -54,7 +54,7 @@ describe('getProgramAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/gpa1.json
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfosPromise = rpc
                     .getProgramAccounts(program, {
@@ -86,7 +86,7 @@ describe('getProgramAccounts', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             const program =
-                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
             const sendPromise = rpc
                 .getProgramAccounts(program, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
@@ -105,7 +105,7 @@ describe('getProgramAccounts', () => {
             expect.assertions(1);
             // randomly generated
             const program =
-                'FZp6uJxwZbyZUCSF3Hyv494Su7w2MJEtNdYuc4RQHa2Z' as Base58EncodedAddress<'FZp6uJxwZbyZUCSF3Hyv494Su7w2MJEtNdYuc4RQHa2Z'>;
+                'FZp6uJxwZbyZUCSF3Hyv494Su7w2MJEtNdYuc4RQHa2Z' as Address<'FZp6uJxwZbyZUCSF3Hyv494Su7w2MJEtNdYuc4RQHa2Z'>;
             const accountInfoPromise = rpc.getProgramAccounts(program).send();
             await expect(accountInfoPromise).resolves.toStrictEqual([]);
         });
@@ -116,7 +116,7 @@ describe('getProgramAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const program =
-                'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6' as Base58EncodedAddress<'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6'>;
+                'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6' as Address<'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6'>;
 
             const accountInfosPromise = rpc.getProgramAccounts(program).send();
 
@@ -157,7 +157,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -176,7 +176,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -198,7 +198,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -217,7 +217,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -238,7 +238,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -257,7 +257,7 @@ describe('getProgramAccounts', () => {
                 // See scripts/fixtures/gpa1.json
                 // data is 'test data'
                 const program =
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                 const accountInfo = await rpc
                     .getProgramAccounts(program, {
@@ -279,7 +279,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/gpa1.json
                     // data is 'test data'
                     const program =
-                        'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                        'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                     const accountInfo = await rpc
                         .getProgramAccounts(program, {
@@ -298,7 +298,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/gpa1.json
                     // data is 'test data'
                     const program =
-                        'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                        'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
                     const accountInfo = await rpc
                         .getProgramAccounts(program, {
@@ -319,7 +319,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/address-lookup-table-account.json
                     const program =
-                        'AddressLookupTab1e1111111111111111111111111' as Base58EncodedAddress<'AddressLookupTab1e1111111111111111111111111'>;
+                        'AddressLookupTab1e1111111111111111111111111' as Address<'AddressLookupTab1e1111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -403,7 +403,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/bpf-upgradeable-loader-program-account.json
                     const program =
-                        'BPFLoaderUpgradeab1e11111111111111111111111' as Base58EncodedAddress<'BPFLoaderUpgradeab1e11111111111111111111111'>;
+                        'BPFLoaderUpgradeab1e11111111111111111111111' as Address<'BPFLoaderUpgradeab1e11111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -483,7 +483,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/config-stake-account.json
                     // See scripts/fixtures/config-validator-account.json
                     const publicKey =
-                        'Config1111111111111111111111111111111111111' as Base58EncodedAddress<'Config1111111111111111111111111111111111111'>;
+                        'Config1111111111111111111111111111111111111' as Address<'Config1111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(publicKey, {
@@ -556,8 +556,7 @@ describe('getProgramAccounts', () => {
                 it('returns parsed JSON data for Nonce account', async () => {
                     expect.assertions(1);
                     // See scripts/fixtures/nonce-account.json
-                    const program =
-                        '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>;
+                    const program = '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -604,7 +603,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/spl-token-token-account.json
                     // See scripts/fixtures/spl-token-multisig-account.json
                     const program =
-                        'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                        'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -864,7 +863,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/spl-token-22-mint-account.json
                     const program =
-                        'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+                        'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -934,7 +933,7 @@ describe('getProgramAccounts', () => {
                     const stakeAddress = expect.any(String);
                     // See scripts/fixtures/stake-account.json
                     const program =
-                        'Stake11111111111111111111111111111111111111' as Base58EncodedAddress<'Stake11111111111111111111111111111111111111'>;
+                        'Stake11111111111111111111111111111111111111' as Address<'Stake11111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1039,7 +1038,7 @@ describe('getProgramAccounts', () => {
                     // Sysvar accounts don't need a fixture
                     // They're owned by Sysvar1111111111111111111111111111111111111
                     const program =
-                        'Sysvar1111111111111111111111111111111111111' as Base58EncodedAddress<'Sysvar1111111111111111111111111111111111111'>;
+                        'Sysvar1111111111111111111111111111111111111' as Address<'Sysvar1111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1187,7 +1186,7 @@ describe('getProgramAccounts', () => {
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     // See scripts/fixtures/vote-account.json
                     const program =
-                        'Vote111111111111111111111111111111111111111' as Base58EncodedAddress<'Vote111111111111111111111111111111111111111'>;
+                        'Vote111111111111111111111111111111111111111' as Address<'Vote111111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1286,7 +1285,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/address-lookup-table-account.json
                     const program =
-                        'AddressLookupTab1e1111111111111111111111111' as Base58EncodedAddress<'AddressLookupTab1e1111111111111111111111111'>;
+                        'AddressLookupTab1e1111111111111111111111111' as Address<'AddressLookupTab1e1111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1371,7 +1370,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/bpf-upgradeable-loader-program-account.json
                     const program =
-                        'BPFLoaderUpgradeab1e11111111111111111111111' as Base58EncodedAddress<'BPFLoaderUpgradeab1e11111111111111111111111'>;
+                        'BPFLoaderUpgradeab1e11111111111111111111111' as Address<'BPFLoaderUpgradeab1e11111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1453,7 +1452,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/config-stake-account.json
                     // See scripts/fixtures/config-validator-account.json
                     const publicKey =
-                        'Config1111111111111111111111111111111111111' as Base58EncodedAddress<'Config1111111111111111111111111111111111111'>;
+                        'Config1111111111111111111111111111111111111' as Address<'Config1111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(publicKey, {
@@ -1527,8 +1526,7 @@ describe('getProgramAccounts', () => {
                 it('returns RPC response with parsed JSON data for Nonce account', async () => {
                     expect.assertions(1);
                     // See scripts/fixtures/nonce-account.json
-                    const program =
-                        '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>;
+                    const program = '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1576,7 +1574,7 @@ describe('getProgramAccounts', () => {
                     // See scripts/fixtures/spl-token-account-account.json
                     // See scripts/fixtures/spl-token-multisig-account.json
                     const program =
-                        'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                        'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1837,7 +1835,7 @@ describe('getProgramAccounts', () => {
                     expect.assertions(1);
                     // See scripts/fixtures/spl-token-22-mint-account.json
                     const program =
-                        'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+                        'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -1908,7 +1906,7 @@ describe('getProgramAccounts', () => {
                     const stakeAddress = expect.any(String);
                     // See scripts/fixtures/stake-account.json
                     const program =
-                        'Stake11111111111111111111111111111111111111' as Base58EncodedAddress<'Stake11111111111111111111111111111111111111'>;
+                        'Stake11111111111111111111111111111111111111' as Address<'Stake11111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -2014,7 +2012,7 @@ describe('getProgramAccounts', () => {
                     // Sysvar accounts don't need a fixture
                     // They're owned by Sysvar1111111111111111111111111111111111111
                     const program =
-                        'Sysvar1111111111111111111111111111111111111' as Base58EncodedAddress<'Sysvar1111111111111111111111111111111111111'>;
+                        'Sysvar1111111111111111111111111111111111111' as Address<'Sysvar1111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -2163,7 +2161,7 @@ describe('getProgramAccounts', () => {
                     const voteAccountAddress = await getNodeAddress(voteAccountKeypairPath);
                     // See scripts/fixtures/vote-account.json
                     const program =
-                        'Vote111111111111111111111111111111111111111' as Base58EncodedAddress<'Vote111111111111111111111111111111111111111'>;
+                        'Vote111111111111111111111111111111111111111' as Address<'Vote111111111111111111111111111111111111111'>;
 
                     const accountInfosPromise = rpc
                         .getProgramAccounts(program, {
@@ -2267,7 +2265,7 @@ describe('getProgramAccounts', () => {
             // See scripts/fixtures/gpa1.json
             // data is 'test data'
             const program =
-                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
             const accountInfo = await rpc.getProgramAccounts(program).send();
             expect(accountInfo[0].account.data).toBe('2Uw1bpnsXxu3e');
@@ -2280,7 +2278,7 @@ describe('getProgramAccounts', () => {
             // See scripts/fixtures/gpa1.json
             // data is 'test data'
             const program =
-                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Base58EncodedAddress<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
+                'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj' as Address<'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj'>;
 
             const accountInfo = await rpc
                 .getProgramAccounts(program, {

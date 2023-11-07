@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Decoder, Encoder } from '@solana/codecs-core';
 
 import { CompiledMessage } from '../../message';
@@ -15,7 +15,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
             const byteArray = compiledMessage.encode({
                 addressTableLookups: [
                     {
-                        lookupTableAddress: '3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7' as Base58EncodedAddress, // decodes to [44{32}]
+                        lookupTableAddress: '3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7' as Address, // decodes to [44{32}]
                         readableIndices: [77],
                         writableIndices: [66, 55],
                     },
@@ -33,7 +33,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                 staticAccounts: [
                     'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn', // decodes to [11{32}]
                     '2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z', // decodes to [22{32}]
-                ] as Base58EncodedAddress[],
+                ] as Address[],
                 version: 0,
             });
             expect(byteArray).toStrictEqual(
@@ -247,7 +247,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
             expect(message).toStrictEqual({
                 addressTableLookups: [
                     {
-                        lookupTableAddress: '3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7' as Base58EncodedAddress, // decodes to [44{32}]
+                        lookupTableAddress: '3yS1JFVT284y8z1LC9MRoWxZjzFrdoD5axKsZiyMsfC7' as Address, // decodes to [44{32}]
                         readableIndices: [77],
                         writableIndices: [66, 55],
                     },
@@ -265,7 +265,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                 staticAccounts: [
                     'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn', // decodes to [11{32}]
                     '2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z', // decodes to [22{32}]
-                ] as Base58EncodedAddress[],
+                ] as Address[],
                 version: 0,
             });
             // Expect the entire byte array to have been consumed.
@@ -343,7 +343,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                 staticAccounts: [
                     'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn', // decodes to [11{32}]
                     '2VDW9dFE1ZXz4zWAbaBDQFynNVdRpQ73HyfSHMzBSL6Z', // decodes to [22{32}]
-                ] as Base58EncodedAddress[],
+                ] as Address[],
                 version: 'legacy',
             });
             // Expect the entire byte array to have been consumed.

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -25,11 +25,9 @@ describe('requestAirdrop', () => {
                 crypto.getRandomValues(randomBytes);
                 const [publicKeyAddress] = getBase58Decoder().decode(randomBytes);
                 const resultPromise = rpc
-                    .requestAirdrop(
-                        publicKeyAddress as Base58EncodedAddress,
-                        5000000n as LamportsUnsafeBeyond2Pow53Minus1,
-                        { commitment }
-                    )
+                    .requestAirdrop(publicKeyAddress as Address, 5000000n as LamportsUnsafeBeyond2Pow53Minus1, {
+                        commitment,
+                    })
                     .send();
                 await expect(resultPromise).resolves.toEqual(expect.any(String));
             });

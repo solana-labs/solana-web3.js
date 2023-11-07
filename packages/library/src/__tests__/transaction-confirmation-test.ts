@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 import { Blockhash, IDurableNonceTransaction, Nonce, TransactionSignature } from '@solana/transactions';
@@ -14,7 +14,7 @@ const FOREVER_PROMISE = new Promise(() => {
 
 describe('waitForDurableNonceTransactionConfirmation', () => {
     const MOCK_DURABLE_NONCE_TRANSACTION = {
-        feePayer: '9'.repeat(44) as Base58EncodedAddress,
+        feePayer: '9'.repeat(44) as Address,
         instructions: [
             // Mock AdvanceNonce instruction.
             {
@@ -22,7 +22,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
                     { address: '5'.repeat(44), role: AccountRole.WRITABLE } as WritableAccount,
                     {
                         address:
-                            'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress<'SysvarRecentB1ockHashes11111111111111111111'>,
+                            'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>,
                         role: AccountRole.READONLY,
                     },
                     {
@@ -31,13 +31,12 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
                     } as ReadonlySignerAccount,
                 ],
                 data: new Uint8Array([4, 0, 0, 0]) as IDurableNonceTransaction['instructions'][0]['data'],
-                programAddress:
-                    '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>,
+                programAddress: '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
             },
         ],
         lifetimeConstraint: { nonce: 'xyz' as Nonce },
         signatures: {
-            ['9'.repeat(44) as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
+            ['9'.repeat(44) as Address]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
         } as const,
     } as const;
     let getNonceInvalidationPromise: jest.Mock<Promise<void>>;
@@ -132,7 +131,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             ...MOCK_DURABLE_NONCE_TRANSACTION,
             signatures: {
                 // Signature by someone other than the fee payer.
-                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
+                ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
             } as const,
         };
         const commitmentPromise = waitForDurableNonceTransactionConfirmation({
@@ -188,10 +187,10 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
 
 describe('waitForRecentTransactionConfirmation', () => {
     const MOCK_TRANSACTION = {
-        feePayer: '9'.repeat(44) as Base58EncodedAddress,
+        feePayer: '9'.repeat(44) as Address,
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
         signatures: {
-            ['9'.repeat(44) as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
+            ['9'.repeat(44) as Address]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
         } as const,
     } as const;
     let getBlockHeightExceedencePromise: jest.Mock<Promise<void>>;
@@ -248,7 +247,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             ...MOCK_TRANSACTION,
             signatures: {
                 // Signature by someone other than the fee payer.
-                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
+                ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as Ed25519Signature,
             } as const,
         };
         const commitmentPromise = waitForRecentTransactionConfirmation({

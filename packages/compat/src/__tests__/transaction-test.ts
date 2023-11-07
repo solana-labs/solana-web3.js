@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 import { ITransactionWithSignatures, Nonce } from '@solana/transactions';
@@ -52,7 +52,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
-                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
+                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -105,24 +105,24 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             const expectedInstruction: IInstruction = {
                 accounts: [
                     {
-                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress,
+                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address,
                         role: AccountRole.READONLY,
                     },
                     {
-                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress,
+                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address,
                         role: AccountRole.WRITABLE,
                     },
                     {
-                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Base58EncodedAddress,
+                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Address,
                         role: AccountRole.READONLY_SIGNER,
                     },
                     {
-                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Base58EncodedAddress,
+                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Address,
                         role: AccountRole.WRITABLE_SIGNER,
                     },
                 ],
                 data: instructionData,
-                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
+                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -156,13 +156,13 @@ describe('fromVersionedTransactionWithBlockhash', () => {
 
             const expectedInstructions: IInstruction[] = [
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
                 {
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                 },
             ];
 
@@ -342,7 +342,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
 
             const expectedInstruction: IInstruction = {
-                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
+                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -395,24 +395,24 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             const expectedInstruction: IInstruction = {
                 accounts: [
                     {
-                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress,
+                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address,
                         role: AccountRole.READONLY,
                     },
                     {
-                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress,
+                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address,
                         role: AccountRole.WRITABLE,
                     },
                     {
-                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Base58EncodedAddress,
+                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Address,
                         role: AccountRole.READONLY_SIGNER,
                     },
                     {
-                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Base58EncodedAddress,
+                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Address,
                         role: AccountRole.WRITABLE_SIGNER,
                     },
                 ],
                 data: instructionData,
-                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress,
+                programAddress: 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -446,13 +446,13 @@ describe('fromVersionedTransactionWithBlockhash', () => {
 
             const expectedInstructions: IInstruction[] = [
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
                 {
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                 },
             ];
 
@@ -677,20 +677,20 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             const expectedInstruction: IInstruction = {
                 accounts: [
                     {
-                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address,
                         role: AccountRole.WRITABLE,
                     },
                     {
-                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Address,
                         role: AccountRole.READONLY,
                     },
                     {
-                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Address,
                         role: AccountRole.READONLY_SIGNER,
                     },
                 ],
                 data: new Uint8Array([4, 0, 0, 0]),
-                programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                programAddress: '11111111111111111111111111111111' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -729,29 +729,29 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                 {
                     accounts: [
                         {
-                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address,
                             role: AccountRole.WRITABLE,
                         },
                         {
-                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Address,
                             role: AccountRole.READONLY,
                         },
                         {
-                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Address,
                             role: AccountRole.READONLY_SIGNER,
                         },
                     ],
                     data: new Uint8Array([4, 0, 0, 0]),
-                    programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                    programAddress: '11111111111111111111111111111111' as Address,
                 },
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
                 {
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                 },
             ];
 
@@ -909,20 +909,20 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             const expectedInstruction: IInstruction = {
                 accounts: [
                     {
-                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                        address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address,
                         role: AccountRole.WRITABLE,
                     },
                     {
-                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                        address: 'SysvarRecentB1ockHashes11111111111111111111' as Address,
                         role: AccountRole.READONLY,
                     },
                     {
-                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                        address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Address,
                         role: AccountRole.READONLY_SIGNER,
                     },
                 ],
                 data: new Uint8Array([4, 0, 0, 0]),
-                programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                programAddress: '11111111111111111111111111111111' as Address,
             };
 
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
@@ -961,29 +961,29 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                 {
                     accounts: [
                         {
-                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress,
+                            address: 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address,
                             role: AccountRole.WRITABLE,
                         },
                         {
-                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress,
+                            address: 'SysvarRecentB1ockHashes11111111111111111111' as Address,
                             role: AccountRole.READONLY,
                         },
                         {
-                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress,
+                            address: '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Address,
                             role: AccountRole.READONLY_SIGNER,
                         },
                     ],
                     data: new Uint8Array([4, 0, 0, 0]),
-                    programAddress: '11111111111111111111111111111111' as Base58EncodedAddress,
+                    programAddress: '11111111111111111111111111111111' as Address,
                 },
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
                 {
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                 },
             ];
 

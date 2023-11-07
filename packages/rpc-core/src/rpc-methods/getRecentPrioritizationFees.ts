@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
 
@@ -26,6 +26,6 @@ export interface GetRecentPrioritizationFeesApi {
          * a fee to land a transaction locking all of the provided accounts
          * as writable.
          */
-        addresses?: Base58EncodedAddress[]
+        addresses?: Address[]
     ): GetRecentPrioritizationFeesApiResponse;
 }

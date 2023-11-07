@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
@@ -20,12 +20,12 @@ async () => {
     // data is 'test data'
     // Note: In type tests, it doesn't matter if the account is actually JSON-parseable
     const pubkey =
-        'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+        'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
     type TNotificationBase = Readonly<{
         executable: boolean;
         lamports: LamportsUnsafeBeyond2Pow53Minus1;
-        owner: Base58EncodedAddress;
+        owner: Address;
         rentEpoch: U64UnsafeBeyond2Pow53Minus1;
     }>;
 

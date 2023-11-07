@@ -1,7 +1,7 @@
 import { Codec, combineCodec, Decoder, Encoder, mapEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
-export type Base58EncodedAddress<TAddress extends string = string> = TAddress & {
+export type Address<TAddress extends string = string> = TAddress & {
     readonly __brand: unique symbol;
 };
 
@@ -18,21 +18,19 @@ function getMemoizedBase58Decoder(): Decoder<string> {
     return memoizedBase58Decoder;
 }
 
-export function isAddress(
-    putativeBase58EncodedAddress: string
-): putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
+export function isAddress(putativeAddress: string): putativeAddress is Address<typeof putativeAddress> {
     // Fast-path; see if the input string is of an acceptable length.
     if (
         // Lowest address (32 bytes of zeroes)
-        putativeBase58EncodedAddress.length < 32 ||
+        putativeAddress.length < 32 ||
         // Highest address (32 bytes of 255)
-        putativeBase58EncodedAddress.length > 44
+        putativeAddress.length > 44
     ) {
         return false;
     }
     // Slow-path; actually attempt to decode the input string.
     const base58Encoder = getMemoizedBase58Encoder();
-    const bytes = base58Encoder.encode(putativeBase58EncodedAddress);
+    const bytes = base58Encoder.encode(putativeAddress);
     const numBytes = bytes.byteLength;
     if (numBytes !== 32) {
         return false;
@@ -40,44 +38,40 @@ export function isAddress(
     return true;
 }
 
-export function assertIsAddress(
-    putativeBase58EncodedAddress: string
-): asserts putativeBase58EncodedAddress is Base58EncodedAddress<typeof putativeBase58EncodedAddress> {
+export function assertIsAddress(putativeAddress: string): asserts putativeAddress is Address<typeof putativeAddress> {
     try {
         // Fast-path; see if the input string is of an acceptable length.
         if (
             // Lowest address (32 bytes of zeroes)
-            putativeBase58EncodedAddress.length < 32 ||
+            putativeAddress.length < 32 ||
             // Highest address (32 bytes of 255)
-            putativeBase58EncodedAddress.length > 44
+            putativeAddress.length > 44
         ) {
             throw new Error('Expected input string to decode to a byte array of length 32.');
         }
         // Slow-path; actually attempt to decode the input string.
         const base58Encoder = getMemoizedBase58Encoder();
-        const bytes = base58Encoder.encode(putativeBase58EncodedAddress);
+        const bytes = base58Encoder.encode(putativeAddress);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
             throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);
         }
     } catch (e) {
-        throw new Error(`\`${putativeBase58EncodedAddress}\` is not a base-58 encoded address`, {
+        throw new Error(`\`${putativeAddress}\` is not a base-58 encoded address`, {
             cause: e,
         });
     }
 }
 
-export function address<TAddress extends string = string>(
-    putativeBase58EncodedAddress: TAddress
-): Base58EncodedAddress<TAddress> {
-    assertIsAddress(putativeBase58EncodedAddress);
-    return putativeBase58EncodedAddress as Base58EncodedAddress<TAddress>;
+export function address<TAddress extends string = string>(putativeAddress: TAddress): Address<TAddress> {
+    assertIsAddress(putativeAddress);
+    return putativeAddress as Address<TAddress>;
 }
 
-export function getAddressEncoder(config?: Readonly<{ description: string }>): Encoder<Base58EncodedAddress> {
+export function getAddressEncoder(config?: Readonly<{ description: string }>): Encoder<Address> {
     return mapEncoder(
         getStringEncoder({
-            description: config?.description ?? 'Base58EncodedAddress',
+            description: config?.description ?? 'Address',
             encoding: getMemoizedBase58Encoder(),
             size: 32,
         }),
@@ -85,15 +79,15 @@ export function getAddressEncoder(config?: Readonly<{ description: string }>): E
     );
 }
 
-export function getAddressDecoder(config?: Readonly<{ description: string }>): Decoder<Base58EncodedAddress> {
+export function getAddressDecoder(config?: Readonly<{ description: string }>): Decoder<Address> {
     return getStringDecoder({
-        description: config?.description ?? 'Base58EncodedAddress',
+        description: config?.description ?? 'Address',
         encoding: getMemoizedBase58Decoder(),
         size: 32,
-    }) as Decoder<Base58EncodedAddress>;
+    }) as Decoder<Address>;
 }
 
-export function getAddressCodec(config?: Readonly<{ description: string }>): Codec<Base58EncodedAddress> {
+export function getAddressCodec(config?: Readonly<{ description: string }>): Codec<Address> {
     return combineCodec(getAddressEncoder(config), getAddressDecoder(config));
 }
 

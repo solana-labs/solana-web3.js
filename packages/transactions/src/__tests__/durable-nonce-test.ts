@@ -1,6 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 
 import { Blockhash, ITransactionWithBlockhashLifetime } from '../blockhash';
@@ -20,15 +20,15 @@ function createMockAdvanceNonceAccountInstruction<
     nonceAccountAddress,
     nonceAuthorityAddress,
 }: {
-    nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>;
-    nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>;
+    nonceAccountAddress: Address<TNonceAccountAddress>;
+    nonceAuthorityAddress: Address<TNonceAuthorityAddress>;
 }): IDurableNonceTransaction['instructions'][0] {
     return {
         accounts: [
             { address: nonceAccountAddress, role: AccountRole.WRITABLE } as WritableAccount<TNonceAccountAddress>,
             {
                 address:
-                    'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress<'SysvarRecentB1ockHashes11111111111111111111'>,
+                    'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>,
                 role: AccountRole.READONLY,
             },
             {
@@ -37,7 +37,7 @@ function createMockAdvanceNonceAccountInstruction<
             } as ReadonlySignerAccount<TNonceAuthorityAddress>,
         ],
         data: new Uint8Array([4, 0, 0, 0]) as IDurableNonceTransaction['instructions'][0]['data'],
-        programAddress: '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>,
+        programAddress: '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
     };
 }
 
@@ -45,8 +45,8 @@ describe('assertIsDurableNonceTransaction()', () => {
     let durableNonceTx: BaseTransaction & IDurableNonceTransaction;
     const NONCE_CONSTRAINT = {
         nonce: '123' as Nonce,
-        nonceAccountAddress: '123' as Base58EncodedAddress,
-        nonceAuthorityAddress: '123' as Base58EncodedAddress,
+        nonceAccountAddress: '123' as Address,
+        nonceAuthorityAddress: '123' as Address,
     };
     beforeEach(() => {
         durableNonceTx = {
@@ -70,7 +70,7 @@ describe('assertIsDurableNonceTransaction()', () => {
                 instructions: [
                     {
                         ...durableNonceTx.instructions[0],
-                        programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Base58EncodedAddress,
+                        programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Address,
                     },
                 ],
                 lifetimeConstraint: { nonce: NONCE_CONSTRAINT.nonce } as IDurableNonceTransaction['lifetimeConstraint'],
@@ -158,17 +158,17 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
     let baseTx: BaseTransaction;
     const NONCE_CONSTRAINT_A = {
         nonce: '123' as Nonce,
-        nonceAccountAddress: '123' as Base58EncodedAddress,
-        nonceAuthorityAddress: '123' as Base58EncodedAddress,
+        nonceAccountAddress: '123' as Address,
+        nonceAuthorityAddress: '123' as Address,
     };
     const NONCE_CONSTRAINT_B = {
         nonce: '456' as Nonce,
-        nonceAccountAddress: '456' as Base58EncodedAddress,
-        nonceAuthorityAddress: '456' as Base58EncodedAddress,
+        nonceAccountAddress: '456' as Address,
+        nonceAuthorityAddress: '456' as Address,
     };
     beforeEach(() => {
         baseTx = {
-            instructions: [{ programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Base58EncodedAddress }],
+            instructions: [{ programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Address }],
             version: 0,
         };
     });
@@ -216,7 +216,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
                 ...baseTx,
                 instructions: [
                     createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
-                    { programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Base58EncodedAddress },
+                    { programAddress: '32JTd9jz5xGuLegzVouXxfzAVTiJYWMLrg6p8RxbV5xc' as Address },
                 ],
                 lifetimeConstraint: { nonce: NONCE_CONSTRAINT_A.nonce },
                 version: 0,

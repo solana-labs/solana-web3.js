@@ -1,4 +1,4 @@
-import { assertIsAddress, type Base58EncodedAddress } from '@solana/addresses';
+import { type Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import type { IAccountMeta, IInstruction } from '@solana/instructions';
 import { AccountRole } from '@solana/instructions';
@@ -48,7 +48,7 @@ function convertAccount(
         : AccountRole.READONLY;
 
     return {
-        address: accountPublicKey.toBase58() as Base58EncodedAddress,
+        address: accountPublicKey.toBase58() as Address,
         role,
     };
 }
@@ -69,7 +69,7 @@ function convertInstruction(
     );
 
     return {
-        programAddress: programAddressPublicKey.toBase58() as Base58EncodedAddress,
+        programAddress: programAddressPublicKey.toBase58() as Address,
         ...(accounts.length ? { accounts } : {}),
         ...(instruction.data.length ? { data: instruction.data } : {}),
     };
@@ -85,7 +85,7 @@ function convertSignatures(
         const allZeros = sig.every(byte => byte === 0);
         if (allZeros) return acc;
 
-        const address = staticAccountKeys[index].toBase58() as Base58EncodedAddress;
+        const address = staticAccountKeys[index].toBase58() as Address;
         return { ...acc, [address]: sig as Ed25519Signature };
     }, {});
 }
@@ -122,7 +122,7 @@ export function fromVersionedTransactionWithBlockhash(
 
     return pipe(
         createTransaction({ version: transaction.version }),
-        tx => setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx),
+        tx => setTransactionFeePayer(feePayer.toBase58() as Address, tx),
         tx => setTransactionLifetimeUsingBlockhash(blockhashLifetime, tx),
         tx =>
             instructions.reduce((acc, instruction) => {
@@ -182,7 +182,7 @@ export function fromVersionedTransactionWithDurableNonce(
 
     return pipe(
         createTransaction({ version: transaction.version }),
-        tx => setTransactionFeePayer(feePayer.toBase58() as Base58EncodedAddress, tx),
+        tx => setTransactionFeePayer(feePayer.toBase58() as Address, tx),
         tx => setTransactionLifetimeUsingDurableNonce(durableNonceLifetime, tx),
         tx =>
             instructions.slice(1).reduce((acc, instruction) => {

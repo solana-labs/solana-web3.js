@@ -1,3 +1,3 @@
-import { address, Base58EncodedAddress } from '../address';
+import { Address, address } from '../address';
 
-address('555555555555555555555555') satisfies Base58EncodedAddress<'555555555555555555555555'>;
+address('555555555555555555555555') satisfies Address<'555555555555555555555555'>;

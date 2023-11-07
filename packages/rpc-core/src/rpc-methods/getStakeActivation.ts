@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -17,7 +17,7 @@ export interface GetStakeActivationApi {
      * Returns epoch activation information for a stake account
      */
     getStakeActivation(
-        address: Base58EncodedAddress,
+        address: Address,
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;

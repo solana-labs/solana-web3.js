@@ -1,9 +1,9 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { AccountRole } from './roles';
 
 export interface IAccountMeta<TAddress extends string = string> {
-    readonly address: Base58EncodedAddress<TAddress>;
+    readonly address: Address<TAddress>;
     readonly role: AccountRole;
 }
 
@@ -19,9 +19,9 @@ export type WritableSignerAccount<TAddress extends string = string> = IAccountMe
 };
 
 export interface IAccountLookupMeta<TAddress extends string = string, TLookupTableAddress extends string = string> {
-    readonly address: Base58EncodedAddress<TAddress>;
+    readonly address: Address<TAddress>;
     readonly addressIndex: number;
-    readonly lookupTableAddress: Base58EncodedAddress<TLookupTableAddress>;
+    readonly lookupTableAddress: Address<TLookupTableAddress>;
     readonly role: AccountRole.READONLY | AccountRole.WRITABLE;
 }
 

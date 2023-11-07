@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -28,7 +28,7 @@ describe('getTokenSupply', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/spl-token-mint-account.json
                 const pubkey =
-                    'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+                    'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
                 const tokenAccountBalancePromise = rpc.getTokenSupply(pubkey, { commitment }).send();
                 await expect(tokenAccountBalancePromise).resolves.toStrictEqual({
                     context: CONTEXT_MATCHER,
@@ -50,7 +50,7 @@ describe('getTokenSupply', () => {
             const stakeActivationPromise = rpc
                 .getTokenSupply(
                     // Randomly generated
-                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Base58EncodedAddress
+                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address
                 )
                 .send();
             await expect(stakeActivationPromise).rejects.toMatchObject({

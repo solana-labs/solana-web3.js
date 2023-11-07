@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
@@ -730,7 +730,7 @@ async () => {
         preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Base58EncodedAddress;
+            programId: Address;
             data: Base64EncodedDataResponse;
         }>;
         rewards: readonly Reward[] | null;
@@ -747,8 +747,8 @@ async () => {
             | (ExpectedMetaForFullBase58 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Base58EncodedAddress[];
-                          readonly: readonly Base58EncodedAddress[];
+                          writable: readonly Address[];
+                          readonly: readonly Address[];
                       };
                   }>)
             | null;
@@ -996,7 +996,7 @@ async () => {
         preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Base58EncodedAddress;
+            programId: Address;
             data: Base64EncodedDataResponse;
         }>;
         rewards: readonly Reward[] | null;
@@ -1013,8 +1013,8 @@ async () => {
             | (ExpectedMetaForFullBase64 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Base58EncodedAddress[];
-                          readonly: readonly Base58EncodedAddress[];
+                          writable: readonly Address[];
+                          readonly: readonly Address[];
                       };
                   }>)
             | null;
@@ -1194,13 +1194,13 @@ async () => {
             info?: object;
         };
         program: string;
-        programId: Base58EncodedAddress;
+        programId: Address;
     }>;
 
     type ExpectedPartiallyDecodedTransactionInstruction = Readonly<{
-        accounts: readonly Base58EncodedAddress[];
+        accounts: readonly Address[];
         data: Base58EncodedBytes;
-        programId: Base58EncodedAddress;
+        programId: Address;
     }>;
 
     type ExpectedTransactionInstructionForFullJsonParsed =
@@ -1221,7 +1221,7 @@ async () => {
         preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Base58EncodedAddress;
+            programId: Address;
             data: Base64EncodedDataResponse;
         }>;
         rewards: readonly Reward[] | null;
@@ -1230,8 +1230,8 @@ async () => {
 
     type ExpectedMetaForFullJsonParsedLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Base58EncodedAddress[];
-            readonly: readonly Base58EncodedAddress[];
+            writable: readonly Address[];
+            readonly: readonly Address[];
         };
     }>;
 
@@ -1405,7 +1405,7 @@ async () => {
         preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Base58EncodedAddress;
+            programId: Address;
             data: Base64EncodedDataResponse;
         }>;
         rewards: readonly Reward[] | null;
@@ -1414,14 +1414,14 @@ async () => {
 
     type ExpectedMetaForFullJsonLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Base58EncodedAddress[];
-            readonly: readonly Base58EncodedAddress[];
+            writable: readonly Address[];
+            readonly: readonly Address[];
         };
     }>;
 
     type ExpectedTransactionForFullJsonBase = {
         message: {
-            accountKeys: readonly Base58EncodedAddress[];
+            accountKeys: readonly Address[];
             header: {
                 numReadonlySignedAccounts: number;
                 numReadonlyUnsignedAccounts: number;

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -36,7 +36,7 @@ export interface GetAccountInfoApi {
      * Returns all information associated with the account of provided public key
      */
     getAccountInfo(
-        address: Base58EncodedAddress,
+        address: Address,
         config: GetAccountInfoApiCommonConfig &
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
@@ -44,7 +44,7 @@ export interface GetAccountInfoApi {
             }>
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedData>;
     getAccountInfo(
-        address: Base58EncodedAddress,
+        address: Address,
         config: GetAccountInfoApiCommonConfig &
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
@@ -52,14 +52,14 @@ export interface GetAccountInfoApi {
             }>
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedZStdCompressedData>;
     getAccountInfo(
-        address: Base58EncodedAddress,
+        address: Address,
         config: GetAccountInfoApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithJsonData>;
     getAccountInfo(
-        address: Base58EncodedAddress,
+        address: Address,
         config: GetAccountInfoApiCommonConfig &
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
@@ -67,7 +67,7 @@ export interface GetAccountInfoApi {
             }>
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58EncodedData>;
     getAccountInfo(
-        address: Base58EncodedAddress,
+        address: Address,
         config?: GetAccountInfoApiCommonConfig
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58Bytes>;
 }

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -22,7 +22,7 @@ type GetBlockProductionApiResponseBase = RpcResponse<{
 
 type GetBlockProductionApiResponseWithAllIdentities = Readonly<{
     value: Readonly<{
-        byIdentity: Record<Base58EncodedAddress, [NumberOfLeaderSlots, NumberOfBlocksProduced]>;
+        byIdentity: Record<Address, [NumberOfLeaderSlots, NumberOfBlocksProduced]>;
     }>;
 }>;
 
@@ -36,7 +36,7 @@ export interface GetBlockProductionApi {
     /**
      * Returns recent block production information from the current or previous epoch.
      */
-    getBlockProduction<TIdentity extends Base58EncodedAddress>(
+    getBlockProduction<TIdentity extends Address>(
         config: GetBlockProductionApiConfigBase &
             Readonly<{
                 identity: TIdentity;

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot } from './common';
@@ -12,5 +12,5 @@ export interface GetSlotLeaderApi {
             commitment?: Commitment;
             minContextSlot?: Slot;
         }>
-    ): Base58EncodedAddress;
+    ): Address;
 }

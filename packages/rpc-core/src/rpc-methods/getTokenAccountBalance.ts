@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { RpcResponse, TokenAmount } from './common';
@@ -11,7 +11,7 @@ export interface GetTokenAccountBalanceApi {
      */
     getTokenAccountBalance(
         /** Pubkey of Token account to query, as base-58 encoded string */
-        address: Base58EncodedAddress,
+        address: Address,
         config?: Readonly<{
             commitment?: Commitment;
         }>

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { RpcResponse } from './common';
@@ -21,7 +21,7 @@ type GetSupplyApiResponseWithNonCirculatingAccounts = GetSupplyApiResponseBase &
     Readonly<{
         value: Readonly<{
             /** an array of account addresses of non-circulating accounts */
-            nonCirculatingAccounts: [Base58EncodedAddress];
+            nonCirculatingAccounts: [Address];
         }>;
     }>;
 

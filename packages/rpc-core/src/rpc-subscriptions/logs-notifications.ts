@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
@@ -20,7 +20,7 @@ type LogsNotificationsApiNotification = RpcResponse<
 
 // Currently, the mentions field only supports one Pubkey string per method call.
 // Listing additional addresses will result in an error.
-type LogsNotificationsApiFilter = 'all' | 'allWithVotes' | { mentions: [Base58EncodedAddress] };
+type LogsNotificationsApiFilter = 'all' | 'allWithVotes' | { mentions: [Address] };
 
 type LogsNotificationsApiConfig = Readonly<{
     commitment?: Commitment;

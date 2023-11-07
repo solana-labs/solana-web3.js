@@ -1,9 +1,9 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { Slot } from './common';
 
 /** array of Node identity public keys as base-58 encoded strings */
-type GetSlotLeadersApiResponse = Base58EncodedAddress[];
+type GetSlotLeadersApiResponse = Address[];
 
 export interface GetSlotLeadersApi {
     /**

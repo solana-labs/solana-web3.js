@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -28,7 +28,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
                 const publicKey =
-                    'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                    'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -55,7 +55,7 @@ describe('getAccountInfo', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
             const sendPromise = rpc
                 .getAccountInfo(publicKey, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
@@ -74,7 +74,7 @@ describe('getAccountInfo', () => {
             expect.assertions(1);
             // randomly generated
             const publicKey =
-                'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV' as Base58EncodedAddress<'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV'>;
+                'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV' as Address<'Bb39jXh8b1rWHymSqM46kKXYwzA35ChNZAMCZ3wSDAMV'>;
             const accountInfoPromise = rpc.getAccountInfo(publicKey).send();
             await expect(accountInfoPromise).resolves.toStrictEqual({
                 context: CONTEXT_MATCHER,
@@ -89,7 +89,7 @@ describe('getAccountInfo', () => {
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             // data is 'test data'
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
             const accountInfo = await rpc
                 .getAccountInfo(publicKey, {
@@ -107,7 +107,7 @@ describe('getAccountInfo', () => {
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             // data is 'test data'
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
             const accountInfo = await rpc
                 .getAccountInfo(publicKey, {
@@ -125,7 +125,7 @@ describe('getAccountInfo', () => {
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             // data is 'test data'
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
             const accountInfo = await rpc
                 .getAccountInfo(publicKey, {
@@ -143,7 +143,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
                 const publicKey =
-                    'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                    'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
                 const accountInfo = await rpc
                     .getAccountInfo(publicKey, {
@@ -160,7 +160,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/address-lookup-table-account.json
                 const publicKey =
-                    '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n' as Base58EncodedAddress<'2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n'>;
+                    '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n' as Address<'2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -238,7 +238,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/bpf-upgradeable-loader-program-account.json
                 const publicKey =
-                    'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Base58EncodedAddress<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
+                    'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Address<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
 
                 const accountInfo = await rpc
                     .getAccountInfo(publicKey, {
@@ -272,7 +272,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/config-validator-account.json
                 const publicKey =
-                    'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY' as Base58EncodedAddress<'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY'>;
+                    'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY' as Address<'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -319,7 +319,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/config-stake-account.json
                 const publicKey =
-                    'StakeConfig11111111111111111111111111111111' as Base58EncodedAddress<'StakeConfig11111111111111111111111111111111'>;
+                    'StakeConfig11111111111111111111111111111111' as Address<'StakeConfig11111111111111111111111111111111'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -354,7 +354,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/nonce-account.json
                 const publicKey =
-                    'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU' as Base58EncodedAddress<'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU'>;
+                    'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU' as Address<'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -392,7 +392,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/spl-token-account.json
                 const publicKey =
-                    'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Base58EncodedAddress<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+                    'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -430,7 +430,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/spl-token-account.json
                 const publicKey =
-                    'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Base58EncodedAddress<'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca'>;
+                    'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca' as Address<'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -473,7 +473,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/spl-token-account.json
                 const publicKey =
-                    '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88' as Base58EncodedAddress<'4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88'>;
+                    '4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88' as Address<'4Uh9vK5nnxfskc73asy7AeRYDfZocrv1th9DEjtdCn88'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -513,7 +513,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/spl-token-22-mint-account.json
                 const publicKey =
-                    'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo' as Base58EncodedAddress<'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo'>;
+                    'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo' as Address<'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -573,7 +573,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/stake-account.json
                 const publicKey =
-                    'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Base58EncodedAddress<'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN'>;
+                    'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Address<'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -628,7 +628,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // Sysvar accounts don't need a fixture
                 const publicKey =
-                    'SysvarRent111111111111111111111111111111111' as Base58EncodedAddress<'SysvarRent111111111111111111111111111111111'>;
+                    'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -664,7 +664,7 @@ describe('getAccountInfo', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/vote-account.json
                 const publicKey =
-                    '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress<'4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'>;
+                    '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Address<'4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'>;
 
                 const accountInfoPromise = rpc
                     .getAccountInfo(publicKey, {
@@ -1164,7 +1164,7 @@ describe('getAccountInfo', () => {
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             // data is 'test data'
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
             const accountInfo = await rpc.getAccountInfo(publicKey, {}).send();
 
@@ -1178,7 +1178,7 @@ describe('getAccountInfo', () => {
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             // data is 'test data'
             const publicKey =
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address<'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G'>;
 
             const accountInfo = await rpc
                 .getAccountInfo(publicKey, {

@@ -1,11 +1,11 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { IAccountLookupMeta, IAccountMeta } from './accounts';
 
 export interface IInstruction<TProgramAddress extends string = string> {
     readonly accounts?: readonly (IAccountMeta | IAccountLookupMeta)[];
     readonly data?: Uint8Array;
-    readonly programAddress: Base58EncodedAddress<TProgramAddress>;
+    readonly programAddress: Address<TProgramAddress>;
 }
 
 export interface IInstructionWithAccounts<TAccounts extends readonly (IAccountMeta | IAccountLookupMeta)[]>

@@ -1,7 +1,7 @@
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
-import { Base58EncodedAddress, getAddressCodec, getAddressComparator } from '../address';
+import { Address, getAddressCodec, getAddressComparator } from '../address';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -14,7 +14,7 @@ const originalBase58Module = jest.requireActual('@solana/codecs-strings');
 const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
 const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
-describe('Base58EncodedAddress', () => {
+describe('Address', () => {
     describe('assertIsAddress()', () => {
         let assertIsAddress: typeof import('../address').assertIsAddress;
         // Reload `assertIsAddress` before each test to reset memoized state
@@ -118,7 +118,7 @@ describe('Base58EncodedAddress', () => {
         it('serializes a base58 encoded address into a 32-byte buffer', () => {
             expect(
                 address.encode(
-                    '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                    '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
                 )
             ).toEqual(
                 new Uint8Array([
@@ -138,7 +138,7 @@ describe('Base58EncodedAddress', () => {
                     ])
                 )[0]
             ).toBe(
-                '4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
             );
         });
         it('fatals when trying to deserialize a byte buffer shorter than 32-bytes', () => {
@@ -160,12 +160,12 @@ describe('Base58EncodedAddress', () => {
 
             address = getAddressCodec!();
             address.encode(
-                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
             );
 
             address = getAddressCodec!();
             address.encode(
-                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Base58EncodedAddress<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
             );
 
             expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);

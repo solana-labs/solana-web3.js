@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
@@ -42,7 +42,7 @@ export interface GetSignaturesForAddressApi {
      * Returns signatures backwards in time from the provided signature or most recent confirmed block
      */
     getSignaturesForAddress(
-        address: Base58EncodedAddress,
+        address: Address,
         config?: GetSignaturesForAddressConfig
     ): GetSignaturesForAddressApiResponse;
 }

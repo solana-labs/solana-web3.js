@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment } from '@solana/rpc-types';
@@ -57,7 +57,7 @@ describe('getVoteAccounts', () => {
             expect.assertions(1);
             // randomly generated address, don't re-use in anything that creates a vote account
             const address =
-                '2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2' as Base58EncodedAddress<'2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2'>;
+                '2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2' as Address<'2eTCZxWZkU5h3Mo162gLRTECzuJhPgC1McB9rCcoqNm2'>;
             const voteAccountsPromise = rpc.getVoteAccounts({ votePubkey: address }).send();
             await expect(voteAccountsPromise).resolves.toStrictEqual({
                 current: [],

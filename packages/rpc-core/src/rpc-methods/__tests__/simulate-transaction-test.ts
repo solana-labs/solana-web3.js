@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
@@ -521,7 +521,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Base58EncodedAddress],
+                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Address],
                         encoding: 'base64',
                     },
                     commitment: 'processed',
@@ -569,7 +569,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Base58EncodedAddress],
+                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Address],
                         encoding: 'base64+zstd',
                     },
                     commitment: 'processed',
@@ -618,7 +618,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Base58EncodedAddress],
+                        addresses: ['4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp' as Address],
                         encoding: 'jsonParsed',
                     },
                     commitment: 'processed',
@@ -682,7 +682,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Base58EncodedAddress],
+                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Address],
                         encoding: 'jsonParsed',
                     },
                     commitment: 'processed',
@@ -731,7 +731,7 @@ describe('simulateTransaction', () => {
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
-                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Base58EncodedAddress],
+                        addresses: ['DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Address],
                     },
                     commitment: 'processed',
                     encoding: 'base64',
@@ -780,8 +780,8 @@ describe('simulateTransaction', () => {
                     accounts: {
                         addresses: [
                             // Randomly generated
-                            'CsJGwBvZrmMheK7cgMXh7ZHmKLL5w76X7pmofUG3cUWB' as Base58EncodedAddress,
-                            'DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Base58EncodedAddress,
+                            'CsJGwBvZrmMheK7cgMXh7ZHmKLL5w76X7pmofUG3cUWB' as Address,
+                            'DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i' as Address,
                         ],
                         encoding: 'base64',
                     },

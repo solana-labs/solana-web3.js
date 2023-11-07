@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -8,7 +8,7 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
 
 // See scripts/fixtures/stake-account.json
-const stakeAccountAddress = 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Base58EncodedAddress;
+const stakeAccountAddress = 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Address;
 
 describe('getStakeActivation', () => {
     let rpc: Rpc<SolanaRpcMethods>;
@@ -41,7 +41,7 @@ describe('getStakeActivation', () => {
             const stakeActivationPromise = rpc
                 .getStakeActivation(
                     // Randomly generated
-                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Base58EncodedAddress
+                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address
                 )
                 .send();
             await expect(stakeActivationPromise).rejects.toMatchObject({

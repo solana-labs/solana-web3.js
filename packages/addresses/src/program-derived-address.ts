@@ -1,6 +1,6 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
 
-import { assertIsAddress, Base58EncodedAddress, getAddressCodec, isAddress } from './address';
+import { Address, assertIsAddress, getAddressCodec, isAddress } from './address';
 import { compressedPointBytesAreOnCurve } from './curve';
 
 /**
@@ -9,7 +9,7 @@ import { compressedPointBytesAreOnCurve } from './curve';
  * ensure the address is not on the Ed25519 curve.
  */
 export type ProgramDerivedAddress<TAddress extends string = string> = Readonly<
-    [Base58EncodedAddress<TAddress>, ProgramDerivedAddressBump]
+    [Address<TAddress>, ProgramDerivedAddressBump]
 >;
 
 /**
@@ -47,7 +47,7 @@ export function assertIsProgramDerivedAddress<TAddress extends string = string>(
     if (!validFormat) {
         // TODO: Coded error.
         throw new Error(
-            `Expected given program derived address to have the following format: [Base58EncodedAddress, ProgramDerivedAddressBump].`
+            `Expected given program derived address to have the following format: [Address, ProgramDerivedAddressBump].`
         );
     }
     if (value[1] < 0 || value[1] > 255) {
@@ -58,13 +58,13 @@ export function assertIsProgramDerivedAddress<TAddress extends string = string>(
 }
 
 type ProgramDerivedAddressInput = Readonly<{
-    programAddress: Base58EncodedAddress;
+    programAddress: Address;
     seeds: Seed[];
 }>;
 
 type SeedInput = Readonly<{
-    baseAddress: Base58EncodedAddress;
-    programAddress: Base58EncodedAddress;
+    baseAddress: Address;
+    programAddress: Address;
     seed: Seed;
 }>;
 
@@ -80,10 +80,7 @@ const PDA_MARKER_BYTES = [
 // TODO: Coded error.
 class PointOnCurveError extends Error {}
 
-async function createProgramDerivedAddress({
-    programAddress,
-    seeds,
-}: ProgramDerivedAddressInput): Promise<Base58EncodedAddress> {
+async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDerivedAddressInput): Promise<Address> {
     await assertDigestCapabilityIsAvailable();
     if (seeds.length > MAX_SEEDS) {
         // TODO: Coded error.
@@ -137,11 +134,7 @@ export async function getProgramDerivedAddress({
     throw new Error('Unable to find a viable program address bump seed');
 }
 
-export async function createAddressWithSeed({
-    baseAddress,
-    programAddress,
-    seed,
-}: SeedInput): Promise<Base58EncodedAddress> {
+export async function createAddressWithSeed({ baseAddress, programAddress, seed }: SeedInput): Promise<Address> {
     const { encode, decode } = getAddressCodec();
 
     const seedBytes = typeof seed === 'string' ? new TextEncoder().encode(seed) : seed;

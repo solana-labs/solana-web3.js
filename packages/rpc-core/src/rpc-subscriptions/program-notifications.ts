@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -32,7 +32,7 @@ type ProgramNotificationsDatasizeFilter = Readonly<{
 
 type ProgramNotificationsApiNotificationBase<TData> = RpcResponse<
     Readonly<{
-        pubkey: Base58EncodedAddress;
+        pubkey: Address;
         account: AccountInfoBase & TData;
     }>
 >;
@@ -53,35 +53,35 @@ export interface ProgramNotificationsApi {
      * owned by the given program changes
      */
     programNotifications(
-        programId: Base58EncodedAddress,
+        programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64';
             }>
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase64EncodedData>;
     programNotifications(
-        programId: Base58EncodedAddress,
+        programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
             }>
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase64EncodedZStdCompressedData>;
     programNotifications(
-        programId: Base58EncodedAddress,
+        programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithJsonData>;
     programNotifications(
-        programId: Base58EncodedAddress,
+        programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base58';
             }>
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase58EncodedData>;
     programNotifications(
-        programId: Base58EncodedAddress,
+        programId: Address,
         config?: ProgramNotificationsApiCommonConfig
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase58Bytes>;
 }

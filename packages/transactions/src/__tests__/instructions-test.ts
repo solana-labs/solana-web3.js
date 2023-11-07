@@ -1,6 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { IInstruction } from '@solana/instructions';
 
 import { appendTransactionInstruction, prependTransactionInstruction } from '../instructions';
@@ -8,9 +8,9 @@ import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
 const PROGRAM_A =
-    'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL' as Base58EncodedAddress<'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL'>;
+    'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL' as Address<'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL'>;
 const PROGRAM_B =
-    'DNAbkMkoMLRXF7wuLCrTzouMyzi25krr3B94yW87VvxU' as Base58EncodedAddress<'DNAbkMkoMLRXF7wuLCrTzouMyzi25krr3B94yW87VvxU'>;
+    'DNAbkMkoMLRXF7wuLCrTzouMyzi25krr3B94yW87VvxU' as Address<'DNAbkMkoMLRXF7wuLCrTzouMyzi25krr3B94yW87VvxU'>;
 
 describe('Transaction instruction helpers', () => {
     let baseTx: BaseTransaction;

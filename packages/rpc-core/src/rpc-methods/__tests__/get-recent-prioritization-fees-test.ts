@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
@@ -38,7 +38,7 @@ describe('getRecentPrioritizationFees', () => {
         it('returns a list of prioritization fees', async () => {
             expect.assertions(1);
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
-            const addresses = ['GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress];
+            const addresses = ['GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address];
             const res = await rpc.getRecentPrioritizationFees(addresses).send();
             expect(Array.isArray(res)).toBe(true);
             // TODO: We have no way to reliably ensure at least one slot
@@ -60,8 +60,8 @@ describe('getRecentPrioritizationFees', () => {
             // See scripts/fixtures/4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc.json
             // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
             const addresses = [
-                '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Base58EncodedAddress,
-                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress,
+                '4nTLDQiSTRHbngKZWPMfYnZdWTbKiNeuuPcX7yFUpSAc' as Address,
+                'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address,
             ];
             const res = await rpc.getRecentPrioritizationFees(addresses).send();
             expect(Array.isArray(res)).toBe(true);
@@ -82,7 +82,7 @@ describe('getRecentPrioritizationFees', () => {
         it('returns a list of prioritization fees', async () => {
             expect.assertions(1);
             // Randomly generated
-            const addresses = ['BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Base58EncodedAddress];
+            const addresses = ['BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address];
             const res = await rpc.getRecentPrioritizationFees(addresses).send();
             expect(Array.isArray(res)).toBe(true);
             // TODO: We have no way to reliably ensure at least one slot

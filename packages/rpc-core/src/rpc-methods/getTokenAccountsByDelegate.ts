@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -29,12 +29,12 @@ type TokenAccountInfoWithJsonData = Readonly<{
 
 type MintFilter = Readonly<{
     /** Pubkey of the specific token Mint to limit accounts to */
-    mint: Base58EncodedAddress;
+    mint: Address;
 }>;
 
 type ProgramIdFilter = Readonly<{
     /** Pubkey of the Token program that owns the accounts */
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type AccountsFilter = MintFilter | ProgramIdFilter;
@@ -55,7 +55,7 @@ export interface GetTokenAccountsByDelegateApi {
      * Returns all SPL Token accounts by approved Delegate.
      */
     getTokenAccountsByDelegate(
-        program: Base58EncodedAddress,
+        program: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByDelegateApiCommonConfig &
             GetTokenAccountsByDelegateApiSliceableCommonConfig &
@@ -65,7 +65,7 @@ export interface GetTokenAccountsByDelegateApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getTokenAccountsByDelegate(
-        program: Base58EncodedAddress,
+        program: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByDelegateApiCommonConfig &
             GetTokenAccountsByDelegateApiSliceableCommonConfig &
@@ -75,7 +75,7 @@ export interface GetTokenAccountsByDelegateApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getTokenAccountsByDelegate(
-        program: Base58EncodedAddress,
+        program: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByDelegateApiCommonConfig &
             Readonly<{
@@ -84,7 +84,7 @@ export interface GetTokenAccountsByDelegateApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
     getTokenAccountsByDelegate(
-        program: Base58EncodedAddress,
+        program: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByDelegateApiCommonConfig &
             GetTokenAccountsByDelegateApiSliceableCommonConfig &
@@ -94,7 +94,7 @@ export interface GetTokenAccountsByDelegateApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getTokenAccountsByDelegate(
-        program: Base58EncodedAddress,
+        program: Address,
         filter: AccountsFilter,
         config?: GetTokenAccountsByDelegateApiCommonConfig & GetTokenAccountsByDelegateApiSliceableCommonConfig
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;

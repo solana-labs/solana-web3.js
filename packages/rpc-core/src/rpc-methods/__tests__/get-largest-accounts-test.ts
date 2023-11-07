@@ -1,6 +1,6 @@
 import { open } from 'node:fs/promises';
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -29,7 +29,7 @@ async function getNodeAddress(path: string) {
         if (secretKey) {
             const publicKey = secretKey.slice(32, 64);
             const expectedAddress = getBase58Decoder().decode(publicKey)[0];
-            return expectedAddress as Base58EncodedAddress;
+            return expectedAddress as Address;
         }
         throw new Error(`Failed to read keypair file \`${path}\``);
     } finally {

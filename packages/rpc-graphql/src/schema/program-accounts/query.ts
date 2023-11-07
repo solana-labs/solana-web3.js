@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import {
     DataSlice,
     GetProgramAccountsDatasizeFilter,
@@ -19,7 +19,7 @@ import {
 import { bigint, list, nonNull, string, type } from '../picks';
 
 export type ProgramAccountsQueryArgs = {
-    programAddress: Base58EncodedAddress;
+    programAddress: Address;
     commitment?: Commitment;
     dataSlice?: DataSlice;
     encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';

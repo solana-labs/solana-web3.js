@@ -1,4 +1,4 @@
-import type { Base58EncodedAddress } from '@solana/addresses';
+import type { Address } from '@solana/addresses';
 
 import type { getCompiledAddressTableLookups } from '../../compile-address-table-lookups';
 import {
@@ -20,7 +20,7 @@ describe('Address table lookup codec', () => {
             it('serializes an `AddressTableLookup` according to the spec', () => {
                 expect(
                     addressTableLookup.encode({
-                        lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Base58EncodedAddress, // decodes to [11{32}]
+                        lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Address, // decodes to [11{32}]
                         readableIndices: [33, 22],
                         writableIndices: [44],
                     } as AddressTableLookup)
@@ -64,7 +64,7 @@ describe('Address table lookup codec', () => {
                 ]);
                 const [lookup, offset] = addressTableLookup.decode(byteArray);
                 expect(lookup).toEqual({
-                    lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Base58EncodedAddress, // decodes to [11{32}]
+                    lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Address, // decodes to [11{32}]
                     readableIndices: [33, 22],
                     writableIndices: [44],
                 });

@@ -1,13 +1,13 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 describe('logsNotifications', () => {
     (
-        [
-            'all',
-            'allWithVotes',
-            { mentions: ['Vote111111111111111111111111111111111111111'] as [Base58EncodedAddress] },
-        ] as ('all' | 'allWithVotes' | { mentions: [Base58EncodedAddress] })[]
+        ['all', 'allWithVotes', { mentions: ['Vote111111111111111111111111111111111111111'] as [Address] }] as (
+            | 'all'
+            | 'allWithVotes'
+            | { mentions: [Address] }
+        )[]
     ).forEach(filter => {
         // Note: Can't do finalized because it requires too much time to wait for the transaction to be finalized.
         // Note: processed is also unreliable because it requires non-vote transactions to occur after this subscription opens,

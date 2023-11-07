@@ -1,21 +1,21 @@
-import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
+import { Address, getAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
 import { OrderedAccounts } from '../accounts';
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 
-const MOCK_ADDRESSES: ReadonlyArray<Base58EncodedAddress> = [
+const MOCK_ADDRESSES: ReadonlyArray<Address> = [
     'BRwZRKsvKkG45g59269qZ5e8UaECFim5Qfxex44UKwDG',
     'AZE3mXbzNp8SfZYBfL4L67ejQ8zmatAKKezUdCarKnUL',
     'Awft9caFzun5FcVTaXJAkAYDBgbEDF5QALeaqeY3M3Va',
     'ARc8zz6T14LZQTpjryhBGDuNZb3YmNT9PtEuBSuVM5xo',
     '6Tu9wk1r9yGwzd3xdrVzDttmkTN98iiffq7L25JKTvwh',
     '4R6dgeBbwPjnTSN78KGxhB78oFsxaobiwBsCBLAyauqA',
-] as Base58EncodedAddress[];
+] as Address[];
 
 let _nextMockAddress = 0;
 function getMockAddress() {
-    return `${_nextMockAddress++}` as Base58EncodedAddress;
+    return `${_nextMockAddress++}` as Address;
 }
 
 describe('getCompiledAddressTableLookups', () => {

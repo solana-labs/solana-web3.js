@@ -18,7 +18,7 @@ This package contains utilities for generating account addresses. It can be used
 
 ## Types
 
-### `Base58EncodedAddress`
+### `Address`
 
 This type represents a string that validates as a Solana address. Functions that require well-formed addresses should specify their inputs in terms of this type.
 
@@ -38,7 +38,7 @@ This type represents an integer between 0-255 used as a seed when deriving a pro
 
 ### `address()`
 
-This helper combines _asserting_ that a string is an address with _coercing_ it to the `Base58EncodedAddress` type. It's best used with untrusted input.
+This helper combines _asserting_ that a string is an address with _coercing_ it to the `Address` type. It's best used with untrusted input.
 
 ```ts
 import { address } from '@solana/addresses';
@@ -49,15 +49,15 @@ await transfer(address(fromAddress), address(toAddress), lamports(100000n));
 When starting from a known-good address as a string, it's more efficient to typecast it rather than to use the `address()` helper, because the helper unconditionally performs validation on its input.
 
 ```ts
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 const MEMO_PROGRAM_ADDRESS =
-    'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr' as Base58EncodedAddress<'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'>;
+    'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr' as Address<'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'>;
 ```
 
 ### `assertIsAddress()`
 
-Client applications primarily deal with addresses and public keys in the form of base58-encoded strings. Addresses returned from the RPC API conform to the type `Base58EncodedAddress`. You can use a value of that type wherever a base58-encoded address is expected.
+Client applications primarily deal with addresses and public keys in the form of base58-encoded strings. Addresses returned from the RPC API conform to the type `Address`. You can use a value of that type wherever a base58-encoded address is expected.
 
 From time to time you might acquire a string, that you expect to validate as an address, from an untrusted network API or user input. To assert that such an arbitrary string is a base58-encoded address, use the `assertIsAddress` function.
 
@@ -70,9 +70,9 @@ function handleSubmit() {
     const address: string = accountAddressInput.value;
     try {
         // If this type assertion function doesn't throw, then
-        // Typescript will upcast `address` to `Base58EncodedAddress`.
+        // Typescript will upcast `address` to `Address`.
         assertIsAddress(address);
-        // At this point, `address` is a `Base58EncodedAddress` that can be used with the RPC.
+        // At this point, `address` is an `Address` that can be used with the RPC.
         const balanceInLamports = await rpc.getBalance(address).send();
     } catch (e) {
         // `address` turned out not to be a base58-encoded address
@@ -95,16 +95,16 @@ import { createAddressWithSeed } from '@solana/addresses';
 
 const derivedAddress = await createAddressWithSeed({
     // The private key associated with this address will be able to sign for `derivedAddress`.
-    baseAddress: 'B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka' as Base58EncodedAddress,
+    baseAddress: 'B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka' as Address,
     // Only this program will be able to write data to this account.
-    programAddress: '445erYq578p2aERrGW9mn9KiYe3fuG6uHdcJ2LPPShGw' as Base58EncodedAddress,
+    programAddress: '445erYq578p2aERrGW9mn9KiYe3fuG6uHdcJ2LPPShGw' as Address,
     seed: 'data-account',
 });
 ```
 
 ### `getAddressDecoder()`
 
-Returns a decoder that you can use to convert an array of 32 bytes representing an address to the base58-encoded representation of that address. Returns a tuple of the `Base58EncodedAddress` and the offset within the byte array at which the decoder stopped reading.
+Returns a decoder that you can use to convert an array of 32 bytes representing an address to the base58-encoded representation of that address. Returns a tuple of the `Address` and the offset within the byte array at which the decoder stopped reading.
 
 ```ts
 import { getAddressDecoder } from '@solana/addresses';
@@ -124,7 +124,7 @@ Returns an encoder that you can use to encode a base58-encoded address to a byte
 ```ts
 import { getAddressEncoder } from '@solana/addresses';
 
-const address = 'B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka' as Base58EncodedAddress;
+const address = 'B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka' as Address;
 const addressEncoder = getAddressEncoder();
 const addressBytes = addressEncoder.encode(address);
 // Uint8Array(32) [
@@ -137,7 +137,7 @@ const addressBytes = addressEncoder.encode(address);
 
 ### `getAddressFromPublicKey()`
 
-Given a public `CryptoKey`, this method will return its associated `Base58EncodedAddress`.
+Given a public `CryptoKey`, this method will return its associated `Address`.
 
 ```ts
 import { getAddressFromPublicKey } from '@solana/addresses';
@@ -147,35 +147,35 @@ const address = await getAddressFromPublicKey(publicKey);
 
 ### `getProgramDerivedAddress()`
 
-Given a program's `Base58EncodedAddress` and up to 16 `Seeds`, this method will return the program derived address (PDA) associated with each.
+Given a program's `Address` and up to 16 `Seeds`, this method will return the program derived address (PDA) associated with each.
 
 ```ts
 import { getAddressEncoder, getProgramDerivedAddress } from '@solana/addresses';
 
 const addressEncoder = getAddressEncoder();
 const { bumpSeed, pda } = await getProgramDerivedAddress({
-    programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Base58EncodedAddress,
+    programAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address,
     seeds: [
         // Owner
-        addressEncoder.encode('9fYLFVoVqwH37C3dyPi6cpeobfbQ2jtLpN5HgAYDDdkm' as Base58EncodedAddress),
+        addressEncoder.encode('9fYLFVoVqwH37C3dyPi6cpeobfbQ2jtLpN5HgAYDDdkm' as Address),
         // Token program
-        addressEncoder.encode('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress),
+        addressEncoder.encode('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address),
         // Mint
-        addressEncoder.encode('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' as Base58EncodedAddress),
+        addressEncoder.encode('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' as Address),
     ],
 });
 ```
 
 ### `isAddress()`
 
-This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `Base58EncodedAddress` type and will refine the type for use in your program.
+This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `Address` type and will refine the type for use in your program.
 
 ```ts
 import { isAddress } from '@solana/addresses';
 
 if (isAddress(ownerAddress)) {
     // At this point, `ownerAddress` has been refined to a
-    // `Base58EncodedAddress` that can be used with the RPC.
+    // `Address` that can be used with the RPC.
     const { value: lamports } = await rpc.getBalance(ownerAddress).send();
     setBalanceLamports(lamports);
 } else {
