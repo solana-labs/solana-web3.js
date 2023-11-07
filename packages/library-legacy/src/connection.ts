@@ -2524,7 +2524,7 @@ const GetTransactionRpcResult = jsonRpcResult(
   nullable(
     pick({
       slot: number(),
-      meta: ConfirmedTransactionMetaResult,
+      meta: nullable(ConfirmedTransactionMetaResult),
       blockTime: optional(nullable(number())),
       transaction: ConfirmedTransactionResult,
       version: optional(TransactionVersionStruct),
