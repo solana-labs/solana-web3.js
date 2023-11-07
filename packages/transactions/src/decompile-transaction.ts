@@ -1,7 +1,7 @@
 import { Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
-import { Ed25519Signature } from '@solana/keys';
+import { SignatureBytes } from '@solana/keys';
 
 import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash';
 import { CompilableTransaction } from './compilable-transaction';
@@ -128,7 +128,7 @@ function convertSignatures(compiledTransaction: CompiledTransaction): ITransacti
         if (allZeros) return acc;
 
         const address = staticAccounts[index];
-        return { ...acc, [address]: sig as Ed25519Signature };
+        return { ...acc, [address]: sig as SignatureBytes };
     }, {});
 }
 

@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
-import { TransactionSignature } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
 import {
@@ -159,7 +159,7 @@ export interface GetTransactionApi {
      * Returns transaction details for a confirmed transaction
      */
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        signature: TransactionSignature,
+        signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'jsonParsed';
@@ -177,7 +177,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        signature: TransactionSignature,
+        signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base64';
@@ -198,7 +198,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        signature: TransactionSignature,
+        signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base58';
@@ -219,7 +219,7 @@ export interface GetTransactionApi {
               })
         | null;
     getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
-        signature: TransactionSignature,
+        signature: Signature,
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding?: 'json';

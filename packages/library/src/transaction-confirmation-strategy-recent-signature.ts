@@ -1,13 +1,13 @@
+import { Signature } from '@solana/keys';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment, commitmentComparator } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 type GetRecentSignatureConfirmationPromiseFn = (config: {
     abortSignal: AbortSignal;
     commitment: Commitment;
-    signature: TransactionSignature;
+    signature: Signature;
 }) => Promise<void>;
 
 export function createRecentSignatureConfirmationPromiseFactory(

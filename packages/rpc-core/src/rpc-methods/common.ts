@@ -49,8 +49,6 @@ export type Base58EncodedDataResponse = [Base58EncodedBytes, 'base58'];
 export type Base64EncodedDataResponse = [Base64EncodedBytes, 'base64'];
 export type Base64EncodedZStdCompressedDataResponse = [Base64EncodedZStdCompressedBytes, 'base64+zstd'];
 
-export type Base58EncodedTransactionSignature = string & { readonly __brand: unique symbol };
-
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */
     executable: boolean;

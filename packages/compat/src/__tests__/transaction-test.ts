@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
-import { Ed25519Signature } from '@solana/keys';
+import { SignatureBytes } from '@solana/keys';
 import { ITransactionWithSignatures, Nonce } from '@solana/transactions';
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 
@@ -186,7 +186,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as SignatureBytes,
             });
         });
 
@@ -234,8 +234,8 @@ describe('fromVersionedTransactionWithBlockhash', () => {
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)) as Ed25519Signature,
-                '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e': new Uint8Array(Array(64).fill(2)) as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)) as SignatureBytes,
+                '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e': new Uint8Array(Array(64).fill(2)) as SignatureBytes,
             });
         });
 
@@ -476,7 +476,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as SignatureBytes,
             });
         });
 
@@ -524,8 +524,8 @@ describe('fromVersionedTransactionWithBlockhash', () => {
 
             expect(transaction.signatures).toStrictEqual({
                 '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd': new Uint8Array(Array(64).fill(3)),
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)) as Ed25519Signature,
-                '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e': new Uint8Array(Array(64).fill(2)) as Ed25519Signature,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': new Uint8Array(Array(64).fill(1)) as SignatureBytes,
+                '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e': new Uint8Array(Array(64).fill(2)) as SignatureBytes,
             });
         });
 
@@ -781,7 +781,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as Ed25519Signature,
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as SignatureBytes,
             });
         });
 
@@ -807,8 +807,8 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as Ed25519Signature,
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as SignatureBytes,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as SignatureBytes,
             });
         });
 
@@ -1013,7 +1013,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as Ed25519Signature,
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as SignatureBytes,
             });
         });
 
@@ -1039,8 +1039,8 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
-                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as Ed25519Signature,
-                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as Ed25519Signature,
+                '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': nonceAuthoritySignature as SignatureBytes,
+                '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as SignatureBytes,
             });
         });
 

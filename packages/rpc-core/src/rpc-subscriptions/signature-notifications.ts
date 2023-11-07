@@ -1,5 +1,5 @@
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
@@ -25,7 +25,7 @@ export interface SignatureNotificationsApi {
      */
     signatureNotifications(
         // Transaction Signature, as base-58 encoded string
-        signature: TransactionSignature,
+        signature: Signature,
         config: SignatureNotificationsApiConfigBase &
             Readonly<{
                 // Whether or not to subscribe for notifications when signatures are received
@@ -34,7 +34,7 @@ export interface SignatureNotificationsApi {
             }>
     ): SignatureNotificationsApiNotificationReceived | SignatureNotificationsApiNotificationProcessed;
     signatureNotifications(
-        signature: TransactionSignature,
+        signature: Signature,
         config?: SignatureNotificationsApiConfigBase &
             Readonly<{
                 enableReceivedNotification?: false;

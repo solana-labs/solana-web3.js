@@ -1,4 +1,4 @@
-import { Ed25519Signature } from '@solana/keys';
+import { SignatureBytes } from '@solana/keys';
 
 import { CompilableTransaction } from './compilable-transaction';
 import { CompiledMessage, compileMessage } from './message';
@@ -6,7 +6,7 @@ import { ITransactionWithSignatures } from './signatures';
 
 export type CompiledTransaction = Readonly<{
     compiledMessage: CompiledMessage;
-    signatures: Ed25519Signature[];
+    signatures: SignatureBytes[];
 }>;
 
 export function getCompiledTransaction(

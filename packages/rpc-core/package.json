@@ -66,6 +66,7 @@
         "@solana/codecs-core": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
+        "@solana/keys": "workspace:*",
         "@solana/rpc-transport": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/transactions": "workspace:*",

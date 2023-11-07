@@ -1,4 +1,4 @@
-import { TransactionSignature } from '@solana/transactions';
+import { Signature } from '@solana/keys';
 
 import { waitForRecentTransactionConfirmationUntilTimeout } from '../airdrop-confirmer';
 
@@ -7,7 +7,7 @@ const FOREVER_PROMISE = new Promise(() => {
 });
 
 describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
-    const MOCK_SIGNATURE = '4'.repeat(44) as TransactionSignature;
+    const MOCK_SIGNATURE = '4'.repeat(44) as Signature;
     let getTimeoutPromise: jest.Mock<Promise<void>>;
     let getRecentSignatureConfirmationPromise: jest.Mock<Promise<void>>;
     beforeEach(() => {

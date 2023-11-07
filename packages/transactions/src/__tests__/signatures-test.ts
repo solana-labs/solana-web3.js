@@ -7,10 +7,8 @@ import {
     getAddressEncoder,
     getAddressFromPublicKey,
 } from '@solana/addresses';
-import { Encoder } from '@solana/codecs-core';
-import { getBase58Encoder } from '@solana/codecs-strings';
 import { AccountRole } from '@solana/instructions';
-import { Ed25519Signature, signBytes } from '@solana/keys';
+import { SignatureBytes, signBytes } from '@solana/keys';
 
 import { Blockhash } from '../blockhash';
 import { CompilableTransaction } from '../compilable-transaction';
@@ -25,131 +23,13 @@ import {
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
 jest.mock('../message');
-jest.mock('@solana/codecs-strings', () => ({
-    ...jest.requireActual('@solana/codecs-strings'),
-    getBase58Encoder: jest.fn(),
-}));
-
-// real implementations
-const originalBase58Module = jest.requireActual('@solana/codecs-strings');
-const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
-
-describe('assertIsTransactionSignature()', () => {
-    let assertIsTransactionSignature: typeof import('../signatures').assertIsTransactionSignature;
-    // Reload `assertIsTransactionSignature` before each test to reset memoized state
-    beforeEach(async () => {
-        await jest.isolateModulesAsync(async () => {
-            const base58ModulePromise =
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                import('../signatures');
-            assertIsTransactionSignature = (await base58ModulePromise).assertIsTransactionSignature;
-        });
-    });
-
-    describe('using the real base58 implementation', () => {
-        beforeEach(() => {
-            // use real implementation
-            jest.mocked(getBase58Encoder).mockReturnValue(originalGetBase58Encoder);
-        });
-
-        it('throws when supplied a non-base58 string', () => {
-            expect(() => {
-                assertIsTransactionSignature('not-a-base-58-encoded-string');
-            }).toThrow();
-        });
-        it('throws when the decoded byte array has a length other than 32 bytes', () => {
-            expect(() => {
-                assertIsTransactionSignature(
-                    // 63 bytes [128, ..., 128]
-                    '1'.repeat(63)
-                );
-            }).toThrow();
-        });
-        it('does not throw when supplied a base-58 encoded signature', () => {
-            expect(() => {
-                // 64 bytes [0, ..., 0]
-                assertIsTransactionSignature('1'.repeat(64));
-
-                // example signatures
-                assertIsTransactionSignature(
-                    '5HkW5GttYoahVHaujuxEyfyq7RwvoKpc94ko5Fq9GuYdyhejg9cHcqm1MjEvHsjaADRe6hVBqB2E4RQgGgxeA2su'
-                );
-                assertIsTransactionSignature(
-                    '2VZm7DkqSKaHxsGiAuVuSkvEbGWf7JrfRdPTw42WKuJC8qw7yQbGL5AE7UxHH3tprgmT9EVbambnK9h3PLpvMvES'
-                );
-                assertIsTransactionSignature(
-                    '5sXRtm61WrRGRTjJ6f2anKUWt86Y4V9gWU4WUpue4T4Zh6zuvFoSyaX5LkEtChfqVC8oHdqLo2eUXbhVduThBdfG'
-                );
-                assertIsTransactionSignature(
-                    '2Dy6Qai5JyChoP4BKoh9KAYhpD96CUhmEce1GJ8HpV5h8Q4CgUt8KZQzhVNDEQYcjARxYyBNhNjhKUGC2XLZtCCm'
-                );
-            }).not.toThrow();
-        });
-        it('returns undefined when supplied a base-58 encoded signature', () => {
-            // 64 bytes [0, ..., 0]
-            expect(assertIsTransactionSignature('1'.repeat(64))).toBeUndefined();
-        });
-    });
-
-    describe('using a mock base58 implementation', () => {
-        const mockEncode = jest.fn();
-        beforeEach(() => {
-            // use mock implementation
-            mockEncode.mockClear();
-            jest.mocked(getBase58Encoder).mockReturnValue({ encode: mockEncode } as unknown as Encoder<string>);
-        });
-        [64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88].forEach(
-            len => {
-                it(`attempts to decode input strings of exactly ${len} characters`, () => {
-                    try {
-                        assertIsTransactionSignature('1'.repeat(len));
-                        // eslint-disable-next-line no-empty
-                    } catch {}
-                    expect(mockEncode).toHaveBeenCalledTimes(1);
-                });
-            }
-        );
-        it('does not attempt to decode too-short input strings', () => {
-            try {
-                assertIsTransactionSignature(
-                    // 63 bytes [0, ..., 0]
-                    '1'.repeat(63)
-                );
-                // eslint-disable-next-line no-empty
-            } catch {}
-            expect(mockEncode).not.toHaveBeenCalled();
-        });
-        it('does not attempt to decode too-long input strings', () => {
-            try {
-                assertIsTransactionSignature(
-                    // 65 bytes [0, 255, ..., 255]
-                    '167rpwLCuS5DGA8KGZXKsVQ7dnPb9goRLoKfgGbLfQg9WoLUgNY77E2jT11fem3coV9nAkguBACzrU1iyZM4B8roQ'
-                );
-                // eslint-disable-next-line no-empty
-            } catch {}
-            expect(mockEncode).not.toHaveBeenCalled();
-        });
-        it('memoizes getBase58Encoder when called multiple times', () => {
-            try {
-                assertIsTransactionSignature('1'.repeat(64));
-                // eslint-disable-next-line no-empty
-            } catch {}
-            try {
-                assertIsTransactionSignature('1'.repeat(64));
-                // eslint-disable-next-line no-empty
-            } catch {}
-            expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
-        });
-    });
-});
 
 describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {
         const transactionWithoutFeePayerSignature = {
             feePayer: '123' as Address,
             signatures: {
-                ['123' as Address]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
+                ['123' as Address]: new Uint8Array(new Array(64).fill(9)) as SignatureBytes,
             } as const,
         };
         expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe(
@@ -161,7 +41,7 @@ describe('getSignatureFromTransaction', () => {
             feePayer: '123' as Address,
             signatures: {
                 // No signature by the fee payer.
-                ['456' as Address]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
+                ['456' as Address]: new Uint8Array(new Array(64).fill(9)) as SignatureBytes,
             } as const,
         };
         expect(() => {
@@ -330,11 +210,11 @@ describe('assertTransactionIsFullySigned', () => {
 
     const mockProgramAddress = 'program' as Address;
     const mockPublicKeyAddressA = 'A' as Address;
-    const mockSignatureA = new Uint8Array(0) as Ed25519Signature;
+    const mockSignatureA = new Uint8Array(0) as SignatureBytes;
     const mockPublicKeyAddressB = 'B' as Address;
-    const mockSignatureB = new Uint8Array(1) as Ed25519Signature;
+    const mockSignatureB = new Uint8Array(1) as SignatureBytes;
     const mockPublicKeyAddressC = 'C' as Address;
-    const mockSignatureC = new Uint8Array(2) as Ed25519Signature;
+    const mockSignatureC = new Uint8Array(2) as SignatureBytes;
 
     const mockBlockhashConstraint = {
         blockhash: 'a' as Blockhash,

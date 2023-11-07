@@ -244,46 +244,17 @@ This type represents a transaction that is signed by all of its required signers
 
 Expect any function that modifies a transaction (eg. `setTransactionFeePayer`, `appendTransactionInstruction`, et cetera) to delete a transaction's `signatures` property and unset this type.
 
-#### `TransactionSignature`
-
-This type represents the base58-encoded signature of a transactions fee payer. This value uniquely identifies the transaction on the network.
-
 ### Functions
-
-#### `assertIsTransactionSignature()`
-
-From time to time you might acquire a string that you expect to be the base58-encoded signature of a transaction, from an untrusted network API or user input. To assert that such an arbitrary string is in fact a transaction signature, use the `assertIsTransactionSignature` function.
-
-See [`assertIsBlockhash()`](#assertisblockhash) for an example of how to use an assertion function.
 
 #### `getSignatureFromTransaction()`
 
-Given a transaction signed by its fee payer, this method will return the `TransactionSignature` that uniquely identifies it. This string can be used to look up transactions at a later date, for example on a Solana block explorer.
+Given a transaction signed by its fee payer, this method will return the `Signature` that uniquely identifies it. This string can be used to look up transactions at a later date, for example on a Solana block explorer.
 
 ```ts
 import { getSignatureFromTransaction } from '@solana/transactions';
 
 const signature = getSignatureFromTransaction(tx);
 console.debug(`Inspect this transaction at https://explorer.solana.com/tx/${signature}`);
-```
-
-#### `isTransactionSignature()`
-
-This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `TransactionSignature` type and will refine the type for use in your program.
-
-```ts
-import { isTransactionSignature } from '@solana/transactions';
-
-if (isTransactionSignature(signature)) {
-    // At this point, `signature` has been refined to a
-    // `TransactionSignature` that can be used with the RPC.
-    const {
-        value: [status],
-    } = await rpc.getSignatureStatuses([signature]).send();
-    setSignatureStatus(status);
-} else {
-    setError(`${signature} is not a transaction signature`);
-}
 ```
 
 #### `signTransaction()`
@@ -295,19 +266,6 @@ import { generateKeyPair } from '@solana/keys';
 import { signTransaction } from '@solana/transactions';
 
 const signedTransaction = await signTransaction([myPrivateKey], tx);
-```
-
-#### `transactionSignature()`
-
-This helper combines _asserting_ that a string is a transaction signature with _coercing_ it to the `TransactionSignature` type. It's best used with untrusted input.
-
-```ts
-import { transactionSignature } from '@solana/transactions';
-
-const signature = transactionSignature(userSuppliedSignature);
-const {
-    value: [status],
-} = await rpc.getSignatureStatuses([signature]).send();
 ```
 
 ## Serializing transactions

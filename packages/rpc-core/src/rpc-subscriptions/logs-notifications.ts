@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
@@ -14,7 +14,7 @@ type LogsNotificationsApiNotification = RpcResponse<
         // (for example due to an invalid blockhash or signature verification failure)
         logs: readonly string[] | null;
         // The transaction signature base58 encoded
-        signature: TransactionSignature;
+        signature: Signature;
     }>
 >;
 

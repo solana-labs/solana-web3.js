@@ -1,10 +1,10 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
 
@@ -43,10 +43,10 @@ export async function requestAndConfirmAirdrop({
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
     recipientAddress: Address;
     rpc: Rpc<RequestAirdropApi>;
-}>): Promise<TransactionSignature> {
-    const airdropTransactionSignature = (await rpc
+}>): Promise<Signature> {
+    const airdropTransactionSignature = await rpc
         .requestAirdrop(recipientAddress, lamports, { commitment })
-        .send({ abortSignal })) as unknown as TransactionSignature; // FIXME(#1709)
+        .send({ abortSignal });
     await confirmSignatureOnlyTransaction({
         abortSignal,
         commitment,

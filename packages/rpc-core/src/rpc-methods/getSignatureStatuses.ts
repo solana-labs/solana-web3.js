@@ -1,5 +1,5 @@
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
 import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -54,7 +54,7 @@ export interface GetSignatureStatusesApi {
          * An array of transaction signatures to confirm,
          * as base-58 encoded strings (up to a maximum of 256)
          */
-        signatures: TransactionSignature[],
+        signatures: Signature[],
         config?: Readonly<{
             /**
              * if `true` - a Solana node will search its ledger cache for any

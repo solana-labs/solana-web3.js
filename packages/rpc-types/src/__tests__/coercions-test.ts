@@ -1,5 +1,3 @@
-import { TransactionSignature, transactionSignature } from '@solana/transactions';
-
 import { lamports, LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
 import { StringifiedBigInt, stringifiedBigInt } from '../stringified-bigint';
 import { StringifiedNumber, stringifiedNumber } from '../stringified-number';
@@ -37,21 +35,6 @@ describe('coercions', () => {
         it('throws on invalid `StringifiedNumber`', () => {
             const thisThrows = () => stringifiedNumber('test');
             expect(thisThrows).toThrow('`test` cannot be parsed as a Number');
-        });
-    });
-    describe('transactionSignature', () => {
-        it('can coerce to `TransactionSignature`', () => {
-            // Randomly generated
-            const raw =
-                '3bwsNoq6EP89sShUAKBeB26aCC3KLGNajRm5wqwr6zRPP3gErZH7erSg3332SVY7Ru6cME43qT35Z7JKpZqCoPaL' as TransactionSignature;
-            const coerced = transactionSignature(
-                '3bwsNoq6EP89sShUAKBeB26aCC3KLGNajRm5wqwr6zRPP3gErZH7erSg3332SVY7Ru6cME43qT35Z7JKpZqCoPaL'
-            );
-            expect(coerced).toBe(raw);
-        });
-        it('throws on invalid `TransactionSignature`', () => {
-            const thisThrows = () => transactionSignature('test');
-            expect(thisThrows).toThrow('`test` is not a transaction signature');
         });
     });
     describe('unixTimestamp', () => {

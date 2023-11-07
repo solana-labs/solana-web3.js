@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { Signature } from '@solana/keys';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
@@ -18,29 +18,29 @@ async () => {
     >;
 
     rpcSubscriptions.signatureNotifications(
-        'xxxxx' as TransactionSignature
+        'xxxxx' as Signature
     ) satisfies PendingRpcSubscription<TNotificationProcessed>;
     rpcSubscriptions
-        .signatureNotifications('xxxxx' as TransactionSignature)
+        .signatureNotifications('xxxxx' as Signature)
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<TNotificationProcessed>
     >;
 
-    rpcSubscriptions.signatureNotifications('xxxxx' as TransactionSignature, {
+    rpcSubscriptions.signatureNotifications('xxxxx' as Signature, {
         commitment: 'confirmed',
     }) satisfies PendingRpcSubscription<TNotificationProcessed>;
     rpcSubscriptions
-        .signatureNotifications('xxxxx' as TransactionSignature, { commitment: 'confirmed' })
+        .signatureNotifications('xxxxx' as Signature, { commitment: 'confirmed' })
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<TNotificationProcessed>
     >;
 
-    rpcSubscriptions.signatureNotifications('xxxxx' as TransactionSignature, {
+    rpcSubscriptions.signatureNotifications('xxxxx' as Signature, {
         commitment: 'confirmed',
         enableReceivedNotification: false,
     }) satisfies PendingRpcSubscription<TNotificationProcessed>;
     rpcSubscriptions
-        .signatureNotifications('xxxxx' as TransactionSignature, {
+        .signatureNotifications('xxxxx' as Signature, {
             commitment: 'confirmed',
             enableReceivedNotification: false,
         })
@@ -48,25 +48,25 @@ async () => {
         AsyncIterable<TNotificationProcessed>
     >;
 
-    rpcSubscriptions.signatureNotifications('xxxxx' as TransactionSignature, {
+    rpcSubscriptions.signatureNotifications('xxxxx' as Signature, {
         commitment: 'confirmed',
         enableReceivedNotification: true,
     }) satisfies PendingRpcSubscription<TNotificationProcessed | TNotificationReceived>;
     rpcSubscriptions
-        .signatureNotifications('xxxxx' as TransactionSignature, {
+        .signatureNotifications('xxxxx' as Signature, {
             commitment: 'confirmed',
             enableReceivedNotification: true,
         })
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<TNotificationProcessed | TNotificationReceived>
     >;
-    rpcSubscriptions.signatureNotifications('xxxxx' as TransactionSignature, {
+    rpcSubscriptions.signatureNotifications('xxxxx' as Signature, {
         commitment: 'confirmed',
         enableReceivedNotification: true,
         // @ts-expect-error Should have both notification types
     }) satisfies PendingRpcSubscription<TNotificationProcessed>;
     rpcSubscriptions
-        .signatureNotifications('xxxxx' as TransactionSignature, {
+        .signatureNotifications('xxxxx' as Signature, {
             commitment: 'confirmed',
             enableReceivedNotification: true,
         })

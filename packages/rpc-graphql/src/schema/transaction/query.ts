@@ -1,5 +1,6 @@
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
-import { TransactionSignature, TransactionVersion } from '@solana/transactions';
+import { TransactionVersion } from '@solana/transactions';
 
 import { RpcGraphQLContext } from '../../context';
 import { commitmentInputType, maxSupportedTransactionVersionInputType, transactionEncodingInputType } from '../inputs';
@@ -7,7 +8,7 @@ import { nonNull, string, type } from '../picks';
 import { transactionInterface } from './types';
 
 export type TransactionQueryArgs = {
-    signature: TransactionSignature;
+    signature: Signature;
     commitment?: Commitment;
     encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
     maxSupportedTransactionVersion?: Exclude<TransactionVersion, 'legacy'>;
