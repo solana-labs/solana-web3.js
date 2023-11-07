@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 
@@ -8,16 +8,16 @@ import { getBase64EncodedWireTransaction } from '../wire-transaction';
 describe('getBase64EncodedWireTransaction', () => {
     it('serializes a transaction to wire format', () => {
         const tx: Parameters<typeof getBase64EncodedWireTransaction>[0] = {
-            feePayer: '22222222222222222222222222222222222222222222' as Base58EncodedAddress,
+            feePayer: '22222222222222222222222222222222222222222222' as Address,
             instructions: [
                 {
                     accounts: [
                         {
-                            address: '44444444444444444444444444444444444444444444' as Base58EncodedAddress,
+                            address: '44444444444444444444444444444444444444444444' as Address,
                             role: AccountRole.READONLY_SIGNER,
                         },
                     ],
-                    programAddress: '55555555555555555555555555555555555555555555' as Base58EncodedAddress,
+                    programAddress: '55555555555555555555555555555555555555555555' as Address,
                 },
             ],
             lifetimeConstraint: {
@@ -26,7 +26,7 @@ describe('getBase64EncodedWireTransaction', () => {
             },
             signatures: {
                 /* No signature for fee payer */
-                ['44444444444444444444444444444444444444444444' as Base58EncodedAddress]:
+                ['44444444444444444444444444444444444444444444' as Address]:
                     // Base58 encoded signature: `3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333`
                     new Uint8Array([
                         0x65, 0xc9, 0xfa, 0x89, 0xe6, 0xab, 0xdb, 0x8b, 0x62, 0x79, 0xaf, 0x58, 0x43, 0x82, 0x48, 0xa6,

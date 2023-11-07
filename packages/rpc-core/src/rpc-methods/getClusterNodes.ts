@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 type GetClusterNodesNode = Readonly<{
     /** The unique identifier of the node's feature set */
@@ -6,7 +6,7 @@ type GetClusterNodesNode = Readonly<{
     /** Gossip network address for the node */
     gossip: string | null;
     /** Node public key, as base-58 encoded string */
-    pubkey: Base58EncodedAddress;
+    pubkey: Address;
     /**
      * JSON RPC network address for the node,
      * or `null` if the JSON RPC service is not enabled

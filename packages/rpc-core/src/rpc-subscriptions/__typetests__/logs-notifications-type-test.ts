@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { TransactionSignature } from '@solana/transactions';
 
@@ -41,19 +41,16 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<AsyncIterable<TNotification>>;
 
     rpcSubscriptions.logsNotifications({
-        mentions: ['11111111111111111111111111111111' as Base58EncodedAddress],
+        mentions: ['11111111111111111111111111111111' as Address],
     }) satisfies PendingRpcSubscription<TNotification>;
     rpcSubscriptions
-        .logsNotifications({ mentions: ['11111111111111111111111111111111' as Base58EncodedAddress] })
+        .logsNotifications({ mentions: ['11111111111111111111111111111111' as Address] })
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<AsyncIterable<TNotification>>;
     rpcSubscriptions.logsNotifications(
-        { mentions: ['11111111111111111111111111111111' as Base58EncodedAddress] },
+        { mentions: ['11111111111111111111111111111111' as Address] },
         { commitment: 'confirmed' }
     ) satisfies PendingRpcSubscription<TNotification>;
     rpcSubscriptions
-        .logsNotifications(
-            { mentions: ['11111111111111111111111111111111' as Base58EncodedAddress] },
-            { commitment: 'confirmed' }
-        )
+        .logsNotifications({ mentions: ['11111111111111111111111111111111' as Address] }, { commitment: 'confirmed' })
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<AsyncIterable<TNotification>>;
 };

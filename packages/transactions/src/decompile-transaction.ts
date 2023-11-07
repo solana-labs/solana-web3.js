@@ -1,4 +1,4 @@
-import { assertIsAddress, Base58EncodedAddress } from '@solana/addresses';
+import { Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
@@ -85,8 +85,8 @@ type LifetimeConstraint =
       }
     | {
           nonce: Nonce;
-          nonceAccountAddress: Base58EncodedAddress;
-          nonceAuthorityAddress: Base58EncodedAddress;
+          nonceAccountAddress: Address;
+          nonceAuthorityAddress: Address;
       };
 
 function getLifetimeConstraint(

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -34,7 +34,7 @@ describe('requestAndConfirmAirdrop', () => {
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
             lamports: lamports(1n),
-            recipientAddress: '123' as Base58EncodedAddress,
+            recipientAddress: '123' as Address,
             rpc,
         });
         expect(sendAirdropRequest).toHaveBeenCalledWith({
@@ -54,7 +54,7 @@ describe('requestAndConfirmAirdrop', () => {
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
             lamports: lamports(1n),
-            recipientAddress: '123' as Base58EncodedAddress,
+            recipientAddress: '123' as Address,
             rpc,
         });
         await jest.runAllTimersAsync();
@@ -78,7 +78,7 @@ describe('requestAndConfirmAirdrop', () => {
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
             lamports: lamports(1n),
-            recipientAddress: '123' as Base58EncodedAddress,
+            recipientAddress: '123' as Address,
             rpc,
         });
         expect(requestAirdrop).toHaveBeenCalledWith('123', 1n, { commitment: 'finalized' });
@@ -91,7 +91,7 @@ describe('requestAndConfirmAirdrop', () => {
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
             lamports: lamports(1n),
-            recipientAddress: '123' as Base58EncodedAddress,
+            recipientAddress: '123' as Address,
             rpc,
         });
         await jest.runAllTimersAsync();
@@ -110,7 +110,7 @@ describe('requestAndConfirmAirdrop', () => {
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
             lamports: lamports(1n),
-            recipientAddress: '123' as Base58EncodedAddress,
+            recipientAddress: '123' as Address,
             rpc,
         });
         await expect(airdropPromise).resolves.toBe('abc');

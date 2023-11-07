@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { IInstruction } from '@solana/instructions';
 
 import { OrderedAccounts } from './accounts';
@@ -10,7 +10,7 @@ type CompiledInstruction = Readonly<{
 }>;
 
 function getAccountIndex(orderedAccounts: OrderedAccounts) {
-    const out: Record<Base58EncodedAddress, number> = {};
+    const out: Record<Address, number> = {};
     for (const [index, account] of orderedAccounts.entries()) {
         out[account.address] = index;
     }

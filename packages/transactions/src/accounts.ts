@@ -1,4 +1,4 @@
-import { Base58EncodedAddress, getAddressComparator } from '@solana/addresses';
+import { Address, getAddressComparator } from '@solana/addresses';
 import {
     AccountRole,
     IAccountLookupMeta,
@@ -38,10 +38,10 @@ type StaticAccountEntry = Omit<
 
 function upsert(
     addressMap: AddressMap,
-    address: Base58EncodedAddress,
+    address: Address,
     update: (
         entry: FeePayerAccountEntry | LookupTableAccountEntry | StaticAccountEntry | Record<never, never>
-    ) => AddressMap[Base58EncodedAddress]
+    ) => AddressMap[Address]
 ) {
     addressMap[address] = update(addressMap[address] ?? { role: AccountRole.READONLY });
 }
@@ -49,14 +49,11 @@ function upsert(
 const TYPE = Symbol('AddressMapTypeProperty');
 export const ADDRESS_MAP_TYPE_PROPERTY: typeof TYPE = TYPE;
 
-export function getAddressMapFromInstructions(
-    feePayer: Base58EncodedAddress,
-    instructions: readonly IInstruction[]
-): AddressMap {
+export function getAddressMapFromInstructions(feePayer: Address, instructions: readonly IInstruction[]): AddressMap {
     const addressMap: AddressMap = {
         [feePayer]: { [TYPE]: AddressMapEntryType.FEE_PAYER, role: AccountRole.WRITABLE_SIGNER },
     };
-    const addressesOfInvokedPrograms = new Set<Base58EncodedAddress>();
+    const addressesOfInvokedPrograms = new Set<Address>();
     for (const instruction of instructions) {
         upsert(addressMap, instruction.programAddress, entry => {
             addressesOfInvokedPrograms.add(instruction.programAddress);
@@ -240,7 +237,7 @@ export function getOrderedAccountsFromAddressMap(addressMap: AddressMap): Ordere
             }
         })
         .map(([address, addressMeta]) => ({
-            address: address as Base58EncodedAddress<typeof address>,
+            address: address as Address<typeof address>,
             ...addressMeta,
         }));
     return orderedAccounts as unknown as OrderedAccounts;

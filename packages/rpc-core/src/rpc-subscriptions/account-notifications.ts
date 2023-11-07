@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -24,35 +24,35 @@ export interface AccountNotificationsApi {
      * @see https://docs.solana.com/api/websocket#getAccountInfo
      */
     accountNotifications(
-        address: Base58EncodedAddress,
+        address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64';
             }>
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase64EncodedData>;
     accountNotifications(
-        address: Base58EncodedAddress,
+        address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
             }>
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
     accountNotifications(
-        address: Base58EncodedAddress,
+        address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
             }>
     ): RpcResponse<AccountInfoBase & AccountInfoWithJsonData>;
     accountNotifications(
-        address: Base58EncodedAddress,
+        address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base58';
             }>
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase58EncodedData>;
     accountNotifications(
-        address: Base58EncodedAddress,
+        address: Address,
         config?: AccountNotificationsApiCommonConfig
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase58Bytes>;
 }

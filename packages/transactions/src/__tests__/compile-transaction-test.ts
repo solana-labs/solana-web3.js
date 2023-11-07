@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { getCompiledTransaction } from '../compile-transaction';
 import { CompiledMessage, compileMessage } from '../message';
@@ -8,12 +8,12 @@ jest.mock('../message');
 
 let _nextMockAddress = 0;
 function getMockAddress() {
-    return `${_nextMockAddress++}` as Base58EncodedAddress;
+    return `${_nextMockAddress++}` as Address;
 }
 
 describe('getCompiledTransaction', () => {
-    let addressA: Base58EncodedAddress;
-    let addressB: Base58EncodedAddress;
+    let addressA: Address;
+    let addressB: Address;
     let mockCompiledMessage: CompiledMessage;
     beforeEach(() => {
         addressA = getMockAddress();

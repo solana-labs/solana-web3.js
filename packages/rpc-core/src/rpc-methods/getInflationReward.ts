@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -21,7 +21,7 @@ export interface GetInflationRewardApi {
      * Returns the current block height of the node
      */
     getInflationReward(
-        addresses: Base58EncodedAddress[],
+        addresses: Address[],
         config?: Readonly<{
             // Defaults to `finalized`
             commitment?: Commitment;

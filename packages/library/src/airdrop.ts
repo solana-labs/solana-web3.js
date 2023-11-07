@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
@@ -41,7 +41,7 @@ export async function requestAndConfirmAirdrop({
     commitment: Commitment;
     confirmSignatureOnlyTransaction: ReturnType<typeof createDefaultSignatureOnlyRecentTransactionConfirmer>;
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
-    recipientAddress: Base58EncodedAddress;
+    recipientAddress: Address;
     rpc: Rpc<RequestAirdropApi>;
 }>): Promise<TransactionSignature> {
     const airdropTransactionSignature = (await rpc

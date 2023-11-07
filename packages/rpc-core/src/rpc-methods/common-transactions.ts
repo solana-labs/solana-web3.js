@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
@@ -14,7 +14,7 @@ import {
 
 type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */
-    accountKey: Base58EncodedAddress;
+    accountKey: Address;
     /** List of indices used to load addresses of writable accounts from a lookup table. */
     writableIndexes: readonly number[];
     /** List of indices used to load addresses of readonly accounts from a lookup table. */
@@ -27,18 +27,18 @@ type ParsedTransactionInstruction = Readonly<{
         info?: object;
     };
     program: string;
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type PartiallyDecodedTransactionInstruction = Readonly<{
-    accounts: readonly Base58EncodedAddress[];
+    accounts: readonly Address[];
     data: Base58EncodedBytes;
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type ReturnData = {
     /** the program that generated the return data */
-    programId: Base58EncodedAddress;
+    programId: Address;
     /** the return data itself */
     data: Base64EncodedDataResponse;
 };
@@ -50,13 +50,13 @@ type TransactionInstruction = Readonly<{
 }>;
 
 type TransactionParsedAccountLegacy = Readonly<{
-    pubkey: Base58EncodedAddress;
+    pubkey: Address;
     signer: boolean;
     source: 'transaction';
     writable: boolean;
 }>;
 type TransactionParsedAccountVersioned = Readonly<{
-    pubkey: Base58EncodedAddress;
+    pubkey: Address;
     signer: boolean;
     source: 'lookupTable' | 'transaction';
     writable: boolean;
@@ -168,8 +168,8 @@ type TransactionForFullMetaInnerInstructionsParsed = Readonly<{
 type TransactionForFullMetaLoadedAddresses = Readonly<{
     /** Addresses loaded from lookup tables */
     loadedAddresses: {
-        writable: readonly Base58EncodedAddress[];
-        readonly: readonly Base58EncodedAddress[];
+        writable: readonly Address[];
+        readonly: readonly Address[];
     };
 }>;
 
@@ -268,7 +268,7 @@ export type TransactionForFullJsonParsed<TMaxSupportedTransactionVersion extends
 
 type TransactionForFullTransactionJsonBase = Readonly<{
     message: {
-        accountKeys: readonly Base58EncodedAddress[];
+        accountKeys: readonly Address[];
         header: {
             numReadonlySignedAccounts: number;
             numReadonlyUnsignedAccounts: number;
@@ -298,7 +298,7 @@ export type TransactionForFullJson<TMaxSupportedTransactionVersion extends Trans
 
 type RewardBase = Readonly<{
     /** The public key of the account that received the reward */
-    pubkey: Base58EncodedAddress;
+    pubkey: Address;
     /** number of reward lamports credited or debited by the account */
     lamports: SignedLamportsAsI64Unsafe;
     /** account balance in lamports after the reward was applied */

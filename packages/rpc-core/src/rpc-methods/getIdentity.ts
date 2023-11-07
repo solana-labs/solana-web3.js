@@ -1,7 +1,7 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 type GetIdentityApiResponse = Readonly<{
-    identity: Base58EncodedAddress;
+    identity: Address;
 }>;
 
 export interface GetIdentityApi {

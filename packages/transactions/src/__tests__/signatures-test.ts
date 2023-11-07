@@ -1,7 +1,7 @@
 import 'test-matchers/toBeFrozenObject';
 
 import {
-    Base58EncodedAddress,
+    Address,
     getAddressCodec,
     getAddressDecoder,
     getAddressEncoder,
@@ -147,9 +147,9 @@ describe('assertIsTransactionSignature()', () => {
 describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {
         const transactionWithoutFeePayerSignature = {
-            feePayer: '123' as Base58EncodedAddress,
+            feePayer: '123' as Address,
             signatures: {
-                ['123' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
+                ['123' as Address]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
             } as const,
         };
         expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe(
@@ -158,10 +158,10 @@ describe('getSignatureFromTransaction', () => {
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', () => {
         const transactionWithoutFeePayerSignature = {
-            feePayer: '123' as Base58EncodedAddress,
+            feePayer: '123' as Address,
             signatures: {
                 // No signature by the fee payer.
-                ['456' as Base58EncodedAddress]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
+                ['456' as Address]: new Uint8Array(new Array(64).fill(9)) as Ed25519Signature,
             } as const,
         };
         expect(() => {
@@ -181,12 +181,9 @@ describe('signTransaction', () => {
     const mockKeyPairA = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
     const mockKeyPairB = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
     const mockKeyPairC = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
-    const mockPublicKeyAddressA =
-        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' as Base58EncodedAddress<'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'>;
-    const mockPublicKeyAddressB =
-        'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Base58EncodedAddress<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
-    const mockPublicKeyAddressC =
-        'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC' as Base58EncodedAddress<'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'>;
+    const mockPublicKeyAddressA = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' as Address<'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'>;
+    const mockPublicKeyAddressB = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Address<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
+    const mockPublicKeyAddressC = 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC' as Address<'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'>;
     beforeEach(async () => {
         (compileMessage as jest.Mock).mockReturnValue({
             header: {
@@ -205,7 +202,7 @@ describe('signTransaction', () => {
                 /* 0: fee payer */ mockPublicKeyAddressA,
                 /* 1: read-only instruction signer address */ mockPublicKeyAddressB,
                 /* 2: readonly address */ mockPublicKeyAddressC,
-                /* 3: system program */ '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>,
+                /* 3: system program */ '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
             ],
             version: 0,
         } as CompiledMessage);
@@ -218,7 +215,7 @@ describe('signTransaction', () => {
                 case mockKeyPairC.publicKey:
                     return mockPublicKeyAddressC;
                 default:
-                    return '99999999999999999999999999999999' as Base58EncodedAddress<'99999999999999999999999999999999'>;
+                    return '99999999999999999999999999999999' as Address<'99999999999999999999999999999999'>;
             }
         });
         (signBytes as jest.Mock).mockImplementation(async secretKey => {
@@ -331,12 +328,12 @@ describe('signTransaction', () => {
 describe('assertTransactionIsFullySigned', () => {
     type SignedTransaction = CompilableTransaction & ITransactionWithSignatures;
 
-    const mockProgramAddress = 'program' as Base58EncodedAddress;
-    const mockPublicKeyAddressA = 'A' as Base58EncodedAddress;
+    const mockProgramAddress = 'program' as Address;
+    const mockPublicKeyAddressA = 'A' as Address;
     const mockSignatureA = new Uint8Array(0) as Ed25519Signature;
-    const mockPublicKeyAddressB = 'B' as Base58EncodedAddress;
+    const mockPublicKeyAddressB = 'B' as Address;
     const mockSignatureB = new Uint8Array(1) as Ed25519Signature;
-    const mockPublicKeyAddressC = 'C' as Base58EncodedAddress;
+    const mockPublicKeyAddressC = 'C' as Address;
     const mockSignatureC = new Uint8Array(2) as Ed25519Signature;
 
     const mockBlockhashConstraint = {

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -23,7 +23,7 @@ async function getValidatorAddress() {
         if (secretKey) {
             const publicKey = secretKey.slice(32, 64);
             const expectedAddress = getBase58Decoder().decode(publicKey)[0];
-            return expectedAddress as Base58EncodedAddress;
+            return expectedAddress as Address;
         }
         throw new Error(`Failed to read keypair file \`${validatorKeypairPath}\``);
     } finally {
@@ -53,7 +53,7 @@ describe('getLeaderSchedule', () => {
                     for (const key of Object.keys(res)) {
                         expect(typeof key).toBe('string');
                         // Needs typecasting to be used as accessor
-                        const base58Key: Base58EncodedAddress = key as Base58EncodedAddress;
+                        const base58Key: Address = key as Address;
                         expect(res[base58Key]).toStrictEqual(expect.any(Array));
                     }
                 });
@@ -69,7 +69,7 @@ describe('getLeaderSchedule', () => {
                     for (const key of Object.keys(res)) {
                         expect(typeof key).toBe('string');
                         // Needs typecasting to be used as accessor
-                        const base58Key: Base58EncodedAddress = key as Base58EncodedAddress;
+                        const base58Key: Address = key as Address;
                         expect(res[base58Key]).toStrictEqual(expect.any(Array));
                     }
                 });
@@ -118,7 +118,7 @@ describe('getLeaderSchedule', () => {
                     .getLeaderSchedule({
                         commitment,
                         // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
-                        identity: 'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Base58EncodedAddress,
+                        identity: 'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address,
                     })
                     .send();
                 expect(res).toStrictEqual({});
@@ -132,7 +132,7 @@ describe('getLeaderSchedule', () => {
                     .getLeaderSchedule({
                         commitment,
                         // Randomly generated
-                        identity: 'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Base58EncodedAddress,
+                        identity: 'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address,
                     })
                     .send();
                 expect(res).toStrictEqual({});

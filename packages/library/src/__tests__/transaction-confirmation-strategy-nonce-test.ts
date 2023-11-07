@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { Nonce } from '@solana/transactions';
 
@@ -56,7 +56,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
         expect(getAccountInfoMock).toHaveBeenCalledWith({
@@ -74,7 +74,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: abortController.signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),
@@ -90,7 +90,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
         expect(createPendingSubscription).toHaveBeenCalledWith('9'.repeat(44), {
@@ -111,7 +111,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
         expect(getAccountInfoMock).not.toHaveBeenCalled();
@@ -135,7 +135,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
         await expect(Promise.race([invalidationPromise, 'pending'])).resolves.toBe('pending');
@@ -151,7 +151,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
             'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
@@ -172,7 +172,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
         await expect(Promise.race([invalidationPromise, 'pending'])).resolves.toBe('pending');
@@ -187,7 +187,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             currentNonceValue: '4'.repeat(44) as Nonce,
-            nonceAccountAddress: '9'.repeat(44) as Base58EncodedAddress,
+            nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
             'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +

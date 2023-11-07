@@ -1,15 +1,15 @@
 import 'test-matchers/toBeFrozenObject';
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer';
 import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
 const EXAMPLE_FEE_PAYER_A =
-    '7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE' as Base58EncodedAddress<'7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE'>;
+    '7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE' as Address<'7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE'>;
 const EXAMPLE_FEE_PAYER_B =
-    '5LHng8dLBxCYyR3jdDbobLiRQ6pR74pYtxKohY93RbZN' as Base58EncodedAddress<'5LHng8dLBxCYyR3jdDbobLiRQ6pR74pYtxKohY93RbZN'>;
+    '5LHng8dLBxCYyR3jdDbobLiRQ6pR74pYtxKohY93RbZN' as Address<'5LHng8dLBxCYyR3jdDbobLiRQ6pR74pYtxKohY93RbZN'>;
 
 describe('setTransactionFeePayer', () => {
     let baseTx: BaseTransaction;

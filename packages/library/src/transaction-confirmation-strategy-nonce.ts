@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
 import { Base64EncodedDataResponse } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
@@ -11,7 +11,7 @@ type GetNonceInvalidationPromiseFn = (config: {
     abortSignal: AbortSignal;
     commitment: Commitment;
     currentNonceValue: Nonce;
-    nonceAccountAddress: Base58EncodedAddress;
+    nonceAccountAddress: Address;
 }) => Promise<void>;
 
 const NONCE_VALUE_OFFSET =

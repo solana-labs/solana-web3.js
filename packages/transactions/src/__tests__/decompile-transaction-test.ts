@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { Ed25519Signature } from '@solana/keys';
 
@@ -14,7 +14,7 @@ type CompiledTransaction = Readonly<{
 
 describe('decompileTransaction', () => {
     const U64_MAX = 2n ** 64n - 1n;
-    const feePayer = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK' as Base58EncodedAddress;
+    const feePayer = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK' as Address;
 
     describe('for a transaction with a blockhash lifetime', () => {
         const blockhash = 'J4yED2jcMAHyQUg61DBmm4njmEydUr2WqrV9cdEcDDgL';
@@ -66,7 +66,7 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a transaction with one instruction with no accounts or data', () => {
-            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress;
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -92,7 +92,7 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a transaction with one instruction with accounts and data', () => {
-            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress;
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -112,13 +112,13 @@ describe('decompileTransaction', () => {
                     staticAccounts: [
                         // writable signers
                         feePayer,
-                        'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Base58EncodedAddress,
+                        'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Address,
                         // read-only signers
-                        'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Base58EncodedAddress,
+                        'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Address,
                         // writable non-signers
-                        '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress,
+                        '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address,
                         // read-only non-signers
-                        '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress,
+                        '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address,
                         programAddress,
                     ],
                     version: 0,
@@ -131,19 +131,19 @@ describe('decompileTransaction', () => {
             const expectedInstruction: IInstruction = {
                 accounts: [
                     {
-                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Base58EncodedAddress,
+                        address: 'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Address,
                         role: AccountRole.WRITABLE_SIGNER,
                     },
                     {
-                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Base58EncodedAddress,
+                        address: 'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Address,
                         role: AccountRole.READONLY_SIGNER,
                     },
                     {
-                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress,
+                        address: '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address,
                         role: AccountRole.WRITABLE,
                     },
                     {
-                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress,
+                        address: '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address,
                         role: AccountRole.READONLY,
                     },
                 ],
@@ -166,9 +166,9 @@ describe('decompileTransaction', () => {
                     lifetimeToken: blockhash,
                     staticAccounts: [
                         feePayer,
-                        '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
-                        'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
-                        'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                        '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
+                        'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
+                        'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                     ],
                     version: 0,
                 },
@@ -179,13 +179,13 @@ describe('decompileTransaction', () => {
 
             const expectedInstructions: IInstruction[] = [
                 {
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
                 {
-                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Base58EncodedAddress,
+                    programAddress: 'GJRYBLa6XpfswT1AN5tpGp8NHtUirwAdTPdSYXsW9L3S' as Address,
                 },
             ];
 
@@ -219,13 +219,13 @@ describe('decompileTransaction', () => {
         it('converts a transaction with multiple signers', () => {
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
 
-            const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress;
+            const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
             const otherSigner1Signature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
 
-            const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress;
+            const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address;
             const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as Ed25519Signature;
 
-            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress;
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -258,11 +258,11 @@ describe('decompileTransaction', () => {
         it('converts a partially signed transaction with multiple signers', () => {
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
 
-            const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Base58EncodedAddress;
-            const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Base58EncodedAddress;
+            const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
+            const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address;
             const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as Ed25519Signature;
 
-            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Base58EncodedAddress;
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             // Used in the signatures array for a missing signature
             const noSignature = new Uint8Array(Array(64).fill(0)) as Ed25519Signature;
@@ -322,13 +322,13 @@ describe('decompileTransaction', () => {
         const nonce = '27kqzE1RifbyoFtibDRTjbnfZ894jsNpuR77JJkt3vgH' as Nonce;
 
         // added as writable non-signer in the durable nonce instruction
-        const nonceAccountAddress = 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Base58EncodedAddress;
+        const nonceAccountAddress = 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address;
 
         // added as read-only signer in the durable nonce instruction
-        const nonceAuthorityAddress = '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Base58EncodedAddress;
+        const nonceAuthorityAddress = '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM' as Address;
 
-        const systemProgramAddress = '11111111111111111111111111111111' as Base58EncodedAddress;
-        const recentBlockhashesSysvarAddress = 'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress;
+        const systemProgramAddress = '11111111111111111111111111111111' as Address;
+        const recentBlockhashesSysvarAddress = 'SysvarRecentB1ockHashes11111111111111111111' as Address;
 
         it('converts a transaction with one instruction which is advance nonce (fee payer is nonce authority)', () => {
             const compiledTransaction: CompiledTransaction = {
@@ -485,8 +485,8 @@ describe('decompileTransaction', () => {
                         // read-only non-signers
                         systemProgramAddress,
                         recentBlockhashesSysvarAddress,
-                        '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
-                        'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                        '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
+                        'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                     ],
                     version: 0,
                 },
@@ -526,10 +526,10 @@ describe('decompileTransaction', () => {
                         },
                     ],
                     data: new Uint8Array([1, 2, 3, 4]),
-                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Base58EncodedAddress,
+                    programAddress: '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
                 },
                 {
-                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Base58EncodedAddress,
+                    programAddress: 'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
                 },
             ];
 
@@ -629,7 +629,7 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a partially signed durable nonce transaction with multiple signers', () => {
-            const extraSignerAddress = '9bXC3RtDN5MzDMWRCqjgVTeQK2anMhdkq1ZoGN1Tb1UE' as Base58EncodedAddress;
+            const extraSignerAddress = '9bXC3RtDN5MzDMWRCqjgVTeQK2anMhdkq1ZoGN1Tb1UE' as Address;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
             const extraSignerSignature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;

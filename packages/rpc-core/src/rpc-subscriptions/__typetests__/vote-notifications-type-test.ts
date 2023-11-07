@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionSignature } from '@solana/transactions';
@@ -16,7 +16,7 @@ async () => {
         signature: TransactionSignature;
         slots: readonly Slot[];
         timestamp: UnixTimestamp | null;
-        votePubkey: Base58EncodedAddress;
+        votePubkey: Address;
     }>;
     rpcSubscriptions.voteNotifications() satisfies PendingRpcSubscription<VoteNotificationsApiNotification>;
     rpcSubscriptions.voteNotifications().subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<

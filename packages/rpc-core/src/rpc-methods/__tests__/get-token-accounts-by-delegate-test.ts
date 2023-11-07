@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -28,11 +28,11 @@ describe('getTokenAccountsByDelegate', () => {
                 expect.assertions(1);
                 // Delegate for fixtures/spl-token-token-account-delegated.json
                 const delegate =
-                    'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                    'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
                 // token program for above delegated token account
                 const tokenProgram =
-                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                    'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
                 const accountInfosPromise = rpc
                     .getTokenAccountsByDelegate(
@@ -73,11 +73,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // token program for above delegated token account
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfoPromise = rpc
                 .getTokenAccountsByDelegate(
@@ -101,10 +101,10 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // randomly generated
             const delegate =
-                'AUbvs341pr8rvpUaDBjpxhH9sg62eVsaMTV6vHoz4iJF' as Base58EncodedAddress<'AUbvs341pr8rvpUaDBjpxhH9sg62eVsaMTV6vHoz4iJF'>;
+                'AUbvs341pr8rvpUaDBjpxhH9sg62eVsaMTV6vHoz4iJF' as Address<'AUbvs341pr8rvpUaDBjpxhH9sg62eVsaMTV6vHoz4iJF'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByDelegate(delegate, { programId: tokenProgram }).send();
             await expect(accountInfoPromise).resolves.toStrictEqual({
@@ -119,11 +119,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // randomly generated
             const mint =
-                'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4' as Base58EncodedAddress<'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4'>;
+                'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4' as Address<'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByDelegate(delegate, { mint }).send();
             await expect(accountInfoPromise).rejects.toMatchObject({
@@ -139,11 +139,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Mint at fixtures/spl-token-mint-account-with-delegated.json (mint for above delegated account)
             const mint =
-                '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M' as Base58EncodedAddress<'4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M'>;
+                '4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M' as Address<'4SspA9vWmizwcvngHTapwQtpnRrPf8V483giCSaCmy6M'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
@@ -182,11 +182,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Mint at fixtures/spl-token-mint-no-token-accounts.json (not the same mint as above delegated account)
             const mint =
-                'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj' as Base58EncodedAddress<'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj'>;
+                'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj' as Address<'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByDelegate(delegate, { mint }).send();
 
@@ -202,11 +202,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // randomly generated
             const programId =
-                'HFnhCvdV9yyShcFNQvdR5LazsKXpnJNxwoRKjE9V1LrF' as Base58EncodedAddress<'HFnhCvdV9yyShcFNQvdR5LazsKXpnJNxwoRKjE9V1LrF'>;
+                'HFnhCvdV9yyShcFNQvdR5LazsKXpnJNxwoRKjE9V1LrF' as Address<'HFnhCvdV9yyShcFNQvdR5LazsKXpnJNxwoRKjE9V1LrF'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByDelegate(delegate, { programId }).send();
             await expect(accountInfoPromise).rejects.toMatchObject({
@@ -222,11 +222,11 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             // Token22 program (not the same as above delegated account fixture)
             const programId =
-                'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Base58EncodedAddress<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
+                'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb' as Address<'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByDelegate(delegate, { programId }).send();
 
@@ -248,10 +248,10 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
@@ -290,10 +290,10 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
@@ -332,10 +332,10 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfosPromise = rpc
                 .getTokenAccountsByDelegate(
@@ -402,10 +402,10 @@ describe('getTokenAccountsByDelegate', () => {
             expect.assertions(1);
             // Delegate for fixtures/spl-token-token-account-delegated.json
             const delegate =
-                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Base58EncodedAddress<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
+                'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
 
             const tokenProgram =
-                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Base58EncodedAddress<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
 
             const accountInfo = await rpc
                 .getTokenAccountsByDelegate(

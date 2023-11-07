@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 import { TransactionSignature } from '@solana/transactions';
@@ -16,7 +16,7 @@ import { Reward, TransactionStatus } from './common-transactions';
 
 type ReturnData = {
     /** the program that generated the return data */
-    programId: Base58EncodedAddress;
+    programId: Address;
     /** the return data itself */
     data: Base64EncodedDataResponse;
 };
@@ -51,7 +51,7 @@ type TransactionMetaBase = Readonly<{
 
 type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */
-    accountKey: Base58EncodedAddress;
+    accountKey: Address;
     /** List of indices used to load addresses of writable accounts from a lookup table. */
     writableIndexes: readonly number[];
     /** List of indices used to load addresses of readonly accounts from a lookup table. */
@@ -74,7 +74,7 @@ type TransactionInstruction = Readonly<{
 type TransactionJson = TransactionBase &
     Readonly<{
         message: {
-            accountKeys: readonly Base58EncodedAddress[];
+            accountKeys: readonly Address[];
             header: {
                 numReadonlySignedAccounts: number;
                 numReadonlyUnsignedAccounts: number;
@@ -85,9 +85,9 @@ type TransactionJson = TransactionBase &
     }>;
 
 type PartiallyDecodedTransactionInstruction = Readonly<{
-    accounts: readonly Base58EncodedAddress[];
+    accounts: readonly Address[];
     data: Base58EncodedBytes;
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type ParsedTransactionInstruction = Readonly<{
@@ -96,7 +96,7 @@ type ParsedTransactionInstruction = Readonly<{
         info?: object;
     };
     program: string;
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type TransactionJsonParsed = TransactionBase &
@@ -104,7 +104,7 @@ type TransactionJsonParsed = TransactionBase &
         message: {
             accountKeys: [
                 {
-                    pubkey: Base58EncodedAddress;
+                    pubkey: Address;
                     signer: boolean;
                     source: string;
                     writable: boolean;
@@ -128,8 +128,8 @@ type GetTransactionApiResponseBase = Readonly<{
 
 type TransactionMetaLoadedAddresses = Readonly<{
     loadedAddresses: {
-        writable: readonly Base58EncodedAddress[];
-        readonly: readonly Base58EncodedAddress[];
+        writable: readonly Address[];
+        readonly: readonly Address[];
     };
 }>;
 

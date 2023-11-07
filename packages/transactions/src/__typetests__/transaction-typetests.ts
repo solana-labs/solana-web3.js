@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import {
     appendTransactionInstruction,
@@ -20,7 +20,7 @@ import { CompiledMessage, compileMessage } from '../message';
 import { Transaction } from '../types';
 import { getUnsignedTransaction } from '../unsigned-transaction';
 
-const mockFeePayer = null as unknown as Base58EncodedAddress<'feePayer'>;
+const mockFeePayer = null as unknown as Address<'feePayer'>;
 const mockBlockhash = null as unknown as Blockhash;
 const mockBlockhashLifetime = {
     blockhash: mockBlockhash,
@@ -29,13 +29,13 @@ const mockBlockhashLifetime = {
 const mockSigner = {} as CryptoKeyPair;
 const mockNonceConfig = {
     nonce: null as unknown as Nonce<'nonce'>,
-    nonceAccountAddress: null as unknown as Base58EncodedAddress<'nonce'>,
-    nonceAuthorityAddress: null as unknown as Base58EncodedAddress<'nonceAuthority'>,
+    nonceAccountAddress: null as unknown as Address<'nonce'>,
+    nonceAuthorityAddress: null as unknown as Address<'nonceAuthority'>,
 };
 const mockInstruction = {
     accounts: [],
     data: Uint8Array.of(0),
-    programAddress: null as unknown as Base58EncodedAddress<'program'>,
+    programAddress: null as unknown as Address<'program'>,
 } as Transaction['instructions'][number];
 
 async () => {

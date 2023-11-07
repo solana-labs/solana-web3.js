@@ -576,21 +576,21 @@ Operations on `CryptoKey` objects using the Web Crypto API *or* the polyfill are
 
 ### String Addresses
 
-All addresses are now JavaScript strings. They are represented by the opaque type `Base58EncodedAddress`, which describes exactly what a Solana address actually is.
+All addresses are now JavaScript strings. They are represented by the opaque type `Address`, which describes exactly what a Solana address actually is.
 
 Consequently, that means no more `PublicKey`. 
 
 Here’s what they look like in development:
 
 ```tsx
-import { address, getAddressFromPublicKey, generateKeyPair, Base58EncodedAddress } from '@solana/web3.js';
+import { Address, address, getAddressFromPublicKey, generateKeyPair } from '@solana/web3.js';
 
-// Coerce a string to a `Base58EncodedAddress`
+// Coerce a string to an `Address`
 const myOtherAddress = address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3');
 
 // Typecast it instead
 const myAddress =
-    'AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3' as Base58EncodedAddress<'AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3'>;
+    'AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3' as Address<'AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3'>;
 
 // From CryptoKey
 const keyPair = await generateKeyPair();
@@ -958,15 +958,15 @@ const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();With the n
 
 You will have noticed by now that web3.js is a complete and total breaking change from the 1.x line. We want to provide you with a strategy for interacting with 1.x APIs while building your application using 2.0. You need a tool for commuting between 1.x and 2.0 data types.
 
-The `@solana/compat` library allows for interoperability between functions and class objects from the legacy library - such as `VersionedTransaction`, `PublicKey`, and `Keypair` - and functions and types of the new library - such as `Transaction`, `Base58EncodedAddress`, and `CryptoKeyPair`.
+The `@solana/compat` library allows for interoperability between functions and class objects from the legacy library - such as `VersionedTransaction`, `PublicKey`, and `Keypair` - and functions and types of the new library - such as `Address`, `Transaction`, and `CryptoKeyPair`.
 
-Here’s how you can use `@solana/compat` to convert from a legacy `PublicKey` to a `Base58EncodedAddress`:
+Here’s how you can use `@solana/compat` to convert from a legacy `PublicKey` to an `Address`:
 
 ```tsx
 import { fromLegacyPublicKey } from '@solana/compat';
 
 const publicKey = new PublicKey('B3piXWBQLLRuk56XG5VihxR4oe2PSsDM8nTF6s1DeVF5');
-const base58Address: Base58EncodedAddress = fromLegacyPublicKey(publicKey);
+const address: Address = fromLegacyPublicKey(publicKey);
 ```
 
 Here’s how to convert from a legacy `Keypair` to a `CryptoKeyPair`:

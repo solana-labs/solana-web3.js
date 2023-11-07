@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 import { TransactionSignature } from '@solana/transactions';
@@ -10,7 +10,7 @@ type VoteNotificationsApiNotification = Readonly<{
     signature: TransactionSignature;
     slots: readonly Slot[];
     timestamp: UnixTimestamp | null;
-    votePubkey: Base58EncodedAddress;
+    votePubkey: Address;
 }>;
 
 export interface VoteNotificationsApi {

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 
 import { OrderedAccounts } from '../accounts';
@@ -6,7 +6,7 @@ import { getCompiledInstructions } from '../compile-instructions';
 
 let _nextMockAddress = 0;
 function getMockAddress() {
-    return `${_nextMockAddress++}` as Base58EncodedAddress;
+    return `${_nextMockAddress++}` as Address;
 }
 
 describe('getCompiledInstructions', () => {

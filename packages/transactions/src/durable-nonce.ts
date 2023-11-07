@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import {
     AccountRole,
     IInstruction,
@@ -36,8 +36,8 @@ type DurableNonceConfig<
     TNonceValue extends string = string
 > = Readonly<{
     readonly nonce: Nonce<TNonceValue>;
-    readonly nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>;
-    readonly nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>;
+    readonly nonceAccountAddress: Address<TNonceAccountAddress>;
+    readonly nonceAuthorityAddress: Address<TNonceAuthorityAddress>;
 }>;
 export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __brand: unique symbol };
 type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
@@ -45,9 +45,8 @@ type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
 }>;
 
 const RECENT_BLOCKHASHES_SYSVAR_ADDRESS =
-    'SysvarRecentB1ockHashes11111111111111111111' as Base58EncodedAddress<'SysvarRecentB1ockHashes11111111111111111111'>;
-const SYSTEM_PROGRAM_ADDRESS =
-    '11111111111111111111111111111111' as Base58EncodedAddress<'11111111111111111111111111111111'>;
+    'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>;
+const SYSTEM_PROGRAM_ADDRESS = '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
 
 export interface IDurableNonceTransaction<
     TNonceAccountAddress extends string = string,
@@ -75,8 +74,8 @@ function createAdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string
 >(
-    nonceAccountAddress: Base58EncodedAddress<TNonceAccountAddress>,
-    nonceAuthorityAddress: Base58EncodedAddress<TNonceAuthorityAddress>
+    nonceAccountAddress: Address<TNonceAccountAddress>,
+    nonceAuthorityAddress: Address<TNonceAuthorityAddress>
 ): AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
     return {
         accounts: [
@@ -131,8 +130,8 @@ function isDurableNonceTransaction(
 }
 
 function isAdvanceNonceAccountInstructionForNonce<
-    TNonceAccountAddress extends Base58EncodedAddress = Base58EncodedAddress,
-    TNonceAuthorityAddress extends Base58EncodedAddress = Base58EncodedAddress
+    TNonceAccountAddress extends Address = Address,
+    TNonceAuthorityAddress extends Address = Address
 >(
     instruction: AdvanceNonceAccountInstruction,
     nonceAccountAddress: TNonceAccountAddress,

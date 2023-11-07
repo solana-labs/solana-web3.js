@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
@@ -23,7 +23,7 @@ describe('compileMessage', () => {
     let baseTx: BaseTransaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
     beforeEach(() => {
         baseTx = {
-            feePayer: 'abc' as Base58EncodedAddress<'abc'>,
+            feePayer: 'abc' as Address<'abc'>,
             instructions: [],
             lifetimeConstraint: MOCK_LIFETIME_CONSTRAINT,
             version: 0,

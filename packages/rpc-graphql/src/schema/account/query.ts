@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { DataSlice, Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
 import { Commitment } from '@solana/rpc-types';
 
@@ -8,7 +8,7 @@ import { bigint, nonNull, string, type } from '../picks';
 import { accountInterface } from './types';
 
 export type AccountQueryArgs = {
-    address: Base58EncodedAddress;
+    address: Address;
     commitment?: Commitment;
     dataSlice?: DataSlice;
     encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -34,7 +34,7 @@ export interface GetProgramAccountsApi {
      * Returns the account information for a list of Pubkeys.
      */
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -44,7 +44,7 @@ export interface GetProgramAccountsApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -54,7 +54,7 @@ export interface GetProgramAccountsApi {
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[];
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -64,7 +64,7 @@ export interface GetProgramAccountsApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -74,7 +74,7 @@ export interface GetProgramAccountsApi {
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[];
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
@@ -83,7 +83,7 @@ export interface GetProgramAccountsApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[]>;
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
@@ -92,7 +92,7 @@ export interface GetProgramAccountsApi {
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[];
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -102,7 +102,7 @@ export interface GetProgramAccountsApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -112,7 +112,7 @@ export interface GetProgramAccountsApi {
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[];
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
@@ -121,7 +121,7 @@ export interface GetProgramAccountsApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
 
     getProgramAccounts(
-        program: Base58EncodedAddress,
+        program: Address,
         config?: GetProgramAccountsApiCommonConfig &
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{

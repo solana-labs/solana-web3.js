@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot } from './common';
@@ -20,7 +20,7 @@ import { Slot } from './common';
  * ```
  */
 type GetLeaderScheduleApiResponseBase = Readonly<{
-    [key: Base58EncodedAddress]: Slot[];
+    [key: Address]: Slot[];
 }>;
 
 export interface GetLeaderScheduleApi {
@@ -37,14 +37,14 @@ export interface GetLeaderScheduleApi {
         config?: Readonly<{
             commitment?: Commitment;
             /** Only return results for this validator identity (base58 encoded address) */
-            identity?: Base58EncodedAddress;
+            identity?: Address;
         }>
     ): GetLeaderScheduleApiResponseBase | null;
     getLeaderSchedule(
         config?: Readonly<{
             commitment?: Commitment;
             /** Only return results for this validator identity (base58 encoded address) */
-            identity?: Base58EncodedAddress;
+            identity?: Address;
         }>
     ): GetLeaderScheduleApiResponseBase;
 }

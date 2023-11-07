@@ -1,8 +1,8 @@
 import { assertKeyExporterIsAvailable } from '@solana/assertions';
 
-import { Base58EncodedAddress, getAddressDecoder } from './address';
+import { Address, getAddressDecoder } from './address';
 
-export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Base58EncodedAddress> {
+export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Address> {
     await assertKeyExporterIsAvailable();
     if (publicKey.type !== 'public' || publicKey.algorithm.name !== 'Ed25519') {
         // TODO: Coded error.

@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { LamportsUnsafeBeyond2Pow53Minus1, StringifiedBigInt, StringifiedNumber } from '@solana/rpc-types';
 
 export type DataSlice = Readonly<{
@@ -57,7 +57,7 @@ export type AccountInfoBase = Readonly<{
     /** number of lamports assigned to this account */
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
     /** pubkey of the program this account has been assigned to */
-    owner: Base58EncodedAddress;
+    owner: Address;
     /** the epoch at which this account will next owe rent */
     rentEpoch: U64UnsafeBeyond2Pow53Minus1;
 }>;
@@ -95,7 +95,7 @@ export type AccountInfoWithJsonData = Readonly<{
 
 export type AccountInfoWithPubkey<TAccount extends AccountInfoBase> = Readonly<{
     account: TAccount;
-    pubkey: Base58EncodedAddress;
+    pubkey: Address;
 }>;
 
 export type TokenAmount = Readonly<{
@@ -109,26 +109,26 @@ export type TokenBalance = Readonly<{
     /** Index of the account in which the token balance is provided for. */
     accountIndex: number;
     /** Pubkey of the token's mint. */
-    mint: Base58EncodedAddress;
+    mint: Address;
     /** Pubkey of token balance's owner. */
-    owner?: Base58EncodedAddress;
+    owner?: Address;
     /** Pubkey of the Token program that owns the account. */
-    programId?: Base58EncodedAddress;
+    programId?: Address;
     uiTokenAmount: TokenAmount;
 }>;
 
 type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
 
 export type TokenAccount = Readonly<{
-    mint: Base58EncodedAddress;
-    owner: Base58EncodedAddress;
+    mint: Address;
+    owner: Address;
     tokenAmount: TokenAmount;
-    delegate?: Base58EncodedAddress;
+    delegate?: Address;
     state: TokenAccountState;
     isNative: boolean;
     rentExemptReserve?: TokenAmount;
     delegatedAmount?: TokenAmount;
-    closeAuthority?: Base58EncodedAddress;
+    closeAuthority?: Address;
     extensions?: unknown[];
 }>;
 

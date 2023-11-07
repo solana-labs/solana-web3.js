@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -29,12 +29,12 @@ type TokenAccountInfoWithJsonData = Readonly<{
 
 type MintFilter = Readonly<{
     /** Pubkey of the specific token Mint to limit accounts to */
-    mint: Base58EncodedAddress;
+    mint: Address;
 }>;
 
 type ProgramIdFilter = Readonly<{
     /** Pubkey of the Token program that owns the accounts */
-    programId: Base58EncodedAddress;
+    programId: Address;
 }>;
 
 type AccountsFilter = MintFilter | ProgramIdFilter;
@@ -55,7 +55,7 @@ export interface GetTokenAccountsByOwnerApi {
      * Returns all SPL Token accounts by token owner.
      */
     getTokenAccountsByOwner(
-        owner: Base58EncodedAddress,
+        owner: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -65,7 +65,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getTokenAccountsByOwner(
-        owner: Base58EncodedAddress,
+        owner: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -75,7 +75,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getTokenAccountsByOwner(
-        owner: Base58EncodedAddress,
+        owner: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             Readonly<{
@@ -84,7 +84,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
     getTokenAccountsByOwner(
-        owner: Base58EncodedAddress,
+        owner: Address,
         filter: AccountsFilter,
         config: GetTokenAccountsByOwnerApiCommonConfig &
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
@@ -94,7 +94,7 @@ export interface GetTokenAccountsByOwnerApi {
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getTokenAccountsByOwner(
-        owner: Base58EncodedAddress,
+        owner: Address,
         filter: AccountsFilter,
         config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;

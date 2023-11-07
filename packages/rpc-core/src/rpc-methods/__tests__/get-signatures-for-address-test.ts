@@ -1,4 +1,4 @@
-import { Base58EncodedAddress } from '@solana/addresses';
+import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
 import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
@@ -27,7 +27,7 @@ describe('getSignaturesForAddress', () => {
                 expect.assertions(1);
                 // This key is random, don't re-use in any tests that perform transactions
                 const publicKey =
-                    '3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP' as Base58EncodedAddress<'3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP'>;
+                    '3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP' as Address<'3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP'>;
                 const transactionsPromise = rpc.getSignaturesForAddress(publicKey, { commitment }).send();
                 await expect(transactionsPromise).resolves.toEqual([]);
             });
@@ -46,7 +46,7 @@ describe('getSignaturesForAddress', () => {
         it('throws an error', async () => {
             expect.assertions(1);
             // This key is random, don't re-use in any tests that perform transactions
-            const publicKey = '3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP' as Base58EncodedAddress;
+            const publicKey = '3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP' as Address;
             const sendPromise = rpc
                 .getSignaturesForAddress(publicKey, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
