@@ -10,7 +10,7 @@ type GetInflationRewardApiResponse = Readonly<{
     commission: number;
     // The slot in which the rewards are effective
     effectiveSlot: Slot;
-    // Epoch for which reward occured
+    // Epoch for which reward occurred
     epoch: U64UnsafeBeyond2Pow53Minus1;
     // Post balance of the account in lamports
     postBalance: LamportsUnsafeBeyond2Pow53Minus1;

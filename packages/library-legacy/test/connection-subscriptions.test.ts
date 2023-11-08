@@ -854,7 +854,7 @@ describe('Subscriptions', () => {
   ].forEach((maybeOverrideCommitment: Commitment | undefined) => {
     describe(`given a Connection with ${
       maybeOverrideCommitment
-        ? `its commitment overriden to \`${maybeOverrideCommitment}\``
+        ? `its commitment overridden to \`${maybeOverrideCommitment}\``
         : 'an unspecified commitment override'
     }`, () => {
       Object.entries(subscriptionMethodsConfig).forEach(
