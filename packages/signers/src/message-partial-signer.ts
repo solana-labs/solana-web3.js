@@ -1,9 +1,11 @@
 import { Address } from '@solana/addresses';
 
+import { SignatureDictionary } from './types';
+
 /** Defines a signer capable of signing messages. */
 export type MessagePartialSigner<TAddress extends string = string> = {
     address: Address<TAddress>;
-    signMessage(messages: readonly Uint8Array[]): Promise<readonly Uint8Array[]>;
+    signMessage(messages: readonly Uint8Array[]): Promise<readonly SignatureDictionary[]>;
 };
 
 /** Checks whether the provided value implements the {@link MessagePartialSigner} interface. */

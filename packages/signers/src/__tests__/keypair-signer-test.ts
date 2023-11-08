@@ -103,11 +103,11 @@ describe('createSignerFromKeyPair', () => {
 
         // When we sign two messages using that signer.
         const messages = [new Uint8Array([1, 1, 1]), new Uint8Array([2, 2, 2])];
-        const signatures = await mySigner.signMessage(messages);
+        const signatureDictionaries = await mySigner.signMessage(messages);
 
         // Then the message reponses contains both the signed messages and their signatures.
-        expect(signatures[0]).toBe(mockSignatures[0]);
-        expect(signatures[1]).toBe(mockSignatures[1]);
+        expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
+        expect(signatureDictionaries[1]).toStrictEqual({ [myAddress]: mockSignatures[1] });
 
         // And signBytes was called twice with the expected parameters.
         expect(jest.mocked(signBytes)).toHaveBeenCalledTimes(2);
@@ -139,11 +139,11 @@ describe('createSignerFromKeyPair', () => {
         });
 
         // When we sign both transactions using that signer.
-        const signatures = await mySigner.signTransaction(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransaction(mockTransactions);
 
         // Then the returned transactions each contain a new signature.
-        expect(signatures[0]).toStrictEqual(mockSignatures[0]);
-        expect(signatures[1]).toStrictEqual(mockSignatures[1]);
+        expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
+        expect(signatureDictionaries[1]).toStrictEqual({ [myAddress]: mockSignatures[1] });
 
         // And signTransaction was called twice with the expected parameters.
         expect(jest.mocked(signTransaction)).toHaveBeenCalledTimes(2);

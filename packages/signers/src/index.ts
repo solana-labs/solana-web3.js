@@ -6,3 +6,4 @@ export * from './transaction-modifier-signer';
 export * from './transaction-partial-signer';
 export * from './transaction-sender-signer';
 export * from './transaction-signer';
+export * from './types';

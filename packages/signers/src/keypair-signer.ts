@@ -39,12 +39,17 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
     return {
         address,
         keyPair,
-        signMessage: messages => Promise.all(messages.map(message => signBytes(keyPair.privateKey, message))),
+        signMessage: messages =>
+            Promise.all(
+                messages.map(async message => ({
+                    [address]: await signBytes(keyPair.privateKey, message),
+                }))
+            ),
         signTransaction: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
                     const signedTransaction = await signTransaction([keyPair], transaction);
-                    return signedTransaction.signatures[address];
+                    return { [address]: signedTransaction.signatures[address] };
                 })
             ),
     };
