@@ -8,7 +8,7 @@ import {
     getStructEncoder,
 } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
-import { Ed25519Signature } from '@solana/keys';
+import { SignatureBytes } from '@solana/keys';
 
 import { CompilableTransaction } from '../compilable-transaction';
 import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction';
@@ -37,8 +37,8 @@ function getCompiledTransactionEncoder(): Encoder<CompiledTransaction> {
     );
 }
 
-function getSignatureDecoder(): Decoder<Ed25519Signature> {
-    return mapDecoder(getBytesDecoder({ size: 64 }), bytes => bytes as Ed25519Signature);
+function getSignatureDecoder(): Decoder<SignatureBytes> {
+    return mapDecoder(getBytesDecoder({ size: 64 }), bytes => bytes as SignatureBytes);
 }
 
 function getCompiledTransactionDecoder(): Decoder<CompiledTransaction> {

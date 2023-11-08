@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { lamports } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { requestAndConfirmAirdrop } from '../airdrop';
 
@@ -48,7 +48,7 @@ describe('requestAndConfirmAirdrop', () => {
     it('aborts the `confirmSignatureOnlyTransaction` call when aborted', async () => {
         expect.assertions(2);
         const abortController = new AbortController();
-        sendAirdropRequest.mockResolvedValue('abc' as TransactionSignature);
+        sendAirdropRequest.mockResolvedValue('abc' as Signature);
         requestAndConfirmAirdrop({
             abortSignal: abortController.signal,
             commitment: 'finalized',
@@ -72,7 +72,7 @@ describe('requestAndConfirmAirdrop', () => {
     });
     it('passes the expected input to the airdrop request', async () => {
         expect.assertions(1);
-        sendAirdropRequest.mockResolvedValue('abc' as TransactionSignature);
+        sendAirdropRequest.mockResolvedValue('abc' as Signature);
         requestAndConfirmAirdrop({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
@@ -85,7 +85,7 @@ describe('requestAndConfirmAirdrop', () => {
     });
     it('passes the expected input to the transaction confirmer', async () => {
         expect.assertions(1);
-        sendAirdropRequest.mockResolvedValue('abc' as TransactionSignature);
+        sendAirdropRequest.mockResolvedValue('abc' as Signature);
         requestAndConfirmAirdrop({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
@@ -98,12 +98,12 @@ describe('requestAndConfirmAirdrop', () => {
         expect(confirmSignatureOnlyTransaction).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
     });
     it('returns the airdrop transaction signature on success', async () => {
         expect.assertions(1);
-        sendAirdropRequest.mockResolvedValue('abc' as TransactionSignature);
+        sendAirdropRequest.mockResolvedValue('abc' as Signature);
         confirmSignatureOnlyTransaction.mockResolvedValue(undefined);
         const airdropPromise = requestAndConfirmAirdrop({
             abortSignal: new AbortController().signal,

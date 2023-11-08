@@ -1,7 +1,7 @@
+import { Signature } from '@solana/keys';
 import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
 import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
 import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './transaction-confirmation-strategy-racer';
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
@@ -15,7 +15,7 @@ interface DefaultSignatureOnlyRecentTransactionConfirmerConfig {
 interface WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig
     extends BaseTransactionConfirmationStrategyConfig {
     getTimeoutPromise: typeof getTimeoutPromise;
-    signature: TransactionSignature;
+    signature: Signature;
 }
 
 /** @deprecated */

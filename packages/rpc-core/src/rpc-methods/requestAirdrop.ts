@@ -1,13 +1,12 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import { Base58EncodedTransactionSignature } from './common';
 
 type RequestAirdropConfig = Readonly<{
     commitment?: Commitment;
 }>;
 
-type RequestAirdropResponse = Base58EncodedTransactionSignature;
+type RequestAirdropResponse = Signature;
 
 export interface RequestAirdropApi {
     /**

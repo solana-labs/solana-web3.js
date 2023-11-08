@@ -1,3 +1,4 @@
+import { Signature } from '@solana/keys';
 import { SendTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/sendTransaction';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment, commitmentComparator } from '@solana/rpc-types';
@@ -8,7 +9,6 @@ import {
     IFullySignedTransaction,
     ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
-    TransactionSignature,
 } from '@solana/transactions';
 
 import {
@@ -84,14 +84,14 @@ async function sendTransaction_INTERNAL({
     rpc,
     transaction,
     ...sendTransactionConfig
-}: SendTransactionInternalConfig): Promise<TransactionSignature> {
+}: SendTransactionInternalConfig): Promise<Signature> {
     const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
-    return (await rpc
+    return await rpc
         .sendTransaction(base64EncodedWireTransaction, {
             ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),
             encoding: 'base64',
         })
-        .send({ abortSignal })) as unknown as TransactionSignature; // FIXME(#1709)
+        .send({ abortSignal });
 }
 
 export function createDefaultDurableNonceTransactionSender({
@@ -149,7 +149,7 @@ export async function sendAndConfirmDurableNonceTransaction({
     rpc,
     transaction,
     ...sendTransactionConfig
-}: SendAndConfirmDurableNonceTransactionConfig): Promise<TransactionSignature> {
+}: SendAndConfirmDurableNonceTransactionConfig): Promise<Signature> {
     const transactionSignature = await sendTransaction_INTERNAL({
         ...sendTransactionConfig,
         abortSignal,
@@ -172,7 +172,7 @@ export async function sendAndConfirmTransaction({
     rpc,
     transaction,
     ...sendTransactionConfig
-}: SendAndConfirmTransactionWithBlockhashLifetimeConfig): Promise<TransactionSignature> {
+}: SendAndConfirmTransactionWithBlockhashLifetimeConfig): Promise<Signature> {
     const transactionSignature = await sendTransaction_INTERNAL({
         ...sendTransactionConfig,
         abortSignal,

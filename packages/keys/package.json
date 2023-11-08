@@ -65,7 +65,9 @@
         "node": ">=17.4"
     },
     "dependencies": {
-        "@solana/assertions": "workspace:*"
+        "@solana/assertions": "workspace:*",
+        "@solana/codecs-core": "workspace:*",
+        "@solana/codecs-strings": "workspace:*"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",

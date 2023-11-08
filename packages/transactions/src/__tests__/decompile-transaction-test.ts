@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
-import { Ed25519Signature } from '@solana/keys';
+import { SignatureBytes } from '@solana/keys';
 
 import { decompileTransaction } from '../decompile-transaction';
 import { Nonce } from '../durable-nonce';
@@ -9,7 +9,7 @@ import { ITransactionWithSignatures } from '../signatures';
 
 type CompiledTransaction = Readonly<{
     compiledMessage: CompiledMessage;
-    signatures: Ed25519Signature[];
+    signatures: SignatureBytes[];
 }>;
 
 describe('decompileTransaction', () => {
@@ -193,7 +193,7 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a transaction with a single signer', () => {
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -212,18 +212,18 @@ describe('decompileTransaction', () => {
 
             const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
-                [feePayer]: feePayerSignature as Ed25519Signature,
+                [feePayer]: feePayerSignature as SignatureBytes,
             });
         });
 
         it('converts a transaction with multiple signers', () => {
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
-            const otherSigner1Signature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
+            const otherSigner1Signature = new Uint8Array(Array(64).fill(2)) as SignatureBytes;
 
             const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address;
-            const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as Ed25519Signature;
+            const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as SignatureBytes;
 
             const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
@@ -256,16 +256,16 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a partially signed transaction with multiple signers', () => {
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
             const otherSigner2Address = '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address;
-            const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as Ed25519Signature;
+            const otherSigner2Signature = new Uint8Array(Array(64).fill(3)) as SignatureBytes;
 
             const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             // Used in the signatures array for a missing signature
-            const noSignature = new Uint8Array(Array(64).fill(0)) as Ed25519Signature;
+            const noSignature = new Uint8Array(Array(64).fill(0)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -538,7 +538,7 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a durable nonce transaction with a single signer', () => {
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -582,8 +582,8 @@ describe('decompileTransaction', () => {
         });
 
         it('converts a durable nonce transaction with multiple signers', () => {
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
-            const authoritySignature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
+            const authoritySignature = new Uint8Array(Array(64).fill(2)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
@@ -631,11 +631,11 @@ describe('decompileTransaction', () => {
         it('converts a partially signed durable nonce transaction with multiple signers', () => {
             const extraSignerAddress = '9bXC3RtDN5MzDMWRCqjgVTeQK2anMhdkq1ZoGN1Tb1UE' as Address;
 
-            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as Ed25519Signature;
-            const extraSignerSignature = new Uint8Array(Array(64).fill(2)) as Ed25519Signature;
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
+            const extraSignerSignature = new Uint8Array(Array(64).fill(2)) as SignatureBytes;
 
             // Used in the signatures array for a missing signature
-            const noSignature = new Uint8Array(Array(64).fill(0)) as Ed25519Signature;
+            const noSignature = new Uint8Array(Array(64).fill(0)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {

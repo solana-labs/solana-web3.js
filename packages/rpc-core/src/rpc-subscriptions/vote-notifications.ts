@@ -1,13 +1,13 @@
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
-import { TransactionSignature } from '@solana/transactions';
 
 import { Slot } from '../rpc-methods/common';
 
 type VoteNotificationsApiNotification = Readonly<{
     hash: Blockhash;
-    signature: TransactionSignature;
+    signature: Signature;
     slots: readonly Slot[];
     timestamp: UnixTimestamp | null;
     votePubkey: Address;

@@ -1,4 +1,4 @@
-import { TransactionSignature } from '@solana/transactions';
+import { Signature } from '@solana/keys';
 
 import { createRecentSignatureConfirmationPromiseFactory } from '../transaction-confirmation-strategy-recent-signature';
 
@@ -37,7 +37,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await jest.runAllTimersAsync();
         expect(createPendingSubscription).toHaveBeenCalledWith('abc', {
@@ -56,7 +56,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await jest.runAllTimersAsync();
         expect(getSignatureStatusesMock).not.toHaveBeenCalled();
@@ -79,7 +79,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             const signatureConfirmationPromise = getSignatureConfirmationPromise({
                 abortSignal: new AbortController().signal,
                 commitment: 'finalized',
-                signature: 'abc' as TransactionSignature,
+                signature: 'abc' as Signature,
             });
             await jest.runAllTimersAsync();
             await expect(Promise.race([signatureConfirmationPromise, 'pending'])).resolves.toBe('pending');
@@ -93,7 +93,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const signatureConfirmationPromise = getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await jest.runAllTimersAsync();
         await expect(Promise.race([signatureConfirmationPromise, 'pending'])).resolves.toBe('pending');
@@ -106,7 +106,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const signatureConfirmationPromise = getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await expect(signatureConfirmationPromise).resolves.toBeUndefined();
     });
@@ -121,7 +121,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const signatureConfirmationPromise = getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await expect(signatureConfirmationPromise).resolves.toBeUndefined();
     });
@@ -134,7 +134,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const signatureConfirmationPromise = getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await expect(signatureConfirmationPromise).rejects.toThrow('The transaction with signature `abc` failed.');
     });
@@ -144,7 +144,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         getSignatureConfirmationPromise({
             abortSignal: abortController.signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         await jest.runAllTimersAsync();
         expect(getSignatureStatusesMock).toHaveBeenCalledWith({
@@ -161,7 +161,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         getSignatureConfirmationPromise({
             abortSignal: abortController.signal,
             commitment: 'finalized',
-            signature: 'abc' as TransactionSignature,
+            signature: 'abc' as Signature,
         });
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
             abortSignal: expect.objectContaining({ aborted: false }),

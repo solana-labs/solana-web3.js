@@ -1,5 +1,5 @@
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
 
@@ -12,7 +12,7 @@ export interface BaseTransactionConfirmationStrategyConfig {
 type WithNonNullableAbortSignal<T> = Omit<T, 'abortSignal'> & Readonly<{ abortSignal: AbortSignal }>;
 
 export async function raceStrategies<TConfig extends BaseTransactionConfirmationStrategyConfig>(
-    signature: TransactionSignature,
+    signature: Signature,
     config: TConfig,
     getSpecificStrategiesForRace: (config: WithNonNullableAbortSignal<TConfig>) => readonly Promise<unknown>[]
 ) {

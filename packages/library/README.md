@@ -592,7 +592,7 @@ const keyPair: CryptoKeyPair = await generateKeyPair();
 const message = new Uint8Array(8).fill(0);
 
 const signedMessage = await signBytes(keyPair.privateKey, message);
-//    ^ Ed25519Signature
+//    ^ Signature
 
 const verified = await verifySignature(keyPair.publicKey, signedMessage, message);
 ```

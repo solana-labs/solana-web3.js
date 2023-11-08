@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { TransactionSignature } from '@solana/transactions';
 
 import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
@@ -15,7 +15,7 @@ async () => {
         Readonly<{
             err: TransactionError | null;
             logs: readonly string[] | null;
-            signature: TransactionSignature;
+            signature: Signature;
         }>
     >;
     rpcSubscriptions.logsNotifications('all') satisfies PendingRpcSubscription<TNotification>;

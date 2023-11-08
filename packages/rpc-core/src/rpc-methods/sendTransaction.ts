@@ -1,7 +1,8 @@
+import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { Base58EncodedTransactionSignature, Slot } from './common';
+import { Slot } from './common';
 
 type SendTransactionConfig = Readonly<{
     skipPreflight?: boolean;
@@ -10,7 +11,7 @@ type SendTransactionConfig = Readonly<{
     minContextSlot?: Slot;
 }>;
 
-type SendTransactionResponse = Base58EncodedTransactionSignature;
+type SendTransactionResponse = Signature;
 
 export interface SendTransactionApi {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */

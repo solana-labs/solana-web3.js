@@ -1,4 +1,4 @@
-import { Base58EncodedTransactionSignature } from '@solana/rpc-core/dist/types/rpc-methods/common';
+import { Signature } from '@solana/keys';
 import { SendTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/sendTransaction';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { Commitment } from '@solana/rpc-types';
@@ -81,7 +81,7 @@ describe('sendAndConfirmTransaction', () => {
             preflightCommitment: 'confirmed' as Commitment,
             skipPreflight: false,
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
-        sendTransaction.mockResolvedValue('abc' as Base58EncodedTransactionSignature);
+        sendTransaction.mockResolvedValue('abc' as Signature);
         const abortSignal = new AbortController().signal;
         sendAndConfirmTransaction({
             ...sendTransactionConfig,
@@ -238,7 +238,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             preflightCommitment: 'confirmed' as Commitment,
             skipPreflight: false,
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
-        sendTransaction.mockResolvedValue('abc' as Base58EncodedTransactionSignature);
+        sendTransaction.mockResolvedValue('abc' as Signature);
         const abortSignal = new AbortController().signal;
         sendAndConfirmDurableNonceTransaction({
             ...sendTransactionConfig,

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Address } from '@solana/addresses';
+import { Signature } from '@solana/keys';
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { UnixTimestamp } from '@solana/rpc-types';
-import { Blockhash, TransactionSignature } from '@solana/transactions';
+import { Blockhash } from '@solana/transactions';
 
 import { Slot } from '../../rpc-methods/common';
 import { VoteNotificationsApi } from '../vote-notifications';
@@ -13,7 +14,7 @@ async () => {
 
     type VoteNotificationsApiNotification = Readonly<{
         hash: Blockhash;
-        signature: TransactionSignature;
+        signature: Signature;
         slots: readonly Slot[];
         timestamp: UnixTimestamp | null;
         votePubkey: Address;

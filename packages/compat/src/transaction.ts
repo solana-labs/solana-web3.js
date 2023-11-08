@@ -2,7 +2,7 @@ import { type Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import type { IAccountMeta, IInstruction } from '@solana/instructions';
 import { AccountRole } from '@solana/instructions';
-import type { Ed25519Signature } from '@solana/keys';
+import type { SignatureBytes } from '@solana/keys';
 import {
     appendTransactionInstruction,
     type Blockhash,
@@ -86,7 +86,7 @@ function convertSignatures(
         if (allZeros) return acc;
 
         const address = staticAccountKeys[index].toBase58() as Address;
-        return { ...acc, [address]: sig as Ed25519Signature };
+        return { ...acc, [address]: sig as SignatureBytes };
     }, {});
 }
 

@@ -1,4 +1,4 @@
-import { TransactionSignature } from '@solana/transactions';
+import { Signature } from '@solana/keys';
 
 import { raceStrategies } from '../transaction-confirmation-strategy-racer';
 
@@ -14,7 +14,7 @@ describe('raceStrategies', () => {
         expect.assertions(2);
         const getRecentSignatureConfirmationPromise = jest.fn();
         raceStrategies(
-            'abc' as TransactionSignature,
+            'abc' as Signature,
             {
                 commitment: 'finalized',
                 getRecentSignatureConfirmationPromise,
@@ -36,7 +36,7 @@ describe('raceStrategies', () => {
         const getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
         const abortController = new AbortController();
         raceStrategies(
-            'abc' as TransactionSignature,
+            'abc' as Signature,
             {
                 abortSignal: abortController.signal,
                 commitment: 'finalized',
@@ -58,7 +58,7 @@ describe('raceStrategies', () => {
         expect.assertions(2);
         const getSpecificStrategiesForRace = jest.fn().mockReturnValue([]);
         raceStrategies(
-            'abc' as TransactionSignature,
+            'abc' as Signature,
             {
                 commitment: 'finalized',
                 getRecentSignatureConfirmationPromise: jest.fn(),
@@ -78,7 +78,7 @@ describe('raceStrategies', () => {
         const getSpecificStrategiesForRace = jest.fn().mockReturnValue([]);
         const abortController = new AbortController();
         raceStrategies(
-            'abc' as TransactionSignature,
+            'abc' as Signature,
             {
                 abortSignal: abortController.signal,
                 commitment: 'finalized',
