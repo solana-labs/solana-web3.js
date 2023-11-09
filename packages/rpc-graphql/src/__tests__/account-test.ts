@@ -22,7 +22,6 @@ describe('account', () => {
         // See scripts/fixtures/spl-token-token-account.json
         const variableValues = {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-            commitment: 'confirmed',
         };
         it("can query an account's lamports balance", async () => {
             expect.assertions(1);
@@ -252,14 +251,14 @@ describe('account', () => {
                 encoding: 'base64',
             };
             const source = `
-                query testQuery($address: String!, $encoding: AccountEncoding) {
-                    account(address: $address, encoding: $encoding) {
-                        ... on AccountBase64 {
-                            data
+                    query testQuery($address: String!, $encoding: AccountEncoding) {
+                        account(address: $address, encoding: $encoding) {
+                            ... on AccountBase64 {
+                                data
+                            }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -277,42 +276,10 @@ describe('account', () => {
                 encoding: 'base64Zstd',
             };
             const source = `
-                query testQuery($address: String!, $encoding: AccountEncoding) {
-                    account(address: $address, encoding: $encoding) {
-                        ... on AccountBase64Zstd {
-                            data
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, variableValues);
-            expect(result).toMatchObject({
-                data: {
-                    account: {
-                        data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                    },
-                },
-            });
-        });
-    });
-    describe('nested account data queries', () => {
-        it('can get nested account data as base64', async () => {
-            expect.assertions(1);
-            // See scripts/fixtures/spl-token-token-account.json
-            const variableValues = {
-                address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-                encoding: 'base64',
-            };
-            const source = `
                     query testQuery($address: String!, $encoding: AccountEncoding) {
                         account(address: $address, encoding: $encoding) {
-                            ... on AccountBase64 {
+                            ... on AccountBase64Zstd {
                                 data
-                                owner(encoding: $encoding) {
-                                    ... on AccountBase64 {
-                                        data
-                                    }
-                                }
                             }
                         }
                     }
@@ -321,10 +288,7 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        data: '6Sg5VQll/9TWSsqvRtRd9zGOW09XyQxIfWBiXYKbg3tRbfSo3iE5g7lQFUZzej7dXNBFemsx9mHsHQF64UlEQ+BvnGLyhiMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
-                        owner: {
-                            data: expect.any(String),
-                        },
+                        data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
                     },
                 },
             });
@@ -393,7 +357,9 @@ describe('account', () => {
                         ... on TokenAccount {
                             data {
                                 isNative
-                                mint
+                                mint {
+                                    address
+                                }
                                 owner {
                                     address
                                 }
@@ -420,7 +386,9 @@ describe('account', () => {
                     account: {
                         data: {
                             isNative: expect.any(Boolean),
-                            mint: expect.any(String),
+                            mint: {
+                                address: expect.any(String),
+                            },
                             owner: {
                                 address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
                             },

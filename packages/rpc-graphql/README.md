@@ -130,11 +130,12 @@ The `Account` interface contains common fields across all accounts.
 
 ```graphql
 interface Account {
-    encoding: String,
-    executable: Boolean,
-    lamports: BigInt,
-    owner: Account, # Interface
-    rentEpoch: BigInt,
+    address: String
+    encoding: String
+    executable: Boolean
+    lamports: BigInt
+    owner: Account
+    rentEpoch: BigInt
 }
 ```
 
@@ -641,37 +642,12 @@ The `Transaction` interface contains common fields across all transactions.
 
 ```graphql
 interface Transaction {
-    blocktime: BigInt,
-    encoding: String,
-    meta: TransactionMeta, # Interface
-    slot: BigInt,
+    blockTime: String
+    encoding: String
+    meta: TransactionMeta
+    slot: BigInt
 }
 ```
-
-Notice the `TransactionMetaInterface` type present in the transaction
-interface.
-
-```graphql
-interface TransactionMeta {
-    computeUnitsConsumed: BigInt,
-    err: String,
-    fee: BigInt,
-    format: String,
-    loadedAddresses: TransactionMetaLoadedAddresses,
-    logMessages: [String],
-    postBalances: [BigInt],
-    postTokenBalances: [TokenBalance],
-    preBalances: [BigInt],
-    preTokenBalances: [TokenBalance],
-    returnData: ReturnData,
-    rewards: [Reward],
-    status: TransactionStatus,
-}
-```
-
-The `TransactionMeta` interface is required since the field `innerInstructions`
-will depend on the encoding level requested for the transaction. This also
-applies to the actual `transaction` object itself.
 
 Similar to account types, any transaction can be queried by these fields
 without specifying the specific transaction type or the transaction meta
@@ -745,14 +721,14 @@ Similar to accounts, transactions with encoded data are also supported.
 
 Specific instruction types can be used in the transaction's instructions. The
 default instruction if it cannot be parsed using `jsonParsed` is the JSON
-version dubbed `PartiallyDecodedInstruction`.
+version dubbed `GenericInstruction`.
 
 ```typescript
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionJsonParsed {
-                transaction {
+            ... on TransactionParsed {
+                data {
                     message {
                         accountKeys {
                             pubkey
@@ -761,7 +737,7 @@ const source = `
                             writable
                         }
                         instructions {
-                            ... on PartiallyDecodedInstruction {
+                            ... on GenericInstruction {
                                 accounts
                                 data
                                 programId
@@ -785,7 +761,7 @@ const result = await rpcGraphQL.query(source, variableValues);
 ```
 data: {
     transaction: {
-        transaction: {
+        data: {
             message: {
                 accountKeys: [
                     {
@@ -824,16 +800,16 @@ instructions, they can be queried using specific instruction types.
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionJsonParsed {
-                transaction {
+            ... on TransactionParsed {
+                data {
                     message {
                         instructions {
                             ... on CreateAccountInstruction {
-                                parsed {
-                                    info {
-                                        lamports
-                                        space
-                                    }
+                                data {
+                                    lamports
+                                    space
+                                }
+                                meta {
                                     program
                                 }
                             }
@@ -856,15 +832,15 @@ const result = await rpcGraphQL.query(source, variableValues);
 ```
 data: {
     transaction: {
-        transaction: {
+        data: {
             message: {
                 instructions: [
                     {
-                        parsed: {
-                            info: {
-                                lamports: 890880n,
-                                space: 0n,
-                            },
+                        data: {
+                            lamports: 890880n,
+                            space: 0n,
+                        },
+                        meta: {
                             program: 'system',
                         },
                     }
@@ -891,7 +867,7 @@ const source = `
             encoding: $encoding,
         ) {
             ... on TransactionBase64 {
-                transaction
+                data
             }
         }
     }
@@ -909,7 +885,7 @@ const result = await rpcGraphQL.query(source, variableValues);
 ```
 data: {
     transaction: {
-        transaction: 'WzIsIDU0LCA5LCAgNzYsIDM1LCA2NCwgOCwgOCwgNCwgMywgMiwgNV0=',
+        data: 'WzIsIDU0LCA5LCAgNzYsIDM1LCA2NCwgOCwgOCwgNCwgMywgMiwgNV0=',
     },
 }
 ```
@@ -927,57 +903,57 @@ in the transaction response.
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionJsonParsed {
-                transaction {
+            ... on TransactionParsed {
+                data {
                     message {
                         instructions {
                             ... on SplTokenTransferInstruction {
-                                parsed {
-                                    info {
-                                        amount
-                                        authority {
-                                            address
-                                            lamports
-                                        }
-                                        destination {
-                                            ... on TokenAccount {
-                                                data {
-                                                    address
-                                                    mint {
-                                                        ... on MintAccount {
-                                                            data {
-                                                                address
-                                                                decimals
-                                                            }
+                                data {
+                                    amount
+                                    authority {
+                                        address
+                                        lamports
+                                    }
+                                    destination {
+                                        ... on TokenAccount {
+                                            data {
+                                                address
+                                                mint {
+                                                    ... on MintAccount {
+                                                        data {
+                                                            address
+                                                            decimals
                                                         }
-                                                    }
-                                                    owner {
-                                                        address
-                                                        lamports
                                                     }
                                                 }
-                                            }
-                                        }
-                                        source {
-                                            ... on TokenAccount {
-                                                data {
+                                                owner {
                                                     address
-                                                    mint {
-                                                        ... on MintAccount {
-                                                            data {
-                                                                address
-                                                                decimals
-                                                            }
-                                                        }
-                                                    }
-                                                    owner {
-                                                        address
-                                                        lamports
-                                                    }
+                                                    lamports
                                                 }
                                             }
                                         }
                                     }
+                                    source {
+                                        ... on TokenAccount {
+                                            data {
+                                                address
+                                                mint {
+                                                    ... on MintAccount {
+                                                        data {
+                                                            address
+                                                            decimals
+                                                        }
+                                                    }
+                                                }
+                                                owner {
+                                                    address
+                                                    lamports
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                meta {
                                     program
                                 }
                             }
@@ -1000,50 +976,50 @@ const result = await rpcGraphQL.query(source, variableValues);
 ```
 data: {
     transaction: {
-        transaction: {
+        data: {
             message: {
                 instructions: [
                     {
-                        parsed: {
-                            info: {
-                                amount: '50',
-                                authority: {
-                                    address: 'AHPPMhzDQix9sKULBqeaQ5BUZgrKdz8tg6DzPxsofB12',
-                                    lamports: 890880n,
-                                },
-                                destination: {
-                                    data: {
-                                        address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
-                                        mint: data: {
-                                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                            decimals: 6,
-                                        },
-                                        owner: {
-                                            address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
-                                            lamports: 890880n,
-                                        },
-                                    }
-                                },
-                                source: {
-                                    data: {
-                                        parsed: {
-                                            info: {
-                                                address: 'BqFCPqXUm4cq6jaZZx1TDTvUR1wdEuNNwAHBEVR6mJhM',
-                                                mint: data: {
-                                                    address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                                    decimals: 6,
-                                                },
-                                                owner: {
-                                                    address: '3dPmVLMD7PC5faZNyJUH9WFrUxAsbjydJfoozwmR1wDG',
-                                                    lamports: e890880n,
-                                                },
-                                            }
+                        data: {
+                            amount: '50',
+                            authority: {
+                                address: 'AHPPMhzDQix9sKULBqeaQ5BUZgrKdz8tg6DzPxsofB12',
+                                lamports: 890880n,
+                            },
+                            destination: {
+                                data: {
+                                    address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
+                                    mint: data: {
+                                        address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                                        decimals: 6,
+                                    },
+                                    owner: {
+                                        address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
+                                        lamports: 890880n,
+                                    },
+                                }
+                            },
+                            source: {
+                                data: {
+                                    parsed: {
+                                        info: {
+                                            address: 'BqFCPqXUm4cq6jaZZx1TDTvUR1wdEuNNwAHBEVR6mJhM',
+                                            mint: data: {
+                                                address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                                                decimals: 6,
+                                            },
+                                            owner: {
+                                                address: '3dPmVLMD7PC5faZNyJUH9WFrUxAsbjydJfoozwmR1wDG',
+                                                lamports: e890880n,
+                                            },
                                         }
                                     }
-                                },
+                                }
                             },
-                            program: 'spl-token',
                         },
+                        meta: {
+                            program: 'spl-token',
+                        }
                     }
                 ]
             },
@@ -1068,19 +1044,21 @@ const source = `
             blockhash
             parentSlot
             rewards {
-                //
+                commission
+                lamports
+                rewardType
             }
             transactions {
-                ... on TransactionJsonParsed {
-                    transaction {
+                ... on TransactionParsed {
+                    data {
                         message {
                             instructions {
                                 ... on CreateAccountInstruction {
-                                    parsed {
-                                        info {
-                                            lamports
-                                            space
-                                        }
+                                    data {
+                                        lamports
+                                        space
+                                    }
+                                    meta {
                                         program
                                     }
                                 }
@@ -1120,20 +1098,22 @@ data: {
             }
         ],
         transactions: [
-            {
-                message: {
-                    instructions: [
-                        {
-                            parsed: {
-                                info: {
+            data: {
+                    {
+                    message: {
+                        instructions: [
+                            {
+                                data: {
                                     lamports: 890880n,
                                     space: 0n,
                                 },
-                                program: 'system',
-                            },
-                        }
-                    ]
-                },
+                                meta: {
+                                    program: 'system',
+                                },
+                            }
+                        ]
+                    },
+                }
             }
         ],
     },
