@@ -1,3 +1,5 @@
+import { TextEncoder } from 'text-encoding-impl';
+
 import { SignatureDictionary } from './types';
 
 /** Defines a message that needs signing and its current set of signatures if any. */
@@ -6,7 +8,10 @@ export type SignableMessage = {
     signatures: SignatureDictionary;
 };
 
-/** Creates a signable message from a provided content. */
-export function createSignableMessage(content: Uint8Array, signatures: SignatureDictionary = {}) {
-    return { content, signatures };
+/**
+ * Creates a signable message from a provided content.
+ * If a string is provided, it will be UTF-8 encoded.
+ */
+export function createSignableMessage(content: string | Uint8Array, signatures: SignatureDictionary = {}) {
+    return { content: typeof content === 'string' ? new TextEncoder().encode(content) : content, signatures };
 }
