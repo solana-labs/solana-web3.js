@@ -3,6 +3,8 @@ import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { createGraphQLCache, GraphQLCache } from './cache';
+import { resolveAccount } from './resolvers/account';
+import { resolveProgramAccounts } from './resolvers/program-accounts';
 import { AccountQueryArgs } from './schema/account/query';
 import { BlockQueryArgs } from './schema/block';
 import { ProgramAccountsQueryArgs } from './schema/program-accounts';
@@ -15,67 +17,6 @@ export interface RpcGraphQLContext {
     resolveProgramAccounts(args: ProgramAccountsQueryArgs): ReturnType<typeof resolveProgramAccounts>;
     resolveTransaction(args: TransactionQueryArgs): ReturnType<typeof resolveTransaction>;
     rpc: Rpc<SolanaRpcMethods>;
-}
-
-// Default to jsonParsed encoding if none is provided
-async function resolveAccount(
-    { address, encoding = 'jsonParsed', ...config }: AccountQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc<SolanaRpcMethods>,
-    info?: GraphQLResolveInfo
-) {
-    // If a user only requests the account's address, don't call the RPC
-    if (info && info.fieldNodes[0].selectionSet) {
-        const selectionSet = info.fieldNodes[0].selectionSet;
-        const requestedFields = selectionSet.selections.map(field => {
-            if (field.kind === 'Field') {
-                return field.name.value;
-            }
-            return null;
-        });
-        if (requestedFields && requestedFields.length === 1 && requestedFields[0] === 'address') {
-            return { address };
-        }
-    }
-
-    const requestConfig = { encoding, ...config };
-
-    const cached = cache.get(address, requestConfig);
-    if (cached !== null) {
-        return cached;
-    }
-
-    const account = await rpc
-        .getAccountInfo(address, requestConfig as Parameters<SolanaRpcMethods['getAccountInfo']>[1])
-        .send()
-        .then(res => res.value)
-        .catch(e => {
-            throw e;
-        });
-
-    if (account === null) {
-        // Account does not exist
-        // Return only the address
-        return {
-            address,
-        };
-    }
-
-    const [data, responseEncoding] = Array.isArray(account.data)
-        ? encoding === 'jsonParsed'
-            ? [account.data[0], 'base64']
-            : [account.data[0], encoding]
-        : [account.data, 'jsonParsed'];
-    const queryResponse = {
-        ...account,
-        address,
-        data,
-        encoding: responseEncoding,
-    };
-
-    cache.insert(address, requestConfig, queryResponse);
-
-    return queryResponse;
 }
 
 async function resolveBlock(
@@ -99,51 +40,6 @@ async function resolveBlock(
     cache.insert(slot, config, block);
 
     return block;
-}
-
-async function resolveProgramAccounts(
-    { programAddress, encoding = 'jsonParsed', ...config }: ProgramAccountsQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc<SolanaRpcMethods>
-) {
-    const requestConfig = { encoding, ...config };
-
-    const cached = cache.get(programAddress, requestConfig);
-    if (cached !== null) {
-        return cached;
-    }
-
-    const programAccounts = await rpc
-        .getProgramAccounts(programAddress, requestConfig as Parameters<SolanaRpcMethods['getProgramAccounts']>[1])
-        .send()
-        .then(res => {
-            if ('value' in res) {
-                return res.value as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
-            }
-            return res as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
-        })
-        .catch(e => {
-            throw e;
-        });
-
-    const queryResponse = programAccounts.map(programAccount => {
-        const [data, responseEncoding] = Array.isArray(programAccount.account.data)
-            ? encoding === 'jsonParsed'
-                ? [programAccount.account.data[0], 'base64']
-                : [programAccount.account.data[0], encoding]
-            : [programAccount.account.data, 'jsonParsed'];
-        const pubkey = programAccount.pubkey;
-        return {
-            ...programAccount.account,
-            address: pubkey,
-            data,
-            encoding: responseEncoding,
-        };
-    });
-
-    cache.insert(programAddress, requestConfig, queryResponse);
-
-    return queryResponse;
 }
 
 async function resolveTransaction(

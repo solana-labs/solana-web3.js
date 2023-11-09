@@ -342,20 +342,18 @@ describe('account', () => {
                     account(address: $address) {
                         ... on MintAccount {
                             data {
-                                parsed {
-                                    info {
-                                        decimals
-                                        isInitialized
-                                        mintAuthority {
-                                            address
-                                            lamports
-                                        }
-                                        supply
-                                    }
-                                    type
+                                decimals
+                                isInitialized
+                                mintAuthority {
+                                    address
+                                    lamports
                                 }
+                                supply
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -366,20 +364,18 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    decimals: 6,
-                                    isInitialized: true,
-                                    mintAuthority: {
-                                        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                                        lamports: expect.any(BigInt),
-                                    },
-                                    supply: expect.any(String),
-                                },
-                                type: 'mint',
+                            decimals: 6,
+                            isInitialized: true,
+                            mintAuthority: {
+                                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+                                lamports: expect.any(BigInt),
                             },
+                            supply: expect.any(String),
+                        },
+                        meta: {
                             program: 'spl-token',
                             space: 82n,
+                            type: 'mint',
                         },
                     },
                 },
@@ -396,25 +392,23 @@ describe('account', () => {
                     account(address: $address) {
                         ... on TokenAccount {
                             data {
-                                parsed {
-                                    info {
-                                        isNative
-                                        mint
-                                        owner {
-                                            address
-                                        }
-                                        state
-                                        tokenAmount {
-                                            amount
-                                            decimals
-                                            uiAmount
-                                            uiAmountString
-                                        }
-                                    }
-                                    type
+                                isNative
+                                mint
+                                owner {
+                                    address
                                 }
+                                state
+                                tokenAmount {
+                                    amount
+                                    decimals
+                                    uiAmount
+                                    uiAmountString
+                                }
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -425,24 +419,22 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    isNative: expect.any(Boolean),
-                                    mint: expect.any(String),
-                                    owner: {
-                                        address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
-                                    },
-                                    state: expect.any(String),
-                                    tokenAmount: {
-                                        amount: expect.any(String),
-                                        decimals: expect.any(Number),
-                                        uiAmountString: expect.any(String),
-                                    },
-                                },
-                                type: 'account',
+                            isNative: expect.any(Boolean),
+                            mint: expect.any(String),
+                            owner: {
+                                address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
                             },
+                            state: expect.any(String),
+                            tokenAmount: {
+                                amount: expect.any(String),
+                                decimals: expect.any(Number),
+                                uiAmountString: expect.any(String),
+                            },
+                        },
+                        meta: {
                             program: 'spl-token',
                             space: 165n,
+                            type: 'account',
                         },
                     },
                 },
@@ -459,20 +451,18 @@ describe('account', () => {
                     account(address: $address) {
                         ... on NonceAccount {
                             data {
-                                parsed {
-                                    info {
-                                        authority {
-                                            address
-                                        }
-                                        blockhash
-                                        feeCalculator {
-                                            lamportsPerSignature
-                                        }
-                                    }
-                                    type
+                                authority {
+                                    address
                                 }
+                                blockhash
+                                feeCalculator {
+                                    lamportsPerSignature
+                                }
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -483,20 +473,18 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    authority: {
-                                        address: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
-                                    },
-                                    blockhash: expect.any(String),
-                                    feeCalculator: {
-                                        lamportsPerSignature: expect.any(String),
-                                    },
-                                },
-                                type: 'initialized',
+                            authority: {
+                                address: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
                             },
+                            blockhash: expect.any(String),
+                            feeCalculator: {
+                                lamportsPerSignature: expect.any(String),
+                            },
+                        },
+                        meta: {
                             program: 'nonce',
                             space: 80n,
+                            type: 'initialized',
                         },
                     },
                 },
@@ -513,42 +501,40 @@ describe('account', () => {
                     account(address: $address) {
                         ... on StakeAccount {
                             data {
-                                parsed {
-                                    info {
-                                        meta {
-                                            authorized {
-                                                staker {
-                                                    address
-                                                }
-                                                withdrawer {
-                                                    address
-                                                }
-                                            }
-                                            lockup {
-                                                custodian {
-                                                    address
-                                                }
-                                                epoch
-                                                unixTimestamp
-                                            }
-                                            rentExemptReserve
+                                meta {
+                                    authorized {
+                                        staker {
+                                            address
                                         }
-                                        stake {
-                                            creditsObserved
-                                            delegation {
-                                                activationEpoch
-                                                deactivationEpoch
-                                                stake
-                                                voter {
-                                                    address
-                                                }
-                                            }
+                                        withdrawer {
+                                            address
                                         }
                                     }
-                                    type
+                                    lockup {
+                                        custodian {
+                                            address
+                                        }
+                                        epoch
+                                        unixTimestamp
+                                    }
+                                    rentExemptReserve
                                 }
+                                stake {
+                                    creditsObserved
+                                    delegation {
+                                        activationEpoch
+                                        deactivationEpoch
+                                        stake
+                                        voter {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -559,42 +545,40 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    meta: {
-                                        authorized: {
-                                            staker: {
-                                                address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
-                                            },
-                                            withdrawer: {
-                                                address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
-                                            },
-                                        },
-                                        lockup: {
-                                            custodian: {
-                                                address: '11111111111111111111111111111111',
-                                            },
-                                            epoch: expect.any(BigInt),
-                                            unixTimestamp: expect.any(BigInt),
-                                        },
-                                        rentExemptReserve: expect.any(String),
+                            meta: {
+                                authorized: {
+                                    staker: {
+                                        address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
                                     },
-                                    stake: {
-                                        creditsObserved: expect.any(BigInt),
-                                        delegation: {
-                                            activationEpoch: expect.any(BigInt),
-                                            deactivationEpoch: expect.any(BigInt),
-                                            stake: expect.any(String),
-                                            voter: {
-                                                address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
-                                            },
-                                        },
+                                    withdrawer: {
+                                        address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
                                     },
                                 },
-                                type: 'delegated',
+                                lockup: {
+                                    custodian: {
+                                        address: '11111111111111111111111111111111',
+                                    },
+                                    epoch: expect.any(BigInt),
+                                    unixTimestamp: expect.any(BigInt),
+                                },
+                                rentExemptReserve: expect.any(String),
                             },
+                            stake: {
+                                creditsObserved: expect.any(BigInt),
+                                delegation: {
+                                    activationEpoch: expect.any(BigInt),
+                                    deactivationEpoch: expect.any(BigInt),
+                                    stake: expect.any(String),
+                                    voter: {
+                                        address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
+                                    },
+                                },
+                            },
+                        },
+                        meta: {
                             program: 'stake',
                             space: 200n,
+                            type: 'delegated',
                         },
                     },
                 },
@@ -611,41 +595,39 @@ describe('account', () => {
                     account(address: $address) {
                         ... on VoteAccount {
                             data {
-                                parsed {
-                                    info {
-                                        authorizedVoters {
-                                            authorizedVoter {
-                                                address
-                                            }
-                                            epoch
-                                        }
-                                        authorizedWithdrawer {
-                                            address
-                                        }
-                                        commission
-                                        epochCredits {
-                                            credits
-                                            epoch
-                                            previousCredits
-                                        }
-                                        lastTimestamp {
-                                            slot
-                                            timestamp
-                                        }
-                                        node {
-                                            address
-                                        }
-                                        priorVoters
-                                        rootSlot
-                                        votes {
-                                            confirmationCount
-                                            slot
-                                        }
+                                authorizedVoters {
+                                    authorizedVoter {
+                                        address
                                     }
-                                    type
+                                    epoch
                                 }
+                                authorizedWithdrawer {
+                                    address
+                                }
+                                commission
+                                epochCredits {
+                                    credits
+                                    epoch
+                                    previousCredits
+                                }
+                                lastTimestamp {
+                                    slot
+                                    timestamp
+                                }
+                                node {
+                                    address
+                                }
+                                priorVoters
+                                rootSlot
+                                votes {
+                                    confirmationCount
+                                    slot
+                                }
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -656,47 +638,45 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    authorizedVoters: expect.arrayContaining([
-                                        {
-                                            authorizedVoter: {
-                                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
-                                            },
-                                            epoch: expect.any(BigInt),
-                                        },
-                                    ]),
-                                    authorizedWithdrawer: {
+                            authorizedVoters: expect.arrayContaining([
+                                {
+                                    authorizedVoter: {
                                         address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                     },
-                                    commission: expect.any(Number),
-                                    epochCredits: expect.arrayContaining([
-                                        {
-                                            credits: expect.any(String),
-                                            epoch: expect.any(BigInt),
-                                            previousCredits: expect.any(String),
-                                        },
-                                    ]),
-                                    lastTimestamp: {
-                                        slot: expect.any(BigInt),
-                                        timestamp: expect.any(BigInt),
-                                    },
-                                    node: {
-                                        address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
-                                    },
-                                    priorVoters: expect.any(Array),
-                                    rootSlot: expect.any(BigInt),
-                                    votes: expect.arrayContaining([
-                                        {
-                                            confirmationCount: expect.any(Number),
-                                            slot: expect.any(BigInt),
-                                        },
-                                    ]),
+                                    epoch: expect.any(BigInt),
                                 },
-                                type: 'vote',
+                            ]),
+                            authorizedWithdrawer: {
+                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                             },
+                            commission: expect.any(Number),
+                            epochCredits: expect.arrayContaining([
+                                {
+                                    credits: expect.any(String),
+                                    epoch: expect.any(BigInt),
+                                    previousCredits: expect.any(String),
+                                },
+                            ]),
+                            lastTimestamp: {
+                                slot: expect.any(BigInt),
+                                timestamp: expect.any(BigInt),
+                            },
+                            node: {
+                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                            },
+                            priorVoters: expect.any(Array),
+                            rootSlot: expect.any(BigInt),
+                            votes: expect.arrayContaining([
+                                {
+                                    confirmationCount: expect.any(Number),
+                                    slot: expect.any(BigInt),
+                                },
+                            ]),
+                        },
+                        meta: {
                             program: 'vote',
                             space: expect.any(BigInt),
+                            type: 'vote',
                         },
                     },
                 },
@@ -713,20 +693,18 @@ describe('account', () => {
                     account(address: $address) {
                         ... on LookupTableAccount {
                             data {
-                                parsed {
-                                    info {
-                                        addresses
-                                        authority {
-                                            address
-                                        }
-                                        deactivationSlot
-                                        lastExtendedSlot
-                                        lastExtendedSlotStartIndex
-                                    }
-                                    type
+                                addresses
+                                authority {
+                                    address
                                 }
+                                deactivationSlot
+                                lastExtendedSlot
+                                lastExtendedSlotStartIndex
+                            }
+                            meta {
                                 program
                                 space
+                                type
                             }
                         }
                     }
@@ -737,20 +715,18 @@ describe('account', () => {
                 data: {
                     account: {
                         data: {
-                            parsed: {
-                                info: {
-                                    addresses: expect.any(Array),
-                                    authority: {
-                                        address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
-                                    },
-                                    deactivationSlot: expect.any(String),
-                                    lastExtendedSlot: expect.any(String),
-                                    lastExtendedSlotStartIndex: expect.any(Number),
-                                },
-                                type: 'lookupTable',
+                            addresses: expect.any(Array),
+                            authority: {
+                                address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
                             },
+                            deactivationSlot: expect.any(String),
+                            lastExtendedSlot: expect.any(String),
+                            lastExtendedSlotStartIndex: expect.any(Number),
+                        },
+                        meta: {
                             program: 'address-lookup-table',
                             space: 1304n,
+                            type: 'lookupTable',
                         },
                     },
                 },

@@ -202,14 +202,10 @@ const source = `
         account(address: $address) {
             ... on MintAccount {
                 data {
-                    parsed {
-                        info {
-                            decimals
-                            isInitialized
-                            mintAuthority
-                            supply
-                        }
-                    }
+                    decimals
+                    isInitialized
+                    mintAuthority
+                    supply
                 }
             }
         }
@@ -222,9 +218,7 @@ for (const address of maybeMintAddresses) {
         const {
             data: {
                 account: {
-                    data: {
-                        parsed: { info: mintInfo },
-                    },
+                    data: mintInfo,
                 },
             },
         } = result;
@@ -251,26 +245,22 @@ const source = `
         account(address: $address) {
             ... on MintAccount {
                 data {
-                    parsed {
-                        info {
-                            decimals
-                            isInitialized
-                            supply
-                        }
-                        type
-                    }
+                    decimals
+                    isInitialized
+                    supply
+                }
+                meta {
+                    type
                 }
             }
             ... on TokenAccount {
                 data {
-                    parsed {
-                        info {
-                            isNative
-                            mint
-                            state
-                        }
-                        type
-                    }
+                    isNative
+                    mint
+                    state
+                }
+                meta {
+                    type
                 }
             }
         }
@@ -283,11 +273,9 @@ for (const address of mintOrTokenAccountAddresses) {
         const {
             data: {
                 account: {
-                    data: {
-                        parsed: {
-                            info: accountParsedInfo,
-                            type: accountType,
-                        }
+                    data: accountParsedInfo,
+                    meta: {
+                        type: accountType,
                     }
                 }
             }
@@ -427,13 +415,9 @@ const source = `
             ... on MintAccount {
                 address
                 data {
-                    parsed {
-                        info {
-                            mintAuthority {
-                                address
-                                lamports
-                            }
-                        }
+                    mintAuthority {
+                        address
+                        lamports
                     }
                 }
             }
@@ -453,13 +437,9 @@ data: {
     account: {
         address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
         data: {
-            parsed: {
-                info: {
-                    mintAuthority: {
-                        address: 'DpfJkNonoVB3sor9H9ceajhex4XHVPrDAGAq2ahdG4JZ',
-                        lamports: 10290815n,
-                    }
-                }
+            mintAuthority: {
+                address: 'DpfJkNonoVB3sor9H9ceajhex4XHVPrDAGAq2ahdG4JZ',
+                lamports: 10290815n,
             }
         },
     },
@@ -524,26 +504,24 @@ const source = `
         programAccounts(programAddress: $address) {
             ... on MintAccount {
                 data {
-                    parsed {
-                        info {
-                            decimals
-                            isInitialized
-                            mintAuthority
-                            supply
-                        }
-                    }
+                    decimals
+                    isInitialized
+                    mintAuthority
+                    supply
+                }
+                meta {
+                    type
                 }
             }
             ... on TokenAccount {
                 data {
-                    parsed {
-                        info {
-                            isNative
-                            mint
-                            owner
-                            state
-                        }
-                    }
+                    isNative
+                    mint
+                    owner
+                    state
+                }
+                meta {
+                    type
                 }
             }
         }
@@ -559,11 +537,9 @@ const result = await rpcGraphQL.query(source, variableValues);
 const { mints, tokenAccounts } = result.data.programAccounts.reduce(
   (acc: { mints: any[]; tokenAccounts: any[] }, account) => {
     const {
-        data: {
-            parsed: {
-                info: accountParsedInfo,
-                type: accountType,
-            }
+        data: accountParsedInfo,
+        meta: {
+            type: accountType,
         }
     } = account;
     if (accountType === "mint") {
@@ -639,13 +615,9 @@ const source = `
         programAccounts(programAddress: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
             ... on TokenAccount {
                 data {
-                    parsed {
-                        info {
-                            owner {
-                                owner {
-                                    lamports
-                                }
-                            }
+                    owner {
+                        owner {
+                            lamports
                         }
                     }
                 }
@@ -657,7 +629,7 @@ const source = `
 const result = await rpcGraphQL.query(source);
 
 const sumOfAllLamportsOfOwnersOfOwnersOfTokenAccounts = result.data
-    .map(o => o.account.data.parsed.info.owner.owner.lamports)
+    .map(o => o.account.data.owner.owner.lamports)
     .reduce((acc, lamports) => acc + lamports, 0);
 ```
 
@@ -975,26 +947,18 @@ const source = `
                                             destination {
                                                 ... on TokenAccount {
                                                     data {
-                                                        parsed {
-                                                            info {
-                                                                address
-                                                                mint {
-                                                                    ... on MintAccount {
-                                                                        data {
-                                                                            parsed {
-                                                                                info {
-                                                                                    address
-                                                                                    decimals
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                owner {
+                                                        address
+                                                        mint {
+                                                            ... on MintAccount {
+                                                                data {
                                                                     address
-                                                                    lamports
+                                                                    decimals
                                                                 }
                                                             }
+                                                        }
+                                                        owner {
+                                                            address
+                                                            lamports
                                                         }
                                                     }
                                                 }
@@ -1002,26 +966,18 @@ const source = `
                                             source {
                                                 ... on TokenAccount {
                                                     data {
-                                                        parsed {
-                                                            info {
-                                                                address
-                                                                mint {
-                                                                    ... on MintAccount {
-                                                                        data {
-                                                                            parsed {
-                                                                                info {
-                                                                                    address
-                                                                                    decimals
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                                owner {
+                                                        address
+                                                        mint {
+                                                            ... on MintAccount {
+                                                                data {
                                                                     address
-                                                                    lamports
+                                                                    decimals
                                                                 }
                                                             }
+                                                        }
+                                                        owner {
+                                                            address
+                                                            lamports
                                                         }
                                                     }
                                                 }
@@ -1063,23 +1019,15 @@ data: {
                                 },
                                 destination: {
                                     data: {
-                                        parsed: {
-                                            info: {
-                                                address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
-                                                mint: data: {
-                                                    parsed: {
-                                                        info: {
-                                                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                                            decimals: 6,
-                                                        }
-                                                    }
-                                                },
-                                                owner: {
-                                                    address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
-                                                    lamports: 890880n,
-                                                },
-                                            }
-                                        }
+                                        address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
+                                        mint: data: {
+                                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                                            decimals: 6,
+                                        },
+                                        owner: {
+                                            address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
+                                            lamports: 890880n,
+                                        },
                                     }
                                 },
                                 source: {
@@ -1088,12 +1036,8 @@ data: {
                                             info: {
                                                 address: 'BqFCPqXUm4cq6jaZZx1TDTvUR1wdEuNNwAHBEVR6mJhM',
                                                 mint: data: {
-                                                    parsed: {
-                                                        info: {
-                                                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                                            decimals: 6,
-                                                        }
-                                                    }
+                                                    address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                                                    decimals: 6,
                                                 },
                                                 owner: {
                                                     address: '3dPmVLMD7PC5faZNyJUH9WFrUxAsbjydJfoozwmR1wDG',

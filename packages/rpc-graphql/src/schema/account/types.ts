@@ -19,6 +19,21 @@ export const tokenAmountType = () => {
     return memoisedTokenAmountType;
 };
 
+let memoisedJsonParsedMeta: GraphQLObjectType | undefined;
+export const jsonParsedMeta = () => {
+    if (!memoisedJsonParsedMeta) {
+        memoisedJsonParsedMeta = new GraphQLObjectType({
+            fields: {
+                program: string(),
+                space: bigint(),
+                type: string(),
+            },
+            name: 'JsonParsedMeta',
+        });
+    }
+    return memoisedJsonParsedMeta;
+};
+
 /**
  * The fields of the account interface
  */
@@ -60,22 +75,22 @@ export const accountInterface = (): GraphQLInterfaceType => {
                     return 'AccountBase64Zstd';
                 }
                 if (account.encoding === 'jsonParsed') {
-                    if (account.data.parsed.type === 'mint' && account.data.program === 'spl-token') {
+                    if (account.meta.type === 'mint' && account.meta.program === 'spl-token') {
                         return 'MintAccount';
                     }
-                    if (account.data.parsed.type === 'account' && account.data.program === 'spl-token') {
+                    if (account.meta.type === 'account' && account.meta.program === 'spl-token') {
                         return 'TokenAccount';
                     }
-                    if (account.data.program === 'nonce') {
+                    if (account.meta.program === 'nonce') {
                         return 'NonceAccount';
                     }
-                    if (account.data.program === 'stake') {
+                    if (account.meta.program === 'stake') {
                         return 'StakeAccount';
                     }
-                    if (account.data.parsed.type === 'vote' && account.data.program === 'vote') {
+                    if (account.meta.type === 'vote' && account.meta.program === 'vote') {
                         return 'VoteAccount';
                     }
-                    if (account.data.parsed.type === 'lookupTable' && account.data.program === 'address-lookup-table') {
+                    if (account.meta.type === 'lookupTable' && account.meta.program === 'address-lookup-table') {
                         return 'LookupTableAccount';
                     }
                 }
@@ -97,60 +112,63 @@ export const accountInterface = (): GraphQLInterfaceType => {
 const accountType = (
     name: string,
     description: string,
-    data: { type: GraphQLScalarType | GraphQLObjectType }
-): GraphQLObjectType =>
-    new GraphQLObjectType({
-        description,
-        fields: {
-            ...accountInterfaceFields(),
-            data,
-            // Nested Account interface
-            owner: {
-                args: {
-                    commitment: type(commitmentInputType()),
-                    dataSlice: type(dataSliceInputType()),
-                    encoding: type(accountEncodingInputType()),
-                    minContextSlot: bigint(),
-                },
-                resolve: (parent, args, context, info) =>
-                    context.resolveAccount({ ...args, address: parent.owner }, info),
-                type: accountInterface(),
+    data: { type: GraphQLScalarType | GraphQLObjectType },
+    meta: boolean
+): GraphQLObjectType => {
+    const fieldsBase = {
+        ...accountInterfaceFields(),
+        data,
+        // Nested Account interface
+        owner: {
+            args: {
+                commitment: type(commitmentInputType()),
+                dataSlice: type(dataSliceInputType()),
+                encoding: type(accountEncodingInputType()),
+                minContextSlot: bigint(),
             },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            resolve: (parent: any, args: any, context: any, info: any) =>
+                context.resolveAccount({ ...args, address: parent.owner }, info),
+            type: accountInterface(),
         },
-        interfaces: [accountInterface()],
-        name,
-    });
-
-/**
- * Builds JSON parsed account data
- * Note: JSON parsed data is only available for account types with known schemas.
- * Any account with an unknown schema will return base64 encoded data.
- * @see https://docs.solana.com/api/http#parsed-responses
- * @param name              The name of the account type
- * @param parsedInfoFields  The fields of the parsed info object
- * @returns                 The JSON parsed account data as a GraphQL object
- */
-const accountDataJsonParsed = (name: string, parsedInfoFields: Parameters<typeof object>[1]) =>
-    object(name + 'Data', {
-        parsed: object(name + 'DataParsed', {
-            info: object(name + 'DataParsedInfo', parsedInfoFields),
-            type: string(),
-        }),
-        program: string(),
-        space: bigint(),
-    });
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const graphQLObject = (fields: any) =>
+        new GraphQLObjectType({
+            description,
+            fields,
+            interfaces: [accountInterface()],
+            name,
+        });
+    return meta
+        ? graphQLObject({
+              ...fieldsBase,
+              meta: type(jsonParsedMeta()),
+          })
+        : graphQLObject(fieldsBase);
+};
 
 let memoisedAccountBase58: GraphQLObjectType | undefined;
 const accountBase58 = () => {
     if (!memoisedAccountBase58)
-        memoisedAccountBase58 = accountType('AccountBase58', 'A Solana account with base58 encoded data', string());
+        memoisedAccountBase58 = accountType(
+            'AccountBase58',
+            'A Solana account with base58 encoded data',
+            string(),
+            false
+        );
     return memoisedAccountBase58;
 };
 
 let memoisedAccountBase64: GraphQLObjectType | undefined;
 const accountBase64 = () => {
     if (!memoisedAccountBase64)
-        memoisedAccountBase64 = accountType('AccountBase64', 'A Solana account with base64 encoded data', string());
+        memoisedAccountBase64 = accountType(
+            'AccountBase64',
+            'A Solana account with base64 encoded data',
+            string(),
+            false
+        );
     return memoisedAccountBase64;
 };
 
@@ -160,7 +178,8 @@ const accountBase64Zstd = () => {
         memoisedAccountBase64Zstd = accountType(
             'AccountBase64Zstd',
             'A Solana account with base64 encoded data compressed with zstd',
-            string()
+            string(),
+            false
         );
     return memoisedAccountBase64Zstd;
 };
@@ -171,7 +190,7 @@ const accountNonceAccount = () => {
         memoisedAccountNonceAccount = accountType(
             'NonceAccount',
             'A nonce account',
-            accountDataJsonParsed('Nonce', {
+            object('NonceData', {
                 // Nested Account interface
                 authority: {
                     args: {
@@ -189,7 +208,8 @@ const accountNonceAccount = () => {
                 feeCalculator: object('NonceFeeCalculator', {
                     lamportsPerSignature: string(),
                 }),
-            })
+            }),
+            true
         );
     return memoisedAccountNonceAccount;
 };
@@ -200,7 +220,7 @@ const accountLookupTable = () => {
         memoisedAccountLookupTable = accountType(
             'LookupTableAccount',
             'An address lookup table account',
-            accountDataJsonParsed('LookupTable', {
+            object('LookupTableData', {
                 addresses: list(string()),
                 // Nested Account interface
                 authority: {
@@ -218,7 +238,8 @@ const accountLookupTable = () => {
                 deactivationSlot: string(),
                 lastExtendedSlot: string(),
                 lastExtendedSlotStartIndex: number(),
-            })
+            }),
+            true
         );
     return memoisedAccountLookupTable;
 };
@@ -229,7 +250,7 @@ const accountMint = () => {
         memoisedAccountMint = accountType(
             'MintAccount',
             'An SPL mint',
-            accountDataJsonParsed('Mint', {
+            object('MintData', {
                 decimals: number(),
                 freezeAuthority: string(),
                 isInitialized: boolean(),
@@ -247,7 +268,8 @@ const accountMint = () => {
                     type: accountInterface(),
                 },
                 supply: string(),
-            })
+            }),
+            true
         );
     return memoisedAccountMint;
 };
@@ -258,7 +280,7 @@ const accountTokenAccount = () => {
         memoisedAccountTokenAccount = accountType(
             'TokenAccount',
             'An SPL token account',
-            accountDataJsonParsed('TokenAccount', {
+            object('TokenAccountData', {
                 isNative: boolean(),
                 mint: string(),
                 // Nested Account interface
@@ -276,7 +298,8 @@ const accountTokenAccount = () => {
                 },
                 state: string(),
                 tokenAmount: type(tokenAmountType()),
-            })
+            }),
+            true
         );
     return memoisedAccountTokenAccount;
 };
@@ -287,7 +310,7 @@ const accountStakeAccount = () => {
         memoisedAccountStakeAccount = accountType(
             'StakeAccount',
             'A stake account',
-            accountDataJsonParsed('Stake', {
+            object('StakeData', {
                 meta: object('StakeMeta', {
                     authorized: object('StakeMetaAuthorized', {
                         // Nested Account interface
@@ -358,7 +381,8 @@ const accountStakeAccount = () => {
                         warmupCooldownRate: number(),
                     }),
                 }),
-            })
+            }),
+            true
         );
     return memoisedAccountStakeAccount;
 };
@@ -369,7 +393,7 @@ const accountVoteAccount = () => {
         memoisedAccountVoteAccount = accountType(
             'VoteAccount',
             'A vote account',
-            accountDataJsonParsed('Vote', {
+            object('VoteData', {
                 authorizedVoters: list(
                     object('VoteAuthorizedVoter', {
                         // Nested Account interface
@@ -434,7 +458,8 @@ const accountVoteAccount = () => {
                         slot: bigint(),
                     })
                 ),
-            })
+            }),
+            true
         );
     return memoisedAccountVoteAccount;
 };
