@@ -5,9 +5,7 @@ import { CompilableTransaction } from '@solana/transactions';
 /** Defines a signer capable of signing and sending transactions simultaneously. */
 export type TransactionSenderSigner<TAddress extends string = string> = {
     address: Address<TAddress>;
-    signAndSendTransaction<TTransaction extends CompilableTransaction>(
-        transactions: readonly TTransaction[]
-    ): Promise<readonly SignatureBytes[]>;
+    signAndSendTransaction(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureBytes[]>;
 };
 
 /** Checks whether the provided value implements the {@link TransactionSenderSigner} interface. */

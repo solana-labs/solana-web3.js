@@ -6,9 +6,7 @@ import { SignatureDictionary } from './types';
 /** Defines a signer capable of signing transactions. */
 export type TransactionPartialSigner<TAddress extends string = string> = {
     address: Address<TAddress>;
-    signTransaction<TTransaction extends CompilableTransaction>(
-        transactions: readonly TTransaction[]
-    ): Promise<readonly SignatureDictionary[]>;
+    signTransaction(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureDictionary[]>;
 };
 
 /** Checks whether the provided value implements the {@link TransactionPartialSigner} interface. */
