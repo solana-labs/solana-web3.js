@@ -10,7 +10,7 @@ import { blockInterface } from './types';
 export type BlockQueryArgs = {
     slot: Slot;
     commitment?: Commitment;
-    encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
+    encoding?: 'base58' | 'base64' | 'jsonParsed';
     maxSupportedTransactionVersion?: Exclude<TransactionVersion, 'legacy'>;
     rewards?: boolean;
     transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
