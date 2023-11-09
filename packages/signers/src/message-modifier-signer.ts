@@ -1,18 +1,11 @@
 import { Address, isAddress } from '@solana/addresses';
 
-/**
- * The response for signing a message using a {@link MessageModifierSigner}.
- * It includes the (potentially) modified message as well as its signature.
- */
-export type SignedMessageResponse = {
-    signature: Uint8Array;
-    signedMessage: Uint8Array;
-};
+import { SignableMessage } from './signable-message';
 
 /** Defines a signer capable of signing messages. */
 export type MessageModifierSigner<TAddress extends string = string> = {
     address: Address<TAddress>;
-    modifyAndSignMessage(messages: readonly Uint8Array[]): Promise<readonly SignedMessageResponse[]>;
+    modifyAndSignMessage(messages: readonly SignableMessage[]): Promise<readonly SignableMessage[]>;
 };
 
 /** Checks whether the provided value implements the {@link MessageModifierSigner} interface. */

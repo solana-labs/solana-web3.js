@@ -9,6 +9,7 @@ import {
     isKeyPairSigner,
     KeyPairSigner,
 } from '../keypair-signer';
+import { createSignableMessage } from '../signable-message';
 
 const getMockCryptoKeyPair = () => ({ privateKey: {}, publicKey: {} } as CryptoKeyPair);
 
@@ -102,7 +103,10 @@ describe('createSignerFromKeyPair', () => {
         jest.mocked(signBytes).mockResolvedValueOnce(mockSignatures[1]);
 
         // When we sign two messages using that signer.
-        const messages = [new Uint8Array([1, 1, 1]), new Uint8Array([2, 2, 2])];
+        const messages = [
+            createSignableMessage(new Uint8Array([1, 1, 1])),
+            createSignableMessage(new Uint8Array([2, 2, 2])),
+        ];
         const signatureDictionaries = await mySigner.signMessage(messages);
 
         // Then the message reponses contains both the signed messages and their signatures.
@@ -111,8 +115,8 @@ describe('createSignerFromKeyPair', () => {
 
         // And signBytes was called twice with the expected parameters.
         expect(jest.mocked(signBytes)).toHaveBeenCalledTimes(2);
-        expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(1, myKeyPair.privateKey, messages[0]);
-        expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(2, myKeyPair.privateKey, messages[1]);
+        expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(1, myKeyPair.privateKey, messages[0].content);
+        expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(2, myKeyPair.privateKey, messages[1].content);
     });
 
     it('signs transactions using the signTransaction function', async () => {
