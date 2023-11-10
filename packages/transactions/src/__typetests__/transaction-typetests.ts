@@ -9,6 +9,7 @@ import {
     ITransactionWithBlockhashLifetime,
     ITransactionWithSignatures,
     Nonce,
+    partiallySignTransaction,
     prependTransactionInstruction,
     setTransactionLifetimeUsingBlockhash,
     setTransactionLifetimeUsingDurableNonce,
@@ -237,6 +238,80 @@ async () => {
         IDurableNonceTransaction &
         ITransactionWithSignatures;
 
+    // partiallySignTransaction
+    // (blockhash)
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime
+    ) satisfies Promise<
+        Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime
+        // @ts-expect-error Version should match
+    ) satisfies Promise<
+        Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime
+    ) satisfies Promise<
+        Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    ) satisfies Promise<
+        Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 'legacy' }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+        // @ts-expect-error Version should match
+    ) satisfies Promise<
+        Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+    partiallySignTransaction(
+        [mockSigner],
+        null as unknown as Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    ) satisfies Promise<
+        Extract<Transaction, { version: 0 }> &
+            ITransactionWithFeePayer<'feePayer'> &
+            ITransactionWithBlockhashLifetime &
+            ITransactionWithSignatures
+    >;
+
     // signTransaction
     // (checks)
     signTransaction(
@@ -270,7 +345,7 @@ async () => {
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
     signTransaction(
         [mockSigner],
@@ -282,7 +357,7 @@ async () => {
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
     signTransaction(
         [mockSigner],
@@ -293,7 +368,7 @@ async () => {
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
     signTransaction(
         [mockSigner],
@@ -305,7 +380,7 @@ async () => {
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
     signTransaction(
         [mockSigner],
@@ -318,7 +393,7 @@ async () => {
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
     signTransaction(
         [mockSigner],
@@ -330,7 +405,7 @@ async () => {
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            IFullySignedTransaction
     >;
 
     // compileMessage

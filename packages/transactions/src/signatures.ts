@@ -35,7 +35,7 @@ export function getSignatureFromTransaction(
     return transactionSignature as Signature;
 }
 
-export async function signTransaction<TTransaction extends CompilableTransaction>(
+export async function partiallySignTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
 ): Promise<TTransaction & ITransactionWithSignatures> {
@@ -55,6 +55,16 @@ export async function signTransaction<TTransaction extends CompilableTransaction
         ...transaction,
         signatures: nextSignatures,
     };
+    Object.freeze(out);
+    return out;
+}
+
+export async function signTransaction<TTransaction extends CompilableTransaction>(
+    keyPairs: CryptoKeyPair[],
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+): Promise<TTransaction & IFullySignedTransaction> {
+    const out = await partiallySignTransaction(keyPairs, transaction);
+    assertTransactionIsFullySigned(out);
     Object.freeze(out);
     return out;
 }
