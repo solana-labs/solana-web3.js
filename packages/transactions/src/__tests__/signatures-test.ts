@@ -17,6 +17,7 @@ import {
     assertTransactionIsFullySigned,
     getSignatureFromTransaction,
     ITransactionWithSignatures,
+    partiallySignTransaction,
     signTransaction,
 } from '../signatures';
 
@@ -53,8 +54,8 @@ describe('getSignatureFromTransaction', () => {
     });
 });
 
-describe('signTransaction', () => {
-    const MOCK_TRANSACTION = {} as unknown as Parameters<typeof signTransaction>[1];
+describe('partiallySignTransaction', () => {
+    const MOCK_TRANSACTION = {} as unknown as Parameters<typeof partiallySignTransaction>[1];
     const MOCK_SIGNATURE_A = new Uint8Array(Array(64).fill(1));
     const MOCK_SIGNATURE_B = new Uint8Array(Array(64).fill(2));
     const MOCK_SIGNATURE_C = new Uint8Array(Array(64).fill(3));
@@ -120,7 +121,7 @@ describe('signTransaction', () => {
     });
     it("returns a transaction object having the first signer's signature", async () => {
         expect.assertions(1);
-        const partiallySignedTransactionPromise = signTransaction([mockKeyPairA], MOCK_TRANSACTION);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], MOCK_TRANSACTION);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({ [mockPublicKeyAddressA]: MOCK_SIGNATURE_A })
@@ -128,7 +129,7 @@ describe('signTransaction', () => {
     });
     it("returns a transaction object having the second signer's signature", async () => {
         expect.assertions(1);
-        const partiallySignedTransactionPromise = signTransaction([mockKeyPairB], MOCK_TRANSACTION);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairB], MOCK_TRANSACTION);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({ [mockPublicKeyAddressB]: MOCK_SIGNATURE_B })
@@ -136,7 +137,7 @@ describe('signTransaction', () => {
     });
     it('returns a transaction object having multiple signatures', async () => {
         expect.assertions(1);
-        const partiallySignedTransactionPromise = signTransaction(
+        const partiallySignedTransactionPromise = partiallySignTransaction(
             [mockKeyPairA, mockKeyPairB, mockKeyPairC],
             MOCK_TRANSACTION
         );
@@ -155,11 +156,147 @@ describe('signTransaction', () => {
             ...MOCK_TRANSACTION,
             signatures: { [mockPublicKeyAddressB]: MOCK_SIGNATURE_B },
         };
-        const partiallySignedTransactionPromise = signTransaction(
+        const partiallySignedTransactionPromise = partiallySignTransaction(
             [mockKeyPairA],
             mockTransactionWithSignatureForSignerA
         );
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            })
+        );
+    });
+    it("does not mutate the original signatures when updating a transaction's signatures", async () => {
+        expect.assertions(2);
+        const startingSignatures = { [mockPublicKeyAddressB]: MOCK_SIGNATURE_B } as const;
+        const mockTransactionWithSignatureForSignerA = {
+            ...MOCK_TRANSACTION,
+            signatures: startingSignatures,
+        };
+        const { signatures } = await partiallySignTransaction([mockKeyPairA], mockTransactionWithSignatureForSignerA);
+        expect(signatures).not.toBe(startingSignatures);
+        expect(signatures).toMatchObject({
+            [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+        });
+    });
+    it("does not mutate the original signatures when updating a transaction's signatures with multiple signers", async () => {
+        expect.assertions(2);
+        const startingSignatures = { [mockPublicKeyAddressB]: MOCK_SIGNATURE_B } as const;
+        const mockTransactionWithSignatureForSignerA = {
+            ...MOCK_TRANSACTION,
+            signatures: startingSignatures,
+        };
+        const { signatures } = await partiallySignTransaction(
+            [mockKeyPairA, mockKeyPairC],
+            mockTransactionWithSignatureForSignerA
+        );
+        expect(signatures).not.toBe(startingSignatures);
+        expect(signatures).toMatchObject({
+            [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            [mockPublicKeyAddressC]: MOCK_SIGNATURE_C,
+        });
+    });
+    it('freezes the object', async () => {
+        expect.assertions(1);
+        await expect(partiallySignTransaction([mockKeyPairA], MOCK_TRANSACTION)).resolves.toBeFrozenObject();
+    });
+});
+
+describe('signTransaction', () => {
+    const mockPublicKeyAddressA = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' as Address<'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'>;
+    const mockPublicKeyAddressB = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Address<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
+    const MOCK_TRANSACTION = {
+        feePayer: mockPublicKeyAddressA,
+        instructions: [
+            {
+                accounts: [{ address: mockPublicKeyAddressB, role: AccountRole.READONLY_SIGNER }],
+                programAddress: '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
+            },
+        ],
+    } as unknown as Parameters<typeof signTransaction>[1];
+    const MOCK_SIGNATURE_A = new Uint8Array(Array(64).fill(1));
+    const MOCK_SIGNATURE_B = new Uint8Array(Array(64).fill(2));
+    const mockKeyPairA = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
+    const mockKeyPairB = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
+    beforeEach(async () => {
+        (compileMessage as jest.Mock).mockReturnValue({
+            header: {
+                numReadonlyNonSignerAccounts: 1,
+                numReadonlySignerAccounts: 1,
+                numSignerAccounts: 2,
+            },
+            instructions: [
+                {
+                    accountIndices: [/* mockPublicKeyAddressB */ 1],
+                    programAddressIndex: 2 /* system program */,
+                },
+            ],
+            lifetimeToken: 'fBrpLg4qfyVH8e3z4zbjAXy4kCZP2jCFdqy113vndcj' as Blockhash,
+            staticAccounts: [
+                /* 0: fee payer */ mockPublicKeyAddressA,
+                /* 1: read-only instruction signer address */ mockPublicKeyAddressB,
+                /* 2: system program */ '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
+            ],
+            version: 0,
+        } as CompiledMessage);
+        (getAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
+            switch (publicKey) {
+                case mockKeyPairA.publicKey:
+                    return mockPublicKeyAddressA;
+                case mockKeyPairB.publicKey:
+                    return mockPublicKeyAddressB;
+                default:
+                    return '99999999999999999999999999999999' as Address<'99999999999999999999999999999999'>;
+            }
+        });
+        (signBytes as jest.Mock).mockImplementation(async secretKey => {
+            switch (secretKey) {
+                case mockKeyPairA.privateKey:
+                    return MOCK_SIGNATURE_A;
+                case mockKeyPairB.privateKey:
+                    return MOCK_SIGNATURE_B;
+                default:
+                    return new Uint8Array(Array(64).fill(0xff));
+            }
+        });
+        (getAddressEncoder as jest.Mock).mockReturnValue({
+            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+        });
+        (getAddressDecoder as jest.Mock).mockReturnValue({});
+        (getAddressCodec as jest.Mock).mockReturnValue({
+            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+        });
+    });
+    it('fatals when missing a signer', async () => {
+        expect.assertions(1);
+        const signedTransactionPromise = signTransaction([mockKeyPairA], MOCK_TRANSACTION);
+        await expect(signedTransactionPromise).rejects.toThrow(
+            `Transaction is missing signature for address \`${mockPublicKeyAddressB}\``
+        );
+    });
+    it('returns a transaction object having multiple signatures', async () => {
+        expect.assertions(1);
+        const signedTransactionPromise = signTransaction([mockKeyPairA, mockKeyPairB], MOCK_TRANSACTION);
+        await expect(signedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            })
+        );
+    });
+    it('returns a transaction object without overwriting the existing signatures', async () => {
+        expect.assertions(1);
+        const mockTransactionWithSignatureForSignerA = {
+            ...MOCK_TRANSACTION,
+            signatures: { [mockPublicKeyAddressB]: MOCK_SIGNATURE_B },
+        };
+        const signedTransactionPromise = signTransaction([mockKeyPairA], mockTransactionWithSignatureForSignerA);
+        await expect(signedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
@@ -188,20 +325,16 @@ describe('signTransaction', () => {
             ...MOCK_TRANSACTION,
             signatures: startingSignatures,
         };
-        const { signatures } = await signTransaction(
-            [mockKeyPairA, mockKeyPairC],
-            mockTransactionWithSignatureForSignerA
-        );
+        const { signatures } = await signTransaction([mockKeyPairA], mockTransactionWithSignatureForSignerA);
         expect(signatures).not.toBe(startingSignatures);
         expect(signatures).toMatchObject({
             [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
             [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
-            [mockPublicKeyAddressC]: MOCK_SIGNATURE_C,
         });
     });
     it('freezes the object', async () => {
         expect.assertions(1);
-        await expect(signTransaction([mockKeyPairA], MOCK_TRANSACTION)).resolves.toBeFrozenObject();
+        await expect(signTransaction([mockKeyPairA, mockKeyPairB], MOCK_TRANSACTION)).resolves.toBeFrozenObject();
     });
 });
 
