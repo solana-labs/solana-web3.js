@@ -6,7 +6,7 @@ import type { Rpc } from '../context';
 import { TransactionQueryArgs } from '../schema/transaction';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function refineJsonParsedInstructionData(jsonParsedInstructionData: any) {
+function refineJsonParsedInstructionData(jsonParsedInstructionData: any) {
     if ('parsed' in jsonParsedInstructionData) {
         const meta = {
             program: jsonParsedInstructionData.program,
@@ -21,7 +21,7 @@ export function refineJsonParsedInstructionData(jsonParsedInstructionData: any) 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function refineJsonParsedTransactionData(jsonParsedTransactionData: any) {
+function refineJsonParsedTransactionData(jsonParsedTransactionData: any) {
     const refinedInstructions = jsonParsedTransactionData.message.instructions.map((instruction: unknown) =>
         refineJsonParsedInstructionData(instruction)
     );
@@ -33,7 +33,7 @@ export function refineJsonParsedTransactionData(jsonParsedTransactionData: any) 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function refineJsonParsedTransactionMeta(jsonParsedTransactionMeta: any) {
+function refineJsonParsedTransactionMeta(jsonParsedTransactionMeta: any) {
     const refinedInnerInstructions = jsonParsedTransactionMeta.innerInstructions.map(
         ({ index, instructions }: { index: number; instructions: unknown[] }) => {
             return {
@@ -49,20 +49,22 @@ export function refineJsonParsedTransactionMeta(jsonParsedTransactionMeta: any) 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function processQueryResponse({ encoding, transaction }: { encoding: string; transaction: any }) {
-    const [transactionData, transactionMeta, responseEncoding] = Array.isArray(transaction.transaction)
-        ? [transaction.transaction[0], transaction.meta, encoding]
-        : [
-              refineJsonParsedTransactionData(transaction.transaction),
-              refineJsonParsedTransactionMeta(transaction.meta),
-              encoding,
-          ];
+export function refineJsonParsedTransaction({ encoding, transaction }: { encoding: string; transaction: any }) {
+    const [transactionData, transactionMeta] = Array.isArray(transaction.transaction)
+        ? [transaction.transaction[0], transaction.meta]
+        : [refineJsonParsedTransactionData(transaction.transaction), refineJsonParsedTransactionMeta(transaction.meta)];
     return {
-        ...transaction,
         data: transactionData,
-        encoding: responseEncoding,
+        encoding,
         meta: transactionMeta,
+        slot: transaction.slot,
+        version: transaction.version,
     };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function processQueryResponse({ encoding, transaction }: { encoding: string; transaction: any }) {
+    return refineJsonParsedTransaction({ encoding, transaction });
 }
 
 export async function loadTransaction(
@@ -89,7 +91,10 @@ export async function loadTransaction(
     // This ensures the response always has the full transaction meta.
     let transaction = await rpc
         .getTransaction(signature, requestConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
-        .send();
+        .send()
+        .catch(e => {
+            throw e;
+        });
     if (transaction === null) {
         return null;
     }
@@ -97,7 +102,10 @@ export async function loadTransaction(
     if (encoding !== 'jsonParsed') {
         const transactionJsonParsed = await rpc
             .getTransaction(signature, requestConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
-            .send();
+            .send()
+            .catch(e => {
+                throw e;
+            });
         if (transactionJsonParsed === null) {
             return null;
         }
