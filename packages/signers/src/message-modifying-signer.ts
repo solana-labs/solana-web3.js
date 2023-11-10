@@ -3,10 +3,10 @@ import { Address, isAddress } from '@solana/addresses';
 import { SignableMessage } from './signable-message';
 
 /** Defines a signer capable of signing messages. */
-export type MessageModifyingSigner<TAddress extends string = string> = {
+export type MessageModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     modifyAndSignMessage(messages: readonly SignableMessage[]): Promise<readonly SignableMessage[]>;
-};
+}>;
 
 /** Checks whether the provided value implements the {@link MessageModifyingSigner} interface. */
 export function isMessageModifyingSigner<TAddress extends string>(value: {

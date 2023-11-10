@@ -1,3 +1,5 @@
+import 'test-matchers/toBeFrozenObject';
+
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
 import { CompilableTransaction, signTransaction } from '@solana/transactions';
@@ -67,7 +69,7 @@ describe('assertIsKeyPairSigner', () => {
 
 describe('createSignerFromKeyPair', () => {
     it('creates a KeyPairSigner from a given CryptoKeypair', async () => {
-        expect.assertions(5);
+        expect.assertions(6);
 
         // Given a mock CryptoKeyPair returning a mock address.
         const myKeyPair = getMockCryptoKeyPair();
@@ -86,10 +88,13 @@ describe('createSignerFromKeyPair', () => {
         // And provided functions to sign messages and transactions.
         expect(typeof mySigner.signMessage).toBe('function');
         expect(typeof mySigner.signTransaction).toBe('function');
+
+        // And the signer is frozen.
+        expect(mySigner).toBeFrozenObject();
     });
 
     it('signs messages using the signBytes function', async () => {
-        expect.assertions(5);
+        expect.assertions(7);
 
         // Given a KeyPairSigner created from a mock CryptoKeyPair.
         const myKeyPair = getMockCryptoKeyPair();
@@ -109,9 +114,13 @@ describe('createSignerFromKeyPair', () => {
         ];
         const signatureDictionaries = await mySigner.signMessage(messages);
 
-        // Then the message reponses contains both the signed messages and their signatures.
+        // Then the signature directories contain the expected signatures.
         expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
         expect(signatureDictionaries[1]).toStrictEqual({ [myAddress]: mockSignatures[1] });
+
+        // And the signature directories are frozen.
+        expect(signatureDictionaries[0]).toBeFrozenObject();
+        expect(signatureDictionaries[1]).toBeFrozenObject();
 
         // And signBytes was called twice with the expected parameters.
         expect(jest.mocked(signBytes)).toHaveBeenCalledTimes(2);
@@ -120,7 +129,7 @@ describe('createSignerFromKeyPair', () => {
     });
 
     it('signs transactions using the signTransaction function', async () => {
-        expect.assertions(5);
+        expect.assertions(7);
 
         // Given a KeyPairSigner created from a mock CryptoKeyPair.
         const myKeyPair = getMockCryptoKeyPair();
@@ -145,9 +154,13 @@ describe('createSignerFromKeyPair', () => {
         // When we sign both transactions using that signer.
         const signatureDictionaries = await mySigner.signTransaction(mockTransactions);
 
-        // Then the returned transactions each contain a new signature.
+        // Then the signature directories contain the expected signatures.
         expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
         expect(signatureDictionaries[1]).toStrictEqual({ [myAddress]: mockSignatures[1] });
+
+        // And the signature directories are frozen.
+        expect(signatureDictionaries[0]).toBeFrozenObject();
+        expect(signatureDictionaries[1]).toBeFrozenObject();
 
         // And signTransaction was called twice with the expected parameters.
         expect(jest.mocked(signTransaction)).toHaveBeenCalledTimes(2);
@@ -158,7 +171,7 @@ describe('createSignerFromKeyPair', () => {
 
 describe('generateKeyPairSigner', () => {
     it('generates a new KeyPairSigner using the generateKeyPair function', async () => {
-        expect.assertions(3);
+        expect.assertions(4);
 
         // Given we mock the return value of generateKeyPair.
         const mockKeypair = getMockCryptoKeyPair();
@@ -175,6 +188,9 @@ describe('generateKeyPairSigner', () => {
         // Then the signer was created using the generated key pair and the mock address.
         expect(mySigner.keyPair).toBe(mockKeypair);
         expect(mySigner.address).toBe(mockAddress);
+
+        // And it is frozen.
+        expect(mySigner).toBeFrozenObject();
 
         // And generateKeyPair was called once.
         expect(jest.mocked(generateKeyPair)).toHaveBeenCalledTimes(1);

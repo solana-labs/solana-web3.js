@@ -76,7 +76,7 @@ In the sections below, we'll go through all the provided signers in more detail 
 Defines a message with any of the signatures that might have already been provided by other signers. This interface allows modifying signers to decide on whether or not they should modify the provided message depending on whether or not signatures already exist for such message. It also helps create a more consistent API by providing a structure analogous to transactions which also keep track of their signature dictionary.
 
 ```ts
-export type SignableMessage = {
+type SignableMessage = {
     content: Uint8Array;
     signatures: SignatureDictionary; // Record<Address, SignatureBytes>
 };

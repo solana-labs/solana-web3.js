@@ -4,10 +4,10 @@ import { CompilableTransaction } from '@solana/transactions';
 import { SignatureDictionary } from './types';
 
 /** Defines a signer capable of signing transactions. */
-export type TransactionPartialSigner<TAddress extends string = string> = {
+export type TransactionPartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     signTransaction(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureDictionary[]>;
-};
+}>;
 
 /** Checks whether the provided value implements the {@link TransactionPartialSigner} interface. */
 export function isTransactionPartialSigner<TAddress extends string>(value: {

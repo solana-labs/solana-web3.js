@@ -1,3 +1,5 @@
+import 'test-matchers/toBeFrozenObject';
+
 import { TextEncoder } from 'text-encoding-impl';
 
 import { createSignableMessage } from '../signable-message';
@@ -13,6 +15,10 @@ describe('createSignableMessage', () => {
         // Then we expect a message with the same content and no signatures.
         expect(message.content).toBe(content);
         expect(message.signatures).toStrictEqual({});
+
+        // And we expect the message and its signatures to be frozen.
+        expect(message).toBeFrozenObject();
+        expect(message.signatures).toBeFrozenObject();
     });
 
     it('creates a SignableMessage with signatures', () => {
@@ -29,6 +35,10 @@ describe('createSignableMessage', () => {
         // Then we expect the message to contain both of these argument as-is.
         expect(message.content).toBe(content);
         expect(message.signatures).toBe(signatures);
+
+        // And we expect the message and its signatures to be frozen.
+        expect(message).toBeFrozenObject();
+        expect(message.signatures).toBeFrozenObject();
     });
 
     it('creates a SignableMessage from a UTF-8 string', () => {
@@ -38,5 +48,9 @@ describe('createSignableMessage', () => {
         // Then we expect this string to be UTF-8 encoded.
         expect(message.content).toStrictEqual(new TextEncoder().encode('Hello world!'));
         expect(message.signatures).toStrictEqual({});
+
+        // And we expect the message and its signatures to be frozen.
+        expect(message).toBeFrozenObject();
+        expect(message.signatures).toBeFrozenObject();
     });
 });

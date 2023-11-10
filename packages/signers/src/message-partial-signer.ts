@@ -4,10 +4,10 @@ import { SignableMessage } from './signable-message';
 import { SignatureDictionary } from './types';
 
 /** Defines a signer capable of signing messages. */
-export type MessagePartialSigner<TAddress extends string = string> = {
+export type MessagePartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     signMessage(messages: readonly SignableMessage[]): Promise<readonly SignatureDictionary[]>;
-};
+}>;
 
 /** Checks whether the provided value implements the {@link MessagePartialSigner} interface. */
 export function isMessagePartialSigner<TAddress extends string>(value: {

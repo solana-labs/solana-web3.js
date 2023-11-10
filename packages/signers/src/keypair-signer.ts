@@ -5,7 +5,7 @@ import { signTransaction } from '@solana/transactions';
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 
-/** Defines a signer capable of signing messages and transactions using a Crypto KeyPair. */
+/** Defines a signer capable of signing messages and transactions using a CryptoKeyPair. */
 export type KeyPairSigner<TAddress extends string = string> = MessagePartialSigner<TAddress> &
     TransactionPartialSigner<TAddress> & { keyPair: CryptoKeyPair };
 
@@ -36,23 +36,25 @@ export function assertIsKeyPairSigner<TAddress extends string>(value: {
 /** Creates a KeyPairSigner from the provided Crypto KeyPair. */
 export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<KeyPairSigner> {
     const address = await getAddressFromPublicKey(keyPair.publicKey);
-    return {
+    const out: KeyPairSigner = {
         address,
         keyPair,
         signMessage: messages =>
             Promise.all(
-                messages.map(async message => ({
-                    [address]: await signBytes(keyPair.privateKey, message.content),
-                }))
+                messages.map(async message =>
+                    Object.freeze({ [address]: await signBytes(keyPair.privateKey, message.content) })
+                )
             ),
         signTransaction: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
                     const signedTransaction = await signTransaction([keyPair], transaction);
-                    return { [address]: signedTransaction.signatures[address] };
+                    return Object.freeze({ [address]: signedTransaction.signatures[address] });
                 })
             ),
     };
+
+    return Object.freeze(out);
 }
 
 /** Securely generates a signer capable of signing messages and transactions using a Crypto KeyPair. */

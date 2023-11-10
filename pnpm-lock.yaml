@@ -1570,6 +1570,9 @@ importers:
       test-config:
         specifier: workspace:*
         version: link:../test-config
+      test-matchers:
+        specifier: workspace:*
+        version: link:../test-matchers
       text-encoding-impl:
         specifier: workspace:*
         version: link:../text-encoding-impl
