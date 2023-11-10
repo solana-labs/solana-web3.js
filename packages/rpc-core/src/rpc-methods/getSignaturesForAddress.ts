@@ -3,9 +3,9 @@ import { Signature } from '@solana/keys';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 
 import { TransactionError } from '../transaction-error';
-import { RpcResponse, Slot } from './common';
+import { Slot } from './common';
 
-type GetSignaturesForAddressTransaction = RpcResponse<{
+type GetSignaturesForAddressTransaction = Readonly<{
     /** transaction signature as base-58 encoded string */
     signature: Signature;
     /** The slot that contains the block with the transaction */
