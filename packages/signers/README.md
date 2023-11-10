@@ -46,15 +46,15 @@ This package offers a total of five different types of signers that may be used 
 They are separated into three categories:
 
 -   **Partial signers**: Given a message or transaction, provide one or more signatures for it. These signers are not able to modify the given data which allows us to run many of them in parallel.
--   **Modifier signers**: Can choose to modify a message or transaction before signing it with zero or more private keys. Because modifying a message or transaction invalidates any pre-existing signatures over it, modifying signers must do their work before any other signer.
--   **Sender signers**: Given a transaction, signs it and sends it immediately to the blockchain. When applicable, the signer may also decide to modify the provided transaction before signing it. This interface accommodates wallets that simply cannot sign a transaction without sending it at the same time. This category of signers does not apply to regular messages.
+-   **Modifying signers**: Can choose to modify a message or transaction before signing it with zero or more private keys. Because modifying a message or transaction invalidates any pre-existing signatures over it, modifying signers must do their work before any other signer.
+-   **Sending signers**: Given a transaction, signs it and sends it immediately to the blockchain. When applicable, the signer may also decide to modify the provided transaction before signing it. This interface accommodates wallets that simply cannot sign a transaction without sending it at the same time. This category of signers does not apply to regular messages.
 
 Thus, we end up with the following interfaces.
 
-|                     | Partial signers            | Modifier signers            | Sender signers            |
-| ------------------- | -------------------------- | --------------------------- | ------------------------- |
-| `TransactionSigner` | `TransactionPartialSigner` | `TransactionModifierSigner` | `TransactionSenderSigner` |
-| `MessageSigner`     | `MessagePartialSigner`     | `MessageModifierSigner`     | N/A                       |
+|                     | Partial signers            | Modifying signers            | Sending signers            |
+| ------------------- | -------------------------- | ---------------------------- | -------------------------- |
+| `TransactionSigner` | `TransactionPartialSigner` | `TransactionModifyingSigner` | `TransactionSendingSigner` |
+| `MessageSigner`     | `MessagePartialSigner`     | `MessageModifyingSigner`     | N/A                        |
 
 We will go through each of these five signer interfaces and their respective characteristics in the documentation below.
 
@@ -73,7 +73,7 @@ In the sections below, we'll go through all the provided signers in more detail 
 
 #### `SignableMessage`
 
-Defines a message with any of the signatures that might have already been provided by other signers. This interface allows modifier signers to decide on whether or not they should modify the provided message depending on whether or not signatures already exist for such message. It also helps create a more consistent API by providing a structure analogous to transactions which also keep track of their signature dictionary.
+Defines a message with any of the signatures that might have already been provided by other signers. This interface allows modifying signers to decide on whether or not they should modify the provided message depending on whether or not signatures already exist for such message. It also helps create a more consistent API by providing a structure analogous to transactions which also keep track of their signature dictionary.
 
 ```ts
 export type SignableMessage = {
@@ -100,12 +100,12 @@ const myMessagePartialSigner: MessagePartialSigner<'1234..5678'> = {
 -   **Parallel**. When multiple signers sign the same message, we can perform this operation in parallel to obtain all their signatures.
 -   **Flexible order**. The order in which we use these signers for a given message doesn’t matter.
 
-#### `MessageModifierSigner<TAddress>`
+#### `MessageModifyingSigner<TAddress>`
 
 An interface that potentially modifies the content of the provided `SignableMessages` before signing them. E.g. this enables wallets to prefix or suffix nonces to the messages they sign. For each message, instead of returning a `SignatureDirectory`, its `modifyAndSignMessage` function returns its updated `SignableMessage` with a potentially modified content and signature dictionary.
 
 ```ts
-const myMessageModifierSigner: MessageModifierSigner<'1234..5678'> = {
+const myMessageModifyingSigner: MessageModifyingSigner<'1234..5678'> = {
     address: address('1234..5678'),
     modifyAndSignMessage: async (messages: SignableMessage[]): Promise<SignableMessage[]> => {
         // My custom signing logic.
@@ -116,15 +116,17 @@ const myMessageModifierSigner: MessageModifierSigner<'1234..5678'> = {
 **Characteristics**:
 
 -   **Sequential**. Contrary to partial signers, these cannot be executed in parallel as each call can modify the content of the message.
--   **First signers**. For a given message, a modifier signer must always be used before a partial signer as the former will likely modify the message and thus impact the outcome of the latter.
--   **Potential conflicts**. If more than one modifier signer is provided, the second signer may invalidate the signature of the first one. However, modifier signers may decide not to modify a message based on the existence of signatures for that message.
+-   **First signers**. For a given message, a modifying signer must always be used before a partial signer as the former will likely modify the message and thus impact the outcome of the latter.
+-   **Potential conflicts**. If more than one modifying signer is provided, the second signer may invalidate the signature of the first one. However, modifying signers may decide not to modify a message based on the existence of signatures for that message.
 
 #### `MessageSigner<TAddress>`
 
 Union interface that uses any of the available message signers.
 
 ```ts
-type MessageSigner<TAddress extends string = string> = MessagePartialSigner<TAddress> | MessageModifierSigner<TAddress>;
+type MessageSigner<TAddress extends string = string> =
+    | MessagePartialSigner<TAddress>
+    | MessageModifyingSigner<TAddress>;
 ```
 
 ### Functions
@@ -153,10 +155,10 @@ isMessagePartialSigner({ address: myAddress }); // ❌ false
 assertIsMessagePartialSigner({ address: myAddress, signMessage: async () => {} }); // ✅ void
 assertIsMessagePartialSigner({ address: myAddress }); // ❌ Throws an error.
 
-isMessageModifierSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ true
-isMessageModifierSigner({ address: myAddress }); // ❌ false
-assertIsMessageModifierSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ void
-assertIsMessageModifierSigner({ address: myAddress }); // ❌ Throws an error.
+isMessageModifyingSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ true
+isMessageModifyingSigner({ address: myAddress }); // ❌ false
+assertIsMessageModifyingSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ void
+assertIsMessageModifyingSigner({ address: myAddress }); // ❌ Throws an error.
 
 isMessageSigner({ address: myAddress, signMessage: async () => {} }); // ✅ true
 isMessageSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ true
@@ -186,12 +188,12 @@ const myTransactionPartialSigner: TransactionPartialSigner<'1234..5678'> = {
 -   **Parallel**. It returns a signature directory for each provided transaction without modifying them, making it possible for multiple partial signers to sign the same transaction in parallel.
 -   **Flexible order**. The order in which we use these signers for a given transaction doesn’t matter.
 
-#### `TransactionModifierSigner<TAddress>`
+#### `TransactionModifyingSigner<TAddress>`
 
 An interface that potentially modifies the provided `CompilableTransactions` before signing them. E.g. this enables wallets to inject additional instructions into the transaction before signing them. For each transaction, instead of returning a `SignatureDirectory`, its `modifyAndSignTransaction` function returns an updated `CompilableTransaction` with a potentially modified set of instructions and signature dictionary.
 
 ```ts
-const myTransactionModifierSigner: TransactionModifierSigner<'1234..5678'> = {
+const myTransactionModifyingSigner: TransactionModifyingSigner<'1234..5678'> = {
     address: address('1234..5678'),
     modifyAndSignTransaction: async <T extends CompilableTransaction>(transactions: T[]): Promise<T[]> => {
         // My custom signing logic.
@@ -202,17 +204,17 @@ const myTransactionModifierSigner: TransactionModifierSigner<'1234..5678'> = {
 **Characteristics**:
 
 -   **Sequential**. Contrary to partial signers, these cannot be executed in parallel as each call can modify the provided transactions.
--   **First signers**. For a given transaction, a modifier signer must always be used before a partial signer as the former will likely modify the transaction and thus impact the outcome of the latter.
--   **Potential conflicts**. If more than one modifier signer is provided, the second signer may invalidate the signature of the first one. However, modifier signers may decide not to modify a transaction based on the existence of signatures for that transaction.
+-   **First signers**. For a given transaction, a modifying signer must always be used before a partial signer as the former will likely modify the transaction and thus impact the outcome of the latter.
+-   **Potential conflicts**. If more than one modifying signer is provided, the second signer may invalidate the signature of the first one. However, modifying signers may decide not to modify a transaction based on the existence of signatures for that transaction.
 
-#### `TransactionSenderSigner<TAddress>`
+#### `TransactionSendingSigner<TAddress>`
 
 An interface that signs one or multiple transactions before sending them immediately to the blockchain. It defines a `signAndSendTransaction` function that returns the transaction signature (i.e. its identifier) for each provided `CompilableTransaction`. This interface is required for PDA wallets and other types of wallets that don't provide an interface for signing transactions without sending them.
 
 Note that it is also possible for such signers to modify the provided transactions before signing and sending them. This enables use cases where the modified transactions cannot be shared with the app and thus must be sent directly.
 
 ```ts
-const myTransactionSenderSigner: TransactionSenderSigner<'1234..5678'> = {
+const myTransactionSendingSigner: TransactionSendingSigner<'1234..5678'> = {
     address: address('1234..5678'),
     signAndSendTransaction: async (transactions: CompilableTransaction[]): Promise<SignatureBytes[]> => {
         // My custom signing logic.
@@ -222,7 +224,7 @@ const myTransactionSenderSigner: TransactionSenderSigner<'1234..5678'> = {
 
 **Characteristics**:
 
--   **Single signer**. Since this signer also sends the provided transactions, we can only use a single `TransactionSenderSigner` for a given set of transactions.
+-   **Single signer**. Since this signer also sends the provided transactions, we can only use a single `TransactionSendingSigner` for a given set of transactions.
 -   **Last signer**. Trivially, that signer must also be the last one used.
 -   **Potential conflicts**. Since signers may decide to modify the given transactions before sending them, they may invalidate previous signatures. However, signers may decide not to modify a transaction based on the existence of signatures for that transaction.
 -   **Potential confirmation**. Whilst this is not required by this interface, it is also worth noting that most wallets will also wait for the transaction to be confirmed (typically with a `confirmed` commitment) before notifying the app that they are done.
@@ -234,8 +236,8 @@ Union interface that uses any of the available transaction signers.
 ```ts
 type TransactionSigner<TAddress extends string = string> =
     | TransactionPartialSigner<TAddress>
-    | TransactionModifierSigner<TAddress>
-    | TransactionSenderSigner<TAddress>;
+    | TransactionModifyingSigner<TAddress>
+    | TransactionSendingSigner<TAddress>;
 ```
 
 ### Functions
@@ -252,15 +254,15 @@ isTransactionPartialSigner({ address: myAddress }); // ❌ false
 assertIsTransactionPartialSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ void
 assertIsTransactionPartialSigner({ address: myAddress }); // ❌ Throws an error.
 
-isTransactionModifierSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ true
-isTransactionModifierSigner({ address: myAddress }); // ❌ false
-assertIsTransactionModifierSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ void
-assertIsTransactionModifierSigner({ address: myAddress }); // ❌ Throws an error.
+isTransactionModifyingSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ true
+isTransactionModifyingSigner({ address: myAddress }); // ❌ false
+assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ void
+assertIsTransactionModifyingSigner({ address: myAddress }); // ❌ Throws an error.
 
-isTransactionSenderSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ true
-isTransactionSenderSigner({ address: myAddress }); // ❌ false
-assertIsTransactionSenderSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ void
-assertIsTransactionSenderSigner({ address: myAddress }); // ❌ Throws an error.
+isTransactionSendingSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ true
+isTransactionSendingSigner({ address: myAddress }); // ❌ false
+assertIsTransactionSendingSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ void
+assertIsTransactionSendingSigner({ address: myAddress }); // ❌ Throws an error.
 
 isTransactionSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ true
 isTransactionSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ true

@@ -9,22 +9,22 @@ describe('isTransactionSigner', () => {
             address: myAddress,
             signTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
-        const myModifierSigner = {
+        const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
-        const mySenderSigner = {
+        const mySendingSigner = {
             address: myAddress,
             signAndSendTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSigner(myPartialSigner)).toBe(true);
-        expect(isTransactionSigner(myModifierSigner)).toBe(true);
-        expect(isTransactionSigner(mySenderSigner)).toBe(true);
-        expect(isTransactionSigner({ ...myPartialSigner, ...myModifierSigner })).toBe(true);
-        expect(isTransactionSigner({ ...myPartialSigner, ...mySenderSigner })).toBe(true);
-        expect(isTransactionSigner({ ...myModifierSigner, ...mySenderSigner })).toBe(true);
-        expect(isTransactionSigner({ ...myPartialSigner, ...myModifierSigner, ...mySenderSigner })).toBe(true);
+        expect(isTransactionSigner(myModifyingSigner)).toBe(true);
+        expect(isTransactionSigner(mySendingSigner)).toBe(true);
+        expect(isTransactionSigner({ ...myPartialSigner, ...myModifyingSigner })).toBe(true);
+        expect(isTransactionSigner({ ...myPartialSigner, ...mySendingSigner })).toBe(true);
+        expect(isTransactionSigner({ ...myModifyingSigner, ...mySendingSigner })).toBe(true);
+        expect(isTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })).toBe(true);
         expect(isTransactionSigner({ address: myAddress })).toBe(false);
         expect(isTransactionSigner({ address: myAddress, signTransaction: 42 })).toBe(false);
         expect(isTransactionSigner({ address: myAddress, modifyAndSignTransaction: 42 })).toBe(false);
@@ -39,24 +39,24 @@ describe('assertIsTransactionSigner', () => {
             address: myAddress,
             signTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
-        const myModifierSigner = {
+        const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
-        const mySenderSigner = {
+        const mySendingSigner = {
             address: myAddress,
             signAndSendTransaction: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedMessage = 'The provided value does not implement any of the TransactionSigner interfaces';
         expect(() => assertIsTransactionSigner(myPartialSigner)).not.toThrow();
-        expect(() => assertIsTransactionSigner(myModifierSigner)).not.toThrow();
-        expect(() => assertIsTransactionSigner(mySenderSigner)).not.toThrow();
-        expect(() => assertIsTransactionSigner({ ...myPartialSigner, ...myModifierSigner })).not.toThrow();
-        expect(() => assertIsTransactionSigner({ ...myPartialSigner, ...mySenderSigner })).not.toThrow();
-        expect(() => assertIsTransactionSigner({ ...myModifierSigner, ...mySenderSigner })).not.toThrow();
+        expect(() => assertIsTransactionSigner(myModifyingSigner)).not.toThrow();
+        expect(() => assertIsTransactionSigner(mySendingSigner)).not.toThrow();
+        expect(() => assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner })).not.toThrow();
+        expect(() => assertIsTransactionSigner({ ...myPartialSigner, ...mySendingSigner })).not.toThrow();
+        expect(() => assertIsTransactionSigner({ ...myModifyingSigner, ...mySendingSigner })).not.toThrow();
         expect(() =>
-            assertIsTransactionSigner({ ...myPartialSigner, ...myModifierSigner, ...mySenderSigner })
+            assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })
         ).not.toThrow();
         expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedMessage);
         expect(() => assertIsTransactionSigner({ address: myAddress, signTransaction: 42 })).toThrow(expectedMessage);
