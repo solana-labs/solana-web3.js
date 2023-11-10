@@ -23,7 +23,7 @@ export type RpcWebSocketConnection = Readonly<{
 
 const EXPLICIT_ABORT_TOKEN = Symbol(
     __DEV__
-        ? "This symbol is thrown from a socket's iterator when the connection is explicity aborted by the user"
+        ? "This symbol is thrown from a socket's iterator when the connection is explicitly aborted by the user"
         : undefined
 );
 
