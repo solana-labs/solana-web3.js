@@ -1,12 +1,14 @@
-import { SolanaRpcMethods } from '@solana/rpc-core';
+import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
+import { GetBlockApi } from '@solana/rpc-core/dist/types/rpc-methods/getBlock';
+import { GetProgramAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getProgramAccounts';
+import { GetTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/getTransaction';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
-import { graphql, GraphQLObjectType, GraphQLSchema, Source } from 'graphql';
+import { graphql, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
-import { accountQuery, accountTypes } from './schema/account';
-import { blockQuery, blockTypes } from './schema/block';
-import { programAccountsQuery } from './schema/program-accounts';
-import { transactionQuery, transactionTypes } from './schema/transaction';
+import { createSolanaGraphQLSchema } from './schema';
+
+type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi;
 
 export interface RpcGraphQL {
     context: RpcGraphQLContext;
@@ -17,20 +19,9 @@ export interface RpcGraphQL {
     schema: GraphQLSchema;
 }
 
-export function createRpcGraphQL(rpc: Rpc<SolanaRpcMethods>): RpcGraphQL {
+export function createRpcGraphQL(rpc: Rpc<RpcMethods>): RpcGraphQL {
     const context = createSolanaGraphQLContext(rpc);
-    const schema = new GraphQLSchema({
-        query: new GraphQLObjectType({
-            fields: {
-                ...accountQuery(),
-                ...blockQuery(),
-                ...programAccountsQuery(),
-                ...transactionQuery(),
-            },
-            name: 'RootQuery',
-        }),
-        types: [...accountTypes(), ...blockTypes(), ...transactionTypes()],
-    });
+    const schema = createSolanaGraphQLSchema();
     return {
         context,
         async query(source: string | Source, variableValues?: { readonly [variable: string]: unknown }) {

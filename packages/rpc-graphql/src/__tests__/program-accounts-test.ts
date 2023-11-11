@@ -258,7 +258,9 @@ describe('programAccounts', () => {
                         ... on TokenAccount {
                             data {
                                 isNative
-                                mint
+                                mint {
+                                    address
+                                }
                                 owner {
                                     address
                                 }
@@ -293,7 +295,9 @@ describe('programAccounts', () => {
                         {
                             data: {
                                 isNative: expect.any(Boolean),
-                                mint: expect.any(String),
+                                mint: {
+                                    address: expect.any(String),
+                                },
                                 owner: {
                                     address: expect.any(String),
                                 },
