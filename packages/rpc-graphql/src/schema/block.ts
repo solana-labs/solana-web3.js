@@ -32,56 +32,76 @@ export const blockTypeDefs = /* GraphQL */ `
 
     # Block interface
     interface Block {
-        blockHeight: BigInt
-        blockTime: BigInt
         blockhash: String
+        blockHeight: BigInt
+        blockTime: Int
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
+        transactionDetails: String
     }
 
     # A block with account transaction details
-    type BlockWithAccounts {
-        blockHeight: BigInt
-        blockTime: BigInt
+    type BlockWithAccounts implements Block {
         blockhash: String
+        blockHeight: BigInt
+        blockTime: Int
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
         transactions: [BlockTransactionAccounts]
+        transactionDetails: String
     }
 
     # A block with full transaction details
-    type BlockFull {
-        blockHeight: BigInt
-        blockTime: BigInt
+    type BlockWithFull implements Block {
         blockhash: String
+        blockHeight: BigInt
+        blockTime: Int
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
         transactions: [Transaction]
+        transactionDetails: String
     }
 
     # A block with none transaction details
-    type BlockWithNone {
-        blockHeight: BigInt
-        blockTime: BigInt
+    type BlockWithNone implements Block {
         blockhash: String
+        blockHeight: BigInt
+        blockTime: Int
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
+        transactionDetails: String
     }
 
     # A block with signature transaction details
-    type BlockWithSignatures {
-        blockHeight: BigInt
-        blockTime: BigInt
+    type BlockWithSignatures implements Block {
         blockhash: String
+        blockHeight: BigInt
+        blockTime: Int
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
         signatures: [String]
+        transactionDetails: String
     }
 `;
 
-export const blockResolvers = {};
+export const blockResolvers = {
+    Block: {
+        __resolveType(block: { transactionDetails: string }) {
+            switch (block.transactionDetails) {
+                case 'accounts':
+                    return 'BlockWithAccounts';
+                case 'none':
+                    return 'BlockWithNone';
+                case 'signatures':
+                    return 'BlockWithSignatures';
+                default:
+                    return 'BlockWithFull';
+            }
+        },
+    },
+};
