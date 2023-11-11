@@ -4249,111 +4249,47 @@ const transactionMetaParsed = () => {
     return memoisedTransactionMetaParsed;
 };
 
-let memoisedTransactionMessageInterfaceFields: object | undefined;
-/**
- * The fields for the transaction message interface
- */
-const transactionMessageInterfaceFields = () => {
-    if (!memoisedTransactionMessageInterfaceFields)
-        memoisedTransactionMessageInterfaceFields = {
-            addressTableLookups: list(type(addressTableLookup())),
-            format: string(),
-            header: object('TransactionJsonTransactionHeader', {
-                numReadonlySignedAccounts: number(),
-                numReadonlyUnsignedAccounts: number(),
-                numRequiredSignatures: number(),
-            }),
-            recentBlockhash: string(),
-        };
-    return memoisedTransactionMessageInterfaceFields;
-};
-
-let memoisedTransactionMessageInterface: GraphQLInterfaceType | undefined;
-/**
- * Interface for a transaction message
- */
-const transactionMessageInterface = () => {
-    if (!memoisedTransactionMessageInterface)
-        memoisedTransactionMessageInterface = new GraphQLInterfaceType({
-            fields: {
-                ...transactionMessageInterfaceFields(),
-            },
-            name: 'TransactionMessage',
-            resolveType(message) {
-                if (message.format === 'parsed') {
-                    return 'TransactionMessageParsed';
-                }
-                return 'TransactionMessageUnparsed';
-            },
-        });
-    return memoisedTransactionMessageInterface;
-};
-
-/**
- * Builds a transaction message type
- * @param name          The name of the transaction message type
- * @param description   The description of the transaction message type
- * @param accountKeys   The account keys of the transaction message type
- * @param instructions  The instructions of the transaction message type
- * @returns             The transaction message type as a GraphQL object
- */
-const transactionMessageType = (
-    name: string,
-    description: string,
-    accountKeys: { type: GraphQLList<GraphQLObjectType | GraphQLScalarType> },
-    instructions: { type: GraphQLList<GraphQLInterfaceType | GraphQLObjectType | GraphQLScalarType> }
-) =>
-    new GraphQLObjectType({
-        description,
-        fields: {
-            ...transactionMessageInterfaceFields(),
-            accountKeys,
-            instructions,
-        },
-        interfaces: [transactionMessageInterface()],
-        name,
-    });
-
-let memoisedTransactionMessageUnparsed: GraphQLObjectType | undefined;
-const transactionMessageUnparsed = () => {
-    if (!memoisedTransactionMessageUnparsed)
-        memoisedTransactionMessageUnparsed = transactionMessageType(
-            'TransactionMessageUnparsed',
-            'Non-parsed transaction message',
-            list(string()),
-            list(type(transactionInstruction()))
-        );
-    return memoisedTransactionMessageUnparsed;
-};
-
-let memoisedTransactionMessageParsed: GraphQLObjectType | undefined;
-const transactionMessageParsed = () => {
-    if (!memoisedTransactionMessageParsed)
-        memoisedTransactionMessageParsed = transactionMessageType(
-            'TransactionMessageParsed',
-            'Parsed transaction message',
-            list(
-                object('transactionMessageParsedAccountKey', {
-                    pubkey: string(),
-                    signer: boolean(),
-                    source: string(),
-                    writable: boolean(),
-                })
-            ),
-            list(type(parsedTransactionInstructionInterface()))
-        );
-    return memoisedTransactionMessageParsed;
-};
-
-let memoisedTransactionTransaction: GraphQLObjectType | undefined;
 /**
  * The standard transaction type, comprised of all the interfaces
  */
+let memoisedTransactionMessage: GraphQLObjectType | undefined;
+const transactionMessage = () => {
+    if (!memoisedTransactionMessage)
+        memoisedTransactionMessage = new GraphQLObjectType({
+            description: 'A transaction message',
+            fields: {
+                accountKeys: list(
+                    object('transactionMessageParsedAccountKey', {
+                        pubkey: string(),
+                        signer: boolean(),
+                        source: string(),
+                        writable: boolean(),
+                    })
+                ),
+                addressTableLookups: list(type(addressTableLookup())),
+                format: string(),
+                header: object('TransactionJsonTransactionHeader', {
+                    numReadonlySignedAccounts: number(),
+                    numReadonlyUnsignedAccounts: number(),
+                    numRequiredSignatures: number(),
+                }),
+                instructions: list(type(parsedTransactionInstructionInterface())),
+                recentBlockhash: string(),
+            },
+            name: 'TransactionMessage',
+        });
+    return memoisedTransactionMessage;
+};
+
+/**
+ * The standard transaction type, comprised of all the interfaces
+ */
+let memoisedTransactionTransaction: GraphQLObjectType | undefined;
 const transactionTransaction = () => {
     if (!memoisedTransactionTransaction)
         memoisedTransactionTransaction = new GraphQLObjectType({
             fields: {
-                message: type(transactionMessageInterface()),
+                message: type(transactionMessage()),
                 signatures: list(string()),
             },
             name: 'TransactionTransaction',
@@ -4485,8 +4421,6 @@ export const transactionTypes = () => {
             ...parsedInstructionsVote(),
             transactionMetaUnparsed(),
             transactionMetaParsed(),
-            transactionMessageUnparsed(),
-            transactionMessageParsed(),
             transactionBase58(),
             transactionBase64(),
             transactionJson(),

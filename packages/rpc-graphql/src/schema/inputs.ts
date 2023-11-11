@@ -125,9 +125,6 @@ export const transactionEncodingInputType = () => {
                 base64: {
                     value: 'base64',
                 },
-                json: {
-                    value: 'json',
-                },
                 jsonParsed: {
                     value: 'jsonParsed',
                 },

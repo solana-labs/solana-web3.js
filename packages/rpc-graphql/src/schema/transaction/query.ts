@@ -10,7 +10,7 @@ import { transactionInterface } from './types';
 export type TransactionQueryArgs = {
     signature: Signature;
     commitment?: Commitment;
-    encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
+    encoding?: 'base58' | 'base64' | 'jsonParsed';
     maxSupportedTransactionVersion?: Exclude<TransactionVersion, 'legacy'>;
 };
 

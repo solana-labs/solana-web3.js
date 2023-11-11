@@ -754,19 +754,17 @@ const source = `
             ... on TransactionJsonParsed {
                 transaction {
                     message {
-                        ... on TransactionMessageParsed {
-                            accountKeys {
-                                pubkey
-                                signer
-                                source
-                                writable
-                            }
-                            instructions {
-                                ... on PartiallyDecodedInstruction {
-                                    accounts
-                                    data
-                                    programId
-                                }
+                        accountKeys {
+                            pubkey
+                            signer
+                            source
+                            writable
+                        }
+                        instructions {
+                            ... on PartiallyDecodedInstruction {
+                                accounts
+                                data
+                                programId
                             }
                         }
                     }
@@ -829,16 +827,14 @@ const source = `
             ... on TransactionJsonParsed {
                 transaction {
                     message {
-                        ... on TransactionMessageParsed {
-                            instructions {
-                                ... on CreateAccountInstruction {
-                                    parsed {
-                                        info {
-                                            lamports
-                                            space
-                                        }
-                                        program
+                        instructions {
+                            ... on CreateAccountInstruction {
+                                parsed {
+                                    info {
+                                        lamports
+                                        space
                                     }
+                                    program
                                 }
                             }
                         }
@@ -934,57 +930,55 @@ const source = `
             ... on TransactionJsonParsed {
                 transaction {
                     message {
-                        ... on TransactionMessageParsed {
-                            instructions {
-                                ... on SplTokenTransferInstruction {
-                                    parsed {
-                                        info {
-                                            amount
-                                            authority {
-                                                address
-                                                lamports
-                                            }
-                                            destination {
-                                                ... on TokenAccount {
-                                                    data {
-                                                        address
-                                                        mint {
-                                                            ... on MintAccount {
-                                                                data {
-                                                                    address
-                                                                    decimals
-                                                                }
+                        instructions {
+                            ... on SplTokenTransferInstruction {
+                                parsed {
+                                    info {
+                                        amount
+                                        authority {
+                                            address
+                                            lamports
+                                        }
+                                        destination {
+                                            ... on TokenAccount {
+                                                data {
+                                                    address
+                                                    mint {
+                                                        ... on MintAccount {
+                                                            data {
+                                                                address
+                                                                decimals
                                                             }
-                                                        }
-                                                        owner {
-                                                            address
-                                                            lamports
                                                         }
                                                     }
-                                                }
-                                            }
-                                            source {
-                                                ... on TokenAccount {
-                                                    data {
+                                                    owner {
                                                         address
-                                                        mint {
-                                                            ... on MintAccount {
-                                                                data {
-                                                                    address
-                                                                    decimals
-                                                                }
-                                                            }
-                                                        }
-                                                        owner {
-                                                            address
-                                                            lamports
-                                                        }
+                                                        lamports
                                                     }
                                                 }
                                             }
                                         }
-                                        program
+                                        source {
+                                            ... on TokenAccount {
+                                                data {
+                                                    address
+                                                    mint {
+                                                        ... on MintAccount {
+                                                            data {
+                                                                address
+                                                                decimals
+                                                            }
+                                                        }
+                                                    }
+                                                    owner {
+                                                        address
+                                                        lamports
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
+                                    program
                                 }
                             }
                         }
@@ -1080,16 +1074,14 @@ const source = `
                 ... on TransactionJsonParsed {
                     transaction {
                         message {
-                            ... on TransactionMessageParsed {
-                                instructions {
-                                    ... on CreateAccountInstruction {
-                                        parsed {
-                                            info {
-                                                lamports
-                                                space
-                                            }
-                                            program
+                            instructions {
+                                ... on CreateAccountInstruction {
+                                    parsed {
+                                        info {
+                                            lamports
+                                            space
                                         }
+                                        program
                                     }
                                 }
                             }
