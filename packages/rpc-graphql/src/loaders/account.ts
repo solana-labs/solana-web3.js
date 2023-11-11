@@ -6,6 +6,16 @@ import { GraphQLCache } from '../cache';
 import type { Rpc } from '../context';
 import { AccountQueryArgs } from '../schema/account';
 
+function normalizeArgs(args: Omit<AccountQueryArgs, 'address'>) {
+    const { commitment, dataSlice, encoding, minContextSlot } = args;
+    return {
+        commitment: commitment ?? 'confirmed',
+        dataSlice,
+        encoding: encoding ?? 'jsonParsed',
+        minContextSlot,
+    };
+}
+
 function onlyAddressRequested(info?: GraphQLResolveInfo): boolean {
     if (info && info.fieldNodes[0].selectionSet) {
         const selectionSet = info.fieldNodes[0].selectionSet;
@@ -60,7 +70,7 @@ function processQueryResponse({ address, account, encoding }: { address: Address
 
 // Default to jsonParsed encoding if none is provided
 export async function loadAccount(
-    { address, encoding = 'jsonParsed', ...config }: AccountQueryArgs,
+    { address, ...config }: AccountQueryArgs,
     cache: GraphQLCache,
     rpc: Rpc,
     info?: GraphQLResolveInfo
@@ -70,7 +80,8 @@ export async function loadAccount(
         return { address };
     }
 
-    const requestConfig = { encoding, ...config };
+    const requestConfig = normalizeArgs(config);
+    const { encoding } = requestConfig;
 
     const cached = cache.get(address, requestConfig);
     if (cached !== null) {

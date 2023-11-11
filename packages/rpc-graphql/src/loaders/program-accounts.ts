@@ -6,6 +6,17 @@ import type { Rpc } from '../context';
 import { ProgramAccountsQueryArgs } from '../schema/program-accounts';
 import { refineJsonParsedAccountData } from './account';
 
+function normalizeArgs(args: Omit<ProgramAccountsQueryArgs, 'programAddress'>) {
+    const { commitment, dataSlice, encoding, filters, minContextSlot } = args;
+    return {
+        commitment: commitment ?? 'confirmed',
+        dataSlice,
+        encoding: encoding ?? 'jsonParsed',
+        filters,
+        minContextSlot,
+    };
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function processQueryResponse({ encoding, programAccounts }: { encoding: string; programAccounts: any[] }) {
     return programAccounts.map(programAccount => {
@@ -34,12 +45,13 @@ function processQueryResponse({ encoding, programAccounts }: { encoding: string;
 }
 
 export async function loadProgramAccounts(
-    { programAddress, encoding = 'jsonParsed', ...config }: ProgramAccountsQueryArgs,
+    { programAddress, ...config }: ProgramAccountsQueryArgs,
     cache: GraphQLCache,
     rpc: Rpc,
     _info?: GraphQLResolveInfo
 ) {
-    const requestConfig = { encoding, ...config };
+    const requestConfig = normalizeArgs(config);
+    const { encoding } = requestConfig;
 
     const cached = cache.get(programAddress, requestConfig);
     if (cached !== null) {
