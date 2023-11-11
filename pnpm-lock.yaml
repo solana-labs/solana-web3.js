@@ -1264,6 +1264,12 @@ importers:
       '@graphql-tools/schema':
         specifier: ^10.0.0
         version: 10.0.0(graphql@16.8.1)
+      dataloader:
+        specifier: ^2.2.2
+        version: 2.2.2
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
       graphql:
         specifier: ^16.8.0
         version: 16.8.1
@@ -7049,6 +7055,10 @@ packages:
       abab: 2.0.6
       whatwg-mimetype: 3.0.0
       whatwg-url: 12.0.1
+
+  /dataloader@2.2.2:
+    resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
+    dev: false
 
   /dateformat@3.0.3:
     resolution: {integrity: sha512-jyCETtSl3VMZMWeRo7iY1FL19ges1t55hMo5yaam4Jrsm5EPL89UQkoQRyiI+Yf4k8r2ZpdngkV8hr1lIdjb3Q==}
