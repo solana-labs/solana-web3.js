@@ -1,6 +1,7 @@
 describe('block', () => {
     describe('basic queries', () => {
         it.todo("can query a block's block time");
+        it.todo('coalesces multiple requests for the same block into one');
     });
     describe('block with signatures transaction details', () => {
         it.todo('can query a block with signatures');

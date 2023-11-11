@@ -29,7 +29,7 @@ export const blockQuery = () => ({
             slot: nonNull(bigint()),
             transactionDetails: type(blockTransactionDetailsInputType()),
         },
-        resolve: (_parent: unknown, args: BlockQueryArgs, context: RpcGraphQLContext) => context.resolveBlock(args),
+        resolve: (_parent: unknown, args: BlockQueryArgs, context: RpcGraphQLContext) => context.block.load(args),
         type: blockInterface(),
     },
 });

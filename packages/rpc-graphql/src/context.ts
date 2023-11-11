@@ -1,5 +1,10 @@
 import { SolanaRpcMethods } from '@solana/rpc-core';
+import { GetBlockApi } from '@solana/rpc-core/dist/types/rpc-methods/getBlock';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import DataLoader from 'dataloader';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { createGraphQLCache, GraphQLCache } from './cache';
@@ -9,9 +14,9 @@ import { ProgramAccountsQueryArgs } from './schema/program-accounts';
 import { TransactionQueryArgs } from './schema/transaction/query';
 
 export interface RpcGraphQLContext {
+    block: DataLoader<BlockQueryArgs, Awaited<ReturnType<typeof resolveBlock>>>;
     cache: GraphQLCache;
     resolveAccount(args: AccountQueryArgs, info?: GraphQLResolveInfo): ReturnType<typeof resolveAccount>;
-    resolveBlock(args: BlockQueryArgs): ReturnType<typeof resolveBlock>;
     resolveProgramAccounts(args: ProgramAccountsQueryArgs): ReturnType<typeof resolveProgramAccounts>;
     resolveTransaction(args: TransactionQueryArgs): ReturnType<typeof resolveTransaction>;
     rpc: Rpc<SolanaRpcMethods>;
@@ -78,27 +83,16 @@ async function resolveAccount(
     return queryResponse;
 }
 
-async function resolveBlock(
-    { slot, encoding = 'jsonParsed', ...config }: BlockQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc<SolanaRpcMethods>
-) {
-    const requestConfig = { encoding, ...config };
+function createBlockBatchLoadFn(rpc: Rpc<SolanaRpcMethods>) {
+    const resolveBlockUsingRpc = resolveBlock.bind(null, rpc);
+    return async (blockQueryArgs: readonly BlockQueryArgs[]) => {
+        return await Promise.all(blockQueryArgs.map(resolveBlockUsingRpc));
+    };
+}
 
-    const cached = cache.get(slot, config);
-    if (cached !== null) {
-        return cached;
-    }
-
-    const block = await rpc.getBlock(slot, requestConfig as Parameters<SolanaRpcMethods['getBlock']>[1]).send();
-
-    if (block === null) {
-        return null;
-    }
-
-    cache.insert(slot, config, block);
-
-    return block;
+async function resolveBlock(rpc: Rpc<GetBlockApi>, { slot, encoding = 'jsonParsed', ...config }: BlockQueryArgs) {
+    const requestConfig = { encoding, ...config } as Parameters<SolanaRpcMethods['getBlock']>[1];
+    return await rpc.getBlock(slot, requestConfig).send();
 }
 
 async function resolveProgramAccounts(
@@ -195,12 +189,10 @@ async function resolveTransaction(
 export function createSolanaGraphQLContext(rpc: Rpc<SolanaRpcMethods>): RpcGraphQLContext {
     const cache = createGraphQLCache();
     return {
+        block: new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify }),
         cache,
         resolveAccount(args, info?) {
             return resolveAccount(args, this.cache, this.rpc, info);
-        },
-        resolveBlock(args) {
-            return resolveBlock(args, this.cache, this.rpc);
         },
         resolveProgramAccounts(args) {
             return resolveProgramAccounts(args, this.cache, this.rpc);
