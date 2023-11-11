@@ -6,6 +6,17 @@ import type { Rpc } from '../context';
 import { BlockQueryArgs } from '../schema/block';
 import { refineJsonParsedTransaction } from './transaction';
 
+function normalizeArgs(args: Omit<BlockQueryArgs, 'slot'>) {
+    const { commitment, encoding, transactionDetails } = args;
+    return {
+        commitment: commitment ?? 'confirmed',
+        encoding: encoding ?? 'jsonParsed',
+        // Always use 0 to avoid silly errors
+        maxSupportedTransactionVersion: 0,
+        transactionDetails: transactionDetails ?? 'full',
+    };
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedTransactionForAccounts({ transaction }: { transaction: any }) {
     return {
@@ -46,18 +57,13 @@ function processQueryResponse({
 }
 
 export async function loadBlock(
-    { slot, encoding = 'jsonParsed', ...config }: BlockQueryArgs,
+    { slot, ...config }: BlockQueryArgs,
     cache: GraphQLCache,
     rpc: Rpc,
     _info?: GraphQLResolveInfo
 ) {
-    const requestConfig = {
-        encoding,
-        ...config,
-        // Always use 0 to avoid silly errors
-        maxSupportedTransactionVersion: 0,
-    };
-    const transactionDetails = config.transactionDetails ?? 'full';
+    const requestConfig = normalizeArgs(config);
+    const { encoding, transactionDetails } = requestConfig;
 
     const cached = cache.get(slot, config);
     if (cached !== null) {

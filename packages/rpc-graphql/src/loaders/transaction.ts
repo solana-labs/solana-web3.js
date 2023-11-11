@@ -5,6 +5,16 @@ import { GraphQLCache } from '../cache';
 import type { Rpc } from '../context';
 import { TransactionQueryArgs } from '../schema/transaction';
 
+function normalizeArgs(args: Omit<TransactionQueryArgs, 'signature'>) {
+    const { commitment, encoding } = args;
+    return {
+        commitment: commitment ?? 'confirmed',
+        encoding: encoding ?? 'jsonParsed',
+        // Always use 0 to avoid silly errors
+        maxSupportedTransactionVersion: 0,
+    };
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedInstructionData(jsonParsedInstructionData: any) {
     if ('parsed' in jsonParsedInstructionData) {
@@ -68,17 +78,13 @@ function processQueryResponse({ encoding, transaction }: { encoding: string; tra
 }
 
 export async function loadTransaction(
-    { signature, encoding = 'jsonParsed', ...config }: TransactionQueryArgs,
+    { signature, ...config }: TransactionQueryArgs,
     cache: GraphQLCache,
     rpc: Rpc,
     _info?: GraphQLResolveInfo
 ) {
-    const requestConfig = {
-        encoding,
-        ...config,
-        // Always use 0 to avoid silly errors
-        maxSupportedTransactionVersion: 0,
-    };
+    const requestConfig = normalizeArgs(config);
+    const { encoding } = requestConfig;
 
     const cached = cache.get(signature, requestConfig);
     if (cached !== null) {
