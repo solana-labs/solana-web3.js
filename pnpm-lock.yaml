@@ -988,8 +988,8 @@ importers:
         specifier: ^4.3.5
         version: 4.3.5
       '@types/chai-as-promised':
-        specifier: ^7.1.3
-        version: 7.1.3
+        specifier: ^7.1.8
+        version: 7.1.8
       '@types/express-serve-static-core':
         specifier: ^4.17.35
         version: 4.17.35
@@ -4993,8 +4993,8 @@ packages:
       base-x: 3.0.9
     dev: true
 
-  /@types/chai-as-promised@7.1.3:
-    resolution: {integrity: sha512-FQnh1ohPXJELpKhzjuDkPLR2BZCAqed+a6xV4MI/T3XzHfd2FlarfUGUdZYgqYe8oxkYn0fchHEeHfHqdZ96sg==}
+  /@types/chai-as-promised@7.1.8:
+    resolution: {integrity: sha512-ThlRVIJhr69FLlh6IctTXFkmhtP3NpMZ2QGq69StYLyKZFp/HOp1VdKZj7RvfNWYYcJ1xlbLGLLWj1UvP5u/Gw==}
     dependencies:
       '@types/chai': 4.3.5
     dev: true
