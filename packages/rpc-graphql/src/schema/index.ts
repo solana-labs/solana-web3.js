@@ -56,7 +56,7 @@ const schemaResolvers = {
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
-            return context.accountLoader.load(args, info);
+            return context.loaders.account.load(args, info);
         },
         block(
             _: unknown,
@@ -64,7 +64,7 @@ const schemaResolvers = {
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
-            return context.blockLoader.load(args, info);
+            return context.loaders.block.load(args, info);
         },
         programAccounts(
             _: unknown,
@@ -80,7 +80,7 @@ const schemaResolvers = {
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
-            return context.loadTransaction(args, info);
+            return context.loaders.transaction.load(args, info);
         },
     },
 };

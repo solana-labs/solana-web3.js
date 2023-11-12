@@ -755,6 +755,7 @@ describe('transaction', () => {
         });
     });
     describe('cache tests', () => {
+        // Not required yet since transactions are not supported as nested queries.
         it.todo('coalesces multiple requests for the same transaction into one');
     });
 });

@@ -1,21 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolanaRpcMethods } from '@solana/rpc-core';
+import DataLoader from 'dataloader';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { GraphQLCache } from '../cache';
 import type { Rpc } from '../context';
 import { TransactionQueryArgs } from '../schema/transaction';
+import { onlyPresentFieldRequested } from './common/resolve-info';
 
-function normalizeArgs(args: Omit<TransactionQueryArgs, 'signature'>) {
-    const { commitment, encoding } = args;
+function normalizeArgs(args: TransactionQueryArgs) {
+    const { commitment, encoding, signature } = args;
     return {
         commitment: commitment ?? 'confirmed',
         encoding: encoding ?? 'jsonParsed',
         // Always use 0 to avoid silly errors
         maxSupportedTransactionVersion: 0,
+        signature,
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedInstructionData(jsonParsedInstructionData: any) {
     if ('parsed' in jsonParsedInstructionData) {
         const meta = {
@@ -30,7 +35,6 @@ function refineJsonParsedInstructionData(jsonParsedInstructionData: any) {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedTransactionData(jsonParsedTransactionData: any) {
     const refinedInstructions = jsonParsedTransactionData.message.instructions.map((instruction: unknown) =>
         refineJsonParsedInstructionData(instruction)
@@ -42,7 +46,6 @@ function refineJsonParsedTransactionData(jsonParsedTransactionData: any) {
     return { message, signatures: jsonParsedTransactionData.signatures };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedTransactionMeta(jsonParsedTransactionMeta: any) {
     const refinedInnerInstructions = jsonParsedTransactionMeta.innerInstructions.map(
         ({ index, instructions }: { index: number; instructions: unknown[] }) => {
@@ -77,26 +80,15 @@ function processQueryResponse({ encoding, transaction }: { encoding: string; tra
     return refineJsonParsedTransaction({ encoding, transaction });
 }
 
-export async function loadTransaction(
-    { signature, ...config }: TransactionQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc,
-    _info?: GraphQLResolveInfo
-) {
-    const requestConfig = normalizeArgs(config);
-    const { encoding } = requestConfig;
-
-    const cached = cache.get(signature, requestConfig);
-    if (cached !== null) {
-        return cached;
-    }
+export async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<typeof normalizeArgs>) {
+    const { encoding } = config;
 
     // If the requested encoding is `base58` or `base64`,
     // first fetch the transaction with the requested encoding,
     // then fetch it again with `jsonParsed` encoding.
     // This ensures the response always has the full transaction meta.
     let transaction = await rpc
-        .getTransaction(signature, requestConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
+        .getTransaction(signature, config as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
         .send()
         .catch(e => {
             throw e;
@@ -107,7 +99,7 @@ export async function loadTransaction(
 
     if (encoding !== 'jsonParsed') {
         const transactionJsonParsed = await rpc
-            .getTransaction(signature, requestConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
+            .getTransaction(signature, config as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
             .send()
             .catch(e => {
                 throw e;
@@ -124,7 +116,25 @@ export async function loadTransaction(
 
     const queryResponse = processQueryResponse({ encoding, transaction });
 
-    cache.insert(signature, requestConfig, queryResponse);
-
     return queryResponse;
+}
+
+function createTransactionBatchLoadFn(rpc: Rpc) {
+    const resolveTransactionUsingRpc = loadTransaction.bind(null, rpc);
+    return async (transactionQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
+        return await Promise.all(transactionQueryArgs.map(async args => await resolveTransactionUsingRpc(args)));
+    };
+}
+
+export function createTransactionLoader(rpc: Rpc) {
+    const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    return {
+        load: async (args: TransactionQueryArgs, info?: GraphQLResolveInfo) => {
+            // If a user only requests the transaction's signature, don't call the RPC or the cache
+            if (onlyPresentFieldRequested('signature', info)) {
+                return { signature: args.signature };
+            }
+            return loader.load(normalizeArgs(args));
+        },
+    };
 }
