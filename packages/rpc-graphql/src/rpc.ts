@@ -25,14 +25,12 @@ export function createRpcGraphQL(rpc: Rpc<RpcMethods>): RpcGraphQL {
     return {
         context,
         async query(source: string | Source, variableValues?: { readonly [variable: string]: unknown }) {
-            const result = await graphql({
+            return graphql({
                 contextValue: this.context,
                 schema: this.schema,
                 source,
                 variableValues,
             });
-            this.context.cache.flush();
-            return result;
         },
         schema,
     };

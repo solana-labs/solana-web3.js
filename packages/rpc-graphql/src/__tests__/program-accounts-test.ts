@@ -620,6 +620,7 @@ describe('programAccounts', () => {
         });
     });
     describe('cache tests', () => {
+        // Not required yet since program accounts are not supported as nested queries.
         it.todo('coalesces multiple requests for the same program into one');
     });
 });

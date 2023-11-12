@@ -72,7 +72,7 @@ const schemaResolvers = {
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
-            return context.loadProgramAccounts(args, info);
+            return context.loaders.programAccounts.load(args, info);
         },
         transaction(
             _: unknown,
