@@ -246,4 +246,7 @@ describe('block', () => {
         it.todo('can query a block with transactions as JSON parsed');
         it.todo('can query a block with transactions as JSON parsed with specific instructions');
     });
+    describe('cache tests', () => {
+        it.todo('coalesces multiple requests for the same block into one');
+    });
 });

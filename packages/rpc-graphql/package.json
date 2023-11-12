@@ -63,6 +63,8 @@
     ],
     "dependencies": {
         "@graphql-tools/schema": "^10.0.0",
+        "dataloader": "^2.2.2",
+        "fast-stable-stringify": "^1.0.0",
         "graphql": "^16.8.0"
     },
     "devDependencies": {

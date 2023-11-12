@@ -1,14 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Address } from '@solana/addresses';
 import { SolanaRpcMethods } from '@solana/rpc-core';
+import DataLoader from 'dataloader';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { GraphQLCache } from '../cache';
 import type { Rpc } from '../context';
 import { AccountQueryArgs } from '../schema/account';
+import { onlyPresentFieldRequested } from './common/resolve-info';
 
-function normalizeArgs(args: Omit<AccountQueryArgs, 'address'>) {
-    const { commitment, dataSlice, encoding, minContextSlot } = args;
+function normalizeArgs(args: AccountQueryArgs) {
+    const { address, commitment, dataSlice, encoding, minContextSlot } = args;
     return {
+        address,
         commitment: commitment ?? 'confirmed',
         dataSlice,
         encoding: encoding ?? 'jsonParsed',
@@ -16,23 +22,6 @@ function normalizeArgs(args: Omit<AccountQueryArgs, 'address'>) {
     };
 }
 
-function onlyAddressRequested(info?: GraphQLResolveInfo): boolean {
-    if (info && info.fieldNodes[0].selectionSet) {
-        const selectionSet = info.fieldNodes[0].selectionSet;
-        const requestedFields = selectionSet.selections.map(field => {
-            if (field.kind === 'Field') {
-                return field.name.value;
-            }
-            return null;
-        });
-        if (requestedFields && requestedFields.length === 1 && requestedFields[0] === 'address') {
-            return true;
-        }
-    }
-    return false;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function refineJsonParsedAccountData(jsonParsedAccountData: any) {
     const meta = {
         program: jsonParsedAccountData.program,
@@ -43,7 +32,6 @@ export function refineJsonParsedAccountData(jsonParsedAccountData: any) {
     return { data, meta };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function processQueryResponse({ address, account, encoding }: { address: Address; account: any; encoding: string }) {
     const [refinedData, responseEncoding] = Array.isArray(account.data)
         ? encoding === 'jsonParsed'
@@ -69,41 +57,41 @@ function processQueryResponse({ address, account, encoding }: { address: Address
 }
 
 // Default to jsonParsed encoding if none is provided
-export async function loadAccount(
-    { address, ...config }: AccountQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc,
-    info?: GraphQLResolveInfo
-) {
-    // If a user only requests the account's address, don't call the RPC
-    if (onlyAddressRequested(info)) {
-        return { address };
-    }
-
-    const requestConfig = normalizeArgs(config);
-    const { encoding } = requestConfig;
-
-    const cached = cache.get(address, requestConfig);
-    if (cached !== null) {
-        return cached;
-    }
+export async function loadAccount(rpc: Rpc, { address, ...config }: ReturnType<typeof normalizeArgs>) {
+    const { encoding } = config;
 
     const account = await rpc
-        .getAccountInfo(address, requestConfig as Parameters<SolanaRpcMethods['getAccountInfo']>[1])
+        .getAccountInfo(address, config as Parameters<SolanaRpcMethods['getAccountInfo']>[1])
         .send()
         .then(res => res.value)
         .catch(e => {
             throw e;
         });
 
+    // Account does not exist, return only the address
     if (account === null) {
-        // Account does not exist, return only the address
         return { address };
     }
 
-    const queryResponse = processQueryResponse({ account, address, encoding });
+    return processQueryResponse({ account, address, encoding });
+}
 
-    cache.insert(address, requestConfig, queryResponse);
+function createAccountBatchLoadFn(rpc: Rpc) {
+    const resolveAccountUsingRpc = loadAccount.bind(null, rpc);
+    return async (accountQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
+        return await Promise.all(accountQueryArgs.map(async args => await resolveAccountUsingRpc(args)));
+    };
+}
 
-    return queryResponse;
+export function createAccountLoader(rpc: Rpc) {
+    const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    return {
+        load: async (args: AccountQueryArgs, info?: GraphQLResolveInfo) => {
+            // If a user only requests the account's address, don't call the RPC or the cache
+            if (onlyPresentFieldRequested('address', info)) {
+                return { address: args.address };
+            }
+            return loader.load(normalizeArgs(args));
+        },
+    };
 }

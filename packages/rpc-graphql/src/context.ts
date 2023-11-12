@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 
 import { createGraphQLCache, GraphQLCache } from './cache';
-import { loadAccount } from './loaders/account';
+import { createAccountLoader } from './loaders/account';
 import { loadBlock } from './loaders/block';
 import { loadProgramAccounts } from './loaders/program-accounts';
 import { loadTransaction } from './loaders/transaction';
@@ -12,10 +12,13 @@ import { ProgramAccountsQueryArgs } from './schema/program-accounts';
 import { TransactionQueryArgs } from './schema/transaction';
 
 export type Rpc = Parameters<typeof createRpcGraphQL>[0];
+type Loader<TArgs> = {
+    load: (args: TArgs, info?: GraphQLResolveInfo | undefined) => Promise<unknown>;
+};
 
 export interface RpcGraphQLContext {
     cache: GraphQLCache;
-    loadAccount(args: AccountQueryArgs, info?: GraphQLResolveInfo): ReturnType<typeof loadAccount>;
+    accountLoader: Loader<AccountQueryArgs>;
     loadBlock(args: BlockQueryArgs, info?: GraphQLResolveInfo): ReturnType<typeof loadBlock>;
     loadProgramAccounts(
         args: ProgramAccountsQueryArgs,
@@ -28,10 +31,8 @@ export interface RpcGraphQLContext {
 export function createSolanaGraphQLContext(rpc: Rpc): RpcGraphQLContext {
     const cache = createGraphQLCache();
     return {
+        accountLoader: createAccountLoader(rpc),
         cache,
-        loadAccount(args, info?) {
-            return loadAccount(args, this.cache, this.rpc, info);
-        },
         loadBlock(args, info?) {
             return loadBlock(args, this.cache, this.rpc, info);
         },
