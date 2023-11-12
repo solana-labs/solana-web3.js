@@ -25,13 +25,13 @@ describe('account', () => {
         };
         it("can query an account's lamports balance", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!) {
-                account(address: $address) {
-                    lamports
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address) {
+                        lamports
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -43,13 +43,13 @@ describe('account', () => {
         });
         it("can query an account's executable value", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!, $commitment: Commitment) {
-                account(address: $address, commitment: $commitment) {
-                    executable
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        executable
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -61,13 +61,13 @@ describe('account', () => {
         });
         it("can query an account's address", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!, $commitment: Commitment) {
-                account(address: $address, commitment: $commitment) {
-                    address
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        address
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -79,15 +79,15 @@ describe('account', () => {
         });
         it('can query multiple fields', async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!, $commitment: Commitment) {
-                account(address: $address, commitment: $commitment) {
-                    executable
-                    lamports
-                    rentEpoch
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        executable
+                        lamports
+                        rentEpoch
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -108,18 +108,18 @@ describe('account', () => {
         };
         it("can perform a nested query for the account's owner", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!, $commitment: Commitment) {
-                account(address: $address, commitment: $commitment) {
-                    owner {
-                        address
-                        executable
-                        lamports
-                        rentEpoch
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        owner {
+                            address
+                            executable
+                            lamports
+                            rentEpoch
+                        }
                     }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -143,21 +143,21 @@ describe('account', () => {
         };
         it("can perform a double nested query for each account's owner", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!, $commitment: Commitment) {
-                account(address: $address, commitment: $commitment) {
-                    owner {
-                        address
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
                         owner {
                             address
-                            executable
-                            lamports
-                            rentEpoch
+                            owner {
+                                address
+                                executable
+                                lamports
+                                rentEpoch
+                            }
                         }
                     }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -184,21 +184,21 @@ describe('account', () => {
         };
         it("can perform a triple nested query for each account's owner", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($address: String!) {
-                account(address: $address) {
-                    owner {
-                        address
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address) {
                         owner {
                             address
                             owner {
                                 address
+                                owner {
+                                    address
+                                }
                             }
                         }
                     }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -225,7 +225,7 @@ describe('account', () => {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                 encoding: 'base58',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
                         ... on AccountBase58 {
@@ -250,15 +250,15 @@ describe('account', () => {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                 encoding: 'base64',
             };
-            const source = `
-                    query testQuery($address: String!, $encoding: AccountEncoding) {
-                        account(address: $address, encoding: $encoding) {
-                            ... on AccountBase64 {
-                                data
-                            }
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $encoding: AccountEncoding) {
+                    account(address: $address, encoding: $encoding) {
+                        ... on AccountBase64 {
+                            data
                         }
                     }
-                `;
+                }
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -275,15 +275,15 @@ describe('account', () => {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                 encoding: 'base64Zstd',
             };
-            const source = `
-                    query testQuery($address: String!, $encoding: AccountEncoding) {
-                        account(address: $address, encoding: $encoding) {
-                            ... on AccountBase64Zstd {
-                                data
-                            }
+            const source = /* GraphQL */ `
+                query testQuery($address: String!, $encoding: AccountEncoding) {
+                    account(address: $address, encoding: $encoding) {
+                        ... on AccountBase64Zstd {
+                            data
                         }
                     }
-                `;
+                }
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -301,7 +301,7 @@ describe('account', () => {
             const variableValues = {
                 address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on MintAccount {
@@ -351,7 +351,7 @@ describe('account', () => {
             const variableValues = {
                 address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on TokenAccount {
@@ -414,7 +414,7 @@ describe('account', () => {
             const variableValues = {
                 address: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on NonceAccount {
@@ -464,7 +464,7 @@ describe('account', () => {
             const variableValues = {
                 address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on StakeAccount {
@@ -558,7 +558,7 @@ describe('account', () => {
             const variableValues = {
                 address: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on VoteAccount {
@@ -656,7 +656,7 @@ describe('account', () => {
             const variableValues = {
                 address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
                         ... on LookupTableAccount {

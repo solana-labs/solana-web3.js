@@ -37,7 +37,7 @@ describe('block', () => {
         it("can query a block's block time", async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}) {
                         blockTime
@@ -56,7 +56,7 @@ describe('block', () => {
         it('can query multiple fields on a block', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}) {
                         blockhash
@@ -93,7 +93,7 @@ describe('block', () => {
         it('can query a block with signatures transaction details', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockSignatures)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}, transactionDetails: signatures) {
                         ... on BlockWithSignatures {
@@ -116,7 +116,7 @@ describe('block', () => {
         it('can query a block with accounts transaction details', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockAccounts)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}, transactionDetails: accounts) {
                         ... on BlockWithAccounts {
@@ -151,7 +151,7 @@ describe('block', () => {
         it('can query a block with none transaction details', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}, transactionDetails: none) {
                         ... on BlockWithNone {
@@ -188,7 +188,7 @@ describe('block', () => {
         it('can query a block with base58 encoded transactions', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}, encoding: base58) {
                         ... on BlockWithFull {
@@ -217,7 +217,7 @@ describe('block', () => {
         it('can query a block with base64 encoded transactions', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase64)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     block(slot: ${defaultSlot}, encoding: base64) {
                         ... on BlockWithFull {

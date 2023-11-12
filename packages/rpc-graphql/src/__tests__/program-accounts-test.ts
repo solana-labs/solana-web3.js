@@ -27,13 +27,13 @@ describe('programAccounts', () => {
         };
         it("can query program accounts' lamports balances", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($programAddress: String!, $commitment: Commitment) {
-                programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    lamports
+            const source = /* GraphQL */ `
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                        lamports
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -43,13 +43,13 @@ describe('programAccounts', () => {
         });
         it("can query program accounts' executable value", async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($programAddress: String!, $commitment: Commitment) {
-                programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    executable
+            const source = /* GraphQL */ `
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                        executable
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -59,15 +59,15 @@ describe('programAccounts', () => {
         });
         it('can query multiple fields', async () => {
             expect.assertions(1);
-            const source = `
-            query testQuery($programAddress: String!, $commitment: Commitment) {
-                programAccounts(programAddress: $programAddress, commitment: $commitment) {
-                    executable
-                    lamports
-                    rentEpoch
+            const source = /* GraphQL */ `
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                        executable
+                        lamports
+                        rentEpoch
+                    }
                 }
-            }
-        `;
+            `;
             const result = await rpcGraphQL.query(source, variableValues);
             expect(result).toMatchObject({
                 data: {
@@ -91,7 +91,7 @@ describe('programAccounts', () => {
                 commitment: 'confirmed',
                 encoding: 'base58',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         ... on AccountBase58 {
@@ -128,7 +128,7 @@ describe('programAccounts', () => {
                 commitment: 'confirmed',
                 encoding: 'base64',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         ... on AccountBase64 {
@@ -165,7 +165,7 @@ describe('programAccounts', () => {
                 commitment: 'confirmed',
                 encoding: 'base64Zstd',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         ... on AccountBase64Zstd {
@@ -201,7 +201,7 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'AddressLookupTab1e1111111111111111111111111',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
                         ... on LookupTableAccount {
@@ -242,7 +242,7 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
                         ... on MintAccount {
@@ -318,7 +318,7 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: '11111111111111111111111111111111',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
                         ... on NonceAccount {
@@ -359,7 +359,7 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'Stake11111111111111111111111111111111111111',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
                         ... on StakeAccount {
@@ -444,7 +444,7 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'Vote111111111111111111111111111111111111111',
             };
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
                         ... on VoteAccount {
@@ -543,18 +543,18 @@ describe('programAccounts', () => {
                     },
                     encoding: 'base58',
                 };
-                const source = `
+                const source = /* GraphQL */ `
                     query testQuery(
-                        $programAddress: String!,
-                        $commitment: Commitment,
-                        $dataSlice: DataSlice,
-                        $encoding: AccountEncoding,
+                        $programAddress: String!
+                        $commitment: Commitment
+                        $dataSlice: DataSlice
+                        $encoding: AccountEncoding
                     ) {
                         programAccounts(
-                            programAddress: $programAddress,
-                            commitment: $commitment,
-                            dataSlice: $dataSlice,
-                            encoding: $encoding,
+                            programAddress: $programAddress
+                            commitment: $commitment
+                            dataSlice: $dataSlice
+                            encoding: $encoding
                         ) {
                             ... on AccountBase58 {
                                 data
@@ -587,18 +587,18 @@ describe('programAccounts', () => {
                     },
                     encoding: 'base64',
                 };
-                const source = `
+                const source = /* GraphQL */ `
                     query testQuery(
-                        $programAddress: String!,
-                        $commitment: Commitment,
-                        $dataSlice: DataSlice,
-                        $encoding: AccountEncoding,
+                        $programAddress: String!
+                        $commitment: Commitment
+                        $dataSlice: DataSlice
+                        $encoding: AccountEncoding
                     ) {
                         programAccounts(
-                            programAddress: $programAddress,
-                            commitment: $commitment,
-                            dataSlice: $dataSlice,
-                            encoding: $encoding,
+                            programAddress: $programAddress
+                            commitment: $commitment
+                            dataSlice: $dataSlice
+                            encoding: $encoding
                         ) {
                             ... on AccountBase64 {
                                 data
