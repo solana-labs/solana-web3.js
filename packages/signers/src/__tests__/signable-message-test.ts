@@ -15,10 +15,6 @@ describe('createSignableMessage', () => {
         // Then we expect a message with the same content and no signatures.
         expect(message.content).toBe(content);
         expect(message.signatures).toStrictEqual({});
-
-        // And we expect the message and its signatures to be frozen.
-        expect(message).toBeFrozenObject();
-        expect(message.signatures).toBeFrozenObject();
     });
 
     it('creates a SignableMessage with signatures', () => {
@@ -32,13 +28,11 @@ describe('createSignableMessage', () => {
         // When we create a SignableMessage using both the content and the existing signatures.
         const message = createSignableMessage(content, signatures);
 
-        // Then we expect the message to contain both of these argument as-is.
+        // Then we expect the message to store the provided content as-is.
         expect(message.content).toBe(content);
-        expect(message.signatures).toBe(signatures);
 
-        // And we expect the message and its signatures to be frozen.
-        expect(message).toBeFrozenObject();
-        expect(message.signatures).toBeFrozenObject();
+        // And the signatures to be copied shallowly.
+        expect(message.signatures).toStrictEqual(signatures);
     });
 
     it('creates a SignableMessage from a UTF-8 string', () => {
@@ -48,9 +42,32 @@ describe('createSignableMessage', () => {
         // Then we expect this string to be UTF-8 encoded.
         expect(message.content).toStrictEqual(new TextEncoder().encode('Hello world!'));
         expect(message.signatures).toStrictEqual({});
+    });
 
-        // And we expect the message and its signatures to be frozen.
+    it('freezes the created signable message', () => {
+        const message = createSignableMessage('Hello world!');
         expect(message).toBeFrozenObject();
+    });
+
+    it('freezes the empty signature directory when none is provided', () => {
+        const message = createSignableMessage('Hello world!');
+        expect(message.signatures).toStrictEqual({});
+        expect(message.signatures).toBeFrozenObject();
+    });
+
+    it('shallow copies and freezes the provided signature directory', () => {
+        // Given an existing signature directory.
+        const signatures = {
+            '1111': new Uint8Array([1, 1, 1, 1]),
+            '2222': new Uint8Array([2, 2, 2, 2]),
+        };
+
+        // When we create a new SignableMessage using this signature directory.
+        const message = createSignableMessage('Hello world!', signatures);
+
+        // Then the signature directory is copied and frozen.
+        expect(message.signatures).not.toBe(signatures);
+        expect(message.signatures).toStrictEqual(signatures);
         expect(message.signatures).toBeFrozenObject();
     });
 });

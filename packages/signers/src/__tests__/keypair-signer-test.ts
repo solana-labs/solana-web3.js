@@ -69,7 +69,7 @@ describe('assertIsKeyPairSigner', () => {
 
 describe('createSignerFromKeyPair', () => {
     it('creates a KeyPairSigner from a given CryptoKeypair', async () => {
-        expect.assertions(6);
+        expect.assertions(5);
 
         // Given a mock CryptoKeyPair returning a mock address.
         const myKeyPair = getMockCryptoKeyPair();
@@ -88,8 +88,11 @@ describe('createSignerFromKeyPair', () => {
         // And provided functions to sign messages and transactions.
         expect(typeof mySigner.signMessages).toBe('function');
         expect(typeof mySigner.signTransactions).toBe('function');
+    });
 
-        // And the signer is frozen.
+    it('freezes the created signer', async () => {
+        expect.assertions(1);
+        const mySigner = await createSignerFromKeyPair(getMockCryptoKeyPair());
         expect(mySigner).toBeFrozenObject();
     });
 
@@ -171,7 +174,7 @@ describe('createSignerFromKeyPair', () => {
 
 describe('generateKeyPairSigner', () => {
     it('generates a new KeyPairSigner using the generateKeyPair function', async () => {
-        expect.assertions(4);
+        expect.assertions(3);
 
         // Given we mock the return value of generateKeyPair.
         const mockKeypair = getMockCryptoKeyPair();
@@ -189,10 +192,19 @@ describe('generateKeyPairSigner', () => {
         expect(mySigner.keyPair).toBe(mockKeypair);
         expect(mySigner.address).toBe(mockAddress);
 
-        // And it is frozen.
-        expect(mySigner).toBeFrozenObject();
-
         // And generateKeyPair was called once.
         expect(jest.mocked(generateKeyPair)).toHaveBeenCalledTimes(1);
+    });
+
+    it('freezes the generated signer', async () => {
+        expect.assertions(1);
+
+        // Given we mock the return value of generateKeyPair.
+        const mockKeypair = getMockCryptoKeyPair();
+        jest.mocked(generateKeyPair).mockResolvedValueOnce(mockKeypair);
+
+        // Then the generated signer is frozen.
+        const mySigner = await generateKeyPairSigner();
+        expect(mySigner).toBeFrozenObject();
     });
 });

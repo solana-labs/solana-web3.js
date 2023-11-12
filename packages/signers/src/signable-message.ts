@@ -12,9 +12,12 @@ export type SignableMessage = Readonly<{
  * Creates a signable message from a provided content.
  * If a string is provided, it will be UTF-8 encoded.
  */
-export function createSignableMessage(content: string | Uint8Array, signatures: SignatureDictionary = {}) {
+export function createSignableMessage(
+    content: string | Uint8Array,
+    signatures: SignatureDictionary = {}
+): SignableMessage {
     return Object.freeze({
         content: typeof content === 'string' ? new TextEncoder().encode(content) : content,
-        signatures: Object.freeze(signatures),
+        signatures: Object.freeze({ ...signatures }),
     });
 }
