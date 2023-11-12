@@ -16,10 +16,10 @@ export const accountTypeDefs = /* GraphQL */ `
     # Account interface
     interface Account {
         address: Address
-        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
-        owner: Account
+        ownerProgram: Account
+        space: BigInt
         rentEpoch: BigInt
     }
 
@@ -27,10 +27,10 @@ export const accountTypeDefs = /* GraphQL */ `
     type AccountBase58 implements Account {
         address: Address
         data: Base58EncodedBytes
-        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
-        owner: Account
+        ownerProgram: Account
+        space: BigInt
         rentEpoch: BigInt
     }
 
@@ -38,10 +38,10 @@ export const accountTypeDefs = /* GraphQL */ `
     type AccountBase64 implements Account {
         address: Address
         data: Base64EncodedBytes
-        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
-        owner: Account
+        ownerProgram: Account
+        space: BigInt
         rentEpoch: BigInt
     }
 
@@ -49,98 +49,72 @@ export const accountTypeDefs = /* GraphQL */ `
     type AccountBase64Zstd implements Account {
         address: Address
         data: Base64ZstdEncodedBytes
-        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
-        owner: Account
-        rentEpoch: BigInt
-    }
-
-    # Interface for JSON-parsed meta
-    type JsonParsedAccountMeta {
-        program: String
+        ownerProgram: Account
         space: BigInt
-        type: String
-    }
-    interface AccountJsonParsed {
-        meta: JsonParsedAccountMeta
+        rentEpoch: BigInt
     }
 
     # A nonce account
     type NonceAccountFeeCalculator {
         lamportsPerSignature: String
     }
-    type NonceAccountData {
+    type NonceAccount implements Account {
+        address: Address
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
         authority: Account
         blockhash: String
         feeCalculator: NonceAccountFeeCalculator
     }
-    type NonceAccount implements Account & AccountJsonParsed {
-        address: Address
-        data: NonceAccountData
-        encoding: AccountEncoding
-        executable: Boolean
-        lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
-        rentEpoch: BigInt
-    }
 
     # A lookup table account
-    type LookupTableAccountData {
-        addresses: [String]
+    type LookupTableAccount implements Account {
+        address: Address
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        addresses: [Address]
         authority: Account
         deactivationSlot: String
         lastExtendedSlot: String
         lastExtendedSlotStartIndex: Int
     }
-    type LookupTableAccount implements Account & AccountJsonParsed {
-        address: Address
-        data: LookupTableAccountData
-        encoding: AccountEncoding
-        executable: Boolean
-        lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
-        rentEpoch: BigInt
-    }
 
     # A mint account
-    type MintAccountData {
+    type MintAccount implements Account {
+        address: Address
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
         decimals: Int
         freezeAuthority: Account
         isInitialized: Boolean
         mintAuthority: Account
         supply: String
     }
-    type MintAccount implements Account & AccountJsonParsed {
-        address: Address
-        data: MintAccountData
-        encoding: AccountEncoding
-        executable: Boolean
-        lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
-        rentEpoch: BigInt
-    }
 
     # A token account
-    type TokenAccountData {
+    type TokenAccount implements Account {
+        address: Address
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
         isNative: Boolean
         mint: Account
         owner: Account
         state: String
         tokenAmount: TokenAmount
-    }
-    type TokenAccount implements Account & AccountJsonParsed {
-        address: Address
-        data: TokenAccountData
-        encoding: AccountEncoding
-        executable: Boolean
-        lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
-        rentEpoch: BigInt
     }
 
     # A stake account
@@ -169,19 +143,15 @@ export const accountTypeDefs = /* GraphQL */ `
         creditsObserved: BigInt
         delegation: StakeAccountDataStakeDelegation
     }
-    type StakeAccountData {
-        meta: StakeAccountDataMeta
-        stake: StakeAccountDataStake
-    }
-    type StakeAccount implements Account & AccountJsonParsed {
+    type StakeAccount implements Account {
         address: Address
-        data: StakeAccountData
-        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
+        ownerProgram: Account
+        space: BigInt
         rentEpoch: BigInt
+        meta: StakeAccountDataMeta
+        stake: StakeAccountDataStake
     }
 
     # A vote account
@@ -202,32 +172,28 @@ export const accountTypeDefs = /* GraphQL */ `
         confirmationCount: Int
         slot: BigInt
     }
-    type VoteAccountData {
+    type VoteAccount implements Account {
+        address: Address
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
         authorizedVoters: [VoteAccountDataAuthorizedVoter]
         authorizedWithdrawer: Account
         commission: Int
         epochCredits: [VoteAccountDataEpochCredit]
         lastTimestamp: VoteAccountDataLastTimestamp
         node: Account
-        priorVoters: [String]
+        priorVoters: [Address]
         rootSlot: BigInt
         votes: [VoteAccountDataVote]
-    }
-    type VoteAccount implements Account & AccountJsonParsed {
-        address: Address
-        data: VoteAccountData
-        encoding: AccountEncoding
-        executable: Boolean
-        lamports: BigInt
-        meta: JsonParsedAccountMeta
-        owner: Account
-        rentEpoch: BigInt
     }
 `;
 
 export const accountResolvers = {
     Account: {
-        __resolveType(account: { encoding: string; meta: { program: string; type: string } }) {
+        __resolveType(account: { encoding: string; programName: string; accountType: string }) {
             if (account.encoding === 'base58') {
                 return 'AccountBase58';
             }
@@ -238,22 +204,22 @@ export const accountResolvers = {
                 return 'AccountBase64Zstd';
             }
             if (account.encoding === 'jsonParsed') {
-                if (account.meta.program === 'nonce') {
+                if (account.programName === 'nonce') {
                     return 'NonceAccount';
                 }
-                if (account.meta.type === 'mint' && account.meta.program === 'spl-token') {
+                if (account.accountType === 'mint' && account.programName === 'spl-token') {
                     return 'MintAccount';
                 }
-                if (account.meta.type === 'account' && account.meta.program === 'spl-token') {
+                if (account.accountType === 'account' && account.programName === 'spl-token') {
                     return 'TokenAccount';
                 }
-                if (account.meta.program === 'stake') {
+                if (account.programName === 'stake') {
                     return 'StakeAccount';
                 }
-                if (account.meta.type === 'vote' && account.meta.program === 'vote') {
+                if (account.accountType === 'vote' && account.programName === 'vote') {
                     return 'VoteAccount';
                 }
-                if (account.meta.type === 'lookupTable' && account.meta.program === 'address-lookup-table') {
+                if (account.accountType === 'lookupTable' && account.programName === 'address-lookup-table') {
                     return 'LookupTableAccount';
                 }
             }
@@ -261,39 +227,31 @@ export const accountResolvers = {
         },
     },
     AccountBase58: {
-        owner: resolveAccount('owner'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     AccountBase64: {
-        owner: resolveAccount('owner'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     AccountBase64Zstd: {
-        owner: resolveAccount('owner'),
-    },
-    NonceAccountData: {
-        authority: resolveAccount('authority'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     NonceAccount: {
-        owner: resolveAccount('owner'),
-    },
-    LookupTableAccountData: {
         authority: resolveAccount('authority'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     LookupTableAccount: {
-        owner: resolveAccount('owner'),
-    },
-    MintAccountData: {
-        freezeAuthority: resolveAccount('freezeAuthority'),
-        mintAuthority: resolveAccount('mintAuthority'),
+        authority: resolveAccount('authority'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     MintAccount: {
-        owner: resolveAccount('owner'),
-    },
-    TokenAccountData: {
-        mint: resolveAccount('mint'),
-        owner: resolveAccount('owner'),
+        freezeAuthority: resolveAccount('freezeAuthority'),
+        mintAuthority: resolveAccount('mintAuthority'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     TokenAccount: {
+        mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     StakeAccountDataMetaAuthorized: {
         staker: resolveAccount('staker'),
@@ -306,16 +264,14 @@ export const accountResolvers = {
         voter: resolveAccount('voter'),
     },
     StakeAccount: {
-        owner: resolveAccount('owner'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     VoteAccountDataAuthorizedVoter: {
         authorizedVoter: resolveAccount('authorizedVoter'),
     },
-    VoteAccountData: {
+    VoteAccount: {
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
         node: resolveAccount('nodePubkey'),
-    },
-    VoteAccount: {
-        owner: resolveAccount('owner'),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
 };

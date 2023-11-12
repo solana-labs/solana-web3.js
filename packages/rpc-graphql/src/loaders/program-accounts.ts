@@ -8,50 +8,23 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import type { Rpc } from '../context';
 import { ProgramAccountsQueryArgs } from '../schema/program-accounts';
-import { refineJsonParsedAccountData } from './account';
 import { onlyPresentFieldRequested } from './common/resolve-info';
+import { transformLoadedAccount } from './transformers/account';
 
-function normalizeArgs(args: ProgramAccountsQueryArgs) {
-    const { commitment, dataSlice, encoding, filters, minContextSlot, programAddress } = args;
-    return {
-        commitment: commitment ?? 'confirmed',
-        dataSlice,
-        encoding: encoding ?? 'jsonParsed',
-        filters,
-        minContextSlot,
-        programAddress,
-    };
+/* Normalizes RPC optional configs to use GraphQL API defaults */
+function normalizeArgs({
+    commitment = 'confirmed',
+    dataSlice,
+    encoding = 'jsonParsed',
+    filters,
+    minContextSlot,
+    programAddress,
+}: ProgramAccountsQueryArgs) {
+    return { commitment, dataSlice, encoding, filters, minContextSlot, programAddress };
 }
 
-function processQueryResponse({ encoding, programAccounts }: { encoding: string; programAccounts: any[] }) {
-    return programAccounts.map(programAccount => {
-        const [refinedData, responseEncoding] = Array.isArray(programAccount.account.data)
-            ? encoding === 'jsonParsed'
-                ? [programAccount.account.data[0], 'base64']
-                : [programAccount.account.data[0], encoding]
-            : [refineJsonParsedAccountData(programAccount.account.data), 'jsonParsed'];
-        const pubkey = programAccount.pubkey;
-        const responseBase = {
-            ...programAccount.account,
-            address: pubkey,
-            encoding: responseEncoding,
-        };
-        return typeof refinedData === 'object' && 'meta' in refinedData
-            ? {
-                  ...responseBase,
-                  data: refinedData.data,
-                  meta: refinedData.meta,
-              }
-            : {
-                  ...responseBase,
-                  data: refinedData,
-              };
-    });
-}
-
-export async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: ReturnType<typeof normalizeArgs>) {
-    const { encoding } = config;
-
+/* Load a program's accounts from the RPC, transform them, then return them */
+async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: ReturnType<typeof normalizeArgs>) {
     const programAccounts = await rpc
         .getProgramAccounts(programAddress, config as Parameters<SolanaRpcMethods['getProgramAccounts']>[1])
         .send()
@@ -65,9 +38,13 @@ export async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config 
             throw e;
         });
 
-    const queryResponse = processQueryResponse({ encoding, programAccounts });
-
-    return queryResponse;
+    return programAccounts.map(programAccount =>
+        transformLoadedAccount({
+            account: programAccount.account,
+            address: programAccount.pubkey,
+            encoding: config.encoding,
+        })
+    );
 }
 
 function createProgramAccountsBatchLoadFn(rpc: Rpc) {
@@ -83,8 +60,9 @@ export function createProgramAccountsLoader(rpc: Rpc) {
     const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
     return {
         load: async (args: ProgramAccountsQueryArgs, info?: GraphQLResolveInfo) => {
-            // If a user only requests the program's address, don't call the RPC or the cache
             if (onlyPresentFieldRequested('programAddress', info)) {
+                // If a user only requests the program's address,
+                // don't call the RPC or the cache
                 return { programAddress: args.programAddress };
             }
             return loader.load(normalizeArgs(args));
