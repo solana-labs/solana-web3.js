@@ -64,7 +64,7 @@ const schemaResolvers = {
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
-            return context.loadBlock(args, info);
+            return context.blockLoader.load(args, info);
         },
         programAccounts(
             _: unknown,

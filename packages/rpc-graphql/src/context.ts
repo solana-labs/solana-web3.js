@@ -2,7 +2,7 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import { createGraphQLCache, GraphQLCache } from './cache';
 import { createAccountLoader } from './loaders/account';
-import { loadBlock } from './loaders/block';
+import { createBlockLoader } from './loaders/block';
 import { loadProgramAccounts } from './loaders/program-accounts';
 import { loadTransaction } from './loaders/transaction';
 import { createRpcGraphQL } from './rpc';
@@ -19,7 +19,7 @@ type Loader<TArgs> = {
 export interface RpcGraphQLContext {
     cache: GraphQLCache;
     accountLoader: Loader<AccountQueryArgs>;
-    loadBlock(args: BlockQueryArgs, info?: GraphQLResolveInfo): ReturnType<typeof loadBlock>;
+    blockLoader: Loader<BlockQueryArgs>;
     loadProgramAccounts(
         args: ProgramAccountsQueryArgs,
         info?: GraphQLResolveInfo
@@ -32,10 +32,8 @@ export function createSolanaGraphQLContext(rpc: Rpc): RpcGraphQLContext {
     const cache = createGraphQLCache();
     return {
         accountLoader: createAccountLoader(rpc),
+        blockLoader: createBlockLoader(rpc),
         cache,
-        loadBlock(args, info?) {
-            return loadBlock(args, this.cache, this.rpc, info);
-        },
         loadProgramAccounts(args, info?) {
             return loadProgramAccounts(args, this.cache, this.rpc, info);
         },

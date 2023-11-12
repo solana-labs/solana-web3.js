@@ -10,5 +10,5 @@ export const resolveBlock = (fieldName: string) => {
         args: BlockQueryArgs,
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo | undefined
-    ) => (parent[fieldName] === null ? null : context.loadBlock({ ...args, slot: parent[fieldName] }, info));
+    ) => (parent[fieldName] === null ? null : context.blockLoader.load({ ...args, slot: parent[fieldName] }, info));
 };
