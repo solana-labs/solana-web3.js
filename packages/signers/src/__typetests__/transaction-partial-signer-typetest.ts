@@ -6,11 +6,11 @@ import {
     TransactionPartialSigner,
 } from '../transaction-partial-signer';
 
-const signTransaction = () => {};
+const signTransactions = () => {};
 
 {
     // [isTransactionPartialSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), signTransaction };
+    const potentialSigner = { address: address('1'), signTransactions };
     if (isTransactionPartialSigner(potentialSigner)) {
         potentialSigner satisfies TransactionPartialSigner<'1'>;
     }
@@ -18,7 +18,7 @@ const signTransaction = () => {};
 
 {
     // [assertIsTransactionPartialSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), signTransaction };
+    const potentialSigner = { address: address('1'), signTransactions };
     assertIsTransactionPartialSigner(potentialSigner);
     potentialSigner satisfies TransactionPartialSigner<'1'>;
 }

@@ -4,7 +4,7 @@ import { CompilableTransaction } from '@solana/transactions';
 /** Defines a signer capable of signing transactions. */
 export type TransactionModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    modifyAndSignTransaction<TTransaction extends CompilableTransaction>(
+    modifyAndSignTransactions<TTransaction extends CompilableTransaction>(
         transactions: readonly TTransaction[]
     ): Promise<readonly TTransaction[]>;
 }>;
@@ -14,7 +14,7 @@ export function isTransactionModifyingSigner<TAddress extends string>(value: {
     address: Address<TAddress>;
     [key: string]: unknown;
 }): value is TransactionModifyingSigner<TAddress> {
-    return 'modifyAndSignTransaction' in value && typeof value.modifyAndSignTransaction === 'function';
+    return 'modifyAndSignTransactions' in value && typeof value.modifyAndSignTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionModifyingSigner} interface. */

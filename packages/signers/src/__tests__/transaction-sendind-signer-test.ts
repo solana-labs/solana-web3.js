@@ -11,12 +11,12 @@ describe('isTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            signAndSendTransaction: async () => [],
+            signAndSendTransactions: async () => [],
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSendingSigner(mySigner)).toBe(true);
         expect(isTransactionSendingSigner({ address: myAddress })).toBe(false);
-        expect(isTransactionSendingSigner({ address: myAddress, signAndSendTransaction: 42 })).toBe(false);
+        expect(isTransactionSendingSigner({ address: myAddress, signAndSendTransactions: 42 })).toBe(false);
     });
 });
 
@@ -25,13 +25,13 @@ describe('assertIsTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            signAndSendTransaction: async () => [],
+            signAndSendTransactions: async () => [],
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedMessage = 'The provided value does not implement the TransactionSendingSigner interface';
         expect(() => assertIsTransactionSendingSigner(mySigner)).not.toThrow();
         expect(() => assertIsTransactionSendingSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsTransactionSendingSigner({ address: myAddress, signAndSendTransaction: 42 })).toThrow(
+        expect(() => assertIsTransactionSendingSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(
             expectedMessage
         );
     });

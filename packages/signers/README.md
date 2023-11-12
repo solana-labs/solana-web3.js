@@ -29,14 +29,14 @@ mySigner.address; // Address;
 
 // Sign one or multiple messages.
 const myMessage = createSignableMessage('Hello world!');
-const [messageSignatures] = await mySigner.signMessage([myMessage]);
+const [messageSignatures] = await mySigner.signMessages([myMessage]);
 
 // Sign one or multiple transactions.
 const myTransaction = pipe(
     createTransaction({ version: 0 })
     // Add instructions, fee payer, lifetime, etc.
 );
-const [transactionSignatures] = await mySigner.signTransaction([myTransaction]);
+const [transactionSignatures] = await mySigner.signTransactions([myTransaction]);
 ```
 
 As you can see, this provides a consistent API regardless of how things are being signed behind the scenes. If tomorrow we need to use a browser wallet instead, we'd simply need to swap the `generateKeyPairSigner` function with the signer factory of our choice.
@@ -84,12 +84,12 @@ type SignableMessage = {
 
 #### `MessagePartialSigner<TAddress>`
 
-An interface that signs an array of `SignableMessages` without modifying their content. It defines a `signMessage` function that returns a `SignatureDictionary` for each provided message. Such signature dictionaries are expected to be merged with the existing ones if any.
+An interface that signs an array of `SignableMessages` without modifying their content. It defines a `signMessages` function that returns a `SignatureDictionary` for each provided message. Such signature dictionaries are expected to be merged with the existing ones if any.
 
 ```ts
 const myMessagePartialSigner: MessagePartialSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    signMessage: async (messages: SignableMessage[]): Promise<SignatureDictionary[]> => {
+    signMessages: async (messages: SignableMessage[]): Promise<SignatureDictionary[]> => {
         // My custom signing logic.
     },
 };
@@ -102,12 +102,12 @@ const myMessagePartialSigner: MessagePartialSigner<'1234..5678'> = {
 
 #### `MessageModifyingSigner<TAddress>`
 
-An interface that potentially modifies the content of the provided `SignableMessages` before signing them. E.g. this enables wallets to prefix or suffix nonces to the messages they sign. For each message, instead of returning a `SignatureDirectory`, its `modifyAndSignMessage` function returns its updated `SignableMessage` with a potentially modified content and signature dictionary.
+An interface that potentially modifies the content of the provided `SignableMessages` before signing them. E.g. this enables wallets to prefix or suffix nonces to the messages they sign. For each message, instead of returning a `SignatureDirectory`, its `modifyAndSignMessages` function returns its updated `SignableMessage` with a potentially modified content and signature dictionary.
 
 ```ts
 const myMessageModifyingSigner: MessageModifyingSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    modifyAndSignMessage: async (messages: SignableMessage[]): Promise<SignableMessage[]> => {
+    modifyAndSignMessages: async (messages: SignableMessage[]): Promise<SignableMessage[]> => {
         // My custom signing logic.
     },
 };
@@ -150,20 +150,20 @@ Each of the message interfaces described above comes with two type guards that a
 ```ts
 const myAddress = address('1234..5678');
 
-isMessagePartialSigner({ address: myAddress, signMessage: async () => {} }); // ✅ true
+isMessagePartialSigner({ address: myAddress, signMessages: async () => {} }); // ✅ true
 isMessagePartialSigner({ address: myAddress }); // ❌ false
-assertIsMessagePartialSigner({ address: myAddress, signMessage: async () => {} }); // ✅ void
+assertIsMessagePartialSigner({ address: myAddress, signMessages: async () => {} }); // ✅ void
 assertIsMessagePartialSigner({ address: myAddress }); // ❌ Throws an error.
 
-isMessageModifyingSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ true
+isMessageModifyingSigner({ address: myAddress, modifyAndSignMessages: async () => {} }); // ✅ true
 isMessageModifyingSigner({ address: myAddress }); // ❌ false
-assertIsMessageModifyingSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ void
+assertIsMessageModifyingSigner({ address: myAddress, modifyAndSignMessages: async () => {} }); // ✅ void
 assertIsMessageModifyingSigner({ address: myAddress }); // ❌ Throws an error.
 
-isMessageSigner({ address: myAddress, signMessage: async () => {} }); // ✅ true
-isMessageSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ true
-assertIsMessageSigner({ address: myAddress, signMessage: async () => {} }); // ✅ void
-assertIsMessageSigner({ address: myAddress, modifyAndSignMessage: async () => {} }); // ✅ void
+isMessageSigner({ address: myAddress, signMessages: async () => {} }); // ✅ true
+isMessageSigner({ address: myAddress, modifyAndSignMessages: async () => {} }); // ✅ true
+assertIsMessageSigner({ address: myAddress, signMessages: async () => {} }); // ✅ void
+assertIsMessageSigner({ address: myAddress, modifyAndSignMessages: async () => {} }); // ✅ void
 ```
 
 ## Signing transactions
@@ -172,12 +172,12 @@ assertIsMessageSigner({ address: myAddress, modifyAndSignMessage: async () => {}
 
 #### `TransactionPartialSigner<TAddress>`
 
-An interface that signs an array of `CompilableTransactions` without modifying their content. It defines a `signTransaction` function that returns a `SignatureDictionary` for each provided transaction. Such signature dictionaries are expected to be merged with the existing ones if any.
+An interface that signs an array of `CompilableTransactions` without modifying their content. It defines a `signTransactions` function that returns a `SignatureDictionary` for each provided transaction. Such signature dictionaries are expected to be merged with the existing ones if any.
 
 ```ts
 const myTransactionPartialSigner: TransactionPartialSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    signTransaction: async (transactions: CompilableTransaction[]): Promise<SignatureDictionary[]> => {
+    signTransactions: async (transactions: CompilableTransaction[]): Promise<SignatureDictionary[]> => {
         // My custom signing logic.
     },
 };
@@ -190,12 +190,12 @@ const myTransactionPartialSigner: TransactionPartialSigner<'1234..5678'> = {
 
 #### `TransactionModifyingSigner<TAddress>`
 
-An interface that potentially modifies the provided `CompilableTransactions` before signing them. E.g. this enables wallets to inject additional instructions into the transaction before signing them. For each transaction, instead of returning a `SignatureDirectory`, its `modifyAndSignTransaction` function returns an updated `CompilableTransaction` with a potentially modified set of instructions and signature dictionary.
+An interface that potentially modifies the provided `CompilableTransactions` before signing them. E.g. this enables wallets to inject additional instructions into the transaction before signing them. For each transaction, instead of returning a `SignatureDirectory`, its `modifyAndSignTransactions` function returns an updated `CompilableTransaction` with a potentially modified set of instructions and signature dictionary.
 
 ```ts
 const myTransactionModifyingSigner: TransactionModifyingSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    modifyAndSignTransaction: async <T extends CompilableTransaction>(transactions: T[]): Promise<T[]> => {
+    modifyAndSignTransactions: async <T extends CompilableTransaction>(transactions: T[]): Promise<T[]> => {
         // My custom signing logic.
     },
 };
@@ -209,14 +209,14 @@ const myTransactionModifyingSigner: TransactionModifyingSigner<'1234..5678'> = {
 
 #### `TransactionSendingSigner<TAddress>`
 
-An interface that signs one or multiple transactions before sending them immediately to the blockchain. It defines a `signAndSendTransaction` function that returns the transaction signature (i.e. its identifier) for each provided `CompilableTransaction`. This interface is required for PDA wallets and other types of wallets that don't provide an interface for signing transactions without sending them.
+An interface that signs one or multiple transactions before sending them immediately to the blockchain. It defines a `signAndSendTransactions` function that returns the transaction signature (i.e. its identifier) for each provided `CompilableTransaction`. This interface is required for PDA wallets and other types of wallets that don't provide an interface for signing transactions without sending them.
 
 Note that it is also possible for such signers to modify the provided transactions before signing and sending them. This enables use cases where the modified transactions cannot be shared with the app and thus must be sent directly.
 
 ```ts
 const myTransactionSendingSigner: TransactionSendingSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    signAndSendTransaction: async (transactions: CompilableTransaction[]): Promise<SignatureBytes[]> => {
+    signAndSendTransactions: async (transactions: CompilableTransaction[]): Promise<SignatureBytes[]> => {
         // My custom signing logic.
     },
 };
@@ -249,14 +249,14 @@ Each of the transaction interfaces described above comes with two type guards th
 ```ts
 const myAddress = address('1234..5678');
 
-isTransactionPartialSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ true
+isTransactionPartialSigner({ address: myAddress, signTransactions: async () => {} }); // ✅ true
 isTransactionPartialSigner({ address: myAddress }); // ❌ false
-assertIsTransactionPartialSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ void
+assertIsTransactionPartialSigner({ address: myAddress, signTransactions: async () => {} }); // ✅ void
 assertIsTransactionPartialSigner({ address: myAddress }); // ❌ Throws an error.
 
-isTransactionModifyingSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ true
+isTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: async () => {} }); // ✅ true
 isTransactionModifyingSigner({ address: myAddress }); // ❌ false
-assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ void
+assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: async () => {} }); // ✅ void
 assertIsTransactionModifyingSigner({ address: myAddress }); // ❌ Throws an error.
 
 isTransactionSendingSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ true
@@ -264,11 +264,11 @@ isTransactionSendingSigner({ address: myAddress }); // ❌ false
 assertIsTransactionSendingSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ void
 assertIsTransactionSendingSigner({ address: myAddress }); // ❌ Throws an error.
 
-isTransactionSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ true
-isTransactionSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ true
+isTransactionSigner({ address: myAddress, signTransactions: async () => {} }); // ✅ true
+isTransactionSigner({ address: myAddress, modifyAndSignTransactions: async () => {} }); // ✅ true
 isTransactionSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ true
-assertIsTransactionSigner({ address: myAddress, signTransaction: async () => {} }); // ✅ void
-assertIsTransactionSigner({ address: myAddress, modifyAndSignTransaction: async () => {} }); // ✅ void
+assertIsTransactionSigner({ address: myAddress, signTransactions: async () => {} }); // ✅ void
+assertIsTransactionSigner({ address: myAddress, modifyAndSignTransactions: async () => {} }); // ✅ void
 assertIsTransactionSigner({ address: myAddress, signAndSignTransaction: async () => {} }); // ✅ void
 ```
 
@@ -286,15 +286,15 @@ import { generateKeyPairSigner } from '@solana/signers';
 const myKeyPairSigner = generateKeyPairSigner();
 myKeyPairSigner.address; // Address;
 myKeyPairSigner.keyPair; // CryptoKeyPair;
-const [myMessageSignatures] = await myKeyPairSigner.signMessage([myMessage]);
-const [myTransactionSignatures] = await myKeyPairSigner.signTransaction([myTransaction]);
+const [myMessageSignatures] = await myKeyPairSigner.signMessages([myMessage]);
+const [myTransactionSignatures] = await myKeyPairSigner.signTransactions([myTransaction]);
 ```
 
 ### Functions
 
 #### `createSignerFromKeyPair()`
 
-Creates a `KeyPairSigner` from a provided Crypto KeyPair. The `signMessage` and `signTransaction` functions of the returned signer will use the private key of the provided key pair to sign messages and transactions. Note that both the `signMessage` and `signTransaction` implementations are parallelized, meaning that they will sign all provided messages and transactions in parallel.
+Creates a `KeyPairSigner` from a provided Crypto KeyPair. The `signMessages` and `signTransactions` functions of the returned signer will use the private key of the provided key pair to sign messages and transactions. Note that both the `signMessages` and `signTransactions` implementations are parallelized, meaning that they will sign all provided messages and transactions in parallel.
 
 ```ts
 import { generateKeyPair } from '@solana/keys';

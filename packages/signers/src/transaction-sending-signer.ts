@@ -5,7 +5,7 @@ import { CompilableTransaction } from '@solana/transactions';
 /** Defines a signer capable of signing and sending transactions simultaneously. */
 export type TransactionSendingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    signAndSendTransaction(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureBytes[]>;
+    signAndSendTransactions(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureBytes[]>;
 }>;
 
 /** Checks whether the provided value implements the {@link TransactionSendingSigner} interface. */
@@ -13,7 +13,7 @@ export function isTransactionSendingSigner<TAddress extends string>(value: {
     address: Address<TAddress>;
     [key: string]: unknown;
 }): value is TransactionSendingSigner<TAddress> {
-    return 'signAndSendTransaction' in value && typeof value.signAndSendTransaction === 'function';
+    return 'signAndSendTransactions' in value && typeof value.signAndSendTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionSendingSigner} interface. */

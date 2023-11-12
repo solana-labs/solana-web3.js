@@ -6,11 +6,11 @@ import {
     TransactionModifyingSigner,
 } from '../transaction-modifying-signer';
 
-const modifyAndSignTransaction = () => {};
+const modifyAndSignTransactions = () => {};
 
 {
     // [isTransactionModifyingSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), modifyAndSignTransaction };
+    const potentialSigner = { address: address('1'), modifyAndSignTransactions };
     if (isTransactionModifyingSigner(potentialSigner)) {
         potentialSigner satisfies TransactionModifyingSigner<'1'>;
     }
@@ -18,7 +18,7 @@ const modifyAndSignTransaction = () => {};
 
 {
     // [assertIsTransactionModifyingSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), modifyAndSignTransaction };
+    const potentialSigner = { address: address('1'), modifyAndSignTransactions };
     assertIsTransactionModifyingSigner(potentialSigner);
     potentialSigner satisfies TransactionModifyingSigner<'1'>;
 }

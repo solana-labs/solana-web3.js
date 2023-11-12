@@ -7,15 +7,15 @@ describe('isTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signTransaction: async () => [],
+            signTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignTransaction: async () => [],
+            modifyAndSignTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            signAndSendTransaction: async () => [],
+            signAndSendTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSigner(myPartialSigner)).toBe(true);
@@ -26,9 +26,9 @@ describe('isTransactionSigner', () => {
         expect(isTransactionSigner({ ...myModifyingSigner, ...mySendingSigner })).toBe(true);
         expect(isTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })).toBe(true);
         expect(isTransactionSigner({ address: myAddress })).toBe(false);
-        expect(isTransactionSigner({ address: myAddress, signTransaction: 42 })).toBe(false);
-        expect(isTransactionSigner({ address: myAddress, modifyAndSignTransaction: 42 })).toBe(false);
-        expect(isTransactionSigner({ address: myAddress, signAndSendTransaction: 42 })).toBe(false);
+        expect(isTransactionSigner({ address: myAddress, signTransactions: 42 })).toBe(false);
+        expect(isTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toBe(false);
+        expect(isTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toBe(false);
     });
 });
 
@@ -37,15 +37,15 @@ describe('assertIsTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signTransaction: async () => [],
+            signTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignTransaction: async () => [],
+            modifyAndSignTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            signAndSendTransaction: async () => [],
+            signAndSendTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedMessage = 'The provided value does not implement any of the TransactionSigner interfaces';
@@ -59,11 +59,11 @@ describe('assertIsTransactionSigner', () => {
             assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })
         ).not.toThrow();
         expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsTransactionSigner({ address: myAddress, signTransaction: 42 })).toThrow(expectedMessage);
-        expect(() => assertIsTransactionSigner({ address: myAddress, modifyAndSignTransaction: 42 })).toThrow(
+        expect(() => assertIsTransactionSigner({ address: myAddress, signTransactions: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
             expectedMessage
         );
-        expect(() => assertIsTransactionSigner({ address: myAddress, signAndSendTransaction: 42 })).toThrow(
+        expect(() => assertIsTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(
             expectedMessage
         );
     });

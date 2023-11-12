@@ -6,7 +6,7 @@ import { SignatureDictionary } from './types';
 /** Defines a signer capable of signing transactions. */
 export type TransactionPartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    signTransaction(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureDictionary[]>;
+    signTransactions(transactions: readonly CompilableTransaction[]): Promise<readonly SignatureDictionary[]>;
 }>;
 
 /** Checks whether the provided value implements the {@link TransactionPartialSigner} interface. */
@@ -14,7 +14,7 @@ export function isTransactionPartialSigner<TAddress extends string>(value: {
     address: Address<TAddress>;
     [key: string]: unknown;
 }): value is TransactionPartialSigner<TAddress> {
-    return 'signTransaction' in value && typeof value.signTransaction === 'function';
+    return 'signTransactions' in value && typeof value.signTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionPartialSigner} interface. */

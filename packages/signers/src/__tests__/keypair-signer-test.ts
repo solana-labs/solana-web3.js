@@ -36,14 +36,14 @@ describe('isKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            signMessage: async () => [],
-            signTransaction: async () => [],
+            signMessages: async () => [],
+            signTransactions: async () => [],
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isKeyPairSigner(mySigner)).toBe(true);
         expect(isKeyPairSigner({ address: myAddress })).toBe(false);
-        expect(isKeyPairSigner({ ...mySigner, signMessage: 42 })).toBe(false);
-        expect(isKeyPairSigner({ ...mySigner, signTransaction: 42 })).toBe(false);
+        expect(isKeyPairSigner({ ...mySigner, signMessages: 42 })).toBe(false);
+        expect(isKeyPairSigner({ ...mySigner, signTransactions: 42 })).toBe(false);
         expect(isKeyPairSigner({ ...mySigner, keyPair: 42 })).toBe(false);
     });
 });
@@ -54,15 +54,15 @@ describe('assertIsKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            signMessage: async () => [],
-            signTransaction: async () => [],
+            signMessages: async () => [],
+            signTransactions: async () => [],
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedMessage = 'The provided value does not implement the KeyPairSigner interface';
         expect(() => assertIsKeyPairSigner(mySigner)).not.toThrow();
         expect(() => assertIsKeyPairSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsKeyPairSigner({ ...mySigner, signMessage: 42 })).toThrow(expectedMessage);
-        expect(() => assertIsKeyPairSigner({ ...mySigner, signTransaction: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsKeyPairSigner({ ...mySigner, signMessages: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsKeyPairSigner({ ...mySigner, signTransactions: 42 })).toThrow(expectedMessage);
         expect(() => assertIsKeyPairSigner({ ...mySigner, keyPair: 42 })).toThrow(expectedMessage);
     });
 });
@@ -86,8 +86,8 @@ describe('createSignerFromKeyPair', () => {
         expect(mySigner.keyPair).toBe(myKeyPair);
 
         // And provided functions to sign messages and transactions.
-        expect(typeof mySigner.signMessage).toBe('function');
-        expect(typeof mySigner.signTransaction).toBe('function');
+        expect(typeof mySigner.signMessages).toBe('function');
+        expect(typeof mySigner.signTransactions).toBe('function');
 
         // And the signer is frozen.
         expect(mySigner).toBeFrozenObject();
@@ -112,7 +112,7 @@ describe('createSignerFromKeyPair', () => {
             createSignableMessage(new Uint8Array([1, 1, 1])),
             createSignableMessage(new Uint8Array([2, 2, 2])),
         ];
-        const signatureDictionaries = await mySigner.signMessage(messages);
+        const signatureDictionaries = await mySigner.signMessages(messages);
 
         // Then the signature directories contain the expected signatures.
         expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
@@ -128,7 +128,7 @@ describe('createSignerFromKeyPair', () => {
         expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(2, myKeyPair.privateKey, messages[1].content);
     });
 
-    it('signs transactions using the signTransaction function', async () => {
+    it('signs transactions using the signTransactions function', async () => {
         expect.assertions(7);
 
         // Given a KeyPairSigner created from a mock CryptoKeyPair.
@@ -140,7 +140,7 @@ describe('createSignerFromKeyPair', () => {
         // And given we have a couple of mock transactions to sign.
         const mockTransactions = [{} as CompilableTransaction, {} as CompilableTransaction];
 
-        // And given we mock the next two calls of the signTransaction function.
+        // And given we mock the next two calls of the signTransactions function.
         const mockSignatures = [new Uint8Array([101, 101, 101]), new Uint8Array([201, 201, 201])] as SignatureBytes[];
         jest.mocked(signTransaction).mockResolvedValueOnce({
             ...mockTransactions[0],
@@ -152,7 +152,7 @@ describe('createSignerFromKeyPair', () => {
         });
 
         // When we sign both transactions using that signer.
-        const signatureDictionaries = await mySigner.signTransaction(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
 
         // Then the signature directories contain the expected signatures.
         expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
@@ -162,7 +162,7 @@ describe('createSignerFromKeyPair', () => {
         expect(signatureDictionaries[0]).toBeFrozenObject();
         expect(signatureDictionaries[1]).toBeFrozenObject();
 
-        // And signTransaction was called twice with the expected parameters.
+        // And signTransactions was called twice with the expected parameters.
         expect(jest.mocked(signTransaction)).toHaveBeenCalledTimes(2);
         expect(jest.mocked(signTransaction)).toHaveBeenNthCalledWith(1, [myKeyPair], mockTransactions[0]);
         expect(jest.mocked(signTransaction)).toHaveBeenNthCalledWith(2, [myKeyPair], mockTransactions[1]);
