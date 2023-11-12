@@ -39,7 +39,7 @@ describe('transaction', () => {
         it("can query a transaction's slot", async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         slot
@@ -58,7 +58,7 @@ describe('transaction', () => {
         it("can query a transaction's computeUnitsConsumed from it's meta", async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         meta {
@@ -81,7 +81,7 @@ describe('transaction', () => {
         it("can query several fields from a transaction's meta", async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         meta {
@@ -113,7 +113,7 @@ describe('transaction', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase58)));
             // Mock again for jsonParsed encoding
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}", encoding: base58) {
                         ... on TransactionBase58 {
@@ -137,7 +137,7 @@ describe('transaction', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase64)));
             // Mock again for jsonParsed encoding
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}", encoding: base64) {
                         ... on TransactionBase64 {
@@ -158,7 +158,7 @@ describe('transaction', () => {
         it('can get a transaction as jsonParsed', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
             query testQuery {
                 transaction(signature: "${defaultTransactionSignature}") {
                     ... on TransactionParsed {
@@ -201,7 +201,7 @@ describe('transaction', () => {
         it('defaults to jsonParsed', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = `
+            const source = /* GraphQL */ `
             query testQuery {
                 transaction(signature: "${defaultTransactionSignature}") {
                     ... on TransactionParsed {
@@ -246,7 +246,7 @@ describe('transaction', () => {
         it('can get a generic instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionGeneric)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -287,7 +287,7 @@ describe('transaction', () => {
         it('can get a `ExtendLookupTable` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionAddressLookup)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -362,7 +362,7 @@ describe('transaction', () => {
         it('can get a `CreateAccount` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -433,7 +433,7 @@ describe('transaction', () => {
         it('can get an `Allocate` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -492,7 +492,7 @@ describe('transaction', () => {
         it('can get an `Assign` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -555,7 +555,7 @@ describe('transaction', () => {
         it('can get a `Transfer` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -620,7 +620,7 @@ describe('transaction', () => {
         it('can get a `InitializeMint` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
@@ -691,7 +691,7 @@ describe('transaction', () => {
         it('can get a `SplTokenTransfer` instruction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
-            const source = `
+            const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
                         ... on TransactionParsed {
