@@ -1,23 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolanaRpcMethods } from '@solana/rpc-core';
+import DataLoader from 'dataloader';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { GraphQLCache } from '../cache';
 import type { Rpc } from '../context';
 import { BlockQueryArgs } from '../schema/block';
+import { onlyPresentFieldRequested } from './common/resolve-info';
 import { refineJsonParsedTransaction } from './transaction';
 
-function normalizeArgs(args: Omit<BlockQueryArgs, 'slot'>) {
-    const { commitment, encoding, transactionDetails } = args;
+function normalizeArgs(args: BlockQueryArgs) {
+    const { commitment, encoding, slot, transactionDetails } = args;
     return {
         commitment: commitment ?? 'confirmed',
         encoding: encoding ?? 'jsonParsed',
         // Always use 0 to avoid silly errors
         maxSupportedTransactionVersion: 0,
+        slot,
         transactionDetails: transactionDetails ?? 'full',
     };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function refineJsonParsedTransactionForAccounts({ transaction }: { transaction: any }) {
     return {
         data: transaction.transaction,
@@ -31,7 +36,6 @@ function processQueryResponse({
     block,
     transactionDetails,
 }: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     block: any;
     encoding: string;
     transactionDetails: string;
@@ -56,22 +60,11 @@ function processQueryResponse({
     };
 }
 
-export async function loadBlock(
-    { slot, ...config }: BlockQueryArgs,
-    cache: GraphQLCache,
-    rpc: Rpc,
-    _info?: GraphQLResolveInfo
-) {
-    const requestConfig = normalizeArgs(config);
-    const { encoding, transactionDetails } = requestConfig;
-
-    const cached = cache.get(slot, config);
-    if (cached !== null) {
-        return cached;
-    }
+export async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
+    const { encoding, transactionDetails } = config;
 
     const block = await rpc
-        .getBlock(slot, requestConfig as unknown as Parameters<SolanaRpcMethods['getBlock']>[1])
+        .getBlock(slot, config as unknown as Parameters<SolanaRpcMethods['getBlock']>[1])
         .send()
         .catch(e => {
             throw e;
@@ -83,7 +76,25 @@ export async function loadBlock(
 
     const queryResponse = processQueryResponse({ block, encoding, transactionDetails });
 
-    cache.insert(slot, requestConfig, queryResponse);
-
     return queryResponse;
+}
+
+function createBlockBatchLoadFn(rpc: Rpc) {
+    const resolveBlockUsingRpc = loadBlock.bind(null, rpc);
+    return async (blockQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
+        return await Promise.all(blockQueryArgs.map(async args => await resolveBlockUsingRpc(args)));
+    };
+}
+
+export function createBlockLoader(rpc: Rpc) {
+    const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    return {
+        load: async (args: BlockQueryArgs, info?: GraphQLResolveInfo) => {
+            // If a user only requests the block's slot, don't call the RPC or the cache
+            if (onlyPresentFieldRequested('slot', info)) {
+                return { slot: args.slot };
+            }
+            return loader.load(normalizeArgs(args));
+        },
+    };
 }
