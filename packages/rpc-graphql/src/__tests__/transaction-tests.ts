@@ -116,7 +116,6 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}", encoding: BASE_58) {
-                        encoding
                         ... on TransactionBase58 {
                             data
                         }
@@ -128,7 +127,6 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         data: expect.any(String),
-                        encoding: 'BASE_58',
                     },
                 },
             });
@@ -142,7 +140,6 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}", encoding: BASE_64) {
-                        encoding
                         ... on TransactionBase64 {
                             data
                         }
@@ -154,7 +151,6 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         data: expect.any(String),
-                        encoding: 'BASE_64',
                     },
                 },
             });
@@ -165,7 +161,6 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
             query testQuery {
                 transaction(signature: "${defaultTransactionSignature}", encoding: PARSED) {
-                    encoding
                     ... on TransactionParsed {
                         data {
                             message {
@@ -199,7 +194,6 @@ describe('transaction', () => {
                             },
                             signatures: expect.any(Array),
                         },
-                        encoding: 'PARSED',
                     },
                 },
             });
@@ -210,7 +204,6 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
             query testQuery {
                 transaction(signature: "${defaultTransactionSignature}") {
-                    encoding
                     ... on TransactionParsed {
                         data {
                             message {
@@ -244,7 +237,6 @@ describe('transaction', () => {
                             },
                             signatures: expect.any(Array),
                         },
-                        encoding: 'PARSED',
                     },
                 },
             });
@@ -302,27 +294,21 @@ describe('transaction', () => {
                             data {
                                 message {
                                     instructions {
-                                        ... on ExtendLookupTableInstruction {
-                                            data {
-                                                lookupTableAccount {
-                                                    address
-                                                }
-                                                lookupTableAuthority {
-                                                    address
-                                                }
-                                                newAddresses
-                                                payerAccount {
-                                                    address
-                                                }
-                                                systemProgram {
-                                                    address
-                                                }
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on ExtendLookupTableInstruction {
+                                            lookupTableAccount {
+                                                address
+                                            }
+                                            lookupTableAuthority {
+                                                address
+                                            }
+                                            newAddresses
+                                            payerAccount {
+                                                address
+                                            }
+                                            systemProgram {
+                                                address
+                                            }
                                         }
                                     }
                                 }
@@ -339,26 +325,20 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        data: {
-                                            lookupTableAccount: {
-                                                address: expect.any(String),
-                                            },
-                                            lookupTableAuthority: {
-                                                address: expect.any(String),
-                                            },
-                                            newAddresses: expect.any(Array),
-                                            payerAccount: {
-                                                address: expect.any(String),
-                                            },
-                                            systemProgram: {
-                                                address: expect.any(String),
-                                            },
+                                        lookupTableAccount: {
+                                            address: expect.any(String),
                                         },
-                                        meta: {
-                                            program: 'address-lookup-table',
-                                            type: 'extendLookupTable',
+                                        lookupTableAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        newAddresses: expect.any(Array),
+                                        payerAccount: {
+                                            address: expect.any(String),
                                         },
                                         programId: 'AddressLookupTab1e1111111111111111111111111',
+                                        systemProgram: {
+                                            address: expect.any(String),
+                                        },
                                     },
                                 ]),
                             },
@@ -377,25 +357,19 @@ describe('transaction', () => {
                             data {
                                 message {
                                     instructions {
-                                        ... on CreateAccountInstruction {
-                                            data {
-                                                lamports
-                                                newAccount {
-                                                    address
-                                                }
-                                                owner {
-                                                    address
-                                                }
-                                                source {
-                                                    address
-                                                }
-                                                space
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on CreateAccountInstruction {
+                                            lamports
+                                            newAccount {
+                                                address
+                                            }
+                                            owner {
+                                                address
+                                            }
+                                            source {
+                                                address
+                                            }
+                                            space
                                         }
                                     }
                                 }
@@ -412,24 +386,18 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        data: {
-                                            lamports: expect.any(BigInt),
-                                            newAccount: {
-                                                address: expect.any(String),
-                                            },
-                                            owner: {
-                                                address: expect.any(String),
-                                            },
-                                            source: {
-                                                address: expect.any(String),
-                                            },
-                                            space: expect.any(BigInt),
+                                        lamports: expect.any(BigInt),
+                                        newAccount: {
+                                            address: expect.any(String),
                                         },
-                                        meta: {
-                                            program: 'system',
-                                            type: 'createAccount',
+                                        owner: {
+                                            address: expect.any(String),
                                         },
                                         programId: '11111111111111111111111111111111',
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                        space: expect.any(BigInt),
                                     },
                                 ]),
                             },
@@ -448,18 +416,12 @@ describe('transaction', () => {
                             meta {
                                 innerInstructions {
                                     instructions {
-                                        ... on AllocateInstruction {
-                                            data {
-                                                account {
-                                                    address
-                                                }
-                                                space
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on AllocateInstruction {
+                                            account {
+                                                address
+                                            }
+                                            space
                                         }
                                     }
                                 }
@@ -477,17 +439,11 @@ describe('transaction', () => {
                                 {
                                     instructions: expect.arrayContaining([
                                         {
-                                            data: {
-                                                account: {
-                                                    address: expect.any(String),
-                                                },
-                                                space: expect.any(BigInt),
-                                            },
-                                            meta: {
-                                                program: 'system',
-                                                type: 'allocate',
+                                            account: {
+                                                address: expect.any(String),
                                             },
                                             programId: '11111111111111111111111111111111',
+                                            space: expect.any(BigInt),
                                         },
                                     ]),
                                 },
@@ -507,20 +463,14 @@ describe('transaction', () => {
                             meta {
                                 innerInstructions {
                                     instructions {
-                                        ... on AssignInstruction {
-                                            data {
-                                                account {
-                                                    address
-                                                }
-                                                owner {
-                                                    address
-                                                }
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on AssignInstruction {
+                                            account {
+                                                address
+                                            }
+                                            owner {
+                                                address
+                                            }
                                         }
                                     }
                                 }
@@ -538,17 +488,11 @@ describe('transaction', () => {
                                 {
                                     instructions: expect.arrayContaining([
                                         {
-                                            data: {
-                                                account: {
-                                                    address: expect.any(String),
-                                                },
-                                                owner: {
-                                                    address: expect.any(String),
-                                                },
+                                            account: {
+                                                address: expect.any(String),
                                             },
-                                            meta: {
-                                                program: 'system',
-                                                type: 'assign',
+                                            owner: {
+                                                address: expect.any(String),
                                             },
                                             programId: '11111111111111111111111111111111',
                                         },
@@ -570,21 +514,15 @@ describe('transaction', () => {
                             meta {
                                 innerInstructions {
                                     instructions {
-                                        ... on TransferInstruction {
-                                            data {
-                                                destination {
-                                                    address
-                                                }
-                                                lamports
-                                                source {
-                                                    address
-                                                }
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on TransferInstruction {
+                                            destination {
+                                                address
+                                            }
+                                            lamports
+                                            source {
+                                                address
+                                            }
                                         }
                                     }
                                 }
@@ -602,20 +540,14 @@ describe('transaction', () => {
                                 {
                                     instructions: expect.arrayContaining([
                                         {
-                                            data: {
-                                                destination: {
-                                                    address: expect.any(String),
-                                                },
-                                                lamports: expect.any(BigInt),
-                                                source: {
-                                                    address: expect.any(String),
-                                                },
+                                            destination: {
+                                                address: expect.any(String),
                                             },
-                                            meta: {
-                                                program: 'system',
-                                                type: 'transfer',
-                                            },
+                                            lamports: expect.any(BigInt),
                                             programId: '11111111111111111111111111111111',
+                                            source: {
+                                                address: expect.any(String),
+                                            },
                                         },
                                     ]),
                                 },
@@ -635,25 +567,19 @@ describe('transaction', () => {
                             data {
                                 message {
                                     instructions {
-                                        ... on SplTokenInitializeMintInstruction {
-                                            data {
-                                                decimals
-                                                freezeAuthority {
-                                                    address
-                                                }
-                                                mint {
-                                                    address
-                                                }
-                                                mintAuthority {
-                                                    address
-                                                }
-                                                rentSysvar
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on SplTokenInitializeMintInstruction {
+                                            decimals
+                                            freezeAuthority {
+                                                address
+                                            }
+                                            mint {
+                                                address
+                                            }
+                                            mintAuthority {
+                                                address
+                                            }
+                                            rentSysvar
                                         }
                                     }
                                 }
@@ -670,24 +596,18 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        data: {
-                                            decimals: expect.any(BigInt),
-                                            freezeAuthority: {
-                                                address: expect.any(String),
-                                            },
-                                            mint: {
-                                                address: expect.any(String),
-                                            },
-                                            mintAuthority: {
-                                                address: expect.any(String),
-                                            },
-                                            rentSysvar: expect.any(String),
+                                        decimals: expect.any(BigInt),
+                                        freezeAuthority: {
+                                            address: expect.any(String),
                                         },
-                                        meta: {
-                                            program: 'spl-token',
-                                            type: 'initializeMint',
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
                                         },
                                         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                        rentSysvar: expect.any(String),
                                     },
                                 ]),
                             },
@@ -706,21 +626,15 @@ describe('transaction', () => {
                             meta {
                                 innerInstructions {
                                     instructions {
-                                        ... on SplTokenTransferInstruction {
-                                            data {
-                                                amount
-                                                destination {
-                                                    address
-                                                }
-                                                source {
-                                                    address
-                                                }
-                                            }
-                                            meta {
-                                                program
-                                                type
-                                            }
                                             programId
+                                        ... on SplTokenTransferInstruction {
+                                            amount
+                                            destination {
+                                                address
+                                            }
+                                            source {
+                                                address
+                                            }
                                         }
                                     }
                                 }
@@ -738,20 +652,14 @@ describe('transaction', () => {
                                 {
                                     instructions: expect.arrayContaining([
                                         {
-                                            data: {
-                                                amount: expect.any(String),
-                                                destination: {
-                                                    address: expect.any(String),
-                                                },
-                                                source: {
-                                                    address: expect.any(String),
-                                                },
-                                            },
-                                            meta: {
-                                                program: 'spl-token',
-                                                type: 'transfer',
+                                            amount: expect.any(String),
+                                            destination: {
+                                                address: expect.any(String),
                                             },
                                             programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                            source: {
+                                                address: expect.any(String),
+                                            },
                                         },
                                     ]),
                                 },

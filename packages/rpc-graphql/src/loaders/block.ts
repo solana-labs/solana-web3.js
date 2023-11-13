@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolanaRpcMethods } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -9,60 +8,27 @@ import { GraphQLResolveInfo } from 'graphql';
 import type { Rpc } from '../context';
 import { BlockQueryArgs } from '../schema/block';
 import { onlyPresentFieldRequested } from './common/resolve-info';
-import { refineJsonParsedTransaction } from './transaction';
+import { transformLoadedBlock } from './transformers/block';
 
-function normalizeArgs(args: BlockQueryArgs) {
-    const { commitment, encoding, slot, transactionDetails } = args;
+/* Normalizes RPC optional configs to use GraphQL API defaults */
+function normalizeArgs({
+    commitment = 'confirmed',
+    encoding = 'jsonParsed',
+    slot,
+    transactionDetails = 'full',
+}: BlockQueryArgs) {
     return {
-        commitment: commitment ?? 'confirmed',
-        encoding: encoding ?? 'jsonParsed',
+        commitment,
+        encoding,
         // Always use 0 to avoid silly errors
         maxSupportedTransactionVersion: 0,
         slot,
-        transactionDetails: transactionDetails ?? 'full',
-    };
-}
-
-function refineJsonParsedTransactionForAccounts({ transaction }: { transaction: any }) {
-    return {
-        data: transaction.transaction,
-        meta: transaction.meta,
-        version: transaction.version,
-    };
-}
-
-function processQueryResponse({
-    encoding,
-    block,
-    transactionDetails,
-}: {
-    block: any;
-    encoding: string;
-    transactionDetails: string;
-}) {
-    if (typeof block === 'object' && 'transactions' in block) {
-        const refinedBlock = {
-            ...block,
-            transactions: block.transactions.map((transaction: unknown) => {
-                if (transactionDetails === 'accounts') {
-                    return refineJsonParsedTransactionForAccounts({ transaction });
-                } else {
-                    return refineJsonParsedTransaction({ encoding, transaction });
-                }
-            }),
-        };
-        block = refinedBlock;
-    }
-    return {
-        ...block,
-        encoding,
         transactionDetails,
     };
 }
 
-export async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
-    const { encoding, transactionDetails } = config;
-
+/* Load a block from the RPC, transform it, then return it */
+async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
     const block = await rpc
         .getBlock(slot, config as unknown as Parameters<SolanaRpcMethods['getBlock']>[1])
         .send()
@@ -70,13 +36,9 @@ export async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof
             throw e;
         });
 
-    if (block === null) {
-        return { slot };
-    }
-
-    const queryResponse = processQueryResponse({ block, encoding, transactionDetails });
-
-    return queryResponse;
+    return block === null
+        ? { slot }
+        : transformLoadedBlock({ block, encoding: config.encoding, transactionDetails: config.transactionDetails });
 }
 
 function createBlockBatchLoadFn(rpc: Rpc) {
@@ -90,8 +52,9 @@ export function createBlockLoader(rpc: Rpc) {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
     return {
         load: async (args: BlockQueryArgs, info?: GraphQLResolveInfo) => {
-            // If a user only requests the block's slot, don't call the RPC or the cache
             if (onlyPresentFieldRequested('slot', info)) {
+                // If a user only requests the block's slot,
+                // don't call the RPC or the cache
                 return { slot: args.slot };
             }
             return loader.load(normalizeArgs(args));

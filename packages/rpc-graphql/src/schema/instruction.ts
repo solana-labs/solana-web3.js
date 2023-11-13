@@ -7,11 +7,6 @@
 import { resolveAccount } from '../resolvers/account';
 
 export const instructionTypeDefs = /* GraphQL */ `
-    type JsonParsedInstructionMeta {
-        program: String
-        type: String
-    }
-
     # Transaction instruction interface
     interface TransactionInstruction {
         programId: Address
@@ -25,7 +20,8 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     # AddressLookupTable: CreateLookupTable
-    type CreateLookupTableInstructionData {
+    type CreateLookupTableInstruction implements TransactionInstruction {
+        programId: Address
         bumpSeed: BigInt # FIXME:*
         lookupTableAccount: Account
         lookupTableAuthority: Account
@@ -33,107 +29,71 @@ export const instructionTypeDefs = /* GraphQL */ `
         recentSlot: BigInt
         systemProgram: Account
     }
-    type CreateLookupTableInstruction implements TransactionInstruction {
-        data: CreateLookupTableInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # AddressLookupTable: ExtendLookupTable
-    type ExtendLookupTableInstructionData {
+    type ExtendLookupTableInstruction implements TransactionInstruction {
+        programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
         newAddresses: [Address]
         payerAccount: Account
         systemProgram: Account
     }
-    type ExtendLookupTableInstruction implements TransactionInstruction {
-        data: ExtendLookupTableInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # AddressLookupTable: FreezeLookupTable
-    type FreezeLookupTableInstructionData {
+    type FreezeLookupTableInstruction implements TransactionInstruction {
+        programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
-    }
-    type FreezeLookupTableInstruction implements TransactionInstruction {
-        data: FreezeLookupTableInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # AddressLookupTable: DeactivateLookupTable
-    type DeactivateLookupTableInstructionData {
+    type DeactivateLookupTableInstruction implements TransactionInstruction {
+        programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
     }
-    type DeactivateLookupTableInstruction implements TransactionInstruction {
-        data: DeactivateLookupTableInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # AddressLookupTable: CloseLookupTable
-    type CloseLookupTableInstructionData {
+    type CloseLookupTableInstruction implements TransactionInstruction {
+        programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
         recipient: Account
     }
-    type CloseLookupTableInstruction implements TransactionInstruction {
-        data: CloseLookupTableInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfLoader: Write
-    type BpfLoaderWriteInstructionData {
+    type BpfLoaderWriteInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         bytes: Base64EncodedBytes
         offset: BigInt # FIXME:*
     }
-    type BpfLoaderWriteInstruction implements TransactionInstruction {
-        data: BpfLoaderWriteInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfLoader: Finalize
-    type BpfLoaderFinalizeInstructionData {
-        account: Account
-    }
     type BpfLoaderFinalizeInstruction implements TransactionInstruction {
-        data: BpfLoaderFinalizeInstructionData
-        meta: JsonParsedInstructionMeta
         programId: Address
+        account: Account
     }
 
     # BpfUpgradeableLoader: InitializeBuffer
-    type BpfUpgradeableLoaderInitializeBufferInstructionData {
-        account: Account
-    }
     type BpfUpgradeableLoaderInitializeBufferInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderInitializeBufferInstructionData
-        meta: JsonParsedInstructionMeta
         programId: Address
+        account: Account
     }
 
     # BpfUpgradeableLoader: Write
-    type BpfUpgradeableLoaderWriteInstructionData {
+    type BpfUpgradeableLoaderWriteInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         bytes: Base64EncodedBytes
         offset: BigInt # FIXME:*
     }
-    type BpfUpgradeableLoaderWriteInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderWriteInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfUpgradeableLoader: DeployWithMaxDataLen
-    type BpfUpgradeableLoaderDeployWithMaxDataLenInstructionData {
+    type BpfUpgradeableLoaderDeployWithMaxDataLenInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         bufferAccount: Account
         clockSysvar: Address
@@ -143,14 +103,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         programDataAccount: Account
         rentSysvar: Address
     }
-    type BpfUpgradeableLoaderDeployWithMaxDataLenInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderDeployWithMaxDataLenInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfUpgradeableLoader: Upgrade
-    type BpfUpgradeableLoaderUpgradeInstructionData {
+    type BpfUpgradeableLoaderUpgradeInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         bufferAccount: Account
         clockSysvar: Address
@@ -159,80 +115,57 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
         spillAccount: Account
     }
-    type BpfUpgradeableLoaderUpgradeInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderUpgradeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfUpgradeableLoader: SetAuthority
-    type BpfUpgradeableLoaderSetAuthorityInstructionData {
+
+    type BpfUpgradeableLoaderSetAuthorityInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         newAuthority: Account
-    }
-    type BpfUpgradeableLoaderSetAuthorityInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderSetAuthorityInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # BpfUpgradeableLoader: SetAuthorityChecked
-    type BpfUpgradeableLoaderSetAuthorityCheckedInstructionData {
+    type BpfUpgradeableLoaderSetAuthorityCheckedInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         newAuthority: Account
     }
-    type BpfUpgradeableLoaderSetAuthorityCheckedInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderSetAuthorityCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfUpgradeableLoader: Close
-    type BpfUpgradeableLoaderCloseInstructionData {
+    type BpfUpgradeableLoaderCloseInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         programAccount: Account
         recipient: Account
     }
-    type BpfUpgradeableLoaderCloseInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderCloseInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # BpfUpgradeableLoader: ExtendProgram
-    type BpfUpgradeableLoaderExtendProgramInstructionData {
+    type BpfUpgradeableLoaderExtendProgramInstruction implements TransactionInstruction {
+        programId: Address
         additionalBytes: BigInt
         payerAccount: Account
         programAccount: Account
         programDataAccount: Account
         systemProgram: Account
     }
-    type BpfUpgradeableLoaderExtendProgramInstruction implements TransactionInstruction {
-        data: BpfUpgradeableLoaderExtendProgramInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplAssociatedTokenAccount: Create
-    type SplAssociatedTokenCreateInstructionData {
+    type SplAssociatedTokenCreateInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         mint: Address
         source: Account
         systemProgram: Account
         tokenProgram: Account
         wallet: Account
-    }
-    type SplAssociatedTokenCreateInstruction implements TransactionInstruction {
-        data: SplAssociatedTokenCreateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # SplAssociatedTokenAccount: CreateIdempotent
-    type SplAssociatedTokenCreateIdempotentInstructionData {
+    type SplAssociatedTokenCreateIdempotentInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         mint: Address
         source: Account
@@ -240,14 +173,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenProgram: Account
         wallet: Account
     }
-    type SplAssociatedTokenCreateIdempotentInstruction implements TransactionInstruction {
-        data: SplAssociatedTokenCreateIdempotentInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplAssociatedTokenAccount: RecoverNested
-    type SplAssociatedTokenRecoverNestedInstructionData {
+    type SplAssociatedTokenRecoverNestedInstruction implements TransactionInstruction {
+        programId: Address
         destination: Account
         nestedMint: Account
         nestedOwner: Account
@@ -256,167 +185,115 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenProgram: Account
         wallet: Account
     }
-    type SplAssociatedTokenRecoverNestedInstruction implements TransactionInstruction {
-        data: SplAssociatedTokenRecoverNestedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplMemo
-    type SplMemoInstructionData {
-        data: String
-    }
     type SplMemoInstruction implements TransactionInstruction {
-        data: SplMemoInstructionData
-        meta: JsonParsedInstructionMeta
         programId: Address
+        data: String
     }
 
     # SplToken: InitializeMint
-    type SplTokenInitializeMintInstructionData {
+    type SplTokenInitializeMintInstruction implements TransactionInstruction {
+        programId: Address
         decimals: BigInt # FIXME:*
         freezeAuthority: Account
         mint: Account
         mintAuthority: Account
         rentSysvar: Address
-    }
-    type SplTokenInitializeMintInstruction implements TransactionInstruction {
-        data: SplTokenInitializeMintInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # SplToken: InitializeMint2
-    type SplTokenInitializeMint2InstructionData {
+    type SplTokenInitializeMint2Instruction implements TransactionInstruction {
+        programId: Address
         decimals: BigInt # FIXME:*
         freezeAuthority: Account
         mint: Account
         mintAuthority: Account
     }
-    type SplTokenInitializeMint2Instruction implements TransactionInstruction {
-        data: SplTokenInitializeMint2InstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: InitializeAccount
-    type SplTokenInitializeAccountInstructionData {
+    type SplTokenInitializeAccountInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         mint: Account
         owner: Account
         rentSysvar: Address
-    }
-    type SplTokenInitializeAccountInstruction implements TransactionInstruction {
-        data: SplTokenInitializeAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # SplToken: InitializeAccount2
-    type SplTokenInitializeAccount2InstructionData {
+    type SplTokenInitializeAccount2Instruction implements TransactionInstruction {
+        programId: Address
         account: Account
         mint: Account
         owner: Account
         rentSysvar: Address
-    }
-    type SplTokenInitializeAccount2Instruction implements TransactionInstruction {
-        data: SplTokenInitializeAccount2InstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # SplToken: InitializeAccount3
-    type SplTokenInitializeAccount3InstructionData {
+    type SplTokenInitializeAccount3Instruction implements TransactionInstruction {
+        programId: Address
         account: Account
         mint: Account
         owner: Account
     }
-    type SplTokenInitializeAccount3Instruction implements TransactionInstruction {
-        data: SplTokenInitializeAccount3InstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: InitializeMultisig
-    type SplTokenInitializeMultisigInstructionData {
+    type SplTokenInitializeMultisigInstruction implements TransactionInstruction {
+        programId: Address
         m: BigInt # FIXME:*
         multisig: Account
         rentSysvar: Address
         signers: [Address]
     }
-    type SplTokenInitializeMultisigInstruction implements TransactionInstruction {
-        data: SplTokenInitializeMultisigInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: InitializeMultisig2
-    type SplTokenInitializeMultisig2InstructionData {
+    type SplTokenInitializeMultisig2Instruction implements TransactionInstruction {
+        programId: Address
         m: BigInt # FIXME:*
         multisig: Account
         signers: [Address]
     }
-    type SplTokenInitializeMultisig2Instruction implements TransactionInstruction {
-        data: SplTokenInitializeMultisig2InstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: Transfer
-    type SplTokenTransferInstructionData {
+    type SplTokenTransferInstruction implements TransactionInstruction {
+        programId: Address
         amount: String
         authority: Account
         destination: Account
         multisigAuthority: Account
         source: Account
     }
-    type SplTokenTransferInstruction implements TransactionInstruction {
-        data: SplTokenTransferInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: Approve
-    type SplTokenApproveInstructionData {
+    type SplTokenApproveInstruction implements TransactionInstruction {
+        programId: Address
         amount: String
         delegate: Account
         multisigOwner: Account
         owner: Account
         source: Account
     }
-    type SplTokenApproveInstruction implements TransactionInstruction {
-        data: SplTokenApproveInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: Revoke
-    type SplTokenRevokeInstructionData {
+    type SplTokenRevokeInstruction implements TransactionInstruction {
+        programId: Address
         multisigOwner: Account
         owner: Account
         source: Account
     }
-    type SplTokenRevokeInstruction implements TransactionInstruction {
-        data: SplTokenRevokeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: SetAuthority
-    type SplTokenSetAuthorityInstructionData {
+    type SplTokenSetAuthorityInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         authorityType: String
         multisigAuthority: Account
         newAuthority: Account
     }
-    type SplTokenSetAuthorityInstruction implements TransactionInstruction {
-        data: SplTokenSetAuthorityInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: MintTo
-    type SplTokenMintToInstructionData {
+    type SplTokenMintToInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         amount: String
         authority: Account
@@ -424,67 +301,47 @@ export const instructionTypeDefs = /* GraphQL */ `
         mintAuthority: Account
         multisigMintAuthority: Account
     }
-    type SplTokenMintToInstruction implements TransactionInstruction {
-        data: SplTokenMintToInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: Burn
-    type SplTokenBurnInstructionData {
+    type SplTokenBurnInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         amount: String
         authority: Account
         mint: Account
         multisigAuthority: Account
     }
-    type SplTokenBurnInstruction implements TransactionInstruction {
-        data: SplTokenBurnInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: CloseAccount
-    type SplTokenCloseAccountInstructionData {
+    type SplTokenCloseAccountInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         destination: Account
         multisigOwner: Account
         owner: Account
     }
-    type SplTokenCloseAccountInstruction implements TransactionInstruction {
-        data: SplTokenCloseAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: FreezeAccount
-    type SplTokenFreezeAccountInstructionData {
+    type SplTokenFreezeAccountInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         freezeAuthority: Account
         mint: Account
         multisigFreezeAuthority: Account
-    }
-    type SplTokenFreezeAccountInstruction implements TransactionInstruction {
-        data: SplTokenFreezeAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # SplToken: ThawAccount
-    type SplTokenThawAccountInstructionData {
+    type SplTokenThawAccountInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         freezeAuthority: Account
         mint: Account
         multisigFreezeAuthority: Account
     }
-    type SplTokenThawAccountInstruction implements TransactionInstruction {
-        data: SplTokenThawAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: TransferChecked
-    type SplTokenTransferCheckedInstructionData {
+    type SplTokenTransferCheckedInstruction implements TransactionInstruction {
+        programId: Address
         amount: String
         authority: Account
         decimals: BigInt # FIXME:*
@@ -494,14 +351,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
         tokenAmount: String
     }
-    type SplTokenTransferCheckedInstruction implements TransactionInstruction {
-        data: SplTokenTransferCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: ApproveChecked
-    type SplTokenApproveCheckedInstructionData {
+    type SplTokenApproveCheckedInstruction implements TransactionInstruction {
+        programId: Address
         delegate: Account
         mint: Account
         multisigOwner: Account
@@ -509,14 +362,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
         tokenAmount: String
     }
-    type SplTokenApproveCheckedInstruction implements TransactionInstruction {
-        data: SplTokenApproveCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: MintToChecked
-    type SplTokenMintToCheckedInstructionData {
+    type SplTokenMintToCheckedInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         mint: Account
@@ -524,88 +373,55 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigMintAuthority: Account
         tokenAmount: String
     }
-    type SplTokenMintToCheckedInstruction implements TransactionInstruction {
-        data: SplTokenMintToCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: BurnChecked
-    type SplTokenBurnCheckedInstructionData {
+    type SplTokenBurnCheckedInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         authority: Account
         mint: Account
         multisigAuthority: Account
         tokenAmount: String
     }
-    type SplTokenBurnCheckedInstruction implements TransactionInstruction {
-        data: SplTokenBurnCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: SyncNative
-    type SplTokenSyncNativeInstructionData {
-        account: Account
-    }
     type SplTokenSyncNativeInstruction implements TransactionInstruction {
-        data: SplTokenSyncNativeInstructionData
-        meta: JsonParsedInstructionMeta
         programId: Address
+        account: Account
     }
 
     # SplToken: GetAccountDataSize
-    type SplTokenGetAccountDataSizeInstructionData {
+    type SplTokenGetAccountDataSizeInstruction implements TransactionInstruction {
+        programId: Address
         extensionTypes: [String]
         mint: Account
     }
-    type SplTokenGetAccountDataSizeInstruction implements TransactionInstruction {
-        data: SplTokenGetAccountDataSizeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: InitializeImmutableOwner
-    type SplTokenInitializeImmutableOwnerInstructionData {
-        account: Account
-    }
     type SplTokenInitializeImmutableOwnerInstruction implements TransactionInstruction {
-        data: SplTokenInitializeImmutableOwnerInstructionData
-        meta: JsonParsedInstructionMeta
         programId: Address
+        account: Account
     }
 
     # SplToken: AmountToUiAmount
-    type SplTokenAmountToUiAmountInstructionData {
+    type SplTokenAmountToUiAmountInstruction implements TransactionInstruction {
+        programId: Address
         amount: String
         mint: Account
     }
-    type SplTokenAmountToUiAmountInstruction implements TransactionInstruction {
-        data: SplTokenAmountToUiAmountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: UiAmountToAmount
-    type SplTokenUiAmountToAmountInstructionData {
+    type SplTokenUiAmountToAmountInstruction implements TransactionInstruction {
+        programId: Address
         mint: Account
         uiAmount: String
     }
-    type SplTokenUiAmountToAmountInstruction implements TransactionInstruction {
-        data: SplTokenUiAmountToAmountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # SplToken: InitializeMintCloseAuthority
-    type SplTokenInitializeMintCloseAuthorityInstructionData {
+    type SplTokenInitializeMintCloseAuthorityInstruction implements TransactionInstruction {
+        programId: Address
         mint: Account
         newAuthority: Account
-    }
-    type SplTokenInitializeMintCloseAuthorityInstruction implements TransactionInstruction {
-        data: SplTokenInitializeMintCloseAuthorityInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # TODO: Extensions!
@@ -635,20 +451,17 @@ export const instructionTypeDefs = /* GraphQL */ `
         staker: Account
         withdrawer: Account
     }
-    type StakeInitializeInstructionData {
+    type StakeInitializeInstruction implements TransactionInstruction {
+        programId: Address
         authorized: StakeInitializeInstructionDataAuthorized
         lockup: Lockup
         rentSysvar: Address
         stakeAccount: Account
     }
-    type StakeInitializeInstruction implements TransactionInstruction {
-        data: StakeInitializeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Authorize
-    type StakeAuthorizeInstructionData {
+    type StakeAuthorizeInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         authorityType: String
         clockSysvar: Address
@@ -656,14 +469,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
         stakeAccount: Account
     }
-    type StakeAuthorizeInstruction implements TransactionInstruction {
-        data: StakeAuthorizeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: DelegateStake
-    type StakeDelegateStakeInstructionData {
+    type StakeDelegateStakeInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         stakeAccount: Account
         stakeAuthority: Account
@@ -671,79 +480,55 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeHistorySysvar: Address
         voteAccount: Account
     }
-    type StakeDelegateStakeInstruction implements TransactionInstruction {
-        data: StakeDelegateStakeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Split
-    type StakeSplitInstructionData {
+    type StakeSplitInstruction implements TransactionInstruction {
+        programId: Address
         lamports: BigInt
         newSplitAccount: Account
         stakeAccount: Account
         stakeAuthority: Account
     }
-    type StakeSplitInstruction implements TransactionInstruction {
-        data: StakeSplitInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Withdraw
-    type StakeWithdrawInstructionData {
+    type StakeWithdrawInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         destination: Account
         lamports: BigInt
         stakeAccount: Account
         withdrawAuthority: Account
     }
-    type StakeWithdrawInstruction implements TransactionInstruction {
-        data: StakeWithdrawInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Deactivate
-    type StakeDeactivateInstructionData {
+    type StakeDeactivateInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         stakeAccount: Account
         stakeAuthority: Account
     }
-    type StakeDeactivateInstruction implements TransactionInstruction {
-        data: StakeDeactivateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: SetLockup
-    type StakeSetLockupInstructionData {
+    type StakeSetLockupInstruction implements TransactionInstruction {
+        programId: Address
         custodian: Account
         lockup: Lockup
         stakeAccount: Account
     }
-    type StakeSetLockupInstruction implements TransactionInstruction {
-        data: StakeSetLockupInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Merge
-    type StakeMergeInstructionData {
+    type StakeMergeInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         destination: Account
         source: Account
         stakeAuthority: Account
         stakeHistorySysvar: Address
     }
-    type StakeMergeInstruction implements TransactionInstruction {
-        data: StakeMergeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: AuthorizeWithSeed
-    type StakeAuthorizeWithSeedInstructionData {
+    type StakeAuthorizeWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         authorityBase: Account
         authorityOwner: Account
         authoritySeed: String
@@ -753,27 +538,23 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthorized: Account
         stakeAccount: Account
     }
-    type StakeAuthorizeWithSeedInstruction implements TransactionInstruction {
-        data: StakeAuthorizeWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: InitializeChecked
     type StakeInitializeCheckedInstructionDataAuthorized {
-        rentSysvar: Address
-        stakeAccount: Account
         staker: Account
         withdrawer: Account
     }
     type StakeInitializeCheckedInstruction implements TransactionInstruction {
-        data: StakeInitializeCheckedInstructionDataAuthorized
-        meta: JsonParsedInstructionMeta
         programId: Address
+        authorized: StakeInitializeCheckedInstructionDataAuthorized
+        lockup: Lockup
+        rentSysvar: Address
+        stakeAccount: Account
     }
 
     # Stake: AuthorizeChecked
-    type StakeAuthorizeCheckedInstructionData {
+    type StakeAuthorizeCheckedInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         authorityType: String
         clockSysvar: Address
@@ -781,14 +562,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
         stakeAccount: Account
     }
-    type StakeAuthorizeCheckedInstruction implements TransactionInstruction {
-        data: StakeAuthorizeCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: AuthorizeCheckedWithSeed
-    type StakeAuthorizeCheckedWithSeedInstructionData {
+    type StakeAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         authorityBase: Account
         authorityOwner: Account
         authoritySeed: String
@@ -798,115 +575,79 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthorized: Account
         stakeAccount: Account
     }
-    type StakeAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
-        data: StakeAuthorizeCheckedWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: SetLockupChecked
-    type StakeSetLockupCheckedInstructionData {
+    type StakeSetLockupCheckedInstruction implements TransactionInstruction {
+        programId: Address
         custodian: Account
         lockup: Lockup
         stakeAccount: Account
     }
-    type StakeSetLockupCheckedInstruction implements TransactionInstruction {
-        data: StakeSetLockupCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: DeactivateDelinquent
-    type StakeDeactivateDelinquentInstructionData {
+    type StakeDeactivateDelinquentInstruction implements TransactionInstruction {
+        programId: Address
         referenceVoteAccount: Account
         stakeAccount: Account
         voteAccount: Account
     }
-    type StakeDeactivateDelinquentInstruction implements TransactionInstruction {
-        data: StakeDeactivateDelinquentInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Stake: Redelegate
-    type StakeRedelegateInstructionData {
+    type StakeRedelegateInstruction implements TransactionInstruction {
+        programId: Address
         newStakeAccount: Account
         stakeAccount: Account
         stakeAuthority: Account
         stakeConfigAccount: Account
         voteAccount: Account
     }
-    type StakeRedelegateInstruction implements TransactionInstruction {
-        data: StakeRedelegateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: CreateAccount
-    type CreateAccountInstructionData {
+    type CreateAccountInstruction implements TransactionInstruction {
+        programId: Address
         lamports: BigInt
         newAccount: Account
         owner: Account
         source: Account
         space: BigInt
     }
-    type CreateAccountInstruction implements TransactionInstruction {
-        data: CreateAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: Assign
-    type AssignInstructionData {
+    type AssignInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         owner: Account
     }
-    type AssignInstruction implements TransactionInstruction {
-        data: AssignInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: Transfer
-    type TransferInstructionData {
+    type TransferInstruction implements TransactionInstruction {
+        programId: Address
         destination: Account
         lamports: BigInt
         source: Account
     }
-    type TransferInstruction implements TransactionInstruction {
-        data: TransferInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: CreateAccountWithSeed
-    type CreateAccountWithSeedInstructionData {
+    type CreateAccountWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         base: Account
         lamports: BigInt
         owner: Account
         seed: String
         space: BigInt
     }
-    type CreateAccountWithSeedInstruction implements TransactionInstruction {
-        data: CreateAccountWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: AdvanceNonceAccount
-    type AdvanceNonceAccountInstructionData {
+    type AdvanceNonceAccountInstruction implements TransactionInstruction {
+        programId: Address
         nonceAccount: Account
         nonceAuthority: Account
         recentBlockhashesSysvar: Address
     }
-    type AdvanceNonceAccountInstruction implements TransactionInstruction {
-        data: AdvanceNonceAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: WithdrawNonceAccount
-    type WithdrawNonceAccountInstructionData {
+    type WithdrawNonceAccountInstruction implements TransactionInstruction {
+        programId: Address
         destination: Account
         lamports: BigInt
         nonceAccount: Account
@@ -914,88 +655,60 @@ export const instructionTypeDefs = /* GraphQL */ `
         recentBlockhashesSysvar: Address
         rentSysvar: Address
     }
-    type WithdrawNonceAccountInstruction implements TransactionInstruction {
-        data: WithdrawNonceAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: InitializeNonceAccount
-    type InitializeNonceAccountInstructionData {
+    type InitializeNonceAccountInstruction implements TransactionInstruction {
+        programId: Address
         nonceAccount: Account
         nonceAuthority: Account
         recentBlockhashesSysvar: Address
         rentSysvar: Address
     }
-    type InitializeNonceAccountInstruction implements TransactionInstruction {
-        data: InitializeNonceAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: AuthorizeNonceAccount
-    type AuthorizeNonceAccountInstructionData {
+    type AuthorizeNonceAccountInstruction implements TransactionInstruction {
+        programId: Address
         newAuthorized: Account
         nonceAccount: Account
         nonceAuthority: Account
     }
-    type AuthorizeNonceAccountInstruction implements TransactionInstruction {
-        data: AuthorizeNonceAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: UpgradeNonceAccount
-    type UpgradeNonceAccountInstructionData {
+    type UpgradeNonceAccountInstruction implements TransactionInstruction {
+        programId: Address
         nonceAccount: Account
         nonceAuthority: Account
     }
-    type UpgradeNonceAccountInstruction implements TransactionInstruction {
-        data: UpgradeNonceAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: Allocate
-    type AllocateInstructionData {
+    type AllocateInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         space: BigInt
-    }
-    type AllocateInstruction implements TransactionInstruction {
-        data: AllocateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # System: AllocateWithSeed
-    type AllocateWithSeedInstructionData {
+    type AllocateWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         base: Address
         owner: Account
         seed: String
         space: BigInt
     }
-    type AllocateWithSeedInstruction implements TransactionInstruction {
-        data: AllocateWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: AssignWithSeed
-    type AssignWithSeedInstructionData {
+    type AssignWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         account: Account
         base: Address
         owner: Account
         seed: String
     }
-    type AssignWithSeedInstruction implements TransactionInstruction {
-        data: AssignWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # System: TransferWithSeed
-    type TransferWithSeedInstructionData {
+    type TransferWithSeedInstruction implements TransactionInstruction {
+        programId: Address
         destination: Account
         lamports: BigInt
         source: Account
@@ -1003,14 +716,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         sourceOwner: Account
         sourceSeed: String
     }
-    type TransferWithSeedInstruction implements TransactionInstruction {
-        data: TransferWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: InitializeAccount
-    type VoteInitializeAccountInstructionData {
+    type VoteInitializeAccountInstruction implements TransactionInstruction {
+        programId: Address
         authorizedVoter: Account
         authorizedWithdrawer: Account
         clockSysvar: Address
@@ -1019,56 +728,39 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
         voteAccount: Account
     }
-    type VoteInitializeAccountInstruction implements TransactionInstruction {
-        data: VoteInitializeAccountInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: Authorize
-    type VoteAuthorizeInstructionData {
+    type VoteAuthorizeInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         authorityType: String
         clockSysvar: Address
         newAuthority: Account
         voteAccount: Account
     }
-    type VoteAuthorizeInstruction implements TransactionInstruction {
-        data: VoteAuthorizeInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: AuthorizeWithSeed
-    type VoteAuthorizeWithSeedInstructionData {
-        authorityBaseKey: Address
+    type VoteAuthorizeWithSeedInstruction implements TransactionInstruction {
+        programId: Address
+        authorityBaseKey: String
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
         clockSysvar: Address
         newAuthority: Account
         voteAccount: Account
-    }
-    type VoteAuthorizeWithSeedInstruction implements TransactionInstruction {
-        data: VoteAuthorizeWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # Vote: AuthorizeCheckedWithSeed
-    type VoteAuthorizeCheckedWithSeedInstructionData {
-        authorityBaseKey: Address
+    type VoteAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
+        programId: Address
+        authorityBaseKey: String
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
         clockSysvar: Address
         newAuthority: Account
         voteAccount: Account
-    }
-    type VoteAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
-        data: VoteAuthorizeCheckedWithSeedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     type Vote {
@@ -1078,17 +770,13 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     # Vote: Vote
-    type VoteVoteInstructionData {
+    type VoteVoteInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         slotHashesSysvar: Address
         vote: Vote
         voteAccount: Account
         voteAuthority: Account
-    }
-    type VoteVoteInstruction implements TransactionInstruction {
-        data: VoteVoteInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     type VoteStateUpdateLockout {
@@ -1103,96 +791,69 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     # Vote: UpdateVoteState
-    type VoteUpdateVoteStateInstructionData {
+    type VoteUpdateVoteStateInstruction implements TransactionInstruction {
+        programId: Address
         hash: String
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
-    }
-    type VoteUpdateVoteStateInstruction implements TransactionInstruction {
-        data: VoteUpdateVoteStateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # Vote: UpdateVoteStateSwitch
-    type VoteUpdateVoteStateSwitchInstructionData {
+    type VoteUpdateVoteStateSwitchInstruction implements TransactionInstruction {
+        programId: Address
         hash: String
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
-    }
-    type VoteUpdateVoteStateSwitchInstruction implements TransactionInstruction {
-        data: VoteUpdateVoteStateSwitchInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # Vote: CompactUpdateVoteState
-    type VoteCompactUpdateVoteStateInstructionData {
+    type VoteCompactUpdateVoteStateInstruction implements TransactionInstruction {
+        programId: Address
         hash: String
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
-    }
-    type VoteCompactUpdateVoteStateInstruction implements TransactionInstruction {
-        data: VoteCompactUpdateVoteStateInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
     }
 
     # Vote: CompactUpdateVoteStateSwitch
-    type VoteCompactUpdateVoteStateSwitchInstructionData {
+    type VoteCompactUpdateVoteStateSwitchInstruction implements TransactionInstruction {
+        programId: Address
         hash: String
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
     }
-    type VoteCompactUpdateVoteStateSwitchInstruction implements TransactionInstruction {
-        data: VoteCompactUpdateVoteStateSwitchInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: Withdraw
-    type VoteWithdrawInstructionData {
+    type VoteWithdrawInstruction implements TransactionInstruction {
+        programId: Address
         destination: Account
         lamports: BigInt
         voteAccount: Account
         withdrawAuthority: Account
     }
-    type VoteWithdrawInstruction implements TransactionInstruction {
-        data: VoteWithdrawInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: UpdateValidatorIdentity
-    type VoteUpdateValidatorIdentityInstructionData {
+    type VoteUpdateValidatorIdentityInstruction implements TransactionInstruction {
+        programId: Address
         newValidatorIdentity: Account
         voteAccount: Account
         withdrawAuthority: Account
     }
-    type VoteUpdateValidatorIdentityInstruction implements TransactionInstruction {
-        data: VoteUpdateValidatorIdentityInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: UpdateCommission
-    type VoteUpdateCommissionInstructionData {
+    type VoteUpdateCommissionInstruction implements TransactionInstruction {
+        programId: Address
         commission: BigInt # FIXME:*
         voteAccount: Account
         withdrawAuthority: Account
     }
-    type VoteUpdateCommissionInstruction implements TransactionInstruction {
-        data: VoteUpdateCommissionInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: VoteSwitch
-    type VoteVoteSwitchInstructionData {
+    type VoteVoteSwitchInstruction implements TransactionInstruction {
+        programId: Address
         clockSysvar: Address
         hash: String
         slotHashesSysvar: Address
@@ -1200,305 +861,296 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
         voteAuthority: Account
     }
-    type VoteVoteSwitchInstruction implements TransactionInstruction {
-        data: VoteVoteSwitchInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 
     # Vote: AuthorizeChecked
-    type VoteAuthorizeCheckedInstructionData {
+    type VoteAuthorizeCheckedInstruction implements TransactionInstruction {
+        programId: Address
         authority: Account
         authorityType: String
         clockSysvar: Address
         newAuthority: Account
         voteAccount: Account
     }
-    type VoteAuthorizeCheckedInstruction implements TransactionInstruction {
-        data: VoteAuthorizeCheckedInstructionData
-        meta: JsonParsedInstructionMeta
-        programId: Address
-    }
 `;
 
 export const instructionResolvers = {
     TransactionInstruction: {
-        __resolveType(instruction: { meta: { program: string; type: string } }) {
-            if (instruction.meta) {
-                if (instruction.meta.program === 'address-lookup-table') {
-                    if (instruction.meta.type === 'createLookupTable') {
+        __resolveType(instruction: { programName: string; instructionType: string }) {
+            if (instruction.programName) {
+                if (instruction.programName === 'address-lookup-table') {
+                    if (instruction.instructionType === 'createLookupTable') {
                         return 'CreateLookupTableInstruction';
                     }
-                    if (instruction.meta.type === 'freezeLookupTable') {
+                    if (instruction.instructionType === 'freezeLookupTable') {
                         return 'FreezeLookupTableInstruction';
                     }
-                    if (instruction.meta.type === 'extendLookupTable') {
+                    if (instruction.instructionType === 'extendLookupTable') {
                         return 'ExtendLookupTableInstruction';
                     }
-                    if (instruction.meta.type === 'deactivateLookupTable') {
+                    if (instruction.instructionType === 'deactivateLookupTable') {
                         return 'DeactivateLookupTableInstruction';
                     }
-                    if (instruction.meta.type === 'closeLookupTable') {
+                    if (instruction.instructionType === 'closeLookupTable') {
                         return 'CloseLookupTableInstruction';
                     }
                 }
-                if (instruction.meta.program === 'bpf-loader') {
-                    if (instruction.meta.type === 'write') {
+                if (instruction.programName === 'bpf-loader') {
+                    if (instruction.instructionType === 'write') {
                         return 'BpfLoaderWriteInstruction';
                     }
-                    if (instruction.meta.type === 'finalize') {
+                    if (instruction.instructionType === 'finalize') {
                         return 'BpfLoaderFinalizeInstruction';
                     }
                 }
-                if (instruction.meta.program === 'bpf-upgradeable-loader') {
-                    if (instruction.meta.type === 'initializeBuffer') {
+                if (instruction.programName === 'bpf-upgradeable-loader') {
+                    if (instruction.instructionType === 'initializeBuffer') {
                         return 'BpfUpgradeableLoaderInitializeBufferInstruction';
                     }
-                    if (instruction.meta.type === 'write') {
+                    if (instruction.instructionType === 'write') {
                         return 'BpfUpgradeableLoaderWriteInstruction';
                     }
-                    if (instruction.meta.type === 'deployWithMaxDataLen') {
+                    if (instruction.instructionType === 'deployWithMaxDataLen') {
                         return 'BpfUpgradeableLoaderDeployWithMaxDataLenInstruction';
                     }
-                    if (instruction.meta.type === 'upgrade') {
+                    if (instruction.instructionType === 'upgrade') {
                         return 'BpfUpgradeableLoaderUpgradeInstruction';
                     }
-                    if (instruction.meta.type === 'setAuthority') {
+                    if (instruction.instructionType === 'setAuthority') {
                         return 'BpfUpgradeableLoaderSetAuthorityInstruction';
                     }
-                    if (instruction.meta.type === 'setAuthorityChecked') {
+                    if (instruction.instructionType === 'setAuthorityChecked') {
                         return 'BpfUpgradeableLoaderSetAuthorityCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'close') {
+                    if (instruction.instructionType === 'close') {
                         return 'BpfUpgradeableLoaderCloseInstruction';
                     }
-                    if (instruction.meta.type === 'extendProgram') {
+                    if (instruction.instructionType === 'extendProgram') {
                         return 'BpfUpgradeableLoaderExtendProgramInstruction';
                     }
                 }
-                if (instruction.meta.program === 'spl-associated-token-account') {
-                    if (instruction.meta.type === 'create') {
+                if (instruction.programName === 'spl-associated-token-account') {
+                    if (instruction.instructionType === 'create') {
                         return 'SplAssociatedTokenCreateInstruction';
                     }
-                    if (instruction.meta.type === 'createIdempotent') {
+                    if (instruction.instructionType === 'createIdempotent') {
                         return 'SplAssociatedTokenCreateIdempotentInstruction';
                     }
-                    if (instruction.meta.type === 'recoverNested') {
+                    if (instruction.instructionType === 'recoverNested') {
                         return 'SplAssociatedTokenRecoverNestedInstruction';
                     }
                 }
-                if (instruction.meta.program === 'spl-memo') {
+                if (instruction.programName === 'spl-memo') {
                     return 'SplMemoInstruction';
                 }
-                if (instruction.meta.program === 'spl-token') {
-                    if (instruction.meta.type === 'initializeMint') {
+                if (instruction.programName === 'spl-token') {
+                    if (instruction.instructionType === 'initializeMint') {
                         return 'SplTokenInitializeMintInstruction';
                     }
-                    if (instruction.meta.type === 'initializeMint2') {
+                    if (instruction.instructionType === 'initializeMint2') {
                         return 'SplTokenInitializeMint2Instruction';
                     }
-                    if (instruction.meta.type === 'initializeAccount') {
+                    if (instruction.instructionType === 'initializeAccount') {
                         return 'SplTokenInitializeAccountInstruction';
                     }
-                    if (instruction.meta.type === 'initializeAccount2') {
+                    if (instruction.instructionType === 'initializeAccount2') {
                         return 'SplTokenInitializeAccount2Instruction';
                     }
-                    if (instruction.meta.type === 'initializeAccount3') {
+                    if (instruction.instructionType === 'initializeAccount3') {
                         return 'SplTokenInitializeAccount3Instruction';
                     }
-                    if (instruction.meta.type === 'initializeMultisig') {
+                    if (instruction.instructionType === 'initializeMultisig') {
                         return 'SplTokenInitializeMultisigInstruction';
                     }
-                    if (instruction.meta.type === 'initializeMultisig2') {
+                    if (instruction.instructionType === 'initializeMultisig2') {
                         return 'SplTokenInitializeMultisig2Instruction';
                     }
-                    if (instruction.meta.type === 'transfer') {
+                    if (instruction.instructionType === 'transfer') {
                         return 'SplTokenTransferInstruction';
                     }
-                    if (instruction.meta.type === 'approve') {
+                    if (instruction.instructionType === 'approve') {
                         return 'SplTokenApproveInstruction';
                     }
-                    if (instruction.meta.type === 'revoke') {
+                    if (instruction.instructionType === 'revoke') {
                         return 'SplTokenRevokeInstruction';
                     }
-                    if (instruction.meta.type === 'setAuthority') {
+                    if (instruction.instructionType === 'setAuthority') {
                         return 'SplTokenSetAuthorityInstruction';
                     }
-                    if (instruction.meta.type === 'mintTo') {
+                    if (instruction.instructionType === 'mintTo') {
                         return 'SplTokenMintToInstruction';
                     }
-                    if (instruction.meta.type === 'burn') {
+                    if (instruction.instructionType === 'burn') {
                         return 'SplTokenBurnInstruction';
                     }
-                    if (instruction.meta.type === 'closeAccount') {
+                    if (instruction.instructionType === 'closeAccount') {
                         return 'SplTokenCloseAccountInstruction';
                     }
-                    if (instruction.meta.type === 'freezeAccount') {
+                    if (instruction.instructionType === 'freezeAccount') {
                         return 'SplTokenFreezeAccountInstruction';
                     }
-                    if (instruction.meta.type === 'thawAccount') {
+                    if (instruction.instructionType === 'thawAccount') {
                         return 'SplTokenThawAccountInstruction';
                     }
-                    if (instruction.meta.type === 'transferChecked') {
+                    if (instruction.instructionType === 'transferChecked') {
                         return 'SplTokenTransferCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'approveChecked') {
+                    if (instruction.instructionType === 'approveChecked') {
                         return 'SplTokenApproveCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'mintToChecked') {
+                    if (instruction.instructionType === 'mintToChecked') {
                         return 'SplTokenMintToCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'burnChecked') {
+                    if (instruction.instructionType === 'burnChecked') {
                         return 'SplTokenBurnCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'syncNative') {
+                    if (instruction.instructionType === 'syncNative') {
                         return 'SplTokenSyncNativeInstruction';
                     }
-                    if (instruction.meta.type === 'getAccountDataSize') {
+                    if (instruction.instructionType === 'getAccountDataSize') {
                         return 'SplTokenGetAccountDataSizeInstruction';
                     }
-                    if (instruction.meta.type === 'initializeImmutableOwner') {
+                    if (instruction.instructionType === 'initializeImmutableOwner') {
                         return 'SplTokenInitializeImmutableOwnerInstruction';
                     }
-                    if (instruction.meta.type === 'amountToUiAmount') {
+                    if (instruction.instructionType === 'amountToUiAmount') {
                         return 'SplTokenAmountToUiAmountInstruction';
                     }
-                    if (instruction.meta.type === 'uiAmountToAmount') {
+                    if (instruction.instructionType === 'uiAmountToAmount') {
                         return 'SplTokenUiAmountToAmountInstruction';
                     }
-                    if (instruction.meta.type === 'initializeMintCloseAuthority') {
+                    if (instruction.instructionType === 'initializeMintCloseAuthority') {
                         return 'SplTokenInitializeMintCloseAuthorityInstruction';
                     }
                 }
-                if (instruction.meta.program === 'stake') {
-                    if (instruction.meta.type === 'initialize') {
+                if (instruction.programName === 'stake') {
+                    if (instruction.instructionType === 'initialize') {
                         return 'StakeInitializeInstruction';
                     }
-                    if (instruction.meta.type === 'authorize') {
+                    if (instruction.instructionType === 'authorize') {
                         return 'StakeAuthorizeInstruction';
                     }
-                    if (instruction.meta.type === 'delegate') {
+                    if (instruction.instructionType === 'delegate') {
                         return 'StakeDelegateStakeInstruction';
                     }
-                    if (instruction.meta.type === 'split') {
+                    if (instruction.instructionType === 'split') {
                         return 'StakeSplitInstruction';
                     }
-                    if (instruction.meta.type === 'withdraw') {
+                    if (instruction.instructionType === 'withdraw') {
                         return 'StakeWithdrawInstruction';
                     }
-                    if (instruction.meta.type === 'deactivate') {
+                    if (instruction.instructionType === 'deactivate') {
                         return 'StakeDeactivateInstruction';
                     }
-                    if (instruction.meta.type === 'setLockup') {
+                    if (instruction.instructionType === 'setLockup') {
                         return 'StakeSetLockupInstruction';
                     }
-                    if (instruction.meta.type === 'merge') {
+                    if (instruction.instructionType === 'merge') {
                         return 'StakeMergeInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeWithSeed') {
+                    if (instruction.instructionType === 'authorizeWithSeed') {
                         return 'StakeAuthorizeWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'initializeChecked') {
+                    if (instruction.instructionType === 'initializeChecked') {
                         return 'StakeInitializeCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeChecked') {
+                    if (instruction.instructionType === 'authorizeChecked') {
                         return 'StakeAuthorizeCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeCheckedWithSeed') {
+                    if (instruction.instructionType === 'authorizeCheckedWithSeed') {
                         return 'StakeAuthorizeCheckedWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'setLockupChecked') {
+                    if (instruction.instructionType === 'setLockupChecked') {
                         return 'StakeSetLockupCheckedInstruction';
                     }
-                    if (instruction.meta.type === 'deactivateDelinquent') {
+                    if (instruction.instructionType === 'deactivateDelinquent') {
                         return 'StakeDeactivateDelinquentInstruction';
                     }
-                    if (instruction.meta.type === 'redelegate') {
+                    if (instruction.instructionType === 'redelegate') {
                         return 'StakeRedelegateInstruction';
                     }
                 }
-                if (instruction.meta.program === 'system') {
-                    if (instruction.meta.type === 'createAccount') {
+                if (instruction.programName === 'system') {
+                    if (instruction.instructionType === 'createAccount') {
                         return 'CreateAccountInstruction';
                     }
-                    if (instruction.meta.type === 'assign') {
+                    if (instruction.instructionType === 'assign') {
                         return 'AssignInstruction';
                     }
-                    if (instruction.meta.type === 'transfer') {
+                    if (instruction.instructionType === 'transfer') {
                         return 'TransferInstruction';
                     }
-                    if (instruction.meta.type === 'createAccountWithSeed') {
+                    if (instruction.instructionType === 'createAccountWithSeed') {
                         return 'CreateAccountWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'advanceNonceAccount') {
+                    if (instruction.instructionType === 'advanceNonceAccount') {
                         return 'AdvanceNonceAccountInstruction';
                     }
-                    if (instruction.meta.type === 'withdrawNonceAccount') {
+                    if (instruction.instructionType === 'withdrawNonceAccount') {
                         return 'WithdrawNonceAccountInstruction';
                     }
-                    if (instruction.meta.type === 'initializeNonceAccount') {
+                    if (instruction.instructionType === 'initializeNonceAccount') {
                         return 'InitializeNonceAccountInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeNonceAccount') {
+                    if (instruction.instructionType === 'authorizeNonceAccount') {
                         return 'AuthorizeNonceAccountInstruction';
                     }
-                    if (instruction.meta.type === 'upgradeNonceAccount') {
+                    if (instruction.instructionType === 'upgradeNonceAccount') {
                         return 'UpgradeNonceAccountInstruction';
                     }
-                    if (instruction.meta.type === 'allocate') {
+                    if (instruction.instructionType === 'allocate') {
                         return 'AllocateInstruction';
                     }
-                    if (instruction.meta.type === 'allocateWithSeed') {
+                    if (instruction.instructionType === 'allocateWithSeed') {
                         return 'AllocateWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'assignWithSeed') {
+                    if (instruction.instructionType === 'assignWithSeed') {
                         return 'AssignWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'transferWithSeed') {
+                    if (instruction.instructionType === 'transferWithSeed') {
                         return 'TransferWithSeedInstruction';
                     }
                 }
-                if (instruction.meta.program === 'vote') {
-                    if (instruction.meta.type === 'initialize') {
+                if (instruction.programName === 'vote') {
+                    if (instruction.instructionType === 'initialize') {
                         return 'VoteInitializeAccountInstruction';
                     }
-                    if (instruction.meta.type === 'authorize') {
+                    if (instruction.instructionType === 'authorize') {
                         return 'VoteAuthorizeInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeWithSeed') {
+                    if (instruction.instructionType === 'authorizeWithSeed') {
                         return 'VoteAuthorizeWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeCheckedWithSeed') {
+                    if (instruction.instructionType === 'authorizeCheckedWithSeed') {
                         return 'VoteAuthorizeCheckedWithSeedInstruction';
                     }
-                    if (instruction.meta.type === 'vote') {
+                    if (instruction.instructionType === 'vote') {
                         return 'VoteVoteInstruction';
                     }
-                    if (instruction.meta.type === 'updatevotestate') {
+                    if (instruction.instructionType === 'updatevotestate') {
                         return 'VoteUpdateVoteStateInstruction';
                     }
-                    if (instruction.meta.type === 'updatevotestateswitch') {
+                    if (instruction.instructionType === 'updatevotestateswitch') {
                         return 'VoteUpdateVoteStateSwitchInstruction';
                     }
-                    if (instruction.meta.type === 'compactupdatevotestate') {
+                    if (instruction.instructionType === 'compactupdatevotestate') {
                         return 'VoteCompactUpdateVoteStateInstruction';
                     }
-                    if (instruction.meta.type === 'compactupdatevotestateswitch') {
+                    if (instruction.instructionType === 'compactupdatevotestateswitch') {
                         return 'VoteCompactUpdateVoteStateSwitchInstruction';
                     }
-                    if (instruction.meta.type === 'withdraw') {
+                    if (instruction.instructionType === 'withdraw') {
                         return 'VoteWithdrawInstruction';
                     }
-                    if (instruction.meta.type === 'updateValidatorIdentity') {
+                    if (instruction.instructionType === 'updateValidatorIdentity') {
                         return 'VoteUpdateValidatorIdentityInstruction';
                     }
-                    if (instruction.meta.type === 'updateCommission') {
+                    if (instruction.instructionType === 'updateCommission') {
                         return 'VoteUpdateCommissionInstruction';
                     }
-                    if (instruction.meta.type === 'voteSwitch') {
+                    if (instruction.instructionType === 'voteSwitch') {
                         return 'VoteVoteSwitchInstruction';
                     }
-                    if (instruction.meta.type === 'authorizeChecked') {
+                    if (instruction.instructionType === 'authorizeChecked') {
                         return 'VoteAuthorizeCheckedInstruction';
                     }
                 }
@@ -1506,80 +1158,80 @@ export const instructionResolvers = {
             return 'GenericInstruction';
         },
     },
-    CreateLookupTableInstructionData: {
+    CreateLookupTableInstruction: {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
         payerAccount: resolveAccount('payerAccount'),
         systemProgram: resolveAccount('systemProgram'),
     },
-    ExtendLookupTableInstructionData: {
+    ExtendLookupTableInstruction: {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
         payerAccount: resolveAccount('payerAccount'),
         systemProgram: resolveAccount('systemProgram'),
     },
-    FreezeLookupTableInstructionData: {
+    FreezeLookupTableInstruction: {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
     },
-    DeactivateLookupTableInstructionData: {
+    DeactivateLookupTableInstruction: {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
     },
-    CloseLookupTableInstructionData: {
+    CloseLookupTableInstruction: {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
         recipient: resolveAccount('recipient'),
     },
-    BpfLoaderWriteInstructionData: {
+    BpfLoaderWriteInstruction: {
         account: resolveAccount('account'),
     },
-    BpfLoaderFinalizeInstructionData: {
+    BpfLoaderFinalizeInstruction: {
         account: resolveAccount('account'),
     },
-    BpfUpgradeableLoaderInitializeBufferInstructionData: {
+    BpfUpgradeableLoaderInitializeBufferInstruction: {
         account: resolveAccount('account'),
     },
-    BpfUpgradeableLoaderWriteInstructionData: {
+    BpfUpgradeableLoaderWriteInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
     },
-    BpfUpgradeableLoaderDeployWithMaxDataLenInstructionData: {
+    BpfUpgradeableLoaderDeployWithMaxDataLenInstruction: {
         authority: resolveAccount('authority'),
         bufferAccount: resolveAccount('bufferAccount'),
         payerAccount: resolveAccount('payerAccount'),
         programAccount: resolveAccount('programAccount'),
         programDataAccount: resolveAccount('programDataAccount'),
     },
-    BpfUpgradeableLoaderUpgradeInstructionData: {
+    BpfUpgradeableLoaderUpgradeInstruction: {
         authority: resolveAccount('authority'),
         bufferAccount: resolveAccount('bufferAccount'),
         programAccount: resolveAccount('programAccount'),
         programDataAccount: resolveAccount('programDataAccount'),
     },
-    BpfUpgradeableLoaderSetAuthorityInstructionData: {
+    BpfUpgradeableLoaderSetAuthorityInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         newAuthority: resolveAccount('newAuthority'),
     },
-    BpfUpgradeableLoaderSetAuthorityCheckedInstructionData: {
+    BpfUpgradeableLoaderSetAuthorityCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         newAuthority: resolveAccount('newAuthority'),
     },
-    BpfUpgradeableLoaderCloseInstructionData: {
+    BpfUpgradeableLoaderCloseInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         programAccount: resolveAccount('programAccount'),
         recipient: resolveAccount('recipient'),
     },
-    BpfUpgradeableLoaderExtendProgramInstructionData: {
+    BpfUpgradeableLoaderExtendProgramInstruction: {
         payerAccount: resolveAccount('payerAccount'),
         programAccount: resolveAccount('programAccount'),
         programDataAccount: resolveAccount('programDataAccount'),
         systemProgram: resolveAccount('systemProgram'),
     },
-    SplAssociatedTokenCreateInstructionData: {
+    SplAssociatedTokenCreateInstruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         source: resolveAccount('source'),
@@ -1587,7 +1239,7 @@ export const instructionResolvers = {
         tokenProgram: resolveAccount('tokenProgram'),
         wallet: resolveAccount('wallet'),
     },
-    SplAssociatedTokenCreateIdempotentInstructionData: {
+    SplAssociatedTokenCreateIdempotentInstruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         source: resolveAccount('source'),
@@ -1595,7 +1247,7 @@ export const instructionResolvers = {
         tokenProgram: resolveAccount('tokenProgram'),
         wallet: resolveAccount('wallet'),
     },
-    SplAssociatedTokenRecoverNestedInstructionData: {
+    SplAssociatedTokenRecoverNestedInstruction: {
         destination: resolveAccount('destination'),
         nestedMint: resolveAccount('nestedMint'),
         nestedOwner: resolveAccount('nestedOwner'),
@@ -1604,130 +1256,130 @@ export const instructionResolvers = {
         tokenProgram: resolveAccount('tokenProgram'),
         wallet: resolveAccount('wallet'),
     },
-    SplTokenInitializeMintInstructionData: {
+    SplTokenInitializeMintInstruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
     },
-    SplTokenInitializeMint2InstructionData: {
+    SplTokenInitializeMint2Instruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
     },
-    SplTokenInitializeAccountInstructionData: {
+    SplTokenInitializeAccountInstruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
     },
-    SplTokenInitializeAccount2InstructionData: {
+    SplTokenInitializeAccount2Instruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
     },
-    SplTokenInitializeAccount3InstructionData: {
+    SplTokenInitializeAccount3Instruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
     },
-    SplTokenInitializeMultisigInstructionData: {
+    SplTokenInitializeMultisigInstruction: {
         multisig: resolveAccount('multisig'),
     },
-    SplTokenInitializeMultisig2InstructionData: {
+    SplTokenInitializeMultisig2Instruction: {
         multisig: resolveAccount('multisig'),
     },
-    SplTokenTransferInstructionData: {
+    SplTokenTransferInstruction: {
         authority: resolveAccount('authority'),
         destination: resolveAccount('destination'),
         multisigAuthority: resolveAccount('multisigAuthority'),
         source: resolveAccount('source'),
     },
-    SplTokenApproveInstructionData: {
+    SplTokenApproveInstruction: {
         delegate: resolveAccount('delegate'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
-    SplTokenRevokeInstructionData: {
+    SplTokenRevokeInstruction: {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
-    SplTokenSetAuthorityInstructionData: {
+    SplTokenSetAuthorityInstruction: {
         authority: resolveAccount('authority'),
         multisigAuthority: resolveAccount('multisigAuthority'),
         newAuthority: resolveAccount('newAuthority'),
     },
-    SplTokenMintToInstructionData: {
+    SplTokenMintToInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
         multisigMintAuthority: resolveAccount('multisigMintAuthority'),
     },
-    SplTokenBurnInstructionData: {
+    SplTokenBurnInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
-    SplTokenCloseAccountInstructionData: {
+    SplTokenCloseAccountInstruction: {
         account: resolveAccount('account'),
         destination: resolveAccount('destination'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
-    SplTokenFreezeAccountInstructionData: {
+    SplTokenFreezeAccountInstruction: {
         account: resolveAccount('account'),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
         multisigFreezeAuthority: resolveAccount('multisigFreezeAuthority'),
     },
-    SplTokenThawAccountInstructionData: {
+    SplTokenThawAccountInstruction: {
         account: resolveAccount('account'),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
         multisigFreezeAuthority: resolveAccount('multisigFreezeAuthority'),
     },
-    SplTokenTransferCheckedInstructionData: {
+    SplTokenTransferCheckedInstruction: {
         authority: resolveAccount('authority'),
         destination: resolveAccount('destination'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
         source: resolveAccount('source'),
     },
-    SplTokenApproveCheckedInstructionData: {
+    SplTokenApproveCheckedInstruction: {
         delegate: resolveAccount('delegate'),
         mint: resolveAccount('mint'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
-    SplTokenMintToCheckedInstructionData: {
+    SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
         multisigMintAuthority: resolveAccount('multisigMintAuthority'),
     },
-    SplTokenBurnCheckedInstructionData: {
+    SplTokenBurnCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
-    SplTokenSyncNativeInstructionData: {
+    SplTokenSyncNativeInstruction: {
         account: resolveAccount('account'),
     },
-    SplTokenGetAccountDataSizeInstructionData: {
+    SplTokenGetAccountDataSizeInstruction: {
         mint: resolveAccount('mint'),
     },
-    SplTokenAmountToUiAmountInstructionData: {
+    SplTokenAmountToUiAmountInstruction: {
         mint: resolveAccount('mint'),
     },
-    SplTokenUiAmountToAmountInstructionData: {
+    SplTokenUiAmountToAmountInstruction: {
         mint: resolveAccount('mint'),
     },
-    SplTokenInitializeMintCloseAuthorityInstructionData: {
+    SplTokenInitializeMintCloseAuthorityInstruction: {
         mint: resolveAccount('mint'),
         newAuthority: resolveAccount('newAuthority'),
     },
@@ -1738,45 +1390,45 @@ export const instructionResolvers = {
         staker: resolveAccount('staker'),
         withdrawer: resolveAccount('withdrawer'),
     },
-    StakeInitializeInstructionData: {
+    StakeInitializeInstruction: {
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeAuthorizeInstructionData: {
+    StakeAuthorizeInstruction: {
         authority: resolveAccount('authority'),
         custodian: resolveAccount('custodian'),
         newAuthority: resolveAccount('newAuthority'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeDelegateStakeInstructionData: {
+    StakeDelegateStakeInstruction: {
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
         stakeConfigAccount: resolveAccount('stakeConfigAccount'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    StakeSplitInstructionData: {
+    StakeSplitInstruction: {
         newSplitAccount: resolveAccount('newSplitAccount'),
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
     },
-    StakeWithdrawInstructionData: {
+    StakeWithdrawInstruction: {
         destination: resolveAccount('destination'),
         stakeAccount: resolveAccount('stakeAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
-    StakeDeactivateInstructionData: {
+    StakeDeactivateInstruction: {
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
     },
-    StakeSetLockupInstructionData: {
+    StakeSetLockupInstruction: {
         custodian: resolveAccount('custodian'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeMergeInstructionData: {
+    StakeMergeInstruction: {
         destination: resolveAccount('destination'),
         source: resolveAccount('source'),
         stakeAuthority: resolveAccount('stakeAuthority'),
     },
-    StakeAuthorizeWithSeedInstructionData: {
+    StakeAuthorizeWithSeedInstruction: {
         authorityBase: resolveAccount('authorityBase'),
         authorityOwner: resolveAccount('authorityOwner'),
         custodian: resolveAccount('custodian'),
@@ -1784,154 +1436,153 @@ export const instructionResolvers = {
         stakeAccount: resolveAccount('stakeAccount'),
     },
     StakeInitializeCheckedInstructionDataAuthorized: {
-        stakeAccount: resolveAccount('stakeAccount'),
         staker: resolveAccount('staker'),
         withdrawer: resolveAccount('withdrawer'),
     },
-    StakeAuthorizeCheckedInstructionData: {
+    StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
         custodian: resolveAccount('custodian'),
         newAuthority: resolveAccount('newAuthority'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeAuthorizeCheckedWithSeedInstructionData: {
+    StakeAuthorizeCheckedWithSeedInstruction: {
         authorityBase: resolveAccount('authorityBase'),
         authorityOwner: resolveAccount('authorityOwner'),
         custodian: resolveAccount('custodian'),
         newAuthorized: resolveAccount('newAuthorized'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeSetLockupCheckedInstructionData: {
+    StakeSetLockupCheckedInstruction: {
         custodian: resolveAccount('custodian'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
-    StakeDeactivateDelinquentInstructionData: {
+    StakeDeactivateDelinquentInstruction: {
         referenceVoteAccount: resolveAccount('referenceVoteAccount'),
         stakeAccount: resolveAccount('stakeAccount'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    StakeRedelegateInstructionData: {
+    StakeRedelegateInstruction: {
         newStakeAccount: resolveAccount('newStakeAccount'),
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
         stakeConfigAccount: resolveAccount('stakeConfigAccount'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    CreateAccountInstructionData: {
+    CreateAccountInstruction: {
         newAccount: resolveAccount('newAccount'),
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
-    AssignInstructionData: {
+    AssignInstruction: {
         account: resolveAccount('account'),
         owner: resolveAccount('owner'),
     },
-    TransferInstructionData: {
+    TransferInstruction: {
         destination: resolveAccount('destination'),
         source: resolveAccount('source'),
     },
-    CreateAccountWithSeedInstructionData: {
+    CreateAccountWithSeedInstruction: {
         base: resolveAccount('base'),
         owner: resolveAccount('owner'),
         seed: resolveAccount('seed'),
     },
-    AdvanceNonceAccountInstructionData: {
+    AdvanceNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
     },
-    WithdrawNonceAccountInstructionData: {
+    WithdrawNonceAccountInstruction: {
         destination: resolveAccount('destination'),
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
     },
-    InitializeNonceAccountInstructionData: {
+    InitializeNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
     },
-    AuthorizeNonceAccountInstructionData: {
+    AuthorizeNonceAccountInstruction: {
         newAuthorized: resolveAccount('newAuthorized'),
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
     },
-    UpgradeNonceAccountInstructionData: {
+    UpgradeNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
     },
-    AllocateInstructionData: {
+    AllocateInstruction: {
         account: resolveAccount('account'),
     },
-    AllocateWithSeedInstructionData: {
-        account: resolveAccount('account'),
-        owner: resolveAccount('owner'),
-    },
-    AssignWithSeedInstructionData: {
+    AllocateWithSeedInstruction: {
         account: resolveAccount('account'),
         owner: resolveAccount('owner'),
     },
-    TransferWithSeedInstructionData: {
+    AssignWithSeedInstruction: {
+        account: resolveAccount('account'),
+        owner: resolveAccount('owner'),
+    },
+    TransferWithSeedInstruction: {
         destination: resolveAccount('destination'),
         source: resolveAccount('source'),
         sourceOwner: resolveAccount('sourceOwner'),
     },
-    VoteInitializeAccountInstructionData: {
+    VoteInitializeAccountInstruction: {
         authorizedVoter: resolveAccount('authorizedVoter'),
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
         node: resolveAccount('node'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    VoteAuthorizeInstructionData: {
+    VoteAuthorizeInstruction: {
         authority: resolveAccount('authority'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    VoteAuthorizeWithSeedInstructionData: {
+    VoteAuthorizeWithSeedInstruction: {
         authorityOwner: resolveAccount('authorityOwner'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    VoteAuthorizeCheckedWithSeedInstructionData: {
+    VoteAuthorizeCheckedWithSeedInstruction: {
         authorityOwner: resolveAccount('authorityOwner'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
-    VoteVoteInstructionData: {
+    VoteVoteInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteUpdateVoteStateInstructionData: {
+    VoteUpdateVoteStateInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteUpdateVoteStateSwitchInstructionData: {
+    VoteUpdateVoteStateSwitchInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteCompactUpdateVoteStateInstructionData: {
+    VoteCompactUpdateVoteStateInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteCompactUpdateVoteStateSwitchInstructionData: {
+    VoteCompactUpdateVoteStateSwitchInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteWithdrawInstructionData: {
+    VoteWithdrawInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
-    VoteUpdateValidatorIdentityInstructionData: {
+    VoteUpdateValidatorIdentityInstruction: {
         newValidatorIdentity: resolveAccount('newValidatorIdentity'),
         voteAccount: resolveAccount('voteAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
-    VoteUpdateCommissionInstructionData: {
+    VoteUpdateCommissionInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
-    VoteVoteSwitchInstructionData: {
+    VoteVoteSwitchInstruction: {
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
-    VoteAuthorizeCheckedInstructionData: {
+    VoteAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
