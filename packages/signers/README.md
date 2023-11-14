@@ -336,25 +336,37 @@ assertIsKeyPairSigner({ address: address('1234..5678') }); // ❌ Throws an erro
 
 ## Creating Noop signers
 
-### Functions
-
-#### `createNoopSigner()`
-
-_Coming soon..._
-
-Creates a Noop (No-Operation) signer from a given address. It will return an implementation of both the `MessagePartialSigner` and `TransactionPartialSigner` interfaces that do not sign anything. Namely, signing a transaction or a message will return an empty `SignatureDictionary`.
+For a given address, a Noop (No-Operation) signer can be created to offer an implementation of both the `MessagePartialSigner` and `TransactionPartialSigner` interfaces such that they do not sign anything. Namely, signing a transaction or a message with a `NoopSigner` will return an empty `SignatureDictionary`.
 
 This signer may be useful:
 
 -   For testing purposes.
 -   For indicating that a given account is a signer and taking the responsibility to provide the signature for that account ourselves. For instance, if we need to send the transaction to a server that will sign it and send it for us.
 
+### Types
+
+#### `NoopSigner<TAddress>`
+
+Defines a Noop (No-Operation) signer.
+
+```ts
+const myNoopSigner: NoopSigner;
+myNoopSigner satisfies MessagePartialSigner;
+myNoopSigner satisfies TransactionPartialSigner;
+```
+
+### Functions
+
+#### `createNoopSigner()`
+
+Creates a Noop (No-Operation) signer from a given address.
+
 ```ts
 import { createNoopSigner } from '@solana/signers';
 
-const myAddress = address('1234..5678');
-const myNoopSigner = createNoopSigner(myAddress);
-// ^ MessagePartialSigner<'1234..5678'> & TransactionPartialSigner<'1234..5678'>
+const myNoopSigner = createNoopSigner(address('1234..5678'));
+const [myMessageSignatures] = await myNoopSigner.signMessages([myMessage]); // <- Empty signature dictionary.
+const [myTransactionSignatures] = await myNoopSigner.signTransactions([myTransaction]); // <- Empty signature dictionary.
 ```
 
 ## Storing transaction signers inside instruction account metas
