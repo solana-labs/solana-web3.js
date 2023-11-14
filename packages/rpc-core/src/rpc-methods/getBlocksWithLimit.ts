@@ -1,10 +1,11 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot } from './common';
 
 type GetBlocksWithLimitApiResponse = Slot[];
 
-export interface GetBlocksWithLimitApi {
+export interface GetBlocksWithLimitApi extends IRpcApiMethods {
     /**
      * Returns a list of confirmed blocks starting at the given slot
      * for up to `limit` blocks

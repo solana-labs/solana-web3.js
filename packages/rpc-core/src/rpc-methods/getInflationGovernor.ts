@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { F64UnsafeSeeDocumentation } from './common';
@@ -19,7 +20,7 @@ type GetInflationGovernorApiResponse = Readonly<{
     terminal: F64UnsafeSeeDocumentation;
 }>;
 
-export interface GetInflationGovernorApi {
+export interface GetInflationGovernorApi extends IRpcApiMethods {
     /**
      * Returns the current inflation governor
      */

@@ -1,5 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 
 import { TransactionError } from '../transaction-error';
@@ -36,7 +37,7 @@ type GetSignaturesForAddressConfig = Readonly<{
     until?: Signature;
 }>;
 
-export interface GetSignaturesForAddressApi {
+export interface GetSignaturesForAddressApi extends IRpcApiMethods {
     /**
      * Returns signatures for confirmed transactions that include the given address in their accountKeys list.
      * Returns signatures backwards in time from the provided signature or most recent confirmed block

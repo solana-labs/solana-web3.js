@@ -1,8 +1,9 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Blockhash } from '@solana/transactions';
 
 type GetGenesisHashApiResponse = Blockhash;
 
-export interface GetGenesisHashApi {
+export interface GetGenesisHashApi extends IRpcApiMethods {
     /**
      * Returns the genesis hash
      */

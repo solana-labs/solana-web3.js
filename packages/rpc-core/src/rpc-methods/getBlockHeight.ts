@@ -1,10 +1,11 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetBlockHeightApiResponse = U64UnsafeBeyond2Pow53Minus1;
 
-export interface GetBlockHeightApi {
+export interface GetBlockHeightApi extends IRpcApiMethods {
     /**
      * Returns the current block height of the node
      */

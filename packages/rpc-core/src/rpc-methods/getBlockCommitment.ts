@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { Slot } from './common';
@@ -7,7 +8,7 @@ type GetBlockCommitmentApiResponse = Readonly<{
     totalStake: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
-export interface GetBlockCommitmentApi {
+export interface GetBlockCommitmentApi extends IRpcApiMethods {
     /**
      * Returns the amount of cluster stake in lamports that has voted on
      * a particular block, as well as the stake attributed to each vote account

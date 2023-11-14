@@ -1,3 +1,5 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
+
 import { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetInflationRateApiResponse = Readonly<{
@@ -11,7 +13,7 @@ type GetInflationRateApiResponse = Readonly<{
     validator: F64UnsafeSeeDocumentation;
 }>;
 
-export interface GetInflationRateApi {
+export interface GetInflationRateApi extends IRpcApiMethods {
     /**
      * Returns the current block height of the node
      */

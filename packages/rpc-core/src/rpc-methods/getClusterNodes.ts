@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 
 type GetClusterNodesNode = Readonly<{
     /** The unique identifier of the node's feature set */
@@ -25,7 +26,7 @@ type GetClusterNodesNode = Readonly<{
 
 type GetClusterNodesApiResponse = readonly GetClusterNodesNode[];
 
-export interface GetClusterNodesApi {
+export interface GetClusterNodesApi extends IRpcApiMethods {
     /**
      * Returns information about all the nodes participating in the cluster
      * Note that the optional NO_CONFIG object is ignored. See https://github.com/solana-labs/solana-web3.js/issues/1389

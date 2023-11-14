@@ -1,3 +1,5 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
+
 type GetVersionApiResponse = Readonly<{
     /** Unique identifier of the current software's feature set */
     'feature-set': number; // `u32`
@@ -5,7 +7,7 @@ type GetVersionApiResponse = Readonly<{
     'solana-core': string;
 }>;
 
-export interface GetVersionApi {
+export interface GetVersionApi extends IRpcApiMethods {
     /**
      * Returns the current Solana version running on the node
      */

@@ -1,5 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type RequestAirdropConfig = Readonly<{
@@ -8,7 +9,7 @@ type RequestAirdropConfig = Readonly<{
 
 type RequestAirdropResponse = Signature;
 
-export interface RequestAirdropApi {
+export interface RequestAirdropApi extends IRpcApiMethods {
     /**
      * Requests an airdrop of lamports to a Pubkey
      */

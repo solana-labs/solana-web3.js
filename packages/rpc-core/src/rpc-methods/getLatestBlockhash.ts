@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
@@ -10,7 +11,7 @@ type GetLatestBlockhashApiResponse = RpcResponse<{
     lastValidBlockHeight: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-export interface GetLatestBlockhashApi {
+export interface GetLatestBlockhashApi extends IRpcApiMethods {
     /**
      * Returns the latest blockhash
      */

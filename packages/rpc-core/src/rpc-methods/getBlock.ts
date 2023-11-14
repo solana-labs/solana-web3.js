@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
@@ -58,7 +59,7 @@ type GetBlockEncoding = 'base58' | 'base64' | 'json' | 'jsonParsed';
 // - These rules apply to both "accounts" and "full" transaction details.
 type GetBlockMaxSupportedTransactionVersion = Exclude<TransactionVersion, 'legacy'>;
 
-export interface GetBlockApi {
+export interface GetBlockApi extends IRpcApiMethods {
     /**
      * Returns identity and transaction information about a confirmed block in the ledger
      */

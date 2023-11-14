@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { RpcResponse } from './common';
@@ -12,7 +13,7 @@ type GetLargestAccountsResponseItem = Readonly<{
 
 type GetLargestAccountsApiResponse = RpcResponse<GetLargestAccountsResponseItem[]>;
 
-export interface GetLargestAccountsApi {
+export interface GetLargestAccountsApi extends IRpcApiMethods {
     /**
      * Returns the 20 largest accounts, by lamport balance
      * (results may be cached up to two hours)

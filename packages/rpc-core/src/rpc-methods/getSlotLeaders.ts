@@ -1,11 +1,12 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 
 import { Slot } from './common';
 
 /** array of Node identity public keys as base-58 encoded strings */
 type GetSlotLeadersApiResponse = Address[];
 
-export interface GetSlotLeadersApi {
+export interface GetSlotLeadersApi extends IRpcApiMethods {
     /**
      * Returns the slot leaders for a given slot range
      */

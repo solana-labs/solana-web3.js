@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
@@ -95,7 +96,7 @@ type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Rpc
     accounts: (T | null)[];
 }>;
 
-export interface SimulateTransactionApi {
+export interface SimulateTransactionApi extends IRpcApiMethods {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,

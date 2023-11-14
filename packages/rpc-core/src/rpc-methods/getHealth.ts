@@ -1,6 +1,8 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
+
 type GetHealthApiResponse = 'ok';
 
-export interface GetHealthApi {
+export interface GetHealthApi extends IRpcApiMethods {
     /**
      * Returns the health status of the node ("ok" if healthy).
      */

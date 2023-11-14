@@ -1,4 +1,5 @@
 import { Signature } from '@solana/keys';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
@@ -13,7 +14,7 @@ type SendTransactionConfig = Readonly<{
 
 type SendTransactionResponse = Signature;
 
-export interface SendTransactionApi {
+export interface SendTransactionApi extends IRpcApiMethods {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     sendTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
