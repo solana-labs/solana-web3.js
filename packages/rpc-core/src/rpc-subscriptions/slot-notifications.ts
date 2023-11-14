@@ -1,3 +1,5 @@
+import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+
 import { Slot } from '../rpc-methods/common';
 
 type SlotNotificationsApiNotification = Readonly<{
@@ -6,7 +8,7 @@ type SlotNotificationsApiNotification = Readonly<{
     slot: Slot;
 }>;
 
-export interface SlotNotificationsApi {
+export interface SlotNotificationsApi extends IRpcApiSubscriptions {
     /**
      * Subscribe to receive notification anytime a slot is processed by the validator
      */

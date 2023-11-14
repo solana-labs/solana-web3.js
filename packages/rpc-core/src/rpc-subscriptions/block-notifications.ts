@@ -1,3 +1,4 @@
+import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
@@ -75,7 +76,7 @@ type BlockNotificationsEncoding = 'base58' | 'base64' | 'json' | 'jsonParsed';
 // - These rules apply to both "accounts" and "full" transaction details.
 type BlockNotificationsMaxSupportedTransactionVersion = Exclude<TransactionVersion, 'legacy'>;
 
-export interface BlockNotificationsApi {
+export interface BlockNotificationsApi extends IRpcApiSubscriptions {
     /**
      * Subscribe to receive notification anytime a new block is Confirmed or Finalized.
      *

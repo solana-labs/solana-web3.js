@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -15,7 +16,7 @@ type AccountNotificationsApiCommonConfig = Readonly<{
     commitment?: Commitment;
 }>;
 
-export interface AccountNotificationsApi {
+export interface AccountNotificationsApi extends IRpcApiSubscriptions {
     /**
      * Subscribe to an account to receive notifications when the lamports or data for
      * a given account public key changes.

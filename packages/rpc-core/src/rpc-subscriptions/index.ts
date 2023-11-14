@@ -47,7 +47,8 @@ export function createSolanaRpcSubscriptionsApi(
             >
         ) {
             const [_, p] = args;
-            const notificationName = p.toString() as keyof (SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable);
+            const notificationName = p.toString() as keyof (SolanaRpcSubscriptions &
+                SolanaRpcSubscriptionsUnstable) as string;
             return function (
                 ...rawParams: Parameters<
                     (SolanaRpcSubscriptions &

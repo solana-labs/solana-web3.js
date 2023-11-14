@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -47,7 +48,7 @@ type ProgramNotificationsApiCommonConfig = Readonly<{
     )[];
 }>;
 
-export interface ProgramNotificationsApi {
+export interface ProgramNotificationsApi extends IRpcApiSubscriptions {
     /**
      * Subscribe to a program to receive notifications when the lamports or data for an account
      * owned by the given program changes

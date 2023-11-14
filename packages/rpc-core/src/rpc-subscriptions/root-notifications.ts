@@ -1,8 +1,10 @@
+import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+
 import { Slot } from '../rpc-methods/common';
 
 type RootNotificationsApiNotification = Slot;
 
-export interface RootNotificationsApi {
+export interface RootNotificationsApi extends IRpcApiSubscriptions {
     /**
      * Subscribe to receive notification anytime a new root is set by the validator
      */
