@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';

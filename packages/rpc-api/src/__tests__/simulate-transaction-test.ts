@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import type { Address } from '@solana/addresses';
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
