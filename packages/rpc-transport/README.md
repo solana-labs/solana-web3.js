@@ -55,7 +55,7 @@ const api = {
             // Pre-process the inputs any way you like.
             params: [assertIsInteger(startSlot), assertIsInteger(endSlot)],
             // Provide an optional function to modify the response.
-            responseProcessor: response => ({
+            responseTransformer: response => ({
                 confirmedBlocks: response,
                 queryRange: [startSlot, endSlot],
             }),

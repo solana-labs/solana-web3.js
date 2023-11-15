@@ -300,16 +300,16 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         });
     });
     describe('when calling a method whose concrete implementation returns a response processor', () => {
-        let responseProcessor: jest.Mock;
+        let responseTransformer: jest.Mock;
         let rpc: RpcSubscriptions<TestRpcSubscriptionNotifications>;
         beforeEach(() => {
-            responseProcessor = jest.fn(response => `${response} processed response`);
+            responseTransformer = jest.fn(response => `${response} processed response`);
             rpc = createJsonSubscriptionRpc({
                 api: {
                     thingNotifications(...params: unknown[]): RpcSubscription<unknown> {
                         return {
                             params,
-                            responseProcessor,
+                            responseTransformer,
                             subscribeMethodName: 'thingSubscribe',
                             unsubscribeMethodName: 'thingUnsubscribe',
                         };
@@ -328,7 +328,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
             await thingNotifications[Symbol.asyncIterator]().next();
-            expect(responseProcessor).toHaveBeenCalledWith(123);
+            expect(responseTransformer).toHaveBeenCalledWith(123);
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

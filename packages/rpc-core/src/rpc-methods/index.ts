@@ -142,7 +142,7 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
                 return {
                     methodName,
                     params,
-                    responseProcessor: rawResponse => patchResponseForSolanaLabsRpc(rawResponse, methodName),
+                    responseTransformer: rawResponse => patchResponseForSolanaLabsRpc(rawResponse, methodName),
                 };
             };
         },

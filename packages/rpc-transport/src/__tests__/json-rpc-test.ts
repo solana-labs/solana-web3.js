@@ -76,28 +76,28 @@ describe('JSON-RPC 2.0', () => {
         });
     });
     describe('when calling a method whose concrete implementation returns a response processor', () => {
-        let responseProcessor: jest.Mock;
+        let responseTransformer: jest.Mock;
         let rpc: Rpc<TestRpcMethods>;
         beforeEach(() => {
-            responseProcessor = jest.fn(response => `${response} processed response`);
+            responseTransformer = jest.fn(response => `${response} processed response`);
             rpc = createJsonRpc({
                 api: {
                     someMethod(...params: unknown[]): RpcRequest<unknown> {
                         return {
                             methodName: 'someMethod',
                             params,
-                            responseProcessor,
+                            responseTransformer,
                         };
                     },
                 } as IRpcApi<TestRpcMethods>,
                 transport: makeHttpRequest,
             });
         });
-        it('calls the response processor with the response from the JSON-RPC 2.0 endpoint', async () => {
+        it('calls the response transformer with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
             (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
             await rpc.someMethod().send();
-            expect(responseProcessor).toHaveBeenCalledWith(123);
+            expect(responseTransformer).toHaveBeenCalledWith(123);
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

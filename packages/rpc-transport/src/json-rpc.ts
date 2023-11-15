@@ -14,7 +14,7 @@ function createPendingRpcRequest<TRpcMethods, TResponse>(
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: SendOptions): Promise<TResponse> {
-            const { methodName, params, responseProcessor } = pendingRequest;
+            const { methodName, params, responseTransformer } = pendingRequest;
             const payload = createJsonRpcMessage(methodName, params);
             const response = await rpcConfig.transport<JsonRpcResponse<unknown>>({
                 payload,
@@ -23,7 +23,7 @@ function createPendingRpcRequest<TRpcMethods, TResponse>(
             if ('error' in response) {
                 throw new SolanaJsonRpcError(response.error);
             } else {
-                return (responseProcessor ? responseProcessor(response.result) : response.result) as TResponse;
+                return (responseTransformer ? responseTransformer(response.result) : response.result) as TResponse;
             }
         },
     };
