@@ -1,11 +1,16 @@
 import { Address } from '@solana/addresses';
 import { CompilableTransaction } from '@solana/transactions';
 
+import { BaseSignerConfig } from './types';
+
+export type TransactionModifyingSignerConfig = BaseSignerConfig;
+
 /** Defines a signer capable of signing transactions. */
 export type TransactionModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     modifyAndSignTransactions<TTransaction extends CompilableTransaction>(
-        transactions: readonly TTransaction[]
+        transactions: readonly TTransaction[],
+        config?: TransactionModifyingSignerConfig
     ): Promise<readonly TTransaction[]>;
 }>;
 

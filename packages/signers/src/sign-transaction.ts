@@ -29,14 +29,18 @@ export async function partiallySignTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
 >(
     transaction: TTransaction,
-    signers: readonly TransactionSigner[] = []
+    config: {
+        abortSignal?: AbortSignal;
+        signers?: readonly TransactionSigner[];
+    } = {}
 ): Promise<TTransaction & ITransactionWithSignatures> {
+    const signers = config.signers ?? [];
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
         deduplicateSigners([...getSignersFromTransaction(transaction).filter(isTransactionSigner), ...signers]),
         { identifySendingSigner: false }
     );
 
-    return signModifyingAndPartialTransactionSigners(transaction, modifyingSigners, partialSigners);
+    return signModifyingAndPartialTransactionSigners(transaction, modifyingSigners, partialSigners, config.abortSignal);
 }
 
 /**
@@ -49,9 +53,12 @@ export async function signTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
 >(
     transaction: TTransaction,
-    signers: readonly TransactionSigner[] = []
+    config: {
+        abortSignal?: AbortSignal;
+        signers?: readonly TransactionSigner[];
+    } = {}
 ): Promise<TTransaction & IFullySignedTransaction> {
-    const signedTransaction = await partiallySignTransactionWithSigners(transaction, signers);
+    const signedTransaction = await partiallySignTransactionWithSigners(transaction, config);
     assertTransactionIsFullySigned(signedTransaction);
     return signedTransaction;
 }
@@ -66,27 +73,35 @@ export async function signAndSendTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
 >(
     transaction: TTransaction,
-    signers: readonly TransactionSigner[] = [],
-    fallbackSender?: (transaction: TTransaction & IFullySignedTransaction) => Promise<SignatureBytes>
+    config: {
+        abortSignal?: AbortSignal;
+        fallbackSender?: (transaction: TTransaction & IFullySignedTransaction) => Promise<SignatureBytes>;
+        signers?: readonly TransactionSigner[];
+    } = {}
 ): Promise<SignatureBytes> {
+    const signers = config.signers ?? [];
+    const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
         deduplicateSigners([...getSignersFromTransaction(transaction).filter(isTransactionSigner), ...signers])
     );
 
+    abortSignal?.throwIfAborted();
     const signedTransaction = await signModifyingAndPartialTransactionSigners(
         transaction,
         modifyingSigners,
-        partialSigners
+        partialSigners,
+        abortSignal
     );
 
     if (sendingSigner) {
-        const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction]);
+        abortSignal?.throwIfAborted();
+        const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
         return signature;
     }
 
-    if (fallbackSender) {
+    if (config.fallbackSender) {
         assertTransactionIsFullySigned(signedTransaction);
-        return fallbackSender(signedTransaction);
+        return config.fallbackSender(signedTransaction);
     }
 
     // TODO: Coded error.
@@ -103,14 +118,14 @@ export async function signAndSendTransactionWithSigners<
  */
 function categorizeTransactionSigners(
     signers: readonly TransactionSigner[],
-    options?: { identifySendingSigner: boolean }
+    config: { identifySendingSigner?: boolean } = {}
 ): Readonly<{
     modifyingSigners: readonly TransactionModifyingSigner[];
     partialSigners: readonly TransactionPartialSigner[];
     sendingSigner: TransactionSendingSigner | null;
 }> {
     // Identify the unique sending signer that should be used.
-    const identifySendingSigner = options?.identifySendingSigner ?? true;
+    const identifySendingSigner = config.identifySendingSigner ?? true;
     const sendingSigner = identifySendingSigner ? identifyTransactionSendingSigner(signers) : null;
 
     // Now, focus on the other signers.
@@ -175,18 +190,21 @@ async function signModifyingAndPartialTransactionSigners<
 >(
     transaction: TTransaction,
     modifyingSigners: readonly TransactionModifyingSigner[] = [],
-    partialSigners: readonly TransactionPartialSigner[] = []
+    partialSigners: readonly TransactionPartialSigner[] = [],
+    abortSignal?: AbortSignal
 ): Promise<TTransaction & ITransactionWithSignatures> {
     // Handle modifying signers sequentially.
     const modifiedTransaction = await modifyingSigners.reduce(async (transaction, modifyingSigner) => {
-        const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction]);
+        abortSignal?.throwIfAborted();
+        const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
         return Object.freeze(tx);
     }, Promise.resolve(transaction) as Promise<TTransaction>);
 
     // Handle partial signers in parallel.
+    abortSignal?.throwIfAborted();
     const signatureDictionaries = await Promise.all(
         partialSigners.map(async partialSigner => {
-            const [signatures] = await partialSigner.signTransactions([modifiedTransaction]);
+            const [signatures] = await partialSigner.signTransactions([modifiedTransaction], { abortSignal });
             return signatures;
         })
     );
