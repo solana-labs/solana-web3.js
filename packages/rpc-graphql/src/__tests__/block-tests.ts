@@ -190,7 +190,7 @@ describe('block', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
             const source = /* GraphQL */ `
                 query testQuery {
-                    block(slot: ${defaultSlot}, encoding: base58) {
+                    block(slot: ${defaultSlot}, encoding: BASE_58) {
                         ... on BlockWithFull {
                             transactions {
                                 ... on TransactionBase58 {
@@ -219,7 +219,7 @@ describe('block', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase64)));
             const source = /* GraphQL */ `
                 query testQuery {
-                    block(slot: ${defaultSlot}, encoding: base64) {
+                    block(slot: ${defaultSlot}, encoding: BASE_64) {
                         ... on BlockWithFull {
                             transactions {
                                 ... on TransactionBase64 {

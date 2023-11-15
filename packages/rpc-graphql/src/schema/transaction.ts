@@ -44,14 +44,14 @@ export const transactionTypeDefs = /* GraphQL */ `
     }
 
     type TransactionMessageAccountKey {
-        pubkey: String
+        pubkey: Address
         signer: Boolean
         source: String
         writable: Boolean
     }
 
     type TransactionMessageAddressTableLookup {
-        accountKey: String
+        accountKey: Address
         readableIndexes: [Int]
         writableIndexes: [Int]
     }
@@ -73,7 +73,7 @@ export const transactionTypeDefs = /* GraphQL */ `
     # Transaction interface
     interface Transaction {
         blockTime: String
-        encoding: String
+        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -82,8 +82,8 @@ export const transactionTypeDefs = /* GraphQL */ `
     # A transaction with base58 encoded data
     type TransactionBase58 implements Transaction {
         blockTime: String
-        data: String
-        encoding: String
+        data: Base58EncodedBytes
+        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -92,8 +92,8 @@ export const transactionTypeDefs = /* GraphQL */ `
     # A transaction with base64 encoded data
     type TransactionBase64 implements Transaction {
         blockTime: String
-        data: String
-        encoding: String
+        data: Base64EncodedBytes
+        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -107,7 +107,7 @@ export const transactionTypeDefs = /* GraphQL */ `
     type TransactionParsed implements Transaction {
         blockTime: String
         data: TransactionDataParsed
-        encoding: String
+        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String

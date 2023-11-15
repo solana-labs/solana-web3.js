@@ -20,7 +20,7 @@ export const blockTypeDefs = /* GraphQL */ `
     }
 
     type TransactionDataForAccounts {
-        accountKeys: [String]
+        accountKeys: [Address]
         signatures: [String]
     }
 

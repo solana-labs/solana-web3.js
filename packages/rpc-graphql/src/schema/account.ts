@@ -15,8 +15,8 @@ export type AccountQueryArgs = {
 export const accountTypeDefs = /* GraphQL */ `
     # Account interface
     interface Account {
-        address: String
-        encoding: String
+        address: Address
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         owner: Account
@@ -25,9 +25,9 @@ export const accountTypeDefs = /* GraphQL */ `
 
     # An account with base58 encoded data
     type AccountBase58 implements Account {
-        address: String
-        data: String
-        encoding: String
+        address: Address
+        data: Base58EncodedBytes
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         owner: Account
@@ -36,9 +36,9 @@ export const accountTypeDefs = /* GraphQL */ `
 
     # An account with base64 encoded data
     type AccountBase64 implements Account {
-        address: String
-        data: String
-        encoding: String
+        address: Address
+        data: Base64EncodedBytes
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         owner: Account
@@ -47,9 +47,9 @@ export const accountTypeDefs = /* GraphQL */ `
 
     # An account with base64+zstd encoded data
     type AccountBase64Zstd implements Account {
-        address: String
-        data: String
-        encoding: String
+        address: Address
+        data: Base64ZstdEncodedBytes
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         owner: Account
@@ -76,9 +76,9 @@ export const accountTypeDefs = /* GraphQL */ `
         feeCalculator: NonceAccountFeeCalculator
     }
     type NonceAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: NonceAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta
@@ -95,9 +95,9 @@ export const accountTypeDefs = /* GraphQL */ `
         lastExtendedSlotStartIndex: Int
     }
     type LookupTableAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: LookupTableAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta
@@ -114,9 +114,9 @@ export const accountTypeDefs = /* GraphQL */ `
         supply: String
     }
     type MintAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: MintAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta
@@ -133,9 +133,9 @@ export const accountTypeDefs = /* GraphQL */ `
         tokenAmount: TokenAmount
     }
     type TokenAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: TokenAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta
@@ -174,9 +174,9 @@ export const accountTypeDefs = /* GraphQL */ `
         stake: StakeAccountDataStake
     }
     type StakeAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: StakeAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta
@@ -214,9 +214,9 @@ export const accountTypeDefs = /* GraphQL */ `
         votes: [VoteAccountDataVote]
     }
     type VoteAccount implements Account & AccountJsonParsed {
-        address: String
+        address: Address
         data: VoteAccountData
-        encoding: String
+        encoding: AccountEncoding
         executable: Boolean
         lamports: BigInt
         meta: JsonParsedAccountMeta

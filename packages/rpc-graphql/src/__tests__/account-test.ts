@@ -223,11 +223,12 @@ describe('account', () => {
             // See scripts/fixtures/gpa1.json
             const variableValues = {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
-                encoding: 'base58',
+                encoding: 'BASE_58',
             };
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
+                        encoding
                         ... on AccountBase58 {
                             data
                         }
@@ -239,6 +240,7 @@ describe('account', () => {
                 data: {
                     account: {
                         data: '2Uw1bpnsXxu3e',
+                        encoding: 'BASE_58',
                     },
                 },
             });
@@ -248,11 +250,12 @@ describe('account', () => {
             // See scripts/fixtures/gpa1.json
             const variableValues = {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
-                encoding: 'base64',
+                encoding: 'BASE_64',
             };
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
+                        encoding
                         ... on AccountBase64 {
                             data
                         }
@@ -264,6 +267,7 @@ describe('account', () => {
                 data: {
                     account: {
                         data: 'dGVzdCBkYXRh',
+                        encoding: 'BASE_64',
                     },
                 },
             });
@@ -273,11 +277,12 @@ describe('account', () => {
             // See scripts/fixtures/gpa1.json
             const variableValues = {
                 address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
-                encoding: 'base64Zstd',
+                encoding: 'BASE_64_ZSTD',
             };
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
+                        encoding
                         ... on AccountBase64Zstd {
                             data
                         }
@@ -289,6 +294,82 @@ describe('account', () => {
                 data: {
                     account: {
                         data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                        encoding: 'BASE_64_ZSTD',
+                    },
+                },
+            });
+        });
+        it('can get account data as jsonParsed', async () => {
+            expect.assertions(2);
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address, encoding: PARSED) {
+                        encoding
+                        ... on AccountBase64 {
+                            data
+                        }
+                        ... on MintAccount {
+                            mintData: data {
+                                supply
+                            }
+                        }
+                    }
+                }
+            `;
+            const resultParsed = await rpcGraphQL.query(source, {
+                // See scripts/fixtures/spl-token-mint-account.json
+                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+            });
+            expect(resultParsed).toMatchObject({
+                data: {
+                    account: {
+                        encoding: 'PARSED',
+                        mintData: {
+                            supply: expect.any(String),
+                        },
+                    },
+                },
+            });
+            // Defaults to base64 if can't be parsed
+            const resultBase64 = await rpcGraphQL.query(source, {
+                // See scripts/fixtures/gpa1.json
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+            });
+            expect(resultBase64).toMatchObject({
+                data: {
+                    account: {
+                        data: 'dGVzdCBkYXRh',
+                        encoding: 'BASE_64',
+                    },
+                },
+            });
+        });
+        it('defaults to jsonParsed if possible', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-mint-account.json
+            const variableValues = {
+                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address) {
+                        encoding
+                        ... on MintAccount {
+                            mintData: data {
+                                supply
+                            }
+                        }
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        encoding: 'PARSED',
+                        mintData: {
+                            supply: expect.any(String),
+                        },
                     },
                 },
             });
