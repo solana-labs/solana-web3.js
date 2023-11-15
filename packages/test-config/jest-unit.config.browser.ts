@@ -25,6 +25,7 @@ const config: Partial<Config.InitialProjectOptions> = {
         ...(commonConfig.setupFilesAfterEnv ?? []),
         path.resolve(__dirname, 'setup-secure-context.ts'),
         path.resolve(__dirname, 'setup-text-encoder.ts'),
+        path.resolve(__dirname, 'setup-web-buffer-global.ts'),
     ],
     testEnvironment: 'jsdom',
     testEnvironmentOptions: {},
