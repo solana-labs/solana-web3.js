@@ -8,6 +8,7 @@ import { graphql, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
 import { createSolanaGraphQLSchema } from './schema';
+import { ProgramAstSource } from './schema/ast/types';
 
 type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi & SimulateTransactionApi;
 
@@ -20,9 +21,13 @@ export interface RpcGraphQL {
     schema: GraphQLSchema;
 }
 
-export function createRpcGraphQL(rpc: Rpc<RpcMethods>): RpcGraphQL {
+type RpcGraphQLConfig = Readonly<{
+    programAst: ProgramAstSource[];
+}>;
+
+export function createRpcGraphQL(rpc: Rpc<RpcMethods>, config?: RpcGraphQLConfig): RpcGraphQL {
     const context = createSolanaGraphQLContext(rpc);
-    const schema = createSolanaGraphQLSchema();
+    const schema = createSolanaGraphQLSchema({ ...config });
     return {
         context,
         async query(source: string | Source, variableValues?: { readonly [variable: string]: unknown }) {

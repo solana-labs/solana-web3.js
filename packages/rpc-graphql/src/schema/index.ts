@@ -2,15 +2,21 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountQueryArgs, accountResolvers, accountTypeDefs } from './account';
+import { AccountQueryArgs, buildAccountSchema } from './account';
+import { buildAstSchemaConfig } from './ast';
+import { ProgramAstSource } from './ast/types';
 import { BlockQueryArgs, blockResolvers, blockTypeDefs } from './block';
 import { inputResolvers, inputTypeDefs } from './common/inputs';
 import { scalarResolvers, scalarTypeDefs } from './common/scalars';
-import { commonResolvers, commonTypeDefs } from './common/types';
-import { instructionResolvers, instructionTypeDefs } from './instruction';
+import { buildCommonSchema } from './common/types';
+import { buildInstructionSchema } from './instruction';
 import { ProgramAccountsQueryArgs } from './program-accounts';
 import { SimulateQueryArgs, simulateResolvers, simulateTypeDefs } from './simulate';
 import { TransactionQueryArgs, transactionResolvers, transactionTypeDefs } from './transaction';
+
+type SolanaGraphQLSchemaConfig = Readonly<{
+    programAst?: ProgramAstSource[];
+}>;
 
 // prettier-ignore
 const schemaTypeDefs = /* GraphQL */ `
@@ -103,19 +109,23 @@ const schemaResolvers = {
     },
 };
 
-export function createSolanaGraphQLSchema() {
+export function createSolanaGraphQLSchema(config?: SolanaGraphQLSchemaConfig) {
+    const astConfig = config?.programAst ? buildAstSchemaConfig(config.programAst) : undefined;
+    const [accountResolvers, accountTypeDefs] = buildAccountSchema(astConfig?.accounts);
+    const [commonResolvers, commonTypeDefs] = buildCommonSchema(astConfig?.types);
+    const [instructionResolvers, instructionTypeDefs] = buildInstructionSchema(astConfig?.instructions);
     return makeExecutableSchema({
-        resolvers: {
-            ...accountResolvers,
-            ...blockResolvers,
-            ...commonResolvers,
-            ...inputResolvers,
-            ...instructionResolvers,
-            ...scalarResolvers,
-            ...schemaResolvers,
-            ...simulateResolvers,
-            ...transactionResolvers,
-        },
+        resolvers: [
+            accountResolvers,
+            blockResolvers,
+            commonResolvers,
+            inputResolvers,
+            instructionResolvers,
+            scalarResolvers,
+            schemaResolvers,
+            simulateResolvers,
+            transactionResolvers,
+        ],
         typeDefs: [
             accountTypeDefs,
             blockTypeDefs,

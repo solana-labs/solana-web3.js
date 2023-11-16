@@ -1,6 +1,7 @@
 import { resolveAccount } from '../../resolvers/account';
+import { AstConfig } from '../ast';
 
-export const commonTypeDefs = /* GraphQL */ `
+const commonTypeDefs = /* GraphQL */ `
     enum AccountEncoding {
         BASE_58
         BASE_64
@@ -66,7 +67,7 @@ export const commonTypeDefs = /* GraphQL */ `
     }
 `;
 
-export const commonResolvers = {
+const commonResolvers = {
     AccountEncoding: {
         BASE_58: 'base58',
         BASE_64: 'base64',
@@ -87,3 +88,9 @@ export const commonResolvers = {
         ZERO: 0,
     },
 };
+
+export function buildCommonSchema(types?: AstConfig): [Record<string, unknown>, string] {
+    return types
+        ? [{ ...commonResolvers, ...types.resolvers }, [commonTypeDefs, ...types.typeDefs].join('\n')]
+        : [commonResolvers, commonTypeDefs];
+}

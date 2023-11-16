@@ -3,6 +3,7 @@ import { Address } from '@solana/addresses';
 import { DataSlice, Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
 
 import { resolveAccount } from '../resolvers/account';
+import { AstConfig } from './ast';
 
 export type AccountQueryArgs = {
     address: Address;
@@ -12,7 +13,7 @@ export type AccountQueryArgs = {
     minContextSlot?: Slot;
 };
 
-export const accountTypeDefs = /* GraphQL */ `
+const accountTypeDefs = /* GraphQL */ `
     # Account interface
     interface Account {
         address: Address
@@ -191,87 +192,104 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 `;
 
-export const accountResolvers = {
-    Account: {
-        __resolveType(account: { encoding: string; programName: string; accountType: string }) {
-            if (account.encoding === 'base58') {
-                return 'AccountBase58';
-            }
-            if (account.encoding === 'base64') {
+function accountResolvers(resolveCustomAccountTypeExtension?: (obj: unknown) => string) {
+    // TODO: This may not be the best default setup.
+    const resolveCustomAccountType = resolveCustomAccountTypeExtension ?? (_account => 'AccountBase64');
+    return {
+        Account: {
+            __resolveType(account: { encoding: string; programName: string; accountType: string }) {
+                if (account.encoding === 'base58') {
+                    return 'AccountBase58';
+                }
+                if (account.encoding === 'base64') {
+                    return 'AccountBase64';
+                }
+                if (account.encoding === 'base64+zstd') {
+                    return 'AccountBase64Zstd';
+                }
+                if (account.encoding === 'jsonParsed') {
+                    if (account.programName === 'nonce') {
+                        return 'NonceAccount';
+                    }
+                    if (account.accountType === 'mint' && account.programName === 'spl-token') {
+                        return 'MintAccount';
+                    }
+                    if (account.accountType === 'account' && account.programName === 'spl-token') {
+                        return 'TokenAccount';
+                    }
+                    if (account.programName === 'stake') {
+                        return 'StakeAccount';
+                    }
+                    if (account.accountType === 'vote' && account.programName === 'vote') {
+                        return 'VoteAccount';
+                    }
+                    if (account.accountType === 'lookupTable' && account.programName === 'address-lookup-table') {
+                        return 'LookupTableAccount';
+                    }
+                    return resolveCustomAccountType(account);
+                }
                 return 'AccountBase64';
-            }
-            if (account.encoding === 'base64+zstd') {
-                return 'AccountBase64Zstd';
-            }
-            if (account.encoding === 'jsonParsed') {
-                if (account.programName === 'nonce') {
-                    return 'NonceAccount';
-                }
-                if (account.accountType === 'mint' && account.programName === 'spl-token') {
-                    return 'MintAccount';
-                }
-                if (account.accountType === 'account' && account.programName === 'spl-token') {
-                    return 'TokenAccount';
-                }
-                if (account.programName === 'stake') {
-                    return 'StakeAccount';
-                }
-                if (account.accountType === 'vote' && account.programName === 'vote') {
-                    return 'VoteAccount';
-                }
-                if (account.accountType === 'lookupTable' && account.programName === 'address-lookup-table') {
-                    return 'LookupTableAccount';
-                }
-            }
-            return 'AccountBase64';
+            },
         },
-    },
-    AccountBase58: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64Zstd: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    NonceAccount: {
-        authority: resolveAccount('authority'),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    LookupTableAccount: {
-        authority: resolveAccount('authority'),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    MintAccount: {
-        freezeAuthority: resolveAccount('freezeAuthority'),
-        mintAuthority: resolveAccount('mintAuthority'),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    TokenAccount: {
-        mint: resolveAccount('mint'),
-        owner: resolveAccount('owner'),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    StakeAccountDataMetaAuthorized: {
-        staker: resolveAccount('staker'),
-        withdrawer: resolveAccount('withdrawer'),
-    },
-    StakeAccountDataMetaLockup: {
-        custodian: resolveAccount('custodian'),
-    },
-    StakeAccountDataStakeDelegation: {
-        voter: resolveAccount('voter'),
-    },
-    StakeAccount: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    VoteAccountDataAuthorizedVoter: {
-        authorizedVoter: resolveAccount('authorizedVoter'),
-    },
-    VoteAccount: {
-        authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
-        node: resolveAccount('nodePubkey'),
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-};
+        AccountBase58: {
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        AccountBase64: {
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        AccountBase64Zstd: {
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        NonceAccount: {
+            authority: resolveAccount('authority'),
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        LookupTableAccount: {
+            authority: resolveAccount('authority'),
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        MintAccount: {
+            freezeAuthority: resolveAccount('freezeAuthority'),
+            mintAuthority: resolveAccount('mintAuthority'),
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        TokenAccount: {
+            mint: resolveAccount('mint'),
+            owner: resolveAccount('owner'),
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        StakeAccountDataMetaAuthorized: {
+            staker: resolveAccount('staker'),
+            withdrawer: resolveAccount('withdrawer'),
+        },
+        StakeAccountDataMetaLockup: {
+            custodian: resolveAccount('custodian'),
+        },
+        StakeAccountDataStakeDelegation: {
+            voter: resolveAccount('voter'),
+        },
+        StakeAccount: {
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+        VoteAccountDataAuthorizedVoter: {
+            authorizedVoter: resolveAccount('authorizedVoter'),
+        },
+        VoteAccount: {
+            authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
+            node: resolveAccount('nodePubkey'),
+            ownerProgram: resolveAccount('ownerProgram'),
+        },
+    };
+}
+
+export function buildAccountSchema(accounts?: AstConfig): [Record<string, unknown>, string] {
+    if (accounts) {
+        const resolvers = {
+            ...accountResolvers(accounts.resolveTypeExtension),
+            ...accounts.resolvers,
+        };
+        const typeDefs = [accountTypeDefs, ...accounts.typeDefs].join('\n');
+        return [resolvers, typeDefs];
+    }
+    return [accountResolvers(), accountTypeDefs];
+}

@@ -1604,6 +1604,71 @@ export const mockTransactionVote = {
     },
 };
 
+export const mockTransactionCreateBet = {
+    blockTime: 1699618507,
+    meta: {
+        computeUnitsConsumed: 53355,
+        err: null,
+        fee: 5000,
+        innerInstructions: [],
+        logMessages: [],
+        postBalances: [113383490000, 23942400, 1169280, 1141440],
+        postTokenBalances: [],
+        preBalances: [113383495000, 23942400, 1169280, 1141440],
+        preTokenBalances: [],
+        rewards: [],
+        status: {
+            Ok: null,
+        },
+    },
+    slot: 257318391,
+    transaction: {
+        message: {
+            accountKeys: [
+                {
+                    pubkey: 'HUZu4xMSHbxTWbkXR6jkGdjvDPJLjrpSNXSoUFBRgjWs',
+                    signer: true,
+                    source: 'transaction',
+                    writable: true,
+                },
+                {
+                    pubkey: '3LuSbvThg5STSvcqTFNG74pifPs9cz2kT6msLA7trkiz',
+                    signer: false,
+                    source: 'transaction',
+                    writable: true,
+                },
+                {
+                    pubkey: 'SysvarC1ock11111111111111111111111111111111',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+                {
+                    pubkey: 'gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+            ],
+            instructions: [
+                {
+                    accounts: [
+                        'HUZu4xMSHbxTWbkXR6jkGdjvDPJLjrpSNXSoUFBRgjWs',
+                        'DMyZyzfNR1uhqYcFGrNftirkveCbyNVLnCB8HgShYz4V',
+                        'SysvarC1ock11111111111111111111111111111111',
+                    ],
+                    data: '6mJFQCt94hG4CKNYKgVcwo7gRuVPWDv2unmQd4jq8zWK3wQZG54k2b',
+                    programId: 'gSbePebfvPy7tRqimPoVecS2UsBvYv46ynrzWocc92s',
+                    stackHeight: null,
+                },
+            ],
+            recentBlockhash: 'ETbinvUP8hqHssm4wHePZnEYupJncfuqn8YdY9uKkYow',
+        },
+        signatures: ['DC4yP5xEUhHuzSDq8fk2TznnMxy4DJm4M5qSzmnuPngLtnn8jH8qu4MEjmie2piiksEGwe98CawKUHuR7VQJ1Nt'],
+    },
+    version: 'legacy',
+};
+
 const mockRewards = [
     {
         commission: 0.1,
