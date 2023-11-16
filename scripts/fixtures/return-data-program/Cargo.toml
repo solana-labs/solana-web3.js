@@ -1,0 +1,11 @@
+[package]
+name = "return-data-program"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+borsh = "0.10"
+solana-program = "1.17.5"

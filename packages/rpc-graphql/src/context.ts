@@ -3,11 +3,13 @@ import { GraphQLResolveInfo } from 'graphql';
 import { createAccountLoader } from './loaders/account';
 import { createBlockLoader } from './loaders/block';
 import { createProgramAccountsLoader } from './loaders/program-accounts';
+import { createSimulateLoader } from './loaders/simulate';
 import { createTransactionLoader } from './loaders/transaction';
 import { createRpcGraphQL } from './rpc';
 import { AccountQueryArgs } from './schema/account';
 import { BlockQueryArgs } from './schema/block';
 import { ProgramAccountsQueryArgs } from './schema/program-accounts';
+import { SimulateQueryArgs } from './schema/simulate';
 import { TransactionQueryArgs } from './schema/transaction';
 
 export type Rpc = Parameters<typeof createRpcGraphQL>[0];
@@ -18,6 +20,7 @@ type RpcGraphQLLoaders = {
     account: Loader<AccountQueryArgs>;
     block: Loader<BlockQueryArgs>;
     programAccounts: Loader<ProgramAccountsQueryArgs>;
+    simulate: Loader<SimulateQueryArgs>;
     transaction: Loader<TransactionQueryArgs>;
 };
 
@@ -32,6 +35,7 @@ export function createSolanaGraphQLContext(rpc: Rpc): RpcGraphQLContext {
             account: createAccountLoader(rpc),
             block: createBlockLoader(rpc),
             programAccounts: createProgramAccountsLoader(rpc),
+            simulate: createSimulateLoader(rpc),
             transaction: createTransactionLoader(rpc),
         },
         rpc,

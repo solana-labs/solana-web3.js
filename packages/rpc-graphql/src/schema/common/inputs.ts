@@ -10,6 +10,11 @@ export const inputTypeDefs = /* GraphQL */ `
         encoding: AccountEncoding
         offset: BigInt
     }
+
+    input SimulateAccounts {
+        addresses: [Address]
+        encoding: AccountEncoding
+    }
 `;
 
 export const inputResolvers = {};

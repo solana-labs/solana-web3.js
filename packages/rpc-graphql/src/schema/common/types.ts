@@ -49,6 +49,11 @@ export const commonTypeDefs = /* GraphQL */ `
         uiTokenAmount: TokenAmount
     }
 
+    enum SimulationEncoding {
+        BASE_58
+        BASE_64
+    }
+
     enum TransactionEncoding {
         BASE_58
         BASE_64

@@ -9,6 +9,7 @@ import { scalarResolvers, scalarTypeDefs } from './common/scalars';
 import { commonResolvers, commonTypeDefs } from './common/types';
 import { instructionResolvers, instructionTypeDefs } from './instruction';
 import { ProgramAccountsQueryArgs } from './program-accounts';
+import { SimulateQueryArgs, simulateResolvers, simulateTypeDefs } from './simulate';
 import { TransactionQueryArgs, transactionResolvers, transactionTypeDefs } from './transaction';
 
 // prettier-ignore
@@ -35,6 +36,15 @@ const schemaTypeDefs = /* GraphQL */ `
             filters: [ProgramAccountsFilter]
             minContextSlot: BigInt
         ): [Account]
+        simulate(
+            transaction: String!
+            accounts: SimulateAccounts
+            commitment: Commitment
+            encoding: SimulationEncoding
+            minContextSlot: BigInt
+            replaceRecentBlockhash: Boolean
+            sigVerify: Boolean
+        ): SimulationResult
         transaction(
             signature: String!
             commitment: Commitment
@@ -74,6 +84,14 @@ const schemaResolvers = {
         ) {
             return context.loaders.programAccounts.load(args, info);
         },
+        simulate(
+            _: unknown,
+            args: SimulateQueryArgs,
+            context: RpcGraphQLContext,
+            info?: GraphQLResolveInfo
+        ) {
+            return context.loaders.simulate.load(args, info);
+        },
         transaction(
             _: unknown,
             args: TransactionQueryArgs,
@@ -95,6 +113,7 @@ export function createSolanaGraphQLSchema() {
             ...instructionResolvers,
             ...scalarResolvers,
             ...schemaResolvers,
+            ...simulateResolvers,
             ...transactionResolvers,
         },
         typeDefs: [
@@ -105,6 +124,7 @@ export function createSolanaGraphQLSchema() {
             instructionTypeDefs,
             scalarTypeDefs,
             schemaTypeDefs,
+            simulateTypeDefs,
             transactionTypeDefs,
         ],
     });

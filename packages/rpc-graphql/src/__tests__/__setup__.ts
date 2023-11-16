@@ -1,4 +1,26 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { address, getAddressFromPublicKey } from '@solana/addresses';
+import { getStringCodec } from '@solana/codecs-strings';
+import { pipe } from '@solana/functional';
+import { AccountRole } from '@solana/instructions';
+import { generateKeyPair } from '@solana/keys';
+import {
+    createSolanaRpcSubscriptionsApi_UNSTABLE,
+    SolanaRpcMethods,
+    SolanaRpcSubscriptions,
+    SolanaRpcSubscriptionsUnstable,
+} from '@solana/rpc-core';
+import { createJsonSubscriptionRpc, createWebSocketTransport } from '@solana/rpc-transport';
+import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { lamports } from '@solana/rpc-types';
+import {
+    createTransaction,
+    getBase64EncodedWireTransaction,
+    prependTransactionInstruction,
+    setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+    signTransaction,
+} from '@solana/transactions';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mockRpcResponse = (result: any) => ({
@@ -1719,3 +1741,76 @@ export const mockBlockNone = {
         },
     ],
 };
+
+function getRpcSubscriptions() {
+    return createJsonSubscriptionRpc<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>({
+        api: createSolanaRpcSubscriptionsApi_UNSTABLE(),
+        transport: createWebSocketTransport({
+            sendBufferHighWatermark: Number.POSITIVE_INFINITY,
+            url: 'ws://127.0.0.1:8900',
+        }),
+    });
+}
+
+export async function getCryptoKeyPairWithAirdrop(rpc: Rpc<SolanaRpcMethods>) {
+    const keyPair = await generateKeyPair();
+    const address = await getAddressFromPublicKey(keyPair.publicKey);
+    const airdropSignature = await rpc
+        .requestAirdrop(address, lamports(100_000_000n), { commitment: 'confirmed' })
+        .send();
+    const rpcSubscriptions = getRpcSubscriptions();
+    const abortController = new AbortController();
+    const poll = await rpcSubscriptions
+        .signatureNotifications(airdropSignature, { commitment: 'confirmed' })
+        .subscribe({
+            abortSignal: abortController.signal,
+        });
+    for await (const res of poll) {
+        if (res.value.err === null) {
+            abortController.abort();
+            break;
+        }
+    }
+    return keyPair;
+}
+
+async function buildSignAndSerializeMockTransaction(
+    rpc: Rpc<SolanaRpcMethods>,
+    feePayer: CryptoKeyPair,
+    instruction: Parameters<typeof prependTransactionInstruction>[0],
+    additionalSigners: CryptoKeyPair[] = []
+) {
+    const feePayerAddress = await getAddressFromPublicKey(feePayer.publicKey);
+    const recentBlockhash = await rpc
+        .getLatestBlockhash()
+        .send()
+        .then(res => res.value);
+
+    const transaction = pipe(
+        createTransaction({ version: 0 }),
+        tx => setTransactionFeePayer(feePayerAddress, tx),
+        tx => setTransactionLifetimeUsingBlockhash(recentBlockhash, tx),
+        tx => prependTransactionInstruction(instruction, tx)
+    );
+
+    const signers = [feePayer, ...additionalSigners];
+    const signedTransaction = await signTransaction(signers, transaction);
+    return getBase64EncodedWireTransaction(signedTransaction);
+}
+
+export async function getMockTransactionMemo(rpc: Rpc<SolanaRpcMethods>, feePayer: CryptoKeyPair, memo: string) {
+    const accountAddress = await getAddressFromPublicKey(feePayer.publicKey);
+    const accounts = [{ address: accountAddress, role: AccountRole.READONLY_SIGNER }];
+    const data = getStringCodec().encode(memo);
+    const programAddress = address('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
+    return buildSignAndSerializeMockTransaction(rpc, feePayer, { accounts, data, programAddress });
+}
+
+export async function getMockTransactionReturnData(rpc: Rpc<SolanaRpcMethods>, feePayer: CryptoKeyPair) {
+    const programAddress = address('7aF53SYcGeBw2FsUKiCqWR5m1ABZ9qsTXxLoD5NRqaS8');
+    return buildSignAndSerializeMockTransaction(rpc, feePayer, {
+        accounts: [],
+        data: new Uint8Array(0),
+        programAddress,
+    });
+}

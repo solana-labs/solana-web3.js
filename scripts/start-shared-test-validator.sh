@@ -10,6 +10,7 @@ SHARED_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.sharedlock"
 TEST_VALIDATOR=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/.solana/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
 FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
+FIXTURE_RETURN_DATA_PROGRAM="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)/return_data_program.so"
 
 mkdir -p $LOCK_DIR
 
@@ -19,7 +20,7 @@ mkdir -p $LOCK_DIR
   flock -s 200 || exit 1
   (
     if flock -nx 200; then
-      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --account-dir $FIXTURE_ACCOUNTS_DIR --rpc-pubsub-enable-vote-subscription --rpc-pubsub-enable-block-subscription >/dev/null &
+      $TEST_VALIDATOR --ledger $TEST_VALIDATOR_LEDGER --reset --quiet --account-dir $FIXTURE_ACCOUNTS_DIR --upgradeable-program "7aF53SYcGeBw2FsUKiCqWR5m1ABZ9qsTXxLoD5NRqaS8" $FIXTURE_RETURN_DATA_PROGRAM "none" --rpc-pubsub-enable-vote-subscription --rpc-pubsub-enable-block-subscription >/dev/null &
       validator_pid=$!
       echo "Started test validator (PID $validator_pid)"
       wait

@@ -2,13 +2,14 @@ import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAc
 import { GetBlockApi } from '@solana/rpc-core/dist/types/rpc-methods/getBlock';
 import { GetProgramAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getProgramAccounts';
 import { GetTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/getTransaction';
+import { SimulateTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/simulateTransaction';
 import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
 import { graphql, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
 import { createSolanaGraphQLSchema } from './schema';
 
-type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi;
+type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi & SimulateTransactionApi;
 
 export interface RpcGraphQL {
     context: RpcGraphQLContext;
