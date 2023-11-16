@@ -1111,6 +1111,12 @@ importers:
 
   packages/library-legacy-sham:
     dependencies:
+      '@noble/ed25519':
+        specifier: ^2.0.0
+        version: 2.0.0
+      '@noble/hashes':
+        specifier: ^1.3.2
+        version: 1.3.2
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
@@ -4374,6 +4380,10 @@ packages:
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
     dependencies:
       '@noble/hashes': 1.3.2
+
+  /@noble/ed25519@2.0.0:
+    resolution: {integrity: sha512-/extjhkwFupyopDrt80OMWKdLgP429qLZj+z6sYJz90rF2Iz0gjZh2ArMKPImUl13Kx+0EXI2hN9T/KJV0/Zng==}
+    dev: false
 
   /@noble/hashes@1.3.1:
     resolution: {integrity: sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==}
