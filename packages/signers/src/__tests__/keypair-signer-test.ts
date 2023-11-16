@@ -2,7 +2,7 @@ import 'test-matchers/toBeFrozenObject';
 
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
-import { CompilableTransaction, signTransaction } from '@solana/transactions';
+import { CompilableTransaction, partiallySignTransaction } from '@solana/transactions';
 
 import {
     assertIsKeyPairSigner,
@@ -27,7 +27,7 @@ jest.mock('@solana/keys', () => ({
 }));
 jest.mock('@solana/transactions', () => ({
     ...jest.requireActual('@solana/transactions'),
-    signTransaction: jest.fn(),
+    partiallySignTransaction: jest.fn(),
 }));
 
 describe('isKeyPairSigner', () => {
@@ -143,13 +143,13 @@ describe('createSignerFromKeyPair', () => {
         // And given we have a couple of mock transactions to sign.
         const mockTransactions = [{} as CompilableTransaction, {} as CompilableTransaction];
 
-        // And given we mock the next two calls of the signTransactions function.
+        // And given we mock the next two calls of the partiallySignTransaction function.
         const mockSignatures = [new Uint8Array([101, 101, 101]), new Uint8Array([201, 201, 201])] as SignatureBytes[];
-        jest.mocked(signTransaction).mockResolvedValueOnce({
+        jest.mocked(partiallySignTransaction).mockResolvedValueOnce({
             ...mockTransactions[0],
             signatures: { [myAddress]: mockSignatures[0] },
         });
-        jest.mocked(signTransaction).mockResolvedValueOnce({
+        jest.mocked(partiallySignTransaction).mockResolvedValueOnce({
             ...mockTransactions[1],
             signatures: { [myAddress]: mockSignatures[1] },
         });
@@ -165,10 +165,10 @@ describe('createSignerFromKeyPair', () => {
         expect(signatureDictionaries[0]).toBeFrozenObject();
         expect(signatureDictionaries[1]).toBeFrozenObject();
 
-        // And signTransactions was called twice with the expected parameters.
-        expect(jest.mocked(signTransaction)).toHaveBeenCalledTimes(2);
-        expect(jest.mocked(signTransaction)).toHaveBeenNthCalledWith(1, [myKeyPair], mockTransactions[0]);
-        expect(jest.mocked(signTransaction)).toHaveBeenNthCalledWith(2, [myKeyPair], mockTransactions[1]);
+        // And partiallySignTransaction was called twice with the expected parameters.
+        expect(jest.mocked(partiallySignTransaction)).toHaveBeenCalledTimes(2);
+        expect(jest.mocked(partiallySignTransaction)).toHaveBeenNthCalledWith(1, [myKeyPair], mockTransactions[0]);
+        expect(jest.mocked(partiallySignTransaction)).toHaveBeenNthCalledWith(2, [myKeyPair], mockTransactions[1]);
     });
 });
 

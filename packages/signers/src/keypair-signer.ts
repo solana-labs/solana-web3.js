@@ -1,6 +1,6 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, signBytes } from '@solana/keys';
-import { signTransaction } from '@solana/transactions';
+import { partiallySignTransaction } from '@solana/transactions';
 
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
@@ -48,7 +48,7 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
         signTransactions: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
-                    const signedTransaction = await signTransaction([keyPair], transaction);
+                    const signedTransaction = await partiallySignTransaction([keyPair], transaction);
                     return Object.freeze({ [address]: signedTransaction.signatures[address] });
                 })
             ),
