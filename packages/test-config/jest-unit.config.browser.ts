@@ -26,7 +26,7 @@ const config: Partial<Config.InitialProjectOptions> = {
         path.resolve(__dirname, 'setup-secure-context.ts'),
         path.resolve(__dirname, 'setup-text-encoder.ts'),
     ],
-    testEnvironment: 'jsdom',
+    testEnvironment: path.resolve(__dirname, 'browser-environment.ts'),
     testEnvironmentOptions: {},
 };
 
