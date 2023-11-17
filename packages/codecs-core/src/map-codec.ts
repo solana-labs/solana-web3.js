@@ -5,8 +5,9 @@ import { Codec, createCodec, createDecoder, createEncoder, Decoder, Encoder } fr
  */
 export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): Encoder<U> {
     return createEncoder({
-        ...encoder,
-        getSize: (value: U) => encoder.getSize(unmap(value)),
+        ...(encoder.fixedSize === null
+            ? { ...encoder, variableSize: (value: U) => encoder.variableSize(unmap(value)) }
+            : encoder),
         write: (value: U, bytes, offset) => encoder.write(unmap(value), bytes, offset),
     });
 }
@@ -45,9 +46,7 @@ export function mapCodec<NewFrom, OldFrom, NewTo extends NewFrom = NewFrom, OldT
     map?: (value: OldTo, bytes: Uint8Array, offset: number) => NewTo,
 ): Codec<NewFrom, NewTo> {
     return createCodec({
-        ...codec,
-        getSize: mapEncoder(codec, unmap).getSize,
+        ...mapEncoder(codec, unmap),
         read: map ? mapDecoder(codec, map).read : (codec.read as unknown as Decoder<NewTo>['read']),
-        write: mapEncoder(codec, unmap).write,
     });
 }

@@ -4,47 +4,62 @@
 export type Offset = number;
 
 /**
- * The shared attributes between codecs, encoders and decoders.
- */
-export type CodecData = {
-    /** An optional description for the codec. */
-    description?: string;
-    /** The fixed size of the encoded value in bytes, or `null` if it is variable. */
-    fixedSize: number | null;
-    /** The maximum size an encoded value can be in bytes, or `null` if it is variable. */
-    maxSize: number | null;
-};
-
-/**
  * An object that can encode a value to a `Uint8Array`.
  */
-export type Encoder<T> = CodecData & {
-    /** Returns the total size of the encoded value in bytes. */
-    getSize: (value: T) => number;
-
+export type Encoder<T> = EncoderSize<T> & {
+    /** Encode the provided value and return the encoded bytes directly. */
+    readonly encode: (value: T) => Uint8Array;
     /**
      * Writes the encoded value into the provided byte array at the given offset.
      * Returns the offset of the next byte after the encoded value.
      */
-    write: (value: T, bytes: Uint8Array, offset: Offset) => Offset;
-
-    /** The function that encodes a value into bytes. */
-    encode: (value: T) => Uint8Array;
+    readonly write: (value: T, bytes: Uint8Array, offset: Offset) => Offset;
 };
+
+/**
+ * Describes the size of an Encoder, either fixed or variable.
+ */
+export type EncoderSize<T> =
+    | {
+          /** The fixed size of the encoded value in bytes, if applicable. */
+          readonly fixedSize: number;
+      }
+    | {
+          /** Otherwise, a null fixedSize indicates it's a variable size encoder. */
+          readonly fixedSize: null;
+          /** The maximum size an encoded value can be in bytes, if applicable. */
+          readonly maxSize?: number;
+          /** The total size of the encoded value in bytes. */
+          readonly variableSize: (value: T) => number;
+      };
 
 /**
  * An object that can decode a value from a `Uint8Array`.
  */
-export type Decoder<T> = CodecData & {
+export type Decoder<T> = DecoderSize & {
+    /** Decodes the provided byte array at the given offset (or zero) and returns the value directly. */
+    readonly decode: (bytes: Uint8Array, offset?: Offset) => T;
     /**
      * Reads the encoded value from the provided byte array at the given offset.
      * Returns the decoded value and the offset of the next byte after the encoded value.
      */
-    read: (bytes: Uint8Array, offset: Offset) => [T, Offset];
-
-    /** The function that decodes a value from bytes. */
-    decode: (bytes: Uint8Array, offset?: Offset) => T;
+    readonly read: (bytes: Uint8Array, offset: Offset) => [T, Offset];
 };
+
+/**
+ * Describes the size of an Decoder, either fixed or variable.
+ */
+export type DecoderSize =
+    | {
+          /** The fixed size of the encoded value in bytes, if applicable. */
+          readonly fixedSize: number;
+      }
+    | {
+          /** Otherwise, a null fixedSize indicates it's a variable size encoder. */
+          readonly fixedSize: null;
+          /** The maximum size an encoded value can be in bytes, if applicable. */
+          readonly maxSize?: number;
+      };
 
 /**
  * An object that can encode and decode a value to and from a `Uint8Array`.
@@ -58,89 +73,60 @@ export type Decoder<T> = CodecData & {
 export type Codec<From, To extends From = From> = Encoder<From> & Decoder<To>;
 
 /**
- * Defines common configurations for codec factories.
- */
-export type BaseCodecConfig = {
-    /** A custom description for the Codec. */
-    description?: string;
-};
-
-/**
  * Wraps all the attributes of an object in Codecs.
  */
 export type WrapInCodec<T, U extends T = T> = {
     [P in keyof T]: Codec<T[P], U[P]>;
 };
 
-type EncoderInput<T> =
-    | {
-          description?: string;
-          fixedSize: number;
-          write: Encoder<T>['write'];
-      }
-    | {
-          description?: string;
-          maxSize?: number | null;
-          getSize: Encoder<T>['getSize'];
-          write: Encoder<T>['write'];
-      };
-
 /**
- * Fills the `encode` function of an encoder based on the provided `getSize` and `write` functions.
+ * Get the encoded size of a given value in bytes.
  */
-export function createEncoder<T>(encoder: EncoderInput<T>): Encoder<T> {
-    return {
-        description: encoder.description,
-        encode: (value: T): Uint8Array => {
-            const size = 'fixedSize' in encoder ? encoder.fixedSize : encoder.getSize(value);
-            const bytes = new Uint8Array(size).fill(0);
+export function getEncodedSize<T>(value: T, encoder: EncoderSize<T>): number {
+    return encoder.fixedSize !== null ? encoder.fixedSize : encoder.variableSize(value);
+}
+
+/** Fills the missing `encode` function using the existing `write` function. */
+export function createEncoder<T>(encoder: EncoderSize<T> & Omit<Encoder<T>, 'encode'>): Encoder<T> {
+    return Object.freeze({
+        ...(encoder.fixedSize === null
+            ? { fixedSize: null, maxSize: encoder.maxSize, variableSize: encoder.variableSize }
+            : { fixedSize: encoder.fixedSize }),
+        encode: (value: T) => {
+            const bytes = new Uint8Array(getEncodedSize(value, encoder));
             encoder.write(value, bytes, 0);
             return bytes;
         },
-        fixedSize: 'fixedSize' in encoder ? encoder.fixedSize : null,
-        getSize: 'fixedSize' in encoder ? () => encoder.fixedSize : encoder.getSize,
-        maxSize: 'fixedSize' in encoder ? encoder.fixedSize : encoder.maxSize ?? null,
         write: encoder.write,
-    };
+    });
 }
 
-type DecoderInput<T> =
-    | {
-          description?: string;
-          fixedSize: number;
-          read: Decoder<T>['read'];
-      }
-    | {
-          description?: string;
-          fixedSize: null;
-          maxSize?: number | null;
-          read: Decoder<T>['read'];
-      };
-
-/**
- * Fills the `decode` function of a decoder based on the provided `read` function.
- */
-export function createDecoder<T>(decoder: DecoderInput<T>): Decoder<T> {
-    return {
-        decode: (bytes: Uint8Array, offset = 0): T => decoder.read(bytes, offset)[0],
-        description: decoder.description,
-        fixedSize: decoder.fixedSize,
-        maxSize: decoder.fixedSize !== null ? decoder.fixedSize : decoder.maxSize ?? null,
+/** Fills the missing `decode` function using the existing `read` function. */
+export function createDecoder<T>(decoder: DecoderSize & Omit<Decoder<T>, 'decode'>): Decoder<T> {
+    return Object.freeze({
+        ...(decoder.fixedSize === null
+            ? { fixedSize: null, maxSize: decoder.maxSize }
+            : { fixedSize: decoder.fixedSize }),
+        decode: (bytes: Uint8Array, offset?: Offset) => decoder.read(bytes, offset ?? 0)[0],
         read: decoder.read,
-    };
+    });
 }
 
-type CodecInput<T, U extends T = T> = EncoderInput<T> & {
-    read: Decoder<U>['read'];
-};
-
-/**
- * Fills the `encode` and `decode` functions of a codec based on the provided `getSize`, `write` and `read` functions.
- */
-export function createCodec<T, U extends T = T>(codec: CodecInput<T, U>): Codec<T, U> {
-    return {
-        ...createEncoder(codec),
-        decode: (bytes: Uint8Array, offset = 0): U => codec.read(bytes, offset)[0],
+/** Fills the missing `encode` and `decode` function using the existing `write` and `read` functions. */
+export function createCodec<From, To extends From = From>(
+    codec: EncoderSize<From> & Omit<Codec<From, To>, 'encode' | 'decode'>
+): Codec<From, To> {
+    return Object.freeze({
+        ...(codec.fixedSize === null
+            ? { fixedSize: null, maxSize: codec.maxSize, variableSize: codec.variableSize }
+            : { fixedSize: codec.fixedSize }),
+        decode: (bytes: Uint8Array, offset?: Offset) => codec.read(bytes, offset ?? 0)[0],
+        encode: (value: From) => {
+            const bytes = new Uint8Array(getEncodedSize(value, codec));
+            codec.write(value, bytes, 0);
+            return bytes;
+        },
         read: codec.read,
-    };
+        write: codec.write,
+    });
 }
