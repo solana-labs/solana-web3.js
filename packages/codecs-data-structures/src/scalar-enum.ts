@@ -1,6 +1,6 @@
 import {
     assertByteArrayIsNotEmptyForCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     CodecData,
     combineCodec,
@@ -20,9 +20,9 @@ import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder }
  */
 export type ScalarEnum<T> = ({ [key: number | string]: string | number | T } | number | T) & NonNullable<unknown>;
 
-/** Defines the options for scalar enum codecs. */
-export type ScalarEnumCodecOptions<TDiscriminator extends NumberCodec | NumberEncoder | NumberDecoder> =
-    BaseCodecOptions & {
+/** Defines the config for scalar enum codecs. */
+export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberEncoder | NumberDecoder> =
+    BaseCodecConfig & {
         /**
          * The codec to use for the enum discriminator.
          * @defaultValue u8 discriminator.
@@ -67,15 +67,15 @@ function scalarEnumCoderHelper<T>(
  * Creates a scalar enum encoder.
  *
  * @param constructor - The constructor of the scalar enum.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getScalarEnumEncoder<T>(
     constructor: ScalarEnum<T>,
-    options: ScalarEnumCodecOptions<NumberEncoder> = {}
+    config: ScalarEnumCodecConfig<NumberEncoder> = {}
 ): Encoder<T> {
-    const prefix = options.size ?? getU8Encoder();
+    const prefix = config.size ?? getU8Encoder();
     const { description, fixedSize, maxSize, minRange, maxRange, stringValues, enumKeys, enumValues } =
-        scalarEnumCoderHelper(constructor, prefix, options.description);
+        scalarEnumCoderHelper(constructor, prefix, config.description);
     return {
         description,
         encode: (value: T) => {
@@ -104,17 +104,17 @@ export function getScalarEnumEncoder<T>(
  * Creates a scalar enum decoder.
  *
  * @param constructor - The constructor of the scalar enum.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getScalarEnumDecoder<T>(
     constructor: ScalarEnum<T>,
-    options: ScalarEnumCodecOptions<NumberDecoder> = {}
+    config: ScalarEnumCodecConfig<NumberDecoder> = {}
 ): Decoder<T> {
-    const prefix = options.size ?? getU8Decoder();
+    const prefix = config.size ?? getU8Decoder();
     const { description, fixedSize, maxSize, minRange, maxRange, isNumericEnum, enumValues } = scalarEnumCoderHelper(
         constructor,
         prefix,
-        options.description
+        config.description
     );
     return {
         decode: (bytes: Uint8Array, offset = 0) => {
@@ -141,11 +141,11 @@ export function getScalarEnumDecoder<T>(
  * Creates a scalar enum codec.
  *
  * @param constructor - The constructor of the scalar enum.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getScalarEnumCodec<T>(
     constructor: ScalarEnum<T>,
-    options: ScalarEnumCodecOptions<NumberCodec> = {}
+    config: ScalarEnumCodecConfig<NumberCodec> = {}
 ): Codec<T> {
-    return combineCodec(getScalarEnumEncoder(constructor, options), getScalarEnumDecoder(constructor, options));
+    return combineCodec(getScalarEnumEncoder(constructor, config), getScalarEnumDecoder(constructor, config));
 }

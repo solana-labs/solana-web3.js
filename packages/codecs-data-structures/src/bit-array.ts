@@ -1,14 +1,14 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     combineCodec,
     Decoder,
     Encoder,
 } from '@solana/codecs-core';
 
-/** Defines the options for bitArray codecs. */
-export type BitArrayCodecOptions = BaseCodecOptions & {
+/** Defines the config for bitArray codecs. */
+export type BitArrayCodecConfig = BaseCodecConfig & {
     /**
      * Whether to read the bits in reverse order.
      * @defaultValue `false`
@@ -20,14 +20,14 @@ export type BitArrayCodecOptions = BaseCodecOptions & {
  * Encodes an array of booleans into bits.
  *
  * @param size - The amount of bytes to use for the bit array.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export const getBitArrayEncoder = (size: number, options: BitArrayCodecOptions | boolean = {}): Encoder<boolean[]> => {
-    const parsedOptions: BitArrayCodecOptions = typeof options === 'boolean' ? { backward: options } : options;
-    const backward = parsedOptions.backward ?? false;
+export const getBitArrayEncoder = (size: number, config: BitArrayCodecConfig | boolean = {}): Encoder<boolean[]> => {
+    const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
+    const backward = parsedConfig.backward ?? false;
     const backwardSuffix = backward ? '; backward' : '';
     return {
-        description: parsedOptions.description ?? `bitArray(${size}${backwardSuffix})`,
+        description: parsedConfig.description ?? `bitArray(${size}${backwardSuffix})`,
         encode(value: boolean[]) {
             const bytes: number[] = [];
 
@@ -55,11 +55,11 @@ export const getBitArrayEncoder = (size: number, options: BitArrayCodecOptions |
  * Decodes bits into an array of booleans.
  *
  * @param size - The amount of bytes to use for the bit array.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
-export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions | boolean = {}): Decoder<boolean[]> => {
-    const parsedOptions: BitArrayCodecOptions = typeof options === 'boolean' ? { backward: options } : options;
-    const backward = parsedOptions.backward ?? false;
+export const getBitArrayDecoder = (size: number, config: BitArrayCodecConfig | boolean = {}): Decoder<boolean[]> => {
+    const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
+    const backward = parsedConfig.backward ?? false;
     const backwardSuffix = backward ? '; backward' : '';
     return {
         decode(bytes, offset = 0) {
@@ -82,7 +82,7 @@ export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions |
 
             return [booleans, offset + size];
         },
-        description: parsedOptions.description ?? `bitArray(${size}${backwardSuffix})`,
+        description: parsedConfig.description ?? `bitArray(${size}${backwardSuffix})`,
         fixedSize: size,
         maxSize: size,
     };
@@ -92,7 +92,7 @@ export const getBitArrayDecoder = (size: number, options: BitArrayCodecOptions |
  * An array of boolean codec that converts booleans to bits and vice versa.
  *
  * @param size - The amount of bytes to use for the bit array.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
-export const getBitArrayCodec = (size: number, options: BitArrayCodecOptions | boolean = {}): Codec<boolean[]> =>
-    combineCodec(getBitArrayEncoder(size, options), getBitArrayDecoder(size, options));
+export const getBitArrayCodec = (size: number, config: BitArrayCodecConfig | boolean = {}): Codec<boolean[]> =>
+    combineCodec(getBitArrayEncoder(size, config), getBitArrayDecoder(size, config));

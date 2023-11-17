@@ -7,12 +7,12 @@ import {
 } from '@solana/codecs-core';
 
 import { assertNumberIsBetweenForCodec } from './assertions';
-import { Endian, NumberCodecOptions, SingleByteNumberCodecOptions } from './common';
+import { Endian, NumberCodecConfig, SingleByteNumberCodecConfig } from './common';
 
 type NumberFactorySharedInput = {
     name: string;
     size: number;
-    options: SingleByteNumberCodecOptions | NumberCodecOptions;
+    config: SingleByteNumberCodecConfig | NumberCodecConfig;
 };
 
 type NumberFactoryEncoderInput<T> = NumberFactorySharedInput & {
@@ -29,12 +29,12 @@ function sharedNumberFactory(input: NumberFactorySharedInput): CodecData & { lit
     let defaultDescription: string = input.name;
 
     if (input.size > 1) {
-        littleEndian = !('endian' in input.options) || input.options.endian === Endian.LITTLE;
+        littleEndian = !('endian' in input.config) || input.config.endian === Endian.LITTLE;
         defaultDescription += littleEndian ? '(le)' : '(be)';
     }
 
     return {
-        description: input.options.description ?? defaultDescription,
+        description: input.config.description ?? defaultDescription,
         fixedSize: input.size,
         littleEndian,
         maxSize: input.size,

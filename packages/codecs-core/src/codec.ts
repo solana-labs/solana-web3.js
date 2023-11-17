@@ -46,9 +46,9 @@ export type Decoder<T> = CodecData & {
 export type Codec<From, To extends From = From> = Encoder<From> & Decoder<To>;
 
 /**
- * Defines common options for codec factories.
+ * Defines common configurations for codec factories.
  */
-export type BaseCodecOptions = {
+export type BaseCodecConfig = {
     /** A custom description for the Codec. */
     description?: string;
 };

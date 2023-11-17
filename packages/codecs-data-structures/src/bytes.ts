@@ -1,7 +1,7 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
     assertByteArrayIsNotEmptyForCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     combineCodec,
     Decoder,
@@ -12,8 +12,8 @@ import {
 } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-/** Defines the options for bytes codecs. */
-export type BytesCodecOptions<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for bytes codecs. */
+export type BytesCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The size of the byte array. It can be one of the following:
      * - a {@link NumberSerializer} that prefixes the byte array with its size.
@@ -27,12 +27,12 @@ export type BytesCodecOptions<TSize extends NumberCodec | NumberEncoder | Number
 /**
  * Encodes sized bytes.
  *
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getBytesEncoder(options: BytesCodecOptions<NumberEncoder> = {}): Encoder<Uint8Array> {
-    const size = options.size ?? 'variable';
+export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): Encoder<Uint8Array> {
+    const size = config.size ?? 'variable';
     const sizeDescription = typeof size === 'object' ? size.description : `${size}`;
-    const description = options.description ?? `bytes(${sizeDescription})`;
+    const description = config.description ?? `bytes(${sizeDescription})`;
 
     const byteEncoder: Encoder<Uint8Array> = {
         description,
@@ -62,12 +62,12 @@ export function getBytesEncoder(options: BytesCodecOptions<NumberEncoder> = {}):
 /**
  * Decodes sized bytes.
  *
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
-export function getBytesDecoder(options: BytesCodecOptions<NumberDecoder> = {}): Decoder<Uint8Array> {
-    const size = options.size ?? 'variable';
+export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): Decoder<Uint8Array> {
+    const size = config.size ?? 'variable';
     const sizeDescription = typeof size === 'object' ? size.description : `${size}`;
-    const description = options.description ?? `bytes(${sizeDescription})`;
+    const description = config.description ?? `bytes(${sizeDescription})`;
 
     const byteDecoder: Decoder<Uint8Array> = {
         decode: (bytes: Uint8Array, offset = 0) => {
@@ -106,8 +106,8 @@ export function getBytesDecoder(options: BytesCodecOptions<NumberDecoder> = {}):
 /**
  * Creates a sized bytes codec.
  *
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
-export function getBytesCodec(options: BytesCodecOptions<NumberCodec> = {}): Codec<Uint8Array> {
-    return combineCodec(getBytesEncoder(options), getBytesDecoder(options));
+export function getBytesCodec(config: BytesCodecConfig<NumberCodec> = {}): Codec<Uint8Array> {
+    return combineCodec(getBytesEncoder(config), getBytesDecoder(config));
 }

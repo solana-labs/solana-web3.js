@@ -1,4 +1,4 @@
-import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 
 import { sumCodecSizes } from './utils';
 
@@ -23,8 +23,8 @@ export type StructToCodecTuple<T extends object, U extends T> = Array<
     }[keyof T]
 >;
 
-/** Defines the options for struct codecs. */
-export type StructCodecOptions = BaseCodecOptions;
+/** Defines the config for struct codecs. */
+export type StructCodecConfig = BaseCodecConfig;
 
 function structCodecHelper(fields: Array<[string | number | symbol, CodecData]>, description?: string): CodecData {
     const fieldDescriptions = fields.map(([name, codec]) => `${String(name)}: ${codec.description}`).join(', ');
@@ -40,14 +40,14 @@ function structCodecHelper(fields: Array<[string | number | symbol, CodecData]>,
  * Creates a encoder for a custom object.
  *
  * @param fields - The name and encoder of each field.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getStructEncoder<T extends object>(
     fields: StructToEncoderTuple<T>,
-    options: StructCodecOptions = {}
+    config: StructCodecConfig = {}
 ): Encoder<T> {
     return {
-        ...structCodecHelper(fields, options.description),
+        ...structCodecHelper(fields, config.description),
         encode: (struct: T) => {
             const fieldBytes = fields.map(([key, codec]) => codec.encode(struct[key]));
             return mergeBytes(fieldBytes);
@@ -59,14 +59,14 @@ export function getStructEncoder<T extends object>(
  * Creates a decoder for a custom object.
  *
  * @param fields - The name and decoder of each field.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getStructDecoder<T extends object>(
     fields: StructToDecoderTuple<T>,
-    options: StructCodecOptions = {}
+    config: StructCodecConfig = {}
 ): Decoder<T> {
     return {
-        ...structCodecHelper(fields, options.description),
+        ...structCodecHelper(fields, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             const struct: Partial<T> = {};
             fields.forEach(([key, codec]) => {
@@ -83,11 +83,11 @@ export function getStructDecoder<T extends object>(
  * Creates a codec for a custom object.
  *
  * @param fields - The name and codec of each field.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getStructCodec<T extends object, U extends T = T>(
     fields: StructToCodecTuple<T, U>,
-    options: StructCodecOptions = {}
+    config: StructCodecConfig = {}
 ): Codec<T, U> {
-    return combineCodec(getStructEncoder(fields, options), getStructDecoder(fields, options));
+    return combineCodec(getStructEncoder(fields, config), getStructDecoder(fields, config));
 }

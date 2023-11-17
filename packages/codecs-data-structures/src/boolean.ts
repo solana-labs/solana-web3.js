@@ -1,7 +1,7 @@
 import {
     assertByteArrayIsNotEmptyForCodec,
     assertFixedSizeCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     combineCodec,
     Decoder,
@@ -9,8 +9,8 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-/** Defines the options for boolean codecs. */
-export type BooleanCodecOptions<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for boolean codecs. */
+export type BooleanCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The number codec to delegate to.
      * @defaultValue u8 size.
@@ -21,14 +21,14 @@ export type BooleanCodecOptions<TSize extends NumberCodec | NumberEncoder | Numb
 /**
  * Encodes booleans.
  *
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getBooleanEncoder(options: BooleanCodecOptions<NumberEncoder> = {}): Encoder<boolean> {
-    const size = options.size ?? getU8Encoder();
+export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}): Encoder<boolean> {
+    const size = config.size ?? getU8Encoder();
     assertFixedSizeCodec(size, 'Codec [bool] requires a fixed size.');
 
     return {
-        description: options.description ?? `bool(${size.description})`,
+        description: config.description ?? `bool(${size.description})`,
         encode: (value: boolean) => size.encode(value ? 1 : 0),
         fixedSize: size.fixedSize,
         maxSize: size.fixedSize,
@@ -38,10 +38,10 @@ export function getBooleanEncoder(options: BooleanCodecOptions<NumberEncoder> = 
 /**
  * Decodes booleans.
  *
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
-export function getBooleanDecoder(options: BooleanCodecOptions<NumberDecoder> = {}): Decoder<boolean> {
-    const size = options.size ?? getU8Decoder();
+export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
+    const size = config.size ?? getU8Decoder();
     assertFixedSizeCodec(size, 'Codec [bool] requires a fixed size.');
 
     return {
@@ -50,7 +50,7 @@ export function getBooleanDecoder(options: BooleanCodecOptions<NumberDecoder> = 
             const [value, vOffset] = size.decode(bytes, offset);
             return [value === 1, vOffset];
         },
-        description: options.description ?? `bool(${size.description})`,
+        description: config.description ?? `bool(${size.description})`,
         fixedSize: size.fixedSize,
         maxSize: size.fixedSize,
     };
@@ -59,8 +59,8 @@ export function getBooleanDecoder(options: BooleanCodecOptions<NumberDecoder> = 
 /**
  * Creates a boolean codec.
  *
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
-export function getBooleanCodec(options: BooleanCodecOptions<NumberCodec> = {}): Codec<boolean> {
-    return combineCodec(getBooleanEncoder(options), getBooleanDecoder(options));
+export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec> = {}): Codec<boolean> {
+    return combineCodec(getBooleanEncoder(config), getBooleanDecoder(config));
 }

@@ -1,10 +1,10 @@
-import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 
 import { assertValidNumberOfItemsForCodec } from './assertions';
 import { sumCodecSizes } from './utils';
 
-/** Defines the options for tuple codecs. */
-export type TupleCodecOptions = BaseCodecOptions;
+/** Defines the config for tuple codecs. */
+export type TupleCodecConfig = BaseCodecConfig;
 
 type WrapInEncoder<T> = {
     [P in keyof T]: Encoder<T[P]>;
@@ -33,14 +33,14 @@ function tupleCodecHelper(items: Array<CodecData>, description?: string): CodecD
  * Creates a encoder for a tuple-like array.
  *
  * @param items - The encoders to use for each item in the tuple.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getTupleEncoder<T extends AnyArray>(
     items: WrapInEncoder<[...T]>,
-    options: TupleCodecOptions = {}
+    config: TupleCodecConfig = {}
 ): Encoder<T> {
     return {
-        ...tupleCodecHelper(items, options.description),
+        ...tupleCodecHelper(items, config.description),
         encode: (value: T) => {
             assertValidNumberOfItemsForCodec('tuple', items.length, value.length);
             return mergeBytes(items.map((item, index) => item.encode(value[index])));
@@ -52,14 +52,14 @@ export function getTupleEncoder<T extends AnyArray>(
  * Creates a decoder for a tuple-like array.
  *
  * @param items - The decoders to use for each item in the tuple.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getTupleDecoder<T extends AnyArray>(
     items: WrapInDecoder<[...T]>,
-    options: TupleCodecOptions = {}
+    config: TupleCodecConfig = {}
 ): Decoder<T> {
     return {
-        ...tupleCodecHelper(items, options.description),
+        ...tupleCodecHelper(items, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             const values = [] as AnyArray as T;
             items.forEach(codec => {
@@ -76,14 +76,14 @@ export function getTupleDecoder<T extends AnyArray>(
  * Creates a codec for a tuple-like array.
  *
  * @param items - The codecs to use for each item in the tuple.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getTupleCodec<T extends AnyArray, U extends T = T>(
     items: WrapInCodec<[...T], [...U]>,
-    options: TupleCodecOptions = {}
+    config: TupleCodecConfig = {}
 ): Codec<T, U> {
     return combineCodec(
-        getTupleEncoder(items as WrapInEncoder<[...T]>, options),
-        getTupleDecoder(items as WrapInDecoder<[...U]>, options)
+        getTupleEncoder(items as WrapInEncoder<[...T]>, config),
+        getTupleDecoder(items as WrapInDecoder<[...U]>, config)
     );
 }

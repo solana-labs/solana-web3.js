@@ -1,12 +1,12 @@
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-import { NumberCodecOptions } from './common';
+import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getU128Encoder = (options: NumberCodecOptions = {}): Encoder<number | bigint> =>
+export const getU128Encoder = (config: NumberCodecConfig = {}): Encoder<number | bigint> =>
     numberEncoderFactory({
+        config,
         name: 'u128',
-        options,
         range: [0, BigInt('0xffffffffffffffffffffffffffffffff')],
         set: (view, value, le) => {
             const leftOffset = le ? 8 : 0;
@@ -18,8 +18,9 @@ export const getU128Encoder = (options: NumberCodecOptions = {}): Encoder<number
         size: 16,
     });
 
-export const getU128Decoder = (options: NumberCodecOptions = {}): Decoder<bigint> =>
+export const getU128Decoder = (config: NumberCodecConfig = {}): Decoder<bigint> =>
     numberDecoderFactory({
+        config,
         get: (view, le) => {
             const leftOffset = le ? 8 : 0;
             const rightOffset = le ? 0 : 8;
@@ -28,9 +29,8 @@ export const getU128Decoder = (options: NumberCodecOptions = {}): Decoder<bigint
             return (left << 64n) + right;
         },
         name: 'u128',
-        options,
         size: 16,
     });
 
-export const getU128Codec = (options: NumberCodecOptions = {}): Codec<number | bigint, bigint> =>
-    combineCodec(getU128Encoder(options), getU128Decoder(options));
+export const getU128Codec = (config: NumberCodecConfig = {}): Codec<number | bigint, bigint> =>
+    combineCodec(getU128Encoder(config), getU128Decoder(config));

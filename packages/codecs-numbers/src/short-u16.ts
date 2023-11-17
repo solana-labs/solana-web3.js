@@ -1,18 +1,18 @@
-import { BaseCodecOptions, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
 import { assertNumberIsBetweenForCodec } from './assertions';
 
 /**
- * Defines the options for the shortU16 serializer.
+ * Defines the config for the shortU16 serializer.
  */
-export type ShortU16CodecOptions = BaseCodecOptions;
+export type ShortU16CodecConfig = BaseCodecConfig;
 
 /**
  * Encodes short u16 numbers.
  * @see {@link getShortU16Codec} for a more detailed description.
  */
-export const getShortU16Encoder = (options: ShortU16CodecOptions = {}): Encoder<number> => ({
-    description: options.description ?? 'shortU16',
+export const getShortU16Encoder = (config: ShortU16CodecConfig = {}): Encoder<number> => ({
+    description: config.description ?? 'shortU16',
     encode: (value: number): Uint8Array => {
         assertNumberIsBetweenForCodec('shortU16', 0, 65535, value);
         const bytes = [0];
@@ -41,7 +41,7 @@ export const getShortU16Encoder = (options: ShortU16CodecOptions = {}): Encoder<
  * Decodes short u16 numbers.
  * @see {@link getShortU16Codec} for a more detailed description.
  */
-export const getShortU16Decoder = (options: ShortU16CodecOptions = {}): Decoder<number> => ({
+export const getShortU16Decoder = (config: ShortU16CodecConfig = {}): Decoder<number> => ({
     decode: (bytes: Uint8Array, offset = 0): [number, number] => {
         let value = 0;
         let byteCount = 0;
@@ -58,7 +58,7 @@ export const getShortU16Decoder = (options: ShortU16CodecOptions = {}): Decoder<
         }
         return [value, offset + byteCount];
     },
-    description: options.description ?? 'shortU16',
+    description: config.description ?? 'shortU16',
     fixedSize: null,
     maxSize: 3,
 });
@@ -72,5 +72,5 @@ export const getShortU16Decoder = (options: ShortU16CodecOptions = {}): Decoder<
  * pattern until the 3rd byte. The 3rd byte, if needed, uses
  * all 8 bits to store the last byte of the original value.
  */
-export const getShortU16Codec = (options: ShortU16CodecOptions = {}): Codec<number> =>
-    combineCodec(getShortU16Encoder(options), getShortU16Decoder(options));
+export const getShortU16Codec = (config: ShortU16CodecConfig = {}): Codec<number> =>
+    combineCodec(getShortU16Encoder(config), getShortU16Decoder(config));

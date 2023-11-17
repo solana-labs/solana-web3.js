@@ -1,7 +1,7 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
     assertByteArrayIsNotEmptyForCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     CodecData,
     combineCodec,
@@ -15,11 +15,11 @@ import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder
 
 import { getUtf8Decoder, getUtf8Encoder } from './utf8';
 
-/** Defines the options for string codecs. */
-export type StringCodecOptions<
+/** Defines the config for string codecs. */
+export type StringCodecConfig<
     TPrefix extends NumberCodec | NumberEncoder | NumberDecoder,
     TEncoding extends Codec<string> | Encoder<string> | Decoder<string>
-> = BaseCodecOptions & {
+> = BaseCodecConfig & {
     /**
      * The size of the string. It can be one of the following:
      * - a {@link NumberCodec} that prefixes the string with its size.
@@ -37,10 +37,10 @@ export type StringCodecOptions<
 };
 
 /** Encodes strings from a given encoding and size strategy. */
-export const getStringEncoder = (options: StringCodecOptions<NumberEncoder, Encoder<string>> = {}): Encoder<string> => {
-    const size = options.size ?? getU32Encoder();
-    const encoding = options.encoding ?? getUtf8Encoder();
-    const description = options.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
+export const getStringEncoder = (config: StringCodecConfig<NumberEncoder, Encoder<string>> = {}): Encoder<string> => {
+    const size = config.size ?? getU32Encoder();
+    const encoding = config.encoding ?? getUtf8Encoder();
+    const description = config.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
 
     if (size === 'variable') {
         return { ...encoding, description };
@@ -63,10 +63,10 @@ export const getStringEncoder = (options: StringCodecOptions<NumberEncoder, Enco
 };
 
 /** Decodes strings from a given encoding and size strategy. */
-export const getStringDecoder = (options: StringCodecOptions<NumberDecoder, Decoder<string>> = {}): Decoder<string> => {
-    const size = options.size ?? getU32Decoder();
-    const encoding = options.encoding ?? getUtf8Decoder();
-    const description = options.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
+export const getStringDecoder = (config: StringCodecConfig<NumberDecoder, Decoder<string>> = {}): Decoder<string> => {
+    const size = config.size ?? getU32Decoder();
+    const encoding = config.encoding ?? getUtf8Decoder();
+    const description = config.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
 
     if (size === 'variable') {
         return { ...encoding, description };
@@ -95,8 +95,8 @@ export const getStringDecoder = (options: StringCodecOptions<NumberDecoder, Deco
 };
 
 /** Encodes and decodes strings from a given encoding and size strategy. */
-export const getStringCodec = (options: StringCodecOptions<NumberCodec, Codec<string>> = {}): Codec<string> =>
-    combineCodec(getStringEncoder(options), getStringDecoder(options));
+export const getStringCodec = (config: StringCodecConfig<NumberCodec, Codec<string>> = {}): Codec<string> =>
+    combineCodec(getStringEncoder(config), getStringDecoder(config));
 
 function getSizeDescription(size: CodecData | number | 'variable'): string {
     return typeof size === 'object' ? size.description : `${size}`;
