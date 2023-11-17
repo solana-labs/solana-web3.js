@@ -37,6 +37,9 @@ export function combineCodec<From, To extends From = From>(
         description: description ?? encoder.description,
         encode: encoder.encode,
         fixedSize: encoder.fixedSize,
+        getSize: encoder.getSize,
         maxSize: encoder.maxSize,
+        read: decoder.read,
+        write: encoder.write,
     };
 }

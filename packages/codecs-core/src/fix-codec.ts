@@ -1,6 +1,6 @@
 import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
-import { Codec, CodecData, Decoder, Encoder } from './codec';
+import { Codec, CodecData, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec';
 import { combineCodec } from './combine-codec';
 
 function fixCodecHelper(data: CodecData, fixedBytes: number, description?: string): CodecData {
@@ -19,10 +19,16 @@ function fixCodecHelper(data: CodecData, fixedBytes: number, description?: strin
  * @param description - A custom description for the encoder.
  */
 export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number, description?: string): Encoder<T> {
-    return {
+    return createEncoder({
         ...fixCodecHelper(encoder, fixedBytes, description),
-        encode: (value: T) => fixBytes(encoder.encode(value), fixedBytes),
-    };
+        getSize: () => fixedBytes,
+        write: (value: T, bytes: Uint8Array, offset: Offset) => {
+            const fixedByteArray = new Uint8Array(fixedBytes);
+            encoder.write(value, fixedByteArray, 0);
+            bytes.set(fixedByteArray, offset);
+            return offset + fixedBytes;
+        },
+    });
 }
 
 /**
@@ -33,9 +39,9 @@ export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number, descripti
  * @param description - A custom description for the decoder.
  */
 export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, description?: string): Decoder<T> {
-    return {
+    return createDecoder({
         ...fixCodecHelper(decoder, fixedBytes, description),
-        decode: (bytes: Uint8Array, offset = 0) => {
+        read: (bytes: Uint8Array, offset: Offset) => {
             assertByteArrayHasEnoughBytesForCodec('fixCodec', fixedBytes, bytes, offset);
             // Slice the byte array to the fixed size if necessary.
             if (offset > 0 || bytes.length > fixedBytes) {
@@ -46,10 +52,10 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, descripti
                 bytes = fixBytes(bytes, decoder.fixedSize);
             }
             // Decode the value using the nested decoder.
-            const [value] = decoder.decode(bytes, 0);
+            const [value] = decoder.read(bytes, 0);
             return [value, offset + fixedBytes];
         },
-    };
+    });
 }
 
 /**
