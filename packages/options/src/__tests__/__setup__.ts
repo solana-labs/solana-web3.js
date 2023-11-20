@@ -17,15 +17,15 @@ export const base16: Codec<string> = {
 };
 
 export const getMockCodec = (
-    options: {
+    config: {
         defaultValue?: string;
         description?: string;
         size?: number | null;
     } = {}
 ) => ({
-    decode: jest.fn().mockReturnValue([options.defaultValue ?? '', 0]),
-    description: options.description ?? 'mock',
+    decode: jest.fn().mockReturnValue([config.defaultValue ?? '', 0]),
+    description: config.description ?? 'mock',
     encode: jest.fn().mockReturnValue(new Uint8Array()),
-    fixedSize: options.size ?? null,
-    maxSize: options.size ?? null,
+    fixedSize: config.size ?? null,
+    maxSize: config.size ?? null,
 });

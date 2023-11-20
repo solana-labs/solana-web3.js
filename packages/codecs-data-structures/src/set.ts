@@ -1,4 +1,4 @@
-import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 import {
@@ -10,8 +10,8 @@ import {
 } from './array-like-codec-size';
 import { assertValidNumberOfItemsForCodec } from './assertions';
 
-/** Defines the options for set codecs. */
-export type SetCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for set codecs. */
+export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The size of the set.
      * @defaultValue u32 prefix.
@@ -36,12 +36,12 @@ function setCodecHelper(item: CodecData, size: ArrayLikeCodecSize<CodecData>, de
  * Encodes an set of items.
  *
  * @param item - The encoder to use for the set's items.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getSetEncoder<T>(item: Encoder<T>, options: SetCodecOptions<NumberEncoder> = {}): Encoder<Set<T>> {
-    const size = options.size ?? getU32Encoder();
+export function getSetEncoder<T>(item: Encoder<T>, config: SetCodecConfig<NumberEncoder> = {}): Encoder<Set<T>> {
+    const size = config.size ?? getU32Encoder();
     return {
-        ...setCodecHelper(item, size, options.description),
+        ...setCodecHelper(item, size, config.description),
         encode: (set: Set<T>) => {
             if (typeof size === 'number' && set.size !== size) {
                 assertValidNumberOfItemsForCodec('set', size, set.size);
@@ -56,12 +56,12 @@ export function getSetEncoder<T>(item: Encoder<T>, options: SetCodecOptions<Numb
  * Decodes an set of items.
  *
  * @param item - The encoder to use for the set's items.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getSetDecoder<T>(item: Decoder<T>, options: SetCodecOptions<NumberDecoder> = {}): Decoder<Set<T>> {
-    const size = options.size ?? getU32Decoder();
+export function getSetDecoder<T>(item: Decoder<T>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<T>> {
+    const size = config.size ?? getU32Decoder();
     return {
-        ...setCodecHelper(item, size, options.description),
+        ...setCodecHelper(item, size, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             const set: Set<T> = new Set();
             if (typeof size === 'object' && bytes.slice(offset).length === 0) {
@@ -83,11 +83,11 @@ export function getSetDecoder<T>(item: Decoder<T>, options: SetCodecOptions<Numb
  * Creates a codec for an set of items.
  *
  * @param item - The codec to use for the set's items.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getSetCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    options: SetCodecOptions<NumberCodec> = {}
+    config: SetCodecConfig<NumberCodec> = {}
 ): Codec<Set<T>, Set<U>> {
-    return combineCodec(getSetEncoder(item, options), getSetDecoder(item, options));
+    return combineCodec(getSetEncoder(item, config), getSetDecoder(item, config));
 }

@@ -1,6 +1,6 @@
 import {
     assertFixedSizeCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     CodecData,
     combineCodec,
@@ -13,8 +13,8 @@ import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder }
 
 import { sumCodecSizes } from './utils';
 
-/** Defines the options for nullable codecs. */
-export type NullableCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for nullable codecs. */
+export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The codec to use for the boolean prefix.
      * @defaultValue u8 prefix.
@@ -53,16 +53,16 @@ function nullableCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean,
  * Creates a encoder for an optional value using `null` as the `None` value.
  *
  * @param item - The encoder to use for the value that may be present.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getNullableEncoder<T>(
     item: Encoder<T>,
-    options: NullableCodecOptions<NumberEncoder> = {}
+    config: NullableCodecConfig<NumberEncoder> = {}
 ): Encoder<T | null> {
-    const prefix = options.prefix ?? getU8Encoder();
-    const fixed = options.fixed ?? false;
+    const prefix = config.prefix ?? getU8Encoder();
+    const fixed = config.fixed ?? false;
     return {
-        ...nullableCodecHelper(item, prefix, fixed, options.description),
+        ...nullableCodecHelper(item, prefix, fixed, config.description),
         encode: (option: T | null) => {
             const prefixByte = prefix.encode(Number(option !== null));
             let itemBytes = option !== null ? item.encode(option) : new Uint8Array();
@@ -76,16 +76,16 @@ export function getNullableEncoder<T>(
  * Creates a decoder for an optional value using `null` as the `None` value.
  *
  * @param item - The decoder to use for the value that may be present.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getNullableDecoder<T>(
     item: Decoder<T>,
-    options: NullableCodecOptions<NumberDecoder> = {}
+    config: NullableCodecConfig<NumberDecoder> = {}
 ): Decoder<T | null> {
-    const prefix = options.prefix ?? getU8Decoder();
-    const fixed = options.fixed ?? false;
+    const prefix = config.prefix ?? getU8Decoder();
+    const fixed = config.fixed ?? false;
     return {
-        ...nullableCodecHelper(item, prefix, fixed, options.description),
+        ...nullableCodecHelper(item, prefix, fixed, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             if (bytes.length - offset <= 0) {
                 return [null, offset];
@@ -107,11 +107,11 @@ export function getNullableDecoder<T>(
  * Creates a codec for an optional value using `null` as the `None` value.
  *
  * @param item - The codec to use for the value that may be present.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getNullableCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    options: NullableCodecOptions<NumberCodec> = {}
+    config: NullableCodecConfig<NumberCodec> = {}
 ): Codec<T | null, U | null> {
-    return combineCodec(getNullableEncoder<T>(item, options), getNullableDecoder<U>(item, options));
+    return combineCodec(getNullableEncoder<T>(item, config), getNullableDecoder<U>(item, config));
 }

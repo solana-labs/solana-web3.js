@@ -1,6 +1,6 @@
 import {
     assertByteArrayIsNotEmptyForCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     CodecData,
     combineCodec,
@@ -91,8 +91,8 @@ export type DataEnumToDecoderTuple<T extends DataEnum> = Array<
           ]
 >;
 
-/** Defines the options for data enum codecs. */
-export type DataEnumCodecOptions<TDiscriminator = NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for data enum codecs. */
+export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The codec to use for the enum discriminator prefixing the variant.
      * @defaultValue u8 prefix.
@@ -119,15 +119,15 @@ function dataEnumCodecHelper(variants: Array<[string, CodecData]>, prefix: Codec
  * Creates a data enum encoder.
  *
  * @param variants - The variant encoders of the data enum.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getDataEnumEncoder<T extends DataEnum>(
     variants: DataEnumToEncoderTuple<T>,
-    options: DataEnumCodecOptions<NumberEncoder> = {}
+    config: DataEnumCodecConfig<NumberEncoder> = {}
 ): Encoder<T> {
-    const prefix = options.size ?? getU8Encoder();
+    const prefix = config.size ?? getU8Encoder();
     return {
-        ...dataEnumCodecHelper(variants, prefix, options.description),
+        ...dataEnumCodecHelper(variants, prefix, config.description),
         encode: (variant: T) => {
             const discriminator = variants.findIndex(([key]) => variant.__kind === key);
             if (discriminator < 0) {
@@ -150,15 +150,15 @@ export function getDataEnumEncoder<T extends DataEnum>(
  * Creates a data enum decoder.
  *
  * @param variants - The variant decoders of the data enum.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getDataEnumDecoder<T extends DataEnum>(
     variants: DataEnumToDecoderTuple<T>,
-    options: DataEnumCodecOptions<NumberDecoder> = {}
+    config: DataEnumCodecConfig<NumberDecoder> = {}
 ): Decoder<T> {
-    const prefix = options.size ?? getU8Decoder();
+    const prefix = config.size ?? getU8Decoder();
     return {
-        ...dataEnumCodecHelper(variants, prefix, options.description),
+        ...dataEnumCodecHelper(variants, prefix, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             assertByteArrayIsNotEmptyForCodec('dataEnum', bytes, offset);
             const [discriminator, dOffset] = prefix.decode(bytes, offset);
@@ -182,11 +182,11 @@ export function getDataEnumDecoder<T extends DataEnum>(
  * Creates a data enum codec.
  *
  * @param variants - The variant codecs of the data enum.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getDataEnumCodec<T extends DataEnum, U extends T = T>(
     variants: DataEnumToCodecTuple<T, U>,
-    options: DataEnumCodecOptions<NumberCodec> = {}
+    config: DataEnumCodecConfig<NumberCodec> = {}
 ): Codec<T, U> {
-    return combineCodec(getDataEnumEncoder<T>(variants, options), getDataEnumDecoder<U>(variants, options));
+    return combineCodec(getDataEnumEncoder<T>(variants, config), getDataEnumDecoder<U>(variants, config));
 }

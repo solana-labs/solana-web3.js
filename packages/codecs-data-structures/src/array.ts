@@ -1,4 +1,4 @@
-import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 import {
@@ -10,8 +10,8 @@ import {
 } from './array-like-codec-size';
 import { assertValidNumberOfItemsForCodec } from './assertions';
 
-/** Defines the options for array codecs. */
-export type ArrayCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the configs for array codecs. */
+export type ArrayCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The size of the array.
      * @defaultValue u32 prefix.
@@ -36,12 +36,12 @@ function arrayCodecHelper(item: CodecData, size: ArrayLikeCodecSize<CodecData>, 
  * Encodes an array of items.
  *
  * @param item - The encoder to use for the array's items.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getArrayEncoder<T>(item: Encoder<T>, options: ArrayCodecOptions<NumberEncoder> = {}): Encoder<T[]> {
-    const size = options.size ?? getU32Encoder();
+export function getArrayEncoder<T>(item: Encoder<T>, config: ArrayCodecConfig<NumberEncoder> = {}): Encoder<T[]> {
+    const size = config.size ?? getU32Encoder();
     return {
-        ...arrayCodecHelper(item, size, options.description),
+        ...arrayCodecHelper(item, size, config.description),
         encode: (value: T[]) => {
             if (typeof size === 'number') {
                 assertValidNumberOfItemsForCodec('array', size, value.length);
@@ -55,12 +55,12 @@ export function getArrayEncoder<T>(item: Encoder<T>, options: ArrayCodecOptions<
  * Decodes an array of items.
  *
  * @param item - The encoder to use for the array's items.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getArrayDecoder<T>(item: Decoder<T>, options: ArrayCodecOptions<NumberDecoder> = {}): Decoder<T[]> {
-    const size = options.size ?? getU32Decoder();
+export function getArrayDecoder<T>(item: Decoder<T>, config: ArrayCodecConfig<NumberDecoder> = {}): Decoder<T[]> {
+    const size = config.size ?? getU32Decoder();
     return {
-        ...arrayCodecHelper(item, size, options.description),
+        ...arrayCodecHelper(item, size, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             if (typeof size === 'object' && bytes.slice(offset).length === 0) {
                 return [[], offset];
@@ -82,11 +82,11 @@ export function getArrayDecoder<T>(item: Decoder<T>, options: ArrayCodecOptions<
  * Creates a codec for an array of items.
  *
  * @param item - The codec to use for the array's items.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getArrayCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    options: ArrayCodecOptions<NumberCodec> = {}
+    config: ArrayCodecConfig<NumberCodec> = {}
 ): Codec<T[], U[]> {
-    return combineCodec(getArrayEncoder(item, options), getArrayDecoder(item, options));
+    return combineCodec(getArrayEncoder(item, config), getArrayDecoder(item, config));
 }

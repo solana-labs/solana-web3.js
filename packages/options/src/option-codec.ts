@@ -1,6 +1,6 @@
 import {
     assertFixedSizeCodec,
-    BaseCodecOptions,
+    BaseCodecConfig,
     Codec,
     CodecData,
     combineCodec,
@@ -14,8 +14,8 @@ import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder }
 import { isOption, isSome, none, Option, OptionOrNullable, some } from './option';
 import { wrapNullable } from './unwrap-option';
 
-/** Defines the options for option codecs. */
-export type OptionCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for option codecs. */
+export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The codec to use for the boolean prefix.
      * @defaultValue u8 prefix.
@@ -58,16 +58,16 @@ function optionCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean, d
  * Creates a encoder for an optional value using `null` as the `None` value.
  *
  * @param item - The encoder to use for the value that may be present.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getOptionEncoder<T>(
     item: Encoder<T>,
-    options: OptionCodecOptions<NumberEncoder> = {}
+    config: OptionCodecConfig<NumberEncoder> = {}
 ): Encoder<OptionOrNullable<T>> {
-    const prefix = options.prefix ?? getU8Encoder();
-    const fixed = options.fixed ?? false;
+    const prefix = config.prefix ?? getU8Encoder();
+    const fixed = config.fixed ?? false;
     return {
-        ...optionCodecHelper(item, prefix, fixed, options.description),
+        ...optionCodecHelper(item, prefix, fixed, config.description),
         encode: (optionOrNullable: OptionOrNullable<T>) => {
             const option = isOption<T>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
             const prefixByte = prefix.encode(Number(isSome(option)));
@@ -82,16 +82,16 @@ export function getOptionEncoder<T>(
  * Creates a decoder for an optional value using `null` as the `None` value.
  *
  * @param item - The decoder to use for the value that may be present.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getOptionDecoder<T>(
     item: Decoder<T>,
-    options: OptionCodecOptions<NumberDecoder> = {}
+    config: OptionCodecConfig<NumberDecoder> = {}
 ): Decoder<Option<T>> {
-    const prefix = options.prefix ?? getU8Decoder();
-    const fixed = options.fixed ?? false;
+    const prefix = config.prefix ?? getU8Decoder();
+    const fixed = config.fixed ?? false;
     return {
-        ...optionCodecHelper(item, prefix, fixed, options.description),
+        ...optionCodecHelper(item, prefix, fixed, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             if (bytes.length - offset <= 0) {
                 return [none(), offset];
@@ -113,11 +113,11 @@ export function getOptionDecoder<T>(
  * Creates a codec for an optional value using `null` as the `None` value.
  *
  * @param item - The codec to use for the value that may be present.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getOptionCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    options: OptionCodecOptions<NumberCodec> = {}
+    config: OptionCodecConfig<NumberCodec> = {}
 ): Codec<OptionOrNullable<T>, Option<U>> {
-    return combineCodec(getOptionEncoder<T>(item, options), getOptionDecoder<U>(item, options));
+    return combineCodec(getOptionEncoder<T>(item, config), getOptionDecoder<U>(item, config));
 }

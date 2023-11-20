@@ -1,4 +1,4 @@
-import { BaseCodecOptions, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 import {
@@ -10,8 +10,8 @@ import {
 } from './array-like-codec-size';
 import { assertValidNumberOfItemsForCodec } from './assertions';
 
-/** Defines the options for Map codecs. */
-export type MapCodecOptions<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecOptions & {
+/** Defines the config for Map codecs. */
+export type MapCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
     /**
      * The size of the array.
      * @defaultValue u32 prefix.
@@ -43,16 +43,16 @@ function mapCodecHelper(
  *
  * @param key - The encoder to use for the map's keys.
  * @param value - The encoder to use for the map's values.
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
 export function getMapEncoder<K, V>(
     key: Encoder<K>,
     value: Encoder<V>,
-    options: MapCodecOptions<NumberEncoder> = {}
+    config: MapCodecConfig<NumberEncoder> = {}
 ): Encoder<Map<K, V>> {
-    const size = options.size ?? getU32Encoder();
+    const size = config.size ?? getU32Encoder();
     return {
-        ...mapCodecHelper(key, value, size, options.description),
+        ...mapCodecHelper(key, value, size, config.description),
         encode: (map: Map<K, V>) => {
             if (typeof size === 'number') {
                 assertValidNumberOfItemsForCodec('map', size, map.size);
@@ -68,16 +68,16 @@ export function getMapEncoder<K, V>(
  *
  * @param key - The decoder to use for the map's keys.
  * @param value - The decoder to use for the map's values.
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
 export function getMapDecoder<K, V>(
     key: Decoder<K>,
     value: Decoder<V>,
-    options: MapCodecOptions<NumberDecoder> = {}
+    config: MapCodecConfig<NumberDecoder> = {}
 ): Decoder<Map<K, V>> {
-    const size = options.size ?? getU32Decoder();
+    const size = config.size ?? getU32Decoder();
     return {
-        ...mapCodecHelper(key, value, size, options.description),
+        ...mapCodecHelper(key, value, size, config.description),
         decode: (bytes: Uint8Array, offset = 0) => {
             const map: Map<K, V> = new Map();
             if (typeof size === 'object' && bytes.slice(offset).length === 0) {
@@ -107,12 +107,12 @@ export function getMapDecoder<K, V>(
  *
  * @param key - The codec to use for the map's keys.
  * @param value - The codec to use for the map's values.
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
 export function getMapCodec<TK, TV, UK extends TK = TK, UV extends TV = TV>(
     key: Codec<TK, UK>,
     value: Codec<TV, UV>,
-    options: MapCodecOptions<NumberCodec> = {}
+    config: MapCodecConfig<NumberCodec> = {}
 ): Codec<Map<TK, TV>, Map<UK, UV>> {
-    return combineCodec(getMapEncoder(key, value, options), getMapDecoder(key, value, options));
+    return combineCodec(getMapEncoder(key, value, config), getMapDecoder(key, value, config));
 }

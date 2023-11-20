@@ -1,16 +1,16 @@
-import { BaseCodecOptions, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { BaseCodecConfig, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-/** Defines the options for unit codecs. */
-export type UnitSerializerOptions = BaseCodecOptions;
+/** Defines the config for unit codecs. */
+export type UnitSerializerconfig = BaseCodecConfig;
 
 /**
  * Creates a void encoder.
  *
- * @param options - A set of options for the encoder.
+ * @param config - A set of config for the encoder.
  */
-export function getUnitEncoder(options: UnitSerializerOptions = {}): Encoder<void> {
+export function getUnitEncoder(config: UnitSerializerconfig = {}): Encoder<void> {
     return {
-        description: options.description ?? 'unit',
+        description: config.description ?? 'unit',
         encode: () => new Uint8Array(),
         fixedSize: 0,
         maxSize: 0,
@@ -20,12 +20,12 @@ export function getUnitEncoder(options: UnitSerializerOptions = {}): Encoder<voi
 /**
  * Creates a void decoder.
  *
- * @param options - A set of options for the decoder.
+ * @param config - A set of config for the decoder.
  */
-export function getUnitDecoder(options: UnitSerializerOptions = {}): Decoder<void> {
+export function getUnitDecoder(config: UnitSerializerconfig = {}): Decoder<void> {
     return {
         decode: (_bytes: Uint8Array, offset = 0) => [undefined, offset],
-        description: options.description ?? 'unit',
+        description: config.description ?? 'unit',
         fixedSize: 0,
         maxSize: 0,
     };
@@ -34,8 +34,8 @@ export function getUnitDecoder(options: UnitSerializerOptions = {}): Decoder<voi
 /**
  * Creates a void codec.
  *
- * @param options - A set of options for the codec.
+ * @param config - A set of config for the codec.
  */
-export function getUnitCodec(options: UnitSerializerOptions = {}): Codec<void> {
-    return combineCodec(getUnitEncoder(options), getUnitDecoder(options));
+export function getUnitCodec(config: UnitSerializerconfig = {}): Codec<void> {
+    return combineCodec(getUnitEncoder(config), getUnitDecoder(config));
 }
