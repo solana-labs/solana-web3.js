@@ -22,6 +22,7 @@ const config: Partial<Config.InitialProjectOptions> = {
             },
         ],
     },
+    transformIgnorePatterns: ['/node_modules/(?!.*\\@noble/ed25519/)', '\\.pnp\\.[^\\/]+$'],
 };
 
 export default config;
