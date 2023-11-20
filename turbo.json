@@ -93,6 +93,11 @@
             "cache": false,
             "dependsOn": ["build", "^publish-packages", "@solana/web3.js#publish-packages"],
             "outputs": []
+        },
+        "@solana/web3.js-legacy-sham#compile:typedefs": {
+            "dependsOn": ["@solana/web3.js#compile:typedefs", "^compile:js"],
+            "inputs": ["tsconfig.*", "src/**", "test/**"],
+            "outputs": []
         }
     },
     "remoteCache": {
