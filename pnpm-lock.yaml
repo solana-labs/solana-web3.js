@@ -1877,9 +1877,9 @@ importers:
 
   packages/webcrypto-ed25519-polyfill:
     dependencies:
-      '@noble/curves':
-        specifier: ^1.2.0
-        version: 1.2.0
+      '@noble/ed25519':
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2

@@ -13,7 +13,7 @@
  * private keys as they are written to the cache, without alerting you to its presence or affecting
  * the regular operation of the cache.
  */
-import { ed25519 } from '@noble/curves/ed25519';
+import { getPublicKeyAsync, signAsync, utils, verifyAsync } from '@noble/ed25519';
 
 const PROHIBITED_KEY_USAGES = new Set<KeyUsage>([
     'decrypt',
@@ -64,7 +64,7 @@ function bufferSourceToUint8Array(data: BufferSource): Uint8Array {
 
 let storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT: WeakMap<CryptoKey, Uint8Array> | undefined;
 
-// Map of public key bytes. These are the result of calling `ed25519.getPublicKey`
+// Map of public key bytes. These are the result of calling `getPublicKey`
 let publicKeyBytesStore: WeakMap<CryptoKey, Uint8Array> | undefined;
 
 function createKeyPairFromBytes(
@@ -120,23 +120,23 @@ function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key: CryptoKey): Uint8Arr
     return secretKeyBytes;
 }
 
-function getPublicKeyBytes(key: CryptoKey): Uint8Array {
+async function getPublicKeyBytes(key: CryptoKey): Promise<Uint8Array> {
     // Try to find the key in the public key store first
     const publicKeyStore = (publicKeyBytesStore ||= new WeakMap());
     const fromPublicStore = publicKeyStore.get(key);
     if (fromPublicStore) return fromPublicStore;
 
     // If not available, get the key from the secrets store instead
-    const publicKeyBytes = ed25519.getPublicKey(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
+    const publicKeyBytes = await getPublicKeyAsync(getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key));
 
     // Store the public key bytes in the public key store for next time
     publicKeyStore.set(key, publicKeyBytes);
     return publicKeyBytes;
 }
 
-export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): JsonWebKey;
-export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer;
-export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffer | JsonWebKey {
+export async function exportKeyPolyfill(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
+export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>;
+export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey> {
     if (key.extractable === false) {
         throw new DOMException('key is not extractable', 'InvalidAccessException');
     }
@@ -145,7 +145,7 @@ export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffe
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
-            const publicKeyBytes = getPublicKeyBytes(key);
+            const publicKeyBytes = await getPublicKeyBytes(key);
             return publicKeyBytes;
         }
         case 'pkcs8': {
@@ -167,7 +167,7 @@ export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): ArrayBuffe
  * associated with the secret.
  */
 export function generateKeyPolyfill(extractable: boolean, keyUsages: readonly KeyUsage[]): CryptoKeyPair {
-    const privateKeyBytes = ed25519.utils.randomPrivateKey();
+    const privateKeyBytes = utils.randomPrivateKey();
     const keyPair = createKeyPairFromBytes(privateKeyBytes, extractable, keyUsages);
     return keyPair;
 }
@@ -176,23 +176,23 @@ export function isPolyfilledKey(key: CryptoKey): boolean {
     return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key) || !!publicKeyBytesStore?.has(key);
 }
 
-export function signPolyfill(key: CryptoKey, data: BufferSource): ArrayBuffer {
+export async function signPolyfill(key: CryptoKey, data: BufferSource): Promise<ArrayBuffer> {
     if (key.type !== 'private' || !key.usages.includes('sign')) {
         throw new DOMException('Unable to use this key to sign', 'InvalidAccessError');
     }
     const privateKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
     const payload = bufferSourceToUint8Array(data);
-    const signature = ed25519.sign(payload, privateKeyBytes);
+    const signature = await signAsync(payload, privateKeyBytes);
     return signature;
 }
 
-export function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: BufferSource): boolean {
+export async function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: BufferSource): Promise<boolean> {
     if (key.type !== 'public' || !key.usages.includes('verify')) {
         throw new DOMException('Unable to use this key to verify', 'InvalidAccessError');
     }
-    const publicKeyBytes = getPublicKeyBytes(key);
+    const publicKeyBytes = await getPublicKeyBytes(key);
     try {
-        return ed25519.verify(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), publicKeyBytes);
+        return await verifyAsync(bufferSourceToUint8Array(signature), bufferSourceToUint8Array(data), publicKeyBytes);
     } catch {
         return false;
     }

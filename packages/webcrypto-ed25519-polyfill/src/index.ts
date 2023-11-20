@@ -22,7 +22,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
     originalSubtleCrypto.exportKey = (async (...args: Parameters<SubtleCrypto['exportKey']>) => {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
-            return exportKeyPolyfill(...args);
+            return await exportKeyPolyfill(...args);
         } else if (originalExportKey) {
             return await originalExportKey.apply(originalSubtleCrypto, args);
         } else {
@@ -100,7 +100,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
             const [_, ...rest] = args;
-            return signPolyfill(...rest);
+            return await signPolyfill(...rest);
         } else if (originalSign) {
             return await originalSign.apply(originalSubtleCrypto, args);
         } else {
@@ -116,7 +116,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
             const [_, ...rest] = args;
-            return verifyPolyfill(...rest);
+            return await verifyPolyfill(...rest);
         } else if (originalVerify) {
             return await originalVerify.apply(originalSubtleCrypto, args);
         } else {

@@ -62,7 +62,7 @@
         "node": ">=17.4"
     },
     "dependencies": {
-        "@noble/curves": "^1.2.0"
+        "@noble/ed25519": "^2.0.0"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
