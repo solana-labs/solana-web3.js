@@ -60,7 +60,7 @@
         "prettier": "^2.8",
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
-        "tsup": "7.2.0",
+        "tsup": "^8.0.1",
         "typescript": "^5.2.2"
     },
     "peerDependencies": {
