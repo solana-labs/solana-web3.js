@@ -1,13 +1,19 @@
 import { env } from 'node:process';
 
+import browsersListToEsBuild from 'browserslist-to-esbuild';
 import path from 'path';
 import { Format, Options } from 'tsup';
 
+console.log(browsersListToEsBuild());
 type Platform =
     | 'browser'
     | 'node'
     // React Native
     | 'native';
+
+const BROWSERSLIST_TARGETS = browsersListToEsBuild()
+    // FIXME(https://github.com/evanw/esbuild/issues/3501) Have to filter out versions like `safariTP`
+    .filter(v => !v.endsWith('TP')) as Options['target'];
 
 export function getBaseConfig(platform: Platform, formats: Format[], _options: Options): Options[] {
     return [true, false].flatMap<Options>(isDebugBuild =>
@@ -27,6 +33,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                         ...options.define,
                         __DEV__: `${isDebugBuild}`,
                     };
+                    options.target = BROWSERSLIST_TARGETS;
                 }
                 options.inject = [path.resolve(__dirname, 'env-shim.ts')];
             },
