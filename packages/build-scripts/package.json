@@ -9,6 +9,7 @@
     ],
     "devDependencies": {
         "@types/node": "^20",
+        "browserslist-to-esbuild": "^1.2.0",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1"
     }

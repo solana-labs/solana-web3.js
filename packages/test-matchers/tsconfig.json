@@ -16,7 +16,7 @@
         "preserveWatchOutput": true,
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES2020"
+        "target": "ESNext"
     },
     "exclude": ["node_modules"]
 }
