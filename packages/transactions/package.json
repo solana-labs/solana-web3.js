@@ -89,7 +89,7 @@
         "test-config": "workspace:*",
         "test-matchers": "workspace:*",
         "tsconfig": "workspace:*",
-        "tsup": "7.2.0",
+        "tsup": "^8.0.1",
         "typescript": "^5.2.2",
         "version-from-git": "^1.1.1"
     },
