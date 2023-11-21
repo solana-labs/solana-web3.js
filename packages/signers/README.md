@@ -391,10 +391,10 @@ const mySignerMeta: IAccountSignerMeta = {
 
 #### `IInstructionWithSigners`
 
-Extends the `IInstruction` type to allow `IAccountSignerMetas` to be used inside the instruction's `accounts` array.
+Composable type that allows `IAccountSignerMetas` to be used inside the instruction's `accounts` array.
 
 ```ts
-const myInstructionWithSigners: IInstructionWithSigners = {
+const myInstructionWithSigners: IInstruction & IInstructionWithSigners = {
     programAddress: address('1234..5678'),
     accounts: [
         {
@@ -403,6 +403,21 @@ const myInstructionWithSigners: IInstructionWithSigners = {
             signer: myTransactionSigner,
         },
     ],
+};
+```
+
+#### `ITransactionWithSigners`
+
+Composable type that allows `IAccountSignerMetas` to be used inside all of the transaction's account metas.
+
+```ts
+const myTransactionWithSigners: BaseTransaction & ITransactionWithSigners = {
+    instructions: [
+        myInstructionA as IInstruction & IInstructionWithSigners,
+        myInstructionB as IInstruction & IInstructionWithSigners,
+        myInstructionC as IInstruction,
+    ],
+    version: 0,
 };
 ```
 
@@ -434,6 +449,39 @@ Similarly to `getSignersFromInstruction`, this function extracts and deduplicate
 
 ```ts
 const transactionSigners = getSignersFromTransaction(myTransactionWithSigners);
+```
+
+#### `addSignersToInstruction()`
+
+Helper function that adds the provided signers to any of the applicable account metas. For an account meta to match a provided signer it:
+
+-   Must have a signer role (`AccountRole.READONLY_SIGNER` or `AccountRole.WRITABLE_SIGNER`).
+-   Must have the same address as the provided signer.
+-   Must not have an attached signer already.
+
+```ts
+const myInstruction: IInstruction = {
+    accounts: [
+        { address: '1111' as Address, role: AccountRole.READONLY_SIGNER },
+        { address: '2222' as Address, role: AccountRole.WRITABLE_SIGNER },
+    ],
+    // ...
+};
+
+const signerA: TransactionSigner<'1111'>;
+const signerB: TransactionSigner<'2222'>;
+const myInstructionWithSigners = addSignersToInstruction([mySignerA, mySignerB], myInstruction);
+
+// myInstructionWithSigners.accounts[0].signer === mySignerA
+// myInstructionWithSigners.accounts[1].signer === mySignerB
+```
+
+#### `addSignersToTransaction()`
+
+Similarly to `addSignersToInstruction`, this function adds signer to all the applicable account metas of all the instructions inside a transaction.
+
+```ts
+const myTransactionWithSigners = addSignersToTransaction(mySigners, myTransaction);
 ```
 
 ## Signing transactions with signers
