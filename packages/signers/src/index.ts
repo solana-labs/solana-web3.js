@@ -11,4 +11,5 @@ export * from './transaction-modifying-signer';
 export * from './transaction-partial-signer';
 export * from './transaction-sending-signer';
 export * from './transaction-signer';
+export * from './transaction-with-single-sending-signer';
 export * from './types';

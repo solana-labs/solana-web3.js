@@ -497,13 +497,13 @@ Extracts all signers inside the provided transaction and uses them to sign it. I
 If a composite signer implements both interfaces, it will be used as a modifying signer if no other signer implements that interface. Otherwise, it will be used as a partial signer.
 
 ```ts
-const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction);
+const mySignedTransaction = await partiallySignTransactionWithSigners(myTransaction);
 ```
 
 It also accepts an optional `AbortSignal` that will be propagated to all signers.
 
 ```ts
-const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction, {
+const mySignedTransaction = await partiallySignTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
 });
 ```
@@ -515,10 +515,10 @@ Finally, note that this function ignores `TransactionSendingSigners` as it does 
 This function works the same as the `partiallySignTransactionWithSigners` function described above except that it also ensures the transaction is fully signed before returning it. An error will be thrown if that's not the case.
 
 ```ts
-const mySignedTransaction = signTransactionWithSigners(myTransaction);
+const mySignedTransaction = await signTransactionWithSigners(myTransaction);
 
 // With additional config.
-const mySignedTransaction = signTransactionWithSigners(myTransaction, {
+const mySignedTransaction = await signTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
 });
 
@@ -531,30 +531,40 @@ mySignedTransaction satisfies IFullySignedTransaction;
 Extracts all signers inside the provided transaction and uses them to sign it before sending it immediately to the blockchain. It returns the signature of the sent transaction (i.e. its identifier).
 
 ```ts
-const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction);
+const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction);
 
 // With additional config.
-const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, {
+const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
 });
 ```
 
-Similarly to the `partiallySignTransactionWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the first `TransactionSendingSigner` it finds. Any other sending signer that does not implement another transaction signer interface will be ignored.
-
-If no `TransactionSendingSigner` is extracted from the transaction or explicitly provided, the `fallbackSender` third argument will be used to send the transaction. If no fallback sender is provided and no sending signer is identified, an error will be thrown.
-
-```ts
-const fallbackSender = async (transaction: CompilableTransaction) => {
-    const encodedTransaction = getBase64EncodedWireTransaction(transaction);
-    const signature = await rpc.sendTransaction(encodedTransaction).send();
-    return getBase58Encoder().encode(signature);
-};
-
-const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, { fallbackSender });
-```
+Similarly to the `partiallySignTransactionWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the `TransactionSendingSigner` it identified.
 
 Here as well, composite transaction signers are treated such that at least one sending signer is used if any. When a `TransactionSigner` implements more than one interface, use it as a:
 
--   `TransactionSendingSigner`, if no other `TransactionSendingSigner` exist.
--   `TransactionModifyingSigner`, if no other `TransactionModifyingSigner` exist.
+-   `TransactionSendingSigner`, if no other `TransactionSendingSigner` exists.
+-   `TransactionModifyingSigner`, if no other `TransactionModifyingSigner` exists.
 -   `TransactionPartialSigner`, otherwise.
+
+The provided transaction must be of type `ITransactionWithSingleSendingSigner` meaning that it must contain exactly one `TransactionSendingSigner` inside its account metas. If more than one composite signers implement the `TransactionSendingSigner` interface, one of them will be selected as the sending signer.
+
+Therefore, you may use the `assertIsTransactionWithSingleSendingSigner()` function to ensure the transaction is of the expected type.
+
+```ts
+assertIsTransactionWithSingleSendingSigner(myTransaction);
+const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction);
+```
+
+Alternatively, you may use the `isTransactionWithSingleSendingSigner()` function to provide a fallback in case the transaction does not contain any sending signer.
+
+```ts
+let transactionSignature: SignatureBytes;
+if (isTransactionWithSingleSendingSigner(transaction)) {
+    transactionSignature = await signAndSendTransactionWithSigners(transaction);
+} else {
+    const signedTransaction = await signTransactionWithSigners(transaction);
+    const encodedTransaction = getBase64EncodedWireTransaction(signedTransaction);
+    transactionSignature = await rpc.sendTransaction(encodedTransaction).send();
+}
+```

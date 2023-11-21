@@ -12,6 +12,7 @@ import { isTransactionModifyingSigner, TransactionModifyingSigner } from './tran
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer';
 import { isTransactionSigner, TransactionSigner } from './transaction-signer';
+import { ITransactionWithSingleSendingSigner } from './transaction-with-single-sending-signer';
 
 type CompilableTransactionWithSigners = CompilableTransaction &
     ITransactionWithSigners &
@@ -60,14 +61,9 @@ export async function signTransactionWithSigners<
  * Otherwise, it will send the transaction using the provided fallbackSender.
  */
 export async function signAndSendTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
->(
-    transaction: TTransaction,
-    config: {
-        abortSignal?: AbortSignal;
-        fallbackSender?: (transaction: TTransaction & IFullySignedTransaction) => Promise<SignatureBytes>;
-    } = {}
-): Promise<SignatureBytes> {
+    TTransaction extends CompilableTransactionWithSigners &
+        ITransactionWithSingleSendingSigner = CompilableTransactionWithSigners & ITransactionWithSingleSendingSigner
+>(transaction: TTransaction, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
         deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner))
@@ -81,19 +77,18 @@ export async function signAndSendTransactionWithSigners<
         abortSignal
     );
 
-    if (sendingSigner) {
-        abortSignal?.throwIfAborted();
-        const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
-        return signature;
+    if (!sendingSigner) {
+        // TODO: Coded error.
+        throw new Error(
+            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.'
+        );
     }
 
-    if (config.fallbackSender) {
-        assertTransactionIsFullySigned(signedTransaction);
-        return config.fallbackSender(signedTransaction);
-    }
+    abortSignal?.throwIfAborted();
+    const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
+    abortSignal?.throwIfAborted();
 
-    // TODO: Coded error.
-    throw new Error('No TransactionSendingSigner was identified and no fallback sender was provided.');
+    return signature;
 }
 
 /**
