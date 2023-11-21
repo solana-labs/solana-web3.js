@@ -45,34 +45,6 @@ describe('partiallySignTransactionWithSigners', () => {
         expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
     });
 
-    it('signs the transaction with extra signers', async () => {
-        expect.assertions(3);
-
-        // Given two mocked signers A and B.
-        const signerA = createMockTransactionPartialSigner('1111' as Address);
-        const signerB = createMockTransactionPartialSigner('2222' as Address);
-        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
-        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
-
-        // And given a transaction that only contains signer A in its account metas.
-        const transaction = createMockTransactionWithSigners([signerA]);
-
-        // When we partially sign this transaction whilst providing signer B as an extra signer.
-        const signedTransaction = await partiallySignTransactionWithSigners(transaction, {
-            signers: [signerB],
-        });
-
-        // Then it contains the expected signatures.
-        expect(signedTransaction.signatures).toStrictEqual({
-            '1111': '1111_signature',
-            '2222': '2222_signature',
-        });
-
-        // And both signers were called with the expected parameters.
-        expect(signerA.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
-        expect(signerB.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
-    });
-
     it('signs modifying signers before partial signers', async () => {
         expect.assertions(2);
 
@@ -398,34 +370,6 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionWithSigners(transaction);
 
         // Then the sending signer was used to send the transaction.
-        expect(signerA.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
-        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
-            [{ ...transaction, signatures: { '1111': '1111_signature' } }],
-            { abortSignal: undefined }
-        );
-
-        // And the returned signature matches the one returned by the sending signer.
-        expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-    });
-
-    it('signs and sends the transaction with extra signers', async () => {
-        expect.assertions(3);
-
-        // Given a partial signer A and a sending signer B with the following mocked return values.
-        const signerA = createMockTransactionPartialSigner('1111' as Address);
-        const signerB = createMockTransactionSendingSigner('2222' as Address);
-        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
-        signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
-
-        // And given a transaction that only contains signer A in its account metas.
-        const transaction = createMockTransactionWithSigners([signerA]);
-
-        // When we sign and send this transaction whilst providing signer B as an extra signer.
-        const transactionSignature = await signAndSendTransactionWithSigners(transaction, {
-            signers: [signerB],
-        });
-
-        // Then both signers were called with the expected parameters.
         expect(signerA.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...transaction, signatures: { '1111': '1111_signature' } }],

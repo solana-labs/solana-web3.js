@@ -452,12 +452,11 @@ If a composite signer implements both interfaces, it will be used as a modifying
 const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction);
 ```
 
-It also accepts an optional `AbortSignal` and an additional array of signers that will be merged with the ones extracted from the transaction, if any.
+It also accepts an optional `AbortSignal` that will be propagated to all signers.
 
 ```ts
 const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
-    signers: [myOtherSigner],
 });
 ```
 
@@ -473,7 +472,6 @@ const mySignedTransaction = signTransactionWithSigners(myTransaction);
 // With additional config.
 const mySignedTransaction = signTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
-    signers: [myOtherSigner],
 });
 
 // We now know the transaction is fully signed.
@@ -490,7 +488,6 @@ const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction);
 // With additional config.
 const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, {
     abortSignal: myAbortController.signal,
-    signers: [myOtherSigner],
 });
 ```
 

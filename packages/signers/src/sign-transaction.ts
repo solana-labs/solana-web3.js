@@ -29,14 +29,10 @@ export async function partiallySignTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
 >(
     transaction: TTransaction,
-    config: {
-        abortSignal?: AbortSignal;
-        signers?: readonly TransactionSigner[];
-    } = {}
+    config: { abortSignal?: AbortSignal } = {}
 ): Promise<TTransaction & ITransactionWithSignatures> {
-    const signers = config.signers ?? [];
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
-        deduplicateSigners([...getSignersFromTransaction(transaction).filter(isTransactionSigner), ...signers]),
+        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
         { identifySendingSigner: false }
     );
 
@@ -53,10 +49,7 @@ export async function signTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
 >(
     transaction: TTransaction,
-    config: {
-        abortSignal?: AbortSignal;
-        signers?: readonly TransactionSigner[];
-    } = {}
+    config: { abortSignal?: AbortSignal } = {}
 ): Promise<TTransaction & IFullySignedTransaction> {
     const signedTransaction = await partiallySignTransactionWithSigners(transaction, config);
     assertTransactionIsFullySigned(signedTransaction);
@@ -76,13 +69,11 @@ export async function signAndSendTransactionWithSigners<
     config: {
         abortSignal?: AbortSignal;
         fallbackSender?: (transaction: TTransaction & IFullySignedTransaction) => Promise<SignatureBytes>;
-        signers?: readonly TransactionSigner[];
     } = {}
 ): Promise<SignatureBytes> {
-    const signers = config.signers ?? [];
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
-        deduplicateSigners([...getSignersFromTransaction(transaction).filter(isTransactionSigner), ...signers])
+        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner))
     );
 
     abortSignal?.throwIfAborted();
