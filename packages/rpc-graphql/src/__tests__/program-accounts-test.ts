@@ -89,11 +89,12 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
-                encoding: 'base58',
+                encoding: 'BASE_58',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                        encoding
                         ... on AccountBase58 {
                             address
                             data
@@ -109,11 +110,13 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: '2Uw1bpnsXxu3e',
+                            encoding: 'BASE_58',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: '2Uw1bpnsXxu3e',
+                            encoding: 'BASE_58',
                             executable: false,
                         },
                     ]),
@@ -126,11 +129,12 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
-                encoding: 'base64',
+                encoding: 'BASE_64',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                        encoding
                         ... on AccountBase64 {
                             address
                             data
@@ -146,11 +150,13 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: 'dGVzdCBkYXRh',
+                            encoding: 'BASE_64',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: 'dGVzdCBkYXRh',
+                            encoding: 'BASE_64',
                             executable: false,
                         },
                     ]),
@@ -163,11 +169,12 @@ describe('programAccounts', () => {
             const variableValues = {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
-                encoding: 'base64Zstd',
+                encoding: 'BASE_64_ZSTD',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                        encoding
                         ... on AccountBase64Zstd {
                             address
                             data
@@ -183,11 +190,13 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            encoding: 'BASE_64_ZSTD',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            encoding: 'BASE_64_ZSTD',
                             executable: false,
                         },
                     ]),
@@ -541,7 +550,7 @@ describe('programAccounts', () => {
                         length: 5,
                         offset: 0,
                     },
-                    encoding: 'base58',
+                    encoding: 'BASE_58',
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
@@ -556,6 +565,7 @@ describe('programAccounts', () => {
                             dataSlice: $dataSlice
                             encoding: $encoding
                         ) {
+                            encoding
                             ... on AccountBase58 {
                                 data
                             }
@@ -568,6 +578,7 @@ describe('programAccounts', () => {
                         programAccounts: expect.arrayContaining([
                             {
                                 data: 'E8f4pET',
+                                encoding: 'BASE_58',
                             },
                         ]),
                     },
@@ -585,7 +596,7 @@ describe('programAccounts', () => {
                         length: 5,
                         offset: 0,
                     },
-                    encoding: 'base64',
+                    encoding: 'BASE_64',
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
@@ -600,6 +611,7 @@ describe('programAccounts', () => {
                             dataSlice: $dataSlice
                             encoding: $encoding
                         ) {
+                            encoding
                             ... on AccountBase64 {
                                 data
                             }
@@ -612,6 +624,7 @@ describe('programAccounts', () => {
                         programAccounts: expect.arrayContaining([
                             {
                                 data: 'dGVzdCA=',
+                                encoding: 'BASE_64',
                             },
                         ]),
                     },

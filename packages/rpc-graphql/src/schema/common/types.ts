@@ -1,16 +1,36 @@
 import { resolveAccount } from '../../resolvers/account';
 
 export const commonTypeDefs = /* GraphQL */ `
+    enum AccountEncoding {
+        BASE_58
+        BASE_64
+        BASE_64_ZSTD
+        PARSED
+    }
+
+    enum BlockTransactionDetails {
+        accounts
+        full
+        none
+        signatures
+    }
+
+    enum Commitment {
+        confirmed
+        finalized
+        processed
+    }
+
     type ReturnData {
-        data: String
-        programId: String
+        data: Base64EncodedBytes
+        programId: Address
     }
 
     type Reward {
         commission: Int
         lamports: BigInt
         postBalance: BigInt
-        pubkey: String
+        pubkey: Address
         rewardType: String
     }
 
@@ -25,14 +45,40 @@ export const commonTypeDefs = /* GraphQL */ `
         accountIndex: Int
         mint: Account
         owner: Account
-        programId: String
+        programId: Address
         uiTokenAmount: TokenAmount
+    }
+
+    enum TransactionEncoding {
+        BASE_58
+        BASE_64
+        PARSED
+    }
+
+    enum TransactionVersion {
+        LEGACY
+        ZERO
     }
 `;
 
 export const commonResolvers = {
+    AccountEncoding: {
+        BASE_58: 'base58',
+        BASE_64: 'base64',
+        BASE_64_ZSTD: 'base64+zstd',
+        PARSED: 'jsonParsed',
+    },
     TokenBalance: {
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
+    },
+    TransactionEncoding: {
+        BASE_58: 'base58',
+        BASE_64: 'base64',
+        PARSED: 'jsonParsed',
+    },
+    TransactionVersion: {
+        LEGACY: 'legacy',
+        ZERO: 0,
     },
 };

@@ -115,7 +115,8 @@ describe('transaction', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
                 query testQuery {
-                    transaction(signature: "${defaultTransactionSignature}", encoding: base58) {
+                    transaction(signature: "${defaultTransactionSignature}", encoding: BASE_58) {
+                        encoding
                         ... on TransactionBase58 {
                             data
                         }
@@ -127,6 +128,7 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         data: expect.any(String),
+                        encoding: 'BASE_58',
                     },
                 },
             });
@@ -139,7 +141,8 @@ describe('transaction', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
                 query testQuery {
-                    transaction(signature: "${defaultTransactionSignature}", encoding: base64) {
+                    transaction(signature: "${defaultTransactionSignature}", encoding: BASE_64) {
+                        encoding
                         ... on TransactionBase64 {
                             data
                         }
@@ -151,6 +154,7 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         data: expect.any(String),
+                        encoding: 'BASE_64',
                     },
                 },
             });
@@ -160,7 +164,8 @@ describe('transaction', () => {
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
             query testQuery {
-                transaction(signature: "${defaultTransactionSignature}") {
+                transaction(signature: "${defaultTransactionSignature}", encoding: PARSED) {
+                    encoding
                     ... on TransactionParsed {
                         data {
                             message {
@@ -194,6 +199,7 @@ describe('transaction', () => {
                             },
                             signatures: expect.any(Array),
                         },
+                        encoding: 'PARSED',
                     },
                 },
             });
@@ -204,6 +210,7 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
             query testQuery {
                 transaction(signature: "${defaultTransactionSignature}") {
+                    encoding
                     ... on TransactionParsed {
                         data {
                             message {
@@ -237,6 +244,7 @@ describe('transaction', () => {
                             },
                             signatures: expect.any(Array),
                         },
+                        encoding: 'PARSED',
                     },
                 },
             });
