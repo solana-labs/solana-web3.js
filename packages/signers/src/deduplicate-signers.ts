@@ -11,6 +11,12 @@ export function deduplicateSigners<TSigner extends MessageSigner | TransactionSi
     signers.forEach(signer => {
         if (!deduplicated[signer.address]) {
             deduplicated[signer.address] = signer;
+        } else if (deduplicated[signer.address] !== signer) {
+            // TODO: Coded error.
+            throw new Error(
+                `Multiple distinct signers were identified for address "${signer.address}". ` +
+                    `Please ensure that you are using the same signer instance for each address.`
+            );
         }
     });
     return Object.values(deduplicated);

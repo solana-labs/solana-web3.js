@@ -10,7 +10,23 @@ import {
 
 describe('deduplicateSigners', () => {
     it('removes duplicated signers by address', () => {
-        // Given a list of signers with some duplicates.
+        // Given two signers A and B.
+        const signerA = createMockTransactionPartialSigner('1111' as Address);
+        const signerB = createMockMessagePartialSigner('2222' as Address);
+
+        // And an array of them with some duplicates.
+        const signers = [signerA, signerB, signerA, signerA, signerB, signerB];
+
+        // When we deduplicate them.
+        const deduplicatedSigners = deduplicateSigners(signers);
+
+        // Then we expect only two signers to remain: one for Signer A and one for Signer B.
+        expect(deduplicatedSigners).toHaveLength(2);
+        expect(deduplicatedSigners.map(signer => signer.address).sort()).toStrictEqual(['1111', '2222']);
+    });
+
+    it('fails to duplicated disctint signers for the same address', () => {
+        // Given a list of signers with some distinct duplicates for the same address.
         const addressA = '1111' as Address;
         const addressB = '2222' as Address;
         const signers = [
@@ -20,12 +36,14 @@ describe('deduplicateSigners', () => {
             createMockTransactionSendingSigner(addressA),
         ];
 
-        // When we deduplicate them.
-        const deduplicatedSigners = deduplicateSigners(signers);
+        // When we try deduplicate them.
+        const fn = () => deduplicateSigners(signers);
 
-        // Then we expect only two signers to remain: one for addressA and one for addressB.
-        expect(deduplicatedSigners).toHaveLength(2);
-        expect(deduplicatedSigners.map(signer => signer.address).sort()).toStrictEqual(['1111', '2222']);
+        // Then we expect an error to be thrown.
+        expect(fn).toThrow(
+            `Multiple distinct signers were identified for address "${addressA}". ` +
+                `Please ensure that you are using the same signer instance for each address.`
+        );
     });
 
     it('filters signers without cloning them', () => {

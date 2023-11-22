@@ -5,7 +5,6 @@ import {
     createMockInstructionWithSigners,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
-    createMockTransactionSendingSigner,
     createMockTransactionWithSigners,
 } from './__setup__';
 
@@ -25,17 +24,11 @@ describe('getSignersFromInstruction', () => {
         expect(extractedSigners[1]).toBe(signerB);
     });
 
-    it('removes duplicated signers', () => {
-        // Given an instruction with duplicated signers.
-        const addressA = '1111' as Address;
-        const addressB = '2222' as Address;
-        const signers = [
-            createMockTransactionPartialSigner(addressA),
-            createMockTransactionPartialSigner(addressB),
-            createMockTransactionModifyingSigner(addressA),
-            createMockTransactionSendingSigner(addressA),
-        ];
-        const instruction = createMockInstructionWithSigners(signers);
+    it('removes duplicated signers by reference', () => {
+        // Given an instruction with duplicated signers using the same reference.
+        const signerA = createMockTransactionPartialSigner('1111' as Address);
+        const signerB = createMockTransactionModifyingSigner('2222' as Address);
+        const instruction = createMockInstructionWithSigners([signerA, signerB, signerA, signerA]);
 
         // When we extract the signers from the instruction's account metas.
         const extractedSigners = getSignersFromInstruction(instruction);
@@ -63,16 +56,10 @@ describe('getSignersFromTransaction', () => {
     });
 
     it('removes duplicated signers', () => {
-        // Given a transaction with duplicated signers.
-        const addressA = '1111' as Address;
-        const addressB = '2222' as Address;
-        const signers = [
-            createMockTransactionPartialSigner(addressA),
-            createMockTransactionPartialSigner(addressB),
-            createMockTransactionModifyingSigner(addressA),
-            createMockTransactionSendingSigner(addressA),
-        ];
-        const transaction = createMockTransactionWithSigners(signers);
+        // Given a transaction with duplicated signers using the same reference.
+        const signerA = createMockTransactionPartialSigner('1111' as Address);
+        const signerB = createMockTransactionModifyingSigner('2222' as Address);
+        const transaction = createMockTransactionWithSigners([signerA, signerB, signerA, signerA]);
 
         // When we extract the signers from the transaction's account metas.
         const extractedSigners = getSignersFromTransaction(transaction);
