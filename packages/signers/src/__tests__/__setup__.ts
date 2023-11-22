@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { AccountRole } from '@solana/instructions';
+import { AccountRole, IInstruction } from '@solana/instructions';
 import {
     appendTransactionInstruction,
     Blockhash,
@@ -7,10 +7,9 @@ import {
     createTransaction,
     setTransactionFeePayer,
     setTransactionLifetimeUsingBlockhash,
-    TransactionVersion,
 } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta';
+import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from '../account-signer-meta';
 import { MessageModifyingSigner } from '../message-modifying-signer';
 import { MessagePartialSigner } from '../message-partial-signer';
 import { TransactionModifyingSigner } from '../transaction-modifying-signer';
@@ -18,7 +17,7 @@ import { TransactionPartialSigner } from '../transaction-partial-signer';
 import { TransactionSendingSigner } from '../transaction-sending-signer';
 import { TransactionSigner } from '../transaction-signer';
 
-export function createMockInstructionWithSigners(signers: TransactionSigner[]): IInstructionWithSigners {
+export function createMockInstructionWithSigners(signers: TransactionSigner[]): IInstruction & IInstructionWithSigners {
     return {
         accounts: signers.map(
             (signer): IAccountSignerMeta => ({ address: signer.address, role: AccountRole.READONLY_SIGNER, signer })
@@ -30,7 +29,7 @@ export function createMockInstructionWithSigners(signers: TransactionSigner[]): 
 
 export function createMockTransactionWithSigners(
     signers: TransactionSigner[]
-): CompilableTransaction<TransactionVersion, IInstructionWithSigners> {
+): CompilableTransaction & ITransactionWithSigners {
     const transaction = createTransaction({ version: 0 });
     const transactionWithFeePayer = setTransactionFeePayer(signers[0]?.address ?? '1111', transaction);
     const compilableTransaction = setTransactionLifetimeUsingBlockhash(

@@ -4,20 +4,17 @@ import {
     CompilableTransaction,
     IFullySignedTransaction,
     ITransactionWithSignatures,
-    TransactionVersion,
 } from '@solana/transactions';
 
-import { getSignersFromTransaction, IInstructionWithSigners } from './account-signer-meta';
+import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta';
 import { deduplicateSigners } from './deduplicate-signers';
 import { isTransactionModifyingSigner, TransactionModifyingSigner } from './transaction-modifying-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer';
 import { isTransactionSigner, TransactionSigner } from './transaction-signer';
 
-type CompilableTransactionWithSigners = CompilableTransaction<
-    TransactionVersion,
-    IInstructionWithSigners<string, TransactionSigner>
-> &
+type CompilableTransactionWithSigners = CompilableTransaction &
+    ITransactionWithSigners &
     Partial<ITransactionWithSignatures>;
 
 /**

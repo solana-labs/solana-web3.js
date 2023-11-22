@@ -13,20 +13,29 @@ export interface IAccountSignerMeta<
     readonly signer: TSigner;
 }
 
-/** A variation of the IInstruction type that allows IAccountSignerMeta in its accounts array. */
 type IAccountMetaWithWithSigner<TSigner extends TransactionSigner = TransactionSigner> =
     | IAccountMeta
     | IAccountLookupMeta
     | IAccountSignerMeta<string, TSigner>;
+
+/** A variation of the instruction type that allows IAccountSignerMeta in its account metas. */
 export type IInstructionWithSigners<
-    TProgramAddress extends string = string,
     TSigner extends TransactionSigner = TransactionSigner,
     TAccounts extends readonly IAccountMetaWithWithSigner<TSigner>[] = readonly IAccountMetaWithWithSigner<TSigner>[]
-> = IInstruction<TProgramAddress, TAccounts>;
+> = Pick<IInstruction<string, TAccounts>, 'accounts'>;
+
+/** A variation of the transaction type that allows IAccountSignerMeta in its account metas. */
+export type ITransactionWithSigners<
+    TSigner extends TransactionSigner = TransactionSigner,
+    TAccounts extends readonly IAccountMetaWithWithSigner<TSigner>[] = readonly IAccountMetaWithWithSigner<TSigner>[]
+> = Pick<
+    BaseTransaction<TransactionVersion, IInstruction & IInstructionWithSigners<TSigner, TAccounts>>,
+    'instructions'
+>;
 
 /** Extract all signers from an instruction that may contain IAccountSignerMeta accounts. */
 export function getSignersFromInstruction<TSigner extends TransactionSigner = TransactionSigner>(
-    instruction: IInstructionWithSigners<string, TSigner>
+    instruction: IInstructionWithSigners<TSigner>
 ): readonly TSigner[] {
     return deduplicateSigners(
         (instruction.accounts ?? []).flatMap(account => ('signer' in account ? account.signer : []))
@@ -36,7 +45,7 @@ export function getSignersFromInstruction<TSigner extends TransactionSigner = Tr
 /** Extract all signers from a transaction that may contain IAccountSignerMeta accounts. */
 export function getSignersFromTransaction<
     TSigner extends TransactionSigner = TransactionSigner,
-    TInstruction extends IInstructionWithSigners<string, TSigner> = IInstructionWithSigners<string, TSigner>
->(transaction: BaseTransaction<TransactionVersion, TInstruction>): readonly TSigner[] {
+    TTransaction extends ITransactionWithSigners<TSigner> = ITransactionWithSigners<TSigner>
+>(transaction: TTransaction): readonly TSigner[] {
     return deduplicateSigners(transaction.instructions.flatMap(getSignersFromInstruction));
 }
