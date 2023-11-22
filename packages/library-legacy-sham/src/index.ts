@@ -55,7 +55,6 @@ export type {
     ConfirmedTransaction,
     ConfirmedTransactionMeta,
     ConfirmOptions,
-    Connection,
     ConnectionConfig,
     ContactInfo,
     Context,
@@ -132,7 +131,6 @@ export type {
     InitializeStakeParams,
     IsBlockhashValidConfig,
     KeyedAccountInfo,
-    Keypair,
     LargestAccountsFilter,
     LeaderSchedule,
     LoadedAddresses,
@@ -174,7 +172,6 @@ export type {
     PerfSample,
     PriorVoter,
     ProgramAccountChangeCallback,
-    PublicKey,
     PublicKeyData,
     PublicKeyInitData,
     RecentPrioritizationFees,
@@ -283,6 +280,7 @@ export type {
     WithdrawStakeParams,
 } from '@solana/web3.js-legacy/declarations';
 
+export * from './connection';
 export * from './key-pair';
 export * from './public-key';
 export const LAMPORTS_PER_SOL = 1_000_000_000;
