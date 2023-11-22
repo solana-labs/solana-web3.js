@@ -7,7 +7,7 @@
         "build": "turbo run build",
         "compile": "turbo run compile:js compile:typedefs",
         "lint": "turbo run test:lint",
-        "publish-packages": "turbo run publish-packages",
+        "publish-packages": "turbo run --force=true build && turbo run --continue publish-packages",
         "style:fix": "turbo run style:fix",
         "test": "turbo run test:unit:browser test:unit:node",
         "test:live-with-test-validator": "turbo run test:live-with-test-validator",
