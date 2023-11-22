@@ -359,10 +359,136 @@ const myNoopSigner = createNoopSigner(myAddress);
 
 ## Storing transaction signers inside instruction account metas
 
+This package defines an alternative definition for account metas that allows us to store `TransactionSigners` inside them. This means each instruction can keep track of its own set of signers and, by extension, so can transactions.
+
+It also provides helper functions that deduplicate and extract signers from instructions and transactions which makes it possible to sign an entire transaction automatically as we will see in the next section.
+
 ### Types
 
-_Coming soon..._
+#### `IAccountSignerMeta`
+
+Alternative `IAccountMeta` definition for signer accounts that allows us to store `TransactionSigners` inside it.
+
+```ts
+const mySignerMeta: IAccountSignerMeta = {
+    address: myTransactionSigner.address,
+    role: AccountRole.READONLY_SIGNER,
+    signer: myTransactionSigner,
+};
+```
+
+#### `IInstructionWithSigners`
+
+Extends the `IInstruction` type to allow `IAccountSignerMetas` to be used inside the instruction's `accounts` array.
+
+```ts
+const myInstructionWithSigners: IInstructionWithSigners = {
+    programAddress: address('1234..5678'),
+    accounts: [
+        {
+            address: myTransactionSigner.address,
+            role: AccountRole.READONLY_SIGNER,
+            signer: myTransactionSigner,
+        },
+    ],
+};
+```
 
 ### Functions
 
-_Coming soon..._
+#### `getSignersFromInstruction()`
+
+Extracts and deduplicates all signers stored inside the account metas of an instruction.
+
+```ts
+const mySignerA = { address: address('1111..1111'), signTransactions: async () => {} };
+const mySignerB = { address: address('2222..2222'), signTransactions: async () => {} };
+const myInstructionWithSigners: IInstructionWithSigners = {
+    programAddress: address('1234..5678'),
+    accounts: [
+        { address: mySignerA.address, role: AccountRole.READONLY_SIGNER, signer: mySignerA },
+        { address: mySignerB.address, role: AccountRole.WRITABLE_SIGNER, signer: mySignerB },
+        { address: mySignerA.address, role: AccountRole.WRITABLE_SIGNER, signer: mySignerA },
+    ],
+};
+
+const instructionSigners = getSignersFromInstruction(myInstructionWithSigners);
+// ^ [mySignerA, mySignerB]
+```
+
+#### `getSignersFromTransaction()`
+
+Similarly to `getSignersFromInstruction`, this function extracts and deduplicates all signers stored inside the account metas of all the instructions inside a transaction.
+
+```ts
+const transactionSigners = getSignersFromTransaction(myTransactionWithSigners);
+```
+
+## Signing transactions with signers
+
+As we've seen in the previous section, we can store and extract `TransactionSigners` from instructions and transactions. This allows us to provide helper methods that sign transactions using the signers stored inside them.
+
+### Functions
+
+#### `partiallySignTransactionWithSigners()`
+
+Extracts all signers inside the provided transaction and uses them to sign it. It first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel.
+
+If a composite signer implements both interfaces, it will be used as a modifying signer if no other signer implements that interface. Otherwise, it will be used as a partial signer.
+
+```ts
+const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction);
+```
+
+It also accepts an additional array of signers that will be merged with the ones extracted from the transaction, if any.
+
+```ts
+const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction, [myOtherSigner]);
+```
+
+Finally, note that this function ignores `TransactionSendingSigners` as it does not send the transaction. See the `signAndSendTransactionWithSigners` function below for more details on how to use sending signers.
+
+#### `signTransactionWithSigners()`
+
+This function works the same as the `partiallySignTransactionWithSigners` function described above except that it also ensures the transaction is fully signed before returning it. An error will be thrown if that's not the case.
+
+```ts
+const mySignedTransaction = signTransactionWithSigners(myTransaction);
+
+// With additional signers.
+const mySignedTransaction = signTransactionWithSigners(myTransaction, [myOtherSigner]);
+
+// We now know the transaction is fully signed.
+mySignedTransaction satisfies IFullySignedTransaction;
+```
+
+#### `signAndSendTransactionWithSigners()`
+
+Extracts all signers inside the provided transaction and uses them to sign it before sending it immediately to the blockchain. It returns the signature of the sent transaction (i.e. its identifier).
+
+```ts
+const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction);
+
+// With additional signers.
+const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, [myOtherSigner]);
+```
+
+Similarly to the `partiallySignTransactionWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the first `TransactionSendingSigner` it finds. Any other sending signer that does not implement another transaction signer interface will be ignored.
+
+If no `TransactionSendingSigner` is extracted from the transaction or explicitly provided, the `fallbackSender` third argument will be used to send the transaction. If no fallback sender is provided and no sending signer is identified, an error will be thrown.
+
+```ts
+const fallbackSender = async (transaction: CompilableTransaction) => {
+    const encodedTransaction = getBase64EncodedWireTransaction(transaction);
+    const signature = await rpc.sendTransaction(encodedTransaction).send();
+    return getBase58Encoder().encode(signature);
+};
+
+const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, [], fallbackSender);
+```
+
+Here as well, composite transaction signers are treated such that at least one sending signer is used if any. When a `TransactionSigner` implements more than one interface, use it as a:
+
+-   `TransactionSendingSigner`, if no other `TransactionSendingSigner` exist.
+-   `TransactionModifyingSigner`, if no other `TransactionModifyingSigner` exist.
+-   `TransactionPartialSigner`, otherwise.
