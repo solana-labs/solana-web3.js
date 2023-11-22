@@ -1,7 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
-import { SignatureBytes } from '@solana/keys';
 import { CompilableTransaction, IFullySignedTransaction, ITransactionWithSignatures } from '@solana/transactions';
 
 import {
@@ -9,6 +8,10 @@ import {
     signAndSendTransactionWithSigners,
     signTransactionWithSigners,
 } from '../sign-transaction';
+import {
+    assertIsTransactionWithSingleSendingSigner,
+    ITransactionWithSingleSendingSigner,
+} from '../transaction-with-single-sending-signer';
 import {
     createMockTransactionCompositeSigner,
     createMockTransactionModifyingSigner,
@@ -367,6 +370,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
         // When we sign and send this transaction.
+        assertIsTransactionWithSingleSendingSigner(transaction);
         const transactionSignature = await signAndSendTransactionWithSigners(transaction);
 
         // Then the sending signer was used to send the transaction.
@@ -380,26 +384,7 @@ describe('signAndSendTransactionWithSigners', () => {
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
     });
 
-    it('sends the transaction using the provided fallback sender if no sending signer is used', async () => {
-        expect.assertions(2);
-
-        // Given a transaction with a mocked partial signer but no sending signer.
-        const signer = createMockTransactionPartialSigner('1111' as Address);
-        const transaction = createMockTransactionWithSigners([signer]);
-        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
-
-        // When we sign and send this transaction using a fallback sender.
-        const fallbackSender = async () => new Uint8Array([1, 2, 3]) as SignatureBytes;
-        const transactionSignature = await signAndSendTransactionWithSigners(transaction, { fallbackSender });
-
-        // Then the partial signer was used to sign the transaction.
-        expect(signer.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
-
-        // And the returned signature matches the one returned by the fallback signer.
-        expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-    });
-
-    it('fails if no sending signer is used and no fallback sender is provided', async () => {
+    it('fails if no sending signer exists on the transaction', async () => {
         expect.assertions(1);
 
         // Given a transaction with a mocked partial signer but no sending signer.
@@ -407,59 +392,15 @@ describe('signAndSendTransactionWithSigners', () => {
         signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transaction = createMockTransactionWithSigners([signer]);
 
-        // When we try to sign and send this transaction without providing a fallback sender.
-        const promise = signAndSendTransactionWithSigners(transaction);
+        // When we try to force sign and send this transaction.
+        const promise = signAndSendTransactionWithSigners(
+            transaction as typeof transaction & ITransactionWithSingleSendingSigner
+        );
 
         // Then we expect an error letting us know no sending mechanism was provided.
         await expect(promise).rejects.toThrow(
-            'No TransactionSendingSigner was identified and no fallback sender was provided'
+            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.'
         );
-    });
-
-    it('ignores the fallback sender when a sending signer is provided', async () => {
-        expect.assertions(3);
-
-        // Given a transaction with a mocked sending signer.
-        const signer = createMockTransactionSendingSigner('1111' as Address);
-        const transaction = createMockTransactionWithSigners([signer]);
-        signer.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
-
-        // When we sign and send this transaction using a fallback sender.
-        const fallbackSender = jest.fn();
-        const transactionSignature = await signAndSendTransactionWithSigners(transaction, { fallbackSender });
-
-        // Then the sending signer was used to sign the transaction.
-        expect(signer.signAndSendTransactions).toHaveBeenCalledWith([{ ...transaction, signatures: {} }], {
-            abortSignal: undefined,
-        });
-
-        // And the fallback sender was not used.
-        expect(fallbackSender).not.toHaveBeenCalled();
-
-        // And the returned signature matches the one returned by sending signer.
-        expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-    });
-
-    it('ignores other sending signers when multiple are provided', async () => {
-        expect.assertions(3);
-
-        // Given a transaction with two mocked sending signers A and B.
-        const signerA = createMockTransactionSendingSigner('1111' as Address);
-        const signerB = createMockTransactionSendingSigner('2222' as Address);
-        const transaction = createMockTransactionWithSigners([signerA, signerB]);
-        signerA.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
-
-        // When we sign and send this transaction.
-        const transactionSignature = await signAndSendTransactionWithSigners(transaction);
-
-        // Then only one sending signer was used to sign and send the transaction.
-        expect(signerA.signAndSendTransactions).toHaveBeenCalledWith([{ ...transaction, signatures: {} }], {
-            abortSignal: undefined,
-        });
-        expect(signerB.signAndSendTransactions).not.toHaveBeenCalled();
-
-        // And the returned signature matches the one returned by that sending signer.
-        expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
     });
 
     it('uses a composite signer as a sending signer when there are no other sending signers', async () => {
@@ -473,6 +414,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we sign and send this transaction.
+        assertIsTransactionWithSingleSendingSigner(transaction);
         const transactionSignature = await signAndSendTransactionWithSigners(transaction);
 
         // Then the composite signer was used as a sending signer.
@@ -501,6 +443,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
         // When we sign and send this transaction.
+        assertIsTransactionWithSingleSendingSigner(transaction);
         const transactionSignature = await signAndSendTransactionWithSigners(transaction);
 
         // Then the composite signer was used as a modifying signer.
@@ -530,6 +473,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signerC.modifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
 
         // When we sign and send this transaction.
+        assertIsTransactionWithSingleSendingSigner(transaction);
         const transactionSignature = await signAndSendTransactionWithSigners(transaction);
 
         // Then the composite signer was used as a partial signer.
@@ -556,6 +500,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // And given we've started signing this transaction whilst providing an abort signal.
         const abortController = new AbortController();
+        assertIsTransactionWithSingleSendingSigner(transaction);
         const promise = signAndSendTransactionWithSigners(transaction, {
             abortSignal: abortController.signal,
         });
