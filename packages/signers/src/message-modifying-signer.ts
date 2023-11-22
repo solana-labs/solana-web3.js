@@ -1,11 +1,17 @@
 import { Address, isAddress } from '@solana/addresses';
 
 import { SignableMessage } from './signable-message';
+import { BaseSignerConfig } from './types';
+
+export type MessageModifyingSignerConfig = BaseSignerConfig;
 
 /** Defines a signer capable of signing messages. */
 export type MessageModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    modifyAndSignMessages(messages: readonly SignableMessage[]): Promise<readonly SignableMessage[]>;
+    modifyAndSignMessages(
+        messages: readonly SignableMessage[],
+        config?: MessageModifyingSignerConfig
+    ): Promise<readonly SignableMessage[]>;
 }>;
 
 /** Checks whether the provided value implements the {@link MessageModifyingSigner} interface. */

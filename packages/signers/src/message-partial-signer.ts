@@ -1,12 +1,17 @@
 import { Address } from '@solana/addresses';
 
 import { SignableMessage } from './signable-message';
-import { SignatureDictionary } from './types';
+import { BaseSignerConfig, SignatureDictionary } from './types';
+
+export type MessagePartialSignerConfig = BaseSignerConfig;
 
 /** Defines a signer capable of signing messages. */
 export type MessagePartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    signMessages(messages: readonly SignableMessage[]): Promise<readonly SignatureDictionary[]>;
+    signMessages(
+        messages: readonly SignableMessage[],
+        config?: MessagePartialSignerConfig
+    ): Promise<readonly SignatureDictionary[]>;
 }>;
 
 /** Checks whether the provided value implements the {@link MessagePartialSigner} interface. */

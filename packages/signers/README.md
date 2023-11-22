@@ -440,10 +440,13 @@ If a composite signer implements both interfaces, it will be used as a modifying
 const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction);
 ```
 
-It also accepts an additional array of signers that will be merged with the ones extracted from the transaction, if any.
+It also accepts an optional `AbortSignal` and an additional array of signers that will be merged with the ones extracted from the transaction, if any.
 
 ```ts
-const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction, [myOtherSigner]);
+const mySignedTransaction = partiallySignTransactionWithSigners(myTransaction, {
+    abortSignal: myAbortController.signal,
+    signers: [myOtherSigner],
+});
 ```
 
 Finally, note that this function ignores `TransactionSendingSigners` as it does not send the transaction. See the `signAndSendTransactionWithSigners` function below for more details on how to use sending signers.
@@ -455,8 +458,11 @@ This function works the same as the `partiallySignTransactionWithSigners` functi
 ```ts
 const mySignedTransaction = signTransactionWithSigners(myTransaction);
 
-// With additional signers.
-const mySignedTransaction = signTransactionWithSigners(myTransaction, [myOtherSigner]);
+// With additional config.
+const mySignedTransaction = signTransactionWithSigners(myTransaction, {
+    abortSignal: myAbortController.signal,
+    signers: [myOtherSigner],
+});
 
 // We now know the transaction is fully signed.
 mySignedTransaction satisfies IFullySignedTransaction;
@@ -469,8 +475,11 @@ Extracts all signers inside the provided transaction and uses them to sign it be
 ```ts
 const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction);
 
-// With additional signers.
-const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, [myOtherSigner]);
+// With additional config.
+const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, {
+    abortSignal: myAbortController.signal,
+    signers: [myOtherSigner],
+});
 ```
 
 Similarly to the `partiallySignTransactionWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the first `TransactionSendingSigner` it finds. Any other sending signer that does not implement another transaction signer interface will be ignored.
@@ -484,7 +493,7 @@ const fallbackSender = async (transaction: CompilableTransaction) => {
     return getBase58Encoder().encode(signature);
 };
 
-const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, [], fallbackSender);
+const myTransactionSignature = signAndSendTransactionWithSigners(myTransaction, { fallbackSender });
 ```
 
 Here as well, composite transaction signers are treated such that at least one sending signer is used if any. When a `TransactionSigner` implements more than one interface, use it as a:
