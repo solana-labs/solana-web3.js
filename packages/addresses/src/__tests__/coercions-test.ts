@@ -1,4 +1,4 @@
-import { Address, address } from '../address';
+import { Address, address } from '../address.js';
 
 describe('coercions', () => {
     describe('address', () => {

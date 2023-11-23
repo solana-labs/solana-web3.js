@@ -1,5 +1,5 @@
-import { Address } from '../address';
-import { createAddressWithSeed, getProgramDerivedAddress } from '../program-derived-address';
+import { Address } from '../address.js';
+import { createAddressWithSeed, getProgramDerivedAddress } from '../program-derived-address.js';
 
 describe('getProgramDerivedAddress()', () => {
     it('fatals when supplied more than 16 seeds', async () => {

@@ -1,7 +1,7 @@
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
-import { Address, getAddressCodec, getAddressComparator } from '../address';
+import { Address, getAddressCodec, getAddressComparator } from '../address.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -16,7 +16,7 @@ const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
 describe('Address', () => {
     describe('assertIsAddress()', () => {
-        let assertIsAddress: typeof import('../address').assertIsAddress;
+        let assertIsAddress: typeof import('../address.js').assertIsAddress;
         // Reload `assertIsAddress` before each test to reset memoized state
         beforeEach(async () => {
             await jest.isolateModulesAsync(async () => {
@@ -149,7 +149,7 @@ describe('Address', () => {
             expect.assertions(2);
 
             // reload the module to reset memoized state
-            let getAddressCodec: typeof import('../address').getAddressCodec;
+            let getAddressCodec: typeof import('../address.js').getAddressCodec;
             await jest.isolateModulesAsync(async () => {
                 const base58ModulePromise =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

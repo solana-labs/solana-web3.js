@@ -23,6 +23,9 @@ const config: Partial<Config.InitialProjectOptions> = {
         ],
     },
     transformIgnorePatterns: ['/node_modules/(?!.*\\@noble/ed25519/)', '\\.pnp\\.[^\\/]+$'],
+    moduleNameMapper: {
+        "^(\.\.?\/.+)\.jsx?$": "$1"
+    }
 };
 
 export default config;

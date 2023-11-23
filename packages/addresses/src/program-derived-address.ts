@@ -1,7 +1,7 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
 
-import { Address, assertIsAddress, getAddressCodec, isAddress } from './address';
-import { compressedPointBytesAreOnCurve } from './curve';
+import { Address, assertIsAddress, getAddressCodec, isAddress } from './address.js';
+import { compressedPointBytesAreOnCurve } from './curve.js';
 
 /**
  * An address derived from a program address and a set of seeds.

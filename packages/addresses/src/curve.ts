@@ -1,4 +1,4 @@
-import { pointIsOnCurve } from './vendor/noble/ed25519';
+import { pointIsOnCurve } from './vendor/noble/ed25519.js';
 
 function byteToHex(byte: number): string {
     const hexString = byte.toString(16);

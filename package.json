@@ -19,6 +19,7 @@
         "@solana/prettier-config-solana": "^0.0.3",
         "commitlint": "^17.6.7",
         "eslint-config-turbo": "^1.10.13",
+        "eslint-plugin-require-extensions": "^0.1.3",
         "turbo": "^1.10.16"
     },
     "engines": {

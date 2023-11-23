@@ -1,6 +1,6 @@
 import { assertKeyExporterIsAvailable } from '@solana/assertions';
 
-import { Address, getAddressDecoder } from './address';
+import { Address, getAddressDecoder } from './address.js';
 
 export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Address> {
     await assertKeyExporterIsAvailable();
