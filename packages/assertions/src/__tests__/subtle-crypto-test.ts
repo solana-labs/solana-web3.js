@@ -3,7 +3,7 @@ import {
     assertKeyExporterIsAvailable,
     assertSigningCapabilityIsAvailable,
     assertVerificationCapabilityIsAvailable,
-} from '../subtle-crypto';
+} from '../subtle-crypto.js';
 
 describe('assertDigestCapabilityIsAvailable()', () => {
     it('resolves to `undefined` without throwing', async () => {
@@ -74,7 +74,7 @@ describe('assertKeyExporterIsAvailable()', () => {
 });
 
 describe('assertKeyGenerationIsAvailable()', () => {
-    let assertKeyGenerationIsAvailable: typeof import('../subtle-crypto').assertKeyGenerationIsAvailable;
+    let assertKeyGenerationIsAvailable: typeof import('../subtle-crypto.js').assertKeyGenerationIsAvailable;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const guardModulePromise =
