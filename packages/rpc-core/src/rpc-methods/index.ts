@@ -149,4 +149,4 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
     });
 }
 
-export type { GetSignatureStatusesApi, RequestAirdropApi };
+export type { GetSignatureStatusesApi, RequestAirdropApi, SendTransactionApi };
