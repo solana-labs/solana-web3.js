@@ -1,6 +1,6 @@
 import { Keypair } from '@solana/web3.js';
 
-import { fromLegacyKeypair } from '../keypair';
+import { fromLegacyKeypair } from '../keypair.js';
 
 describe('fromLegacyKeypair', () => {
     const legacyKeypair = Keypair.generate();

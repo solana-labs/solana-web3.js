@@ -6,7 +6,7 @@ import {
 } from '@solana/transactions';
 import { VersionedTransaction } from '@solana/web3.js';
 
-import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDurableNonce } from '../transaction';
+import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDurableNonce } from '../transaction.js';
 
 // Blockhash
 {
