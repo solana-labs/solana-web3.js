@@ -1,4 +1,4 @@
-import { IRpcSubscriptionsApi } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { IRpcSubscriptionsApi } from '@solana/rpc-transport';
 
 import { KeyPath } from './response-patcher';
 import { KEYPATH_WILDCARD } from './response-patcher-types';
