@@ -1,7 +1,6 @@
 import { Signature } from '@solana/keys';
-import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
-import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
-import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { GetSignatureStatusesApi, SignatureNotificationsApi } from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 
 import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './transaction-confirmation-strategy-racer';
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';

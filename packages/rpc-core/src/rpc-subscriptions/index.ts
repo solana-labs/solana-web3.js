@@ -84,3 +84,5 @@ export function createSolanaRpcSubscriptionsApi_UNSTABLE(
         SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
     >;
 }
+
+export type { SignatureNotificationsApi };
