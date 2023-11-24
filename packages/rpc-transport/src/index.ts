@@ -1,4 +1,5 @@
 export * from './json-rpc';
+export type { SolanaJsonRpcErrorCode } from './json-rpc-errors';
 export * from './json-rpc-subscription';
 export type {
     IRpcApi,
