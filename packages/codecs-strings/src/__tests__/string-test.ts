@@ -1,8 +1,8 @@
 import { Endian, getU8Codec, getU16Codec } from '@solana/codecs-numbers';
 
-import { getBase16Codec } from '../base16';
-import { getBase58Codec } from '../base58';
-import { getStringCodec } from '../string';
+import { getBase16Codec } from '../base16.js';
+import { getBase58Codec } from '../base58.js';
+import { getStringCodec } from '../string.js';
 
 describe('getStringCodec', () => {
     const string = getStringCodec;

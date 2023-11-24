@@ -1,4 +1,4 @@
-import { getBase58Codec } from '../base58';
+import { getBase58Codec } from '../base58.js';
 
 describe('getBase58Codec', () => {
     it('can encode base 58 strings', () => {

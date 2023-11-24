@@ -1,4 +1,4 @@
-import { getUtf8Codec } from '../utf8';
+import { getUtf8Codec } from '../utf8.js';
 
 describe('getUtf8Codec', () => {
     it('can encode UTF-8 strings', () => {

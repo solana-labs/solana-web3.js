@@ -1,4 +1,4 @@
-import { getBase10Codec } from '../base10';
+import { getBase10Codec } from '../base10.js';
 
 describe('getBase10Codec', () => {
     it('can encode base 10 strings', () => {

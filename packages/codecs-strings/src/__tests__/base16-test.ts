@@ -1,4 +1,4 @@
-import { getBase16Codec } from '../base16';
+import { getBase16Codec } from '../base16.js';
 
 describe('getBase16Codec', () => {
     it('can encode base 16 strings', () => {

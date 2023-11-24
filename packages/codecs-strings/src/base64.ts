@@ -1,7 +1,7 @@
 import { combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
 
-import { assertValidBaseString } from './assertions';
-import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
+import { assertValidBaseString } from './assertions.js';
+import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice.js';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 

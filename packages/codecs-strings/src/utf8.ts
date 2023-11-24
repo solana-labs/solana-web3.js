@@ -1,7 +1,7 @@
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 import { TextDecoder, TextEncoder } from 'text-encoding-impl';
 
-import { removeNullCharacters } from './null-characters';
+import { removeNullCharacters } from './null-characters.js';
 
 /** Encodes UTF-8 strings using the native `TextEncoder` API. */
 export const getUtf8Encoder = (): Encoder<string> => {
