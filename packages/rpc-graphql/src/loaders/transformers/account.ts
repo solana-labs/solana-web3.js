@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Address } from '@solana/addresses';
 
-import { AccountQueryArgs } from '../../schema/account';
+import { AccountQueryArgs } from '../../schema/account.js';
 
 function transformParsedAccountData(parsedAccountData: any) {
     const {

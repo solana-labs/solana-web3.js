@@ -5,10 +5,10 @@ import DataLoader from 'dataloader';
 import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
-import { BlockQueryArgs } from '../schema/block';
-import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedBlock } from './transformers/block';
+import type { Rpc } from '../context.js';
+import { BlockQueryArgs } from '../schema/block.js';
+import { onlyPresentFieldRequested } from './common/resolve-info.js';
+import { transformLoadedBlock } from './transformers/block.js';
 
 /* Normalizes RPC optional configs to use GraphQL API defaults */
 function normalizeArgs({

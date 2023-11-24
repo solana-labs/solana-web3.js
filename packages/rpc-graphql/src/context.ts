@@ -1,14 +1,14 @@
 import { GraphQLResolveInfo } from 'graphql';
 
-import { createAccountLoader } from './loaders/account';
-import { createBlockLoader } from './loaders/block';
-import { createProgramAccountsLoader } from './loaders/program-accounts';
-import { createTransactionLoader } from './loaders/transaction';
-import { createRpcGraphQL } from './rpc';
-import { AccountQueryArgs } from './schema/account';
-import { BlockQueryArgs } from './schema/block';
-import { ProgramAccountsQueryArgs } from './schema/program-accounts';
-import { TransactionQueryArgs } from './schema/transaction';
+import { createAccountLoader } from './loaders/account.js';
+import { createBlockLoader } from './loaders/block.js';
+import { createProgramAccountsLoader } from './loaders/program-accounts.js';
+import { createTransactionLoader } from './loaders/transaction.js';
+import { createRpcGraphQL } from './rpc.js';
+import { AccountQueryArgs } from './schema/account.js';
+import { BlockQueryArgs } from './schema/block.js';
+import { ProgramAccountsQueryArgs } from './schema/program-accounts.js';
+import { TransactionQueryArgs } from './schema/transaction.js';
 
 export type Rpc = Parameters<typeof createRpcGraphQL>[0];
 

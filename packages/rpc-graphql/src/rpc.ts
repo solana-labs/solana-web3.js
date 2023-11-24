@@ -2,8 +2,8 @@ import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransact
 import type { Rpc } from '@solana/rpc-transport';
 import { graphql, GraphQLSchema, Source } from 'graphql';
 
-import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
-import { createSolanaGraphQLSchema } from './schema';
+import { createSolanaGraphQLContext, RpcGraphQLContext } from './context.js';
+import { createSolanaGraphQLSchema } from './schema/index.js';
 
 type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi;
 

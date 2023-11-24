@@ -1,15 +1,15 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { RpcGraphQLContext } from '../context';
-import { AccountQueryArgs, accountResolvers, accountTypeDefs } from './account';
-import { BlockQueryArgs, blockResolvers, blockTypeDefs } from './block';
-import { inputResolvers, inputTypeDefs } from './common/inputs';
-import { scalarResolvers, scalarTypeDefs } from './common/scalars';
-import { commonResolvers, commonTypeDefs } from './common/types';
-import { instructionResolvers, instructionTypeDefs } from './instruction';
-import { ProgramAccountsQueryArgs } from './program-accounts';
-import { TransactionQueryArgs, transactionResolvers, transactionTypeDefs } from './transaction';
+import { RpcGraphQLContext } from '../context.js';
+import { AccountQueryArgs, accountResolvers, accountTypeDefs } from './account.js';
+import { BlockQueryArgs, blockResolvers, blockTypeDefs } from './block.js';
+import { inputResolvers, inputTypeDefs } from './common/inputs.js';
+import { scalarResolvers, scalarTypeDefs } from './common/scalars.js';
+import { commonResolvers, commonTypeDefs } from './common/types.js';
+import { instructionResolvers, instructionTypeDefs } from './instruction.js';
+import { ProgramAccountsQueryArgs } from './program-accounts.js';
+import { TransactionQueryArgs, transactionResolvers, transactionTypeDefs } from './transaction.js';
 
 // prettier-ignore
 const schemaTypeDefs = /* GraphQL */ `

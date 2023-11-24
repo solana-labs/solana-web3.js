@@ -1,4 +1,4 @@
-import { resolveAccount } from '../../resolvers/account';
+import { resolveAccount } from '../../resolvers/account.js';
 
 export const commonTypeDefs = /* GraphQL */ `
     enum AccountEncoding {

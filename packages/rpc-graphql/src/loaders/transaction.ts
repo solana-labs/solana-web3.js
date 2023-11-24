@@ -5,10 +5,10 @@ import DataLoader from 'dataloader';
 import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
-import { TransactionQueryArgs } from '../schema/transaction';
-import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedTransaction } from './transformers/transaction';
+import type { Rpc } from '../context.js';
+import { TransactionQueryArgs } from '../schema/transaction.js';
+import { onlyPresentFieldRequested } from './common/resolve-info.js';
+import { transformLoadedTransaction } from './transformers/transaction.js';
 
 /* Normalizes RPC optional configs to use GraphQL API defaults */
 function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', signature }: TransactionQueryArgs) {

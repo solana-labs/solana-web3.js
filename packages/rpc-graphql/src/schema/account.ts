@@ -2,7 +2,7 @@
 import { Address } from '@solana/addresses';
 import type { DataSlice, Slot } from '@solana/rpc-core';
 
-import { resolveAccount } from '../resolvers/account';
+import { resolveAccount } from '../resolvers/account.js';
 
 export type AccountQueryArgs = {
     address: Address;

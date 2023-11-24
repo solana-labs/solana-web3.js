@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { transformLoadedTransaction } from './transaction';
+import { transformLoadedTransaction } from './transaction.js';
 
 export function transformLoadedBlock({
     encoding,

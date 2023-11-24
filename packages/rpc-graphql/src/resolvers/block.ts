@@ -1,8 +1,8 @@
 import type { Slot } from '@solana/rpc-core';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { RpcGraphQLContext } from '../context';
-import { BlockQueryArgs } from '../schema/block';
+import { RpcGraphQLContext } from '../context.js';
+import { BlockQueryArgs } from '../schema/block.js';
 
 export const resolveBlock = (fieldName: string) => {
     return (

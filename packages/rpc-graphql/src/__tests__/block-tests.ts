@@ -2,7 +2,7 @@ import { createSolanaRpcApi, type Slot, type SolanaRpcMethods } from '@solana/rp
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createRpcGraphQL, RpcGraphQL } from '../rpc';
+import { createRpcGraphQL, RpcGraphQL } from '../rpc.js';
 import {
     mockBlockAccounts,
     mockBlockFull,
@@ -11,7 +11,7 @@ import {
     mockBlockNone,
     mockBlockSignatures,
     mockRpcResponse,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('block', () => {
     let rpc: Rpc<SolanaRpcMethods>;

@@ -4,7 +4,7 @@
 // until the following issue is resolved:
 // <https://github.com/solana-labs/solana-web3.js/issues/1828>
 
-import { resolveAccount } from '../resolvers/account';
+import { resolveAccount } from '../resolvers/account.js';
 
 export const instructionTypeDefs = /* GraphQL */ `
     # Transaction instruction interface

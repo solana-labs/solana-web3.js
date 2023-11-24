@@ -6,10 +6,10 @@ import DataLoader from 'dataloader';
 import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
-import { ProgramAccountsQueryArgs } from '../schema/program-accounts';
-import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedAccount } from './transformers/account';
+import type { Rpc } from '../context.js';
+import { ProgramAccountsQueryArgs } from '../schema/program-accounts.js';
+import { onlyPresentFieldRequested } from './common/resolve-info.js';
+import { transformLoadedAccount } from './transformers/account.js';
 
 /* Normalizes RPC optional configs to use GraphQL API defaults */
 function normalizeArgs({
