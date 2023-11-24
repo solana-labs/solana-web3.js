@@ -4,7 +4,7 @@ import type { GetSignatureStatusesApi, RequestAirdropApi } from '@solana/rpc-cor
 import type { Rpc } from '@solana/rpc-transport';
 import { lamports } from '@solana/rpc-types';
 
-import { requestAndConfirmAirdrop } from '../airdrop';
+import { requestAndConfirmAirdrop } from '../airdrop.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

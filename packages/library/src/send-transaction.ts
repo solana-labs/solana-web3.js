@@ -14,7 +14,7 @@ import {
 import {
     createDefaultDurableNonceTransactionConfirmer,
     createDefaultRecentTransactionConfirmer,
-} from './transaction-confirmation';
+} from './transaction-confirmation.js';
 
 interface DurableNonceTransactionSenderFactoryConfig {
     rpc: Rpc<SendTransactionApi> & Parameters<typeof createDefaultDurableNonceTransactionConfirmer>[0]['rpc'];

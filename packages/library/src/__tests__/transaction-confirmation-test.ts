@@ -6,7 +6,7 @@ import { Blockhash, IDurableNonceTransaction, Nonce } from '@solana/transactions
 import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,
-} from '../transaction-confirmation';
+} from '../transaction-confirmation.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

@@ -1,8 +1,8 @@
 import { pipe } from '@solana/functional';
 import { createWebSocketTransport, type IRpcWebSocketTransport } from '@solana/rpc-transport';
 
-import { getWebSocketTransportWithAutoping } from './rpc-websocket-autopinger';
-import { getWebSocketTransportWithConnectionSharding } from './rpc-websocket-connection-sharding';
+import { getWebSocketTransportWithAutoping } from './rpc-websocket-autopinger.js';
+import { getWebSocketTransportWithConnectionSharding } from './rpc-websocket-connection-sharding.js';
 
 export function createDefaultRpcSubscriptionsTransport(
     config: Omit<Parameters<typeof createWebSocketTransport>[0], 'sendBufferHighWatermark'> & {

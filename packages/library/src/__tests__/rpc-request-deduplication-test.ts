@@ -1,4 +1,4 @@
-import { getSolanaRpcPayloadDeduplicationKey } from '../rpc-request-deduplication';
+import { getSolanaRpcPayloadDeduplicationKey } from '../rpc-request-deduplication.js';
 
 describe('getSolanaRpcPayloadDeduplicationKey', () => {
     it('produces no key for undefined payloads', () => {

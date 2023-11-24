@@ -1,6 +1,6 @@
 import { Signature } from '@solana/keys';
 
-import { waitForRecentTransactionConfirmationUntilTimeout } from '../airdrop-confirmer';
+import { waitForRecentTransactionConfirmationUntilTimeout } from '../airdrop-confirmer.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

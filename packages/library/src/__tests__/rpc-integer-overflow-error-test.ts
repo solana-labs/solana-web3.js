@@ -1,4 +1,4 @@
-import { SolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error';
+import { SolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error.js';
 
 describe('SolanaJsonRpcIntegerOverflowError', () => {
     it('features an informative error message', () => {

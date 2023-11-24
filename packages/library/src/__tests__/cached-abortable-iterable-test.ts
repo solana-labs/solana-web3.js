@@ -1,4 +1,4 @@
-import { getCachedAbortableIterableFactory } from '../cached-abortable-iterable';
+import { getCachedAbortableIterableFactory } from '../cached-abortable-iterable.js';
 
 describe('getCachedAbortableIterableFactory', () => {
     let asyncGenerator: jest.Mock<AsyncGenerator<unknown, void>>;

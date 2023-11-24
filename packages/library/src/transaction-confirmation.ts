@@ -14,10 +14,13 @@ import {
     ITransactionWithSignatures,
 } from '@solana/transactions';
 
-import { createBlockHeightExceedencePromiseFactory } from './transaction-confirmation-strategy-blockheight';
-import { createNonceInvalidationPromiseFactory } from './transaction-confirmation-strategy-nonce';
-import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './transaction-confirmation-strategy-racer';
-import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
+import { createBlockHeightExceedencePromiseFactory } from './transaction-confirmation-strategy-blockheight.js';
+import { createNonceInvalidationPromiseFactory } from './transaction-confirmation-strategy-nonce.js';
+import {
+    BaseTransactionConfirmationStrategyConfig,
+    raceStrategies,
+} from './transaction-confirmation-strategy-racer.js';
+import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature.js';
 
 interface DefaultDurableNonceTransactionConfirmerConfig {
     rpc: Rpc<GetSignatureStatusesApi & GetAccountInfoApi>;

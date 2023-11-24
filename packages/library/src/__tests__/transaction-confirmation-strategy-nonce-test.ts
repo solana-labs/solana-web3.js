@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { Nonce } from '@solana/transactions';
 
-import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
+import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

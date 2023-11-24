@@ -1,8 +1,8 @@
 import { pipe } from '@solana/functional';
 import { createHttpTransport, type IRpcTransport } from '@solana/rpc-transport';
 
-import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
-import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
+import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer.js';
+import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication.js';
 
 /**
  * Lowercasing header names makes it easier to override user-supplied headers.

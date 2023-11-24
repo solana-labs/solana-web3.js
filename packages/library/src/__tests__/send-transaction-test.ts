@@ -12,7 +12,7 @@ import {
     ITransactionWithFeePayer,
 } from '@solana/transactions';
 
-import { sendAndConfirmDurableNonceTransaction, sendAndConfirmTransaction } from '../send-transaction';
+import { sendAndConfirmDurableNonceTransaction, sendAndConfirmTransaction } from '../send-transaction.js';
 
 jest.mock('@solana/transactions');
 

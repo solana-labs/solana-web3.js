@@ -2,9 +2,12 @@ import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, SignatureNotificationsApi } from '@solana/rpc-core';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 
-import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './transaction-confirmation-strategy-racer';
-import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
-import { getTimeoutPromise } from './transaction-confirmation-strategy-timeout';
+import {
+    BaseTransactionConfirmationStrategyConfig,
+    raceStrategies,
+} from './transaction-confirmation-strategy-racer.js';
+import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature.js';
+import { getTimeoutPromise } from './transaction-confirmation-strategy-timeout.js';
 
 interface DefaultSignatureOnlyRecentTransactionConfirmerConfig {
     rpc: Rpc<GetSignatureStatusesApi>;

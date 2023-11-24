@@ -1,4 +1,4 @@
-import { createBlockHeightExceedencePromiseFactory } from '../transaction-confirmation-strategy-blockheight';
+import { createBlockHeightExceedencePromiseFactory } from '../transaction-confirmation-strategy-blockheight.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

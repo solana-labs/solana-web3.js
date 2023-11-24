@@ -12,8 +12,8 @@ import { createJsonRpc, createJsonSubscriptionRpc, type Rpc, type RpcSubscriptio
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
 
-import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
-import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
+import { DEFAULT_RPC_CONFIG } from './rpc-default-config.js';
+import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer.js';
 
 export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
     return createJsonRpc({

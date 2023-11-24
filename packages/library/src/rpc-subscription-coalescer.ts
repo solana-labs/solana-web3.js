@@ -1,6 +1,6 @@
 import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
 
-import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
+import { getCachedAbortableIterableFactory } from './cached-abortable-iterable.js';
 
 type CacheKey = string | undefined;
 type Config<TRpcSubscriptionsMethods> = Readonly<{

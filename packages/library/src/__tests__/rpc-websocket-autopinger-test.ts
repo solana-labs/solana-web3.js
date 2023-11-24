@@ -1,6 +1,6 @@
 import type { IRpcWebSocketTransport } from '@solana/rpc-transport';
 
-import { getWebSocketTransportWithAutoping } from '../rpc-websocket-autopinger';
+import { getWebSocketTransportWithAutoping } from '../rpc-websocket-autopinger.js';
 
 jest.mock('@solana/rpc-transport');
 

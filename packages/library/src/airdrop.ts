@@ -4,7 +4,7 @@ import type { GetSignatureStatusesApi, RequestAirdropApi, SignatureNotifications
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
+import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer.js';
 
 type AirdropRequesterConfig = Readonly<{
     rpc: Rpc<RequestAirdropApi & GetSignatureStatusesApi>;

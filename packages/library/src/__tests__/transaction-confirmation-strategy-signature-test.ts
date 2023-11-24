@@ -1,6 +1,6 @@
 import { Signature } from '@solana/keys';
 
-import { createRecentSignatureConfirmationPromiseFactory } from '../transaction-confirmation-strategy-recent-signature';
+import { createRecentSignatureConfirmationPromiseFactory } from '../transaction-confirmation-strategy-recent-signature.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
