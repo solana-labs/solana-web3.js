@@ -1,7 +1,7 @@
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { Base58EncodedBytes, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
+import { Base58EncodedBytes, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common.js';
 import {
     Reward,
     TransactionForAccounts,
@@ -9,7 +9,7 @@ import {
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-} from '../rpc-methods/common-transactions';
+} from '../rpc-methods/common-transactions.js';
 
 // Subscription notification types
 

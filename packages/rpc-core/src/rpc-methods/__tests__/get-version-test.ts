@@ -4,7 +4,7 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validator.log');
 const featureSetPattern = /feat:([\d]+)/;

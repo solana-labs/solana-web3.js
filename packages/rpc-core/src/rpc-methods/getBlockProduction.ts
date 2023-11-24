@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
-import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
 type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;

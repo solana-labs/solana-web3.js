@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
+import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common.js';
 
 type GetRecentPrioritizationFeesApiResponse = Readonly<{
     /**

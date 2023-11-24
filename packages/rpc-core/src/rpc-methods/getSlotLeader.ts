@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 export interface GetSlotLeaderApi {
     /**

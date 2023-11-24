@@ -3,7 +3,7 @@ import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCo
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 // See scripts/fixtures/stake-account.json
 const stakeAccountAddress = 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Address;

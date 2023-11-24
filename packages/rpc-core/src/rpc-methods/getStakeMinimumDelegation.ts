@@ -1,6 +1,6 @@
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { RpcResponse } from './common';
+import { RpcResponse } from './common.js';
 
 type GetStakeMinimumDelegationApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 

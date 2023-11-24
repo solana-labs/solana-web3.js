@@ -2,8 +2,8 @@
 
 import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
 
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
-import { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common.js';
+import { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<SlotsUpdatesNotificationsApi>;

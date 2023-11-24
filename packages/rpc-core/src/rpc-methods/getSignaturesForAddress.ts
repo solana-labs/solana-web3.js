@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 
-import { TransactionError } from '../transaction-error';
-import { Slot } from './common';
+import { TransactionError } from '../transaction-error.js';
+import { Slot } from './common.js';
 
 type GetSignaturesForAddressTransaction = Readonly<{
     /** transaction signature as base-58 encoded string */

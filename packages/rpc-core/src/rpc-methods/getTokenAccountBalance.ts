@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
-import { RpcResponse, TokenAmount } from './common';
+import { RpcResponse, TokenAmount } from './common.js';
 
 type GetTokenAccountBalanceApiResponse = RpcResponse<TokenAmount>;
 

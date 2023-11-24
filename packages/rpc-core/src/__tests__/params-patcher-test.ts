@@ -1,4 +1,4 @@
-import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { patchParamsForSolanaLabsRpc } from '../params-patcher.js';
 
 describe('patchParamsForSolanaLabsRpc', () => {
     [10, '10', null, undefined, Symbol()].forEach(input => {

@@ -4,7 +4,7 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('getBalance', () => {
     let rpc: Rpc<SolanaRpcMethods>;

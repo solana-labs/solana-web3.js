@@ -5,7 +5,7 @@ import {
     createSolanaRpcSubscriptionsApi_UNSTABLE,
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
-} from '../index';
+} from '../index.js';
 
 describe('slotsUpdatesNotifications', () => {
     let rpc: RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>;

@@ -11,7 +11,7 @@ import {
     DataSlice,
     RpcResponse,
     Slot,
-} from './common';
+} from './common.js';
 
 type GetAccountInfoApiResponseBase = RpcResponse<AccountInfoBase | null>;
 

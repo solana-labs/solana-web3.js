@@ -2,7 +2,7 @@ import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 type SendTransactionConfig = Readonly<{
     skipPreflight?: boolean;

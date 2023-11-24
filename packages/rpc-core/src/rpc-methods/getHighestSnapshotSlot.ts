@@ -1,4 +1,4 @@
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 type GetHighestSnapshotSlotApiResponse = Readonly<{
     full: Slot;

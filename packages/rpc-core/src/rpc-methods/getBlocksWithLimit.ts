@@ -1,6 +1,6 @@
 import { Commitment } from '@solana/rpc-types';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 type GetBlocksWithLimitApiResponse = Slot[];
 

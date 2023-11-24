@@ -1,8 +1,8 @@
 import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
 
-import { TransactionError } from '../transaction-error';
-import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { TransactionError } from '../transaction-error.js';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 /** @deprecated */
 type TransactionStatusOk = Readonly<{

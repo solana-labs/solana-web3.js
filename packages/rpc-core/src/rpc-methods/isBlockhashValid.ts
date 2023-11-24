@@ -1,7 +1,7 @@
 import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
-import { RpcResponse, Slot } from './common';
+import { RpcResponse, Slot } from './common.js';
 
 type IsBlockhashValidApiResponse = RpcResponse<boolean>;
 

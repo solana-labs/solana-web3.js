@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { RpcResponse, Slot } from './common';
+import { RpcResponse, Slot } from './common.js';
 
 type GetBalanceApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 

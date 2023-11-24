@@ -6,8 +6,8 @@ import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-trans
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
-import { Slot } from '../../rpc-methods/common';
-import { VoteNotificationsApi } from '../vote-notifications';
+import { Slot } from '../../rpc-methods/common.js';
+import { VoteNotificationsApi } from '../vote-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<VoteNotificationsApi>;

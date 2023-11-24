@@ -1,6 +1,6 @@
 import { Commitment } from '@solana/rpc-types';
 
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetEpochInfoApiResponse = Readonly<{
     /** the current slot */

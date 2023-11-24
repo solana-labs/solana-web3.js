@@ -1,16 +1,16 @@
 import type { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport';
 
-import { patchParamsForSolanaLabsRpc } from '../params-patcher';
-import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
-import { AccountNotificationsApi } from './account-notifications';
-import { BlockNotificationsApi } from './block-notifications';
-import { LogsNotificationsApi } from './logs-notifications';
-import { ProgramNotificationsApi } from './program-notifications';
-import { RootNotificationsApi } from './root-notifications';
-import { SignatureNotificationsApi } from './signature-notifications';
-import { SlotNotificationsApi } from './slot-notifications';
-import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
-import { VoteNotificationsApi } from './vote-notifications';
+import { patchParamsForSolanaLabsRpc } from '../params-patcher.js';
+import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher.js';
+import { AccountNotificationsApi } from './account-notifications.js';
+import { BlockNotificationsApi } from './block-notifications.js';
+import { LogsNotificationsApi } from './logs-notifications.js';
+import { ProgramNotificationsApi } from './program-notifications.js';
+import { RootNotificationsApi } from './root-notifications.js';
+import { SignatureNotificationsApi } from './signature-notifications.js';
+import { SlotNotificationsApi } from './slot-notifications.js';
+import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications.js';
+import { VoteNotificationsApi } from './vote-notifications.js';
 
 type Config = Readonly<{
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;

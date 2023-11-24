@@ -1,4 +1,4 @@
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common.js';
 
 type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     slot: Slot;

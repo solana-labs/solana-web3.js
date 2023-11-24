@@ -12,7 +12,7 @@ import {
     Base64EncodedBytes,
     RpcResponse,
     U64UnsafeBeyond2Pow53Minus1,
-} from '../rpc-methods/common';
+} from '../rpc-methods/common.js';
 
 type ProgramNotificationsMemcmpFilterBase58 = Readonly<{
     offset: U64UnsafeBeyond2Pow53Minus1;

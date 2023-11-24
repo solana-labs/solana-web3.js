@@ -10,7 +10,7 @@ import {
     DataSlice,
     RpcResponse,
     Slot,
-} from './common';
+} from './common.js';
 
 type GetMultipleAccountsApiResponseBase = AccountInfoBase | null;
 

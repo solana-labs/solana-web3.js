@@ -1,6 +1,6 @@
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 type GetBlockCommitmentApiResponse = Readonly<{
     commitment: LamportsUnsafeBeyond2Pow53Minus1[] | null;

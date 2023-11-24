@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 /**
  * This return type is a dictionary of validator identities, as base-58 encoded

@@ -1,6 +1,6 @@
 import { Commitment } from '@solana/rpc-types';
 
-import { F64UnsafeSeeDocumentation } from './common';
+import { F64UnsafeSeeDocumentation } from './common.js';
 
 type GetInflationGovernorApiResponse = Readonly<{
     /** The initial inflation percentage from time 0 */

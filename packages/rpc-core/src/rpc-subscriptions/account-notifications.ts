@@ -9,7 +9,7 @@ import {
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
     RpcResponse,
-} from '../rpc-methods/common';
+} from '../rpc-methods/common.js';
 
 type AccountNotificationsApiCommonConfig = Readonly<{
     commitment?: Commitment;

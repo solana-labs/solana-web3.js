@@ -12,8 +12,8 @@ import {
     Base64EncodedZStdCompressedDataResponse,
     RpcResponse,
     U64UnsafeBeyond2Pow53Minus1,
-} from '../../rpc-methods/common';
-import { ProgramNotificationsApi } from '../program-notifications';
+} from '../../rpc-methods/common.js';
+import { ProgramNotificationsApi } from '../program-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<ProgramNotificationsApi>;

@@ -4,7 +4,7 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('requestAirdrop', () => {
     let rpc: Rpc<SolanaRpcMethods>;

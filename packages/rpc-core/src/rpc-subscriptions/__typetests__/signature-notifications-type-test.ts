@@ -3,9 +3,9 @@
 import { Signature } from '@solana/keys';
 import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
 
-import { RpcResponse } from '../../rpc-methods/common';
-import { TransactionError } from '../../transaction-error';
-import { SignatureNotificationsApi } from '../signature-notifications';
+import { RpcResponse } from '../../rpc-methods/common.js';
+import { TransactionError } from '../../transaction-error.js';
+import { SignatureNotificationsApi } from '../signature-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<SignatureNotificationsApi>;

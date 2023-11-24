@@ -14,7 +14,7 @@ import {
     GetProgramAccountsMemcmpFilter,
     RpcResponse,
     Slot,
-} from './common';
+} from './common.js';
 
 type GetProgramAccountsApiCommonConfig = Readonly<{
     /** @defaultValue "finalized" */

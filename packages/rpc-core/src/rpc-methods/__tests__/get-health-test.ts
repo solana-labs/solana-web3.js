@@ -1,7 +1,7 @@
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('getHealth', () => {
     let rpc: Rpc<SolanaRpcMethods>;

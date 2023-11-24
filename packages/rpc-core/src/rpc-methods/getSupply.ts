@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { RpcResponse } from './common';
+import { RpcResponse } from './common.js';
 
 type GetSupplyConfig = Readonly<{
     commitment?: Commitment;

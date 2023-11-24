@@ -1,7 +1,7 @@
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('minimumLedgerSlot', () => {
     let rpc: Rpc<SolanaRpcMethods>;

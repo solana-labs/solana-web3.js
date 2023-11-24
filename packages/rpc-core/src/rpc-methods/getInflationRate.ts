@@ -1,4 +1,4 @@
-import { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetInflationRateApiResponse = Readonly<{
     /** Epoch for which these values are valid */

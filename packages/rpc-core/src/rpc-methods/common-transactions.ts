@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { TransactionError } from '../transaction-error';
+import { TransactionError } from '../transaction-error.js';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
@@ -10,7 +10,7 @@ import {
     SignedLamportsAsI64Unsafe,
     TokenBalance,
     U64UnsafeBeyond2Pow53Minus1,
-} from './common';
+} from './common.js';
 
 type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */

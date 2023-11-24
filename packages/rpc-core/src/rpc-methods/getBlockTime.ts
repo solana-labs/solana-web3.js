@@ -1,6 +1,6 @@
 import { UnixTimestamp } from '@solana/rpc-types';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 /** Estimated production time, as Unix timestamp (seconds since the Unix epoch) */
 type GetBlockTimeApiResponse = UnixTimestamp;

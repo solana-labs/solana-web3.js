@@ -13,7 +13,7 @@ import {
     Slot,
     TokenAccount,
     U64UnsafeBeyond2Pow53Minus1,
-} from './common';
+} from './common.js';
 
 type TokenAccountInfoWithJsonData = Readonly<{
     data: Readonly<{

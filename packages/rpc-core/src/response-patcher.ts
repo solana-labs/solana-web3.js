@@ -1,10 +1,10 @@
 import {
     getAllowedNumericKeypathsForNotification,
     getAllowedNumericKeypathsForResponse,
-} from './response-patcher-allowed-numeric-values';
-import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
-import { createSolanaRpcApi } from './rpc-methods';
-import { createSolanaRpcSubscriptionsApi } from './rpc-subscriptions';
+} from './response-patcher-allowed-numeric-values.js';
+import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types.js';
+import { createSolanaRpcApi } from './rpc-methods/index.js';
+import { createSolanaRpcSubscriptionsApi } from './rpc-subscriptions/index.js';
 
 export type KeyPath = ReadonlyArray<KeyPathWildcard | number | string | KeyPath>;
 // FIXME(https://github.com/microsoft/TypeScript/issues/33014)

@@ -2,7 +2,7 @@ import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCo
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('getInflationReward', () => {
     let rpc: Rpc<SolanaRpcMethods>;

@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetInflationRewardApiResponse = Readonly<{
     // Reward amount in lamports

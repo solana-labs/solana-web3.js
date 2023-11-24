@@ -6,8 +6,8 @@ import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Base58EncodedBytes } from '../common';
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { Base58EncodedBytes } from '../common.js';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

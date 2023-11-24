@@ -3,7 +3,7 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 describe('getVoteAccounts', () => {
     let rpc: Rpc<SolanaRpcMethods>;

@@ -1,4 +1,4 @@
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 type GetMaxRetransmitSlotApiResponse = Slot;
 

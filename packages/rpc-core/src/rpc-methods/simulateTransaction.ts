@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { TransactionError } from '../transaction-error';
+import { TransactionError } from '../transaction-error.js';
 import {
     AccountInfoBase,
     AccountInfoWithBase64EncodedData,
@@ -13,7 +13,7 @@ import {
     RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,
-} from './common';
+} from './common.js';
 
 type SimulateTransactionConfigBase = Readonly<{
     /**

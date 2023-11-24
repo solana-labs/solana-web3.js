@@ -1,4 +1,4 @@
-import { Slot } from '../rpc-methods/common';
+import { Slot } from '../rpc-methods/common.js';
 
 type RootNotificationsApiNotification = Slot;
 

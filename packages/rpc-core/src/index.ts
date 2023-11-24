@@ -1,2 +1,2 @@
-export * from './rpc-methods';
-export * from './rpc-subscriptions';
+export * from './rpc-methods/index.js';
+export * from './rpc-subscriptions/index.js';

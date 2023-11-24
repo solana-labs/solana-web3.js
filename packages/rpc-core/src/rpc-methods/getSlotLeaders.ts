@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { Slot } from './common';
+import { Slot } from './common.js';
 
 /** array of Node identity public keys as base-58 encoded strings */
 type GetSlotLeadersApiResponse = Address[];

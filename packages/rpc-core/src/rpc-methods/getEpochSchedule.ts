@@ -1,4 +1,4 @@
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetEpochScheduleApiResponse = Readonly<{
     /** the maximum number of slots in each epoch */

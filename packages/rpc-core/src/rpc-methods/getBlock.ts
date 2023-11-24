@@ -1,7 +1,7 @@
 import { Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { Base58EncodedBytes, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Base58EncodedBytes, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 import {
     Reward,
     TransactionForAccounts,
@@ -9,7 +9,7 @@ import {
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-} from './common-transactions';
+} from './common-transactions.js';
 
 // API response types
 

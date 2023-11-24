@@ -3,17 +3,17 @@ import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-trans
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
-import { RpcResponse, Slot } from '../../rpc-methods/common';
+import { RpcResponse, Slot } from '../../rpc-methods/common.js';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     TokenBalance,
     U64UnsafeBeyond2Pow53Minus1,
-} from '../../rpc-methods/common';
-import { Reward, TransactionStatus } from '../../rpc-methods/common-transactions';
-import { TransactionError } from '../../transaction-error';
-import { SolanaRpcSubscriptions } from '../index';
+} from '../../rpc-methods/common.js';
+import { Reward, TransactionStatus } from '../../rpc-methods/common-transactions.js';
+import { TransactionError } from '../../transaction-error.js';
+import { SolanaRpcSubscriptions } from '../index.js';
 
 async () => {
     type BlockNotificationsApiNotificationBase = RpcResponse<

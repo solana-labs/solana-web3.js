@@ -1,6 +1,6 @@
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetMinimumBalanceForRentExemptionApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
 

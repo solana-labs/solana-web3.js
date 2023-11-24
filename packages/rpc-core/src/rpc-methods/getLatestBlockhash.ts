@@ -1,7 +1,7 @@
 import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
-import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type GetLatestBlockhashApiResponse = RpcResponse<{
     /** a Hash as base-58 encoded string */

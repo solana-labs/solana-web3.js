@@ -3,7 +3,7 @@ import { Signature } from '@solana/keys';
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
-import { Slot } from '../rpc-methods/common';
+import { Slot } from '../rpc-methods/common.js';
 
 type VoteNotificationsApiNotification = Readonly<{
     hash: Blockhash;

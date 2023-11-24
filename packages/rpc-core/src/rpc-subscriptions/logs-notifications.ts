@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
 
-import { RpcResponse } from '../rpc-methods/common';
-import { TransactionError } from '../transaction-error';
+import { RpcResponse } from '../rpc-methods/common.js';
+import { TransactionError } from '../transaction-error.js';
 
 type LogsNotificationsApiNotification = RpcResponse<
     Readonly<{

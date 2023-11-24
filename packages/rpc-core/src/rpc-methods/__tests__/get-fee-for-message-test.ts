@@ -5,7 +5,7 @@ import { Commitment } from '@solana/rpc-types';
 import { Blockhash, SerializedMessageBytesBase64 } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, SolanaRpcMethods } from '../index.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

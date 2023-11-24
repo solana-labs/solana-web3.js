@@ -1,4 +1,4 @@
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common.js';
 
 type PerformanceSample = Readonly<{
     /** Slot in which sample was taken at */
