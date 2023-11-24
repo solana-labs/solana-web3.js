@@ -5,7 +5,7 @@ import {
     isPolyfilledKey,
     signPolyfill,
     verifyPolyfill,
-} from '../secrets';
+} from '../secrets.js';
 
 jest.mock('../secrets');
 
