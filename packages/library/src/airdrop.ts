@@ -1,9 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
-import { RequestAirdropApi } from '@solana/rpc-core/dist/types/rpc-methods/requestAirdrop';
-import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
-import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { GetSignatureStatusesApi, RequestAirdropApi, SignatureNotificationsApi } from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
