@@ -38,6 +38,7 @@
         },
         "publish-packages": {
             "cache": false,
+            "dependsOn": ["^publish-packages"],
             "outputs": []
         },
         "style:fix": {
