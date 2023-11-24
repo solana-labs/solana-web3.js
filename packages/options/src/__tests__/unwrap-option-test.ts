@@ -1,5 +1,5 @@
-import { none, some } from '../option';
-import { unwrapOption, wrapNullable } from '../unwrap-option';
+import { none, some } from '../option.js';
+import { unwrapOption, wrapNullable } from '../unwrap-option.js';
 
 describe('unwrapOption', () => {
     it('can unwrap an Option as a Nullable', () => {

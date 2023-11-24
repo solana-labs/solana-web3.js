@@ -1,4 +1,4 @@
-import { isSome, none, Option, some } from './option';
+import { isSome, none, Option, some } from './option.js';
 
 /**
  * Unwraps the value of an {@link Option} of type `T`

@@ -11,8 +11,8 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { isOption, isSome, none, Option, OptionOrNullable, some } from './option';
-import { wrapNullable } from './unwrap-option';
+import { isOption, isSome, none, Option, OptionOrNullable, some } from './option.js';
+import { wrapNullable } from './unwrap-option.js';
 
 /** Defines the config for option codecs. */
 export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {

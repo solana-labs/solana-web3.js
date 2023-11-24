@@ -1,5 +1,5 @@
-import { none, some } from '../option';
-import { unwrapOptionRecursively } from '../unwrap-option-recursively';
+import { none, some } from '../option.js';
+import { unwrapOptionRecursively } from '../unwrap-option-recursively.js';
 
 describe('unwrapOptionRecursively', () => {
     it('can unwrap options recursively', () => {

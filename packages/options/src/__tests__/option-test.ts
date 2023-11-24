@@ -1,4 +1,4 @@
-import { isNone, isSome, none, Option, some } from '../option';
+import { isNone, isSome, none, Option, some } from '../option.js';
 
 describe('Option', () => {
     it('can create Some and None options', () => {

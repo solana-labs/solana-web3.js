@@ -1,4 +1,4 @@
-import { isOption, isSome, None, Some } from './option';
+import { isOption, isSome, None, Some } from './option.js';
 
 /**
  * Lists all types that should not be recursively unwrapped.
