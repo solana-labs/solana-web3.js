@@ -1,5 +1,5 @@
-import { IRpcWebSocketTransport } from '../transport-types';
-import { createWebSocketConnection } from './websocket-connection';
+import { IRpcWebSocketTransport } from '../transport-types.js';
+import { createWebSocketConnection } from './websocket-connection.js';
 
 type Config = Readonly<{
     sendBufferHighWatermark: number;

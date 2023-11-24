@@ -1,4 +1,4 @@
-import { getNextMessageId } from './json-rpc-message-id';
+import { getNextMessageId } from './json-rpc-message-id.js';
 
 export function createJsonRpcMessage<TParams>(method: string, params: TParams) {
     return {

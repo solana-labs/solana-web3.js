@@ -1,7 +1,7 @@
 import WS from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
 
-import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection';
+import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection.js';
 
 const MOCK_SEND_BUFFER_HIGH_WATERMARK = 42069;
 

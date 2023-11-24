@@ -1,6 +1,6 @@
-import { IRpcWebSocketTransport } from '../../transport-types';
-import { createWebSocketConnection } from '../websocket-connection';
-import { createWebSocketTransport } from '../websocket-transport';
+import { IRpcWebSocketTransport } from '../../transport-types.js';
+import { createWebSocketConnection } from '../websocket-connection.js';
+import { createWebSocketTransport } from '../websocket-transport.js';
 
 jest.mock('../websocket-connection');
 

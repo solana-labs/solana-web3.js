@@ -1,4 +1,4 @@
-import { createJsonRpcMessage } from '../json-rpc-message';
+import { createJsonRpcMessage } from '../json-rpc-message.js';
 
 describe('createJsonRpcMessage', () => {
     it('auto-increments ids with each new message', () => {

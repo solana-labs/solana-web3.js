@@ -1,9 +1,9 @@
-import { SolanaJsonRpcError } from '../json-rpc-errors';
-import { createJsonRpcMessage } from '../json-rpc-message';
-import { getNextMessageId } from '../json-rpc-message-id';
-import { createJsonSubscriptionRpc } from '../json-rpc-subscription';
-import { IRpcSubscriptionsApi, RpcSubscription, RpcSubscriptions } from '../json-rpc-types';
-import { IRpcWebSocketTransport } from '../transports/transport-types';
+import { SolanaJsonRpcError } from '../json-rpc-errors.js';
+import { createJsonRpcMessage } from '../json-rpc-message.js';
+import { getNextMessageId } from '../json-rpc-message-id.js';
+import { createJsonSubscriptionRpc } from '../json-rpc-subscription.js';
+import { IRpcSubscriptionsApi, RpcSubscription, RpcSubscriptions } from '../json-rpc-types.js';
+import { IRpcWebSocketTransport } from '../transports/transport-types.js';
 
 jest.mock('../json-rpc-message-id');
 

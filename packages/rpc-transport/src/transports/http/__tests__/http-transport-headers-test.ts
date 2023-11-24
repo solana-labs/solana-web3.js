@@ -1,6 +1,6 @@
-import { IRpcTransport } from '../../transport-types';
-import { createHttpTransport } from '../http-transport';
-import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
+import { IRpcTransport } from '../../transport-types.js';
+import { createHttpTransport } from '../http-transport.js';
+import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers.js';
 
 describe('assertIsAllowedHttpRequestHeader', () => {
     [

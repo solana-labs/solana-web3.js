@@ -1,6 +1,6 @@
-import { SolanaJsonRpcError } from './json-rpc-errors';
-import { createJsonRpcMessage } from './json-rpc-message';
-import { PendingRpcRequest, Rpc, RpcConfig, RpcRequest, SendOptions } from './json-rpc-types';
+import { SolanaJsonRpcError } from './json-rpc-errors.js';
+import { createJsonRpcMessage } from './json-rpc-message.js';
+import { PendingRpcRequest, Rpc, RpcConfig, RpcRequest, SendOptions } from './json-rpc-types.js';
 
 interface IHasIdentifier {
     readonly id: number;

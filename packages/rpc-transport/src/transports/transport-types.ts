@@ -1,4 +1,4 @@
-import { RpcWebSocketConnection } from './websocket/websocket-connection';
+import { RpcWebSocketConnection } from './websocket/websocket-connection.js';
 
 type RpcTransportConfig = Readonly<{
     payload: unknown;

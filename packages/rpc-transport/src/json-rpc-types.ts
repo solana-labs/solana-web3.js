@@ -1,4 +1,4 @@
-import { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-types';
+import { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-types.js';
 
 /**
  * Public RPC API.

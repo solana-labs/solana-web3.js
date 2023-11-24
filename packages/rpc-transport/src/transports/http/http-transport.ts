@@ -1,12 +1,12 @@
 import fetchImpl from 'fetch-impl';
 
-import { IRpcTransport } from '../transport-types';
-import { SolanaHttpError } from './http-transport-errors';
+import { IRpcTransport } from '../transport-types.js';
+import { SolanaHttpError } from './http-transport-errors.js';
 import {
     AllowedHttpRequestHeaders,
     assertIsAllowedHttpRequestHeaders,
     normalizeHeaders,
-} from './http-transport-headers';
+} from './http-transport-headers.js';
 
 type Config = Readonly<{
     headers?: AllowedHttpRequestHeaders;

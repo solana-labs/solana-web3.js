@@ -1,13 +1,13 @@
-import { JsonRpcResponse } from './json-rpc';
-import { SolanaJsonRpcError } from './json-rpc-errors';
-import { createJsonRpcMessage } from './json-rpc-message';
+import { JsonRpcResponse } from './json-rpc.js';
+import { SolanaJsonRpcError } from './json-rpc-errors.js';
+import { createJsonRpcMessage } from './json-rpc-message.js';
 import {
     PendingRpcSubscription,
     RpcSubscription,
     RpcSubscriptionConfig,
     RpcSubscriptions,
     SubscribeOptions,
-} from './json-rpc-types';
+} from './json-rpc-types.js';
 
 type JsonRpcNotification<TNotification> = Readonly<{
     params: Readonly<{
