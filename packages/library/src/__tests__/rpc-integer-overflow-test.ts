@@ -1,4 +1,4 @@
-import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import type { IRpcTransport } from '@solana/rpc-transport';
 
 import { createSolanaRpc } from '../rpc';
 import { SolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error';
