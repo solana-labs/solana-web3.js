@@ -1,4 +1,4 @@
-import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { IRpcApi, RpcRequest } from '@solana/rpc-transport';
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';

@@ -1,6 +1,7 @@
 export * from './json-rpc';
 export * from './json-rpc-subscription';
 export type {
+    IRpcApi,
     IRpcSubscriptionsApi,
     IRpcWebSocketTransport,
     PendingRpcSubscription,
