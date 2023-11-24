@@ -1,8 +1,8 @@
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
-import { getNullableCodec } from '../nullable';
-import { b } from './__setup__';
+import { getNullableCodec } from '../nullable.js';
+import { b } from './__setup__.js';
 
 describe('getNullableCodec', () => {
     const nullable = getNullableCodec;

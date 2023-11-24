@@ -1,6 +1,6 @@
 import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 
-import { sumCodecSizes } from './utils';
+import { sumCodecSizes } from './utils.js';
 
 /** Get the name and encoder of each field in a struct. */
 export type StructToEncoderTuple<T extends object> = Array<

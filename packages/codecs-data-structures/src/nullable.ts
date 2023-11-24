@@ -11,7 +11,7 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { sumCodecSizes } from './utils';
+import { sumCodecSizes } from './utils.js';
 
 /** Defines the config for nullable codecs. */
 export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {

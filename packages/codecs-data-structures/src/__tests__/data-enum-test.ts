@@ -1,13 +1,13 @@
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
-import { getArrayCodec } from '../array';
-import { getBooleanCodec } from '../boolean';
-import { DataEnumToCodecTuple, getDataEnumCodec } from '../data-enum';
-import { getStructCodec } from '../struct';
-import { getTupleCodec } from '../tuple';
-import { getUnitCodec } from '../unit';
-import { b } from './__setup__';
+import { getArrayCodec } from '../array.js';
+import { getBooleanCodec } from '../boolean.js';
+import { DataEnumToCodecTuple, getDataEnumCodec } from '../data-enum.js';
+import { getStructCodec } from '../struct.js';
+import { getTupleCodec } from '../tuple.js';
+import { getUnitCodec } from '../unit.js';
+import { b } from './__setup__.js';
 
 describe('getDataEnumCodec', () => {
     const dataEnum = getDataEnumCodec;

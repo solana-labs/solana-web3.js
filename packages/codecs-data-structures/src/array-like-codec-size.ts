@@ -1,7 +1,7 @@
 import { CodecData, Offset } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { sumCodecSizes } from './utils';
+import { sumCodecSizes } from './utils.js';
 
 /**
  * Represents all the size options for array-like codecs

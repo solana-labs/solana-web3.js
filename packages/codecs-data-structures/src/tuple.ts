@@ -1,7 +1,7 @@
 import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
 
-import { assertValidNumberOfItemsForCodec } from './assertions';
-import { sumCodecSizes } from './utils';
+import { assertValidNumberOfItemsForCodec } from './assertions.js';
+import { sumCodecSizes } from './utils.js';
 
 /** Defines the config for tuple codecs. */
 export type TupleCodecConfig = BaseCodecConfig;

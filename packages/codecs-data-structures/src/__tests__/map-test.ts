@@ -1,8 +1,8 @@
 import { Endian, getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
-import { getMapCodec } from '../map';
-import { b } from './__setup__';
+import { getMapCodec } from '../map.js';
+import { b } from './__setup__.js';
 
 describe('getMapCodec', () => {
     const map = getMapCodec;

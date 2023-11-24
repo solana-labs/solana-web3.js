@@ -7,8 +7,8 @@ import {
     getArrayLikeCodecSizeDescription,
     getArrayLikeCodecSizeFromChildren,
     getArrayLikeCodecSizePrefix,
-} from './array-like-codec-size';
-import { assertValidNumberOfItemsForCodec } from './assertions';
+} from './array-like-codec-size.js';
+import { assertValidNumberOfItemsForCodec } from './assertions.js';
 
 /** Defines the configs for array codecs. */
 export type ArrayCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {

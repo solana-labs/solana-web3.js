@@ -1,7 +1,7 @@
 import { Endian, getU32Codec } from '@solana/codecs-numbers';
 
-import { getBooleanCodec } from '../boolean';
-import { b } from './__setup__';
+import { getBooleanCodec } from '../boolean.js';
+import { b } from './__setup__.js';
 
 describe('getBooleanCodec', () => {
     const boolean = getBooleanCodec;

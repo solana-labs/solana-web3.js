@@ -10,7 +10,7 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { maxCodecSizes, sumCodecSizes } from './utils';
+import { maxCodecSizes, sumCodecSizes } from './utils.js';
 
 /**
  * Defines a data enum using discriminated union types.

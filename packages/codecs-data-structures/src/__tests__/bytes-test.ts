@@ -1,7 +1,7 @@
 import { Endian, getU8Codec, getU16Codec } from '@solana/codecs-numbers';
 
-import { getBytesCodec } from '../bytes';
-import { b } from './__setup__';
+import { getBytesCodec } from '../bytes.js';
+import { b } from './__setup__.js';
 
 describe('getBytesCodec', () => {
     const bytes = getBytesCodec;
