@@ -6,8 +6,8 @@ import {
     Encoder,
 } from '@solana/codecs-core';
 
-import { assertNumberIsBetweenForCodec } from './assertions';
-import { Endian, NumberCodecConfig, SingleByteNumberCodecConfig } from './common';
+import { assertNumberIsBetweenForCodec } from './assertions.js';
+import { Endian, NumberCodecConfig, SingleByteNumberCodecConfig } from './common.js';
 
 type NumberFactorySharedInput = {
     name: string;

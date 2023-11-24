@@ -1,7 +1,7 @@
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-import { NumberCodecConfig } from './common';
-import { numberDecoderFactory, numberEncoderFactory } from './utils';
+import { NumberCodecConfig } from './common.js';
+import { numberDecoderFactory, numberEncoderFactory } from './utils.js';
 
 export const getU128Encoder = (config: NumberCodecConfig = {}): Encoder<number | bigint> =>
     numberEncoderFactory({

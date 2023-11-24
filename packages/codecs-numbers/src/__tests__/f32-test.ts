@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getF32Codec } from '../f32';
-import { assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getF32Codec } from '../f32.js';
+import { assertValid } from './__setup__.js';
 
 const APPROX_PI = 3.1415927410125732;
 const f32 = getF32Codec;

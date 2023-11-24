@@ -1,5 +1,5 @@
-import { getShortU16Codec } from '../short-u16';
-import { assertRangeError, assertValid } from './__setup__';
+import { getShortU16Codec } from '../short-u16.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = 0;
 const MAX = 65535;

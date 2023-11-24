@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getF64Codec } from '../f64';
-import { assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getF64Codec } from '../f64.js';
+import { assertValid } from './__setup__.js';
 
 const APPROX_PI = 3.141592653589793;
 const f64 = getF64Codec;

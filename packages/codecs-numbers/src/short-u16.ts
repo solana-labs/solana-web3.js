@@ -1,6 +1,6 @@
 import { BaseCodecConfig, Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-import { assertNumberIsBetweenForCodec } from './assertions';
+import { assertNumberIsBetweenForCodec } from './assertions.js';
 
 /**
  * Defines the config for the shortU16 serializer.

@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getU128Codec } from '../u128';
-import { assertRangeError, assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getU128Codec } from '../u128.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = 0n;
 const MAX = BigInt('0xffffffffffffffffffffffffffffffff');

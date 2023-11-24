@@ -1,7 +1,7 @@
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-import { SingleByteNumberCodecConfig } from './common';
-import { numberDecoderFactory, numberEncoderFactory } from './utils';
+import { SingleByteNumberCodecConfig } from './common.js';
+import { numberDecoderFactory, numberEncoderFactory } from './utils.js';
 
 export const getI8Encoder = (config: SingleByteNumberCodecConfig = {}): Encoder<number> =>
     numberEncoderFactory({
