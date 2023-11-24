@@ -1,4 +1,4 @@
-import { assertIsLamports } from '../lamports';
+import { assertIsLamports } from '../lamports.js';
 
 describe('assertIsLamports()', () => {
     it('throws when supplied a negative number', () => {

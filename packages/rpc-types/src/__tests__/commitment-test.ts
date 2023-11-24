@@ -1,4 +1,4 @@
-import { Commitment, commitmentComparator } from '../commitment';
+import { Commitment, commitmentComparator } from '../commitment.js';
 
 describe('commitmentComparator', () => {
     it('sorts commitments according to their level of finality ascending', () => {

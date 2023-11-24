@@ -1,4 +1,4 @@
-import { assertIsUnixTimestamp } from '../unix-timestamp';
+import { assertIsUnixTimestamp } from '../unix-timestamp.js';
 
 describe('assertIsUnixTimestamp()', () => {
     it('throws when supplied a too large number', () => {

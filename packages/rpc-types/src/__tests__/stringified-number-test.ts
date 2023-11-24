@@ -1,4 +1,4 @@
-import { assertIsStringifiedNumber } from '../stringified-number';
+import { assertIsStringifiedNumber } from '../stringified-number.js';
 
 describe('assertIsStringifiedNumber()', () => {
     it("throws when supplied a string that can't parse as a number", () => {
