@@ -1,6 +1,5 @@
-import { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { SlotNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/slot-notifications';
-import { RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { Slot, SlotNotificationsApi } from '@solana/rpc-core';
+import type { RpcSubscriptions } from '@solana/rpc-transport';
 
 type GetBlockHeightExceedencePromiseFn = (config: {
     abortSignal: AbortSignal;
