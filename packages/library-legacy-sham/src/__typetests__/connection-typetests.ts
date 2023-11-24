@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Connection as LegacyConnection } from '@solana/web3.js-legacy';
 
-import { Connection } from '../connection';
+import { Connection } from '../connection.js';
 
 new Connection('https://some.rpc').rpcEndpoint satisfies 'https://some.rpc';
 

@@ -1,7 +1,7 @@
 import { utils } from '@noble/ed25519';
 
-import { Keypair } from '../key-pair';
-import { PublicKey } from '../public-key';
+import { Keypair } from '../key-pair.js';
+import { PublicKey } from '../public-key.js';
 
 const MOCK_PRIVATE_KEY_BYTES = [
     151, 227, 37, 180, 104, 169, 5, 53, 191, 115, 132, 187, 223, 228, 25, 52, 7, 50, 86, 18, 151, 45, 105, 68, 31, 21,

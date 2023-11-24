@@ -1,4 +1,4 @@
-import { PublicKey } from '../public-key';
+import { PublicKey } from '../public-key.js';
 
 const VALID_ADDRESS = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb';
 const VALID_ADDRESS_BYTES = [
