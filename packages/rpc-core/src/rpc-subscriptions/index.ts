@@ -85,4 +85,4 @@ export function createSolanaRpcSubscriptionsApi_UNSTABLE(
     >;
 }
 
-export type { SignatureNotificationsApi, SlotNotificationsApi };
+export type { AccountNotificationsApi, SignatureNotificationsApi, SlotNotificationsApi };

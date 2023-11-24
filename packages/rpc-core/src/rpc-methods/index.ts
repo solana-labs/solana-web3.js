@@ -151,4 +151,4 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
 
 export type { GetSignatureStatusesApi, RequestAirdropApi, SendTransactionApi };
 
-export type { Slot } from './common';
+export type { Base64EncodedDataResponse, Slot } from './common';
