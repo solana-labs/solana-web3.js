@@ -4,7 +4,7 @@ import {
     assertIsTransactionSendingSigner,
     isTransactionSendingSigner,
     TransactionSendingSigner,
-} from '../transaction-sending-signer';
+} from '../transaction-sending-signer.js';
 
 describe('isTransactionSendingSigner', () => {
     it('checks whether a given value is a TransactionSendingSigner', () => {

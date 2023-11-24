@@ -1,6 +1,10 @@
 import { address } from '@solana/addresses';
 
-import { assertIsMessagePartialSigner, isMessagePartialSigner, MessagePartialSigner } from '../message-partial-signer';
+import {
+    assertIsMessagePartialSigner,
+    isMessagePartialSigner,
+    MessagePartialSigner,
+} from '../message-partial-signer.js';
 
 describe('isMessagePartialSigner', () => {
     it('checks whether a given value is a MessagePartialSigner', () => {

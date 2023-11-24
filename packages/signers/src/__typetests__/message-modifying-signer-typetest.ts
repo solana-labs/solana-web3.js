@@ -4,7 +4,7 @@ import {
     assertIsMessageModifyingSigner,
     isMessageModifyingSigner,
     MessageModifyingSigner,
-} from '../message-modifying-signer';
+} from '../message-modifying-signer.js';
 
 const modifyAndSignMessages = () => {};
 

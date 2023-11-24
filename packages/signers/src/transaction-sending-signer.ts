@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { SignatureBytes } from '@solana/keys';
 import { CompilableTransaction } from '@solana/transactions';
 
-import { BaseSignerConfig } from './types';
+import { BaseSignerConfig } from './types.js';
 
 export type TransactionSendingSignerConfig = BaseSignerConfig;
 

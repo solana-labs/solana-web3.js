@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 
-import { MessagePartialSigner } from './message-partial-signer';
-import { TransactionPartialSigner } from './transaction-partial-signer';
+import { MessagePartialSigner } from './message-partial-signer.js';
+import { TransactionPartialSigner } from './transaction-partial-signer.js';
 
 /** Defines a no-operation signer that pretends to partially sign messages and transactions. */
 export type NoopSigner<TAddress extends string = string> = MessagePartialSigner<TAddress> &

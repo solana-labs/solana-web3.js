@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { CompilableTransaction } from '@solana/transactions';
 
-import { BaseSignerConfig } from './types';
+import { BaseSignerConfig } from './types.js';
 
 export type TransactionModifyingSignerConfig = BaseSignerConfig;
 

@@ -4,9 +4,9 @@ import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { BaseTransaction } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta';
-import { addSignersToInstruction, addSignersToTransaction } from '../add-signers';
-import { createMockTransactionModifyingSigner, createMockTransactionPartialSigner } from './__setup__';
+import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta.js';
+import { addSignersToInstruction, addSignersToTransaction } from '../add-signers.js';
+import { createMockTransactionModifyingSigner, createMockTransactionPartialSigner } from './__setup__.js';
 
 describe('addSignersToInstruction', () => {
     it('adds signers to the account metas of the instruction', () => {

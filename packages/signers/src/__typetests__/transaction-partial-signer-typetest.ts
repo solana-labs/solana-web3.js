@@ -4,7 +4,7 @@ import {
     assertIsTransactionPartialSigner,
     isTransactionPartialSigner,
     TransactionPartialSigner,
-} from '../transaction-partial-signer';
+} from '../transaction-partial-signer.js';
 
 const signTransactions = () => {};
 

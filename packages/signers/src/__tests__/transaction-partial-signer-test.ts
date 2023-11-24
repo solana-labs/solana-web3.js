@@ -4,7 +4,7 @@ import {
     assertIsTransactionPartialSigner,
     isTransactionPartialSigner,
     TransactionPartialSigner,
-} from '../transaction-partial-signer';
+} from '../transaction-partial-signer.js';
 
 describe('isTransactionPartialSigner', () => {
     it('checks whether a given value is a TransactionPartialSigner', () => {

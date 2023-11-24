@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 
-import { MessageSigner } from './message-signer';
-import { TransactionSigner } from './transaction-signer';
+import { MessageSigner } from './message-signer.js';
+import { TransactionSigner } from './transaction-signer.js';
 
 /** Removes all duplicated signers from a provided array by comparing their addresses. */
 export function deduplicateSigners<TSigner extends MessageSigner | TransactionSigner>(

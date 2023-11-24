@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 
-import { SignableMessage } from './signable-message';
-import { BaseSignerConfig, SignatureDictionary } from './types';
+import { SignableMessage } from './signable-message.js';
+import { BaseSignerConfig, SignatureDictionary } from './types.js';
 
 export type MessagePartialSignerConfig = BaseSignerConfig;
 

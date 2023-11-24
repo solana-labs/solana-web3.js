@@ -4,7 +4,7 @@ import {
     assertIsMessageModifyingSigner,
     isMessageModifyingSigner,
     MessageModifyingSigner,
-} from '../message-modifying-signer';
+} from '../message-modifying-signer.js';
 
 describe('isMessageModifyingSigner', () => {
     it('checks whether a given value is a MessageModifyingSigner', () => {

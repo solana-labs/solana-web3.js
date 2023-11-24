@@ -1,6 +1,6 @@
 import { address } from '@solana/addresses';
 
-import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer';
+import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer.js';
 
 describe('isMessageSigner', () => {
     it('checks whether a given value is a MessageSigner', () => {

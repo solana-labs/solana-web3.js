@@ -2,8 +2,8 @@ import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, signBytes } from '@solana/keys';
 import { partiallySignTransaction } from '@solana/transactions';
 
-import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
-import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
+import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer.js';
+import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer.js';
 
 /** Defines a signer capable of signing messages and transactions using a CryptoKeyPair. */
 export type KeyPairSigner<TAddress extends string = string> = MessagePartialSigner<TAddress> &

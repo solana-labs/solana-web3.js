@@ -1,12 +1,12 @@
 import { Address } from '@solana/addresses';
 
-import { deduplicateSigners } from '../deduplicate-signers';
+import { deduplicateSigners } from '../deduplicate-signers.js';
 import {
     createMockMessagePartialSigner,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
     createMockTransactionSendingSigner,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('deduplicateSigners', () => {
     it('removes duplicated signers by address', () => {

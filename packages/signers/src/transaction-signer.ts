@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 
-import { isTransactionModifyingSigner, TransactionModifyingSigner } from './transaction-modifying-signer';
-import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
-import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer';
+import { isTransactionModifyingSigner, TransactionModifyingSigner } from './transaction-modifying-signer.js';
+import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer.js';
+import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer.js';
 
 /** Defines a signer capable of signing transactions. */
 export type TransactionSigner<TAddress extends string = string> =

@@ -1,7 +1,7 @@
 import { Address, isAddress } from '@solana/addresses';
 
-import { SignableMessage } from './signable-message';
-import { BaseSignerConfig } from './types';
+import { SignableMessage } from './signable-message.js';
+import { BaseSignerConfig } from './types.js';
 
 export type MessageModifyingSignerConfig = BaseSignerConfig;
 
