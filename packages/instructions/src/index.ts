@@ -1,3 +1,3 @@
-export * from './accounts';
-export * from './instruction';
-export * from './roles';
+export * from './accounts.js';
+export * from './instruction.js';
+export * from './roles.js';

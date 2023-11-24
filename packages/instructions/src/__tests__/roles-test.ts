@@ -7,7 +7,7 @@ import {
     mergeRoles,
     upgradeRoleToSigner,
     upgradeRoleToWritable,
-} from '../roles';
+} from '../roles.js';
 
 describe('downgradeRoleToNonSigner', () => {
     it.each`
