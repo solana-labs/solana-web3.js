@@ -1,4 +1,4 @@
-import { CodecData } from './codec';
+import { CodecData } from './codec.js';
 
 /**
  * Asserts that a given byte array is not empty.

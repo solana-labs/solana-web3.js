@@ -1,7 +1,7 @@
-import { Decoder, Encoder } from '../codec';
-import { fixCodec } from '../fix-codec';
-import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
-import { b, base16 } from './__setup__';
+import { Decoder, Encoder } from '../codec.js';
+import { fixCodec } from '../fix-codec.js';
+import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec.js';
+import { b, base16 } from './__setup__.js';
 
 describe('reverseCodec', () => {
     it('can reverse the bytes of a fixed-size codec', () => {

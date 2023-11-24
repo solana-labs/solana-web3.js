@@ -1,7 +1,7 @@
-import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
-import { fixBytes } from './bytes';
-import { Codec, CodecData, Decoder, Encoder } from './codec';
-import { combineCodec } from './combine-codec';
+import { assertByteArrayHasEnoughBytesForCodec } from './assertions.js';
+import { fixBytes } from './bytes.js';
+import { Codec, CodecData, Decoder, Encoder } from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 function fixCodecHelper(data: CodecData, fixedBytes: number, description?: string): CodecData {
     return {

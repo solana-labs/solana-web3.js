@@ -1,5 +1,5 @@
-import { Codec, Decoder, Encoder } from '../codec';
-import { combineCodec } from '../combine-codec';
+import { Codec, Decoder, Encoder } from '../codec.js';
+import { combineCodec } from '../combine-codec.js';
 
 describe('combineCodec', () => {
     const mockEncode: Encoder<number>['encode'] = () => new Uint8Array([]);

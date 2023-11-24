@@ -1,6 +1,6 @@
-import { Codec } from '../codec';
-import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
-import { b, getMockCodec } from './__setup__';
+import { Codec } from '../codec.js';
+import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec.js';
+import { b, getMockCodec } from './__setup__.js';
 
 describe('fixCodec', () => {
     it('keeps same-sized byte arrays as-is', () => {

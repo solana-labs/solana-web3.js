@@ -1,4 +1,4 @@
-import { Codec } from '../codec';
+import { Codec } from '../codec.js';
 
 export const b = (s: string) => base16.encode(s);
 

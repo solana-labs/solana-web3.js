@@ -1,4 +1,4 @@
-import { Codec, Decoder, Encoder } from './codec';
+import { Codec, Decoder, Encoder } from './codec.js';
 
 /**
  * Combines an encoder and a decoder into a codec.

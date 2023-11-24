@@ -1,4 +1,4 @@
-import { Codec, Decoder, Encoder } from './codec';
+import { Codec, Decoder, Encoder } from './codec.js';
 
 /**
  * Converts an encoder A to a encoder B by mapping their values.

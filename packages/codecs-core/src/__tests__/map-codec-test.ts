@@ -1,5 +1,5 @@
-import { Codec, Decoder, Encoder } from '../codec';
-import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
+import { Codec, Decoder, Encoder } from '../codec.js';
+import { mapCodec, mapDecoder, mapEncoder } from '../map-codec.js';
 
 const numberCodec: Codec<number> = {
     decode: (bytes: Uint8Array): [number, number] => [bytes[0], 1],

@@ -1,7 +1,7 @@
-import { assertFixedSizeCodec } from './assertions';
-import { mergeBytes } from './bytes';
-import { Codec, Decoder, Encoder } from './codec';
-import { combineCodec } from './combine-codec';
+import { assertFixedSizeCodec } from './assertions.js';
+import { mergeBytes } from './bytes.js';
+import { Codec, Decoder, Encoder } from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 /**
  * Reverses the bytes of a fixed-size encoder.
