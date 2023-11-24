@@ -1,10 +1,12 @@
-import { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
-import type { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
-import type { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
-import type { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
-import type { SlotNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/slot-notifications';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type {
+    AccountNotificationsApi,
+    GetAccountInfoApi,
+    GetSignatureStatusesApi,
+    SignatureNotificationsApi,
+    Slot,
+    SlotNotificationsApi,
+} from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import {
     getSignatureFromTransaction,
     IDurableNonceTransaction,
