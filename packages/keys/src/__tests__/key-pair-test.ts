@@ -1,4 +1,4 @@
-import { generateKeyPair } from '../key-pair';
+import { generateKeyPair } from '../key-pair.js';
 
 describe('generateKeyPair', () => {
     it.each(['private', 'public'])('generates an ed25519 %s `CryptoKey`', async type => {

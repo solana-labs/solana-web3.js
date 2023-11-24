@@ -1,2 +1,2 @@
-export * from './key-pair';
-export * from './signatures';
+export * from './key-pair.js';
+export * from './signatures.js';
