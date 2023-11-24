@@ -1,6 +1,6 @@
 import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
 
-import { TransactionVersion } from '../types';
+import { TransactionVersion } from '../types.js';
 
 const VERSION_FLAG_MASK = 0x80;
 

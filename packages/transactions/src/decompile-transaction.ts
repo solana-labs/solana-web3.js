@@ -3,16 +3,16 @@ import { pipe } from '@solana/functional';
 import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
-import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash';
-import { CompilableTransaction } from './compilable-transaction';
-import { CompiledTransaction } from './compile-transaction';
-import { createTransaction } from './create-transaction';
-import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce';
-import { setTransactionFeePayer } from './fee-payer';
-import { appendTransactionInstruction } from './instructions';
-import { CompiledMessage } from './message';
-import { ITransactionWithSignatures } from './signatures';
-import { TransactionVersion } from './types';
+import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash.js';
+import { CompilableTransaction } from './compilable-transaction.js';
+import { CompiledTransaction } from './compile-transaction.js';
+import { createTransaction } from './create-transaction.js';
+import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce.js';
+import { setTransactionFeePayer } from './fee-payer.js';
+import { appendTransactionInstruction } from './instructions.js';
+import { CompiledMessage } from './message.js';
+import { ITransactionWithSignatures } from './signatures.js';
+import { TransactionVersion } from './types.js';
 
 function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
     const { header } = message;

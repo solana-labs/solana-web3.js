@@ -3,7 +3,7 @@ import { type Codec, combineCodec, type Decoder, type Encoder } from '@solana/co
 import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder, getU8Decoder, getU8Encoder } from '@solana/codecs-numbers';
 
-import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
+import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups.js';
 
 type AddressTableLookup = ReturnType<typeof getCompiledAddressTableLookups>[number];
 

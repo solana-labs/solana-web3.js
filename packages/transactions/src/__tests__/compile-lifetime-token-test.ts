@@ -1,6 +1,6 @@
-import { Blockhash } from '../blockhash';
-import { getCompiledLifetimeToken } from '../compile-lifetime-token';
-import { Nonce } from '../durable-nonce';
+import { Blockhash } from '../blockhash.js';
+import { getCompiledLifetimeToken } from '../compile-lifetime-token.js';
+import { Nonce } from '../durable-nonce.js';
 
 describe('getCompiledLifetimeToken', () => {
     it('compiles a recent blockhash lifetime constraint', () => {

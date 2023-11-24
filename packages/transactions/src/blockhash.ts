@@ -1,10 +1,10 @@
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
-import { IDurableNonceTransaction } from './durable-nonce';
-import { ITransactionWithSignatures } from './signatures';
-import { BaseTransaction } from './types';
-import { getUnsignedTransaction } from './unsigned-transaction';
+import { IDurableNonceTransaction } from './durable-nonce.js';
+import { ITransactionWithSignatures } from './signatures.js';
+import { BaseTransaction } from './types.js';
+import { getUnsignedTransaction } from './unsigned-transaction.js';
 
 export type Blockhash = string & { readonly __brand: unique symbol };
 

@@ -3,9 +3,9 @@ import 'test-matchers/toBeFrozenObject';
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
-import { Blockhash, ITransactionWithBlockhashLifetime, setTransactionLifetimeUsingBlockhash } from '../blockhash';
-import { ITransactionWithSignatures } from '../signatures';
-import { BaseTransaction } from '../types';
+import { Blockhash, ITransactionWithBlockhashLifetime, setTransactionLifetimeUsingBlockhash } from '../blockhash.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { BaseTransaction } from '../types.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -17,7 +17,7 @@ const originalBase58Module = jest.requireActual('@solana/codecs-strings');
 const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
 
 describe('assertIsBlockhash()', () => {
-    let assertIsBlockhash: typeof import('../blockhash').assertIsBlockhash;
+    let assertIsBlockhash: typeof import('../blockhash.js').assertIsBlockhash;
     // Reload `assertIsBlockhash` before each test to reset memoized state
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {

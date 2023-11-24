@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 
-import { ITransactionWithSignatures } from './signatures';
-import { BaseTransaction } from './types';
-import { getUnsignedTransaction } from './unsigned-transaction';
+import { ITransactionWithSignatures } from './signatures.js';
+import { BaseTransaction } from './types.js';
+import { getUnsignedTransaction } from './unsigned-transaction.js';
 
 export interface ITransactionWithFeePayer<TAddress extends string = string> {
     readonly feePayer: Address<TAddress>;

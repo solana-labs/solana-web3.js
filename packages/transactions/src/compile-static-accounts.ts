@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { OrderedAccounts } from './accounts';
+import { OrderedAccounts } from './accounts.js';
 
 export function getCompiledStaticAccounts(orderedAccounts: OrderedAccounts): Address[] {
     const firstLookupTableAccountIndex = orderedAccounts.findIndex(account => 'lookupTableAddress' in account);

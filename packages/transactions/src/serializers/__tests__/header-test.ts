@@ -1,4 +1,4 @@
-import { getMessageHeaderCodec, getMessageHeaderDecoder, getMessageHeaderEncoder } from '../header';
+import { getMessageHeaderCodec, getMessageHeaderDecoder, getMessageHeaderEncoder } from '../header.js';
 
 describe('Message header codec', () => {
     describe.each([getMessageHeaderEncoder, getMessageHeaderCodec])('message header encoder %p', encoderFactory => {

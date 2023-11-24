@@ -1,4 +1,4 @@
-import { getInstructionCodec, getInstructionDecoder, getInstructionEncoder } from '../instruction';
+import { getInstructionCodec, getInstructionDecoder, getInstructionEncoder } from '../instruction.js';
 
 describe('Instruction codec', () => {
     describe.each([getInstructionEncoder, getInstructionCodec])('instruction encoder %p', encoderFactory => {

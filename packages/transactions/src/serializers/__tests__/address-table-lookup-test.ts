@@ -1,11 +1,11 @@
 import type { Address } from '@solana/addresses';
 
-import type { getCompiledAddressTableLookups } from '../../compile-address-table-lookups';
+import type { getCompiledAddressTableLookups } from '../../compile-address-table-lookups.js';
 import {
     getAddressTableLookupCodec,
     getAddressTableLookupDecoder,
     getAddressTableLookupEncoder,
-} from '../address-table-lookup';
+} from '../address-table-lookup.js';
 
 type AddressTableLookup = ReturnType<typeof getCompiledAddressTableLookups>[number];
 

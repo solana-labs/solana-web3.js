@@ -6,7 +6,7 @@ import {
     AddressMapEntryType,
     getAddressMapFromInstructions,
     getOrderedAccountsFromAddressMap,
-} from '../accounts';
+} from '../accounts.js';
 
 type AccountRoleEnumName = keyof typeof AccountRole;
 type TestCase = {

@@ -1,8 +1,8 @@
 import { SignatureBytes } from '@solana/keys';
 
-import { CompilableTransaction } from './compilable-transaction';
-import { CompiledMessage, compileMessage } from './message';
-import { ITransactionWithSignatures } from './signatures';
+import { CompilableTransaction } from './compilable-transaction.js';
+import { CompiledMessage, compileMessage } from './message.js';
+import { ITransactionWithSignatures } from './signatures.js';
 
 export type CompiledTransaction = Readonly<{
     compiledMessage: CompiledMessage;

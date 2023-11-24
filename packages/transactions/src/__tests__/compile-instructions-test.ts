@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 
-import { OrderedAccounts } from '../accounts';
-import { getCompiledInstructions } from '../compile-instructions';
+import { OrderedAccounts } from '../accounts.js';
+import { getCompiledInstructions } from '../compile-instructions.js';
 
 let _nextMockAddress = 0;
 function getMockAddress() {

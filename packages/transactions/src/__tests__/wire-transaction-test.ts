@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
-import { Blockhash } from '../blockhash';
-import { getBase64EncodedWireTransaction } from '../wire-transaction';
+import { Blockhash } from '../blockhash.js';
+import { getBase64EncodedWireTransaction } from '../wire-transaction.js';
 
 describe('getBase64EncodedWireTransaction', () => {
     it('serializes a transaction to wire format', () => {

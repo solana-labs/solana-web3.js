@@ -1,6 +1,6 @@
 import { getBase64Decoder } from '@solana/codecs-strings';
 
-import { getTransactionEncoder } from './serializers/transaction';
+import { getTransactionEncoder } from './serializers/transaction.js';
 
 export type Base64EncodedWireTransaction = string & {
     readonly __brand: unique symbol;
