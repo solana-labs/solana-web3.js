@@ -7,8 +7,11 @@ export type {
     IRpcWebSocketTransport,
     PendingRpcSubscription,
     Rpc,
+    RpcRequest,
+    RpcSubscription,
     RpcSubscriptions,
 } from './json-rpc-types';
+
 export * from './transports/http/http-transport';
 export * from './transports/websocket/websocket-transport';
 export type { IRpcTransport } from './transports/transport-types';
