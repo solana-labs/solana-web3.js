@@ -1,8 +1,5 @@
-import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
-import { GetBlockApi } from '@solana/rpc-core/dist/types/rpc-methods/getBlock';
-import { GetProgramAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getProgramAccounts';
-import { GetTransactionApi } from '@solana/rpc-core/dist/types/rpc-methods/getTransaction';
-import { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
+import type { Rpc } from '@solana/rpc-transport';
 import { graphql, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';
