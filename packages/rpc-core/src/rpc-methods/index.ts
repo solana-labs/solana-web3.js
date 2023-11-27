@@ -159,4 +159,10 @@ export type {
     SendTransactionApi,
 };
 
-export type { Base64EncodedDataResponse, DataSlice, Slot } from './common';
+export type {
+    Base64EncodedDataResponse,
+    DataSlice,
+    GetProgramAccountsDatasizeFilter,
+    GetProgramAccountsMemcmpFilter,
+    Slot,
+} from './common';
