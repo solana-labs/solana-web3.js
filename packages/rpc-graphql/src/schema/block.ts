@@ -1,4 +1,4 @@
-import { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
+import type { Slot } from '@solana/rpc-core';
 import { Commitment } from '@solana/rpc-types';
 
 export type BlockQueryArgs = {
