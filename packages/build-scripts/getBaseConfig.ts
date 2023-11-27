@@ -53,6 +53,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
             noExternal: [
                 // @noble/ed25519 is an ESM-only module, so we have to inline it in CJS builds.
                 ...(format === 'cjs' ? ['@noble/ed25519'] : []),
+                'crypto-impl',
                 'fetch-impl',
                 'text-encoding-impl',
                 'ws-impl',
