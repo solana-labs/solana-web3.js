@@ -1943,6 +1943,9 @@ importers:
       '@noble/ed25519':
         specifier: ^2.0.0
         version: 2.0.0
+      crypto-impl:
+        specifier: workspace:*
+        version: link:../crypto-impl
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2

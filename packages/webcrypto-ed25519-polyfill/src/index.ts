@@ -1,3 +1,5 @@
+import cryptoImpl from 'crypto-impl';
+
 import {
     exportKeyPolyfill,
     generateKeyPolyfill,
@@ -6,6 +8,14 @@ import {
     signPolyfill,
     verifyPolyfill,
 } from './secrets';
+
+if (__NODEJS__) {
+    /**
+     * Node only sets the `crypto` global variable when run with `--experimental-global-webcrypto`.
+     * Let's set it unconditionally here.
+     */
+    globalThis.crypto ||= cryptoImpl;
+}
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
