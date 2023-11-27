@@ -1,4 +1,11 @@
-import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import {
+    combineCodec,
+    createDecoder,
+    createEncoder,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
+} from '@solana/codecs-core';
 
 import { assertValidBaseString } from './assertions';
 
@@ -6,33 +13,34 @@ import { assertValidBaseString } from './assertions';
  * Encodes a string using a custom alphabet by reslicing the bits of the byte array.
  * @see {@link getBaseXResliceCodec} for a more detailed description.
  */
-export const getBaseXResliceEncoder = (alphabet: string, bits: number): Encoder<string> => ({
-    description: `base${alphabet.length}`,
-    encode(value: string): Uint8Array {
-        assertValidBaseString(alphabet, value);
-        if (value === '') return new Uint8Array();
-        const charIndices = [...value].map(c => alphabet.indexOf(c));
-        return new Uint8Array(reslice(charIndices, bits, 8, false));
-    },
-    fixedSize: null,
-    maxSize: null,
-});
+export const getBaseXResliceEncoder = (alphabet: string, bits: number): VariableSizeEncoder<string> =>
+    createEncoder({
+        fixedSize: null,
+        variableSize: (value: string) => Math.floor((value.length * bits) / 8),
+        write(value: string, bytes, offset) {
+            assertValidBaseString(alphabet, value);
+            if (value === '') return offset;
+            const charIndices = [...value].map(c => alphabet.indexOf(c));
+            const reslicedBytes = reslice(charIndices, bits, 8, false);
+            bytes.set(reslicedBytes, offset);
+            return reslicedBytes.length + offset;
+        },
+    });
 
 /**
  * Decodes a string using a custom alphabet by reslicing the bits of the byte array.
  * @see {@link getBaseXResliceCodec} for a more detailed description.
  */
-export const getBaseXResliceDecoder = (alphabet: string, bits: number): Decoder<string> => ({
-    decode(rawBytes, offset = 0): [string, number] {
-        const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
-        if (bytes.length === 0) return ['', rawBytes.length];
-        const charIndices = reslice([...bytes], 8, bits, true);
-        return [charIndices.map(i => alphabet[i]).join(''), rawBytes.length];
-    },
-    description: `base${alphabet.length}`,
-    fixedSize: null,
-    maxSize: null,
-});
+export const getBaseXResliceDecoder = (alphabet: string, bits: number): VariableSizeDecoder<string> =>
+    createDecoder({
+        fixedSize: null,
+        read(rawBytes, offset = 0): [string, number] {
+            const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
+            if (bytes.length === 0) return ['', rawBytes.length];
+            const charIndices = reslice([...bytes], 8, bits, true);
+            return [charIndices.map(i => alphabet[i]).join(''), rawBytes.length];
+        },
+    });
 
 /**
  * A string serializer that reslices bytes into custom chunks
@@ -41,7 +49,7 @@ export const getBaseXResliceDecoder = (alphabet: string, bits: number): Decoder<
  * This can be used to create serializers whose alphabet
  * is a power of 2 such as base16 or base64.
  */
-export const getBaseXResliceCodec = (alphabet: string, bits: number): Codec<string> =>
+export const getBaseXResliceCodec = (alphabet: string, bits: number): VariableSizeCodec<string> =>
     combineCodec(getBaseXResliceEncoder(alphabet, bits), getBaseXResliceDecoder(alphabet, bits));
 
 /** Helper function to reslice the bits inside bytes. */

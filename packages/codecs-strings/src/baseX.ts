@@ -1,4 +1,11 @@
-import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import {
+    combineCodec,
+    createDecoder,
+    createEncoder,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
+} from '@solana/codecs-core';
 
 import { assertValidBaseString } from './assertions';
 
@@ -7,43 +14,43 @@ import { assertValidBaseString } from './assertions';
  * by the base and handling leading zeroes.
  * @see {@link getBaseXCodec} for a more detailed description.
  */
-export const getBaseXEncoder = (alphabet: string): Encoder<string> => {
-    const base = alphabet.length;
-    const baseBigInt = BigInt(base);
-    return {
-        description: `base${base}`,
-        encode(value: string): Uint8Array {
+export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> => {
+    return createEncoder({
+        fixedSize: null,
+        variableSize: (value: string): number => {
+            const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
+            if (tailChars === '') return value.length;
+
+            const base10Number = getBigIntFromBaseX(tailChars, alphabet);
+            return leadingZeroes.length + Math.ceil(base10Number.toString(16).length / 2);
+        },
+        write(value: string, bytes, offset) {
             // Check if the value is valid.
             assertValidBaseString(alphabet, value);
-            if (value === '') return new Uint8Array();
+            if (value === '') return offset;
 
             // Handle leading zeroes.
-            const chars = [...value];
-            let trailIndex = chars.findIndex(c => c !== alphabet[0]);
-            trailIndex = trailIndex === -1 ? chars.length : trailIndex;
-            const leadingZeroes = Array(trailIndex).fill(0);
-            if (trailIndex === chars.length) return Uint8Array.from(leadingZeroes);
-
-            // From baseX to base10.
-            const tailChars = chars.slice(trailIndex);
-            let base10Number = 0n;
-            let baseXPower = 1n;
-            for (let i = tailChars.length - 1; i >= 0; i -= 1) {
-                base10Number += baseXPower * BigInt(alphabet.indexOf(tailChars[i]));
-                baseXPower *= baseBigInt;
+            const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
+            if (tailChars === '') {
+                bytes.set(new Uint8Array(leadingZeroes.length).fill(0), offset);
+                return offset + leadingZeroes.length;
             }
 
+            // From baseX to base10.
+            let base10Number = getBigIntFromBaseX(tailChars, alphabet);
+
             // From base10 to bytes.
-            const tailBytes = [];
+            const tailBytes: number[] = [];
             while (base10Number > 0n) {
                 tailBytes.unshift(Number(base10Number % 256n));
                 base10Number /= 256n;
             }
-            return Uint8Array.from(leadingZeroes.concat(tailBytes));
+
+            const bytesToAdd = [...Array(leadingZeroes.length).fill(0), ...tailBytes];
+            bytes.set(bytesToAdd, offset);
+            return offset + bytesToAdd.length;
         },
-        fixedSize: null,
-        maxSize: null,
-    };
+    });
 };
 
 /**
@@ -51,11 +58,10 @@ export const getBaseXEncoder = (alphabet: string): Encoder<string> => {
  * by the base and handling leading zeroes.
  * @see {@link getBaseXCodec} for a more detailed description.
  */
-export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
-    const base = alphabet.length;
-    const baseBigInt = BigInt(base);
-    return {
-        decode(rawBytes, offset = 0): [string, number] {
+export const getBaseXDecoder = (alphabet: string): VariableSizeDecoder<string> => {
+    return createDecoder({
+        fixedSize: null,
+        read(rawBytes, offset): [string, number] {
             const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
             if (bytes.length === 0) return ['', 0];
 
@@ -66,21 +72,14 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
             if (trailIndex === bytes.length) return [leadingZeroes, rawBytes.length];
 
             // From bytes to base10.
-            let base10Number = bytes.slice(trailIndex).reduce((sum, byte) => sum * 256n + BigInt(byte), 0n);
+            const base10Number = bytes.slice(trailIndex).reduce((sum, byte) => sum * 256n + BigInt(byte), 0n);
 
             // From base10 to baseX.
-            const tailChars = [];
-            while (base10Number > 0n) {
-                tailChars.unshift(alphabet[Number(base10Number % baseBigInt)]);
-                base10Number /= baseBigInt;
-            }
+            const tailChars = getBaseXFromBigInt(base10Number, alphabet);
 
-            return [leadingZeroes + tailChars.join(''), rawBytes.length];
+            return [leadingZeroes + tailChars, rawBytes.length];
         },
-        description: `base${base}`,
-        fixedSize: null,
-        maxSize: null,
-    };
+    });
 };
 
 /**
@@ -92,5 +91,25 @@ export const getBaseXDecoder = (alphabet: string): Decoder<string> => {
  *
  * This can be used to create codecs such as base10 or base58.
  */
-export const getBaseXCodec = (alphabet: string): Codec<string> =>
+export const getBaseXCodec = (alphabet: string): VariableSizeCodec<string> =>
     combineCodec(getBaseXEncoder(alphabet), getBaseXDecoder(alphabet));
+
+function partitionLeadingZeroes(value: string, zeroCharacter: string): [string, string] {
+    const leadingZeroIndex = [...value].findIndex(c => c !== zeroCharacter);
+    return leadingZeroIndex === -1 ? [value, ''] : [value.slice(0, leadingZeroIndex), value.slice(leadingZeroIndex)];
+}
+
+function getBigIntFromBaseX(value: string, alphabet: string): bigint {
+    const base = BigInt(alphabet.length);
+    return [...value].reduce((sum, char) => sum * base + BigInt(alphabet.indexOf(char)), 0n);
+}
+
+function getBaseXFromBigInt(value: bigint, alphabet: string): string {
+    const base = BigInt(alphabet.length);
+    const tailChars = [];
+    while (value > 0n) {
+        tailChars.unshift(alphabet[Number(value % base)]);
+        value /= base;
+    }
+    return tailChars.join('');
+}
