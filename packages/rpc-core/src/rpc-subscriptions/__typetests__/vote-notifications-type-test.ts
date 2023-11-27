@@ -2,7 +2,7 @@
 
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
 import { UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
