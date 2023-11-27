@@ -1,9 +1,9 @@
-import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getF32Encoder = (config: NumberCodecConfig = {}): Encoder<number> =>
+export const getF32Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number> =>
     numberEncoderFactory({
         config,
         name: 'f32',
@@ -11,7 +11,7 @@ export const getF32Encoder = (config: NumberCodecConfig = {}): Encoder<number> =
         size: 4,
     });
 
-export const getF32Decoder = (config: NumberCodecConfig = {}): Decoder<number> =>
+export const getF32Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number> =>
     numberDecoderFactory({
         config,
         get: (view, le) => view.getFloat32(0, le),
@@ -19,5 +19,5 @@ export const getF32Decoder = (config: NumberCodecConfig = {}): Decoder<number> =
         size: 4,
     });
 
-export const getF32Codec = (config: NumberCodecConfig = {}): Codec<number> =>
+export const getF32Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number> =>
     combineCodec(getF32Encoder(config), getF32Decoder(config));

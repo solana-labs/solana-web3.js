@@ -42,15 +42,7 @@ describe('getI16Codec', () => {
         assertRangeError(i16BE, MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(i16().description).toBe('i16(le)');
-        expect(i16({ endian: Endian.LITTLE }).description).toBe('i16(le)');
-        expect(i16({ endian: Endian.BIG }).description).toBe('i16(be)');
-        expect(i16({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(i16().fixedSize).toBe(2);
-        expect(i16().maxSize).toBe(2);
     });
 });

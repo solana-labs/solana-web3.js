@@ -32,13 +32,8 @@ describe('getShortU16Codec', () => {
         const codec = shortU16();
         for (let i = 0; i <= 0b1111111111111111; i += 1) {
             const bytes = codec.encode(i);
-            expect(codec.decode(bytes)[0]).toBe(i);
+            expect(codec.decode(bytes)).toBe(i);
         }
-    });
-
-    it('has the right description', () => {
-        expect(shortU16().description).toBe('shortU16');
-        expect(shortU16({ description: 'custom' }).description).toBe('custom');
     });
 
     it('has the right sizes', () => {

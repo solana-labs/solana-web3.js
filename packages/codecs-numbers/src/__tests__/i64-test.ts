@@ -42,15 +42,7 @@ describe('getI64Codec', () => {
         assertRangeError(i64BE, MAX + 1n);
     });
 
-    it('has the right description', () => {
-        expect(i64().description).toBe('i64(le)');
-        expect(i64({ endian: Endian.LITTLE }).description).toBe('i64(le)');
-        expect(i64({ endian: Endian.BIG }).description).toBe('i64(be)');
-        expect(i64({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(i64().fixedSize).toBe(8);
-        expect(i64().maxSize).toBe(8);
     });
 });

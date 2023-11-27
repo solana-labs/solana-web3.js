@@ -29,15 +29,7 @@ describe('getF32Codec', () => {
         assertValid(f32BE, -Math.PI, 'c0490fdb', -APPROX_PI);
     });
 
-    it('has the right description', () => {
-        expect(f32().description).toBe('f32(le)');
-        expect(f32({ endian: Endian.LITTLE }).description).toBe('f32(le)');
-        expect(f32({ endian: Endian.BIG }).description).toBe('f32(be)');
-        expect(f32({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(f32().fixedSize).toBe(4);
-        expect(f32().maxSize).toBe(4);
     });
 });

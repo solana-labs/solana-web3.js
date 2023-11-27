@@ -41,15 +41,7 @@ describe('getU32Codec', () => {
         assertRangeError(u32BE, MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(u32().description).toBe('u32(le)');
-        expect(u32({ endian: Endian.LITTLE }).description).toBe('u32(le)');
-        expect(u32({ endian: Endian.BIG }).description).toBe('u32(be)');
-        expect(u32({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(u32().fixedSize).toBe(4);
-        expect(u32().maxSize).toBe(4);
     });
 });

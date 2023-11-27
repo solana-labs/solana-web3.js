@@ -1,9 +1,9 @@
-import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getI16Encoder = (config: NumberCodecConfig = {}): Encoder<number> =>
+export const getI16Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number> =>
     numberEncoderFactory({
         config,
         name: 'i16',
@@ -12,7 +12,7 @@ export const getI16Encoder = (config: NumberCodecConfig = {}): Encoder<number> =
         size: 2,
     });
 
-export const getI16Decoder = (config: NumberCodecConfig = {}): Decoder<number> =>
+export const getI16Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number> =>
     numberDecoderFactory({
         config,
         get: (view, le) => view.getInt16(0, le),
@@ -20,5 +20,5 @@ export const getI16Decoder = (config: NumberCodecConfig = {}): Decoder<number> =
         size: 2,
     });
 
-export const getI16Codec = (config: NumberCodecConfig = {}): Codec<number> =>
+export const getI16Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number> =>
     combineCodec(getI16Encoder(config), getI16Decoder(config));
