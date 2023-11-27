@@ -17,7 +17,7 @@ export function getWebSocketTransportWithAutoping({ intervalMs, transport }: Con
     >();
     return async (...args) => {
         const connection = await transport(...args);
-        let intervalId: string | number | NodeJS.Timeout | undefined;
+        let intervalId: number | undefined;
         function sendPing() {
             connection.send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED(PING_PAYLOAD);
         }
