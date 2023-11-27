@@ -1,3 +1,4 @@
+import { PublicKey } from '../public-key';
 import { Transaction } from '../transaction';
 
 const TRANSACTION_MESSAGE_IN_WIRE_FORMAT =
@@ -69,6 +70,13 @@ describe('TransactionSham', () => {
             expect(() => {
                 signedTx[property];
             }).toThrow(`Transaction#${property} (getter) is unimplemented`);
+        });
+        it('vends the `PublicKey` of the fee payer through the `feePayer` property', () => {
+            expect(signedTx.feePayer).toEqual(new PublicKey('k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn'));
+        });
+        it('allows you to set the fee payer by assigning a `PublicKey` to the `feePayer` property', () => {
+            signedTx.feePayer = new PublicKey('8qbHbw2BbbTHBW1sbeqakYXVKRQM8Ne7pLK7m6CVfeR');
+            expect(signedTx.feePayer).toEqual(new PublicKey('8qbHbw2BbbTHBW1sbeqakYXVKRQM8Ne7pLK7m6CVfeR'));
         });
     });
     describe('given an unsigned transaction', () => {
