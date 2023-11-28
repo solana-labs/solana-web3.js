@@ -28,7 +28,7 @@
     "sideEffects": false,
     "scripts": {
         "compile:js": "tsup",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
+        "compile:typedefs": "tsup --dts-only --out-dir dist/types",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
         "test:lint": "jest -c node_modules/test-config/jest-lint.config.ts --rootDir . --silent",
