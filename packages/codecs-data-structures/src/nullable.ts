@@ -1,20 +1,35 @@
 import {
-    assertFixedSizeCodec,
-    BaseCodecConfig,
+    assertIsFixedSizeCodec,
     Codec,
-    CodecData,
     combineCodec,
+    createDecoder,
+    createEncoder,
     Decoder,
     Encoder,
-    fixBytes,
-    mergeBytes,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    getEncodedSize,
+    isFixedSizeCodec,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
 } from '@solana/codecs-core';
-import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
+import {
+    FixedSizeNumberCodec,
+    FixedSizeNumberDecoder,
+    FixedSizeNumberEncoder,
+    getU8Decoder,
+    getU8Encoder,
+    NumberCodec,
+    NumberDecoder,
+    NumberEncoder,
+} from '@solana/codecs-numbers';
 
-import { sumCodecSizes } from './utils';
+import { getMaxSize, sumCodecSizes } from './utils';
 
 /** Defines the config for nullable codecs. */
-export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
+export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
     /**
      * The codec to use for the boolean prefix.
      * @defaultValue u8 prefix.
@@ -32,44 +47,60 @@ export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Nu
     fixed?: boolean;
 };
 
-function nullableCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean, description?: string): CodecData {
-    let descriptionSuffix = `; ${prefix.description}`;
-    let fixedSize = item.fixedSize === 0 ? prefix.fixedSize : null;
-    if (fixed) {
-        assertFixedSizeCodec(item, 'Fixed nullables can only be used with fixed-size codecs.');
-        assertFixedSizeCodec(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
-        descriptionSuffix += '; fixed';
-        fixedSize = prefix.fixedSize + item.fixedSize;
-    }
-
-    return {
-        description: description ?? `nullable(${item.description + descriptionSuffix})`,
-        fixedSize,
-        maxSize: sumCodecSizes([prefix.maxSize, item.maxSize]),
-    };
-}
-
 /**
  * Creates a encoder for an optional value using `null` as the `None` value.
  *
  * @param item - The encoder to use for the value that may be present.
  * @param config - A set of config for the encoder.
  */
-export function getNullableEncoder<T>(
-    item: Encoder<T>,
-    config: NullableCodecConfig<NumberEncoder> = {},
-): Encoder<T | null> {
+export function getNullableEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom>,
+    config: NullableCodecConfig<FixedSizeNumberEncoder> & { fixed: true }
+): FixedSizeEncoder<TFrom | null>;
+export function getNullableEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom, 0>,
+    config?: NullableCodecConfig<FixedSizeNumberEncoder>
+): FixedSizeEncoder<TFrom | null>;
+export function getNullableEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config?: NullableCodecConfig<NumberEncoder> & { fixed?: false }
+): VariableSizeEncoder<TFrom | null>;
+export function getNullableEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config: NullableCodecConfig<NumberEncoder> = {}
+): Encoder<TFrom | null> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
-    return {
-        ...nullableCodecHelper(item, prefix, fixed, config.description),
-        encode: (option: T | null) => {
-            const prefixByte = prefix.encode(Number(option !== null));
-            let itemBytes = option !== null ? item.encode(option) : new Uint8Array();
-            itemBytes = fixed ? fixBytes(itemBytes, item.fixedSize as number) : itemBytes;
-            return mergeBytes([prefixByte, itemBytes]);
+
+    const isZeroSizeItem = isFixedSizeCodec(item) && isFixedSizeCodec(prefix) && item.fixedSize === 0;
+    if (fixed || isZeroSizeItem) {
+        assertIsFixedSizeCodec(item, 'Fixed nullables can only be used with fixed-size codecs.');
+        assertIsFixedSizeCodec(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        const fixedSize = prefix.fixedSize + item.fixedSize;
+        return createEncoder({
+            fixedSize,
+            write: (option: TFrom | null, bytes, offset) => {
+                const prefixOffset = prefix.write(Number(option !== null), bytes, offset);
+                if (option !== null) {
+                    item.write(option, bytes, prefixOffset);
+                }
+                return offset + fixedSize;
+            },
+        });
+    }
+
+    return createEncoder({
+        getSizeFromValue: (option: TFrom | null) =>
+            getEncodedSize(Number(option !== null), prefix) + (option !== null ? getEncodedSize(option, item) : 0),
+        maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined,
+        write: (option: TFrom | null, bytes, offset) => {
+            offset = prefix.write(Number(option !== null), bytes, offset);
+            if (option !== null) {
+                offset = item.write(option, bytes, offset);
+            }
+            return offset;
         },
-    };
+    });
 }
 
 /**
@@ -78,29 +109,49 @@ export function getNullableEncoder<T>(
  * @param item - The decoder to use for the value that may be present.
  * @param config - A set of config for the decoder.
  */
-export function getNullableDecoder<T>(
-    item: Decoder<T>,
-    config: NullableCodecConfig<NumberDecoder> = {},
-): Decoder<T | null> {
+export function getNullableDecoder<TTo>(
+    item: FixedSizeDecoder<TTo>,
+    config: NullableCodecConfig<FixedSizeNumberDecoder> & { fixed: true }
+): FixedSizeDecoder<TTo | null>;
+export function getNullableDecoder<TTo>(
+    item: FixedSizeDecoder<TTo, 0>,
+    config?: NullableCodecConfig<FixedSizeNumberDecoder>
+): FixedSizeDecoder<TTo | null>;
+export function getNullableDecoder<TTo>(
+    item: Decoder<TTo>,
+    config?: NullableCodecConfig<NumberDecoder> & { fixed?: false }
+): VariableSizeDecoder<TTo | null>;
+export function getNullableDecoder<TTo>(
+    item: Decoder<TTo>,
+    config: NullableCodecConfig<NumberDecoder> = {}
+): Decoder<TTo | null> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
-    return {
-        ...nullableCodecHelper(item, prefix, fixed, config.description),
-        decode: (bytes: Uint8Array, offset = 0) => {
+
+    let fixedSize: number | null = null;
+    const isZeroSizeItem = isFixedSizeCodec(item) && isFixedSizeCodec(prefix) && item.fixedSize === 0;
+    if (fixed || isZeroSizeItem) {
+        assertIsFixedSizeCodec(item, 'Fixed nullables can only be used with fixed-size codecs.');
+        assertIsFixedSizeCodec(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        fixedSize = prefix.fixedSize + item.fixedSize;
+    }
+
+    return createDecoder({
+        ...(fixedSize === null
+            ? { maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined }
+            : { fixedSize }),
+        read: (bytes: Uint8Array, offset) => {
             if (bytes.length - offset <= 0) {
                 return [null, offset];
             }
-            const fixedOffset = offset + (prefix.fixedSize ?? 0) + (item.fixedSize ?? 0);
-            const [isSome, prefixOffset] = prefix.decode(bytes, offset);
-            offset = prefixOffset;
+            const [isSome, prefixOffset] = prefix.read(bytes, offset);
             if (isSome === 0) {
-                return [null, fixed ? fixedOffset : offset];
+                return [null, fixedSize !== null ? offset + fixedSize : prefixOffset];
             }
-            const [value, newOffset] = item.decode(bytes, offset);
-            offset = newOffset;
-            return [value, fixed ? fixedOffset : offset];
+            const [value, newOffset] = item.read(bytes, prefixOffset);
+            return [value, fixedSize !== null ? offset + fixedSize : newOffset];
         },
-    };
+    });
 }
 
 /**
@@ -109,9 +160,22 @@ export function getNullableDecoder<T>(
  * @param item - The codec to use for the value that may be present.
  * @param config - A set of config for the codec.
  */
-export function getNullableCodec<T, U extends T = T>(
-    item: Codec<T, U>,
-    config: NullableCodecConfig<NumberCodec> = {},
-): Codec<T | null, U | null> {
-    return combineCodec(getNullableEncoder<T>(item, config), getNullableDecoder<U>(item, config));
+export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo>,
+    config: NullableCodecConfig<FixedSizeNumberCodec> & { fixed: true }
+): FixedSizeCodec<TFrom | null, TTo | null>;
+export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo, 0>,
+    config?: NullableCodecConfig<FixedSizeNumberCodec>
+): FixedSizeCodec<TFrom | null, TTo | null>;
+export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config?: NullableCodecConfig<NumberCodec> & { fixed?: false }
+): VariableSizeCodec<TFrom | null, TTo | null>;
+export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config: NullableCodecConfig<NumberCodec> = {}
+): Codec<TFrom | null, TTo | null> {
+    const configCast = config as NullableCodecConfig<NumberCodec> & { fixed?: false };
+    return combineCodec(getNullableEncoder<TFrom>(item, configCast), getNullableDecoder<TTo>(item, configCast));
 }

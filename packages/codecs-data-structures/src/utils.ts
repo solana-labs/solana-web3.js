@@ -1,4 +1,5 @@
-/** Returns the max size or null if at least one size is null. */
+import { isFixedSizeCodec } from '@solana/codecs-core';
+
 export function maxCodecSizes(sizes: (number | null)[]): number | null {
     return sizes.reduce(
         (all, size) => (all === null || size === null ? null : Math.max(all, size)),
@@ -6,7 +7,14 @@ export function maxCodecSizes(sizes: (number | null)[]): number | null {
     );
 }
 
-/** Returns the sum of all sizes or null if at least one size is null. */
 export function sumCodecSizes(sizes: (number | null)[]): number | null {
     return sizes.reduce((all, size) => (all === null || size === null ? null : all + size), 0 as number | null);
+}
+
+export function getFixedSize(codec: { fixedSize: number } | { maxSize?: number }): number | null {
+    return isFixedSizeCodec(codec) ? codec.fixedSize : null;
+}
+
+export function getMaxSize(codec: { fixedSize: number } | { maxSize?: number }): number | null {
+    return isFixedSizeCodec(codec) ? codec.fixedSize : codec.maxSize ?? null;
 }

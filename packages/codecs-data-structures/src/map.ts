@@ -1,42 +1,30 @@
-import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
-import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
-
 import {
-    ArrayLikeCodecSize,
-    decodeArrayLikeCodecSize,
-    getArrayLikeCodecSizeDescription,
-    getArrayLikeCodecSizeFromChildren,
-    getArrayLikeCodecSizePrefix,
-} from './array-like-codec-size';
-import { assertValidNumberOfItemsForCodec } from './assertions';
+    Codec,
+    combineCodec,
+    Decoder,
+    Encoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    mapDecoder,
+    mapEncoder,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
+} from '@solana/codecs-core';
+import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
+
+import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
+import { getTupleDecoder, getTupleEncoder } from './tuple';
 
 /** Defines the config for Map codecs. */
-export type MapCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
+export type MapCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
     /**
      * The size of the array.
      * @defaultValue u32 prefix.
      */
     size?: ArrayLikeCodecSize<TPrefix>;
 };
-
-function mapCodecHelper(
-    key: CodecData,
-    value: CodecData,
-    size: ArrayLikeCodecSize<CodecData>,
-    description?: string,
-): CodecData {
-    if (size === 'remainder' && (key.fixedSize === null || value.fixedSize === null)) {
-        // TODO: Coded error.
-        throw new Error('Codecs of "remainder" size must have fixed-size items.');
-    }
-
-    return {
-        description:
-            description ?? `map(${key.description}, ${value.description}; ${getArrayLikeCodecSizeDescription(size)})`,
-        fixedSize: getArrayLikeCodecSizeFromChildren(size, [key.fixedSize, value.fixedSize]),
-        maxSize: getArrayLikeCodecSizeFromChildren(size, [key.maxSize, value.maxSize]),
-    };
-}
 
 /**
  * Creates a encoder for a map.
@@ -45,22 +33,35 @@ function mapCodecHelper(
  * @param value - The encoder to use for the map's values.
  * @param config - A set of config for the encoder.
  */
-export function getMapEncoder<K, V>(
-    key: Encoder<K>,
-    value: Encoder<V>,
-    config: MapCodecConfig<NumberEncoder> = {},
-): Encoder<Map<K, V>> {
-    const size = config.size ?? getU32Encoder();
-    return {
-        ...mapCodecHelper(key, value, size, config.description),
-        encode: (map: Map<K, V>) => {
-            if (typeof size === 'number') {
-                assertValidNumberOfItemsForCodec('map', size, map.size);
-            }
-            const itemBytes = Array.from(map, ([k, v]) => mergeBytes([key.encode(k), value.encode(v)]));
-            return mergeBytes([getArrayLikeCodecSizePrefix(size, map.size), ...itemBytes]);
-        },
-    };
+export function getMapEncoder<TFromKey, TFromValue>(
+    key: Encoder<TFromKey>,
+    value: Encoder<TFromValue>,
+    config: MapCodecConfig<NumberEncoder> & { size: 0 }
+): FixedSizeEncoder<Map<TFromKey, TFromValue>, 0>;
+export function getMapEncoder<TFromKey, TFromValue>(
+    key: FixedSizeEncoder<TFromKey>,
+    value: FixedSizeEncoder<TFromValue>,
+    config: MapCodecConfig<NumberEncoder> & { size: number }
+): FixedSizeEncoder<Map<TFromKey, TFromValue>>;
+export function getMapEncoder<TFromKey, TFromValue>(
+    key: FixedSizeEncoder<TFromKey>,
+    value: FixedSizeEncoder<TFromValue>,
+    config: MapCodecConfig<NumberEncoder> & { size: 'remainder' }
+): VariableSizeEncoder<Map<TFromKey, TFromValue>>;
+export function getMapEncoder<TFromKey, TFromValue>(
+    key: Encoder<TFromKey>,
+    value: Encoder<TFromValue>,
+    config?: MapCodecConfig<NumberEncoder> & { size?: number | NumberEncoder }
+): VariableSizeEncoder<Map<TFromKey, TFromValue>>;
+export function getMapEncoder<TFromKey, TFromValue>(
+    key: Encoder<TFromKey>,
+    value: Encoder<TFromValue>,
+    config: MapCodecConfig<NumberEncoder> = {}
+): Encoder<Map<TFromKey, TFromValue>> {
+    return mapEncoder(
+        getArrayEncoder(getTupleEncoder([key, value]), config as object),
+        (map: Map<TFromKey, TFromValue>): [TFromKey, TFromValue][] => [...map.entries()]
+    );
 }
 
 /**
@@ -70,36 +71,35 @@ export function getMapEncoder<K, V>(
  * @param value - The decoder to use for the map's values.
  * @param config - A set of config for the decoder.
  */
-export function getMapDecoder<K, V>(
-    key: Decoder<K>,
-    value: Decoder<V>,
-    config: MapCodecConfig<NumberDecoder> = {},
-): Decoder<Map<K, V>> {
-    const size = config.size ?? getU32Decoder();
-    return {
-        ...mapCodecHelper(key, value, size, config.description),
-        decode: (bytes: Uint8Array, offset = 0) => {
-            const map: Map<K, V> = new Map();
-            if (typeof size === 'object' && bytes.slice(offset).length === 0) {
-                return [map, offset];
-            }
-            const [resolvedSize, newOffset] = decodeArrayLikeCodecSize(
-                size,
-                [key.fixedSize, value.fixedSize],
-                bytes,
-                offset,
-            );
-            offset = newOffset;
-            for (let i = 0; i < resolvedSize; i += 1) {
-                const [decodedKey, kOffset] = key.decode(bytes, offset);
-                offset = kOffset;
-                const [decodedValue, vOffset] = value.decode(bytes, offset);
-                offset = vOffset;
-                map.set(decodedKey, decodedValue);
-            }
-            return [map, offset];
-        },
-    };
+export function getMapDecoder<TToKey, TToValue>(
+    key: Decoder<TToKey>,
+    value: Decoder<TToValue>,
+    config: MapCodecConfig<NumberDecoder> & { size: 0 }
+): FixedSizeDecoder<Map<TToKey, TToValue>, 0>;
+export function getMapDecoder<TToKey, TToValue>(
+    key: FixedSizeDecoder<TToKey>,
+    value: FixedSizeDecoder<TToValue>,
+    config: MapCodecConfig<NumberDecoder> & { size: number }
+): FixedSizeDecoder<Map<TToKey, TToValue>>;
+export function getMapDecoder<TToKey, TToValue>(
+    key: FixedSizeDecoder<TToKey>,
+    value: FixedSizeDecoder<TToValue>,
+    config: MapCodecConfig<NumberDecoder> & { size: 'remainder' }
+): VariableSizeDecoder<Map<TToKey, TToValue>>;
+export function getMapDecoder<TToKey, TToValue>(
+    key: Decoder<TToKey>,
+    value: Decoder<TToValue>,
+    config?: MapCodecConfig<NumberDecoder> & { size?: number | NumberDecoder }
+): VariableSizeDecoder<Map<TToKey, TToValue>>;
+export function getMapDecoder<TToKey, TToValue>(
+    key: Decoder<TToKey>,
+    value: Decoder<TToValue>,
+    config: MapCodecConfig<NumberDecoder> = {}
+): Decoder<Map<TToKey, TToValue>> {
+    return mapDecoder(
+        getArrayDecoder(getTupleDecoder([key, value]), config as object),
+        (entries: [TToKey, TToValue][]): Map<TToKey, TToValue> => new Map(entries)
+    );
 }
 
 /**
@@ -109,10 +109,55 @@ export function getMapDecoder<K, V>(
  * @param value - The codec to use for the map's values.
  * @param config - A set of config for the codec.
  */
-export function getMapCodec<TK, TV, UK extends TK = TK, UV extends TV = TV>(
-    key: Codec<TK, UK>,
-    value: Codec<TV, UV>,
-    config: MapCodecConfig<NumberCodec> = {},
-): Codec<Map<TK, TV>, Map<UK, UV>> {
-    return combineCodec(getMapEncoder(key, value, config), getMapDecoder(key, value, config));
+export function getMapCodec<
+    TFromKey,
+    TFromValue,
+    TToKey extends TFromKey = TFromKey,
+    TToValue extends TFromValue = TFromValue
+>(
+    key: Codec<TFromKey, TToKey>,
+    value: Codec<TFromValue, TToValue>,
+    config: MapCodecConfig<NumberCodec> & { size: 0 }
+): FixedSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>, 0>;
+export function getMapCodec<
+    TFromKey,
+    TFromValue,
+    TToKey extends TFromKey = TFromKey,
+    TToValue extends TFromValue = TFromValue
+>(
+    key: FixedSizeCodec<TFromKey, TToKey>,
+    value: FixedSizeCodec<TFromValue, TToValue>,
+    config: MapCodecConfig<NumberCodec> & { size: number }
+): FixedSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>>;
+export function getMapCodec<
+    TFromKey,
+    TFromValue,
+    TToKey extends TFromKey = TFromKey,
+    TToValue extends TFromValue = TFromValue
+>(
+    key: FixedSizeCodec<TFromKey, TToKey>,
+    value: FixedSizeCodec<TFromValue, TToValue>,
+    config: MapCodecConfig<NumberCodec> & { size: 'remainder' }
+): VariableSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>>;
+export function getMapCodec<
+    TFromKey,
+    TFromValue,
+    TToKey extends TFromKey = TFromKey,
+    TToValue extends TFromValue = TFromValue
+>(
+    key: Codec<TFromKey, TToKey>,
+    value: Codec<TFromValue, TToValue>,
+    config?: MapCodecConfig<NumberCodec> & { size?: number | NumberCodec }
+): VariableSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>>;
+export function getMapCodec<
+    TFromKey,
+    TFromValue,
+    TToKey extends TFromKey = TFromKey,
+    TToValue extends TFromValue = TFromValue
+>(
+    key: Codec<TFromKey, TToKey>,
+    value: Codec<TFromValue, TToValue>,
+    config: MapCodecConfig<NumberCodec> = {}
+): Codec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>> {
+    return combineCodec(getMapEncoder(key, value, config as object), getMapDecoder(key, value, config as object));
 }

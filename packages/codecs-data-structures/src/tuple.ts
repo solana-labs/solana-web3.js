@@ -1,89 +1,116 @@
-import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
+import {
+    Codec,
+    combineCodec,
+    createDecoder,
+    createEncoder,
+    Decoder,
+    Encoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    getEncodedSize,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
+} from '@solana/codecs-core';
 
 import { assertValidNumberOfItemsForCodec } from './assertions';
-import { sumCodecSizes } from './utils';
+import { getFixedSize, getMaxSize, sumCodecSizes } from './utils';
 
-/** Defines the config for tuple codecs. */
-export type TupleCodecConfig = BaseCodecConfig;
-
-type WrapInEncoder<T> = {
-    [P in keyof T]: Encoder<T[P]>;
+type WrapInFixedSizeEncoder<TFrom> = {
+    [P in keyof TFrom]: FixedSizeEncoder<TFrom[P]>;
 };
-type WrapInDecoder<T> = {
-    [P in keyof T]: Decoder<T[P]>;
+type WrapInEncoder<TFrom> = {
+    [P in keyof TFrom]: Encoder<TFrom[P]>;
 };
-type WrapInCodec<T, U extends T = T> = {
-    [P in keyof T]: Codec<T[P], U[P]>;
+type WrapInFixedSizeDecoder<TTo> = {
+    [P in keyof TTo]: FixedSizeDecoder<TTo[P]>;
+};
+type WrapInDecoder<TTo> = {
+    [P in keyof TTo]: Decoder<TTo[P]>;
+};
+type WrapInCodec<TFrom, TTo extends TFrom> = {
+    [P in keyof TFrom]: Codec<TFrom[P], TTo[P]>;
+};
+type WrapInFixedSizeCodec<TFrom, TTo extends TFrom> = {
+    [P in keyof TFrom]: FixedSizeCodec<TFrom[P], TTo[P]>;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyArray = any[];
 
-function tupleCodecHelper(items: Array<CodecData>, description?: string): CodecData {
-    const itemDescriptions = items.map(item => item.description).join(', ');
-
-    return {
-        description: description ?? `tuple(${itemDescriptions})`,
-        fixedSize: sumCodecSizes(items.map(item => item.fixedSize)),
-        maxSize: sumCodecSizes(items.map(item => item.maxSize)),
-    };
-}
-
 /**
  * Creates a encoder for a tuple-like array.
  *
  * @param items - The encoders to use for each item in the tuple.
- * @param config - A set of config for the encoder.
  */
-export function getTupleEncoder<T extends AnyArray>(
-    items: WrapInEncoder<[...T]>,
-    config: TupleCodecConfig = {},
-): Encoder<T> {
-    return {
-        ...tupleCodecHelper(items, config.description),
-        encode: (value: T) => {
+export function getTupleEncoder<TFrom extends AnyArray>(
+    items: WrapInFixedSizeEncoder<[...TFrom]>
+): FixedSizeEncoder<TFrom>;
+export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): VariableSizeEncoder<TFrom>;
+export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): Encoder<TFrom> {
+    const fixedSize = sumCodecSizes(items.map(getFixedSize));
+    const maxSize = sumCodecSizes(items.map(getMaxSize)) ?? undefined;
+
+    return createEncoder({
+        ...(fixedSize === null
+            ? {
+                  getSizeFromValue: (value: TFrom) =>
+                      items.map((item, index) => getEncodedSize(value[index], item)).reduce((all, one) => all + one, 0),
+                  maxSize,
+              }
+            : { fixedSize }),
+        write: (value: TFrom, bytes, offset) => {
             assertValidNumberOfItemsForCodec('tuple', items.length, value.length);
-            return mergeBytes(items.map((item, index) => item.encode(value[index])));
+            items.forEach((item, index) => {
+                offset = item.write(value[index], bytes, offset);
+            });
+            return offset;
         },
-    };
+    });
 }
 
 /**
  * Creates a decoder for a tuple-like array.
  *
  * @param items - The decoders to use for each item in the tuple.
- * @param config - A set of config for the decoder.
  */
-export function getTupleDecoder<T extends AnyArray>(
-    items: WrapInDecoder<[...T]>,
-    config: TupleCodecConfig = {},
-): Decoder<T> {
-    return {
-        ...tupleCodecHelper(items, config.description),
-        decode: (bytes: Uint8Array, offset = 0) => {
-            const values = [] as AnyArray as T;
-            items.forEach(codec => {
-                const [newValue, newOffset] = codec.decode(bytes, offset);
+export function getTupleDecoder<TTo extends AnyArray>(items: WrapInFixedSizeDecoder<[...TTo]>): FixedSizeDecoder<TTo>;
+export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...TTo]>): VariableSizeDecoder<TTo>;
+export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...TTo]>): Decoder<TTo> {
+    const fixedSize = sumCodecSizes(items.map(getFixedSize));
+    const maxSize = sumCodecSizes(items.map(getMaxSize)) ?? undefined;
+
+    return createDecoder({
+        ...(fixedSize === null ? { maxSize } : { fixedSize }),
+        read: (bytes: Uint8Array, offset) => {
+            const values = [] as AnyArray as TTo;
+            items.forEach(item => {
+                const [newValue, newOffset] = item.read(bytes, offset);
                 values.push(newValue);
                 offset = newOffset;
             });
             return [values, offset];
         },
-    };
+    });
 }
 
 /**
  * Creates a codec for a tuple-like array.
  *
  * @param items - The codecs to use for each item in the tuple.
- * @param config - A set of config for the codec.
  */
-export function getTupleCodec<T extends AnyArray, U extends T = T>(
-    items: WrapInCodec<[...T], [...U]>,
-    config: TupleCodecConfig = {},
-): Codec<T, U> {
+export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
+    items: WrapInFixedSizeCodec<[...TFrom], [...TTo]>
+): FixedSizeCodec<TFrom, TTo>;
+export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
+    items: WrapInCodec<[...TFrom], [...TTo]>
+): VariableSizeCodec<TFrom, TTo>;
+export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
+    items: WrapInCodec<[...TFrom], [...TTo]>
+): Codec<TFrom, TTo> {
     return combineCodec(
-        getTupleEncoder(items as WrapInEncoder<[...T]>, config),
-        getTupleDecoder(items as WrapInDecoder<[...U]>, config),
+        getTupleEncoder(items as WrapInEncoder<[...TFrom]>),
+        getTupleDecoder(items as WrapInDecoder<[...TTo]>)
     );
 }

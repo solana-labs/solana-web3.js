@@ -1,4 +1,4 @@
-import { Endian, getU32Codec } from '@solana/codecs-numbers';
+import { getU32Codec } from '@solana/codecs-numbers';
 
 import { getBooleanCodec } from '../boolean';
 import { b } from './__setup__';
@@ -15,25 +15,16 @@ describe('getBooleanCodec', () => {
         expect(boolean({ size: u32() }).encode(false)).toStrictEqual(b('00000000'));
 
         // Decode.
-        expect(boolean().decode(b('01'))).toStrictEqual([true, 1]);
-        expect(boolean().decode(b('00'))).toStrictEqual([false, 1]);
-        expect(boolean().decode(b('ffff01'), 2)).toStrictEqual([true, 3]);
-        expect(boolean().decode(b('ffff00'), 2)).toStrictEqual([false, 3]);
-        expect(boolean({ size: u32() }).decode(b('01000000'))).toStrictEqual([true, 4]);
-        expect(boolean({ size: u32() }).decode(b('00000000'))).toStrictEqual([false, 4]);
-    });
-
-    it('has the right description', () => {
-        expect(boolean().description).toBe('bool(u8)');
-        expect(boolean({ size: u32() }).description).toBe('bool(u32(le))');
-        expect(boolean({ size: u32({ endian: Endian.BIG }) }).description).toBe('bool(u32(be))');
-        expect(boolean({ description: 'My bool' }).description).toBe('My bool');
+        expect(boolean().read(b('01'), 0)).toStrictEqual([true, 1]);
+        expect(boolean().read(b('00'), 0)).toStrictEqual([false, 1]);
+        expect(boolean().read(b('ffff01'), 2)).toStrictEqual([true, 3]);
+        expect(boolean().read(b('ffff00'), 2)).toStrictEqual([false, 3]);
+        expect(boolean({ size: u32() }).read(b('01000000'), 0)).toStrictEqual([true, 4]);
+        expect(boolean({ size: u32() }).read(b('00000000'), 0)).toStrictEqual([false, 4]);
     });
 
     it('has the right sizes', () => {
         expect(boolean().fixedSize).toBe(1);
-        expect(boolean().maxSize).toBe(1);
         expect(boolean({ size: u32() }).fixedSize).toBe(4);
-        expect(boolean({ size: u32() }).maxSize).toBe(4);
     });
 });
