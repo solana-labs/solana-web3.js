@@ -1178,6 +1178,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/transactions':
+        specifier: workspace:*
+        version: link:../transactions
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2

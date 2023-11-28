@@ -283,6 +283,7 @@ export type {
 export * from './connection';
 export * from './key-pair';
 export * from './public-key';
+export * from './transaction';
 export const LAMPORTS_PER_SOL = 1_000_000_000;
 export const MAX_SEED_LENGTH = 32;
 export const NONCE_ACCOUNT_LENGTH = 80;
