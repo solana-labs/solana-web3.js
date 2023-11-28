@@ -165,9 +165,10 @@ describe('AddressLookupTableProgram', () => {
       const authority = Keypair.generate();
       const payer = Keypair.generate();
 
-      const slot = await connection.getSlot('confirmed');
-      const payerMinBalance =
-        await connection.getMinimumBalanceForRentExemption(44 * 10);
+      const [payerMinBalance, slot] = await Promise.all([
+        connection.getMinimumBalanceForRentExemption(44 * 10),
+        connection.getSlot('confirmed'),
+      ]);
 
       const [createInstruction, lutAddress] =
         AddressLookupTableProgram.createLookupTable({
@@ -176,17 +177,18 @@ describe('AddressLookupTableProgram', () => {
           recentSlot: slot,
         });
 
-      await helpers.airdrop({
-        connection,
-        address: payer.publicKey,
-        amount: payerMinBalance,
-      });
-
-      await helpers.airdrop({
-        connection,
-        address: authority.publicKey,
-        amount: payerMinBalance,
-      });
+      await Promise.all([
+        helpers.airdrop({
+          connection,
+          address: payer.publicKey,
+          amount: payerMinBalance,
+        }),
+        helpers.airdrop({
+          connection,
+          address: authority.publicKey,
+          amount: payerMinBalance,
+        }),
+      ]);
 
       // Creating a new lut
       const createLutTransaction = new Transaction();
