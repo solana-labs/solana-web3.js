@@ -27,60 +27,71 @@ if (process.env.TEST_LIVE) {
 
       before(async function () {
         this.timeout(60_000);
-        programData = await fs.readFile(
-          'test/fixtures/noop-program/solana_sbf_rust_noop.so',
-        );
 
-        const {feeCalculator} = await connection.getRecentBlockhash();
+        const [
+          _0, // eslint-disable-line @typescript-eslint/no-unused-vars
+          {feeCalculator},
+          payerBalance,
+        ] = await Promise.all([
+          (async () => {
+            programData = await fs.readFile(
+              'test/fixtures/noop-program/solana_sbf_rust_noop.so',
+            );
+          })(),
+          connection.getRecentBlockhash(),
+          connection.getMinimumBalanceForRentExemption(0),
+        ]);
+
         const fees =
           feeCalculator.lamportsPerSignature *
           BpfLoader.getMinNumSignatures(programData.length);
-        const payerBalance = await connection.getMinimumBalanceForRentExemption(
-          0,
-        );
-        const executableBalance =
-          await connection.getMinimumBalanceForRentExemption(
-            programData.length,
-          );
-
-        await helpers.airdrop({
-          connection,
-          address: payerAccount.publicKey,
-          amount: payerBalance + fees + executableBalance,
-        });
-
-        // Create program account with low balance
-        await helpers.airdrop({
-          connection,
-          address: program.publicKey,
-          amount: executableBalance - 1,
-        });
 
         // First load will fail part way due to lack of funds
         const insufficientPayerAccount = Keypair.generate();
-        await helpers.airdrop({
-          connection,
-          address: insufficientPayerAccount.publicKey,
-          amount: 2 * feeCalculator.lamportsPerSignature * 8,
-        });
 
-        const failedLoad = BpfLoader.load(
+        const [
+          _1, // eslint-disable-line @typescript-eslint/no-unused-vars
+          executableBalance,
+        ] = await Promise.all([
+          helpers.airdrop({
+            connection,
+            address: insufficientPayerAccount.publicKey,
+            amount: 2 * feeCalculator.lamportsPerSignature * 8,
+          }),
+          connection.getMinimumBalanceForRentExemption(programData.length),
+        ]);
+
+        await Promise.all([
+          helpers.airdrop({
+            connection,
+            address: payerAccount.publicKey,
+            amount: payerBalance + fees + executableBalance,
+          }),
+          // Create program account with low balance
+          helpers.airdrop({
+            connection,
+            address: program.publicKey,
+            amount: executableBalance - 1,
+          }),
+        ]);
+
+        const failedLoadPromise = BpfLoader.load(
           connection,
           insufficientPayerAccount,
           program,
           programData,
           BPF_LOADER_PROGRAM_ID,
         );
-        await expect(failedLoad).to.be.rejected;
-
         // Second load will succeed
-        await BpfLoader.load(
+        const successfulLoadPromise = BpfLoader.load(
           connection,
           payerAccount,
           program,
           programData,
           BPF_LOADER_PROGRAM_ID,
         );
+        await expect(failedLoadPromise).to.be.rejected;
+        await expect(successfulLoadPromise).not.to.be.rejected;
       });
 
       it('get confirmed transaction', async () => {
@@ -276,15 +287,15 @@ if (process.env.TEST_LIVE) {
       });
 
       it('reload program', async () => {
-        expect(
-          await BpfLoader.load(
+        await expect(
+          BpfLoader.load(
             connection,
             payerAccount,
             program,
             programData,
             BPF_LOADER_PROGRAM_ID,
           ),
-        ).to.eq(false);
+        ).to.eventually.be.false;
       });
     });
   });
