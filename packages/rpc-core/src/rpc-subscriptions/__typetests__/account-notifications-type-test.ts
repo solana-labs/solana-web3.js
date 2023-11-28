@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Address } from '@solana/addresses';
-import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import {

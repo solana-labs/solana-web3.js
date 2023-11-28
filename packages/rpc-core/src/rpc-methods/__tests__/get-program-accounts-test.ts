@@ -2,9 +2,7 @@ import { open } from 'node:fs/promises';
 
 import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-import type { SolanaJsonRpcErrorCode } from '@solana/rpc-transport/dist/types/json-rpc-errors';
-import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';

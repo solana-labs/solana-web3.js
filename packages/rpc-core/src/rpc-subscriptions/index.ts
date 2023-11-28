@@ -1,4 +1,4 @@
-import { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport';
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
@@ -84,3 +84,5 @@ export function createSolanaRpcSubscriptionsApi_UNSTABLE(
         SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
     >;
 }
+
+export type { AccountNotificationsApi, SignatureNotificationsApi, SlotNotificationsApi };

@@ -1,6 +1,6 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import { Address } from '@solana/addresses';
-import { DataSlice, Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
+import type { DataSlice, Slot } from '@solana/rpc-core';
 
 import { resolveAccount } from '../resolvers/account';
 

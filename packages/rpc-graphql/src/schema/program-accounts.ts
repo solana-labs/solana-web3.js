@@ -1,10 +1,5 @@
 import { Address } from '@solana/addresses';
-import {
-    DataSlice,
-    GetProgramAccountsDatasizeFilter,
-    GetProgramAccountsMemcmpFilter,
-    Slot,
-} from '@solana/rpc-core/dist/types/rpc-methods/common';
+import { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter, Slot } from '@solana/rpc-core';
 import { Commitment } from '@solana/rpc-types';
 
 export type ProgramAccountsQueryArgs = {

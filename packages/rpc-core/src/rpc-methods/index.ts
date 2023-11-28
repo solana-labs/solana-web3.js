@@ -1,4 +1,4 @@
-import { IRpcApi, RpcRequest } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { IRpcApi, RpcRequest } from '@solana/rpc-transport';
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
@@ -148,3 +148,21 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
         },
     });
 }
+
+export type {
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetProgramAccountsApi,
+    GetSignatureStatusesApi,
+    GetTransactionApi,
+    RequestAirdropApi,
+    SendTransactionApi,
+};
+
+export type {
+    Base64EncodedDataResponse,
+    DataSlice,
+    GetProgramAccountsDatasizeFilter,
+    GetProgramAccountsMemcmpFilter,
+    Slot,
+} from './common';

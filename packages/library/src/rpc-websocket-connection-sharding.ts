@@ -1,4 +1,4 @@
-import { IRpcWebSocketTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import type { IRpcWebSocketTransport } from '@solana/rpc-transport';
 
 import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
 

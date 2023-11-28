@@ -1,9 +1,7 @@
 import { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
-import { Base64EncodedDataResponse } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
-import { AccountNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/account-notifications';
-import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { AccountNotificationsApi, Base64EncodedDataResponse, GetAccountInfoApi } from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Nonce } from '@solana/transactions';
 

@@ -1,6 +1,5 @@
 import { Address } from '@solana/addresses';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-import type { Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 

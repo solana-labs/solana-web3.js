@@ -1,4 +1,4 @@
-import { RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { RpcSubscriptions } from '@solana/rpc-transport';
 
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from '../rpc-subscription-coalescer';
 

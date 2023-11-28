@@ -1,7 +1,6 @@
 import { Signature } from '@solana/keys';
-import { GetSignatureStatusesApi } from '@solana/rpc-core/dist/types/rpc-methods/getSignatureStatuses';
-import { SignatureNotificationsApi } from '@solana/rpc-core/dist/types/rpc-subscriptions/signature-notifications';
-import { Rpc, RpcSubscriptions } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { GetSignatureStatusesApi, SignatureNotificationsApi } from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import { Commitment, commitmentComparator } from '@solana/rpc-types';
 
 type GetRecentSignatureConfirmationPromiseFn = (config: {
