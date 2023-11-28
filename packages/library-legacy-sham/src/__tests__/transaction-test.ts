@@ -55,7 +55,6 @@ describe('TransactionSham', () => {
             'compileMessage',
             'getEstimatedFee',
             'partialSign',
-            'serialize',
             'serializeMessage',
             'setSigners',
             'sign',
@@ -78,6 +77,27 @@ describe('TransactionSham', () => {
             signedTx.feePayer = new PublicKey('8qbHbw2BbbTHBW1sbeqakYXVKRQM8Ne7pLK7m6CVfeR');
             expect(signedTx.feePayer).toEqual(new PublicKey('8qbHbw2BbbTHBW1sbeqakYXVKRQM8Ne7pLK7m6CVfeR'));
         });
+        it('serializes the transaction', () => {
+            expect(signedTx.serialize()).toEqual(
+                expect.objectContaining([
+                    /** SIGNATURES */
+                    1, // Length of signatures array
+                    ...MOCK_SIGNATURE,
+
+                    ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
+                ])
+            );
+        });
+        it('`serialize` does not fatal when `requireAllSignatures` is `true`', () => {
+            expect(() => {
+                signedTx.serialize({ requireAllSignatures: true });
+            }).not.toThrow();
+        });
+        it('`serialize` fatals when `verifySignatures` is `true`', () => {
+            expect(() => {
+                signedTx.serialize({ verifySignatures: true });
+            }).toThrow('The `verifySignatures` option of `Transaction#serialize` is unimplemented');
+        });
     });
     describe('given an unsigned transaction', () => {
         let unsignedTx: Transaction;
@@ -93,6 +113,22 @@ describe('TransactionSham', () => {
         });
         it('vends null for an unsigned transaction through the `signature` property', () => {
             expect(unsignedTx).toHaveProperty('signature', null);
+        });
+        it('serializes the transaction', () => {
+            expect(unsignedTx.serialize()).toEqual(
+                expect.objectContaining([
+                    /** SIGNATURES */
+                    1, // Length of signatures array
+                    ...new Uint8Array(64),
+
+                    ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
+                ])
+            );
+        });
+        it('`serialize` fatals when `requireAllSignatures` is `true`', () => {
+            expect(() => {
+                unsignedTx.serialize({ requireAllSignatures: true });
+            }).toThrow();
         });
     });
 });
