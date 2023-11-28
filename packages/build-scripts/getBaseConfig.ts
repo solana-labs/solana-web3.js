@@ -4,7 +4,6 @@ import browsersListToEsBuild from 'browserslist-to-esbuild';
 import path from 'path';
 import { Format, Options } from 'tsup';
 
-console.log(browsersListToEsBuild());
 type Platform =
     | 'browser'
     | 'node'
