@@ -44,32 +44,32 @@ describe('getBase58Codec', () => {
         const base58 = getBase58Codec();
 
         // Empty.
-        expect(base58.variableSize('')).toBe(0);
+        expect(base58.getSizeFromValue('')).toBe(0);
 
         // Simple strings.
-        expect(base58.variableSize('2')).toBe(1);
-        expect(base58.variableSize('Jf')).toBe(2);
+        expect(base58.getSizeFromValue('2')).toBe(1);
+        expect(base58.getSizeFromValue('Jf')).toBe(2);
 
         // Leading zeroes.
-        expect(base58.variableSize('1')).toBe(1);
-        expect(base58.variableSize('11')).toBe(2);
-        expect(base58.variableSize('11111')).toBe(5);
-        expect(base58.variableSize('1'.repeat(32))).toBe(32);
-        expect(base58.variableSize('11111LUv')).toBe(5 + 2);
+        expect(base58.getSizeFromValue('1')).toBe(1);
+        expect(base58.getSizeFromValue('11')).toBe(2);
+        expect(base58.getSizeFromValue('11111')).toBe(5);
+        expect(base58.getSizeFromValue('1'.repeat(32))).toBe(32);
+        expect(base58.getSizeFromValue('11111LUv')).toBe(5 + 2);
 
         // Boundaries.
-        expect(base58.variableSize('5Q')).toBe(1);
-        expect(base58.variableSize('5R')).toBe(2);
-        expect(base58.variableSize('LUv')).toBe(2);
-        expect(base58.variableSize('LUw')).toBe(3);
-        expect(base58.variableSize('2UzHL')).toBe(3);
-        expect(base58.variableSize('2UzHM')).toBe(4);
-        expect(base58.variableSize('4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofL')).toBe(31);
-        expect(base58.variableSize('4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM')).toBe(32);
-        expect(base58.variableSize('JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG')).toBe(32);
-        expect(base58.variableSize('JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFH')).toBe(33);
+        expect(base58.getSizeFromValue('5Q')).toBe(1);
+        expect(base58.getSizeFromValue('5R')).toBe(2);
+        expect(base58.getSizeFromValue('LUv')).toBe(2);
+        expect(base58.getSizeFromValue('LUw')).toBe(3);
+        expect(base58.getSizeFromValue('2UzHL')).toBe(3);
+        expect(base58.getSizeFromValue('2UzHM')).toBe(4);
+        expect(base58.getSizeFromValue('4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofL')).toBe(31);
+        expect(base58.getSizeFromValue('4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM')).toBe(32);
+        expect(base58.getSizeFromValue('JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG')).toBe(32);
+        expect(base58.getSizeFromValue('JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFH')).toBe(33);
 
         // Addresses.
-        expect(base58.variableSize('LorisCg1FTs89a32VSrFskYDgiRbNQzct1WxyZb7nuA')).toBe(32);
+        expect(base58.getSizeFromValue('LorisCg1FTs89a32VSrFskYDgiRbNQzct1WxyZb7nuA')).toBe(32);
     });
 });

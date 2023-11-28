@@ -19,7 +19,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
     if (__BROWSER__) {
         return createEncoder({
             fixedSize: null,
-            variableSize: (value: string) => {
+            getSizeFromValue: (value: string) => {
                 try {
                     return (atob as Window['atob'])(value).length;
                 } catch (e) {
@@ -45,7 +45,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
     if (__NODEJS__) {
         return createEncoder({
             fixedSize: null,
-            variableSize: (value: string) => Buffer.from(value, 'base64').length,
+            getSizeFromValue: (value: string) => Buffer.from(value, 'base64').length,
             write(value: string, bytes, offset) {
                 assertValidBaseString(alphabet, value.replace(/=/g, ''));
                 const buffer = Buffer.from(value, 'base64');

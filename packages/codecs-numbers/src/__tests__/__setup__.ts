@@ -27,7 +27,7 @@ export const base16: Codec<string> = createCodec({
         const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
         return [value, bytes.length];
     },
-    variableSize: (value: string) => Math.ceil(value.length / 2),
+    getSizeFromValue: (value: string) => Math.ceil(value.length / 2),
     write(value: string, bytes, offset) {
         const matches = value.toLowerCase().match(/.{1,2}/g);
         const hexBytes = matches ? matches.map((byte: string) => parseInt(byte, 16)) : [];

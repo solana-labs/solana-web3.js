@@ -18,7 +18,7 @@ export const getShortU16Encoder = (): VariableSizeEncoder<number> =>
     createEncoder({
         fixedSize: null,
         maxSize: 3,
-        variableSize: (value: number): number => {
+        getSizeFromValue: (value: number): number => {
             if (value <= 0b01111111) return 1;
             if (value <= 0b0011111111111111) return 2;
             return 3;

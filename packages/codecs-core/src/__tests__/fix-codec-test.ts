@@ -6,7 +6,7 @@ describe('fixCodec', () => {
     it('keeps same-sized byte arrays as-is', () => {
         const mockCodec = getMockCodec();
 
-        mockCodec.variableSize.mockReturnValueOnce(10);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(10);
         mockCodec.write.mockImplementation((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f170f120c04'), offset);
             return offset + 10;
@@ -24,7 +24,7 @@ describe('fixCodec', () => {
     it('truncates over-sized byte arrays', () => {
         const mockCodec = getMockCodec();
 
-        mockCodec.variableSize.mockReturnValueOnce(10);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(10);
         mockCodec.write.mockImplementation((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f170f120c04'), offset);
             return offset + 10;
@@ -42,7 +42,7 @@ describe('fixCodec', () => {
     it('pads under-sized byte arrays', () => {
         const mockCodec = getMockCodec();
 
-        mockCodec.variableSize.mockReturnValueOnce(5);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(5);
         mockCodec.write.mockImplementation((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f'), offset);
             return offset + 5;
@@ -101,7 +101,7 @@ describe('fixEncoder', () => {
     it('can fix an encoder to a given amount of bytes', () => {
         const mockCodec = getMockCodec();
 
-        mockCodec.variableSize.mockReturnValueOnce(10);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(10);
         mockCodec.write.mockImplementationOnce((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f170f120c04'), offset);
             return offset + 10;
@@ -109,7 +109,7 @@ describe('fixEncoder', () => {
         expect(fixEncoder(mockCodec, 10).encode('helloworld')).toStrictEqual(b('08050c0c0f170f120c04'));
         expect(mockCodec.write).toHaveBeenCalledWith('helloworld', expect.any(Uint8Array), 0);
 
-        mockCodec.variableSize.mockReturnValueOnce(10);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(10);
         mockCodec.write.mockImplementationOnce((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f170f120c04'), offset);
             return offset + 10;
@@ -117,7 +117,7 @@ describe('fixEncoder', () => {
         expect(fixEncoder(mockCodec, 5).encode('helloworld')).toStrictEqual(b('08050c0c0f'));
         expect(mockCodec.write).toHaveBeenCalledWith('helloworld', expect.any(Uint8Array), 0);
 
-        mockCodec.variableSize.mockReturnValueOnce(5);
+        mockCodec.getSizeFromValue.mockReturnValueOnce(5);
         mockCodec.write.mockImplementationOnce((_, bytes: Uint8Array, offset: number) => {
             bytes.set(b('08050c0c0f'), offset);
             return offset + 5;
