@@ -84,6 +84,7 @@ describe('account', () => {
                         executable
                         lamports
                         rentEpoch
+                        space
                     }
                 }
             `;
@@ -94,6 +95,7 @@ describe('account', () => {
                         executable: false,
                         lamports: 10290815n,
                         rentEpoch: 0n,
+                        space: 165n,
                     },
                 },
             });
@@ -105,16 +107,17 @@ describe('account', () => {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
             commitment: 'confirmed',
         };
-        it("can perform a nested query for the account's owner", async () => {
+        it("can perform a nested query for the account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
-                        owner {
+                        ownerProgram {
                             address
                             executable
                             lamports
                             rentEpoch
+                            space
                         }
                     }
                 }
@@ -123,11 +126,12 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        owner: {
+                        ownerProgram: {
                             address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             executable: true,
                             lamports: expect.any(BigInt),
                             rentEpoch: expect.any(BigInt),
+                            space: 133352n,
                         },
                     },
                 },
@@ -140,18 +144,19 @@ describe('account', () => {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
             commitment: 'confirmed',
         };
-        it("can perform a double nested query for each account's owner", async () => {
+        it("can perform a double nested query for each account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
-                        owner {
+                        ownerProgram {
                             address
-                            owner {
+                            ownerProgram {
                                 address
                                 executable
                                 lamports
                                 rentEpoch
+                                space
                             }
                         }
                     }
@@ -161,13 +166,14 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        owner: {
+                        ownerProgram: {
                             address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                            owner: {
+                            ownerProgram: {
                                 address: 'BPFLoader2111111111111111111111111111111111',
                                 executable: true,
                                 lamports: expect.any(BigInt),
                                 rentEpoch: expect.any(BigInt),
+                                space: 25n,
                             },
                         },
                     },
@@ -181,16 +187,16 @@ describe('account', () => {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
             commitment: 'confirmed',
         };
-        it("can perform a triple nested query for each account's owner", async () => {
+        it("can perform a triple nested query for each account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
-                        owner {
+                        ownerProgram {
                             address
-                            owner {
+                            ownerProgram {
                                 address
-                                owner {
+                                ownerProgram {
                                     address
                                 }
                             }
@@ -202,11 +208,11 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        owner: {
+                        ownerProgram: {
                             address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                            owner: {
+                            ownerProgram: {
                                 address: 'BPFLoader2111111111111111111111111111111111',
-                                owner: {
+                                ownerProgram: {
                                     address: 'NativeLoader1111111111111111111111111111111',
                                 },
                             },
@@ -227,7 +233,7 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
-                        encoding
+                        address
                         ... on AccountBase58 {
                             data
                         }
@@ -238,8 +244,8 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                         data: '2Uw1bpnsXxu3e',
-                        encoding: 'BASE_58',
                     },
                 },
             });
@@ -254,7 +260,7 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
-                        encoding
+                        address
                         ... on AccountBase64 {
                             data
                         }
@@ -265,8 +271,8 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                         data: 'dGVzdCBkYXRh',
-                        encoding: 'BASE_64',
                     },
                 },
             });
@@ -281,7 +287,7 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
-                        encoding
+                        address
                         ... on AccountBase64Zstd {
                             data
                         }
@@ -292,8 +298,8 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                         data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                        encoding: 'BASE_64_ZSTD',
                     },
                 },
             });
@@ -303,14 +309,11 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address, encoding: PARSED) {
-                        encoding
                         ... on AccountBase64 {
                             data
                         }
                         ... on MintAccount {
-                            mintData: data {
-                                supply
-                            }
+                            supply
                         }
                     }
                 }
@@ -322,10 +325,7 @@ describe('account', () => {
             expect(resultParsed).toMatchObject({
                 data: {
                     account: {
-                        encoding: 'PARSED',
-                        mintData: {
-                            supply: expect.any(String),
-                        },
+                        supply: expect.any(String),
                     },
                 },
             });
@@ -338,7 +338,6 @@ describe('account', () => {
                 data: {
                     account: {
                         data: 'dGVzdCBkYXRh',
-                        encoding: 'BASE_64',
                     },
                 },
             });
@@ -352,10 +351,46 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
-                        encoding
                         ... on MintAccount {
-                            mintData: data {
-                                supply
+                            supply
+                        }
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        supply: expect.any(String),
+                    },
+                },
+            });
+        });
+    });
+    describe('specific account type queries', () => {
+        it('can get a nonce account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/nonce-account.json
+            const variableValues = {
+                address: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
+                        ... on NonceAccount {
+                            authority {
+                                address
+                            }
+                            blockhash
+                            feeCalculator {
+                                lamportsPerSignature
                             }
                         }
                     }
@@ -365,16 +400,74 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        encoding: 'PARSED',
-                        mintData: {
-                            supply: expect.any(String),
+                        address: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
+                        authority: {
+                            address: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
                         },
+                        blockhash: expect.any(String),
+                        feeCalculator: {
+                            lamportsPerSignature: expect.any(String),
+                        },
+                        lamports: expect.any(BigInt),
+                        ownerProgram: {
+                            address: '11111111111111111111111111111111',
+                        },
+                        rentEpoch: expect.any(BigInt),
+                        space: 80n,
                     },
                 },
             });
         });
-    });
-    describe('specific account type queries', () => {
+        it('can get an address lookup table account', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/address-lookup-table-account.json
+            const variableValues = {
+                address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: String!) {
+                    account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
+                        ... on LookupTableAccount {
+                            addresses
+                            authority {
+                                address
+                            }
+                            deactivationSlot
+                            lastExtendedSlot
+                            lastExtendedSlotStartIndex
+                        }
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
+                        addresses: expect.any(Array),
+                        authority: {
+                            address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
+                        },
+                        deactivationSlot: expect.any(String),
+                        lamports: expect.any(BigInt),
+                        lastExtendedSlot: expect.any(String),
+                        lastExtendedSlotStartIndex: expect.any(Number),
+                        ownerProgram: {
+                            address: 'AddressLookupTab1e1111111111111111111111111',
+                        },
+                        rentEpoch: expect.any(BigInt),
+                        space: 1304n,
+                    },
+                },
+            });
+        });
         it('can get a mint account', async () => {
             expect.assertions(1);
             // See scripts/fixtures/spl-token-mint-account.json
@@ -384,21 +477,21 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
                         ... on MintAccount {
-                            data {
-                                decimals
-                                isInitialized
-                                mintAuthority {
-                                    address
-                                    lamports
-                                }
-                                supply
+                            decimals
+                            isInitialized
+                            mintAuthority {
+                                address
+                                lamports
                             }
-                            meta {
-                                program
-                                space
-                                type
-                            }
+                            supply
                         }
                     }
                 }
@@ -407,20 +500,20 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        data: {
-                            decimals: 6,
-                            isInitialized: true,
-                            mintAuthority: {
-                                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                                lamports: expect.any(BigInt),
-                            },
-                            supply: expect.any(String),
+                        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+                        decimals: 6,
+                        isInitialized: true,
+                        lamports: expect.any(BigInt),
+                        mintAuthority: {
+                            address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+                            lamports: expect.any(BigInt),
                         },
-                        meta: {
-                            program: 'spl-token',
-                            space: 82n,
-                            type: 'mint',
+                        ownerProgram: {
+                            address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                         },
+                        rentEpoch: expect.any(BigInt),
+                        space: 82n,
+                        supply: expect.any(String),
                     },
                 },
             });
@@ -434,27 +527,27 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
                         ... on TokenAccount {
-                            data {
-                                isNative
-                                mint {
-                                    address
-                                }
-                                owner {
-                                    address
-                                }
-                                state
-                                tokenAmount {
-                                    amount
-                                    decimals
-                                    uiAmount
-                                    uiAmountString
-                                }
+                            isNative
+                            mint {
+                                address
                             }
-                            meta {
-                                program
-                                space
-                                type
+                            owner {
+                                address
+                            }
+                            state
+                            tokenAmount {
+                                amount
+                                decimals
+                                uiAmount
+                                uiAmountString
                             }
                         }
                     }
@@ -464,75 +557,25 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        data: {
-                            isNative: expect.any(Boolean),
-                            mint: {
-                                address: expect.any(String),
-                            },
-                            owner: {
-                                address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
-                            },
-                            state: expect.any(String),
-                            tokenAmount: {
-                                amount: expect.any(String),
-                                decimals: expect.any(Number),
-                                uiAmountString: expect.any(String),
-                            },
+                        address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
+                        isNative: expect.any(Boolean),
+                        lamports: expect.any(BigInt),
+                        mint: {
+                            address: expect.any(String),
                         },
-                        meta: {
-                            program: 'spl-token',
-                            space: 165n,
-                            type: 'account',
+                        owner: {
+                            address: '6UsGbaMgchgj4wiwKKuE1v5URHdcDfEiMSM25QpesKir',
                         },
-                    },
-                },
-            });
-        });
-        it('can get a nonce account', async () => {
-            expect.assertions(1);
-            // See scripts/fixtures/nonce-account.json
-            const variableValues = {
-                address: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
-            };
-            const source = /* GraphQL */ `
-                query testQuery($address: String!) {
-                    account(address: $address) {
-                        ... on NonceAccount {
-                            data {
-                                authority {
-                                    address
-                                }
-                                blockhash
-                                feeCalculator {
-                                    lamportsPerSignature
-                                }
-                            }
-                            meta {
-                                program
-                                space
-                                type
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, variableValues);
-            expect(result).toMatchObject({
-                data: {
-                    account: {
-                        data: {
-                            authority: {
-                                address: '3xxDCjN8s6MgNHwdRExRLa6gHmmRTWPnUdzkbKfEgNAe',
-                            },
-                            blockhash: expect.any(String),
-                            feeCalculator: {
-                                lamportsPerSignature: expect.any(String),
-                            },
+                        ownerProgram: {
+                            address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                         },
-                        meta: {
-                            program: 'nonce',
-                            space: 80n,
-                            type: 'initialized',
+                        rentEpoch: expect.any(BigInt),
+                        space: 165n,
+                        state: expect.any(String),
+                        tokenAmount: {
+                            amount: expect.any(String),
+                            decimals: expect.any(Number),
+                            uiAmountString: expect.any(String),
                         },
                     },
                 },
@@ -547,42 +590,42 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
                         ... on StakeAccount {
-                            data {
-                                meta {
-                                    authorized {
-                                        staker {
-                                            address
-                                        }
-                                        withdrawer {
-                                            address
-                                        }
-                                    }
-                                    lockup {
-                                        custodian {
-                                            address
-                                        }
-                                        epoch
-                                        unixTimestamp
-                                    }
-                                    rentExemptReserve
-                                }
-                                stake {
-                                    creditsObserved
-                                    delegation {
-                                        activationEpoch
-                                        deactivationEpoch
-                                        stake
-                                        voter {
-                                            address
-                                        }
-                                    }
-                                }
-                            }
                             meta {
-                                program
-                                space
-                                type
+                                authorized {
+                                    staker {
+                                        address
+                                    }
+                                    withdrawer {
+                                        address
+                                    }
+                                }
+                                lockup {
+                                    custodian {
+                                        address
+                                    }
+                                    epoch
+                                    unixTimestamp
+                                }
+                                rentExemptReserve
+                            }
+                            stake {
+                                creditsObserved
+                                delegation {
+                                    activationEpoch
+                                    deactivationEpoch
+                                    stake
+                                    voter {
+                                        address
+                                    }
+                                }
                             }
                         }
                     }
@@ -592,41 +635,41 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        data: {
-                            meta: {
-                                authorized: {
-                                    staker: {
-                                        address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
-                                    },
-                                    withdrawer: {
-                                        address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
-                                    },
-                                },
-                                lockup: {
-                                    custodian: {
-                                        address: '11111111111111111111111111111111',
-                                    },
-                                    epoch: expect.any(BigInt),
-                                    unixTimestamp: expect.any(BigInt),
-                                },
-                                rentExemptReserve: expect.any(String),
-                            },
-                            stake: {
-                                creditsObserved: expect.any(BigInt),
-                                delegation: {
-                                    activationEpoch: expect.any(BigInt),
-                                    deactivationEpoch: expect.any(BigInt),
-                                    stake: expect.any(String),
-                                    voter: {
-                                        address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
-                                    },
-                                },
-                            },
-                        },
+                        address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
+                        lamports: expect.any(BigInt),
                         meta: {
-                            program: 'stake',
-                            space: 200n,
-                            type: 'delegated',
+                            authorized: {
+                                staker: {
+                                    address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
+                                },
+                                withdrawer: {
+                                    address: '3HRNKNXafhr3wE9NSXRpNVdFYt6EVygdqFwqf6WpG57V',
+                                },
+                            },
+                            lockup: {
+                                custodian: {
+                                    address: '11111111111111111111111111111111',
+                                },
+                                epoch: expect.any(BigInt),
+                                unixTimestamp: expect.any(BigInt),
+                            },
+                            rentExemptReserve: expect.any(String),
+                        },
+                        ownerProgram: {
+                            address: 'Stake11111111111111111111111111111111111111',
+                        },
+                        rentEpoch: expect.any(BigInt),
+                        space: 200n,
+                        stake: {
+                            creditsObserved: expect.any(BigInt),
+                            delegation: {
+                                activationEpoch: expect.any(BigInt),
+                                deactivationEpoch: expect.any(BigInt),
+                                stake: expect.any(String),
+                                voter: {
+                                    address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
+                                },
+                            },
                         },
                     },
                 },
@@ -641,41 +684,41 @@ describe('account', () => {
             const source = /* GraphQL */ `
                 query testQuery($address: String!) {
                     account(address: $address) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
+                        rentEpoch
+                        space
                         ... on VoteAccount {
-                            data {
-                                authorizedVoters {
-                                    authorizedVoter {
-                                        address
-                                    }
-                                    epoch
-                                }
-                                authorizedWithdrawer {
+                            authorizedVoters {
+                                authorizedVoter {
                                     address
                                 }
-                                commission
-                                epochCredits {
-                                    credits
-                                    epoch
-                                    previousCredits
-                                }
-                                lastTimestamp {
-                                    slot
-                                    timestamp
-                                }
-                                node {
-                                    address
-                                }
-                                priorVoters
-                                rootSlot
-                                votes {
-                                    confirmationCount
-                                    slot
-                                }
+                                epoch
                             }
-                            meta {
-                                program
-                                space
-                                type
+                            authorizedWithdrawer {
+                                address
+                            }
+                            commission
+                            epochCredits {
+                                credits
+                                epoch
+                                previousCredits
+                            }
+                            lastTimestamp {
+                                slot
+                                timestamp
+                            }
+                            node {
+                                address
+                            }
+                            priorVoters
+                            rootSlot
+                            votes {
+                                confirmationCount
+                                slot
                             }
                         }
                     }
@@ -685,97 +728,47 @@ describe('account', () => {
             expect(result).toMatchObject({
                 data: {
                     account: {
-                        data: {
-                            authorizedVoters: expect.arrayContaining([
-                                {
-                                    authorizedVoter: {
-                                        address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
-                                    },
-                                    epoch: expect.any(BigInt),
+                        address: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
+                        authorizedVoters: expect.arrayContaining([
+                            {
+                                authorizedVoter: {
+                                    address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
                                 },
-                            ]),
-                            authorizedWithdrawer: {
-                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                                epoch: expect.any(BigInt),
                             },
-                            commission: expect.any(Number),
-                            epochCredits: expect.arrayContaining([
-                                {
-                                    credits: expect.any(String),
-                                    epoch: expect.any(BigInt),
-                                    previousCredits: expect.any(String),
-                                },
-                            ]),
-                            lastTimestamp: {
+                        ]),
+                        authorizedWithdrawer: {
+                            address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                        },
+                        commission: expect.any(Number),
+                        epochCredits: expect.arrayContaining([
+                            {
+                                credits: expect.any(String),
+                                epoch: expect.any(BigInt),
+                                previousCredits: expect.any(String),
+                            },
+                        ]),
+                        lamports: expect.any(BigInt),
+                        lastTimestamp: {
+                            slot: expect.any(BigInt),
+                            timestamp: expect.any(BigInt),
+                        },
+                        node: {
+                            address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
+                        },
+                        ownerProgram: {
+                            address: 'Vote111111111111111111111111111111111111111',
+                        },
+                        priorVoters: expect.any(Array),
+                        rentEpoch: expect.any(BigInt),
+                        rootSlot: expect.any(BigInt),
+                        space: 3731n,
+                        votes: expect.arrayContaining([
+                            {
+                                confirmationCount: expect.any(Number),
                                 slot: expect.any(BigInt),
-                                timestamp: expect.any(BigInt),
                             },
-                            node: {
-                                address: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr',
-                            },
-                            priorVoters: expect.any(Array),
-                            rootSlot: expect.any(BigInt),
-                            votes: expect.arrayContaining([
-                                {
-                                    confirmationCount: expect.any(Number),
-                                    slot: expect.any(BigInt),
-                                },
-                            ]),
-                        },
-                        meta: {
-                            program: 'vote',
-                            space: expect.any(BigInt),
-                            type: 'vote',
-                        },
-                    },
-                },
-            });
-        });
-        it('can get an address lookup table account', async () => {
-            expect.assertions(1);
-            // See scripts/fixtures/address-lookup-table-account.json
-            const variableValues = {
-                address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
-            };
-            const source = /* GraphQL */ `
-                query testQuery($address: String!) {
-                    account(address: $address) {
-                        ... on LookupTableAccount {
-                            data {
-                                addresses
-                                authority {
-                                    address
-                                }
-                                deactivationSlot
-                                lastExtendedSlot
-                                lastExtendedSlotStartIndex
-                            }
-                            meta {
-                                program
-                                space
-                                type
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, variableValues);
-            expect(result).toMatchObject({
-                data: {
-                    account: {
-                        data: {
-                            addresses: expect.any(Array),
-                            authority: {
-                                address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
-                            },
-                            deactivationSlot: expect.any(String),
-                            lastExtendedSlot: expect.any(String),
-                            lastExtendedSlotStartIndex: expect.any(Number),
-                        },
-                        meta: {
-                            program: 'address-lookup-table',
-                            space: 1304n,
-                            type: 'lookupTable',
-                        },
+                        ]),
                     },
                 },
             });
@@ -810,7 +803,7 @@ describe('account', () => {
                 query testQuery {
                     account(address: "CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN") {
                         address
-                        owner {
+                        ownerProgram {
                             address
                         }
                     }
@@ -821,7 +814,7 @@ describe('account', () => {
                     data: {
                         account: {
                             address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
-                            owner: {
+                            ownerProgram: {
                                 address: 'Stake11111111111111111111111111111111111111',
                             },
                         },
@@ -837,9 +830,9 @@ describe('account', () => {
                 query testQuery {
                     account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
                         address
-                        owner {
+                        ownerProgram {
                             address
-                            owner {
+                            ownerProgram {
                                 address
                             }
                         }
@@ -851,9 +844,9 @@ describe('account', () => {
                     data: {
                         account: {
                             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-                            owner: {
+                            ownerProgram: {
                                 address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                owner: {
+                                ownerProgram: {
                                     address: 'BPFLoader2111111111111111111111111111111111',
                                 },
                             },
@@ -870,13 +863,11 @@ describe('account', () => {
             const source = `
                 query testQuery {
                     account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        address
                         ... on MintAccount {
-                            address
-                            data {
-                                mintAuthority {
-                                    address
-                                    lamports
-                                }
+                            mintAuthority {
+                                address
+                                lamports
                             }
                         }
                     }
@@ -887,11 +878,9 @@ describe('account', () => {
                 data: {
                     account: {
                         address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                        data: {
-                            mintAuthority: {
-                                address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                                lamports: expect.any(BigInt),
-                            },
+                        mintAuthority: {
+                            address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
+                            lamports: expect.any(BigInt),
                         },
                     },
                 },

@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 import { createSolanaRpcApi, SolanaRpcMethods } from '@solana/rpc-core';
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
@@ -21,8 +20,8 @@ describe('programAccounts', () => {
     describe('basic queries', () => {
         // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
         const variableValues = {
-            programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             commitment: 'confirmed',
+            programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
         };
         it("can query program accounts' lamports balances", async () => {
             expect.assertions(1);
@@ -86,18 +85,17 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
                 encoding: 'BASE_58',
+                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        encoding
+                        address
+                        executable
                         ... on AccountBase58 {
-                            address
                             data
-                            executable
                         }
                     }
                 }
@@ -109,13 +107,11 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: '2Uw1bpnsXxu3e',
-                            encoding: 'BASE_58',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: '2Uw1bpnsXxu3e',
-                            encoding: 'BASE_58',
                             executable: false,
                         },
                     ]),
@@ -126,18 +122,17 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
                 encoding: 'BASE_64',
+                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        encoding
+                        address
+                        executable
                         ... on AccountBase64 {
-                            address
                             data
-                            executable
                         }
                     }
                 }
@@ -149,13 +144,11 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: 'dGVzdCBkYXRh',
-                            encoding: 'BASE_64',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: 'dGVzdCBkYXRh',
-                            encoding: 'BASE_64',
                             executable: false,
                         },
                     ]),
@@ -166,18 +159,17 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
                 commitment: 'confirmed',
                 encoding: 'BASE_64_ZSTD',
+                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
-                        encoding
+                        address
+                        executable
                         ... on AccountBase64Zstd {
-                            address
                             data
-                            executable
                         }
                     }
                 }
@@ -189,13 +181,11 @@ describe('programAccounts', () => {
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
                             data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                            encoding: 'BASE_64_ZSTD',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                             data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
-                            encoding: 'BASE_64_ZSTD',
                             executable: false,
                         },
                     ]),
@@ -212,16 +202,19 @@ describe('programAccounts', () => {
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
                         ... on LookupTableAccount {
-                            data {
-                                addresses
-                                authority {
-                                    address
-                                }
-                                deactivationSlot
-                                lastExtendedSlot
-                                lastExtendedSlotStartIndex
+                            addresses
+                            authority {
+                                address
                             }
+                            deactivationSlot
+                            lastExtendedSlot
+                            lastExtendedSlotStartIndex
                         }
                     }
                 }
@@ -231,14 +224,17 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            data: {
-                                addresses: expect.arrayContaining([expect.any(String)]),
-                                authority: {
-                                    address: expect.any(String),
-                                },
-                                deactivationSlot: expect.any(String),
-                                lastExtendedSlot: expect.any(String),
-                                lastExtendedSlotStartIndex: expect.any(Number),
+                            address: expect.any(String),
+                            addresses: expect.arrayContaining([expect.any(String)]),
+                            authority: {
+                                address: expect.any(String),
+                            },
+                            deactivationSlot: expect.any(String),
+                            lamports: expect.any(BigInt),
+                            lastExtendedSlot: expect.any(String),
+                            lastExtendedSlotStartIndex: expect.any(Number),
+                            ownerProgram: {
+                                address: 'AddressLookupTab1e1111111111111111111111111',
                             },
                         },
                     ]),
@@ -253,32 +249,33 @@ describe('programAccounts', () => {
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
                         ... on MintAccount {
-                            data {
-                                decimals
-                                isInitialized
-                                mintAuthority {
-                                    address
-                                }
-                                supply
+                            decimals
+                            isInitialized
+                            mintAuthority {
+                                address
                             }
+                            supply
                         }
                         ... on TokenAccount {
-                            data {
-                                isNative
-                                mint {
-                                    address
-                                }
-                                owner {
-                                    address
-                                }
-                                state
-                                tokenAmount {
-                                    amount
-                                    decimals
-                                    uiAmount
-                                    uiAmountString
-                                }
+                            isNative
+                            mint {
+                                address
+                            }
+                            owner {
+                                address
+                            }
+                            state
+                            tokenAmount {
+                                amount
+                                decimals
+                                uiAmount
+                                uiAmountString
                             }
                         }
                     }
@@ -290,32 +287,38 @@ describe('programAccounts', () => {
                     programAccounts: expect.arrayContaining([
                         // Mint account
                         {
-                            data: {
-                                decimals: expect.any(Number),
-                                isInitialized: expect.any(Boolean),
-                                mintAuthority: {
-                                    address: expect.any(String),
-                                },
-                                supply: expect.any(String),
+                            address: expect.any(String),
+                            decimals: expect.any(Number),
+                            isInitialized: expect.any(Boolean),
+                            lamports: expect.any(BigInt),
+                            mintAuthority: {
+                                address: expect.any(String),
                             },
+                            ownerProgram: {
+                                address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            },
+                            supply: expect.any(String),
                         },
                         // Token account
                         {
-                            data: {
-                                isNative: expect.any(Boolean),
-                                mint: {
-                                    address: expect.any(String),
-                                },
-                                owner: {
-                                    address: expect.any(String),
-                                },
-                                state: expect.any(String),
-                                tokenAmount: expect.objectContaining({
-                                    amount: expect.any(String),
-                                    decimals: expect.any(Number),
-                                    uiAmountString: expect.any(String),
-                                }),
+                            address: expect.any(String),
+                            isNative: expect.any(Boolean),
+                            lamports: expect.any(BigInt),
+                            mint: {
+                                address: expect.any(String),
                             },
+                            owner: {
+                                address: expect.any(String),
+                            },
+                            ownerProgram: {
+                                address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                            },
+                            state: expect.any(String),
+                            tokenAmount: expect.objectContaining({
+                                amount: expect.any(String),
+                                decimals: expect.any(Number),
+                                uiAmountString: expect.any(String),
+                            }),
                         },
                     ]),
                 },
@@ -329,15 +332,18 @@ describe('programAccounts', () => {
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
                         ... on NonceAccount {
-                            data {
-                                authority {
-                                    address
-                                }
-                                blockhash
-                                feeCalculator {
-                                    lamportsPerSignature
-                                }
+                            authority {
+                                address
+                            }
+                            blockhash
+                            feeCalculator {
+                                lamportsPerSignature
                             }
                         }
                     }
@@ -348,14 +354,17 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            data: {
-                                authority: {
-                                    address: expect.any(String),
-                                },
-                                blockhash: expect.any(String),
-                                feeCalculator: {
-                                    lamportsPerSignature: expect.any(String),
-                                },
+                            address: expect.any(String),
+                            authority: {
+                                address: expect.any(String),
+                            },
+                            blockhash: expect.any(String),
+                            feeCalculator: {
+                                lamportsPerSignature: expect.any(String),
+                            },
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: '11111111111111111111111111111111',
                             },
                         },
                     ]),
@@ -370,35 +379,38 @@ describe('programAccounts', () => {
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
                         ... on StakeAccount {
-                            data {
-                                meta {
-                                    authorized {
-                                        staker {
-                                            address
-                                        }
-                                        withdrawer {
-                                            address
-                                        }
+                            meta {
+                                authorized {
+                                    staker {
+                                        address
                                     }
-                                    lockup {
-                                        custodian {
-                                            address
-                                        }
-                                        epoch
-                                        unixTimestamp
+                                    withdrawer {
+                                        address
                                     }
-                                    rentExemptReserve
                                 }
-                                stake {
-                                    creditsObserved
-                                    delegation {
-                                        activationEpoch
-                                        deactivationEpoch
-                                        stake
-                                        voter {
-                                            address
-                                        }
+                                lockup {
+                                    custodian {
+                                        address
+                                    }
+                                    epoch
+                                    unixTimestamp
+                                }
+                                rentExemptReserve
+                            }
+                            stake {
+                                creditsObserved
+                                delegation {
+                                    activationEpoch
+                                    deactivationEpoch
+                                    stake
+                                    voter {
+                                        address
                                     }
                                 }
                             }
@@ -411,34 +423,37 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            data: {
-                                meta: {
-                                    authorized: {
-                                        staker: {
-                                            address: expect.any(String),
-                                        },
-                                        withdrawer: {
-                                            address: expect.any(String),
-                                        },
+                            address: expect.any(String),
+                            lamports: expect.any(BigInt),
+                            meta: {
+                                authorized: {
+                                    staker: {
+                                        address: expect.any(String),
                                     },
-                                    lockup: {
-                                        custodian: {
-                                            address: expect.any(String),
-                                        },
-                                        epoch: expect.any(BigInt),
-                                        unixTimestamp: expect.any(BigInt),
+                                    withdrawer: {
+                                        address: expect.any(String),
                                     },
-                                    rentExemptReserve: expect.any(String),
                                 },
-                                stake: {
-                                    creditsObserved: expect.any(BigInt),
-                                    delegation: {
-                                        activationEpoch: expect.any(BigInt),
-                                        deactivationEpoch: expect.any(BigInt),
-                                        stake: expect.any(String),
-                                        voter: {
-                                            address: expect.any(String),
-                                        },
+                                lockup: {
+                                    custodian: {
+                                        address: expect.any(String),
+                                    },
+                                    epoch: expect.any(BigInt),
+                                    unixTimestamp: expect.any(BigInt),
+                                },
+                                rentExemptReserve: expect.any(String),
+                            },
+                            ownerProgram: {
+                                address: 'Stake11111111111111111111111111111111111111',
+                            },
+                            stake: {
+                                creditsObserved: expect.any(BigInt),
+                                delegation: {
+                                    activationEpoch: expect.any(BigInt),
+                                    deactivationEpoch: expect.any(BigInt),
+                                    stake: expect.any(String),
+                                    voter: {
+                                        address: expect.any(String),
                                     },
                                 },
                             },
@@ -455,36 +470,39 @@ describe('programAccounts', () => {
             const source = /* GraphQL */ `
                 query testQuery($programAddress: String!) {
                     programAccounts(programAddress: $programAddress) {
+                        address
+                        lamports
+                        ownerProgram {
+                            address
+                        }
                         ... on VoteAccount {
-                            data {
-                                authorizedVoters {
-                                    authorizedVoter {
-                                        address
-                                    }
-                                    epoch
-                                }
-                                authorizedWithdrawer {
+                            authorizedVoters {
+                                authorizedVoter {
                                     address
                                 }
-                                commission
-                                epochCredits {
-                                    credits
-                                    epoch
-                                    previousCredits
-                                }
-                                lastTimestamp {
-                                    slot
-                                    timestamp
-                                }
-                                node {
-                                    address
-                                }
-                                priorVoters
-                                rootSlot
-                                votes {
-                                    confirmationCount
-                                    slot
-                                }
+                                epoch
+                            }
+                            authorizedWithdrawer {
+                                address
+                            }
+                            commission
+                            epochCredits {
+                                credits
+                                epoch
+                                previousCredits
+                            }
+                            lastTimestamp {
+                                slot
+                                timestamp
+                            }
+                            node {
+                                address
+                            }
+                            priorVoters
+                            rootSlot
+                            votes {
+                                confirmationCount
+                                slot
                             }
                         }
                     }
@@ -495,42 +513,45 @@ describe('programAccounts', () => {
                 data: {
                     programAccounts: expect.arrayContaining([
                         {
-                            data: {
-                                authorizedVoters: expect.arrayContaining([
-                                    {
-                                        authorizedVoter: {
-                                            address: expect.any(String),
-                                        },
-                                        epoch: expect.any(BigInt),
+                            address: expect.any(String),
+                            authorizedVoters: expect.arrayContaining([
+                                {
+                                    authorizedVoter: {
+                                        address: expect.any(String),
                                     },
-                                ]),
-                                authorizedWithdrawer: {
-                                    address: expect.any(String),
+                                    epoch: expect.any(BigInt),
                                 },
-                                commission: expect.any(Number),
-                                epochCredits: expect.arrayContaining([
-                                    {
-                                        credits: expect.any(String),
-                                        epoch: expect.any(BigInt),
-                                        previousCredits: expect.any(String),
-                                    },
-                                ]),
-                                lastTimestamp: {
-                                    slot: expect.any(BigInt),
-                                    timestamp: expect.any(BigInt),
-                                },
-                                node: {
-                                    address: expect.any(String),
-                                },
-                                priorVoters: expect.any(Array),
-                                rootSlot: expect.any(BigInt),
-                                votes: expect.arrayContaining([
-                                    {
-                                        confirmationCount: expect.any(Number),
-                                        slot: expect.any(BigInt),
-                                    },
-                                ]),
+                            ]),
+                            authorizedWithdrawer: {
+                                address: expect.any(String),
                             },
+                            commission: expect.any(Number),
+                            epochCredits: expect.arrayContaining([
+                                {
+                                    credits: expect.any(String),
+                                    epoch: expect.any(BigInt),
+                                    previousCredits: expect.any(String),
+                                },
+                            ]),
+                            lamports: expect.any(BigInt),
+                            lastTimestamp: {
+                                slot: expect.any(BigInt),
+                                timestamp: expect.any(BigInt),
+                            },
+                            node: {
+                                address: expect.any(String),
+                            },
+                            ownerProgram: {
+                                address: 'Vote111111111111111111111111111111111111111',
+                            },
+                            priorVoters: expect.any(Array),
+                            rootSlot: expect.any(BigInt),
+                            votes: expect.arrayContaining([
+                                {
+                                    confirmationCount: expect.any(Number),
+                                    slot: expect.any(BigInt),
+                                },
+                            ]),
                         },
                     ]),
                 },
@@ -543,13 +564,13 @@ describe('programAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/gpa1.json
                 const variableValues = {
-                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                     commitment: 'confirmed',
                     dataSlice: {
                         length: 5,
                         offset: 0,
                     },
                     encoding: 'BASE_58',
+                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
@@ -564,7 +585,6 @@ describe('programAccounts', () => {
                             dataSlice: $dataSlice
                             encoding: $encoding
                         ) {
-                            encoding
                             ... on AccountBase58 {
                                 data
                             }
@@ -577,7 +597,6 @@ describe('programAccounts', () => {
                         programAccounts: expect.arrayContaining([
                             {
                                 data: 'E8f4pET',
-                                encoding: 'BASE_58',
                             },
                         ]),
                     },
@@ -589,13 +608,13 @@ describe('programAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/gpa1.json
                 const variableValues = {
-                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                     commitment: 'confirmed',
                     dataSlice: {
                         length: 5,
                         offset: 0,
                     },
                     encoding: 'BASE_64',
+                    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
@@ -610,7 +629,6 @@ describe('programAccounts', () => {
                             dataSlice: $dataSlice
                             encoding: $encoding
                         ) {
-                            encoding
                             ... on AccountBase64 {
                                 data
                             }
@@ -623,7 +641,6 @@ describe('programAccounts', () => {
                         programAccounts: expect.arrayContaining([
                             {
                                 data: 'dGVzdCA=',
-                                encoding: 'BASE_64',
                             },
                         ]),
                     },
