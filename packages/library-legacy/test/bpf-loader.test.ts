@@ -9,6 +9,9 @@ import {
   Transaction,
   sendAndConfirmTransaction,
   Keypair,
+  MessageV0,
+  TransactionInstruction,
+  VersionedTransaction,
 } from '../src';
 import {url} from './url';
 import {BPF_LOADER_PROGRAM_ID} from '../src/bpf-loader';
@@ -111,14 +114,11 @@ if (process.env.TEST_LIVE) {
           transaction,
           [payerAccount],
           {
-            commitment: 'finalized', // `getParsedConfirmedTransaction` requires max commitment
             preflightCommitment: connection.commitment || 'finalized',
           },
         );
 
-        const parsedTx = await connection.getParsedConfirmedTransaction(
-          signature,
-        );
+        const parsedTx = await connection.getParsedTransaction(signature);
         if (parsedTx === null) {
           expect(parsedTx).not.to.be.null;
           return;
@@ -135,21 +135,30 @@ if (process.env.TEST_LIVE) {
       }).timeout(30000);
 
       it('simulate transaction', async () => {
-        const simulatedTransaction = new Transaction().add({
-          keys: [
-            {
-              pubkey: payerAccount.publicKey,
-              isSigner: true,
-              isWritable: true,
-            },
-          ],
-          programId: program.publicKey,
-        });
+        const simulatedTransaction = new VersionedTransaction(
+          MessageV0.compile({
+            instructions: [
+              new TransactionInstruction({
+                keys: [
+                  {
+                    pubkey: payerAccount.publicKey,
+                    isSigner: true,
+                    isWritable: true,
+                  },
+                ],
+                programId: program.publicKey,
+              }),
+            ],
+            payerKey: payerAccount.publicKey,
+            recentBlockhash: (await connection.getLatestBlockhash()).blockhash,
+          }),
+        );
+        simulatedTransaction.sign([payerAccount]);
 
         const {err, logs} = (
-          await connection.simulateTransaction(simulatedTransaction, [
-            payerAccount,
-          ])
+          await connection.simulateTransaction(simulatedTransaction, {
+            sigVerify: true,
+          })
         ).value;
         expect(err).to.be.null;
 
@@ -168,20 +177,30 @@ if (process.env.TEST_LIVE) {
       });
 
       it('simulate transaction with returnData', async () => {
-        const simulatedTransaction = new Transaction().add({
-          keys: [
-            {
-              pubkey: payerAccount.publicKey,
-              isSigner: true,
-              isWritable: true,
-            },
-          ],
-          programId: program.publicKey,
-        });
+        const simulatedTransaction = new VersionedTransaction(
+          MessageV0.compile({
+            instructions: [
+              new TransactionInstruction({
+                keys: [
+                  {
+                    pubkey: payerAccount.publicKey,
+                    isSigner: true,
+                    isWritable: true,
+                  },
+                ],
+                programId: program.publicKey,
+              }),
+            ],
+            payerKey: payerAccount.publicKey,
+            recentBlockhash: (await connection.getLatestBlockhash()).blockhash,
+          }),
+        );
+        simulatedTransaction.sign([payerAccount]);
+
         const {err, returnData} = (
-          await connection.simulateTransaction(simulatedTransaction, [
-            payerAccount,
-          ])
+          await connection.simulateTransaction(simulatedTransaction, {
+            sigVerify: true,
+          })
         ).value;
         const expectedReturnData = new Uint8Array([1, 2, 3]);
 
@@ -195,54 +214,30 @@ if (process.env.TEST_LIVE) {
         }
       });
 
-      it('deprecated - simulate transaction without signature verification', async () => {
-        const simulatedTransaction = new Transaction().add({
-          keys: [
-            {
-              pubkey: payerAccount.publicKey,
-              isSigner: true,
-              isWritable: true,
-            },
-          ],
-          programId: program.publicKey,
-        });
-
-        simulatedTransaction.setSigners(payerAccount.publicKey);
-        const {err, logs} = (
-          await connection.simulateTransaction(simulatedTransaction)
-        ).value;
-        expect(err).to.be.null;
-
-        if (logs === null) {
-          expect(logs).not.to.be.null;
-          return;
-        }
-
-        expect(logs.length).to.be.at.least(2);
-        expect(logs[0]).to.eq(
-          `Program ${program.publicKey.toBase58()} invoke [1]`,
-        );
-        expect(logs[logs.length - 1]).to.eq(
-          `Program ${program.publicKey.toBase58()} success`,
-        );
-      });
-
       it('simulate transaction without signature verification', async () => {
-        const simulatedTransaction = new Transaction();
-        simulatedTransaction.feePayer = payerAccount.publicKey;
-        simulatedTransaction.add({
-          keys: [
-            {
-              pubkey: payerAccount.publicKey,
-              isSigner: true,
-              isWritable: true,
-            },
-          ],
-          programId: program.publicKey,
-        });
+        const simulatedTransaction = new VersionedTransaction(
+          MessageV0.compile({
+            instructions: [
+              new TransactionInstruction({
+                keys: [
+                  {
+                    pubkey: payerAccount.publicKey,
+                    isSigner: true,
+                    isWritable: true,
+                  },
+                ],
+                programId: program.publicKey,
+              }),
+            ],
+            payerKey: payerAccount.publicKey,
+            recentBlockhash: (await connection.getLatestBlockhash()).blockhash,
+          }),
+        );
 
         const {err, logs} = (
-          await connection.simulateTransaction(simulatedTransaction)
+          await connection.simulateTransaction(simulatedTransaction, {
+            sigVerify: false,
+          })
         ).value;
         expect(err).to.be.null;
 
@@ -261,18 +256,25 @@ if (process.env.TEST_LIVE) {
       });
 
       it('simulate transaction with bad programId', async () => {
-        const simulatedTransaction = new Transaction().add({
-          keys: [
-            {
-              pubkey: payerAccount.publicKey,
-              isSigner: true,
-              isWritable: true,
-            },
-          ],
-          programId: Keypair.generate().publicKey,
-        });
+        const simulatedTransaction = new VersionedTransaction(
+          MessageV0.compile({
+            instructions: [
+              new TransactionInstruction({
+                keys: [
+                  {
+                    pubkey: payerAccount.publicKey,
+                    isSigner: true,
+                    isWritable: true,
+                  },
+                ],
+                programId: Keypair.generate().publicKey,
+              }),
+            ],
+            payerKey: payerAccount.publicKey,
+            recentBlockhash: (await connection.getLatestBlockhash()).blockhash,
+          }),
+        );
 
-        simulatedTransaction.setSigners(payerAccount.publicKey);
         const {err, logs} = (
           await connection.simulateTransaction(simulatedTransaction)
         ).value;
