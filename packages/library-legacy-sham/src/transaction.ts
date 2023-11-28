@@ -1,16 +1,24 @@
 import { Address } from '@solana/addresses';
 import {
+    assertIsBlockhash,
     assertTransactionIsFullySigned,
     BaseTransaction,
+    Blockhash,
     CompilableTransaction,
     createTransaction,
     getTransactionDecoder,
     getTransactionEncoder,
+    ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
     ITransactionWithSignatures,
+    Nonce,
     setTransactionFeePayer,
+    setTransactionLifetimeUsingBlockhash,
+    setTransactionLifetimeUsingDurableNonce,
 } from '@solana/transactions';
 import {
+    Blockhash as LegacyBlockhash,
+    NonceInformation,
     SerializeConfig,
     SignaturePubkeyPair,
     TransactionBlockhashCtor,
@@ -62,6 +70,72 @@ export class Transaction {
     set feePayer(publicKey: { toBase58: () => string }) {
         const addressString = publicKey.toBase58();
         this.#tx = setTransactionFeePayer(addressString as Address, this.#tx);
+    }
+    get lastValidBlockHeight(): number | undefined {
+        if (
+            'lifetimeConstraint' in this.#tx &&
+            this.#tx.lifetimeConstraint != null &&
+            typeof this.#tx.lifetimeConstraint === 'object' &&
+            'blockhash' in this.#tx.lifetimeConstraint
+        ) {
+            return Number((this.#tx as ITransactionWithBlockhashLifetime).lifetimeConstraint.lastValidBlockHeight);
+        }
+    }
+    set lastValidBlockHeight(slot: number | null | undefined) {
+        this.#tx = setTransactionLifetimeUsingBlockhash(
+            {
+                // Use the existing value or set it to `undefined` otherwise.
+                blockhash:
+                    'lifetimeConstraint' in this.#tx &&
+                    this.#tx.lifetimeConstraint != null &&
+                    typeof this.#tx.lifetimeConstraint === 'object' &&
+                    'blockhash' in this.#tx.lifetimeConstraint
+                        ? (this.#tx as ITransactionWithBlockhashLifetime).lifetimeConstraint.blockhash
+                        : (undefined as unknown as Blockhash),
+                lastValidBlockHeight: BigInt(slot ?? Number.MAX_SAFE_INTEGER),
+            },
+            this.#tx
+        );
+    }
+    get nonceInfo() {
+        throw getUnimplementedError('Transaction#nonceInfo (getter)');
+    }
+    set nonceInfo(nonceInfo: NonceInformation) {
+        this.#tx = setTransactionLifetimeUsingDurableNonce(
+            {
+                nonce: nonceInfo.nonce as Nonce<typeof nonceInfo.nonce>,
+                nonceAccountAddress: nonceInfo.nonceInstruction.keys[0].pubkey.toBase58() as Address,
+                nonceAuthorityAddress: nonceInfo.nonceInstruction.keys[2].pubkey.toBase58() as Address,
+            },
+            this.#tx
+        );
+    }
+    get recentBlockhash(): LegacyBlockhash | undefined {
+        if (
+            'lifetimeConstraint' in this.#tx &&
+            this.#tx.lifetimeConstraint != null &&
+            typeof this.#tx.lifetimeConstraint === 'object' &&
+            'blockhash' in this.#tx.lifetimeConstraint
+        ) {
+            return (this.#tx as ITransactionWithBlockhashLifetime).lifetimeConstraint.blockhash;
+        }
+    }
+    set recentBlockhash(putativeBlockhash: LegacyBlockhash) {
+        assertIsBlockhash(putativeBlockhash);
+        this.#tx = setTransactionLifetimeUsingBlockhash(
+            {
+                blockhash: putativeBlockhash,
+                lastValidBlockHeight:
+                    // Use the existing value or set it to `Number.MAX_SAFE_INTEGER` otherwise.
+                    'lifetimeConstraint' in this.#tx &&
+                    this.#tx.lifetimeConstraint != null &&
+                    typeof this.#tx.lifetimeConstraint === 'object' &&
+                    'lastValidBlockHeight' in this.#tx.lifetimeConstraint
+                        ? (this.#tx as ITransactionWithBlockhashLifetime).lifetimeConstraint.lastValidBlockHeight
+                        : BigInt(Number.MAX_SAFE_INTEGER),
+            },
+            this.#tx
+        );
     }
     get instructions(): Array<TransactionInstruction> {
         throw getUnimplementedError('Transaction#instructions (getter)');
