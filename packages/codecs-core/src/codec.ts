@@ -19,12 +19,10 @@ export type FixedSizeEncoder<T> = BaseEncoder<T> & {
 };
 
 export type VariableSizeEncoder<T> = BaseEncoder<T> & {
-    /** A null fixedSize indicates it's a variable size encoder. */
-    readonly fixedSize: null;
-    /** The maximum size an encoded value can be in bytes, if applicable. */
-    readonly maxSize?: number;
     /** The total size of the encoded value in bytes. */
     readonly getSizeFromValue: (value: T) => number;
+    /** The maximum size an encoded value can be in bytes, if applicable. */
+    readonly maxSize?: number;
 };
 
 /**
@@ -48,8 +46,6 @@ export type FixedSizeDecoder<T> = BaseDecoder<T> & {
 };
 
 export type VariableSizeDecoder<T> = BaseDecoder<T> & {
-    /** A null fixedSize indicates it's a variable size decoder. */
-    readonly fixedSize: null;
     /** The maximum size an encoded value can be in bytes, if applicable. */
     readonly maxSize?: number;
 };
@@ -79,9 +75,9 @@ export type Codec<From, To extends From = From> = FixedSizeCodec<From, To> | Var
  */
 export function getEncodedSize<T>(
     value: T,
-    encoder: { fixedSize: number } | { fixedSize: null; getSizeFromValue: (value: T) => number }
+    encoder: { fixedSize: number } | { getSizeFromValue: (value: T) => number }
 ): number {
-    return encoder.fixedSize !== null ? encoder.fixedSize : encoder.getSizeFromValue(value);
+    return 'fixedSize' in encoder ? encoder.fixedSize : encoder.getSizeFromValue(value);
 }
 
 /** Fills the missing `encode` function using the existing `write` function. */
@@ -145,4 +141,62 @@ export function createCodec<From, To extends From = From>(
         read: codec.read,
         write: codec.write,
     });
+}
+
+export function isFixedSizeCodec<T>(encoder: Encoder<T>): encoder is FixedSizeEncoder<T>;
+export function isFixedSizeCodec<T>(decoder: Decoder<T>): decoder is FixedSizeDecoder<T>;
+export function isFixedSizeCodec<T, U extends T = T>(codec: Codec<T, U>): codec is FixedSizeCodec<T, U>;
+export function isFixedSizeCodec<T, U extends T = T>(codec: Encoder<T> | Decoder<T> | Codec<T, U>): boolean {
+    return 'fixedSize' in codec && typeof codec.fixedSize === 'number';
+}
+
+export function assertIsFixedSizeCodec<T>(
+    encoder: Encoder<T>,
+    message?: string
+): asserts encoder is FixedSizeEncoder<T>;
+export function assertIsFixedSizeCodec<T>(
+    decoder: Decoder<T>,
+    message?: string
+): asserts decoder is FixedSizeDecoder<T>;
+export function assertIsFixedSizeCodec<T, U extends T = T>(
+    codec: Codec<T, U>,
+    message?: string
+): asserts codec is FixedSizeCodec<T, U>;
+export function assertIsFixedSizeCodec<T, U extends T = T>(
+    codec: Encoder<T> | Decoder<T> | Codec<T, U>,
+    message?: string
+): void {
+    if (!isFixedSizeCodec(codec as Codec<T, U>)) {
+        // TODO: Coded error.
+        throw new Error(message ?? 'Expected a fixed-size codec, got a variable-size one.');
+    }
+}
+
+export function isVariableSizeCodec<T>(encoder: Encoder<T>): encoder is VariableSizeEncoder<T>;
+export function isVariableSizeCodec<T>(decoder: Decoder<T>): decoder is VariableSizeDecoder<T>;
+export function isVariableSizeCodec<T, U extends T = T>(codec: Codec<T, U>): codec is VariableSizeCodec<T, U>;
+export function isVariableSizeCodec<T, U extends T = T>(codec: Encoder<T> | Decoder<T> | Codec<T, U>): boolean {
+    return !isFixedSizeCodec(codec as Codec<T, U>);
+}
+
+export function assertIsVariableSizeCodec<T>(
+    encoder: Encoder<T>,
+    message?: string
+): asserts encoder is VariableSizeEncoder<T>;
+export function assertIsVariableSizeCodec<T>(
+    decoder: Decoder<T>,
+    message?: string
+): asserts decoder is VariableSizeDecoder<T>;
+export function assertIsVariableSizeCodec<T, U extends T = T>(
+    codec: Codec<T, U>,
+    message?: string
+): asserts codec is VariableSizeCodec<T, U>;
+export function assertIsVariableSizeCodec<T, U extends T = T>(
+    codec: Encoder<T> | Decoder<T> | Codec<T, U>,
+    message?: string
+): void {
+    if (!isVariableSizeCodec(codec as Codec<T, U>)) {
+        // TODO: Coded error.
+        throw new Error(message ?? 'Expected a variable-size codec, got a fixed-size one.');
+    }
 }

@@ -15,7 +15,6 @@ import { assertValidBaseString } from './assertions';
  */
 export const getBaseXResliceEncoder = (alphabet: string, bits: number): VariableSizeEncoder<string> =>
     createEncoder({
-        fixedSize: null,
         getSizeFromValue: (value: string) => Math.floor((value.length * bits) / 8),
         write(value: string, bytes, offset) {
             assertValidBaseString(alphabet, value);
@@ -33,7 +32,6 @@ export const getBaseXResliceEncoder = (alphabet: string, bits: number): Variable
  */
 export const getBaseXResliceDecoder = (alphabet: string, bits: number): VariableSizeDecoder<string> =>
     createDecoder({
-        fixedSize: null,
         read(rawBytes, offset = 0): [string, number] {
             const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
             if (bytes.length === 0) return ['', rawBytes.length];

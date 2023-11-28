@@ -37,7 +37,11 @@ describe('getShortU16Codec', () => {
     });
 
     it('has the right sizes', () => {
-        expect(shortU16().fixedSize).toBeNull();
         expect(shortU16().maxSize).toBe(3);
+        expect(shortU16().getSizeFromValue(1)).toBe(1);
+        expect(shortU16().getSizeFromValue(127)).toBe(1);
+        expect(shortU16().getSizeFromValue(128)).toBe(2);
+        expect(shortU16().getSizeFromValue(16383)).toBe(2);
+        expect(shortU16().getSizeFromValue(16384)).toBe(3);
     });
 });

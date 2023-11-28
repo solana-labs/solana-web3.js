@@ -12,7 +12,6 @@ import { assertValidBaseString } from './assertions';
 /** Encodes strings in base16. */
 export const getBase16Encoder = (): VariableSizeEncoder<string> =>
     createEncoder({
-        fixedSize: null,
         getSizeFromValue: (value: string) => Math.ceil(value.length / 2),
         write(value: string, bytes, offset) {
             const lowercaseValue = value.toLowerCase();
@@ -27,7 +26,6 @@ export const getBase16Encoder = (): VariableSizeEncoder<string> =>
 /** Decodes strings in base16. */
 export const getBase16Decoder = (): VariableSizeDecoder<string> =>
     createDecoder({
-        fixedSize: null,
         read(bytes, offset) {
             const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
             return [value, bytes.length];

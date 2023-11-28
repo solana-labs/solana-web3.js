@@ -16,7 +16,6 @@ import { assertValidBaseString } from './assertions';
  */
 export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> => {
     return createEncoder({
-        fixedSize: null,
         getSizeFromValue: (value: string): number => {
             const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
             if (tailChars === '') return value.length;
@@ -60,7 +59,6 @@ export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> =
  */
 export const getBaseXDecoder = (alphabet: string): VariableSizeDecoder<string> => {
     return createDecoder({
-        fixedSize: null,
         read(rawBytes, offset): [string, number] {
             const bytes = offset === 0 ? rawBytes : rawBytes.slice(offset);
             if (bytes.length === 0) return ['', 0];

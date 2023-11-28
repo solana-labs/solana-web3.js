@@ -1,4 +1,4 @@
-import { Codec, createCodec, createDecoder, createEncoder, Decoder, Encoder } from '../codec';
+import { Codec, createCodec, createDecoder, createEncoder, Encoder } from '../codec';
 
 describe('Encoder', () => {
     it('can define Encoder instances', () => {
@@ -25,7 +25,7 @@ describe('Encoder', () => {
 
 describe('Decoder', () => {
     it('can define Decoder instances', () => {
-        const myDecoder: Decoder<string> = createDecoder({
+        const myDecoder = createDecoder({
             fixedSize: 32,
             read: (bytes: Uint8Array, offset) => {
                 const slice = bytes.slice(offset, offset + 32);

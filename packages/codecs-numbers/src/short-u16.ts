@@ -16,13 +16,12 @@ import { assertNumberIsBetweenForCodec } from './assertions';
  */
 export const getShortU16Encoder = (): VariableSizeEncoder<number> =>
     createEncoder({
-        fixedSize: null,
-        maxSize: 3,
         getSizeFromValue: (value: number): number => {
             if (value <= 0b01111111) return 1;
             if (value <= 0b0011111111111111) return 2;
             return 3;
         },
+        maxSize: 3,
         write: (value: number, bytes: Uint8Array, offset: Offset): Offset => {
             assertNumberIsBetweenForCodec('shortU16', 0, 65535, value);
             const shortU16Bytes = [0];
@@ -52,7 +51,6 @@ export const getShortU16Encoder = (): VariableSizeEncoder<number> =>
  */
 export const getShortU16Decoder = (): VariableSizeDecoder<number> =>
     createDecoder({
-        fixedSize: null,
         maxSize: 3,
         read: (bytes: Uint8Array, offset): [number, Offset] => {
             let value = 0;
