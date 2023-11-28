@@ -73,7 +73,6 @@ export const transactionTypeDefs = /* GraphQL */ `
     # Transaction interface
     interface Transaction {
         blockTime: String
-        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -83,7 +82,6 @@ export const transactionTypeDefs = /* GraphQL */ `
     type TransactionBase58 implements Transaction {
         blockTime: String
         data: Base58EncodedBytes
-        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -93,7 +91,6 @@ export const transactionTypeDefs = /* GraphQL */ `
     type TransactionBase64 implements Transaction {
         blockTime: String
         data: Base64EncodedBytes
-        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
@@ -107,7 +104,6 @@ export const transactionTypeDefs = /* GraphQL */ `
     type TransactionParsed implements Transaction {
         blockTime: String
         data: TransactionDataParsed
-        encoding: TransactionEncoding
         meta: TransactionMeta
         slot: BigInt
         version: String
