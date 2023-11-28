@@ -1,13 +1,17 @@
 import { Address } from '@solana/addresses';
 import {
+    assertTransactionIsFullySigned,
     BaseTransaction,
+    CompilableTransaction,
     createTransaction,
     getTransactionDecoder,
+    getTransactionEncoder,
     ITransactionWithFeePayer,
     ITransactionWithSignatures,
     setTransactionFeePayer,
 } from '@solana/transactions';
 import {
+    SerializeConfig,
     SignaturePubkeyPair,
     TransactionBlockhashCtor,
     TransactionCtorFields_DEPRECATED,
@@ -32,7 +36,21 @@ export class Transaction {
     getEstimatedFee = createUnimplementedFunction('Transaction#getEstimatedFee');
     partialSign = createUnimplementedFunction('Transaction#partialSign');
     serializeMessage = createUnimplementedFunction('Transaction#serializeMessage');
-    serialize = createUnimplementedFunction('Transaction#serialize');
+    serialize(config?: SerializeConfig): Buffer {
+        if (config?.requireAllSignatures) {
+            assertTransactionIsFullySigned(this.#tx as CompilableTransaction & ITransactionWithSignatures);
+        }
+        if (config?.verifySignatures) {
+            throw new Error(
+                'The `verifySignatures` option of `Transaction#serialize` is unimplemented in ' +
+                    '`@solana/web3.js-legacy-sham`. If the caller of this method is code that ' +
+                    "you don't maintain, and part of a dependency that you can not replace, let " +
+                    'us know: https://github.com/solana-labs/solana-web3.js/issues/new/choose'
+            );
+        }
+        const byteArray = getTransactionEncoder().encode(this.#tx as CompilableTransaction);
+        return __NODEJS__ ? Buffer.from(byteArray) : (byteArray as Buffer);
+    }
     setSigners = createUnimplementedFunction('Transaction#setSigners');
     sign = createUnimplementedFunction('Transaction#sign');
     verifySignatures = createUnimplementedFunction('Transaction#verifySignatures');
