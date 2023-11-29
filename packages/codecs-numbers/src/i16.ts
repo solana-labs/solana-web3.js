@@ -3,7 +3,7 @@ import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getI16Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number> =>
+export const getI16Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number, 2> =>
     numberEncoderFactory({
         config,
         name: 'i16',
@@ -12,7 +12,7 @@ export const getI16Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
         size: 2,
     });
 
-export const getI16Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number> =>
+export const getI16Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number, 2> =>
     numberDecoderFactory({
         config,
         get: (view, le) => view.getInt16(0, le),
@@ -20,5 +20,5 @@ export const getI16Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<
         size: 2,
     });
 
-export const getI16Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number> =>
+export const getI16Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number, number, 2> =>
     combineCodec(getI16Encoder(config), getI16Decoder(config));

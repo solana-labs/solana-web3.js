@@ -19,12 +19,14 @@ import { combineCodec } from './combine-codec';
  *
  * @param encoder - The encoder to wrap into a fixed-size encoder.
  * @param fixedBytes - The fixed number of bytes to write.
- * @param description - A custom description for the encoder.
  */
-export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): FixedSizeEncoder<T> {
+export function fixEncoder<TFrom, TSize extends number>(
+    encoder: Encoder<TFrom>,
+    fixedBytes: TSize
+): FixedSizeEncoder<TFrom, TSize> {
     return createEncoder({
         fixedSize: fixedBytes,
-        write: (value: T, bytes: Uint8Array, offset: Offset) => {
+        write: (value: TFrom, bytes: Uint8Array, offset: Offset) => {
             // Here we exceptionally use the `encode` function instead of the `write`
             // function as using the nested `write` function on a fixed-sized byte
             // array may result in a out-of-bounds error on the nested encoder.
@@ -42,9 +44,11 @@ export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): FixedSiz
  *
  * @param decoder - The decoder to wrap into a fixed-size decoder.
  * @param fixedBytes - The fixed number of bytes to read.
- * @param description - A custom description for the decoder.
  */
-export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): FixedSizeDecoder<T> {
+export function fixDecoder<TTo, TSize extends number>(
+    decoder: Decoder<TTo>,
+    fixedBytes: TSize
+): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: fixedBytes,
         read: (bytes: Uint8Array, offset: Offset) => {
@@ -69,8 +73,10 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): FixedSiz
  *
  * @param codec - The codec to wrap into a fixed-size codec.
  * @param fixedBytes - The fixed number of bytes to read/write.
- * @param description - A custom description for the codec.
  */
-export function fixCodec<T, U extends T = T>(codec: Codec<T, U>, fixedBytes: number): FixedSizeCodec<T, U> {
+export function fixCodec<TFrom, TTo extends TFrom, TSize extends number>(
+    codec: Codec<TFrom, TTo>,
+    fixedBytes: TSize
+): FixedSizeCodec<TFrom, TTo, TSize> {
     return combineCodec(fixEncoder(codec, fixedBytes), fixDecoder(codec, fixedBytes));
 }

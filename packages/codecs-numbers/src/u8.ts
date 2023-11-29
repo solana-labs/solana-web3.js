@@ -2,7 +2,7 @@ import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from
 
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getU8Encoder = (): FixedSizeEncoder<number> =>
+export const getU8Encoder = (): FixedSizeEncoder<number, 1> =>
     numberEncoderFactory({
         name: 'u8',
         range: [0, Number('0xff')],
@@ -10,11 +10,11 @@ export const getU8Encoder = (): FixedSizeEncoder<number> =>
         size: 1,
     });
 
-export const getU8Decoder = (): FixedSizeDecoder<number> =>
+export const getU8Decoder = (): FixedSizeDecoder<number, 1> =>
     numberDecoderFactory({
         get: view => view.getUint8(0),
         name: 'u8',
         size: 1,
     });
 
-export const getU8Codec = (): FixedSizeCodec<number> => combineCodec(getU8Encoder(), getU8Decoder());
+export const getU8Codec = (): FixedSizeCodec<number, number, 1> => combineCodec(getU8Encoder(), getU8Decoder());

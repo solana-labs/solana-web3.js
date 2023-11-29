@@ -3,7 +3,7 @@ import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getF64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number> =>
+export const getF64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number, 8> =>
     numberEncoderFactory({
         config,
         name: 'f64',
@@ -11,7 +11,7 @@ export const getF64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
         size: 8,
     });
 
-export const getF64Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number> =>
+export const getF64Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<number, 8> =>
     numberDecoderFactory({
         config,
         get: (view, le) => view.getFloat64(0, le),
@@ -19,5 +19,5 @@ export const getF64Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<
         size: 8,
     });
 
-export const getF64Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number> =>
+export const getF64Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number, number, 8> =>
     combineCodec(getF64Encoder(config), getF64Decoder(config));

@@ -11,11 +11,13 @@ import { combineCodec } from './combine-codec';
 /**
  * Reverses the bytes of a fixed-size encoder.
  */
-export function reverseEncoder<T>(encoder: FixedSizeEncoder<T>): FixedSizeEncoder<T> {
+export function reverseEncoder<TFrom, TSize extends number>(
+    encoder: FixedSizeEncoder<TFrom, TSize>
+): FixedSizeEncoder<TFrom, TSize> {
     assertIsFixedSizeCodec(encoder, 'Cannot reverse a codec of variable size.');
     return createEncoder({
         ...encoder,
-        write: (value: T, bytes, offset) => {
+        write: (value: TFrom, bytes, offset) => {
             const newOffset = encoder.write(value, bytes, offset);
             const slice = bytes.slice(offset, offset + encoder.fixedSize).reverse();
             bytes.set(slice, offset);
@@ -27,7 +29,9 @@ export function reverseEncoder<T>(encoder: FixedSizeEncoder<T>): FixedSizeEncode
 /**
  * Reverses the bytes of a fixed-size decoder.
  */
-export function reverseDecoder<T>(decoder: FixedSizeDecoder<T>): FixedSizeDecoder<T> {
+export function reverseDecoder<TTo, TSize extends number>(
+    decoder: FixedSizeDecoder<TTo, TSize>
+): FixedSizeDecoder<TTo, TSize> {
     assertIsFixedSizeCodec(decoder, 'Cannot reverse a codec of variable size.');
     return createDecoder({
         ...decoder,
@@ -46,6 +50,8 @@ export function reverseDecoder<T>(decoder: FixedSizeDecoder<T>): FixedSizeDecode
 /**
  * Reverses the bytes of a fixed-size codec.
  */
-export function reverseCodec<T, U extends T = T>(codec: FixedSizeCodec<T, U>): FixedSizeCodec<T, U> {
+export function reverseCodec<TFrom, TTo extends TFrom, TSize extends number>(
+    codec: FixedSizeCodec<TFrom, TTo, TSize>
+): FixedSizeCodec<TFrom, TTo, TSize> {
     return combineCodec(reverseEncoder(codec), reverseDecoder(codec));
 }

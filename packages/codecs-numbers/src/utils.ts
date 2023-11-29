@@ -11,31 +11,31 @@ import {
 import { assertNumberIsBetweenForCodec } from './assertions';
 import { Endian, NumberCodecConfig } from './common';
 
-type NumberFactorySharedInput = {
+type NumberFactorySharedInput<TSize extends number> = {
     name: string;
-    size: number;
+    size: TSize;
     config?: NumberCodecConfig;
 };
 
-type NumberFactoryEncoderInput<T> = NumberFactorySharedInput & {
+type NumberFactoryEncoderInput<TFrom, TSize extends number> = NumberFactorySharedInput<TSize> & {
     range?: [number | bigint, number | bigint];
-    set: (view: DataView, value: T, littleEndian?: boolean) => void;
+    set: (view: DataView, value: TFrom, littleEndian?: boolean) => void;
 };
 
-type NumberFactoryDecoderInput<T> = NumberFactorySharedInput & {
-    get: (view: DataView, littleEndian?: boolean) => T;
+type NumberFactoryDecoderInput<TTo, TSize extends number> = NumberFactorySharedInput<TSize> & {
+    get: (view: DataView, littleEndian?: boolean) => TTo;
 };
 
 function isLittleEndian(config?: NumberCodecConfig): boolean {
     return config?.endian === Endian.BIG ? false : true;
 }
 
-export function numberEncoderFactory<T extends number | bigint>(
-    input: NumberFactoryEncoderInput<T>
-): FixedSizeEncoder<T> {
+export function numberEncoderFactory<TFrom extends number | bigint, TSize extends number>(
+    input: NumberFactoryEncoderInput<TFrom, TSize>
+): FixedSizeEncoder<TFrom, TSize> {
     return createEncoder({
         fixedSize: input.size,
-        write(value: T, bytes: Uint8Array, offset: Offset): Offset {
+        write(value: TFrom, bytes: Uint8Array, offset: Offset): Offset {
             if (input.range) {
                 assertNumberIsBetweenForCodec(input.name, input.range[0], input.range[1], value);
             }
@@ -47,12 +47,12 @@ export function numberEncoderFactory<T extends number | bigint>(
     });
 }
 
-export function numberDecoderFactory<T extends number | bigint>(
-    input: NumberFactoryDecoderInput<T>
-): FixedSizeDecoder<T> {
+export function numberDecoderFactory<TTo extends number | bigint, TSize extends number>(
+    input: NumberFactoryDecoderInput<TTo, TSize>
+): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: input.size,
-        read(bytes, offset = 0): [T, number] {
+        read(bytes, offset = 0): [TTo, number] {
             assertByteArrayIsNotEmptyForCodec(input.name, bytes, offset);
             assertByteArrayHasEnoughBytesForCodec(input.name, input.size, bytes, offset);
             const view = new DataView(toArrayBuffer(bytes, offset, input.size));

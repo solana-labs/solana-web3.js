@@ -16,22 +16,22 @@ import {
  * The encoder and decoder must have the same fixed size, max size and description.
  * If a description is provided, it will override the encoder and decoder descriptions.
  */
-export function combineCodec<From, To extends From = From>(
-    encoder: FixedSizeEncoder<From>,
-    decoder: FixedSizeDecoder<To>
-): FixedSizeCodec<From, To>;
-export function combineCodec<From, To extends From = From>(
-    encoder: VariableSizeEncoder<From>,
-    decoder: VariableSizeDecoder<To>
-): VariableSizeCodec<From, To>;
-export function combineCodec<From, To extends From = From>(
-    encoder: Encoder<From>,
-    decoder: Decoder<To>
-): Codec<From, To>;
-export function combineCodec<From, To extends From = From>(
-    encoder: Encoder<From>,
-    decoder: Decoder<To>
-): Codec<From, To> {
+export function combineCodec<TFrom, TTo extends TFrom, TSize extends number>(
+    encoder: FixedSizeEncoder<TFrom, TSize>,
+    decoder: FixedSizeDecoder<TTo, TSize>
+): FixedSizeCodec<TFrom, TTo, TSize>;
+export function combineCodec<TFrom, TTo extends TFrom>(
+    encoder: VariableSizeEncoder<TFrom>,
+    decoder: VariableSizeDecoder<TTo>
+): VariableSizeCodec<TFrom, TTo>;
+export function combineCodec<TFrom, TTo extends TFrom>(
+    encoder: Encoder<TFrom>,
+    decoder: Decoder<TTo>
+): Codec<TFrom, TTo>;
+export function combineCodec<TFrom, TTo extends TFrom>(
+    encoder: Encoder<TFrom>,
+    decoder: Decoder<TTo>
+): Codec<TFrom, TTo> {
     if (isFixedSizeCodec(encoder) !== isFixedSizeCodec(decoder)) {
         // TODO: Coded error.
         throw new Error(`Encoder and decoder must either both be fixed-size or variable-size.`);
