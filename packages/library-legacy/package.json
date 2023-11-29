@@ -113,7 +113,7 @@
     "mockttp": "^3.9.2",
     "mz": "^2.7.0",
     "node-abort-controller": "^3.0.1",
-    "prettier": "^2.8",
+    "prettier": "^3.1",
     "rimraf": "5.0.1",
     "rollup": "^3.27.2",
     "rollup-plugin-dts": "^6.0.1",

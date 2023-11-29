@@ -81,7 +81,7 @@
         "jest-runner-eslint": "^2.1.2",
         "jest-runner-prettier": "^1.0.0",
         "jest-websocket-mock": "^2.4.1",
-        "prettier": "^2.8",
+        "prettier": "^3.1",
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1",
