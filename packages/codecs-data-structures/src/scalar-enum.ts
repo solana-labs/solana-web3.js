@@ -33,7 +33,7 @@ export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberEnc
 function scalarEnumCoderHelper<T>(
     constructor: ScalarEnum<T>,
     prefix: CodecData,
-    description?: string
+    description?: string,
 ): CodecData & {
     enumKeys: string[];
     enumValues: T[];
@@ -71,7 +71,7 @@ function scalarEnumCoderHelper<T>(
  */
 export function getScalarEnumEncoder<T>(
     constructor: ScalarEnum<T>,
-    config: ScalarEnumCodecConfig<NumberEncoder> = {}
+    config: ScalarEnumCodecConfig<NumberEncoder> = {},
 ): Encoder<T> {
     const prefix = config.size ?? getU8Encoder();
     const { description, fixedSize, maxSize, minRange, maxRange, stringValues, enumKeys, enumValues } =
@@ -87,7 +87,7 @@ export function getScalarEnumEncoder<T>(
                     `Invalid scalar enum variant. ` +
                         `Expected one of [${stringValues.join(', ')}] ` +
                         `or a number between ${minRange} and ${maxRange}, ` +
-                        `got "${value}".`
+                        `got "${value}".`,
                 );
             }
             if (typeof value === 'number') return prefix.encode(value);
@@ -108,13 +108,13 @@ export function getScalarEnumEncoder<T>(
  */
 export function getScalarEnumDecoder<T>(
     constructor: ScalarEnum<T>,
-    config: ScalarEnumCodecConfig<NumberDecoder> = {}
+    config: ScalarEnumCodecConfig<NumberDecoder> = {},
 ): Decoder<T> {
     const prefix = config.size ?? getU8Decoder();
     const { description, fixedSize, maxSize, minRange, maxRange, isNumericEnum, enumValues } = scalarEnumCoderHelper(
         constructor,
         prefix,
-        config.description
+        config.description,
     );
     return {
         decode: (bytes: Uint8Array, offset = 0) => {
@@ -126,7 +126,7 @@ export function getScalarEnumDecoder<T>(
                 // TODO: Coded error.
                 throw new Error(
                     `Enum discriminator out of range. ` +
-                        `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`
+                        `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`,
                 );
             }
             return [(isNumericEnum ? valueAsNumber : enumValues[valueAsNumber]) as T, offset];
@@ -145,7 +145,7 @@ export function getScalarEnumDecoder<T>(
  */
 export function getScalarEnumCodec<T>(
     constructor: ScalarEnum<T>,
-    config: ScalarEnumCodecConfig<NumberCodec> = {}
+    config: ScalarEnumCodecConfig<NumberCodec> = {},
 ): Codec<T> {
     return combineCodec(getScalarEnumEncoder(constructor, config), getScalarEnumDecoder(constructor, config));
 }

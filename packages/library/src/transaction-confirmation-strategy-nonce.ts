@@ -20,7 +20,7 @@ const NONCE_VALUE_OFFSET =
 
 export function createNonceInvalidationPromiseFactory(
     rpc: Rpc<GetAccountInfoApi>,
-    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi>
+    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi>,
 ): GetNonceInvalidationPromiseFn {
     return async function getNonceInvalidationPromise({
         abortSignal: callerAbortSignal,
@@ -52,7 +52,7 @@ export function createNonceInvalidationPromiseFactory(
                 if (nonceValue !== currentNonceValue) {
                     throw new Error(
                         `The nonce \`${currentNonceValue}\` is no longer valid. It has advanced ` +
-                            `to \`${nonceValue}\`.`
+                            `to \`${nonceValue}\`.`,
                     );
                 }
             }
@@ -78,7 +78,7 @@ export function createNonceInvalidationPromiseFactory(
                 nonceAccount.data[0] as unknown as Nonce;
             if (nonceValue !== currentNonceValue) {
                 throw new Error(
-                    `The nonce \`${currentNonceValue}\` is no longer valid. It has advanced to \`${nonceValue}\`.`
+                    `The nonce \`${currentNonceValue}\` is no longer valid. It has advanced to \`${nonceValue}\`.`,
                 );
             } else {
                 await new Promise(() => {

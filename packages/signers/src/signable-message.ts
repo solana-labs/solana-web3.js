@@ -14,7 +14,7 @@ export type SignableMessage = Readonly<{
  */
 export function createSignableMessage(
     content: string | Uint8Array,
-    signatures: SignatureDictionary = {}
+    signatures: SignatureDictionary = {},
 ): SignableMessage {
     return Object.freeze({
         content: typeof content === 'string' ? new TextEncoder().encode(content) : content,

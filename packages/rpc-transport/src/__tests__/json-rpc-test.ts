@@ -19,7 +19,7 @@ describe('JSON-RPC 2.0', () => {
             () =>
                 new Promise(_ => {
                     /* never resolve */
-                })
+                }),
         );
         rpc = createJsonRpc({
             api: {

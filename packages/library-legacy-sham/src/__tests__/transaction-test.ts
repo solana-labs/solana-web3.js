@@ -28,7 +28,7 @@ describe('TransactionSham', () => {
             // This is basically just complaining that `prototype` is not callable.
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            Transaction[method]()
+            Transaction[method](),
         ).toThrow(`Transaction#${method.toString()} is unimplemented`);
     });
     it('fatals when `from()` is called with a non-parseable transaction', () => {
@@ -45,7 +45,7 @@ describe('TransactionSham', () => {
                     ...MOCK_SIGNATURE,
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('vends the signature of a transaction through the `signature` property', () => {
@@ -73,7 +73,7 @@ describe('TransactionSham', () => {
                 expect(() => {
                     signedTx[property];
                 }).toThrow(`Transaction#${property} (getter) is unimplemented`);
-            }
+            },
         );
         it('vends the `PublicKey` of the fee payer through the `feePayer` property', () => {
             expect(signedTx.feePayer).toEqual(new PublicKey('k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn'));
@@ -151,7 +151,7 @@ describe('TransactionSham', () => {
                         2, 4, 1, // Address indices
                         4, // Length of instruction data
                             4, 0, 0, 0, // (nonce advance)
-                ])
+                ]),
             );
         });
         it('serializes the transaction', () => {
@@ -162,7 +162,7 @@ describe('TransactionSham', () => {
                     ...MOCK_SIGNATURE,
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('`serialize` does not fatal when `requireAllSignatures` is `true`', () => {
@@ -185,7 +185,7 @@ describe('TransactionSham', () => {
                     0, // Length of signatures array
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('vends null for an unsigned transaction through the `signature` property', () => {
@@ -199,7 +199,7 @@ describe('TransactionSham', () => {
                     ...new Uint8Array(64),
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('`serialize` fatals when `requireAllSignatures` is `true`', () => {

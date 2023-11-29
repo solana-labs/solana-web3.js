@@ -48,7 +48,7 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<AsyncIterable<TNotification>>;
     rpcSubscriptions.logsNotifications(
         { mentions: ['11111111111111111111111111111111' as Address] },
-        { commitment: 'confirmed' }
+        { commitment: 'confirmed' },
     ) satisfies PendingRpcSubscription<TNotification>;
     rpcSubscriptions
         .logsNotifications({ mentions: ['11111111111111111111111111111111' as Address] }, { commitment: 'confirmed' })

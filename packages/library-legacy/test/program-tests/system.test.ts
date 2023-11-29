@@ -315,9 +315,10 @@ describe('SystemProgram', () => {
         amount: LAMPORTS_PER_SOL,
       });
 
-      const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-        NONCE_ACCOUNT_LENGTH,
-      );
+      const minimumAmount =
+        await connection.getMinimumBalanceForRentExemption(
+          NONCE_ACCOUNT_LENGTH,
+        );
 
       let createNonceAccount = new Transaction().add(
         SystemProgram.createNonceAccount({
@@ -455,9 +456,8 @@ describe('SystemProgram', () => {
       );
       const space = 0;
 
-      const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-        space,
-      );
+      const minimumAmount =
+        await connection.getMinimumBalanceForRentExemption(space);
 
       // Test CreateAccountWithSeed
       const createAccountWithSeedParams = {

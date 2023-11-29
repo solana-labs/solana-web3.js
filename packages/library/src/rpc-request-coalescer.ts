@@ -10,11 +10,11 @@ type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
 
 export function getRpcTransportWithRequestCoalescing(
     transport: IRpcTransport,
-    getDeduplicationKey: GetDeduplicationKeyFn
+    getDeduplicationKey: GetDeduplicationKeyFn,
 ): IRpcTransport {
     let coalescedRequestsByDeduplicationKey: Record<string, CoalescedRequest> | undefined;
     return async function makeCoalescedHttpRequest<TResponse>(
-        config: Parameters<IRpcTransport>[0]
+        config: Parameters<IRpcTransport>[0],
     ): Promise<TResponse> {
         const { payload, signal } = config;
         const deduplicationKey = getDeduplicationKey(payload);

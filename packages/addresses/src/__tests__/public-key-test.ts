@@ -14,7 +14,7 @@ describe('getAddressFromPublicKey', () => {
             MOCK_PUBLIC_KEY_BYTES,
             'Ed25519',
             /* extractable */ true,
-            ['verify']
+            ['verify'],
         );
         await expect(getAddressFromPublicKey(publicKey)).resolves.toBe('DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct');
     });
@@ -25,7 +25,7 @@ describe('getAddressFromPublicKey', () => {
             MOCK_PUBLIC_KEY_BYTES,
             'Ed25519',
             /* extractable */ false,
-            ['verify']
+            ['verify'],
         );
         await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
     });
@@ -37,7 +37,7 @@ describe('getAddressFromPublicKey', () => {
                 name: 'AES-GCM',
             },
             true,
-            ['encrypt', 'decrypt']
+            ['encrypt', 'decrypt'],
         );
         await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
     });
@@ -54,8 +54,8 @@ describe('getAddressFromPublicKey', () => {
                         modulusLength: 2048,
                         name: rsaAlgoName,
                         publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                    } as RsaHashedKeyGenParams)
-            )
+                    }) as RsaHashedKeyGenParams,
+            ),
         ),
     ])('throws when called with a $name/$__variant public key', async algorithm => {
         expect.assertions(1);
@@ -73,7 +73,7 @@ describe('getAddressFromPublicKey', () => {
             ]),
             'Ed25519',
             /* extractable */ false,
-            ['sign']
+            ['sign'],
         );
         await expect(() => getAddressFromPublicKey(mockPrivateKey)).rejects.toThrow();
     });

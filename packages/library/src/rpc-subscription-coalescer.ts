@@ -13,7 +13,7 @@ const EXPLICIT_ABORT_TOKEN = Symbol(
     __DEV__
         ? "This symbol is thrown from a subscription's iterator when the subscription is " +
               'explicitly aborted by the user'
-        : undefined
+        : undefined,
 );
 
 function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: CallableFunction) {
@@ -63,7 +63,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                     getCacheEntryMissingError(deduplicationKey) {
                         // TODO: Coded error.
                         return new Error(
-                            `Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``
+                            `Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``,
                         );
                     },
                     getCacheKeyFromInputArgs: () => deduplicationKey,
@@ -76,7 +76,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                     },
                     async onCreateIterable(abortSignal, config) {
                         const pendingSubscription = (subscriptionMethod as CallableFunction)(
-                            ...rawParams
+                            ...rawParams,
                         ) as PendingRpcSubscription<unknown>;
                         const iterable = await pendingSubscription.subscribe({
                             ...config,

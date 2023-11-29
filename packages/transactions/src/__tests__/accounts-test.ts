@@ -127,7 +127,7 @@ describe('getAddressMapFromInstructions', () => {
                 },
             ]);
             expect(addressMap).toHaveProperty(commonAddress, FEE_PAYER_ENTRY);
-        }
+        },
     );
     it.each(['READONLY', 'WRITABLE'] as AccountRoleEnumName[])(
         'creates a fee-payer entry given a matching fee payer and %s lookup table address',
@@ -147,7 +147,7 @@ describe('getAddressMapFromInstructions', () => {
                 },
             ]);
             expect(addressMap).toHaveProperty(commonAddress, FEE_PAYER_ENTRY);
-        }
+        },
     );
     it('creates one READONLY static entry given two matching program addresses', () => {
         const commonAddress = getMockAddress();
@@ -177,13 +177,13 @@ describe('getAddressMapFromInstructions', () => {
                     {
                         programAddress: commonAddress,
                     },
-                ])
+                ]),
             );
             expect(addressMap).toHaveProperty(commonAddress, {
                 [TYPE]: AddressMapEntryType.STATIC,
                 role: AccountRole[role],
             });
-        }
+        },
     );
     it.each`
         role                 | instructionOrder
@@ -204,10 +204,10 @@ describe('getAddressMapFromInstructions', () => {
                             programAddress: getMockAddress(),
                         },
                         { programAddress: commonAddress },
-                    ])
-                )
+                    ]),
+                ),
             ).toThrow();
-        }
+        },
     );
     it.each`
         instructionOrder
@@ -232,10 +232,10 @@ describe('getAddressMapFromInstructions', () => {
                         programAddress: getMockAddress(),
                     },
                     { programAddress: commonAddress },
-                ])
+                ]),
             );
             expect(addressMap).toHaveProperty(commonAddress, STATIC_ENTRY_READONLY);
-        }
+        },
     );
     it.each`
         instructionOrder
@@ -261,10 +261,10 @@ describe('getAddressMapFromInstructions', () => {
                             programAddress: getMockAddress(),
                         },
                         { programAddress: commonAddress },
-                    ])
-                )
+                    ]),
+                ),
             ).toThrow();
-        }
+        },
     );
     it.each`
         aRole                | bRole                | endRole              | expectedEntry
@@ -299,7 +299,7 @@ describe('getAddressMapFromInstructions', () => {
                 },
             ]);
             expect(addressMap).toHaveProperty(commonAddress, expectedEntry);
-        }
+        },
     );
     it.each`
         staticRole    | lutRole       | endRole       | expectedEntry         | instructionOrder
@@ -330,10 +330,10 @@ describe('getAddressMapFromInstructions', () => {
                         accounts: [{ address: commonAddress, role: AccountRole[staticRole] }],
                         programAddress: getMockAddress(),
                     },
-                ])
+                ]),
             );
             expect(addressMap).toHaveProperty(commonAddress, { ...expectedEntry, ...lutMeta });
-        }
+        },
     );
     it.each`
         staticRole           | lutRole       | endRole              | expectedEntry                   | instructionOrder
@@ -364,10 +364,10 @@ describe('getAddressMapFromInstructions', () => {
                         accounts: [{ address: commonAddress, role: AccountRole[staticRole] }],
                         programAddress: getMockAddress(),
                     },
-                ])
+                ]),
             );
             expect(addressMap).toHaveProperty(commonAddress, expectedEntry);
-        }
+        },
     );
     it.each`
         aRole         | bRole         | endRole       | expectedEntry
@@ -394,7 +394,7 @@ describe('getAddressMapFromInstructions', () => {
                 },
             ]);
             expect(addressMap).toHaveProperty(commonAddress, { ...expectedEntry, ...lutMeta });
-        }
+        },
     );
     it.each`
         aRole         | bRole         | endRole       | expectedEntry         | instructionOrder
@@ -430,10 +430,10 @@ describe('getAddressMapFromInstructions', () => {
                         accounts: [{ address: commonAddress, role: AccountRole[bRole], ...higherLutMeta }],
                         programAddress: getMockAddress(),
                     },
-                ])
+                ]),
             );
             expect(addressMap).toHaveProperty(commonAddress, { ...expectedEntry, ...lowerLutMeta });
-        }
+        },
     );
 });
 
@@ -454,7 +454,7 @@ describe('getOrderedAccountsFromAddressMap', () => {
                 address: sortedAddresses[1],
                 role: AccountRole.WRITABLE_SIGNER,
             });
-        }
+        },
     );
     it.each(['READONLY', 'WRITABLE'] as AccountRoleEnumName[])(
         'puts the fee payer before %s lookup table addresses',
@@ -476,7 +476,7 @@ describe('getOrderedAccountsFromAddressMap', () => {
                 address: sortedAddresses[1],
                 role: AccountRole.WRITABLE_SIGNER,
             });
-        }
+        },
     );
     it.each(['READONLY', 'WRITABLE', 'READONLY_SIGNER', 'WRITABLE_SIGNER'] as AccountRoleEnumName[])(
         'orders %s static account addresses in lexical order',
@@ -490,7 +490,7 @@ describe('getOrderedAccountsFromAddressMap', () => {
                 { [TYPE]: AddressMapEntryType.STATIC, address: sortedAddresses[0], ...roleMeta },
                 { [TYPE]: AddressMapEntryType.STATIC, address: sortedAddresses[1], ...roleMeta },
             ]);
-        }
+        },
     );
     it.each(['READONLY', 'WRITABLE'] as AccountRoleEnumName[])(
         'orders %s lookup table addresses by the lexical order of the address of their lookup table first, then by the addresses themselves',
@@ -531,7 +531,7 @@ describe('getOrderedAccountsFromAddressMap', () => {
                     ...roleMeta,
                 },
             ]);
-        }
+        },
     );
     it.each`
         beforeKind                  | beforeEntry                     | afterKind                   | afterEntry

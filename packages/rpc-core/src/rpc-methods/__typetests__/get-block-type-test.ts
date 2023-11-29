@@ -16,7 +16,7 @@ import { Reward, TransactionStatus } from '../common-transactions';
 
 function assertNotAProperty<T extends object, TPropName extends string>(
     _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },
-    _propName: TPropName
+    _propName: TPropName,
 ): void {}
 
 const rpc = null as unknown as Rpc<SolanaRpcMethods>;
@@ -28,7 +28,7 @@ function assertBase(
         blockTime: number;
         parentSlot: bigint;
         previousBlockhash: string;
-    } & { [key: string]: unknown }
+    } & { [key: string]: unknown },
 ) {
     response.blockhash satisfies string;
     response.blockHeight satisfies bigint;

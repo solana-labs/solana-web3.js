@@ -74,7 +74,7 @@ describe('getProgramAccounts', () => {
                             },
                             pubkey: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
                         },
-                    ])
+                    ]),
                 );
             });
         });
@@ -143,7 +143,7 @@ describe('getProgramAccounts', () => {
                         },
                         pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
                     },
-                ])
+                ]),
             );
         });
     });
@@ -393,7 +393,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -472,7 +472,7 @@ describe('getProgramAccounts', () => {
                                 // Token 2022 data account
                                 pubkey: 'DoU57AYuPFu2QU514RktNPG22QhApEjnKxnBcu4BHDTY',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -547,7 +547,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'FtLZBmDW4Y6WNTYYZv9AcC2nQupDMDzX5Q5mp5MLpmdY',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -591,7 +591,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -853,7 +853,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'HWHfrWotTpaNArteqeYDziV1ZX9Lm7WV684NeUCwPPzj',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -919,7 +919,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'CKfatsPMUf8SkiURsDXs7eK6GWb4Jsd6UDbs7twMCWxo',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -1027,7 +1027,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -1174,7 +1174,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: 'SysvarStakeHistory1111111111111111111111111',
                             },
-                        ])
+                        ]),
                     );
                 });
 
@@ -1273,7 +1273,7 @@ describe('getProgramAccounts', () => {
                                 },
                                 pubkey: voteAccountAddress,
                             },
-                        ])
+                        ]),
                     );
                 });
             });

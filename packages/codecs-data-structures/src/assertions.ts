@@ -2,7 +2,7 @@
 export function assertValidNumberOfItemsForCodec(
     codecDescription: string,
     expected: number | bigint,
-    actual: number | bigint
+    actual: number | bigint,
 ) {
     if (expected !== actual) {
         // TODO: Coded error.

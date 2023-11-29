@@ -101,7 +101,7 @@ export interface SimulateTransactionApi {
         base58EncodedWireTransaction: Base58EncodedBytes,
         config: SimulateTransactionConfigBase &
             SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithBase64Encoding
+            AccountsConfigWithBase64Encoding,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
 
@@ -110,7 +110,7 @@ export interface SimulateTransactionApi {
         base58EncodedWireTransaction: Base58EncodedBytes,
         config: SimulateTransactionConfigBase &
             SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithBase64EncodingZstdCompression
+            AccountsConfigWithBase64EncodingZstdCompression,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
 
@@ -119,21 +119,21 @@ export interface SimulateTransactionApi {
         base58EncodedWireTransaction: Base58EncodedBytes,
         config: SimulateTransactionConfigBase &
             SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithJsonParsedEncoding
+            AccountsConfigWithJsonParsedEncoding,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
-        config?: SimulateTransactionConfigBase & SigVerifyAndReplaceRecentBlockhashConfig
+        config?: SimulateTransactionConfigBase & SigVerifyAndReplaceRecentBlockhashConfig,
     ): SimulateTransactionApiResponseBase & { accounts: null };
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithBase64Encoding
+            AccountsConfigWithBase64Encoding,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
 
@@ -141,7 +141,7 @@ export interface SimulateTransactionApi {
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithBase64EncodingZstdCompression
+            AccountsConfigWithBase64EncodingZstdCompression,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
 
@@ -149,13 +149,13 @@ export interface SimulateTransactionApi {
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
-            AccountsConfigWithJsonParsedEncoding
+            AccountsConfigWithJsonParsedEncoding,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
-        config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig
+        config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig,
     ): SimulateTransactionApiResponseBase & { accounts: null };
 }

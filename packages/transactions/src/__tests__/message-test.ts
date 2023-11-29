@@ -78,7 +78,7 @@ describe('compileMessage', () => {
             const message = compileMessage(baseTx);
             expect(getCompiledInstructions).toHaveBeenCalledWith(
                 baseTx.instructions,
-                expect.any(Array) /* orderedAccounts */
+                expect.any(Array) /* orderedAccounts */,
             );
             expect(message.instructions).toBe(expectedInstructions);
         });

@@ -30,7 +30,7 @@ describe('createWebSocketTransport', () => {
                     url: `${protocol}socket`,
                 });
             }).not.toThrow();
-        }
+        },
     );
 });
 
@@ -64,7 +64,7 @@ describe('IRpcWebSocketTransport', () => {
         jest.mocked(createWebSocketConnection).mockReturnValue(
             new Promise(r => {
                 resolveConnection = r;
-            })
+            }),
         );
         const transportPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
         await expect(Promise.race([transportPromise, 'pending'])).resolves.toBe('pending');
@@ -89,7 +89,7 @@ describe('IRpcWebSocketTransport', () => {
         expect.assertions(1);
         abortController.abort();
         await expect(sendWebSocketMessage({ payload: 'hello', signal: abortController.signal })).rejects.toThrow(
-            'operation was aborted'
+            'operation was aborted',
         );
     });
     it('throws if the signal is aborted after the socket connects but before the message is sent', async () => {

@@ -19,7 +19,7 @@ function getAccountIndex(orderedAccounts: OrderedAccounts) {
 
 export function getCompiledInstructions(
     instructions: readonly IInstruction[],
-    orderedAccounts: OrderedAccounts
+    orderedAccounts: OrderedAccounts,
 ): CompiledInstruction[] {
     const accountIndex = getAccountIndex(orderedAccounts);
     return instructions.map(({ accounts, data, programAddress }) => {

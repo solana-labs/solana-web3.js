@@ -2,7 +2,7 @@ import { pipe } from '../pipe';
 
 function assertNotAProperty<T extends object, TPropName extends string>(
     _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },
-    _propName: TPropName
+    _propName: TPropName,
 ): void {}
 
 // Single-value primitives
@@ -123,7 +123,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         1,
         value => value.toString(),
-        value => value + '!'
+        value => value + '!',
     );
     value satisfies string;
 }
@@ -131,7 +131,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         'test',
         value => value.length,
-        value => value + 1
+        value => value + 1,
     );
     value satisfies number;
 }
@@ -167,7 +167,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => value.a,
-        value => value + 1
+        value => value + 1,
     );
     value satisfies number;
 }
@@ -175,7 +175,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => value.a.toString(),
-        value => value + '!'
+        value => value + '!',
     );
     value satisfies string;
 }
@@ -193,7 +193,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => ({ b: value.a }),
-        value => ({ c: value.b })
+        value => ({ c: value.b }),
     );
     value satisfies { c: number };
 }
@@ -201,7 +201,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => ({ b: value.a.toString() }),
-        value => ({ c: value.b })
+        value => ({ c: value.b }),
     );
     value satisfies { c: string };
 }
@@ -219,7 +219,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => ({ ...value, b: 2 }),
-        value => ({ ...value, c: true })
+        value => ({ ...value, c: true }),
     );
     value satisfies { a: number; b: number; c: boolean };
 }
@@ -227,7 +227,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     const value = pipe(
         { a: 1 },
         value => ({ ...value, b: 'test' }),
-        value => ({ ...value, c: true })
+        value => ({ ...value, c: true }),
     );
     value satisfies { a: number; b: string; c: boolean };
 }
@@ -254,7 +254,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         { a: 1 },
         value => ({ ...value, b: 'test' }),
         value => ({ ...value, c: true }),
-        value => addOrAppend(value, 'test')
+        value => addOrAppend(value, 'test'),
     );
     value satisfies { a: number; b?: string; c?: boolean; d: string[] };
 }
@@ -265,7 +265,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         value => ({ ...value, c: true }),
         value => addOrAppend(value, 'test'),
         value => addOrAppend(value, 'test again'),
-        value => addOrAppend(value, 'test a third time')
+        value => addOrAppend(value, 'test a third time'),
     );
     value satisfies { a: number; b?: string; c?: boolean; d: string[] };
 }
@@ -274,7 +274,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         { a: 1 },
         value => addOrAppend(value, 'test'),
         value => ({ ...value, b: 'test' }),
-        value => ({ ...value, c: true })
+        value => ({ ...value, c: true }),
     );
     value satisfies { a: number; b?: string; c?: boolean; d: string[] };
 }
@@ -285,7 +285,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         value => addOrAppend(value, 'test again'),
         value => ({ ...value, b: 'test' }),
         value => ({ ...value, c: true }),
-        value => dropArray(value)
+        value => dropArray(value),
     );
     value satisfies { a: number; b?: string; c?: boolean };
     assertNotAProperty(value, 'd');
@@ -297,7 +297,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         { a: 1 },
         value => ({ ...value, b: 'test' }),
         value => ({ ...value, c: true }),
-        value => ({ ...value, d: pipe({}, value => ({ ...value, e: 1 })) })
+        value => ({ ...value, d: pipe({}, value => ({ ...value, e: 1 })) }),
     );
     value satisfies { a: number; b?: string; c?: boolean; d: { e: number } };
 }
@@ -307,7 +307,7 @@ function dropArray(obj: { a: number; b?: string; c?: boolean; d?: string[] }) {
         value => ({ ...value, b: 'test' }),
         value => ({ ...value, c: true }),
         value => ({ ...value, d: pipe({}, value => ({ ...value, e: 1 })) }),
-        value => ({ ...value, d: pipe(value.d, value => ({ ...value, f: 'test' })) })
+        value => ({ ...value, d: pipe(value.d, value => ({ ...value, f: 'test' })) }),
     );
     value satisfies { a: number; b?: string; c?: boolean; d: { e: number; f: string } };
 }

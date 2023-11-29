@@ -86,7 +86,7 @@ export function getArrayDecoder<T>(item: Decoder<T>, config: ArrayCodecConfig<Nu
  */
 export function getArrayCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    config: ArrayCodecConfig<NumberCodec> = {}
+    config: ArrayCodecConfig<NumberCodec> = {},
 ): Codec<T[], U[]> {
     return combineCodec(getArrayEncoder(item, config), getArrayDecoder(item, config));
 }

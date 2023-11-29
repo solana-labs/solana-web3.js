@@ -51,7 +51,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         createSubscriptionIterable.mockReturnValue(
             new Promise(resolve => {
                 setupSubscription = resolve;
-            })
+            }),
         );
         getSignatureConfirmationPromise({
             abortSignal: new AbortController().signal,
@@ -83,7 +83,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             });
             await jest.runAllTimersAsync();
             await expect(Promise.race([signatureConfirmationPromise, 'pending'])).resolves.toBe('pending');
-        }
+        },
     );
     it('continues to pend when no signature status is returned by the one-shot query', async () => {
         expect.assertions(1);

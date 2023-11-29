@@ -10,7 +10,7 @@ export type TransactionPartialSigner<TAddress extends string = string> = Readonl
     address: Address<TAddress>;
     signTransactions(
         transactions: readonly CompilableTransaction[],
-        config?: TransactionPartialSignerConfig
+        config?: TransactionPartialSignerConfig,
     ): Promise<readonly SignatureDictionary[]>;
 }>;
 

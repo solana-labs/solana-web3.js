@@ -40,7 +40,7 @@ describe('VersionedTransactionSham', () => {
                     ...MOCK_SIGNATURE,
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('vends the signature of a transaction through the `signatures` property', () => {
@@ -54,7 +54,7 @@ describe('VersionedTransactionSham', () => {
                     // @ts-ignore
                     signedTx[method]();
                 }).toThrow(`VersionedTransaction#${method} is unimplemented`);
-            }
+            },
         );
         it.each(['message'] as (keyof VersionedTransaction)[])('fatals when accessing `%s`', property => {
             expect(() => {
@@ -71,7 +71,7 @@ describe('VersionedTransactionSham', () => {
                     0, // Length of signatures array
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT,
-                ])
+                ]),
             );
         });
         it('vends an all-zero signature for an unsigned transaction through the `signatures` property', () => {
@@ -90,7 +90,7 @@ describe('VersionedTransactionSham', () => {
                     42 + 128, // 42 + version mask
 
                     ...TRANSACTION_MESSAGE_IN_WIRE_FORMAT.slice(1),
-                ])
+                ]),
             );
         });
         it('vends `42` through the `version` property', () => {

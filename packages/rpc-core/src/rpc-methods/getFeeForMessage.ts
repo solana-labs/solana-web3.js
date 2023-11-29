@@ -15,6 +15,6 @@ export interface GetFeeForMessageApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetFeeForMessageApiResponse;
 }

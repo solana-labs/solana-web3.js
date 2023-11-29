@@ -51,7 +51,7 @@ function getCompiledMessageVersionedEncoder(): Encoder<CompiledMessage> {
                 ...value,
                 addressTableLookups: value.addressTableLookups ?? [],
             } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
-        }
+        },
     );
 }
 
@@ -160,7 +160,7 @@ export function getCompiledMessageDecoder(): Decoder<CompiledMessage> {
                 CompiledMessage,
                 { readonly version: 'legacy' }
             >;
-        }
+        },
     );
 }
 

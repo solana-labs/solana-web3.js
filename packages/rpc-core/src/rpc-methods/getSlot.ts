@@ -12,6 +12,6 @@ export interface GetSlotApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetSlotApiResponse;
 }

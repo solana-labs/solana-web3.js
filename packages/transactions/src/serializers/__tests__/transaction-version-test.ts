@@ -28,9 +28,9 @@ describe.each([getTransactionVersionCodec, getTransactionVersionEncoder])(
             'throws when passed the out-of-range version `%s`',
             version => {
                 expect(() => transactionVersion.encode(version)).toThrow();
-            }
+            },
         );
-    }
+    },
 );
 
 describe.each([getTransactionVersionCodec, getTransactionVersionDecoder])(
@@ -47,9 +47,9 @@ describe.each([getTransactionVersionCodec, getTransactionVersionDecoder])(
             expect(
                 transactionVersion.decode(
                     // eg. just a byte that indicates that there are 3 required signers
-                    new Uint8Array([3])
-                )[0]
+                    new Uint8Array([3]),
+                )[0],
             ).toBe('legacy');
         });
-    }
+    },
 );

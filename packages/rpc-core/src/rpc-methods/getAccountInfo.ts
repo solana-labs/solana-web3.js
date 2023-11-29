@@ -41,7 +41,7 @@ export interface GetAccountInfoApi {
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedData>;
     getAccountInfo(
         address: Address,
@@ -49,14 +49,14 @@ export interface GetAccountInfoApi {
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-            }>
+            }>,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase64EncodedZStdCompressedData>;
     getAccountInfo(
         address: Address,
         config: GetAccountInfoApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithJsonData>;
     getAccountInfo(
         address: Address,
@@ -64,10 +64,10 @@ export interface GetAccountInfoApi {
             GetAccountInfoApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58EncodedData>;
     getAccountInfo(
         address: Address,
-        config?: GetAccountInfoApiCommonConfig
+        config?: GetAccountInfoApiCommonConfig,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58Bytes>;
 }

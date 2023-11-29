@@ -42,7 +42,7 @@ describe('deduplicateSigners', () => {
         // Then we expect an error to be thrown.
         expect(fn).toThrow(
             `Multiple distinct signers were identified for address "${addressA}". ` +
-                `Please ensure that you are using the same signer instance for each address.`
+                `Please ensure that you are using the same signer instance for each address.`,
         );
     });
 

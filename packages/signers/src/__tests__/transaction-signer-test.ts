@@ -56,15 +56,15 @@ describe('assertIsTransactionSigner', () => {
         expect(() => assertIsTransactionSigner({ ...myPartialSigner, ...mySendingSigner })).not.toThrow();
         expect(() => assertIsTransactionSigner({ ...myModifyingSigner, ...mySendingSigner })).not.toThrow();
         expect(() =>
-            assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })
+            assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner }),
         ).not.toThrow();
         expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedMessage);
         expect(() => assertIsTransactionSigner({ address: myAddress, signTransactions: 42 })).toThrow(expectedMessage);
         expect(() => assertIsTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
-            expectedMessage
+            expectedMessage,
         );
         expect(() => assertIsTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(
-            expectedMessage
+            expectedMessage,
         );
     });
 });

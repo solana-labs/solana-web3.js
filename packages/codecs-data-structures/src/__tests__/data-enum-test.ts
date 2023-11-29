@@ -106,10 +106,10 @@ describe('getDataEnumCodec', () => {
         expect(() => dataEnum(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
             'Invalid data enum variant. ' +
                 'Expected one of [PageLoad, Click, KeyPress, PageUnload], ' +
-                'got "Missing".'
+                'got "Missing".',
         );
         expect(() => dataEnum(getWebEvent()).decode(new Uint8Array([4]))).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.'
+            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.',
         );
     });
 
@@ -133,18 +133,18 @@ describe('getDataEnumCodec', () => {
                 'Click: struct(x: u8, y: u8), ' +
                 'KeyPress: struct(fields: tuple(string(utf8; u32(le)))), ' +
                 'PageUnload: struct()' +
-                '; u8)'
+                '; u8)',
         );
         expect(dataEnum(getSameSizeVariants()).description).toBe(
             'dataEnum(' +
                 'A: struct(value: u16(le)), ' +
                 'B: struct(x: u8, y: u8), ' +
                 'C: struct(items: array(bool(u8); 2))' +
-                '; u8)'
+                '; u8)',
         );
         expect(dataEnum(getU64Enum()).description).toBe('dataEnum(A: unit, B: struct(value: u64(le)); u8)');
         expect(dataEnum(getU64Enum(), { size: u32() }).description).toBe(
-            'dataEnum(A: unit, B: struct(value: u64(le)); u32(le))'
+            'dataEnum(A: unit, B: struct(value: u64(le)); u32(le))',
         );
         expect(dataEnum(getWebEvent(), { description: 'my data enum' }).description).toBe('my data enum');
     });

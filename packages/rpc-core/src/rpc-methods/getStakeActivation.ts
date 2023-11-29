@@ -23,6 +23,6 @@ export interface GetStakeActivationApi {
             minContextSlot?: Slot;
             /** Defaults to current epoch */
             epoch?: U64UnsafeBeyond2Pow53Minus1;
-        }>
+        }>,
     ): GetStakeActivationApiResponse;
 }

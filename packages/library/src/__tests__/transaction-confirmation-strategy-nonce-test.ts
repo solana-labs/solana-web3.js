@@ -18,7 +18,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             32; // nonce authority(pubkey)
         const bytes = new Uint8Array(
             NONCE_VALUE_OFFSET + // zeros up to the offset
-                32 // nonce value(pubkey)
+                32, // nonce value(pubkey)
             // don't care about anything after this
         );
         bytes.set(getBase58Encoder().encode(nonceValue), NONCE_VALUE_OFFSET);
@@ -105,7 +105,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         createSubscriptionIterable.mockReturnValue(
             new Promise(resolve => {
                 setupSubscription = resolve;
-            })
+            }),
         );
         getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
@@ -155,7 +155,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         });
         await expect(invalidationPromise).rejects.toThrow(
             'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
-                '`55555555555555555555555555555555555555555555`.'
+                '`55555555555555555555555555555555555555555555`.',
         );
     });
     it('continues to pend when the nonce value returned by the account subscription is the same as the expected one', async () => {
@@ -191,7 +191,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         });
         await expect(invalidationPromise).rejects.toThrow(
             'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
-                '`55555555555555555555555555555555555555555555`.'
+                '`55555555555555555555555555555555555555555555`.',
         );
     });
 });

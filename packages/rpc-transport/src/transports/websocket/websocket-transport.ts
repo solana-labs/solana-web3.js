@@ -12,7 +12,7 @@ export function createWebSocketTransport({ sendBufferHighWatermark, url }: Confi
         throw new DOMException(
             protocolMatch
                 ? `Failed to construct 'WebSocket': The URL's scheme must be either 'ws' or 'wss'. '${protocolMatch[1]}:' is not allowed.`
-                : `Failed to construct 'WebSocket': The URL '${url}' is invalid.`
+                : `Failed to construct 'WebSocket': The URL '${url}' is invalid.`,
         );
     }
     return async function sendWebSocketMessage({ payload, signal }: Parameters<IRpcWebSocketTransport>[0]) {

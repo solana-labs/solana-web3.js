@@ -13,6 +13,6 @@ export interface GetSlotLeadersApi {
         /** Start slot, as u64 integer */
         startSlot: Slot,
         /** Limit (between 1 and 5000) */
-        limit: number
+        limit: number,
     ): GetSlotLeadersApiResponse;
 }

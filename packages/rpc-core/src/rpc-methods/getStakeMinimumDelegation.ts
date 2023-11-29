@@ -11,6 +11,6 @@ export interface GetStakeMinimumDelegationApi {
     getStakeMinimumDelegation(
         config?: Readonly<{
             commitment?: Commitment;
-        }>
+        }>,
     ): GetStakeMinimumDelegationApiResponse;
 }

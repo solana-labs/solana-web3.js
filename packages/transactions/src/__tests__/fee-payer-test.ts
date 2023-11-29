@@ -50,12 +50,12 @@ describe('setTransactionFeePayer', () => {
             it('does not clear the signatures when the fee payer is the same as the current one', () => {
                 expect(setTransactionFeePayer(EXAMPLE_FEE_PAYER_A, txWithFeePayerAndSignatures)).toHaveProperty(
                     'signatures',
-                    txWithFeePayerAndSignatures.signatures
+                    txWithFeePayerAndSignatures.signatures,
                 );
             });
             it('clears the signatures when the fee payer is different than the current one', () => {
                 expect(setTransactionFeePayer(EXAMPLE_FEE_PAYER_B, txWithFeePayerAndSignatures)).not.toHaveProperty(
-                    'signatures'
+                    'signatures',
                 );
             });
         });

@@ -79,7 +79,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                     66, 55, // Writable indices
                     1, // Number of readonly indices
                     77, // Readonly indices
-                ])
+                ]),
             );
         });
         it('serializes a versioned transaction with `undefined` address table lookups', () => {
@@ -117,7 +117,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
 
                     /** ADDRESS TABLE LOOKUPS get serialized despite not being in the source object */
                     0, // Number of address table lookups
-                ])
+                ]),
             );
         });
         it('omits the version header for `legacy` transactions', () => {
@@ -132,7 +132,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                     lifetimeToken: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn', // decodes to [11{32}]
                     staticAccounts: [],
                     version: 'legacy',
-                })
+                }),
             ).toStrictEqual(
                 // prettier-ignore
                 new Uint8Array([
@@ -151,7 +151,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
 
                     /* INSTRUCTIONS */
                     0, // Number of instructions
-                ])
+                ]),
             );
         });
         it('omits the address table lookups for `legacy` transactions', () => {
@@ -166,7 +166,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                     lifetimeToken: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn', // decodes to [11{32}]
                     staticAccounts: [],
                     version: 'legacy',
-                })
+                }),
             ).toStrictEqual(
                 // prettier-ignore
                 new Uint8Array([
@@ -185,10 +185,10 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
                     0, // Number of instructions
 
                     /** NO ADDRESS TABLE LOOKUPS */
-                ])
+                ]),
             );
         });
-    }
+    },
 );
 
 describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
@@ -292,8 +292,8 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
 
                         /* INSTRUCTIONS */
                         0, // Number of instructions
-                    ])
-                )[0]
+                    ]),
+                )[0],
             ).not.toHaveProperty('addressTableLookups');
         });
         it('deserializes a legacy transaction according to the spec', () => {
@@ -349,5 +349,5 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
             // Expect the entire byte array to have been consumed.
             expect(offset).toBe(byteArray.byteLength);
         });
-    }
+    },
 );

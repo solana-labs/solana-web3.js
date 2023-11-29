@@ -73,7 +73,7 @@ const FORBIDDEN_HEADERS: Record<string, boolean> = {
 };
 
 export function assertIsAllowedHttpRequestHeaders(
-    headers: Record<string, string>
+    headers: Record<string, string>,
 ): asserts headers is AllowedHttpRequestHeaders {
     const badHeaders = Object.keys(headers).filter(headerName => {
         const lowercaseHeaderName = headerName.toLowerCase();
@@ -88,7 +88,7 @@ export function assertIsAllowedHttpRequestHeaders(
         throw new Error(
             `${badHeaders.length > 1 ? 'These headers are' : 'This header is'} forbidden: ` +
                 `\`${badHeaders.join('`, `')}\`. Learn more at ` +
-                'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.'
+                'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.',
         );
     }
 }
@@ -98,7 +98,7 @@ export function assertIsAllowedHttpRequestHeaders(
  * in the `DisallowedHeaders` type.
  */
 export function normalizeHeaders<T extends Record<string, string>>(
-    headers: T
+    headers: T,
 ): { [K in keyof T & string as Lowercase<K>]: T[K] } {
     const out: Record<string, string> = {};
     for (const headerName in headers) {

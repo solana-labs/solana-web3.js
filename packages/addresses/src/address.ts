@@ -75,7 +75,7 @@ export function getAddressEncoder(config?: Readonly<{ description: string }>): E
             encoding: getMemoizedBase58Encoder(),
             size: 32,
         }),
-        putativeAddress => address(putativeAddress)
+        putativeAddress => address(putativeAddress),
     );
 }
 

@@ -62,7 +62,7 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             lastValidBlockHeight: 123n,
         });
         await expect(exceedencePromise).rejects.toThrow(
-            'The network has progressed past the last block for which this transaction could have committed.'
+            'The network has progressed past the last block for which this transaction could have committed.',
         );
     });
     it('calls the abort signal passed to the slot subscription when aborted', async () => {

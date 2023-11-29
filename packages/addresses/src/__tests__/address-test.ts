@@ -42,7 +42,7 @@ describe('Address', () => {
                 expect(() => {
                     assertIsAddress(
                         // 31 bytes [128, ..., 128]
-                        '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM'
+                        '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                     );
                 }).toThrow();
             });
@@ -76,7 +76,7 @@ describe('Address', () => {
                 try {
                     assertIsAddress(
                         // 31 bytes [0, ..., 0]
-                        '1111111111111111111111111111111' // 31 characters
+                        '1111111111111111111111111111111', // 31 characters
                     );
                     // eslint-disable-next-line no-empty
                 } catch {}
@@ -86,7 +86,7 @@ describe('Address', () => {
                 try {
                     assertIsAddress(
                         // 33 bytes [0, 255, ..., 255]
-                        '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG' // 45 characters
+                        '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG', // 45 characters
                     );
                     // eslint-disable-next-line no-empty
                 } catch {}
@@ -118,13 +118,13 @@ describe('Address', () => {
         it('serializes a base58 encoded address into a 32-byte buffer', () => {
             expect(
                 address.encode(
-                    '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
-                )
+                    '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>,
+                ),
             ).toEqual(
                 new Uint8Array([
                     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     0,
-                ])
+                ]),
             );
         });
         it('deserializes a byte buffer representing an address into a base58 encoded address', () => {
@@ -135,10 +135,10 @@ describe('Address', () => {
                         27, 28, 29, 30, 31, 32,
                         // Followed by extra bytes not part of the address
                         33, 34,
-                    ])
-                )[0]
+                    ]),
+                )[0],
             ).toBe(
-                '4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>,
             );
         });
         it('fatals when trying to deserialize a byte buffer shorter than 32-bytes', () => {
@@ -160,12 +160,12 @@ describe('Address', () => {
 
             address = getAddressCodec!();
             address.encode(
-                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>,
             );
 
             address = getAddressCodec!();
             address.encode(
-                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>
+                '4wBqpZM9xaSheZzJSMawUHDgZ7miWfSsxmfVF5jJpYP' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>,
             );
 
             expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
@@ -191,7 +191,7 @@ describe('Address', () => {
                     'BKggsVVp7yLmXtPuBDtC3FXBzvLyyye3Q2tFKUUGCHLj',
                     'Ds72joawSKQ9nCDAAmGMKFiwiY6HR7PDzYDHDzZom3tj',
                     'F1zKr4ZUYo5UAnH1fvYaD6R7ne137NYfS1r5HrCb8NpF',
-                ].sort(getAddressComparator())
+                ].sort(getAddressComparator()),
             ).toEqual([
                 '6JYSQqSHY1E5JDwEfgWMieozqA1KCwiP2cH69to9eWKH',
                 '7grJ9YUAEHxckLFqCY7fq8cM1UrragNSuPH1dvwJ8EEK',

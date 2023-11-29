@@ -44,7 +44,7 @@ function structCodecHelper(fields: Array<[string | number | symbol, CodecData]>,
  */
 export function getStructEncoder<T extends object>(
     fields: StructToEncoderTuple<T>,
-    config: StructCodecConfig = {}
+    config: StructCodecConfig = {},
 ): Encoder<T> {
     return {
         ...structCodecHelper(fields, config.description),
@@ -63,7 +63,7 @@ export function getStructEncoder<T extends object>(
  */
 export function getStructDecoder<T extends object>(
     fields: StructToDecoderTuple<T>,
-    config: StructCodecConfig = {}
+    config: StructCodecConfig = {},
 ): Decoder<T> {
     return {
         ...structCodecHelper(fields, config.description),
@@ -87,7 +87,7 @@ export function getStructDecoder<T extends object>(
  */
 export function getStructCodec<T extends object, U extends T = T>(
     fields: StructToCodecTuple<T, U>,
-    config: StructCodecConfig = {}
+    config: StructCodecConfig = {},
 ): Codec<T, U> {
     return combineCodec(getStructEncoder(fields, config), getStructDecoder(fields, config));
 }

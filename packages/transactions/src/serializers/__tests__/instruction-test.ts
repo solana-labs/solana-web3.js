@@ -12,7 +12,7 @@ describe('Instruction codec', () => {
                     accountIndices: [1, 2],
                     data: new Uint8Array([4, 5, 6]),
                     programAddressIndex: 7,
-                })
+                }),
             ).toEqual(
                 new Uint8Array([
                     // Program id index
@@ -26,7 +26,7 @@ describe('Instruction codec', () => {
                     4,
                     5,
                     6,
-                ])
+                ]),
             );
         });
         it('serializes a zero-length compact array when `accountIndices` is `undefined`', () => {
@@ -34,7 +34,7 @@ describe('Instruction codec', () => {
                 instruction.encode({
                     data: new Uint8Array([3, 4]),
                     programAddressIndex: 1,
-                })
+                }),
             ).toEqual(
                 new Uint8Array([
                     // Program id index
@@ -45,7 +45,7 @@ describe('Instruction codec', () => {
                     2, // Compact-u16 length
                     3,
                     4,
-                ])
+                ]),
             );
         });
         it('serializes a zero-length compact array when `data` is `undefined`', () => {
@@ -53,7 +53,7 @@ describe('Instruction codec', () => {
                 instruction.encode({
                     accountIndices: [3, 4],
                     programAddressIndex: 1,
-                })
+                }),
             ).toEqual(
                 new Uint8Array([
                     // Program id index
@@ -64,7 +64,7 @@ describe('Instruction codec', () => {
                     4,
                     // Compact array of instruction data
                     0, // Compact-u16 length
-                ])
+                ]),
             );
         });
     });
@@ -91,8 +91,8 @@ describe('Instruction codec', () => {
                         8,
                         9,
                         10,
-                    ])
-                )[0]
+                    ]),
+                )[0],
             ).toEqual({
                 accountIndices: [3, 4],
                 data: new Uint8Array([6, 7, 8, 9, 10]),
@@ -111,8 +111,8 @@ describe('Instruction codec', () => {
                         2, // Compact-u16 length
                         3,
                         4,
-                    ])
-                )[0]
+                    ]),
+                )[0],
             ).not.toHaveProperty('accountIndices');
         });
         it('omits the `data` property when the instruction data is zero-length', () => {
@@ -127,8 +127,8 @@ describe('Instruction codec', () => {
                         4,
                         // Compact array of instruction data
                         0, // Compact-u16 length
-                    ])
-                )[0]
+                    ]),
+                )[0],
             ).not.toHaveProperty('data');
         });
     });

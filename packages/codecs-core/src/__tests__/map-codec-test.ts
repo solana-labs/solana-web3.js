@@ -14,7 +14,7 @@ describe('mapCodec', () => {
         // From <number> to <number | string, number>.
         const mappedCodec: Codec<number | string, number> = mapCodec(numberCodec, (value: number | string) =>
             // eslint-disable-next-line jest/no-conditional-in-test
-            typeof value === 'number' ? value : value.length
+            typeof value === 'number' ? value : value.length,
         );
 
         const bytesA = mappedCodec.encode(42);
@@ -30,7 +30,7 @@ describe('mapCodec', () => {
             numberCodec,
             // eslint-disable-next-line jest/no-conditional-in-test
             (value: number | string) => (typeof value === 'number' ? value : value.length),
-            (value: number) => 'x'.repeat(value)
+            (value: number) => 'x'.repeat(value),
         );
 
         const bytesA = mappedCodec.encode(42);
@@ -45,7 +45,7 @@ describe('mapCodec', () => {
         const mappedCodec: Codec<string> = mapCodec(
             numberCodec,
             (value: string) => value.length,
-            (value: number) => 'x'.repeat(value)
+            (value: number) => 'x'.repeat(value),
         );
 
         const bytesA = mappedCodec.encode('42');
@@ -61,7 +61,7 @@ describe('mapCodec', () => {
         const mappedCodec: Codec<Wrap<number>> = mapCodec(
             numberCodec,
             (value: Wrap<number>) => value.value,
-            (value: number): Wrap<number> => ({ value })
+            (value: number): Wrap<number> => ({ value }),
         );
 
         const bytes = mappedCodec.encode({ value: 42 });
@@ -95,7 +95,7 @@ describe('mapCodec', () => {
             (value: Loose): Strict => ({
                 discriminator: 42, // <- Default value.
                 ...value,
-            })
+            }),
         );
 
         // With explicit discriminator.

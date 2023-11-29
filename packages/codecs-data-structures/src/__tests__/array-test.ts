@@ -59,7 +59,7 @@ describe('getArrayCodec', () => {
         // It fails if the array has a different size.
         expect(() => array(string(), { size: 1 }).encode([])).toThrow('Expected [array] to have 1 items, got 0.');
         expect(() => array(string(), { size: 2 }).encode(['a', 'b', 'c'])).toThrow(
-            'Expected [array] to have 2 items, got 3.'
+            'Expected [array] to have 2 items, got 3.',
         );
     });
 

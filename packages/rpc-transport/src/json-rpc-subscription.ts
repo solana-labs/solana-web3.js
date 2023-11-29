@@ -33,7 +33,7 @@ function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: Ca
 
 function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
     rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>,
-    { params, subscribeMethodName, unsubscribeMethodName, responseProcessor }: RpcSubscription<TNotification>
+    { params, subscribeMethodName, unsubscribeMethodName, responseProcessor }: RpcSubscription<TNotification>,
 ): PendingRpcSubscription<TNotification> {
     return {
         async subscribe({ abortSignal }: SubscribeOptions): Promise<AsyncIterable<TNotification>> {
@@ -103,7 +103,7 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
 }
 
 function makeProxy<TRpcSubscriptionMethods>(
-    rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>
+    rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>,
 ): RpcSubscriptions<TRpcSubscriptionMethods> {
     return new Proxy(rpcConfig.api, {
         defineProperty() {
@@ -121,7 +121,7 @@ function makeProxy<TRpcSubscriptionMethods>(
                     throw new Error(
                         "Either the notification name must end in 'Notifications' or the API " +
                             'must supply a subscription creator function to map between the ' +
-                            'notification name and the subscribe/unsubscribe method names.'
+                            'notification name and the subscribe/unsubscribe method names.',
                     );
                 }
                 const newRequest = createRpcSubscription
@@ -138,7 +138,7 @@ function makeProxy<TRpcSubscriptionMethods>(
 }
 
 export function createJsonSubscriptionRpc<TRpcSubscriptionMethods>(
-    rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>
+    rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>,
 ): RpcSubscriptions<TRpcSubscriptionMethods> {
     return makeProxy(rpcConfig);
 }

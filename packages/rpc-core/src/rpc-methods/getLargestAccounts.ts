@@ -22,6 +22,6 @@ export interface GetLargestAccountsApi {
             commitment?: Commitment;
             /** Filter results by account type */
             filter?: 'circulating' | 'nonCirculating';
-        }>
+        }>,
     ): GetLargestAccountsApiResponse;
 }

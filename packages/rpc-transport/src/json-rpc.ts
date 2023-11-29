@@ -10,7 +10,7 @@ export type JsonRpcResponse<TResponse> = IHasIdentifier &
 
 function createPendingRpcRequest<TRpcMethods, TResponse>(
     rpcConfig: RpcConfig<TRpcMethods>,
-    pendingRequest: RpcRequest<TResponse>
+    pendingRequest: RpcRequest<TResponse>,
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: SendOptions): Promise<TResponse> {

@@ -37,7 +37,7 @@ function tupleCodecHelper(items: Array<CodecData>, description?: string): CodecD
  */
 export function getTupleEncoder<T extends AnyArray>(
     items: WrapInEncoder<[...T]>,
-    config: TupleCodecConfig = {}
+    config: TupleCodecConfig = {},
 ): Encoder<T> {
     return {
         ...tupleCodecHelper(items, config.description),
@@ -56,7 +56,7 @@ export function getTupleEncoder<T extends AnyArray>(
  */
 export function getTupleDecoder<T extends AnyArray>(
     items: WrapInDecoder<[...T]>,
-    config: TupleCodecConfig = {}
+    config: TupleCodecConfig = {},
 ): Decoder<T> {
     return {
         ...tupleCodecHelper(items, config.description),
@@ -80,10 +80,10 @@ export function getTupleDecoder<T extends AnyArray>(
  */
 export function getTupleCodec<T extends AnyArray, U extends T = T>(
     items: WrapInCodec<[...T], [...U]>,
-    config: TupleCodecConfig = {}
+    config: TupleCodecConfig = {},
 ): Codec<T, U> {
     return combineCodec(
         getTupleEncoder(items as WrapInEncoder<[...T]>, config),
-        getTupleDecoder(items as WrapInDecoder<[...U]>, config)
+        getTupleDecoder(items as WrapInDecoder<[...U]>, config),
     );
 }

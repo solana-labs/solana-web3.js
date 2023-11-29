@@ -14,7 +14,7 @@ type WithNonNullableAbortSignal<T> = Omit<T, 'abortSignal'> & Readonly<{ abortSi
 export async function raceStrategies<TConfig extends BaseTransactionConfirmationStrategyConfig>(
     signature: Signature,
     config: TConfig,
-    getSpecificStrategiesForRace: (config: WithNonNullableAbortSignal<TConfig>) => readonly Promise<unknown>[]
+    getSpecificStrategiesForRace: (config: WithNonNullableAbortSignal<TConfig>) => readonly Promise<unknown>[],
 ) {
     const { abortSignal: callerAbortSignal, commitment, getRecentSignatureConfirmationPromise } = config;
     callerAbortSignal?.throwIfAborted();

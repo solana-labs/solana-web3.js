@@ -48,7 +48,7 @@ describe('getTokenSupply', () => {
             const stakeActivationPromise = rpc
                 .getTokenSupply(
                     // Randomly generated
-                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address
+                    'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address,
                 )
                 .send();
             await expect(stakeActivationPromise).rejects.toMatchObject({

@@ -36,7 +36,7 @@ describe('voteNotifications', () => {
                 // TODO: Test for null. It appears this is maybe non-deterministic? Seems to maybe occur on delayed votes?
                 timestamp: expect.any(BigInt),
                 votePubkey: expect.any(String),
-            })
+            }),
         );
     });
 });

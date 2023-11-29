@@ -27,7 +27,7 @@ export class SolanaJsonRpcIntegerOverflowError extends Error {
             `The ${ordinal} argument to the \`${methodName}\` RPC method` +
                 `${path ? ` at path \`${path}\`` : ''} was \`${value}\`. This number is ` +
                 'unsafe for use with the Solana JSON-RPC because it exceeds ' +
-                '`Number.MAX_SAFE_INTEGER`.'
+                '`Number.MAX_SAFE_INTEGER`.',
         );
         this.keyPath = keyPath;
         this.methodName = methodName;

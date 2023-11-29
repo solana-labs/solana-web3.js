@@ -7,7 +7,7 @@ import { BaseTransaction, TransactionVersion } from './types';
 
 export type CompilableTransaction<
     TVersion extends TransactionVersion = TransactionVersion,
-    TInstruction extends IInstruction = IInstruction
+    TInstruction extends IInstruction = IInstruction,
 > = BaseTransaction<TVersion, TInstruction> &
     ITransactionWithFeePayer &
     (ITransactionWithBlockhashLifetime | IDurableNonceTransaction);

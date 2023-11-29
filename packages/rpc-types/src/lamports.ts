@@ -11,7 +11,7 @@ export function isLamports(putativeLamports: bigint): putativeLamports is Lampor
 }
 
 export function assertIsLamports(
-    putativeLamports: bigint
+    putativeLamports: bigint,
 ): asserts putativeLamports is LamportsUnsafeBeyond2Pow53Minus1 {
     if (putativeLamports < 0) {
         // TODO: Coded error.

@@ -46,6 +46,6 @@ type GetVoteAccountsConfig<TVotePubkey extends Address> = Readonly<{
 export interface GetVoteAccountsApi {
     /** Returns the account info and associated stake for all the voting accounts in the current bank. */
     getVoteAccounts<TVoteAccount extends Address>(
-        config?: GetVoteAccountsConfig<TVoteAccount>
+        config?: GetVoteAccountsConfig<TVoteAccount>,
     ): GetVoteAccountsApiResponse<TVoteAccount>;
 }

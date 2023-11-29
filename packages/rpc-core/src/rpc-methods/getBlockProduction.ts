@@ -40,9 +40,9 @@ export interface GetBlockProductionApi {
         config: GetBlockProductionApiConfigBase &
             Readonly<{
                 identity: TIdentity;
-            }>
+            }>,
     ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithSingleIdentity<TIdentity>;
     getBlockProduction(
-        config?: GetBlockProductionApiConfigBase
+        config?: GetBlockProductionApiConfigBase,
     ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithAllIdentities;
 }

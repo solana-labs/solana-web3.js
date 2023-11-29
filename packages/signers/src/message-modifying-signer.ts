@@ -10,7 +10,7 @@ export type MessageModifyingSigner<TAddress extends string = string> = Readonly<
     address: Address<TAddress>;
     modifyAndSignMessages(
         messages: readonly SignableMessage[],
-        config?: MessageModifyingSignerConfig
+        config?: MessageModifyingSignerConfig,
     ): Promise<readonly SignableMessage[]>;
 }>;
 

@@ -38,13 +38,13 @@ export interface GetLeaderScheduleApi {
             commitment?: Commitment;
             /** Only return results for this validator identity (base58 encoded address) */
             identity?: Address;
-        }>
+        }>,
     ): GetLeaderScheduleApiResponseBase | null;
     getLeaderSchedule(
         config?: Readonly<{
             commitment?: Commitment;
             /** Only return results for this validator identity (base58 encoded address) */
             identity?: Address;
-        }>
+        }>,
     ): GetLeaderScheduleApiResponseBase;
 }

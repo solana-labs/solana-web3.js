@@ -26,7 +26,7 @@ export type SolanaRpcSubscriptions = AccountNotificationsApi &
 export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
 export function createSolanaRpcSubscriptionsApi(
-    config?: Config
+    config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
     return new Proxy({} as IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>, {
         defineProperty() {
@@ -38,7 +38,7 @@ export function createSolanaRpcSubscriptionsApi(
         get<
             TNotificationName extends keyof IRpcSubscriptionsApi<
                 SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
-            >
+            >,
         >(
             ...args: Parameters<
                 NonNullable<
@@ -63,7 +63,7 @@ export function createSolanaRpcSubscriptionsApi(
                     rawParams,
                     handleIntegerOverflow
                         ? (keyPath, value) => handleIntegerOverflow(notificationName, keyPath, value)
-                        : undefined
+                        : undefined,
                 );
                 return {
                     params,
@@ -78,7 +78,7 @@ export function createSolanaRpcSubscriptionsApi(
 }
 
 export function createSolanaRpcSubscriptionsApi_UNSTABLE(
-    config?: Config
+    config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
     return createSolanaRpcSubscriptionsApi(config) as IRpcSubscriptionsApi<
         SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable

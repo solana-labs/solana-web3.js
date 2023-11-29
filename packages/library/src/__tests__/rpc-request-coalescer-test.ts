@@ -92,7 +92,7 @@ describe('RPC request coalescer', () => {
                     () =>
                         new Promise(resolve => {
                             transportResponsePromise = resolve;
-                        })
+                        }),
                 );
                 responsePromiseA = coalescedTransport({ payload: null, signal: abortControllerA.signal });
                 responsePromiseB = coalescedTransport({ payload: null, signal: abortControllerB.signal });

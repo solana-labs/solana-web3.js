@@ -57,7 +57,7 @@ function nullableCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean,
  */
 export function getNullableEncoder<T>(
     item: Encoder<T>,
-    config: NullableCodecConfig<NumberEncoder> = {}
+    config: NullableCodecConfig<NumberEncoder> = {},
 ): Encoder<T | null> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
@@ -80,7 +80,7 @@ export function getNullableEncoder<T>(
  */
 export function getNullableDecoder<T>(
     item: Decoder<T>,
-    config: NullableCodecConfig<NumberDecoder> = {}
+    config: NullableCodecConfig<NumberDecoder> = {},
 ): Decoder<T | null> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
@@ -111,7 +111,7 @@ export function getNullableDecoder<T>(
  */
 export function getNullableCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    config: NullableCodecConfig<NumberCodec> = {}
+    config: NullableCodecConfig<NumberCodec> = {},
 ): Codec<T | null, U | null> {
     return combineCodec(getNullableEncoder<T>(item, config), getNullableDecoder<U>(item, config));
 }

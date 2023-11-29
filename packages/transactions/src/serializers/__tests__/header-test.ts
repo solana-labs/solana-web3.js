@@ -13,7 +13,7 @@ describe('Message header codec', () => {
                     numReadonlyNonSignerAccounts: 1,
                     numReadonlySignerAccounts: 2,
                     numSignerAccounts: 3,
-                })
+                }),
             ).toEqual(new Uint8Array([3, 2, 1]));
         });
     });

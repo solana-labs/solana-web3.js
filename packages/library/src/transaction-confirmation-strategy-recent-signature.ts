@@ -11,7 +11,7 @@ type GetRecentSignatureConfirmationPromiseFn = (config: {
 
 export function createRecentSignatureConfirmationPromiseFactory(
     rpc: Rpc<GetSignatureStatusesApi>,
-    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>,
 ): GetRecentSignatureConfirmationPromiseFn {
     return async function getRecentSignatureConfirmationPromise({
         abortSignal: callerAbortSignal,

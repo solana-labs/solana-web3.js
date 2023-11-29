@@ -54,9 +54,8 @@ describe('Nonce', () => {
       value: 50,
     });
 
-    const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-      NONCE_ACCOUNT_LENGTH,
-    );
+    const minimumAmount =
+      await connection.getMinimumBalanceForRentExemption(NONCE_ACCOUNT_LENGTH);
 
     await helpers.airdrop({
       connection,
@@ -123,9 +122,8 @@ describe('Nonce', () => {
       value: 50,
     });
 
-    const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-      NONCE_ACCOUNT_LENGTH,
-    );
+    const minimumAmount =
+      await connection.getMinimumBalanceForRentExemption(NONCE_ACCOUNT_LENGTH);
 
     await helpers.airdrop({
       connection,

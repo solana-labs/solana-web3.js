@@ -61,7 +61,7 @@ export interface GetTokenAccountsByOwnerApi {
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getTokenAccountsByOwner(
@@ -71,7 +71,7 @@ export interface GetTokenAccountsByOwnerApi {
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getTokenAccountsByOwner(
@@ -80,7 +80,7 @@ export interface GetTokenAccountsByOwnerApi {
         config: GetTokenAccountsByOwnerApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
 
     getTokenAccountsByOwner(
@@ -90,12 +90,12 @@ export interface GetTokenAccountsByOwnerApi {
             GetTokenAccountsByOwnerApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getTokenAccountsByOwner(
         owner: Address,
         filter: AccountsFilter,
-        config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig
+        config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
 }

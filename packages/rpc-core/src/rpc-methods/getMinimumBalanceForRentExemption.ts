@@ -12,6 +12,6 @@ export interface GetMinimumBalanceForRentExemptionApi {
         size: U64UnsafeBeyond2Pow53Minus1,
         config?: Readonly<{
             commitment?: Commitment;
-        }>
+        }>,
     ): GetMinimumBalanceForRentExemptionApiResponse;
 }

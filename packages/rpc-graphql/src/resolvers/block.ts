@@ -9,6 +9,6 @@ export const resolveBlock = (fieldName: string) => {
         parent: { [x: string]: Slot },
         args: BlockQueryArgs,
         context: RpcGraphQLContext,
-        info: GraphQLResolveInfo | undefined
+        info: GraphQLResolveInfo | undefined,
     ) => (parent[fieldName] === null ? null : context.loaders.block.load({ ...args, slot: parent[fieldName] }, info));
 };

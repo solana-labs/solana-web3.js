@@ -101,7 +101,7 @@ describe('getOptionCodec', () => {
 
         // Fixed options must wrap fixed-size items.
         expect(() => option(getMockCodec({ size: null }), { fixed: true })).toThrow(
-            'Fixed options can only be used with fixed-size codecs'
+            'Fixed options can only be used with fixed-size codecs',
         );
     });
 

@@ -4,7 +4,7 @@ import { IAccountLookupMeta, IAccountMeta } from './accounts';
 
 export interface IInstruction<
     TProgramAddress extends string = string,
-    TAccounts extends readonly (IAccountMeta | IAccountLookupMeta)[] = readonly (IAccountMeta | IAccountLookupMeta)[]
+    TAccounts extends readonly (IAccountMeta | IAccountLookupMeta)[] = readonly (IAccountMeta | IAccountLookupMeta)[],
 > {
     readonly accounts?: TAccounts;
     readonly data?: Uint8Array;

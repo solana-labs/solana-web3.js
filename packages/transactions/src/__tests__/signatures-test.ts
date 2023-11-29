@@ -34,7 +34,7 @@ describe('getSignatureFromTransaction', () => {
             } as const,
         };
         expect(getSignatureFromTransaction(transactionWithoutFeePayerSignature)).toBe(
-            'BUguQsv2ZuHus54HAFzjdJHzZBkygAjKhEeYwSG19tUfUyvvz3worsdQCdAXDNjakJHioSiyxhFiDJrm8XpSXRA'
+            'BUguQsv2ZuHus54HAFzjdJHzZBkygAjKhEeYwSG19tUfUyvvz3worsdQCdAXDNjakJHioSiyxhFiDJrm8XpSXRA',
         );
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', () => {
@@ -49,7 +49,7 @@ describe('getSignatureFromTransaction', () => {
             getSignatureFromTransaction(transactionWithoutFeePayerSignature);
         }).toThrow(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.'
+                'has been signed by its fee payer.',
         );
     });
 });
@@ -124,7 +124,7 @@ describe('partiallySignTransaction', () => {
         const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], MOCK_TRANSACTION);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
-            expect.objectContaining({ [mockPublicKeyAddressA]: MOCK_SIGNATURE_A })
+            expect.objectContaining({ [mockPublicKeyAddressA]: MOCK_SIGNATURE_A }),
         );
     });
     it("returns a transaction object having the second signer's signature", async () => {
@@ -132,14 +132,14 @@ describe('partiallySignTransaction', () => {
         const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairB], MOCK_TRANSACTION);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
-            expect.objectContaining({ [mockPublicKeyAddressB]: MOCK_SIGNATURE_B })
+            expect.objectContaining({ [mockPublicKeyAddressB]: MOCK_SIGNATURE_B }),
         );
     });
     it('returns a transaction object having multiple signatures', async () => {
         expect.assertions(1);
         const partiallySignedTransactionPromise = partiallySignTransaction(
             [mockKeyPairA, mockKeyPairB, mockKeyPairC],
-            MOCK_TRANSACTION
+            MOCK_TRANSACTION,
         );
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
@@ -147,7 +147,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
                 [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
                 [mockPublicKeyAddressC]: MOCK_SIGNATURE_C,
-            })
+            }),
         );
     });
     it('returns a transaction object without overwriting the existing signatures', async () => {
@@ -158,14 +158,14 @@ describe('partiallySignTransaction', () => {
         };
         const partiallySignedTransactionPromise = partiallySignTransaction(
             [mockKeyPairA],
-            mockTransactionWithSignatureForSignerA
+            mockTransactionWithSignatureForSignerA,
         );
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
                 [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
-            })
+            }),
         );
     });
     it("does not mutate the original signatures when updating a transaction's signatures", async () => {
@@ -191,7 +191,7 @@ describe('partiallySignTransaction', () => {
         };
         const { signatures } = await partiallySignTransaction(
             [mockKeyPairA, mockKeyPairC],
-            mockTransactionWithSignatureForSignerA
+            mockTransactionWithSignatureForSignerA,
         );
         expect(signatures).not.toBe(startingSignatures);
         expect(signatures).toMatchObject({
@@ -275,7 +275,7 @@ describe('signTransaction', () => {
         expect.assertions(1);
         const signedTransactionPromise = signTransaction([mockKeyPairA], MOCK_TRANSACTION);
         await expect(signedTransactionPromise).rejects.toThrow(
-            `Transaction is missing signature for address \`${mockPublicKeyAddressB}\``
+            `Transaction is missing signature for address \`${mockPublicKeyAddressB}\``,
         );
     });
     it('returns a transaction object having multiple signatures', async () => {
@@ -286,7 +286,7 @@ describe('signTransaction', () => {
             expect.objectContaining({
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
                 [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
-            })
+            }),
         );
     });
     it('returns a transaction object without overwriting the existing signatures', async () => {
@@ -301,7 +301,7 @@ describe('signTransaction', () => {
             expect.objectContaining({
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
                 [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
-            })
+            }),
         );
     });
     it("does not mutate the original signatures when updating a transaction's signatures", async () => {
@@ -364,7 +364,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signature for address `A`'
+            'Transaction is missing signature for address `A`',
         );
     });
 
@@ -390,7 +390,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signature for address `B`'
+            'Transaction is missing signature for address `B`',
         );
     });
 
@@ -416,7 +416,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signature for address `B`'
+            'Transaction is missing signature for address `B`',
         );
     });
 
@@ -452,7 +452,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signature for address `C`'
+            'Transaction is missing signature for address `C`',
         );
     });
 

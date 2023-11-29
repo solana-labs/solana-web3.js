@@ -56,21 +56,21 @@ describe('patchParamsForSolanaLabsRpc', () => {
                 patchParamsForSolanaLabsRpc(value, onIntegerOverflow);
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     [], // Equivalent to `params`
-                    value
+                    value,
                 );
             });
             it('calls `onIntegerOverflow` when passed a nested array having a value ' + description, () => {
                 patchParamsForSolanaLabsRpc([1, 2, [3, value]], onIntegerOverflow);
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     [2, 1], // Equivalent to `params[2][1]`.
-                    value
+                    value,
                 );
             });
             it('calls `onIntegerOverflow` when passed a nested object having a value ' + description, () => {
                 patchParamsForSolanaLabsRpc({ a: 1, b: { b1: 2, b2: value } }, onIntegerOverflow);
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     ['b', 'b2'], // Equivalent to `params.b.b2`.
-                    value
+                    value,
                 );
             });
             it('does not call `onIntegerOverflow` when passed `Number.MAX_SAFE_INTEGER`', () => {

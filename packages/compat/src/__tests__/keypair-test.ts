@@ -25,6 +25,6 @@ describe('fromLegacyKeypair', () => {
             expect.assertions(1);
             const keyPair = await fromLegacyKeypair(legacyKeypair, extractable);
             expect(keyPair.privateKey).toHaveProperty('extractable', extractable);
-        }
+        },
     );
 });

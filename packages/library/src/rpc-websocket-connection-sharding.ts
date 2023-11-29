@@ -13,7 +13,7 @@ type Config = Readonly<{
 }>;
 
 const NULL_SHARD_CACHE_KEY = Symbol(
-    __DEV__ ? 'Cache key to use when there is no connection sharding strategy' : undefined
+    __DEV__ ? 'Cache key to use when there is no connection sharding strategy' : undefined,
 );
 
 export function getWebSocketTransportWithConnectionSharding({ getShard, transport }: Config): IRpcWebSocketTransport {

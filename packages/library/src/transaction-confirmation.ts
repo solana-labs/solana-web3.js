@@ -53,13 +53,13 @@ export function createDefaultDurableNonceTransactionConfirmer({
     const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
-        rpcSubscriptions
+        rpcSubscriptions,
     );
     return async function confirmDurableNonceTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
-        >
+        >,
     ) {
         await waitForDurableNonceTransactionConfirmation({
             ...config,
@@ -76,13 +76,13 @@ export function createDefaultRecentTransactionConfirmer({
     const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory(rpcSubscriptions);
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
-        rpcSubscriptions
+        rpcSubscriptions,
     );
     return async function confirmRecentTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmation>[0],
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
-        >
+        >,
     ) {
         await waitForRecentTransactionConfirmation({
             ...config,
@@ -93,7 +93,7 @@ export function createDefaultRecentTransactionConfirmer({
 }
 
 export async function waitForDurableNonceTransactionConfirmation(
-    config: WaitForDurableNonceTransactionConfirmationConfig
+    config: WaitForDurableNonceTransactionConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
         getSignatureFromTransaction(config.transaction),
@@ -107,12 +107,12 @@ export async function waitForDurableNonceTransactionConfirmation(
                     nonceAccountAddress: transaction.instructions[0].accounts[0].address,
                 }),
             ];
-        }
+        },
     );
 }
 
 export async function waitForRecentTransactionConfirmation(
-    config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
+    config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
         getSignatureFromTransaction(config.transaction),
@@ -124,6 +124,6 @@ export async function waitForRecentTransactionConfirmation(
                     lastValidBlockHeight: transaction.lifetimeConstraint.lastValidBlockHeight,
                 }),
             ];
-        }
+        },
     );
 }

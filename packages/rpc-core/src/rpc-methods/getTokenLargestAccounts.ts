@@ -13,6 +13,6 @@ export interface GetTokenLargestAccountsApi {
         tokenMint: Address,
         config?: Readonly<{
             commitment?: Commitment;
-        }>
+        }>,
     ): GetTokenLargestAccountsApiResponse;
 }

@@ -52,7 +52,7 @@ export async function fromLegacyKeypair(keypair: Keypair, extractable?: boolean)
         privateKeyBytesPkcs8,
         'Ed25519',
         extractable ?? false,
-        ['sign']
+        ['sign'],
     );
     return {
         privateKey,

@@ -14,7 +14,7 @@ export function createDefaultRpcSubscriptionsTransport(
         getShard?: (payload: unknown) => string;
         intervalMs?: number;
         sendBufferHighWatermark?: number;
-    }
+    },
 ): IRpcWebSocketTransport {
     const { getShard, intervalMs, ...rest } = config;
     return pipe(
@@ -34,6 +34,6 @@ export function createDefaultRpcSubscriptionsTransport(
             getWebSocketTransportWithConnectionSharding({
                 getShard,
                 transport,
-            })
+            }),
     );
 }

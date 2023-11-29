@@ -44,7 +44,7 @@ describe('createHttpTransport', () => {
                 expect.anything(),
                 expect.objectContaining({
                     body: JSON.stringify({ ok: true }),
-                })
+                }),
             );
         });
         it('sets the accept header to `application/json`', () => {
@@ -55,7 +55,7 @@ describe('createHttpTransport', () => {
                     headers: expect.objectContaining({
                         accept: 'application/json',
                     }),
-                })
+                }),
             );
         });
         it('sets the content type header to `application/json; charset=utf-8`', () => {
@@ -66,7 +66,7 @@ describe('createHttpTransport', () => {
                     headers: expect.objectContaining({
                         'content-type': 'application/json; charset=utf-8',
                     }),
-                })
+                }),
             );
         });
         it('sets the content length header to the length of the JSON-stringified payload', () => {
@@ -87,7 +87,7 @@ describe('createHttpTransport', () => {
                     headers: expect.objectContaining({
                         'content-length': '30',
                     }),
-                })
+                }),
             );
         });
         it('sets the `method` to `POST`', () => {
@@ -96,7 +96,7 @@ describe('createHttpTransport', () => {
                 expect.anything(),
                 expect.objectContaining({
                     method: 'POST',
-                })
+                }),
             );
         });
     });

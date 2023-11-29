@@ -44,7 +44,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                     ...createJsonRpcMessage('thingSubscribe', [123]),
                     id: expect.any(Number),
                 },
-            })
+            }),
         );
     });
     it('returns from the iterator when the connection iterator returns', async () => {
@@ -124,7 +124,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             expect.objectContaining({
                 method: 'thingUnsubscribe',
                 params: [42],
-            })
+            }),
         );
     });
     it('does not send an unsubscribe request to the transport when aborted if the subscription has not yet been established', async () => {
@@ -136,7 +136,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         expect(send).not.toHaveBeenCalledWith(
             expect.objectContaining({
                 method: 'thingUnsubscribe',
-            })
+            }),
         );
     });
     it('does not send an unsubscribe request to the transport when aborted after the connection iterator returns given an established subscription', async () => {
@@ -164,7 +164,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         expect(send).not.toHaveBeenCalledWith(
             expect.objectContaining({
                 method: 'thingUnsubscribe',
-            })
+            }),
         );
     });
     it('does not send an unsubscribe request to the transport when aborted after the connection iterator fatals given an established subscription', async () => {
@@ -188,7 +188,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         expect(send).not.toHaveBeenCalledWith(
             expect.objectContaining({
                 method: 'thingUnsubscribe',
-            })
+            }),
         );
     });
     it('delivers only messages destined for a particular subscription', async () => {
@@ -215,7 +215,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
             await expect(thingNotificationsPromise).rejects.toThrow('Failed to obtain a subscription id');
-        }
+        },
     );
     it("fatals when called with a method that does not end in 'Notifications'", () => {
         expect(() => {
@@ -280,7 +280,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                         ...createJsonRpcMessage('nonConformingSubscribeAugmented', [123, 'augmented', 'params']),
                         id: expect.any(Number),
                     },
-                })
+                }),
             );
         });
         it('uses the returned unsubscribe method name when unsubscribing', async () => {
@@ -341,7 +341,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .subscribe({ abortSignal: new AbortController().signal });
             await expect(thingNotifications[Symbol.asyncIterator]().next()).resolves.toHaveProperty(
                 'value',
-                '123 processed response'
+                '123 processed response',
             );
         });
     });

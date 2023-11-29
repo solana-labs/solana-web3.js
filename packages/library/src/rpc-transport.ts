@@ -8,7 +8,7 @@ import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication
  * Lowercasing header names makes it easier to override user-supplied headers.
  */
 function normalizeHeaders<T extends Record<string, string>>(
-    headers: T
+    headers: T,
 ): { [K in keyof T & string as Lowercase<K>]: T[K] } {
     const out: Record<string, string> = {};
     for (const headerName in headers) {
@@ -29,6 +29,6 @@ export function createDefaultRpcTransport(config: Parameters<typeof createHttpTr
                 } as { [overrideHeader: string]: string }),
             },
         }),
-        transport => getRpcTransportWithRequestCoalescing(transport, getSolanaRpcPayloadDeduplicationKey)
+        transport => getRpcTransportWithRequestCoalescing(transport, getSolanaRpcPayloadDeduplicationKey),
     );
 }

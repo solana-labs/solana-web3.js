@@ -66,7 +66,7 @@ describe('createHttpRequest with custom headers', () => {
                 headers: expect.objectContaining({
                     accept: 'application/json',
                 }),
-            })
+            }),
         );
     });
     it('is impossible to override the `Content-Length` header', () => {
@@ -81,7 +81,7 @@ describe('createHttpRequest with custom headers', () => {
                 headers: expect.objectContaining({
                     'content-length': '3',
                 }),
-            })
+            }),
         );
     });
     it('is impossible to override the `Content-Type` header', () => {
@@ -96,7 +96,7 @@ describe('createHttpRequest with custom headers', () => {
                 headers: expect.objectContaining({
                     'content-type': 'application/json; charset=utf-8',
                 }),
-            })
+            }),
         );
     });
     describe('when configured with a forbidden header', () => {

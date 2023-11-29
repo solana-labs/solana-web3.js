@@ -33,7 +33,7 @@ describe('slotsUpdatesNotifications', () => {
                 slot: expect.any(BigInt),
                 timestamp: expect.any(BigInt),
                 type: expect.any(String),
-            })
+            }),
         );
     });
 });

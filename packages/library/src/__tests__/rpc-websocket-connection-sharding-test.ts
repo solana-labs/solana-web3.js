@@ -38,7 +38,7 @@ describe('getWebSocketTransportWithConnectionSharding', () => {
             expect(mockInnerTransport).toHaveBeenCalledWith(
                 expect.objectContaining({
                     payload: 'hello',
-                })
+                }),
             );
         });
         it('sends subsequent messages over the cached connection in the same runloop', async () => {

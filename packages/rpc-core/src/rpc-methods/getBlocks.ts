@@ -14,6 +14,6 @@ export interface GetBlocksApi {
         config?: Readonly<{
             // Defaults to `finalized`
             commitment?: Exclude<Commitment, 'processed'>;
-        }>
+        }>,
     ): GetBlocksApiResponse;
 }

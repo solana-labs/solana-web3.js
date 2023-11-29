@@ -43,7 +43,7 @@ describe('Transaction instruction helpers', () => {
             });
             it('clears the signatures when the fee payer is different than the current one', () => {
                 expect(appendTransactionInstruction(exampleInstruction, txWithSignatures)).not.toHaveProperty(
-                    'signatures'
+                    'signatures',
                 );
             });
         });
@@ -67,7 +67,7 @@ describe('Transaction instruction helpers', () => {
             });
             it('clears the signatures when the fee payer is different than the current one', () => {
                 expect(prependTransactionInstruction(exampleInstruction, txWithSignatures)).not.toHaveProperty(
-                    'signatures'
+                    'signatures',
                 );
             });
         });

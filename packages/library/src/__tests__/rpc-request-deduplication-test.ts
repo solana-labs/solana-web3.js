@@ -29,7 +29,7 @@ describe('getSolanaRpcPayloadDeduplicationKey', () => {
                 jsonrpc: '2.0',
                 method: 'getFoo',
                 params: 'foo',
-            })
+            }),
         ).toMatchInlineSnapshot(`"["getFoo","foo"]"`);
     });
     it('produces identical keys for two materially identical JSON-RPC payloads', () => {
@@ -39,7 +39,7 @@ describe('getSolanaRpcPayloadDeduplicationKey', () => {
                 jsonrpc: '2.0',
                 method: 'getFoo',
                 params: { a: 1, b: { c: [2, 3], d: 4 } },
-            })
+            }),
         ).toEqual(
             /* eslint-disable sort-keys-fix/sort-keys-fix */
             getSolanaRpcPayloadDeduplicationKey({
@@ -47,7 +47,7 @@ describe('getSolanaRpcPayloadDeduplicationKey', () => {
                 method: 'getFoo',
                 params: { b: { d: 4, c: [2, 3] }, a: 1 },
                 id: 2,
-            })
+            }),
             /* eslint-enable sort-keys-fix/sort-keys-fix */
         );
     });

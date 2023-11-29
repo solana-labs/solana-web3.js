@@ -42,15 +42,15 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
         signMessages: messages =>
             Promise.all(
                 messages.map(async message =>
-                    Object.freeze({ [address]: await signBytes(keyPair.privateKey, message.content) })
-                )
+                    Object.freeze({ [address]: await signBytes(keyPair.privateKey, message.content) }),
+                ),
             ),
         signTransactions: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
                     const signedTransaction = await partiallySignTransaction([keyPair], transaction);
                     return Object.freeze({ [address]: signedTransaction.signatures[address] });
-                })
+                }),
             ),
     };
 

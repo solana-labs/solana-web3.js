@@ -10,7 +10,7 @@ export type TransactionModifyingSigner<TAddress extends string = string> = Reado
     address: Address<TAddress>;
     modifyAndSignTransactions<TTransaction extends CompilableTransaction>(
         transactions: readonly TTransaction[],
-        config?: TransactionModifyingSignerConfig
+        config?: TransactionModifyingSignerConfig,
     ): Promise<readonly TTransaction[]>;
 }>;
 

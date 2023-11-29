@@ -27,6 +27,6 @@ export interface GetInflationGovernorApi {
         config?: Readonly<{
             // Defaults to `finalized`
             commitment?: Commitment;
-        }>
+        }>,
     ): GetInflationGovernorApiResponse;
 }

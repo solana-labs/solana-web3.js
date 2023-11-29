@@ -88,7 +88,7 @@ describe('assertIsSignature()', () => {
             expect(() => {
                 assertIsSignature(
                     // 63 bytes [128, ..., 128]
-                    '1'.repeat(63)
+                    '1'.repeat(63),
                 );
             }).toThrow();
         });
@@ -99,16 +99,16 @@ describe('assertIsSignature()', () => {
 
                 // example signatures
                 assertIsSignature(
-                    '5HkW5GttYoahVHaujuxEyfyq7RwvoKpc94ko5Fq9GuYdyhejg9cHcqm1MjEvHsjaADRe6hVBqB2E4RQgGgxeA2su'
+                    '5HkW5GttYoahVHaujuxEyfyq7RwvoKpc94ko5Fq9GuYdyhejg9cHcqm1MjEvHsjaADRe6hVBqB2E4RQgGgxeA2su',
                 );
                 assertIsSignature(
-                    '2VZm7DkqSKaHxsGiAuVuSkvEbGWf7JrfRdPTw42WKuJC8qw7yQbGL5AE7UxHH3tprgmT9EVbambnK9h3PLpvMvES'
+                    '2VZm7DkqSKaHxsGiAuVuSkvEbGWf7JrfRdPTw42WKuJC8qw7yQbGL5AE7UxHH3tprgmT9EVbambnK9h3PLpvMvES',
                 );
                 assertIsSignature(
-                    '5sXRtm61WrRGRTjJ6f2anKUWt86Y4V9gWU4WUpue4T4Zh6zuvFoSyaX5LkEtChfqVC8oHdqLo2eUXbhVduThBdfG'
+                    '5sXRtm61WrRGRTjJ6f2anKUWt86Y4V9gWU4WUpue4T4Zh6zuvFoSyaX5LkEtChfqVC8oHdqLo2eUXbhVduThBdfG',
                 );
                 assertIsSignature(
-                    '2Dy6Qai5JyChoP4BKoh9KAYhpD96CUhmEce1GJ8HpV5h8Q4CgUt8KZQzhVNDEQYcjARxYyBNhNjhKUGC2XLZtCCm'
+                    '2Dy6Qai5JyChoP4BKoh9KAYhpD96CUhmEce1GJ8HpV5h8Q4CgUt8KZQzhVNDEQYcjARxYyBNhNjhKUGC2XLZtCCm',
                 );
             }).not.toThrow();
         });
@@ -134,13 +134,13 @@ describe('assertIsSignature()', () => {
                     } catch {}
                     expect(mockEncode).toHaveBeenCalledTimes(1);
                 });
-            }
+            },
         );
         it('does not attempt to decode too-short input strings', () => {
             try {
                 assertIsSignature(
                     // 63 bytes [0, ..., 0]
-                    '1'.repeat(63)
+                    '1'.repeat(63),
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
@@ -150,7 +150,7 @@ describe('assertIsSignature()', () => {
             try {
                 assertIsSignature(
                     // 65 bytes [0, 255, ..., 255]
-                    '167rpwLCuS5DGA8KGZXKsVQ7dnPb9goRLoKfgGbLfQg9WoLUgNY77E2jT11fem3coV9nAkguBACzrU1iyZM4B8roQ'
+                    '167rpwLCuS5DGA8KGZXKsVQ7dnPb9goRLoKfgGbLfQg9WoLUgNY77E2jT11fem3coV9nAkguBACzrU1iyZM4B8roQ',
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
@@ -178,7 +178,7 @@ describe('sign', () => {
             MOCK_PKCS8_PRIVATE_KEY,
             'Ed25519',
             /* extractable */ false,
-            ['sign']
+            ['sign'],
         );
         const signature = await signBytes(privateKey, MOCK_DATA);
         expect(signature).toEqual(MOCK_DATA_SIGNATURE);
@@ -201,7 +201,7 @@ describe('verify', () => {
             MOCK_PUBLIC_KEY_BYTES,
             'Ed25519',
             /* extractable */ false,
-            ['verify']
+            ['verify'],
         );
     });
     it('returns `true` when the correct signature is supplied for a given payload', async () => {

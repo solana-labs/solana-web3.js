@@ -71,7 +71,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion?: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails: 'none';
-            }>
+            }>,
     ): GetBlockApiResponseBase | null;
     // transactionDetails=none, rewards=missing/true, encoding + maxSupportedTransactionVersion irrelevant
     getBlock(
@@ -82,7 +82,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion?: GetBlockMaxSupportedTransactionVersion;
                 rewards?: true;
                 transactionDetails: 'none';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithRewards) | null;
     // transactionDetails=signatures, rewards=false, encoding + maxSupportedTransactionVersion irrelevant
     getBlock(
@@ -93,7 +93,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion?: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails: 'signatures';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithSignatures) | null;
     // transactionDetails=signatures, rewards=missing/true, encoding + maxSupportedTransactionVersion irrelevant
     getBlock(
@@ -104,7 +104,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion?: GetBlockMaxSupportedTransactionVersion;
                 rewards?: true;
                 transactionDetails: 'signatures';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithRewards & GetBlockApiResponseWithSignatures) | null;
     // transactionDetails=accounts, rewards=false, maxSupportedTransactionVersion=0, encoding irrelevant
     getBlock(
@@ -115,7 +115,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithTransactions<TransactionForAccounts<GetBlockMaxSupportedTransactionVersion>>)
@@ -128,7 +128,7 @@ export interface GetBlockApi {
                 encoding?: GetBlockEncoding;
                 rewards: false;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithTransactions<TransactionForAccounts<void>>) | null;
     // transactionDetails=accounts, rewards=missing/true, maxSupportedTransactionVersion=0, encoding irrelevant
     getBlock(
@@ -139,7 +139,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards?: true;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -153,7 +153,7 @@ export interface GetBlockApi {
                 encoding?: GetBlockEncoding;
                 rewards?: true;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -168,7 +168,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithTransactions<TransactionForFullBase58<GetBlockMaxSupportedTransactionVersion>>)
@@ -181,7 +181,7 @@ export interface GetBlockApi {
                 encoding: 'base58';
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithTransactions<TransactionForFullBase58<void>>) | null;
     // transactionDetails=full (default), encoding=base58, rewards=missing/true, maxSupportedTransactionVersion=0
     getBlock(
@@ -192,7 +192,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -206,7 +206,7 @@ export interface GetBlockApi {
                 encoding: 'base58';
                 rewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -221,7 +221,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithTransactions<TransactionForFullBase64<GetBlockMaxSupportedTransactionVersion>>)
@@ -234,7 +234,7 @@ export interface GetBlockApi {
                 encoding: 'base64';
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithTransactions<TransactionForFullBase64<void>>) | null;
     // transactionDetails=full (default), encoding=base64, rewards=missing/true, maxSupportedTransactionVersion=0
     getBlock(
@@ -245,7 +245,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -259,7 +259,7 @@ export interface GetBlockApi {
                 encoding: 'base64';
                 rewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -274,7 +274,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithTransactions<TransactionForFullJsonParsed<GetBlockMaxSupportedTransactionVersion>>)
@@ -287,7 +287,7 @@ export interface GetBlockApi {
                 encoding: 'jsonParsed';
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithTransactions<TransactionForFullJsonParsed<void>>) | null;
     // transactionDetails=full (default), encoding=jsonParsed, rewards=missing/true, maxSupportedTransactionVersion=0
     getBlock(
@@ -298,7 +298,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards?: boolean;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -312,7 +312,7 @@ export interface GetBlockApi {
                 encoding: 'jsonParsed';
                 rewards?: boolean;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -327,7 +327,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithTransactions<TransactionForFullJson<GetBlockMaxSupportedTransactionVersion>>)
@@ -340,7 +340,7 @@ export interface GetBlockApi {
                 encoding?: 'json';
                 rewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): (GetBlockApiResponseBase & GetBlockApiResponseWithTransactions<TransactionForFullJson<void>>) | null;
     // transactionDetails=full (default), encoding=json (default), rewards=missing/true, maxSupportedTransactionVersion=0
     getBlock(
@@ -351,7 +351,7 @@ export interface GetBlockApi {
                 maxSupportedTransactionVersion: GetBlockMaxSupportedTransactionVersion;
                 rewards?: boolean;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &
@@ -365,7 +365,7 @@ export interface GetBlockApi {
                 encoding?: 'json';
                 rewards?: boolean;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ):
         | (GetBlockApiResponseBase &
               GetBlockApiResponseWithRewards &

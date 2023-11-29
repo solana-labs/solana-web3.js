@@ -40,8 +40,8 @@ function upsert(
     addressMap: AddressMap,
     address: Address,
     update: (
-        entry: FeePayerAccountEntry | LookupTableAccountEntry | StaticAccountEntry | Record<never, never>
-    ) => AddressMap[Address]
+        entry: FeePayerAccountEntry | LookupTableAccountEntry | StaticAccountEntry | Record<never, never>,
+    ) => AddressMap[Address],
 ) {
     addressMap[address] = update(addressMap[address] ?? { role: AccountRole.READONLY });
 }
@@ -65,14 +65,14 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                             throw new Error(
                                 'This transaction includes an address ' +
                                     `(\`${instruction.programAddress}\`) which is both invoked ` +
-                                    'and set as the fee payer. Program addresses may not pay fees.'
+                                    'and set as the fee payer. Program addresses may not pay fees.',
                             );
                         default:
                             // TODO: Coded error.
                             throw new Error(
                                 'This transaction includes an address ' +
                                     `(\`${instruction.programAddress}\`) which is both invoked ` +
-                                    'and marked writable. Program addresses may not be writable.'
+                                    'and marked writable. Program addresses may not be writable.',
                             );
                     }
                 }
@@ -108,7 +108,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                     // ...and sorts before the existing one.
                                     (addressComparator ||= getAddressComparator())(
                                         accountMeta.lookupTableAddress,
-                                        entry.lookupTableAddress
+                                        entry.lookupTableAddress,
                                     ) < 0;
                                 if (shouldReplaceEntry) {
                                     return {
@@ -146,7 +146,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                         'This transaction includes an address ' +
                                             `(\`${account.address}\`) which is both invoked and ` +
                                             'marked writable. Program addresses may not be ' +
-                                            'writable.'
+                                            'writable.',
                                     );
                                 }
                                 if (entry.role !== nextRole) {

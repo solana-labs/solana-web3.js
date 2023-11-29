@@ -87,7 +87,7 @@ export function getSetDecoder<T>(item: Decoder<T>, config: SetCodecConfig<Number
  */
 export function getSetCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    config: SetCodecConfig<NumberCodec> = {}
+    config: SetCodecConfig<NumberCodec> = {},
 ): Codec<Set<T>, Set<U>> {
     return combineCodec(getSetEncoder(item, config), getSetDecoder(item, config));
 }

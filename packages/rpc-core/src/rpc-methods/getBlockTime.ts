@@ -11,6 +11,6 @@ export interface GetBlockTimeApi {
      */
     getBlockTime(
         /** block number, identified by Slot */
-        blockNumber: Slot
+        blockNumber: Slot,
     ): GetBlockTimeApiResponse;
 }

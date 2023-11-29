@@ -17,7 +17,7 @@ export function createDefaultAirdropRequester({ rpc, rpcSubscriptions }: Airdrop
         rpcSubscriptions,
     });
     return async function requestAirdrop(
-        config: Omit<Parameters<typeof requestAndConfirmAirdrop>[0], 'confirmSignatureOnlyTransaction' | 'rpc'>
+        config: Omit<Parameters<typeof requestAndConfirmAirdrop>[0], 'confirmSignatureOnlyTransaction' | 'rpc'>,
     ) {
         return await requestAndConfirmAirdrop({
             ...config,

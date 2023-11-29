@@ -15,6 +15,6 @@ export interface RequestAirdropApi {
     requestAirdrop(
         recipientAccount: Address,
         lamports: LamportsUnsafeBeyond2Pow53Minus1,
-        config?: RequestAirdropConfig
+        config?: RequestAirdropConfig,
     ): RequestAirdropResponse;
 }

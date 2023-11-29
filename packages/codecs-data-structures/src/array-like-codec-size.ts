@@ -24,7 +24,7 @@ export function decodeArrayLikeCodecSize(
     size: ArrayLikeCodecSize<NumberDecoder>,
     childrenSizes: (number | null)[],
     bytes: Uint8Array,
-    offset: Offset
+    offset: Offset,
 ): [number | bigint, Offset] {
     if (typeof size === 'number') {
         return [size, offset];
@@ -46,7 +46,7 @@ export function decodeArrayLikeCodecSize(
             throw new Error(
                 `The remainder of the byte array (${remainder} bytes) cannot be split into chunks of ${childrenSize} bytes. ` +
                     `Codecs of "remainder" size must have a remainder that is a multiple of its item size. ` +
-                    `In other words, ${remainder} modulo ${childrenSize} should be equal to zero.`
+                    `In other words, ${remainder} modulo ${childrenSize} should be equal to zero.`,
             );
         }
         return [remainder / childrenSize, offset];
@@ -62,7 +62,7 @@ export function getArrayLikeCodecSizeDescription(size: ArrayLikeCodecSize<CodecD
 
 export function getArrayLikeCodecSizeFromChildren(
     size: ArrayLikeCodecSize<CodecData>,
-    childrenSizes: (number | null)[]
+    childrenSizes: (number | null)[],
 ): number | null {
     if (typeof size !== 'number') return null;
     if (size === 0) return 0;

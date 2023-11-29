@@ -33,7 +33,7 @@ function getCompiledTransactionEncoder(): Encoder<CompiledTransaction> {
         ],
         {
             description: transactionDescription,
-        }
+        },
     );
 }
 
@@ -55,7 +55,7 @@ function getCompiledTransactionDecoder(): Decoder<CompiledTransaction> {
         ],
         {
             description: transactionDescription,
-        }
+        },
     );
 }
 
@@ -66,15 +66,15 @@ export function getTransactionEncoder(): Encoder<
 }
 
 export function getTransactionDecoder(
-    lastValidBlockHeight?: bigint
+    lastValidBlockHeight?: bigint,
 ): Decoder<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
     return mapDecoder(getCompiledTransactionDecoder(), compiledTransaction =>
-        decompileTransaction(compiledTransaction, lastValidBlockHeight)
+        decompileTransaction(compiledTransaction, lastValidBlockHeight),
     );
 }
 
 export function getTransactionCodec(
-    lastValidBlockHeight?: bigint
+    lastValidBlockHeight?: bigint,
 ): Codec<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
     return combineCodec(getTransactionEncoder(), getTransactionDecoder(lastValidBlockHeight));
 }

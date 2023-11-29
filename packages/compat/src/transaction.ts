@@ -29,7 +29,7 @@ import type {
 function convertAccount(
     message: VersionedMessage,
     accountKeys: MessageAccountKeys,
-    accountIndex: number
+    accountIndex: number,
 ): IAccountMeta {
     const accountPublicKey = accountKeys.get(accountIndex);
     if (!accountPublicKey) {
@@ -44,8 +44,8 @@ function convertAccount(
             ? AccountRole.WRITABLE_SIGNER
             : AccountRole.READONLY_SIGNER
         : isWritable
-        ? AccountRole.WRITABLE
-        : AccountRole.READONLY;
+          ? AccountRole.WRITABLE
+          : AccountRole.READONLY;
 
     return {
         address: accountPublicKey.toBase58() as Address,
@@ -56,7 +56,7 @@ function convertAccount(
 function convertInstruction(
     message: VersionedMessage,
     accountKeys: MessageAccountKeys,
-    instruction: MessageCompiledInstruction
+    instruction: MessageCompiledInstruction,
 ): IInstruction {
     const programAddressPublicKey = accountKeys.get(instruction.programIdIndex);
     if (!programAddressPublicKey) {
@@ -65,7 +65,7 @@ function convertInstruction(
     }
 
     const accounts = instruction.accountKeyIndexes.map(accountIndex =>
-        convertAccount(message, accountKeys, accountIndex)
+        convertAccount(message, accountKeys, accountIndex),
     );
 
     return {
@@ -77,7 +77,7 @@ function convertInstruction(
 
 function convertSignatures(
     transaction: VersionedTransaction,
-    staticAccountKeys: PublicKey[]
+    staticAccountKeys: PublicKey[],
 ): ITransactionWithSignatures['signatures'] {
     return transaction.signatures.reduce((acc, sig, index) => {
         // legacy web3js includes a fake all 0 signature if it hasn't been signed
@@ -92,7 +92,7 @@ function convertSignatures(
 
 export function fromVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
-    lastValidBlockHeight?: bigint
+    lastValidBlockHeight?: bigint,
 ): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
@@ -115,7 +115,7 @@ export function fromVersionedTransactionWithBlockhash(
     };
 
     const instructions = transaction.message.compiledInstructions.map(instruction =>
-        convertInstruction(transaction.message, accountKeys, instruction)
+        convertInstruction(transaction.message, accountKeys, instruction),
     );
 
     const signatures = convertSignatures(transaction, accountKeys.staticAccountKeys);
@@ -128,12 +128,12 @@ export function fromVersionedTransactionWithBlockhash(
             instructions.reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
             }, tx),
-        tx => (transaction.signatures.length ? { ...tx, signatures } : tx)
+        tx => (transaction.signatures.length ? { ...tx, signatures } : tx),
     );
 }
 
 export function fromVersionedTransactionWithDurableNonce(
-    transaction: VersionedTransaction
+    transaction: VersionedTransaction,
 ): Transaction & ITransactionWithFeePayer & IDurableNonceTransaction {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
@@ -151,7 +151,7 @@ export function fromVersionedTransactionWithDurableNonce(
     if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
 
     const instructions = transaction.message.compiledInstructions.map(instruction =>
-        convertInstruction(transaction.message, accountKeys, instruction)
+        convertInstruction(transaction.message, accountKeys, instruction),
     );
 
     // Check first instruction is durable nonce + extract params
@@ -188,6 +188,6 @@ export function fromVersionedTransactionWithDurableNonce(
             instructions.slice(1).reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
             }, tx),
-        tx => (transaction.signatures.length ? { ...tx, signatures } : tx)
+        tx => (transaction.signatures.length ? { ...tx, signatures } : tx),
     );
 }

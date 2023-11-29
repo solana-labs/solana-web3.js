@@ -45,7 +45,7 @@ export function getAddressTableLookupEncoder(): Encoder<AddressTableLookup> {
                     }) as Encoder<readonly number[]>,
                 ],
             ],
-            { description: addressTableLookupDescription }
+            { description: addressTableLookupDescription },
         );
     }
 
@@ -73,7 +73,7 @@ export function getAddressTableLookupDecoder(): Decoder<AddressTableLookup> {
                     }),
                 ],
             ],
-            { description: addressTableLookupDescription }
+            { description: addressTableLookupDescription },
         );
     }
 

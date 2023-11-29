@@ -70,7 +70,7 @@ let publicKeyBytesStore: WeakMap<CryptoKey, Uint8Array> | undefined;
 function createKeyPairFromBytes(
     bytes: Uint8Array,
     extractable: boolean,
-    keyUsages: readonly KeyUsage[]
+    keyUsages: readonly KeyUsage[],
 ): CryptoKeyPair {
     const keyPair = createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(extractable, keyUsages);
     const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
@@ -81,7 +81,7 @@ function createKeyPairFromBytes(
 
 function createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(
     extractable: boolean,
-    keyUsages: readonly KeyUsage[]
+    keyUsages: readonly KeyUsage[],
 ): CryptoKeyPair {
     if (keyUsages.length === 0) {
         throw new DOMException('Usages cannot be empty when creating a key.', 'SyntaxError');
@@ -202,7 +202,7 @@ export function importKeyPolyfill(
     format: KeyFormat,
     keyData: BufferSource,
     extractable: boolean,
-    keyUsages: readonly KeyUsage[]
+    keyUsages: readonly KeyUsage[],
 ): CryptoKey {
     const bytes = bufferSourceToUint8Array(keyData);
 

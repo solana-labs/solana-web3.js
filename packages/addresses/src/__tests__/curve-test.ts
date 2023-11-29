@@ -27,7 +27,7 @@ describe('compressedPointBytesAreOnCurve', () => {
         async bytes => {
             expect.assertions(1);
             await expect(compressedPointBytesAreOnCurve(bytes)).resolves.toBe(false);
-        }
+        },
     );
     it.each(ON_CURVE_KEY_BYTES)('returns true when a public key lies on the Ed25519 curve [%#]', async bytes => {
         expect.assertions(1);

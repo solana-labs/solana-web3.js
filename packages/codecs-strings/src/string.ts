@@ -18,7 +18,7 @@ import { getUtf8Decoder, getUtf8Encoder } from './utf8';
 /** Defines the config for string codecs. */
 export type StringCodecConfig<
     TPrefix extends NumberCodec | NumberEncoder | NumberDecoder,
-    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>
+    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>,
 > = BaseCodecConfig & {
     /**
      * The size of the string. It can be one of the following:
