@@ -13,14 +13,14 @@ describe('getCompiledInstructions', () => {
     it('compiles no account indices when are no accounts', () => {
         const compiledInstructions = getCompiledInstructions(
             [{ programAddress: getMockAddress() }],
-            [] as unknown as OrderedAccounts
+            [] as unknown as OrderedAccounts,
         );
         expect(compiledInstructions[0]).not.toHaveProperty('accountIndices');
     });
     it('compiles no data when there is no data', () => {
         const compiledInstructions = getCompiledInstructions(
             [{ programAddress: getMockAddress() }],
-            [] as unknown as OrderedAccounts
+            [] as unknown as OrderedAccounts,
         );
         expect(compiledInstructions[0]).not.toHaveProperty('data');
     });
@@ -65,7 +65,7 @@ describe('getCompiledInstructions', () => {
         const expectedData = new Uint8Array([1, 2, 3]);
         const compiledInstructions = getCompiledInstructions(
             [{ data: expectedData, programAddress: getMockAddress() }],
-            [] as unknown as OrderedAccounts
+            [] as unknown as OrderedAccounts,
         );
         expect(compiledInstructions[0]).toHaveProperty('data', expectedData);
     });

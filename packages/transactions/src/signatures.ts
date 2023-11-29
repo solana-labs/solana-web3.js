@@ -19,7 +19,7 @@ export interface ITransactionWithSignatures {
 let base58Decoder: Decoder<string> | undefined;
 
 export function getSignatureFromTransaction(
-    transaction: ITransactionWithFeePayer & ITransactionWithSignatures
+    transaction: ITransactionWithFeePayer & ITransactionWithSignatures,
 ): Signature {
     if (!base58Decoder) base58Decoder = getBase58Decoder();
 
@@ -28,7 +28,7 @@ export function getSignatureFromTransaction(
         // TODO: Coded error.
         throw new Error(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.'
+                'has been signed by its fee payer.',
         );
     }
     const transactionSignature = base58Decoder.decode(signatureBytes)[0];
@@ -37,7 +37,7 @@ export function getSignatureFromTransaction(
 
 export async function partiallySignTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): Promise<TTransaction & ITransactionWithSignatures> {
     const compiledMessage = compileMessage(transaction);
     const nextSignatures: Record<Address, SignatureBytes> =
@@ -45,8 +45,8 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
     const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);
     const publicKeySignaturePairs = await Promise.all(
         keyPairs.map(keyPair =>
-            Promise.all([getAddressFromPublicKey(keyPair.publicKey), signBytes(keyPair.privateKey, wireMessageBytes)])
-        )
+            Promise.all([getAddressFromPublicKey(keyPair.publicKey), signBytes(keyPair.privateKey, wireMessageBytes)]),
+        ),
     );
     for (const [signerPublicKey, signature] of publicKeySignaturePairs) {
         nextSignatures[signerPublicKey] = signature;
@@ -61,7 +61,7 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
 
 export async function signTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): Promise<TTransaction & IFullySignedTransaction> {
     const out = await partiallySignTransaction(keyPairs, transaction);
     assertTransactionIsFullySigned(out);
@@ -70,7 +70,7 @@ export async function signTransaction<TTransaction extends CompilableTransaction
 }
 
 export function assertTransactionIsFullySigned<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction & ITransactionWithSignatures
+    transaction: TTransaction & ITransactionWithSignatures,
 ): asserts transaction is TTransaction & IFullySignedTransaction {
     const signerAddressesFromInstructions = transaction.instructions
         .flatMap(i => i.accounts?.filter(a => isSignerRole(a.role)) ?? [])

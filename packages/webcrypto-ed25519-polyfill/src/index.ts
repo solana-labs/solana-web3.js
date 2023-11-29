@@ -70,7 +70,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
                                     'environment that supports Ed25519 key manipulation ' +
                                     'natively. Falling back to the native implementation. ' +
                                     'Consider including this polyfill only in environments where ' +
-                                    'Ed25519 is not supported.'
+                                    'Ed25519 is not supported.',
                             );
                         }
                         if (originalSubtleCrypto.generateKey !== originalGenerateKey) {
@@ -164,7 +164,7 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
                                     'environment that supports Ed25519 key manipulation ' +
                                     'natively. Falling back to the native implementation. ' +
                                     'Consider including this polyfill only in environments where ' +
-                                    'Ed25519 is not supported.'
+                                    'Ed25519 is not supported.',
                             );
                         }
                         if (originalSubtleCrypto.importKey !== originalImportKey) {

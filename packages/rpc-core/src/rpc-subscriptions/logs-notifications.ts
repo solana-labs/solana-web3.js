@@ -34,6 +34,6 @@ export interface LogsNotificationsApi {
      */
     logsNotifications(
         filter: LogsNotificationsApiFilter,
-        config?: LogsNotificationsApiConfig
+        config?: LogsNotificationsApiConfig,
     ): LogsNotificationsApiNotification;
 }

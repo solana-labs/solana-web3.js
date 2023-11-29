@@ -56,7 +56,7 @@ interface SendTransactionConfigWithoutEncoding extends Omit<NonNullable<SendTran
 
 function getSendTransactionConfigWithAdjustedPreflightCommitment(
     commitment: Commitment,
-    config?: SendTransactionConfigWithoutEncoding
+    config?: SendTransactionConfigWithoutEncoding,
 ): SendTransactionConfigWithoutEncoding | void {
     if (
         // The developer has supplied no value for `preflightCommitment`.
@@ -107,7 +107,7 @@ export function createDefaultDurableNonceTransactionSender({
         config: Omit<
             Parameters<typeof sendAndConfirmDurableNonceTransaction>[0],
             'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
-        >
+        >,
     ): Promise<void> {
         await sendAndConfirmDurableNonceTransaction({
             ...config,
@@ -131,7 +131,7 @@ export function createDefaultTransactionSender({
         config: Omit<
             Parameters<typeof sendAndConfirmTransaction>[0],
             'confirmRecentTransaction' | 'rpc' | 'transaction'
-        >
+        >,
     ): Promise<void> {
         await sendAndConfirmTransaction({
             ...config,

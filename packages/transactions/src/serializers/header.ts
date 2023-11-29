@@ -73,7 +73,7 @@ export function getMessageHeaderEncoder(): Encoder<MessageHeader> {
         ],
         {
             description: messageHeaderDescription,
-        }
+        },
     );
 }
 
@@ -86,7 +86,7 @@ export function getMessageHeaderDecoder(): Decoder<MessageHeader> {
         ],
         {
             description: messageHeaderDescription,
-        }
+        },
     );
 }
 
@@ -99,6 +99,6 @@ export function getMessageHeaderCodec(): Codec<MessageHeader> {
         ],
         {
             description: messageHeaderDescription,
-        }
+        },
     );
 }

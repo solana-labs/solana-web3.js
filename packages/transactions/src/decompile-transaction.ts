@@ -60,7 +60,7 @@ function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
 
 function convertInstruction(
     instruction: CompiledMessage['instructions'][0],
-    accountMetas: IAccountMeta[]
+    accountMetas: IAccountMeta[],
 ): IInstruction {
     const programAddress = accountMetas[instruction.programAddressIndex]?.address;
     if (!programAddress) {
@@ -92,7 +92,7 @@ type LifetimeConstraint =
 function getLifetimeConstraint(
     messageLifetimeToken: string,
     firstInstruction?: IInstruction,
-    lastValidBlockHeight?: bigint
+    lastValidBlockHeight?: bigint,
 ): LifetimeConstraint {
     if (!firstInstruction || !isAdvanceNonceAccountInstruction(firstInstruction)) {
         // first instruction is not advance durable nonce, so use blockhash lifetime constraint
@@ -134,7 +134,7 @@ function convertSignatures(compiledTransaction: CompiledTransaction): ITransacti
 
 export function decompileTransaction(
     compiledTransaction: CompiledTransaction,
-    lastValidBlockHeight?: bigint
+    lastValidBlockHeight?: bigint,
 ): CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures) {
     const { compiledMessage } = compiledTransaction;
 
@@ -151,14 +151,14 @@ export function decompileTransaction(
     const accountMetas = getAccountMetas(compiledMessage);
 
     const instructions: IInstruction[] = compiledMessage.instructions.map(compiledInstruction =>
-        convertInstruction(compiledInstruction, accountMetas)
+        convertInstruction(compiledInstruction, accountMetas),
     );
 
     const firstInstruction = instructions[0];
     const lifetimeConstraint = getLifetimeConstraint(
         compiledMessage.lifetimeToken,
         firstInstruction,
-        lastValidBlockHeight
+        lastValidBlockHeight,
     );
 
     const signatures = convertSignatures(compiledTransaction);
@@ -174,6 +174,6 @@ export function decompileTransaction(
             'blockhash' in lifetimeConstraint
                 ? setTransactionLifetimeUsingBlockhash(lifetimeConstraint, tx)
                 : setTransactionLifetimeUsingDurableNonce(lifetimeConstraint, tx),
-        tx => (compiledTransaction.signatures.length ? { ...tx, signatures } : tx)
+        tx => (compiledTransaction.signatures.length ? { ...tx, signatures } : tx),
     );
 }

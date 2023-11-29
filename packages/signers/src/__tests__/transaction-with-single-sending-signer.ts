@@ -83,7 +83,7 @@ describe('assertIsTransactionWithSingleSendingSigner', () => {
 
         // Then we expect the assertion to fail.
         expect(() => assertIsTransactionWithSingleSendingSigner(transaction)).toThrow(
-            'More than one `TransactionSendingSigner` was identified'
+            'More than one `TransactionSendingSigner` was identified',
         );
     });
 
@@ -95,7 +95,7 @@ describe('assertIsTransactionWithSingleSendingSigner', () => {
 
         // Then we expect the assertion to fail.
         expect(() => assertIsTransactionWithSingleSendingSigner(transaction)).toThrow(
-            'No `TransactionSendingSigner` was identified'
+            'No `TransactionSendingSigner` was identified',
         );
     });
 });

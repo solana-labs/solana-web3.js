@@ -168,7 +168,7 @@ describe('simulateTransaction', () => {
         describe(`when called with \`${commitment}\` preflight commitment`, () => {
             if (commitment === 'finalized') {
                 it.todo(
-                    'returns the transaction information (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)'
+                    'returns the transaction information (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)',
                 );
                 return;
             }
@@ -191,9 +191,9 @@ describe('simulateTransaction', () => {
                                 0x01, // Length of signatures
                                 ...signature,
                                 ...message,
-                            ])
+                            ]),
                         ).toString('base64') as Base64EncodedWireTransaction,
-                        { commitment, encoding: 'base64' }
+                        { commitment, encoding: 'base64' },
                     )
                     .send();
 
@@ -230,13 +230,13 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     commitment: 'processed',
                     encoding: 'base64',
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
-                }
+                },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
@@ -262,13 +262,13 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     commitment: 'processed',
                     encoding: 'base64',
                     sigVerify: true,
-                }
+                },
             )
             .send();
 
@@ -295,13 +295,13 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     commitment: 'processed',
                     encoding: 'base64',
                     sigVerify: false,
-                }
+                },
             )
             .send();
 
@@ -333,13 +333,13 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     commitment: 'processed',
                     encoding: 'base64',
                     replaceRecentBlockhash: false,
-                }
+                },
             )
             .send();
 
@@ -371,13 +371,13 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     commitment: 'processed',
                     encoding: 'base64',
                     replaceRecentBlockhash: true,
-                }
+                },
             )
             .send();
 
@@ -413,16 +413,16 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { commitment: 'processed', encoding: 'base64' }
+                { commitment: 'processed', encoding: 'base64' },
             )
             .send();
 
         await expect(resultPromise).rejects.toMatchObject({
             code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
             message: expect.stringContaining(
-                'invalid value: integer `126`, expected a valid transaction message version'
+                'invalid value: integer `126`, expected a valid transaction message version',
             ),
             name: 'SolanaJsonRpcError',
         });
@@ -440,9 +440,9 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { commitment: 'processed', encoding: 'base64' }
+                { commitment: 'processed', encoding: 'base64' },
             )
             .send();
 
@@ -478,9 +478,9 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { commitment: 'processed', encoding: 'base64' }
+                { commitment: 'processed', encoding: 'base64' },
             )
             .send();
 
@@ -515,7 +515,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -524,7 +524,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -563,7 +563,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -572,7 +572,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -612,7 +612,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -621,7 +621,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -676,7 +676,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -685,7 +685,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -725,7 +725,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -733,7 +733,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -772,7 +772,7 @@ describe('simulateTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
                 {
                     accounts: {
@@ -785,7 +785,7 @@ describe('simulateTransaction', () => {
                     },
                     commitment: 'processed',
                     encoding: 'base64',
-                }
+                },
             )
             .send();
 
@@ -824,8 +824,8 @@ describe('simulateTransaction', () => {
                     0x01, // Length of signatures
                     ...signature,
                     ...message,
-                ])
-            )
+                ]),
+            ),
         );
         const resultPromise = rpc
             .simulateTransaction(base58WireTransaction as Base58EncodedBytes, {

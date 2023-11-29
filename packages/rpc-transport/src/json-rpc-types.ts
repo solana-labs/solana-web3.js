@@ -149,7 +149,7 @@ type Overloads24<T> =
               (...args: A21) => R21,
               (...args: A22) => R22,
               (...args: A23) => R23,
-              (...args: A24) => R24
+              (...args: A24) => R24,
           ]
         : Overloads23<T>;
 type Overloads23<T> = T extends {
@@ -200,7 +200,7 @@ type Overloads23<T> = T extends {
           (...args: A20) => R20,
           (...args: A21) => R21,
           (...args: A22) => R22,
-          (...args: A23) => R23
+          (...args: A23) => R23,
       ]
     : Overloads22<T>;
 type Overloads22<T> = T extends {
@@ -249,7 +249,7 @@ type Overloads22<T> = T extends {
           (...args: A19) => R19,
           (...args: A20) => R20,
           (...args: A21) => R21,
-          (...args: A22) => R22
+          (...args: A22) => R22,
       ]
     : Overloads21<T>;
 type Overloads21<T> = T extends {
@@ -296,7 +296,7 @@ type Overloads21<T> = T extends {
           (...args: A18) => R18,
           (...args: A19) => R19,
           (...args: A20) => R20,
-          (...args: A21) => R21
+          (...args: A21) => R21,
       ]
     : Overloads20<T>;
 type Overloads20<T> = T extends {
@@ -341,7 +341,7 @@ type Overloads20<T> = T extends {
           (...args: A17) => R17,
           (...args: A18) => R18,
           (...args: A19) => R19,
-          (...args: A20) => R20
+          (...args: A20) => R20,
       ]
     : Overloads19<T>;
 type Overloads19<T> = T extends {
@@ -384,7 +384,7 @@ type Overloads19<T> = T extends {
           (...args: A16) => R16,
           (...args: A17) => R17,
           (...args: A18) => R18,
-          (...args: A19) => R19
+          (...args: A19) => R19,
       ]
     : Overloads18<T>;
 type Overloads18<T> = T extends {
@@ -425,7 +425,7 @@ type Overloads18<T> = T extends {
           (...args: A15) => R15,
           (...args: A16) => R16,
           (...args: A17) => R17,
-          (...args: A18) => R18
+          (...args: A18) => R18,
       ]
     : Overloads17<T>;
 type Overloads17<T> = T extends {
@@ -464,7 +464,7 @@ type Overloads17<T> = T extends {
           (...args: A14) => R14,
           (...args: A15) => R15,
           (...args: A16) => R16,
-          (...args: A17) => R17
+          (...args: A17) => R17,
       ]
     : Overloads16<T>;
 type Overloads16<T> = T extends {
@@ -501,7 +501,7 @@ type Overloads16<T> = T extends {
           (...args: A13) => R13,
           (...args: A14) => R14,
           (...args: A15) => R15,
-          (...args: A16) => R16
+          (...args: A16) => R16,
       ]
     : Overloads15<T>;
 type Overloads15<T> = T extends {
@@ -536,7 +536,7 @@ type Overloads15<T> = T extends {
           (...args: A12) => R12,
           (...args: A13) => R13,
           (...args: A14) => R14,
-          (...args: A15) => R15
+          (...args: A15) => R15,
       ]
     : Overloads14<T>;
 type Overloads14<T> = T extends {
@@ -569,7 +569,7 @@ type Overloads14<T> = T extends {
           (...args: A11) => R11,
           (...args: A12) => R12,
           (...args: A13) => R13,
-          (...args: A14) => R14
+          (...args: A14) => R14,
       ]
     : Overloads13<T>;
 type Overloads13<T> = T extends {
@@ -600,7 +600,7 @@ type Overloads13<T> = T extends {
           (...args: A10) => R10,
           (...args: A11) => R11,
           (...args: A12) => R12,
-          (...args: A13) => R13
+          (...args: A13) => R13,
       ]
     : Overloads12<T>;
 type Overloads12<T> = T extends {
@@ -629,7 +629,7 @@ type Overloads12<T> = T extends {
           (...args: A9) => R9,
           (...args: A10) => R10,
           (...args: A11) => R11,
-          (...args: A12) => R12
+          (...args: A12) => R12,
       ]
     : Overloads11<T>;
 type Overloads11<T> = T extends {
@@ -656,7 +656,7 @@ type Overloads11<T> = T extends {
           (...args: A8) => R8,
           (...args: A9) => R9,
           (...args: A10) => R10,
-          (...args: A11) => R11
+          (...args: A11) => R11,
       ]
     : Overloads10<T>;
 type Overloads10<T> = T extends {
@@ -681,7 +681,7 @@ type Overloads10<T> = T extends {
           (...args: A7) => R7,
           (...args: A8) => R8,
           (...args: A9) => R9,
-          (...args: A10) => R10
+          (...args: A10) => R10,
       ]
     : Overloads9<T>;
 type Overloads9<T> = T extends {
@@ -704,7 +704,7 @@ type Overloads9<T> = T extends {
           (...args: A6) => R6,
           (...args: A7) => R7,
           (...args: A8) => R8,
-          (...args: A9) => R9
+          (...args: A9) => R9,
       ]
     : Overloads8<T>;
 type Overloads8<T> = T extends {
@@ -725,7 +725,7 @@ type Overloads8<T> = T extends {
           (...args: A5) => R5,
           (...args: A6) => R6,
           (...args: A7) => R7,
-          (...args: A8) => R8
+          (...args: A8) => R8,
       ]
     : Overloads7<T>;
 type Overloads7<T> = T extends {
@@ -744,7 +744,7 @@ type Overloads7<T> = T extends {
           (...args: A4) => R4,
           (...args: A5) => R5,
           (...args: A6) => R6,
-          (...args: A7) => R7
+          (...args: A7) => R7,
       ]
     : Overloads6<T>;
 type Overloads6<T> = T extends {
@@ -761,7 +761,7 @@ type Overloads6<T> = T extends {
           (...args: A3) => R3,
           (...args: A4) => R4,
           (...args: A5) => R5,
-          (...args: A6) => R6
+          (...args: A6) => R6,
       ]
     : Overloads5<T>;
 type Overloads5<T> = T extends {

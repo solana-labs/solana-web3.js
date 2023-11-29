@@ -27,9 +27,9 @@ export interface IAccountLookupMeta<TAddress extends string = string, TLookupTab
 
 export type ReadonlyAccountLookup<
     TAddress extends string = string,
-    TLookupTableAddress extends string = string
+    TLookupTableAddress extends string = string,
 > = IAccountLookupMeta<TAddress, TLookupTableAddress> & { readonly role: AccountRole.READONLY };
 export type WritableAccountLookup<
     TAddress extends string = string,
-    TLookupTableAddress extends string = string
+    TLookupTableAddress extends string = string,
 > = IAccountLookupMeta<TAddress, TLookupTableAddress> & { readonly role: AccountRole.WRITABLE };

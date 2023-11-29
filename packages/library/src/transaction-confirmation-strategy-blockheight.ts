@@ -7,7 +7,7 @@ type GetBlockHeightExceedencePromiseFn = (config: {
 }) => Promise<void>;
 
 export function createBlockHeightExceedencePromiseFactory(
-    rpcSubscriptions: RpcSubscriptions<SlotNotificationsApi>
+    rpcSubscriptions: RpcSubscriptions<SlotNotificationsApi>,
 ): GetBlockHeightExceedencePromiseFn {
     return async function getBlockHeightExceedencePromise({ abortSignal: callerAbortSignal, lastValidBlockHeight }) {
         const abortController = new AbortController();
@@ -24,7 +24,7 @@ export function createBlockHeightExceedencePromiseFactory(
                     // TODO: Coded error.
                     throw new Error(
                         'The network has progressed past the last block for which this transaction ' +
-                            'could have committed.'
+                            'could have committed.',
                     );
                 }
             }

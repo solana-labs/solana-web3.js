@@ -11,6 +11,6 @@ export interface GetSlotLeaderApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): Address;
 }

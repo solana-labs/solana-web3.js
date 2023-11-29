@@ -377,7 +377,7 @@ describe('signAndSendTransactionWithSigners', () => {
         expect(signerA.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...transaction, signatures: { '1111': '1111_signature' } }],
-            { abortSignal: undefined }
+            { abortSignal: undefined },
         );
 
         // And the returned signature matches the one returned by the sending signer.
@@ -394,12 +394,12 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // When we try to force sign and send this transaction.
         const promise = signAndSendTransactionWithSigners(
-            transaction as typeof transaction & ITransactionWithSingleSendingSigner
+            transaction as typeof transaction & ITransactionWithSingleSendingSigner,
         );
 
         // Then we expect an error letting us know no sending mechanism was provided.
         await expect(promise).rejects.toThrow(
-            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.'
+            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.',
         );
     });
 
@@ -420,7 +420,7 @@ describe('signAndSendTransactionWithSigners', () => {
         // Then the composite signer was used as a sending signer.
         expect(signerA.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...transaction, signatures: { '2222': '2222_signature' } }],
-            { abortSignal: undefined }
+            { abortSignal: undefined },
         );
         expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.modifyAndSignTransactions).not.toHaveBeenCalled();
@@ -486,7 +486,7 @@ describe('signAndSendTransactionWithSigners', () => {
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...transaction, signatures: { '1111': '1111_signature', '3333': '3333_signature' } }],
-            { abortSignal: undefined }
+            { abortSignal: undefined },
         );
     });
 

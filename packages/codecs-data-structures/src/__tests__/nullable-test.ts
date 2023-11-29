@@ -76,7 +76,7 @@ describe('getNullableCodec', () => {
 
         // Fixed nullables must wrap fixed-size items.
         expect(() => nullable(string(), { fixed: true })).toThrow(
-            'Fixed nullables can only be used with fixed-size codecs'
+            'Fixed nullables can only be used with fixed-size codecs',
         );
     });
 

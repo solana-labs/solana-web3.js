@@ -3,7 +3,7 @@ function assertIsSecureContext() {
         // TODO: Coded error.
         throw new Error(
             'Cryptographic operations are only allowed in secure browser contexts. Read more ' +
-                'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts'
+                'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts',
         );
     }
 }
@@ -50,7 +50,7 @@ export async function assertKeyGenerationIsAvailable() {
                 'import `@solana/webcrypto-ed25519-polyfill` before generating keys in ' +
                 'environments that do not support Ed25519.\n\nFor a list of runtimes that ' +
                 'currently support Ed25519 operations, visit ' +
-                'https://github.com/WICG/webcrypto-secure-curves/issues/20'
+                'https://github.com/WICG/webcrypto-secure-curves/issues/20',
         );
     }
 }

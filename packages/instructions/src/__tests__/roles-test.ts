@@ -20,7 +20,7 @@ describe('downgradeRoleToNonSigner', () => {
         'downgrades $role to $expected',
         ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
             expect(downgradeRoleToNonSigner(AccountRole[role])).toBe(AccountRole[expected]);
-        }
+        },
     );
 });
 
@@ -35,7 +35,7 @@ describe('downgradeRoleToReadonly', () => {
         'downgrades $role to $expected',
         ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
             expect(downgradeRoleToReadonly(AccountRole[role])).toBe(AccountRole[expected]);
-        }
+        },
     );
 });
 
@@ -47,7 +47,7 @@ describe('isSignerRole', () => {
         'returns `true` for AccountRole.$role',
         role => {
             expect(isSignerRole(role)).toBe(true);
-        }
+        },
     );
 });
 
@@ -91,7 +91,7 @@ describe('mergeRoles', () => {
             expected: keyof typeof AccountRole;
         }) => {
             expect(mergeRoles(AccountRole[aRole], AccountRole[bRole])).toBe(AccountRole[expected]);
-        }
+        },
     );
 });
 
@@ -106,7 +106,7 @@ describe('upgradeRoleToSigner', () => {
         'upgrades $role to $expected',
         ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
             expect(upgradeRoleToSigner(AccountRole[role])).toBe(AccountRole[expected]);
-        }
+        },
     );
 });
 
@@ -121,6 +121,6 @@ describe('upgradeRoleToWritable', () => {
         'upgrades $role to $expected',
         ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
             expect(upgradeRoleToWritable(AccountRole[role])).toBe(AccountRole[expected]);
-        }
+        },
     );
 });

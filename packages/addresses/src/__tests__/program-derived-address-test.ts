@@ -8,7 +8,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'FN2R9R724eb4WaxeDmDYrUtmJgoSzkBiQMEHELV3ocyg' as Address,
                 seeds: Array(17).fill(''),
-            })
+            }),
         ).rejects.toThrow(/A maximum of 16 seeds/);
     });
     it.each([
@@ -21,7 +21,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: '5eUi55m4FVaDqKubGH9r6ca1TxjmimmXEU9v1WUZJ47Z' as Address,
                 seeds: [oversizedSeed],
-            })
+            }),
         ).rejects.toThrow(/exceeds the maximum length of 32 bytes/);
     });
     it('returns a program derived address given a program address and no seeds', async () => {
@@ -30,7 +30,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'CZ3TbkgUYpDAJVEWpujQhDSgzNTeqbokrJmYa1j4HAZc' as Address,
                 seeds: [],
-            })
+            }),
         ).resolves.toStrictEqual(['9tVtkyCGAHSDDBPwz7895aC3p2gJRjpu2v26o35FTUco', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and no seeds', async () => {
@@ -39,7 +39,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'EfTbwNBrSqSuCNBhWUHsBoBdSMWgRU1S47daqRNgW7aK' as Address,
                 seeds: [],
-            })
+            }),
         ).resolves.toStrictEqual(['CKWT8KZ5GMzKpVRiAULWKPg1LiHt9U3NdAtbuTErHCTq', 251]);
     });
     it('returns a program derived address given a program address and a byte-array seed', async () => {
@@ -48,7 +48,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'FD3PDEvpQ9JXq8tv7FpJPyZrCjWkCnAaTju16gFPdpqP' as Address,
                 seeds: [new Uint8Array([1, 2, 3])],
-            })
+            }),
         ).resolves.toStrictEqual(['9Tj3hpMWacDiZoBe94sjwJQ72zsUVvEQYsrqyy2CfHky', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a byte-array seed', async () => {
@@ -57,7 +57,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: '9HT3iB4oX1aZPH5V8eNUGByKuwhfcKjBQ3x9rfEAuNeF' as Address,
                 seeds: [new Uint8Array([1, 2, 3])],
-            })
+            }),
         ).resolves.toStrictEqual(['EeTcRajHcPh74C5D4GqZePac1wYB7Dj9ChTaNHaTH77V', 251]);
     });
     it('returns a program derived address given a program address and a string seed', async () => {
@@ -66,7 +66,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'EKaNRGA37uiGRyRPMap5EZg9cmbT5mt7KWrGwKwAQ3rK' as Address,
                 seeds: ['hello'],
-            })
+            }),
         ).resolves.toStrictEqual(['6V76gtKMCmVVjrx4sxR9uB868HtZbL3piKEmadC7rSgf', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a string seed', async () => {
@@ -75,7 +75,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: '9PyoV2rqNtoboSvg2JD7GWhM5RQvHGwgdDvK7MCfpgX1' as Address,
                 seeds: ['hello'],
-            })
+            }),
         ).resolves.toStrictEqual(['E6npEurFu1UEbQFh1DsqBvny17XxUK2QPMgxD3Edn3aG', 251]);
     });
     it('returns a program derived address given a program address and a UTF-8 string seed', async () => {
@@ -84,7 +84,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'A5dcVPLJsE2vbf7hkqqyYkYDK9UjUfNxuwGtWF2m2vEz' as Address,
                 seeds: ['\uD83D\uDE80'],
-            })
+            }),
         ).resolves.toStrictEqual(['GYpAzW57Ex4Sw3rp4pq95QrjvtsDyqZsMhSZwqz3NMsE', 255]);
     });
     it('returns a program derived address after having tried multiple bump seeds given a program address and a UTF-8 string seed', async () => {
@@ -93,7 +93,7 @@ describe('getProgramDerivedAddress()', () => {
             getProgramDerivedAddress({
                 programAddress: 'H8gBP21L5ietkHgXcGbgQBCVVEdPUQyuP9Q5MPRLLSJu' as Address,
                 seeds: ['\uD83D\uDE80'],
-            })
+            }),
         ).resolves.toStrictEqual(['46v3JvPtEPeQmH3euXydEbxYD6yfxeZjWSzkkYvvM5Pp', 251]);
     });
     it('returns the same result given a program address and two different seed inputs that concatenate to the same bytes', async () => {
@@ -112,7 +112,7 @@ describe('getProgramDerivedAddress()', () => {
     });
     // https://solana.stackexchange.com/questions/7253/what-combination-of-program-address-and-seeds-would-cause-findprogramaddress-t
     it.todo(
-        'fatals when supplied a combination of program address and seeds for which no off-curve point can be found'
+        'fatals when supplied a combination of program address and seeds for which no off-curve point can be found',
     );
 });
 
@@ -124,11 +124,11 @@ describe('createAddressWithSeed', () => {
         const expectedAddress = 'HUKxCeXY6gZohFJFARbLE6L6C9wDEHz1SfK8ENM7QY7z' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).resolves.toEqual(
-            expectedAddress
+            expectedAddress,
         );
 
         await expect(
-            createAddressWithSeed({ baseAddress, programAddress, seed: new Uint8Array([0x73, 0x65, 0x65, 0x64]) })
+            createAddressWithSeed({ baseAddress, programAddress, seed: new Uint8Array([0x73, 0x65, 0x65, 0x64]) }),
         ).resolves.toEqual(expectedAddress);
     });
     it('fails when the seed is longer than 32 bytes', async () => {
@@ -137,7 +137,7 @@ describe('createAddressWithSeed', () => {
         const programAddress = 'FGrddpvjBUAG6VdV4fR8Q2hEZTHS6w4SEveVBgfwbfdm' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'a'.repeat(33) })).rejects.toThrow(
-            'The seed exceeds the maximum length of 32 bytes'
+            'The seed exceeds the maximum length of 32 bytes',
         );
     });
     it('fails with a malicious programAddress meant to produce an address that would collide with a PDA', async () => {
@@ -147,7 +147,7 @@ describe('createAddressWithSeed', () => {
         const programAddress = '4vJ9JU1bJJE96FbKdjWme2JfVK1knU936FHTDZV7AC2' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).rejects.toThrow(
-            'programAddress cannot end with the PDA marker'
+            'programAddress cannot end with the PDA marker',
         );
     });
 });

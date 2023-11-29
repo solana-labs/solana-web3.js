@@ -42,7 +42,7 @@ export class Keypair {
                 'implementation of `Keypair` historically exposed the internal property ' +
                 '`_keypair` but the sham does not. Please eliminate this access of `_keypair` ' +
                 'and replace it with an implementation that makes use of the available public ' +
-                'methods.'
+                'methods.',
         );
     }
     get publicKey(): PublicKey {

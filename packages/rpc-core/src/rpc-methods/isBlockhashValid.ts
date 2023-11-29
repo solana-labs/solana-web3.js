@@ -17,6 +17,6 @@ export interface IsBlockhashValidApi {
             commitment?: Commitment;
             /** The minimum slot that the request can be evaluated at */
             minContextSlot?: Slot;
-        }>
+        }>,
     ): IsBlockhashValidApiResponse;
 }

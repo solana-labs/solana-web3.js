@@ -23,7 +23,7 @@ export class PublicKey<TAddress extends string = string> {
                 '`PublicKey.getBuffer()` is not implemented in the browser and React Native ' +
                     'builds of `@solana/web3.js-legacy-sham`. You may choose to either:\n\n1. ' +
                     'Modify the code that calls `getBuffer()`/`encode()` to instead call ' +
-                    '`toBytes()`, or\n2. Polyfill `globalThis.Buffer`.'
+                    '`toBytes()`, or\n2. Polyfill `globalThis.Buffer`.',
             );
         }
         return Buffer.from(this.#getByteArray());
@@ -45,7 +45,7 @@ export class PublicKey<TAddress extends string = string> {
             'This error is being thrown from `@solana/web3.js-legacy-sham`. The legacy ' +
                 'implementation of `PublicKey` historically exposed the internal property ' +
                 '`_bn` but the sham does not. Please eliminate this access of `_bn` and replace ' +
-                'it with an implementation that makes use of the available public methods.'
+                'it with an implementation that makes use of the available public methods.',
         );
     }
     static createProgramAddress = createUnimplementedFunction('PublicKey#createProgramAddress');

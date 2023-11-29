@@ -14,6 +14,6 @@ export interface GetTokenSupplyApi {
         address: Address,
         config?: Readonly<{
             commitment?: Commitment;
-        }>
+        }>,
     ): GetTokenSupplyApiResponse;
 }

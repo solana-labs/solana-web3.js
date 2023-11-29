@@ -40,7 +40,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base64';
                 withContext: true;
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
 
     getProgramAccounts(
@@ -50,7 +50,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base64';
                 withContext?: boolean;
-            }>
+            }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[];
 
     getProgramAccounts(
@@ -60,7 +60,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base64+zstd';
                 withContext: true;
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
 
     getProgramAccounts(
@@ -70,7 +70,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base64+zstd';
                 withContext?: boolean;
-            }>
+            }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[];
 
     getProgramAccounts(
@@ -79,7 +79,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'jsonParsed';
                 withContext: true;
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[]>;
 
     getProgramAccounts(
@@ -88,7 +88,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'jsonParsed';
                 withContext?: boolean;
-            }>
+            }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[];
 
     getProgramAccounts(
@@ -98,7 +98,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base58';
                 withContext: true;
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
 
     getProgramAccounts(
@@ -108,7 +108,7 @@ export interface GetProgramAccountsApi {
             Readonly<{
                 encoding: 'base58';
                 withContext?: boolean;
-            }>
+            }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[];
 
     getProgramAccounts(
@@ -117,7 +117,7 @@ export interface GetProgramAccountsApi {
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
                 withContext: true;
-            }>
+            }>,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
 
     getProgramAccounts(
@@ -126,6 +126,6 @@ export interface GetProgramAccountsApi {
             GetProgramAccountsApiSliceableCommonConfig &
             Readonly<{
                 withContext?: boolean;
-            }>
+            }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[];
 }

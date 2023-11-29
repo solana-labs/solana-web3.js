@@ -14,6 +14,6 @@ export interface GetBlockHeightApi {
             commitment?: Commitment;
             // The minimum slot that the request can be evaluated at
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetBlockHeightApiResponse;
 }

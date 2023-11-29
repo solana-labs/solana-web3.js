@@ -25,6 +25,6 @@ export interface GetEpochInfoApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetEpochInfoApiResponse;
 }

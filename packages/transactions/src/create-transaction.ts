@@ -5,7 +5,7 @@ type TransactionConfig<TVersion extends TransactionVersion> = Readonly<{
 }>;
 
 export function createTransaction<TVersion extends TransactionVersion>(
-    config: TransactionConfig<TVersion>
+    config: TransactionConfig<TVersion>,
 ): Extract<Transaction, { version: TVersion }>;
 export function createTransaction<TVersion extends TransactionVersion>({
     version,

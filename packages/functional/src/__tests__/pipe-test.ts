@@ -18,24 +18,24 @@ describe('pipe', () => {
                 'test',
                 value => value.toUpperCase(),
                 value => value + '!',
-                value => value.repeat(3)
-            )
+                value => value.repeat(3),
+            ),
         ).toBe('TEST!TEST!TEST!');
         expect(
             pipe(
                 1,
                 value => value + 1,
                 value => value + 2,
-                value => value + 3
-            )
+                value => value + 3,
+            ),
         ).toBe(7);
         expect(
             pipe(
                 1,
                 value => value + 1,
                 value => value * 2,
-                value => value - 1
-            )
+                value => value - 1,
+            ),
         ).toBe(3);
     });
     it('can pipe multiple functions with different types', () => {
@@ -44,16 +44,16 @@ describe('pipe', () => {
                 1,
                 value => value + 1,
                 value => value.toString(),
-                value => value + '!'
-            )
+                value => value + '!',
+            ),
         ).toBe('2!');
         expect(
             pipe(
                 'test',
                 value => value.toUpperCase(),
                 value => value.length,
-                value => value + 1
-            )
+                value => value + 1,
+            ),
         ).toBe(5);
         expect(
             pipe(
@@ -62,8 +62,8 @@ describe('pipe', () => {
                 value => value * 2,
                 value => value - 1,
                 value => value.toString(),
-                value => value + '!'
-            )
+                value => value + '!',
+            ),
         ).toBe('3!');
     });
     describe('mutating objects', () => {
@@ -101,8 +101,8 @@ describe('pipe', () => {
                     { a: 1 },
                     value => combine(value, { b: 2 }),
                     value => combine(value, { c: 3 }),
-                    value => combine(value, { d: 4 })
-                )
+                    value => combine(value, { d: 4 }),
+                ),
             ).toEqual({ a: 1, b: 2, c: 3, d: 4 });
         });
     });
@@ -119,8 +119,8 @@ describe('pipe', () => {
                     [1],
                     value => combine(value, [2]),
                     value => combine(value, [3]),
-                    value => combine(value, [4])
-                )
+                    value => combine(value, [4]),
+                ),
             ).toEqual([1, 2, 3, 4]);
         });
     });
@@ -137,8 +137,8 @@ describe('pipe', () => {
                     'a',
                     value => combine(value, 'b'),
                     value => combine(value, 'c'),
-                    value => combine(value, 'd')
-                )
+                    value => combine(value, 'd'),
+                ),
             ).toBe('abcd');
         });
     });
@@ -173,8 +173,8 @@ describe('pipe', () => {
                 pipe(
                     { a: 1, b: 'test' },
                     value => addOrAppend(value, 'test'),
-                    value => addOrAppend(value, 'test again')
-                )
+                    value => addOrAppend(value, 'test again'),
+                ),
             ).toEqual({
                 a: 1,
                 b: 'test',
@@ -188,8 +188,8 @@ describe('pipe', () => {
                     value => addOrAppend(value, 'test'),
                     value => addOrAppend(value, 'test again'),
                     value => addOrAppend(value, 'test again'),
-                    value => addOrAppend(value, 'test again')
-                )
+                    value => addOrAppend(value, 'test again'),
+                ),
             ).toEqual({
                 a: 1,
                 b: 'test',
@@ -203,8 +203,8 @@ describe('pipe', () => {
                     value => addOrAppend(value, 'test'),
                     value => addOrAppend(value, 'test again'),
                     value => ({ ...value, b: value.b + '!' }),
-                    value => addOrAppend(value, 'test again')
-                )
+                    value => addOrAppend(value, 'test again'),
+                ),
             ).toEqual({
                 a: 1,
                 b: 'test!',
@@ -218,8 +218,8 @@ describe('pipe', () => {
                     value => addOrAppend(value, 'test'),
                     value => addOrAppend(value, 'test again'),
                     value => ({ ...value, b: value.b + '!' }),
-                    value => dropArray(value)
-                )
+                    value => dropArray(value),
+                ),
             ).toEqual({
                 a: 1,
                 b: 'test!',
@@ -233,8 +233,8 @@ describe('pipe', () => {
                     value => addOrAppend(value, 'test again'),
                     value => ({ ...value, b: value.b + '!' }),
                     value => dropArray(value),
-                    value => addOrAppend(value, 'test again')
-                )
+                    value => addOrAppend(value, 'test again'),
+                ),
             ).toEqual({
                 a: 1,
                 b: 'test!',
@@ -259,8 +259,8 @@ describe('pipe', () => {
                     throws,
                     value => value.toUpperCase(),
                     value => value + '!',
-                    value => value.repeat(3)
-                )
+                    value => value.repeat(3),
+                ),
             ).toThrow('test error');
         });
     });
@@ -276,10 +276,10 @@ describe('pipe', () => {
                             1,
                             value => value + 1,
                             value => value * 2,
-                            value => value - 1
-                        )
-                    )
-                )
+                            value => value - 1,
+                        ),
+                    ),
+                ),
             ).toBe(3);
         });
         it('can pipe multiple functions on a nested pipe of multiple functions', () => {
@@ -290,12 +290,12 @@ describe('pipe', () => {
                             1,
                             value => value + 1,
                             value => value * 2,
-                            value => value - 1
-                        )
+                            value => value - 1,
+                        ),
                     ),
                     value => value.toString(),
-                    value => value + '!'
-                )
+                    value => value + '!',
+                ),
             ).toBe('3!');
         });
         it('can pipe an initial value through multiple functions, apply a nested pipe of multiple functions, then apply more functions', () => {
@@ -309,11 +309,11 @@ describe('pipe', () => {
                         pipe(
                             value,
                             value => value.toString(),
-                            value => value + '!'
+                            value => value + '!',
                         ),
                     value => value + '##',
-                    value => value.repeat(2)
-                )
+                    value => value.repeat(2),
+                ),
             ).toBe('3!##3!##');
         });
     });
@@ -329,12 +329,12 @@ describe('pipe', () => {
                         value,
                         value => ({ ...value, e: 5 }),
                         value => ({ ...value, f: 6 }),
-                        value => ({ ...value, g: 7 })
+                        value => ({ ...value, g: 7 }),
                     ),
                 value => ({ ...value, h: 8 }),
                 value => ({ ...value, i: 9 }),
-                value => ({ ...value, j: 10 })
-            )
+                value => ({ ...value, j: 10 }),
+            ),
         ).toEqual({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7, h: 8, i: 9, j: 10 });
     });
     it('can pipe an initial object through multiple functions, apply a nested pipe of multiple functions to one field, then apply more functions', () => {
@@ -358,13 +358,13 @@ describe('pipe', () => {
                         d => {
                             d.push('test a third time');
                             return d;
-                        }
+                        },
                     ),
                 }),
                 value => ({ ...value, e: 5 }),
                 value => ({ ...value, f: 6 }),
-                value => ({ ...value, g: 7 })
-            )
+                value => ({ ...value, g: 7 }),
+            ),
         ).toEqual({
             a: 1,
             b: 2,

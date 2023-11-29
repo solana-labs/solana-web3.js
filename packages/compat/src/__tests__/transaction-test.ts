@@ -20,7 +20,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -46,7 +46,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -97,7 +97,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -149,7 +149,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions,
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -175,14 +175,14 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -217,7 +217,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -229,7 +229,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -266,7 +266,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -276,7 +276,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -291,7 +291,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, 100n);
@@ -310,7 +310,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -336,7 +336,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -387,7 +387,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -439,7 +439,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions,
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction);
@@ -465,14 +465,14 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -507,7 +507,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -519,7 +519,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -556,7 +556,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -566,7 +566,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             oldTransaction.addSignature(otherSigner2PublicKey, otherSignature2);
 
             const transaction = fromVersionedTransactionWithBlockhash(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -581,7 +581,7 @@ describe('fromVersionedTransactionWithBlockhash', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: blockhashString,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithBlockhash(oldTransaction, 100n);
@@ -632,7 +632,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             expect(() => {
@@ -653,7 +653,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             expect(() => {
@@ -669,7 +669,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [nonceAdvanceInstruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
@@ -720,7 +720,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions,
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
@@ -770,14 +770,14 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     // So for our test just use a different account as fee payer
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const signature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(nonceAuthorityAddress, signature);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -793,7 +793,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [nonceAdvanceInstruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -803,7 +803,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             oldTransaction.addSignature(nonceAuthorityAddress, nonceAuthoritySignature);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -836,7 +836,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToLegacyMessage()
+                }).compileToLegacyMessage(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -847,7 +847,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -864,7 +864,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             expect(() => {
@@ -885,7 +885,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [instruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             expect(() => {
@@ -901,7 +901,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [nonceAdvanceInstruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
@@ -952,7 +952,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions,
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const transaction = fromVersionedTransactionWithDurableNonce(oldTransaction);
@@ -1002,14 +1002,14 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     // So for our test just use a different account as fee payer
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const signature = new Uint8Array(Array(64).fill(1));
             oldTransaction.addSignature(nonceAuthorityAddress, signature);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -1025,7 +1025,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     instructions: [nonceAdvanceInstruction],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -1035,7 +1035,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             oldTransaction.addSignature(nonceAuthorityAddress, nonceAuthoritySignature);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
@@ -1068,7 +1068,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
                     ],
                     payerKey: feePayerPublicKey,
                     recentBlockhash: nonce,
-                }).compileToV0Message()
+                }).compileToV0Message(),
             );
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1));
@@ -1079,7 +1079,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             oldTransaction.addSignature(otherSigner1PublicKey, otherSignature1);
 
             const transaction = fromVersionedTransactionWithDurableNonce(
-                oldTransaction
+                oldTransaction,
             ) as unknown as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({

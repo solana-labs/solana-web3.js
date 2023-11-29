@@ -137,7 +137,7 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
                     rawParams,
                     handleIntegerOverflow
                         ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
-                        : undefined
+                        : undefined,
                 );
                 return {
                     methodName,

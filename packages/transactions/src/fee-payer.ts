@@ -12,12 +12,12 @@ export function setTransactionFeePayer<TFeePayerAddress extends string, TTransac
     feePayer: Address<TFeePayerAddress>,
     transaction:
         | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures)
+        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
 ): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithFeePayer<TFeePayerAddress>;
 
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayer: Address<TFeePayerAddress>,
-    transaction: TTransaction | (TTransaction & ITransactionWithFeePayer<string>)
+    transaction: TTransaction | (TTransaction & ITransactionWithFeePayer<string>),
 ): TTransaction & ITransactionWithFeePayer<TFeePayerAddress>;
 
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
@@ -26,7 +26,7 @@ export function setTransactionFeePayer<TFeePayerAddress extends string, TTransac
         | TTransaction
         | (TTransaction & ITransactionWithFeePayer<string>)
         | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures)
+        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
 ) {
     if ('feePayer' in transaction && feePayer === transaction.feePayer) {
         return transaction;

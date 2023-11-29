@@ -18,7 +18,7 @@ describe('KeypairSham', () => {
             // This is basically just complaining that `prototype` is not callable.
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            Keypair[method]()
+            Keypair[method](),
         ).toThrow(`Keypair#${method.toString()} is unimplemented`);
     });
     describe('generate()', () => {

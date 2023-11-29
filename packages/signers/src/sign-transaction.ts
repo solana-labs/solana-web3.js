@@ -24,14 +24,14 @@ type CompilableTransactionWithSigners = CompilableTransaction &
  * It will ignore TransactionSendingSigners since this function does not send the transaction.
  */
 export async function partiallySignTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
+    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
 >(
     transaction: TTransaction,
-    config: { abortSignal?: AbortSignal } = {}
+    config: { abortSignal?: AbortSignal } = {},
 ): Promise<TTransaction & ITransactionWithSignatures> {
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
         deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
-        { identifySendingSigner: false }
+        { identifySendingSigner: false },
     );
 
     return signModifyingAndPartialTransactionSigners(transaction, modifyingSigners, partialSigners, config.abortSignal);
@@ -44,10 +44,10 @@ export async function partiallySignTransactionWithSigners<
  * It will ignore TransactionSendingSigners since this function does not send the transaction.
  */
 export async function signTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
+    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
 >(
     transaction: TTransaction,
-    config: { abortSignal?: AbortSignal } = {}
+    config: { abortSignal?: AbortSignal } = {},
 ): Promise<TTransaction & IFullySignedTransaction> {
     const signedTransaction = await partiallySignTransactionWithSigners(transaction, config);
     assertTransactionIsFullySigned(signedTransaction);
@@ -62,11 +62,11 @@ export async function signTransactionWithSigners<
  */
 export async function signAndSendTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners &
-        ITransactionWithSingleSendingSigner = CompilableTransactionWithSigners & ITransactionWithSingleSendingSigner
+        ITransactionWithSingleSendingSigner = CompilableTransactionWithSigners & ITransactionWithSingleSendingSigner,
 >(transaction: TTransaction, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
-        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner))
+        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
     );
 
     abortSignal?.throwIfAborted();
@@ -74,13 +74,13 @@ export async function signAndSendTransactionWithSigners<
         transaction,
         modifyingSigners,
         partialSigners,
-        abortSignal
+        abortSignal,
     );
 
     if (!sendingSigner) {
         // TODO: Coded error.
         throw new Error(
-            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.'
+            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.',
         );
     }
 
@@ -101,7 +101,7 @@ export async function signAndSendTransactionWithSigners<
  */
 function categorizeTransactionSigners(
     signers: readonly TransactionSigner[],
-    config: { identifySendingSigner?: boolean } = {}
+    config: { identifySendingSigner?: boolean } = {},
 ): Readonly<{
     modifyingSigners: readonly TransactionModifyingSigner[];
     partialSigners: readonly TransactionPartialSigner[];
@@ -116,7 +116,7 @@ function categorizeTransactionSigners(
     // Note that any other sending only signers will be discarded.
     const otherSigners = signers.filter(
         (signer): signer is TransactionModifyingSigner | TransactionPartialSigner =>
-            signer !== sendingSigner && (isTransactionModifyingSigner(signer) || isTransactionPartialSigner(signer))
+            signer !== sendingSigner && (isTransactionModifyingSigner(signer) || isTransactionPartialSigner(signer)),
     );
 
     // Identify the modifying signers from the other signers.
@@ -138,7 +138,7 @@ function identifyTransactionSendingSigner(signers: readonly TransactionSigner[])
 
     // Prefer sending signers that do not offer other interfaces.
     const sendingOnlySigners = sendingSigners.filter(
-        signer => !isTransactionModifyingSigner(signer) && !isTransactionPartialSigner(signer)
+        signer => !isTransactionModifyingSigner(signer) && !isTransactionPartialSigner(signer),
     );
     if (sendingOnlySigners.length > 0) {
         return sendingOnlySigners[0];
@@ -150,7 +150,7 @@ function identifyTransactionSendingSigner(signers: readonly TransactionSigner[])
 
 /** Identifies the best signers to use as TransactionModifyingSigners, if any */
 function identifyTransactionModifyingSigners(
-    signers: readonly (TransactionModifyingSigner | TransactionPartialSigner)[]
+    signers: readonly (TransactionModifyingSigner | TransactionPartialSigner)[],
 ): readonly TransactionModifyingSigner[] {
     // Ensure there are any TransactionModifyingSigner in the first place.
     const modifyingSigners = signers.filter(isTransactionModifyingSigner);
@@ -169,19 +169,22 @@ function identifyTransactionModifyingSigners(
  * sequentially followed by the TransactionPartialSigners in parallel.
  */
 async function signModifyingAndPartialTransactionSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners
+    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
 >(
     transaction: TTransaction,
     modifyingSigners: readonly TransactionModifyingSigner[] = [],
     partialSigners: readonly TransactionPartialSigner[] = [],
-    abortSignal?: AbortSignal
+    abortSignal?: AbortSignal,
 ): Promise<TTransaction & ITransactionWithSignatures> {
     // Handle modifying signers sequentially.
-    const modifiedTransaction = await modifyingSigners.reduce(async (transaction, modifyingSigner) => {
-        abortSignal?.throwIfAborted();
-        const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
-        return Object.freeze(tx);
-    }, Promise.resolve(transaction) as Promise<TTransaction>);
+    const modifiedTransaction = await modifyingSigners.reduce(
+        async (transaction, modifyingSigner) => {
+            abortSignal?.throwIfAborted();
+            const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
+            return Object.freeze(tx);
+        },
+        Promise.resolve(transaction) as Promise<TTransaction>,
+    );
 
     // Handle partial signers in parallel.
     abortSignal?.throwIfAborted();
@@ -189,14 +192,14 @@ async function signModifyingAndPartialTransactionSigners<
         partialSigners.map(async partialSigner => {
             const [signatures] = await partialSigner.signTransactions([modifiedTransaction], { abortSignal });
             return signatures;
-        })
+        }),
     );
     const signedTransaction: TTransaction & ITransactionWithSignatures = {
         ...modifiedTransaction,
         signatures: Object.freeze(
             signatureDictionaries.reduce((signatures, signatureDictionary) => {
                 return { ...signatures, ...signatureDictionary };
-            }, modifiedTransaction.signatures ?? {})
+            }, modifiedTransaction.signatures ?? {}),
         ),
     };
 

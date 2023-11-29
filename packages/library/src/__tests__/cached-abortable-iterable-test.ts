@@ -198,7 +198,7 @@ describe('getCachedAbortableIterableFactory', () => {
             () =>
                 new Promise(r => {
                     resolve = r;
-                })
+                }),
         );
         Promise.all([factory('A'), factory('B')]);
         expect(onCacheHit).not.toHaveBeenCalled();
@@ -225,7 +225,7 @@ describe('getCachedAbortableIterableFactory', () => {
             () =>
                 new Promise(r => {
                     resolve = r;
-                })
+                }),
         );
         factory('A');
         await jest.runAllTimersAsync();

@@ -35,7 +35,7 @@ describe('getMultipleAccounts', () => {
                         ],
                         {
                             commitment,
-                        }
+                        },
                     )
                     .send();
 

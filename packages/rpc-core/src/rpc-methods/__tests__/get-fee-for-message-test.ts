@@ -70,7 +70,7 @@ describe('getFeeForMessage', () => {
         describe(`when called with \`${commitment}\` commitment`, () => {
             if (commitment === 'finalized') {
                 it.todo(
-                    'returns the result as a bigint (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)'
+                    'returns the result as a bigint (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)',
                 );
                 return;
             }
@@ -97,7 +97,7 @@ describe('getFeeForMessage', () => {
                     expect.assertions(1);
                     const message = getMockTransactionMessage(
                         // Randomly generated
-                        'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Blockhash
+                        'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Blockhash,
                     );
                     const result = await rpc.getFeeForMessage(message, { commitment }).send();
                     expect(result).toStrictEqual({

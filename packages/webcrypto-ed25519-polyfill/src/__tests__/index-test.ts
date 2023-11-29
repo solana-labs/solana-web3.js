@@ -135,13 +135,13 @@ describe('generateKey() polyfill', () => {
                             modulusLength: 2048,
                             name: rsaAlgoName,
                             publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                        } as RsaHashedKeyGenParams)
-                )
+                        }) as RsaHashedKeyGenParams,
+                ),
             ),
         ])('fatals when the algorithm is $name/$__variant', async algorithm => {
             expect.assertions(1);
             await expect(() =>
-                globalThis.crypto.subtle.generateKey(algorithm, /* extractable */ false, ['sign', 'verify'])
+                globalThis.crypto.subtle.generateKey(algorithm, /* extractable */ false, ['sign', 'verify']),
             ).rejects.toThrow();
         });
         it('delegates Ed25519 `generateKey` calls to the polyfill', async () => {
@@ -149,7 +149,7 @@ describe('generateKey() polyfill', () => {
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
             await expect(
-                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify']),
             ).resolves.toBe(mockKeyPair);
         });
     });
@@ -188,7 +188,7 @@ describe('generateKey() polyfill', () => {
             const mockKeyPair = {};
             (generateKeyPolyfill as jest.Mock).mockReturnValue(mockKeyPair);
             await expect(
-                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify']),
             ).resolves.toBe(mockKeyPair);
         });
     });
@@ -216,8 +216,8 @@ describe('generateKey() polyfill', () => {
                             modulusLength: 2048,
                             name: rsaAlgoName,
                             publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                        } as RsaHashedKeyGenParams)
-                )
+                        }) as RsaHashedKeyGenParams,
+                ),
             ),
         ])('calls the original `generateKey` when the algorithm is $name/$__variant', async algorithm => {
             expect.assertions(1);
@@ -229,7 +229,7 @@ describe('generateKey() polyfill', () => {
             const mockKeyPair = {};
             (originalGenerateKey as jest.Mock).mockResolvedValue(mockKeyPair);
             await expect(
-                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify'])
+                globalThis.crypto.subtle.generateKey('Ed25519', /* extractable */ false, ['sign', 'verify']),
             ).resolves.toBe(mockKeyPair);
         });
         it('calls the original `generateKey` once per call to `generateKey` when the algorithm is "Ed25519" (parallel version)', async () => {
@@ -442,7 +442,7 @@ describe('verify() polyfill', () => {
             const mockData = new Uint8Array([1, 2, 3]);
             const mockSignature = new Uint8Array(Array(64).fill(1));
             await expect(() =>
-                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData)
+                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData),
             ).rejects.toThrow();
         });
     });
@@ -509,15 +509,15 @@ describe('importKey() polyfill', () => {
                             modulusLength: 2048,
                             name: rsaAlgoName,
                             publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                        } as RsaHashedKeyGenParams)
-                )
+                        }) as RsaHashedKeyGenParams,
+                ),
             ),
         ])('fatals when the algorithm is $name/$__variant', async algorithm => {
             expect.assertions(1);
             await expect(() =>
                 globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, algorithm, /* extractable */ false, [
                     'verify',
-                ])
+                ]),
             ).rejects.toThrow();
         });
         it('delegates Ed25519 `importKey` calls to the polyfill', async () => {
@@ -527,7 +527,7 @@ describe('importKey() polyfill', () => {
             await expect(
                 globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
                     'verify',
-                ])
+                ]),
             ).resolves.toBe(mockKey);
         });
     });
@@ -569,7 +569,7 @@ describe('importKey() polyfill', () => {
                     MOCK_PUBLIC_KEY_BYTES,
                     'Ed25519',
                     /* extractable */ false,
-                    ['verify']
+                    ['verify'],
                 ),
                 expect(originalImportKey).toHaveBeenCalledTimes(1);
         });
@@ -582,7 +582,7 @@ describe('importKey() polyfill', () => {
                 MOCK_PUBLIC_KEY_BYTES,
                 'Ed25519',
                 /* extractable */ false,
-                ['verify']
+                ['verify'],
             );
             expect(key).toBe(mockKey);
         });
@@ -611,8 +611,8 @@ describe('importKey() polyfill', () => {
                             modulusLength: 2048,
                             name: rsaAlgoName,
                             publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                        } as RsaHashedKeyGenParams)
-                )
+                        }) as RsaHashedKeyGenParams,
+                ),
             ),
         ])('calls the original `importKey` when the algorithm is $name/$__variant', async algorithm => {
             expect.assertions(1);
@@ -622,7 +622,7 @@ describe('importKey() polyfill', () => {
                     MOCK_PUBLIC_KEY_BYTES,
                     algorithm,
                     /* extractable */ false,
-                    ['verify']
+                    ['verify'],
                 );
             } catch {
                 // some of these won't work with our mock key data, we just want to make sure they're called
@@ -636,7 +636,7 @@ describe('importKey() polyfill', () => {
             await expect(
                 globalThis.crypto.subtle.importKey('raw', MOCK_PUBLIC_KEY_BYTES, 'Ed25519', /* extractable */ false, [
                     'verify',
-                ])
+                ]),
             ).resolves.toBe(mockKey);
         });
         it('calls the original `importKey` once per call to `importKey` when the algorithm is "Ed25519" (parallel version)', async () => {

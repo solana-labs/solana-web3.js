@@ -62,7 +62,7 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, descripti
 export function fixCodec<T, U extends T = T>(
     codec: Codec<T, U>,
     fixedBytes: number,
-    description?: string
+    description?: string,
 ): Codec<T, U> {
     return combineCodec(fixEncoder(codec, fixedBytes, description), fixDecoder(codec, fixedBytes, description));
 }

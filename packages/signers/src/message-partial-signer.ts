@@ -10,7 +10,7 @@ export type MessagePartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     signMessages(
         messages: readonly SignableMessage[],
-        config?: MessagePartialSignerConfig
+        config?: MessagePartialSignerConfig,
     ): Promise<readonly SignatureDictionary[]>;
 }>;
 

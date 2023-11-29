@@ -63,7 +63,7 @@ export type DataEnumToCodecTuple<T extends DataEnum, U extends T = T> = Array<
               T['__kind'],
               keyof Omit<T, '__kind'> extends never
                   ? Codec<Omit<T, '__kind'>, Omit<U, '__kind'>> | Codec<void>
-                  : Codec<Omit<T, '__kind'>, Omit<U, '__kind'>>
+                  : Codec<Omit<T, '__kind'>, Omit<U, '__kind'>>,
           ]
 >;
 
@@ -75,7 +75,7 @@ export type DataEnumToEncoderTuple<T extends DataEnum> = Array<
               T['__kind'],
               keyof Omit<T, '__kind'> extends never
                   ? Encoder<Omit<T, '__kind'>> | Encoder<void>
-                  : Encoder<Omit<T, '__kind'>>
+                  : Encoder<Omit<T, '__kind'>>,
           ]
 >;
 
@@ -87,7 +87,7 @@ export type DataEnumToDecoderTuple<T extends DataEnum> = Array<
               T['__kind'],
               keyof Omit<T, '__kind'> extends never
                   ? Decoder<Omit<T, '__kind'>> | Decoder<void>
-                  : Decoder<Omit<T, '__kind'>>
+                  : Decoder<Omit<T, '__kind'>>,
           ]
 >;
 
@@ -123,7 +123,7 @@ function dataEnumCodecHelper(variants: Array<[string, CodecData]>, prefix: Codec
  */
 export function getDataEnumEncoder<T extends DataEnum>(
     variants: DataEnumToEncoderTuple<T>,
-    config: DataEnumCodecConfig<NumberEncoder> = {}
+    config: DataEnumCodecConfig<NumberEncoder> = {},
 ): Encoder<T> {
     const prefix = config.size ?? getU8Encoder();
     return {
@@ -135,7 +135,7 @@ export function getDataEnumEncoder<T extends DataEnum>(
                 throw new Error(
                     `Invalid data enum variant. ` +
                         `Expected one of [${variants.map(([key]) => key).join(', ')}], ` +
-                        `got "${variant.__kind}".`
+                        `got "${variant.__kind}".`,
                 );
             }
             const variantPrefix = prefix.encode(discriminator);
@@ -154,7 +154,7 @@ export function getDataEnumEncoder<T extends DataEnum>(
  */
 export function getDataEnumDecoder<T extends DataEnum>(
     variants: DataEnumToDecoderTuple<T>,
-    config: DataEnumCodecConfig<NumberDecoder> = {}
+    config: DataEnumCodecConfig<NumberDecoder> = {},
 ): Decoder<T> {
     const prefix = config.size ?? getU8Decoder();
     return {
@@ -168,7 +168,7 @@ export function getDataEnumDecoder<T extends DataEnum>(
                 // TODO: Coded error.
                 throw new Error(
                     `Enum discriminator out of range. ` +
-                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`
+                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`,
                 );
             }
             const [variant, vOffset] = variantField[1].decode(bytes, offset);
@@ -186,7 +186,7 @@ export function getDataEnumDecoder<T extends DataEnum>(
  */
 export function getDataEnumCodec<T extends DataEnum, U extends T = T>(
     variants: DataEnumToCodecTuple<T, U>,
-    config: DataEnumCodecConfig<NumberCodec> = {}
+    config: DataEnumCodecConfig<NumberCodec> = {},
 ): Codec<T, U> {
     return combineCodec(getDataEnumEncoder<T>(variants, config), getDataEnumDecoder<U>(variants, config));
 }

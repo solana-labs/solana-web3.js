@@ -23,7 +23,7 @@ export type ProgramDerivedAddressBump = number & {
  * Returns true if the input value is a program derived address.
  */
 export function isProgramDerivedAddress<TAddress extends string = string>(
-    value: unknown
+    value: unknown,
 ): value is ProgramDerivedAddress<TAddress> {
     return (
         Array.isArray(value) &&
@@ -40,14 +40,14 @@ export function isProgramDerivedAddress<TAddress extends string = string>(
  * Fails if the input value is not a program derived address.
  */
 export function assertIsProgramDerivedAddress<TAddress extends string = string>(
-    value: unknown
+    value: unknown,
 ): asserts value is ProgramDerivedAddress<TAddress> {
     const validFormat =
         Array.isArray(value) && value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'number';
     if (!validFormat) {
         // TODO: Coded error.
         throw new Error(
-            `Expected given program derived address to have the following format: [Address, ProgramDerivedAddressBump].`
+            `Expected given program derived address to have the following format: [Address, ProgramDerivedAddressBump].`,
         );
     }
     if (value[1] < 0 || value[1] > 255) {
@@ -100,7 +100,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDer
     const programAddressBytes = base58EncodedAddressCodec.encode(programAddress);
     const addressBytesBuffer = await crypto.subtle.digest(
         'SHA-256',
-        new Uint8Array([...seedBytes, ...programAddressBytes, ...PDA_MARKER_BYTES])
+        new Uint8Array([...seedBytes, ...programAddressBytes, ...PDA_MARKER_BYTES]),
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
     if (await compressedPointBytesAreOnCurve(addressBytes)) {
@@ -154,7 +154,7 @@ export async function createAddressWithSeed({ baseAddress, programAddress, seed 
 
     const addressBytesBuffer = await crypto.subtle.digest(
         'SHA-256',
-        new Uint8Array([...encode(baseAddress), ...seedBytes, ...programAddressBytes])
+        new Uint8Array([...encode(baseAddress), ...seedBytes, ...programAddressBytes]),
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
 

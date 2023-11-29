@@ -21,7 +21,7 @@ export const getMockCodec = (
         defaultValue?: string;
         description?: string;
         size?: number | null;
-    } = {}
+    } = {},
 ) => ({
     decode: jest.fn().mockReturnValue([config.defaultValue ?? '', 0]),
     description: config.description ?? 'mock',

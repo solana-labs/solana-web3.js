@@ -23,7 +23,7 @@ function mapCodecHelper(
     key: CodecData,
     value: CodecData,
     size: ArrayLikeCodecSize<CodecData>,
-    description?: string
+    description?: string,
 ): CodecData {
     if (size === 'remainder' && (key.fixedSize === null || value.fixedSize === null)) {
         // TODO: Coded error.
@@ -48,7 +48,7 @@ function mapCodecHelper(
 export function getMapEncoder<K, V>(
     key: Encoder<K>,
     value: Encoder<V>,
-    config: MapCodecConfig<NumberEncoder> = {}
+    config: MapCodecConfig<NumberEncoder> = {},
 ): Encoder<Map<K, V>> {
     const size = config.size ?? getU32Encoder();
     return {
@@ -73,7 +73,7 @@ export function getMapEncoder<K, V>(
 export function getMapDecoder<K, V>(
     key: Decoder<K>,
     value: Decoder<V>,
-    config: MapCodecConfig<NumberDecoder> = {}
+    config: MapCodecConfig<NumberDecoder> = {},
 ): Decoder<Map<K, V>> {
     const size = config.size ?? getU32Decoder();
     return {
@@ -87,7 +87,7 @@ export function getMapDecoder<K, V>(
                 size,
                 [key.fixedSize, value.fixedSize],
                 bytes,
-                offset
+                offset,
             );
             offset = newOffset;
             for (let i = 0; i < resolvedSize; i += 1) {
@@ -112,7 +112,7 @@ export function getMapDecoder<K, V>(
 export function getMapCodec<TK, TV, UK extends TK = TK, UV extends TV = TV>(
     key: Codec<TK, UK>,
     value: Codec<TV, UV>,
-    config: MapCodecConfig<NumberCodec> = {}
+    config: MapCodecConfig<NumberCodec> = {},
 ): Codec<Map<TK, TV>, Map<UK, UV>> {
     return combineCodec(getMapEncoder(key, value, config), getMapDecoder(key, value, config));
 }

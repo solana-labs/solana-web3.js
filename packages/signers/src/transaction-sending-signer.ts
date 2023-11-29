@@ -11,7 +11,7 @@ export type TransactionSendingSigner<TAddress extends string = string> = Readonl
     address: Address<TAddress>;
     signAndSendTransactions(
         transactions: readonly CompilableTransaction[],
-        config?: TransactionSendingSignerConfig
+        config?: TransactionSendingSignerConfig,
     ): Promise<readonly SignatureBytes[]>;
 }>;
 

@@ -40,7 +40,7 @@ export interface GetSupplyApi {
         config: GetSupplyConfig &
             Readonly<{
                 excludeNonCirculatingAccountsList: true;
-            }>
+            }>,
     ): GetSupplyApiResponseWithoutNonCirculatingAccounts;
     getSupply(config?: GetSupplyConfig): GetSupplyApiResponseWithNonCirculatingAccounts;
 }

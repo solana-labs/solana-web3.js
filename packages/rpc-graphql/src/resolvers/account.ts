@@ -9,7 +9,7 @@ export const resolveAccount = (fieldName: string) => {
         parent: { [x: string]: Address },
         args: AccountQueryArgs,
         context: RpcGraphQLContext,
-        info: GraphQLResolveInfo | undefined
+        info: GraphQLResolveInfo | undefined,
     ) =>
         parent[fieldName] === null ? null : context.loaders.account.load({ ...args, address: parent[fieldName] }, info);
 };

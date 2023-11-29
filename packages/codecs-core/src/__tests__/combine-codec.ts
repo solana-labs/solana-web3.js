@@ -58,22 +58,22 @@ describe('combineCodec', () => {
         expect(() =>
             combineCodec(
                 { description: 'u8', encode: mockEncode, fixedSize: 1, maxSize: 1 },
-                { decode: mockDecode, description: 'u8', fixedSize: 2, maxSize: 1 }
-            )
+                { decode: mockDecode, description: 'u8', fixedSize: 2, maxSize: 1 },
+            ),
         ).toThrow('Encoder and decoder must have the same fixed size, got [1] and [2]');
 
         expect(() =>
             combineCodec(
                 { description: 'u8', encode: mockEncode, fixedSize: 1, maxSize: 1 },
-                { decode: mockDecode, description: 'u8', fixedSize: 1, maxSize: null }
-            )
+                { decode: mockDecode, description: 'u8', fixedSize: 1, maxSize: null },
+            ),
         ).toThrow('Encoder and decoder must have the same max size, got [1] and [null]');
 
         expect(() =>
             combineCodec(
                 { description: 'u8', encode: mockEncode, fixedSize: 1, maxSize: 1 },
-                { decode: mockDecode, description: 'u16', fixedSize: 1, maxSize: 1 }
-            )
+                { decode: mockDecode, description: 'u16', fixedSize: 1, maxSize: 1 },
+            ),
         ).toThrow('Encoder and decoder must have the same description, got [u8] and [u16]');
     });
 
@@ -81,7 +81,7 @@ describe('combineCodec', () => {
         const myCodec = combineCodec(
             { description: 'u8', encode: mockEncode, fixedSize: 1, maxSize: 1 },
             { decode: mockDecode, description: 'u16', fixedSize: 1, maxSize: 1 },
-            'myCustomDescription'
+            'myCustomDescription',
         );
 
         expect(myCodec.description).toBe('myCustomDescription');

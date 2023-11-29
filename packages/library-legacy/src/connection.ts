@@ -5711,9 +5711,8 @@ export class Connection {
     } else {
       let disableCache = this._disableBlockhashCaching;
       for (;;) {
-        const latestBlockhash = await this._blockhashWithExpiryBlockHeight(
-          disableCache,
-        );
+        const latestBlockhash =
+          await this._blockhashWithExpiryBlockHeight(disableCache);
         transaction.lastValidBlockHeight = latestBlockhash.lastValidBlockHeight;
         transaction.recentBlockhash = latestBlockhash.blockhash;
 
@@ -5839,9 +5838,8 @@ export class Connection {
     } else {
       let disableCache = this._disableBlockhashCaching;
       for (;;) {
-        const latestBlockhash = await this._blockhashWithExpiryBlockHeight(
-          disableCache,
-        );
+        const latestBlockhash =
+          await this._blockhashWithExpiryBlockHeight(disableCache);
         transaction.lastValidBlockHeight = latestBlockhash.lastValidBlockHeight;
         transaction.recentBlockhash = latestBlockhash.blockhash;
         transaction.sign(...signers);

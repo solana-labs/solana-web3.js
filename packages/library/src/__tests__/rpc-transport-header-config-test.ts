@@ -15,7 +15,7 @@ describe('createDefaultRpcTransport', () => {
                 headers: expect.objectContaining({
                     authorization: 'Picard, 4 7 Alpha Tango',
                 }),
-            })
+            }),
         );
     });
     it('adds a `solana-client` header with the current NPM package version by default', () => {
@@ -26,7 +26,7 @@ describe('createDefaultRpcTransport', () => {
                     // Version is defined in `setup-define-version-constant.ts`
                     'solana-client': `js/0.0.0-test`,
                 }),
-            })
+            }),
         );
     });
     it('makes it impossible to override the `solana-client` header', () => {
@@ -40,14 +40,14 @@ describe('createDefaultRpcTransport', () => {
                     // Version is defined in `setup-define-version-constant.ts`
                     'solana-client': `js/0.0.0-test`,
                 }),
-            })
+            }),
         );
         expect(createHttpTransport).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.not.objectContaining({
                     'sOlAnA-cLiEnT': 'fakeversion',
                 }),
-            })
+            }),
         );
     });
 });

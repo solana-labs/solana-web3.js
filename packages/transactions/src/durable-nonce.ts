@@ -17,13 +17,13 @@ import { getUnsignedTransaction } from './unsigned-transaction';
 
 type AdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string
+    TNonceAuthorityAddress extends string = string,
 > = IInstruction<'11111111111111111111111111111111'> &
     IInstructionWithAccounts<
         readonly [
             WritableAccount<TNonceAccountAddress>,
             ReadonlyAccount<'SysvarRecentB1ockHashes11111111111111111111'>,
-            ReadonlySignerAccount<TNonceAuthorityAddress> | WritableSignerAccount<TNonceAuthorityAddress>
+            ReadonlySignerAccount<TNonceAuthorityAddress> | WritableSignerAccount<TNonceAuthorityAddress>,
         ]
     > &
     IInstructionWithData<AdvanceNonceAccountInstructionData>;
@@ -33,7 +33,7 @@ type AdvanceNonceAccountInstructionData = Uint8Array & {
 type DurableNonceConfig<
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string,
-    TNonceValue extends string = string
+    TNonceValue extends string = string,
 > = Readonly<{
     readonly nonce: Nonce<TNonceValue>;
     readonly nonceAccountAddress: Address<TNonceAccountAddress>;
@@ -51,18 +51,18 @@ const SYSTEM_PROGRAM_ADDRESS = '11111111111111111111111111111111' as Address<'11
 export interface IDurableNonceTransaction<
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string,
-    TNonceValue extends string = string
+    TNonceValue extends string = string,
 > {
     readonly instructions: readonly [
         // The first instruction *must* be the system program's `AdvanceNonceAccount` instruction.
         AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
-        ...IInstruction[]
+        ...IInstruction[],
     ];
     readonly lifetimeConstraint: NonceLifetimeConstraint<TNonceValue>;
 }
 
 export function assertIsDurableNonceTransaction(
-    transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction)
+    transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction),
 ): asserts transaction is BaseTransaction & IDurableNonceTransaction {
     if (!isDurableNonceTransaction(transaction)) {
         // TODO: Coded error.
@@ -72,10 +72,10 @@ export function assertIsDurableNonceTransaction(
 
 function createAdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string
+    TNonceAuthorityAddress extends string = string,
 >(
     nonceAccountAddress: Address<TNonceAccountAddress>,
-    nonceAuthorityAddress: Address<TNonceAuthorityAddress>
+    nonceAuthorityAddress: Address<TNonceAuthorityAddress>,
 ): AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
     return {
         accounts: [
@@ -92,7 +92,7 @@ function createAdvanceNonceAccountInstruction<
 }
 
 export function isAdvanceNonceAccountInstruction(
-    instruction: IInstruction
+    instruction: IInstruction,
 ): instruction is AdvanceNonceAccountInstruction {
     return (
         instruction.programAddress === SYSTEM_PROGRAM_ADDRESS &&
@@ -119,7 +119,7 @@ function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is Advance
 }
 
 function isDurableNonceTransaction(
-    transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction)
+    transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction),
 ): transaction is BaseTransaction & IDurableNonceTransaction {
     return (
         'lifetimeConstraint' in transaction &&
@@ -131,11 +131,11 @@ function isDurableNonceTransaction(
 
 function isAdvanceNonceAccountInstructionForNonce<
     TNonceAccountAddress extends Address = Address,
-    TNonceAuthorityAddress extends Address = Address
+    TNonceAuthorityAddress extends Address = Address,
 >(
     instruction: AdvanceNonceAccountInstruction,
     nonceAccountAddress: TNonceAccountAddress,
-    nonceAuthorityAddress: TNonceAuthorityAddress
+    nonceAuthorityAddress: TNonceAuthorityAddress,
 ): instruction is AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
     return (
         instruction.accounts[0].address === nonceAccountAddress &&
@@ -147,19 +147,19 @@ export function setTransactionLifetimeUsingDurableNonce<
     TTransaction extends BaseTransaction,
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string,
-    TNonceValue extends string = string
+    TNonceValue extends string = string,
 >(
     {
         nonce,
         nonceAccountAddress,
         nonceAuthorityAddress,
     }: DurableNonceConfig<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>,
-    transaction: TTransaction | (TTransaction & IDurableNonceTransaction)
+    transaction: TTransaction | (TTransaction & IDurableNonceTransaction),
 ): Omit<TTransaction, keyof ITransactionWithSignatures> &
     IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
     let newInstructions: [
         AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
-        ...IInstruction[]
+        ...IInstruction[],
     ];
 
     const firstInstruction = transaction.instructions[0];

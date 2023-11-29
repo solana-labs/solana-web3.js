@@ -71,7 +71,7 @@ describe('exportKeyPolyfill', () => {
             expect.assertions(1);
             const mockKey = { extractable: true, type } as unknown as CryptoKey;
             await expect(exportKeyPolyfill('raw', mockKey)).rejects.toThrow(
-                `Unable to export a raw Ed25519 ${type} key`
+                `Unable to export a raw Ed25519 ${type} key`,
             );
         });
         it('throws when supplied a public key that was not generated with the polyfill', async () => {
@@ -99,7 +99,7 @@ describe('exportKeyPolyfill', () => {
             expect.assertions(1);
             const mockKey = { extractable: true, type } as unknown as CryptoKey;
             await expect(exportKeyPolyfill('pkcs8', mockKey)).rejects.toThrow(
-                `Unable to export a pkcs8 Ed25519 ${type} key`
+                `Unable to export a pkcs8 Ed25519 ${type} key`,
             );
         });
         it('throws when supplied a private key that was not generated with the polyfill', async () => {
@@ -167,14 +167,14 @@ describe('importKeyPolyfill', () => {
             'fatals when the usage `%s` is specified',
             usage => {
                 expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [usage])).toThrow(
-                    'Unsupported key usage for a Ed25519 key'
+                    'Unsupported key usage for a Ed25519 key',
                 );
-            }
+            },
         );
         it.each([0, 1, 30, 31, 33, 34, 48])('fatals when bytes is length `%d`', bytesLength => {
             const keyData = new Uint8Array(Array(bytesLength).fill(0));
             expect(() => importKeyPolyfill('raw', keyData, false, ['verify'])).toThrow(
-                'Ed25519 raw keys must be exactly 32-bytes'
+                'Ed25519 raw keys must be exactly 32-bytes',
             );
         });
         it('has the string tag "CryptoKey"', () => {
@@ -190,7 +190,7 @@ describe('importKeyPolyfill', () => {
             extractability => {
                 const key = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, extractability, ['verify']);
                 expect(key).toHaveProperty('extractable', extractability);
-            }
+            },
         );
         it('has the algorithm "Ed25519"', () => {
             const key = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
@@ -251,9 +251,9 @@ describe('importKeyPolyfill', () => {
             'fatals when the usage `%s` is specified',
             usage => {
                 expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [usage])).toThrow(
-                    'Unsupported key usage for a Ed25519 key'
+                    'Unsupported key usage for a Ed25519 key',
                 );
-            }
+            },
         );
         it.each([0, 1, 32, 46, 47, 49, 50])('fatals when bytes is length `%d`', bytesLength => {
             const keyData = new Uint8Array(Array(bytesLength).fill(0));
@@ -276,7 +276,7 @@ describe('importKeyPolyfill', () => {
             extractability => {
                 const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, extractability, ['sign']);
                 expect(key).toHaveProperty('extractable', extractability);
-            }
+            },
         );
         it('has the algorithm "Ed25519"', () => {
             const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
@@ -352,20 +352,20 @@ describe('generateKeyPolyfill', () => {
         extractable => {
             const { privateKey } = generateKeyPolyfill(extractable, ['sign', 'verify']);
             expect(privateKey).toHaveProperty('extractable', extractable);
-        }
+        },
     );
     it.each([true, false])(
         "sets the public key's `extractable` to `true` when generating a key pair with the extractability `%s`",
         extractable => {
             const { publicKey } = generateKeyPolyfill(extractable, ['sign', 'verify']);
             expect(publicKey).toHaveProperty('extractable', true);
-        }
+        },
     );
     it.each(['decrypt', 'deriveBits', 'deriveKey', 'encrypt', 'unwrapKey', 'wrapKey'] as KeyUsage[])(
         'fatals when the usage `%s` is specified',
         usage => {
             expect(() => generateKeyPolyfill(/* extractable */ false, [usage])).toThrow();
-        }
+        },
     );
     it("includes `sign` among the private key's usages when the `sign` usage is specified", () => {
         const { privateKey } = generateKeyPolyfill(/* extractable */ false, ['sign']);
@@ -497,7 +497,7 @@ describe('verifyPolyfill', () => {
         const mockKey = { type: 'public', usages: ['sign'] } as unknown as CryptoKey;
         const mockSignature = new Uint8Array(Array(64).fill(1));
         await expect(verifyPolyfill(mockKey, mockSignature, MOCK_DATA)).rejects.toThrow(
-            /Unable to use this key to verify/
+            /Unable to use this key to verify/,
         );
     });
     it.each(['private', 'secret'] as KeyType[])('throws when a %s key is supplied', async type => {
@@ -505,7 +505,7 @@ describe('verifyPolyfill', () => {
         const mockKey = { type, usages: ['verify'] } as unknown as CryptoKey;
         const mockSignature = new Uint8Array(Array(64).fill(1));
         await expect(verifyPolyfill(mockKey, mockSignature, MOCK_DATA)).rejects.toThrow(
-            /Unable to use this key to verify/
+            /Unable to use this key to verify/,
         );
     });
     it('returns `true` when the correct signature is supplied for a given payload', async () => {

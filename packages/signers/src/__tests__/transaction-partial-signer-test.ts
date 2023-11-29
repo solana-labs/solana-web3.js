@@ -32,7 +32,7 @@ describe('assertIsTransactionPartialSigner', () => {
         expect(() => assertIsTransactionPartialSigner(mySigner)).not.toThrow();
         expect(() => assertIsTransactionPartialSigner({ address: myAddress })).toThrow(expectedMessage);
         expect(() => assertIsTransactionPartialSigner({ address: myAddress, signTransactions: 42 })).toThrow(
-            expectedMessage
+            expectedMessage,
         );
     });
 });

@@ -17,7 +17,7 @@ export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): E
  */
 export function mapDecoder<T, U>(
     decoder: Decoder<T>,
-    map: (value: T, bytes: Uint8Array, offset: number) => U
+    map: (value: T, bytes: Uint8Array, offset: number) => U,
 ): Decoder<U> {
     return {
         decode: (bytes: Uint8Array, offset = 0) => {
@@ -35,17 +35,17 @@ export function mapDecoder<T, U>(
  */
 export function mapCodec<NewFrom, OldFrom, To extends NewFrom & OldFrom>(
     codec: Codec<OldFrom, To>,
-    unmap: (value: NewFrom) => OldFrom
+    unmap: (value: NewFrom) => OldFrom,
 ): Codec<NewFrom, To>;
 export function mapCodec<NewFrom, OldFrom, NewTo extends NewFrom = NewFrom, OldTo extends OldFrom = OldFrom>(
     codec: Codec<OldFrom, OldTo>,
     unmap: (value: NewFrom) => OldFrom,
-    map: (value: OldTo, bytes: Uint8Array, offset: number) => NewTo
+    map: (value: OldTo, bytes: Uint8Array, offset: number) => NewTo,
 ): Codec<NewFrom, NewTo>;
 export function mapCodec<NewFrom, OldFrom, NewTo extends NewFrom = NewFrom, OldTo extends OldFrom = OldFrom>(
     codec: Codec<OldFrom, OldTo>,
     unmap: (value: NewFrom) => OldFrom,
-    map?: (value: OldTo, bytes: Uint8Array, offset: number) => NewTo
+    map?: (value: OldTo, bytes: Uint8Array, offset: number) => NewTo,
 ): Codec<NewFrom, NewTo> {
     return {
         decode: map ? mapDecoder(codec, map).decode : (codec.decode as unknown as Decoder<NewTo>['decode']),

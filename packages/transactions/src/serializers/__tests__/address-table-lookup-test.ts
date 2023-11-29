@@ -23,7 +23,7 @@ describe('Address table lookup codec', () => {
                         lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Address, // decodes to [11{32}]
                         readableIndices: [33, 22],
                         writableIndices: [44],
-                    } as AddressTableLookup)
+                    } as AddressTableLookup),
                 ).toEqual(
                     // prettier-ignore
                     new Uint8Array([
@@ -35,10 +35,10 @@ describe('Address table lookup codec', () => {
                     // Compact array of read-only indices
                     2, // Compact-u16 length
                     33, 22, // Read-only indicies
-                ])
+                ]),
                 );
             });
-        }
+        },
     );
 
     describe.each([getAddressTableLookupDecoder, getAddressTableLookupCodec])(
@@ -71,6 +71,6 @@ describe('Address table lookup codec', () => {
                 // Expect the entire byte array to have been consumed.
                 expect(offset).toBe(byteArray.byteLength);
             });
-        }
+        },
     );
 });

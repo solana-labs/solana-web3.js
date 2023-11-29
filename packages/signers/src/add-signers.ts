@@ -8,7 +8,7 @@ import { TransactionSigner } from './transaction-signer';
 /** Attaches the provided signers to the account metas of an instruction when applicable. */
 export function addSignersToInstruction<TInstruction extends IInstruction>(
     signers: TransactionSigner[],
-    instruction: TInstruction | (TInstruction & IInstructionWithSigners)
+    instruction: TInstruction | (TInstruction & IInstructionWithSigners),
 ): TInstruction & IInstructionWithSigners {
     if (!instruction.accounts || instruction.accounts.length === 0) {
         return instruction as TInstruction & IInstructionWithSigners;
@@ -30,7 +30,7 @@ export function addSignersToInstruction<TInstruction extends IInstruction>(
 /** Attaches the provided signers to the account metas of a transaction when applicable. */
 export function addSignersToTransaction<TTransaction extends BaseTransaction>(
     signers: TransactionSigner[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSigners)
+    transaction: TTransaction | (TTransaction & ITransactionWithSigners),
 ): TTransaction & ITransactionWithSigners {
     if (transaction.instructions.length === 0) {
         return transaction as TTransaction & ITransactionWithSigners;

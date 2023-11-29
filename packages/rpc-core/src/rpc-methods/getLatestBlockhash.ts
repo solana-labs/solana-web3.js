@@ -18,6 +18,6 @@ export interface GetLatestBlockhashApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetLatestBlockhashApiResponse;
 }

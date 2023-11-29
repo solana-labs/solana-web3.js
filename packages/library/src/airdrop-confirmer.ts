@@ -24,13 +24,13 @@ export function createDefaultSignatureOnlyRecentTransactionConfirmer({
 }: DefaultSignatureOnlyRecentTransactionConfirmerConfig) {
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
-        rpcSubscriptions
+        rpcSubscriptions,
     );
     return async function confirmSignatureOnlyRecentTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],
             'getRecentSignatureConfirmationPromise' | 'getTimeoutPromise'
-        >
+        >,
     ) {
         await waitForRecentTransactionConfirmationUntilTimeout({
             ...config,
@@ -42,7 +42,7 @@ export function createDefaultSignatureOnlyRecentTransactionConfirmer({
 
 /** @deprecated */
 export async function waitForRecentTransactionConfirmationUntilTimeout(
-    config: WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig
+    config: WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
         config.signature,
@@ -54,6 +54,6 @@ export async function waitForRecentTransactionConfirmationUntilTimeout(
                     commitment,
                 }),
             ];
-        }
+        },
     );
 }

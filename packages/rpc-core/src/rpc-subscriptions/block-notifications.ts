@@ -91,7 +91,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion?: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails: 'none';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -107,7 +107,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion?: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails: 'none';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -123,7 +123,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion?: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails: 'signatures';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -139,7 +139,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion?: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails: 'signatures';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -159,7 +159,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -179,7 +179,7 @@ export interface BlockNotificationsApi {
                 encoding?: BlockNotificationsEncoding;
                 showRewards: false;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -198,7 +198,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -219,7 +219,7 @@ export interface BlockNotificationsApi {
                 encoding?: BlockNotificationsEncoding;
                 showRewards?: true;
                 transactionDetails: 'accounts';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -239,7 +239,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -259,7 +259,7 @@ export interface BlockNotificationsApi {
                 encoding: 'base58';
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -278,7 +278,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -299,7 +299,7 @@ export interface BlockNotificationsApi {
                 encoding: 'base58';
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -319,7 +319,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -339,7 +339,7 @@ export interface BlockNotificationsApi {
                 encoding: 'base64';
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -358,7 +358,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -379,7 +379,7 @@ export interface BlockNotificationsApi {
                 encoding: 'base64';
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -399,7 +399,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -419,7 +419,7 @@ export interface BlockNotificationsApi {
                 encoding: 'jsonParsed';
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -438,7 +438,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -459,7 +459,7 @@ export interface BlockNotificationsApi {
                 encoding: 'jsonParsed';
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -479,7 +479,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -499,7 +499,7 @@ export interface BlockNotificationsApi {
                 encoding?: 'json';
                 showRewards: false;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -518,7 +518,7 @@ export interface BlockNotificationsApi {
                 maxSupportedTransactionVersion: BlockNotificationsMaxSupportedTransactionVersion;
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{
@@ -539,7 +539,7 @@ export interface BlockNotificationsApi {
                 encoding?: 'json';
                 showRewards?: true;
                 transactionDetails?: 'full';
-            }>
+            }>,
     ): RpcResponse<
         BlockNotificationsNotificationBase &
             Readonly<{

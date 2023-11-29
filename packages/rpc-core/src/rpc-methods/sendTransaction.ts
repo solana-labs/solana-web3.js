@@ -17,7 +17,7 @@ export interface SendTransactionApi {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     sendTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
-        config?: SendTransactionConfig & { encoding?: 'base58' }
+        config?: SendTransactionConfig & { encoding?: 'base58' },
     ): SendTransactionResponse;
     /**
      * Submits a signed transaction to the cluster for processing.
@@ -48,6 +48,6 @@ export interface SendTransactionApi {
      */
     sendTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
-        config?: SendTransactionConfig & { encoding: 'base64' }
+        config?: SendTransactionConfig & { encoding: 'base64' },
     ): SendTransactionResponse;
 }

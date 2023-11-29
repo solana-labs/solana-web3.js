@@ -28,31 +28,31 @@ export interface AccountNotificationsApi {
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase64EncodedData>;
     accountNotifications(
         address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-            }>
+            }>,
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
     accountNotifications(
         address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ): RpcResponse<AccountInfoBase & AccountInfoWithJsonData>;
     accountNotifications(
         address: Address,
         config: AccountNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase58EncodedData>;
     accountNotifications(
         address: Address,
-        config?: AccountNotificationsApiCommonConfig
+        config?: AccountNotificationsApiCommonConfig,
     ): RpcResponse<AccountInfoBase & AccountInfoWithBase58Bytes>;
 }

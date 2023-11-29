@@ -143,7 +143,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         });
         await expect(commitmentPromise).rejects.toThrow(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.'
+                'has been signed by its fee payer.',
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
@@ -259,7 +259,7 @@ describe('waitForRecentTransactionConfirmation', () => {
         });
         await expect(commitmentPromise).rejects.toThrow(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.'
+                'has been signed by its fee payer.',
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {

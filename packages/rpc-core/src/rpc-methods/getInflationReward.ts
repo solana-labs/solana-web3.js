@@ -30,6 +30,6 @@ export interface GetInflationRewardApi {
             epoch?: U64UnsafeBeyond2Pow53Minus1;
             // The minimum slot that the request can be evaluated at
             minContextSlot?: Slot;
-        }>
+        }>,
     ): Promise<readonly (GetInflationRewardApiResponse | null)[]>;
 }

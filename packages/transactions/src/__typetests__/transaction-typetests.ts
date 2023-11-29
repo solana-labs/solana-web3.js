@@ -51,62 +51,62 @@ async () => {
     // setTransactionLifetimeUsingBlockhash
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime;
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithBlockhashLifetime;
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithBlockhashLifetime &
         ITransactionWithSignatures;
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 0 }>
+        null as unknown as Extract<Transaction, { version: 0 }>,
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithBlockhashLifetime;
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 0 }>
+        null as unknown as Extract<Transaction, { version: 0 }>,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime;
     setTransactionLifetimeUsingBlockhash(
         mockBlockhashLifetime,
-        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithBlockhashLifetime & ITransactionWithSignatures;
 
     // setTransactionLifetimeUsingDurableNonce
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction;
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 0 }> & IDurableNonceTransaction;
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction & ITransactionWithSignatures;
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 0 }>
+        null as unknown as Extract<Transaction, { version: 0 }>,
     ) satisfies Extract<Transaction, { version: 0 }> & IDurableNonceTransaction;
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 0 }>
+        null as unknown as Extract<Transaction, { version: 0 }>,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction;
     setTransactionLifetimeUsingDurableNonce(
         mockNonceConfig,
-        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 0 }> & IDurableNonceTransaction & ITransactionWithSignatures;
 
@@ -115,20 +115,20 @@ async () => {
     // (base)
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'NOTfeePayer'>
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'NOTfeePayer'>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithFeePayer<'feePayer'>;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -140,7 +140,7 @@ async () => {
         ITransactionWithFeePayer<'feePayer'>;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 0 }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -149,7 +149,7 @@ async () => {
     // (blockhash)
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime,
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithBlockhashLifetime;
@@ -157,13 +157,13 @@ async () => {
         mockFeePayer,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'NOTfeePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithBlockhashLifetime;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 0 }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -172,7 +172,7 @@ async () => {
         mockFeePayer,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -180,7 +180,7 @@ async () => {
         ITransactionWithSignatures;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithBlockhashLifetime
+        null as unknown as Extract<Transaction, { version: 0 }> & ITransactionWithBlockhashLifetime,
     ) satisfies Extract<Transaction, { version: 0 }> &
         ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithBlockhashLifetime;
@@ -188,7 +188,7 @@ async () => {
         mockFeePayer,
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 0 }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -198,7 +198,7 @@ async () => {
     // (durable nonce)
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction,
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
         IDurableNonceTransaction;
@@ -206,20 +206,20 @@ async () => {
         mockFeePayer,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'NOTfeePayer'> &
-            IDurableNonceTransaction
+            IDurableNonceTransaction,
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
         IDurableNonceTransaction;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction,
         // @ts-expect-error Version should match
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithFeePayer<'feePayer'> & IDurableNonceTransaction;
     setTransactionFeePayer(
         mockFeePayer,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             IDurableNonceTransaction &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -227,11 +227,11 @@ async () => {
         ITransactionWithSignatures;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 0 }> & IDurableNonceTransaction
+        null as unknown as Extract<Transaction, { version: 0 }> & IDurableNonceTransaction,
     ) satisfies Extract<Transaction, { version: 0 }> & ITransactionWithFeePayer<'feePayer'> & IDurableNonceTransaction;
     setTransactionFeePayer(
         mockFeePayer,
-        null as unknown as Extract<Transaction, { version: 0 }> & IDurableNonceTransaction & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 0 }> & IDurableNonceTransaction & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 0 }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -244,7 +244,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Promise<
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -255,7 +255,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
         // @ts-expect-error Version should match
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
@@ -267,7 +267,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -279,7 +279,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Promise<
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -291,7 +291,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Version should match
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
@@ -304,7 +304,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -317,22 +317,22 @@ async () => {
     signTransaction(
         [mockSigner],
         // @ts-expect-error Type error on missing fee payer and lifetime
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     );
     signTransaction(
         [mockSigner],
         // @ts-expect-error Type error on missing lifetime
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>,
     );
     signTransaction(
         [mockSigner],
         // @ts-expect-error Type error on missing fee payer (blockhash)
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithBlockhashLifetime,
     );
     signTransaction(
         [mockSigner],
         // @ts-expect-error Type error on missing fee payer (durable nonce)
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & IDurableNonceTransaction,
     );
 
     // (blockhash)
@@ -340,7 +340,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Promise<
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -351,7 +351,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
         // @ts-expect-error Version should match
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
@@ -363,7 +363,7 @@ async () => {
         [mockSigner],
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -375,7 +375,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Promise<
         Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -387,7 +387,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Version should match
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
@@ -400,7 +400,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Promise<
         Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
@@ -412,31 +412,31 @@ async () => {
     compileMessage(
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Extract<CompiledMessage, { version: 'legacy' }>;
     compileMessage(
         null as unknown as Extract<Transaction, { version: 0 }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithBlockhashLifetime
+            ITransactionWithBlockhashLifetime,
     ) satisfies Extract<CompiledMessage, { version: number }>;
 
     // getUnsignedTransaction
     getUnsignedTransaction(
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
     ) satisfies Extract<Transaction, { version: 'legacy' }>;
     getUnsignedTransaction(
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures;
     getUnsignedTransaction(
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>;
     getUnsignedTransaction(
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -445,7 +445,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithBlockhashLifetime;
@@ -453,7 +453,7 @@ async () => {
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
             ITransactionWithBlockhashLifetime &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithFeePayer<'feePayer'> &
@@ -463,20 +463,20 @@ async () => {
     // appendTransactionInstruction
     appendTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     };
     appendTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithSignatures;
     appendTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithFeePayer<'feePayer'>;
@@ -484,7 +484,7 @@ async () => {
         mockInstruction,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithFeePayer<'feePayer'>;
@@ -492,7 +492,7 @@ async () => {
         mockInstruction,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
@@ -502,20 +502,20 @@ async () => {
     // prependTransactionInstruction
     prependTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }>
+        null as unknown as Extract<Transaction, { version: 'legacy' }>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     };
     prependTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithSignatures;
     prependTransactionInstruction(
         mockInstruction,
-        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>
+        null as unknown as Extract<Transaction, { version: 'legacy' }> & ITransactionWithFeePayer<'feePayer'>,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithFeePayer<'feePayer'>;
@@ -523,7 +523,7 @@ async () => {
         mockInstruction,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];
     } & ITransactionWithFeePayer<'feePayer'>;
@@ -531,7 +531,7 @@ async () => {
         mockInstruction,
         null as unknown as Extract<Transaction, { version: 'legacy' }> &
             ITransactionWithFeePayer<'feePayer'> &
-            ITransactionWithSignatures
+            ITransactionWithSignatures,
         // @ts-expect-error Should not have signatures
     ) satisfies Extract<Transaction, { version: 'legacy' }> & {
         instructions: Transaction['instructions'];

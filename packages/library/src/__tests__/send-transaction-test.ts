@@ -38,7 +38,7 @@ describe('sendAndConfirmTransaction', () => {
             sendTransaction: createPendingRequest,
         };
         jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
-            'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction
+            'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
     it('encodes the transaction into wire format before sending', () => {
@@ -116,9 +116,9 @@ describe('sendAndConfirmTransaction', () => {
                 expect.anything(),
                 expect.objectContaining({
                     preflightCommitment: expectedPreflightCommitment,
-                })
+                }),
             );
-        }
+        },
     );
     it.each`
         commitment     | preflightCommitment | expectedPreflightCommitment
@@ -146,9 +146,9 @@ describe('sendAndConfirmTransaction', () => {
                 expect.anything(),
                 expect.objectContaining({
                     preflightCommitment: expectedPreflightCommitment,
-                })
+                }),
             );
-        }
+        },
     );
     it('when missing a `preflightCommitment` and the commitment is the same as the server default for `preflightCommitment`, does not apply a `preflightCommitment`', () => {
         expect.assertions(1);
@@ -172,7 +172,7 @@ describe('sendAndConfirmTransaction', () => {
                 confirmRecentTransaction,
                 rpc,
                 transaction: MOCK_TRANSACTION,
-            })
+            }),
         ).resolves.toBe('abc');
     });
 });
@@ -195,7 +195,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             sendTransaction: createPendingRequest,
         };
         jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
-            'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction
+            'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
     it('encodes the transaction into wire format before sending', () => {
@@ -273,9 +273,9 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
                 expect.anything(),
                 expect.objectContaining({
                     preflightCommitment: expectedPreflightCommitment,
-                })
+                }),
             );
-        }
+        },
     );
     it.each`
         commitment     | preflightCommitment | expectedPreflightCommitment
@@ -303,9 +303,9 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
                 expect.anything(),
                 expect.objectContaining({
                     preflightCommitment: expectedPreflightCommitment,
-                })
+                }),
             );
-        }
+        },
     );
     it('when missing a `preflightCommitment` and the commitment is the same as the server default for `preflightCommitment`, does not apply a `preflightCommitment`', () => {
         expect.assertions(1);
@@ -329,7 +329,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
                 confirmDurableNonceTransaction,
                 rpc,
                 transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-            })
+            }),
         ).resolves.toBe('abc');
     });
 });

@@ -57,31 +57,31 @@ export interface ProgramNotificationsApi {
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase64EncodedData>;
     programNotifications(
         programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-            }>
+            }>,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase64EncodedZStdCompressedData>;
     programNotifications(
         programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithJsonData>;
     programNotifications(
         programId: Address,
         config: ProgramNotificationsApiCommonConfig &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase58EncodedData>;
     programNotifications(
         programId: Address,
-        config?: ProgramNotificationsApiCommonConfig
+        config?: ProgramNotificationsApiCommonConfig,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase58Bytes>;
 }

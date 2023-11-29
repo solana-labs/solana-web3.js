@@ -17,6 +17,6 @@ export interface GetBlocksWithLimitApi {
         config?: Readonly<{
             // Defaults to `finalized`
             commitment?: Exclude<Commitment, 'processed'>;
-        }>
+        }>,
     ): GetBlocksWithLimitApiResponse;
 }

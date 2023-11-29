@@ -4,7 +4,7 @@ import { getUnsignedTransaction } from './unsigned-transaction';
 
 export function appendTransactionInstruction<TTransaction extends BaseTransaction>(
     instruction: TTransaction['instructions'][number],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
     const out = {
         ...getUnsignedTransaction(transaction),
@@ -16,7 +16,7 @@ export function appendTransactionInstruction<TTransaction extends BaseTransactio
 
 export function prependTransactionInstruction<TTransaction extends BaseTransaction>(
     instruction: TTransaction['instructions'][number],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
     const out = {
         ...getUnsignedTransaction(transaction),

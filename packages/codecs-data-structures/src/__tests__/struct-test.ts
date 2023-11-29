@@ -43,7 +43,7 @@ describe('getStructCodec', () => {
             struct([
                 ['name', string()],
                 ['age', u8()],
-            ]).description
+            ]).description,
         ).toBe('struct(name: string(utf8; u32(le)), age: u8)');
         expect(struct([['age', u8()]], { description: 'my struct' }).description).toBe('my struct');
     });

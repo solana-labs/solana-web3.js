@@ -53,7 +53,7 @@ export class Transaction {
                 'The `verifySignatures` option of `Transaction#serialize` is unimplemented in ' +
                     '`@solana/web3.js-legacy-sham`. If the caller of this method is code that ' +
                     "you don't maintain, and part of a dependency that you can not replace, let " +
-                    'us know: https://github.com/solana-labs/solana-web3.js/issues/new/choose'
+                    'us know: https://github.com/solana-labs/solana-web3.js/issues/new/choose',
             );
         }
         const byteArray = getTransactionEncoder().encode(this.#tx as CompilableTransaction);
@@ -94,7 +94,7 @@ export class Transaction {
                         : (undefined as unknown as Blockhash),
                 lastValidBlockHeight: BigInt(slot ?? Number.MAX_SAFE_INTEGER),
             },
-            this.#tx
+            this.#tx,
         );
     }
     get nonceInfo() {
@@ -107,7 +107,7 @@ export class Transaction {
                 nonceAccountAddress: nonceInfo.nonceInstruction.keys[0].pubkey.toBase58() as Address,
                 nonceAuthorityAddress: nonceInfo.nonceInstruction.keys[2].pubkey.toBase58() as Address,
             },
-            this.#tx
+            this.#tx,
         );
     }
     get recentBlockhash(): LegacyBlockhash | undefined {
@@ -134,7 +134,7 @@ export class Transaction {
                         ? (this.#tx as ITransactionWithBlockhashLifetime).lifetimeConstraint.lastValidBlockHeight
                         : BigInt(Number.MAX_SAFE_INTEGER),
             },
-            this.#tx
+            this.#tx,
         );
     }
     get instructions(): Array<TransactionInstruction> {

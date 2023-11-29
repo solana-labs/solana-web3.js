@@ -45,7 +45,7 @@ describe('fixCodec', () => {
         expect(mockCodec.decode).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixCodec(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            'Codec [fixCodec] expected 10 bytes, got 5.'
+            'Codec [fixCodec] expected 10 bytes, got 5.',
         );
     });
 
@@ -128,7 +128,7 @@ describe('fixDecoder', () => {
         expect(mockCodec.decode).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixDecoder(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            'Codec [fixCodec] expected 10 bytes, got 5.'
+            'Codec [fixCodec] expected 10 bytes, got 5.',
         );
     });
 });

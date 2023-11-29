@@ -108,7 +108,7 @@ type TransactionJsonParsed = TransactionBase &
                     signer: boolean;
                     source: string;
                     writable: boolean;
-                }
+                },
             ];
             instructions: readonly (ParsedTransactionInstruction | PartiallyDecodedTransactionInstruction)[];
         };
@@ -163,7 +163,7 @@ export interface GetTransactionApi {
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ):
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
@@ -181,7 +181,7 @@ export interface GetTransactionApi {
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ):
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
@@ -202,7 +202,7 @@ export interface GetTransactionApi {
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ):
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
@@ -223,7 +223,7 @@ export interface GetTransactionApi {
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
                 encoding?: 'json';
-            }>
+            }>,
     ):
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void

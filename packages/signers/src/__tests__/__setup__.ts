@@ -20,7 +20,7 @@ import { TransactionSigner } from '../transaction-signer';
 export function createMockInstructionWithSigners(signers: TransactionSigner[]): IInstruction & IInstructionWithSigners {
     return {
         accounts: signers.map(
-            (signer): IAccountSignerMeta => ({ address: signer.address, role: AccountRole.READONLY_SIGNER, signer })
+            (signer): IAccountSignerMeta => ({ address: signer.address, role: AccountRole.READONLY_SIGNER, signer }),
         ),
         data: new Uint8Array([]),
         programAddress: '11111111111111111111111111111111' as Address,
@@ -28,13 +28,13 @@ export function createMockInstructionWithSigners(signers: TransactionSigner[]): 
 }
 
 export function createMockTransactionWithSigners(
-    signers: TransactionSigner[]
+    signers: TransactionSigner[],
 ): CompilableTransaction & ITransactionWithSigners {
     const transaction = createTransaction({ version: 0 });
     const transactionWithFeePayer = setTransactionFeePayer(signers[0]?.address ?? '1111', transaction);
     const compilableTransaction = setTransactionLifetimeUsingBlockhash(
         { blockhash: 'dummy_blockhash' as Blockhash, lastValidBlockHeight: 42n },
-        transactionWithFeePayer
+        transactionWithFeePayer,
     );
     return appendTransactionInstruction(createMockInstructionWithSigners(signers), compilableTransaction);
 }
@@ -44,25 +44,25 @@ export function createMockMessagePartialSigner(address: Address): MessagePartial
 }
 
 export function createMockMessageModifyingSigner(
-    address: Address
+    address: Address,
 ): MessageModifyingSigner & { modifyAndSignMessages: jest.Mock } {
     return { address, modifyAndSignMessages: jest.fn() };
 }
 
 export function createMockTransactionPartialSigner(
-    address: Address
+    address: Address,
 ): TransactionPartialSigner & { signTransactions: jest.Mock } {
     return { address, signTransactions: jest.fn() };
 }
 
 export function createMockTransactionModifyingSigner(
-    address: Address
+    address: Address,
 ): TransactionModifyingSigner & { modifyAndSignTransactions: jest.Mock } {
     return { address, modifyAndSignTransactions: jest.fn() };
 }
 
 export function createMockTransactionSendingSigner(
-    address: Address
+    address: Address,
 ): TransactionSendingSigner & { signAndSendTransactions: jest.Mock } {
     return { address, signAndSendTransactions: jest.fn() };
 }

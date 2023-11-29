@@ -61,6 +61,6 @@ export interface GetSignatureStatusesApi {
              * signatures not found in the recent status cache
              */
             searchTransactionHistory?: boolean;
-        }>
+        }>,
     ): GetSignatureStatusesApiResponse;
 }

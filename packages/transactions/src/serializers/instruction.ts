@@ -54,7 +54,7 @@ export function getInstructionEncoder(): Encoder<Instruction> {
                     accountIndices: instruction.accountIndices ?? [],
                     data: instruction.data ?? new Uint8Array(0),
                 } as Required<Instruction>;
-            }
+            },
         );
     }
 
@@ -87,7 +87,7 @@ export function getInstructionDecoder(): Decoder<Instruction> {
                     ...(accountIndices.length ? { accountIndices } : null),
                     ...(data.byteLength ? { data } : null),
                 };
-            }
+            },
         );
     }
     return memoizedGetInstructionDecoder;

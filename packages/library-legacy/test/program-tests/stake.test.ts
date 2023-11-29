@@ -516,9 +516,8 @@ describe('StakeProgram', () => {
 
       let stakeActivationState;
       do {
-        stakeActivationState = await connection.getStakeActivation(
-          newAccountPubkey,
-        );
+        stakeActivationState =
+          await connection.getStakeActivation(newAccountPubkey);
       } while (stakeActivationState.state != 'inactive');
 
       // Test that withdraw succeeds after deactivation

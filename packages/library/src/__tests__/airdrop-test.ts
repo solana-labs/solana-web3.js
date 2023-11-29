@@ -60,13 +60,13 @@ describe('requestAndConfirmAirdrop', () => {
         expect(confirmSignatureOnlyTransaction).toHaveBeenCalledWith(
             expect.objectContaining({
                 abortSignal: expect.objectContaining({ aborted: false }),
-            })
+            }),
         );
         abortController.abort();
         expect(confirmSignatureOnlyTransaction).toHaveBeenCalledWith(
             expect.objectContaining({
                 abortSignal: expect.objectContaining({ aborted: true }),
-            })
+            }),
         );
     });
     it('passes the expected input to the airdrop request', async () => {

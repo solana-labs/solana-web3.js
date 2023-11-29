@@ -26,6 +26,6 @@ export interface GetRecentPrioritizationFeesApi {
          * a fee to land a transaction locking all of the provided accounts
          * as writable.
          */
-        addresses?: Address[]
+        addresses?: Address[],
     ): GetRecentPrioritizationFeesApiResponse;
 }

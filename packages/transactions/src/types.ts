@@ -6,7 +6,7 @@ export type SerializedMessageBytesBase64 = string & { readonly __serializedMessa
 
 export type BaseTransaction<
     TVersion extends TransactionVersion = TransactionVersion,
-    TInstruction extends IInstruction = IInstruction
+    TInstruction extends IInstruction = IInstruction,
 > = Readonly<{
     instructions: readonly TInstruction[];
     version: TVersion;

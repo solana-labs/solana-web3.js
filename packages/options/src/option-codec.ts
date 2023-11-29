@@ -62,7 +62,7 @@ function optionCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean, d
  */
 export function getOptionEncoder<T>(
     item: Encoder<T>,
-    config: OptionCodecConfig<NumberEncoder> = {}
+    config: OptionCodecConfig<NumberEncoder> = {},
 ): Encoder<OptionOrNullable<T>> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
@@ -86,7 +86,7 @@ export function getOptionEncoder<T>(
  */
 export function getOptionDecoder<T>(
     item: Decoder<T>,
-    config: OptionCodecConfig<NumberDecoder> = {}
+    config: OptionCodecConfig<NumberDecoder> = {},
 ): Decoder<Option<T>> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
@@ -117,7 +117,7 @@ export function getOptionDecoder<T>(
  */
 export function getOptionCodec<T, U extends T = T>(
     item: Codec<T, U>,
-    config: OptionCodecConfig<NumberCodec> = {}
+    config: OptionCodecConfig<NumberCodec> = {},
 ): Codec<OptionOrNullable<T>, Option<U>> {
     return combineCodec(getOptionEncoder<T>(item, config), getOptionDecoder<U>(item, config));
 }

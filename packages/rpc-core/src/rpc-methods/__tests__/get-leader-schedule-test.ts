@@ -144,7 +144,7 @@ describe('getLeaderSchedule', () => {
                 const leaderSchedulePromise = rpc
                     .getLeaderSchedule(
                         2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
-                        { commitment }
+                        { commitment },
                     )
                     .send();
                 await expect(leaderSchedulePromise).resolves.toBeNull();

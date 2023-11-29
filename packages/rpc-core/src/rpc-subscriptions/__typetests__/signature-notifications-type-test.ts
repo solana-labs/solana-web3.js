@@ -18,7 +18,7 @@ async () => {
     >;
 
     rpcSubscriptions.signatureNotifications(
-        'xxxxx' as Signature
+        'xxxxx' as Signature,
     ) satisfies PendingRpcSubscription<TNotificationProcessed>;
     rpcSubscriptions
         .signatureNotifications('xxxxx' as Signature)

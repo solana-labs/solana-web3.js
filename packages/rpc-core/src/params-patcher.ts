@@ -7,7 +7,7 @@ type TypescriptBug33014 = any;
 function visitNode<T>(value: T, keyPath: (number | string)[], onIntegerOverflow?: IntegerOverflowHandler): Patched<T> {
     if (Array.isArray(value)) {
         return value.map((element, ii) =>
-            visitNode(element, [...keyPath, ii], onIntegerOverflow)
+            visitNode(element, [...keyPath, ii], onIntegerOverflow),
         ) as TypescriptBug33014;
     } else if (typeof value === 'object' && value !== null) {
         const out = {} as TypescriptBug33014;

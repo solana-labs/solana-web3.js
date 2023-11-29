@@ -32,7 +32,7 @@ describe('assertIsTransactionModifyingSigner', () => {
         expect(() => assertIsTransactionModifyingSigner(mySigner)).not.toThrow();
         expect(() => assertIsTransactionModifyingSigner({ address: myAddress })).toThrow(expectedMessage);
         expect(() => assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
-            expectedMessage
+            expectedMessage,
         );
     });
 });

@@ -84,7 +84,7 @@ describe('patchResponseForSolanaLabsRpc', () => {
             'numeric response': { allowedKeyPaths: [[]], expectation: 10, input: 10 },
         }).forEach(([description, { allowedKeyPaths, expectation, input }]) => {
             it(`performs no \`bigint\` upcasts on ${description} when the allowlist is of the form \`${JSON.stringify(
-                allowedKeyPaths
+                allowedKeyPaths,
             )}\``, () => {
                 jest.mocked(getAllowedNumericKeypathsForResponse).mockReturnValue({ getBlocks: allowedKeyPaths });
                 expect(patchResponseForSolanaLabsRpc(input, 'getBlocks')).toStrictEqual(expectation);

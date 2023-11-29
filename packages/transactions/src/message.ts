@@ -27,7 +27,7 @@ type VersionedCompiledMessage = BaseCompiledMessage &
     }>;
 
 export function compileMessage(
-    transaction: CompilableTransaction & Readonly<{ version: 'legacy' }>
+    transaction: CompilableTransaction & Readonly<{ version: 'legacy' }>,
 ): LegacyCompiledMessage;
 export function compileMessage(transaction: CompilableTransaction): VersionedCompiledMessage;
 export function compileMessage(transaction: CompilableTransaction): CompiledMessage {

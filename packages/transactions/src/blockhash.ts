@@ -46,19 +46,19 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
 
 export function setTransactionLifetimeUsingBlockhash<TTransaction extends BaseTransaction & IDurableNonceTransaction>(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): Omit<TTransaction, keyof ITransactionWithSignatures | 'lifetimeConstraint'> & ITransactionWithBlockhashLifetime;
 
 export function setTransactionLifetimeUsingBlockhash<
-    TTransaction extends BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+    TTransaction extends BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures)
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithBlockhashLifetime;
 
 export function setTransactionLifetimeUsingBlockhash(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 ) {
     if (
         'lifetimeConstraint' in transaction &&

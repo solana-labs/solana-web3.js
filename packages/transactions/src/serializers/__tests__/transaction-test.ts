@@ -53,7 +53,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
 
                 /** COMPILED MESSAGE */
                 ...mockCompiledWireMessage,
-            ])
+            ]),
         );
     });
     it('serializes a partially signed transaction', () => {
@@ -61,7 +61,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
         expect(
             transaction.encode({ signatures: { [addressA]: mockSignatureA } } as Parameters<
                 typeof transaction.encode
-            >[0])
+            >[0]),
         ).toStrictEqual(
             new Uint8Array([
                 /** SIGNATURES */
@@ -71,7 +71,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
 
                 /** COMPILED MESSAGE */
                 ...mockCompiledWireMessage,
-            ])
+            ]),
         );
     });
     it('serializes a fully signed transaction', () => {
@@ -80,7 +80,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
         expect(
             transaction.encode({
                 signatures: { [addressA]: mockSignatureA, [addressB]: mockSignatureB },
-            } as Parameters<typeof transaction.encode>[0])
+            } as Parameters<typeof transaction.encode>[0]),
         ).toStrictEqual(
             new Uint8Array([
                 /** SIGNATURES */
@@ -90,7 +90,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
 
                 /** COMPILED MESSAGE */
                 ...mockCompiledWireMessage,
-            ])
+            ]),
         );
     });
 });
@@ -162,7 +162,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
-            undefined
+            undefined,
         );
     });
     it('deserializes a partially signed transaction', () => {
@@ -186,7 +186,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, mockSignatureA],
             },
-            undefined
+            undefined,
         );
     });
     it('deserializes a fully signed transaction', () => {
@@ -210,7 +210,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [mockSignatureB, mockSignatureA],
             },
-            undefined
+            undefined,
         );
     });
     it('passes lastValidBlockHeight to decompileTransaction', () => {
@@ -233,7 +233,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
-            100n
+            100n,
         );
     });
 });

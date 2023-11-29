@@ -11,7 +11,7 @@ export interface RpcGraphQL {
     context: RpcGraphQLContext;
     query(
         source: string | Source,
-        variableValues?: { readonly [variable: string]: unknown }
+        variableValues?: { readonly [variable: string]: unknown },
     ): ReturnType<typeof graphql>;
     schema: GraphQLSchema;
 }

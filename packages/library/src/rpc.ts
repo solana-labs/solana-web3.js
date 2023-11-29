@@ -23,7 +23,7 @@ export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0]
 }
 
 export function createSolanaRpcSubscriptions(
-    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
+    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>,
 ): RpcSubscriptions<SolanaRpcSubscriptions> {
     return pipe(
         createJsonSubscriptionRpc({
@@ -34,12 +34,12 @@ export function createSolanaRpcSubscriptions(
             getRpcSubscriptionsWithSubscriptionCoalescing({
                 getDeduplicationKey: (...args) => fastStableStringify(args),
                 rpcSubscriptions,
-            })
+            }),
     );
 }
 
 export function createSolanaRpcSubscriptions_UNSTABLE(
-    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>
+    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>,
 ): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
     return createJsonSubscriptionRpc({
         ...config,

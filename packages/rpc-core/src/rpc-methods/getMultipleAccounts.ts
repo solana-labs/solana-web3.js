@@ -37,7 +37,7 @@ export interface GetMultipleAccountsApi {
             GetMultipleAccountsApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64';
-            }>
+            }>,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
@@ -46,7 +46,7 @@ export interface GetMultipleAccountsApi {
             GetMultipleAccountsApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base64+zstd';
-            }>
+            }>,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedZStdCompressedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
@@ -54,7 +54,7 @@ export interface GetMultipleAccountsApi {
         config: GetMultipleAccountsApiCommonConfig &
             Readonly<{
                 encoding: 'jsonParsed';
-            }>
+            }>,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithJsonData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
@@ -63,11 +63,11 @@ export interface GetMultipleAccountsApi {
             GetMultipleAccountsApiSliceableCommonConfig &
             Readonly<{
                 encoding: 'base58';
-            }>
+            }>,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase58EncodedData | null))[]>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Address[],
-        config?: GetMultipleAccountsApiCommonConfig
+        config?: GetMultipleAccountsApiCommonConfig,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
 }

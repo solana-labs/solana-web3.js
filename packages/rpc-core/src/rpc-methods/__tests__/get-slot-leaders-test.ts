@@ -58,7 +58,7 @@ describe('getSlotLeaders', () => {
             const sendPromise = rpc
                 .getSlotLeaders(
                     2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
-                    3
+                    3,
                 )
                 .send();
             await expect(sendPromise).rejects.toMatchObject({

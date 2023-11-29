@@ -15,7 +15,7 @@ import { BaseTransaction } from '../types';
 
 function createMockAdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string
+    TNonceAuthorityAddress extends string = string,
 >({
     nonceAccountAddress,
     nonceAuthorityAddress,
@@ -190,7 +190,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
             const transaction: BaseTransaction = { ...baseTx, instructions: [instruction, baseTx.instructions[0]] };
             const durableNonceTxWithConstraintA = setTransactionLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_A,
-                transaction
+                transaction,
             );
             expect(durableNonceTxWithConstraintA.instructions).toEqual([instruction, baseTx.instructions[0]]);
         });
@@ -201,7 +201,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
             };
             const durableNonceTxWithConstraintA = setTransactionLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_A,
-                transaction
+                transaction,
             );
             expect(durableNonceTxWithConstraintA.instructions).toEqual([
                 createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
@@ -225,7 +225,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
         it('sets the new durable nonce constraint on the transaction when it differs from the existing one', () => {
             const durableNonceTxWithConstraintB = setTransactionLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_B,
-                durableNonceTxWithConstraintA
+                durableNonceTxWithConstraintA,
             );
             expect(durableNonceTxWithConstraintB).toHaveProperty('lifetimeConstraint', {
                 nonce: NONCE_CONSTRAINT_B.nonce,
@@ -234,7 +234,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
         it('replaces the advance nonce account instruction when it differs from the existing one', () => {
             const durableNonceTxWithConstraintB = setTransactionLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_B,
-                durableNonceTxWithConstraintA
+                durableNonceTxWithConstraintA,
             );
             expect(durableNonceTxWithConstraintB.instructions).toEqual([
                 createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_B),
@@ -244,7 +244,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
         it('returns the original transaction when trying to set the same durable nonce constraint again', () => {
             const txWithSameNonceLifetimeConstraint = setTransactionLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_A,
-                durableNonceTxWithConstraintA
+                durableNonceTxWithConstraintA,
             );
             expect(durableNonceTxWithConstraintA).toBe(txWithSameNonceLifetimeConstraint);
         });
@@ -262,16 +262,16 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
                 expect(
                     setTransactionLifetimeUsingDurableNonce(
                         NONCE_CONSTRAINT_A,
-                        durableNonceTxWithConstraintAAndSignatures
-                    )
+                        durableNonceTxWithConstraintAAndSignatures,
+                    ),
                 ).toHaveProperty('signatures', durableNonceTxWithConstraintAAndSignatures.signatures);
             });
             it('clears the signatures when the durable nonce constraint is different than the current one', () => {
                 expect(
                     setTransactionLifetimeUsingDurableNonce(
                         NONCE_CONSTRAINT_B,
-                        durableNonceTxWithConstraintAAndSignatures
-                    )
+                        durableNonceTxWithConstraintAAndSignatures,
+                    ),
                 ).not.toHaveProperty('signatures');
             });
         });

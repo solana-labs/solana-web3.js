@@ -44,7 +44,7 @@ describe('assertIsBlockhash()', () => {
             expect(() => {
                 assertIsBlockhash(
                     // 31 bytes [128, ..., 128]
-                    '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM'
+                    '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                 );
             }).toThrow();
         });
@@ -79,7 +79,7 @@ describe('assertIsBlockhash()', () => {
             try {
                 assertIsBlockhash(
                     // 31 bytes [0, ..., 0]
-                    '1111111111111111111111111111111' // 31 characters
+                    '1111111111111111111111111111111', // 31 characters
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
@@ -89,7 +89,7 @@ describe('assertIsBlockhash()', () => {
             try {
                 assertIsBlockhash(
                     // 33 bytes [0, 255, ..., 255]
-                    '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG' // 45 characters
+                    '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG', // 45 characters
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
@@ -140,14 +140,14 @@ describe('setTransactionLifetimeUsingBlockhash', () => {
         it('sets the new blockhash lifetime constraint on the transaction when it differs from the existing one', () => {
             const txWithBlockhashLifetimeConstraintB = setTransactionLifetimeUsingBlockhash(
                 BLOCKHASH_CONSTRAINT_B,
-                txWithBlockhashLifetimeConstraint
+                txWithBlockhashLifetimeConstraint,
             );
             expect(txWithBlockhashLifetimeConstraintB).toHaveProperty('lifetimeConstraint', BLOCKHASH_CONSTRAINT_B);
         });
         it('returns the original transaction when trying to set the same blockhash lifetime constraint again', () => {
             const txWithSameBlockhashLifetimeConstraint = setTransactionLifetimeUsingBlockhash(
                 BLOCKHASH_CONSTRAINT_A,
-                txWithBlockhashLifetimeConstraint
+                txWithBlockhashLifetimeConstraint,
             );
             expect(txWithBlockhashLifetimeConstraint).toBe(txWithSameBlockhashLifetimeConstraint);
         });
@@ -165,16 +165,16 @@ describe('setTransactionLifetimeUsingBlockhash', () => {
                 expect(
                     setTransactionLifetimeUsingBlockhash(
                         BLOCKHASH_CONSTRAINT_A,
-                        txWithBlockhashLifetimeConstraintAndSignatures
-                    )
+                        txWithBlockhashLifetimeConstraintAndSignatures,
+                    ),
                 ).toHaveProperty('signatures', txWithBlockhashLifetimeConstraintAndSignatures.signatures);
             });
             it('clears the signatures when the blockhash lifetime constraint is different than the current one', () => {
                 expect(
                     setTransactionLifetimeUsingBlockhash(
                         BLOCKHASH_CONSTRAINT_B,
-                        txWithBlockhashLifetimeConstraintAndSignatures
-                    )
+                        txWithBlockhashLifetimeConstraintAndSignatures,
+                    ),
                 ).not.toHaveProperty('signatures');
             });
         });

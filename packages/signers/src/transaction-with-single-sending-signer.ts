@@ -12,7 +12,7 @@ export type ITransactionWithSingleSendingSigner = ITransactionWithSigners & {
 
 /** Checks whether the provided transaction has exactly one {@link TransactionSendingSigner}. */
 export function isTransactionWithSingleSendingSigner<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction
+    transaction: TTransaction,
 ): transaction is TTransaction & ITransactionWithSingleSendingSigner {
     try {
         assertIsTransactionWithSingleSendingSigner(transaction);
@@ -24,7 +24,7 @@ export function isTransactionWithSingleSendingSigner<TTransaction extends Compil
 
 /** Asserts that the provided transaction has exactly one {@link TransactionSendingSigner}. */
 export function assertIsTransactionWithSingleSendingSigner<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction
+    transaction: TTransaction,
 ): asserts transaction is TTransaction & ITransactionWithSingleSendingSigner {
     const signers = getSignersFromTransaction(transaction);
     const sendingSigners = signers.filter(isTransactionSendingSigner);
@@ -40,7 +40,7 @@ export function assertIsTransactionWithSingleSendingSigner<TTransaction extends 
     // sending signers that do not implement other transaction signer interfaces as
     // they will be used as these other signer interfaces in case of a conflict.
     const sendingOnlySigners = sendingSigners.filter(
-        signer => !isTransactionPartialSigner(signer) && !isTransactionModifyingSigner(signer)
+        signer => !isTransactionPartialSigner(signer) && !isTransactionModifyingSigner(signer),
     );
 
     if (sendingOnlySigners.length > 1) {

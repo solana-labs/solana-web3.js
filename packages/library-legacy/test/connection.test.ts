@@ -2829,9 +2829,8 @@ describe('Connection', function () {
     expect(resultSlotRange.firstSlot).to.equal(firstSlot);
     expect(resultSlotRange.lastSlot).to.equal(lastSlot);
 
-    const resultCommitmentOnly = await connection.getBlockProduction(
-      commitment,
-    );
+    const resultCommitmentOnly =
+      await connection.getBlockProduction(commitment);
 
     if (!resultCommitmentOnly) {
       expect(resultCommitmentOnly).to.be.ok;
@@ -3133,9 +3132,8 @@ describe('Connection', function () {
       },
     });
 
-    const result = await connection.getConfirmedTransaction(
-      confirmedTransaction,
-    );
+    const result =
+      await connection.getConfirmedTransaction(confirmedTransaction);
 
     if (!result) {
       expect(result).to.be.ok;
@@ -3164,9 +3162,8 @@ describe('Connection', function () {
     });
 
     // Signature hasn't been finalized yet
-    const nullResponse = await connection.getConfirmedTransaction(
-      recentSignature,
-    );
+    const nullResponse =
+      await connection.getConfirmedTransaction(recentSignature);
     expect(nullResponse).to.be.null;
   });
 
@@ -3362,9 +3359,8 @@ describe('Connection', function () {
         }),
       });
 
-      const result = await connection.getParsedConfirmedTransaction(
-        confirmedTransaction,
-      );
+      const result =
+        await connection.getParsedConfirmedTransaction(confirmedTransaction);
 
       if (result && result.meta && result.meta.innerInstructions) {
         const innerInstructions = result.meta.innerInstructions;
@@ -3385,9 +3381,8 @@ describe('Connection', function () {
         }),
       });
 
-      const result2 = await connection.getParsedConfirmedTransaction(
-        confirmedTransaction,
-      );
+      const result2 =
+        await connection.getParsedConfirmedTransaction(confirmedTransaction);
 
       if (result2 && result2.meta && result2.meta.innerInstructions) {
         const innerInstructions = result2.meta.innerInstructions;
@@ -4104,9 +4099,8 @@ describe('Connection', function () {
           }
         | undefined;
       while (!result) {
-        const candidateBlock = await connection.getConfirmedBlock(
-          candidateSlot,
-        );
+        const candidateBlock =
+          await connection.getConfirmedBlock(candidateSlot);
         if (candidateBlock && candidateBlock.transactions.length) {
           const parentBlock = await connection.getConfirmedBlock(
             candidateSlot - 1,
@@ -4326,9 +4320,8 @@ describe('Connection', function () {
           }
         | undefined;
       while (!result) {
-        const candidateBlock = await connection.getBlockSignatures(
-          candidateSlot,
-        );
+        const candidateBlock =
+          await connection.getBlockSignatures(candidateSlot);
         if (candidateBlock && candidateBlock.signatures.length) {
           const parentBlock = await connection.getBlockSignatures(
             candidateSlot - 1,
@@ -4783,9 +4776,8 @@ describe('Connection', function () {
       });
 
       it('get confirmed token transaction', async () => {
-        const parsedTx = await connection.getParsedConfirmedTransaction(
-          testSignature,
-        );
+        const parsedTx =
+          await connection.getParsedConfirmedTransaction(testSignature);
         if (parsedTx === null) {
           expect(parsedTx).not.to.be.null;
           return;
@@ -4802,9 +4794,8 @@ describe('Connection', function () {
 
         const missingSignature =
           '45pGoC4Rr3fJ1TKrsiRkhHRbdUeX7633XAGVec6XzVdpRbzQgHhe6ZC6Uq164MPWtiqMg7wCkC6Wy3jy2BqsDEKf';
-        const nullResponse = await connection.getParsedConfirmedTransaction(
-          missingSignature,
-        );
+        const nullResponse =
+          await connection.getParsedConfirmedTransaction(missingSignature);
 
         expect(nullResponse).to.be.null;
       });
@@ -4886,9 +4877,8 @@ describe('Connection', function () {
       });
 
       it('get parsed token program accounts', async () => {
-        const tokenAccounts = await connection.getParsedProgramAccounts(
-          TOKEN_PROGRAM_ID,
-        );
+        const tokenAccounts =
+          await connection.getParsedProgramAccounts(TOKEN_PROGRAM_ID);
         tokenAccounts.forEach(({account}) => {
           expect(account.owner).to.eql(TOKEN_PROGRAM_ID);
           const data = account.data;
@@ -5466,9 +5456,8 @@ describe('Connection', function () {
 
       const accountFrom = Keypair.generate();
       const accountTo = Keypair.generate();
-      const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-        0,
-      );
+      const minimumAmount =
+        await connection.getMinimumBalanceForRentExemption(0);
 
       await helpers.airdrop({
         connection,
@@ -5579,9 +5568,8 @@ describe('Connection', function () {
         LAMPORTS_PER_SOL,
       );
 
-      const minimumAmount = await connection.getMinimumBalanceForRentExemption(
-        0,
-      );
+      const minimumAmount =
+        await connection.getMinimumBalanceForRentExemption(0);
 
       signature = await connection.requestAirdrop(
         accountTo.publicKey,

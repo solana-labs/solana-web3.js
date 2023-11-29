@@ -43,7 +43,7 @@ async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: Retu
             account: programAccount.account,
             address: programAccount.pubkey,
             encoding: config.encoding,
-        })
+        }),
     );
 }
 
@@ -51,7 +51,7 @@ function createProgramAccountsBatchLoadFn(rpc: Rpc) {
     const resolveProgramAccountsUsingRpc = loadProgramAccounts.bind(null, rpc);
     return async (programAccountsQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
         return await Promise.all(
-            programAccountsQueryArgs.map(async args => await resolveProgramAccountsUsingRpc(args))
+            programAccountsQueryArgs.map(async args => await resolveProgramAccountsUsingRpc(args)),
         );
     };
 }

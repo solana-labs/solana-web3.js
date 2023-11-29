@@ -27,7 +27,7 @@ describe('PublicKeySham', () => {
             // This is basically just complaining that `default` is not callable.
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            PublicKey[method]()
+            PublicKey[method](),
         ).toThrow(`PublicKey#${method.toString()} is unimplemented`);
     });
     it('vends the all-zero address at `default`', () => {

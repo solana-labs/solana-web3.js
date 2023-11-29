@@ -24,7 +24,7 @@ export type RpcWebSocketConnection = Readonly<{
 const EXPLICIT_ABORT_TOKEN = Symbol(
     __DEV__
         ? "This symbol is thrown from a socket's iterator when the connection is explicitly aborted by the user"
-        : undefined
+        : undefined,
 );
 
 export async function createWebSocketConnection({
@@ -67,7 +67,7 @@ export async function createWebSocketConnection({
             if (!hasConnected) {
                 reject(
                     // TODO: Coded error
-                    new Error('WebSocket failed to connect', { cause: ev })
+                    new Error('WebSocket failed to connect', { cause: ev }),
                 );
             }
         }
@@ -100,7 +100,7 @@ export async function createWebSocketConnection({
                                 clearInterval(intervalId);
                                 reject(
                                     // TODO: Coded error
-                                    new Error('WebSocket was closed before payload could be sent')
+                                    new Error('WebSocket was closed before payload could be sent'),
                                 );
                             };
                         });
@@ -130,7 +130,7 @@ export async function createWebSocketConnection({
                                 // You should never be able to poll twice in a row.
                                 throw new Error(
                                     'Invariant: WebSocket message iterator state is corrupt; ' +
-                                        'iterated without first resolving existing message promise'
+                                        'iterated without first resolving existing message promise',
                                 );
                             }
                             const queuedMessages = state.queuedMessages;

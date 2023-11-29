@@ -14,6 +14,6 @@ export interface GetBalanceApi {
         config?: Readonly<{
             commitment?: Commitment;
             minContextSlot?: Slot;
-        }>
+        }>,
     ): GetBalanceApiResponse;
 }

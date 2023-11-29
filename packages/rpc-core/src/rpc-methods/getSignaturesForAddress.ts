@@ -43,6 +43,6 @@ export interface GetSignaturesForAddressApi {
      */
     getSignaturesForAddress(
         address: Address,
-        config?: GetSignaturesForAddressConfig
+        config?: GetSignaturesForAddressConfig,
     ): GetSignaturesForAddressApiResponse;
 }

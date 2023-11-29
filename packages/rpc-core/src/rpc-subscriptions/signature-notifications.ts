@@ -31,13 +31,13 @@ export interface SignatureNotificationsApi {
                 // Whether or not to subscribe for notifications when signatures are received
                 // by the RPC, in addition to when they are processed.
                 enableReceivedNotification: true;
-            }>
+            }>,
     ): SignatureNotificationsApiNotificationReceived | SignatureNotificationsApiNotificationProcessed;
     signatureNotifications(
         signature: Signature,
         config?: SignatureNotificationsApiConfigBase &
             Readonly<{
                 enableReceivedNotification?: false;
-            }>
+            }>,
     ): SignatureNotificationsApiNotificationProcessed;
 }

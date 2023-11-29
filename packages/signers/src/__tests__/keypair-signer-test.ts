@@ -13,7 +13,7 @@ import {
 } from '../keypair-signer';
 import { createSignableMessage } from '../signable-message';
 
-const getMockCryptoKeyPair = () => ({ privateKey: {}, publicKey: {} } as CryptoKeyPair);
+const getMockCryptoKeyPair = () => ({ privateKey: {}, publicKey: {} }) as CryptoKeyPair;
 
 // Partial mocks.
 jest.mock('@solana/addresses', () => ({

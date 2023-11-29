@@ -39,7 +39,7 @@ describe('getTokenAccountsByDelegate', () => {
                         {
                             commitment,
                             encoding: 'base64',
-                        }
+                        },
                     )
                     .send();
 
@@ -83,7 +83,7 @@ describe('getTokenAccountsByDelegate', () => {
                     { programId: tokenProgram },
                     {
                         minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
-                    }
+                    },
                 )
                 .send();
             await expect(accountInfoPromise).rejects.toMatchObject({
@@ -149,7 +149,7 @@ describe('getTokenAccountsByDelegate', () => {
                     { mint },
                     {
                         encoding: 'base64',
-                    }
+                    },
                 )
                 .send();
 
@@ -257,7 +257,7 @@ describe('getTokenAccountsByDelegate', () => {
                     { programId: tokenProgram },
                     {
                         encoding: 'base64',
-                    }
+                    },
                 )
                 .send();
 
@@ -299,7 +299,7 @@ describe('getTokenAccountsByDelegate', () => {
                     { programId: tokenProgram },
                     {
                         encoding: 'base64+zstd',
-                    }
+                    },
                 )
                 .send();
 
@@ -341,7 +341,7 @@ describe('getTokenAccountsByDelegate', () => {
                     { programId: tokenProgram },
                     {
                         encoding: 'jsonParsed',
-                    }
+                    },
                 )
                 .send();
 
@@ -412,7 +412,7 @@ describe('getTokenAccountsByDelegate', () => {
                     {
                         dataSlice: { length: 10, offset: 0 },
                         encoding: 'base64',
-                    }
+                    },
                 )
                 .send();
 

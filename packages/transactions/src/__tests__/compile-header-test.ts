@@ -30,7 +30,7 @@ describe('getCompiledMessageHeader', () => {
                     lookupTableAddress: getMockAddress(),
                     role: AccountRole.READONLY,
                 },
-            ] as OrderedAccounts)
+            ] as OrderedAccounts),
         ).toHaveProperty('numSignerAccounts', 3);
     });
     it('counts the number of readonly signers', () => {
@@ -53,7 +53,7 @@ describe('getCompiledMessageHeader', () => {
                     lookupTableAddress: getMockAddress(),
                     role: AccountRole.READONLY,
                 },
-            ] as OrderedAccounts)
+            ] as OrderedAccounts),
         ).toHaveProperty('numReadonlySignerAccounts', 2);
     });
     it('counts the number of readonly non-signers, ignoring lookup table addresses', () => {
@@ -76,7 +76,7 @@ describe('getCompiledMessageHeader', () => {
                     lookupTableAddress: getMockAddress(),
                     role: AccountRole.READONLY,
                 },
-            ] as OrderedAccounts)
+            ] as OrderedAccounts),
         ).toHaveProperty('numReadonlyNonSignerAccounts', 1);
     });
 });

@@ -10,7 +10,7 @@ describe('RPC integer overflow behavior', () => {
             () =>
                 new Promise(_ => {
                     /* never resolve */
-                })
+                }),
         ) as IRpcTransport;
         rpc = createSolanaRpc({ transport });
     });

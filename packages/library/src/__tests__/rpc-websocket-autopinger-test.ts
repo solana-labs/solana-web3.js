@@ -57,7 +57,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
         // Second ping.
         send.mockClear();
@@ -68,7 +68,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
     });
     it('does not send a ping until interval milliseconds after the last sent message', async () => {
@@ -85,7 +85,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
     });
     it('does not send a ping until interval milliseconds after the last received message', async () => {
@@ -103,7 +103,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
     });
     it('does not send a ping after the connection throws', async () => {
@@ -115,7 +115,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
         killConnection();
         await jest.runAllTimersAsync();
@@ -133,7 +133,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             expect.objectContaining({
                 jsonrpc: '2.0',
                 method: 'ping',
-            })
+            }),
         );
         returnFromConnection();
         await jest.runAllTimersAsync();
@@ -173,7 +173,7 @@ describe('getWebSocketTransportWithAutoping', () => {
                     expect.objectContaining({
                         jsonrpc: '2.0',
                         method: 'ping',
-                    })
+                    }),
                 );
             });
             it('pings the connection interval milliseconds after the connection comes back online', async () => {
@@ -190,7 +190,7 @@ describe('getWebSocketTransportWithAutoping', () => {
                     expect.objectContaining({
                         jsonrpc: '2.0',
                         method: 'ping',
-                    })
+                    }),
                 );
             });
         });

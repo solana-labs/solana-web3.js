@@ -49,7 +49,7 @@ function visitNode<T>(value: unknown, allowedKeypaths: readonly KeyPath[]): T {
 
 export function patchResponseForSolanaLabsRpc<T>(
     rawResponse: unknown,
-    methodName?: keyof ReturnType<typeof createSolanaRpcApi>
+    methodName?: keyof ReturnType<typeof createSolanaRpcApi>,
 ): T {
     const allowedKeypaths = methodName ? getAllowedNumericKeypathsForResponse()[methodName] : undefined;
     return visitNode(rawResponse, allowedKeypaths ?? []);
@@ -57,7 +57,7 @@ export function patchResponseForSolanaLabsRpc<T>(
 
 export function patchResponseForSolanaLabsRpcSubscriptions<T>(
     rawResponse: unknown,
-    methodName?: keyof ReturnType<typeof createSolanaRpcSubscriptionsApi>
+    methodName?: keyof ReturnType<typeof createSolanaRpcSubscriptionsApi>,
 ): T {
     const allowedKeypaths = methodName ? getAllowedNumericKeypathsForNotification()[methodName] : undefined;
     return visitNode(rawResponse, allowedKeypaths ?? []);

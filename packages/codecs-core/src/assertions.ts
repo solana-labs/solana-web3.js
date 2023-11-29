@@ -17,7 +17,7 @@ export function assertByteArrayHasEnoughBytesForCodec(
     codecDescription: string,
     expected: number,
     bytes: Uint8Array,
-    offset = 0
+    offset = 0,
 ) {
     const bytesLength = bytes.length - offset;
     if (bytesLength < expected) {
@@ -31,7 +31,7 @@ export function assertByteArrayHasEnoughBytesForCodec(
  */
 export function assertFixedSizeCodec(
     data: Pick<CodecData, 'fixedSize'>,
-    message?: string
+    message?: string,
 ): asserts data is { fixedSize: number } {
     if (data.fixedSize === null) {
         // TODO: Coded error.

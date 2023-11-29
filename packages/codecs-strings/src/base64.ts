@@ -66,7 +66,7 @@ export const getBase64Decoder = (): Decoder<string> => {
     }
 
     return mapDecoder(getBaseXResliceDecoder(alphabet, 6), (value: string): string =>
-        value.padEnd(Math.ceil(value.length / 4) * 4, '=')
+        value.padEnd(Math.ceil(value.length / 4) * 4, '='),
     );
 };
 

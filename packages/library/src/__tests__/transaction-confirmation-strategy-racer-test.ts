@@ -21,14 +21,14 @@ describe('raceStrategies', () => {
             },
             function getSpecificStrategiesForRace() {
                 return [];
-            }
+            },
         );
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
         await jest.runAllTimersAsync();
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
     it('aborts the `AbortController` passed to `getRecentSignatureConfirmationPromise` when the caller-supplied `AbortSignal` aborts', async () => {
@@ -44,14 +44,14 @@ describe('raceStrategies', () => {
             },
             function getSpecificStrategiesForRace() {
                 return [];
-            }
+            },
         );
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
         abortController.abort();
         expect(getRecentSignatureConfirmationPromise).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
     it('aborts the `AbortController` passed to the specific strategies when finished', async () => {
@@ -63,14 +63,14 @@ describe('raceStrategies', () => {
                 commitment: 'finalized',
                 getRecentSignatureConfirmationPromise: jest.fn(),
             },
-            getSpecificStrategiesForRace
+            getSpecificStrategiesForRace,
         );
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
         await jest.runAllTimersAsync();
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
     it('aborts the `AbortController` passed to the specific strategies when the caller-supplied `AbortSignal` aborts', async () => {
@@ -84,14 +84,14 @@ describe('raceStrategies', () => {
                 commitment: 'finalized',
                 getRecentSignatureConfirmationPromise: jest.fn().mockReturnValue(FOREVER_PROMISE),
             },
-            getSpecificStrategiesForRace
+            getSpecificStrategiesForRace,
         );
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: false }) }),
         );
         abortController.abort();
         expect(getSpecificStrategiesForRace).toHaveBeenCalledWith(
-            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) })
+            expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
 });

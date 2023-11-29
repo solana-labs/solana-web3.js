@@ -113,7 +113,7 @@ describe('sendTransaction', () => {
         describe(`when called with \`${commitment}\` preflight commitment`, () => {
             if (commitment === 'finalized') {
                 it.todo(
-                    'returns the transaction signature (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)'
+                    'returns the transaction signature (test broken; see https://discord.com/channels/428295358100013066/560496939779620864/1132048104728825926)',
                 );
                 return;
             }
@@ -136,9 +136,9 @@ describe('sendTransaction', () => {
                                 0x01, // Length of signatures
                                 ...signature,
                                 ...message,
-                            ])
+                            ]),
                         ).toString('base64') as Base64EncodedWireTransaction,
-                        { encoding: 'base64', preflightCommitment: commitment }
+                        { encoding: 'base64', preflightCommitment: commitment },
                     )
                     .send();
                 await expect(resultPromise).resolves.toEqual(getBase58Decoder().decode(signature)[0]);
@@ -161,9 +161,9 @@ describe('sendTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { encoding: 'base64', preflightCommitment: 'processed' }
+                { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
@@ -192,15 +192,15 @@ describe('sendTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { encoding: 'base64', preflightCommitment: 'processed' }
+                { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
             code: -32602 satisfies (typeof SolanaJsonRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
             message: expect.stringContaining(
-                'invalid value: integer `126`, expected a valid transaction message version'
+                'invalid value: integer `126`, expected a valid transaction message version',
             ),
             name: 'SolanaJsonRpcError',
         });
@@ -217,9 +217,9 @@ describe('sendTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { encoding: 'base64', preflightCommitment: 'processed' }
+                { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
@@ -253,9 +253,9 @@ describe('sendTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { encoding: 'base64', preflightCommitment: 'processed' }
+                { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
@@ -280,9 +280,9 @@ describe('sendTransaction', () => {
                         0x01, // Length of signatures
                         ...signature,
                         ...message,
-                    ])
+                    ]),
                 ).toString('base64') as Base64EncodedWireTransaction,
-                { encoding: 'base64', preflightCommitment: 'processed' }
+                { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
         await expect(resultPromise).rejects.toMatchObject({
@@ -311,13 +311,13 @@ describe('sendTransaction', () => {
                             0x01, // Length of signatures
                             ...signature,
                             ...message,
-                        ])
+                        ]),
                     ).toString('base64') as Base64EncodedWireTransaction,
                     {
                         encoding: 'base64',
                         minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                         preflightCommitment: 'processed',
-                    }
+                    },
                 )
                 .send();
             await expect(resultPromise).rejects.toMatchObject({

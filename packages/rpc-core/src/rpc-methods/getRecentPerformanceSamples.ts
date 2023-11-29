@@ -21,6 +21,6 @@ export interface GetRecentPerformanceSamplesApi {
      */
     getRecentPerformanceSamples(
         /** number of samples to return (maximum 720) */
-        limit?: number
+        limit?: number,
     ): GetRecentPerformanceSamplesApiResponse;
 }

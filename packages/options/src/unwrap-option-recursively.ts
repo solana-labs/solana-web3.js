@@ -32,14 +32,14 @@ type UnUnwrappables =
 export type UnwrappedOption<T, U = null> = T extends Some<infer TValue>
     ? UnwrappedOption<TValue, U>
     : T extends None
-    ? U
-    : T extends UnUnwrappables
-    ? T
-    : T extends object
-    ? { [key in keyof T]: UnwrappedOption<T[key], U> }
-    : T extends Array<infer TItem>
-    ? Array<UnwrappedOption<TItem, U>>
-    : T;
+      ? U
+      : T extends UnUnwrappables
+        ? T
+        : T extends object
+          ? { [key in keyof T]: UnwrappedOption<T[key], U> }
+          : T extends Array<infer TItem>
+            ? Array<UnwrappedOption<TItem, U>>
+            : T;
 
 /**
  * Recursively go through a type `T` such that all

@@ -14,6 +14,6 @@ export interface GetTokenAccountBalanceApi {
         address: Address,
         config?: Readonly<{
             commitment?: Commitment;
-        }>
+        }>,
     ): GetTokenAccountBalanceApiResponse;
 }
