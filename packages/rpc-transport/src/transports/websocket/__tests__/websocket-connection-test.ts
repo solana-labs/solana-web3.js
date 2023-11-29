@@ -31,6 +31,15 @@ describe('createWebSocketConnection', () => {
         await connectionPromise;
         expect(client).toHaveProperty('readyState', WebSocket.OPEN);
     });
+    it('throws when the socket fails to connect', async () => {
+        expect.assertions(1);
+        const connectionPromise = createWebSocketConnection({
+            sendBufferHighWatermark: 0,
+            signal: new AbortController().signal,
+            url: 'ws://fake', // Wrong URL!
+        });
+        await expect(connectionPromise).rejects.toThrow('WebSocket failed to connect');
+    });
     // https://github.com/thoov/mock-socket/issues/384
     it.failing('throws when the connection is aborted before the connection is established', async () => {
         expect.assertions(1);
