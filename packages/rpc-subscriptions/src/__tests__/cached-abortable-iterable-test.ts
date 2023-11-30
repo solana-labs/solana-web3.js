@@ -41,7 +41,7 @@ describe('getCachedAbortableIterableFactory', () => {
     it('reuses the same iterable so long as there is at least one non-aborted consumer', async () => {
         expect.assertions(1);
         const abortControllerA = new AbortController();
-        getAbortSignalFromInputArgs.mockReturnValue(abortControllerA.signal);
+        getAbortSignalFromInputArgs.mockReturnValueOnce(abortControllerA.signal);
         await factory('A');
         await factory('B');
         abortControllerA.abort();
