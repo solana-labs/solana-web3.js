@@ -85,6 +85,8 @@ if (process.env.TEST_LIVE) {
           programData,
           BPF_LOADER_PROGRAM_ID,
         );
+        await expect(failedLoadPromise).to.be.rejected;
+
         // Second load will succeed
         const successfulLoadPromise = BpfLoader.load(
           connection,
@@ -93,7 +95,6 @@ if (process.env.TEST_LIVE) {
           programData,
           BPF_LOADER_PROGRAM_ID,
         );
-        await expect(failedLoadPromise).to.be.rejected;
         await expect(successfulLoadPromise).not.to.be.rejected;
       });
 
