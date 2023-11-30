@@ -1056,8 +1056,8 @@ importers:
         specifier: ^7.1.8
         version: 7.1.8
       '@types/express-serve-static-core':
-        specifier: ^4.17.35
-        version: 4.17.35
+        specifier: ^4.17.41
+        version: 4.17.41
       '@types/mocha':
         specifier: ^10.0.6
         version: 10.0.6
@@ -5315,8 +5315,8 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
 
-  /@types/express-serve-static-core@4.17.35:
-    resolution: {integrity: sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==}
+  /@types/express-serve-static-core@4.17.41:
+    resolution: {integrity: sha512-OaJ7XLaelTgrvlZD8/aa0vvvxZdUmlCn6MtWeB7TkiKW70BQLc9XEPpDLPdbo52ZhXUCrznlWdCHWxJWtdyajA==}
     dependencies:
       '@types/node': 20.10.0
       '@types/qs': 6.9.7
