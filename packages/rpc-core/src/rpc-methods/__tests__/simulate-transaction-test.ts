@@ -1,6 +1,7 @@
 import { Address } from '@solana/addresses';
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import { createPrivateKeyFromBytes } from '@solana/keys';
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
@@ -104,43 +105,10 @@ function getMockTransactionMessageWithAdditionalAccount({
     ]);
 }
 
-const MOCK_PKCS8_PRIVATE_KEY =
-    // prettier-ignore
-    new Uint8Array([
-        /**
-         * PKCS#8 header
-         */
-        0x30, // ASN.1 sequence tag
-        0x2e, // Length of sequence (46 more bytes)
-
-        0x02, // ASN.1 integer tag
-        0x01, // Length of integer
-        0x00, // Version number
-
-        0x30, // ASN.1 sequence tag
-        0x05, // Length of sequence
-        0x06, // ASN.1 object identifier tag
-        0x03, // Length of object identifier
-        // Edwards curve algorithms identifier https://oid-rep.orange-labs.fr/get/1.3.101.112
-        0x2b, // iso(1) / identified-organization(3) (The first node is multiplied by the decimal 40 and the result is added to the value of the second node)
-        0x65, // thawte(101)
-        // Ed25519 identifier
-        0x70, // id-Ed25519(112)
-
-        /**
-         * Private key payload
-         */
-        0x04, // ASN.1 octet string tag
-        0x22, // String length (34 more bytes)
-
-        // Private key bytes as octet string
-        0x04, // ASN.1 octet string tag
-        0x20, // String length (32 bytes)
-        16, 192, 67, 187, 170, 210, 152, 95,
-        180, 204, 123, 21, 81, 45, 171, 85,
-        188, 91, 164, 34, 8, 0, 244, 56,
-        209, 190, 255, 201, 212, 94, 45, 186,
-    ]);
+const MOCK_PRIVATE_KEY_BYTES = new Uint8Array([
+    16, 192, 67, 187, 170, 210, 152, 95, 180, 204, 123, 21, 81, 45, 171, 85, 188, 91, 164, 34, 8, 0, 244, 56, 209, 190,
+    255, 201, 212, 94, 45, 186,
+]);
 // See scripts/fixtures/send-transaction-fee-payer.json
 const MOCK_PUBLIC_KEY_BYTES = // DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i
     // prettier-ignore
@@ -150,7 +118,7 @@ const MOCK_PUBLIC_KEY_BYTES = // DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i
     ]);
 
 async function getSecretKey() {
-    return await crypto.subtle.importKey('pkcs8', MOCK_PKCS8_PRIVATE_KEY, 'Ed25519', /* extractable */ false, ['sign']);
+    return await createPrivateKeyFromBytes(MOCK_PRIVATE_KEY_BYTES, /* extractable */ false);
 }
 
 describe('simulateTransaction', () => {
