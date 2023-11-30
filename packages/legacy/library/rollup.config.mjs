@@ -30,7 +30,7 @@ function generateConfig(configType, format) {
               if (resolved == null) {
                 return;
               }
-              const {id: resolvedId} = resolved;
+              const { id: resolvedId } = resolved;
               const directory = path.dirname(resolvedId);
               const moduleFilename = path.basename(resolvedId);
               const forkPath = path.join(
@@ -82,7 +82,7 @@ function generateConfig(configType, format) {
       if (warning.code === 'CIRCULAR_DEPENDENCY') {
         throw new Error(
           'Please eliminate the circular dependencies listed ' +
-            'above and retry the build',
+          'above and retry the build',
         );
       }
     },
@@ -137,7 +137,7 @@ function generateConfig(configType, format) {
               format: 'iife',
               name: 'solanaWeb3',
               sourcemap: true,
-              plugins: [terser({mangle: false, compress: false})],
+              plugins: [terser({ mangle: false, compress: false })],
             },
           ];
 
@@ -146,19 +146,18 @@ function generateConfig(configType, format) {
         default: {
           config.output = [
             {
-              file: `lib/index.${
-                configType === 'react-native' ? 'native' : 'browser.cjs'
-              }.js`,
+              file: `lib/index.${configType === 'react-native' ? 'native' : 'browser.cjs'
+                }.js`,
               format: 'cjs',
               interop: 'compat',
               sourcemap: true,
             },
             configType === 'browser'
               ? {
-                  file: 'lib/index.browser.esm.js',
-                  format: 'es',
-                  sourcemap: true,
-                }
+                file: 'lib/index.browser.esm.js',
+                format: 'es',
+                sourcemap: true,
+              }
               : null,
           ].filter(Boolean);
 

@@ -92,7 +92,7 @@ $ npm run test:live-with-test-validator:setup
 To start the test validator and run all of the integration tests in live mode:
 
 ```shell
-$ cd packages/library-legacy
+$ cd packages/legacy/library
 $ npm run test:live-with-test-validator
 ```
 
