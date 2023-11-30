@@ -44,6 +44,31 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
     }
 }
 
+function isTransactionWithBlockhashLifetime(
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+): transaction is BaseTransaction & ITransactionWithBlockhashLifetime {
+    const lifetimeConstraintShapeMatches =
+        'lifetimeConstraint' in transaction &&
+        typeof transaction.lifetimeConstraint.blockhash === 'string' &&
+        typeof transaction.lifetimeConstraint.lastValidBlockHeight === 'bigint';
+    if (!lifetimeConstraintShapeMatches) return false;
+    try {
+        assertIsBlockhash(transaction.lifetimeConstraint.blockhash);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export function assertIsTransactionWithBlockhashLifetime(
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+): asserts transaction is BaseTransaction & ITransactionWithBlockhashLifetime {
+    if (!isTransactionWithBlockhashLifetime(transaction)) {
+        // TODO: Coded error.
+        throw new Error('Transaction does not have a blockhash lifetime');
+    }
+}
+
 export function setTransactionLifetimeUsingBlockhash<TTransaction extends BaseTransaction & IDurableNonceTransaction>(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures),

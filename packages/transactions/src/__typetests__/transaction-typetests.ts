@@ -2,6 +2,7 @@ import { Address } from '@solana/addresses';
 
 import {
     appendTransactionInstruction,
+    assertIsTransactionWithBlockhashLifetime,
     assertTransactionIsFullySigned,
     Blockhash,
     IDurableNonceTransaction,
@@ -18,7 +19,7 @@ import {
 import { createTransaction } from '../create-transaction';
 import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer';
 import { CompiledMessage, compileMessage } from '../message';
-import { Transaction } from '../types';
+import { BaseTransaction, Transaction } from '../types';
 import { getUnsignedTransaction } from '../unsigned-transaction';
 
 const mockFeePayer = null as unknown as Address<'feePayer'>;
@@ -538,10 +539,43 @@ async () => {
     } & ITransactionWithFeePayer<'feePayer'> &
         ITransactionWithSignatures;
 
-    // assertTransactionIsFullySigned
-    const transaction = {} as Parameters<typeof assertTransactionIsFullySigned>[0];
-    // @ts-expect-error Should not be fully signed
-    transaction satisfies IFullySignedTransaction;
-    assertTransactionIsFullySigned(transaction);
-    transaction satisfies IFullySignedTransaction;
+    {
+        // assertTransactionIsFullySigned
+        const transaction = {} as Parameters<typeof assertTransactionIsFullySigned>[0];
+        // @ts-expect-error Should not be fully signed
+        transaction satisfies IFullySignedTransaction;
+        assertTransactionIsFullySigned(transaction);
+        transaction satisfies IFullySignedTransaction;
+    }
+
+    {
+        // assertIsBlockhashLifetimeTransaction
+        const transaction = null as unknown as BaseTransaction;
+        // @ts-expect-error Should not be blockhash lifetime
+        transaction satisfies ITransactionWithBlockhashLifetime;
+        // @ts-expect-error Should not satisfy has blockhash
+        transaction satisfies {
+            lifetimeConstraint: {
+                blockhash: Blockhash;
+            };
+        };
+        // @ts-expect-error Should not satisfy has lastValidBlockHeight
+        transaction satisfies {
+            lifetimeConstraint: {
+                lastValidBlockHeight: bigint;
+            };
+        };
+        assertIsTransactionWithBlockhashLifetime(transaction);
+        transaction satisfies ITransactionWithBlockhashLifetime;
+        transaction satisfies {
+            lifetimeConstraint: {
+                blockhash: Blockhash;
+            };
+        };
+        transaction satisfies {
+            lifetimeConstraint: {
+                lastValidBlockHeight: bigint;
+            };
+        };
+    }
 };

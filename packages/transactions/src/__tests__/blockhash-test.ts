@@ -3,7 +3,12 @@ import 'test-matchers/toBeFrozenObject';
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
-import { Blockhash, ITransactionWithBlockhashLifetime, setTransactionLifetimeUsingBlockhash } from '../blockhash';
+import {
+    assertIsTransactionWithBlockhashLifetime,
+    Blockhash,
+    ITransactionWithBlockhashLifetime,
+    setTransactionLifetimeUsingBlockhash,
+} from '../blockhash';
 import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
@@ -106,6 +111,71 @@ describe('assertIsBlockhash()', () => {
             } catch {}
             expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
         });
+    });
+});
+
+describe('assertIsBlockhashLifetimeTransaction', () => {
+    beforeEach(() => {
+        // use real implementation
+        jest.mocked(getBase58Encoder).mockReturnValue(originalGetBase58Encoder);
+    });
+    it('throws for a transaction with no lifetime constraint', () => {
+        const transaction: BaseTransaction = {
+            instructions: [],
+            version: 0,
+        };
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).toThrow();
+    });
+    it('throws for a transaction with a durable nonce constraint', () => {
+        const transaction = {
+            instructions: [],
+            lifetimeConstraint: {
+                nonce: 'abcd',
+            },
+            version: 0,
+        } as unknown as BaseTransaction;
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).toThrow();
+    });
+    it('throws for a transaction with a blockhash but no lastValidBlockHeight in lifetimeConstraint', () => {
+        const transaction = {
+            instructions: [],
+            lifetimeConstraint: {
+                blockhash: '11111111111111111111111111111111',
+            },
+            version: 0,
+        } as unknown as BaseTransaction;
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).toThrow();
+    });
+    it('throws for a transaction with a lastValidBlockHeight but no blockhash in lifetimeConstraint', () => {
+        const transaction = {
+            instructions: [],
+            lifetimeConstraint: {
+                lastValidBlockHeight: 1234n,
+            },
+            version: 0,
+        } as unknown as BaseTransaction;
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).toThrow();
+    });
+    it('throws for a transaction with a blockhash lifetime but an invalid blockhash value', () => {
+        const transaction = {
+            instructions: [],
+            lifetimeConstraint: {
+                blockhash: 'not a valid blockhash value',
+            },
+            version: 0,
+        } as unknown as BaseTransaction;
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).toThrow();
+    });
+    it('does not throw for a transaction with a valid blockhash lifetime constraint', () => {
+        const transaction = {
+            instructions: [],
+            lifetimeConstraint: {
+                blockhash: '11111111111111111111111111111111',
+                lastValidBlockHeight: 1234n,
+            },
+            version: 0,
+        } as unknown as BaseTransaction;
+        expect(() => assertIsTransactionWithBlockhashLifetime(transaction)).not.toThrow();
     });
 });
 
