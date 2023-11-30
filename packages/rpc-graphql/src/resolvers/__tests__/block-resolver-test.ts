@@ -41,9 +41,7 @@ describe('block resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
             expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                 commitment: 'confirmed',
@@ -68,9 +66,7 @@ describe('block resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
             expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                 commitment: 'confirmed',
@@ -99,9 +95,7 @@ describe('block resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
             expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                 commitment: 'confirmed',
@@ -132,9 +126,7 @@ describe('block resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(2);
             expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
                 commitment: 'confirmed',
@@ -164,9 +156,7 @@ describe('block resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
             expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                 commitment: 'confirmed',

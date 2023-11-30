@@ -85,8 +85,7 @@ describe('getCachedAbortableIterableFactory', () => {
         await factory('B');
         abortControllerA.abort();
         abortControllerB.abort();
-        // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-        jest.runAllTimers();
+        await jest.runAllTimersAsync();
         await factory('C');
         expect(onCreateIterable).toHaveBeenCalledTimes(2);
     });
@@ -99,11 +98,9 @@ describe('getCachedAbortableIterableFactory', () => {
         getAbortSignalFromInputArgs.mockReturnValueOnce(abortControllerB.signal);
         await factory('B');
         abortControllerA.abort();
-        // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-        jest.runAllTimers();
+        await jest.runAllTimersAsync();
         abortControllerB.abort();
-        // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-        jest.runAllTimers();
+        await jest.runAllTimersAsync();
         await factory('C');
         expect(onCreateIterable).toHaveBeenCalledTimes(2);
     });
