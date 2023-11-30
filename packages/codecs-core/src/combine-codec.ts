@@ -5,7 +5,7 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    isFixedSizeCodec,
+    isFixedSize,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -32,19 +32,19 @@ export function combineCodec<TFrom, TTo extends TFrom>(
     encoder: Encoder<TFrom>,
     decoder: Decoder<TTo>
 ): Codec<TFrom, TTo> {
-    if (isFixedSizeCodec(encoder) !== isFixedSizeCodec(decoder)) {
+    if (isFixedSize(encoder) !== isFixedSize(decoder)) {
         // TODO: Coded error.
         throw new Error(`Encoder and decoder must either both be fixed-size or variable-size.`);
     }
 
-    if (isFixedSizeCodec(encoder) && isFixedSizeCodec(decoder) && encoder.fixedSize !== decoder.fixedSize) {
+    if (isFixedSize(encoder) && isFixedSize(decoder) && encoder.fixedSize !== decoder.fixedSize) {
         // TODO: Coded error.
         throw new Error(
             `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`
         );
     }
 
-    if (!isFixedSizeCodec(encoder) && !isFixedSizeCodec(decoder) && encoder.maxSize !== decoder.maxSize) {
+    if (!isFixedSize(encoder) && !isFixedSize(decoder) && encoder.maxSize !== decoder.maxSize) {
         // TODO: Coded error.
         throw new Error(
             `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`

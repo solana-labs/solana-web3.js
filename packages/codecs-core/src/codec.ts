@@ -150,81 +150,79 @@ export function createCodec<TFrom, TTo extends TFrom = TFrom>(
     });
 }
 
-export function isFixedSizeCodec<TFrom, TSize extends number>(
+export function isFixedSize<TFrom, TSize extends number>(
     encoder: FixedSizeEncoder<TFrom, TSize> | VariableSizeEncoder<TFrom>
 ): encoder is FixedSizeEncoder<TFrom, TSize>;
-export function isFixedSizeCodec<TTo, TSize extends number>(
+export function isFixedSize<TTo, TSize extends number>(
     decoder: FixedSizeDecoder<TTo, TSize> | VariableSizeDecoder<TTo>
 ): decoder is FixedSizeDecoder<TTo, TSize>;
-export function isFixedSizeCodec<TFrom, TTo extends TFrom, TSize extends number>(
+export function isFixedSize<TFrom, TTo extends TFrom, TSize extends number>(
     codec: FixedSizeCodec<TFrom, TTo, TSize> | VariableSizeCodec<TFrom, TTo>
 ): codec is FixedSizeCodec<TFrom, TTo, TSize>;
-export function isFixedSizeCodec<TSize extends number>(
+export function isFixedSize<TSize extends number>(
     codec: { fixedSize: TSize } | { maxSize?: number }
 ): codec is { fixedSize: TSize };
-export function isFixedSizeCodec(codec: { fixedSize: number } | { maxSize?: number }): codec is { fixedSize: number } {
+export function isFixedSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { fixedSize: number } {
     return 'fixedSize' in codec && typeof codec.fixedSize === 'number';
 }
 
-export function assertIsFixedSizeCodec<TFrom, TSize extends number>(
+export function assertIsFixedSize<TFrom, TSize extends number>(
     encoder: FixedSizeEncoder<TFrom, TSize> | VariableSizeEncoder<TFrom>,
     message?: string
 ): asserts encoder is FixedSizeEncoder<TFrom, TSize>;
-export function assertIsFixedSizeCodec<TTo, TSize extends number>(
+export function assertIsFixedSize<TTo, TSize extends number>(
     decoder: FixedSizeDecoder<TTo, TSize> | VariableSizeDecoder<TTo>,
     message?: string
 ): asserts decoder is FixedSizeDecoder<TTo, TSize>;
-export function assertIsFixedSizeCodec<TFrom, TTo extends TFrom, TSize extends number>(
+export function assertIsFixedSize<TFrom, TTo extends TFrom, TSize extends number>(
     codec: FixedSizeCodec<TFrom, TTo, TSize> | VariableSizeCodec<TFrom, TTo>,
     message?: string
 ): asserts codec is FixedSizeCodec<TFrom, TTo, TSize>;
-export function assertIsFixedSizeCodec<TSize extends number>(
+export function assertIsFixedSize<TSize extends number>(
     codec: { fixedSize: TSize } | { maxSize?: number },
     message?: string
 ): asserts codec is { fixedSize: TSize };
-export function assertIsFixedSizeCodec(
+export function assertIsFixedSize(
     codec: { fixedSize: number } | { maxSize?: number },
     message?: string
 ): asserts codec is { fixedSize: number } {
-    if (!isFixedSizeCodec(codec)) {
+    if (!isFixedSize(codec)) {
         // TODO: Coded error.
         throw new Error(message ?? 'Expected a fixed-size codec, got a variable-size one.');
     }
 }
 
-export function isVariableSizeCodec<TFrom>(encoder: Encoder<TFrom>): encoder is VariableSizeEncoder<TFrom>;
-export function isVariableSizeCodec<TTo>(decoder: Decoder<TTo>): decoder is VariableSizeDecoder<TTo>;
-export function isVariableSizeCodec<TFrom, TTo extends TFrom>(
+export function isVariableSize<TFrom>(encoder: Encoder<TFrom>): encoder is VariableSizeEncoder<TFrom>;
+export function isVariableSize<TTo>(decoder: Decoder<TTo>): decoder is VariableSizeDecoder<TTo>;
+export function isVariableSize<TFrom, TTo extends TFrom>(
     codec: Codec<TFrom, TTo>
 ): codec is VariableSizeCodec<TFrom, TTo>;
-export function isVariableSizeCodec(codec: { fixedSize: number } | { maxSize?: number }): codec is { maxSize?: number };
-export function isVariableSizeCodec(
-    codec: { fixedSize: number } | { maxSize?: number }
-): codec is { maxSize?: number } {
-    return !isFixedSizeCodec(codec);
+export function isVariableSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { maxSize?: number };
+export function isVariableSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { maxSize?: number } {
+    return !isFixedSize(codec);
 }
 
-export function assertIsVariableSizeCodec<T>(
+export function assertIsVariableSize<T>(
     encoder: Encoder<T>,
     message?: string
 ): asserts encoder is VariableSizeEncoder<T>;
-export function assertIsVariableSizeCodec<T>(
+export function assertIsVariableSize<T>(
     decoder: Decoder<T>,
     message?: string
 ): asserts decoder is VariableSizeDecoder<T>;
-export function assertIsVariableSizeCodec<TFrom, TTo extends TFrom>(
+export function assertIsVariableSize<TFrom, TTo extends TFrom>(
     codec: Codec<TFrom, TTo>,
     message?: string
 ): asserts codec is VariableSizeCodec<TFrom, TTo>;
-export function assertIsVariableSizeCodec(
+export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
     message?: string
 ): asserts codec is { maxSize?: number };
-export function assertIsVariableSizeCodec(
+export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
     message?: string
 ): asserts codec is { maxSize?: number } {
-    if (!isVariableSizeCodec(codec)) {
+    if (!isVariableSize(codec)) {
         // TODO: Coded error.
         throw new Error(message ?? 'Expected a variable-size codec, got a fixed-size one.');
     }

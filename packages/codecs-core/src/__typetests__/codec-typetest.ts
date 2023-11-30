@@ -1,6 +1,6 @@
 import {
-    assertIsFixedSizeCodec,
-    assertIsVariableSizeCodec,
+    assertIsFixedSize,
+    assertIsVariableSize,
     Codec,
     createCodec,
     createDecoder,
@@ -10,8 +10,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    isFixedSizeCodec,
-    isVariableSizeCodec,
+    isFixedSize,
+    isVariableSize,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -53,61 +53,61 @@ import {
 }
 
 {
-    // [isFixedSizeCodec]: It returns true if the codec is fixed size and keeps the type information.
+    // [isFixedSize]: It returns true if the codec is fixed size and keeps the type information.
     const codec = {} as FixedSizeCodec<string, string, 42> | VariableSizeCodec<string>;
-    if (isFixedSizeCodec(codec)) {
+    if (isFixedSize(codec)) {
         codec satisfies FixedSizeCodec<string, string, 42>;
     }
 }
 
 {
-    // [isFixedSizeCodec]: It works with codec sizes only.
+    // [isFixedSize]: It works with codec sizes only.
     const codec = {} as { fixedSize: 42 } | { maxSize?: number };
-    if (isFixedSizeCodec(codec)) {
+    if (isFixedSize(codec)) {
         codec satisfies { fixedSize: 42 };
     }
 }
 
 {
-    // [assertIsFixedSizeCodec]: It asserts the codec is fixed size and keeps the type information.
+    // [assertIsFixedSize]: It asserts the codec is fixed size and keeps the type information.
     const codec = {} as FixedSizeCodec<string, string, 42> | VariableSizeCodec<string>;
-    assertIsFixedSizeCodec(codec);
+    assertIsFixedSize(codec);
     codec satisfies FixedSizeCodec<string, string, 42>;
 }
 
 {
-    // [assertIsFixedSizeCodec]: It works with codec sizes only.
+    // [assertIsFixedSize]: It works with codec sizes only.
     const codec = {} as { fixedSize: 42 } | { maxSize?: number };
-    assertIsFixedSizeCodec(codec);
+    assertIsFixedSize(codec);
     codec satisfies { fixedSize: 42 };
 }
 
 {
-    // [isVariableSizeCodec]: It returns true if the codec is variable size.
+    // [isVariableSize]: It returns true if the codec is variable size.
     const codec = {} as FixedSizeCodec<string, string, 42> | VariableSizeCodec<string>;
-    if (isVariableSizeCodec(codec)) {
+    if (isVariableSize(codec)) {
         codec satisfies VariableSizeCodec<string>;
     }
 }
 
 {
-    // [isVariableSizeCodec]: It works with codec sizes only.
+    // [isVariableSize]: It works with codec sizes only.
     const codec = {} as { fixedSize: 42 } | { maxSize?: number; foo: 'bar' };
-    if (isVariableSizeCodec(codec)) {
+    if (isVariableSize(codec)) {
         codec satisfies { maxSize?: number; foo: 'bar' };
     }
 }
 
 {
-    // [assertIsVariableSizeCodec]: It asserts the codec is variable size.
+    // [assertIsVariableSize]: It asserts the codec is variable size.
     const codec = {} as FixedSizeCodec<string, string, 42> | VariableSizeCodec<string>;
-    assertIsVariableSizeCodec(codec);
+    assertIsVariableSize(codec);
     codec satisfies VariableSizeCodec<string>;
 }
 
 {
-    // [assertIsVariableSizeCodec]: It works with codec sizes only.
+    // [assertIsVariableSize]: It works with codec sizes only.
     const codec = {} as { fixedSize: 42 } | { maxSize?: number; foo: 'bar' };
-    assertIsVariableSizeCodec(codec);
+    assertIsVariableSize(codec);
     codec satisfies { maxSize?: number; foo: 'bar' };
 }

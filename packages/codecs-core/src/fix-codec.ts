@@ -9,7 +9,7 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    isFixedSizeCodec,
+    isFixedSize,
     Offset,
 } from './codec';
 import { combineCodec } from './combine-codec';
@@ -58,7 +58,7 @@ export function fixDecoder<TTo, TSize extends number>(
                 bytes = bytes.slice(offset, offset + fixedBytes);
             }
             // If the nested decoder is fixed-size, pad and truncate the byte array accordingly.
-            if (isFixedSizeCodec(decoder)) {
+            if (isFixedSize(decoder)) {
                 bytes = fixBytes(bytes, decoder.fixedSize);
             }
             // Decode the value using the nested decoder.

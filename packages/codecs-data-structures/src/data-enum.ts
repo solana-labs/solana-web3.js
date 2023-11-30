@@ -7,7 +7,7 @@ import {
     Decoder,
     Encoder,
     getEncodedSize,
-    isFixedSizeCodec,
+    isFixedSize,
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
@@ -186,14 +186,14 @@ function getDataEnumFixedSize<T extends DataEnum>(
     variants: DataEnumToEncoderTuple<T> | DataEnumToDecoderTuple<T>,
     prefix: { fixedSize: number } | object
 ): number | null {
-    if (variants.length === 0) return isFixedSizeCodec(prefix) ? prefix.fixedSize : null;
-    if (!isFixedSizeCodec(variants[0][1])) return null;
+    if (variants.length === 0) return isFixedSize(prefix) ? prefix.fixedSize : null;
+    if (!isFixedSize(variants[0][1])) return null;
     const variantSize = variants[0][1].fixedSize;
     const sameSizedVariants = variants.every(
-        variant => isFixedSizeCodec(variant[1]) && variant[1].fixedSize === variantSize
+        variant => isFixedSize(variant[1]) && variant[1].fixedSize === variantSize
     );
     if (!sameSizedVariants) return null;
-    return isFixedSizeCodec(prefix) ? prefix.fixedSize + variantSize : null;
+    return isFixedSize(prefix) ? prefix.fixedSize + variantSize : null;
 }
 
 function getDataEnumMaxSize<T extends DataEnum>(
