@@ -488,7 +488,7 @@ importers:
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
       '@solana/web3.js':
         specifier: workspace:*
-        version: link:../library-legacy
+        version: link:../legacy/library
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -857,6 +857,223 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
+  packages/legacy/library:
+    dependencies:
+      '@babel/runtime':
+        specifier: ^7.23.4
+        version: 7.23.4
+      '@noble/curves':
+        specifier: ^1.2.0
+        version: 1.2.0
+      '@noble/hashes':
+        specifier: ^1.3.2
+        version: 1.3.2
+      '@solana/buffer-layout':
+        specifier: ^4.0.1
+        version: 4.0.1
+      agentkeepalive:
+        specifier: ^4.5.0
+        version: 4.5.0
+      bigint-buffer:
+        specifier: ^1.1.5
+        version: 1.1.5
+      bn.js:
+        specifier: ^5.2.1
+        version: 5.2.1
+      borsh:
+        specifier: ^0.7.0
+        version: 0.7.0
+      bs58:
+        specifier: ^4.0.1
+        version: 4.0.1
+      buffer:
+        specifier: 6.0.3
+        version: 6.0.3
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
+      jayson:
+        specifier: ^4.1.0
+        version: 4.1.0
+      node-fetch:
+        specifier: ^2.7.0
+        version: 2.7.0
+      rpc-websockets:
+        specifier: ^7.5.1
+        version: 7.6.1
+      superstruct:
+        specifier: ^0.14.2
+        version: 0.14.2
+    devDependencies:
+      '@babel/core':
+        specifier: ^7.23.3
+        version: 7.23.3
+      '@babel/plugin-transform-class-properties':
+        specifier: ^7.23.3
+        version: 7.23.3(@babel/core@7.23.3)
+      '@babel/plugin-transform-private-methods':
+        specifier: ^7.23.3
+        version: 7.23.3(@babel/core@7.23.3)
+      '@babel/plugin-transform-private-property-in-object':
+        specifier: ^7.23.4
+        version: 7.23.4(@babel/core@7.23.3)
+      '@babel/plugin-transform-runtime':
+        specifier: ^7.23.4
+        version: 7.23.4(@babel/core@7.23.3)
+      '@babel/preset-env':
+        specifier: ^7.23.3
+        version: 7.23.3(@babel/core@7.23.3)
+      '@babel/preset-typescript':
+        specifier: ^7.23.3
+        version: 7.23.3(@babel/core@7.23.3)
+      '@rollup/plugin-alias':
+        specifier: ^4.0.3
+        version: 4.0.3(rollup@3.27.2)
+      '@rollup/plugin-babel':
+        specifier: ^6.0.4
+        version: 6.0.4(@babel/core@7.23.3)(rollup@3.27.2)
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4(rollup@3.27.2)
+      '@rollup/plugin-json':
+        specifier: ^6.0.1
+        version: 6.0.1(rollup@3.27.2)
+      '@rollup/plugin-multi-entry':
+        specifier: ^6.0.0
+        version: 6.0.0(rollup@3.27.2)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.2.3
+        version: 15.2.3(rollup@3.27.2)
+      '@rollup/plugin-replace':
+        specifier: ^5.0.2
+        version: 5.0.2(rollup@3.27.2)
+      '@rollup/plugin-terser':
+        specifier: ^0.4.3
+        version: 0.4.3(rollup@3.27.2)
+      '@solana/spl-token':
+        specifier: ^0.3.8
+        version: 0.3.8(@solana/web3.js@1.87.6)
+      '@types/bn.js':
+        specifier: ^5.1.1
+        version: 5.1.1
+      '@types/bs58':
+        specifier: ^4.0.1
+        version: 4.0.1
+      '@types/chai':
+        specifier: ^4.3.5
+        version: 4.3.5
+      '@types/chai-as-promised':
+        specifier: ^7.1.8
+        version: 7.1.8
+      '@types/express-serve-static-core':
+        specifier: ^4.17.41
+        version: 4.17.41
+      '@types/mocha':
+        specifier: ^10.0.6
+        version: 10.0.6
+      '@types/mz':
+        specifier: ^2.7.4
+        version: 2.7.4
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@types/node-fetch':
+        specifier: '2'
+        version: 2.1.0
+      '@types/sinon':
+        specifier: ^10.0.16
+        version: 10.0.16
+      '@types/sinon-chai':
+        specifier: ^3.2.9
+        version: 3.2.9
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.7.0
+        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      chai:
+        specifier: ^4.3.7
+        version: 4.3.7
+      chai-as-promised:
+        specifier: ^7.1.1
+        version: 7.1.1(chai@4.3.7)
+      cross-env:
+        specifier: 7.0.3
+        version: 7.0.3
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-config-prettier:
+        specifier: ^9.0.0
+        version: 9.0.0(eslint@8.51.0)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.29.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)
+      eslint-plugin-mocha:
+        specifier: ^10.1.0
+        version: 10.1.0(eslint@8.51.0)
+      eslint-plugin-prettier:
+        specifier: ^5.0.0
+        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.51.0)(prettier@3.1.0)
+      esm:
+        specifier: ^3.2.25
+        version: 3.2.25
+      mocha:
+        specifier: ^10.2.0
+        version: 10.2.0
+      mockttp:
+        specifier: ^3.9.2
+        version: 3.9.2
+      mz:
+        specifier: ^2.7.0
+        version: 2.7.0
+      node-abort-controller:
+        specifier: ^3.0.1
+        version: 3.0.1
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      rimraf:
+        specifier: 5.0.5
+        version: 5.0.5
+      rollup:
+        specifier: ^3.27.2
+        version: 3.27.2
+      rollup-plugin-node-polyfills:
+        specifier: ^0.2.1
+        version: 0.2.1
+      semantic-release:
+        specifier: ^21.0.7
+        version: 21.0.7
+      sinon:
+        specifier: ^15.2.0
+        version: 15.2.0
+      sinon-chai:
+        specifier: ^3.7.0
+        version: 3.7.0(chai@4.3.7)(sinon@15.2.0)
+      start-server-and-test:
+        specifier: ^2.0.0
+        version: 2.0.0
+      ts-mocha:
+        specifier: ^10.0.0
+        version: 10.0.0(mocha@10.2.0)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@18.11.19)(typescript@5.2.2)
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../tsconfig
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typedoc:
+        specifier: ^0.25.4
+        version: 0.25.4(typescript@5.2.2)
+      typescript:
+        specifier: ^5.1.6
+        version: 5.2.2
+
   packages/library:
     dependencies:
       '@solana/addresses':
@@ -951,223 +1168,6 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
-  packages/library-legacy:
-    dependencies:
-      '@babel/runtime':
-        specifier: ^7.23.4
-        version: 7.23.4
-      '@noble/curves':
-        specifier: ^1.2.0
-        version: 1.2.0
-      '@noble/hashes':
-        specifier: ^1.3.2
-        version: 1.3.2
-      '@solana/buffer-layout':
-        specifier: ^4.0.1
-        version: 4.0.1
-      agentkeepalive:
-        specifier: ^4.5.0
-        version: 4.5.0
-      bigint-buffer:
-        specifier: ^1.1.5
-        version: 1.1.5
-      bn.js:
-        specifier: ^5.2.1
-        version: 5.2.1
-      borsh:
-        specifier: ^0.7.0
-        version: 0.7.0
-      bs58:
-        specifier: ^4.0.1
-        version: 4.0.1
-      buffer:
-        specifier: 6.0.3
-        version: 6.0.3
-      fast-stable-stringify:
-        specifier: ^1.0.0
-        version: 1.0.0
-      jayson:
-        specifier: ^4.1.0
-        version: 4.1.0
-      node-fetch:
-        specifier: ^2.7.0
-        version: 2.7.0
-      rpc-websockets:
-        specifier: ^7.5.1
-        version: 7.5.1
-      superstruct:
-        specifier: ^0.14.2
-        version: 0.14.2
-    devDependencies:
-      '@babel/core':
-        specifier: ^7.23.3
-        version: 7.23.3
-      '@babel/plugin-transform-class-properties':
-        specifier: ^7.23.3
-        version: 7.23.3(@babel/core@7.23.3)
-      '@babel/plugin-transform-private-methods':
-        specifier: ^7.23.3
-        version: 7.23.3(@babel/core@7.23.3)
-      '@babel/plugin-transform-private-property-in-object':
-        specifier: ^7.23.4
-        version: 7.23.4(@babel/core@7.23.3)
-      '@babel/plugin-transform-runtime':
-        specifier: ^7.23.4
-        version: 7.23.4(@babel/core@7.23.3)
-      '@babel/preset-env':
-        specifier: ^7.23.3
-        version: 7.23.3(@babel/core@7.23.3)
-      '@babel/preset-typescript':
-        specifier: ^7.23.3
-        version: 7.23.3(@babel/core@7.23.3)
-      '@rollup/plugin-alias':
-        specifier: ^4.0.3
-        version: 4.0.3(rollup@3.27.2)
-      '@rollup/plugin-babel':
-        specifier: ^6.0.4
-        version: 6.0.4(@babel/core@7.23.3)(rollup@3.27.2)
-      '@rollup/plugin-commonjs':
-        specifier: ^25.0.4
-        version: 25.0.4(rollup@3.27.2)
-      '@rollup/plugin-json':
-        specifier: ^6.0.1
-        version: 6.0.1(rollup@3.27.2)
-      '@rollup/plugin-multi-entry':
-        specifier: ^6.0.0
-        version: 6.0.0(rollup@3.27.2)
-      '@rollup/plugin-node-resolve':
-        specifier: ^15.2.3
-        version: 15.2.3(rollup@3.27.2)
-      '@rollup/plugin-replace':
-        specifier: ^5.0.2
-        version: 5.0.2(rollup@3.27.2)
-      '@rollup/plugin-terser':
-        specifier: ^0.4.3
-        version: 0.4.3(rollup@3.27.2)
-      '@solana/spl-token':
-        specifier: ^0.3.8
-        version: 0.3.8(@solana/web3.js@1.87.6)
-      '@types/bn.js':
-        specifier: ^5.1.1
-        version: 5.1.1
-      '@types/bs58':
-        specifier: ^4.0.1
-        version: 4.0.1
-      '@types/chai':
-        specifier: ^4.3.5
-        version: 4.3.5
-      '@types/chai-as-promised':
-        specifier: ^7.1.8
-        version: 7.1.8
-      '@types/express-serve-static-core':
-        specifier: ^4.17.41
-        version: 4.17.41
-      '@types/mocha':
-        specifier: ^10.0.6
-        version: 10.0.6
-      '@types/mz':
-        specifier: ^2.7.4
-        version: 2.7.4
-      '@types/node':
-        specifier: 18.11.19
-        version: 18.11.19
-      '@types/node-fetch':
-        specifier: '2'
-        version: 2.1.0
-      '@types/sinon':
-        specifier: ^10.0.16
-        version: 10.0.16
-      '@types/sinon-chai':
-        specifier: ^3.2.9
-        version: 3.2.9
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
-      '@typescript-eslint/parser':
-        specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.1.6)
-      chai:
-        specifier: ^4.3.7
-        version: 4.3.7
-      chai-as-promised:
-        specifier: ^7.1.1
-        version: 7.1.1(chai@4.3.7)
-      cross-env:
-        specifier: 7.0.3
-        version: 7.0.3
-      eslint:
-        specifier: ^8.45.0
-        version: 8.45.0
-      eslint-config-prettier:
-        specifier: ^9.0.0
-        version: 9.0.0(eslint@8.45.0)
-      eslint-plugin-import:
-        specifier: ^2.29.0
-        version: 2.29.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)
-      eslint-plugin-mocha:
-        specifier: ^10.1.0
-        version: 10.1.0(eslint@8.45.0)
-      eslint-plugin-prettier:
-        specifier: ^5.0.0
-        version: 5.0.0(eslint-config-prettier@9.0.0)(eslint@8.45.0)(prettier@3.1.0)
-      esm:
-        specifier: ^3.2.25
-        version: 3.2.25
-      mocha:
-        specifier: ^10.2.0
-        version: 10.2.0
-      mockttp:
-        specifier: ^3.9.2
-        version: 3.9.2
-      mz:
-        specifier: ^2.7.0
-        version: 2.7.0
-      node-abort-controller:
-        specifier: ^3.0.1
-        version: 3.0.1
-      prettier:
-        specifier: ^3.1
-        version: 3.1.0
-      rimraf:
-        specifier: 5.0.5
-        version: 5.0.5
-      rollup:
-        specifier: ^3.27.2
-        version: 3.27.2
-      rollup-plugin-node-polyfills:
-        specifier: ^0.2.1
-        version: 0.2.1
-      semantic-release:
-        specifier: ^21.0.7
-        version: 21.0.7
-      sinon:
-        specifier: ^15.2.0
-        version: 15.2.0
-      sinon-chai:
-        specifier: ^3.7.0
-        version: 3.7.0(chai@4.3.7)(sinon@15.2.0)
-      start-server-and-test:
-        specifier: ^2.0.0
-        version: 2.0.0
-      ts-mocha:
-        specifier: ^10.0.0
-        version: 10.0.0(mocha@10.2.0)
-      ts-node:
-        specifier: ^10.9.1
-        version: 10.9.1(@types/node@18.11.19)(typescript@5.1.6)
-      tsconfig:
-        specifier: workspace:*
-        version: link:../tsconfig
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.2
-      typedoc:
-        specifier: ^0.25.4
-        version: 0.25.4(typescript@5.1.6)
-      typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
-
   packages/library-legacy-sham:
     dependencies:
       '@noble/ed25519':
@@ -1187,8 +1187,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
       '@solana/web3.js-legacy':
-        specifier: workspace:../library-legacy
-        version: link:../library-legacy
+        specifier: workspace:../legacy/library
+        version: link:../legacy/library
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -2187,18 +2187,6 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /@babel/helper-create-regexp-features-plugin@7.22.5(@babel/core@7.23.3):
-    resolution: {integrity: sha512-1VpEFOIbMRaXyDeUwUfmTIxExLwQ+zkW+Bh5zXpApA3oQedBx9v/updixWxnx/bZpKw7u8VxWjb/qWpIcmPq8A==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-    dependencies:
-      '@babel/core': 7.23.3
-      '@babel/helper-annotate-as-pure': 7.22.5
-      regexpu-core: 5.3.2
-      semver: 6.3.1
-    dev: true
-
   /@babel/helper-define-polyfill-provider@0.4.3(@babel/core@7.23.3):
     resolution: {integrity: sha512-WBrLmuPP47n7PNwsZ57pqam6G/RGo1vw/87b0Blc53tZNGZ4x7YvZ6HgQe2vo1W/FR20OgjeZuGXzudPiXHFug==}
     peerDependencies:
@@ -2495,15 +2483,6 @@ packages:
       '@babel/core': 7.23.3
       '@babel/helper-plugin-utils': 7.22.5
 
-  /@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.23.3):
-    resolution: {integrity: sha512-gvyP4hZrgrs/wWMaocvxZ44Hw0b3W8Pe+cMxc8V1ULQ07oh8VNbIRaoD1LRZVTvD+0nieDKjfgKg89sD7rrKrg==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-    dependencies:
-      '@babel/core': 7.23.3
-      '@babel/helper-plugin-utils': 7.22.5
-
   /@babel/plugin-syntax-jsx@7.23.3(@babel/core@7.23.3):
     resolution: {integrity: sha512-EB2MELswq55OHUoRZLGg/zC7QWUKfNLpE57m/S2yr1uEneIgsTgrSzXP3NXEsMkVn76OlaVVnzN+ugObuYGwhg==}
     engines: {node: '>=6.9.0'}
@@ -2512,7 +2491,6 @@ packages:
     dependencies:
       '@babel/core': 7.23.3
       '@babel/helper-plugin-utils': 7.22.5
-    dev: true
 
   /@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.23.3):
     resolution: {integrity: sha512-d8waShlpFDinQ5MtvGU9xDAOzKH47+FFoney2baFIoMr952hKOLp1HR7VszoZvOsV/4+RRszNY7D17ba0te0ig==}
@@ -2598,7 +2576,6 @@ packages:
     dependencies:
       '@babel/core': 7.23.3
       '@babel/helper-plugin-utils': 7.22.5
-    dev: true
 
   /@babel/plugin-syntax-unicode-sets-regex@7.18.6(@babel/core@7.23.3):
     resolution: {integrity: sha512-727YkEAPwSIQTv5im8QHz3upqp92JTWhidIC81Tdx4VJYIte/VndKf1qKrfnnhPLiPghStWfvC/iFaMCQu7Nqg==}
@@ -2607,7 +2584,7 @@ packages:
       '@babel/core': ^7.0.0
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/helper-create-regexp-features-plugin': 7.22.5(@babel/core@7.23.3)
+      '@babel/helper-create-regexp-features-plugin': 7.22.15(@babel/core@7.23.3)
       '@babel/helper-plugin-utils': 7.22.5
     dev: true
 
@@ -2900,7 +2877,7 @@ packages:
       '@babel/core': ^7.0.0
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/helper-create-regexp-features-plugin': 7.22.5(@babel/core@7.23.3)
+      '@babel/helper-create-regexp-features-plugin': 7.22.15(@babel/core@7.23.3)
       '@babel/helper-plugin-utils': 7.22.5
     dev: true
 
@@ -3303,26 +3280,9 @@ packages:
     resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/code-frame': 7.22.13
-      '@babel/parser': 7.23.4
-      '@babel/types': 7.23.4
-
-  /@babel/traverse@7.23.2:
-    resolution: {integrity: sha512-azpe59SQ48qG6nu2CzcMLbxUudtN+dOM9kDbUqGq3HXUJRlo7i8fvPoxQUzYgLZ4cMVmuZgm8vvBpNeRhd6XSw==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
       '@babel/code-frame': 7.23.4
-      '@babel/generator': 7.23.4
-      '@babel/helper-environment-visitor': 7.22.20
-      '@babel/helper-function-name': 7.23.0
-      '@babel/helper-hoist-variables': 7.22.5
-      '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.4
       '@babel/types': 7.23.4
-      debug: 4.3.4(supports-color@8.1.1)
-      globals: 11.12.0
-    transitivePeerDependencies:
-      - supports-color
 
   /@babel/traverse@7.23.4:
     resolution: {integrity: sha512-IYM8wSUwunWTB6tFC2dkKZhxbIjHoWemdK+3f8/wq8aKhbUscxD5MX72ubd90fxvFknaLPeGw5ycU84V1obHJg==}
@@ -3913,7 +3873,7 @@ packages:
       graphql: 15.8.0
       iterall: 1.3.0
       symbol-observable: 1.2.0
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -3925,10 +3885,10 @@ packages:
       '@types/ws': 8.5.5
       duplexify: 3.7.1
       inherits: 2.0.4
-      isomorphic-ws: 4.0.1(ws@8.14.0)
+      isomorphic-ws: 4.0.1(ws@8.14.2)
       readable-stream: 2.3.8
       safe-buffer: 5.2.1
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       xtend: 4.0.2
     transitivePeerDependencies:
       - bufferutil
@@ -4944,7 +4904,7 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@solana/buffer-layout': 4.0.1
-      '@solana/web3.js': 1.77.3
+      '@solana/web3.js': 1.87.6
       bigint-buffer: 1.1.5
       bignumber.js: 9.1.1
     transitivePeerDependencies:
@@ -5043,30 +5003,6 @@ packages:
       '@solana/buffer-layout-utils': 0.2.0
       '@solana/web3.js': 1.87.6
       buffer: 6.0.3
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - utf-8-validate
-    dev: true
-
-  /@solana/web3.js@1.77.3:
-    resolution: {integrity: sha512-PHaO0BdoiQRPpieC1p31wJsBaxwIOWLh8j2ocXNKX8boCQVldt26Jqm2tZE4KlrvnCIV78owPLv1pEUgqhxZ3w==}
-    dependencies:
-      '@babel/runtime': 7.23.4
-      '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.2
-      '@solana/buffer-layout': 4.0.1
-      agentkeepalive: 4.5.0
-      bigint-buffer: 1.1.5
-      bn.js: 5.2.1
-      borsh: 0.7.0
-      bs58: 4.0.1
-      buffer: 6.0.3
-      fast-stable-stringify: 1.0.0
-      jayson: 4.1.0
-      node-fetch: 2.7.0
-      rpc-websockets: 7.5.1
-      superstruct: 0.14.2
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -7702,13 +7638,13 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-prettier@9.0.0(eslint@8.45.0):
+  /eslint-config-prettier@9.0.0(eslint@8.51.0):
     resolution: {integrity: sha512-IcJsTkJae2S35pRsRAwoCE+925rJJStOdkKnLVgtE+tEpqU0EVVM7OqrwxqgptKdX29NUwC82I5pXsGFIgSevw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
     dependencies:
-      eslint: 8.45.0
+      eslint: 8.51.0
     dev: true
 
   /eslint-config-turbo@1.10.13(eslint@8.51.0):
@@ -7730,7 +7666,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-module-utils@2.8.0(@typescript-eslint/parser@6.3.0)(eslint-import-resolver-node@0.3.9)(eslint@8.45.0):
+  /eslint-module-utils@2.8.0(@typescript-eslint/parser@6.8.0)(eslint-import-resolver-node@0.3.9)(eslint@8.51.0):
     resolution: {integrity: sha512-aWajIYfsqCKRDgUfjEXNN/JlrzauMuSEy5sbd7WXbtW3EH6A6MpwEh42c7qD+MqQo9QMJ6fWLAeIJynx0g6OAw==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -7751,15 +7687,15 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       debug: 3.2.7
-      eslint: 8.45.0
+      eslint: 8.51.0
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0):
+  /eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0):
     resolution: {integrity: sha512-QPOO5NO6Odv5lpoTkddtutccQjysJuFxoPS7fAHO+9m9udNHvTCPSAMW9zGAYj8lAIdr40I8yPCdUYrncXtrwg==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -7769,16 +7705,16 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       array-includes: 3.1.7
       array.prototype.findlastindex: 1.2.3
       array.prototype.flat: 1.3.2
       array.prototype.flatmap: 1.3.2
       debug: 3.2.7
       doctrine: 2.1.0
-      eslint: 8.45.0
+      eslint: 8.51.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.3.0)(eslint-import-resolver-node@0.3.9)(eslint@8.45.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.8.0)(eslint-import-resolver-node@0.3.9)(eslint@8.51.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -7860,18 +7796,18 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-mocha@10.1.0(eslint@8.45.0):
+  /eslint-plugin-mocha@10.1.0(eslint@8.51.0):
     resolution: {integrity: sha512-xLqqWUF17llsogVOC+8C6/jvQ+4IoOREbN7ZCHuOHuD6cT5cDD4h7f2LgsZuzMAiwswWE21tO7ExaknHVDrSkw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       eslint: '>=7.0.0'
     dependencies:
-      eslint: 8.45.0
-      eslint-utils: 3.0.0(eslint@8.45.0)
+      eslint: 8.51.0
+      eslint-utils: 3.0.0(eslint@8.51.0)
       rambda: 7.5.0
     dev: true
 
-  /eslint-plugin-prettier@5.0.0(eslint-config-prettier@9.0.0)(eslint@8.45.0)(prettier@3.1.0):
+  /eslint-plugin-prettier@5.0.0(eslint-config-prettier@9.0.0)(eslint@8.51.0)(prettier@3.1.0):
     resolution: {integrity: sha512-AgaZCVuYDXHUGxj/ZGu1u8H8CYgDY3iG6w5kUFw4AzMVXzB7VvbKgYR4nATIN+OvUrghMbiDLeimVjVY5ilq3w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -7885,8 +7821,8 @@ packages:
       eslint-config-prettier:
         optional: true
     dependencies:
-      eslint: 8.45.0
-      eslint-config-prettier: 9.0.0(eslint@8.45.0)
+      eslint: 8.51.0
+      eslint-config-prettier: 9.0.0(eslint@8.51.0)
       prettier: 3.1.0
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
@@ -7968,13 +7904,13 @@ packages:
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
-  /eslint-utils@3.0.0(eslint@8.45.0):
+  /eslint-utils@3.0.0(eslint@8.51.0):
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
     peerDependencies:
       eslint: '>=5'
     dependencies:
-      eslint: 8.45.0
+      eslint: 8.51.0
       eslint-visitor-keys: 2.1.0
     dev: true
 
@@ -9421,20 +9357,12 @@ packages:
     dependencies:
       ws: 7.5.9
 
-  /isomorphic-ws@4.0.1(ws@8.13.0):
+  /isomorphic-ws@4.0.1(ws@8.14.2):
     resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    dev: true
-
-  /isomorphic-ws@4.0.1(ws@8.14.0):
-    resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
-    peerDependencies:
-      ws: '*'
-    dependencies:
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     dev: true
 
   /issue-parser@6.0.0:
@@ -9885,7 +9813,7 @@ packages:
     resolution: {integrity: sha512-rMyFe1+jnyAAf+NHwTclDz0eAaLkVDdKVHHBFWsBWHnnh5YeJMNWWsv7AbFYXfK3oTqvL7VTWkhNLu1jX24D+g==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     dependencies:
-      '@babel/code-frame': 7.22.13
+      '@babel/code-frame': 7.23.4
       '@jest/types': 27.5.1
       '@types/stack-utils': 2.0.2
       chalk: 4.1.2
@@ -10209,8 +10137,8 @@ packages:
     dependencies:
       '@babel/core': 7.23.3
       '@babel/generator': 7.23.4
-      '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.23.3)
-      '@babel/traverse': 7.23.2
+      '@babel/plugin-syntax-typescript': 7.23.3(@babel/core@7.23.3)
+      '@babel/traverse': 7.23.4
       '@babel/types': 7.23.4
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
@@ -10238,7 +10166,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.3
       '@babel/generator': 7.23.4
-      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.23.3)
+      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.23.3)
       '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.23.3)
       '@babel/types': 7.23.4
       '@jest/expect-utils': 29.7.0
@@ -11048,7 +10976,7 @@ packages:
       http-encoding: 1.5.1
       http2-wrapper: 2.2.0
       https-proxy-agent: 5.0.1
-      isomorphic-ws: 4.0.1(ws@8.13.0)
+      isomorphic-ws: 4.0.1(ws@8.14.2)
       lodash: 4.17.21
       lru-cache: 7.18.3
       native-duplexpair: 1.0.0
@@ -11062,7 +10990,7 @@ packages:
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.2
       uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -12156,17 +12084,6 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /rpc-websockets@7.5.1:
-    resolution: {integrity: sha512-kGFkeTsmd37pHPMaHIgN1LVKXMi0JD782v4Ds9ZKtLlwdTKjn+CxM9A9/gLT2LaOuEcEFGL98h1QWQtlOIdW0w==}
-    dependencies:
-      '@babel/runtime': 7.23.4
-      eventemitter3: 4.0.7
-      uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    optionalDependencies:
-      bufferutil: 4.0.8
-      utf-8-validate: 5.0.10
-
   /rpc-websockets@7.6.1:
     resolution: {integrity: sha512-MmRGaJJvxTHSRxYPjJJqcj2zWnCetw7YbYbKlD0Yc7qVw6PsZhRJg1MI3mpWlpBs+4zO+urlNfLl9zLsdOD/gA==}
     dependencies:
@@ -12177,7 +12094,6 @@ packages:
     optionalDependencies:
       bufferutil: 4.0.8
       utf-8-validate: 5.0.10
-    dev: true
 
   /rrweb-cssom@0.6.0:
     resolution: {integrity: sha512-APM0Gt1KoXBz0iIkkdB/kfvGOwC4UuJFeG/c+yV7wSc7q96cG/kJ0HiYCnzivD9SB53cLV1MlHFNfOuPaadYSw==}
@@ -12263,7 +12179,7 @@ packages:
       p-reduce: 3.0.0
       read-pkg-up: 10.0.0
       resolve-from: 5.0.0
-      semver: 7.5.3
+      semver: 7.5.4
       semver-diff: 4.0.0
       signale: 1.4.0
       yargs: 17.7.2
@@ -12294,14 +12210,6 @@ packages:
 
   /semver@7.5.2:
     resolution: {integrity: sha512-SoftuTROv/cRjCze/scjGyiDtcUyxw1rgYQSZY7XTmtR5hX+dm76iDbTH8TkLPHCQmlbQVSSbNZCPM2hb0knnQ==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
-  /semver@7.5.3:
-    resolution: {integrity: sha512-QBlUtyVk/5EeHbi7X0fw6liDZc7BBmEaSYn01fMU1OUYbf6GPsbTtd8WmnqbI20SeycoHSeiybkE/q1Q+qlThQ==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -12461,6 +12369,7 @@ packages:
 
   /sinon@15.2.0:
     resolution: {integrity: sha512-nPS85arNqwBXaIsFCkolHjGIkFo+Oxu9vbgmBJizLAhqe6P2o3Qmj3KCUoRkfhHtvgDhZdWD3risLHAUJ8npjw==}
+    deprecated: 16.1.1
     dependencies:
       '@sinonjs/commons': 3.0.0
       '@sinonjs/fake-timers': 10.3.0
@@ -13039,37 +12948,6 @@ packages:
       tsconfig-paths: 3.14.2
     dev: true
 
-  /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.1.6):
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 18.11.19
-      acorn: 8.10.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.1.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
-
   /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.2.2):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
@@ -13394,7 +13272,7 @@ packages:
     dependencies:
       is-typedarray: 1.0.0
 
-  /typedoc@0.25.4(typescript@5.1.6):
+  /typedoc@0.25.4(typescript@5.2.2):
     resolution: {integrity: sha512-Du9ImmpBCw54bX275yJrxPVnjdIyJO/84co0/L9mwe0R3G4FSR6rQ09AlXVRvZEGMUg09+z/usc8mgygQ1aidA==}
     engines: {node: '>= 16'}
     hasBin: true
@@ -13405,7 +13283,7 @@ packages:
       marked: 4.3.0
       minimatch: 9.0.3
       shiki: 0.14.2
-      typescript: 5.1.6
+      typescript: 5.2.2
     dev: true
 
   /typescript@5.1.6:
@@ -13755,21 +13633,6 @@ packages:
       utf-8-validate:
         optional: true
 
-  /ws@8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
-    resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dependencies:
-      bufferutil: 4.0.8
-      utf-8-validate: 5.0.10
-
   /ws@8.14.0:
     resolution: {integrity: sha512-WR0RJE9Ehsio6U4TuM+LmunEsjQ5ncHlw4sn9ihD6RoJKZrVyH9FWV3dmnwu8B2aNib1OvG2X6adUCyFpQyWcg==}
     engines: {node: '>=10.0.0'}
@@ -13781,6 +13644,7 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
 
   /ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
