@@ -22,9 +22,9 @@
             "outputs": ["dist/**", "lib/**"]
         },
         "compile:docs": {
-            "dependsOn": ["clean"],
+            "dependsOn": ["clean", "^compile:typedefs"],
             "inputs": ["src/**"],
-            "outputs": ["doc/**"]
+            "outputs": ["declarations/**", "doc/**"]
         },
         "compile:js": {
             "dependsOn": ["clean", "^compile:js"],
@@ -50,6 +50,7 @@
             "outputs": []
         },
         "test:live-with-test-validator": {
+            "dependsOn": ["^compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },

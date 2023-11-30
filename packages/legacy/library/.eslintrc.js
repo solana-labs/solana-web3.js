@@ -7,9 +7,6 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
-    'plugin:import/typescript',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -20,18 +17,6 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/no-unused-vars': ['error'],
-    'import/first': ['error'],
-    'import/no-commonjs': ['error'],
-    'import/order': [
-      'error',
-      {
-        groups: [
-          ['internal', 'external', 'builtin'],
-          ['index', 'sibling', 'parent'],
-        ],
-        'newlines-between': 'always',
-      },
-    ],
     'linebreak-style': ['error', 'unix'],
     'no-console': [0],
     'no-trailing-spaces': ['error'],
@@ -40,7 +25,7 @@ module.exports = {
     quotes: [
       'error',
       'single',
-      {avoidEscape: true, allowTemplateLiterals: true},
+      { avoidEscape: true, allowTemplateLiterals: true },
     ],
     'require-await': ['error'],
     semi: ['error', 'always'],
