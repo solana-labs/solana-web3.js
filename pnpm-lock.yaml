@@ -469,6 +469,9 @@ importers:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -479,9 +482,6 @@ importers:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
-      '@solana/keys':
-        specifier: workspace:*
-        version: link:../keys
       '@solana/web3.js':
         specifier: workspace:*
         version: link:../library-legacy
