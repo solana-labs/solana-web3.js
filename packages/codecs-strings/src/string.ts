@@ -1,15 +1,21 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
     assertByteArrayIsNotEmptyForCodec,
-    BaseCodecConfig,
     Codec,
-    CodecData,
     combineCodec,
+    createDecoder,
+    createEncoder,
     Decoder,
     Encoder,
     fixDecoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
     fixEncoder,
-    mergeBytes,
+    getEncodedSize,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
 } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
@@ -18,8 +24,8 @@ import { getUtf8Decoder, getUtf8Encoder } from './utf8';
 /** Defines the config for string codecs. */
 export type StringCodecConfig<
     TPrefix extends NumberCodec | NumberEncoder | NumberDecoder,
-    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>,
-> = BaseCodecConfig & {
+    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>
+> = {
     /**
      * The size of the string. It can be one of the following:
      * - a {@link NumberCodec} that prefixes the string with its size.
@@ -37,67 +43,78 @@ export type StringCodecConfig<
 };
 
 /** Encodes strings from a given encoding and size strategy. */
-export const getStringEncoder = (config: StringCodecConfig<NumberEncoder, Encoder<string>> = {}): Encoder<string> => {
+export function getStringEncoder(
+    config: StringCodecConfig<NumberEncoder, Encoder<string>> & { size: number }
+): FixedSizeEncoder<string>;
+export function getStringEncoder(
+    config?: StringCodecConfig<NumberEncoder, Encoder<string>>
+): VariableSizeEncoder<string>;
+export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encoder<string>> = {}): Encoder<string> {
     const size = config.size ?? getU32Encoder();
     const encoding = config.encoding ?? getUtf8Encoder();
-    const description = config.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
 
     if (size === 'variable') {
-        return { ...encoding, description };
+        return encoding;
     }
 
     if (typeof size === 'number') {
-        return fixEncoder(encoding, size, description);
+        return fixEncoder(encoding, size);
     }
 
-    return {
-        description,
-        encode: (value: string) => {
-            const contentBytes = encoding.encode(value);
-            const lengthBytes = size.encode(contentBytes.length);
-            return mergeBytes([lengthBytes, contentBytes]);
-        },
+    return createEncoder({
         fixedSize: null,
-        maxSize: null,
-    };
-};
+        variableSize: (value: string) => {
+            const contentSize = getEncodedSize(value, encoding);
+            return getEncodedSize(contentSize, size) + contentSize;
+        },
+        write: (value: string, bytes, offset) => {
+            const contentSize = getEncodedSize(value, encoding);
+            offset = size.write(contentSize, bytes, offset);
+            return encoding.write(value, bytes, offset);
+        },
+    });
+}
 
 /** Decodes strings from a given encoding and size strategy. */
-export const getStringDecoder = (config: StringCodecConfig<NumberDecoder, Decoder<string>> = {}): Decoder<string> => {
+export function getStringDecoder(
+    config: StringCodecConfig<NumberDecoder, Decoder<string>> & { size: number }
+): FixedSizeDecoder<string>;
+export function getStringDecoder(
+    config?: StringCodecConfig<NumberDecoder, Decoder<string>>
+): VariableSizeDecoder<string>;
+export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decoder<string>> = {}): Decoder<string> {
     const size = config.size ?? getU32Decoder();
     const encoding = config.encoding ?? getUtf8Decoder();
-    const description = config.description ?? `string(${encoding.description}; ${getSizeDescription(size)})`;
 
     if (size === 'variable') {
-        return { ...encoding, description };
+        return encoding;
     }
 
     if (typeof size === 'number') {
-        return fixDecoder(encoding, size, description);
+        return fixDecoder(encoding, size);
     }
 
-    return {
-        decode: (bytes: Uint8Array, offset = 0) => {
+    return createDecoder({
+        fixedSize: null,
+        read: (bytes: Uint8Array, offset = 0) => {
             assertByteArrayIsNotEmptyForCodec('string', bytes, offset);
-            const [lengthBigInt, lengthOffset] = size.decode(bytes, offset);
+            const [lengthBigInt, lengthOffset] = size.read(bytes, offset);
             const length = Number(lengthBigInt);
             offset = lengthOffset;
             const contentBytes = bytes.slice(offset, offset + length);
             assertByteArrayHasEnoughBytesForCodec('string', length, contentBytes);
-            const [value, contentOffset] = encoding.decode(contentBytes);
+            const [value, contentOffset] = encoding.read(contentBytes, 0);
             offset += contentOffset;
             return [value, offset];
         },
-        description,
-        fixedSize: null,
-        maxSize: null,
-    };
-};
+    });
+}
 
 /** Encodes and decodes strings from a given encoding and size strategy. */
-export const getStringCodec = (config: StringCodecConfig<NumberCodec, Codec<string>> = {}): Codec<string> =>
-    combineCodec(getStringEncoder(config), getStringDecoder(config));
-
-function getSizeDescription(size: CodecData | number | 'variable'): string {
-    return typeof size === 'object' ? size.description : `${size}`;
+export function getStringCodec(
+    config: StringCodecConfig<NumberCodec, Codec<string>> & { size: number }
+): FixedSizeCodec<string>;
+export function getStringCodec(config?: StringCodecConfig<NumberCodec, Codec<string>>): VariableSizeCodec<string>;
+export function getStringCodec(config: StringCodecConfig<NumberCodec, Codec<string>> = {}): Codec<string> {
+    return combineCodec(getStringEncoder(config), getStringDecoder(config));
 }
