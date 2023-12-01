@@ -7,36 +7,21 @@ import { Codec, Decoder, Encoder } from './codec';
  */
 export function combineCodec<From, To extends From = From>(
     encoder: Encoder<From>,
-    decoder: Decoder<To>,
-    description?: string,
+    decoder: Decoder<To>
 ): Codec<From, To> {
     if (encoder.fixedSize !== decoder.fixedSize) {
         // TODO: Coded error.
         throw new Error(
-            `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`,
+            `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`
         );
     }
 
-    if (encoder.maxSize !== decoder.maxSize) {
+    if (encoder.fixedSize === null && decoder.fixedSize === null && encoder.maxSize !== decoder.maxSize) {
         // TODO: Coded error.
         throw new Error(
-            `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`,
+            `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`
         );
     }
 
-    if (description === undefined && encoder.description !== decoder.description) {
-        // TODO: Coded error.
-        throw new Error(
-            `Encoder and decoder must have the same description, got [${encoder.description}] and [${decoder.description}]. ` +
-                `Pass a custom description as a third argument if you want to override the description and bypass this error.`,
-        );
-    }
-
-    return {
-        decode: decoder.decode,
-        description: description ?? encoder.description,
-        encode: encoder.encode,
-        fixedSize: encoder.fixedSize,
-        maxSize: encoder.maxSize,
-    };
+    return { ...decoder, ...encoder };
 }

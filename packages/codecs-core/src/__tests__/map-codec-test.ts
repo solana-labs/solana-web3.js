@@ -1,13 +1,14 @@
-import { Codec, Decoder, Encoder } from '../codec';
+import { Codec, createCodec, createDecoder, createEncoder, Decoder, Encoder } from '../codec';
 import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
 
-const numberCodec: Codec<number> = {
-    decode: (bytes: Uint8Array): [number, number] => [bytes[0], 1],
-    description: 'number',
-    encode: (value: number) => new Uint8Array([value]),
+const numberCodec: Codec<number> = createCodec({
     fixedSize: 1,
-    maxSize: 1,
-};
+    read: (bytes: Uint8Array): [number, number] => [bytes[0], 1],
+    write: (value: number, bytes, offset) => {
+        bytes.set([value], offset);
+        return offset + 1;
+    },
+});
 
 describe('mapCodec', () => {
     it('can loosen the codec input with a map', () => {
@@ -18,10 +19,10 @@ describe('mapCodec', () => {
         );
 
         const bytesA = mappedCodec.encode(42);
-        expect(mappedCodec.decode(bytesA)[0]).toBe(42);
+        expect(mappedCodec.decode(bytesA)).toBe(42);
 
         const bytesB = mappedCodec.encode('Hello world');
-        expect(mappedCodec.decode(bytesB)[0]).toBe(11);
+        expect(mappedCodec.decode(bytesB)).toBe(11);
     });
 
     it('can map both the input and output of a codec', () => {
@@ -34,10 +35,10 @@ describe('mapCodec', () => {
         );
 
         const bytesA = mappedCodec.encode(42);
-        expect(mappedCodec.decode(bytesA)[0]).toBe('x'.repeat(42));
+        expect(mappedCodec.decode(bytesA)).toBe('x'.repeat(42));
 
         const bytesB = mappedCodec.encode('Hello world');
-        expect(mappedCodec.decode(bytesB)[0]).toBe('x'.repeat(11));
+        expect(mappedCodec.decode(bytesB)).toBe('x'.repeat(11));
     });
 
     it('can map the input and output of a codec to the same type', () => {
@@ -49,10 +50,10 @@ describe('mapCodec', () => {
         );
 
         const bytesA = mappedCodec.encode('42');
-        expect(mappedCodec.decode(bytesA)[0]).toBe('xx');
+        expect(mappedCodec.decode(bytesA)).toBe('xx');
 
         const bytesB = mappedCodec.encode('Hello world');
-        expect(mappedCodec.decode(bytesB)[0]).toBe('xxxxxxxxxxx');
+        expect(mappedCodec.decode(bytesB)).toBe('xxxxxxxxxxx');
     });
 
     it('can wrap a codec type in an object using a map', () => {
@@ -65,25 +66,26 @@ describe('mapCodec', () => {
         );
 
         const bytes = mappedCodec.encode({ value: 42 });
-        expect(mappedCodec.decode(bytes)[0]).toStrictEqual({ value: 42 });
+        expect(mappedCodec.decode(bytes)).toStrictEqual({ value: 42 });
     });
 
     it('map a codec to loosen its input by providing default values', () => {
         // Create Codec<Strict>.
         type Strict = { discriminator: number; label: string };
-        const strictCodec: Codec<Strict> = {
-            decode: (bytes: Uint8Array): [Strict, number] => [
+        const strictCodec: Codec<Strict> = createCodec({
+            fixedSize: 2,
+            read: (bytes: Uint8Array): [Strict, number] => [
                 { discriminator: bytes[0], label: 'x'.repeat(bytes[1]) },
                 1,
             ],
-            description: 'Strict',
-            encode: (value: Strict) => new Uint8Array([value.discriminator, value.label.length]),
-            fixedSize: 2,
-            maxSize: 2,
-        };
+            write: (value: Strict, bytes, offset) => {
+                bytes.set([value.discriminator, value.label.length], offset);
+                return offset + 2;
+            },
+        });
 
         const bytesA = strictCodec.encode({ discriminator: 5, label: 'Hello world' });
-        expect(strictCodec.decode(bytesA)[0]).toStrictEqual({
+        expect(strictCodec.decode(bytesA)).toStrictEqual({
             discriminator: 5,
             label: 'xxxxxxxxxxx',
         });
@@ -100,30 +102,31 @@ describe('mapCodec', () => {
 
         // With explicit discriminator.
         const bytesB = looseCodec.encode({ discriminator: 5, label: 'Hello world' });
-        expect(looseCodec.decode(bytesB)[0]).toStrictEqual({
+        expect(looseCodec.decode(bytesB)).toStrictEqual({
             discriminator: 5,
             label: 'xxxxxxxxxxx',
         });
 
         // With implicit discriminator.
         const bytesC = looseCodec.encode({ label: 'Hello world' });
-        expect(looseCodec.decode(bytesC)[0]).toStrictEqual({
+        expect(looseCodec.decode(bytesC)).toStrictEqual({
             discriminator: 42,
             label: 'xxxxxxxxxxx',
         });
     });
 
     it('can loosen a tuple codec', () => {
-        const codec: Codec<[number, string]> = {
-            decode: (bytes: Uint8Array): [[number, string], number] => [[bytes[0], 'x'.repeat(bytes[1])], 2],
-            description: 'Tuple',
-            encode: (value: [number, string]) => new Uint8Array([value[0], value[1].length]),
+        const codec: Codec<[number, string]> = createCodec({
             fixedSize: 2,
-            maxSize: 2,
-        };
+            read: (bytes: Uint8Array): [[number, string], number] => [[bytes[0], 'x'.repeat(bytes[1])], 2],
+            write: (value: [number, string], bytes, offset) => {
+                bytes.set([value[0], value[1].length], offset);
+                return offset + 2;
+            },
+        });
 
         const bytesA = codec.encode([42, 'Hello world']);
-        expect(codec.decode(bytesA)[0]).toStrictEqual([42, 'xxxxxxxxxxx']);
+        expect(codec.decode(bytesA)).toStrictEqual([42, 'xxxxxxxxxxx']);
 
         const mappedCodec = mapCodec(codec, (value: [number | null, string]): [number, string] => [
             // eslint-disable-next-line jest/no-conditional-in-test
@@ -132,45 +135,40 @@ describe('mapCodec', () => {
         ]);
 
         const bytesB = mappedCodec.encode([null, 'Hello world']);
-        expect(mappedCodec.decode(bytesB)[0]).toStrictEqual([11, 'xxxxxxxxxxx']);
+        expect(mappedCodec.decode(bytesB)).toStrictEqual([11, 'xxxxxxxxxxx']);
 
         const bytesC = mappedCodec.encode([42, 'Hello world']);
-        expect(mappedCodec.decode(bytesC)[0]).toStrictEqual([42, 'xxxxxxxxxxx']);
+        expect(mappedCodec.decode(bytesC)).toStrictEqual([42, 'xxxxxxxxxxx']);
     });
 });
 
 describe('mapEncoder', () => {
     it('can map an encoder to another encoder', () => {
-        const encoderA: Encoder<number> = {
-            description: 'A',
-            encode: (value: number) => new Uint8Array([value]),
+        const encoderA: Encoder<number> = createEncoder({
             fixedSize: 1,
-            maxSize: 1,
-        };
+            write: (value: number, bytes, offset) => {
+                bytes.set([value], offset);
+                return offset + 1;
+            },
+        });
 
         const encoderB = mapEncoder(encoderA, (value: string): number => value.length);
 
-        expect(encoderB.description).toBe('A');
         expect(encoderB.fixedSize).toBe(1);
-        expect(encoderB.maxSize).toBe(1);
         expect(encoderB.encode('helloworld')).toStrictEqual(new Uint8Array([10]));
     });
 });
 
 describe('mapDecoder', () => {
     it('can map an encoder to another encoder', () => {
-        const decoder: Decoder<number> = {
-            decode: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
-            description: 'A',
+        const decoder: Decoder<number> = createDecoder({
             fixedSize: 1,
-            maxSize: 1,
-        };
+            read: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
+        });
 
         const decoderB = mapDecoder(decoder, (value: number): string => 'x'.repeat(value));
 
-        expect(decoderB.description).toBe('A');
         expect(decoderB.fixedSize).toBe(1);
-        expect(decoderB.maxSize).toBe(1);
-        expect(decoderB.decode(new Uint8Array([10]))).toStrictEqual(['xxxxxxxxxx', 1]);
+        expect(decoderB.decode(new Uint8Array([10]))).toBe('xxxxxxxxxx');
     });
 });

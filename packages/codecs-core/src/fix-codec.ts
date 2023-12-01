@@ -1,15 +1,7 @@
 import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
-import { Codec, CodecData, Decoder, Encoder } from './codec';
+import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec';
 import { combineCodec } from './combine-codec';
-
-function fixCodecHelper(data: CodecData, fixedBytes: number, description?: string): CodecData {
-    return {
-        description: description ?? `fixed(${fixedBytes}, ${data.description})`,
-        fixedSize: fixedBytes,
-        maxSize: fixedBytes,
-    };
-}
 
 /**
  * Creates a fixed-size encoder from a given encoder.
@@ -18,11 +10,20 @@ function fixCodecHelper(data: CodecData, fixedBytes: number, description?: strin
  * @param fixedBytes - The fixed number of bytes to write.
  * @param description - A custom description for the encoder.
  */
-export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number, description?: string): Encoder<T> {
-    return {
-        ...fixCodecHelper(encoder, fixedBytes, description),
-        encode: (value: T) => fixBytes(encoder.encode(value), fixedBytes),
-    };
+export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): Encoder<T> {
+    return createEncoder({
+        fixedSize: fixedBytes,
+        write: (value: T, bytes: Uint8Array, offset: Offset) => {
+            // Here we exceptionally use the `encode` function instead of the `write`
+            // function as using the nested `write` function on a fixed-sized byte
+            // array may result in a out-of-bounds error on the nested encoder.
+            const variableByteArray = encoder.encode(value);
+            const fixedByteArray =
+                variableByteArray.length > fixedBytes ? variableByteArray.slice(0, fixedBytes) : variableByteArray;
+            bytes.set(fixedByteArray, offset);
+            return offset + fixedBytes;
+        },
+    });
 }
 
 /**
@@ -32,10 +33,10 @@ export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number, descripti
  * @param fixedBytes - The fixed number of bytes to read.
  * @param description - A custom description for the decoder.
  */
-export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, description?: string): Decoder<T> {
-    return {
-        ...fixCodecHelper(decoder, fixedBytes, description),
-        decode: (bytes: Uint8Array, offset = 0) => {
+export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): Decoder<T> {
+    return createDecoder({
+        fixedSize: fixedBytes,
+        read: (bytes: Uint8Array, offset: Offset) => {
             assertByteArrayHasEnoughBytesForCodec('fixCodec', fixedBytes, bytes, offset);
             // Slice the byte array to the fixed size if necessary.
             if (offset > 0 || bytes.length > fixedBytes) {
@@ -46,10 +47,10 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, descripti
                 bytes = fixBytes(bytes, decoder.fixedSize);
             }
             // Decode the value using the nested decoder.
-            const [value] = decoder.decode(bytes, 0);
+            const [value] = decoder.read(bytes, 0);
             return [value, offset + fixedBytes];
         },
-    };
+    });
 }
 
 /**
@@ -59,10 +60,6 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number, descripti
  * @param fixedBytes - The fixed number of bytes to read/write.
  * @param description - A custom description for the codec.
  */
-export function fixCodec<T, U extends T = T>(
-    codec: Codec<T, U>,
-    fixedBytes: number,
-    description?: string,
-): Codec<T, U> {
-    return combineCodec(fixEncoder(codec, fixedBytes, description), fixDecoder(codec, fixedBytes, description));
+export function fixCodec<T, U extends T = T>(codec: Codec<T, U>, fixedBytes: number): Codec<T, U> {
+    return combineCodec(fixEncoder(codec, fixedBytes), fixDecoder(codec, fixedBytes));
 }

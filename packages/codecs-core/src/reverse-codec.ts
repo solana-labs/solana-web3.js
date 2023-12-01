@@ -1,6 +1,5 @@
 import { assertFixedSizeCodec } from './assertions';
-import { mergeBytes } from './bytes';
-import { Codec, Decoder, Encoder } from './codec';
+import { Codec, createDecoder, createEncoder, Decoder, Encoder } from './codec';
 import { combineCodec } from './combine-codec';
 
 /**
@@ -8,10 +7,15 @@ import { combineCodec } from './combine-codec';
  */
 export function reverseEncoder<T>(encoder: Encoder<T>): Encoder<T> {
     assertFixedSizeCodec(encoder, 'Cannot reverse a codec of variable size.');
-    return {
+    return createEncoder({
         ...encoder,
-        encode: (value: T) => encoder.encode(value).reverse(),
-    };
+        write: (value: T, bytes, offset) => {
+            const newOffset = encoder.write(value, bytes, offset);
+            const slice = bytes.slice(offset, offset + encoder.fixedSize).reverse();
+            bytes.set(slice, offset);
+            return newOffset;
+        },
+    });
 }
 
 /**
@@ -19,21 +23,18 @@ export function reverseEncoder<T>(encoder: Encoder<T>): Encoder<T> {
  */
 export function reverseDecoder<T>(decoder: Decoder<T>): Decoder<T> {
     assertFixedSizeCodec(decoder, 'Cannot reverse a codec of variable size.');
-    return {
+    return createDecoder({
         ...decoder,
-        decode: (bytes: Uint8Array, offset = 0) => {
+        read: (bytes, offset) => {
             const reverseEnd = offset + decoder.fixedSize;
             if (offset === 0 && bytes.length === reverseEnd) {
-                return decoder.decode(bytes.reverse(), offset);
+                return decoder.read(bytes.reverse(), offset);
             }
-            const newBytes = mergeBytes([
-                ...(offset === 0 ? [] : [bytes.slice(0, offset)]),
-                bytes.slice(offset, reverseEnd).reverse(),
-                ...(bytes.length === reverseEnd ? [] : [bytes.slice(reverseEnd)]),
-            ]);
-            return decoder.decode(newBytes, offset);
+            const reversedBytes = bytes.slice();
+            reversedBytes.set(bytes.slice(offset, reverseEnd).reverse(), offset);
+            return decoder.read(reversedBytes, offset);
         },
-    };
+    });
 }
 
 /**
