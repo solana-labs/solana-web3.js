@@ -1,21 +1,36 @@
 import {
-    assertFixedSizeCodec,
-    BaseCodecConfig,
+    assertIsFixedSize,
     Codec,
-    CodecData,
     combineCodec,
+    createDecoder,
+    createEncoder,
     Decoder,
     Encoder,
-    fixBytes,
-    mergeBytes,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    getEncodedSize,
+    isFixedSize,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
 } from '@solana/codecs-core';
-import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
+import {
+    FixedSizeNumberCodec,
+    FixedSizeNumberDecoder,
+    FixedSizeNumberEncoder,
+    getU8Decoder,
+    getU8Encoder,
+    NumberCodec,
+    NumberDecoder,
+    NumberEncoder,
+} from '@solana/codecs-numbers';
 
 import { isOption, isSome, none, Option, OptionOrNullable, some } from './option';
 import { wrapNullable } from './unwrap-option';
 
 /** Defines the config for option codecs. */
-export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
+export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
     /**
      * The codec to use for the boolean prefix.
      * @defaultValue u8 prefix.
@@ -33,49 +48,67 @@ export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Numb
     fixed?: boolean;
 };
 
-function sumCodecSizes(sizes: (number | null)[]): number | null {
-    return sizes.reduce((all, size) => (all === null || size === null ? null : all + size), 0 as number | null);
-}
-
-function optionCodecHelper(item: CodecData, prefix: CodecData, fixed: boolean, description?: string): CodecData {
-    let descriptionSuffix = `; ${prefix.description}`;
-    let fixedSize = item.fixedSize === 0 ? prefix.fixedSize : null;
-    if (fixed) {
-        assertFixedSizeCodec(item, 'Fixed options can only be used with fixed-size codecs.');
-        assertFixedSizeCodec(prefix, 'Fixed options can only be used with fixed-size prefix.');
-        descriptionSuffix += '; fixed';
-        fixedSize = prefix.fixedSize + item.fixedSize;
-    }
-
-    return {
-        description: description ?? `option(${item.description + descriptionSuffix})`,
-        fixedSize,
-        maxSize: sumCodecSizes([prefix.maxSize, item.maxSize]),
-    };
-}
-
 /**
  * Creates a encoder for an optional value using `null` as the `None` value.
  *
  * @param item - The encoder to use for the value that may be present.
  * @param config - A set of config for the encoder.
  */
-export function getOptionEncoder<T>(
-    item: Encoder<T>,
+export function getOptionEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom>,
+    config: OptionCodecConfig<FixedSizeNumberEncoder> & { fixed: true },
+): FixedSizeEncoder<OptionOrNullable<TFrom>>;
+export function getOptionEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom, 0>,
+    config?: OptionCodecConfig<FixedSizeNumberEncoder>,
+): FixedSizeEncoder<OptionOrNullable<TFrom>>;
+export function getOptionEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config?: OptionCodecConfig<NumberEncoder> & { fixed?: false },
+): VariableSizeEncoder<OptionOrNullable<TFrom>>;
+export function getOptionEncoder<TFrom>(
+    item: Encoder<TFrom>,
     config: OptionCodecConfig<NumberEncoder> = {},
-): Encoder<OptionOrNullable<T>> {
+): Encoder<OptionOrNullable<TFrom>> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
-    return {
-        ...optionCodecHelper(item, prefix, fixed, config.description),
-        encode: (optionOrNullable: OptionOrNullable<T>) => {
-            const option = isOption<T>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
-            const prefixByte = prefix.encode(Number(isSome(option)));
-            let itemBytes = isSome(option) ? item.encode(option.value) : new Uint8Array();
-            itemBytes = fixed ? fixBytes(itemBytes, item.fixedSize as number) : itemBytes;
-            return mergeBytes([prefixByte, itemBytes]);
+
+    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
+    if (fixed || isZeroSizeItem) {
+        assertIsFixedSize(item, 'Fixed options can only be used with fixed-size codecs.');
+        assertIsFixedSize(prefix, 'Fixed options can only be used with fixed-size prefix.');
+        const fixedSize = prefix.fixedSize + item.fixedSize;
+        return createEncoder({
+            fixedSize,
+            write: (optionOrNullable: OptionOrNullable<TFrom>, bytes, offset) => {
+                const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
+                const prefixOffset = prefix.write(Number(isSome(option)), bytes, offset);
+                if (isSome(option)) {
+                    item.write(option.value, bytes, prefixOffset);
+                }
+                return offset + fixedSize;
+            },
+        });
+    }
+
+    return createEncoder({
+        getSizeFromValue: (optionOrNullable: OptionOrNullable<TFrom>) => {
+            const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
+            return (
+                getEncodedSize(Number(isSome(option)), prefix) +
+                (isSome(option) ? getEncodedSize(option.value, item) : 0)
+            );
         },
-    };
+        maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined,
+        write: (optionOrNullable: OptionOrNullable<TFrom>, bytes, offset) => {
+            const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
+            offset = prefix.write(Number(isSome(option)), bytes, offset);
+            if (isSome(option)) {
+                offset = item.write(option.value, bytes, offset);
+            }
+            return offset;
+        },
+    });
 }
 
 /**
@@ -84,29 +117,49 @@ export function getOptionEncoder<T>(
  * @param item - The decoder to use for the value that may be present.
  * @param config - A set of config for the decoder.
  */
-export function getOptionDecoder<T>(
-    item: Decoder<T>,
+export function getOptionDecoder<TTo>(
+    item: FixedSizeDecoder<TTo>,
+    config: OptionCodecConfig<FixedSizeNumberDecoder> & { fixed: true },
+): FixedSizeDecoder<Option<TTo>>;
+export function getOptionDecoder<TTo>(
+    item: FixedSizeDecoder<TTo, 0>,
+    config?: OptionCodecConfig<FixedSizeNumberDecoder>,
+): FixedSizeDecoder<Option<TTo>>;
+export function getOptionDecoder<TTo>(
+    item: Decoder<TTo>,
+    config?: OptionCodecConfig<NumberDecoder> & { fixed?: false },
+): VariableSizeDecoder<Option<TTo>>;
+export function getOptionDecoder<TTo>(
+    item: Decoder<TTo>,
     config: OptionCodecConfig<NumberDecoder> = {},
-): Decoder<Option<T>> {
+): Decoder<Option<TTo>> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
-    return {
-        ...optionCodecHelper(item, prefix, fixed, config.description),
-        decode: (bytes: Uint8Array, offset = 0) => {
+
+    let fixedSize: number | null = null;
+    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
+    if (fixed || isZeroSizeItem) {
+        assertIsFixedSize(item, 'Fixed options can only be used with fixed-size codecs.');
+        assertIsFixedSize(prefix, 'Fixed options can only be used with fixed-size prefix.');
+        fixedSize = prefix.fixedSize + item.fixedSize;
+    }
+
+    return createDecoder({
+        ...(fixedSize === null
+            ? { maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined }
+            : { fixedSize }),
+        read: (bytes: Uint8Array, offset) => {
             if (bytes.length - offset <= 0) {
                 return [none(), offset];
             }
-            const fixedOffset = offset + (prefix.fixedSize ?? 0) + (item.fixedSize ?? 0);
-            const [isSome, prefixOffset] = prefix.decode(bytes, offset);
-            offset = prefixOffset;
+            const [isSome, prefixOffset] = prefix.read(bytes, offset);
             if (isSome === 0) {
-                return [none(), fixed ? fixedOffset : offset];
+                return [none(), fixedSize !== null ? offset + fixedSize : prefixOffset];
             }
-            const [value, newOffset] = item.decode(bytes, offset);
-            offset = newOffset;
-            return [some(value), fixed ? fixedOffset : offset];
+            const [value, newOffset] = item.read(bytes, prefixOffset);
+            return [some(value), fixedSize !== null ? offset + fixedSize : newOffset];
         },
-    };
+    });
 }
 
 /**
@@ -115,9 +168,29 @@ export function getOptionDecoder<T>(
  * @param item - The codec to use for the value that may be present.
  * @param config - A set of config for the codec.
  */
-export function getOptionCodec<T, U extends T = T>(
-    item: Codec<T, U>,
+export function getOptionCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo>,
+    config: OptionCodecConfig<FixedSizeNumberCodec> & { fixed: true },
+): FixedSizeCodec<OptionOrNullable<TFrom>, Option<TTo>>;
+export function getOptionCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo, 0>,
+    config?: OptionCodecConfig<FixedSizeNumberCodec>,
+): FixedSizeCodec<OptionOrNullable<TFrom>, Option<TTo>>;
+export function getOptionCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config?: OptionCodecConfig<NumberCodec> & { fixed?: false },
+): VariableSizeCodec<OptionOrNullable<TFrom>, Option<TTo>>;
+export function getOptionCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
     config: OptionCodecConfig<NumberCodec> = {},
-): Codec<OptionOrNullable<T>, Option<U>> {
-    return combineCodec(getOptionEncoder<T>(item, config), getOptionDecoder<U>(item, config));
+): Codec<OptionOrNullable<TFrom>, Option<TTo>> {
+    return combineCodec(getOptionEncoder<TFrom>(item, config as object), getOptionDecoder<TTo>(item, config as object));
+}
+
+function sumCodecSizes(sizes: (number | null)[]): number | null {
+    return sizes.reduce((all, size) => (all === null || size === null ? null : all + size), 0 as number | null);
+}
+
+function getMaxSize(codec: { fixedSize: number } | { maxSize?: number }): number | null {
+    return isFixedSize(codec) ? codec.fixedSize : codec.maxSize ?? null;
 }
