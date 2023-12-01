@@ -1,4 +1,5 @@
 import {Buffer} from 'buffer';
+import {sign} from '@solana/ed25519';
 
 import {
   Connection,
@@ -8,7 +9,6 @@ import {
   Transaction,
   Ed25519Program,
 } from '../../src';
-import {sign} from '../../src/utils/ed25519';
 import {url} from '../url';
 
 if (process.env.TEST_LIVE) {

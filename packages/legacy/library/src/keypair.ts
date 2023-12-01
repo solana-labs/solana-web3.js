@@ -1,4 +1,5 @@
-import {generateKeypair, getPublicKey, Ed25519Keypair} from './utils/ed25519';
+import {generateKeypair, getPublicKey, Ed25519Keypair} from '@solana/ed25519';
+
 import {PublicKey} from './publickey';
 
 /**

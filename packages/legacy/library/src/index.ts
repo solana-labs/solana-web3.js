@@ -1,3 +1,4 @@
+export * from '@solana/ed25519';
 export * from './account';
 export * from './blockhash';
 export * from './bpf-loader-deprecated';
