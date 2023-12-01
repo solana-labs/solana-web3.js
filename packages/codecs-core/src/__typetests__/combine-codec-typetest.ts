@@ -13,7 +13,11 @@ import { combineCodec } from '../combine-codec';
 
 {
     // [combineCodec]: It keeps track of the fixed or variable size types.
-    combineCodec({} as FixedSizeEncoder<string>, {} as FixedSizeDecoder<string>) satisfies FixedSizeCodec<string>;
+    combineCodec({} as FixedSizeEncoder<string, 42>, {} as FixedSizeDecoder<string, 42>) satisfies FixedSizeCodec<
+        string,
+        string,
+        42
+    >;
     combineCodec(
         {} as VariableSizeEncoder<string>,
         {} as VariableSizeDecoder<string>

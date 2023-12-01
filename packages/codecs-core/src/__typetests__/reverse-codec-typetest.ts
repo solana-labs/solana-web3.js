@@ -13,7 +13,7 @@ import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
 
 {
     // [reverseEncoder]: It only works with fixed size encoders.
-    reverseEncoder({} as FixedSizeEncoder<string>) satisfies FixedSizeEncoder<string>;
+    reverseEncoder({} as FixedSizeEncoder<string, 42>) satisfies FixedSizeEncoder<string, 42>;
     // @ts-expect-error Expected a fixed size encoder.
     reverseEncoder({} as VariableSizeEncoder<string>);
     // @ts-expect-error Expected a fixed size encoder.
@@ -22,7 +22,7 @@ import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
 
 {
     // [reverseDecoder]: It only works with fixed size decoders.
-    reverseDecoder({} as FixedSizeDecoder<string>) satisfies FixedSizeDecoder<string>;
+    reverseDecoder({} as FixedSizeDecoder<string, 42>) satisfies FixedSizeDecoder<string, 42>;
     // @ts-expect-error Expected a fixed size decoder.
     reverseDecoder({} as VariableSizeDecoder<string>);
     // @ts-expect-error Expected a fixed size decoder.
@@ -31,7 +31,7 @@ import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
 
 {
     // [reverseCodec]: It only works with fixed size codecs.
-    reverseCodec({} as FixedSizeCodec<string>) satisfies FixedSizeCodec<string>;
+    reverseCodec({} as FixedSizeCodec<string, string, 42>) satisfies FixedSizeCodec<string, string, 42>;
     // @ts-expect-error Expected a fixed size codec.
     reverseCodec({} as VariableSizeCodec<string>);
     // @ts-expect-error Expected a fixed size codec.

@@ -3,7 +3,7 @@ import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getU128Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number | bigint> =>
+export const getU128Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number | bigint, 16> =>
     numberEncoderFactory({
         config,
         name: 'u128',
@@ -18,7 +18,7 @@ export const getU128Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder
         size: 16,
     });
 
-export const getU128Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<bigint> =>
+export const getU128Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<bigint, 16> =>
     numberDecoderFactory({
         config,
         get: (view, le) => {
@@ -32,5 +32,5 @@ export const getU128Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder
         size: 16,
     });
 
-export const getU128Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number | bigint, bigint> =>
+export const getU128Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number | bigint, bigint, 16> =>
     combineCodec(getU128Encoder(config), getU128Decoder(config));
