@@ -23,16 +23,3 @@ export function assertByteArrayHasEnoughBytesForCodec(
         throw new Error(`Codec [${codecDescription}] expected ${expected} bytes, got ${bytesLength}.`);
     }
 }
-
-/**
- * Asserts that a given codec is fixed-size codec.
- */
-export function assertFixedSizeCodec(
-    data: { fixedSize: number | null },
-    message?: string
-): asserts data is { fixedSize: number } {
-    if (data.fixedSize === null) {
-        // TODO: Coded error.
-        throw new Error(message ?? 'Expected a fixed-size codec, got a variable-size one.');
-    }
-}

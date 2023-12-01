@@ -1,4 +1,4 @@
-import { Codec, createCodec, createDecoder, createEncoder, Decoder, Encoder } from '../codec';
+import { Codec, createCodec, createDecoder, createEncoder } from '../codec';
 import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
 
 const numberCodec: Codec<number> = createCodec({
@@ -144,7 +144,7 @@ describe('mapCodec', () => {
 
 describe('mapEncoder', () => {
     it('can map an encoder to another encoder', () => {
-        const encoderA: Encoder<number> = createEncoder({
+        const encoderA = createEncoder({
             fixedSize: 1,
             write: (value: number, bytes, offset) => {
                 bytes.set([value], offset);
@@ -161,7 +161,7 @@ describe('mapEncoder', () => {
 
 describe('mapDecoder', () => {
     it('can map an encoder to another encoder', () => {
-        const decoder: Decoder<number> = createDecoder({
+        const decoder = createDecoder({
             fixedSize: 1,
             read: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         });

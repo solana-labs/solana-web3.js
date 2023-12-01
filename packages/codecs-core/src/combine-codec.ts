@@ -5,6 +5,7 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    isFixedSizeCodec,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -31,14 +32,19 @@ export function combineCodec<From, To extends From = From>(
     encoder: Encoder<From>,
     decoder: Decoder<To>
 ): Codec<From, To> {
-    if (encoder.fixedSize !== decoder.fixedSize) {
+    if (isFixedSizeCodec(encoder) !== isFixedSizeCodec(decoder)) {
+        // TODO: Coded error.
+        throw new Error(`Encoder and decoder must either both be fixed-size or variable-size.`);
+    }
+
+    if (isFixedSizeCodec(encoder) && isFixedSizeCodec(decoder) && encoder.fixedSize !== decoder.fixedSize) {
         // TODO: Coded error.
         throw new Error(
             `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`
         );
     }
 
-    if (encoder.fixedSize === null && decoder.fixedSize === null && encoder.maxSize !== decoder.maxSize) {
+    if (!isFixedSizeCodec(encoder) && !isFixedSizeCodec(decoder) && encoder.maxSize !== decoder.maxSize) {
         // TODO: Coded error.
         throw new Error(
             `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`

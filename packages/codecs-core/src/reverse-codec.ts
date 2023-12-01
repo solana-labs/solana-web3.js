@@ -1,12 +1,18 @@
-import { assertFixedSizeCodec } from './assertions';
-import { createDecoder, createEncoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from './codec';
+import {
+    assertIsFixedSizeCodec,
+    createDecoder,
+    createEncoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+} from './codec';
 import { combineCodec } from './combine-codec';
 
 /**
  * Reverses the bytes of a fixed-size encoder.
  */
 export function reverseEncoder<T>(encoder: FixedSizeEncoder<T>): FixedSizeEncoder<T> {
-    assertFixedSizeCodec(encoder, 'Cannot reverse a codec of variable size.');
+    assertIsFixedSizeCodec(encoder, 'Cannot reverse a codec of variable size.');
     return createEncoder({
         ...encoder,
         write: (value: T, bytes, offset) => {
@@ -22,7 +28,7 @@ export function reverseEncoder<T>(encoder: FixedSizeEncoder<T>): FixedSizeEncode
  * Reverses the bytes of a fixed-size decoder.
  */
 export function reverseDecoder<T>(decoder: FixedSizeDecoder<T>): FixedSizeDecoder<T> {
-    assertFixedSizeCodec(decoder, 'Cannot reverse a codec of variable size.');
+    assertIsFixedSizeCodec(decoder, 'Cannot reverse a codec of variable size.');
     return createDecoder({
         ...decoder,
         read: (bytes, offset) => {

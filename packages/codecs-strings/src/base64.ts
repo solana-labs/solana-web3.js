@@ -18,7 +18,6 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 export const getBase64Encoder = (): VariableSizeEncoder<string> => {
     if (__BROWSER__) {
         return createEncoder({
-            fixedSize: null,
             getSizeFromValue: (value: string) => {
                 try {
                     return (atob as Window['atob'])(value).length;
@@ -44,7 +43,6 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
 
     if (__NODEJS__) {
         return createEncoder({
-            fixedSize: null,
             getSizeFromValue: (value: string) => Buffer.from(value, 'base64').length,
             write(value: string, bytes, offset) {
                 assertValidBaseString(alphabet, value.replace(/=/g, ''));
@@ -62,7 +60,6 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
 export const getBase64Decoder = (): VariableSizeDecoder<string> => {
     if (__BROWSER__) {
         return createDecoder({
-            fixedSize: null,
             read(bytes, offset = 0) {
                 const slice = bytes.slice(offset);
                 const value = (btoa as Window['btoa'])(String.fromCharCode(...slice));
@@ -73,7 +70,6 @@ export const getBase64Decoder = (): VariableSizeDecoder<string> => {
 
     if (__NODEJS__) {
         return createDecoder({
-            fixedSize: null,
             read: (bytes, offset = 0) => [Buffer.from(bytes, offset).toString('base64'), bytes.length],
         });
     }

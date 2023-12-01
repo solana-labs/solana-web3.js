@@ -62,7 +62,6 @@ export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encode
     }
 
     return createEncoder({
-        fixedSize: null,
         getSizeFromValue: (value: string) => {
             const contentSize = getEncodedSize(value, encoding);
             return getEncodedSize(contentSize, size) + contentSize;
@@ -95,7 +94,6 @@ export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decode
     }
 
     return createDecoder({
-        fixedSize: null,
         read: (bytes: Uint8Array, offset = 0) => {
             assertByteArrayIsNotEmptyForCodec('string', bytes, offset);
             const [lengthBigInt, lengthOffset] = size.read(bytes, offset);

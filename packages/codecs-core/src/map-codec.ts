@@ -8,6 +8,7 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    isVariableSizeCodec,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -21,7 +22,7 @@ export function mapEncoder<T, U>(encoder: VariableSizeEncoder<T>, unmap: (value:
 export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): Encoder<U>;
 export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): Encoder<U> {
     return createEncoder({
-        ...(encoder.fixedSize === null
+        ...(isVariableSizeCodec(encoder)
             ? { ...encoder, getSizeFromValue: (value: U) => encoder.getSizeFromValue(unmap(value)) }
             : encoder),
         write: (value: U, bytes, offset) => encoder.write(unmap(value), bytes, offset),

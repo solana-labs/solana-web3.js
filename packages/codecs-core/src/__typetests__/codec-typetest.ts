@@ -20,7 +20,6 @@ import {
         write: (_: string) => 1,
     }) satisfies FixedSizeEncoder<string>;
     createEncoder({
-        fixedSize: null,
         getSizeFromValue: (_: string) => 42,
         write: (_: string) => 1,
     }) satisfies VariableSizeEncoder<string>;
@@ -29,14 +28,8 @@ import {
 
 {
     // [createDecoder]: It knows if the decoder is fixed size or variable size.
-    createDecoder({
-        fixedSize: 42,
-        read: (): [string, number] => ['', 1],
-    }) satisfies FixedSizeDecoder<string>;
-    createDecoder({
-        fixedSize: null,
-        read: (): [string, number] => ['', 1],
-    }) satisfies VariableSizeDecoder<string>;
+    createDecoder({ fixedSize: 42, read: (): [string, number] => ['', 1] }) satisfies FixedSizeDecoder<string>;
+    createDecoder({ read: (): [string, number] => ['', 1] }) satisfies VariableSizeDecoder<string>;
     createDecoder({} as Decoder<string>) satisfies Decoder<string>;
 }
 
@@ -48,9 +41,8 @@ import {
         write: (_: string) => 1,
     }) satisfies FixedSizeCodec<string>;
     createCodec({
-        fixedSize: null,
-        read: (): [string, number] => ['', 1],
         getSizeFromValue: (_: string) => 42,
+        read: (): [string, number] => ['', 1],
         write: (_: string) => 1,
     }) satisfies VariableSizeCodec<string>;
     createCodec({} as Codec<string>) satisfies Codec<string>;

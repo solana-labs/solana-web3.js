@@ -88,11 +88,11 @@ describe('getStringCodec', () => {
     });
 
     it('has the right sizes', () => {
-        expect(string().fixedSize).toBeNull();
+        expect(string().getSizeFromValue('ABC')).toBe(4 + 3);
         expect(string().maxSize).toBeUndefined();
-        expect(string({ size: u8() }).fixedSize).toBeNull();
+        expect(string({ size: u8() }).getSizeFromValue('ABC')).toBe(1 + 3);
         expect(string({ size: u8() }).maxSize).toBeUndefined();
-        expect(string({ size: 'variable' }).fixedSize).toBeNull();
+        expect(string({ size: 'variable' }).getSizeFromValue('ABC')).toBe(3);
         expect(string({ size: 'variable' }).maxSize).toBeUndefined();
         expect(string({ size: 42 }).fixedSize).toBe(42);
     });
