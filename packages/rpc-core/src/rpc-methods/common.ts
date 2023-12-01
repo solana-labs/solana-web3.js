@@ -83,7 +83,10 @@ export type AccountInfoWithJsonData = Readonly<{
         | Readonly<{
               // Name of the program that owns this account.
               program: string;
-              parsed: unknown;
+              parsed: {
+                  info?: object;
+                  type: string;
+              };
               space: U64UnsafeBeyond2Pow53Minus1;
           }>
         // If `jsonParsed` encoding is requested but a parser cannot be found for the given

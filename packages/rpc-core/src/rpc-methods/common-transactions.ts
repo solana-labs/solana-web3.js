@@ -23,8 +23,8 @@ type AddressTableLookup = Readonly<{
 
 type ParsedTransactionInstruction = Readonly<{
     parsed: {
-        type: string;
         info?: object;
+        type: string;
     };
     program: string;
     programId: Address;
