@@ -9,6 +9,5 @@ export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Add
         throw new Error('The `CryptoKey` must be an `Ed25519` public key');
     }
     const publicKeyBytes = await crypto.subtle.exportKey('raw', publicKey);
-    const [base58EncodedAddress] = getAddressDecoder().decode(new Uint8Array(publicKeyBytes));
-    return base58EncodedAddress;
+    return getAddressDecoder().decode(new Uint8Array(publicKeyBytes));
 }

@@ -107,7 +107,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDer
         // TODO: Coded error.
         throw new PointOnCurveError('Invalid seeds; point must fall off the Ed25519 curve');
     }
-    return base58EncodedAddressCodec.decode(addressBytes)[0];
+    return base58EncodedAddressCodec.decode(addressBytes);
 }
 
 export async function getProgramDerivedAddress({
@@ -158,5 +158,5 @@ export async function createAddressWithSeed({ baseAddress, programAddress, seed 
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
 
-    return decode(addressBytes)[0];
+    return decode(addressBytes);
 }

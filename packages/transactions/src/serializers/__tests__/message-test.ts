@@ -243,7 +243,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                     1, // Number of readonly indices
                     77, // Readonly indices
                 ]);
-            const [message, offset] = compiledMessage.decode(byteArray);
+            const [message, offset] = compiledMessage.read(byteArray, 0);
             expect(message).toStrictEqual({
                 addressTableLookups: [
                     {
@@ -293,7 +293,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                         /* INSTRUCTIONS */
                         0, // Number of instructions
                     ]),
-                )[0],
+                ),
             ).not.toHaveProperty('addressTableLookups');
         });
         it('deserializes a legacy transaction according to the spec', () => {
@@ -328,7 +328,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
                     3, // Length of instruction data
                     7, 8, 9, // Instruction data itself
                 ]);
-            const [message, offset] = compiledMessage.decode(byteArray);
+            const [message, offset] = compiledMessage.read(byteArray, 0);
             expect(message).toStrictEqual({
                 header: {
                     numReadonlyNonSignerAccounts: 1,

@@ -44,7 +44,7 @@ export function createNonceInvalidationPromiseFactory(
         function getNonceFromAccountData([base64EncodedBytes]: Base64EncodedDataResponse): Nonce {
             const data = base64Encoder.encode(base64EncodedBytes);
             const nonceValueBytes = data.slice(NONCE_VALUE_OFFSET, NONCE_VALUE_OFFSET + 32);
-            return base58Decoder.decode(nonceValueBytes)[0] as Nonce;
+            return base58Decoder.decode(nonceValueBytes) as Nonce;
         }
         const nonceAccountDidAdvancePromise = (async () => {
             for await (const accountNotification of accountNotifications) {

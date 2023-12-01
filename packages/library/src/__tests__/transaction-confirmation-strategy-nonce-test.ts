@@ -22,7 +22,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             // don't care about anything after this
         );
         bytes.set(getBase58Encoder().encode(nonceValue), NONCE_VALUE_OFFSET);
-        return [getBase64Decoder().decode(bytes)[0], 'base64'];
+        return [getBase64Decoder().decode(bytes), 'base64'];
     }
     let accountNotificationGenerator: jest.Mock;
     let createPendingSubscription: jest.Mock;

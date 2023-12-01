@@ -112,11 +112,13 @@ describe('partiallySignTransaction', () => {
             }
         });
         (getAddressEncoder as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+            getSizeFromValue: jest.fn().mockReturnValue(42),
+            write: jest.fn().mockImplementation((_value, _bytes: Uint8Array, offset: number) => offset + 42),
         });
         (getAddressDecoder as jest.Mock).mockReturnValue({});
         (getAddressCodec as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+            getSizeFromValue: jest.fn().mockReturnValue(42),
+            write: jest.fn().mockImplementation((_value, _bytes: Uint8Array, offset: number) => offset + 42),
         });
     });
     it("returns a transaction object having the first signer's signature", async () => {
@@ -264,11 +266,13 @@ describe('signTransaction', () => {
             }
         });
         (getAddressEncoder as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+            getSizeFromValue: jest.fn().mockReturnValue(42),
+            write: jest.fn().mockImplementation((_value, _bytes: Uint8Array, offset: number) => offset + 42),
         });
         (getAddressDecoder as jest.Mock).mockReturnValue({});
         (getAddressCodec as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue('fAkEbAsE58AdDrEsS'),
+            getSizeFromValue: jest.fn().mockReturnValue(42),
+            write: jest.fn().mockImplementation((_value, _bytes: Uint8Array, offset: number) => offset + 42),
         });
     });
     it('fatals when missing a signer', async () => {

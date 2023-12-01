@@ -109,7 +109,7 @@ describe('sendTransaction', () => {
                         { encoding: 'base64', preflightCommitment: commitment },
                     )
                     .send();
-                await expect(resultPromise).resolves.toEqual(getBase58Decoder().decode(signature)[0]);
+                await expect(resultPromise).resolves.toEqual(getBase58Decoder().decode(signature));
             });
         });
     });
@@ -236,7 +236,7 @@ describe('sendTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0))),
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });

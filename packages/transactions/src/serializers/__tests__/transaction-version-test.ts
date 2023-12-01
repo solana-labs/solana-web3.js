@@ -41,14 +41,14 @@ describe.each([getTransactionVersionCodec, getTransactionVersionDecoder])(
             transactionVersion = serializerFactory();
         });
         it.each(VERSION_TEST_CASES)('deserializes `%s` to the version `%s`', (byte, expected) => {
-            expect(transactionVersion.decode(new Uint8Array([byte]))[0]).toEqual(expected);
+            expect(transactionVersion.decode(new Uint8Array([byte]))).toEqual(expected);
         });
         it('deserializes to `legacy` when missing the version flag', () => {
             expect(
                 transactionVersion.decode(
                     // eg. just a byte that indicates that there are 3 required signers
                     new Uint8Array([3]),
-                )[0],
+                ),
             ).toBe('legacy');
         });
     },

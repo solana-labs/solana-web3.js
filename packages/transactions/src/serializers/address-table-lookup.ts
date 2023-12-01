@@ -1,5 +1,11 @@
 import { getAddressDecoder, getAddressEncoder } from '@solana/addresses';
-import { type Codec, combineCodec, type Decoder, type Encoder } from '@solana/codecs-core';
+import {
+    combineCodec,
+    type Encoder,
+    type VariableSizeCodec,
+    type VariableSizeDecoder,
+    type VariableSizeEncoder,
+} from '@solana/codecs-core';
 import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder, getU8Decoder, getU8Encoder } from '@solana/codecs-numbers';
 
@@ -7,79 +13,38 @@ import type { getCompiledAddressTableLookups } from '../compile-address-table-lo
 
 type AddressTableLookup = ReturnType<typeof getCompiledAddressTableLookups>[number];
 
-const lookupTableAddressDescription = __DEV__
-    ? 'The address of the address lookup table account from which instruction addresses should be looked up'
-    : 'lookupTableAddress';
-
-const writableIndicesDescription = __DEV__
-    ? 'The indices of the accounts in the lookup table that should be loaded as writeable'
-    : 'writableIndices';
-
-const readableIndicesDescription = __DEV__
-    ? 'The indices of the accounts in the lookup table that should be loaded as read-only'
-    : 'readableIndices';
-
-const addressTableLookupDescription = __DEV__
-    ? 'A pointer to the address of an address lookup table, along with the ' +
-      'readonly/writeable indices of the addresses that should be loaded from it'
-    : 'addressTableLookup';
-
-let memoizedAddressTableLookupEncoder: Encoder<AddressTableLookup> | undefined;
-export function getAddressTableLookupEncoder(): Encoder<AddressTableLookup> {
+let memoizedAddressTableLookupEncoder: VariableSizeEncoder<AddressTableLookup> | undefined;
+export function getAddressTableLookupEncoder(): VariableSizeEncoder<AddressTableLookup> {
     if (!memoizedAddressTableLookupEncoder) {
-        memoizedAddressTableLookupEncoder = getStructEncoder(
+        memoizedAddressTableLookupEncoder = getStructEncoder([
+            ['lookupTableAddress', getAddressEncoder()],
             [
-                ['lookupTableAddress', getAddressEncoder({ description: lookupTableAddressDescription })],
-                [
-                    'writableIndices',
-                    getArrayEncoder(getU8Encoder(), {
-                        description: writableIndicesDescription,
-                        size: getShortU16Encoder(),
-                    }) as Encoder<readonly number[]>,
-                ],
-                [
-                    'readableIndices',
-                    getArrayEncoder(getU8Encoder(), {
-                        description: readableIndicesDescription,
-                        size: getShortU16Encoder(),
-                    }) as Encoder<readonly number[]>,
-                ],
+                'writableIndices',
+                getArrayEncoder(getU8Encoder(), { size: getShortU16Encoder() }) as Encoder<readonly number[]>,
             ],
-            { description: addressTableLookupDescription },
-        );
+            [
+                'readableIndices',
+                getArrayEncoder(getU8Encoder(), { size: getShortU16Encoder() }) as Encoder<readonly number[]>,
+            ],
+        ]);
     }
 
     return memoizedAddressTableLookupEncoder;
 }
 
-let memoizedAddressTableLookupDecoder: Decoder<AddressTableLookup> | undefined;
-export function getAddressTableLookupDecoder(): Decoder<AddressTableLookup> {
+let memoizedAddressTableLookupDecoder: VariableSizeDecoder<AddressTableLookup> | undefined;
+export function getAddressTableLookupDecoder(): VariableSizeDecoder<AddressTableLookup> {
     if (!memoizedAddressTableLookupDecoder) {
-        memoizedAddressTableLookupDecoder = getStructDecoder(
-            [
-                ['lookupTableAddress', getAddressDecoder({ description: lookupTableAddressDescription })],
-                [
-                    'writableIndices',
-                    getArrayDecoder(getU8Decoder(), {
-                        description: writableIndicesDescription,
-                        size: getShortU16Decoder(),
-                    }),
-                ],
-                [
-                    'readableIndices',
-                    getArrayDecoder(getU8Decoder(), {
-                        description: readableIndicesDescription,
-                        size: getShortU16Decoder(),
-                    }),
-                ],
-            ],
-            { description: addressTableLookupDescription },
-        );
+        memoizedAddressTableLookupDecoder = getStructDecoder([
+            ['lookupTableAddress', getAddressDecoder()],
+            ['writableIndices', getArrayDecoder(getU8Decoder(), { size: getShortU16Decoder() })],
+            ['readableIndices', getArrayDecoder(getU8Decoder(), { size: getShortU16Decoder() })],
+        ]);
     }
 
     return memoizedAddressTableLookupDecoder;
 }
 
-export function getAddressTableLookupCodec(): Codec<AddressTableLookup> {
+export function getAddressTableLookupCodec(): VariableSizeCodec<AddressTableLookup> {
     return combineCodec(getAddressTableLookupEncoder(), getAddressTableLookupDecoder());
 }

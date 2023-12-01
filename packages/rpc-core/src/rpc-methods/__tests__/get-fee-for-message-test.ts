@@ -51,8 +51,7 @@ function getMockTransactionMessage(blockhash: Blockhash) {
         /** ADDRESS TABLE LOOKUPS */
         0x00, // Number of address table lookups
     ]);
-    const [messageBase64] = getBase64Decoder().decode(message);
-    return messageBase64 as SerializedMessageBytesBase64;
+    return getBase64Decoder().decode(message) as SerializedMessageBytesBase64;
 }
 
 describe('getFeeForMessage', () => {

@@ -114,7 +114,7 @@ const addressBytes = new Uint8Array([
     179, 178, 232, 220, 89, 53, 127,
 ]);
 const addressDecoder = getAddressDecoder();
-const [address, offset] = addressDecoder.decode(address); // [B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka, 32]
+const address = addressDecoder.decode(address); // B9Lf9z5BfNPT4d5KMeaBFx8x1G4CULZYR1jA2kmxRDka
 ```
 
 ### `getAddressEncoder()`

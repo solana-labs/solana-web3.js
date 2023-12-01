@@ -814,7 +814,7 @@ const myToken = {
 };
 
 const myEncodedToken: Uint8Array = structCodec.encode(myToken);
-const myDecodedToken = structCodec.decode(myEncodedToken)[0];
+const myDecodedToken = structCodec.decode(myEncodedToken);
 
 myDecodedToken satisfies {
   amount: bigint;

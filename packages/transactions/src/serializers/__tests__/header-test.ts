@@ -25,7 +25,7 @@ describe('Message header codec', () => {
         });
 
         it('serializes header data according to spec', () => {
-            expect(messageHeader.decode(new Uint8Array([3, 2, 1]))[0]).toEqual({
+            expect(messageHeader.decode(new Uint8Array([3, 2, 1]))).toEqual({
                 numReadonlyNonSignerAccounts: 1,
                 numReadonlySignerAccounts: 2,
                 numSignerAccounts: 3,

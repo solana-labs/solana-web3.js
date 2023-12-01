@@ -1,4 +1,12 @@
-import { Codec, combineCodec, Decoder, Encoder, mapEncoder } from '@solana/codecs-core';
+import {
+    combineCodec,
+    Decoder,
+    Encoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    mapEncoder,
+} from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
 export type Address<TAddress extends string = string> = TAddress & {
@@ -68,27 +76,18 @@ export function address<TAddress extends string = string>(putativeAddress: TAddr
     return putativeAddress as Address<TAddress>;
 }
 
-export function getAddressEncoder(config?: Readonly<{ description: string }>): Encoder<Address> {
-    return mapEncoder(
-        getStringEncoder({
-            description: config?.description ?? 'Address',
-            encoding: getMemoizedBase58Encoder(),
-            size: 32,
-        }),
-        putativeAddress => address(putativeAddress),
+export function getAddressEncoder(): FixedSizeEncoder<Address, 32> {
+    return mapEncoder(getStringEncoder({ encoding: getMemoizedBase58Encoder(), size: 32 }), putativeAddress =>
+        address(putativeAddress),
     );
 }
 
-export function getAddressDecoder(config?: Readonly<{ description: string }>): Decoder<Address> {
-    return getStringDecoder({
-        description: config?.description ?? 'Address',
-        encoding: getMemoizedBase58Decoder(),
-        size: 32,
-    }) as Decoder<Address>;
+export function getAddressDecoder(): FixedSizeDecoder<Address, 32> {
+    return getStringDecoder({ encoding: getMemoizedBase58Decoder(), size: 32 }) as FixedSizeDecoder<Address, 32>;
 }
 
-export function getAddressCodec(config?: Readonly<{ description: string }>): Codec<Address> {
-    return combineCodec(getAddressEncoder(config), getAddressDecoder(config));
+export function getAddressCodec(): FixedSizeCodec<Address, Address, 32> {
+    return combineCodec(getAddressEncoder(), getAddressDecoder());
 }
 
 export function getAddressComparator(): (x: string, y: string) => number {

@@ -48,7 +48,7 @@ export class Keypair {
     get publicKey(): PublicKey {
         if (!this.#cachedPublicKey) {
             const publicKeyBytes = this.#publicKeyBytes;
-            const [address] = getAddressDecoder().decode(publicKeyBytes);
+            const address = getAddressDecoder().decode(publicKeyBytes);
             this.#cachedPublicKey = new PublicKey(address);
         }
         return this.#cachedPublicKey;

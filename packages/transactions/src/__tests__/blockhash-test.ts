@@ -1,6 +1,6 @@
 import 'test-matchers/toBeFrozenObject';
 
-import { Encoder } from '@solana/codecs-core';
+import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
 import {
@@ -68,7 +68,9 @@ describe('assertIsBlockhash()', () => {
         beforeEach(() => {
             // use mock implementation
             mockEncode.mockClear();
-            jest.mocked(getBase58Encoder).mockReturnValue({ encode: mockEncode } as unknown as Encoder<string>);
+            jest.mocked(getBase58Encoder).mockReturnValue({
+                encode: mockEncode,
+            } as unknown as VariableSizeEncoder<string>);
         });
 
         [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {

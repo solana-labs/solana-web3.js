@@ -35,10 +35,14 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
         } as CompiledMessage;
         mockCompiledWireMessage = new Uint8Array([1, 2, 3]);
         (getCompiledMessageEncoder as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue(mockCompiledWireMessage),
+            getSizeFromValue: jest.fn().mockReturnValue(mockCompiledWireMessage.length),
+            write: jest.fn().mockImplementation((_value, bytes: Uint8Array, offset: number) => {
+                bytes.set(mockCompiledWireMessage, offset);
+                return offset + mockCompiledWireMessage.length;
+            }),
         });
         (getCompiledMessageDecoder as jest.Mock).mockReturnValue({
-            decode: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
+            read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
         (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
         transaction = serializerFactory();
@@ -134,10 +138,14 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         } as unknown as ReturnType<typeof decompileTransaction>;
 
         (getCompiledMessageEncoder as jest.Mock).mockReturnValue({
-            encode: jest.fn().mockReturnValue(mockCompiledWireMessage),
+            getSizeFromValue: jest.fn().mockReturnValue(mockCompiledWireMessage.length),
+            write: jest.fn().mockImplementation((_value, bytes: Uint8Array, offset: number) => {
+                bytes.set(mockCompiledWireMessage, offset);
+                return offset + mockCompiledWireMessage.length;
+            }),
         });
         (getCompiledMessageDecoder as jest.Mock).mockReturnValue({
-            decode: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
+            read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
         (decompileTransaction as jest.Mock).mockReturnValue(mockDecompiledTransaction);
 
@@ -155,7 +163,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const [decodedTransaction] = transaction.decode(bytes);
+        const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
@@ -179,7 +187,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const [decodedTransaction] = transaction.decode(bytes);
+        const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
@@ -203,7 +211,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const [decodedTransaction] = transaction.decode(bytes);
+        const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
@@ -226,7 +234,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         ]);
 
         const transaction = deserializerFactory(100n);
-        const [decodedTransaction] = transaction.decode(bytes);
+        const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {

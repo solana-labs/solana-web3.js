@@ -42,7 +42,7 @@ export class VersionedTransaction {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore Hack to allow this method to construct an instance.
             new this();
-        newTransaction.#tx = getTransactionDecoder().decode(serializedTransaction)[0];
+        newTransaction.#tx = getTransactionDecoder().decode(serializedTransaction);
         return newTransaction;
     }
 }
