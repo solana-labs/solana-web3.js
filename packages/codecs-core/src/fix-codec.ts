@@ -1,6 +1,16 @@
 import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
 import { fixBytes } from './bytes';
-import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec';
+import {
+    Codec,
+    createDecoder,
+    createEncoder,
+    Decoder,
+    Encoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    Offset,
+} from './codec';
 import { combineCodec } from './combine-codec';
 
 /**
@@ -10,7 +20,7 @@ import { combineCodec } from './combine-codec';
  * @param fixedBytes - The fixed number of bytes to write.
  * @param description - A custom description for the encoder.
  */
-export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): Encoder<T> {
+export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): FixedSizeEncoder<T> {
     return createEncoder({
         fixedSize: fixedBytes,
         write: (value: T, bytes: Uint8Array, offset: Offset) => {
@@ -33,7 +43,7 @@ export function fixEncoder<T>(encoder: Encoder<T>, fixedBytes: number): Encoder<
  * @param fixedBytes - The fixed number of bytes to read.
  * @param description - A custom description for the decoder.
  */
-export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): Decoder<T> {
+export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): FixedSizeDecoder<T> {
     return createDecoder({
         fixedSize: fixedBytes,
         read: (bytes: Uint8Array, offset: Offset) => {
@@ -60,6 +70,6 @@ export function fixDecoder<T>(decoder: Decoder<T>, fixedBytes: number): Decoder<
  * @param fixedBytes - The fixed number of bytes to read/write.
  * @param description - A custom description for the codec.
  */
-export function fixCodec<T, U extends T = T>(codec: Codec<T, U>, fixedBytes: number): Codec<T, U> {
+export function fixCodec<T, U extends T = T>(codec: Codec<T, U>, fixedBytes: number): FixedSizeCodec<T, U> {
     return combineCodec(fixEncoder(codec, fixedBytes), fixDecoder(codec, fixedBytes));
 }
