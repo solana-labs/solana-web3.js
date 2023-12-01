@@ -1,5 +1,5 @@
 import {
-    assertIsFixedSizeCodec,
+    assertIsFixedSize,
     Codec,
     combineCodec,
     createDecoder,
@@ -73,7 +73,7 @@ export function getArrayEncoder<TFrom>(
 ): Encoder<TFrom[]> {
     const size = config.size ?? getU32Encoder();
     if (size === 'remainder') {
-        assertIsFixedSizeCodec(item, 'Codecs of "remainder" size must have fixed-size items.');
+        assertIsFixedSize(item, 'Codecs of "remainder" size must have fixed-size items.');
     }
 
     const fixedSize = computeArrayLikeCodecSize(size, getFixedSize(item));
@@ -129,7 +129,7 @@ export function getArrayDecoder<TTo>(
 export function getArrayDecoder<TTo>(item: Decoder<TTo>, config: ArrayCodecConfig<NumberDecoder> = {}): Decoder<TTo[]> {
     const size = config.size ?? getU32Decoder();
     if (size === 'remainder') {
-        assertIsFixedSizeCodec(item, 'Codecs of "remainder" size must have fixed-size items.');
+        assertIsFixedSize(item, 'Codecs of "remainder" size must have fixed-size items.');
     }
 
     const itemSize = getFixedSize(item);

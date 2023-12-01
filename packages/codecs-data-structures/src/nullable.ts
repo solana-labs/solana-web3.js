@@ -1,5 +1,5 @@
 import {
-    assertIsFixedSizeCodec,
+    assertIsFixedSize,
     Codec,
     combineCodec,
     createDecoder,
@@ -10,7 +10,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     getEncodedSize,
-    isFixedSizeCodec,
+    isFixedSize,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -72,10 +72,10 @@ export function getNullableEncoder<TFrom>(
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
 
-    const isZeroSizeItem = isFixedSizeCodec(item) && isFixedSizeCodec(prefix) && item.fixedSize === 0;
+    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        assertIsFixedSizeCodec(item, 'Fixed nullables can only be used with fixed-size codecs.');
-        assertIsFixedSizeCodec(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        assertIsFixedSize(item, 'Fixed nullables can only be used with fixed-size codecs.');
+        assertIsFixedSize(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
         const fixedSize = prefix.fixedSize + item.fixedSize;
         return createEncoder({
             fixedSize,
@@ -129,10 +129,10 @@ export function getNullableDecoder<TTo>(
     const fixed = config.fixed ?? false;
 
     let fixedSize: number | null = null;
-    const isZeroSizeItem = isFixedSizeCodec(item) && isFixedSizeCodec(prefix) && item.fixedSize === 0;
+    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        assertIsFixedSizeCodec(item, 'Fixed nullables can only be used with fixed-size codecs.');
-        assertIsFixedSizeCodec(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        assertIsFixedSize(item, 'Fixed nullables can only be used with fixed-size codecs.');
+        assertIsFixedSize(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
         fixedSize = prefix.fixedSize + item.fixedSize;
     }
 

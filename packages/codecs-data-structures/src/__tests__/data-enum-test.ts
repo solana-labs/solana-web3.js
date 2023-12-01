@@ -1,9 +1,4 @@
-import {
-    assertIsFixedSizeCodec,
-    assertIsVariableSizeCodec,
-    isFixedSizeCodec,
-    isVariableSizeCodec,
-} from '@solana/codecs-core';
+import { assertIsFixedSize, assertIsVariableSize, isFixedSize, isVariableSize } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
@@ -134,8 +129,8 @@ describe('getDataEnumCodec', () => {
 
     it('has the right sizes', () => {
         const webEvent = dataEnum(getWebEvent());
-        expect(isVariableSizeCodec(webEvent)).toBe(true);
-        assertIsVariableSizeCodec(webEvent);
+        expect(isVariableSize(webEvent)).toBe(true);
+        assertIsVariableSize(webEvent);
         expect(webEvent.getSizeFromValue({ __kind: 'PageLoad' })).toBe(1);
         expect(webEvent.getSizeFromValue({ __kind: 'PageUnload' })).toBe(1);
         expect(webEvent.getSizeFromValue({ __kind: 'Click', x: 0, y: 1 })).toBe(1 + 2);
@@ -143,18 +138,18 @@ describe('getDataEnumCodec', () => {
         expect(webEvent.maxSize).toBeUndefined();
 
         const sameSize = dataEnum(getSameSizeVariants());
-        expect(isFixedSizeCodec(sameSize)).toBe(true);
-        assertIsFixedSizeCodec(sameSize);
+        expect(isFixedSize(sameSize)).toBe(true);
+        assertIsFixedSize(sameSize);
         expect(sameSize.fixedSize).toBe(3);
 
         const sameSizeU32 = dataEnum(getSameSizeVariants(), { size: u32() });
-        expect(isFixedSizeCodec(sameSizeU32)).toBe(true);
-        assertIsFixedSizeCodec(sameSizeU32);
+        expect(isFixedSize(sameSizeU32)).toBe(true);
+        assertIsFixedSize(sameSizeU32);
         expect(sameSizeU32.fixedSize).toBe(6);
 
         const u64Enum = dataEnum(getU64Enum());
-        expect(isVariableSizeCodec(u64Enum)).toBe(true);
-        assertIsVariableSizeCodec(u64Enum);
+        expect(isVariableSize(u64Enum)).toBe(true);
+        assertIsVariableSize(u64Enum);
         expect(u64Enum.maxSize).toBe(9);
     });
 });

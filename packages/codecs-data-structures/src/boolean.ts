@@ -1,5 +1,5 @@
 import {
-    assertIsFixedSizeCodec,
+    assertIsFixedSize,
     Codec,
     combineCodec,
     Decoder,
@@ -42,7 +42,7 @@ export function getBooleanEncoder<TSize extends number>(
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder>): Encoder<boolean>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}): Encoder<boolean> {
     const size = config.size ?? getU8Encoder();
-    assertIsFixedSizeCodec(size, 'Codec [bool] requires a fixed size.');
+    assertIsFixedSize(size, 'Codec [bool] requires a fixed size.');
     return mapEncoder(size, (value: boolean) => (value ? 1 : 0));
 }
 
@@ -58,7 +58,7 @@ export function getBooleanDecoder<TSize extends number>(
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): Decoder<boolean>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
     const size = config.size ?? getU8Decoder();
-    assertIsFixedSizeCodec(size, 'Codec [bool] requires a fixed size.');
+    assertIsFixedSize(size, 'Codec [bool] requires a fixed size.');
     return mapDecoder(size, (value: number | bigint): boolean => Number(value) === 1);
 }
 
