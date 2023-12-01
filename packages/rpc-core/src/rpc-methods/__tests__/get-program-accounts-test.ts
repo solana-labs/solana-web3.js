@@ -26,7 +26,7 @@ async function getNodeAddress(path: string) {
         }
         if (secretKey) {
             const publicKey = secretKey.slice(32, 64);
-            const expectedAddress = getBase58Decoder().decode(publicKey)[0];
+            const expectedAddress = getBase58Decoder().decode(publicKey);
             return expectedAddress as Address;
         }
         throw new Error(`Failed to read keypair file \`${path}\``);

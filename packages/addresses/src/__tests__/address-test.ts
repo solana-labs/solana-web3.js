@@ -1,4 +1,4 @@
-import { Encoder } from '@solana/codecs-core';
+import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
 import { Address, getAddressCodec, getAddressComparator } from '../address';
@@ -60,7 +60,9 @@ describe('Address', () => {
             beforeEach(() => {
                 // use mock implementation
                 mockEncode.mockClear();
-                jest.mocked(getBase58Encoder).mockReturnValue({ encode: mockEncode } as unknown as Encoder<string>);
+                jest.mocked(getBase58Encoder).mockReturnValue({
+                    encode: mockEncode,
+                } as unknown as VariableSizeEncoder<string>);
             });
 
             [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {
@@ -136,7 +138,7 @@ describe('Address', () => {
                         // Followed by extra bytes not part of the address
                         33, 34,
                     ]),
-                )[0],
+                ),
             ).toBe(
                 '4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw' as Address<'4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw'>,
             );

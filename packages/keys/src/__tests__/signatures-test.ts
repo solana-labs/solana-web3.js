@@ -1,4 +1,4 @@
-import { Encoder } from '@solana/codecs-core';
+import { createEncoder, VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
 import { createPrivateKeyFromBytes } from '../private-key';
@@ -87,11 +87,16 @@ describe('assertIsSignature()', () => {
     });
 
     describe('using a mock base58 implementation', () => {
-        const mockEncode = jest.fn();
+        const mockWrite = jest.fn();
         beforeEach(() => {
             // use mock implementation
-            mockEncode.mockClear();
-            jest.mocked(getBase58Encoder).mockReturnValue({ encode: mockEncode } as unknown as Encoder<string>);
+            mockWrite.mockClear();
+            jest.mocked(getBase58Encoder).mockReturnValue(
+                createEncoder({
+                    fixedSize: 64,
+                    write: mockWrite,
+                }) as unknown as VariableSizeEncoder<string>,
+            );
         });
         [64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88].forEach(
             len => {
@@ -100,7 +105,7 @@ describe('assertIsSignature()', () => {
                         assertIsSignature('1'.repeat(len));
                         // eslint-disable-next-line no-empty
                     } catch {}
-                    expect(mockEncode).toHaveBeenCalledTimes(1);
+                    expect(mockWrite).toHaveBeenCalledTimes(1);
                 });
             },
         );
@@ -112,7 +117,7 @@ describe('assertIsSignature()', () => {
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
-            expect(mockEncode).not.toHaveBeenCalled();
+            expect(mockWrite).not.toHaveBeenCalled();
         });
         it('does not attempt to decode too-long input strings', () => {
             try {
@@ -122,7 +127,7 @@ describe('assertIsSignature()', () => {
                 );
                 // eslint-disable-next-line no-empty
             } catch {}
-            expect(mockEncode).not.toHaveBeenCalled();
+            expect(mockWrite).not.toHaveBeenCalled();
         });
         it('memoizes getBase58Encoder when called multiple times', () => {
             try {

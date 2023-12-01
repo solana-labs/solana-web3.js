@@ -289,7 +289,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0))),
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
@@ -327,7 +327,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = getMockTransactionMessage({
-            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0)))[0],
+            blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0))),
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
@@ -786,7 +786,7 @@ describe('simulateTransaction', () => {
             memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
         const signature = new Uint8Array(await crypto.subtle.sign('Ed25519', secretKey, message));
-        const [base58WireTransaction] = getBase58Decoder().decode(
+        const base58WireTransaction = getBase58Decoder().decode(
             Buffer.from(
                 new Uint8Array([
                     0x01, // Length of signatures

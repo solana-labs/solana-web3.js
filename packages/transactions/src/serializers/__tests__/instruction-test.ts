@@ -92,7 +92,7 @@ describe('Instruction codec', () => {
                         9,
                         10,
                     ]),
-                )[0],
+                ),
             ).toEqual({
                 accountIndices: [3, 4],
                 data: new Uint8Array([6, 7, 8, 9, 10]),
@@ -112,7 +112,7 @@ describe('Instruction codec', () => {
                         3,
                         4,
                     ]),
-                )[0],
+                ),
             ).not.toHaveProperty('accountIndices');
         });
         it('omits the `data` property when the instruction data is zero-length', () => {
@@ -128,7 +128,7 @@ describe('Instruction codec', () => {
                         // Compact array of instruction data
                         0, // Compact-u16 length
                     ]),
-                )[0],
+                ),
             ).not.toHaveProperty('data');
         });
     });

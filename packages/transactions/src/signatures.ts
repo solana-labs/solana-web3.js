@@ -31,7 +31,7 @@ export function getSignatureFromTransaction(
                 'has been signed by its fee payer.',
         );
     }
-    const transactionSignature = base58Decoder.decode(signatureBytes)[0];
+    const transactionSignature = base58Decoder.decode(signatureBytes);
     return transactionSignature as Signature;
 }
 

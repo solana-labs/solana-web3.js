@@ -62,7 +62,7 @@ describe('Address table lookup codec', () => {
                     2, // Compact-u16 length
                     33, 22, // Read-only indicies
                 ]);
-                const [lookup, offset] = addressTableLookup.decode(byteArray);
+                const [lookup, offset] = addressTableLookup.read(byteArray, 0);
                 expect(lookup).toEqual({
                     lookupTableAddress: 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Address, // decodes to [11{32}]
                     readableIndices: [33, 22],

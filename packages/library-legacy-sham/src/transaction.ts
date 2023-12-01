@@ -154,7 +154,7 @@ export class Transaction {
     static from(data: Buffer | Uint8Array | Array<number>) {
         const newTransaction = new this();
         const byteArray = Array.isArray(data) ? new Uint8Array(data) : data;
-        newTransaction.#tx = getTransactionDecoder().decode(byteArray)[0];
+        newTransaction.#tx = getTransactionDecoder().decode(byteArray);
         return newTransaction;
     }
     static populate = createUnimplementedFunction('Transaction#populate');
