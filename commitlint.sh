@@ -28,5 +28,5 @@ fi
 cd "$basedir"
 echo "Checking commits in COMMIT_RANGE: $COMMIT_RANGE"
 while IFS= read -r line; do
-  echo "$line" | pnpm commitlint
+  echo "$line" | pnpm commitlint --config "$basedir"/commitlint.config.js
 done < <(git log "$COMMIT_RANGE" --format=%s -- .)
