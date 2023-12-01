@@ -13,7 +13,7 @@ import { assertValidBaseString } from './assertions';
 export const getBase16Encoder = (): VariableSizeEncoder<string> =>
     createEncoder({
         fixedSize: null,
-        variableSize: (value: string) => Math.ceil(value.length / 2),
+        getSizeFromValue: (value: string) => Math.ceil(value.length / 2),
         write(value: string, bytes, offset) {
             const lowercaseValue = value.toLowerCase();
             assertValidBaseString('0123456789abcdef', lowercaseValue, value);

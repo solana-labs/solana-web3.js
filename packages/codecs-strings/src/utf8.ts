@@ -15,7 +15,7 @@ export const getUtf8Encoder = (): VariableSizeEncoder<string> => {
     let textEncoder: TextEncoder;
     return createEncoder({
         fixedSize: null,
-        variableSize: value => (textEncoder ||= new TextEncoder()).encode(value).length,
+        getSizeFromValue: value => (textEncoder ||= new TextEncoder()).encode(value).length,
         write: (value: string, bytes, offset) => {
             const bytesToAdd = (textEncoder ||= new TextEncoder()).encode(value);
             bytes.set(bytesToAdd, offset);

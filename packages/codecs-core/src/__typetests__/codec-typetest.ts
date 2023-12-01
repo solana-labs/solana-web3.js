@@ -21,7 +21,7 @@ import {
     }) satisfies FixedSizeEncoder<string>;
     createEncoder({
         fixedSize: null,
-        variableSize: (_: string) => 42,
+        getSizeFromValue: (_: string) => 42,
         write: (_: string) => 1,
     }) satisfies VariableSizeEncoder<string>;
     createEncoder({} as Encoder<string>) satisfies Encoder<string>;
@@ -50,7 +50,7 @@ import {
     createCodec({
         fixedSize: null,
         read: (): [string, number] => ['', 1],
-        variableSize: (_: string) => 42,
+        getSizeFromValue: (_: string) => 42,
         write: (_: string) => 1,
     }) satisfies VariableSizeCodec<string>;
     createCodec({} as Codec<string>) satisfies Codec<string>;

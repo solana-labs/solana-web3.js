@@ -24,7 +24,7 @@ export type VariableSizeEncoder<T> = BaseEncoder<T> & {
     /** The maximum size an encoded value can be in bytes, if applicable. */
     readonly maxSize?: number;
     /** The total size of the encoded value in bytes. */
-    readonly variableSize: (value: T) => number;
+    readonly getSizeFromValue: (value: T) => number;
 };
 
 /**
@@ -79,9 +79,9 @@ export type Codec<From, To extends From = From> = FixedSizeCodec<From, To> | Var
  */
 export function getEncodedSize<T>(
     value: T,
-    encoder: { fixedSize: number } | { fixedSize: null; variableSize: (value: T) => number }
+    encoder: { fixedSize: number } | { fixedSize: null; getSizeFromValue: (value: T) => number }
 ): number {
-    return encoder.fixedSize !== null ? encoder.fixedSize : encoder.variableSize(value);
+    return encoder.fixedSize !== null ? encoder.fixedSize : encoder.getSizeFromValue(value);
 }
 
 /** Fills the missing `encode` function using the existing `write` function. */

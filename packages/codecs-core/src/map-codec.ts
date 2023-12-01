@@ -22,7 +22,7 @@ export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): E
 export function mapEncoder<T, U>(encoder: Encoder<T>, unmap: (value: U) => T): Encoder<U> {
     return createEncoder({
         ...(encoder.fixedSize === null
-            ? { ...encoder, variableSize: (value: U) => encoder.variableSize(unmap(value)) }
+            ? { ...encoder, getSizeFromValue: (value: U) => encoder.getSizeFromValue(unmap(value)) }
             : encoder),
         write: (value: U, bytes, offset) => encoder.write(unmap(value), bytes, offset),
     });

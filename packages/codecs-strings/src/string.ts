@@ -63,7 +63,7 @@ export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encode
 
     return createEncoder({
         fixedSize: null,
-        variableSize: (value: string) => {
+        getSizeFromValue: (value: string) => {
             const contentSize = getEncodedSize(value, encoding);
             return getEncodedSize(contentSize, size) + contentSize;
         },
