@@ -19,34 +19,26 @@ describe('getTupleCodec', () => {
         expect(tuple([string(), u8()]).encode(['Hello', 42])).toStrictEqual(b('0500000048656c6c6f2a'));
 
         // Decode.
-        expect(tuple([]).decode(b(''))).toStrictEqual([[], 0]);
-        expect(tuple([u8()]).decode(b('2a'))).toStrictEqual([[42], 1]);
-        expect(tuple([u8(), i16()]).decode(b('00d6ff'))).toStrictEqual([[0, -42], 3]);
-        expect(tuple([string(), u8()]).decode(b('0500000048656c6c6f2a'))).toStrictEqual([['Hello', 42], 10]);
+        expect(tuple([]).decode(b(''))).toStrictEqual([]);
+        expect(tuple([u8()]).decode(b('2a'))).toStrictEqual([42]);
+        expect(tuple([u8(), i16()]).decode(b('00d6ff'))).toStrictEqual([0, -42]);
+        expect(tuple([string(), u8()]).decode(b('0500000048656c6c6f2a'))).toStrictEqual(['Hello', 42]);
 
         // Different From and To types.
         const tupleU8U64 = tuple<[number, number | bigint], [number, bigint]>([u8(), u64()]);
         expect(tupleU8U64.encode([1, 2])).toStrictEqual(b('010200000000000000'));
         expect(tupleU8U64.encode([1, 2n])).toStrictEqual(b('010200000000000000'));
-        expect(tupleU8U64.decode(b('010200000000000000'))).toStrictEqual([[1, 2n], 9]);
+        expect(tupleU8U64.decode(b('010200000000000000'))).toStrictEqual([1, 2n]);
         expect(tupleU8U64.encode([1, 2n ** 63n])).toStrictEqual(b('010000000000000080'));
-        expect(tupleU8U64.decode(b('010000000000000080'))).toStrictEqual([[1, 2n ** 63n], 9]);
-    });
-
-    it('has the right description', () => {
-        expect(tuple([u8()]).description).toBe('tuple(u8)');
-        expect(tuple([u8(), string(), i16()]).description).toBe('tuple(u8, string(utf8; u32(le)), i16(le))');
-        expect(tuple([u8()], { description: 'my tuple' }).description).toBe('my tuple');
+        expect(tupleU8U64.decode(b('010000000000000080'))).toStrictEqual([1, 2n ** 63n]);
     });
 
     it('has the right sizes', () => {
         expect(tuple([]).fixedSize).toBe(0);
-        expect(tuple([]).maxSize).toBe(0);
         expect(tuple([u8()]).fixedSize).toBe(1);
-        expect(tuple([u8()]).maxSize).toBe(1);
         expect(tuple([u8(), i16()]).fixedSize).toBe(1 + 2);
-        expect(tuple([u8(), i16()]).maxSize).toBe(1 + 2);
-        expect(tuple([u8(), string(), i16()]).fixedSize).toBeNull();
-        expect(tuple([u8(), string(), i16()]).maxSize).toBeNull();
+        expect(tuple([u8(), string(), i16()]).getSizeFromValue([1, 'ABC', 2])).toBe(1 + (4 + 3) + 2);
+        expect(tuple([u8(), string(), i16()]).maxSize).toBeUndefined();
+        expect(tuple([string(), u8()]).getSizeFromValue(['Hello', 42])).toBe(4 + 5 + 1);
     });
 });

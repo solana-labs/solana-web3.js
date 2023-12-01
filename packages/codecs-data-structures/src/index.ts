@@ -1,5 +1,4 @@
 export * from './array';
-export * from './array-like-codec-size';
 export * from './assertions';
 export * from './bit-array';
 export * from './boolean';

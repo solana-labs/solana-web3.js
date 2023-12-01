@@ -1,14 +1,15 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
-    BaseCodecConfig,
-    Codec,
     combineCodec,
-    Decoder,
-    Encoder,
+    createDecoder,
+    createEncoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
 } from '@solana/codecs-core';
 
 /** Defines the config for bitArray codecs. */
-export type BitArrayCodecConfig = BaseCodecConfig & {
+export type BitArrayCodecConfig = {
     /**
      * Whether to read the bits in reverse order.
      * @defaultValue `false`
@@ -22,14 +23,16 @@ export type BitArrayCodecConfig = BaseCodecConfig & {
  * @param size - The amount of bytes to use for the bit array.
  * @param config - A set of config for the encoder.
  */
-export const getBitArrayEncoder = (size: number, config: BitArrayCodecConfig | boolean = {}): Encoder<boolean[]> => {
+export function getBitArrayEncoder<TSize extends number>(
+    size: TSize,
+    config: BitArrayCodecConfig | boolean = {}
+): FixedSizeEncoder<boolean[], TSize> {
     const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
     const backward = parsedConfig.backward ?? false;
-    const backwardSuffix = backward ? '; backward' : '';
-    return {
-        description: parsedConfig.description ?? `bitArray(${size}${backwardSuffix})`,
-        encode(value: boolean[]) {
-            const bytes: number[] = [];
+    return createEncoder({
+        fixedSize: size,
+        write(value: boolean[], bytes, offset) {
+            const bytesToAdd: number[] = [];
 
             for (let i = 0; i < size; i += 1) {
                 let byte = 0;
@@ -38,18 +41,17 @@ export const getBitArrayEncoder = (size: number, config: BitArrayCodecConfig | b
                     byte |= feature << (backward ? j : 7 - j);
                 }
                 if (backward) {
-                    bytes.unshift(byte);
+                    bytesToAdd.unshift(byte);
                 } else {
-                    bytes.push(byte);
+                    bytesToAdd.push(byte);
                 }
             }
 
-            return new Uint8Array(bytes);
+            bytes.set(bytesToAdd, offset);
+            return size;
         },
-        fixedSize: size,
-        maxSize: size,
-    };
-};
+    });
+}
 
 /**
  * Decodes bits into an array of booleans.
@@ -57,12 +59,15 @@ export const getBitArrayEncoder = (size: number, config: BitArrayCodecConfig | b
  * @param size - The amount of bytes to use for the bit array.
  * @param config - A set of config for the decoder.
  */
-export const getBitArrayDecoder = (size: number, config: BitArrayCodecConfig | boolean = {}): Decoder<boolean[]> => {
+export function getBitArrayDecoder<TSize extends number>(
+    size: TSize,
+    config: BitArrayCodecConfig | boolean = {}
+): FixedSizeDecoder<boolean[], TSize> {
     const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
     const backward = parsedConfig.backward ?? false;
-    const backwardSuffix = backward ? '; backward' : '';
-    return {
-        decode(bytes, offset = 0) {
+    return createDecoder({
+        fixedSize: size,
+        read(bytes, offset) {
             assertByteArrayHasEnoughBytesForCodec('bitArray', size, bytes, offset);
             const booleans: boolean[] = [];
             let slice = bytes.slice(offset, offset + size);
@@ -82,11 +87,8 @@ export const getBitArrayDecoder = (size: number, config: BitArrayCodecConfig | b
 
             return [booleans, offset + size];
         },
-        description: parsedConfig.description ?? `bitArray(${size}${backwardSuffix})`,
-        fixedSize: size,
-        maxSize: size,
-    };
-};
+    });
+}
 
 /**
  * An array of boolean codec that converts booleans to bits and vice versa.
@@ -94,5 +96,9 @@ export const getBitArrayDecoder = (size: number, config: BitArrayCodecConfig | b
  * @param size - The amount of bytes to use for the bit array.
  * @param config - A set of config for the codec.
  */
-export const getBitArrayCodec = (size: number, config: BitArrayCodecConfig | boolean = {}): Codec<boolean[]> =>
-    combineCodec(getBitArrayEncoder(size, config), getBitArrayDecoder(size, config));
+export function getBitArrayCodec<TSize extends number>(
+    size: TSize,
+    config: BitArrayCodecConfig | boolean = {}
+): FixedSizeCodec<boolean[], boolean[], TSize> {
+    return combineCodec(getBitArrayEncoder(size, config), getBitArrayDecoder(size, config));
+}

@@ -1,17 +1,23 @@
-import { BaseCodecConfig, Codec, CodecData, combineCodec, Decoder, Encoder, mergeBytes } from '@solana/codecs-core';
-import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
-
 import {
-    ArrayLikeCodecSize,
-    decodeArrayLikeCodecSize,
-    getArrayLikeCodecSizeDescription,
-    getArrayLikeCodecSizeFromChildren,
-    getArrayLikeCodecSizePrefix,
-} from './array-like-codec-size';
-import { assertValidNumberOfItemsForCodec } from './assertions';
+    Codec,
+    combineCodec,
+    Decoder,
+    Encoder,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    mapDecoder,
+    mapEncoder,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
+} from '@solana/codecs-core';
+import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
+
+import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
 
 /** Defines the config for set codecs. */
-export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = BaseCodecConfig & {
+export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
     /**
      * The size of the set.
      * @defaultValue u32 prefix.
@@ -19,37 +25,33 @@ export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberD
     size?: ArrayLikeCodecSize<TPrefix>;
 };
 
-function setCodecHelper(item: CodecData, size: ArrayLikeCodecSize<CodecData>, description?: string): CodecData {
-    if (size === 'remainder' && item.fixedSize === null) {
-        // TODO: Coded error.
-        throw new Error('Codecs of "remainder" size must have fixed-size items.');
-    }
-
-    return {
-        description: description ?? `set(${item.description}; ${getArrayLikeCodecSizeDescription(size)})`,
-        fixedSize: getArrayLikeCodecSizeFromChildren(size, [item.fixedSize]),
-        maxSize: getArrayLikeCodecSizeFromChildren(size, [item.maxSize]),
-    };
-}
-
 /**
  * Encodes an set of items.
  *
  * @param item - The encoder to use for the set's items.
  * @param config - A set of config for the encoder.
  */
-export function getSetEncoder<T>(item: Encoder<T>, config: SetCodecConfig<NumberEncoder> = {}): Encoder<Set<T>> {
-    const size = config.size ?? getU32Encoder();
-    return {
-        ...setCodecHelper(item, size, config.description),
-        encode: (set: Set<T>) => {
-            if (typeof size === 'number' && set.size !== size) {
-                assertValidNumberOfItemsForCodec('set', size, set.size);
-            }
-            const itemBytes = Array.from(set, value => item.encode(value));
-            return mergeBytes([getArrayLikeCodecSizePrefix(size, set.size), ...itemBytes]);
-        },
-    };
+export function getSetEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config: SetCodecConfig<NumberEncoder> & { size: 0 }
+): FixedSizeEncoder<Set<TFrom>, 0>;
+export function getSetEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom>,
+    config: SetCodecConfig<NumberEncoder> & { size: number }
+): FixedSizeEncoder<Set<TFrom>>;
+export function getSetEncoder<TFrom>(
+    item: FixedSizeEncoder<TFrom>,
+    config: SetCodecConfig<NumberEncoder> & { size: 'remainder' }
+): VariableSizeEncoder<Set<TFrom>>;
+export function getSetEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config?: SetCodecConfig<NumberEncoder> & { size?: number | NumberEncoder }
+): VariableSizeEncoder<Set<TFrom>>;
+export function getSetEncoder<TFrom>(
+    item: Encoder<TFrom>,
+    config: SetCodecConfig<NumberEncoder> = {}
+): Encoder<Set<TFrom>> {
+    return mapEncoder(getArrayEncoder(item, config as object), (set: Set<TFrom>): TFrom[] => [...set]);
 }
 
 /**
@@ -58,25 +60,24 @@ export function getSetEncoder<T>(item: Encoder<T>, config: SetCodecConfig<Number
  * @param item - The encoder to use for the set's items.
  * @param config - A set of config for the encoder.
  */
-export function getSetDecoder<T>(item: Decoder<T>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<T>> {
-    const size = config.size ?? getU32Decoder();
-    return {
-        ...setCodecHelper(item, size, config.description),
-        decode: (bytes: Uint8Array, offset = 0) => {
-            const set: Set<T> = new Set();
-            if (typeof size === 'object' && bytes.slice(offset).length === 0) {
-                return [set, offset];
-            }
-            const [resolvedSize, newOffset] = decodeArrayLikeCodecSize(size, [item.fixedSize], bytes, offset);
-            offset = newOffset;
-            for (let i = 0; i < resolvedSize; i += 1) {
-                const [value, newOffset] = item.decode(bytes, offset);
-                offset = newOffset;
-                set.add(value);
-            }
-            return [set, offset];
-        },
-    };
+export function getSetDecoder<TTo>(
+    item: Decoder<TTo>,
+    config: SetCodecConfig<NumberDecoder> & { size: 0 }
+): FixedSizeDecoder<Set<TTo>, 0>;
+export function getSetDecoder<TTo>(
+    item: FixedSizeDecoder<TTo>,
+    config: SetCodecConfig<NumberDecoder> & { size: number }
+): FixedSizeDecoder<Set<TTo>>;
+export function getSetDecoder<TTo>(
+    item: FixedSizeDecoder<TTo>,
+    config: SetCodecConfig<NumberDecoder> & { size: 'remainder' }
+): VariableSizeDecoder<Set<TTo>>;
+export function getSetDecoder<TTo>(
+    item: Decoder<TTo>,
+    config?: SetCodecConfig<NumberDecoder> & { size?: number | NumberDecoder }
+): VariableSizeDecoder<Set<TTo>>;
+export function getSetDecoder<TTo>(item: Decoder<TTo>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<TTo>> {
+    return mapDecoder(getArrayDecoder(item, config as object), (entries: TTo[]): Set<TTo> => new Set(entries));
 }
 
 /**
@@ -85,9 +86,25 @@ export function getSetDecoder<T>(item: Decoder<T>, config: SetCodecConfig<Number
  * @param item - The codec to use for the set's items.
  * @param config - A set of config for the codec.
  */
-export function getSetCodec<T, U extends T = T>(
-    item: Codec<T, U>,
-    config: SetCodecConfig<NumberCodec> = {},
-): Codec<Set<T>, Set<U>> {
-    return combineCodec(getSetEncoder(item, config), getSetDecoder(item, config));
+export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config: SetCodecConfig<NumberCodec> & { size: 0 }
+): FixedSizeCodec<Set<TFrom>, Set<TTo>, 0>;
+export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo>,
+    config: SetCodecConfig<NumberCodec> & { size: number }
+): FixedSizeCodec<Set<TFrom>, Set<TTo>>;
+export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: FixedSizeCodec<TFrom, TTo>,
+    config: SetCodecConfig<NumberCodec> & { size: 'remainder' }
+): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
+export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config?: SetCodecConfig<NumberCodec> & { size?: number | NumberCodec }
+): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
+export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
+    item: Codec<TFrom, TTo>,
+    config: SetCodecConfig<NumberCodec> = {}
+): Codec<Set<TFrom>, Set<TTo>> {
+    return combineCodec(getSetEncoder(item, config as object), getSetDecoder(item, config as object));
 }
