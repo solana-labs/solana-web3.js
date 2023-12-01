@@ -41,15 +41,7 @@ describe('getU16Codec', () => {
         assertRangeError(u16BE, MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(u16().description).toBe('u16(le)');
-        expect(u16({ endian: Endian.LITTLE }).description).toBe('u16(le)');
-        expect(u16({ endian: Endian.BIG }).description).toBe('u16(be)');
-        expect(u16({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(u16().fixedSize).toBe(2);
-        expect(u16().maxSize).toBe(2);
     });
 });

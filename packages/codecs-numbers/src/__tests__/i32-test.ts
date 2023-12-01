@@ -42,15 +42,7 @@ describe('getI32Codec', () => {
         assertRangeError(i32BE, MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(i32().description).toBe('i32(le)');
-        expect(i32({ endian: Endian.LITTLE }).description).toBe('i32(le)');
-        expect(i32({ endian: Endian.BIG }).description).toBe('i32(be)');
-        expect(i32({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(i32().fixedSize).toBe(4);
-        expect(i32().maxSize).toBe(4);
     });
 });

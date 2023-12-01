@@ -1,9 +1,9 @@
-import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
 import { NumberCodecConfig } from './common';
 import { numberDecoderFactory, numberEncoderFactory } from './utils';
 
-export const getI64Encoder = (config: NumberCodecConfig = {}): Encoder<number | bigint> =>
+export const getI64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number | bigint> =>
     numberEncoderFactory({
         config,
         name: 'i64',
@@ -12,7 +12,7 @@ export const getI64Encoder = (config: NumberCodecConfig = {}): Encoder<number | 
         size: 8,
     });
 
-export const getI64Decoder = (config: NumberCodecConfig = {}): Decoder<bigint> =>
+export const getI64Decoder = (config: NumberCodecConfig = {}): FixedSizeDecoder<bigint> =>
     numberDecoderFactory({
         config,
         get: (view, le) => view.getBigInt64(0, le),
@@ -20,5 +20,5 @@ export const getI64Decoder = (config: NumberCodecConfig = {}): Decoder<bigint> =
         size: 8,
     });
 
-export const getI64Codec = (config: NumberCodecConfig = {}): Codec<number | bigint, bigint> =>
+export const getI64Codec = (config: NumberCodecConfig = {}): FixedSizeCodec<number | bigint, bigint> =>
     combineCodec(getI64Encoder(config), getI64Decoder(config));

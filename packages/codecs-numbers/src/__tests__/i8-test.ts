@@ -27,13 +27,7 @@ describe('getI8Codec', () => {
         assertRangeError(i8(), MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(i8().description).toBe('i8');
-        expect(i8({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(i8().fixedSize).toBe(1);
-        expect(i8().maxSize).toBe(1);
     });
 });

@@ -41,15 +41,7 @@ describe('getU64Codec', () => {
         assertRangeError(u64BE, MAX + 1n);
     });
 
-    it('has the right description', () => {
-        expect(u64().description).toBe('u64(le)');
-        expect(u64({ endian: Endian.LITTLE }).description).toBe('u64(le)');
-        expect(u64({ endian: Endian.BIG }).description).toBe('u64(be)');
-        expect(u64({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(u64().fixedSize).toBe(8);
-        expect(u64().maxSize).toBe(8);
     });
 });

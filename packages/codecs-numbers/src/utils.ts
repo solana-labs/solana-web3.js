@@ -1,18 +1,20 @@
 import {
     assertByteArrayHasEnoughBytesForCodec,
     assertByteArrayIsNotEmptyForCodec,
-    CodecData,
-    Decoder,
-    Encoder,
+    createDecoder,
+    createEncoder,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    Offset,
 } from '@solana/codecs-core';
 
 import { assertNumberIsBetweenForCodec } from './assertions';
-import { Endian, NumberCodecConfig, SingleByteNumberCodecConfig } from './common';
+import { Endian, NumberCodecConfig } from './common';
 
 type NumberFactorySharedInput = {
     name: string;
     size: number;
-    config: SingleByteNumberCodecConfig | NumberCodecConfig;
+    config?: NumberCodecConfig;
 };
 
 type NumberFactoryEncoderInput<T> = NumberFactorySharedInput & {
@@ -24,55 +26,39 @@ type NumberFactoryDecoderInput<T> = NumberFactorySharedInput & {
     get: (view: DataView, littleEndian?: boolean) => T;
 };
 
-function sharedNumberFactory(input: NumberFactorySharedInput): CodecData & { littleEndian: boolean | undefined } {
-    let littleEndian: boolean | undefined;
-    let defaultDescription: string = input.name;
-
-    if (input.size > 1) {
-        littleEndian = !('endian' in input.config) || input.config.endian === Endian.LITTLE;
-        defaultDescription += littleEndian ? '(le)' : '(be)';
-    }
-
-    return {
-        description: input.config.description ?? defaultDescription,
-        fixedSize: input.size,
-        littleEndian,
-        maxSize: input.size,
-    };
+function isLittleEndian(config?: NumberCodecConfig): boolean {
+    return config?.endian === Endian.BIG ? false : true;
 }
 
-export function numberEncoderFactory<T extends number | bigint>(input: NumberFactoryEncoderInput<T>): Encoder<T> {
-    const codecData = sharedNumberFactory(input);
-
-    return {
-        description: codecData.description,
-        encode(value: T): Uint8Array {
+export function numberEncoderFactory<T extends number | bigint>(
+    input: NumberFactoryEncoderInput<T>
+): FixedSizeEncoder<T> {
+    return createEncoder({
+        fixedSize: input.size,
+        write(value: T, bytes: Uint8Array, offset: Offset): Offset {
             if (input.range) {
                 assertNumberIsBetweenForCodec(input.name, input.range[0], input.range[1], value);
             }
             const arrayBuffer = new ArrayBuffer(input.size);
-            input.set(new DataView(arrayBuffer), value, codecData.littleEndian);
-            return new Uint8Array(arrayBuffer);
+            input.set(new DataView(arrayBuffer), value, isLittleEndian(input.config));
+            bytes.set(new Uint8Array(arrayBuffer), offset);
+            return offset + input.size;
         },
-        fixedSize: codecData.fixedSize,
-        maxSize: codecData.maxSize,
-    };
+    });
 }
 
-export function numberDecoderFactory<T extends number | bigint>(input: NumberFactoryDecoderInput<T>): Decoder<T> {
-    const codecData = sharedNumberFactory(input);
-
-    return {
-        decode(bytes, offset = 0): [T, number] {
-            assertByteArrayIsNotEmptyForCodec(codecData.description, bytes, offset);
-            assertByteArrayHasEnoughBytesForCodec(codecData.description, input.size, bytes, offset);
+export function numberDecoderFactory<T extends number | bigint>(
+    input: NumberFactoryDecoderInput<T>
+): FixedSizeDecoder<T> {
+    return createDecoder({
+        fixedSize: input.size,
+        read(bytes, offset = 0): [T, number] {
+            assertByteArrayIsNotEmptyForCodec(input.name, bytes, offset);
+            assertByteArrayHasEnoughBytesForCodec(input.name, input.size, bytes, offset);
             const view = new DataView(toArrayBuffer(bytes, offset, input.size));
-            return [input.get(view, codecData.littleEndian), offset + input.size];
+            return [input.get(view, isLittleEndian(input.config)), offset + input.size];
         },
-        description: codecData.description,
-        fixedSize: codecData.fixedSize,
-        maxSize: codecData.maxSize,
-    };
+    });
 }
 
 /**

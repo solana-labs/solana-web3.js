@@ -24,13 +24,7 @@ describe('getU8Codec', () => {
         assertRangeError(u8(), MAX + 1);
     });
 
-    it('has the right description', () => {
-        expect(u8().description).toBe('u8');
-        expect(u8({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(u8().fixedSize).toBe(1);
-        expect(u8().maxSize).toBe(1);
     });
 });

@@ -29,15 +29,7 @@ describe('getF64Codec', () => {
         assertValid(f64BE, -Math.PI, 'c00921fb54442d18', -APPROX_PI);
     });
 
-    it('has the right description', () => {
-        expect(f64().description).toBe('f64(le)');
-        expect(f64({ endian: Endian.LITTLE }).description).toBe('f64(le)');
-        expect(f64({ endian: Endian.BIG }).description).toBe('f64(be)');
-        expect(f64({ description: 'custom' }).description).toBe('custom');
-    });
-
-    it('has the right sizes', () => {
+    it('has the right size', () => {
         expect(f64().fixedSize).toBe(8);
-        expect(f64().maxSize).toBe(8);
     });
 });
