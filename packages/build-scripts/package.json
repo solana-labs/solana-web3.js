@@ -8,7 +8,7 @@
         "tsup.config.package.ts"
     ],
     "devDependencies": {
-        "@types/node": "^20",
+        "@types/node": "18.11.19",
         "browserslist-to-esbuild": "^1.2.0",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1"
