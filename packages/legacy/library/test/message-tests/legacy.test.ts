@@ -1,10 +1,10 @@
 import bs58 from 'bs58';
 import {expect} from 'chai';
 import {sha256} from '@noble/hashes/sha256';
+import {PublicKey} from '@solana/keys';
 
 import {Message} from '../../src/message';
 import {TransactionInstruction} from '../../src/transaction';
-import {PublicKey} from '../../src/publickey';
 
 function createTestKeys(count: number): Array<PublicKey> {
   return new Array(count).fill(0).map(() => PublicKey.unique());

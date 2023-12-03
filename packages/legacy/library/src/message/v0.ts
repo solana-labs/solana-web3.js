@@ -1,5 +1,6 @@
 import bs58 from 'bs58';
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey, PUBLIC_KEY_LENGTH} from '@solana/keys';
 
 import * as Layout from '../layout';
 import {Blockhash} from '../blockhash';
@@ -8,7 +9,6 @@ import {
   MessageAddressTableLookup,
   MessageCompiledInstruction,
 } from './index';
-import {PublicKey, PUBLIC_KEY_LENGTH} from '../publickey';
 import * as shortvec from '../utils/shortvec-encoding';
 import assert from '../utils/assert';
 import {PACKET_DATA_SIZE, VERSION_PREFIX_MASK} from '../transaction/constants';

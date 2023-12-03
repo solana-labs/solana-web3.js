@@ -1,4 +1,5 @@
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey} from '@solana/keys';
 
 import {
   encodeData,
@@ -6,7 +7,6 @@ import {
   InstructionType,
   IInstructionInputData,
 } from '../instruction';
-import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import {u64} from '../utils/bigint';
 

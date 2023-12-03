@@ -1,8 +1,8 @@
 import * as BufferLayout from '@solana/buffer-layout';
 import {Buffer} from 'buffer';
+import {PublicKey} from '@solana/keys';
 
 import * as Layout from './layout';
-import {PublicKey} from './publickey';
 import type {FeeCalculator} from './fee-calculator';
 import {FeeCalculatorLayout} from './fee-calculator';
 import {toBuffer} from 'legacy-shared';

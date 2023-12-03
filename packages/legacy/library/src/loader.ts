@@ -1,14 +1,14 @@
 import {Buffer} from 'buffer';
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey} from '@solana/keys';
+import type {Signer} from '@solana/keys';
 
-import {PublicKey} from './publickey';
 import {Transaction, PACKET_DATA_SIZE} from './transaction';
 import {MS_PER_SLOT} from './timing';
 import {SYSVAR_RENT_PUBKEY} from './sysvar';
 import {sendAndConfirmTransaction} from './utils/send-and-confirm-transaction';
 import {sleep} from './utils/sleep';
 import type {Connection} from './connection';
-import type {Signer} from './keypair';
 import {SystemProgram} from './programs/system';
 import {IInstructionInputData} from './instruction';
 

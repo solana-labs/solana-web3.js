@@ -1,8 +1,8 @@
 import {Buffer} from 'buffer';
 import * as BufferLayout from '@solana/buffer-layout';
 import {keccak_256} from '@noble/hashes/sha3';
+import {PublicKey} from '@solana/keys';
 
-import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import assert from '../utils/assert';
 import {publicKeyCreate, ecdsaSign} from '../utils/secp256k1';

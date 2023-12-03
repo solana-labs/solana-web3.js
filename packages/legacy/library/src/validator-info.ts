@@ -5,10 +5,10 @@ import {
   string,
   type as pick,
 } from 'superstruct';
+import {PublicKey, PUBLIC_KEY_LENGTH} from '@solana/keys';
 
 import * as Layout from './layout';
 import * as shortvec from './utils/shortvec-encoding';
-import {PublicKey, PUBLIC_KEY_LENGTH} from './publickey';
 
 export const VALIDATOR_INFO_KEY = new PublicKey(
   'Va1idator1nfo111111111111111111111111111111',

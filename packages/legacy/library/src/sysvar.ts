@@ -1,4 +1,4 @@
-import {PublicKey} from './publickey';
+import {PublicKey} from '@solana/keys';
 
 export const SYSVAR_CLOCK_PUBKEY = new PublicKey(
   'SysvarC1ock11111111111111111111111111111111',

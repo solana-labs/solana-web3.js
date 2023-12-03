@@ -1,9 +1,10 @@
+import {PublicKey} from '@solana/keys';
+
 import {MessageHeader, MessageAddressTableLookup} from './index';
 import {AccountKeysFromLookups} from './account-keys';
 import {AddressLookupTableAccount} from '../programs';
 import {TransactionInstruction} from '../transaction';
 import assert from '../utils/assert';
-import {PublicKey} from '../publickey';
 
 export type CompiledKeyMeta = {
   isSigner: boolean;

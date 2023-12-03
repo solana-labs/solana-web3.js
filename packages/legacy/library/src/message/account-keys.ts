@@ -1,5 +1,6 @@
+import {PublicKey} from '@solana/keys';
+
 import {LoadedAddresses} from '../connection';
-import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import {MessageCompiledInstruction} from './index';
 

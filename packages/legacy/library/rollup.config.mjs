@@ -55,9 +55,12 @@ function generateConfig(configType, format) {
       commonjs(),
       nodeResolve({
         browser,
-        dedupe: ['bn.js', 'buffer'],
+        dedupe: ['bn.js', 'bs58', 'buffer'],
         extensions,
         preferBuiltins: !browser,
+        modulePaths: fs.readdirSync(path.join(process.cwd(), '..'), { withFileTypes: true })
+          .filter(dirEnt => dirEnt.isDirectory() && dirEnt.name !== 'library')
+          .map((dirEnt) => path.join(dirEnt.path, dirEnt.name, 'node_modules')),
       }),
       babel({
         exclude: '**/node_modules/**',
@@ -103,6 +106,7 @@ function generateConfig(configType, format) {
       '@noble/hashes/sha3',
       '@noble/secp256k1',
       '@solana/buffer-layout',
+      '@solana/keys',
       'bigint-buffer',
       'bn.js',
       'borsh',
@@ -170,6 +174,7 @@ function generateConfig(configType, format) {
             '@noble/hashes/sha256',
             '@noble/hashes/sha3',
             '@solana/buffer-layout',
+            '@solana/keys',
             'bigint-buffer',
             'bn.js',
             'borsh',

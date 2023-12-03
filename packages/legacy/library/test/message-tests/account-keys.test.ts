@@ -1,10 +1,10 @@
 import {expect} from 'chai';
+import {PublicKey} from '@solana/keys';
 
 import {
   MessageAccountKeys,
   MessageCompiledInstruction,
 } from '../../src/message';
-import {PublicKey} from '../../src/publickey';
 import {TransactionInstruction} from '../../src/transaction';
 
 function createTestKeys(count: number): Array<PublicKey> {

@@ -1,4 +1,5 @@
 import { Address, assertIsAddress, getAddressEncoder } from '@solana/addresses';
+import type BN from 'bn.js';
 
 import { createUnimplementedFunction } from './unimplemented';
 
@@ -40,7 +41,7 @@ export class PublicKey<TAddress extends string = string> {
     get [Symbol.toStringTag]() {
         return `PublicKeySham(${this.#address})`;
     }
-    get _bn() {
+    get _bn(): BN {
         throw new Error(
             'This error is being thrown from `@solana/web3.js-legacy-sham`. The legacy ' +
                 'implementation of `PublicKey` historically exposed the internal property ' +

@@ -28,13 +28,12 @@ import {
 import type {Struct} from 'superstruct';
 import RpcClient from 'jayson/lib/client/browser';
 import {JSONRPCError} from 'jayson';
+import {PublicKey, Signer} from '@solana/keys';
 
 import {EpochSchedule} from './epoch-schedule';
 import {SendTransactionError, SolanaJSONRPCError} from './errors';
 import fetchImpl from './fetch-impl';
 import {DurableNonce, NonceAccount} from './nonce-account';
-import {PublicKey} from './publickey';
-import {Signer} from './keypair';
 import RpcWebSocketClient from './rpc-websocket';
 import {MS_PER_SLOT} from './timing';
 import {

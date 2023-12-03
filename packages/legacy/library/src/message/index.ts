@@ -1,4 +1,4 @@
-import {PublicKey} from '../publickey';
+import {PublicKey} from '@solana/keys';
 
 export * from './account-keys';
 // note: compiled-keys is internal and doesn't need to be exported

@@ -1,13 +1,13 @@
 import bs58 from 'bs58';
 import {expect} from 'chai';
 import {sha256} from '@noble/hashes/sha256';
+import {PublicKey} from '@solana/keys';
 
 import {
   Transaction,
   TransactionInstruction,
   TransactionMessage,
 } from '../../src/transaction';
-import {PublicKey} from '../../src/publickey';
 import {AddressLookupTableAccount} from '../../src/programs';
 import {Message, MessageV0} from '../../src/message';
 

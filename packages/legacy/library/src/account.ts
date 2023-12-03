@@ -1,7 +1,6 @@
+import {PublicKey} from '@solana/keys';
 import {Buffer} from 'buffer';
 import {generatePrivateKey, getPublicKey, toBuffer} from 'legacy-shared';
-
-import {PublicKey} from './publickey';
 
 /**
  * An account key pair (public and secret keys).

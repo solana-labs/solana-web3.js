@@ -1,8 +1,8 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey, PUBLIC_KEY_LENGTH} from '@solana/keys';
 
-import {PublicKey, PUBLIC_KEY_LENGTH} from '../publickey';
 import type {Blockhash} from '../blockhash';
 import * as Layout from '../layout';
 import {PACKET_DATA_SIZE, VERSION_PREFIX_MASK} from '../transaction/constants';

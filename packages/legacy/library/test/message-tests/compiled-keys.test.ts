@@ -1,8 +1,8 @@
 import {expect} from 'chai';
+import {PublicKey} from '@solana/keys';
 
 import {CompiledKeyMeta, CompiledKeys} from '../../src/message/compiled-keys';
 import {AddressLookupTableAccount} from '../../src/programs';
-import {PublicKey} from '../../src/publickey';
 import {AccountMeta, TransactionInstruction} from '../../src/transaction';
 
 function createTestKeys(count: number): Array<PublicKey> {

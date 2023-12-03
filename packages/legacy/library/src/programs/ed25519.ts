@@ -1,9 +1,8 @@
 import {Buffer} from 'buffer';
 import * as BufferLayout from '@solana/buffer-layout';
+import {Keypair, PublicKey} from '@solana/keys';
 import {sign} from 'legacy-shared';
 
-import {Keypair} from '../keypair';
-import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import assert from '../utils/assert';
 

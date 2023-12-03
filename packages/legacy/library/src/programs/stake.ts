@@ -1,4 +1,5 @@
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey} from '@solana/keys';
 
 import {
   encodeData,
@@ -7,7 +8,6 @@ import {
   IInstructionInputData,
 } from '../instruction';
 import * as Layout from '../layout';
-import {PublicKey} from '../publickey';
 import {SystemProgram} from './system';
 import {
   SYSVAR_CLOCK_PUBKEY,

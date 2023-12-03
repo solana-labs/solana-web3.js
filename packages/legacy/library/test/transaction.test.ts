@@ -2,10 +2,9 @@ import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import {expect} from 'chai';
 import {sign, toBuffer} from 'legacy-shared';
+import {Keypair, PublicKey} from '@solana/keys';
 
 import {Connection} from '../src/connection';
-import {Keypair} from '../src/keypair';
-import {PublicKey} from '../src/publickey';
 import {
   Transaction,
   TransactionInstruction,

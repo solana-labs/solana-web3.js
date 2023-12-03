@@ -1,8 +1,7 @@
 import {Buffer} from 'buffer';
 import {expect} from 'chai';
+import {Keypair, PublicKey} from '@solana/keys';
 
-import {Keypair} from '../src/keypair';
-import {PublicKey} from '../src/publickey';
 import {ValidatorInfo} from '../src/validator-info';
 
 describe('ValidatorInfo', () => {

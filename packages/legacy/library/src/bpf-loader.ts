@@ -1,9 +1,9 @@
 import type {Buffer} from 'buffer';
+import {PublicKey} from '@solana/keys';
+import type {Signer} from '@solana/keys';
 
-import {PublicKey} from './publickey';
 import {Loader} from './loader';
 import type {Connection} from './connection';
-import type {Signer} from './keypair';
 
 export const BPF_LOADER_PROGRAM_ID = new PublicKey(
   'BPFLoader2111111111111111111111111111111111',

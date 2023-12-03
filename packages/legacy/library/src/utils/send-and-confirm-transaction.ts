@@ -1,7 +1,8 @@
+import type {Signer} from '@solana/keys';
+
 import {Connection, SignatureResult} from '../connection';
 import {Transaction} from '../transaction';
 import type {ConfirmOptions} from '../connection';
-import type {Signer} from '../keypair';
 import type {TransactionSignature} from '../transaction';
 
 /**

@@ -1,8 +1,8 @@
 import {toBufferLE} from 'bigint-buffer';
 import * as BufferLayout from '@solana/buffer-layout';
+import {PublicKey} from '@solana/keys';
 
 import * as Layout from '../../layout';
-import {PublicKey} from '../../publickey';
 import * as bigintLayout from '../../utils/bigint';
 import {SystemProgram} from '../system';
 import {TransactionInstruction} from '../../transaction';
