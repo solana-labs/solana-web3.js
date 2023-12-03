@@ -15,7 +15,7 @@ import {
   SYSVAR_STAKE_HISTORY_PUBKEY,
 } from '../sysvar';
 import {Transaction, TransactionInstruction} from '../transaction';
-import {toBuffer} from '../utils/to-buffer';
+import {toBuffer} from 'legacy-shared';
 
 /**
  * Address of the stake config account which configures the rate

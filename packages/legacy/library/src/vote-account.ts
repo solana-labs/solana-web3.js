@@ -3,7 +3,7 @@ import type {Buffer} from 'buffer';
 
 import * as Layout from './layout';
 import {PublicKey} from './publickey';
-import {toBuffer} from './utils/to-buffer';
+import {toBuffer} from 'legacy-shared';
 
 export const VOTE_PROGRAM_ID = new PublicKey(
   'Vote111111111111111111111111111111111111111',

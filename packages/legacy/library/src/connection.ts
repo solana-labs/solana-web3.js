@@ -47,7 +47,6 @@ import {Message, MessageHeader, MessageV0, VersionedMessage} from './message';
 import {AddressLookupTableAccount} from './programs/address-lookup-table/state';
 import assert from './utils/assert';
 import {sleep} from './utils/sleep';
-import {toBuffer} from './utils/to-buffer';
 import {
   TransactionExpiredBlockheightExceededError,
   TransactionExpiredNonceInvalidError,
@@ -58,6 +57,7 @@ import type {Blockhash} from './blockhash';
 import type {FeeCalculator} from './fee-calculator';
 import type {TransactionSignature} from './transaction';
 import type {CompiledInstruction} from './message';
+import {toBuffer} from 'legacy-shared';
 
 const PublicKeyFromString = coerce(
   instance(PublicKey),

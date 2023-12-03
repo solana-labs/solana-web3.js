@@ -6,7 +6,7 @@ import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import assert from '../utils/assert';
 import {publicKeyCreate, ecdsaSign} from '../utils/secp256k1';
-import {toBuffer} from '../utils/to-buffer';
+import {toBuffer} from 'legacy-shared';
 
 const PRIVATE_KEY_BYTES = 32;
 const ETHEREUM_ADDRESS_BYTES = 20;

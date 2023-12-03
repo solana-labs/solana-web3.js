@@ -28,7 +28,6 @@ import {
   MessageAddressTableLookup,
 } from '../src';
 import invariant from '../src/utils/assert';
-import {toBuffer} from '../src/utils/to-buffer';
 import {MOCK_PORT, url, Node14Controller, nodeVersion} from './url';
 import {
   AccountInfo,
@@ -76,6 +75,7 @@ import type {
 import {VersionedTransaction} from '../src/transaction/versioned';
 import {MessageV0} from '../src/message/v0';
 import {encodeData} from '../src/instruction';
+import {toBuffer} from 'legacy-shared';
 
 use(chaiAsPromised);
 use(sinonChai);

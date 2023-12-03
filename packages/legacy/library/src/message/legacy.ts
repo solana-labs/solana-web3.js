@@ -7,7 +7,6 @@ import type {Blockhash} from '../blockhash';
 import * as Layout from '../layout';
 import {PACKET_DATA_SIZE, VERSION_PREFIX_MASK} from '../transaction/constants';
 import * as shortvec from '../utils/shortvec-encoding';
-import {toBuffer} from '../utils/to-buffer';
 import {
   MessageHeader,
   MessageAddressTableLookup,
@@ -16,6 +15,7 @@ import {
 import {TransactionInstruction} from '../transaction';
 import {CompiledKeys} from './compiled-keys';
 import {MessageAccountKeys} from './account-keys';
+import {toBuffer} from 'legacy-shared';
 
 /**
  * An instruction to execute by a program

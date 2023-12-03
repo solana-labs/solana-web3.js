@@ -11,8 +11,8 @@ import {NONCE_ACCOUNT_LENGTH} from '../nonce-account';
 import {PublicKey} from '../publickey';
 import {SYSVAR_RECENT_BLOCKHASHES_PUBKEY, SYSVAR_RENT_PUBKEY} from '../sysvar';
 import {Transaction, TransactionInstruction} from '../transaction';
-import {toBuffer} from '../utils/to-buffer';
 import {u64} from '../utils/bigint';
+import {toBuffer} from 'legacy-shared';
 
 /**
  * Create account system transaction params

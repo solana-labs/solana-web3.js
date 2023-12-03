@@ -1,13 +1,12 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-import {sign, verify} from 'legacy-shared';
+import {sign, toBuffer, verify} from 'legacy-shared';
 
 import {PACKET_DATA_SIZE, SIGNATURE_LENGTH_IN_BYTES} from './constants';
 import {Connection} from '../connection';
 import {Message} from '../message';
 import {PublicKey} from '../publickey';
 import * as shortvec from '../utils/shortvec-encoding';
-import {toBuffer} from '../utils/to-buffer';
 import invariant from '../utils/assert';
 import type {Signer} from '../keypair';
 import type {Blockhash} from '../blockhash';

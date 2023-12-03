@@ -1,7 +1,7 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import {expect} from 'chai';
-import {sign} from 'legacy-shared';
+import {sign, toBuffer} from 'legacy-shared';
 
 import {Connection} from '../src/connection';
 import {Keypair} from '../src/keypair';
@@ -15,7 +15,6 @@ import {
 import {StakeProgram, SystemProgram} from '../src/programs';
 import {Message} from '../src/message';
 import invariant from '../src/utils/assert';
-import {toBuffer} from '../src/utils/to-buffer';
 import {helpers} from './mocks/rpc-http';
 import {url} from './url';
 

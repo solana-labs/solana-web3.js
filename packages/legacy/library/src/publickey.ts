@@ -2,10 +2,9 @@ import BN from 'bn.js';
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
 import {sha256} from '@noble/hashes/sha256';
-import {isOnCurve} from 'legacy-shared';
+import {isOnCurve, toBuffer} from 'legacy-shared';
 
 import {Struct, SOLANA_SCHEMA} from './utils/borsh-schema';
-import {toBuffer} from './utils/to-buffer';
 
 /**
  * Maximum length of derived pubkey seed

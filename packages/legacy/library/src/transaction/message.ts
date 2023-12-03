@@ -1,11 +1,11 @@
 import {AccountKeysFromLookups} from '../message/account-keys';
 import assert from '../utils/assert';
-import {toBuffer} from '../utils/to-buffer';
 import {Blockhash} from '../blockhash';
 import {Message, MessageV0, VersionedMessage} from '../message';
 import {PublicKey} from '../publickey';
 import {AddressLookupTableAccount} from '../programs';
 import {AccountMeta, TransactionInstruction} from './legacy';
+import {toBuffer} from 'legacy-shared';
 
 export type TransactionMessageArgs = {
   payerKey: PublicKey;
