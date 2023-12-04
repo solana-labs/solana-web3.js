@@ -14,7 +14,7 @@ importers:
         version: 17.6.7
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.3.2)
       '@solana/prettier-config-solana':
         specifier: ^0.0.4
         version: 0.0.4(prettier@3.1.0)
@@ -42,7 +42,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -51,10 +51,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -66,7 +66,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -93,10 +93,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -105,7 +105,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -114,10 +114,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -129,7 +129,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -156,10 +156,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -177,13 +177,13 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
 
   packages/codecs-core:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -192,10 +192,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -207,7 +207,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -234,10 +234,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -256,7 +256,7 @@ importers:
         version: link:../codecs-strings
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -265,10 +265,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -280,7 +280,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -307,10 +307,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -323,7 +323,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -332,10 +332,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -347,7 +347,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -374,10 +374,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -396,7 +396,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -408,10 +408,10 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -423,7 +423,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -453,10 +453,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -481,7 +481,7 @@ importers:
         version: link:../addresses
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@solana/web3.js':
         specifier: workspace:*
         version: link:../library-legacy
@@ -493,10 +493,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -508,7 +508,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -535,10 +535,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -547,7 +547,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -559,10 +559,10 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -571,7 +571,7 @@ importers:
         version: 8.51.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -598,16 +598,16 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.1.6
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
 
   packages/fetch-impl:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -616,10 +616,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -628,7 +628,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -655,16 +655,16 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
+        specifier: ^5.3.2
+        version: 5.3.2
 
   packages/functional:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -673,10 +673,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.3.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -712,10 +712,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -727,7 +727,7 @@ importers:
         version: link:../addresses
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -736,10 +736,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -772,10 +772,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -794,7 +794,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -803,10 +803,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -818,7 +818,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -845,10 +845,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -888,7 +888,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -897,10 +897,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -912,7 +912,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -939,10 +939,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1078,10 +1078,10 @@ importers:
         version: 3.2.9
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       chai:
         specifier: ^4.3.7
         version: 4.3.7
@@ -1132,7 +1132,7 @@ importers:
         version: 3.27.2
       rollup-plugin-dts:
         specifier: ^6.0.1
-        version: 6.0.1(rollup@3.27.2)(typescript@5.1.6)
+        version: 6.0.1(rollup@3.27.2)(typescript@5.3.2)
       rollup-plugin-node-polyfills:
         specifier: ^0.2.1
         version: 0.2.1
@@ -1153,7 +1153,7 @@ importers:
         version: 10.0.0(mocha@10.2.0)
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@types/node@18.11.19)(typescript@5.1.6)
+        version: 10.9.1(@types/node@18.11.19)(typescript@5.3.2)
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -1162,10 +1162,10 @@ importers:
         version: 2.6.2
       typedoc:
         specifier: ^0.25.4
-        version: 0.25.4(typescript@5.1.6)
+        version: 0.25.4(typescript@5.3.2)
       typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
+        specifier: ^5.3.2
+        version: 5.3.2
 
   packages/library-legacy-sham:
     dependencies:
@@ -1184,7 +1184,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.3.2)
       '@solana/web3.js-legacy':
         specifier: workspace:../library-legacy
         version: link:../library-legacy
@@ -1199,10 +1199,10 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1214,7 +1214,7 @@ importers:
         version: 8.51.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1241,10 +1241,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1260,7 +1260,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1269,10 +1269,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1284,7 +1284,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1311,10 +1311,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1332,7 +1332,7 @@ importers:
         version: link:../codecs-strings
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -1353,10 +1353,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1368,7 +1368,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1398,10 +1398,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1426,7 +1426,7 @@ importers:
         version: link:../addresses
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -1450,10 +1450,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.3.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1465,7 +1465,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1495,10 +1495,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.1.6
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1511,7 +1511,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1523,10 +1523,10 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1538,7 +1538,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1577,10 +1577,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1592,7 +1592,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.3.2)
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -1604,10 +1604,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+        version: 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1619,7 +1619,7 @@ importers:
         version: 8.51.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1649,10 +1649,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1674,7 +1674,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1683,10 +1683,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1698,7 +1698,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1731,10 +1731,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1793,7 +1793,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1805,10 +1805,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1817,7 +1817,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1844,10 +1844,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
 
   packages/transactions:
     dependencies:
@@ -1875,7 +1875,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
@@ -1890,10 +1890,10 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1929,10 +1929,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1950,7 +1950,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1959,10 +1959,10 @@ importers:
         version: 29.5.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       build-scripts:
         specifier: workspace:*
         version: link:../build-scripts
@@ -1971,7 +1971,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1998,10 +1998,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
+        specifier: ^5.3.2
+        version: 5.3.2
       version-from-git:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2014,7 +2014,7 @@ importers:
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -2026,10 +2026,10 @@ importers:
         version: 8.5.5
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.7.0
-        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+        version: 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2038,7 +2038,7 @@ importers:
         version: 8.45.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -2065,10 +2065,10 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2)
       typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
+        specifier: ^5.3.2
+        version: 5.3.2
 
 packages:
 
@@ -3447,13 +3447,13 @@ packages:
       '@types/node': 18.11.19
       chalk: 4.1.2
       cosmiconfig: 8.2.0
-      cosmiconfig-typescript-loader: 4.3.0(@types/node@18.11.19)(cosmiconfig@8.2.0)(ts-node@10.9.1)(typescript@5.2.2)
+      cosmiconfig-typescript-loader: 4.3.0(@types/node@18.11.19)(cosmiconfig@8.2.0)(ts-node@10.9.1)(typescript@5.3.2)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
       resolve-from: 5.0.0
-      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.2.2)
-      typescript: 5.2.2
+      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -4958,7 +4958,7 @@ packages:
     dependencies:
       buffer: 6.0.3
 
-  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.1.6):
+  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-/mBi2xFsX0fq3ukZ3ugA+Zh2+Ct+bh713ZSdOJAv1G7ARzyOEDxmiUz8TLzHu4joOC/3Ok4Yl7cjupOcIRzMHw==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0
@@ -4970,17 +4970,17 @@ packages:
       eslint-plugin-sort-keys-fix: ^1.1.2
       typescript: ^5.1.6
     dependencies:
-      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
+      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       eslint: 8.45.0
-      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6)
+      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.45.0)
       eslint-plugin-simple-import-sort: 10.0.0(eslint@8.45.0)
       eslint-plugin-sort-keys-fix: 1.1.2
-      typescript: 5.1.6
+      typescript: 5.3.2
     dev: true
 
-  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.7.0)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2):
+  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-/mBi2xFsX0fq3ukZ3ugA+Zh2+Ct+bh713ZSdOJAv1G7ARzyOEDxmiUz8TLzHu4joOC/3Ok4Yl7cjupOcIRzMHw==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0
@@ -4992,36 +4992,14 @@ packages:
       eslint-plugin-sort-keys-fix: ^1.1.2
       typescript: ^5.1.6
     dependencies:
-      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.2.2)
-      eslint: 8.45.0
-      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
-      eslint-plugin-react-hooks: 4.6.0(eslint@8.45.0)
-      eslint-plugin-simple-import-sort: 10.0.0(eslint@8.45.0)
-      eslint-plugin-sort-keys-fix: 1.1.2
-      typescript: 5.2.2
-    dev: true
-
-  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.8.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-/mBi2xFsX0fq3ukZ3ugA+Zh2+Ct+bh713ZSdOJAv1G7ARzyOEDxmiUz8TLzHu4joOC/3Ok4Yl7cjupOcIRzMHw==}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^6.0.0
-      '@typescript-eslint/parser': ^6.0.0
-      eslint: ^8.45.0
-      eslint-plugin-jest: ^27.2.3
-      eslint-plugin-react-hooks: ^4.6.0
-      eslint-plugin-simple-import-sort: ^10.0.0
-      eslint-plugin-sort-keys-fix: ^1.1.2
-      typescript: ^5.1.6
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
-      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/eslint-plugin': 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2)
+      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       eslint: 8.51.0
-      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.3.2)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.51.0)
       eslint-plugin-simple-import-sort: 10.0.0(eslint@8.51.0)
       eslint-plugin-sort-keys-fix: 1.1.2
-      typescript: 5.2.2
+      typescript: 5.3.2
     dev: true
 
   /@solana/prettier-config-solana@0.0.4(prettier@3.1.0):
@@ -5488,7 +5466,7 @@ packages:
     dependencies:
       '@types/yargs-parser': 21.0.0
 
-  /@typescript-eslint/eslint-plugin@6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6):
+  /@typescript-eslint/eslint-plugin@6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-gUqtknHm0TDs1LhY12K2NA3Rmlmp88jK9Tx8vGZMfHeNMLE3GH2e9TRub+y+SOjuYgtOmok+wt1AyDPZqxbNag==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5500,10 +5478,10 @@ packages:
         optional: true
     dependencies:
       '@eslint-community/regexpp': 4.9.1
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/scope-manager': 6.7.0
-      '@typescript-eslint/type-utils': 6.7.0(eslint@8.45.0)(typescript@5.1.6)
-      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/type-utils': 6.7.0(eslint@8.45.0)(typescript@5.3.2)
+      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.3.2)
       '@typescript-eslint/visitor-keys': 6.7.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.45.0
@@ -5511,42 +5489,13 @@ packages:
       ignore: 5.2.4
       natural-compare: 1.4.0
       semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.1.6)
-      typescript: 5.1.6
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/eslint-plugin@6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-gUqtknHm0TDs1LhY12K2NA3Rmlmp88jK9Tx8vGZMfHeNMLE3GH2e9TRub+y+SOjuYgtOmok+wt1AyDPZqxbNag==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      '@typescript-eslint/parser': ^6.0.0 || ^6.0.0-alpha
-      eslint: ^7.0.0 || ^8.0.0
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@eslint-community/regexpp': 4.9.1
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.2.2)
-      '@typescript-eslint/scope-manager': 6.7.0
-      '@typescript-eslint/type-utils': 6.7.0(eslint@8.45.0)(typescript@5.2.2)
-      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.2.2)
-      '@typescript-eslint/visitor-keys': 6.7.0
-      debug: 4.3.4(supports-color@8.1.1)
-      eslint: 8.45.0
-      graphemer: 1.4.0
-      ignore: 5.2.4
-      natural-compare: 1.4.0
-      semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/eslint-plugin@6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2):
+  /@typescript-eslint/eslint-plugin@6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-GosF4238Tkes2SHPQ1i8f6rMtG6zlKwMEB0abqSJ3Npvos+doIlc/ATG+vX1G9coDF3Ex78zM3heXHLyWEwLUw==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5558,10 +5507,10 @@ packages:
         optional: true
     dependencies:
       '@eslint-community/regexpp': 4.9.1
-      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       '@typescript-eslint/scope-manager': 6.8.0
-      '@typescript-eslint/type-utils': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
-      '@typescript-eslint/utils': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/type-utils': 6.8.0(eslint@8.51.0)(typescript@5.3.2)
+      '@typescript-eslint/utils': 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       '@typescript-eslint/visitor-keys': 6.8.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.51.0
@@ -5569,13 +5518,13 @@ packages:
       ignore: 5.2.4
       natural-compare: 1.4.0
       semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/parser@6.3.0(eslint@8.45.0)(typescript@5.1.6):
+  /@typescript-eslint/parser@6.3.0(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-ibP+y2Gr6p0qsUkhs7InMdXrwldjxZw66wpcQq9/PzAroM45wdwyu81T+7RibNCh8oc0AgrsyCwJByncY0Ongg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5587,37 +5536,16 @@ packages:
     dependencies:
       '@typescript-eslint/scope-manager': 6.3.0
       '@typescript-eslint/types': 6.3.0
-      '@typescript-eslint/typescript-estree': 6.3.0(typescript@5.1.6)
+      '@typescript-eslint/typescript-estree': 6.3.0(typescript@5.3.2)
       '@typescript-eslint/visitor-keys': 6.3.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.45.0
-      typescript: 5.1.6
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/parser@6.3.0(eslint@8.45.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-ibP+y2Gr6p0qsUkhs7InMdXrwldjxZw66wpcQq9/PzAroM45wdwyu81T+7RibNCh8oc0AgrsyCwJByncY0Ongg==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/scope-manager': 6.3.0
-      '@typescript-eslint/types': 6.3.0
-      '@typescript-eslint/typescript-estree': 6.3.0(typescript@5.2.2)
-      '@typescript-eslint/visitor-keys': 6.3.0
-      debug: 4.3.4(supports-color@8.1.1)
-      eslint: 8.45.0
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/parser@6.8.0(eslint@8.51.0)(typescript@5.2.2):
+  /@typescript-eslint/parser@6.8.0(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-5tNs6Bw0j6BdWuP8Fx+VH4G9fEPDxnVI7yH1IAPkQH5RUtvKwRoqdecAPdQXv4rSOADAaz1LFBZvZG7VbXivSg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5629,11 +5557,11 @@ packages:
     dependencies:
       '@typescript-eslint/scope-manager': 6.8.0
       '@typescript-eslint/types': 6.8.0
-      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.2.2)
+      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.3.2)
       '@typescript-eslint/visitor-keys': 6.8.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.51.0
-      typescript: 5.2.2
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5670,7 +5598,7 @@ packages:
       '@typescript-eslint/visitor-keys': 6.8.0
     dev: true
 
-  /@typescript-eslint/type-utils@6.7.0(eslint@8.45.0)(typescript@5.1.6):
+  /@typescript-eslint/type-utils@6.7.0(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-f/QabJgDAlpSz3qduCyQT0Fw7hHpmhOzY/Rv6zO3yO+HVIdPfIWhrQoAyG+uZVtWAIS85zAyzgAFfyEr+MgBpg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5680,37 +5608,17 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.1.6)
-      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.3.2)
+      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.3.2)
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.45.0
-      ts-api-utils: 1.0.3(typescript@5.1.6)
-      typescript: 5.1.6
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/type-utils@6.7.0(eslint@8.45.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-f/QabJgDAlpSz3qduCyQT0Fw7hHpmhOzY/Rv6zO3yO+HVIdPfIWhrQoAyG+uZVtWAIS85zAyzgAFfyEr+MgBpg==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.2.2)
-      '@typescript-eslint/utils': 6.7.0(eslint@8.45.0)(typescript@5.2.2)
-      debug: 4.3.4(supports-color@8.1.1)
-      eslint: 8.45.0
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/type-utils@6.8.0(eslint@8.51.0)(typescript@5.2.2):
+  /@typescript-eslint/type-utils@6.8.0(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-RYOJdlkTJIXW7GSldUIHqc/Hkto8E+fZN96dMIFhuTJcQwdRoGN2rEWA8U6oXbLo0qufH7NPElUb+MceHtz54g==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5720,12 +5628,12 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.2.2)
-      '@typescript-eslint/utils': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.3.2)
+      '@typescript-eslint/utils': 6.8.0(eslint@8.51.0)(typescript@5.3.2)
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.51.0
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5750,7 +5658,7 @@ packages:
     engines: {node: ^16.0.0 || >=18.0.0}
     dev: true
 
-  /@typescript-eslint/typescript-estree@5.61.0(typescript@5.1.6):
+  /@typescript-eslint/typescript-estree@5.61.0(typescript@5.3.2):
     resolution: {integrity: sha512-Fud90PxONnnLZ36oR5ClJBLTLfU4pIWBmnvGwTbEa2cXIqj70AEDEmOmpkFComjBZ/037ueKrOdHuYmSFVD7Rw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -5765,34 +5673,13 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.5.4
-      tsutils: 3.21.0(typescript@5.1.6)
-      typescript: 5.1.6
+      tsutils: 3.21.0(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/typescript-estree@5.61.0(typescript@5.2.2):
-    resolution: {integrity: sha512-Fud90PxONnnLZ36oR5ClJBLTLfU4pIWBmnvGwTbEa2cXIqj70AEDEmOmpkFComjBZ/037ueKrOdHuYmSFVD7Rw==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/types': 5.61.0
-      '@typescript-eslint/visitor-keys': 5.61.0
-      debug: 4.3.4(supports-color@8.1.1)
-      globby: 11.1.0
-      is-glob: 4.0.3
-      semver: 7.5.4
-      tsutils: 3.21.0(typescript@5.2.2)
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/typescript-estree@6.3.0(typescript@5.1.6):
+  /@typescript-eslint/typescript-estree@6.3.0(typescript@5.3.2):
     resolution: {integrity: sha512-Xh4NVDaC4eYKY4O3QGPuQNp5NxBAlEvNQYOqJquR2MePNxO11E5K3t5x4M4Mx53IZvtpW+mBxIT0s274fLUocg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5807,34 +5694,13 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.5.4
-      ts-api-utils: 1.0.1(typescript@5.1.6)
-      typescript: 5.1.6
+      ts-api-utils: 1.0.1(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/typescript-estree@6.3.0(typescript@5.2.2):
-    resolution: {integrity: sha512-Xh4NVDaC4eYKY4O3QGPuQNp5NxBAlEvNQYOqJquR2MePNxO11E5K3t5x4M4Mx53IZvtpW+mBxIT0s274fLUocg==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/types': 6.3.0
-      '@typescript-eslint/visitor-keys': 6.3.0
-      debug: 4.3.4(supports-color@8.1.1)
-      globby: 11.1.0
-      is-glob: 4.0.3
-      semver: 7.5.4
-      ts-api-utils: 1.0.1(typescript@5.2.2)
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/typescript-estree@6.7.0(typescript@5.1.6):
+  /@typescript-eslint/typescript-estree@6.7.0(typescript@5.3.2):
     resolution: {integrity: sha512-dPvkXj3n6e9yd/0LfojNU8VMUGHWiLuBZvbM6V6QYD+2qxqInE7J+J/ieY2iGwR9ivf/R/haWGkIj04WVUeiSQ==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5849,34 +5715,13 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.1.6)
-      typescript: 5.1.6
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/typescript-estree@6.7.0(typescript@5.2.2):
-    resolution: {integrity: sha512-dPvkXj3n6e9yd/0LfojNU8VMUGHWiLuBZvbM6V6QYD+2qxqInE7J+J/ieY2iGwR9ivf/R/haWGkIj04WVUeiSQ==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@typescript-eslint/types': 6.7.0
-      '@typescript-eslint/visitor-keys': 6.7.0
-      debug: 4.3.4(supports-color@8.1.1)
-      globby: 11.1.0
-      is-glob: 4.0.3
-      semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
-  /@typescript-eslint/typescript-estree@6.8.0(typescript@5.2.2):
+  /@typescript-eslint/typescript-estree@6.8.0(typescript@5.3.2):
     resolution: {integrity: sha512-ISgV0lQ8XgW+mvv5My/+iTUdRmGspducmQcDw5JxznasXNnZn3SKNrTRuMsEXv+V/O+Lw9AGcQCfVaOPCAk/Zg==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5891,13 +5736,13 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.5.4
-      ts-api-utils: 1.0.3(typescript@5.2.2)
-      typescript: 5.2.2
+      ts-api-utils: 1.0.3(typescript@5.3.2)
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@typescript-eslint/utils@5.61.0(eslint@8.45.0)(typescript@5.1.6):
+  /@typescript-eslint/utils@5.61.0(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-mV6O+6VgQmVE6+xzlA91xifndPW9ElFW8vbSF0xCT/czPXVhwDewKila1jOyRwa9AE19zKnrr7Cg5S3pJVrTWQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -5908,7 +5753,7 @@ packages:
       '@types/semver': 7.5.4
       '@typescript-eslint/scope-manager': 5.61.0
       '@typescript-eslint/types': 5.61.0
-      '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.1.6)
+      '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.3.2)
       eslint: 8.45.0
       eslint-scope: 5.1.1
       semver: 7.5.4
@@ -5917,27 +5762,7 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/utils@5.61.0(eslint@8.45.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-mV6O+6VgQmVE6+xzlA91xifndPW9ElFW8vbSF0xCT/czPXVhwDewKila1jOyRwa9AE19zKnrr7Cg5S3pJVrTWQ==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-    dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.45.0)
-      '@types/json-schema': 7.0.14
-      '@types/semver': 7.5.4
-      '@typescript-eslint/scope-manager': 5.61.0
-      '@typescript-eslint/types': 5.61.0
-      '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.2.2)
-      eslint: 8.45.0
-      eslint-scope: 5.1.1
-      semver: 7.5.4
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-    dev: true
-
-  /@typescript-eslint/utils@5.61.0(eslint@8.51.0)(typescript@5.2.2):
+  /@typescript-eslint/utils@5.61.0(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-mV6O+6VgQmVE6+xzlA91xifndPW9ElFW8vbSF0xCT/czPXVhwDewKila1jOyRwa9AE19zKnrr7Cg5S3pJVrTWQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -5948,7 +5773,7 @@ packages:
       '@types/semver': 7.5.4
       '@typescript-eslint/scope-manager': 5.61.0
       '@typescript-eslint/types': 5.61.0
-      '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.2.2)
+      '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.3.2)
       eslint: 8.51.0
       eslint-scope: 5.1.1
       semver: 7.5.4
@@ -5957,7 +5782,7 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/utils@6.7.0(eslint@8.45.0)(typescript@5.1.6):
+  /@typescript-eslint/utils@6.7.0(eslint@8.45.0)(typescript@5.3.2):
     resolution: {integrity: sha512-MfCq3cM0vh2slSikQYqK2Gq52gvOhe57vD2RM3V4gQRZYX4rDPnKLu5p6cm89+LJiGlwEXU8hkYxhqqEC/V3qA==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -5968,7 +5793,7 @@ packages:
       '@types/semver': 7.5.4
       '@typescript-eslint/scope-manager': 6.7.0
       '@typescript-eslint/types': 6.7.0
-      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.1.6)
+      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.3.2)
       eslint: 8.45.0
       semver: 7.5.4
     transitivePeerDependencies:
@@ -5976,26 +5801,7 @@ packages:
       - typescript
     dev: true
 
-  /@typescript-eslint/utils@6.7.0(eslint@8.45.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-MfCq3cM0vh2slSikQYqK2Gq52gvOhe57vD2RM3V4gQRZYX4rDPnKLu5p6cm89+LJiGlwEXU8hkYxhqqEC/V3qA==}
-    engines: {node: ^16.0.0 || >=18.0.0}
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
-    dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.45.0)
-      '@types/json-schema': 7.0.14
-      '@types/semver': 7.5.4
-      '@typescript-eslint/scope-manager': 6.7.0
-      '@typescript-eslint/types': 6.7.0
-      '@typescript-eslint/typescript-estree': 6.7.0(typescript@5.2.2)
-      eslint: 8.45.0
-      semver: 7.5.4
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-    dev: true
-
-  /@typescript-eslint/utils@6.8.0(eslint@8.51.0)(typescript@5.2.2):
+  /@typescript-eslint/utils@6.8.0(eslint@8.51.0)(typescript@5.3.2):
     resolution: {integrity: sha512-dKs1itdE2qFG4jr0dlYLQVppqTE+Itt7GmIf/vX6CSvsW+3ov8PbWauVKyyfNngokhIO9sKZeRGCUo1+N7U98Q==}
     engines: {node: ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -6006,7 +5812,7 @@ packages:
       '@types/semver': 7.5.4
       '@typescript-eslint/scope-manager': 6.8.0
       '@typescript-eslint/types': 6.8.0
-      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.2.2)
+      '@typescript-eslint/typescript-estree': 6.8.0(typescript@5.3.2)
       eslint: 8.51.0
       semver: 7.5.4
     transitivePeerDependencies:
@@ -7056,7 +6862,7 @@ packages:
       vary: 1.1.2
     dev: true
 
-  /cosmiconfig-typescript-loader@4.3.0(@types/node@18.11.19)(cosmiconfig@8.2.0)(ts-node@10.9.1)(typescript@5.2.2):
+  /cosmiconfig-typescript-loader@4.3.0(@types/node@18.11.19)(cosmiconfig@8.2.0)(ts-node@10.9.1)(typescript@5.3.2):
     resolution: {integrity: sha512-NTxV1MFfZDLPiBMjxbHRwSh5LaLcPMwNdCutmnHJCKoVnlvldPWlllonKwrsRJ5pYZBIBGRWWU2tfvzxgeSW5Q==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
@@ -7067,8 +6873,8 @@ packages:
     dependencies:
       '@types/node': 18.11.19
       cosmiconfig: 8.2.0
-      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.2.2)
-      typescript: 5.2.2
+      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.3.2)
+      typescript: 5.3.2
     dev: true
 
   /cosmiconfig@7.1.0:
@@ -7750,7 +7556,7 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       debug: 3.2.7
       eslint: 8.45.0
       eslint-import-resolver-node: 0.3.9
@@ -7768,7 +7574,7 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/parser': 6.3.0(eslint@8.45.0)(typescript@5.3.2)
       array-includes: 3.1.7
       array.prototype.findlastindex: 1.2.3
       array.prototype.flat: 1.3.2
@@ -7793,7 +7599,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jest@27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6):
+  /eslint-plugin-jest@27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.3.2):
     resolution: {integrity: sha512-3Nfvv3wbq2+PZlRTf2oaAWXWwbdBejFRBR2O8tAO67o+P8zno+QGbcDYaAXODlreXVg+9gvWhKKmG2rgfb8GEg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
@@ -7806,8 +7612,8 @@ packages:
       jest:
         optional: true
     dependencies:
-      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
-      '@typescript-eslint/utils': 5.61.0(eslint@8.45.0)(typescript@5.1.6)
+      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.3.2)
+      '@typescript-eslint/utils': 5.61.0(eslint@8.45.0)(typescript@5.3.2)
       eslint: 8.45.0
       jest: 29.7.0(@types/node@18.11.19)(ts-node@10.9.1)
     transitivePeerDependencies:
@@ -7815,7 +7621,7 @@ packages:
       - typescript
     dev: true
 
-  /eslint-plugin-jest@27.4.2(@typescript-eslint/eslint-plugin@6.7.0)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2):
+  /eslint-plugin-jest@27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.3.2):
     resolution: {integrity: sha512-3Nfvv3wbq2+PZlRTf2oaAWXWwbdBejFRBR2O8tAO67o+P8zno+QGbcDYaAXODlreXVg+9gvWhKKmG2rgfb8GEg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     peerDependencies:
@@ -7828,30 +7634,8 @@ packages:
       jest:
         optional: true
     dependencies:
-      '@typescript-eslint/eslint-plugin': 6.7.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
-      '@typescript-eslint/utils': 5.61.0(eslint@8.45.0)(typescript@5.2.2)
-      eslint: 8.45.0
-      jest: 29.7.0(@types/node@18.11.19)(ts-node@10.9.1)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-    dev: true
-
-  /eslint-plugin-jest@27.4.2(@typescript-eslint/eslint-plugin@6.8.0)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-3Nfvv3wbq2+PZlRTf2oaAWXWwbdBejFRBR2O8tAO67o+P8zno+QGbcDYaAXODlreXVg+9gvWhKKmG2rgfb8GEg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      '@typescript-eslint/eslint-plugin': ^5.0.0 || ^6.0.0
-      eslint: ^7.0.0 || ^8.0.0
-      jest: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/eslint-plugin':
-        optional: true
-      jest:
-        optional: true
-    dependencies:
-      '@typescript-eslint/eslint-plugin': 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
-      '@typescript-eslint/utils': 5.61.0(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/eslint-plugin': 6.8.0(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.3.2)
+      '@typescript-eslint/utils': 5.61.0(eslint@8.51.0)(typescript@5.3.2)
       eslint: 8.51.0
       jest: 29.7.0(@types/node@18.11.19)(ts-node@10.9.1)
     transitivePeerDependencies:
@@ -9637,7 +9421,7 @@ packages:
       pretty-format: 29.7.0
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.2.2)
+      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.3.2)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -11732,7 +11516,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.1.0
-      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.2.2)
+      ts-node: 10.9.1(@types/node@18.11.19)(typescript@5.3.2)
       yaml: 2.3.1
     dev: true
 
@@ -12125,7 +11909,7 @@ packages:
       glob: 10.3.10
     dev: true
 
-  /rollup-plugin-dts@6.0.1(rollup@3.27.2)(typescript@5.1.6):
+  /rollup-plugin-dts@6.0.1(rollup@3.27.2)(typescript@5.3.2):
     resolution: {integrity: sha512-XJbCldVrp4TLc2Hg4DfrRiJgzJ73uhZB0sPSDizgdlrhSJ1bsIkkRMkwRKNQYgkbfMz4CHLdbnFKVivHE0vsPA==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -12134,7 +11918,7 @@ packages:
     dependencies:
       magic-string: 0.30.3
       rollup: 3.27.2
-      typescript: 5.1.6
+      typescript: 5.3.2
     optionalDependencies:
       '@babel/code-frame': 7.23.4
     dev: true
@@ -13018,40 +12802,22 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-api-utils@1.0.1(typescript@5.1.6):
+  /ts-api-utils@1.0.1(typescript@5.3.2):
     resolution: {integrity: sha512-lC/RGlPmwdrIBFTX59wwNzqh7aR2otPNPR/5brHZm/XKFYKsfqxihXUe9pU3JI+3vGkl+vyCoNNnPhJn3aLK1A==}
     engines: {node: '>=16.13.0'}
     peerDependencies:
       typescript: '>=4.2.0'
     dependencies:
-      typescript: 5.1.6
+      typescript: 5.3.2
     dev: true
 
-  /ts-api-utils@1.0.1(typescript@5.2.2):
-    resolution: {integrity: sha512-lC/RGlPmwdrIBFTX59wwNzqh7aR2otPNPR/5brHZm/XKFYKsfqxihXUe9pU3JI+3vGkl+vyCoNNnPhJn3aLK1A==}
-    engines: {node: '>=16.13.0'}
-    peerDependencies:
-      typescript: '>=4.2.0'
-    dependencies:
-      typescript: 5.2.2
-    dev: true
-
-  /ts-api-utils@1.0.3(typescript@5.1.6):
+  /ts-api-utils@1.0.3(typescript@5.3.2):
     resolution: {integrity: sha512-wNMeqtMz5NtwpT/UZGY5alT+VoKdSsOOP/kqHFcUW1P/VRhH2wJ48+DN2WwUliNbQ976ETwDL0Ifd2VVvgonvg==}
     engines: {node: '>=16.13.0'}
     peerDependencies:
       typescript: '>=4.2.0'
     dependencies:
-      typescript: 5.1.6
-    dev: true
-
-  /ts-api-utils@1.0.3(typescript@5.2.2):
-    resolution: {integrity: sha512-wNMeqtMz5NtwpT/UZGY5alT+VoKdSsOOP/kqHFcUW1P/VRhH2wJ48+DN2WwUliNbQ976ETwDL0Ifd2VVvgonvg==}
-    engines: {node: '>=16.13.0'}
-    peerDependencies:
-      typescript: '>=4.2.0'
-    dependencies:
-      typescript: 5.2.2
+      typescript: 5.3.2
     dev: true
 
   /ts-interface-checker@0.1.13:
@@ -13071,7 +12837,7 @@ packages:
       tsconfig-paths: 3.14.2
     dev: true
 
-  /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.1.6):
+  /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.3.2):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -13097,38 +12863,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.1.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
-
-  /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.2.2):
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 18.11.19
-      acorn: 8.10.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.2.2
+      typescript: 5.3.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
@@ -13163,7 +12898,7 @@ packages:
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
-  /tsup@8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.1.6):
+  /tsup@8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.3.2):
     resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
     engines: {node: '>=18'}
     hasBin: true
@@ -13197,70 +12932,20 @@ packages:
       source-map: 0.8.0-beta.0
       sucrase: 3.32.0
       tree-kill: 1.2.2
-      typescript: 5.1.6
+      typescript: 5.3.2
     transitivePeerDependencies:
       - supports-color
       - ts-node
     dev: true
 
-  /tsup@8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2):
-    resolution: {integrity: sha512-hvW7gUSG96j53ZTSlT4j/KL0q1Q2l6TqGBFc6/mu/L46IoNWqLLUzLRLP1R8Q7xrJTmkDxxDoojV5uCVs1sVOg==}
-    engines: {node: '>=18'}
-    hasBin: true
-    peerDependencies:
-      '@microsoft/api-extractor': ^7.36.0
-      '@swc/core': ^1
-      postcss: ^8.4.12
-      typescript: '>=4.5.0'
-    peerDependenciesMeta:
-      '@microsoft/api-extractor':
-        optional: true
-      '@swc/core':
-        optional: true
-      postcss:
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@swc/core': 1.3.93
-      bundle-require: 4.0.1(esbuild@0.19.7)
-      cac: 6.7.14
-      chokidar: 3.5.3
-      debug: 4.3.4(supports-color@8.1.1)
-      esbuild: 0.19.7
-      execa: 5.1.1
-      globby: 11.1.0
-      joycon: 3.1.1
-      postcss-load-config: 4.0.1(ts-node@10.9.1)
-      resolve-from: 5.0.0
-      rollup: 4.5.0
-      source-map: 0.8.0-beta.0
-      sucrase: 3.32.0
-      tree-kill: 1.2.2
-      typescript: 5.2.2
-    transitivePeerDependencies:
-      - supports-color
-      - ts-node
-    dev: true
-
-  /tsutils@3.21.0(typescript@5.1.6):
+  /tsutils@3.21.0(typescript@5.3.2):
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     dependencies:
       tslib: 1.14.1
-      typescript: 5.1.6
-    dev: true
-
-  /tsutils@3.21.0(typescript@5.2.2):
-    resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
-    engines: {node: '>= 6'}
-    peerDependencies:
-      typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
-    dependencies:
-      tslib: 1.14.1
-      typescript: 5.2.2
+      typescript: 5.3.2
     dev: true
 
   /turbo-darwin-64@1.10.16:
@@ -13426,7 +13111,7 @@ packages:
     dependencies:
       is-typedarray: 1.0.0
 
-  /typedoc@0.25.4(typescript@5.1.6):
+  /typedoc@0.25.4(typescript@5.3.2):
     resolution: {integrity: sha512-Du9ImmpBCw54bX275yJrxPVnjdIyJO/84co0/L9mwe0R3G4FSR6rQ09AlXVRvZEGMUg09+z/usc8mgygQ1aidA==}
     engines: {node: '>= 16'}
     hasBin: true
@@ -13437,17 +13122,11 @@ packages:
       marked: 4.3.0
       minimatch: 9.0.3
       shiki: 0.14.2
-      typescript: 5.1.6
+      typescript: 5.3.2
     dev: true
 
-  /typescript@5.1.6:
-    resolution: {integrity: sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-    dev: true
-
-  /typescript@5.2.2:
-    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+  /typescript@5.3.2:
+    resolution: {integrity: sha512-6l+RyNy7oAHDfxC4FzSJcz9vnjTKxrLpDG5M2Vu4SHRVNg6xzqZp6LYSR9zjqQTu8DU/f5xwxUdADOkbrIX2gQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 

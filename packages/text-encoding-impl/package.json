@@ -61,7 +61,7 @@
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1",
-        "typescript": "^5.2.2"
+        "typescript": "^5.3.2"
     },
     "peerDependencies": {
         "fastestsmallesttextencoderdecoder": "^1.0.22"
