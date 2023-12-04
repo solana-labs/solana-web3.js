@@ -1,5 +1,17 @@
 {
   "repositoryUrl": "git@github.com:solana-labs/solana-web3.js.git",
+  "plugins": [
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./scripts/publish-dependencies-to-npm.sh ${nextRelease.version}",
+        "publishCmd": "pnpm publish --access public --no-git-checks${options.dryRun ? ' --dry-run' : ''}"
+      }
+    ],
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github"
+  ],
   "preset": "conventionalcommits",
   "presetConfig": {
     "issueUrlFormat": "{{host}}/{{owner}}/solana-web3.js/issues/{{id}}"
