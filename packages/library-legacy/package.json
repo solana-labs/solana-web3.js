@@ -26,7 +26,7 @@
   "react-native": "lib/index.native.js",
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
-  "types": "lib/index.d.ts",
+  "types": "declarations/index.d.ts",
   "browserslist": [
     "defaults",
     "not IE 11",
@@ -39,7 +39,7 @@
   "scripts": {
     "compile:docs": "typedoc --treatWarningsAsErrors",
     "compile:js": "cross-env NODE_ENV=production rollup -c",
-    "compile:typedefs": "./scripts/typegen.sh",
+    "compile:typedefs": "tsc -p ./tsconfig.d.json -d",
     "build:fixtures": "set -ex; ./test/fixtures/noop-program/build.sh",
     "clean": "rimraf ./doc ./declarations ./lib",
     "dev": "cross-env NODE_ENV=development rollup -c --watch",
@@ -116,7 +116,6 @@
     "prettier": "^3.1",
     "rimraf": "5.0.5",
     "rollup": "^3.27.2",
-    "rollup-plugin-dts": "^6.0.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^21.0.7",
     "sinon": "^15.2.0",
