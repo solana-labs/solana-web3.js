@@ -46,10 +46,10 @@ describe('getScalarEnumCodec', () => {
         expect(() => scalarEnum(Feedback).encode('Missing')).toThrow(
             'Invalid scalar enum variant. ' +
                 'Expected one of [0, 1, BAD, GOOD] or a number between 0 and 1, ' +
-                'got "Missing".'
+                'got "Missing".',
         );
         expect(() => scalarEnum(Feedback).read(new Uint8Array([2]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 1, got 2.'
+            'Enum discriminator out of range. Expected a number between 0 and 1, got 2.',
         );
     });
 
@@ -86,10 +86,10 @@ describe('getScalarEnumCodec', () => {
         expect(() => scalarEnum(Direction).encode('Diagonal' as unknown as Direction)).toThrow(
             'Invalid scalar enum variant. ' +
                 'Expected one of [UP, DOWN, LEFT, RIGHT, Up, Down, Left, Right] ' +
-                'or a number between 0 and 3, got "Diagonal".'
+                'or a number between 0 and 3, got "Diagonal".',
         );
         expect(() => scalarEnum(Direction).read(new Uint8Array([4]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.'
+            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.',
         );
     });
 

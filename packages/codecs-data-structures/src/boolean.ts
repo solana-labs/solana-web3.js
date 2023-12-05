@@ -37,7 +37,7 @@ export type BooleanCodecConfig<TSize extends NumberCodec | NumberEncoder | Numbe
  */
 export function getBooleanEncoder(): FixedSizeEncoder<boolean, 1>;
 export function getBooleanEncoder<TSize extends number>(
-    config: BooleanCodecConfig<NumberEncoder> & { size: FixedSizeNumberEncoder<TSize> }
+    config: BooleanCodecConfig<NumberEncoder> & { size: FixedSizeNumberEncoder<TSize> },
 ): FixedSizeEncoder<boolean, TSize>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder>): Encoder<boolean>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}): Encoder<boolean> {
@@ -53,7 +53,7 @@ export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}
  */
 export function getBooleanDecoder(): FixedSizeDecoder<boolean, 1>;
 export function getBooleanDecoder<TSize extends number>(
-    config: BooleanCodecConfig<NumberDecoder> & { size: FixedSizeNumberDecoder<TSize> }
+    config: BooleanCodecConfig<NumberDecoder> & { size: FixedSizeNumberDecoder<TSize> },
 ): FixedSizeDecoder<boolean, TSize>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): Decoder<boolean>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
@@ -69,7 +69,7 @@ export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}
  */
 export function getBooleanCodec(): FixedSizeCodec<boolean, boolean, 1>;
 export function getBooleanCodec<TSize extends number>(
-    config: BooleanCodecConfig<NumberCodec> & { size: FixedSizeNumberCodec<TSize> }
+    config: BooleanCodecConfig<NumberCodec> & { size: FixedSizeNumberCodec<TSize> },
 ): FixedSizeCodec<boolean, boolean, TSize>;
 export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec>): Codec<boolean>;
 export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec> = {}): Codec<boolean> {

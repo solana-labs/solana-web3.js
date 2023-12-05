@@ -69,7 +69,7 @@ describe('getMapCodec', () => {
 
         // It fails if the map has a different size.
         expect(() => map(u8(), u8(), { size: 1 }).encode(new Map())).toThrow(
-            'Expected [array] to have 1 items, got 0.'
+            'Expected [array] to have 1 items, got 0.',
         );
         expect(() => letters.encode(lettersMap.set('c', 3))).toThrow('Expected [array] to have 2 items, got 3.');
     });

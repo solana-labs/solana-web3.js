@@ -24,7 +24,7 @@ import { getUtf8Decoder, getUtf8Encoder } from './utf8';
 /** Defines the config for string codecs. */
 export type StringCodecConfig<
     TPrefix extends NumberCodec | NumberEncoder | NumberDecoder,
-    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>
+    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>,
 > = {
     /**
      * The size of the string. It can be one of the following:
@@ -44,16 +44,16 @@ export type StringCodecConfig<
 
 /** Encodes strings from a given encoding and size strategy. */
 export function getStringEncoder<TSize extends number>(
-    config: StringCodecConfig<NumberEncoder, Encoder<string>> & { size: TSize }
+    config: StringCodecConfig<NumberEncoder, Encoder<string>> & { size: TSize },
 ): FixedSizeEncoder<string, TSize>;
 export function getStringEncoder<TSize extends number>(
     config: StringCodecConfig<NumberEncoder, Encoder<string>> & {
         size: 'variable';
         encoding: FixedSizeEncoder<string, TSize>;
-    }
+    },
 ): FixedSizeEncoder<string, TSize>;
 export function getStringEncoder(
-    config?: StringCodecConfig<NumberEncoder, Encoder<string>>
+    config?: StringCodecConfig<NumberEncoder, Encoder<string>>,
 ): VariableSizeEncoder<string>;
 export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encoder<string>> = {}): Encoder<string> {
     const size = config.size ?? getU32Encoder();
@@ -82,16 +82,16 @@ export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encode
 
 /** Decodes strings from a given encoding and size strategy. */
 export function getStringDecoder<TSize extends number>(
-    config: StringCodecConfig<NumberDecoder, Decoder<string>> & { size: TSize }
+    config: StringCodecConfig<NumberDecoder, Decoder<string>> & { size: TSize },
 ): FixedSizeDecoder<string, TSize>;
 export function getStringDecoder<TSize extends number>(
     config: StringCodecConfig<NumberDecoder, Decoder<string>> & {
         size: 'variable';
         encoding: FixedSizeDecoder<string, TSize>;
-    }
+    },
 ): FixedSizeDecoder<string, TSize>;
 export function getStringDecoder(
-    config?: StringCodecConfig<NumberDecoder, Decoder<string>>
+    config?: StringCodecConfig<NumberDecoder, Decoder<string>>,
 ): VariableSizeDecoder<string>;
 export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decoder<string>> = {}): Decoder<string> {
     const size = config.size ?? getU32Decoder();
@@ -122,13 +122,13 @@ export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decode
 
 /** Encodes and decodes strings from a given encoding and size strategy. */
 export function getStringCodec<TSize extends number>(
-    config: StringCodecConfig<NumberCodec, Codec<string>> & { size: TSize }
+    config: StringCodecConfig<NumberCodec, Codec<string>> & { size: TSize },
 ): FixedSizeCodec<string, string, TSize>;
 export function getStringCodec<TSize extends number>(
     config: StringCodecConfig<NumberCodec, Codec<string>> & {
         size: 'variable';
         encoding: FixedSizeCodec<string, string, TSize>;
-    }
+    },
 ): FixedSizeCodec<string, string, TSize>;
 export function getStringCodec(config?: StringCodecConfig<NumberCodec, Codec<string>>): VariableSizeCodec<string>;
 export function getStringCodec(config: StringCodecConfig<NumberCodec, Codec<string>> = {}): Codec<string> {

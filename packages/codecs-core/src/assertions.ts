@@ -15,7 +15,7 @@ export function assertByteArrayHasEnoughBytesForCodec(
     codecDescription: string,
     expected: number,
     bytes: Uint8Array,
-    offset = 0
+    offset = 0,
 ) {
     const bytesLength = bytes.length - offset;
     if (bytesLength < expected) {

@@ -55,19 +55,19 @@ export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Nu
  */
 export function getNullableEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: NullableCodecConfig<FixedSizeNumberEncoder> & { fixed: true }
+    config: NullableCodecConfig<FixedSizeNumberEncoder> & { fixed: true },
 ): FixedSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberEncoder>
+    config?: NullableCodecConfig<FixedSizeNumberEncoder>,
 ): FixedSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config?: NullableCodecConfig<NumberEncoder> & { fixed?: false }
+    config?: NullableCodecConfig<NumberEncoder> & { fixed?: false },
 ): VariableSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config: NullableCodecConfig<NumberEncoder> = {}
+    config: NullableCodecConfig<NumberEncoder> = {},
 ): Encoder<TFrom | null> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
@@ -111,19 +111,19 @@ export function getNullableEncoder<TFrom>(
  */
 export function getNullableDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: NullableCodecConfig<FixedSizeNumberDecoder> & { fixed: true }
+    config: NullableCodecConfig<FixedSizeNumberDecoder> & { fixed: true },
 ): FixedSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
     item: FixedSizeDecoder<TTo, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberDecoder>
+    config?: NullableCodecConfig<FixedSizeNumberDecoder>,
 ): FixedSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
     item: Decoder<TTo>,
-    config?: NullableCodecConfig<NumberDecoder> & { fixed?: false }
+    config?: NullableCodecConfig<NumberDecoder> & { fixed?: false },
 ): VariableSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
     item: Decoder<TTo>,
-    config: NullableCodecConfig<NumberDecoder> = {}
+    config: NullableCodecConfig<NumberDecoder> = {},
 ): Decoder<TTo | null> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
@@ -162,19 +162,19 @@ export function getNullableDecoder<TTo>(
  */
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: NullableCodecConfig<FixedSizeNumberCodec> & { fixed: true }
+    config: NullableCodecConfig<FixedSizeNumberCodec> & { fixed: true },
 ): FixedSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberCodec>
+    config?: NullableCodecConfig<FixedSizeNumberCodec>,
 ): FixedSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config?: NullableCodecConfig<NumberCodec> & { fixed?: false }
+    config?: NullableCodecConfig<NumberCodec> & { fixed?: false },
 ): VariableSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config: NullableCodecConfig<NumberCodec> = {}
+    config: NullableCodecConfig<NumberCodec> = {},
 ): Codec<TFrom | null, TTo | null> {
     const configCast = config as NullableCodecConfig<NumberCodec> & { fixed?: false };
     return combineCodec(getNullableEncoder<TFrom>(item, configCast), getNullableDecoder<TTo>(item, configCast));

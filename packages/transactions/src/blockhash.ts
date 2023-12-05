@@ -45,7 +45,7 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
 }
 
 function isTransactionWithBlockhashLifetime(
-    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 ): transaction is BaseTransaction & ITransactionWithBlockhashLifetime {
     const lifetimeConstraintShapeMatches =
         'lifetimeConstraint' in transaction &&
@@ -61,7 +61,7 @@ function isTransactionWithBlockhashLifetime(
 }
 
 export function assertIsTransactionWithBlockhashLifetime(
-    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime)
+    transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 ): asserts transaction is BaseTransaction & ITransactionWithBlockhashLifetime {
     if (!isTransactionWithBlockhashLifetime(transaction)) {
         // TODO: Coded error.

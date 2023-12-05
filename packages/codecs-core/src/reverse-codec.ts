@@ -12,7 +12,7 @@ import { combineCodec } from './combine-codec';
  * Reverses the bytes of a fixed-size encoder.
  */
 export function reverseEncoder<TFrom, TSize extends number>(
-    encoder: FixedSizeEncoder<TFrom, TSize>
+    encoder: FixedSizeEncoder<TFrom, TSize>,
 ): FixedSizeEncoder<TFrom, TSize> {
     assertIsFixedSize(encoder, 'Cannot reverse a codec of variable size.');
     return createEncoder({
@@ -30,7 +30,7 @@ export function reverseEncoder<TFrom, TSize extends number>(
  * Reverses the bytes of a fixed-size decoder.
  */
 export function reverseDecoder<TTo, TSize extends number>(
-    decoder: FixedSizeDecoder<TTo, TSize>
+    decoder: FixedSizeDecoder<TTo, TSize>,
 ): FixedSizeDecoder<TTo, TSize> {
     assertIsFixedSize(decoder, 'Cannot reverse a codec of variable size.');
     return createDecoder({
@@ -51,7 +51,7 @@ export function reverseDecoder<TTo, TSize extends number>(
  * Reverses the bytes of a fixed-size codec.
  */
 export function reverseCodec<TFrom, TTo extends TFrom, TSize extends number>(
-    codec: FixedSizeCodec<TFrom, TTo, TSize>
+    codec: FixedSizeCodec<TFrom, TTo, TSize>,
 ): FixedSizeCodec<TFrom, TTo, TSize> {
     return combineCodec(reverseEncoder(codec), reverseDecoder(codec));
 }

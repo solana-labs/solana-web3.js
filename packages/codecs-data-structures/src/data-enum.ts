@@ -64,7 +64,7 @@ export type DataEnumToEncoderTuple<TFrom extends DataEnum> = Array<
               TFrom['__kind'],
               keyof Omit<TFrom, '__kind'> extends never
                   ? Encoder<Omit<TFrom, '__kind'>> | Encoder<void>
-                  : Encoder<Omit<TFrom, '__kind'>>
+                  : Encoder<Omit<TFrom, '__kind'>>,
           ]
 >;
 
@@ -76,7 +76,7 @@ export type DataEnumToDecoderTuple<TTo extends DataEnum> = Array<
               TTo['__kind'],
               keyof Omit<TTo, '__kind'> extends never
                   ? Decoder<Omit<TTo, '__kind'>> | Decoder<void>
-                  : Decoder<Omit<TTo, '__kind'>>
+                  : Decoder<Omit<TTo, '__kind'>>,
           ]
 >;
 
@@ -88,7 +88,7 @@ export type DataEnumToCodecTuple<TFrom extends DataEnum, TTo extends TFrom = TFr
               TFrom['__kind'],
               keyof Omit<TFrom, '__kind'> extends never
                   ? Codec<Omit<TFrom, '__kind'>, Omit<TTo, '__kind'>> | Codec<void>
-                  : Codec<Omit<TFrom, '__kind'>, Omit<TTo, '__kind'>>
+                  : Codec<Omit<TFrom, '__kind'>, Omit<TTo, '__kind'>>,
           ]
 >;
 
@@ -109,7 +109,7 @@ export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberEncoder | N
  */
 export function getDataEnumEncoder<TFrom extends DataEnum>(
     variants: DataEnumToEncoderTuple<TFrom>,
-    config: DataEnumCodecConfig<NumberEncoder> = {}
+    config: DataEnumCodecConfig<NumberEncoder> = {},
 ): Encoder<TFrom> {
     const prefix = config.size ?? getU8Encoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
@@ -144,7 +144,7 @@ export function getDataEnumEncoder<TFrom extends DataEnum>(
  */
 export function getDataEnumDecoder<T extends DataEnum>(
     variants: DataEnumToDecoderTuple<T>,
-    config: DataEnumCodecConfig<NumberDecoder> = {}
+    config: DataEnumCodecConfig<NumberDecoder> = {},
 ): Decoder<T> {
     const prefix = config.size ?? getU8Decoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
@@ -159,7 +159,7 @@ export function getDataEnumDecoder<T extends DataEnum>(
                 // TODO: Coded error.
                 throw new Error(
                     `Enum discriminator out of range. ` +
-                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`
+                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`,
                 );
             }
             const [variant, vOffset] = variantField[1].read(bytes, offset);
@@ -177,20 +177,20 @@ export function getDataEnumDecoder<T extends DataEnum>(
  */
 export function getDataEnumCodec<T extends DataEnum, U extends T = T>(
     variants: DataEnumToCodecTuple<T, U>,
-    config: DataEnumCodecConfig<NumberCodec> = {}
+    config: DataEnumCodecConfig<NumberCodec> = {},
 ): Codec<T, U> {
     return combineCodec(getDataEnumEncoder<T>(variants, config), getDataEnumDecoder<U>(variants, config));
 }
 
 function getDataEnumFixedSize<T extends DataEnum>(
     variants: DataEnumToEncoderTuple<T> | DataEnumToDecoderTuple<T>,
-    prefix: { fixedSize: number } | object
+    prefix: { fixedSize: number } | object,
 ): number | null {
     if (variants.length === 0) return isFixedSize(prefix) ? prefix.fixedSize : null;
     if (!isFixedSize(variants[0][1])) return null;
     const variantSize = variants[0][1].fixedSize;
     const sameSizedVariants = variants.every(
-        variant => isFixedSize(variant[1]) && variant[1].fixedSize === variantSize
+        variant => isFixedSize(variant[1]) && variant[1].fixedSize === variantSize,
     );
     if (!sameSizedVariants) return null;
     return isFixedSize(prefix) ? prefix.fixedSize + variantSize : null;
@@ -198,7 +198,7 @@ function getDataEnumFixedSize<T extends DataEnum>(
 
 function getDataEnumMaxSize<T extends DataEnum>(
     variants: DataEnumToEncoderTuple<T> | DataEnumToDecoderTuple<T>,
-    prefix: { fixedSize: number } | object
+    prefix: { fixedSize: number } | object,
 ) {
     const maxVariantSize = maxCodecSizes(variants.map(([, codec]) => getMaxSize(codec)));
     return sumCodecSizes([getMaxSize(prefix), maxVariantSize]) ?? undefined;
@@ -211,7 +211,7 @@ function getVariantDiscriminator<TFrom extends DataEnum>(variants: DataEnumToEnc
         throw new Error(
             `Invalid data enum variant. ` +
                 `Expected one of [${variants.map(([key]) => key).join(', ')}], ` +
-                `got "${variant.__kind}".`
+                `got "${variant.__kind}".`,
         );
     }
     return discriminator;

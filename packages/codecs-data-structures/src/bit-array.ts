@@ -25,7 +25,7 @@ export type BitArrayCodecConfig = {
  */
 export function getBitArrayEncoder<TSize extends number>(
     size: TSize,
-    config: BitArrayCodecConfig | boolean = {}
+    config: BitArrayCodecConfig | boolean = {},
 ): FixedSizeEncoder<boolean[], TSize> {
     const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
     const backward = parsedConfig.backward ?? false;
@@ -61,7 +61,7 @@ export function getBitArrayEncoder<TSize extends number>(
  */
 export function getBitArrayDecoder<TSize extends number>(
     size: TSize,
-    config: BitArrayCodecConfig | boolean = {}
+    config: BitArrayCodecConfig | boolean = {},
 ): FixedSizeDecoder<boolean[], TSize> {
     const parsedConfig: BitArrayCodecConfig = typeof config === 'boolean' ? { backward: config } : config;
     const backward = parsedConfig.backward ?? false;
@@ -98,7 +98,7 @@ export function getBitArrayDecoder<TSize extends number>(
  */
 export function getBitArrayCodec<TSize extends number>(
     size: TSize,
-    config: BitArrayCodecConfig | boolean = {}
+    config: BitArrayCodecConfig | boolean = {},
 ): FixedSizeCodec<boolean[], boolean[], TSize> {
     return combineCodec(getBitArrayEncoder(size, config), getBitArrayDecoder(size, config));
 }

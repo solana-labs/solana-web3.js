@@ -1,4 +1,4 @@
-import { Codec, createCodec } from "@solana/codecs-core";
+import { Codec, createCodec } from '@solana/codecs-core';
 
 export const b = (s: string) => base16.encode(s);
 
@@ -21,7 +21,7 @@ export const getMockCodec = (
         defaultValue?: string;
         description?: string;
         size?: number | null;
-    } = {}
+    } = {},
 ) =>
     createCodec({
         ...(config.size != null ? { fixedSize: config.size } : { getSizeFromValue: jest.fn().mockReturnValue(0) }),

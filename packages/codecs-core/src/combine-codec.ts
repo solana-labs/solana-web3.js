@@ -18,19 +18,19 @@ import {
  */
 export function combineCodec<TFrom, TTo extends TFrom, TSize extends number>(
     encoder: FixedSizeEncoder<TFrom, TSize>,
-    decoder: FixedSizeDecoder<TTo, TSize>
+    decoder: FixedSizeDecoder<TTo, TSize>,
 ): FixedSizeCodec<TFrom, TTo, TSize>;
 export function combineCodec<TFrom, TTo extends TFrom>(
     encoder: VariableSizeEncoder<TFrom>,
-    decoder: VariableSizeDecoder<TTo>
+    decoder: VariableSizeDecoder<TTo>,
 ): VariableSizeCodec<TFrom, TTo>;
 export function combineCodec<TFrom, TTo extends TFrom>(
     encoder: Encoder<TFrom>,
-    decoder: Decoder<TTo>
+    decoder: Decoder<TTo>,
 ): Codec<TFrom, TTo>;
 export function combineCodec<TFrom, TTo extends TFrom>(
     encoder: Encoder<TFrom>,
-    decoder: Decoder<TTo>
+    decoder: Decoder<TTo>,
 ): Codec<TFrom, TTo> {
     if (isFixedSize(encoder) !== isFixedSize(decoder)) {
         // TODO: Coded error.
@@ -40,14 +40,14 @@ export function combineCodec<TFrom, TTo extends TFrom>(
     if (isFixedSize(encoder) && isFixedSize(decoder) && encoder.fixedSize !== decoder.fixedSize) {
         // TODO: Coded error.
         throw new Error(
-            `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`
+            `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`,
         );
     }
 
     if (!isFixedSize(encoder) && !isFixedSize(decoder) && encoder.maxSize !== decoder.maxSize) {
         // TODO: Coded error.
         throw new Error(
-            `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`
+            `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`,
         );
     }
 

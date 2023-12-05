@@ -30,16 +30,16 @@ import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
     mapCodec(
         {} as FixedSizeCodec<string, string, 42>,
         (_: number) => '42',
-        (_: string) => 42
+        (_: string) => 42,
     ) satisfies FixedSizeCodec<number, number, 42>;
     mapCodec(
         {} as VariableSizeCodec<string>,
         (_: number) => '42',
-        (_: string) => 42
+        (_: string) => 42,
     ) satisfies VariableSizeCodec<number>;
     mapCodec(
         {} as Codec<string>,
         (_: number) => '42',
-        (_: string) => 42
+        (_: string) => 42,
     ) satisfies Codec<number>;
 }

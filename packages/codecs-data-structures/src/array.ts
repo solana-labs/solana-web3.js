@@ -53,23 +53,23 @@ export type ArrayCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Numbe
  */
 export function getArrayEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config: ArrayCodecConfig<NumberEncoder> & { size: 0 }
+    config: ArrayCodecConfig<NumberEncoder> & { size: 0 },
 ): FixedSizeEncoder<TFrom[], 0>;
 export function getArrayEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: ArrayCodecConfig<NumberEncoder> & { size: number }
+    config: ArrayCodecConfig<NumberEncoder> & { size: number },
 ): FixedSizeEncoder<TFrom[]>;
 export function getArrayEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: ArrayCodecConfig<NumberEncoder> & { size: 'remainder' }
+    config: ArrayCodecConfig<NumberEncoder> & { size: 'remainder' },
 ): VariableSizeEncoder<TFrom[]>;
 export function getArrayEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config?: ArrayCodecConfig<NumberEncoder> & { size?: number | NumberEncoder }
+    config?: ArrayCodecConfig<NumberEncoder> & { size?: number | NumberEncoder },
 ): VariableSizeEncoder<TFrom[]>;
 export function getArrayEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config: ArrayCodecConfig<NumberEncoder> = {}
+    config: ArrayCodecConfig<NumberEncoder> = {},
 ): Encoder<TFrom[]> {
     const size = config.size ?? getU32Encoder();
     if (size === 'remainder') {
@@ -112,19 +112,19 @@ export function getArrayEncoder<TFrom>(
  */
 export function getArrayDecoder<TTo>(
     item: Decoder<TTo>,
-    config: ArrayCodecConfig<NumberDecoder> & { size: 0 }
+    config: ArrayCodecConfig<NumberDecoder> & { size: 0 },
 ): FixedSizeDecoder<TTo[], 0>;
 export function getArrayDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: ArrayCodecConfig<NumberDecoder> & { size: number }
+    config: ArrayCodecConfig<NumberDecoder> & { size: number },
 ): FixedSizeDecoder<TTo[]>;
 export function getArrayDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: ArrayCodecConfig<NumberDecoder> & { size: 'remainder' }
+    config: ArrayCodecConfig<NumberDecoder> & { size: 'remainder' },
 ): VariableSizeDecoder<TTo[]>;
 export function getArrayDecoder<TTo>(
     item: Decoder<TTo>,
-    config?: ArrayCodecConfig<NumberDecoder> & { size?: number | NumberDecoder }
+    config?: ArrayCodecConfig<NumberDecoder> & { size?: number | NumberDecoder },
 ): VariableSizeDecoder<TTo[]>;
 export function getArrayDecoder<TTo>(item: Decoder<TTo>, config: ArrayCodecConfig<NumberDecoder> = {}): Decoder<TTo[]> {
     const size = config.size ?? getU32Decoder();
@@ -163,23 +163,23 @@ export function getArrayDecoder<TTo>(item: Decoder<TTo>, config: ArrayCodecConfi
  */
 export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config: ArrayCodecConfig<NumberCodec> & { size: 0 }
+    config: ArrayCodecConfig<NumberCodec> & { size: 0 },
 ): FixedSizeCodec<TFrom[], TTo[], 0>;
 export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: ArrayCodecConfig<NumberCodec> & { size: number }
+    config: ArrayCodecConfig<NumberCodec> & { size: number },
 ): FixedSizeCodec<TFrom[], TTo[]>;
 export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: ArrayCodecConfig<NumberCodec> & { size: 'remainder' }
+    config: ArrayCodecConfig<NumberCodec> & { size: 'remainder' },
 ): VariableSizeCodec<TFrom[], TTo[]>;
 export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config?: ArrayCodecConfig<NumberCodec> & { size?: number | NumberCodec }
+    config?: ArrayCodecConfig<NumberCodec> & { size?: number | NumberCodec },
 ): VariableSizeCodec<TFrom[], TTo[]>;
 export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config: ArrayCodecConfig<NumberCodec> = {}
+    config: ArrayCodecConfig<NumberCodec> = {},
 ): Codec<TFrom[], TTo[]> {
     return combineCodec(getArrayEncoder(item, config as object), getArrayDecoder(item, config as object));
 }
@@ -188,7 +188,7 @@ function readArrayLikeCodecSize(
     size: ArrayLikeCodecSize<NumberDecoder>,
     itemSize: number | null,
     bytes: Uint8Array,
-    offset: Offset
+    offset: Offset,
 ): [number | bigint, Offset] {
     if (typeof size === 'number') {
         return [size, offset];
@@ -209,7 +209,7 @@ function readArrayLikeCodecSize(
             throw new Error(
                 `The remainder of the byte array (${remainder} bytes) cannot be split into chunks of ${itemSize} bytes. ` +
                     `Codecs of "remainder" size must have a remainder that is a multiple of its item size. ` +
-                    `In other words, ${remainder} modulo ${itemSize} should be equal to zero.`
+                    `In other words, ${remainder} modulo ${itemSize} should be equal to zero.`,
             );
         }
         return [remainder / itemSize, offset];

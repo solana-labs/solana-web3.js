@@ -64,7 +64,7 @@ export type StructToFixedSizeCodecTuple<TFrom extends object, TTo extends TFrom>
  * @param fields - The name and encoder of each field.
  */
 export function getStructEncoder<TFrom extends object>(
-    fields: StructToFixedSizeEncoderTuple<TFrom>
+    fields: StructToFixedSizeEncoderTuple<TFrom>,
 ): FixedSizeEncoder<TFrom>;
 export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTuple<TFrom>): VariableSizeEncoder<TFrom>;
 export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTuple<TFrom>): Encoder<TFrom> {
@@ -123,13 +123,13 @@ export function getStructDecoder<TTo extends object>(fields: StructToDecoderTupl
  * @param fields - The name and codec of each field.
  */
 export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToFixedSizeCodecTuple<TFrom, TTo>
+    fields: StructToFixedSizeCodecTuple<TFrom, TTo>,
 ): FixedSizeCodec<TFrom, TTo>;
 export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToCodecTuple<TFrom, TTo>
+    fields: StructToCodecTuple<TFrom, TTo>,
 ): VariableSizeCodec<TFrom, TTo>;
 export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToCodecTuple<TFrom, TTo>
+    fields: StructToCodecTuple<TFrom, TTo>,
 ): Codec<TFrom, TTo> {
     return combineCodec(getStructEncoder(fields), getStructDecoder(fields));
 }

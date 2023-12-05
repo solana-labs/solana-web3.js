@@ -37,7 +37,7 @@ export type BytesCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberD
  * @param config - A set of config for the encoder.
  */
 export function getBytesEncoder<TSize extends number>(
-    config: BytesCodecConfig<NumberEncoder> & { size: TSize }
+    config: BytesCodecConfig<NumberEncoder> & { size: TSize },
 ): FixedSizeEncoder<Uint8Array, TSize>;
 export function getBytesEncoder(config?: BytesCodecConfig<NumberEncoder>): VariableSizeEncoder<Uint8Array>;
 export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): Encoder<Uint8Array> {
@@ -74,7 +74,7 @@ export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): E
  * @param config - A set of config for the decoder.
  */
 export function getBytesDecoder<TSize extends number>(
-    config: BytesCodecConfig<NumberDecoder> & { size: TSize }
+    config: BytesCodecConfig<NumberDecoder> & { size: TSize },
 ): FixedSizeDecoder<Uint8Array, TSize>;
 export function getBytesDecoder(config?: BytesCodecConfig<NumberDecoder>): VariableSizeDecoder<Uint8Array>;
 export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): Decoder<Uint8Array> {
@@ -116,7 +116,7 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
  * @param config - A set of config for the codec.
  */
 export function getBytesCodec<TSize extends number>(
-    config: BytesCodecConfig<NumberCodec> & { size: TSize }
+    config: BytesCodecConfig<NumberCodec> & { size: TSize },
 ): FixedSizeCodec<Uint8Array, Uint8Array, TSize>;
 export function getBytesCodec(config?: BytesCodecConfig<NumberCodec>): VariableSizeCodec<Uint8Array>;
 export function getBytesCodec(config: BytesCodecConfig<NumberCodec> = {}): Codec<Uint8Array> {

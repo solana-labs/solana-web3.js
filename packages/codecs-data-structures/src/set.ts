@@ -33,23 +33,23 @@ export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberD
  */
 export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config: SetCodecConfig<NumberEncoder> & { size: 0 }
+    config: SetCodecConfig<NumberEncoder> & { size: 0 },
 ): FixedSizeEncoder<Set<TFrom>, 0>;
 export function getSetEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: SetCodecConfig<NumberEncoder> & { size: number }
+    config: SetCodecConfig<NumberEncoder> & { size: number },
 ): FixedSizeEncoder<Set<TFrom>>;
 export function getSetEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: SetCodecConfig<NumberEncoder> & { size: 'remainder' }
+    config: SetCodecConfig<NumberEncoder> & { size: 'remainder' },
 ): VariableSizeEncoder<Set<TFrom>>;
 export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config?: SetCodecConfig<NumberEncoder> & { size?: number | NumberEncoder }
+    config?: SetCodecConfig<NumberEncoder> & { size?: number | NumberEncoder },
 ): VariableSizeEncoder<Set<TFrom>>;
 export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config: SetCodecConfig<NumberEncoder> = {}
+    config: SetCodecConfig<NumberEncoder> = {},
 ): Encoder<Set<TFrom>> {
     return mapEncoder(getArrayEncoder(item, config as object), (set: Set<TFrom>): TFrom[] => [...set]);
 }
@@ -62,19 +62,19 @@ export function getSetEncoder<TFrom>(
  */
 export function getSetDecoder<TTo>(
     item: Decoder<TTo>,
-    config: SetCodecConfig<NumberDecoder> & { size: 0 }
+    config: SetCodecConfig<NumberDecoder> & { size: 0 },
 ): FixedSizeDecoder<Set<TTo>, 0>;
 export function getSetDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: SetCodecConfig<NumberDecoder> & { size: number }
+    config: SetCodecConfig<NumberDecoder> & { size: number },
 ): FixedSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: SetCodecConfig<NumberDecoder> & { size: 'remainder' }
+    config: SetCodecConfig<NumberDecoder> & { size: 'remainder' },
 ): VariableSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(
     item: Decoder<TTo>,
-    config?: SetCodecConfig<NumberDecoder> & { size?: number | NumberDecoder }
+    config?: SetCodecConfig<NumberDecoder> & { size?: number | NumberDecoder },
 ): VariableSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(item: Decoder<TTo>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<TTo>> {
     return mapDecoder(getArrayDecoder(item, config as object), (entries: TTo[]): Set<TTo> => new Set(entries));
@@ -88,23 +88,23 @@ export function getSetDecoder<TTo>(item: Decoder<TTo>, config: SetCodecConfig<Nu
  */
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config: SetCodecConfig<NumberCodec> & { size: 0 }
+    config: SetCodecConfig<NumberCodec> & { size: 0 },
 ): FixedSizeCodec<Set<TFrom>, Set<TTo>, 0>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: SetCodecConfig<NumberCodec> & { size: number }
+    config: SetCodecConfig<NumberCodec> & { size: number },
 ): FixedSizeCodec<Set<TFrom>, Set<TTo>>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: SetCodecConfig<NumberCodec> & { size: 'remainder' }
+    config: SetCodecConfig<NumberCodec> & { size: 'remainder' },
 ): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config?: SetCodecConfig<NumberCodec> & { size?: number | NumberCodec }
+    config?: SetCodecConfig<NumberCodec> & { size?: number | NumberCodec },
 ): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config: SetCodecConfig<NumberCodec> = {}
+    config: SetCodecConfig<NumberCodec> = {},
 ): Codec<Set<TFrom>, Set<TTo>> {
     return combineCodec(getSetEncoder(item, config as object), getSetDecoder(item, config as object));
 }

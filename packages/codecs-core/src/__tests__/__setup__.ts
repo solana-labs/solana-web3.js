@@ -21,7 +21,7 @@ export const getMockCodec = (
         defaultValue?: string;
         description?: string;
         size?: number | null;
-    } = {}
+    } = {},
 ) =>
     createCodec({
         ...(config.size != null ? { fixedSize: config.size } : { getSizeFromValue: jest.fn().mockReturnValue(0) }),

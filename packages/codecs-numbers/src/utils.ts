@@ -31,7 +31,7 @@ function isLittleEndian(config?: NumberCodecConfig): boolean {
 }
 
 export function numberEncoderFactory<TFrom extends number | bigint, TSize extends number>(
-    input: NumberFactoryEncoderInput<TFrom, TSize>
+    input: NumberFactoryEncoderInput<TFrom, TSize>,
 ): FixedSizeEncoder<TFrom, TSize> {
     return createEncoder({
         fixedSize: input.size,
@@ -48,7 +48,7 @@ export function numberEncoderFactory<TFrom extends number | bigint, TSize extend
 }
 
 export function numberDecoderFactory<TTo extends number | bigint, TSize extends number>(
-    input: NumberFactoryDecoderInput<TTo, TSize>
+    input: NumberFactoryDecoderInput<TTo, TSize>,
 ): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: input.size,

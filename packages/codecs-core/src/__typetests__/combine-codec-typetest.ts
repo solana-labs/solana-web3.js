@@ -20,7 +20,7 @@ import { combineCodec } from '../combine-codec';
     >;
     combineCodec(
         {} as VariableSizeEncoder<string>,
-        {} as VariableSizeDecoder<string>
+        {} as VariableSizeDecoder<string>,
     ) satisfies VariableSizeCodec<string>;
     combineCodec({} as Encoder<string>, {} as Decoder<string>) satisfies Codec<string>;
 }

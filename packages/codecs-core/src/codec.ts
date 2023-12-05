@@ -79,21 +79,21 @@ export type Codec<TFrom, TTo extends TFrom = TFrom> = FixedSizeCodec<TFrom, TTo>
  */
 export function getEncodedSize<TFrom>(
     value: TFrom,
-    encoder: { fixedSize: number } | { getSizeFromValue: (value: TFrom) => number }
+    encoder: { fixedSize: number } | { getSizeFromValue: (value: TFrom) => number },
 ): number {
     return 'fixedSize' in encoder ? encoder.fixedSize : encoder.getSizeFromValue(value);
 }
 
 /** Fills the missing `encode` function using the existing `write` function. */
 export function createEncoder<TFrom, TSize extends number>(
-    encoder: Omit<FixedSizeEncoder<TFrom, TSize>, 'encode'>
+    encoder: Omit<FixedSizeEncoder<TFrom, TSize>, 'encode'>,
 ): FixedSizeEncoder<TFrom, TSize>;
 export function createEncoder<TFrom>(encoder: Omit<VariableSizeEncoder<TFrom>, 'encode'>): VariableSizeEncoder<TFrom>;
 export function createEncoder<TFrom>(
-    encoder: Omit<FixedSizeEncoder<TFrom>, 'encode'> | Omit<VariableSizeEncoder<TFrom>, 'encode'>
+    encoder: Omit<FixedSizeEncoder<TFrom>, 'encode'> | Omit<VariableSizeEncoder<TFrom>, 'encode'>,
 ): Encoder<TFrom>;
 export function createEncoder<TFrom>(
-    encoder: Omit<FixedSizeEncoder<TFrom>, 'encode'> | Omit<VariableSizeEncoder<TFrom>, 'encode'>
+    encoder: Omit<FixedSizeEncoder<TFrom>, 'encode'> | Omit<VariableSizeEncoder<TFrom>, 'encode'>,
 ): Encoder<TFrom> {
     return Object.freeze({
         ...encoder,
@@ -107,14 +107,14 @@ export function createEncoder<TFrom>(
 
 /** Fills the missing `decode` function using the existing `read` function. */
 export function createDecoder<TTo, TSize extends number>(
-    decoder: Omit<FixedSizeDecoder<TTo, TSize>, 'decode'>
+    decoder: Omit<FixedSizeDecoder<TTo, TSize>, 'decode'>,
 ): FixedSizeDecoder<TTo, TSize>;
 export function createDecoder<TTo>(decoder: Omit<VariableSizeDecoder<TTo>, 'decode'>): VariableSizeDecoder<TTo>;
 export function createDecoder<TTo>(
-    decoder: Omit<FixedSizeDecoder<TTo>, 'decode'> | Omit<VariableSizeDecoder<TTo>, 'decode'>
+    decoder: Omit<FixedSizeDecoder<TTo>, 'decode'> | Omit<VariableSizeDecoder<TTo>, 'decode'>,
 ): Decoder<TTo>;
 export function createDecoder<TTo>(
-    decoder: Omit<FixedSizeDecoder<TTo>, 'decode'> | Omit<VariableSizeDecoder<TTo>, 'decode'>
+    decoder: Omit<FixedSizeDecoder<TTo>, 'decode'> | Omit<VariableSizeDecoder<TTo>, 'decode'>,
 ): Decoder<TTo> {
     return Object.freeze({
         ...decoder,
@@ -124,20 +124,20 @@ export function createDecoder<TTo>(
 
 /** Fills the missing `encode` and `decode` function using the existing `write` and `read` functions. */
 export function createCodec<TFrom, TTo extends TFrom = TFrom, TSize extends number = number>(
-    codec: Omit<FixedSizeCodec<TFrom, TTo, TSize>, 'encode' | 'decode'>
+    codec: Omit<FixedSizeCodec<TFrom, TTo, TSize>, 'encode' | 'decode'>,
 ): FixedSizeCodec<TFrom, TTo, TSize>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
-    codec: Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
+    codec: Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
 ): VariableSizeCodec<TFrom, TTo>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
     codec:
         | Omit<FixedSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
-        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
+        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
 ): Codec<TFrom, TTo>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
     codec:
         | Omit<FixedSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
-        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
+        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
 ): Codec<TFrom, TTo> {
     return Object.freeze({
         ...codec,
@@ -151,16 +151,16 @@ export function createCodec<TFrom, TTo extends TFrom = TFrom>(
 }
 
 export function isFixedSize<TFrom, TSize extends number>(
-    encoder: FixedSizeEncoder<TFrom, TSize> | VariableSizeEncoder<TFrom>
+    encoder: FixedSizeEncoder<TFrom, TSize> | VariableSizeEncoder<TFrom>,
 ): encoder is FixedSizeEncoder<TFrom, TSize>;
 export function isFixedSize<TTo, TSize extends number>(
-    decoder: FixedSizeDecoder<TTo, TSize> | VariableSizeDecoder<TTo>
+    decoder: FixedSizeDecoder<TTo, TSize> | VariableSizeDecoder<TTo>,
 ): decoder is FixedSizeDecoder<TTo, TSize>;
 export function isFixedSize<TFrom, TTo extends TFrom, TSize extends number>(
-    codec: FixedSizeCodec<TFrom, TTo, TSize> | VariableSizeCodec<TFrom, TTo>
+    codec: FixedSizeCodec<TFrom, TTo, TSize> | VariableSizeCodec<TFrom, TTo>,
 ): codec is FixedSizeCodec<TFrom, TTo, TSize>;
 export function isFixedSize<TSize extends number>(
-    codec: { fixedSize: TSize } | { maxSize?: number }
+    codec: { fixedSize: TSize } | { maxSize?: number },
 ): codec is { fixedSize: TSize };
 export function isFixedSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { fixedSize: number } {
     return 'fixedSize' in codec && typeof codec.fixedSize === 'number';
@@ -168,23 +168,23 @@ export function isFixedSize(codec: { fixedSize: number } | { maxSize?: number })
 
 export function assertIsFixedSize<TFrom, TSize extends number>(
     encoder: FixedSizeEncoder<TFrom, TSize> | VariableSizeEncoder<TFrom>,
-    message?: string
+    message?: string,
 ): asserts encoder is FixedSizeEncoder<TFrom, TSize>;
 export function assertIsFixedSize<TTo, TSize extends number>(
     decoder: FixedSizeDecoder<TTo, TSize> | VariableSizeDecoder<TTo>,
-    message?: string
+    message?: string,
 ): asserts decoder is FixedSizeDecoder<TTo, TSize>;
 export function assertIsFixedSize<TFrom, TTo extends TFrom, TSize extends number>(
     codec: FixedSizeCodec<TFrom, TTo, TSize> | VariableSizeCodec<TFrom, TTo>,
-    message?: string
+    message?: string,
 ): asserts codec is FixedSizeCodec<TFrom, TTo, TSize>;
 export function assertIsFixedSize<TSize extends number>(
     codec: { fixedSize: TSize } | { maxSize?: number },
-    message?: string
+    message?: string,
 ): asserts codec is { fixedSize: TSize };
 export function assertIsFixedSize(
     codec: { fixedSize: number } | { maxSize?: number },
-    message?: string
+    message?: string,
 ): asserts codec is { fixedSize: number } {
     if (!isFixedSize(codec)) {
         // TODO: Coded error.
@@ -195,7 +195,7 @@ export function assertIsFixedSize(
 export function isVariableSize<TFrom>(encoder: Encoder<TFrom>): encoder is VariableSizeEncoder<TFrom>;
 export function isVariableSize<TTo>(decoder: Decoder<TTo>): decoder is VariableSizeDecoder<TTo>;
 export function isVariableSize<TFrom, TTo extends TFrom>(
-    codec: Codec<TFrom, TTo>
+    codec: Codec<TFrom, TTo>,
 ): codec is VariableSizeCodec<TFrom, TTo>;
 export function isVariableSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { maxSize?: number };
 export function isVariableSize(codec: { fixedSize: number } | { maxSize?: number }): codec is { maxSize?: number } {
@@ -204,23 +204,23 @@ export function isVariableSize(codec: { fixedSize: number } | { maxSize?: number
 
 export function assertIsVariableSize<T>(
     encoder: Encoder<T>,
-    message?: string
+    message?: string,
 ): asserts encoder is VariableSizeEncoder<T>;
 export function assertIsVariableSize<T>(
     decoder: Decoder<T>,
-    message?: string
+    message?: string,
 ): asserts decoder is VariableSizeDecoder<T>;
 export function assertIsVariableSize<TFrom, TTo extends TFrom>(
     codec: Codec<TFrom, TTo>,
-    message?: string
+    message?: string,
 ): asserts codec is VariableSizeCodec<TFrom, TTo>;
 export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
-    message?: string
+    message?: string,
 ): asserts codec is { maxSize?: number };
 export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
-    message?: string
+    message?: string,
 ): asserts codec is { maxSize?: number } {
     if (!isVariableSize(codec)) {
         // TODO: Coded error.

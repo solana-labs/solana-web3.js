@@ -49,15 +49,15 @@ describe('combineCodec', () => {
         expect(() =>
             combineCodec(
                 createEncoder({ fixedSize: 1, write: jest.fn() }),
-                createDecoder({ fixedSize: 2, read: jest.fn() })
-            )
+                createDecoder({ fixedSize: 2, read: jest.fn() }),
+            ),
         ).toThrow('Encoder and decoder must have the same fixed size, got [1] and [2]');
 
         expect(() =>
             combineCodec(
                 createEncoder({ getSizeFromValue: jest.fn(), maxSize: 1, write: jest.fn() }),
-                createDecoder({ read: jest.fn() })
-            )
+                createDecoder({ read: jest.fn() }),
+            ),
         ).toThrow('Encoder and decoder must have the same max size, got [1] and [undefined]');
     });
 });

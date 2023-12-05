@@ -45,7 +45,7 @@ type AnyArray = any[];
  * @param items - The encoders to use for each item in the tuple.
  */
 export function getTupleEncoder<TFrom extends AnyArray>(
-    items: WrapInFixedSizeEncoder<[...TFrom]>
+    items: WrapInFixedSizeEncoder<[...TFrom]>,
 ): FixedSizeEncoder<TFrom>;
 export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): VariableSizeEncoder<TFrom>;
 export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): Encoder<TFrom> {
@@ -101,16 +101,16 @@ export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...T
  * @param items - The codecs to use for each item in the tuple.
  */
 export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInFixedSizeCodec<[...TFrom], [...TTo]>
+    items: WrapInFixedSizeCodec<[...TFrom], [...TTo]>,
 ): FixedSizeCodec<TFrom, TTo>;
 export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInCodec<[...TFrom], [...TTo]>
+    items: WrapInCodec<[...TFrom], [...TTo]>,
 ): VariableSizeCodec<TFrom, TTo>;
 export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInCodec<[...TFrom], [...TTo]>
+    items: WrapInCodec<[...TFrom], [...TTo]>,
 ): Codec<TFrom, TTo> {
     return combineCodec(
         getTupleEncoder(items as WrapInEncoder<[...TFrom]>),
-        getTupleDecoder(items as WrapInDecoder<[...TTo]>)
+        getTupleDecoder(items as WrapInDecoder<[...TTo]>),
     );
 }

@@ -59,7 +59,7 @@ describe('getSetCodec', () => {
         // It fails if the set has a different size.
         expect(() => set(string(), { size: 1 }).encode(new Set())).toThrow('Expected [array] to have 1 items, got 0.');
         expect(() => set(string(), { size: 2 }).encode(new Set(['a', 'b', 'c']))).toThrow(
-            'Expected [array] to have 2 items, got 3.'
+            'Expected [array] to have 2 items, got 3.',
         );
     });
 

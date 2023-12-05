@@ -50,19 +50,19 @@ export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberEnc
  * @param config - A set of config for the encoder.
  */
 export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
-    constructor: TFromConstructor
+    constructor: TFromConstructor,
 ): FixedSizeEncoder<TFrom, 1>;
 export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<TFrom>, TSize extends number>(
     constructor: TFromConstructor,
-    config: ScalarEnumCodecConfig<NumberEncoder> & { size: FixedSizeNumberEncoder<TSize> }
+    config: ScalarEnumCodecConfig<NumberEncoder> & { size: FixedSizeNumberEncoder<TSize> },
 ): FixedSizeEncoder<TFrom, TSize>;
 export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
     constructor: TFromConstructor,
-    config?: ScalarEnumCodecConfig<NumberEncoder>
+    config?: ScalarEnumCodecConfig<NumberEncoder>,
 ): VariableSizeEncoder<TFrom>;
 export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
     constructor: TFromConstructor,
-    config: ScalarEnumCodecConfig<NumberEncoder> = {}
+    config: ScalarEnumCodecConfig<NumberEncoder> = {},
 ): Encoder<TFrom> {
     const prefix = config.size ?? getU8Encoder();
     const { minRange, maxRange, stringValues, enumKeys, enumValues } = getScalarEnumStats(constructor);
@@ -75,7 +75,7 @@ export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<
                 `Invalid scalar enum variant. ` +
                     `Expected one of [${stringValues.join(', ')}] ` +
                     `or a number between ${minRange} and ${maxRange}, ` +
-                    `got "${value}".`
+                    `got "${value}".`,
             );
         }
         if (typeof value === 'number') return value;
@@ -92,19 +92,19 @@ export function getScalarEnumEncoder<TFrom, TFromConstructor extends ScalarEnum<
  * @param config - A set of config for the decoder.
  */
 export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>>(
-    constructor: TToConstructor
+    constructor: TToConstructor,
 ): FixedSizeDecoder<TTo, 1>;
 export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>, TSize extends number>(
     constructor: TToConstructor,
-    config: ScalarEnumCodecConfig<NumberDecoder> & { size: FixedSizeNumberDecoder<TSize> }
+    config: ScalarEnumCodecConfig<NumberDecoder> & { size: FixedSizeNumberDecoder<TSize> },
 ): FixedSizeDecoder<TTo, TSize>;
 export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>>(
     constructor: TToConstructor,
-    config?: ScalarEnumCodecConfig<NumberDecoder>
+    config?: ScalarEnumCodecConfig<NumberDecoder>,
 ): VariableSizeDecoder<TTo>;
 export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>>(
     constructor: TToConstructor,
-    config: ScalarEnumCodecConfig<NumberDecoder> = {}
+    config: ScalarEnumCodecConfig<NumberDecoder> = {},
 ): Decoder<TTo> {
     const prefix = config.size ?? getU8Decoder();
     const { minRange, maxRange, isNumericEnum, enumValues } = getScalarEnumStats(constructor);
@@ -114,7 +114,7 @@ export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>
             // TODO: Coded error.
             throw new Error(
                 `Enum discriminator out of range. ` +
-                    `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`
+                    `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`,
             );
         }
         return (isNumericEnum ? valueAsNumber : enumValues[valueAsNumber]) as TTo;
@@ -128,19 +128,19 @@ export function getScalarEnumDecoder<TTo, TToConstructor extends ScalarEnum<TTo>
  * @param config - A set of config for the codec.
  */
 export function getScalarEnumCodec<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
-    constructor: TFromConstructor
+    constructor: TFromConstructor,
 ): FixedSizeCodec<TFrom, TFrom, 1>;
 export function getScalarEnumCodec<TFrom, TFromConstructor extends ScalarEnum<TFrom>, TSize extends number>(
     constructor: TFromConstructor,
-    config: ScalarEnumCodecConfig<NumberCodec> & { size: FixedSizeNumberCodec<TSize> }
+    config: ScalarEnumCodecConfig<NumberCodec> & { size: FixedSizeNumberCodec<TSize> },
 ): FixedSizeCodec<TFrom, TFrom, TSize>;
 export function getScalarEnumCodec<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
     constructor: TFromConstructor,
-    config?: ScalarEnumCodecConfig<NumberCodec>
+    config?: ScalarEnumCodecConfig<NumberCodec>,
 ): VariableSizeCodec<TFrom>;
 export function getScalarEnumCodec<TFrom, TFromConstructor extends ScalarEnum<TFrom>>(
     constructor: TFromConstructor,
-    config: ScalarEnumCodecConfig<NumberCodec> = {}
+    config: ScalarEnumCodecConfig<NumberCodec> = {},
 ): Codec<TFrom> {
     return combineCodec(getScalarEnumEncoder(constructor, config), getScalarEnumDecoder(constructor, config));
 }

@@ -107,10 +107,10 @@ describe('getDataEnumCodec', () => {
         expect(() => dataEnum(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
             'Invalid data enum variant. ' +
                 'Expected one of [PageLoad, Click, KeyPress, PageUnload], ' +
-                'got "Missing".'
+                'got "Missing".',
         );
         expect(() => dataEnum(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.'
+            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.',
         );
     });
 

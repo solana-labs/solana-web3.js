@@ -22,7 +22,7 @@ import { combineCodec } from './combine-codec';
  */
 export function fixEncoder<TFrom, TSize extends number>(
     encoder: Encoder<TFrom>,
-    fixedBytes: TSize
+    fixedBytes: TSize,
 ): FixedSizeEncoder<TFrom, TSize> {
     return createEncoder({
         fixedSize: fixedBytes,
@@ -47,7 +47,7 @@ export function fixEncoder<TFrom, TSize extends number>(
  */
 export function fixDecoder<TTo, TSize extends number>(
     decoder: Decoder<TTo>,
-    fixedBytes: TSize
+    fixedBytes: TSize,
 ): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: fixedBytes,
@@ -76,7 +76,7 @@ export function fixDecoder<TTo, TSize extends number>(
  */
 export function fixCodec<TFrom, TTo extends TFrom, TSize extends number>(
     codec: Codec<TFrom, TTo>,
-    fixedBytes: TSize
+    fixedBytes: TSize,
 ): FixedSizeCodec<TFrom, TTo, TSize> {
     return combineCodec(fixEncoder(codec, fixedBytes), fixDecoder(codec, fixedBytes));
 }
