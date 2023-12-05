@@ -11,6 +11,19 @@ TEST_VALIDATOR=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/.solana/acti
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
 FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
 
+wait_for_rpc_server() {
+    while true; do
+        RESPONSE=$(curl http://127.0.0.1:8899 -s -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","id":1, "method":"getHealth"}')
+        if echo "$RESPONSE" | jq -e .result > /dev/null; then
+            echo "RPC server ready for connections"
+            break
+        else
+            echo "Waiting for the RPC server to come online..."
+            sleep 1 # Wait for 1 second before retrying
+        fi
+    done
+}
+
 mkdir -p $LOCK_DIR
 
 (
@@ -23,6 +36,7 @@ mkdir -p $LOCK_DIR
       validator_pid=$!
       echo "Started test validator (PID $validator_pid)"
       wait
+      wait_for_rpc_server
     else
       echo "Sharing lock on already running test validator (PID $(pidof $TEST_VALIDATOR))"
       sleep 86400000; # 1000 days
