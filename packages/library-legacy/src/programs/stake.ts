@@ -734,7 +734,7 @@ export class StakeProgram {
     if (custodianPubkey) {
       keys.push({
         pubkey: custodianPubkey,
-        isSigner: false,
+        isSigner: true,
         isWritable: false,
       });
     }
@@ -776,7 +776,7 @@ export class StakeProgram {
     if (custodianPubkey) {
       keys.push({
         pubkey: custodianPubkey,
-        isSigner: false,
+        isSigner: true,
         isWritable: false,
       });
     }
@@ -903,7 +903,7 @@ export class StakeProgram {
     if (custodianPubkey) {
       keys.push({
         pubkey: custodianPubkey,
-        isSigner: false,
+        isSigner: true,
         isWritable: false,
       });
     }
