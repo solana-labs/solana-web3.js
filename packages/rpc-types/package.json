@@ -34,7 +34,7 @@
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
+        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --watch",
         "prepublishOnly": "version-from-git --no-git-tag-version --template experimental.short",
         "publish-packages": "pnpm publish --tag experimental --access public --no-git-checks",
