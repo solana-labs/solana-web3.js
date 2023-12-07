@@ -1798,8 +1798,8 @@ importers:
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
       '@types/fastestsmallesttextencoderdecoder':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2
+        version: 1.0.2
       '@types/jest':
         specifier: ^29.5.6
         version: 29.5.6
@@ -5321,8 +5321,8 @@ packages:
       '@types/send': 0.17.1
     dev: true
 
-  /@types/fastestsmallesttextencoderdecoder@1.0.0:
-    resolution: {integrity: sha512-bCyxe0zloFjExUH/36vW/sMHItelWPYtf5Mp9w67hFDSc5a+IBZeb/1yQXxC55/DWYw+QrYftfhp8tl9lDl+ww==}
+  /@types/fastestsmallesttextencoderdecoder@1.0.2:
+    resolution: {integrity: sha512-0Md9qUxGnQ9uJ0NjsA70Y0NHIl3NwfBO1d8CGXK0zhczRL85CXJ3M0JZsmCNQ0WcAbt08FuT4U1G1mWQqgOsUg==}
     dev: true
 
   /@types/graceful-fs@4.1.6:
