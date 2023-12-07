@@ -1,3 +1,4 @@
+export type {Ed25519Keypair} from 'legacy-shared';
 export * from './account';
 export * from './blockhash';
 export * from './bpf-loader-deprecated';

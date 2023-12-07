@@ -58,6 +58,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               ...(format === 'cjs' ? ['@noble/ed25519'] : []),
                               'crypto-impl',
                               'fetch-impl',
+                              'legacy-shared',
                               'text-encoding-impl',
                               'ws-impl',
                           ],

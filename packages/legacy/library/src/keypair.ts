@@ -1,4 +1,5 @@
-import {generateKeypair, getPublicKey, Ed25519Keypair} from './utils/ed25519';
+import {generateKeypair, getPublicKey, Ed25519Keypair} from 'legacy-shared';
+
 import {PublicKey} from './publickey';
 
 /**

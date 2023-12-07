@@ -1,4 +1,5 @@
 import * as BufferLayout from '@solana/buffer-layout';
+import {sign} from 'legacy-shared';
 
 import {Signer} from '../keypair';
 import assert from '../utils/assert';
@@ -6,7 +7,6 @@ import {VersionedMessage} from '../message/versioned';
 import {SIGNATURE_LENGTH_IN_BYTES} from './constants';
 import * as shortvec from '../utils/shortvec-encoding';
 import * as Layout from '../layout';
-import {sign} from '../utils/ed25519';
 import {PublicKey} from '../publickey';
 
 export type TransactionVersion = 'legacy' | 0;

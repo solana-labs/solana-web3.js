@@ -1,11 +1,11 @@
 import {Buffer} from 'buffer';
 import * as BufferLayout from '@solana/buffer-layout';
+import {sign} from 'legacy-shared';
 
 import {Keypair} from '../keypair';
 import {PublicKey} from '../publickey';
 import {TransactionInstruction} from '../transaction';
 import assert from '../utils/assert';
-import {sign} from '../utils/ed25519';
 
 const PRIVATE_KEY_BYTES = 64;
 const PUBLIC_KEY_BYTES = 32;
