@@ -1,5 +1,6 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
+import {sign, verify} from 'legacy-shared';
 
 import {PACKET_DATA_SIZE, SIGNATURE_LENGTH_IN_BYTES} from './constants';
 import {Connection} from '../connection';
@@ -11,7 +12,6 @@ import invariant from '../utils/assert';
 import type {Signer} from '../keypair';
 import type {Blockhash} from '../blockhash';
 import type {CompiledInstruction} from '../message';
-import {sign, verify} from '../utils/ed25519';
 
 /**
  * Transaction signature as base-58 encoded string

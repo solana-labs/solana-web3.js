@@ -68,6 +68,9 @@ function generateConfig(configType, format) {
       replace({
         preventAssignment: true,
         values: {
+          '__BROWSER__': JSON.stringify(configType === 'browser'),
+          '__NODEJS__': JSON.stringify(configType === 'node'),
+          '__REACTNATIVE__': JSON.stringify(configType === 'react-native'),
           'process.env.NODE_ENV': JSON.stringify(env),
           'process.env.BROWSER': JSON.stringify(browser),
           'process.env.TEST_LIVE': JSON.stringify(false),
@@ -96,7 +99,6 @@ function generateConfig(configType, format) {
     config.external = [
       /@babel\/runtime/,
       '@noble/curves/secp256k1',
-      '@noble/curves/ed25519',
       '@noble/hashes/sha256',
       '@noble/hashes/sha3',
       '@noble/secp256k1',
@@ -164,11 +166,10 @@ function generateConfig(configType, format) {
           // Prevent dependencies from being bundled
           config.external = [
             /@babel\/runtime/,
-            '@solana/buffer-layout',
             '@noble/curves/secp256k1',
-            '@noble/curves/ed25519',
             '@noble/hashes/sha256',
             '@noble/hashes/sha3',
+            '@solana/buffer-layout',
             'bigint-buffer',
             'bn.js',
             'borsh',

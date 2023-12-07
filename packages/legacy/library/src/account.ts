@@ -1,6 +1,6 @@
 import {Buffer} from 'buffer';
+import {generatePrivateKey, getPublicKey} from 'legacy-shared';
 
-import {generatePrivateKey, getPublicKey} from './utils/ed25519';
 import {toBuffer} from './utils/to-buffer';
 import {PublicKey} from './publickey';
 
