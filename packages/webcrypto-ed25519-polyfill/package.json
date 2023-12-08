@@ -62,8 +62,7 @@
         "node": ">=17.4"
     },
     "dependencies": {
-        "@noble/ed25519": "^2.0.0",
-        "crypto-impl": "workspace:*"
+        "@noble/ed25519": "^2.0.0"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
@@ -72,6 +71,7 @@
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.3.0",
         "build-scripts": "workspace:*",
+        "crypto-impl": "workspace:*",
         "eslint": "^8.45.0",
         "eslint-plugin-jest": "^27.4.2",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
