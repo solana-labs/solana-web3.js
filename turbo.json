@@ -73,15 +73,15 @@
             "outputs": []
         },
         "test:treeshakability:browser": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "outputs": []
         },
         "test:treeshakability:native": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "outputs": []
         },
         "test:treeshakability:node": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "outputs": []
         },
         "@solana/web3.js#test:unit:node": {
