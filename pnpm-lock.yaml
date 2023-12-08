@@ -1192,8 +1192,8 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0
       mockttp:
-        specifier: ^3.9.2
-        version: 3.9.2
+        specifier: ^3.10.0
+        version: 3.10.0
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -3900,11 +3900,11 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: true
 
-  /@httptoolkit/httpolyglot@2.1.1:
-    resolution: {integrity: sha512-TvJOb/9dYmOD1U8sErFKCy5BxQc7kbLuvvRLfsTr+NN9kQGNGRNyenC00mJxUn2ld/WtxPMNup3JICHPUOPXDg==}
+  /@httptoolkit/httpolyglot@2.2.1:
+    resolution: {integrity: sha512-HOS/0zWc3yn7NM0RQFgBeepeTE8eAKtyOkcGL/TV6if5MAfr+3bH9rwCyAhbXbjlLVR3afeBRt8JYKEerDcygA==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@types/node': 16.18.36
+      '@types/node': 18.11.19
     dev: true
 
   /@httptoolkit/subscriptions-transport-ws@0.11.2(graphql@15.8.0):
@@ -3917,7 +3917,7 @@ packages:
       graphql: 15.8.0
       iterall: 1.3.0
       symbol-observable: 1.2.0
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -3929,10 +3929,10 @@ packages:
       '@types/ws': 8.5.5
       duplexify: 3.7.1
       inherits: 2.0.4
-      isomorphic-ws: 4.0.1(ws@8.14.0)
+      isomorphic-ws: 4.0.1(ws@8.14.2)
       readable-stream: 2.3.8
       safe-buffer: 5.2.1
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       xtend: 4.0.2
     transitivePeerDependencies:
       - bufferutil
@@ -5407,10 +5407,6 @@ packages:
 
   /@types/node@12.20.55:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-
-  /@types/node@16.18.36:
-    resolution: {integrity: sha512-8egDX8dE50XyXWH6C6PRCNkTP106DuUrvdrednFouDSmCi7IOvrqr0frznfZaHifHH/3aq/7a7v9N4wdXMqhBQ==}
-    dev: true
 
   /@types/node@18.11.19:
     resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
@@ -7369,11 +7365,6 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
-  /depd@1.1.2:
-    resolution: {integrity: sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==}
-    engines: {node: '>= 0.6'}
-    dev: true
-
   /depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
@@ -8222,20 +8213,6 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
 
-  /express-graphql@0.11.0(graphql@15.8.0):
-    resolution: {integrity: sha512-IMYmF2aIBKKfo8c+EENBNR8FAy91QHboxfaHe1omCyb49GJXsToUgcjjIF/PfWJdzn0Ofp6JJvcsODQJrqpz2g==}
-    engines: {node: '>= 10.x'}
-    deprecated: This package is no longer maintained. We recommend using `graphql-http` instead. Please consult the migration document https://github.com/graphql/graphql-http#migrating-express-grpahql.
-    peerDependencies:
-      graphql: ^14.7.0 || ^15.3.0
-    dependencies:
-      accepts: 1.3.8
-      content-type: 1.0.5
-      graphql: 15.8.0
-      http-errors: 1.8.0
-      raw-body: 2.5.2
-    dev: true
-
   /express@4.18.2:
     resolution: {integrity: sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ==}
     engines: {node: '>= 0.10.0'}
@@ -8810,6 +8787,15 @@ packages:
   /graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
+  /graphql-http@1.22.0(graphql@15.8.0):
+    resolution: {integrity: sha512-9RBUlGJWBFqz9LwfpmAbjJL/8j/HCNkZwPBU5+Bfmwez+1Ay43DocMNQYpIWsWqH0Ftv6PTNAh2aRnnMCBJgLw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      graphql: '>=0.11 <=16'
+    dependencies:
+      graphql: 15.8.0
+    dev: true
+
   /graphql-subscriptions@1.2.1(graphql@15.8.0):
     resolution: {integrity: sha512-95yD/tKi24q8xYa7Q9rhQN16AYj5wPbrb8tmHGM3WRc9EBmWrG/0kkMl+tQG8wcEuE9ibR4zyOM31p5Sdr2v4g==}
     peerDependencies:
@@ -8961,17 +8947,6 @@ packages:
       zstd-codec: 0.1.4
     dev: true
 
-  /http-errors@1.8.0:
-    resolution: {integrity: sha512-4I8r0C5JDhT5VkvI47QktDW75rNlGVsUf/8hzjCC/wkWI/jdTRmBb9aI7erSG82r1bjKY3F6k28WnsVxB1C73A==}
-    engines: {node: '>= 0.6'}
-    dependencies:
-      depd: 1.1.2
-      inherits: 2.0.4
-      setprototypeof: 1.2.0
-      statuses: 1.5.0
-      toidentifier: 1.0.0
-    dev: true
-
   /http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
     engines: {node: '>= 0.8'}
@@ -9003,8 +8978,8 @@ packages:
       - supports-color
     dev: true
 
-  /http2-wrapper@2.2.0:
-    resolution: {integrity: sha512-kZB0wxMo0sh1PehyjJUWRFEd99KC5TLjZ2cULC4f9iqJBAmKQQXEICjxl5iPJRwP40dpeHFqqhm7tYCvODpqpQ==}
+  /http2-wrapper@2.2.1:
+    resolution: {integrity: sha512-V5nVw1PAOgfI3Lmeaj2Exmeg7fenjhRUgz1lPSezy1CuhPYbgQtbQj4jZfEAEMlaL+vupsvhjqCyjzob0yxsmQ==}
     engines: {node: '>=10.19.0'}
     dependencies:
       quick-lru: 5.1.1
@@ -9396,20 +9371,12 @@ packages:
     dependencies:
       ws: 7.5.9
 
-  /isomorphic-ws@4.0.1(ws@8.13.0):
+  /isomorphic-ws@4.0.1(ws@8.14.2):
     resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    dev: true
-
-  /isomorphic-ws@4.0.1(ws@8.14.0):
-    resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
-    peerDependencies:
-      ws: '*'
-    dependencies:
-      ws: 8.14.0
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     dev: true
 
   /issue-parser@6.0.0:
@@ -10991,14 +10958,14 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mockttp@3.9.2:
-    resolution: {integrity: sha512-DM24cqpXr9PtSbIv12GxEYH0yHEa6m6V8Pnl29akbwarLvQnvIBkLAoFG0x9pkQl5H57T6qjpNWuoFsL9dD4sw==}
+  /mockttp@3.10.0:
+    resolution: {integrity: sha512-5+4A+0UG8Pzgvz2eqimAoFYX9ZgdAV5jgscvQzJupIMiKHPo3jaU26mqQgLAhX7o5KcsTfWpRNUQt5Y4U9luzQ==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     dependencies:
       '@graphql-tools/schema': 8.5.1(graphql@15.8.0)
       '@graphql-tools/utils': 8.13.1(graphql@15.8.0)
-      '@httptoolkit/httpolyglot': 2.1.1
+      '@httptoolkit/httpolyglot': 2.2.1
       '@httptoolkit/subscriptions-transport-ws': 0.11.2(graphql@15.8.0)
       '@httptoolkit/websocket-stream': 6.0.1
       '@types/cors': 2.8.13
@@ -11013,14 +10980,14 @@ packages:
       cross-fetch: 3.1.6
       destroyable-server: 1.0.0
       express: 4.18.2
-      express-graphql: 0.11.0(graphql@15.8.0)
       graphql: 15.8.0
+      graphql-http: 1.22.0(graphql@15.8.0)
       graphql-subscriptions: 1.2.1(graphql@15.8.0)
       graphql-tag: 2.12.6(graphql@15.8.0)
       http-encoding: 1.5.1
-      http2-wrapper: 2.2.0
+      http2-wrapper: 2.2.1
       https-proxy-agent: 5.0.1
-      isomorphic-ws: 4.0.1(ws@8.13.0)
+      isomorphic-ws: 4.0.1(ws@8.14.2)
       lodash: 4.17.21
       lru-cache: 7.18.3
       native-duplexpair: 1.0.0
@@ -11034,7 +11001,7 @@ packages:
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.2
       uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -12925,11 +12892,6 @@ packages:
     dependencies:
       is-number: 7.0.0
 
-  /toidentifier@1.0.0:
-    resolution: {integrity: sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==}
-    engines: {node: '>=0.6'}
-    dev: true
-
   /toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
@@ -13750,6 +13712,7 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+    dev: false
 
   /ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
