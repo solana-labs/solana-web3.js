@@ -16,9 +16,8 @@
 
 This package contains a polyfill that enables Ed25519 key manipulation in environments where it is not yet implemented. It does so by proxying calls to `SubtleCrypto` instance methods to an Ed25519 implementation in userspace.
 
-## Security warning
-
-Because this package's implementation of Ed25519 key generation exists in userspace, it can't guarantee that the keys you generate with it are non-exportable. Untrusted code running in your JavaScript context may still be able to gain access to and/or exfiltrate secret key material.
+> [!WARNING]
+> Because this package's implementation of Ed25519 key generation exists in userspace, it can't guarantee that the keys you generate with it are non-exportable. Untrusted code running in your JavaScript context may still be able to gain access to and/or exfiltrate secret key material.
 
 ## Usage
 
