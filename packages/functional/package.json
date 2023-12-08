@@ -33,7 +33,7 @@
         "web3"
     ],
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.library.ts",
+        "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "version-from-git --no-git-tag-version --template experimental.short",
