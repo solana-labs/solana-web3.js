@@ -19,6 +19,9 @@ This package contains a polyfill that enables Ed25519 key manipulation in enviro
 > [!WARNING]
 > Because this package's implementation of Ed25519 key generation exists in userspace, it can't guarantee that the keys you generate with it are non-exportable. Untrusted code running in your JavaScript context may still be able to gain access to and/or exfiltrate secret key material.
 
+> [!NOTE]
+> Native `CryptoKeys` can be stored in IndexedDB but the keys created by this polyfill can not. This is because, unlike native `CryptoKeys`, our polyfilled key objects can not implement the [structured clone algorithm](https://www.w3.org/TR/WebCryptoAPI/#cryptokey-interface-clone).
+
 ## Usage
 
 Environments that support Ed25519 (see https://github.com/WICG/webcrypto-secure-curves/issues/20) do not require this polyfill.
