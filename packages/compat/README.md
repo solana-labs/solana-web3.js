@@ -32,7 +32,7 @@ const address = fromLegacyPublicKey(new PublicKey('49XBVQsvSW44ULKL9qufS9YqQPbdc
 This can be used to convert a legacy `Keypair` object to a native Ed25519 `CryptoKeyPair` object
 
 ```ts
-import { fromLegaycKeypair } from '@solana/compat';
+import { fromLegacyKeypair } from '@solana/compat';
 const { privateKey, publicKey } = await fromLegacyKeypair(Keypair.generate());
 ```
 
