@@ -251,8 +251,7 @@ const rpc = createJsonRpc<SolanaRpcMethods>({ api, transport });
 If you want to, you can also reduce the scope of the API’s type-spec so you are left only with the types you need. Keep in mind types don’t affect bundle size, but you may choose to scope the type-spec for a variety of reasons, including reducing TypeScript noise.
 
 ```tsx
-import { createSolanaRpcApi } from '@solana/rpc-core';
-import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
+import { createSolanaRpcApi, type GetAccountInfoApi } from '@solana/rpc-core';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 
 const api = createSolanaRpcApi();
@@ -325,8 +324,7 @@ Here’s an example of how someone might implement a “round robin” approach 
 
 ```tsx
 import { createSolanaRpcApi } from '@solana/rpc-core';
-import { createJsonRpc } from '@solana/rpc-transport';
-import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import { createJsonRpc, type IRpcTransport } from '@solana/rpc-transport';
 import { createDefaultRpcTransport } from '@solana/web3.js';
 
 // Create a transport for each RPC server
@@ -364,10 +362,9 @@ Another example of a possible customization for RPC transports is sharding. Here
 The transport library can also be used to implement custom retry logic on any request:
 
 ```tsx
-import { createDefaultRpcTransport } from "@solana/web3.js";
-import { IRpcTransport } from "@solana/rpc-transport/dist/types/transports/transport-types";
-import { createJsonRpc } from "@solana/rpc-transport";
-import { createSolanaRpcApi } from "@solana/rpc-core";
+import { createDefaultRpcTransport } from '@solana/web3.js';
+import { createJsonRpc, IRpcTransport } from '@solana/rpc-transport';
+import { createSolanaRpcApi } from '@solana/rpc-core';
 
 // Set the maximum number of attempts to retry a request
 const MAX_ATTEMPTS = 4;
@@ -425,8 +422,7 @@ Perhaps your application needs to make a large number of requests, or needs to f
 
 ```tsx
 import { createSolanaRpcApi } from '@solana/rpc-core';
-import { createJsonRpc } from '@solana/rpc-transport';
-import { IRpcTransport } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import { createJsonRpc, IRpcTransport } from '@solana/rpc-transport';
 import { createDefaultRpcTransport } from '@solana/web3.js';
 
 // Create multiple transports
