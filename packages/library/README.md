@@ -80,7 +80,7 @@ The inability to customize web3.js has been a source of frustration for some:
 
 ## Lagging Behind Modern JavaScript
 
-The advance of modern JavaScript features presents an opportunity to developers of crypto applcations, such as the ability to use native Ed25519 keys and to express large values as native `bigint`.
+The advance of modern JavaScript features presents an opportunity to developers of crypto applications, such as the ability to use native Ed25519 keys and to express large values as native `bigint`.
 
 The Web Incubator Community Group has advocated for the addition of Ed25519 support to the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), and support has already landed in *most* modern JavaScript runtimes.
 
@@ -426,10 +426,10 @@ import { createJsonRpc, IRpcTransport } from '@solana/rpc-transport';
 import { createDefaultRpcTransport } from '@solana/web3.js';
 
 // Create multiple transports
-const transportA = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' }));
-const transportB = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' }));
-const transportC = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' }));
-const transportD = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-4.com' }));
+const transportA = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
+const transportB = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' });
+const transportC = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' });
+const transportD = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-4.com' });
 
 // Function to determine which shard to use based on the request method
 function selectShard(method: string): IRpcTransport {
