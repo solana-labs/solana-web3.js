@@ -67,7 +67,7 @@ export function createSolanaRpcSubscriptionsApi(
                 );
                 return {
                     params,
-                    responseProcessor: rawResponse =>
+                    responseTransformer: rawResponse =>
                         patchResponseForSolanaLabsRpcSubscriptions(rawResponse, notificationName),
                     subscribeMethodName: notificationName.replace(/Notifications$/, 'Subscribe'),
                     unsubscribeMethodName: notificationName.replace(/Notifications$/, 'Unsubscribe'),

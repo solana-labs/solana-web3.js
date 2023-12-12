@@ -33,7 +33,7 @@ function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: Ca
 
 function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
     rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>,
-    { params, subscribeMethodName, unsubscribeMethodName, responseProcessor }: RpcSubscription<TNotification>,
+    { params, subscribeMethodName, unsubscribeMethodName, responseTransformer }: RpcSubscription<TNotification>,
 ): PendingRpcSubscription<TNotification> {
     return {
         async subscribe({ abortSignal }: SubscribeOptions): Promise<AsyncIterable<TNotification>> {
@@ -94,7 +94,7 @@ function createPendingRpcSubscription<TRpcSubscriptionMethods, TNotification>(
                             continue;
                         }
                         const notification = message.params.result as TNotification;
-                        yield responseProcessor ? responseProcessor(notification) : notification;
+                        yield responseTransformer ? responseTransformer(notification) : notification;
                     }
                 },
             };
