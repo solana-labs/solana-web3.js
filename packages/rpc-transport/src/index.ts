@@ -1,5 +1,6 @@
 export * from './apis/api-types';
 export * from './apis/methods/methods-api';
+export * from './apis/subscriptions/subscriptions-api';
 export * from './json-rpc';
 export type { SolanaJsonRpcErrorCode } from './json-rpc-errors';
 export * from './json-rpc-subscription';

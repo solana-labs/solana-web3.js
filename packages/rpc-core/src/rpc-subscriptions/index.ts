@@ -1,4 +1,4 @@
-import type { IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-transport';
+import { createJsonRpcSubscriptionsApi, IRpcSubscriptionsApi } from '@solana/rpc-transport';
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';
@@ -25,63 +25,38 @@ export type SolanaRpcSubscriptions = AccountNotificationsApi &
     SlotNotificationsApi;
 export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
-export function createSolanaRpcSubscriptionsApi(
+export function createSolanaRpcSubscriptionsApi_INTERNAL(
     config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
-    return new Proxy({} as IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>, {
-        defineProperty() {
-            return false;
-        },
-        deleteProperty() {
-            return false;
-        },
-        get<
-            TNotificationName extends keyof IRpcSubscriptionsApi<
-                SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
-            >,
-        >(
-            ...args: Parameters<
-                NonNullable<
-                    ProxyHandler<IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>>['get']
-                >
-            >
-        ) {
-            const [_, p] = args;
-            const notificationName = p.toString() as keyof (SolanaRpcSubscriptions &
-                SolanaRpcSubscriptionsUnstable) as string;
-            return function (
-                ...rawParams: Parameters<
-                    (SolanaRpcSubscriptions &
-                        SolanaRpcSubscriptionsUnstable)[TNotificationName] extends CallableFunction
-                        ? (SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable)[TNotificationName]
-                        : never
-                >
-            ): RpcSubscription<
-                ReturnType<(SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable)[TNotificationName]>
-            > {
-                const handleIntegerOverflow = config?.onIntegerOverflow;
-                const params = patchParamsForSolanaLabsRpc(
-                    rawParams,
-                    handleIntegerOverflow
-                        ? (keyPath, value) => handleIntegerOverflow(notificationName, keyPath, value)
-                        : undefined,
-                );
-                return {
-                    params,
-                    responseTransformer: rawResponse =>
-                        patchResponseForSolanaLabsRpcSubscriptions(rawResponse, notificationName),
-                    subscribeMethodName: notificationName.replace(/Notifications$/, 'Subscribe'),
-                    unsubscribeMethodName: notificationName.replace(/Notifications$/, 'Unsubscribe'),
-                };
-            };
-        },
+    const handleIntegerOverflow = config?.onIntegerOverflow;
+    return createJsonRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>({
+        parametersTransformer: <T>(rawParams: T, methodName: string) =>
+            patchParamsForSolanaLabsRpc(
+                rawParams,
+                handleIntegerOverflow
+                    ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
+                    : undefined,
+            ) as unknown[],
+        responseTransformer: <T>(rawResponse: unknown, methodName: string): T =>
+            patchResponseForSolanaLabsRpcSubscriptions(
+                rawResponse,
+                methodName as keyof (SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable),
+            ),
+        subscribeNotificationNameTransformer: (notificationName: string) =>
+            notificationName.replace(/Notifications$/, 'Subscribe'),
+        unsubscribeNotificationNameTransformer: (notificationName: string) =>
+            notificationName.replace(/Notifications$/, 'Unsubscribe'),
     });
+}
+
+export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscriptionsApi<SolanaRpcSubscriptions> {
+    return createSolanaRpcSubscriptionsApi_INTERNAL(config) as IRpcSubscriptionsApi<SolanaRpcSubscriptions>;
 }
 
 export function createSolanaRpcSubscriptionsApi_UNSTABLE(
     config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
-    return createSolanaRpcSubscriptionsApi(config) as IRpcSubscriptionsApi<
+    return createSolanaRpcSubscriptionsApi_INTERNAL(config) as IRpcSubscriptionsApi<
         SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
     >;
 }
