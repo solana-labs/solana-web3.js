@@ -1,4 +1,5 @@
-import type { IRpcApi, RpcRequest } from '@solana/rpc-transport';
+import { createJsonRpcApi } from '@solana/rpc-transport';
+import { IRpcApi } from '@solana/rpc-transport';
 
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
@@ -115,37 +116,17 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     SimulateTransactionApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
-    return new Proxy({} as IRpcApi<SolanaRpcMethods>, {
-        defineProperty() {
-            return false;
-        },
-        deleteProperty() {
-            return false;
-        },
-        get<TMethodName extends keyof IRpcApi<SolanaRpcMethods>>(
-            ...args: Parameters<NonNullable<ProxyHandler<IRpcApi<SolanaRpcMethods>>['get']>>
-        ) {
-            const [_, p] = args;
-            const methodName = p.toString() as keyof SolanaRpcMethods as string;
-            return function (
-                ...rawParams: Parameters<
-                    SolanaRpcMethods[TMethodName] extends CallableFunction ? SolanaRpcMethods[TMethodName] : never
-                >
-            ): RpcRequest<ReturnType<SolanaRpcMethods[TMethodName]>> {
-                const handleIntegerOverflow = config?.onIntegerOverflow;
-                const params = patchParamsForSolanaLabsRpc(
-                    rawParams,
-                    handleIntegerOverflow
-                        ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
-                        : undefined,
-                );
-                return {
-                    methodName,
-                    params,
-                    responseTransformer: rawResponse => patchResponseForSolanaLabsRpc(rawResponse, methodName),
-                };
-            };
-        },
+    const handleIntegerOverflow = config?.onIntegerOverflow;
+    return createJsonRpcApi<SolanaRpcMethods>({
+        parametersTransformer: <T>(rawParams: T, methodName: string) =>
+            patchParamsForSolanaLabsRpc(
+                rawParams,
+                handleIntegerOverflow
+                    ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
+                    : undefined,
+            ) as unknown[],
+        responseTransformer: <T>(rawResponse: unknown, methodName: string): T =>
+            patchResponseForSolanaLabsRpc(rawResponse, methodName as keyof SolanaRpcMethods),
     });
 }
 
