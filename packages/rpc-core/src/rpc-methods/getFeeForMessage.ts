@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { SerializedMessageBytesBase64 } from '@solana/transactions';
 
@@ -6,7 +7,7 @@ import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 /** Fee corresponding to the message at the specified blockhash */
 type GetFeeForMessageApiResponse = RpcResponse<U64UnsafeBeyond2Pow53Minus1 | null>;
 
-export interface GetFeeForMessageApi {
+export interface GetFeeForMessageApi extends IRpcApiMethods {
     /**
      * Returns the fee the network will charge for a particular Message
      */

@@ -1,10 +1,11 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot } from './common';
 
 type GetBlocksApiResponse = Slot[];
 
-export interface GetBlocksApi {
+export interface GetBlocksApi extends IRpcApiMethods {
     /**
      * Returns a list of confirmed blocks between two slots
      */

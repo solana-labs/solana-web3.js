@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot } from './common';
@@ -23,7 +24,7 @@ type GetLeaderScheduleApiResponseBase = Readonly<{
     [key: Address]: Slot[];
 }>;
 
-export interface GetLeaderScheduleApi {
+export interface GetLeaderScheduleApi extends IRpcApiMethods {
     /**
      * Fetch the leader schedule for the epoch that corresponds to the provided slot.
      * If unspecified, the leader schedule for the current epoch is fetched

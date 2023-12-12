@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -32,7 +33,7 @@ type GetBlockProductionApiResponseWithSingleIdentity<TIdentity extends string> =
     }>;
 }>;
 
-export interface GetBlockProductionApi {
+export interface GetBlockProductionApi extends IRpcApiMethods {
     /**
      * Returns recent block production information from the current or previous epoch.
      */

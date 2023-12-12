@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 
@@ -5,7 +6,7 @@ import { RpcResponse, Slot } from './common';
 
 type IsBlockhashValidApiResponse = RpcResponse<boolean>;
 
-export interface IsBlockhashValidApi {
+export interface IsBlockhashValidApi extends IRpcApiMethods {
     /**
      * Returns whether a blockhash is still valid or not
      */

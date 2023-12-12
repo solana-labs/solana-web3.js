@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -12,7 +13,7 @@ type GetStakeActivationApiResponse = Readonly<{
     state: 'active' | 'inactive' | 'activating' | 'deactivating';
 }>;
 
-export interface GetStakeActivationApi {
+export interface GetStakeActivationApi extends IRpcApiMethods {
     /**
      * Returns epoch activation information for a stake account
      */

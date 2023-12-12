@@ -1,3 +1,4 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -17,7 +18,7 @@ type GetEpochInfoApiResponse = Readonly<{
     transactionCount: U64UnsafeBeyond2Pow53Minus1 | null;
 }>;
 
-export interface GetEpochInfoApi {
+export interface GetEpochInfoApi extends IRpcApiMethods {
     /**
      * Returns the balance of the account of provided Pubkey
      */

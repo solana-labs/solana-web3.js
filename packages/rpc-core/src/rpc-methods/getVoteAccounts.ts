@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
@@ -43,7 +44,7 @@ type GetVoteAccountsConfig<TVotePubkey extends Address> = Readonly<{
     delinquentSlotDistance?: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-export interface GetVoteAccountsApi {
+export interface GetVoteAccountsApi extends IRpcApiMethods {
     /** Returns the account info and associated stake for all the voting accounts in the current bank. */
     getVoteAccounts<TVoteAccount extends Address>(
         config?: GetVoteAccountsConfig<TVoteAccount>,

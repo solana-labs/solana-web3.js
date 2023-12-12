@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -31,7 +32,7 @@ type GetAccountInfoApiSliceableCommonConfig = Readonly<{
     dataSlice?: DataSlice;
 }>;
 
-export interface GetAccountInfoApi {
+export interface GetAccountInfoApi extends IRpcApiMethods {
     /**
      * Returns all information associated with the account of provided public key
      */

@@ -1,5 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, UnixTimestamp } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
@@ -154,7 +155,7 @@ type TransactionAddressTableLookups = Readonly<{
     }>;
 }>;
 
-export interface GetTransactionApi {
+export interface GetTransactionApi extends IRpcApiMethods {
     /**
      * Returns transaction details for a confirmed transaction
      */

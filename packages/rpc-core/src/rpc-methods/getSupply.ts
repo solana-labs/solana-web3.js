@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { RpcResponse } from './common';
@@ -32,7 +33,7 @@ type GetSupplyApiResponseWithoutNonCirculatingAccounts = GetSupplyApiResponseBas
         }>;
     }>;
 
-export interface GetSupplyApi {
+export interface GetSupplyApi extends IRpcApiMethods {
     /**
      * Returns information about the current supply.
      */

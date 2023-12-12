@@ -1,4 +1,5 @@
 import { Signature } from '@solana/keys';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import { TransactionError } from '../transaction-error';
@@ -39,7 +40,7 @@ type GetSignatureStatusesBase = ReadonlyArray<SignatureStatusResult | null>;
 
 type GetSignatureStatusesApiResponse = RpcResponse<GetSignatureStatusesBase>;
 
-export interface GetSignatureStatusesApi {
+export interface GetSignatureStatusesApi extends IRpcApiMethods {
     /**
      * Returns the statuses of a list of signatures.
      * Each signature must be a txid, the first signature of a transaction.

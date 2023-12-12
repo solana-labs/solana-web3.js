@@ -126,7 +126,7 @@ export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
             ...args: Parameters<NonNullable<ProxyHandler<IRpcApi<SolanaRpcMethods>>['get']>>
         ) {
             const [_, p] = args;
-            const methodName = p.toString() as keyof SolanaRpcMethods;
+            const methodName = p.toString() as keyof SolanaRpcMethods as string;
             return function (
                 ...rawParams: Parameters<
                     SolanaRpcMethods[TMethodName] extends CallableFunction ? SolanaRpcMethods[TMethodName] : never

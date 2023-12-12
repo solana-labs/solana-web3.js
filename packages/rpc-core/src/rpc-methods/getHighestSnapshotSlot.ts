@@ -1,3 +1,5 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
+
 import { Slot } from './common';
 
 type GetHighestSnapshotSlotApiResponse = Readonly<{
@@ -5,7 +7,7 @@ type GetHighestSnapshotSlotApiResponse = Readonly<{
     incremental: Slot | null;
 }>;
 
-export interface GetHighestSnapshotSlotApi {
+export interface GetHighestSnapshotSlotApi extends IRpcApiMethods {
     /**
      * Returns the highest slot information that the node has snapshots for.
      *

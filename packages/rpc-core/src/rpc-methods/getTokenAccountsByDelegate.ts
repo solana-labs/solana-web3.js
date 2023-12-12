@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -50,7 +51,7 @@ type GetTokenAccountsByDelegateApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
-export interface GetTokenAccountsByDelegateApi {
+export interface GetTokenAccountsByDelegateApi extends IRpcApiMethods {
     /**
      * Returns all SPL Token accounts by approved Delegate.
      */

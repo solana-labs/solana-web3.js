@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
 import {
@@ -26,7 +27,7 @@ type GetMultipleAccountsApiSliceableCommonConfig = Readonly<{
     dataSlice?: DataSlice;
 }>;
 
-export interface GetMultipleAccountsApi {
+export interface GetMultipleAccountsApi extends IRpcApiMethods {
     /**
      * Returns the account information for a list of Pubkeys.
      */

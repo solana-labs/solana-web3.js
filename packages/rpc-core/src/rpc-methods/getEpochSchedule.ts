@@ -1,3 +1,5 @@
+import type { IRpcApiMethods } from '@solana/rpc-transport';
+
 import { U64UnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetEpochScheduleApiResponse = Readonly<{
@@ -13,7 +15,7 @@ type GetEpochScheduleApiResponse = Readonly<{
     firstNormalSlot: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-export interface GetEpochScheduleApi {
+export interface GetEpochScheduleApi extends IRpcApiMethods {
     /**
      * Returns the epoch schedule information from this cluster's genesis config
      * Note that the optional NO_CONFIG object is ignored. See https://github.com/solana-labs/solana-web3.js/issues/1389

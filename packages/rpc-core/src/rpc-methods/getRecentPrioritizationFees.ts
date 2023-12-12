@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { IRpcApiMethods } from '@solana/rpc-transport';
 
 import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
 
@@ -13,7 +14,7 @@ type GetRecentPrioritizationFeesApiResponse = Readonly<{
     slot: Slot;
 }>[];
 
-export interface GetRecentPrioritizationFeesApi {
+export interface GetRecentPrioritizationFeesApi extends IRpcApiMethods {
     /**
      * Returns the balance of the account of provided Pubkey
      */
