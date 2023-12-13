@@ -13,6 +13,9 @@ import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
 import { VoteNotificationsApi } from './vote-notifications';
 
 type Config = Readonly<{
+    getNodeTransformersForKeyPaths?: (
+        methodName: string,
+    ) => NonNullable<NonNullable<Parameters<typeof patchParamsForSolanaLabsRpc>>[1]>['nodeTransformersForKeyPaths'];
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
@@ -28,15 +31,18 @@ export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & Vote
 export function createSolanaRpcSubscriptionsApi_INTERNAL(
     config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+    const getNodeTransformersForKeyPaths = config?.getNodeTransformersForKeyPaths;
     const handleIntegerOverflow = config?.onIntegerOverflow;
     return createJsonRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>({
         parametersTransformer: <T>(rawParams: T, methodName: string) =>
-            patchParamsForSolanaLabsRpc(
-                rawParams,
-                handleIntegerOverflow
+            patchParamsForSolanaLabsRpc(rawParams, {
+                nodeTransformersForKeyPaths: getNodeTransformersForKeyPaths
+                    ? getNodeTransformersForKeyPaths(methodName)
+                    : undefined,
+                onIntegerOverflow: handleIntegerOverflow
                     ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
                     : undefined,
-            ) as unknown[],
+            }) as unknown[],
         responseTransformer: <T>(rawResponse: unknown, methodName: string): T =>
             patchResponseForSolanaLabsRpcSubscriptions(
                 rawResponse,

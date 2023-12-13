@@ -1,6 +1,6 @@
+import { KEYPATH_WILDCARD } from '../patcher-types';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 import { getAllowedNumericKeypathsForResponse } from '../response-patcher-allowed-numeric-values';
-import { KEYPATH_WILDCARD } from '../response-patcher-types';
 
 jest.mock('../response-patcher-allowed-numeric-values');
 

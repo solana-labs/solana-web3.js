@@ -1,12 +1,11 @@
+import { KeyPath, KEYPATH_WILDCARD } from './patcher-types';
 import {
     getAllowedNumericKeypathsForNotification,
     getAllowedNumericKeypathsForResponse,
 } from './response-patcher-allowed-numeric-values';
-import { KEYPATH_WILDCARD, KeyPathWildcard } from './response-patcher-types';
 import { createSolanaRpcApi } from './rpc-methods';
 import { createSolanaRpcSubscriptionsApi } from './rpc-subscriptions';
 
-export type KeyPath = ReadonlyArray<KeyPathWildcard | number | string | KeyPath>;
 // FIXME(https://github.com/microsoft/TypeScript/issues/33014)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TypescriptBug33014 = any;

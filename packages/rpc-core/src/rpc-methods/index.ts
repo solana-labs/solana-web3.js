@@ -58,6 +58,9 @@ import { SendTransactionApi } from './sendTransaction';
 import { SimulateTransactionApi } from './simulateTransaction';
 
 type Config = Readonly<{
+    getNodeTransformersForKeyPaths?: (
+        methodName: string,
+    ) => NonNullable<NonNullable<Parameters<typeof patchParamsForSolanaLabsRpc>>[1]>['nodeTransformersForKeyPaths'];
     onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
 }>;
 
@@ -116,15 +119,18 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     SimulateTransactionApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
+    const getNodeTransformersForKeyPaths = config?.getNodeTransformersForKeyPaths;
     const handleIntegerOverflow = config?.onIntegerOverflow;
     return createJsonRpcApi<SolanaRpcMethods>({
         parametersTransformer: <T>(rawParams: T, methodName: string) =>
-            patchParamsForSolanaLabsRpc(
-                rawParams,
-                handleIntegerOverflow
+            patchParamsForSolanaLabsRpc(rawParams, {
+                nodeTransformersForKeyPaths: getNodeTransformersForKeyPaths
+                    ? getNodeTransformersForKeyPaths(methodName)
+                    : undefined,
+                onIntegerOverflow: handleIntegerOverflow
                     ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
                     : undefined,
-            ) as unknown[],
+            }) as unknown[],
         responseTransformer: <T>(rawResponse: unknown, methodName: string): T =>
             patchResponseForSolanaLabsRpc(rawResponse, methodName as keyof SolanaRpcMethods),
     });

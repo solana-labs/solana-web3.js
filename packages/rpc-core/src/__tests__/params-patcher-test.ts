@@ -1,4 +1,5 @@
 import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { KeyPath, KEYPATH_WILDCARD } from '../patcher-types';
 
 describe('patchParamsForSolanaLabsRpc', () => {
     [10, '10', null, undefined, Symbol()].forEach(input => {
@@ -53,30 +54,77 @@ describe('patchParamsForSolanaLabsRpc', () => {
             'value below `Number.MAX_SAFE_INTEGER`': -BigInt(Number.MAX_SAFE_INTEGER) - 1n,
         }).forEach(([description, value]) => {
             it('calls `onIntegerOverflow` when passed a value ' + description, () => {
-                patchParamsForSolanaLabsRpc(value, onIntegerOverflow);
+                patchParamsForSolanaLabsRpc(value, { onIntegerOverflow });
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     [], // Equivalent to `params`
                     value,
                 );
             });
             it('calls `onIntegerOverflow` when passed a nested array having a value ' + description, () => {
-                patchParamsForSolanaLabsRpc([1, 2, [3, value]], onIntegerOverflow);
+                patchParamsForSolanaLabsRpc([1, 2, [3, value]], { onIntegerOverflow });
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     [2, 1], // Equivalent to `params[2][1]`.
                     value,
                 );
             });
             it('calls `onIntegerOverflow` when passed a nested object having a value ' + description, () => {
-                patchParamsForSolanaLabsRpc({ a: 1, b: { b1: 2, b2: value } }, onIntegerOverflow);
+                patchParamsForSolanaLabsRpc({ a: 1, b: { b1: 2, b2: value } }, { onIntegerOverflow });
                 expect(onIntegerOverflow).toHaveBeenCalledWith(
                     ['b', 'b2'], // Equivalent to `params.b.b2`.
                     value,
                 );
             });
             it('does not call `onIntegerOverflow` when passed `Number.MAX_SAFE_INTEGER`', () => {
-                patchParamsForSolanaLabsRpc(BigInt(Number.MAX_SAFE_INTEGER), onIntegerOverflow);
+                patchParamsForSolanaLabsRpc(BigInt(Number.MAX_SAFE_INTEGER), { onIntegerOverflow });
                 expect(onIntegerOverflow).not.toHaveBeenCalled();
             });
         });
     });
+    describe.each`
+        replacement      | keyPaths                     | params                                 | expectedTransformees           | expectedPatchedParams
+        ${'🍕'}          | ${[[KEYPATH_WILDCARD]]}      | ${[1, [2, 22], { foo: 3 }, 4]}         | ${[1, [2, 22], { foo: 3 }, 4]} | ${['🍕', '🍕', '🍕', '🍕']}
+        ${'🍕'}          | ${[[1, 1], [2, 'foo']]}      | ${[1, [2, 22], { foo: 3 }, 4]}         | ${[22, 3]}                     | ${[1, [2, '🍕'], { foo: '🍕' }, 4]}
+        ${'🍕'}          | ${[['foo', 1, 'bar']]}       | ${{ baz: 1, foo: [2, { bar: 3 }, 4] }} | ${[3]}                         | ${{ baz: 1, foo: [2, { bar: '🍕' }, 4] }}
+        ${'🍕'}          | ${[['foo'], ['foo', 'bar']]} | ${{ foo: { bar: 1 } }}                 | ${[{ bar: 1 }]}                | ${{ foo: '🍕' }}
+        ${'🍕'}          | ${[['foo'], ['foo']]}        | ${{ foo: { bar: 1 } }}                 | ${[{ bar: 1 }, '🍕']}          | ${{ foo: '🍕' }}
+        ${{ bar: '🍕' }} | ${[['foo'], ['foo', 'bar']]} | ${{ foo: 1 }}                          | ${[1, '🍕']}                   | ${{ foo: { bar: { bar: '🍕' } } }}
+        ${{ bar: '🍕' }} | ${[['foo', 'bar'], ['foo']]} | ${{ foo: 1 }}                          | ${[1, '🍕']}                   | ${{ foo: { bar: { bar: '🍕' } } }}
+    `(
+        'given a transformer with the key paths from test case $#',
+        ({
+            expectedTransformees,
+            expectedPatchedParams,
+            keyPaths,
+            params,
+            replacement,
+        }: {
+            expectedPatchedParams: unknown;
+            expectedTransformees: unknown[];
+            keyPaths: KeyPath[];
+            params: unknown;
+            replacement: unknown;
+        }) => {
+            let nodeTransformersForKeyPaths: NonNullable<
+                NonNullable<Parameters<typeof patchParamsForSolanaLabsRpc>[1]>['nodeTransformersForKeyPaths']
+            >;
+            let nodeTransformer: jest.Mock;
+            beforeEach(() => {
+                nodeTransformer = jest.fn().mockReturnValue(replacement);
+                nodeTransformersForKeyPaths = keyPaths.map(keyPath => [keyPath, nodeTransformer]);
+            });
+            it('calls the transformer with the expected nodes', () => {
+                expect.hasAssertions();
+                patchParamsForSolanaLabsRpc(params, { nodeTransformersForKeyPaths });
+                expectedTransformees.forEach((transformee, ii) => {
+                    expect(nodeTransformer).toHaveBeenNthCalledWith(ii + 1, transformee);
+                });
+                expect(nodeTransformer).toHaveBeenCalledTimes(expectedTransformees.length);
+            });
+            it('replaces the nodes with the output of the transformer', () => {
+                expect(patchParamsForSolanaLabsRpc(params, { nodeTransformersForKeyPaths })).toStrictEqual(
+                    expectedPatchedParams,
+                );
+            });
+        },
+    );
 });
