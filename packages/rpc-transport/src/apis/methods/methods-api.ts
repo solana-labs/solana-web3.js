@@ -1,7 +1,21 @@
-import { IRpcApi, RpcRequest } from '../../json-rpc-types';
-import { IRpcApiMethods, RpcApiConfig } from '../api-types';
+import { IRpcApi, IRpcApiDevnet, IRpcApiMainnet, IRpcApiTestnet, RpcRequest } from '../../json-rpc-types';
+import {
+    IRpcApiMethods,
+    IRpcApiMethodsDevnet,
+    IRpcApiMethodsMainnet,
+    IRpcApiMethodsTestnet,
+    RpcApiConfig,
+} from '../api-types';
 
-export function createJsonRpcApi<TRpcMethods extends IRpcApiMethods>(config?: RpcApiConfig): IRpcApi<TRpcMethods> {
+export function createJsonRpcApi<TRpcMethods extends IRpcApiMethods>(
+    config?: RpcApiConfig,
+): TRpcMethods extends IRpcApiMethodsDevnet<TRpcMethods>
+    ? IRpcApiDevnet<TRpcMethods>
+    : TRpcMethods extends IRpcApiMethodsTestnet<TRpcMethods>
+      ? IRpcApiTestnet<TRpcMethods>
+      : TRpcMethods extends IRpcApiMethodsMainnet<TRpcMethods>
+        ? IRpcApiMainnet<TRpcMethods>
+        : IRpcApi<TRpcMethods> {
     return new Proxy({} as IRpcApi<TRpcMethods>, {
         defineProperty() {
             return false;
@@ -32,5 +46,11 @@ export function createJsonRpcApi<TRpcMethods extends IRpcApiMethods>(config?: Rp
                 };
             };
         },
-    });
+    }) as TRpcMethods extends IRpcApiMethodsDevnet<TRpcMethods>
+        ? IRpcApiDevnet<TRpcMethods>
+        : TRpcMethods extends IRpcApiMethodsTestnet<TRpcMethods>
+          ? IRpcApiTestnet<TRpcMethods>
+          : TRpcMethods extends IRpcApiMethodsMainnet<TRpcMethods>
+            ? IRpcApiMainnet<TRpcMethods>
+            : IRpcApi<TRpcMethods>;
 }

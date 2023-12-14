@@ -1,6 +1,16 @@
+import { IRpcApiMethodsDevnet, IRpcApiMethodsMainnet, IRpcApiMethodsTestnet } from './apis/api-types';
 import { SolanaJsonRpcError } from './json-rpc-errors';
 import { createJsonRpcMessage } from './json-rpc-message';
-import { PendingRpcRequest, Rpc, RpcConfig, RpcRequest, SendOptions } from './json-rpc-types';
+import {
+    PendingRpcRequest,
+    Rpc,
+    RpcConfig,
+    RpcDevnet,
+    RpcMainnet,
+    RpcRequest,
+    RpcTestnet,
+    SendOptions,
+} from './json-rpc-types';
 
 interface IHasIdentifier {
     readonly id: number;
@@ -52,6 +62,20 @@ function makeProxy<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMeth
     }) as Rpc<TRpcMethods>;
 }
 
-export function createJsonRpc<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMethods> {
-    return makeProxy(rpcConfig);
+export function createJsonRpc<TRpcMethods>(
+    rpcConfig: RpcConfig<TRpcMethods>,
+): TRpcMethods extends IRpcApiMethodsDevnet<TRpcMethods>
+    ? RpcDevnet<TRpcMethods>
+    : TRpcMethods extends IRpcApiMethodsTestnet<TRpcMethods>
+      ? RpcTestnet<TRpcMethods>
+      : TRpcMethods extends IRpcApiMethodsMainnet<TRpcMethods>
+        ? RpcMainnet<TRpcMethods>
+        : Rpc<TRpcMethods> {
+    return makeProxy(rpcConfig) as TRpcMethods extends IRpcApiMethodsDevnet<TRpcMethods>
+        ? RpcDevnet<TRpcMethods>
+        : TRpcMethods extends IRpcApiMethodsTestnet<TRpcMethods>
+          ? RpcTestnet<TRpcMethods>
+          : TRpcMethods extends IRpcApiMethodsMainnet<TRpcMethods>
+            ? RpcMainnet<TRpcMethods>
+            : Rpc<TRpcMethods>;
 }

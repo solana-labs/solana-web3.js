@@ -6,6 +6,9 @@ export type { SolanaJsonRpcErrorCode } from './json-rpc-errors';
 export * from './json-rpc-subscription';
 export type {
     IRpcApi,
+    IRpcApiDevnet,
+    IRpcApiMainnet,
+    IRpcApiTestnet,
     IRpcSubscriptionsApi,
     IRpcWebSocketTransport,
     PendingRpcSubscription,

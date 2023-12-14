@@ -1,3 +1,4 @@
+import { IRpcApiMethodsDevnet, IRpcApiMethodsMainnet, IRpcApiMethodsTestnet } from './apis/api-types';
 import { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-types';
 
 /**
@@ -6,10 +7,19 @@ import { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-ty
 export type IRpcApi<TRpcMethods> = {
     [MethodName in keyof TRpcMethods]: RpcReturnTypeMapper<TRpcMethods[MethodName]>;
 };
+export type IRpcApiDevnet<TRpcMethods> = IRpcApi<IRpcApiMethodsDevnet<TRpcMethods>>;
+export type IRpcApiTestnet<TRpcMethods> = IRpcApi<IRpcApiMethodsTestnet<TRpcMethods>>;
+export type IRpcApiMainnet<TRpcMethods> = IRpcApi<IRpcApiMethodsMainnet<TRpcMethods>>;
+
 export type IRpcSubscriptionsApi<TRpcSubscriptionMethods> = {
     [MethodName in keyof TRpcSubscriptionMethods]: RpcSubscriptionReturnTypeMapper<TRpcSubscriptionMethods[MethodName]>;
 };
+
 export type Rpc<TRpcMethods> = RpcMethods<TRpcMethods>;
+export type RpcDevnet<TRpcMethods> = RpcMethods<IRpcApiMethodsDevnet<TRpcMethods>>;
+export type RpcTestnet<TRpcMethods> = RpcMethods<IRpcApiMethodsTestnet<TRpcMethods>>;
+export type RpcMainnet<TRpcMethods> = RpcMethods<IRpcApiMethodsMainnet<TRpcMethods>>;
+
 export type RpcSubscriptions<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods>;
 export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
