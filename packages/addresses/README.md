@@ -82,7 +82,7 @@ function handleSubmit() {
 
 ### `assertIsProgramDerivedAddress()`
 
-In the event that you receive an address/bump-seed tuple from some untrusted source, you can assert that such an tuple conforms to the `ProgramDerivedAddress` type using this function.
+In the event that you receive an address/bump-seed tuple from some untrusted source, you can assert that such a tuple conforms to the `ProgramDerivedAddress` type using this function.
 
 See [`assertIsAddress()`](#assertisaddress) for an example of how to use an assertion function.
 
