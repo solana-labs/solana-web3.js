@@ -73,7 +73,7 @@ This library requires a JavaScript runtime that supports [`BigInt`](https://deve
 
 #### Unit tests
 
-To run the full suite of unit tests, excute the following in the root:
+To run the full suite of unit tests, execute the following in the root:
 
 ```shell
 $ npm test

@@ -46,7 +46,7 @@ This type represents a number in the range $[-8.64 \times 10^{15}, 8.64 \times 1
 
 Lamport values returned from the RPC API conform to the type `LamportsUnsafeBeyond2Pow53Minus1`. You can use a value of that type wherever a quantity of Lamports is expected.
 
-From time to time you might acquire an number that you expect to be a quantity of Lamports, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a quantity of Lamports, use the `assertIsLamports` function.
+From time to time you might acquire a number that you expect to be a quantity of Lamports, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a quantity of Lamports, use the `assertIsLamports` function.
 
 ```ts
 import { assertIsLamports } from '@solana/rpc-types';
