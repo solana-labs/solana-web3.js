@@ -102,7 +102,7 @@ Enter web3.js 2.0. The new API aims to deliver a re-imagined experience of build
 
 ## Features
 
-The new (2.0) version of `@solana/web3.js` aims to address shortcomings in the legacy library first, then goes even further .
+The new (2.0) version of `@solana/web3.js` aims to address shortcomings in the legacy library first, then goes even further.
 
 ### Tree-Shaking
 
@@ -547,7 +547,7 @@ for await (const notification of accountNotifications) {
 
 One of the most crucial aspects of any subscription API is managing potential missed messages. Missing messages, such as account state updates, could be catastrophic for an application. That’s why the new library provides native support for recovering missed messages using the `AsyncIterator`.
 
-When a connection fails unexpectedly, any messages you miss while disconnected can result in your UI falling behind or becoming corrupt. Because subscription failure is now made explicit in the new API, you can implement ‘catch up’ logic after re-estabilshing the subscription.
+When a connection fails unexpectedly, any messages you miss while disconnected can result in your UI falling behind or becoming corrupt. Because subscription failure is now made explicit in the new API, you can implement ‘catch up’ logic after re-establishing the subscription.
 
 Here’s an example of such logic:
 
@@ -750,7 +750,7 @@ const transactionSignedWithFeePayer = await signTransaction([signer], transactio
 
 Transaction objects are also ********frozen by these functions******** to prevent transactions from being mutated in place by functions you pass them to.
 
-Building transactions in this manner might feel different to what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transactions to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transactions in **********************************pipelines**********************************. Here’s how it can be used:
+Building transactions in this manner might feel different from what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transactions to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transactions in **********************************pipelines**********************************. Here’s how it can be used:
 
 ```tsx
 import { pipe } from '@solana/functional';
@@ -909,7 +909,7 @@ const blockWithRewardsAndTransactionsResponse = await rpc.getBlock(0n, {
 
 ### Catching Compile-Time Bugs with TypeScript
 
-As previously mentioned, the type coverage in web3.js 2.0 allow developers to catch common bugs at compile time, rather than runtime.
+As previously mentioned, the type coverage in web3.js 2.0 allows developers to catch common bugs at compile time, rather than runtime.
 
 In the example below, a transaction is created and then attempted to be compiled without setting the fee payer. This would result in a runtime error from the RPC, but instead you will see a type error from TypeScript as you type:
 
