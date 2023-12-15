@@ -9,7 +9,8 @@ import {
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
-import { createJsonRpc, createJsonSubscriptionRpc, type Rpc, type RpcSubscriptions } from '@solana/rpc-transport';
+import { createJsonRpc, createJsonSubscriptionRpc, type RpcSubscriptions } from '@solana/rpc-transport';
+import { Rpc, RpcDevnet, RpcMainnet, RpcTestnet } from '@solana/rpc-transport/dist/types/json-rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
@@ -19,11 +20,25 @@ import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptio
 
 type SolanaRpcMethods = SolanaRpcMethodsMainnet | SolanaRpcMethodsTestnet | SolanaRpcMethodsDevnet;
 
-export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
+export function createSolanaRpc<TRpcMethods extends SolanaRpcMethods>(
+    config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>,
+): TRpcMethods extends SolanaRpcMethodsDevnet
+    ? RpcDevnet<SolanaRpcMethodsDevnet>
+    : TRpcMethods extends SolanaRpcMethodsTestnet
+      ? RpcTestnet<SolanaRpcMethodsTestnet>
+      : TRpcMethods extends SolanaRpcMethodsMainnet
+        ? RpcMainnet<SolanaRpcMethodsMainnet>
+        : Rpc<SolanaRpcMethods> {
     return createJsonRpc({
         ...config,
         api: createSolanaRpcApi(DEFAULT_RPC_CONFIG) as Parameters<typeof createJsonRpc>[0]['api'],
-    }) as Rpc<SolanaRpcMethods>;
+    }) as TRpcMethods extends SolanaRpcMethodsDevnet
+        ? RpcDevnet<SolanaRpcMethodsDevnet>
+        : TRpcMethods extends SolanaRpcMethodsTestnet
+          ? RpcTestnet<SolanaRpcMethodsTestnet>
+          : TRpcMethods extends SolanaRpcMethodsMainnet
+            ? RpcMainnet<SolanaRpcMethodsMainnet>
+            : Rpc<SolanaRpcMethods>;
 }
 
 export function createSolanaRpcSubscriptions(
