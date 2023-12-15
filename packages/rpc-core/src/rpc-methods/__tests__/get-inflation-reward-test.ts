@@ -2,14 +2,14 @@ import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCo
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetInflationRewardApi } from '../index';
 
 describe('getInflationReward', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetInflationRewardApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetInflationRewardApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

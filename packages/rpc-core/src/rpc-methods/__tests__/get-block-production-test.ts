@@ -4,18 +4,18 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetBlockProductionApi } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),
 });
 
 describe('getBlockProduction', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetBlockProductionApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetBlockProductionApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

@@ -1,14 +1,14 @@
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetEpochScheduleApi } from '../index';
 
 describe('getEpochSchedule', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetEpochScheduleApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetEpochScheduleApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

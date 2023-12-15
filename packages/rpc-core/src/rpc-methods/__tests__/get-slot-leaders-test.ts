@@ -6,7 +6,7 @@ import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCo
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetSlotLeadersApi } from '../index';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../../test-ledger/validator-keypair.json');
 
@@ -30,11 +30,11 @@ async function getValidatorAddress() {
 }
 
 describe('getSlotLeaders', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetSlotLeadersApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetSlotLeadersApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

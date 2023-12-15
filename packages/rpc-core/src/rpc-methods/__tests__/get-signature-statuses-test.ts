@@ -2,18 +2,18 @@ import { Signature } from '@solana/keys';
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetSignatureStatusesApi } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),
 });
 
 describe('getSignatureStatuses', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetSignatureStatusesApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetSignatureStatusesApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

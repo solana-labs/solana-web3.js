@@ -5,7 +5,7 @@ import { Commitment } from '@solana/rpc-types';
 import { Blockhash, SerializedMessageBytesBase64 } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetFeeForMessageApi, GetLatestBlockhashApi } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),
@@ -55,11 +55,11 @@ function getMockTransactionMessage(blockhash: Blockhash) {
 }
 
 describe('getFeeForMessage', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetFeeForMessageApi & GetLatestBlockhashApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetFeeForMessageApi & GetLatestBlockhashApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

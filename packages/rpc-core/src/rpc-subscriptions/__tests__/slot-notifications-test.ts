@@ -1,14 +1,14 @@
 import { createJsonSubscriptionRpc, createWebSocketTransport, type RpcSubscriptions } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcSubscriptionsApi, SolanaRpcSubscriptions } from '../index';
+import { createSolanaRpcSubscriptionsApi, SlotNotificationsApi } from '../index';
 
 describe('slotNotifications', () => {
-    let rpc: RpcSubscriptions<SolanaRpcSubscriptions>;
+    let rpc: RpcSubscriptions<SlotNotificationsApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonSubscriptionRpc<SolanaRpcSubscriptions>({
+        rpc = createJsonSubscriptionRpc<SlotNotificationsApi>({
             api: createSolanaRpcSubscriptionsApi(),
             transport: createWebSocketTransport({
                 sendBufferHighWatermark: Number.POSITIVE_INFINITY,

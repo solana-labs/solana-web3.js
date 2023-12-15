@@ -8,7 +8,7 @@ import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { Base58EncodedBytes } from '../common';
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetLatestBlockhashApi, SimulateTransactionApi } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),
@@ -122,11 +122,11 @@ async function getSecretKey() {
 }
 
 describe('simulateTransaction', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<SimulateTransactionApi & GetLatestBlockhashApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<SimulateTransactionApi & GetLatestBlockhashApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

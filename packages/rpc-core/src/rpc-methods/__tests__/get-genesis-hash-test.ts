@@ -4,7 +4,7 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetGenesisHashApi } from '../index';
 
 const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validator.log');
 const genesisHashPattern = /genesis hash: ([\d\w]{32,})/;
@@ -25,11 +25,11 @@ async function getGenesisHashFromLogFile() {
 }
 
 describe('getGenesisHash', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetGenesisHashApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetGenesisHashApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

@@ -4,7 +4,7 @@ import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../../transaction-error';
-import { SolanaRpcMethods } from '..';
+import { GetBlockApi } from '..';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
@@ -19,7 +19,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
     _propName: TPropName,
 ): void {}
 
-const rpc = null as unknown as Rpc<SolanaRpcMethods>;
+const rpc = null as unknown as Rpc<GetBlockApi>;
 
 function assertBase(
     response: {
