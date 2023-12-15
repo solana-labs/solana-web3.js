@@ -1,9 +1,8 @@
 import type { IRpcSubscriptionsApi } from '@solana/rpc-transport';
 
-import { KeyPath } from './response-patcher';
-import { KEYPATH_WILDCARD } from './response-patcher-types';
 import { createSolanaRpcApi } from './rpc-methods';
 import { SolanaRpcSubscriptions, SolanaRpcSubscriptionsUnstable } from './rpc-subscriptions';
+import { KeyPath, KEYPATH_WILDCARD } from './tree-traversal';
 
 // Numeric values nested in `jsonParsed` accounts
 const jsonParsedTokenAccountsConfigs = [

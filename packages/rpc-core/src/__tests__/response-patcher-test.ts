@@ -1,29 +1,10 @@
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 import { getAllowedNumericKeypathsForResponse } from '../response-patcher-allowed-numeric-values';
-import { KEYPATH_WILDCARD } from '../response-patcher-types';
+import { KEYPATH_WILDCARD } from '../tree-traversal';
 
 jest.mock('../response-patcher-allowed-numeric-values');
 
 describe('patchResponseForSolanaLabsRpc', () => {
-    [10n, '10', null, undefined, Symbol()].forEach(input => {
-        describe(`given \`${String(input)}\` (${typeof input}) as input`, () => {
-            it('returns the value as-is', () => {
-                expect(patchResponseForSolanaLabsRpc(input)).toBe(input);
-            });
-        });
-    });
-    describe('given a `number` as input', () => {
-        const input = 10;
-        it('casts the input to a `bigint`', () => {
-            expect(patchResponseForSolanaLabsRpc(input)).toBe(BigInt(input));
-        });
-    });
-    describe('given a non-integer `number` as input', () => {
-        const input = 10.5;
-        it('returns the value as-is', () => {
-            expect(patchResponseForSolanaLabsRpc(input)).toBe(input);
-        });
-    });
     describe('given an array as input', () => {
         const input = [10, 10n, '10', ['10', [10n, 10], 10]] as const;
         it('casts the numbers in the array to a `bigint`, recursively', () => {
@@ -46,49 +27,19 @@ describe('patchResponseForSolanaLabsRpc', () => {
         });
     });
     describe('where allowlisted numeric values are concerned', () => {
-        Object.entries({
-            'nested array of numeric responses': {
-                allowedKeyPaths: [[0], [1, 1], [1, 2, 1]],
-                expectation: [10, [10n, 10, [10n, 10]]],
-                input: [10, [10, 10, [10, 10]]],
+        it.each`
+            description                                          | allowedKeyPaths                                      | expectation                                                         | input
+            ${'nested array of numeric responses'}               | ${[[0], [1, 1], [1, 2, 1]]}                          | ${[10, [10n, 10, [10n, 10]]]}                                       | ${[10, [10, 10, [10, 10]]]}
+            ${'nested array of numeric responses with wildcard'} | ${[[KEYPATH_WILDCARD], [2, KEYPATH_WILDCARD]]}       | ${[1, [2n], [3, 33, 333], 4]}                                       | ${[1, [2], [3, 33, 333], 4]}
+            ${'nested array of objects with numeric responses'}  | ${[['a', 'b', KEYPATH_WILDCARD, 'c']]}               | ${{ a: { b: [{ c: 5, d: 5n }, { c: 10, d: 10n }] } }}               | ${{ a: { b: [{ c: 5, d: 5 }, { c: 10, d: 10 }] } }}
+            ${'nested object of numeric responses'}              | ${[['a'], ['b', 'b2', 'b2_1'], ['b', 'b2', 'b2_3']]} | ${{ a: 10, b: { b1: 10n, b2: { b2_1: 10, b2_2: 10n, b2_3: 10 } } }} | ${{ a: 10, b: { b1: 10, b2: { b2_1: 10, b2_2: 10, b2_3: 10 } } }}
+            ${'numeric response'}                                | ${[[]]}                                              | ${10}                                                               | ${10}
+        `(
+            'performs no `bigint` upcasts on $description when the allowlist is of the form in test case $#',
+            ({ allowedKeyPaths, expectation, input }) => {
+                jest.mocked(getAllowedNumericKeypathsForResponse).mockReturnValue({ getFoo: allowedKeyPaths });
+                expect(patchResponseForSolanaLabsRpc(input, 'getFoo')).toStrictEqual(expectation);
             },
-            'nested array of numeric responses with wildcard': {
-                allowedKeyPaths: [[KEYPATH_WILDCARD], [2, KEYPATH_WILDCARD]],
-                expectation: [1, [2n], [3, 33, 333], 4],
-                input: [1, [2], [3, 33, 333], 4],
-            },
-            'nested array of objects with numeric responses': {
-                allowedKeyPaths: [['a', 'b', KEYPATH_WILDCARD, 'c']],
-                expectation: {
-                    a: {
-                        b: [
-                            { c: 5, d: 5n },
-                            { c: 10, d: 10n },
-                        ],
-                    },
-                },
-                input: {
-                    a: {
-                        b: [
-                            { c: 5, d: 5 },
-                            { c: 10, d: 10 },
-                        ],
-                    },
-                },
-            },
-            'nested object of numeric responses': {
-                allowedKeyPaths: [['a'], ['b', 'b2', 'b2_1'], ['b', 'b2', 'b2_3']],
-                expectation: { a: 10, b: { b1: 10n, b2: { b2_1: 10, b2_2: 10n, b2_3: 10 } } },
-                input: { a: 10, b: { b1: 10, b2: { b2_1: 10, b2_2: 10, b2_3: 10 } } },
-            },
-            'numeric response': { allowedKeyPaths: [[]], expectation: 10, input: 10 },
-        }).forEach(([description, { allowedKeyPaths, expectation, input }]) => {
-            it(`performs no \`bigint\` upcasts on ${description} when the allowlist is of the form \`${JSON.stringify(
-                allowedKeyPaths,
-            )}\``, () => {
-                jest.mocked(getAllowedNumericKeypathsForResponse).mockReturnValue({ getBlocks: allowedKeyPaths });
-                expect(patchResponseForSolanaLabsRpc(input, 'getBlocks')).toStrictEqual(expectation);
-            });
-        });
+        );
     });
 });

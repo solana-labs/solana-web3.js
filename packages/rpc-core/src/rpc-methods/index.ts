@@ -1,7 +1,7 @@
 import { createJsonRpcApi } from '@solana/rpc-transport';
 import { IRpcApi } from '@solana/rpc-transport';
 
-import { patchParamsForSolanaLabsRpc } from '../params-patcher';
+import { getParamsPatcherForSolanaLabsRpc, ParamsPatcherConfig } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
 import { GetAccountInfoApi } from './getAccountInfo';
 import { GetBalanceApi } from './getBalance';
@@ -57,9 +57,7 @@ import { RequestAirdropApi } from './requestAirdrop';
 import { SendTransactionApi } from './sendTransaction';
 import { SimulateTransactionApi } from './simulateTransaction';
 
-type Config = Readonly<{
-    onIntegerOverflow?: (methodName: string, keyPath: (number | string)[], value: bigint) => void;
-}>;
+type Config = ParamsPatcherConfig;
 
 export type SolanaRpcMethods = GetAccountInfoApi &
     GetBalanceApi &
@@ -116,17 +114,9 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     SimulateTransactionApi;
 
 export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
-    const handleIntegerOverflow = config?.onIntegerOverflow;
     return createJsonRpcApi<SolanaRpcMethods>({
-        parametersTransformer: <T>(rawParams: T, methodName: string) =>
-            patchParamsForSolanaLabsRpc(
-                rawParams,
-                handleIntegerOverflow
-                    ? (keyPath, value) => handleIntegerOverflow(methodName, keyPath, value)
-                    : undefined,
-            ) as unknown[],
-        responseTransformer: <T>(rawResponse: unknown, methodName: string): T =>
-            patchResponseForSolanaLabsRpc(rawResponse, methodName as keyof SolanaRpcMethods),
+        parametersTransformer: getParamsPatcherForSolanaLabsRpc(config) as (params: unknown[]) => unknown[],
+        responseTransformer: patchResponseForSolanaLabsRpc,
     });
 }
 
