@@ -1,4 +1,7 @@
+import { Commitment } from '@solana/rpc-types';
+
 import { getParamsPatcherForSolanaLabsRpc } from '../params-patcher';
+import { OPTIONS_OBJECT_POSITION_BY_METHOD } from '../params-patcher-options-object-position-config';
 
 describe('getParamsPatcherForSolanaLabsRpc', () => {
     describe('given no config', () => {
@@ -28,6 +31,186 @@ describe('getParamsPatcherForSolanaLabsRpc', () => {
                 });
             });
         });
+    });
+    describe('with respect to the default commitment', () => {
+        const METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING = [
+            'accountNotifications',
+            'blockNotifications',
+            'getAccountInfo',
+            'getBalance',
+            'getBlock',
+            'getBlockHeight',
+            'getBlockProduction',
+            'getBlocks',
+            'getBlocksWithLimit',
+            'getConfirmedBlock',
+            'getConfirmedBlocks',
+            'getConfirmedBlocksWithLimit',
+            'getConfirmedSignaturesForAddress2',
+            'getConfirmedTransaction',
+            'getEpochInfo',
+            'getFeeCalculatorForBlockhash',
+            'getFeeForMessage',
+            'getFees',
+            'getInflationGovernor',
+            'getInflationReward',
+            'getLargestAccounts',
+            'getLatestBlockhash',
+            'getLeaderSchedule',
+            'getMinimumBalanceForRentExemption',
+            'getMultipleAccounts',
+            'getProgramAccounts',
+            'getRecentBlockhash',
+            'getSignaturesForAddress',
+            'getSlot',
+            'getSlotLeader',
+            'getStakeActivation',
+            'getStakeMinimumDelegation',
+            'getSupply',
+            'getTokenAccountBalance',
+            'getTokenAccountsByDelegate',
+            'getTokenAccountsByOwner',
+            'getTokenLargestAccounts',
+            'getTokenSupply',
+            'getTransaction',
+            'getTransactionCount',
+            'getVoteAccounts',
+            'isBlockhashValid',
+            'logsNotifications',
+            'programNotifications',
+            'requestAirdrop',
+            'signatureNotifications',
+            'simulateTransaction',
+        ];
+        describe.each(['processed', 'confirmed'] as Commitment[])(
+            'with the default commitment set to `%s`',
+            defaultCommitment => {
+                let patcher: ReturnType<typeof getParamsPatcherForSolanaLabsRpc>;
+                beforeEach(() => {
+                    patcher = getParamsPatcherForSolanaLabsRpc({ defaultCommitment });
+                });
+                it.each(METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING)(
+                    'adds a default commitment on calls for `%s`',
+                    methodName => {
+                        expect(patcher([], methodName)).toContainEqual({ commitment: defaultCommitment });
+                    },
+                );
+                it('adds a default preflight commitment on calls to `sendTransaction`', () => {
+                    expect(patcher([], 'sendTransaction')).toContainEqual({ preflightCommitment: defaultCommitment });
+                });
+            },
+        );
+        describe('with the default commitment set to `finalized`', () => {
+            let patcher: ReturnType<typeof getParamsPatcherForSolanaLabsRpc>;
+            beforeEach(() => {
+                patcher = getParamsPatcherForSolanaLabsRpc({ defaultCommitment: 'finalized' });
+            });
+            it.each(METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING)('adds no commitment on calls for `%s`', methodName => {
+                expect(patcher([], methodName)).not.toContainEqual(
+                    expect.objectContaining({ commitment: expect.anything() }),
+                );
+            });
+            it('adds no preflight commitment on calls to `sendTransaction`', () => {
+                expect(patcher([], 'sendTransaction')).not.toContainEqual(
+                    expect.objectContaining({ preflightCommitment: expect.anything() }),
+                );
+            });
+        });
+        describe('with no default commitment set', () => {
+            let patcher: ReturnType<typeof getParamsPatcherForSolanaLabsRpc>;
+            beforeEach(() => {
+                patcher = getParamsPatcherForSolanaLabsRpc();
+            });
+            it.each(METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING)('sets no commitment on calls to `%s`', methodName => {
+                expect(patcher([], methodName)).not.toContainEqual(
+                    expect.objectContaining({ commitment: expect.anything() }),
+                );
+            });
+            it('adds no preflight commitment on calls to `sendTransaction`', () => {
+                expect(patcher([], 'sendTransaction')).not.toContainEqual(
+                    expect.objectContaining({ preflightCommitment: expect.anything() }),
+                );
+            });
+        });
+        describe.each(['finalized', undefined])(
+            'when the params already specify a commitment of `%s`',
+            existingCommitment => {
+                describe.each(METHODS_SUBJECT_TO_COMMITMENT_DEFAULTING)('on calls to `%s`', methodName => {
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD[methodName]!;
+                    it('removes the commitment property on calls to `%s` when there are other properties in the config object', () => {
+                        expect.assertions(1);
+                        const params = [
+                            ...new Array(optionsObjectPosition),
+                            { commitment: existingCommitment, other: 'property' },
+                        ];
+                        const patcher = getParamsPatcherForSolanaLabsRpc();
+                        expect(patcher(params, methodName)).toStrictEqual([
+                            ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                            { other: 'property' },
+                        ]);
+                    });
+                    it('deletes the commitment on calls to `%s` when there are no other properties left and the config object is not the last param', () => {
+                        expect.assertions(1);
+                        const params = [
+                            ...new Array(optionsObjectPosition),
+                            { commitment: existingCommitment },
+                            'someParam',
+                        ];
+                        const patcher = getParamsPatcherForSolanaLabsRpc();
+                        expect(patcher(params, methodName)).toStrictEqual([
+                            ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                            undefined,
+                            'someParam',
+                        ]);
+                    });
+                    it('truncates the params on calls to `%s` when there are no other properties left and the config object is the last param', () => {
+                        expect.assertions(1);
+                        const params = [...new Array(optionsObjectPosition), { commitment: existingCommitment }];
+                        const patcher = getParamsPatcherForSolanaLabsRpc();
+                        expect(patcher(params, methodName)).toStrictEqual([
+                            ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                        ]);
+                    });
+                });
+                it('removes the preflight commitment property on calls to `%s` when there are other properties in the config object', () => {
+                    expect.assertions(1);
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const params = [
+                        ...new Array(optionsObjectPosition),
+                        { other: 'property', preflightCommitment: existingCommitment },
+                    ];
+                    const patcher = getParamsPatcherForSolanaLabsRpc();
+                    expect(patcher(params, 'sendTransaction')).toStrictEqual([
+                        ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                        { other: 'property' },
+                    ]);
+                });
+                it('deletes the preflight commitment on calls to `%s` when there are no other properties left and the config object is not the last param', () => {
+                    expect.assertions(1);
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const params = [
+                        ...new Array(optionsObjectPosition),
+                        { preflightCommitment: existingCommitment },
+                        'someParam',
+                    ];
+                    const patcher = getParamsPatcherForSolanaLabsRpc();
+                    expect(patcher(params, 'sendTransaction')).toStrictEqual([
+                        ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                        undefined,
+                        'someParam',
+                    ]);
+                });
+                it('truncates the params on calls to `%s` when there are no other properties left and the config object is the last param', () => {
+                    expect.assertions(1);
+                    const optionsObjectPosition = OPTIONS_OBJECT_POSITION_BY_METHOD['sendTransaction']!;
+                    const params = [...new Array(optionsObjectPosition), { preflightCommitment: existingCommitment }];
+                    const patcher = getParamsPatcherForSolanaLabsRpc();
+                    expect(patcher(params, 'sendTransaction')).toStrictEqual([
+                        ...new Array(optionsObjectPosition).map(() => expect.anything()),
+                    ]);
+                });
+            },
+        );
     });
     describe('given an integer overflow handler', () => {
         let onIntegerOverflow: jest.Mock;
