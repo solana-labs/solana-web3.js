@@ -3,7 +3,9 @@ import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
     createSolanaRpcSubscriptionsApi_UNSTABLE,
-    SolanaRpcMethods,
+    SolanaRpcMethodsDevnet,
+    SolanaRpcMethodsMainnet,
+    SolanaRpcMethodsTestnet,
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
@@ -15,11 +17,13 @@ import fastStableStringify from 'fast-stable-stringify';
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
 
+type SolanaRpcMethods = SolanaRpcMethodsMainnet | SolanaRpcMethodsTestnet | SolanaRpcMethodsDevnet;
+
 export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
     return createJsonRpc({
         ...config,
-        api: createSolanaRpcApi(DEFAULT_RPC_CONFIG),
-    });
+        api: createSolanaRpcApi(DEFAULT_RPC_CONFIG) as Parameters<typeof createJsonRpc>[0]['api'],
+    }) as Rpc<SolanaRpcMethods>;
 }
 
 export function createSolanaRpcSubscriptions(

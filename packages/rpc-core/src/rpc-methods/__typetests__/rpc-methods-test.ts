@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
 import { Rpc } from '@solana/rpc-transport';
 
-import { SolanaRpcMethods } from '..';
+import { GetTokenAccountsByDelegateApi, GetTokenAccountsByOwnerApi } from '..';
 
-const rpc = {} as unknown as Rpc<SolanaRpcMethods>;
+const rpc = {} as unknown as Rpc<GetTokenAccountsByDelegateApi & GetTokenAccountsByOwnerApi>;
 
 // getTokenAccountsByDelegate
 async () => {
