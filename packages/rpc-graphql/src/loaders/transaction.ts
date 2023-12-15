@@ -1,10 +1,10 @@
-import { SolanaRpcMethods } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
+import { TransactionVersion } from '../../../transactions/dist/types';
 import type { Rpc } from '../context';
 import { TransactionQueryArgs } from '../schema/transaction';
 import { onlyPresentFieldRequested } from './common/resolve-info';
@@ -16,7 +16,7 @@ function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', sign
         commitment,
         encoding,
         // Always use 0 to avoid silly errors
-        maxSupportedTransactionVersion: 0,
+        maxSupportedTransactionVersion: 0 as TransactionVersion,
         signature,
     };
 }
@@ -26,7 +26,11 @@ async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<ty
     const { encoding } = config;
 
     const transaction = await rpc
-        .getTransaction(signature, config as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
+        .getTransaction(
+            signature,
+            // @ts-expect-error FIXME: https://github.com/solana-labs/solana-web3.js/issues/1984
+            config,
+        )
         .send()
         .catch(e => {
             throw e;
@@ -42,7 +46,11 @@ async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<ty
     if (encoding !== 'jsonParsed') {
         const jsonParsedConfig = { ...config, encoding: 'jsonParsed' };
         const transactionJsonParsed = await rpc
-            .getTransaction(signature, jsonParsedConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
+            .getTransaction(
+                signature,
+                // @ts-expect-error FIXME: https://github.com/solana-labs/solana-web3.js/issues/1984
+                jsonParsedConfig,
+            )
             .send()
             .catch(e => {
                 throw e;
