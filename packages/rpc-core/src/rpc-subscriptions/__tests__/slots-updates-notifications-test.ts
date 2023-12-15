@@ -23,9 +23,10 @@ describe('slotsUpdatesNotifications', () => {
 
     it('produces slots updates notifications', async () => {
         expect.assertions(1);
+        const abortController = new AbortController();
         const slotsUpdatesNotifications = await rpc
             .slotsUpdatesNotifications()
-            .subscribe({ abortSignal: new AbortController().signal });
+            .subscribe({ abortSignal: abortController.signal });
         const iterator = slotsUpdatesNotifications[Symbol.asyncIterator]();
         await expect(iterator.next()).resolves.toHaveProperty(
             'value',
@@ -35,5 +36,6 @@ describe('slotsUpdatesNotifications', () => {
                 type: expect.any(String),
             }),
         );
+        abortController.abort();
     });
 });

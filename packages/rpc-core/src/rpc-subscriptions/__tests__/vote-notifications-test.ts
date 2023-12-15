@@ -23,9 +23,8 @@ describe('voteNotifications', () => {
 
     it('produces vote notifications', async () => {
         expect.assertions(1);
-        const voteNotifications = await rpc
-            .voteNotifications()
-            .subscribe({ abortSignal: new AbortController().signal });
+        const abortController = new AbortController();
+        const voteNotifications = await rpc.voteNotifications().subscribe({ abortSignal: abortController.signal });
         const iterator = voteNotifications[Symbol.asyncIterator]();
         await expect(iterator.next()).resolves.toHaveProperty(
             'value',
@@ -38,5 +37,6 @@ describe('voteNotifications', () => {
                 votePubkey: expect.any(String),
             }),
         );
+        abortController.abort();
     });
 });
