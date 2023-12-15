@@ -1,16 +1,22 @@
-import { createSolanaRpcApi, SolanaRpcMethods } from '@solana/rpc-core';
+import {
+    createSolanaRpcApi,
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+} from '@solana/rpc-core';
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../rpc';
 
 describe('account', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
