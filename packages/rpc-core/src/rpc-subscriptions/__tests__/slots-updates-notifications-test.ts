@@ -24,18 +24,21 @@ describe('slotsUpdatesNotifications', () => {
     it('produces slots updates notifications', async () => {
         expect.assertions(1);
         const abortController = new AbortController();
-        const slotsUpdatesNotifications = await rpc
-            .slotsUpdatesNotifications()
-            .subscribe({ abortSignal: abortController.signal });
-        const iterator = slotsUpdatesNotifications[Symbol.asyncIterator]();
-        await expect(iterator.next()).resolves.toHaveProperty(
-            'value',
-            expect.objectContaining({
-                slot: expect.any(BigInt),
-                timestamp: expect.any(BigInt),
-                type: expect.any(String),
-            }),
-        );
-        abortController.abort();
+        try {
+            const slotsUpdatesNotifications = await rpc
+                .slotsUpdatesNotifications()
+                .subscribe({ abortSignal: abortController.signal });
+            const iterator = slotsUpdatesNotifications[Symbol.asyncIterator]();
+            await expect(iterator.next()).resolves.toHaveProperty(
+                'value',
+                expect.objectContaining({
+                    slot: expect.any(BigInt),
+                    timestamp: expect.any(BigInt),
+                    type: expect.any(String),
+                }),
+            );
+        } finally {
+            abortController.abort();
+        }
     });
 });
