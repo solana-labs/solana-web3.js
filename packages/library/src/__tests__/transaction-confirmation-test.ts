@@ -223,6 +223,7 @@ describe('waitForRecentTransactionConfirmation', () => {
         });
         expect(getBlockHeightExceedencePromise).toHaveBeenCalledWith({
             abortSignal: expect.any(AbortSignal),
+            commitment: 'finalized',
             lastValidBlockHeight: MOCK_TRANSACTION.lifetimeConstraint.lastValidBlockHeight,
         });
     });
