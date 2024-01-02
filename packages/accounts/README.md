@@ -147,6 +147,21 @@ assertAccountExists(myAccount);
 myAccount satisfies EncodedAccount<'1234..5678'>;
 ```
 
+### `assertAccountsExist()`
+
+Given an array of `MaybeAccount`s, this function asserts that all the accounts
+exist and allows them to be used as an array of `Account`s going forward.
+
+```ts
+const myAccounts: MaybeEncodedAccount<Address>[];
+assertAccountsExist(myAccounts);
+
+// Now we can use them as an array of accounts
+for (const a of myAccounts) {
+  a satisfies EncodedAccount<Address>;
+}
+```
+
 ### `parseBase64RpcAccount()`
 
 This function parses a base64-encoded account provided by the RPC client into an `EncodedAccount` type or a `MaybeEncodedAccount` type if the raw data can be set to `null`.
