@@ -19,3 +19,15 @@ export function assertAccountExists<TData extends object | Uint8Array, TAddress 
         throw new Error(`Expected account [${account.address}] to exist.`);
     }
 }
+
+/** Asserts that all accounts that may or may not exist, actually all exist. */
+export function assertAccountsExist<TData extends object | Uint8Array, TAddress extends string = string>(
+    accounts: MaybeAccount<TData, TAddress>[]
+): asserts accounts is (Account<TData, TAddress> & { exists: true })[] {
+    const missingAccounts = accounts.filter(a => !a.exists);
+    if(missingAccounts.length > 0) {
+        const missingAddresses = missingAccounts.map(a => a.address);
+        // TODO: Coded error.
+        throw new Error(`Expected accounts [${missingAddresses.join(', ')}] to exist.`);
+    }
+}
