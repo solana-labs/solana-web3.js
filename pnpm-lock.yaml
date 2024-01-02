@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.0
@@ -260,7 +256,7 @@ importers:
         version: link:../tsconfig
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(ts-node@10.9.1)(typescript@5.1.6)
 
   packages/codecs-core:
     devDependencies:
@@ -1091,8 +1087,8 @@ importers:
         specifier: ^7.23.4
         version: 7.23.4(@babel/core@7.23.3)
       '@babel/plugin-transform-runtime':
-        specifier: ^7.23.4
-        version: 7.23.4(@babel/core@7.23.3)
+        specifier: ^7.23.7
+        version: 7.23.7(@babel/core@7.23.3)
       '@babel/preset-env':
         specifier: ^7.23.3
         version: 7.23.3(@babel/core@7.23.3)
@@ -2274,8 +2270,8 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /@babel/helper-define-polyfill-provider@0.4.3(@babel/core@7.23.3):
-    resolution: {integrity: sha512-WBrLmuPP47n7PNwsZ57pqam6G/RGo1vw/87b0Blc53tZNGZ4x7YvZ6HgQe2vo1W/FR20OgjeZuGXzudPiXHFug==}
+  /@babel/helper-define-polyfill-provider@0.4.4(@babel/core@7.23.3):
+    resolution: {integrity: sha512-QcJMILQCu2jm5TFPGA3lCpJJTeEP+mqeXooG/NZbg/h5FTFi6V0+99ahlRsW8/kRLyb24LZVCCiclDedhLKcBA==}
     peerDependencies:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
     dependencies:
@@ -3096,8 +3092,8 @@ packages:
       '@babel/helper-plugin-utils': 7.22.5
     dev: true
 
-  /@babel/plugin-transform-runtime@7.23.4(@babel/core@7.23.3):
-    resolution: {integrity: sha512-ITwqpb6V4btwUG0YJR82o2QvmWrLgDnx/p2A3CTPYGaRgULkDiC0DRA2C4jlRB9uXGUEfaSS/IGHfVW+ohzYDw==}
+  /@babel/plugin-transform-runtime@7.23.7(@babel/core@7.23.3):
+    resolution: {integrity: sha512-fa0hnfmiXc9fq/weK34MUV0drz2pOL/vfKWvN7Qw127hiUPabFCUMgAbYWcchRzMJit4o5ARsK/s+5h0249pLw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -3105,9 +3101,9 @@ packages:
       '@babel/core': 7.23.3
       '@babel/helper-module-imports': 7.22.15
       '@babel/helper-plugin-utils': 7.22.5
-      babel-plugin-polyfill-corejs2: 0.4.6(@babel/core@7.23.3)
-      babel-plugin-polyfill-corejs3: 0.8.5(@babel/core@7.23.3)
-      babel-plugin-polyfill-regenerator: 0.5.3(@babel/core@7.23.3)
+      babel-plugin-polyfill-corejs2: 0.4.7(@babel/core@7.23.3)
+      babel-plugin-polyfill-corejs3: 0.8.7(@babel/core@7.23.3)
+      babel-plugin-polyfill-regenerator: 0.5.4(@babel/core@7.23.3)
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -6404,7 +6400,20 @@ packages:
     dependencies:
       '@babel/compat-data': 7.23.3
       '@babel/core': 7.23.3
-      '@babel/helper-define-polyfill-provider': 0.4.3(@babel/core@7.23.3)
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
+      semver: 6.3.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /babel-plugin-polyfill-corejs2@0.4.7(@babel/core@7.23.3):
+    resolution: {integrity: sha512-LidDk/tEGDfuHW2DWh/Hgo4rmnw3cduK6ZkOI1NPFceSK3n/yAGeOsNT7FLnSGHkXj3RHGSEVkN3FsCTY6w2CQ==}
+    peerDependencies:
+      '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
+    dependencies:
+      '@babel/compat-data': 7.23.3
+      '@babel/core': 7.23.3
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -6416,7 +6425,19 @@ packages:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/helper-define-polyfill-provider': 0.4.3(@babel/core@7.23.3)
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
+      core-js-compat: 3.33.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /babel-plugin-polyfill-corejs3@0.8.7(@babel/core@7.23.3):
+    resolution: {integrity: sha512-KyDvZYxAzkC0Aj2dAPyDzi2Ym15e5JKZSK+maI7NAwSqofvuFglbSsxE7wUOvTg9oFVnHMzVzBKcqEb4PJgtOA==}
+    peerDependencies:
+      '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
+    dependencies:
+      '@babel/core': 7.23.3
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
       core-js-compat: 3.33.1
     transitivePeerDependencies:
       - supports-color
@@ -6428,7 +6449,18 @@ packages:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
     dependencies:
       '@babel/core': 7.23.3
-      '@babel/helper-define-polyfill-provider': 0.4.3(@babel/core@7.23.3)
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /babel-plugin-polyfill-regenerator@0.5.4(@babel/core@7.23.3):
+    resolution: {integrity: sha512-S/x2iOCvDaCASLYsOOgWOq4bCfKYVqvO/uxjkaYyZ3rVsVE3CeAI/c84NpyuBBymEgNvHgjEot3a9/Z/kXvqsg==}
+    peerDependencies:
+      '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
+    dependencies:
+      '@babel/core': 7.23.3
+      '@babel/helper-define-polyfill-provider': 0.4.4(@babel/core@7.23.3)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13833,3 +13865,7 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

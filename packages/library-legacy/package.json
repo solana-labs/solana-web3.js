@@ -75,7 +75,7 @@
     "@babel/plugin-transform-class-properties": "^7.23.3",
     "@babel/plugin-transform-private-methods": "^7.23.3",
     "@babel/plugin-transform-private-property-in-object": "^7.23.4",
-    "@babel/plugin-transform-runtime": "^7.23.4",
+    "@babel/plugin-transform-runtime": "^7.23.7",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
     "@rollup/plugin-alias": "^4.0.3",
