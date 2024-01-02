@@ -62,6 +62,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/accounts": "workspace:*",
         "@solana/addresses": "workspace:*",
         "@solana/codecs-core": "workspace:*",
         "@solana/codecs-data-structures": "workspace:*",
@@ -73,6 +74,8 @@
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/instructions": "workspace:*",
+        "@solana/rpc-core": "workspace:*",
+        "@solana/rpc-transport": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
         "@types/node": "18.11.19",

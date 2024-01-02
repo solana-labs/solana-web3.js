@@ -1,9 +1,7 @@
 import {
-    combineCodec,
     FixedSizeDecoder,
     mapDecoder,
     mapEncoder,
-    VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
@@ -17,6 +15,8 @@ import {
 } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { SignatureBytes } from '@solana/keys';
+import type { GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Rpc } from '@solana/rpc-transport';
 
 import { CompilableTransaction } from '../compilable-transaction';
 import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction';
@@ -50,15 +50,10 @@ export function getTransactionEncoder(): VariableSizeEncoder<
 }
 
 export function getTransactionDecoder(
+    rpc: Rpc<GetMultipleAccountsApi>,
     lastValidBlockHeight?: bigint,
-): VariableSizeDecoder<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
+): VariableSizeDecoder<Promise<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)>> {
     return mapDecoder(getCompiledTransactionDecoder(), compiledTransaction =>
-        decompileTransaction(compiledTransaction, lastValidBlockHeight),
+        decompileTransaction(compiledTransaction, rpc, lastValidBlockHeight),
     );
-}
-
-export function getTransactionCodec(
-    lastValidBlockHeight?: bigint,
-): VariableSizeCodec<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
-    return combineCodec(getTransactionEncoder(), getTransactionDecoder(lastValidBlockHeight));
 }

@@ -1934,6 +1934,9 @@ importers:
 
   packages/transactions:
     dependencies:
+      '@solana/accounts':
+        specifier: workspace:*
+        version: link:../accounts
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
@@ -1962,6 +1965,12 @@ importers:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
+      '@solana/rpc-core':
+        specifier: workspace:*
+        version: link:../rpc-core
+      '@solana/rpc-transport':
+        specifier: workspace:*
+        version: link:../rpc-transport
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)

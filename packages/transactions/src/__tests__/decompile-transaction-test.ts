@@ -1,6 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
+import type { GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Rpc } from '@solana/rpc-transport';
 
 import { decompileTransaction } from '../decompile-transaction';
 import { Nonce } from '../durable-nonce';
@@ -15,11 +17,14 @@ type CompiledTransaction = Readonly<{
 describe('decompileTransaction', () => {
     const U64_MAX = 2n ** 64n - 1n;
     const feePayer = '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK' as Address;
+    const nullRpc = {} as unknown as Rpc<GetMultipleAccountsApi>;
 
     describe('for a transaction with a blockhash lifetime', () => {
         const blockhash = 'J4yED2jcMAHyQUg61DBmm4njmEydUr2WqrV9cdEcDDgL';
 
-        it('converts a transaction with no instructions', () => {
+        it('converts a transaction with no instructions', async () => {
+            expect.assertions(3);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -35,7 +40,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             expect(transaction.version).toBe(0);
             expect(transaction.feePayer).toEqual(feePayer);
@@ -45,7 +50,9 @@ describe('decompileTransaction', () => {
             });
         });
 
-        it('converts a transaction with version legacy', () => {
+        it('converts a transaction with version legacy', async () => {
+            expect.assertions(1);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -61,11 +68,13 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
             expect(transaction.version).toBe('legacy');
         });
 
-        it('converts a transaction with one instruction with no accounts or data', () => {
+        it('converts a transaction with one instruction with no accounts or data', async () => {
+            expect.assertions(1);
+
             const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             const compiledTransaction: CompiledTransaction = {
@@ -84,14 +93,16 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
             const expectedInstruction: IInstruction = {
                 programAddress,
             };
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
         });
 
-        it('converts a transaction with one instruction with accounts and data', () => {
+        it('converts a transaction with one instruction with accounts and data', async () => {
+            expect.assertions(1);
+
             const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
 
             const compiledTransaction: CompiledTransaction = {
@@ -126,7 +137,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -154,7 +165,9 @@ describe('decompileTransaction', () => {
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
         });
 
-        it('converts a transaction with multiple instructions', () => {
+        it('converts a transaction with multiple instructions', async () => {
+            expect.assertions(1);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -175,7 +188,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -192,7 +205,9 @@ describe('decompileTransaction', () => {
             expect(transaction.instructions).toStrictEqual(expectedInstructions);
         });
 
-        it('converts a transaction with a single signer', () => {
+        it('converts a transaction with a single signer', async () => {
+            expect.assertions(1);
+
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
@@ -210,13 +225,18 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature as SignatureBytes,
             });
         });
 
-        it('converts a transaction with multiple signers', () => {
+        it('converts a transaction with multiple signers', async () => {
+            expect.assertions(1);
+
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
@@ -247,7 +267,10 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, otherSigner1Signature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner1Address]: otherSigner1Signature,
@@ -255,7 +278,9 @@ describe('decompileTransaction', () => {
             });
         });
 
-        it('converts a partially signed transaction with multiple signers', () => {
+        it('converts a partially signed transaction with multiple signers', async () => {
+            expect.assertions(1);
+
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const otherSigner1Address = '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address;
@@ -287,14 +312,19 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner2Address]: otherSigner2Signature,
             });
         });
 
-        it('converts a transaction with a given lastValidBlockHeight', () => {
+        it('converts a transaction with a given lastValidBlockHeight', async () => {
+            expect.assertions(1);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -310,7 +340,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, 100n);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc, 100n);
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: 100n,
@@ -330,7 +360,9 @@ describe('decompileTransaction', () => {
         const systemProgramAddress = '11111111111111111111111111111111' as Address;
         const recentBlockhashesSysvarAddress = 'SysvarRecentB1ockHashes11111111111111111111' as Address;
 
-        it('converts a transaction with one instruction which is advance nonce (fee payer is nonce authority)', () => {
+        it('converts a transaction with one instruction which is advance nonce (fee payer is nonce authority)', async () => {
+            expect.assertions(3);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -365,7 +397,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -391,7 +423,9 @@ describe('decompileTransaction', () => {
             expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
         });
 
-        it('converts a transaction with one instruction which is advance nonce (fee payer is not nonce authority)', () => {
+        it('converts a transaction with one instruction which is advance nonce (fee payer is not nonce authority)', async () => {
+            expect.assertions(1);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -427,7 +461,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -450,7 +484,9 @@ describe('decompileTransaction', () => {
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
         });
 
-        it('converts a durable nonce transaction with multiple instruction', () => {
+        it('converts a durable nonce transaction with multiple instruction', async () => {
+            expect.assertions(2);
+
             const compiledTransaction: CompiledTransaction = {
                 compiledMessage: {
                     header: {
@@ -493,7 +529,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = await decompileTransaction(compiledTransaction, nullRpc);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -537,7 +573,9 @@ describe('decompileTransaction', () => {
             expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
         });
 
-        it('converts a durable nonce transaction with a single signer', () => {
+        it('converts a durable nonce transaction with a single signer', async () => {
+            expect.assertions(1);
+
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
             const compiledTransaction: CompiledTransaction = {
@@ -574,14 +612,19 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [nonceAuthorityAddress]: feePayerSignature,
             });
         });
 
-        it('converts a durable nonce transaction with multiple signers', () => {
+        it('converts a durable nonce transaction with multiple signers', async () => {
+            expect.assertions(1);
+
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
             const authoritySignature = new Uint8Array(Array(64).fill(2)) as SignatureBytes;
 
@@ -620,7 +663,10 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, authoritySignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
@@ -628,7 +674,9 @@ describe('decompileTransaction', () => {
             });
         });
 
-        it('converts a partially signed durable nonce transaction with multiple signers', () => {
+        it('converts a partially signed durable nonce transaction with multiple signers', async () => {
+            expect.assertions(1);
+
             const extraSignerAddress = '9bXC3RtDN5MzDMWRCqjgVTeQK2anMhdkq1ZoGN1Tb1UE' as Address;
 
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
@@ -677,7 +725,10 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, extraSignerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = (await decompileTransaction(
+                compiledTransaction,
+                nullRpc,
+            )) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [extraSignerAddress]: extraSignerSignature,

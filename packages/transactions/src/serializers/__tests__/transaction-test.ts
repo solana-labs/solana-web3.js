@@ -1,10 +1,12 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
+import type { GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Rpc } from '@solana/rpc-transport';
 
 import { decompileTransaction } from '../../decompile-transaction';
 import { CompiledMessage, compileMessage } from '../../message';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
-import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
+import { getTransactionDecoder, getTransactionEncoder } from '../transaction';
 
 jest.mock('../../message');
 jest.mock('../message');
@@ -15,7 +17,7 @@ function getMockAddress() {
     return `${_nextMockAddress++}` as Address;
 }
 
-describe.each([getTransactionEncoder, getTransactionCodec])('Transaction serializer %p', serializerFactory => {
+describe.each([getTransactionEncoder])('Transaction serializer %p', serializerFactory => {
     let transaction: ReturnType<typeof getTransactionEncoder>;
 
     let addressA: Address;
@@ -99,7 +101,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
     });
 });
 
-describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deserializer %p', deserializerFactory => {
+describe.each([getTransactionDecoder])('Transaction deserializer %p', deserializerFactory => {
     let transaction: ReturnType<typeof getTransactionDecoder>;
 
     let addressA: Address;
@@ -107,6 +109,8 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
     let mockCompiledMessage: CompiledMessage;
     let mockCompiledWireMessage: Uint8Array;
     let mockDecompiledTransaction: ReturnType<typeof decompileTransaction>;
+
+    const nullRpc = {} as unknown as Rpc<GetMultipleAccountsApi>;
 
     beforeEach(() => {
         addressA = getMockAddress();
@@ -147,11 +151,13 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         (getCompiledMessageDecoder as jest.Mock).mockReturnValue({
             read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
-        (decompileTransaction as jest.Mock).mockReturnValue(mockDecompiledTransaction);
+        (decompileTransaction as jest.Mock).mockResolvedValue(mockDecompiledTransaction);
 
-        transaction = deserializerFactory();
+        transaction = deserializerFactory(nullRpc);
     });
-    it('deserializes a transaction with no signatures', () => {
+    it('deserializes a transaction with no signatures', async () => {
+        expect.assertions(2);
+
         const noSignature = new Uint8Array(Array(64).fill(0));
         const bytes = new Uint8Array([
             /** SIGNATURES */
@@ -163,17 +169,20 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const decodedTransaction = transaction.decode(bytes);
+        const decodedTransaction = await transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
+            nullRpc,
             undefined,
         );
     });
-    it('deserializes a partially signed transaction', () => {
+    it('deserializes a partially signed transaction', async () => {
+        expect.assertions(2);
+
         const noSignature = new Uint8Array(Array(64).fill(0));
         const mockSignatureA = new Uint8Array(Array(64).fill(1));
 
@@ -187,17 +196,20 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const decodedTransaction = transaction.decode(bytes);
+        const decodedTransaction = await transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, mockSignatureA],
             },
+            nullRpc,
             undefined,
         );
     });
-    it('deserializes a fully signed transaction', () => {
+    it('deserializes a fully signed transaction', async () => {
+        expect.assertions(2);
+
         const mockSignatureA = new Uint8Array(Array(64).fill(1));
         const mockSignatureB = new Uint8Array(Array(64).fill(2));
 
@@ -211,17 +223,20 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const decodedTransaction = transaction.decode(bytes);
+        const decodedTransaction = await transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
                 compiledMessage: mockCompiledMessage,
                 signatures: [mockSignatureB, mockSignatureA],
             },
+            nullRpc,
             undefined,
         );
     });
-    it('passes lastValidBlockHeight to decompileTransaction', () => {
+    it('passes lastValidBlockHeight to decompileTransaction', async () => {
+        expect.assertions(2);
+
         const noSignature = new Uint8Array(Array(64).fill(0));
         const bytes = new Uint8Array([
             /** SIGNATURES */
@@ -233,14 +248,15 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const transaction = deserializerFactory(100n);
-        const decodedTransaction = transaction.decode(bytes);
+        const transaction = deserializerFactory(nullRpc, 100n);
+        const decodedTransaction = await transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
             {
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
+            nullRpc,
             100n,
         );
     });
