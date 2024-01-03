@@ -1676,9 +1676,6 @@ importers:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
         version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
-      '@solana/transactions':
-        specifier: workspace:*
-        version: link:../transactions
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
