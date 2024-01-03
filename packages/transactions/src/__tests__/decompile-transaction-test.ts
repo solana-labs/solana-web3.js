@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { AccountRole, IInstruction } from '@solana/instructions';
+import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 import type { GetMultipleAccountsApi } from '@solana/rpc-core';
 import type { Rpc } from '@solana/rpc-transport';
@@ -733,6 +733,1093 @@ describe('decompileTransaction', () => {
             expect(transaction.signatures).toStrictEqual({
                 [extraSignerAddress]: extraSignerSignature,
                 [feePayer]: feePayerSignature,
+            });
+        });
+    });
+
+    describe('for a transaction with address lookup tables', () => {
+        const blockhash = 'J4yED2jcMAHyQUg61DBmm4njmEydUr2WqrV9cdEcDDgL';
+
+        describe('for one lookup table', () => {
+            const lookupTableAddress = '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw' as Address;
+
+            it('converts an instruction with a single readonly lookup', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts an instruction with multiple readonly lookups', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0, 2],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [
+                                                    addressInLookup1,
+                                                    'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj',
+                                                    addressInLookup2,
+                                                ],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts an instruction with a single writable lookup', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.WRITABLE,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts an instruction with multiple writable lookups', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [],
+                                writableIndices: [0, 2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [
+                                                    addressInLookup1,
+                                                    'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj',
+                                                    addressInLookup2,
+                                                ],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts an instruction with a readonly and a writable lookup', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [
+                                                    addressInLookup1,
+                                                    'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj',
+                                                    addressInLookup2,
+                                                ],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    // writable is first since we used account indices [2,3]
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts an instruction with a combination of static and lookup accounts', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+                const staticAddress = 'GbRuWcHyNaVuE9rJE4sKpkHYa9k76VJBCCwGtf87ikH3' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 2, // 1 static address, 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [1, 3],
+                                programAddressIndex: 2,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, staticAddress, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountMeta: IAccountMeta = {
+                    address: staticAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountMeta, expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+
+            it('converts multiple instructions with lookup accounts', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                            {
+                                accountIndices: [3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [
+                                                    addressInLookup1,
+                                                    'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj',
+                                                    addressInLookup2,
+                                                ],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMeta1: IAccountLookupMeta = {
+                    address: addressInLookup1,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                const expectedAccountLookupMeta2: IAccountLookupMeta = {
+                    address: addressInLookup2,
+                    addressIndex: 2,
+                    lookupTableAddress,
+                    role: AccountRole.WRITABLE,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    // first instruction uses index 2, which is the writable lookup
+                    {
+                        accounts: [expectedAccountLookupMeta2],
+                        programAddress,
+                    },
+                    // second instruction uses index 3, the readonly lookup
+                    {
+                        accounts: [expectedAccountLookupMeta1],
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith([lookupTableAddress], expect.any(Object));
+            });
+        });
+
+        describe('for multiple lookup tables', () => {
+            const lookupTableAddress1 = '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw' as Address;
+            const lookupTableAddress2 = 'GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg' as Address;
+
+            it('converts an instruction with readonly accounts from two lookup tables', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table 1
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup1],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                                // address lookup table 2
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup2],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
+                    [lookupTableAddress1, lookupTableAddress2],
+                    expect.any(Object),
+                );
+            });
+
+            it('converts an instruction with writable accounts from two lookup tables', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table 1
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup1],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                                // address lookup table 2
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [addressInLookup2],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
+                    [lookupTableAddress1, lookupTableAddress2],
+                    expect.any(Object),
+                );
+            });
+
+            it('converts an instruction with readonly and writable accounts from two lookup tables', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        /*
+                            accountIndices:
+                            0 - feePayer
+                            1 - program
+                            2 - writable from lookup1
+                            3 - writable from lookup2
+                            4 - readonly from lookup1
+                            5 - readonly from lookup2
+                        */
+                        instructions: [
+                            {
+                                accountIndices: [2, 3, 4, 5],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const readOnlyaddressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const readonlyAddressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const writableAddressInLookup1 = 'FgNrG1D7AoqNJuLc5eqmsXSHWta6Tfu41mQ9dgc5yaXo' as Address;
+                const writableAddressInLookup2 = '9jEBzMuJfwWH1qcG4g1bj24iSLGCmTsedgisui7SVHes' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table 1
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [readOnlyaddressInLookup1, writableAddressInLookup1],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                                // address lookup table 2
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [readonlyAddressInLookup2, writableAddressInLookup2],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: writableAddressInLookup1,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: writableAddressInLookup2,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: readOnlyaddressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: readonlyAddressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
+                    [lookupTableAddress1, lookupTableAddress2],
+                    expect.any(Object),
+                );
+            });
+
+            it('converts multiple instructions with readonly and writable accounts from two lookup tables', async () => {
+                expect.assertions(2);
+
+                const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        /*
+                            accountIndices:
+                            0 - feePayer
+                            1 - program
+                            2 - writable from lookup1
+                            3 - writable from lookup2
+                            4 - readonly from lookup1
+                            5 - readonly from lookup2
+                        */
+                        instructions: [
+                            {
+                                accountIndices: [2, 5],
+                                programAddressIndex: 1,
+                            },
+                            {
+                                accountIndices: [3, 4],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const readOnlyaddressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const readonlyAddressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const writableAddressInLookup1 = 'FgNrG1D7AoqNJuLc5eqmsXSHWta6Tfu41mQ9dgc5yaXo' as Address;
+                const writableAddressInLookup2 = '9jEBzMuJfwWH1qcG4g1bj24iSLGCmTsedgisui7SVHes' as Address;
+
+                const rpc: Rpc<GetMultipleAccountsApi> = {
+                    getMultipleAccounts: jest.fn().mockReturnValue({
+                        send: async () => ({
+                            value: [
+                                // address lookup table 1
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [readOnlyaddressInLookup1, writableAddressInLookup1],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                                // address lookup table 2
+                                {
+                                    data: {
+                                        parsed: {
+                                            info: {
+                                                addresses: [readonlyAddressInLookup2, writableAddressInLookup2],
+                                            },
+                                            type: 'lookupTable',
+                                        },
+                                        program: 'address-lookup-table',
+                                        space: 1304n,
+                                    },
+                                },
+                            ],
+                        }),
+                    }),
+                };
+
+                const transaction = await decompileTransaction(compiledTransaction, rpc);
+
+                const expectedAccountLookupMetasInstruction1: IAccountLookupMeta[] = [
+                    // index 2 - writable from lookup1
+                    {
+                        address: writableAddressInLookup1,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    // index 5 - readonly from lookup2
+                    {
+                        address: readonlyAddressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                const expectedAccountLookupMetasInstruction2: IAccountLookupMeta[] = [
+                    // index 3 - writable from lookup2
+                    {
+                        address: writableAddressInLookup2,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                    // index 4 - readonly from lookup1
+                    {
+                        address: readOnlyaddressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetasInstruction1,
+                        programAddress,
+                    },
+                    {
+                        accounts: expectedAccountLookupMetasInstruction2,
+                        programAddress,
+                    },
+                ]);
+
+                expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
+                    [lookupTableAddress1, lookupTableAddress2],
+                    expect.any(Object),
+                );
             });
         });
     });
