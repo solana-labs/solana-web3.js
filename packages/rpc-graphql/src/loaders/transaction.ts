@@ -40,8 +40,9 @@ async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<ty
     // then fetch it again with `jsonParsed` encoding.
     // This ensures the response always has the full transaction meta.
     if (encoding !== 'jsonParsed') {
+        const jsonParsedConfig = { ...config, encoding: 'jsonParsed' };
         const transactionJsonParsed = await rpc
-            .getTransaction(signature, config as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
+            .getTransaction(signature, jsonParsedConfig as unknown as Parameters<SolanaRpcMethods['getTransaction']>[1])
             .send()
             .catch(e => {
                 throw e;
