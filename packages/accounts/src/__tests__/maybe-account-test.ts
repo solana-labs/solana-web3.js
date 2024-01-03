@@ -21,7 +21,7 @@ describe('assertAccountsExist', () => {
         const maybeAccounts = [
             <MaybeEncodedAccount>{ address: '1111', exists: false },
             <MaybeEncodedAccount>{ address: '2222', exists: false },
-            <MaybeEncodedAccount>{ address: '3333', exists: true }
+            <MaybeEncodedAccount>{ address: '3333', exists: true },
         ];
 
         // When we assert that all the accounts exist.
@@ -29,14 +29,14 @@ describe('assertAccountsExist', () => {
 
         // Then we expect an error to be thrown with the non-existent accounts
         expect(fn).toThrow('Expected accounts [1111, 2222] to exist');
-    })
+    });
 
     it('does not fail if all accounts exist', () => {
         // Given three accounts that all exist
         const maybeAccounts = [
             <MaybeEncodedAccount>{ address: '1111', exists: true },
             <MaybeEncodedAccount>{ address: '2222', exists: true },
-            <MaybeEncodedAccount>{ address: '3333', exists: true }
+            <MaybeEncodedAccount>{ address: '3333', exists: true },
         ];
 
         // When we assert that all the accounts exist.
@@ -44,5 +44,5 @@ describe('assertAccountsExist', () => {
 
         // Then we expect an error not to be thrown
         expect(fn).not.toThrow();
-    })
-})
+    });
+});
