@@ -17,7 +17,7 @@ function getMockAddress() {
     return `${_nextMockAddress++}` as Address;
 }
 
-describe.each([getTransactionEncoder])('Transaction serializer %p', serializerFactory => {
+describe('getTransactionEncoder', () => {
     let transaction: ReturnType<typeof getTransactionEncoder>;
 
     let addressA: Address;
@@ -47,7 +47,7 @@ describe.each([getTransactionEncoder])('Transaction serializer %p', serializerFa
             read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
         (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
-        transaction = serializerFactory();
+        transaction = getTransactionEncoder();
     });
     it('serializes a transaction with no signatures', () => {
         expect(transaction.encode({} as Parameters<typeof transaction.encode>[0])).toStrictEqual(
@@ -101,7 +101,7 @@ describe.each([getTransactionEncoder])('Transaction serializer %p', serializerFa
     });
 });
 
-describe.each([getTransactionDecoder])('Transaction deserializer %p', deserializerFactory => {
+describe('getTransactionDecoder', () => {
     let transaction: ReturnType<typeof getTransactionDecoder>;
 
     let addressA: Address;
@@ -153,7 +153,7 @@ describe.each([getTransactionDecoder])('Transaction deserializer %p', deserializ
         });
         (decompileTransaction as jest.Mock).mockResolvedValue(mockDecompiledTransaction);
 
-        transaction = deserializerFactory(nullRpc);
+        transaction = getTransactionDecoder(nullRpc);
     });
     it('deserializes a transaction with no signatures', async () => {
         expect.assertions(2);
@@ -248,7 +248,7 @@ describe.each([getTransactionDecoder])('Transaction deserializer %p', deserializ
             ...mockCompiledWireMessage,
         ]);
 
-        const transaction = deserializerFactory(nullRpc, 100n);
+        const transaction = getTransactionDecoder(nullRpc, 100n);
         const decodedTransaction = await transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
