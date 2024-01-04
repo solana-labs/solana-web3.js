@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
-import { decompileTransaction } from '../../decompile-transaction';
+import { decompileTransaction, LookupTables } from '../../decompile-transaction';
 import { CompiledMessage, compileMessage } from '../../message';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
 import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
@@ -45,7 +45,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
             read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
         (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
-        transaction = serializerFactory();
+        transaction = serializerFactory({});
     });
     it('serializes a transaction with no signatures', () => {
         expect(transaction.encode({} as Parameters<typeof transaction.encode>[0])).toStrictEqual(
@@ -149,7 +149,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         });
         (decompileTransaction as jest.Mock).mockReturnValue(mockDecompiledTransaction);
 
-        transaction = deserializerFactory();
+        transaction = deserializerFactory({});
     });
     it('deserializes a transaction with no signatures', () => {
         const noSignature = new Uint8Array(Array(64).fill(0));
@@ -170,6 +170,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
+            {},
             undefined,
         );
     });
@@ -194,6 +195,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, mockSignatureA],
             },
+            {},
             undefined,
         );
     });
@@ -218,6 +220,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [mockSignatureB, mockSignatureA],
             },
+            {},
             undefined,
         );
     });
@@ -233,7 +236,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const transaction = deserializerFactory(100n);
+        const transaction = deserializerFactory({}, 100n);
         const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
@@ -241,7 +244,37 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
+            {},
             100n,
+        );
+    });
+    it('passes lookupTables to decompileTransaction', () => {
+        const noSignature = new Uint8Array(Array(64).fill(0));
+        const bytes = new Uint8Array([
+            /** SIGNATURES */
+            2, // Length of signatures array
+            ...noSignature, // null signature for `addressB`
+            ...noSignature, // null signature for `addressA`
+
+            /** COMPILED MESSAGE */
+            ...mockCompiledWireMessage,
+        ]);
+
+        const lookupTables: LookupTables = {
+            ['1111' as Address]: ['2222' as Address, '3333' as Address],
+            ['4444' as Address]: ['5555' as Address, '6666' as Address],
+        };
+
+        const transaction = deserializerFactory(lookupTables);
+        const decodedTransaction = transaction.decode(bytes);
+        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
+        expect(decompileTransaction).toHaveBeenCalledWith(
+            {
+                compiledMessage: mockCompiledMessage,
+                signatures: [noSignature, noSignature],
+            },
+            lookupTables,
+            undefined,
         );
     });
 });

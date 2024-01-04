@@ -35,7 +35,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             expect(transaction.version).toBe(0);
             expect(transaction.feePayer).toEqual(feePayer);
@@ -61,7 +61,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
             expect(transaction.version).toBe('legacy');
         });
 
@@ -84,7 +84,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
             const expectedInstruction: IInstruction = {
                 programAddress,
             };
@@ -126,7 +126,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -175,7 +175,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -210,7 +210,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature as SignatureBytes,
             });
@@ -247,7 +247,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, otherSigner1Signature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner1Address]: otherSigner1Signature,
@@ -287,7 +287,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner2Address]: otherSigner2Signature,
@@ -310,7 +310,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, 100n);
+            const transaction = decompileTransaction(compiledTransaction, {}, 100n);
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: 100n,
@@ -365,7 +365,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -427,7 +427,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -493,7 +493,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction);
+            const transaction = decompileTransaction(compiledTransaction, {});
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -574,7 +574,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [nonceAuthorityAddress]: feePayerSignature,
@@ -620,7 +620,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, authoritySignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
@@ -677,7 +677,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, extraSignerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [extraSignerAddress]: extraSignerSignature,
