@@ -1,7 +1,7 @@
-import { Address } from "@solana/addresses";
+import { Address } from '@solana/addresses';
 
-import { Account } from "../account";
-import { assertAccountExists, assertAccountsExist,MaybeAccount } from "../maybe-account";
+import { Account } from '../account';
+import { assertAccountExists, assertAccountsExist, MaybeAccount } from '../maybe-account';
 
 type MockData = { foo: 42 };
 

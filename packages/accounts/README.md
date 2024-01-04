@@ -267,3 +267,47 @@ const myDecoder: Decoder<MyAccountData> = getStructDecoder([
 const myDecodedAccount = decodeAccount(myAccount, myDecoder);
 myDecodedAccount satisfies Account<MyAccountData, '1234..5678'>;
 ```
+
+### `assertAccountDecoded()`
+
+This function asserts that an account stores decoded data, ie not a Uint8Array. Note that it does not check the shape of the data matches the decoded type, only that it is not a Uint8Array.
+
+```ts
+type MyAccountData = { name: string; age: number };
+
+const myAccount: Account<MyAccountData | Uint8Array, '1234..5678'>;
+assertAccountDecoded(myAccount);
+
+// now the account data can be used as MyAccountData
+account.data satisfies MyAccountData;
+```
+
+This is particularly useful for narrowing the result of fetching a JSON parsed account.
+
+
+```ts
+    const account: MaybeAccount<MockData | Uint8Array> = await fetchJsonParsedAccount<MockData>(
+        rpc, 
+        '1234..5678' as Address,
+    )
+
+    assertAccountDecoded(account);
+    // now we have a MaybeAccount<MockData>
+    account satisfies MaybeAccount<MockData>
+```
+
+### `assertAccountsDecoded`
+
+This function asserts that all input accounts store decoded data, ie not a Uint8Array. As with `assertAccountDecoded` it does not check the shape of the data matches the decoded type, only that it is not a Uint8Array.
+
+```ts
+type MyAccountData = { name: string; age: number };
+
+const myAccounts: Account<MyAccountData | Uint8Array, Address>[];
+assertAccountsDecoded(myAccounts);
+
+// now the account data can be used as MyAccountData
+for(const a of account) {
+    account.data satisfies MyAccountData;
+}
+```

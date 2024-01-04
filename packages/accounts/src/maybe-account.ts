@@ -12,7 +12,7 @@ export type MaybeEncodedAccount<TAddress extends string = string> = MaybeAccount
 
 /** Asserts that an account that may or may not exists, actually exists. */
 export function assertAccountExists<TData extends object | Uint8Array, TAddress extends string = string>(
-    account: MaybeAccount<TData, TAddress>
+    account: MaybeAccount<TData, TAddress>,
 ): asserts account is Account<TData, TAddress> & { exists: true } {
     if (!account.exists) {
         // TODO: Coded error.
@@ -22,10 +22,10 @@ export function assertAccountExists<TData extends object | Uint8Array, TAddress 
 
 /** Asserts that all accounts that may or may not exist, actually all exist. */
 export function assertAccountsExist<TData extends object | Uint8Array, TAddress extends string = string>(
-    accounts: MaybeAccount<TData, TAddress>[]
+    accounts: MaybeAccount<TData, TAddress>[],
 ): asserts accounts is (Account<TData, TAddress> & { exists: true })[] {
     const missingAccounts = accounts.filter(a => !a.exists);
-    if(missingAccounts.length > 0) {
+    if (missingAccounts.length > 0) {
         const missingAddresses = missingAccounts.map(a => a.address);
         // TODO: Coded error.
         throw new Error(`Expected accounts [${missingAddresses.join(', ')}] to exist.`);
