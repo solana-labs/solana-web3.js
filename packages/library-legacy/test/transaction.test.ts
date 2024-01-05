@@ -798,7 +798,10 @@ describe('Transaction', () => {
     // Transactions with missing signatures will fail sigverify.
     expect(() => {
       expectedTransaction.serialize();
-    }).to.throw('Signature verification failed');
+    }).to.throw(
+      'Signature verification failed for account ' +
+        sender.publicKey.toBase58(),
+    );
 
     // Serializing without signatures is allowed if sigverify disabled.
     expectedTransaction.serialize({verifySignatures: false});
@@ -813,7 +816,10 @@ describe('Transaction', () => {
     // Transactions with missing signatures will fail sigverify.
     expect(() => {
       expectedTransaction.serialize();
-    }).to.throw('Signature verification failed');
+    }).to.throw(
+      'Signature verification failed for account ' +
+        sender.publicKey.toBase58(),
+    );
 
     // Serializing without signatures is allowed if sigverify disabled.
     expectedTransaction.serialize({verifySignatures: false});
