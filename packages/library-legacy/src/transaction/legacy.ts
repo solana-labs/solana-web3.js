@@ -759,7 +759,7 @@ export class Transaction {
    */
   verifySignatures(requireAllSignatures?: boolean): boolean {
     return (
-      this._findInvalidSig(
+      this._findSigError(
         this.serializeMessage(),
         requireAllSignatures === undefined ? true : requireAllSignatures,
       ) === undefined
@@ -769,18 +769,18 @@ export class Transaction {
   /**
    * @internal
    */
-  _findInvalidSig(
+  _findSigError(
     signData: Uint8Array,
     requireAllSignatures: boolean,
-  ): PublicKey | undefined {
+  ): string | undefined {
     for (const {signature, publicKey} of this.signatures) {
       if (signature === null) {
         if (requireAllSignatures) {
-          return publicKey;
+          return 'Missing signature for public key: ' + publicKey.toBase58();
         }
       } else {
         if (!verify(signature, signData, publicKey.toBytes())) {
-          return publicKey;
+          return 'Invalid signature for public key: ' + publicKey.toBase58();
         }
       }
     }
@@ -801,14 +801,11 @@ export class Transaction {
     );
 
     const signData = this.serializeMessage();
-    const invalidSigPubkey = verifySignatures
-      ? this._findInvalidSig(signData, requireAllSignatures)
+    const sigError = verifySignatures
+      ? this._findSigError(signData, requireAllSignatures)
       : undefined;
-    if (invalidSigPubkey) {
-      throw new Error(
-        'Signature verification failed for account ' +
-          invalidSigPubkey.toBase58(),
-      );
+    if (sigError) {
+      throw new Error(sigError);
     }
 
     return this._serialize(signData);
