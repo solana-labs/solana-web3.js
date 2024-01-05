@@ -66,12 +66,12 @@ function getAddressLookupMetas(
     addressesByLookupTableAddress: AddressesByLookupTableAddress,
 ): IAccountLookupMeta[] {
     // check that all message lookups are known
-    const transactionLookupAddresses = compiledAddressTableLookups.map(l => l.lookupTableAddress);
-    const missing = transactionLookupAddresses.filter(a => addressesByLookupTableAddress[a] === undefined);
+    const compiledAddressTableLookupAddresses = compiledAddressTableLookups.map(l => l.lookupTableAddress);
+    const missing = compiledAddressTableLookupAddresses.filter(a => addressesByLookupTableAddress[a] === undefined);
     if (missing.length > 0) {
         const missingAddresses = missing.join(', ');
         // TODO: coded error.
-        throw new Error(`Transaction includes missing address lookup tables: [${missingAddresses}]`);
+        throw new Error(`Addresses not provided for lookup tables: [${missingAddresses}]`);
     }
 
     const readOnlyMetas: IAccountLookupMeta[] = [];
@@ -84,7 +84,9 @@ function getAddressLookupMetas(
         const highestIndex = Math.max(...lookup.readableIndices, ...lookup.writableIndices);
         if (highestIndex >= addresses.length) {
             // TODO coded error
-            throw new Error(`Cannot look up index ${highestIndex} in lookup table ${lookup.lookupTableAddress}`);
+            throw new Error(
+                `Cannot look up index ${highestIndex} in lookup table [${lookup.lookupTableAddress}]. The lookup table may have been extended since the addresses provided were retrieved.`,
+            );
         }
 
         const readOnlyForLookup: IAccountLookupMeta[] = lookup.readableIndices.map(r => ({

@@ -1142,7 +1142,7 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction, {});
                 expect(fn).toThrow(
-                    'Transaction includes missing address lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]',
+                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]',
                 );
             });
 
@@ -1181,7 +1181,7 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction, lookupTables);
                 expect(fn).toThrow(
-                    'Cannot look up index 1 in lookup table 9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',
+                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
                 );
             });
 
@@ -1220,7 +1220,7 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction, lookupTables);
                 expect(fn).toThrow(
-                    'Cannot look up index 1 in lookup table 9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',
+                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
                 );
             });
         });
@@ -1588,7 +1588,7 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction, {});
                 expect(fn).toThrow(
-                    'Transaction includes missing address lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw, GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg]',
+                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw, GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg]',
                 );
             });
         });
