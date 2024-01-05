@@ -12,7 +12,12 @@ import type {Signer} from '../keypair';
 import type {Blockhash} from '../blockhash';
 import type {CompiledInstruction} from '../message';
 import {sign, verify} from '../utils/ed25519';
-import {Pair} from '../utils/Pair';
+
+/** @internal */
+type MessageSignednessErrors = {
+  invalid?: PublicKey[];
+  missing?: PublicKey[];
+};
 
 /**
  * Transaction signature as base-58 encoded string
@@ -758,35 +763,34 @@ export class Transaction {
    *
    * @param {boolean} [requireAllSignatures=true] Require a fully signed Transaction
    */
-  verifySignatures(requireAllSignatures?: boolean): boolean {
-    return (
-      this._findSigErrors(
-        this.serializeMessage(),
-        requireAllSignatures === undefined ? true : requireAllSignatures,
-      ).length === 0
+  verifySignatures(requireAllSignatures: boolean = true): boolean {
+    const signatureErrors = this._getMessageSignednessErrors(
+      this.serializeMessage(),
+      requireAllSignatures,
     );
+    return !signatureErrors;
   }
 
   /**
    * @internal
    */
-  _findSigErrors(
-    signData: Uint8Array,
+  _getMessageSignednessErrors(
+    message: Uint8Array,
     requireAllSignatures: boolean,
-  ): Pair<PublicKey, string>[] {
-    const errAggregator: Pair<PublicKey, string>[] = [];
+  ): MessageSignednessErrors | undefined {
+    const errors: MessageSignednessErrors = {};
     for (const {signature, publicKey} of this.signatures) {
       if (signature === null) {
         if (requireAllSignatures) {
-          errAggregator.push({fst: publicKey, snd: 'Missing Signature'});
+          (errors.missing ||= []).push(publicKey);
         }
       } else {
-        if (!verify(signature, signData, publicKey.toBytes())) {
-          errAggregator.push({fst: publicKey, snd: 'Invalid Signature'});
+        if (!verify(signature, message, publicKey.toBytes())) {
+          (errors.invalid ||= []).push(publicKey);
         }
       }
     }
-    return errAggregator;
+    return errors.invalid || errors.missing ? errors : undefined;
   }
 
   /**
@@ -803,15 +807,25 @@ export class Transaction {
     );
 
     const signData = this.serializeMessage();
-    const sigErrors = verifySignatures
-      ? this._findSigErrors(signData, requireAllSignatures)
-      : [];
-    if (sigErrors.length > 0) {
-      const errMessage = sigErrors.reduceRight(
-        (previousMessage, {fst, snd}) => previousMessage + `${fst}: ${snd}\n`,
-        '',
+    if (verifySignatures) {
+      const sigErrors = this._getMessageSignednessErrors(
+        signData,
+        requireAllSignatures,
       );
-      throw new Error(errMessage);
+      if (sigErrors) {
+        let errorMessage = 'Signature verification failed.';
+        if (sigErrors.invalid) {
+          errorMessage += `\nInvalid signature for public key${
+            sigErrors.invalid.length === 1 ? '' : '(s)'
+          } [\`${sigErrors.invalid.map(p => p.toBase58()).join('`, `')}\`].`;
+        }
+        if (sigErrors.missing) {
+          errorMessage += `\nMissing signature for public key${
+            sigErrors.missing.length === 1 ? '' : '(s)'
+          } [\`${sigErrors.missing.map(p => p.toBase58()).join('`, `')}\`].`;
+        }
+        throw new Error(errorMessage);
+      }
     }
 
     return this._serialize(signData);

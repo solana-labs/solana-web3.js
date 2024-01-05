@@ -847,7 +847,9 @@ describe('Transaction', () => {
     // Transactions with missing signatures will fail sigverify.
     expect(() => {
       sampleTransaction.serialize();
-    }).to.throw(sender.publicKey.toBase58() + ': Missing Signature');
+    }).to.throw(
+      `Signature verification failed.\nMissing signature for public key [\`${sender.publicKey.toBase58()}\`].`,
+    );
 
     // Serializing without signatures is allowed if sigverify disabled.
     sampleTransaction.serialize({verifySignatures: false});
@@ -863,7 +865,9 @@ describe('Transaction', () => {
     // Transactions with invalid signature will fail sigverify.
     expect(() => {
       sampleTransaction.serialize();
-    }).to.throw(sender.publicKey.toBase58() + ': Invalid Signature');
+    }).to.throw(
+      `Signature verification failed.\nInvalid signature for public key [\`${sender.publicKey.toBase58()}\`].`,
+    );
 
     const tempKey = Keypair.generate();
     sampleTransaction.feePayer = tempKey.publicKey;
@@ -880,10 +884,7 @@ describe('Transaction', () => {
     expect(() => {
       sampleTransaction.serialize();
     }).to.throw(
-      sender.publicKey.toBase58() +
-        ': Invalid Signature\n' +
-        tempKey.publicKey.toBase58() +
-        ': Missing Signature\n',
+      `Signature verification failed.\nInvalid signature for public key [\`${sender.publicKey.toBase58()}\`].\nMissing signature for public key [\`${tempKey.publicKey.toBase58()}\`].`,
     );
   });
 
