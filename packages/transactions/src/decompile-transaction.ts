@@ -59,15 +59,15 @@ function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
     return accountMetas;
 }
 
-export type LookupTables = { [lookupTableAddress: Address]: Address[] };
+export type AddressesByLookupTableAddress = { [lookupTableAddress: Address]: Address[] };
 
 function getAddressLookupMetas(
-    transactionLookups: ReturnType<typeof getCompiledAddressTableLookups>,
-    knownLookups: LookupTables,
+    compiledAddressTableLookups: ReturnType<typeof getCompiledAddressTableLookups>,
+    addressesByLookupTableAddress: AddressesByLookupTableAddress,
 ): IAccountLookupMeta[] {
     // check that all message lookups are known
-    const transactionLookupAddresses = transactionLookups.map(l => l.lookupTableAddress);
-    const missing = transactionLookupAddresses.filter(a => knownLookups[a] === undefined);
+    const transactionLookupAddresses = compiledAddressTableLookups.map(l => l.lookupTableAddress);
+    const missing = transactionLookupAddresses.filter(a => addressesByLookupTableAddress[a] === undefined);
     if (missing.length > 0) {
         const missingAddresses = missing.join(', ');
         // TODO: coded error.
@@ -78,8 +78,8 @@ function getAddressLookupMetas(
     const writableMetas: IAccountLookupMeta[] = [];
 
     // we know that for each lookup, knownLookups[lookup.lookupTableAddress] is defined
-    for (const lookup of transactionLookups) {
-        const addresses = knownLookups[lookup.lookupTableAddress];
+    for (const lookup of compiledAddressTableLookups) {
+        const addresses = addressesByLookupTableAddress[lookup.lookupTableAddress];
 
         const highestIndex = Math.max(...lookup.readableIndices, ...lookup.writableIndices);
         if (highestIndex >= addresses.length) {
@@ -183,7 +183,7 @@ function convertSignatures(compiledTransaction: CompiledTransaction): ITransacti
 
 export function decompileTransaction(
     compiledTransaction: CompiledTransaction,
-    lookupTables: LookupTables,
+    addressesByLookupTableAddress: AddressesByLookupTableAddress,
     lastValidBlockHeight?: bigint,
 ): CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures) {
     const { compiledMessage } = compiledTransaction;
@@ -197,7 +197,7 @@ export function decompileTransaction(
         'addressTableLookups' in compiledMessage &&
         compiledMessage.addressTableLookups !== undefined &&
         compiledMessage.addressTableLookups.length > 0
-            ? getAddressLookupMetas(compiledMessage.addressTableLookups, lookupTables)
+            ? getAddressLookupMetas(compiledMessage.addressTableLookups, addressesByLookupTableAddress)
             : [];
     const transactionMetas = [...accountMetas, ...accountLookupMetas];
 

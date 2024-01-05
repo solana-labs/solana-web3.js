@@ -20,7 +20,7 @@ import { SignatureBytes } from '@solana/keys';
 
 import { CompilableTransaction } from '../compilable-transaction';
 import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction';
-import { decompileTransaction, LookupTables } from '../decompile-transaction';
+import { AddressesByLookupTableAddress, decompileTransaction } from '../decompile-transaction';
 import { ITransactionWithSignatures } from '../signatures';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from './message';
 
@@ -50,7 +50,7 @@ export function getTransactionEncoder(): VariableSizeEncoder<
 }
 
 export function getTransactionDecoder(
-    lookupTables: LookupTables,
+    lookupTables: AddressesByLookupTableAddress,
     lastValidBlockHeight?: bigint,
 ): VariableSizeDecoder<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
     return mapDecoder(getCompiledTransactionDecoder(), compiledTransaction =>
@@ -59,7 +59,7 @@ export function getTransactionDecoder(
 }
 
 export function getTransactionCodec(
-    lookupTables: LookupTables,
+    lookupTables: AddressesByLookupTableAddress,
     lastValidBlockHeight?: bigint,
 ): VariableSizeCodec<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
     return combineCodec(getTransactionEncoder(), getTransactionDecoder(lookupTables, lastValidBlockHeight));

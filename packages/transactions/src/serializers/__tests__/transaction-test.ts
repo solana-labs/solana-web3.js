@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
-import { decompileTransaction, LookupTables } from '../../decompile-transaction';
+import { AddressesByLookupTableAddress, decompileTransaction } from '../../decompile-transaction';
 import { CompiledMessage, compileMessage } from '../../message';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
 import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
@@ -260,7 +260,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const lookupTables: LookupTables = {
+        const lookupTables: AddressesByLookupTableAddress = {
             ['1111' as Address]: ['2222' as Address, '3333' as Address],
             ['4444' as Address]: ['5555' as Address, '6666' as Address],
         };
