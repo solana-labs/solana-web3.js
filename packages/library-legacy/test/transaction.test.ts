@@ -795,26 +795,6 @@ describe('Transaction', () => {
 
     expectedTransaction.feePayer = sender.publicKey;
 
-    // Transactions with missing signatures will fail sigverify.
-    expect(() => {
-      expectedTransaction.serialize();
-    }).to.throw('Signature verification failed');
-
-    // Serializing without signatures is allowed if sigverify disabled.
-    expectedTransaction.serialize({verifySignatures: false});
-
-    // Serializing the message is allowed when signature array has null signatures
-    expectedTransaction.serializeMessage();
-
-    expectedTransaction.feePayer = undefined;
-    expectedTransaction.setSigners(sender.publicKey);
-    expect(expectedTransaction.signatures).to.have.length(1);
-
-    // Transactions with missing signatures will fail sigverify.
-    expect(() => {
-      expectedTransaction.serialize();
-    }).to.throw('Signature verification failed');
-
     // Serializing without signatures is allowed if sigverify disabled.
     expectedTransaction.serialize({verifySignatures: false});
 
@@ -845,6 +825,67 @@ describe('Transaction', () => {
     );
     expect(expectedTransaction.serialize()).to.eql(expectedSerialization);
     expect(expectedTransaction.signatures).to.have.length(1);
+  });
+
+  it('throws for invalid signatures', () => {
+    const sender = Keypair.fromSeed(Uint8Array.from(Array(32).fill(8))); // Arbitrary known account
+    const recentBlockhash = 'EETubP5AKHgjPAhzPAFcb8BAY1hMH639CWCFTqi3hq1k'; // Arbitrary known recentBlockhash
+    const recipient = new PublicKey(
+      'J3dxNj7nDRRqRRXuEMynDG57DkZK4jYRuv3Garmb1i99',
+    ); // Arbitrary known public key
+    const transfer = SystemProgram.transfer({
+      fromPubkey: sender.publicKey,
+      toPubkey: recipient,
+      lamports: 49,
+    });
+    const sampleTransaction = new Transaction({
+      blockhash: recentBlockhash,
+      lastValidBlockHeight: 9999,
+    }).add(transfer);
+    sampleTransaction.feePayer = sender.publicKey;
+
+    // Transactions with missing signatures will fail sigverify.
+    expect(() => {
+      sampleTransaction.serialize();
+    }).to.throw(
+      `Signature verification failed.\nMissing signature for public key [\`${sender.publicKey.toBase58()}\`].`,
+    );
+
+    // Serializing without signatures is allowed if sigverify disabled.
+    sampleTransaction.serialize({verifySignatures: false});
+
+    // Serializing the message is allowed when signature array has null signatures
+    sampleTransaction.serializeMessage();
+
+    sampleTransaction.feePayer = undefined;
+    sampleTransaction.setSigners(sender.publicKey);
+    expect(sampleTransaction.signatures).to.have.length(1);
+    sampleTransaction.signatures[0].signature = Buffer.allocUnsafe(64).fill(0);
+
+    // Transactions with invalid signature will fail sigverify.
+    expect(() => {
+      sampleTransaction.serialize();
+    }).to.throw(
+      `Signature verification failed.\nInvalid signature for public key [\`${sender.publicKey.toBase58()}\`].`,
+    );
+
+    const tempKey = Keypair.generate();
+    sampleTransaction.feePayer = tempKey.publicKey;
+    sampleTransaction.signatures[0] = {
+      signature: null,
+      publicKey: tempKey.publicKey,
+    };
+    sampleTransaction.signatures[1] = {
+      signature: Buffer.allocUnsafe(64).fill(42),
+      publicKey: sender.publicKey,
+    };
+
+    // Transactions with invalid signature and missing signature will fail sigverify and throw both.
+    expect(() => {
+      sampleTransaction.serialize();
+    }).to.throw(
+      `Signature verification failed.\nInvalid signature for public key [\`${sender.publicKey.toBase58()}\`].\nMissing signature for public key [\`${tempKey.publicKey.toBase58()}\`].`,
+    );
   });
 
   describe('partially signed transaction signature verification tests', () => {

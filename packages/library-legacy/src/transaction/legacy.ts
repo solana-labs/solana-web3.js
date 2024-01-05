@@ -13,6 +13,12 @@ import type {Blockhash} from '../blockhash';
 import type {CompiledInstruction} from '../message';
 import {sign, verify} from '../utils/ed25519';
 
+/** @internal */
+type MessageSignednessErrors = {
+  invalid?: PublicKey[];
+  missing?: PublicKey[];
+};
+
 /**
  * Transaction signature as base-58 encoded string
  */
@@ -757,32 +763,34 @@ export class Transaction {
    *
    * @param {boolean} [requireAllSignatures=true] Require a fully signed Transaction
    */
-  verifySignatures(requireAllSignatures?: boolean): boolean {
-    return this._verifySignatures(
+  verifySignatures(requireAllSignatures: boolean = true): boolean {
+    const signatureErrors = this._getMessageSignednessErrors(
       this.serializeMessage(),
-      requireAllSignatures === undefined ? true : requireAllSignatures,
+      requireAllSignatures,
     );
+    return !signatureErrors;
   }
 
   /**
    * @internal
    */
-  _verifySignatures(
-    signData: Uint8Array,
+  _getMessageSignednessErrors(
+    message: Uint8Array,
     requireAllSignatures: boolean,
-  ): boolean {
+  ): MessageSignednessErrors | undefined {
+    const errors: MessageSignednessErrors = {};
     for (const {signature, publicKey} of this.signatures) {
       if (signature === null) {
         if (requireAllSignatures) {
-          return false;
+          (errors.missing ||= []).push(publicKey);
         }
       } else {
-        if (!verify(signature, signData, publicKey.toBytes())) {
-          return false;
+        if (!verify(signature, message, publicKey.toBytes())) {
+          (errors.invalid ||= []).push(publicKey);
         }
       }
     }
-    return true;
+    return errors.invalid || errors.missing ? errors : undefined;
   }
 
   /**
@@ -799,11 +807,25 @@ export class Transaction {
     );
 
     const signData = this.serializeMessage();
-    if (
-      verifySignatures &&
-      !this._verifySignatures(signData, requireAllSignatures)
-    ) {
-      throw new Error('Signature verification failed');
+    if (verifySignatures) {
+      const sigErrors = this._getMessageSignednessErrors(
+        signData,
+        requireAllSignatures,
+      );
+      if (sigErrors) {
+        let errorMessage = 'Signature verification failed.';
+        if (sigErrors.invalid) {
+          errorMessage += `\nInvalid signature for public key${
+            sigErrors.invalid.length === 1 ? '' : '(s)'
+          } [\`${sigErrors.invalid.map(p => p.toBase58()).join('`, `')}\`].`;
+        }
+        if (sigErrors.missing) {
+          errorMessage += `\nMissing signature for public key${
+            sigErrors.missing.length === 1 ? '' : '(s)'
+          } [\`${sigErrors.missing.map(p => p.toBase58()).join('`, `')}\`].`;
+        }
+        throw new Error(errorMessage);
+      }
     }
 
     return this._serialize(signData);
