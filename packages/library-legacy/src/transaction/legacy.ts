@@ -760,7 +760,7 @@ export class Transaction {
    */
   verifySignatures(requireAllSignatures?: boolean): boolean {
     return (
-      this._findSigError(
+      this._findSigErrors(
         this.serializeMessage(),
         requireAllSignatures === undefined ? true : requireAllSignatures,
       ).length === 0
@@ -770,7 +770,7 @@ export class Transaction {
   /**
    * @internal
    */
-  _findSigError(
+  _findSigErrors(
     signData: Uint8Array,
     requireAllSignatures: boolean,
   ): Pair<PublicKey, string>[] {
@@ -804,7 +804,7 @@ export class Transaction {
 
     const signData = this.serializeMessage();
     const sigErrors = verifySignatures
-      ? this._findSigError(signData, requireAllSignatures)
+      ? this._findSigErrors(signData, requireAllSignatures)
       : [];
     if (sigErrors.length > 0) {
       const errMessage = sigErrors.reduceRight(
