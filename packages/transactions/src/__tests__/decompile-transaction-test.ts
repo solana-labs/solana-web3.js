@@ -35,7 +35,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             expect(transaction.version).toBe(0);
             expect(transaction.feePayer).toEqual(feePayer);
@@ -61,7 +61,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
             expect(transaction.version).toBe('legacy');
         });
 
@@ -84,7 +84,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
             const expectedInstruction: IInstruction = {
                 programAddress,
             };
@@ -126,7 +126,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -175,7 +175,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -210,7 +210,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature as SignatureBytes,
             });
@@ -247,7 +247,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, otherSigner1Signature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner1Address]: otherSigner1Signature,
@@ -287,7 +287,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, otherSigner2Signature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
                 [otherSigner2Address]: otherSigner2Signature,
@@ -310,7 +310,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}, 100n);
+            const transaction = decompileTransaction(compiledTransaction, { lastValidBlockHeight: 100n });
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: 100n,
@@ -365,7 +365,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -427,7 +427,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             const expectedInstruction: IInstruction = {
                 accounts: [
@@ -493,7 +493,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {});
+            const transaction = decompileTransaction(compiledTransaction);
 
             const expectedInstructions: IInstruction[] = [
                 {
@@ -574,7 +574,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [nonceAuthorityAddress]: feePayerSignature,
@@ -620,7 +620,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, authoritySignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [feePayer]: feePayerSignature,
@@ -677,7 +677,7 @@ describe('decompileTransaction', () => {
                 signatures: [feePayerSignature, noSignature, extraSignerSignature],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, {}) as ITransactionWithSignatures;
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
 
             expect(transaction.signatures).toStrictEqual({
                 [extraSignerAddress]: extraSignerSignature,
@@ -726,7 +726,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMeta: IAccountLookupMeta = {
                     address: addressInLookup,
@@ -781,7 +783,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     {
@@ -839,7 +843,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMeta: IAccountLookupMeta = {
                     address: addressInLookup,
@@ -894,7 +900,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     {
@@ -957,7 +965,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     // writable is first since we used account indices [2,3]
@@ -1018,7 +1028,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountMeta: IAccountMeta = {
                     address: staticAddress,
@@ -1082,7 +1094,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMeta1: IAccountLookupMeta = {
                     address: addressInLookup1,
@@ -1140,7 +1154,7 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const fn = () => decompileTransaction(compiledTransaction, {});
+                const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
                     'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]',
                 );
@@ -1179,7 +1193,8 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const fn = () => decompileTransaction(compiledTransaction, lookupTables);
+                const fn = () =>
+                    decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
                     'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
                 );
@@ -1218,7 +1233,8 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const fn = () => decompileTransaction(compiledTransaction, lookupTables);
+                const fn = () =>
+                    decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
                     'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
                 );
@@ -1270,7 +1286,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     {
@@ -1335,7 +1353,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     {
@@ -1412,7 +1432,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetas: IAccountLookupMeta[] = [
                     {
@@ -1505,7 +1527,9 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const transaction = decompileTransaction(compiledTransaction, lookupTables);
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
 
                 const expectedAccountLookupMetasInstruction1: IAccountLookupMeta[] = [
                     // index 2 - writable from lookup1
@@ -1586,7 +1610,7 @@ describe('decompileTransaction', () => {
                     signatures: [],
                 };
 
-                const fn = () => decompileTransaction(compiledTransaction, {});
+                const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
                     'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw, GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg]',
                 );

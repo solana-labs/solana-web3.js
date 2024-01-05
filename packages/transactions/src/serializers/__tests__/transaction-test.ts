@@ -149,7 +149,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         });
         (decompileTransaction as jest.Mock).mockReturnValue(mockDecompiledTransaction);
 
-        transaction = deserializerFactory({});
+        transaction = deserializerFactory();
     });
     it('deserializes a transaction with no signatures', () => {
         const noSignature = new Uint8Array(Array(64).fill(0));
@@ -170,7 +170,6 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
-            {},
             undefined,
         );
     });
@@ -195,7 +194,6 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, mockSignatureA],
             },
-            {},
             undefined,
         );
     });
@@ -220,7 +218,6 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [mockSignatureB, mockSignatureA],
             },
-            {},
             undefined,
         );
     });
@@ -236,7 +233,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ...mockCompiledWireMessage,
         ]);
 
-        const transaction = deserializerFactory({}, 100n);
+        const transaction = deserializerFactory({ lastValidBlockHeight: 100n });
         const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
@@ -244,8 +241,9 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
-            {},
-            100n,
+            {
+                lastValidBlockHeight: 100n,
+            },
         );
     });
     it('passes lookupTables to decompileTransaction', () => {
@@ -265,7 +263,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             ['4444' as Address]: ['5555' as Address, '6666' as Address],
         };
 
-        const transaction = deserializerFactory(lookupTables);
+        const transaction = deserializerFactory({ addressesByLookupTableAddress: lookupTables });
         const decodedTransaction = transaction.decode(bytes);
         expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
         expect(decompileTransaction).toHaveBeenCalledWith(
@@ -273,8 +271,9 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                 compiledMessage: mockCompiledMessage,
                 signatures: [noSignature, noSignature],
             },
-            lookupTables,
-            undefined,
+            {
+                addressesByLookupTableAddress: lookupTables,
+            },
         );
     });
 });

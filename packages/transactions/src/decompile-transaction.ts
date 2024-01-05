@@ -183,10 +183,14 @@ function convertSignatures(compiledTransaction: CompiledTransaction): ITransacti
     }, {});
 }
 
+export type DecompileTransactionConfig = {
+    addressesByLookupTableAddress?: AddressesByLookupTableAddress;
+    lastValidBlockHeight?: bigint;
+};
+
 export function decompileTransaction(
     compiledTransaction: CompiledTransaction,
-    addressesByLookupTableAddress: AddressesByLookupTableAddress,
-    lastValidBlockHeight?: bigint,
+    config?: DecompileTransactionConfig,
 ): CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures) {
     const { compiledMessage } = compiledTransaction;
 
@@ -199,7 +203,7 @@ export function decompileTransaction(
         'addressTableLookups' in compiledMessage &&
         compiledMessage.addressTableLookups !== undefined &&
         compiledMessage.addressTableLookups.length > 0
-            ? getAddressLookupMetas(compiledMessage.addressTableLookups, addressesByLookupTableAddress)
+            ? getAddressLookupMetas(compiledMessage.addressTableLookups, config?.addressesByLookupTableAddress ?? {})
             : [];
     const transactionMetas = [...accountMetas, ...accountLookupMetas];
 
@@ -211,7 +215,7 @@ export function decompileTransaction(
     const lifetimeConstraint = getLifetimeConstraint(
         compiledMessage.lifetimeToken,
         firstInstruction,
-        lastValidBlockHeight,
+        config?.lastValidBlockHeight,
     );
 
     const signatures = convertSignatures(compiledTransaction);
