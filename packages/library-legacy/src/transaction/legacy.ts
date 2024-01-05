@@ -776,8 +776,6 @@ export class Transaction {
   ): Pair<PublicKey, string>[] {
     const errAggregator: Pair<PublicKey, string>[] = [];
     for (const {signature, publicKey} of this.signatures) {
-      console.log(publicKey.toString());
-      console.log(signature);
       if (signature === null) {
         if (requireAllSignatures) {
           errAggregator.push({fst: publicKey, snd: 'Missing Signature'});
