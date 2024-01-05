@@ -12,6 +12,7 @@ import type {Signer} from '../keypair';
 import type {Blockhash} from '../blockhash';
 import type {CompiledInstruction} from '../message';
 import {sign, verify} from '../utils/ed25519';
+import {Pair} from '../utils/Pair';
 
 /**
  * Transaction signature as base-58 encoded string
@@ -762,7 +763,7 @@ export class Transaction {
       this._findSigError(
         this.serializeMessage(),
         requireAllSignatures === undefined ? true : requireAllSignatures,
-      ) === undefined
+      ).length === 0
     );
   }
 
@@ -772,19 +773,22 @@ export class Transaction {
   _findSigError(
     signData: Uint8Array,
     requireAllSignatures: boolean,
-  ): string | undefined {
+  ): Pair<PublicKey, string>[] {
+    const errAggregator: Pair<PublicKey, string>[] = [];
     for (const {signature, publicKey} of this.signatures) {
+      console.log(publicKey.toString());
+      console.log(signature);
       if (signature === null) {
         if (requireAllSignatures) {
-          return 'Missing signature for public key: ' + publicKey.toBase58();
+          errAggregator.push({fst: publicKey, snd: 'Missing Signature'});
         }
       } else {
         if (!verify(signature, signData, publicKey.toBytes())) {
-          return 'Invalid signature for public key: ' + publicKey.toBase58();
+          errAggregator.push({fst: publicKey, snd: 'Invalid Signature'});
         }
       }
     }
-    return undefined;
+    return errAggregator;
   }
 
   /**
@@ -801,11 +805,15 @@ export class Transaction {
     );
 
     const signData = this.serializeMessage();
-    const sigError = verifySignatures
+    const sigErrors = verifySignatures
       ? this._findSigError(signData, requireAllSignatures)
-      : undefined;
-    if (sigError) {
-      throw new Error(sigError);
+      : [];
+    if (sigErrors.length > 0) {
+      const errMessage = sigErrors.reduceRight(
+        (previousMessage, {fst, snd}) => previousMessage + `${fst}: ${snd}\n`,
+        '',
+      );
+      throw new Error(errMessage);
     }
 
     return this._serialize(signData);
