@@ -28,7 +28,7 @@ export function getSignatureFromTransaction(
         // TODO: Coded error.
         throw new Error(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
+            'has been signed by its fee payer.',
         );
     }
     const transactionSignature = base58Decoder.decode(signatureBytes);
@@ -77,7 +77,7 @@ export function assertTransactionIsFullySigned<TTransaction extends CompilableTr
         .map(a => a.address);
     const requiredSigners = new Set([transaction.feePayer, ...signerAddressesFromInstructions]);
 
-    const missingSigs = [];
+    const missingSigs: Address[] = [];
     requiredSigners.forEach(address => {
         if (!transaction.signatures[address]) {
             missingSigs.push(address);
