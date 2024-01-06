@@ -77,10 +77,17 @@ export function assertTransactionIsFullySigned<TTransaction extends CompilableTr
         .map(a => a.address);
     const requiredSigners = new Set([transaction.feePayer, ...signerAddressesFromInstructions]);
 
+    const missingSigs = [];
     requiredSigners.forEach(address => {
         if (!transaction.signatures[address]) {
-            // TODO coded error
-            throw new Error(`Transaction is missing signature for address \`${address}\``);
+            missingSigs.push(address);
         }
     });
+
+    if (missingSigs.length > 0) {
+        // TODO coded error
+        throw new Error(
+            `Transaction is missing signatures for addresses: ${missingSigs.map(a => `'${a}'`).join(', ')}`,
+        );
+    }
 }
