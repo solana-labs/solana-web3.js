@@ -1,6 +1,7 @@
 import type {
     AccountNotificationsApi,
     GetAccountInfoApi,
+    GetEpochInfoApi,
     GetSignatureStatusesApi,
     SignatureNotificationsApi,
     Slot,
@@ -25,7 +26,7 @@ interface DefaultDurableNonceTransactionConfirmerConfig {
 }
 
 interface DefaultRecentTransactionConfirmerConfig {
-    rpc: Rpc<GetSignatureStatusesApi>;
+    rpc: Rpc<GetEpochInfoApi & GetSignatureStatusesApi>;
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
 }
 
@@ -73,7 +74,10 @@ export function createDefaultRecentTransactionConfirmer({
     rpc,
     rpcSubscriptions,
 }: DefaultRecentTransactionConfirmerConfig) {
-    const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory(rpcSubscriptions);
+    const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory({
+        rpc,
+        rpcSubscriptions,
+    });
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,
@@ -117,10 +121,16 @@ export async function waitForRecentTransactionConfirmation(
     await raceStrategies(
         getSignatureFromTransaction(config.transaction),
         config,
-        function getSpecificStrategiesForRace({ abortSignal, getBlockHeightExceedencePromise, transaction }) {
+        function getSpecificStrategiesForRace({
+            abortSignal,
+            commitment,
+            getBlockHeightExceedencePromise,
+            transaction,
+        }) {
             return [
                 getBlockHeightExceedencePromise({
                     abortSignal,
+                    commitment,
                     lastValidBlockHeight: transaction.lifetimeConstraint.lastValidBlockHeight,
                 }),
             ];
