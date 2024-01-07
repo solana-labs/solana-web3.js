@@ -36,6 +36,8 @@ function convertAccount(
         // TODO coded error
         throw new Error(`Could not find account address at index ${accountIndex}`);
     }
+    assertIsAddress(accountPublicKey.toBase58());
+
     const isSigner = message.isAccountSigner(accountIndex);
     const isWritable = message.isAccountWritable(accountIndex);
 
