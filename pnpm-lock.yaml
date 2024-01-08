@@ -1177,8 +1177,8 @@ importers:
         specifier: ^9.1.0
         version: 9.1.0(eslint@8.45.0)
       eslint-plugin-import:
-        specifier: ^2.29.0
-        version: 2.29.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)
+        specifier: ^2.29.1
+        version: 2.29.1(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)
       eslint-plugin-mocha:
         specifier: ^10.1.0
         version: 10.1.0(eslint@8.45.0)
@@ -5114,7 +5114,7 @@ packages:
       '@typescript-eslint/eslint-plugin': 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
       '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       eslint: 8.51.0
-      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6)
+      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.51.0)
       eslint-plugin-simple-import-sort: 10.0.0(eslint@8.51.0)
       eslint-plugin-sort-keys-fix: 1.1.2
@@ -7886,8 +7886,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.3.0)(eslint@8.45.0):
-    resolution: {integrity: sha512-QPOO5NO6Odv5lpoTkddtutccQjysJuFxoPS7fAHO+9m9udNHvTCPSAMW9zGAYj8lAIdr40I8yPCdUYrncXtrwg==}
+  /eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.3.0)(eslint@8.45.0):
+    resolution: {integrity: sha512-BbPC0cuExzhiMo4Ff1BTVwHpjjv28C5R+btTOGaCRC7UEz801up0JadwkeSk5Ued6TG34uaczuVuH6qyy5YUxw==}
     engines: {node: '>=4'}
     peerDependencies:
       '@typescript-eslint/parser': '*'
@@ -7914,7 +7914,7 @@ packages:
       object.groupby: 1.0.1
       object.values: 1.1.7
       semver: 6.3.1
-      tsconfig-paths: 3.14.2
+      tsconfig-paths: 3.15.0
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -13099,7 +13099,7 @@ packages:
       mocha: 10.2.0
       ts-node: 7.0.1
     optionalDependencies:
-      tsconfig-paths: 3.14.2
+      tsconfig-paths: 3.15.0
     dev: true
 
   /ts-node@10.9.1(@types/node@18.11.19)(typescript@5.1.6):
@@ -13178,8 +13178,8 @@ packages:
       yn: 2.0.0
     dev: true
 
-  /tsconfig-paths@3.14.2:
-    resolution: {integrity: sha512-o/9iXgCYc5L/JxCHPe3Hvh8Q/2xm5Z+p18PESBU6Ff33695QnCHBEjcytY2q19ua7Mbl/DavtBOLq+oG0RCL+g==}
+  /tsconfig-paths@3.15.0:
+    resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
     dependencies:
       '@types/json5': 0.0.29
       json5: 1.0.2
