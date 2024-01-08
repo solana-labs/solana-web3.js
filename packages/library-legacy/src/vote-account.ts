@@ -56,7 +56,10 @@ export type BlockTimestamp = Readonly<{
   timestamp: number;
 }>;
 
-type VoteAccountData = Readonly<{
+/**
+ * See https://github.com/solana-labs/solana/blob/v1.17.15/sdk/program/src/vote/state/vote_state_1_14_11.rs#L8
+ */
+type VoteAccountData_0_14_11 = Readonly<{
   authorizedVoters: AuthorizedVoterRaw[];
   authorizedWithdrawer: Uint8Array;
   commission: number;
@@ -64,17 +67,32 @@ type VoteAccountData = Readonly<{
   lastTimestamp: BlockTimestamp;
   nodePubkey: Uint8Array;
   priorVoters: PriorVoters;
-  rootSlot: number;
-  rootSlotValid: number;
+  rootSlot: number | null;
   votes: Lockout[];
 }>;
+
+/**
+ * See https://github.com/solana-labs/solana/blob/v1.17.15/sdk/program/src/vote/state/vote_state_0_23_5.rs#L7
+ */
+type VoteAccountData_0_23_5 = Readonly<{
+  nodePubkey: Uint8Array
+  authorizedVoter: Uint8Array
+  authorizedVoterEpoch: number
+  priorVoters: PriorVoters
+  authorizedWithdrawer: Uint8Array
+  commission: number
+  votes: Lockout[]
+  rootSlot: number | null
+  epochCredits: EpochCredits[]
+  lastTimestamp: BlockTimestamp
+}>
 
 /**
  * See https://github.com/solana-labs/solana/blob/8a12ed029cfa38d4a45400916c2463fb82bbec8c/programs/vote_api/src/vote_state.rs#L68-L88
  *
  * @internal
  */
-const VoteAccountLayout = BufferLayout.struct<VoteAccountData>([
+const VoteAccountLayout_0_14_11 = BufferLayout.struct<VoteAccountData_0_14_11>([
   Layout.publicKey('nodePubkey'),
   Layout.publicKey('authorizedWithdrawer'),
   BufferLayout.u8('commission'),
@@ -87,8 +105,7 @@ const VoteAccountLayout = BufferLayout.struct<VoteAccountData>([
     BufferLayout.offset(BufferLayout.u32(), -8),
     'votes',
   ),
-  BufferLayout.u8('rootSlotValid'),
-  BufferLayout.nu64('rootSlot'),
+  option(BufferLayout.nu64(), 'rootSlot'),
   BufferLayout.nu64(), // authorizedVoters.length
   BufferLayout.seq<AuthorizedVoterRaw>(
     BufferLayout.struct([
@@ -129,6 +146,57 @@ const VoteAccountLayout = BufferLayout.struct<VoteAccountData>([
     'lastTimestamp',
   ),
 ]);
+
+/** 
+ * @internal
+ */
+const VoteAccountLayout_0_23_05 = BufferLayout.struct<VoteAccountData_0_23_5>([
+  Layout.publicKey('nodePubkey'),
+  Layout.publicKey('authorizedVoter'),
+  BufferLayout.nu64('authorizedVoterEpoch'),
+  BufferLayout.struct<PriorVoters>(
+    [
+      BufferLayout.seq(
+        BufferLayout.struct([
+          Layout.publicKey('authorizedPubkey'),
+          BufferLayout.nu64('epochOfLastAuthorizedSwitch'),
+          BufferLayout.nu64('targetEpoch'),
+        ]),
+        32,
+        'buf'
+      ),
+      BufferLayout.nu64('idx'),
+      BufferLayout.u8('isEmpty'),
+    ],
+    'priorVoters'
+  ),
+  Layout.publicKey('authorizedWithdrawer'),
+  BufferLayout.u8('commission'),
+  BufferLayout.nu64(), // votes.length
+  BufferLayout.seq<Lockout>(
+    BufferLayout.struct([
+      BufferLayout.nu64('slot'),
+      BufferLayout.u32('confirmationCount'),
+    ]),
+    BufferLayout.offset(BufferLayout.u32(), -8),
+    'votes'
+  ),
+  option(BufferLayout.nu64(), 'rootSlot'),
+  BufferLayout.nu64(), // epochCredits.length
+  BufferLayout.seq<EpochCredits>(
+    BufferLayout.struct([
+      BufferLayout.nu64('epoch'),
+      BufferLayout.nu64('credits'),
+      BufferLayout.nu64('prevCredits'),
+    ]),
+    BufferLayout.offset(BufferLayout.u32(), -8),
+    'epochCredits'
+  ),
+  BufferLayout.struct<BlockTimestamp>(
+    [BufferLayout.nu64('slot'), BufferLayout.nu64('timestamp')],
+    'lastTimestamp'
+  ),
+])
 
 type VoteAccountArgs = {
   nodePubkey: PublicKey;
@@ -181,25 +249,41 @@ export class VoteAccount {
     buffer: Buffer | Uint8Array | Array<number>,
   ): VoteAccount {
     const versionOffset = 4;
-    const va = VoteAccountLayout.decode(toBuffer(buffer), versionOffset);
-
-    let rootSlot: number | null = va.rootSlot;
-    if (!va.rootSlotValid) {
-      rootSlot = null;
+    let va: VoteAccountData_0_14_11 | VoteAccountData_0_23_5;
+    try {
+      va = VoteAccountLayout_0_14_11.decode(toBuffer(buffer), versionOffset);
+    } catch (err) {
+      va = VoteAccountLayout_0_23_05.decode(toBuffer(buffer), versionOffset);
     }
+
+    let authorizedVoters: AuthorizedVoter[] = [];
+    if (isData0_23_5(va)) {
+         authorizedVoters = [{
+          epoch: va.authorizedVoterEpoch,
+          authorizedVoter: new PublicKey(va.authorizedVoter)
+        }];
+      } else {
+        authorizedVoters = va.authorizedVoters.map(parseAuthorizedVoter);
+      }
 
     return new VoteAccount({
       nodePubkey: new PublicKey(va.nodePubkey),
       authorizedWithdrawer: new PublicKey(va.authorizedWithdrawer),
       commission: va.commission,
       votes: va.votes,
-      rootSlot,
-      authorizedVoters: va.authorizedVoters.map(parseAuthorizedVoter),
+      rootSlot: va.rootSlot,
+      authorizedVoters,
       priorVoters: getPriorVoters(va.priorVoters),
       epochCredits: va.epochCredits,
       lastTimestamp: va.lastTimestamp,
     });
   }
+}
+
+function isData0_23_5(
+  vad: VoteAccountData_0_14_11 | VoteAccountData_0_23_5
+): vad is VoteAccountData_0_23_5 {
+  return 'authorizedVoter' in vad && 'authorizedVoterEpoch' in vad
 }
 
 function parseAuthorizedVoter({
@@ -233,4 +317,61 @@ function getPriorVoters({buf, idx, isEmpty}: PriorVoters): PriorVoter[] {
     ...buf.slice(idx + 1).map(parsePriorVoters),
     ...buf.slice(0, idx).map(parsePriorVoters),
   ];
+}
+
+/**
+ *
+ * See https://github.com/acheroncrypto/native-to-anchor/blob/master/client/packages/buffer-layout/src/index.ts
+ */
+export function option<T>(
+  layout: BufferLayout.Layout<T>,
+  property?: string
+): BufferLayout.Layout<T | null> {
+  return new OptionLayout<T>(layout, property)
+}
+
+class OptionLayout<T> extends BufferLayout.Layout<T | null> {
+  layout: BufferLayout.Layout<T>
+  discriminator: BufferLayout.Layout<number>
+
+  constructor(layout: BufferLayout.Layout<T>, property?: string) {
+    super(-1, property)
+    this.layout = layout
+    this.discriminator = BufferLayout.u8('option')
+  }
+
+  encode(src: T | null, b: Buffer, offset = 0): number {
+    if (src === null || src === undefined) {
+      return this.discriminator.encode(0, b, offset)
+    }
+
+    this.discriminator.encode(1, b, offset)
+    return (
+      this.discriminator.span +
+      this.layout.encode(src, b, offset + this.discriminator.span)
+    )
+  }
+
+  decode(b: Buffer, offset = 0): T | null {
+    const discriminator = this.discriminator.decode(b, offset)
+    if (discriminator === 0) {
+      return null
+    } else if (discriminator === 1) {
+      return this.layout.decode(b, offset + this.discriminator.span)
+    }
+
+    throw new Error(
+      `decode: Invalid option; discriminator: ${discriminator} : ${this.property}`
+    )
+  }
+
+  getSpan(b: Buffer, offset = 0): number {
+    const discriminator = this.discriminator.decode(b, offset)
+    if (discriminator === 0) {
+      return 1
+    } else if (discriminator === 1) {
+      return this.layout.getSpan(b, offset + 1) + 1
+    }
+    throw new Error('getSpan: Invalid option ' + this.property)
+  }
 }
