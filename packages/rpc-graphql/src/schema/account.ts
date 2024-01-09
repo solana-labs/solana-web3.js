@@ -1,16 +1,5 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { Address } from '@solana/addresses';
-import type { DataSlice, Slot } from '@solana/rpc-core';
-
 import { resolveAccount } from '../resolvers/account';
-
-export type AccountQueryArgs = {
-    address: Address;
-    dataSlice?: DataSlice;
-    encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
-    commitment?: 'processed' | 'confirmed' | 'finalized';
-    minContextSlot?: Slot;
-};
 
 export const accountTypeDefs = /* GraphQL */ `
     # Account interface

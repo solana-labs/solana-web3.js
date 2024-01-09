@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Address } from '@solana/addresses';
 
-import { AccountQueryArgs } from '../../schema/account';
+import { AccountLoaderArgs } from '../../loaders/account';
 
 function transformParsedAccountData(parsedAccountData: any) {
     const {
@@ -26,7 +26,7 @@ export function transformLoadedAccount({
 }: {
     account: any;
     address: Address;
-    encoding: AccountQueryArgs['encoding'];
+    encoding: AccountLoaderArgs['encoding'];
 }) {
     const [
         // The account's data, either encoded or parsed.

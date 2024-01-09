@@ -2,12 +2,12 @@ import type { Slot } from '@solana/rpc-core';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { BlockQueryArgs } from '../schema/block';
+import { BlockLoaderArgs } from '../loaders/block';
 
 export const resolveBlock = (fieldName: string) => {
     return (
         parent: { [x: string]: Slot },
-        args: BlockQueryArgs,
+        args: BlockLoaderArgs,
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo | undefined,
     ) => (parent[fieldName] === null ? null : context.loaders.block.load({ ...args, slot: parent[fieldName] }, info));

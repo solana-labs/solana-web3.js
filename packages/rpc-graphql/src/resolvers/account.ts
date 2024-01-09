@@ -2,12 +2,12 @@ import { Address } from '@solana/addresses';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountQueryArgs } from '../schema/account';
+import { AccountLoaderArgs } from '../loaders/account';
 
 export const resolveAccount = (fieldName: string) => {
     return (
         parent: { [x: string]: Address },
-        args: AccountQueryArgs,
+        args: AccountLoaderArgs,
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo | undefined,
     ) =>

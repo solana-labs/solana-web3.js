@@ -2,14 +2,17 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountQueryArgs, accountResolvers, accountTypeDefs } from './account';
-import { BlockQueryArgs, blockResolvers, blockTypeDefs } from './block';
+import { AccountLoaderArgs } from '../loaders/account';
+import { BlockLoaderArgs } from '../loaders/block';
+import { ProgramAccountsLoaderArgs } from '../loaders/program-accounts';
+import { TransactionLoaderArgs } from '../loaders/transaction';
+import { accountResolvers, accountTypeDefs } from './account';
+import { blockResolvers, blockTypeDefs } from './block';
 import { inputResolvers, inputTypeDefs } from './common/inputs';
 import { scalarResolvers, scalarTypeDefs } from './common/scalars';
 import { commonResolvers, commonTypeDefs } from './common/types';
 import { instructionResolvers, instructionTypeDefs } from './instruction';
-import { ProgramAccountsQueryArgs } from './program-accounts';
-import { TransactionQueryArgs, transactionResolvers, transactionTypeDefs } from './transaction';
+import { transactionResolvers, transactionTypeDefs } from './transaction';
 
 // prettier-ignore
 const schemaTypeDefs = /* GraphQL */ `
@@ -52,7 +55,7 @@ const schemaResolvers = {
     Query: {
         account(
             _: unknown,
-            args: AccountQueryArgs,
+            args: AccountLoaderArgs,
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
@@ -60,7 +63,7 @@ const schemaResolvers = {
         },
         block(
             _: unknown,
-            args: BlockQueryArgs,
+            args: BlockLoaderArgs,
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
@@ -68,7 +71,7 @@ const schemaResolvers = {
         },
         programAccounts(
             _: unknown,
-            args: ProgramAccountsQueryArgs,
+            args: ProgramAccountsLoaderArgs,
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
@@ -76,7 +79,7 @@ const schemaResolvers = {
         },
         transaction(
             _: unknown,
-            args: TransactionQueryArgs,
+            args: TransactionLoaderArgs,
             context: RpcGraphQLContext,
             info?: GraphQLResolveInfo
         ) {
