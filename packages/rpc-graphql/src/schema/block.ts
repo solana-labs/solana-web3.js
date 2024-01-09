@@ -20,7 +20,9 @@ export const blockTypeDefs = /* GraphQL */ `
         version: String
     }
 
-    # Block interface
+    """
+    Block interface
+    """
     interface Block {
         blockhash: String
         blockHeight: BigInt
@@ -31,7 +33,9 @@ export const blockTypeDefs = /* GraphQL */ `
         transactionDetails: String
     }
 
-    # A block with account transaction details
+    """
+    A block with account transaction details
+    """
     type BlockWithAccounts implements Block {
         blockhash: String
         blockHeight: BigInt
@@ -43,7 +47,9 @@ export const blockTypeDefs = /* GraphQL */ `
         transactionDetails: String
     }
 
-    # A block with full transaction details
+    """
+    A block with full transaction details
+    """
     type BlockWithFull implements Block {
         blockhash: String
         blockHeight: BigInt
@@ -55,7 +61,9 @@ export const blockTypeDefs = /* GraphQL */ `
         transactionDetails: String
     }
 
-    # A block with none transaction details
+    """
+    A block with no transaction details
+    """
     type BlockWithNone implements Block {
         blockhash: String
         blockHeight: BigInt
@@ -66,7 +74,9 @@ export const blockTypeDefs = /* GraphQL */ `
         transactionDetails: String
     }
 
-    # A block with signature transaction details
+    """
+    A block with signature transaction details
+    """
     type BlockWithSignatures implements Block {
         blockhash: String
         blockHeight: BigInt
