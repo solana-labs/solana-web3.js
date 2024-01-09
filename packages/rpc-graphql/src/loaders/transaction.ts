@@ -1,12 +1,10 @@
 import DataLoader from 'dataloader';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { TransactionVersion } from '../../../transactions/dist/types';
 import type { Rpc } from '../context';
 import { TransactionQueryArgs } from '../schema/transaction';
+import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedTransaction } from './transformers/transaction';
 
@@ -72,7 +70,7 @@ function createTransactionBatchLoadFn(rpc: Rpc) {
 }
 
 export function createTransactionLoader(rpc: Rpc) {
-    const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: TransactionQueryArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('signature', info)) {
