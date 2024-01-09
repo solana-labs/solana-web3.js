@@ -1,11 +1,19 @@
+import { Slot } from '@solana/rpc-core';
+import { Commitment } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
 import type { Rpc } from '../context';
-import { BlockQueryArgs } from '../schema/block';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedBlock } from './transformers/block';
+
+export type BlockLoaderArgs = {
+    slot: Slot;
+    commitment?: Commitment;
+    encoding?: 'base58' | 'base64' | 'jsonParsed';
+    transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
+};
 
 /* Normalizes RPC optional configs to use GraphQL API defaults */
 function normalizeArgs({
@@ -13,7 +21,7 @@ function normalizeArgs({
     encoding = 'jsonParsed',
     slot,
     transactionDetails = 'full',
-}: BlockQueryArgs) {
+}: BlockLoaderArgs) {
     return {
         commitment,
         encoding,
@@ -52,7 +60,7 @@ function createBlockBatchLoadFn(rpc: Rpc) {
 export function createBlockLoader(rpc: Rpc) {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async (args: BlockQueryArgs, info?: GraphQLResolveInfo) => {
+        load: async (args: BlockLoaderArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('slot', info)) {
                 // If a user only requests the block's slot,
                 // don't call the RPC or the cache

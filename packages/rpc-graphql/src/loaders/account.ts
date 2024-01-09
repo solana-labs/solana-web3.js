@@ -1,11 +1,20 @@
+import { Address } from '@solana/addresses';
+import { DataSlice, Slot } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
 import type { Rpc } from '../context';
-import { AccountQueryArgs } from '../schema/account';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedAccount } from './transformers/account';
+
+export type AccountLoaderArgs = {
+    address: Address;
+    dataSlice?: DataSlice;
+    encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+    commitment?: 'processed' | 'confirmed' | 'finalized';
+    minContextSlot?: Slot;
+};
 
 /* Normalizes RPC optional configs to use GraphQL API defaults */
 function normalizeArgs({
@@ -14,7 +23,7 @@ function normalizeArgs({
     dataSlice,
     encoding = 'jsonParsed',
     minContextSlot,
-}: AccountQueryArgs) {
+}: AccountLoaderArgs) {
     return { address, commitment, dataSlice, encoding, minContextSlot };
 }
 
@@ -40,7 +49,7 @@ function createAccountBatchLoadFn(rpc: Rpc) {
 export function createAccountLoader(rpc: Rpc) {
     const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async (args: AccountQueryArgs, info?: GraphQLResolveInfo) => {
+        load: async (args: AccountLoaderArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('address', info)) {
                 // If a user only requests the account's address,
                 // don't call the RPC or the cache

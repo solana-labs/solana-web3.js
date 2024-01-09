@@ -1,13 +1,3 @@
-import type { Slot } from '@solana/rpc-core';
-import { Commitment } from '@solana/rpc-types';
-
-export type BlockQueryArgs = {
-    slot: Slot;
-    commitment?: Commitment;
-    encoding?: 'base58' | 'base64' | 'jsonParsed';
-    transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
-};
-
 export const blockTypeDefs = /* GraphQL */ `
     type TransactionMetaForAccounts {
         err: String

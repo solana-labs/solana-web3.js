@@ -1,13 +1,4 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { Signature } from '@solana/keys';
-import { Commitment } from '@solana/rpc-types';
-
-export type TransactionQueryArgs = {
-    signature: Signature;
-    commitment?: Commitment;
-    encoding?: 'base58' | 'base64' | 'jsonParsed';
-};
-
 export const transactionTypeDefs = /* GraphQL */ `
     type TransactionStatusOk {
         Ok: String
