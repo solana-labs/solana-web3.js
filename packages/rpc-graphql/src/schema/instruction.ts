@@ -189,7 +189,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     # SplMemo
     type SplMemoInstruction implements TransactionInstruction {
         programId: Address
-        data: String
+        memo: String
     }
 
     # SplToken: InitializeMint
