@@ -18,9 +18,7 @@ import { getArrayCodec, getArrayDecoder, getArrayEncoder } from '../array';
     getArrayEncoder({} as FixedSizeEncoder<string>, { size: 42 }) satisfies FixedSizeEncoder<string[]>;
     getArrayEncoder({} as Encoder<string>, { size: 0 }) satisfies FixedSizeEncoder<string[], 0>;
     getArrayEncoder({} as FixedSizeEncoder<string>, { size: 'remainder' }) satisfies VariableSizeEncoder<string[]>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size items.
-    getArrayEncoder({} as VariableSizeEncoder<string>, { size: 'remainder' });
+    getArrayEncoder({} as VariableSizeEncoder<string>, { size: 'remainder' }) satisfies VariableSizeEncoder<string[]>;
 }
 
 {
@@ -29,9 +27,7 @@ import { getArrayCodec, getArrayDecoder, getArrayEncoder } from '../array';
     getArrayDecoder({} as FixedSizeDecoder<string>, { size: 42 }) satisfies FixedSizeDecoder<string[]>;
     getArrayDecoder({} as Decoder<string>, { size: 0 }) satisfies FixedSizeDecoder<string[], 0>;
     getArrayDecoder({} as FixedSizeDecoder<string>, { size: 'remainder' }) satisfies VariableSizeDecoder<string[]>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size items.
-    getArrayDecoder({} as VariableSizeDecoder<string>, { size: 'remainder' });
+    getArrayDecoder({} as VariableSizeDecoder<string>, { size: 'remainder' }) satisfies VariableSizeDecoder<string[]>;
 }
 
 {
@@ -40,7 +36,5 @@ import { getArrayCodec, getArrayDecoder, getArrayEncoder } from '../array';
     getArrayCodec({} as FixedSizeCodec<string>, { size: 42 }) satisfies FixedSizeCodec<string[]>;
     getArrayCodec({} as Codec<string>, { size: 0 }) satisfies FixedSizeCodec<string[], string[], 0>;
     getArrayCodec({} as FixedSizeCodec<string>, { size: 'remainder' }) satisfies VariableSizeCodec<string[]>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size items.
-    getArrayCodec({} as VariableSizeCodec<string>, { size: 'remainder' });
+    getArrayCodec({} as VariableSizeCodec<string>, { size: 'remainder' }) satisfies VariableSizeCodec<string[]>;
 }

@@ -79,15 +79,18 @@ describe('getSetCodec', () => {
         expect(set(string({ size: 1 }), remainder).encode(new Set(['a', 'b']))).toStrictEqual(b('6162'));
         expect(set(string({ size: 1 }), remainder).read(b('6162'), 0)).toStrictEqual([new Set(['a', 'b']), 2]);
 
+        // Variable sized items.
+        expect(set(string({ size: u8() }), remainder).encode(new Set(['a', 'bc']))).toStrictEqual(b('0161026263'));
+        expect(set(string({ size: u8() }), remainder).read(b('0161026263'), 0)).toStrictEqual([
+            new Set(['a', 'bc']),
+            5,
+        ]);
+
         // Different From and To types.
         const setU64 = set<number | bigint, bigint>(u64(), remainder);
         expect(setU64.encode(new Set([2]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.encode(new Set([2n]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.read(b('0200000000000000'), 0)).toStrictEqual([new Set([2n]), 8]);
-
-        // It fails with variable size items.
-        // @ts-expect-error Remainder size needs a fixed-size item.
-        expect(() => set(string(), remainder)).toThrow('Codecs of "remainder" size must have fixed-size items');
     });
 
     it('has the right sizes', () => {

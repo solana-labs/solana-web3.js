@@ -95,15 +95,20 @@ describe('getMapCodec', () => {
         expect(letters.encode(lettersMap)).toStrictEqual(b('61016202'));
         expect(letters.read(b('61016202'), 0)).toStrictEqual([lettersMap, 4]);
 
+        // Variable sized items.
+        const prefixedLetters = map(string({ size: u8() }), u8(), remainder);
+        const prefixedLettersMap = new Map([
+            ['a', 6],
+            ['bc', 7],
+        ]);
+        expect(prefixedLetters.encode(prefixedLettersMap)).toStrictEqual(b('01610602626307'));
+        expect(prefixedLetters.read(b('01610602626307'), 0)).toStrictEqual([prefixedLettersMap, 7]);
+
         // Different From and To types.
         const mapU64 = map<number, number | bigint, number, bigint>(u8(), u64(), remainder);
         expect(mapU64.encode(new Map([[1, 2]]))).toStrictEqual(b('010200000000000000'));
         expect(mapU64.encode(new Map([[1, 2n]]))).toStrictEqual(b('010200000000000000'));
         expect(mapU64.read(b('010200000000000000'), 0)).toStrictEqual([new Map([[1, 2n]]), 9]);
-
-        // It fails with variable size items.
-        // @ts-expect-error Remainder size needs a fixed-size item.
-        expect(() => map(u8(), string(), remainder)).toThrow('Codecs of "remainder" size must have fixed-size items.');
     });
 
     it('has the right sizes', () => {
