@@ -1385,6 +1385,9 @@ export const mockTransactionStake = {
     },
 };
 
+// There's a memo instruction in this one
+export const mockTransactionMemo = mockTransactionStake;
+
 export const mockTransactionVote = {
     blockTime: 1699617237,
     meta: {

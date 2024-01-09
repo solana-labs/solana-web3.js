@@ -2,6 +2,11 @@
 
 function transformParsedInstruction(parsedInstruction: any) {
     if ('parsed' in parsedInstruction) {
+        if (typeof parsedInstruction.parsed === 'string' && parsedInstruction.program === 'spl-memo') {
+            const { parsed: memo, program: programName, programId } = parsedInstruction;
+            const instructionType = 'memo';
+            return { instructionType, memo, programId, programName };
+        }
         const {
             parsed: { info: data, type: instructionType },
             program: programName,
