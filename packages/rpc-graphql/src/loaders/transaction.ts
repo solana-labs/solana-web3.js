@@ -1,15 +1,22 @@
+import { Signature } from '@solana/keys';
+import { Commitment } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { TransactionVersion } from '../../../transactions/dist/types';
 import type { Rpc } from '../context';
-import { TransactionQueryArgs } from '../schema/transaction';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedTransaction } from './transformers/transaction';
 
+export type TransactionLoaderArgs = {
+    signature: Signature;
+    commitment?: Commitment;
+    encoding?: 'base58' | 'base64' | 'jsonParsed';
+};
+
 /* Normalizes RPC optional configs to use GraphQL API defaults */
-function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', signature }: TransactionQueryArgs) {
+function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', signature }: TransactionLoaderArgs) {
     return {
         commitment,
         encoding,
@@ -72,7 +79,7 @@ function createTransactionBatchLoadFn(rpc: Rpc) {
 export function createTransactionLoader(rpc: Rpc) {
     const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async (args: TransactionQueryArgs, info?: GraphQLResolveInfo) => {
+        load: async (args: TransactionLoaderArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('signature', info)) {
                 // If a user only requests the transaction's signature,
                 // don't call the RPC or the cache
