@@ -31,17 +31,72 @@ describe('block', () => {
         rpcGraphQL = createRpcGraphQL(rpc);
     });
 
+    // The `block` query takes a `BigInt` as a parameter. We need to test this
+    // for various input types that might occur outside of a JavaScript
+    // context, such as string or number.
+    describe('bigint parameter', () => {
+        const source = /* GraphQL */ `
+            query testQuery($block: BigInt!) {
+                block(slot: $block) {
+                    blockhash
+                }
+            }
+        `;
+        1;
+        it('can accept a bigint parameter', async () => {
+            expect.assertions(2);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
+            const variables = { block: 511226n };
+            const result = await rpcGraphQL.query(source, variables);
+            expect(result).not.toHaveProperty('errors');
+            expect(result).toMatchObject({
+                data: {
+                    block: {
+                        blockhash: expect.any(String),
+                    },
+                },
+            });
+        });
+        it('can accept a number parameter', async () => {
+            expect.assertions(2);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
+            const variables = { block: 511226 };
+            const result = await rpcGraphQL.query(source, variables);
+            expect(result).not.toHaveProperty('errors');
+            expect(result).toMatchObject({
+                data: {
+                    block: {
+                        blockhash: expect.any(String),
+                    },
+                },
+            });
+        });
+        it('can accept a string parameter', async () => {
+            expect.assertions(2);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
+            const variables = { block: '511226' };
+            const result = await rpcGraphQL.query(source, variables);
+            expect(result).not.toHaveProperty('errors');
+            expect(result).toMatchObject({
+                data: {
+                    block: {
+                        blockhash: expect.any(String),
+                    },
+                },
+            });
+        });
+    });
     describe('basic queries', () => {
         it("can query a block's block time", async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}) {
-                        blockTime
+                    query testQuery {
+                        block(slot: ${defaultSlot}) {
+                            blockTime
+                        }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
@@ -55,25 +110,31 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}) {
-                        blockhash
-                        parentSlot
-                        rewards {
-                            pubkey
-                            lamports
-                            postBalance
-                            rewardType
+                    query testQuery {
+                        block(slot: ${defaultSlot}) {
+                            blockHeight
+                            blockTime
+                            blockhash
+                            parentSlot
+                            previousBlockhash
+                            rewards {
+                                pubkey
+                                lamports
+                                postBalance
+                                rewardType
+                            }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
                     block: {
+                        blockHeight: expect.any(BigInt),
+                        blockTime: expect.any(Number),
                         blockhash: expect.any(String),
                         parentSlot: expect.any(BigInt),
+                        previousBlockhash: expect.any(String),
                         rewards: expect.arrayContaining([
                             {
                                 lamports: expect.any(BigInt),
@@ -92,14 +153,14 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockSignatures)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: signatures) {
-                        ... on BlockWithSignatures {
-                            signatures
+                    query testQuery {
+                        block(slot: ${defaultSlot}, transactionDetails: signatures) {
+                            ... on BlockWithSignatures {
+                                signatures
+                            }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
@@ -115,19 +176,19 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockAccounts)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: accounts) {
-                        ... on BlockWithAccounts {
-                            transactions {
-                                data {
-                                    accountKeys
-                                    signatures
+                    query testQuery {
+                        block(slot: ${defaultSlot}, transactionDetails: accounts) {
+                            ... on BlockWithAccounts {
+                                transactions {
+                                    data {
+                                        accountKeys
+                                        signatures
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
@@ -150,20 +211,20 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: none) {
-                        ... on BlockWithNone {
-                            blockhash
-                            rewards {
-                                pubkey
-                                lamports
-                                postBalance
-                                rewardType
+                    query testQuery {
+                        block(slot: ${defaultSlot}, transactionDetails: none) {
+                            ... on BlockWithNone {
+                                blockhash
+                                rewards {
+                                    pubkey
+                                    lamports
+                                    postBalance
+                                    rewardType
+                                }
                             }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
@@ -187,18 +248,18 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, encoding: BASE_58) {
-                        ... on BlockWithFull {
-                            transactions {
-                                ... on TransactionBase58 {
-                                    data
+                    query testQuery {
+                        block(slot: ${defaultSlot}, encoding: BASE_58) {
+                            ... on BlockWithFull {
+                                transactions {
+                                    ... on TransactionBase58 {
+                                        data
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            `;
+                `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {

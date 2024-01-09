@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SolanaRpcMethods } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
 import type { Rpc } from '../context';
 import { ProgramAccountsQueryArgs } from '../schema/program-accounts';
+import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedAccount } from './transformers/account';
 
@@ -57,7 +55,7 @@ function createProgramAccountsBatchLoadFn(rpc: Rpc) {
 }
 
 export function createProgramAccountsLoader(rpc: Rpc) {
-    const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: ProgramAccountsQueryArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('programAddress', info)) {

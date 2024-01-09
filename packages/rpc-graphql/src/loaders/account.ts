@@ -1,12 +1,10 @@
 import { SolanaRpcMethods } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import fastStableStringify from 'fast-stable-stringify';
 import { GraphQLResolveInfo } from 'graphql';
 
 import type { Rpc } from '../context';
 import { AccountQueryArgs } from '../schema/account';
+import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedAccount } from './transformers/account';
 
@@ -41,7 +39,7 @@ function createAccountBatchLoadFn(rpc: Rpc) {
 }
 
 export function createAccountLoader(rpc: Rpc) {
-    const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn: fastStableStringify });
+    const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: AccountQueryArgs, info?: GraphQLResolveInfo) => {
             if (onlyPresentFieldRequested('address', info)) {
