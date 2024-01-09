@@ -6,7 +6,6 @@ import { GraphQLResolveInfo } from 'graphql';
 import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedAccount } from './transformers/account';
 
 export type AccountLoaderArgs = {
     address: Address;
@@ -29,6 +28,22 @@ function normalizeArgs({
 
 /* Load an account from the RPC, transform it, then return it */
 async function loadAccount(rpc: Rpc, { address, ...config }: ReturnType<typeof normalizeArgs>) {
+    if (
+        address === 'Feature111111111111111111111111111111111111' ||
+        address === 'NativeLoader1111111111111111111111111111111' ||
+        address === 'Sysvar1nstructions1111111111111111111111111'
+    ) {
+        // This is a synthetic account; `getAccountInfo()` would return `null`.
+        return {
+            address,
+            data: ['', 'base64'],
+            executable: false,
+            lamports: 0n,
+            owner: '11111111111111111111111111111111',
+            rentEpoch: 18_446_744_073_709_552_000n,
+            space: 0n,
+        };
+    }
     const account = await rpc
         .getAccountInfo(address, config as Parameters<SolanaRpcMethods['getAccountInfo']>[1])
         .send()
@@ -36,7 +51,13 @@ async function loadAccount(rpc: Rpc, { address, ...config }: ReturnType<typeof n
         .catch(e => {
             throw e;
         });
-    return account === null ? { address } : transformLoadedAccount({ account, address, encoding: config.encoding });
+    if (!account || account.lamports <= 0n) {
+        return null;
+    }
+    return {
+        ...account,
+        address,
+    };
 }
 
 function createAccountBatchLoadFn(rpc: Rpc) {

@@ -6,18 +6,39 @@ export const accountTypeDefs = /* GraphQL */ `
     interface Account {
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
-        executable: Boolean
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
         rentEpoch: BigInt
     }
 
-    # Base account type
     type GenericAccount implements Account {
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
-        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+    }
+
+    """
+    An account whose data is an executable binary
+    """
+    type ProgramAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+    }
+
+    """
+    An special account with dynamically-updated data
+    """
+    type Sysvar implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
@@ -167,7 +188,24 @@ export const accountTypeDefs = /* GraphQL */ `
 
 export const accountResolvers = {
     Account: {
-        __resolveType(account: { encoding: string; programName: string; accountType: string }) {
+        __resolveType(account: {
+            address: string;
+            encoding: string;
+            executable?: boolean;
+            lamports?: bigint;
+            owner: string;
+            programName: string;
+            accountType: string;
+        }) {
+            if (
+                account.owner === 'Sysvar1111111111111111111111111111111111111' ||
+                account.address === 'Sysvar1nstructions1111111111111111111111111'
+            ) {
+                return 'Sysvar';
+            }
+            if (account.owner === 'NativeLoader1111111111111111111111111111111' || account.executable) {
+                return 'ProgramAccount';
+            }
             if (account.encoding === 'jsonParsed') {
                 if (account.programName === 'nonce') {
                     return 'NonceAccount';
@@ -190,33 +228,36 @@ export const accountResolvers = {
             }
             return 'GenericAccount';
         },
-        data: resolveAccountData(),
     },
     GenericAccount: {
         data: resolveAccountData(),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
     },
     NonceAccount: {
         data: resolveAccountData(),
         authority: resolveAccount('authority'),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
     },
     LookupTableAccount: {
         data: resolveAccountData(),
         authority: resolveAccount('authority'),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
     },
     MintAccount: {
         data: resolveAccountData(),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mintAuthority: resolveAccount('mintAuthority'),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
+    },
+    ProgramAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('owner'),
     },
     TokenAccount: {
         data: resolveAccountData(),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
     },
     StakeAccountDataMetaAuthorized: {
         staker: resolveAccount('staker'),
@@ -230,7 +271,11 @@ export const accountResolvers = {
     },
     StakeAccount: {
         data: resolveAccountData(),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
+    },
+    Sysvar: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('owner'),
     },
     VoteAccountDataAuthorizedVoter: {
         authorizedVoter: resolveAccount('authorizedVoter'),
@@ -239,6 +284,6 @@ export const accountResolvers = {
         data: resolveAccountData(),
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
         node: resolveAccount('nodePubkey'),
-        ownerProgram: resolveAccount('ownerProgram'),
+        ownerProgram: resolveAccount('owner'),
     },
 };

@@ -14,7 +14,6 @@ import { GraphQLResolveInfo } from 'graphql';
 import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedAccount } from './transformers/account';
 
 export type ProgramAccountsLoaderArgs = {
     programAddress: Address;
@@ -52,13 +51,10 @@ async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: Retu
             throw e;
         });
 
-    return programAccounts.map(programAccount =>
-        transformLoadedAccount({
-            account: programAccount.account,
-            address: programAccount.pubkey,
-            encoding: config.encoding,
-        }),
-    );
+    return programAccounts.map(programAccount => ({
+        ...programAccount.account,
+        address: programAccount.pubkey,
+    }));
 }
 
 function createProgramAccountsBatchLoadFn(rpc: Rpc) {
