@@ -1,4 +1,11 @@
-import { createSolanaRpcApi, type Slot, type SolanaRpcMethods } from '@solana/rpc-core';
+import {
+    createSolanaRpcApi,
+    type GetAccountInfoApi,
+    GetBlockApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+    type Slot,
+} from '@solana/rpc-core';
 import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
@@ -14,7 +21,7 @@ import {
 } from './__setup__';
 
 describe('block', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
 
     // Random slot for testing.
@@ -24,7 +31,7 @@ describe('block', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
