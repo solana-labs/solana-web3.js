@@ -16,6 +16,7 @@ import {
     mockTransactionBase58,
     mockTransactionBase64,
     mockTransactionGeneric,
+    mockTransactionMemo,
     mockTransactionSystem,
     mockTransactionToken,
     mockTransactionVote,
@@ -557,6 +558,45 @@ describe('transaction', () => {
                                     ]),
                                 },
                             ]),
+                        },
+                    },
+                },
+            });
+        });
+        it('can get a `SplMemoInstruction` instruction', async () => {
+            expect.assertions(1);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionMemo)));
+            const source = /* GraphQL */ `
+                query testQuery {
+                    transaction(signature: "${defaultTransactionSignature}") {
+                        ... on TransactionParsed {
+                            data {
+                                message {
+                                    instructions {
+                                            programId
+                                        ... on SplMemoInstruction {
+                                            memo
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source);
+            expect(result).toMatchObject({
+                data: {
+                    transaction: {
+                        data: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        memo: 'fb_07ce1448',
+                                        programId: 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
+                                    },
+                                ]),
+                            },
                         },
                     },
                 },
