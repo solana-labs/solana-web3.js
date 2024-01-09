@@ -2,7 +2,9 @@
 import { resolveAccount } from '../resolvers/account';
 
 export const accountTypeDefs = /* GraphQL */ `
-    # Account interface
+    """
+    Account interface
+    """
     interface Account {
         address: Address
         executable: Boolean
@@ -12,7 +14,9 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
     }
 
-    # An account with base58 encoded data
+    """
+    An account with base58 encoded data
+    """
     type AccountBase58 implements Account {
         address: Address
         data: Base58EncodedBytes
@@ -23,7 +27,9 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
     }
 
-    # An account with base64 encoded data
+    """
+    An account with base64 encoded data
+    """
     type AccountBase64 implements Account {
         address: Address
         data: Base64EncodedBytes
@@ -34,7 +40,9 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
     }
 
-    # An account with base64+zstd encoded data
+    """
+    An account with base64+zstd encoded data
+    """
     type AccountBase64Zstd implements Account {
         address: Address
         data: Base64ZstdEncodedBytes
@@ -45,10 +53,12 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
     }
 
-    # A nonce account
     type NonceAccountFeeCalculator {
         lamportsPerSignature: String
     }
+    """
+    A nonce account
+    """
     type NonceAccount implements Account {
         address: Address
         executable: Boolean
@@ -61,7 +71,9 @@ export const accountTypeDefs = /* GraphQL */ `
         feeCalculator: NonceAccountFeeCalculator
     }
 
-    # A lookup table account
+    """
+    A lookup table account
+    """
     type LookupTableAccount implements Account {
         address: Address
         executable: Boolean
@@ -76,7 +88,9 @@ export const accountTypeDefs = /* GraphQL */ `
         lastExtendedSlotStartIndex: Int
     }
 
-    # A mint account
+    """
+    A mint account
+    """
     type MintAccount implements Account {
         address: Address
         executable: Boolean
@@ -91,7 +105,9 @@ export const accountTypeDefs = /* GraphQL */ `
         supply: String
     }
 
-    # A token account
+    """
+    A token account
+    """
     type TokenAccount implements Account {
         address: Address
         executable: Boolean
@@ -106,7 +122,6 @@ export const accountTypeDefs = /* GraphQL */ `
         tokenAmount: TokenAmount
     }
 
-    # A stake account
     type StakeAccountDataMetaAuthorized {
         staker: Account
         withdrawer: Account
@@ -132,6 +147,9 @@ export const accountTypeDefs = /* GraphQL */ `
         creditsObserved: BigInt
         delegation: StakeAccountDataStakeDelegation
     }
+    """
+    A stake account
+    """
     type StakeAccount implements Account {
         address: Address
         executable: Boolean
@@ -143,7 +161,6 @@ export const accountTypeDefs = /* GraphQL */ `
         stake: StakeAccountDataStake
     }
 
-    # A vote account
     type VoteAccountDataAuthorizedVoter {
         authorizedVoter: Account
         epoch: BigInt
@@ -161,6 +178,9 @@ export const accountTypeDefs = /* GraphQL */ `
         confirmationCount: Int
         slot: BigInt
     }
+    """
+    A vote account
+    """
     type VoteAccount implements Account {
         address: Address
         executable: Boolean

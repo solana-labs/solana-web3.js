@@ -61,7 +61,9 @@ export const transactionTypeDefs = /* GraphQL */ `
         recentBlockhash: String
     }
 
-    # Transaction interface
+    """
+    Transaction interface
+    """
     interface Transaction {
         blockTime: String
         meta: TransactionMeta
@@ -69,7 +71,9 @@ export const transactionTypeDefs = /* GraphQL */ `
         version: String
     }
 
-    # A transaction with base58 encoded data
+    """
+    A transaction with base58 encoded data
+    """
     type TransactionBase58 implements Transaction {
         blockTime: String
         data: Base58EncodedBytes
@@ -78,7 +82,9 @@ export const transactionTypeDefs = /* GraphQL */ `
         version: String
     }
 
-    # A transaction with base64 encoded data
+    """
+    A transaction with base64 encoded data
+    """
     type TransactionBase64 implements Transaction {
         blockTime: String
         data: Base64EncodedBytes
@@ -87,7 +93,9 @@ export const transactionTypeDefs = /* GraphQL */ `
         version: String
     }
 
-    # A transaction with JSON encoded data
+    """
+    A transaction with JSON encoded data
+    """
     type TransactionDataParsed {
         message: TransactionMessage
         signatures: [String]

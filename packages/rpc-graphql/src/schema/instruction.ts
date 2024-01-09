@@ -7,19 +7,25 @@
 import { resolveAccount } from '../resolvers/account';
 
 export const instructionTypeDefs = /* GraphQL */ `
-    # Transaction instruction interface
+    """
+    Transaction instruction interface
+    """
     interface TransactionInstruction {
         programId: Address
     }
 
-    # Generic transaction instruction
+    """
+    Generic transaction instruction
+    """
     type GenericInstruction implements TransactionInstruction {
         accounts: [Address]
         data: Base64EncodedBytes
         programId: Address
     }
 
-    # AddressLookupTable: CreateLookupTable
+    """
+    AddressLookupTable: CreateLookupTable instruction
+    """
     type CreateLookupTableInstruction implements TransactionInstruction {
         programId: Address
         bumpSeed: BigInt # FIXME:*
@@ -30,7 +36,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         systemProgram: Account
     }
 
-    # AddressLookupTable: ExtendLookupTable
+    """
+    AddressLookupTable: ExtendLookupTable instruction
+    """
     type ExtendLookupTableInstruction implements TransactionInstruction {
         programId: Address
         lookupTableAccount: Account
@@ -40,21 +48,27 @@ export const instructionTypeDefs = /* GraphQL */ `
         systemProgram: Account
     }
 
-    # AddressLookupTable: FreezeLookupTable
+    """
+    AddressLookupTable: FreezeLookupTable instruction
+    """
     type FreezeLookupTableInstruction implements TransactionInstruction {
         programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
     }
 
-    # AddressLookupTable: DeactivateLookupTable
+    """
+    AddressLookupTable: DeactivateLookupTable instruction
+    """
     type DeactivateLookupTableInstruction implements TransactionInstruction {
         programId: Address
         lookupTableAccount: Account
         lookupTableAuthority: Account
     }
 
-    # AddressLookupTable: CloseLookupTable
+    """
+    AddressLookupTable: CloseLookupTable instruction
+    """
     type CloseLookupTableInstruction implements TransactionInstruction {
         programId: Address
         lookupTableAccount: Account
@@ -62,7 +76,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         recipient: Account
     }
 
-    # BpfLoader: Write
+    """
+    BpfLoader: Write instruction
+    """
     type BpfLoaderWriteInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -70,19 +86,25 @@ export const instructionTypeDefs = /* GraphQL */ `
         offset: BigInt # FIXME:*
     }
 
-    # BpfLoader: Finalize
+    """
+    BpfLoader: Finalize instruction
+    """
     type BpfLoaderFinalizeInstruction implements TransactionInstruction {
         programId: Address
         account: Account
     }
 
-    # BpfUpgradeableLoader: InitializeBuffer
+    """
+    BpfUpgradeableLoader: InitializeBuffer instruction
+    """
     type BpfUpgradeableLoaderInitializeBufferInstruction implements TransactionInstruction {
         programId: Address
         account: Account
     }
 
-    # BpfUpgradeableLoader: Write
+    """
+    BpfUpgradeableLoader: Write instruction
+    """
     type BpfUpgradeableLoaderWriteInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -91,7 +113,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         offset: BigInt # FIXME:*
     }
 
-    # BpfUpgradeableLoader: DeployWithMaxDataLen
+    """
+    BpfUpgradeableLoader: DeployWithMaxDataLen instruction
+    """
     type BpfUpgradeableLoaderDeployWithMaxDataLenInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -104,7 +128,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # BpfUpgradeableLoader: Upgrade
+    """
+    BpfUpgradeableLoader: Upgrade instruction
+    """
     type BpfUpgradeableLoaderUpgradeInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -116,8 +142,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         spillAccount: Account
     }
 
-    # BpfUpgradeableLoader: SetAuthority
-
+    """
+    BpfUpgradeableLoader: SetAuthority instruction
+    """
     type BpfUpgradeableLoaderSetAuthorityInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -125,7 +152,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
     }
 
-    # BpfUpgradeableLoader: SetAuthorityChecked
+    """
+    BpfUpgradeableLoader: SetAuthorityChecked instruction
+    """
     type BpfUpgradeableLoaderSetAuthorityCheckedInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -133,7 +162,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
     }
 
-    # BpfUpgradeableLoader: Close
+    """
+    BpfUpgradeableLoader: Close instruction
+    """
     type BpfUpgradeableLoaderCloseInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -142,7 +173,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         recipient: Account
     }
 
-    # BpfUpgradeableLoader: ExtendProgram
+    """
+    BpfUpgradeableLoader: ExtendProgram instruction
+    """
     type BpfUpgradeableLoaderExtendProgramInstruction implements TransactionInstruction {
         programId: Address
         additionalBytes: BigInt
@@ -152,7 +185,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         systemProgram: Account
     }
 
-    # SplAssociatedTokenAccount: Create
+    """
+    SplAssociatedTokenAccount: Create instruction
+    """
     type SplAssociatedTokenCreateInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -163,7 +198,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         wallet: Account
     }
 
-    # SplAssociatedTokenAccount: CreateIdempotent
+    """
+    SplAssociatedTokenAccount: CreateIdempotent instruction
+    """
     type SplAssociatedTokenCreateIdempotentInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -174,7 +211,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         wallet: Account
     }
 
-    # SplAssociatedTokenAccount: RecoverNested
+    """
+    SplAssociatedTokenAccount: RecoverNested instruction
+    """
     type SplAssociatedTokenRecoverNestedInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
@@ -186,13 +225,17 @@ export const instructionTypeDefs = /* GraphQL */ `
         wallet: Account
     }
 
-    # SplMemo
+    """
+    SplMemo instruction
+    """
     type SplMemoInstruction implements TransactionInstruction {
         programId: Address
         memo: String
     }
 
-    # SplToken: InitializeMint
+    """
+    SplToken: InitializeMint instruction
+    """
     type SplTokenInitializeMintInstruction implements TransactionInstruction {
         programId: Address
         decimals: BigInt # FIXME:*
@@ -202,7 +245,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # SplToken: InitializeMint2
+    """
+    SplToken: InitializeMint2 instruction
+    """
     type SplTokenInitializeMint2Instruction implements TransactionInstruction {
         programId: Address
         decimals: BigInt # FIXME:*
@@ -211,7 +256,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         mintAuthority: Account
     }
 
-    # SplToken: InitializeAccount
+    """
+    SplToken: InitializeAccount instruction
+    """
     type SplTokenInitializeAccountInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -220,7 +267,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # SplToken: InitializeAccount2
+    """
+    SplToken: InitializeAccount2 instruction
+    """
     type SplTokenInitializeAccount2Instruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -229,7 +278,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # SplToken: InitializeAccount3
+    """
+    SplToken: InitializeAccount3 instruction
+    """
     type SplTokenInitializeAccount3Instruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -237,7 +288,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         owner: Account
     }
 
-    # SplToken: InitializeMultisig
+    """
+    SplToken: InitializeMultisig instruction
+    """
     type SplTokenInitializeMultisigInstruction implements TransactionInstruction {
         programId: Address
         m: BigInt # FIXME:*
@@ -246,7 +299,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
-    # SplToken: InitializeMultisig2
+    """
+    SplToken: InitializeMultisig2 instruction
+    """
     type SplTokenInitializeMultisig2Instruction implements TransactionInstruction {
         programId: Address
         m: BigInt # FIXME:*
@@ -254,7 +309,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
-    # SplToken: Transfer
+    """
+    SplToken: Transfer instruction
+    """
     type SplTokenTransferInstruction implements TransactionInstruction {
         programId: Address
         amount: String
@@ -264,7 +321,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
-    # SplToken: Approve
+    """
+    SplToken: Approve instruction
+    """
     type SplTokenApproveInstruction implements TransactionInstruction {
         programId: Address
         amount: String
@@ -274,7 +333,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
-    # SplToken: Revoke
+    """
+    SplToken: Revoke instruction
+    """
     type SplTokenRevokeInstruction implements TransactionInstruction {
         programId: Address
         multisigOwner: Account
@@ -282,7 +343,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
-    # SplToken: SetAuthority
+    """
+    SplToken: SetAuthority instruction
+    """
     type SplTokenSetAuthorityInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -291,7 +354,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
     }
 
-    # SplToken: MintTo
+    """
+    SplToken: MintTo instruction
+    """
     type SplTokenMintToInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -302,7 +367,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigMintAuthority: Account
     }
 
-    # SplToken: Burn
+    """
+    SplToken: Burn instruction
+    """
     type SplTokenBurnInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -312,7 +379,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigAuthority: Account
     }
 
-    # SplToken: CloseAccount
+    """
+    SplToken: CloseAccount instruction
+    """
     type SplTokenCloseAccountInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -321,7 +390,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         owner: Account
     }
 
-    # SplToken: FreezeAccount
+    """
+    SplToken: FreezeAccount instruction
+    """
     type SplTokenFreezeAccountInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -330,7 +401,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigFreezeAuthority: Account
     }
 
-    # SplToken: ThawAccount
+    """
+    SplToken: ThawAccount instruction
+    """
     type SplTokenThawAccountInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -339,7 +412,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigFreezeAuthority: Account
     }
 
-    # SplToken: TransferChecked
+    """
+    SplToken: TransferChecked instruction
+    """
     type SplTokenTransferCheckedInstruction implements TransactionInstruction {
         programId: Address
         amount: String
@@ -352,7 +427,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenAmount: String
     }
 
-    # SplToken: ApproveChecked
+    """
+    SplToken: ApproveChecked instruction
+    """
     type SplTokenApproveCheckedInstruction implements TransactionInstruction {
         programId: Address
         delegate: Account
@@ -363,7 +440,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenAmount: String
     }
 
-    # SplToken: MintToChecked
+    """
+    SplToken: MintToChecked instruction
+    """
     type SplTokenMintToCheckedInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -374,7 +453,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenAmount: String
     }
 
-    # SplToken: BurnChecked
+    """
+    SplToken: BurnChecked instruction
+    """
     type SplTokenBurnCheckedInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -384,40 +465,52 @@ export const instructionTypeDefs = /* GraphQL */ `
         tokenAmount: String
     }
 
-    # SplToken: SyncNative
+    """
+    SplToken: SyncNative instruction
+    """
     type SplTokenSyncNativeInstruction implements TransactionInstruction {
         programId: Address
         account: Account
     }
 
-    # SplToken: GetAccountDataSize
+    """
+    SplToken: GetAccountDataSize instruction
+    """
     type SplTokenGetAccountDataSizeInstruction implements TransactionInstruction {
         programId: Address
         extensionTypes: [String]
         mint: Account
     }
 
-    # SplToken: InitializeImmutableOwner
+    """
+    SplToken: InitializeImmutableOwner instruction
+    """
     type SplTokenInitializeImmutableOwnerInstruction implements TransactionInstruction {
         programId: Address
         account: Account
     }
 
-    # SplToken: AmountToUiAmount
+    """
+    SplToken: AmountToUiAmount instruction
+    """
     type SplTokenAmountToUiAmountInstruction implements TransactionInstruction {
         programId: Address
         amount: String
         mint: Account
     }
 
-    # SplToken: UiAmountToAmount
+    """
+    SplToken: UiAmountToAmount instruction
+    """
     type SplTokenUiAmountToAmountInstruction implements TransactionInstruction {
         programId: Address
         mint: Account
         uiAmount: String
     }
 
-    # SplToken: InitializeMintCloseAuthority
+    """
+    SplToken: InitializeMintCloseAuthority instruction
+    """
     type SplTokenInitializeMintCloseAuthorityInstruction implements TransactionInstruction {
         programId: Address
         mint: Account
@@ -446,7 +539,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         unixTimestamp: BigInt
     }
 
-    # Stake: Initialize
+    """
+    Stake: Initialize instruction
+    """
     type StakeInitializeInstructionDataAuthorized {
         staker: Account
         withdrawer: Account
@@ -459,7 +554,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: Authorize
+    """
+    Stake: Authorize instruction
+    """
     type StakeAuthorizeInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -470,7 +567,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: DelegateStake
+    """
+    Stake: DelegateStake instruction
+    """
     type StakeDelegateStakeInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -481,7 +580,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # Stake: Split
+    """
+    Stake: Split instruction
+    """
     type StakeSplitInstruction implements TransactionInstruction {
         programId: Address
         lamports: BigInt
@@ -490,7 +591,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAuthority: Account
     }
 
-    # Stake: Withdraw
+    """
+    Stake: Withdraw instruction
+    """
     type StakeWithdrawInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -500,7 +603,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawAuthority: Account
     }
 
-    # Stake: Deactivate
+    """
+    Stake: Deactivate instruction
+    """
     type StakeDeactivateInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -508,7 +613,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAuthority: Account
     }
 
-    # Stake: SetLockup
+    """
+    Stake: SetLockup instruction
+    """
     type StakeSetLockupInstruction implements TransactionInstruction {
         programId: Address
         custodian: Account
@@ -516,7 +623,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: Merge
+    """
+    Stake: Merge instruction
+    """
     type StakeMergeInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -526,7 +635,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeHistorySysvar: Address
     }
 
-    # Stake: AuthorizeWithSeed
+    """
+    Stake: AuthorizeWithSeed instruction
+    """
     type StakeAuthorizeWithSeedInstruction implements TransactionInstruction {
         programId: Address
         authorityBase: Account
@@ -539,7 +650,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: InitializeChecked
+    """
+    Stake: InitializeChecked instruction
+    """
     type StakeInitializeCheckedInstructionDataAuthorized {
         staker: Account
         withdrawer: Account
@@ -552,7 +665,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: AuthorizeChecked
+    """
+    Stake: AuthorizeChecked instruction
+    """
     type StakeAuthorizeCheckedInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -563,7 +678,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: AuthorizeCheckedWithSeed
+    """
+    Stake: AuthorizeCheckedWithSeed instruction
+    """
     type StakeAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
         programId: Address
         authorityBase: Account
@@ -576,7 +693,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: SetLockupChecked
+    """
+    Stake: SetLockupChecked instruction
+    """
     type StakeSetLockupCheckedInstruction implements TransactionInstruction {
         programId: Address
         custodian: Account
@@ -584,7 +703,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         stakeAccount: Account
     }
 
-    # Stake: DeactivateDelinquent
+    """
+    Stake: DeactivateDelinquent instruction
+    """
     type StakeDeactivateDelinquentInstruction implements TransactionInstruction {
         programId: Address
         referenceVoteAccount: Account
@@ -592,7 +713,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # Stake: Redelegate
+    """
+    Stake: Redelegate instruction
+    """
     type StakeRedelegateInstruction implements TransactionInstruction {
         programId: Address
         newStakeAccount: Account
@@ -602,7 +725,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # System: CreateAccount
+    """
+    System: CreateAccount instruction
+    """
     type CreateAccountInstruction implements TransactionInstruction {
         programId: Address
         lamports: BigInt
@@ -612,14 +737,18 @@ export const instructionTypeDefs = /* GraphQL */ `
         space: BigInt
     }
 
-    # System: Assign
+    """
+    System: Assign instruction
+    """
     type AssignInstruction implements TransactionInstruction {
         programId: Address
         account: Account
         owner: Account
     }
 
-    # System: Transfer
+    """
+    System: Transfer instruction
+    """
     type TransferInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
@@ -627,7 +756,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
-    # System: CreateAccountWithSeed
+    """
+    System: CreateAccountWithSeed instruction
+    """
     type CreateAccountWithSeedInstruction implements TransactionInstruction {
         programId: Address
         base: Account
@@ -637,7 +768,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         space: BigInt
     }
 
-    # System: AdvanceNonceAccount
+    """
+    System: AdvanceNonceAccount instruction
+    """
     type AdvanceNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         nonceAccount: Account
@@ -645,7 +778,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         recentBlockhashesSysvar: Address
     }
 
-    # System: WithdrawNonceAccount
+    """
+    System: WithdrawNonceAccount instruction
+    """
     type WithdrawNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
@@ -656,7 +791,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # System: InitializeNonceAccount
+    """
+    System: InitializeNonceAccount instruction
+    """
     type InitializeNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         nonceAccount: Account
@@ -665,7 +802,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         rentSysvar: Address
     }
 
-    # System: AuthorizeNonceAccount
+    """
+    System: AuthorizeNonceAccount instruction
+    """
     type AuthorizeNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         newAuthorized: Account
@@ -673,21 +812,27 @@ export const instructionTypeDefs = /* GraphQL */ `
         nonceAuthority: Account
     }
 
-    # System: UpgradeNonceAccount
+    """
+    System: UpgradeNonceAccount instruction
+    """
     type UpgradeNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         nonceAccount: Account
         nonceAuthority: Account
     }
 
-    # System: Allocate
+    """
+    System: Allocate instruction
+    """
     type AllocateInstruction implements TransactionInstruction {
         programId: Address
         account: Account
         space: BigInt
     }
 
-    # System: AllocateWithSeed
+    """
+    System: AllocateWithSeed instruction
+    """
     type AllocateWithSeedInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -697,7 +842,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         space: BigInt
     }
 
-    # System: AssignWithSeed
+    """
+    System: AssignWithSeed instruction
+    """
     type AssignWithSeedInstruction implements TransactionInstruction {
         programId: Address
         account: Account
@@ -706,7 +853,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         seed: String
     }
 
-    # System: TransferWithSeed
+    """
+    System: TransferWithSeed instruction
+    """
     type TransferWithSeedInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
@@ -717,7 +866,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         sourceSeed: String
     }
 
-    # Vote: InitializeAccount
+    """
+    Vote: InitializeAccount instruction
+    """
     type VoteInitializeAccountInstruction implements TransactionInstruction {
         programId: Address
         authorizedVoter: Account
@@ -729,7 +880,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # Vote: Authorize
+    """
+    Vote: Authorize instruction
+    """
     type VoteAuthorizeInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
@@ -739,7 +892,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # Vote: AuthorizeWithSeed
+    """
+    Vote: AuthorizeWithSeed instruction
+    """
     type VoteAuthorizeWithSeedInstruction implements TransactionInstruction {
         programId: Address
         authorityBaseKey: String
@@ -751,7 +906,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAccount: Account
     }
 
-    # Vote: AuthorizeCheckedWithSeed
+    """
+    Vote: AuthorizeCheckedWithSeed instruction
+    """
     type VoteAuthorizeCheckedWithSeedInstruction implements TransactionInstruction {
         programId: Address
         authorityBaseKey: String
@@ -769,7 +926,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         timestamp: BigInt
     }
 
-    # Vote: Vote
+    """
+    Vote: Vote instruction
+    """
     type VoteVoteInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -790,7 +949,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         timestamp: BigInt
     }
 
-    # Vote: UpdateVoteState
+    """
+    Vote: UpdateVoteState instruction
+    """
     type VoteUpdateVoteStateInstruction implements TransactionInstruction {
         programId: Address
         hash: String
@@ -799,7 +960,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteStateUpdate: VoteStateUpdate
     }
 
-    # Vote: UpdateVoteStateSwitch
+    """
+    Vote: UpdateVoteStateSwitch instruction
+    """
     type VoteUpdateVoteStateSwitchInstruction implements TransactionInstruction {
         programId: Address
         hash: String
@@ -808,7 +971,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteStateUpdate: VoteStateUpdate
     }
 
-    # Vote: CompactUpdateVoteState
+    """
+    Vote: CompactUpdateVoteState instruction
+    """
     type VoteCompactUpdateVoteStateInstruction implements TransactionInstruction {
         programId: Address
         hash: String
@@ -817,7 +982,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteStateUpdate: VoteStateUpdate
     }
 
-    # Vote: CompactUpdateVoteStateSwitch
+    """
+    Vote: CompactUpdateVoteStateSwitch instruction
+    """
     type VoteCompactUpdateVoteStateSwitchInstruction implements TransactionInstruction {
         programId: Address
         hash: String
@@ -826,7 +993,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteStateUpdate: VoteStateUpdate
     }
 
-    # Vote: Withdraw
+    """
+    Vote: Withdraw instruction
+    """
     type VoteWithdrawInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
@@ -835,7 +1004,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawAuthority: Account
     }
 
-    # Vote: UpdateValidatorIdentity
+    """
+    Vote: UpdateValidatorIdentity instruction
+    """
     type VoteUpdateValidatorIdentityInstruction implements TransactionInstruction {
         programId: Address
         newValidatorIdentity: Account
@@ -843,7 +1014,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawAuthority: Account
     }
 
-    # Vote: UpdateCommission
+    """
+    Vote: UpdateCommission instruction
+    """
     type VoteUpdateCommissionInstruction implements TransactionInstruction {
         programId: Address
         commission: BigInt # FIXME:*
@@ -851,7 +1024,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawAuthority: Account
     }
 
-    # Vote: VoteSwitch
+    """
+    Vote: VoteSwitch instruction
+    """
     type VoteVoteSwitchInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Address
@@ -862,7 +1037,9 @@ export const instructionTypeDefs = /* GraphQL */ `
         voteAuthority: Account
     }
 
-    # Vote: AuthorizeChecked
+    """
+    Vote: AuthorizeChecked instruction
+    """
     type VoteAuthorizeCheckedInstruction implements TransactionInstruction {
         programId: Address
         authority: Account
