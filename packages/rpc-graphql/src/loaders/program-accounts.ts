@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { SolanaRpcMethods } from '@solana/rpc-core';
 import DataLoader from 'dataloader';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -26,14 +24,8 @@ function normalizeArgs({
 /* Load a program's accounts from the RPC, transform them, then return them */
 async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: ReturnType<typeof normalizeArgs>) {
     const programAccounts = await rpc
-        .getProgramAccounts(programAddress, config as Parameters<SolanaRpcMethods['getProgramAccounts']>[1])
+        .getProgramAccounts(programAddress, config)
         .send()
-        .then(res => {
-            if ('value' in res) {
-                return res.value as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
-            }
-            return res as ReturnType<SolanaRpcMethods['getProgramAccounts']>;
-        })
         .catch(e => {
             throw e;
         });
