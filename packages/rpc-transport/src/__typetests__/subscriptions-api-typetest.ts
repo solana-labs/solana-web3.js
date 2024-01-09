@@ -1,6 +1,6 @@
-import { IRpcSubscriptionsApi } from '../../json-rpc-types';
-import { IRpcApiMethods } from '../api-types';
-import { createJsonRpcSubscriptionsApi } from '../subscriptions/subscriptions-api';
+import { IRpcApiMethods } from '../apis/api-types';
+import { createJsonRpcSubscriptionsApi } from '../apis/subscriptions/subscriptions-api';
+import { IRpcSubscriptionsApi } from '../json-rpc-types';
 
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
