@@ -2,14 +2,14 @@ import { Address } from '@solana/addresses';
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../../index';
+import { createSolanaRpcApi, GetSignaturesForAddressApi } from '../../index';
 
 describe('getSignaturesForAddress', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetSignaturesForAddressApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetSignaturesForAddressApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

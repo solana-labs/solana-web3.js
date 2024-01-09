@@ -6,7 +6,7 @@ import { Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetLatestBlockhashApi, SendTransactionApi } from '../index';
 
 function getMockTransactionMessage({
     blockhash,
@@ -68,11 +68,11 @@ async function getSecretKey() {
 }
 
 describe('sendTransaction', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<SendTransactionApi & GetLatestBlockhashApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<SendTransactionApi & GetLatestBlockhashApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

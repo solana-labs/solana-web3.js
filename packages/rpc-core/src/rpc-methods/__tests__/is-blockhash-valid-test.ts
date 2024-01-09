@@ -3,14 +3,14 @@ import { Commitment } from '@solana/rpc-types';
 import { Blockhash } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, IsBlockhashValidApi } from '../index';
 
 describe('isBlockhashValid', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<IsBlockhashValidApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<IsBlockhashValidApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

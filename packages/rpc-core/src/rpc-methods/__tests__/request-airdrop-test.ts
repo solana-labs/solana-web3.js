@@ -4,14 +4,14 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, RequestAirdropApi } from '../index';
 
 describe('requestAirdrop', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<RequestAirdropApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<RequestAirdropApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

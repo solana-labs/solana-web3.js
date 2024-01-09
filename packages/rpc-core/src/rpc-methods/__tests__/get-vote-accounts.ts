@@ -3,14 +3,14 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetVoteAccountsApi } from '../index';
 
 describe('getVoteAccounts', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetVoteAccountsApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetVoteAccountsApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

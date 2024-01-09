@@ -4,7 +4,7 @@ import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transp
 import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetClusterNodesApi } from '../index';
 
 const logFilePath = path.resolve(__dirname, '../../../../../test-ledger/validator.log');
 
@@ -61,11 +61,11 @@ async function getNodeInfoFromLogFile() {
 }
 
 describe('getClusterNodes', () => {
-    let mockRpc: Rpc<SolanaRpcMethods>;
+    let mockRpc: Rpc<GetClusterNodesApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        mockRpc = createJsonRpc<SolanaRpcMethods>({
+        mockRpc = createJsonRpc<GetClusterNodesApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });

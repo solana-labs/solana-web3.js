@@ -3,14 +3,14 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createSolanaRpcApi, SolanaRpcMethods } from '../index';
+import { createSolanaRpcApi, GetBlockHeightApi } from '../index';
 
 describe('getBlockHeight', () => {
-    let rpc: Rpc<SolanaRpcMethods>;
+    let rpc: Rpc<GetBlockHeightApi>;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SolanaRpcMethods>({
+        rpc = createJsonRpc<GetBlockHeightApi>({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
