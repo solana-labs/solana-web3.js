@@ -20,8 +20,6 @@ const schemaTypeDefs = /* GraphQL */ `
         account(
             address: String!
             commitment: Commitment
-            dataSlice: DataSlice
-            encoding: AccountEncoding
             minContextSlot: BigInt
         ): Account
         block(
@@ -33,8 +31,6 @@ const schemaTypeDefs = /* GraphQL */ `
         programAccounts(
             programAddress: String!
             commitment: Commitment
-            dataSlice: DataSlice
-            encoding: AccountEncoding
             filters: [ProgramAccountsFilter]
             minContextSlot: BigInt
         ): [Account]

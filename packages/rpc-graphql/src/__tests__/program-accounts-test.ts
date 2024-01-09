@@ -86,17 +86,14 @@ describe('programAccounts', () => {
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
                 commitment: 'confirmed',
-                encoding: 'BASE_58',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
+                        dataBase58: data(encoding: BASE_58)
                         executable
-                        ... on AccountBase58 {
-                            data
-                        }
                     }
                 }
             `;
@@ -106,12 +103,12 @@ describe('programAccounts', () => {
                     programAccounts: expect.arrayContaining([
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
-                            data: '2Uw1bpnsXxu3e',
+                            dataBase58: '2Uw1bpnsXxu3e',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
-                            data: '2Uw1bpnsXxu3e',
+                            dataBase58: '2Uw1bpnsXxu3e',
                             executable: false,
                         },
                     ]),
@@ -123,17 +120,14 @@ describe('programAccounts', () => {
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
                 commitment: 'confirmed',
-                encoding: 'BASE_64',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
+                        dataBase64: data(encoding: BASE_64)
                         executable
-                        ... on AccountBase64 {
-                            data
-                        }
                     }
                 }
             `;
@@ -143,12 +137,12 @@ describe('programAccounts', () => {
                     programAccounts: expect.arrayContaining([
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
-                            data: 'dGVzdCBkYXRh',
+                            dataBase64: 'dGVzdCBkYXRh',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
-                            data: 'dGVzdCBkYXRh',
+                            dataBase64: 'dGVzdCBkYXRh',
                             executable: false,
                         },
                     ]),
@@ -160,17 +154,14 @@ describe('programAccounts', () => {
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
                 commitment: 'confirmed',
-                encoding: 'BASE_64_ZSTD',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
+                        dataBase64Zstd: data(encoding: BASE_64_ZSTD)
                         executable
-                        ... on AccountBase64Zstd {
-                            data
-                        }
                     }
                 }
             `;
@@ -180,12 +171,12 @@ describe('programAccounts', () => {
                     programAccounts: expect.arrayContaining([
                         {
                             address: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
-                            data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            dataBase64Zstd: 'KLUv/QBYSQAAdGVzdCBkYXRh',
                             executable: false,
                         },
                         {
                             address: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',
-                            data: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                            dataBase64Zstd: 'KLUv/QBYSQAAdGVzdCBkYXRh',
                             executable: false,
                         },
                     ]),
@@ -569,25 +560,12 @@ describe('programAccounts', () => {
                         length: 5,
                         offset: 0,
                     },
-                    encoding: 'BASE_58',
                     programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                 };
                 const source = /* GraphQL */ `
-                    query testQuery(
-                        $programAddress: String!
-                        $commitment: Commitment
-                        $dataSlice: DataSlice
-                        $encoding: AccountEncoding
-                    ) {
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
-                            ... on AccountBase58 {
-                                data
-                            }
+                    query testQuery($programAddress: String!, $commitment: Commitment, $dataSlice: DataSlice) {
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                            dataBase58: data(encoding: BASE_58, dataSlice: $dataSlice)
                         }
                     }
                 `;
@@ -596,7 +574,7 @@ describe('programAccounts', () => {
                     data: {
                         programAccounts: expect.arrayContaining([
                             {
-                                data: 'E8f4pET',
+                                dataBase58: 'E8f4pET',
                             },
                         ]),
                     },
@@ -613,25 +591,12 @@ describe('programAccounts', () => {
                         length: 5,
                         offset: 0,
                     },
-                    encoding: 'BASE_64',
                     programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
                 };
                 const source = /* GraphQL */ `
-                    query testQuery(
-                        $programAddress: String!
-                        $commitment: Commitment
-                        $dataSlice: DataSlice
-                        $encoding: AccountEncoding
-                    ) {
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
-                            ... on AccountBase64 {
-                                data
-                            }
+                    query testQuery($programAddress: String!, $commitment: Commitment, $dataSlice: DataSlice) {
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                            dataBase64: data(encoding: BASE_64, dataSlice: $dataSlice)
                         }
                     }
                 `;
@@ -640,7 +605,7 @@ describe('programAccounts', () => {
                     data: {
                         programAccounts: expect.arrayContaining([
                             {
-                                data: 'dGVzdCA=',
+                                dataBase64: 'dGVzdCA=',
                             },
                         ]),
                     },

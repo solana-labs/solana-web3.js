@@ -5,7 +5,6 @@ export const commonTypeDefs = /* GraphQL */ `
         BASE_58
         BASE_64
         BASE_64_ZSTD
-        PARSED
     }
 
     enum BlockTransactionDetails {
@@ -66,7 +65,6 @@ export const commonResolvers = {
         BASE_58: 'base58',
         BASE_64: 'base64',
         BASE_64_ZSTD: 'base64+zstd',
-        PARSED: 'jsonParsed',
     },
     TokenBalance: {
         mint: resolveAccount('mint'),

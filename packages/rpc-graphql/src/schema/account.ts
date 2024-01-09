@@ -1,10 +1,11 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import { resolveAccount } from '../resolvers/account';
+import { resolveAccount, resolveAccountData } from '../resolvers/account';
 
 export const accountTypeDefs = /* GraphQL */ `
     # Account interface
     interface Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -12,32 +13,10 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
     }
 
-    # An account with base58 encoded data
-    type AccountBase58 implements Account {
+    # Base account type
+    type GenericAccount implements Account {
         address: Address
-        data: Base58EncodedBytes
-        executable: Boolean
-        lamports: BigInt
-        ownerProgram: Account
-        space: BigInt
-        rentEpoch: BigInt
-    }
-
-    # An account with base64 encoded data
-    type AccountBase64 implements Account {
-        address: Address
-        data: Base64EncodedBytes
-        executable: Boolean
-        lamports: BigInt
-        ownerProgram: Account
-        space: BigInt
-        rentEpoch: BigInt
-    }
-
-    # An account with base64+zstd encoded data
-    type AccountBase64Zstd implements Account {
-        address: Address
-        data: Base64ZstdEncodedBytes
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -51,6 +30,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
     type NonceAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -64,6 +44,7 @@ export const accountTypeDefs = /* GraphQL */ `
     # A lookup table account
     type LookupTableAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -79,6 +60,7 @@ export const accountTypeDefs = /* GraphQL */ `
     # A mint account
     type MintAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -94,6 +76,7 @@ export const accountTypeDefs = /* GraphQL */ `
     # A token account
     type TokenAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -134,6 +117,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
     type StakeAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -163,6 +147,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
     type VoteAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -183,15 +168,6 @@ export const accountTypeDefs = /* GraphQL */ `
 export const accountResolvers = {
     Account: {
         __resolveType(account: { encoding: string; programName: string; accountType: string }) {
-            if (account.encoding === 'base58') {
-                return 'AccountBase58';
-            }
-            if (account.encoding === 'base64') {
-                return 'AccountBase64';
-            }
-            if (account.encoding === 'base64+zstd') {
-                return 'AccountBase64Zstd';
-            }
             if (account.encoding === 'jsonParsed') {
                 if (account.programName === 'nonce') {
                     return 'NonceAccount';
@@ -212,32 +188,32 @@ export const accountResolvers = {
                     return 'LookupTableAccount';
                 }
             }
-            return 'AccountBase64';
+            return 'GenericAccount';
         },
+        data: resolveAccountData(),
     },
-    AccountBase58: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64Zstd: {
+    GenericAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     NonceAccount: {
+        data: resolveAccountData(),
         authority: resolveAccount('authority'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     LookupTableAccount: {
+        data: resolveAccountData(),
         authority: resolveAccount('authority'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     MintAccount: {
+        data: resolveAccountData(),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mintAuthority: resolveAccount('mintAuthority'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     TokenAccount: {
+        data: resolveAccountData(),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
         ownerProgram: resolveAccount('ownerProgram'),
@@ -253,12 +229,14 @@ export const accountResolvers = {
         voter: resolveAccount('voter'),
     },
     StakeAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     VoteAccountDataAuthorizedVoter: {
         authorizedVoter: resolveAccount('authorizedVoter'),
     },
     VoteAccount: {
+        data: resolveAccountData(),
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
         node: resolveAccount('nodePubkey'),
         ownerProgram: resolveAccount('ownerProgram'),
