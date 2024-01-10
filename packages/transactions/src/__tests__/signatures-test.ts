@@ -49,7 +49,7 @@ describe('getSignatureFromTransaction', () => {
             getSignatureFromTransaction(transactionWithoutFeePayerSignature);
         }).toThrow(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-            'has been signed by its fee payer.',
+                'has been signed by its fee payer.',
         );
     });
 });
@@ -368,7 +368,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: A",
+            'Transaction is missing signatures for addresses: A',
         );
     });
 
@@ -387,7 +387,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: A, B",
+            'Transaction is missing signatures for addresses: A, B',
         );
     });
 
@@ -413,7 +413,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: B",
+            'Transaction is missing signatures for addresses: B',
         );
     });
 
@@ -439,7 +439,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: B",
+            'Transaction is missing signatures for addresses: B',
         );
     });
 
@@ -475,7 +475,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: C",
+            'Transaction is missing signatures for addresses: C',
         );
     });
 
