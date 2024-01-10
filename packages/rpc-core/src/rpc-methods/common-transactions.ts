@@ -1,12 +1,9 @@
 import { Address } from '@solana/addresses';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
 import {
-    Base58EncodedBytes,
-    Base58EncodedDataResponse,
-    Base64EncodedDataResponse,
     SignedLamportsAsI64Unsafe,
     TokenBalance,
     U64UnsafeBeyond2Pow53Minus1,

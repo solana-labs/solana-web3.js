@@ -177,7 +177,6 @@ export type {
 };
 
 export type {
-    Base64EncodedDataResponse,
     DataSlice,
     GetProgramAccountsDatasizeFilter,
     GetProgramAccountsMemcmpFilter,
