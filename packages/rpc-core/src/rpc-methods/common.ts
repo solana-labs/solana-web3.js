@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { LamportsUnsafeBeyond2Pow53Minus1, StringifiedBigInt, StringifiedNumber } from '@solana/rpc-types';
+import { LamportsUnsafeBeyond2Pow53Minus1, TokenAmount } from '@solana/rpc-types';
 
 export type DataSlice = Readonly<{
     offset: number;
@@ -99,13 +99,6 @@ export type AccountInfoWithPubkey<TAccount extends AccountInfoBase> = Readonly<{
     pubkey: Address;
 }>;
 
-export type TokenAmount = Readonly<{
-    amount: StringifiedBigInt;
-    decimals: number;
-    uiAmount: number | null;
-    uiAmountString: StringifiedNumber;
-}>;
-
 export type TokenBalance = Readonly<{
     /** Index of the account in which the token balance is provided for. */
     accountIndex: number;
@@ -116,21 +109,6 @@ export type TokenBalance = Readonly<{
     /** Pubkey of the Token program that owns the account. */
     programId?: Address;
     uiTokenAmount: TokenAmount;
-}>;
-
-type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
-
-export type TokenAccount = Readonly<{
-    mint: Address;
-    owner: Address;
-    tokenAmount: TokenAmount;
-    delegate?: Address;
-    state: TokenAccountState;
-    isNative: boolean;
-    rentExemptReserve?: TokenAmount;
-    delegatedAmount?: TokenAmount;
-    closeAuthority?: Address;
-    extensions?: unknown[];
 }>;
 
 export type GetProgramAccountsMemcmpFilter = Readonly<{

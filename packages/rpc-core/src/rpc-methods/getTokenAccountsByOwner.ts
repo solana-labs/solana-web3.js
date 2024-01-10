@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import type { TokenAccount } from '@solana/rpc-json-parsed';
 import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
@@ -12,7 +13,6 @@ import {
     DataSlice,
     RpcResponse,
     Slot,
-    TokenAccount,
     U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
