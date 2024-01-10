@@ -938,6 +938,9 @@ importers:
 
   packages/library:
     dependencies:
+      '@solana/accounts':
+        specifier: workspace:*
+        version: link:../accounts
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
