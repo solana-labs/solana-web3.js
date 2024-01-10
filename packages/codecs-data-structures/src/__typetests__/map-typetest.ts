@@ -21,12 +21,7 @@ import { getMapCodec, getMapDecoder, getMapEncoder } from '../map';
     getMapEncoder(...fixedKeyValue, { size: 42 }) satisfies FixedSizeEncoder<Map<string, number>>;
     getMapEncoder(...anyKeyValue, { size: 0 }) satisfies FixedSizeEncoder<Map<string, number>, 0>;
     getMapEncoder(...fixedKeyValue, { size: 'remainder' }) satisfies VariableSizeEncoder<Map<string, number>>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size keys.
-    getMapEncoder({} as VariableSizeEncoder<string>, {} as FixedSizeEncoder<number>, { size: 'remainder' });
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size values.
-    getMapEncoder({} as FixedSizeEncoder<string>, {} as VariableSizeEncoder<number>, { size: 'remainder' });
+    getMapEncoder(...anyKeyValue, { size: 'remainder' }) satisfies VariableSizeEncoder<Map<string, number>>;
 }
 
 {
@@ -38,12 +33,7 @@ import { getMapCodec, getMapDecoder, getMapEncoder } from '../map';
     getMapDecoder(...fixedKeyValue, { size: 42 }) satisfies FixedSizeDecoder<Map<string, number>>;
     getMapDecoder(...anyKeyValue, { size: 0 }) satisfies FixedSizeDecoder<Map<string, number>, 0>;
     getMapDecoder(...fixedKeyValue, { size: 'remainder' }) satisfies VariableSizeDecoder<Map<string, number>>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size keys.
-    getMapDecoder({} as VariableSizeDecoder<string>, {} as FixedSizeDecoder<number>, { size: 'remainder' });
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size values.
-    getMapDecoder({} as FixedSizeDecoder<string>, {} as VariableSizeDecoder<number>, { size: 'remainder' });
+    getMapDecoder(...anyKeyValue, { size: 'remainder' }) satisfies VariableSizeDecoder<Map<string, number>>;
 }
 
 {
@@ -55,10 +45,5 @@ import { getMapCodec, getMapDecoder, getMapEncoder } from '../map';
     getMapCodec(...fixedKeyValue, { size: 42 }) satisfies FixedSizeCodec<Map<string, number>>;
     getMapCodec(...anyKeyValue, { size: 0 }) satisfies FixedSizeCodec<Map<string, number>, Map<string, number>, 0>;
     getMapCodec(...fixedKeyValue, { size: 'remainder' }) satisfies VariableSizeCodec<Map<string, number>>;
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size keys.
-    getMapCodec({} as VariableSizeCodec<string>, {} as FixedSizeCodec<number>, { size: 'remainder' });
-
-    // @ts-expect-error Remainder size cannot be used with fixed-size values.
-    getMapCodec({} as FixedSizeCodec<string>, {} as VariableSizeCodec<number>, { size: 'remainder' });
+    getMapCodec(...anyKeyValue, { size: 'remainder' }) satisfies VariableSizeCodec<Map<string, number>>;
 }

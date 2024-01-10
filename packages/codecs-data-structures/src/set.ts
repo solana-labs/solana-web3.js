@@ -40,12 +40,8 @@ export function getSetEncoder<TFrom>(
     config: SetCodecConfig<NumberEncoder> & { size: number },
 ): FixedSizeEncoder<Set<TFrom>>;
 export function getSetEncoder<TFrom>(
-    item: FixedSizeEncoder<TFrom>,
-    config: SetCodecConfig<NumberEncoder> & { size: 'remainder' },
-): VariableSizeEncoder<Set<TFrom>>;
-export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config?: SetCodecConfig<NumberEncoder> & { size?: number | NumberEncoder },
+    config?: SetCodecConfig<NumberEncoder>,
 ): VariableSizeEncoder<Set<TFrom>>;
 export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
@@ -69,12 +65,8 @@ export function getSetDecoder<TTo>(
     config: SetCodecConfig<NumberDecoder> & { size: number },
 ): FixedSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(
-    item: FixedSizeDecoder<TTo>,
-    config: SetCodecConfig<NumberDecoder> & { size: 'remainder' },
-): VariableSizeDecoder<Set<TTo>>;
-export function getSetDecoder<TTo>(
     item: Decoder<TTo>,
-    config?: SetCodecConfig<NumberDecoder> & { size?: number | NumberDecoder },
+    config?: SetCodecConfig<NumberDecoder>,
 ): VariableSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(item: Decoder<TTo>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<TTo>> {
     return mapDecoder(getArrayDecoder(item, config as object), (entries: TTo[]): Set<TTo> => new Set(entries));
@@ -95,12 +87,8 @@ export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     config: SetCodecConfig<NumberCodec> & { size: number },
 ): FixedSizeCodec<Set<TFrom>, Set<TTo>>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
-    item: FixedSizeCodec<TFrom, TTo>,
-    config: SetCodecConfig<NumberCodec> & { size: 'remainder' },
-): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
-export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config?: SetCodecConfig<NumberCodec> & { size?: number | NumberCodec },
+    config?: SetCodecConfig<NumberCodec>,
 ): VariableSizeCodec<Set<TFrom>, Set<TTo>>;
 export function getSetCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,

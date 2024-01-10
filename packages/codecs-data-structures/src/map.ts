@@ -44,14 +44,9 @@ export function getMapEncoder<TFromKey, TFromValue>(
     config: MapCodecConfig<NumberEncoder> & { size: number },
 ): FixedSizeEncoder<Map<TFromKey, TFromValue>>;
 export function getMapEncoder<TFromKey, TFromValue>(
-    key: FixedSizeEncoder<TFromKey>,
-    value: FixedSizeEncoder<TFromValue>,
-    config: MapCodecConfig<NumberEncoder> & { size: 'remainder' },
-): VariableSizeEncoder<Map<TFromKey, TFromValue>>;
-export function getMapEncoder<TFromKey, TFromValue>(
     key: Encoder<TFromKey>,
     value: Encoder<TFromValue>,
-    config?: MapCodecConfig<NumberEncoder> & { size?: number | NumberEncoder },
+    config?: MapCodecConfig<NumberEncoder>,
 ): VariableSizeEncoder<Map<TFromKey, TFromValue>>;
 export function getMapEncoder<TFromKey, TFromValue>(
     key: Encoder<TFromKey>,
@@ -82,14 +77,9 @@ export function getMapDecoder<TToKey, TToValue>(
     config: MapCodecConfig<NumberDecoder> & { size: number },
 ): FixedSizeDecoder<Map<TToKey, TToValue>>;
 export function getMapDecoder<TToKey, TToValue>(
-    key: FixedSizeDecoder<TToKey>,
-    value: FixedSizeDecoder<TToValue>,
-    config: MapCodecConfig<NumberDecoder> & { size: 'remainder' },
-): VariableSizeDecoder<Map<TToKey, TToValue>>;
-export function getMapDecoder<TToKey, TToValue>(
     key: Decoder<TToKey>,
     value: Decoder<TToValue>,
-    config?: MapCodecConfig<NumberDecoder> & { size?: number | NumberDecoder },
+    config?: MapCodecConfig<NumberDecoder>,
 ): VariableSizeDecoder<Map<TToKey, TToValue>>;
 export function getMapDecoder<TToKey, TToValue>(
     key: Decoder<TToKey>,
@@ -135,19 +125,9 @@ export function getMapCodec<
     TToKey extends TFromKey = TFromKey,
     TToValue extends TFromValue = TFromValue,
 >(
-    key: FixedSizeCodec<TFromKey, TToKey>,
-    value: FixedSizeCodec<TFromValue, TToValue>,
-    config: MapCodecConfig<NumberCodec> & { size: 'remainder' },
-): VariableSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>>;
-export function getMapCodec<
-    TFromKey,
-    TFromValue,
-    TToKey extends TFromKey = TFromKey,
-    TToValue extends TFromValue = TFromValue,
->(
     key: Codec<TFromKey, TToKey>,
     value: Codec<TFromValue, TToValue>,
-    config?: MapCodecConfig<NumberCodec> & { size?: number | NumberCodec },
+    config?: MapCodecConfig<NumberCodec>,
 ): VariableSizeCodec<Map<TFromKey, TFromValue>, Map<TToKey, TToValue>>;
 export function getMapCodec<
     TFromKey,

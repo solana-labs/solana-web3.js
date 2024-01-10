@@ -79,15 +79,15 @@ describe('getArrayCodec', () => {
         expect(array(string({ size: 1 }), remainder).encode(['a', 'b'])).toStrictEqual(b('6162'));
         expect(array(string({ size: 1 }), remainder).read(b('6162'), 0)).toStrictEqual([['a', 'b'], 2]);
 
+        // Variable sized items.
+        expect(array(string({ size: u8() }), remainder).encode(['a', 'bc'])).toStrictEqual(b('0161026263'));
+        expect(array(string({ size: u8() }), remainder).read(b('0161026263'), 0)).toStrictEqual([['a', 'bc'], 5]);
+
         // Different From and To types.
         const arrayU64 = array<number | bigint, bigint>(u64(), remainder);
         expect(arrayU64.encode([2])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.encode([2n])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);
-
-        // It fails with variable size items.
-        // @ts-expect-error Remainder size cannot be used with fixed-size items.
-        expect(() => array(string(), remainder)).toThrow('Codecs of "remainder" size must have fixed-size items');
     });
 
     it('has the right sizes', () => {
