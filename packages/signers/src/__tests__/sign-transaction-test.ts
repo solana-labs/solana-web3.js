@@ -331,7 +331,7 @@ describe('signTransactionWithSigners', () => {
 
         // Then we expect an error letting us know the transaction is not fully signed.
         // This is because sending signers are ignored by signTransactionWithSigners.
-        await expect(promise).rejects.toThrow('Transaction is missing signature for address `2222`');
+        await expect(promise).rejects.toThrow('Transaction is missing signatures for addresses: 2222');
     });
 
     it('can be cancelled using an AbortSignal', async () => {
