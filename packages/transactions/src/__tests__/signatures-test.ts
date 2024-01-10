@@ -49,7 +49,7 @@ describe('getSignatureFromTransaction', () => {
             getSignatureFromTransaction(transactionWithoutFeePayerSignature);
         }).toThrow(
             "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
+            'has been signed by its fee payer.',
         );
     });
 });
@@ -279,7 +279,7 @@ describe('signTransaction', () => {
         expect.assertions(1);
         const signedTransactionPromise = signTransaction([mockKeyPairA], MOCK_TRANSACTION);
         await expect(signedTransactionPromise).rejects.toThrow(
-            `Transaction is missing signature for address: '${mockPublicKeyAddressB}'`,
+            `Transaction is missing signatures for addresses: ${mockPublicKeyAddressB}`,
         );
     });
     it('returns a transaction object having multiple signatures', async () => {
@@ -368,7 +368,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signature for address: 'A'",
+            "Transaction is missing signatures for addresses: A",
         );
     });
 
@@ -387,7 +387,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signatures for addresses: 'A', 'B'",
+            "Transaction is missing signatures for addresses: A, B",
         );
     });
 
@@ -413,7 +413,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signature for address: 'B'",
+            "Transaction is missing signatures for addresses: B",
         );
     });
 
@@ -439,7 +439,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signature for address: 'B'",
+            "Transaction is missing signatures for addresses: B",
         );
     });
 
@@ -475,7 +475,7 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            "Transaction is missing signature for address: 'C'",
+            "Transaction is missing signatures for addresses: C",
         );
     });
 
