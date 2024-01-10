@@ -11,7 +11,7 @@ type ProgramDataAccount = Readonly<{
     slot: bigint;
 }>;
 
-export type BpfUpgradeableProgramAccounts =
+export type BpfUpgradeableProgramAccount =
     | Readonly<{
           info: ProgramAccount;
           type: 'program';
