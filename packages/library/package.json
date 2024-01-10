@@ -65,6 +65,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/accounts": "workspace:*",
         "@solana/addresses": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
         "@solana/functional": "workspace:*",
