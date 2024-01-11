@@ -316,6 +316,51 @@ describe('decompileTransaction', () => {
                 lastValidBlockHeight: 100n,
             });
         });
+
+        it('excludes the signatures field if the transaction has no signatures', () => {
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 0,
+                        numReadonlySignerAccounts: 0,
+                        numSignerAccounts: 1,
+                    },
+                    instructions: [],
+                    lifetimeToken: blockhash,
+                    staticAccounts: [feePayer],
+                    version: 0,
+                },
+                signatures: [],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction, {});
+            expect(transaction).not.toHaveProperty('signatures');
+        });
+
+        it('excludes the signatures field if the transaction has only all-zero signatures', () => {
+            // when we compile a transaction we insert all-zero signatures where they're missing
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage: {
+                    header: {
+                        numReadonlyNonSignerAccounts: 0,
+                        numReadonlySignerAccounts: 0,
+                        numSignerAccounts: 1,
+                    },
+                    instructions: [],
+                    lifetimeToken: blockhash,
+                    staticAccounts: [feePayer],
+                    version: 0,
+                },
+                signatures: [
+                    new Uint8Array(64) as SignatureBytes,
+                    new Uint8Array(64) as SignatureBytes,
+                    new Uint8Array(64) as SignatureBytes,
+                ],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction, {});
+            expect(transaction).not.toHaveProperty('signatures');
+        });
     });
 
     describe('for a transaction with a durable nonce lifetime', () => {

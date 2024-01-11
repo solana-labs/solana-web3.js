@@ -231,6 +231,6 @@ export function decompileTransaction(
             'blockhash' in lifetimeConstraint
                 ? setTransactionLifetimeUsingBlockhash(lifetimeConstraint, tx)
                 : setTransactionLifetimeUsingDurableNonce(lifetimeConstraint, tx),
-        tx => (compiledTransaction.signatures.length ? { ...tx, signatures } : tx),
+        tx => (Object.keys(signatures).length > 0 ? { ...tx, signatures } : tx),
     );
 }
