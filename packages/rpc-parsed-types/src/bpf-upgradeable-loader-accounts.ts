@@ -1,7 +1,7 @@
-import { Address } from '@solana/addresses';
-import { Base64EncodedDataResponse } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Base64EncodedDataResponse, Slot } from '@solana/rpc-types';
 
-import { RpcParsedType } from './rpc-parsed-type';
+import type { RpcParsedType } from './rpc-parsed-type';
 
 type ProgramAccount = Readonly<{
     programData: Address;
@@ -10,7 +10,7 @@ type ProgramAccount = Readonly<{
 type ProgramDataAccount = Readonly<{
     authority?: Address;
     data: Base64EncodedDataResponse;
-    slot: bigint;
+    slot: Slot;
 }>;
 
 export type BpfUpgradeableProgramAccount =
