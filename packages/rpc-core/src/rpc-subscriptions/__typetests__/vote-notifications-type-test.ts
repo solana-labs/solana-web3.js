@@ -3,8 +3,7 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
-import { UnixTimestamp } from '@solana/rpc-types';
-import { Blockhash } from '@solana/transactions';
+import type { Blockhash, UnixTimestamp } from '@solana/rpc-types';
 
 import { Slot } from '../../rpc-methods/common';
 import { VoteNotificationsApi } from '../vote-notifications';

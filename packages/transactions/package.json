@@ -73,6 +73,7 @@
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/instructions": "workspace:*",
+        "@solana/rpc-types": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
         "@types/node": "18.11.19",

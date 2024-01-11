@@ -5,11 +5,12 @@ import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
+    Blockhash,
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
     UnixTimestamp,
 } from '@solana/rpc-types';
-import { Blockhash, TransactionVersion } from '@solana/transactions';
+import { TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
 import { Slot, TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from './common';

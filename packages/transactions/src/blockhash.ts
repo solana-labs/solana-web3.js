@@ -1,12 +1,11 @@
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
+import type { Blockhash } from '@solana/rpc-types';
 
 import { IDurableNonceTransaction } from './durable-nonce';
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';
-
-export type Blockhash = string & { readonly __brand: unique symbol };
 
 type BlockhashLifetimeConstraint = Readonly<{
     blockhash: Blockhash;

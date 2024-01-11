@@ -1,6 +1,6 @@
 import type { IRpcApiMethods } from '@solana/rpc-transport';
-import { Base58EncodedBytes, Commitment, UnixTimestamp } from '@solana/rpc-types';
-import { Blockhash, TransactionVersion } from '@solana/transactions';
+import type { Base58EncodedBytes, Blockhash, Commitment, UnixTimestamp } from '@solana/rpc-types';
+import { TransactionVersion } from '@solana/transactions';
 
 import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
 import {

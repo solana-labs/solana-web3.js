@@ -2,8 +2,9 @@ import 'test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
+import type { Blockhash } from '@solana/rpc-types';
 
-import { Blockhash, ITransactionWithBlockhashLifetime } from '../blockhash';
+import { ITransactionWithBlockhashLifetime } from '../blockhash';
 import {
     assertIsDurableNonceTransaction,
     IDurableNonceTransaction,

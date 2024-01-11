@@ -1,8 +1,8 @@
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
-import { Blockhash, SerializedMessageBytesBase64 } from '@solana/transactions';
+import type { Blockhash, Commitment } from '@solana/rpc-types';
+import { SerializedMessageBytesBase64 } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createSolanaRpcApi, GetFeeForMessageApi, GetLatestBlockhashApi } from '../index';

@@ -2,8 +2,9 @@ import { Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
+import type { Blockhash } from '@solana/rpc-types';
 
-import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash';
+import { setTransactionLifetimeUsingBlockhash } from './blockhash';
 import { CompilableTransaction } from './compilable-transaction';
 import type { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { CompiledTransaction } from './compile-transaction';

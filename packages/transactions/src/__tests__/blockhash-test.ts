@@ -2,10 +2,10 @@ import 'test-matchers/toBeFrozenObject';
 
 import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
+import type { Blockhash } from '@solana/rpc-types';
 
 import {
     assertIsTransactionWithBlockhashLifetime,
-    Blockhash,
     ITransactionWithBlockhashLifetime,
     setTransactionLifetimeUsingBlockhash,
 } from '../blockhash';

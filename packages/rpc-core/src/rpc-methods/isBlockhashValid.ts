@@ -1,6 +1,5 @@
 import type { IRpcApiMethods } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
-import { Blockhash } from '@solana/transactions';
+import type { Blockhash, Commitment } from '@solana/rpc-types';
 
 import { RpcResponse, Slot } from './common';
 

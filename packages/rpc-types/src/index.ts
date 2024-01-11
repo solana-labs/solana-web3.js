@@ -1,3 +1,4 @@
+export * from './blockhash';
 export * from './commitment';
 export * from './encoded-bytes';
 export * from './lamports';

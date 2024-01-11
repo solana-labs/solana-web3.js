@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
+import type { Blockhash } from '@solana/rpc-types';
 import {
     appendTransactionInstruction,
-    Blockhash,
     CompilableTransaction,
     createTransaction,
     setTransactionFeePayer,

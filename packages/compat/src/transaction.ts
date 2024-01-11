@@ -3,9 +3,9 @@ import { pipe } from '@solana/functional';
 import type { IAccountMeta, IInstruction } from '@solana/instructions';
 import { AccountRole } from '@solana/instructions';
 import type { SignatureBytes } from '@solana/keys';
+import type { Blockhash } from '@solana/rpc-types';
 import {
     appendTransactionInstruction,
-    type Blockhash,
     createTransaction,
     type IDurableNonceTransaction,
     isAdvanceNonceAccountInstruction,
