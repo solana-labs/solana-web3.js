@@ -13,11 +13,7 @@
 
 # @solana/rpc-parsed-types
 
-This package defines types for JSON Parsed objects used in the
+This package defines types for Parsed objects used in the
 [Solana JSON-RPC](https://docs.solana.com/api/http). It can be used standalone,
 but it is also exported as part of the Solana JavaScript SDK
 [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
-
-## Types
-
-TODO
