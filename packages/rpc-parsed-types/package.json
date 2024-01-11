@@ -1,7 +1,7 @@
 {
-    "name": "@solana/rpc-core",
+    "name": "@solana/rpc-parsed-types",
     "version": "2.0.0-development",
-    "description": "A library for making calls to the Solana JSON RPC API",
+    "description": "Type definitions for parsed types used in the Solana RPC",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -44,9 +44,7 @@
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:native": "agadoo dist/index.native.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
-        "test:typecheck": "tsc --noEmit",
-        "test:unit:browser": "jest -c node_modules/test-config/jest-unit.config.browser.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent",
-        "test:unit:node": "jest -c node_modules/test-config/jest-unit.config.node.ts --globalSetup test-config/test-validator-setup.js --globalTeardown test-config/test-validator-teardown.js --rootDir . --silent"
+        "test:typecheck": "tsc --noEmit"
     },
     "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
     "license": "MIT",
@@ -63,16 +61,8 @@
     ],
     "devDependencies": {
         "@solana/addresses": "workspace:*",
-        "@solana/codecs-core": "workspace:*",
-        "@solana/codecs-strings": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
-        "@solana/keys": "workspace:*",
-        "@solana/rpc-parsed-types": "workspace:*",
-        "@solana/rpc-transport": "workspace:*",
         "@solana/rpc-types": "workspace:*",
-        "@solana/transactions": "workspace:*",
-        "@swc/jest": "^0.2.29",
-        "@types/jest": "^29.5.11",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
@@ -81,10 +71,6 @@
         "eslint-plugin-jest": "^27.4.2",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
         "jest": "^29.7.0",
-        "jest-environment-jsdom": "^29.7.0",
-        "jest-fetch-mock-fork": "^3.0.4",
-        "jest-runner-eslint": "^2.1.2",
-        "jest-runner-prettier": "^1.0.0",
         "prettier": "^3.1",
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
