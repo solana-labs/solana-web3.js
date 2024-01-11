@@ -3,11 +3,10 @@ import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createPrivateKeyFromBytes } from '@solana/keys';
 import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
+import type { Base58EncodedBytes, Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { Base58EncodedBytes } from '../common';
 import { createSolanaRpcApi, GetLatestBlockhashApi, SimulateTransactionApi } from '../index';
 
 const CONTEXT_MATCHER = expect.objectContaining({
