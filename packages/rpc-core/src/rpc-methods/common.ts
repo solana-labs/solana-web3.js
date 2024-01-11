@@ -1,5 +1,10 @@
 import { Address } from '@solana/addresses';
-import type { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse, Base64EncodedZStdCompressedDataResponse } from '@solana/rpc-types';
+import type {
+    Base58EncodedBytes,
+    Base58EncodedDataResponse,
+    Base64EncodedDataResponse,
+    Base64EncodedZStdCompressedDataResponse,
+} from '@solana/rpc-types';
 import { LamportsUnsafeBeyond2Pow53Minus1, TokenAmount } from '@solana/rpc-types';
 
 export type DataSlice = Readonly<{

@@ -1,15 +1,18 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import type { IRpcApiMethods } from '@solana/rpc-transport';
-import { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse, Commitment, LamportsUnsafeBeyond2Pow53Minus1, UnixTimestamp } from '@solana/rpc-types';
+import {
+    Base58EncodedBytes,
+    Base58EncodedDataResponse,
+    Base64EncodedDataResponse,
+    Commitment,
+    LamportsUnsafeBeyond2Pow53Minus1,
+    UnixTimestamp,
+} from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
-import {
-    Slot,
-    TokenBalance,
-    U64UnsafeBeyond2Pow53Minus1,
-} from './common';
+import { Slot, TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from './common';
 import { Reward, TransactionStatus } from './common-transactions';
 
 type ReturnData = {

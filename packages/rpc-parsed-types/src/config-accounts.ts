@@ -1,4 +1,4 @@
-import { Address } from "@solana/addresses";
+import { Address } from '@solana/addresses';
 
 type StakeConfigAccount = Readonly<{
     slashPenalty: number;
@@ -8,8 +8,8 @@ type StakeConfigAccount = Readonly<{
 type ValidatorInfoAccount = Readonly<{
     configData: unknown;
     keys: {
-        pubkey: Address,
-        signer: boolean
+        pubkey: Address;
+        signer: boolean;
     }[];
 }>;
 

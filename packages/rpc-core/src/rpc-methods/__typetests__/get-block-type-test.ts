@@ -1,16 +1,16 @@
 import { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-transport';
-import type {     Base58EncodedBytes,
+import type {
+    Base58EncodedBytes,
     Base58EncodedDataResponse,
-    Base64EncodedDataResponse, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+    Base64EncodedDataResponse,
+    LamportsUnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 import { Blockhash, TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../../transaction-error';
 import { GetBlockApi } from '..';
-import {
-    TokenBalance,
-    U64UnsafeBeyond2Pow53Minus1,
-} from '../common';
+import { TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from '../common';
 import { Reward, TransactionStatus } from '../common-transactions';
 
 function assertNotAProperty<T extends object, TPropName extends string>(

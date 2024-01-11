@@ -1,22 +1,22 @@
-import { Address } from "@solana/addresses";
+import { Address } from '@solana/addresses';
 
-import { ConfigProgramAccount } from "../config-accounts";
+import { ConfigProgramAccount } from '../config-accounts';
 
 // stake config account
 {
     const account = {
         info: {
             slashPenalty: 12,
-            warmupCooldownRate: 0.25
+            warmupCooldownRate: 0.25,
         },
-        type: "stakeConfig" as const
+        type: 'stakeConfig' as const,
     };
     account satisfies ConfigProgramAccount;
 }
 
 {
     const account = {} as unknown as ConfigProgramAccount;
-    if(account.type === 'stakeConfig') {
+    if (account.type === 'stakeConfig') {
         account.info.slashPenalty satisfies number;
     }
 }
@@ -26,22 +26,21 @@ import { ConfigProgramAccount } from "../config-accounts";
     const account = {
         info: {
             configData: {
-                name: "HoldTheNode",
-                website: "https://holdthenode.com"
+                name: 'HoldTheNode',
+                website: 'https://holdthenode.com',
             },
             keys: [
                 {
-                    pubkey: "Va1idator1nfo111111111111111111111111111111" as Address,
-                    signer: false
+                    pubkey: 'Va1idator1nfo111111111111111111111111111111' as Address,
+                    signer: false,
                 },
                 {
-                    pubkey: "5hvJ19nRgtzAkosb5bcx9bqeN2QA1Qwxq4M349Q2L6s2" as Address,
-                    signer: true
-                }
-            ]
+                    pubkey: '5hvJ19nRgtzAkosb5bcx9bqeN2QA1Qwxq4M349Q2L6s2' as Address,
+                    signer: true,
+                },
+            ],
         },
-        type: "validatorInfo" as const
+        type: 'validatorInfo' as const,
     };
     account satisfies ConfigProgramAccount;
 }
-
