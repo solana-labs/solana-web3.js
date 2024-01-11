@@ -31,7 +31,7 @@ function getCompiledTransactionEncoder(): VariableSizeEncoder<CompiledTransactio
     ]);
 }
 
-function getCompiledTransactionDecoder(): VariableSizeDecoder<CompiledTransaction> {
+export function getCompiledTransactionDecoder(): VariableSizeDecoder<CompiledTransaction> {
     return getStructDecoder([
         [
             'signatures',
