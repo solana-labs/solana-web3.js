@@ -11,7 +11,7 @@
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-release-url]: https://github.com/semantic-release/semantic-release
 
-# @solana/rpc-json-parsed
+# @solana/rpc-parsed-types
 
 This package defines types for JSON Parsed objects used in the
 [Solana JSON-RPC](https://docs.solana.com/api/http). It can be used standalone,

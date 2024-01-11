@@ -1,7 +1,7 @@
 {
-    "name": "@solana/rpc-json-parsed",
+    "name": "@solana/rpc-parsed-types",
     "version": "2.0.0-development",
-    "description": "Type definitions for JSON parsed types used in the Solana RPC",
+    "description": "Type definitions for parsed types used in the Solana RPC",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",

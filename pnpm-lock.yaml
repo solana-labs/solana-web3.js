@@ -1488,9 +1488,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      '@solana/rpc-json-parsed':
+      '@solana/rpc-parsed-types':
         specifier: workspace:*
-        version: link:../rpc-json-parsed
+        version: link:../rpc-parsed-types
       '@solana/rpc-transport':
         specifier: workspace:*
         version: link:../rpc-transport
@@ -1658,7 +1658,7 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
-  packages/rpc-json-parsed:
+  packages/rpc-parsed-types:
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
