@@ -62,6 +62,7 @@
         "maintained node versions"
     ],
     "devDependencies": {
+        "@solana/codecs-core": "workspace:2.0.0-development",
         "@solana/eslint-config-solana": "^1.0.2",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
@@ -91,5 +92,8 @@
                 "path": "./dist/index*.js"
             }
         ]
+    },
+    "dependencies": {
+        "@solana/codecs-strings": "workspace:2.0.0-development"
     }
 }
