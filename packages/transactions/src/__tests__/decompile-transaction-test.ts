@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { AccountRole, IInstruction } from '@solana/instructions';
+import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
 import { decompileTransaction } from '../decompile-transaction';
@@ -310,7 +310,7 @@ describe('decompileTransaction', () => {
                 signatures: [],
             };
 
-            const transaction = decompileTransaction(compiledTransaction, 100n);
+            const transaction = decompileTransaction(compiledTransaction, { lastValidBlockHeight: 100n });
             expect(transaction.lifetimeConstraint).toEqual({
                 blockhash,
                 lastValidBlockHeight: 100n,
@@ -682,6 +682,938 @@ describe('decompileTransaction', () => {
             expect(transaction.signatures).toStrictEqual({
                 [extraSignerAddress]: extraSignerSignature,
                 [feePayer]: feePayerSignature,
+            });
+        });
+    });
+
+    describe('for a transaction with address lookup tables', () => {
+        const blockhash = 'J4yED2jcMAHyQUg61DBmm4njmEydUr2WqrV9cdEcDDgL';
+        const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+        describe('for one lookup table', () => {
+            const lookupTableAddress = '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw' as Address;
+
+            it('converts an instruction with a single readonly lookup', () => {
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [addressInLookup],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with multiple readonly lookups', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [
+                        addressInLookup1,
+                        'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj' as Address,
+                        addressInLookup2,
+                    ],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0, 2],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with a single writable lookup', () => {
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [addressInLookup],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.WRITABLE,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with multiple writable lookups', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [
+                        addressInLookup1,
+                        'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj' as Address,
+                        addressInLookup2,
+                    ],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [],
+                                writableIndices: [0, 2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with a readonly and a writable lookup', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [
+                        addressInLookup1,
+                        'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj' as Address,
+                        addressInLookup2,
+                    ],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    // writable is first since we used account indices [2,3]
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 2,
+                        lookupTableAddress,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with a combination of static and lookup accounts', () => {
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [addressInLookup],
+                };
+
+                const staticAddress = 'GbRuWcHyNaVuE9rJE4sKpkHYa9k76VJBCCwGtf87ikH3' as Address;
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 2, // 1 static address, 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [1, 3],
+                                programAddressIndex: 2,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, staticAddress, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountMeta: IAccountMeta = {
+                    address: staticAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                const expectedAccountLookupMeta: IAccountLookupMeta = {
+                    address: addressInLookup,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: [expectedAccountMeta, expectedAccountLookupMeta],
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts multiple instructions with lookup accounts', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = '5g6b4v8ivF7haRWMUXT1aewBGsc8xY7B6efGadNc3xYk' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [
+                        addressInLookup1,
+                        'HAv2PXRjwr4AL1odpoMNfvsw6bWxjDzURy1nPA6QBhDj' as Address,
+                        addressInLookup2,
+                    ],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [2],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                            {
+                                accountIndices: [3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMeta1: IAccountLookupMeta = {
+                    address: addressInLookup1,
+                    addressIndex: 0,
+                    lookupTableAddress,
+                    role: AccountRole.READONLY,
+                };
+
+                const expectedAccountLookupMeta2: IAccountLookupMeta = {
+                    address: addressInLookup2,
+                    addressIndex: 2,
+                    lookupTableAddress,
+                    role: AccountRole.WRITABLE,
+                };
+
+                expect(transaction.instructions).toStrictEqual([
+                    // first instruction uses index 2, which is the writable lookup
+                    {
+                        accounts: [expectedAccountLookupMeta2],
+                        programAddress,
+                    },
+                    // second instruction uses index 3, the readonly lookup
+                    {
+                        accounts: [expectedAccountLookupMeta1],
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('throws if the lookup table is not passed in', () => {
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const fn = () => decompileTransaction(compiledTransaction);
+                expect(fn).toThrow(
+                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]',
+                );
+            });
+
+            it('throws if a read index is outside the lookup table', () => {
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [addressInLookup],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [1],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const fn = () =>
+                    decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
+                expect(fn).toThrow(
+                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
+                );
+            });
+
+            it('throws if a write index is outside the lookup table', () => {
+                const addressInLookup = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const lookupTables = {
+                    [lookupTableAddress]: [addressInLookup],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress,
+                                readableIndices: [],
+                                writableIndices: [1],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const fn = () =>
+                    decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
+                expect(fn).toThrow(
+                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
+                );
+            });
+        });
+
+        describe('for multiple lookup tables', () => {
+            const lookupTableAddress1 = '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw' as Address;
+            const lookupTableAddress2 = 'GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg' as Address;
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+            it('converts an instruction with readonly accounts from two lookup tables', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const lookupTables = {
+                    [lookupTableAddress1]: [addressInLookup1],
+                    [lookupTableAddress2]: [addressInLookup2],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with writable accounts from two lookup tables', () => {
+                const addressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const addressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const lookupTables = {
+                    [lookupTableAddress1]: [addressInLookup1],
+                    [lookupTableAddress2]: [addressInLookup2],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [],
+                                writableIndices: [0],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2, 3],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: addressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: addressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts an instruction with readonly and writable accounts from two lookup tables', () => {
+                const readOnlyaddressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const readonlyAddressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const writableAddressInLookup1 = 'FgNrG1D7AoqNJuLc5eqmsXSHWta6Tfu41mQ9dgc5yaXo' as Address;
+                const writableAddressInLookup2 = '9jEBzMuJfwWH1qcG4g1bj24iSLGCmTsedgisui7SVHes' as Address;
+
+                const lookupTables = {
+                    [lookupTableAddress1]: [readOnlyaddressInLookup1, writableAddressInLookup1],
+                    [lookupTableAddress2]: [readonlyAddressInLookup2, writableAddressInLookup2],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        /*
+                            accountIndices:
+                            0 - feePayer
+                            1 - program
+                            2 - writable from lookup1
+                            3 - writable from lookup2
+                            4 - readonly from lookup1
+                            5 - readonly from lookup2
+                        */
+                        instructions: [
+                            {
+                                accountIndices: [2, 3, 4, 5],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetas: IAccountLookupMeta[] = [
+                    {
+                        address: writableAddressInLookup1,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: writableAddressInLookup2,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                    {
+                        address: readOnlyaddressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                    {
+                        address: readonlyAddressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetas,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('converts multiple instructions with readonly and writable accounts from two lookup tables', () => {
+                const readOnlyaddressInLookup1 = 'F1Vc6AGoxXLwGB7QV8f4So3C5d8SXEk3KKGHxKGEJ8qn' as Address;
+                const readonlyAddressInLookup2 = 'E7p56hzZZEs9vJ1yjxAFjhUP3fN2UJNk2nWvcY7Hz3ee' as Address;
+                const writableAddressInLookup1 = 'FgNrG1D7AoqNJuLc5eqmsXSHWta6Tfu41mQ9dgc5yaXo' as Address;
+                const writableAddressInLookup2 = '9jEBzMuJfwWH1qcG4g1bj24iSLGCmTsedgisui7SVHes' as Address;
+
+                const lookupTables = {
+                    [lookupTableAddress1]: [readOnlyaddressInLookup1, writableAddressInLookup1],
+                    [lookupTableAddress2]: [readonlyAddressInLookup2, writableAddressInLookup2],
+                };
+
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [1],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        /*
+                            accountIndices:
+                            0 - feePayer
+                            1 - program
+                            2 - writable from lookup1
+                            3 - writable from lookup2
+                            4 - readonly from lookup1
+                            5 - readonly from lookup2
+                        */
+                        instructions: [
+                            {
+                                accountIndices: [2, 5],
+                                programAddressIndex: 1,
+                            },
+                            {
+                                accountIndices: [3, 4],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const transaction = decompileTransaction(compiledTransaction, {
+                    addressesByLookupTableAddress: lookupTables,
+                });
+
+                const expectedAccountLookupMetasInstruction1: IAccountLookupMeta[] = [
+                    // index 2 - writable from lookup1
+                    {
+                        address: writableAddressInLookup1,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.WRITABLE,
+                    },
+                    // index 5 - readonly from lookup2
+                    {
+                        address: readonlyAddressInLookup2,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                const expectedAccountLookupMetasInstruction2: IAccountLookupMeta[] = [
+                    // index 3 - writable from lookup2
+                    {
+                        address: writableAddressInLookup2,
+                        addressIndex: 1,
+                        lookupTableAddress: lookupTableAddress2,
+                        role: AccountRole.WRITABLE,
+                    },
+                    // index 4 - readonly from lookup1
+                    {
+                        address: readOnlyaddressInLookup1,
+                        addressIndex: 0,
+                        lookupTableAddress: lookupTableAddress1,
+                        role: AccountRole.READONLY,
+                    },
+                ];
+
+                expect(transaction.instructions).toStrictEqual([
+                    {
+                        accounts: expectedAccountLookupMetasInstruction1,
+                        programAddress,
+                    },
+                    {
+                        accounts: expectedAccountLookupMetasInstruction2,
+                        programAddress,
+                    },
+                ]);
+            });
+
+            it('throws if multiple lookup tables are not passed in', () => {
+                const compiledTransaction: CompiledTransaction = {
+                    compiledMessage: {
+                        addressTableLookups: [
+                            {
+                                lookupTableAddress: lookupTableAddress1,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                            {
+                                lookupTableAddress: lookupTableAddress2,
+                                readableIndices: [0],
+                                writableIndices: [],
+                            },
+                        ],
+                        header: {
+                            numReadonlyNonSignerAccounts: 1, // 1 program
+                            numReadonlySignerAccounts: 0,
+                            numSignerAccounts: 1, // fee payer
+                        },
+                        instructions: [
+                            {
+                                accountIndices: [2],
+                                programAddressIndex: 1,
+                            },
+                        ],
+                        lifetimeToken: blockhash,
+                        staticAccounts: [feePayer, programAddress],
+                        version: 0,
+                    },
+                    signatures: [],
+                };
+
+                const fn = () => decompileTransaction(compiledTransaction);
+                expect(fn).toThrow(
+                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw, GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg]',
+                );
             });
         });
     });

@@ -1,10 +1,11 @@
 import { Address, assertIsAddress } from '@solana/addresses';
 import { pipe } from '@solana/functional';
-import { AccountRole, IAccountMeta, IInstruction } from '@solana/instructions';
+import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
 import { Blockhash, setTransactionLifetimeUsingBlockhash } from './blockhash';
 import { CompilableTransaction } from './compilable-transaction';
+import type { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { CompiledTransaction } from './compile-transaction';
 import { createTransaction } from './create-transaction';
 import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce';
@@ -56,6 +57,56 @@ function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
     }
 
     return accountMetas;
+}
+
+export type AddressesByLookupTableAddress = { [lookupTableAddress: Address]: Address[] };
+
+function getAddressLookupMetas(
+    compiledAddressTableLookups: ReturnType<typeof getCompiledAddressTableLookups>,
+    addressesByLookupTableAddress: AddressesByLookupTableAddress,
+): IAccountLookupMeta[] {
+    // check that all message lookups are known
+    const compiledAddressTableLookupAddresses = compiledAddressTableLookups.map(l => l.lookupTableAddress);
+    const missing = compiledAddressTableLookupAddresses.filter(a => addressesByLookupTableAddress[a] === undefined);
+    if (missing.length > 0) {
+        const missingAddresses = missing.join(', ');
+        // TODO: coded error.
+        throw new Error(`Addresses not provided for lookup tables: [${missingAddresses}]`);
+    }
+
+    const readOnlyMetas: IAccountLookupMeta[] = [];
+    const writableMetas: IAccountLookupMeta[] = [];
+
+    // we know that for each lookup, knownLookups[lookup.lookupTableAddress] is defined
+    for (const lookup of compiledAddressTableLookups) {
+        const addresses = addressesByLookupTableAddress[lookup.lookupTableAddress];
+
+        const highestIndex = Math.max(...lookup.readableIndices, ...lookup.writableIndices);
+        if (highestIndex >= addresses.length) {
+            // TODO coded error
+            throw new Error(
+                `Cannot look up index ${highestIndex} in lookup table [${lookup.lookupTableAddress}]. The lookup table may have been extended since the addresses provided were retrieved.`,
+            );
+        }
+
+        const readOnlyForLookup: IAccountLookupMeta[] = lookup.readableIndices.map(r => ({
+            address: addresses[r],
+            addressIndex: r,
+            lookupTableAddress: lookup.lookupTableAddress,
+            role: AccountRole.READONLY,
+        }));
+        readOnlyMetas.push(...readOnlyForLookup);
+
+        const writableForLookup: IAccountLookupMeta[] = lookup.writableIndices.map(w => ({
+            address: addresses[w],
+            addressIndex: w,
+            lookupTableAddress: lookup.lookupTableAddress,
+            role: AccountRole.WRITABLE,
+        }));
+        writableMetas.push(...writableForLookup);
+    }
+
+    return [...writableMetas, ...readOnlyMetas];
 }
 
 function convertInstruction(
@@ -132,33 +183,39 @@ function convertSignatures(compiledTransaction: CompiledTransaction): ITransacti
     }, {});
 }
 
+export type DecompileTransactionConfig = {
+    addressesByLookupTableAddress?: AddressesByLookupTableAddress;
+    lastValidBlockHeight?: bigint;
+};
+
 export function decompileTransaction(
     compiledTransaction: CompiledTransaction,
-    lastValidBlockHeight?: bigint,
+    config?: DecompileTransactionConfig,
 ): CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures) {
     const { compiledMessage } = compiledTransaction;
-
-    // TODO: add support for address lookup tables
-    if ('addressTableLookups' in compiledMessage && compiledMessage.addressTableLookups!.length > 0) {
-        // TODO: coded error
-        throw new Error('Cannot convert transaction with addressTableLookups');
-    }
 
     const feePayer = compiledMessage.staticAccounts[0];
     // TODO: coded error
     if (!feePayer) throw new Error('No fee payer set in CompiledTransaction');
 
     const accountMetas = getAccountMetas(compiledMessage);
+    const accountLookupMetas =
+        'addressTableLookups' in compiledMessage &&
+        compiledMessage.addressTableLookups !== undefined &&
+        compiledMessage.addressTableLookups.length > 0
+            ? getAddressLookupMetas(compiledMessage.addressTableLookups, config?.addressesByLookupTableAddress ?? {})
+            : [];
+    const transactionMetas = [...accountMetas, ...accountLookupMetas];
 
     const instructions: IInstruction[] = compiledMessage.instructions.map(compiledInstruction =>
-        convertInstruction(compiledInstruction, accountMetas),
+        convertInstruction(compiledInstruction, transactionMetas),
     );
 
     const firstInstruction = instructions[0];
     const lifetimeConstraint = getLifetimeConstraint(
         compiledMessage.lifetimeToken,
         firstInstruction,
-        lastValidBlockHeight,
+        config?.lastValidBlockHeight,
     );
 
     const signatures = convertSignatures(compiledTransaction);
