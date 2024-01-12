@@ -1,6 +1,6 @@
 import { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import { SysvarProgramAccount } from '../sysvar-accounts';
+import { JsonParsedSysvarAccount } from '../sysvar-accounts';
 
 // clock sysvar
 {
@@ -14,11 +14,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'clock' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'clock') {
         account.info.epoch satisfies Epoch;
     }
@@ -36,11 +36,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'epochSchedule' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'epochSchedule') {
         account.info.firstNormalEpoch satisfies Epoch;
     }
@@ -56,11 +56,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'fees' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'fees') {
         account.info.feeCalculator.lamportsPerSignature satisfies StringifiedBigInt;
     }
@@ -85,11 +85,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         ],
         type: 'recentBlockhashes' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'recentBlockhashes') {
         account.info[0].blockhash satisfies Blockhash;
     }
@@ -105,11 +105,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'rent' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'rent') {
         account.info.burnPercent satisfies number;
     }
@@ -130,11 +130,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         ],
         type: 'slotHashes' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'slotHashes') {
         account.info[0].hash satisfies string;
     }
@@ -149,11 +149,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'slotHistory' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'slotHistory') {
         account.info.bits satisfies string;
     }
@@ -182,11 +182,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         ],
         type: 'stakeHistory' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'stakeHistory') {
         account.info[0].epoch satisfies Epoch;
     }
@@ -200,11 +200,11 @@ import { SysvarProgramAccount } from '../sysvar-accounts';
         },
         type: 'lastRestartSlot' as const,
     };
-    account satisfies SysvarProgramAccount;
+    account satisfies JsonParsedSysvarAccount;
 }
 
 {
-    const account = {} as unknown as SysvarProgramAccount;
+    const account = {} as unknown as JsonParsedSysvarAccount;
     if (account.type === 'lastRestartSlot') {
         account.info.lastRestartSlot satisfies Slot;
     }

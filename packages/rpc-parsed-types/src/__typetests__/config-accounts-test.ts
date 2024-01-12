@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { ConfigProgramAccount } from '../config-accounts';
+import { JsonParsedConfigProgramAccount } from '../config-accounts';
 
 // stake config account
 {
@@ -11,11 +11,11 @@ import { ConfigProgramAccount } from '../config-accounts';
         },
         type: 'stakeConfig' as const,
     };
-    account satisfies ConfigProgramAccount;
+    account satisfies JsonParsedConfigProgramAccount;
 }
 
 {
-    const account = {} as unknown as ConfigProgramAccount;
+    const account = {} as unknown as JsonParsedConfigProgramAccount;
     if (account.type === 'stakeConfig') {
         account.info.slashPenalty satisfies number;
     }
@@ -42,5 +42,5 @@ import { ConfigProgramAccount } from '../config-accounts';
         },
         type: 'validatorInfo' as const,
     };
-    account satisfies ConfigProgramAccount;
+    account satisfies JsonParsedConfigProgramAccount;
 }

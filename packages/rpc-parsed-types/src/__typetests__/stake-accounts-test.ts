@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import type { StakeProgramAccount } from '../stake-accounts';
+import type { JsonParsedStakeProgramAccount } from '../stake-accounts';
 
 // initialized stake account
 {
@@ -32,11 +32,11 @@ import type { StakeProgramAccount } from '../stake-accounts';
         },
         type: 'initialized' as const,
     };
-    account satisfies StakeProgramAccount;
+    account satisfies JsonParsedStakeProgramAccount;
 }
 
 {
-    const account = {} as unknown as StakeProgramAccount;
+    const account = {} as unknown as JsonParsedStakeProgramAccount;
     if (account.type === 'initialized') {
         account.info.meta.authorized.staker satisfies Address;
     }
@@ -71,11 +71,11 @@ import type { StakeProgramAccount } from '../stake-accounts';
         },
         type: 'delegated' as const,
     };
-    account satisfies StakeProgramAccount;
+    account satisfies JsonParsedStakeProgramAccount;
 }
 
 {
-    const account = {} as unknown as StakeProgramAccount;
+    const account = {} as unknown as JsonParsedStakeProgramAccount;
     if (account.type === 'delegated') {
         account.info.meta.authorized.staker satisfies Address;
     }

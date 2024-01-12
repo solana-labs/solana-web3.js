@@ -6,7 +6,7 @@ type FeeCalculator = Readonly<{
     lamportsPerSignature: StringifiedBigInt;
 }>;
 
-type ClockAccount = Readonly<{
+type JsonParsedClockAccount = Readonly<{
     slot: Slot;
     epoch: Epoch;
     epochStartTimestamp: UnixTimestamp;
@@ -14,7 +14,7 @@ type ClockAccount = Readonly<{
     unixTimestamp: UnixTimestamp;
 }>;
 
-type EpochScheduleAccount = Readonly<{
+type JsonParsedEpochScheduleAccount = Readonly<{
     slotsPerEpoch: bigint;
     leaderScheduleSlotOffset: bigint;
     warmup: boolean;
@@ -22,32 +22,32 @@ type EpochScheduleAccount = Readonly<{
     firstNormalSlot: Slot;
 }>;
 
-type FeesAccount_DEPRECATED = Readonly<{
+type JsonParsedFeesAccount_DEPRECATED = Readonly<{
     feeCalculator: FeeCalculator;
 }>;
 
-type RecentBlockhashesAccount_DEPRECATED = Readonly<{
+type JsonParsedRecentBlockhashesAccount_DEPRECATED = Readonly<{
     blockhash: Blockhash;
     feeCalculator: FeeCalculator;
 }>[];
 
-type RentAccount = Readonly<{
+type JsonParsedRentAccount = Readonly<{
     lamportsPerByteYear: StringifiedBigInt;
     exemptionThreshold: number;
     burnPercent: number;
 }>;
 
-type SlotHashesAccount = Readonly<{
+type JsonParsedSlotHashesAccount = Readonly<{
     hash: string;
     slot: Slot;
 }>[];
 
-type SlotHistoryAccount = Readonly<{
+type JsonParsedSlotHistoryAccount = Readonly<{
     bits: string;
     nextSlot: Slot;
 }>;
 
-type StakeHistoryAccount = Readonly<{
+type JsonParsedStakeHistoryAccount = Readonly<{
     epoch: Epoch;
     stakeHistory: Readonly<{
         activating: bigint;
@@ -56,17 +56,17 @@ type StakeHistoryAccount = Readonly<{
     }>;
 }>[];
 
-type LastRestartSlotAccount = Readonly<{
+type JsonParsedLastRestartSlotAccount = Readonly<{
     lastRestartSlot: Slot;
 }>;
 
-export type SysvarProgramAccount =
-    | RpcParsedType<'clock', ClockAccount>
-    | RpcParsedType<'epochSchedule', EpochScheduleAccount>
-    | RpcParsedType<'fees', FeesAccount_DEPRECATED>
-    | RpcParsedType<'recentBlockhashes', RecentBlockhashesAccount_DEPRECATED>
-    | RpcParsedType<'rent', RentAccount>
-    | RpcParsedType<'slotHashes', SlotHashesAccount>
-    | RpcParsedType<'slotHistory', SlotHistoryAccount>
-    | RpcParsedType<'stakeHistory', StakeHistoryAccount>
-    | RpcParsedType<'lastRestartSlot', LastRestartSlotAccount>;
+export type JsonParsedSysvarAccount =
+    | RpcParsedType<'clock', JsonParsedClockAccount>
+    | RpcParsedType<'epochSchedule', JsonParsedEpochScheduleAccount>
+    | RpcParsedType<'fees', JsonParsedFeesAccount_DEPRECATED>
+    | RpcParsedType<'recentBlockhashes', JsonParsedRecentBlockhashesAccount_DEPRECATED>
+    | RpcParsedType<'rent', JsonParsedRentAccount>
+    | RpcParsedType<'slotHashes', JsonParsedSlotHashesAccount>
+    | RpcParsedType<'slotHistory', JsonParsedSlotHistoryAccount>
+    | RpcParsedType<'stakeHistory', JsonParsedStakeHistoryAccount>
+    | RpcParsedType<'lastRestartSlot', JsonParsedLastRestartSlotAccount>;

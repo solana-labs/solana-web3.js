@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-export type VoteAccount = Readonly<{
+export type JsonParsedVoteAccount = Readonly<{
     authorizedVoters: Readonly<{
         authorizedVoter: Address;
         epoch: Epoch;

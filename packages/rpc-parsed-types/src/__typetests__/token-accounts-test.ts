@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt, StringifiedNumber } from '@solana/rpc-types';
 
-import { TokenProgramAccount } from '../token-accounts';
+import { JsonParsedTokenProgramAccount } from '../token-accounts';
 
 // token account
 {
@@ -20,11 +20,11 @@ import { TokenProgramAccount } from '../token-accounts';
         },
         type: 'account' as const,
     };
-    account satisfies TokenProgramAccount;
+    account satisfies JsonParsedTokenProgramAccount;
 }
 
 {
-    const account = {} as unknown as TokenProgramAccount;
+    const account = {} as unknown as JsonParsedTokenProgramAccount;
     if (account.type === 'account') {
         account.info.mint satisfies Address;
     }
@@ -42,11 +42,11 @@ import { TokenProgramAccount } from '../token-accounts';
         },
         type: 'mint' as const,
     };
-    account satisfies TokenProgramAccount;
+    account satisfies JsonParsedTokenProgramAccount;
 }
 
 {
-    const account = {} as unknown as TokenProgramAccount;
+    const account = {} as unknown as JsonParsedTokenProgramAccount;
     if (account.type === 'mint') {
         account.info.supply satisfies StringifiedBigInt;
     }
@@ -66,11 +66,11 @@ import { TokenProgramAccount } from '../token-accounts';
         },
         type: 'multisig' as const,
     };
-    account satisfies TokenProgramAccount;
+    account satisfies JsonParsedTokenProgramAccount;
 }
 
 {
-    const account = {} as unknown as TokenProgramAccount;
+    const account = {} as unknown as JsonParsedTokenProgramAccount;
     if (account.type === 'multisig') {
         account.info.numRequiredSigners satisfies number;
     }

@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt } from '@solana/rpc-types';
 
-import { AddressLookupTableAccount } from '../address-lookup-table-accounts';
+import { JsonParsedAddressLookupTableAccount } from '../address-lookup-table-accounts';
 
 const account = {
     addresses: [
@@ -14,4 +14,4 @@ const account = {
     lastExtendedSlotStartIndex: 20,
 };
 
-account satisfies AddressLookupTableAccount;
+account satisfies JsonParsedAddressLookupTableAccount;

@@ -3,7 +3,7 @@ import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
 import { RpcParsedType } from './rpc-parsed-type';
 
-type StakeAccount = Readonly<{
+type JsonParsedStakeAccount = Readonly<{
     meta: Readonly<{
         rentExemptReserve: StringifiedBigInt;
         authorized: Readonly<{
@@ -28,4 +28,6 @@ type StakeAccount = Readonly<{
     }> | null;
 }>;
 
-export type StakeProgramAccount = RpcParsedType<'initialized', StakeAccount> | RpcParsedType<'delegated', StakeAccount>;
+export type JsonParsedStakeProgramAccount =
+    | RpcParsedType<'initialized', JsonParsedStakeAccount>
+    | RpcParsedType<'delegated', JsonParsedStakeAccount>;
