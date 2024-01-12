@@ -1,10 +1,10 @@
 import { Address } from '@solana/addresses';
+import type { Blockhash } from '@solana/rpc-types';
 
 import {
     appendTransactionInstruction,
     assertIsTransactionWithBlockhashLifetime,
     assertTransactionIsFullySigned,
-    Blockhash,
     IDurableNonceTransaction,
     IFullySignedTransaction,
     ITransactionWithBlockhashLifetime,

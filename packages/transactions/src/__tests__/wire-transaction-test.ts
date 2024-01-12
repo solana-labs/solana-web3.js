@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
+import type { Blockhash } from '@solana/rpc-types';
 
-import { Blockhash } from '../blockhash';
 import { getBase64EncodedWireTransaction } from '../wire-transaction';
 
 describe('getBase64EncodedWireTransaction', () => {

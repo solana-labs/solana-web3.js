@@ -4,9 +4,10 @@ import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
+    Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
-import { Blockhash, TransactionVersion } from '@solana/transactions';
+import { TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../../transaction-error';
 import { GetBlockApi } from '..';

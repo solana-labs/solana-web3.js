@@ -1,9 +1,8 @@
 import { Address } from '@solana/addresses';
+import { assertIsBlockhash, type Blockhash } from '@solana/rpc-types';
 import {
-    assertIsBlockhash,
     assertTransactionIsFullySigned,
     BaseTransaction,
-    Blockhash,
     CompilableTransaction,
     createTransaction,
     getTransactionDecoder,

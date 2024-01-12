@@ -1,7 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Signature, SignatureBytes } from '@solana/keys';
-import { Blockhash, IDurableNonceTransaction, Nonce } from '@solana/transactions';
+import type { Blockhash } from '@solana/rpc-types';
+import { IDurableNonceTransaction, Nonce } from '@solana/transactions';
 
 import {
     waitForDurableNonceTransactionConfirmation,

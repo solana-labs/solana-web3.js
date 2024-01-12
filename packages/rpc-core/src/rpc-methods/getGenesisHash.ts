@@ -1,5 +1,5 @@
 import type { IRpcApiMethods } from '@solana/rpc-transport';
-import { Blockhash } from '@solana/transactions';
+import type { Blockhash } from '@solana/rpc-types';
 
 type GetGenesisHashApiResponse = Blockhash;
 

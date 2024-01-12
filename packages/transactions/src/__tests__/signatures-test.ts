@@ -9,8 +9,8 @@ import {
 } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 import { SignatureBytes, signBytes } from '@solana/keys';
+import type { Blockhash } from '@solana/rpc-types';
 
-import { Blockhash } from '../blockhash';
 import { CompilableTransaction } from '../compilable-transaction';
 import { CompiledMessage, compileMessage } from '../message';
 import {

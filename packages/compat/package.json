@@ -66,14 +66,15 @@
     },
     "dependencies": {
         "@solana/functional": "workspace:*",
-        "@solana/keys": "workspace:*",
         "@solana/instructions": "workspace:*",
+        "@solana/keys": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/keys": "workspace:*",
+        "@solana/rpc-types": "workspace:*",
         "@solana/web3.js": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",

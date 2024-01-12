@@ -2,7 +2,8 @@ import { FetchAccountsConfig, fetchJsonParsedAccounts } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import { GetMultipleAccountsApi } from '@solana/rpc-core';
 import { Rpc } from '@solana/rpc-transport';
-import { type Blockhash, decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
+import type { Blockhash } from '@solana/rpc-types';
+import { decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
 import { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
 
 import { LamportsUnsafeBeyond2Pow53Minus1 } from '..';
