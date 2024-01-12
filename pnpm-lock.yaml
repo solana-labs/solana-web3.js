@@ -1011,9 +1011,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
-      '@solana/codecs-strings':
+      '@solana/codecs':
         specifier: workspace:*
-        version: link:../codecs-strings
+        version: link:../codecs
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional

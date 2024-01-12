@@ -67,7 +67,7 @@
     "dependencies": {
         "@solana/accounts": "workspace:*",
         "@solana/addresses": "workspace:*",
-        "@solana/codecs-strings": "workspace:*",
+        "@solana/codecs": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",

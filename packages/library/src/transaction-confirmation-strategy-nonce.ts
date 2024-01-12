@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
+import { getBase58Decoder, getBase64Encoder } from '@solana/codecs';
 import type { AccountNotificationsApi, GetAccountInfoApi } from '@solana/rpc-core';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
 import { Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';

@@ -784,6 +784,8 @@ Solana’s codecs libraries are broken up into modular components so you only ne
 - `@solana/codecs-data-structures`: Codecs and serializers for structs
 - `@solana/options`: Designed to build codecs and serializers for types that mimic Rust’s enums, which can include embedded data within their variants such as values, tuples, and structs
 
+These packages are included in the main `@solana/web3.js` library but you may also import them from `@solana/codecs` if you only need the codecs.
+
 Here’s an example of encoding and decoding a custom struct with some strings and numbers:
 
 ```tsx

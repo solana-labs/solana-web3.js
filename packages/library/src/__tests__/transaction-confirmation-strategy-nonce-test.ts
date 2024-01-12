@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
+import { getBase58Encoder, getBase64Decoder } from '@solana/codecs';
 import { Nonce } from '@solana/transactions';
 
 import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
