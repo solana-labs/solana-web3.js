@@ -9,7 +9,7 @@ describe('RPC request coalescer', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         hashFn = jest.fn();
-        mockTransport = jest.fn();
+        mockTransport = jest.fn().mockResolvedValue(null);
         coalescedTransport = getRpcTransportWithRequestCoalescing(mockTransport, hashFn);
     });
     describe('when requests produce the same hash', () => {
@@ -88,12 +88,16 @@ describe('RPC request coalescer', () => {
             beforeEach(() => {
                 abortControllerA = new AbortController();
                 abortControllerB = new AbortController();
-                mockTransport.mockImplementation(
-                    () =>
-                        new Promise(resolve => {
-                            transportResponsePromise = resolve;
-                        }),
-                );
+                mockTransport.mockImplementation(async ({ signal }) => {
+                    signal?.throwIfAborted();
+                    return await new Promise((resolve, reject) => {
+                        transportResponsePromise = resolve;
+                        signal?.addEventListener('abort', (e: AbortSignalEventMap['abort']) => {
+                            const abortError = new DOMException((e.target as AbortSignal).reason, 'AbortError');
+                            reject(abortError);
+                        });
+                    });
+                });
                 responsePromiseA = coalescedTransport({ payload: null, signal: abortControllerA.signal });
                 responsePromiseB = coalescedTransport({ payload: null, signal: abortControllerB.signal });
             });
@@ -110,13 +114,12 @@ describe('RPC request coalescer', () => {
                 abortControllerA.abort('o no');
                 await expect(responsePromiseA).rejects.toThrow(/o no/);
             });
-            it('aborts the transport when all of the requests abort', async () => {
-                expect.assertions(1);
+            it('aborts the transport when all of the requests abort', () => {
                 abortControllerA.abort('o no A');
                 abortControllerB.abort('o no B');
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
-                await expect(transportAbortSignal.aborted).toBe(true);
+                expect(transportAbortSignal.aborted).toBe(true);
             });
             it('does not abort the transport if fewer than every request aborts', async () => {
                 expect.assertions(1);

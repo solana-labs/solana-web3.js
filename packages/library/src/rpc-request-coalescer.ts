@@ -29,13 +29,28 @@ export function getRpcTransportWithRequestCoalescing(
         }
         if (coalescedRequestsByDeduplicationKey[deduplicationKey] == null) {
             const abortController = new AbortController();
+            const responsePromise = (async () => {
+                try {
+                    return await transport<TResponse>({
+                        ...config,
+                        signal: abortController.signal,
+                    });
+                } catch (e) {
+                    if (e && typeof e === 'object' && 'name' in e && e.name === 'AbortError') {
+                        // Ignore `AbortError` thrown from the underlying transport behind which all
+                        // requests are coalesced. If it experiences an `AbortError` it is because
+                        // we triggered one when the last subscriber aborted. Letting the underlying
+                        // transport's `AbortError` bubble up from here would cause runtime fatals
+                        // where there should be none.
+                        return;
+                    }
+                    throw e;
+                }
+            })();
             coalescedRequestsByDeduplicationKey[deduplicationKey] = {
                 abortController,
                 numConsumers: 0,
-                responsePromise: transport<TResponse>({
-                    ...config,
-                    signal: abortController.signal,
-                }),
+                responsePromise,
             };
         }
         const coalescedRequest = coalescedRequestsByDeduplicationKey[deduplicationKey];
