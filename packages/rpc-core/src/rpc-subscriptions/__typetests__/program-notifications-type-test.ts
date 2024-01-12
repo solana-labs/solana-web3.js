@@ -2,17 +2,16 @@
 
 import { Address } from '@solana/addresses';
 import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import {
+import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedBytes,
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
-    RpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
-} from '../../rpc-methods/common';
+    LamportsUnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
+
+import { RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
 import { ProgramNotificationsApi } from '../program-notifications';
 
 async () => {

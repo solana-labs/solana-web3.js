@@ -176,10 +176,4 @@ export type {
     SimulateTransactionApi,
 };
 
-export type {
-    Base64EncodedDataResponse,
-    DataSlice,
-    GetProgramAccountsDatasizeFilter,
-    GetProgramAccountsMemcmpFilter,
-    Slot,
-} from './common';
+export type { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter, Slot } from './common';

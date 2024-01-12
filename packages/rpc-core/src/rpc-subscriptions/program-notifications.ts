@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
+import { Base58EncodedBytes, Base64EncodedBytes, Commitment } from '@solana/rpc-types';
 
 import {
     AccountInfoBase,
@@ -9,8 +9,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    Base58EncodedBytes,
-    Base64EncodedBytes,
     RpcResponse,
     U64UnsafeBeyond2Pow53Minus1,
 } from '../rpc-methods/common';

@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import type { IRpcApiMethods } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
+import { Base58EncodedBytes, Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
@@ -9,8 +9,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    Base58EncodedBytes,
-    Base64EncodedDataResponse,
     RpcResponse,
     Slot,
     U64UnsafeBeyond2Pow53Minus1,
