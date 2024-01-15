@@ -209,3 +209,23 @@ import { JsonParsedSysvarAccount } from '../sysvar-accounts';
         account.info.lastRestartSlot satisfies Slot;
     }
 }
+
+// epoch rewards account
+{
+    const account = {
+        info: {
+            distributedRewards: 100n,
+            distributionCompleteBlockHeight: 1000n,
+            totalRewards: 200n,
+        },
+        type: 'epochRewards' as const,
+    };
+    account satisfies JsonParsedSysvarAccount;
+}
+
+{
+    const account = {} as unknown as JsonParsedSysvarAccount;
+    if (account.type === 'epochRewards') {
+        account.info.totalRewards satisfies bigint;
+    }
+}

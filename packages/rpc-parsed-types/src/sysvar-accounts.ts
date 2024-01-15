@@ -60,6 +60,12 @@ type JsonParsedLastRestartSlotAccount = Readonly<{
     lastRestartSlot: Slot;
 }>;
 
+type JsonParsedEpochRewardsAccount = Readonly<{
+    totalRewards: bigint;
+    distributedRewards: bigint;
+    distributionCompleteBlockHeight: bigint;
+}>;
+
 export type JsonParsedSysvarAccount =
     | RpcParsedType<'clock', JsonParsedClockAccount>
     | RpcParsedType<'epochSchedule', JsonParsedEpochScheduleAccount>
@@ -69,4 +75,5 @@ export type JsonParsedSysvarAccount =
     | RpcParsedType<'slotHashes', JsonParsedSlotHashesAccount>
     | RpcParsedType<'slotHistory', JsonParsedSlotHistoryAccount>
     | RpcParsedType<'stakeHistory', JsonParsedStakeHistoryAccount>
-    | RpcParsedType<'lastRestartSlot', JsonParsedLastRestartSlotAccount>;
+    | RpcParsedType<'lastRestartSlot', JsonParsedLastRestartSlotAccount>
+    | RpcParsedType<'epochRewards', JsonParsedEpochRewardsAccount>;
