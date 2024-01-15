@@ -944,8 +944,9 @@ export type SimulateTransactionConfig = {
   replaceRecentBlockhash?: boolean;
   /** Optional parameter used to set the commitment level when selecting the latest block */
   commitment?: Commitment;
-  /** Optional parameter used to specify a list of account addresses to return post simulation state for */
+  /** Optional parameter used to specify a list of base58-encoded account addresses to return post simulation state for */
   accounts?: {
+    /** The encoding of the returned account's data */
     encoding: 'base64';
     addresses: string[];
   };
