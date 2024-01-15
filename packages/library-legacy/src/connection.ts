@@ -1635,7 +1635,7 @@ function createRpcClient(
         if (too_many_requests_retries === 0) {
           break;
         }
-        console.log(
+        console.error(
           `Server responded with ${res.status} ${res.statusText}.  Retrying after ${waitTime}ms delay...`,
         );
         await sleep(waitTime);
