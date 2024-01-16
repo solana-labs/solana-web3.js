@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Blockhash, StringifiedBigInt } from '@solana/rpc-types';
 
-import { NonceAccount } from '../nonce-accounts';
+import { JsonParsedNonceAccount } from '../nonce-accounts';
 
 {
     const account = {
@@ -11,5 +11,5 @@ import { NonceAccount } from '../nonce-accounts';
             lamportsPerSignature: '5000' as StringifiedBigInt,
         },
     };
-    account satisfies NonceAccount;
+    account satisfies JsonParsedNonceAccount;
 }

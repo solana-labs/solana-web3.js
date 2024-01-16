@@ -3,16 +3,16 @@ import type { Base64EncodedDataResponse, Slot } from '@solana/rpc-types';
 
 import type { RpcParsedType } from './rpc-parsed-type';
 
-type ProgramAccount = Readonly<{
+type JsonParsedBpfProgramAccount = Readonly<{
     programData: Address;
 }>;
 
-type ProgramDataAccount = Readonly<{
+type JsonParsedBpfProgramDataAccount = Readonly<{
     authority?: Address;
     data: Base64EncodedDataResponse;
     slot: Slot;
 }>;
 
-export type BpfUpgradeableProgramAccount =
-    | RpcParsedType<'program', ProgramAccount>
-    | RpcParsedType<'programData', ProgramDataAccount>;
+export type JsonParsedBpfUpgradeableLoaderProgramAccount =
+    | RpcParsedType<'program', JsonParsedBpfProgramAccount>
+    | RpcParsedType<'programData', JsonParsedBpfProgramDataAccount>;

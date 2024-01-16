@@ -5,7 +5,7 @@ import { RpcParsedType } from './rpc-parsed-type';
 
 type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
 
-export type TokenAccount = Readonly<{
+export type JsonParsedTokenAccount = Readonly<{
     mint: Address;
     owner: Address;
     tokenAmount: TokenAmount;
@@ -18,7 +18,7 @@ export type TokenAccount = Readonly<{
     extensions?: readonly unknown[];
 }>;
 
-export type MintAccount = Readonly<{
+type JsonParsedMintAccount = Readonly<{
     mintAuthority: Address | null;
     supply: StringifiedBigInt;
     decimals: number;
@@ -27,14 +27,14 @@ export type MintAccount = Readonly<{
     extensions?: readonly unknown[];
 }>;
 
-export type MultisigAccount = Readonly<{
+type JsonParsedMultisigAccount = Readonly<{
     numRequiredSigners: number;
     numValidSigners: number;
     isInitialized: boolean;
     signers: readonly Address[];
 }>;
 
-export type TokenProgramAccount =
-    | RpcParsedType<'account', TokenAccount>
-    | RpcParsedType<'mint', MintAccount>
-    | RpcParsedType<'multisig', MultisigAccount>;
+export type JsonParsedTokenProgramAccount =
+    | RpcParsedType<'account', JsonParsedTokenAccount>
+    | RpcParsedType<'mint', JsonParsedMintAccount>
+    | RpcParsedType<'multisig', JsonParsedMultisigAccount>;

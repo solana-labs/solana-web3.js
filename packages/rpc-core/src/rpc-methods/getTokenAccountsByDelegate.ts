@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { TokenAccount } from '@solana/rpc-parsed-types';
+import type { JsonParsedTokenAccount } from '@solana/rpc-parsed-types';
 import type { IRpcApiMethods } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 
@@ -21,7 +21,7 @@ type TokenAccountInfoWithJsonData = Readonly<{
         /** Name of the program that owns this account. */
         program: Address;
         parsed: {
-            info: TokenAccount;
+            info: JsonParsedTokenAccount;
             type: 'account';
         };
         space: U64UnsafeBeyond2Pow53Minus1;

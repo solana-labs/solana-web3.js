@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Base64EncodedDataResponse } from '@solana/rpc-types';
 
-import { BpfUpgradeableProgramAccount } from '../bpf-upgradeable-loader-accounts';
+import { JsonParsedBpfUpgradeableLoaderProgramAccount } from '../bpf-upgradeable-loader-accounts';
 
 // program account
 {
@@ -11,11 +11,11 @@ import { BpfUpgradeableProgramAccount } from '../bpf-upgradeable-loader-accounts
         },
         type: 'program' as const,
     };
-    account satisfies BpfUpgradeableProgramAccount;
+    account satisfies JsonParsedBpfUpgradeableLoaderProgramAccount;
 }
 
 {
-    const account = {} as unknown as BpfUpgradeableProgramAccount;
+    const account = {} as unknown as JsonParsedBpfUpgradeableLoaderProgramAccount;
     if (account.type === 'program') {
         account.info.programData satisfies Address;
     }
@@ -31,11 +31,11 @@ import { BpfUpgradeableProgramAccount } from '../bpf-upgradeable-loader-accounts
         },
         type: 'programData' as const,
     };
-    account satisfies BpfUpgradeableProgramAccount;
+    account satisfies JsonParsedBpfUpgradeableLoaderProgramAccount;
 }
 
 {
-    const account = {} as unknown as BpfUpgradeableProgramAccount;
+    const account = {} as unknown as JsonParsedBpfUpgradeableLoaderProgramAccount;
     if (account.type === 'programData') {
         account.info.slot satisfies bigint;
     }

@@ -2,12 +2,12 @@ import type { Address } from '@solana/addresses';
 
 import type { RpcParsedType } from './rpc-parsed-type';
 
-type StakeConfigAccount = Readonly<{
+type JsonParsedStakeConfigAccount = Readonly<{
     slashPenalty: number;
     warmupCooldownRate: number;
 }>;
 
-type ValidatorInfoAccount = Readonly<{
+type JsonParsedValidatorInfoAccount = Readonly<{
     configData: unknown;
     keys: {
         pubkey: Address;
@@ -15,6 +15,6 @@ type ValidatorInfoAccount = Readonly<{
     }[];
 }>;
 
-export type ConfigProgramAccount =
-    | RpcParsedType<'stakeConfig', StakeConfigAccount>
-    | RpcParsedType<'validatorInfo', ValidatorInfoAccount>;
+export type JsonParsedConfigProgramAccount =
+    | RpcParsedType<'stakeConfig', JsonParsedStakeConfigAccount>
+    | RpcParsedType<'validatorInfo', JsonParsedValidatorInfoAccount>;
