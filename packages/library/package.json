@@ -72,6 +72,7 @@
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-core": "workspace:*",
+        "@solana/rpc-parsed-types": "workspace:*",
         "@solana/rpc-transport": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/transactions": "workspace:*",

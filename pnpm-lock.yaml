@@ -962,6 +962,9 @@ importers:
       '@solana/rpc-core':
         specifier: workspace:*
         version: link:../rpc-core
+      '@solana/rpc-parsed-types':
+        specifier: workspace:*
+        version: link:../rpc-parsed-types
       '@solana/rpc-transport':
         specifier: workspace:*
         version: link:../rpc-transport
