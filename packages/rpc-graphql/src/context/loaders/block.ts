@@ -1,9 +1,9 @@
-import { Slot } from '@solana/rpc-core';
+import { GetBlockApi, Slot } from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedBlock } from './transformers/block';
@@ -33,7 +33,7 @@ function normalizeArgs({
 }
 
 /* Load a block from the RPC, transform it, then return it */
-async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
+async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
     const block = await rpc
         .getBlock(
             slot,
@@ -50,14 +50,14 @@ async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normal
         : transformLoadedBlock({ block, encoding: config.encoding, transactionDetails: config.transactionDetails });
 }
 
-function createBlockBatchLoadFn(rpc: Rpc) {
+function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
     const resolveBlockUsingRpc = loadBlock.bind(null, rpc);
     return async (blockQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
         return await Promise.all(blockQueryArgs.map(async args => await resolveBlockUsingRpc(args)));
     };
 }
 
-export function createBlockLoader(rpc: Rpc) {
+export function createBlockLoader(rpc: Rpc<GetBlockApi>) {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: BlockLoaderArgs, info?: GraphQLResolveInfo) => {

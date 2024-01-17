@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountLoaderArgs } from '../loaders/account';
+import { AccountLoaderArgs } from '../context/loaders/account';
 
 export const resolveAccount = (fieldName: string) => {
     return (

@@ -2,10 +2,10 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountLoaderArgs } from '../loaders/account';
-import { BlockLoaderArgs } from '../loaders/block';
-import { ProgramAccountsLoaderArgs } from '../loaders/program-accounts';
-import { TransactionLoaderArgs } from '../loaders/transaction';
+import { AccountLoaderArgs } from '../context/loaders/account';
+import { BlockLoaderArgs } from '../context/loaders/block';
+import { ProgramAccountsLoaderArgs } from '../context/loaders/program-accounts';
+import { TransactionLoaderArgs } from '../context/loaders/transaction';
 import { accountResolvers, accountTypeDefs } from './account';
 import { blockResolvers, blockTypeDefs } from './block';
 import { inputResolvers, inputTypeDefs } from './common/inputs';

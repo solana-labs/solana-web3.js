@@ -2,7 +2,7 @@ import type { Slot } from '@solana/rpc-core';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { BlockLoaderArgs } from '../loaders/block';
+import { BlockLoaderArgs } from '../context/loaders/block';
 
 export const resolveBlock = (fieldName: string) => {
     return (

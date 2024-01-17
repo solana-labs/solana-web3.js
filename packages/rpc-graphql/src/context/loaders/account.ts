@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
-import { DataSlice, Slot } from '@solana/rpc-core';
+import { DataSlice, GetAccountInfoApi, Slot } from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-transport';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedAccount } from './transformers/account';
@@ -28,7 +28,7 @@ function normalizeArgs({
 }
 
 /* Load an account from the RPC, transform it, then return it */
-async function loadAccount(rpc: Rpc, { address, ...config }: ReturnType<typeof normalizeArgs>) {
+async function loadAccount(rpc: Rpc<GetAccountInfoApi>, { address, ...config }: ReturnType<typeof normalizeArgs>) {
     const account = await rpc
         .getAccountInfo(address, config)
         .send()
@@ -39,14 +39,14 @@ async function loadAccount(rpc: Rpc, { address, ...config }: ReturnType<typeof n
     return account === null ? { address } : transformLoadedAccount({ account, address, encoding: config.encoding });
 }
 
-function createAccountBatchLoadFn(rpc: Rpc) {
+function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi>) {
     const resolveAccountUsingRpc = loadAccount.bind(null, rpc);
     return async (accountQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
         return await Promise.all(accountQueryArgs.map(async args => await resolveAccountUsingRpc(args)));
     };
 }
 
-export function createAccountLoader(rpc: Rpc) {
+export function createAccountLoader(rpc: Rpc<GetAccountInfoApi>) {
     const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: AccountLoaderArgs, info?: GraphQLResolveInfo) => {

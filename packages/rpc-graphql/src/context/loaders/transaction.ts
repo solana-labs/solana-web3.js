@@ -1,10 +1,10 @@
 import { Signature } from '@solana/keys';
+import { GetTransactionApi } from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { TransactionVersion } from '../../../transactions/dist/types';
-import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedTransaction } from './transformers/transaction';
@@ -21,13 +21,16 @@ function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', sign
         commitment,
         encoding,
         // Always use 0 to avoid silly errors
-        maxSupportedTransactionVersion: 0 as TransactionVersion,
+        maxSupportedTransactionVersion: 0,
         signature,
     };
 }
 
 /* Load a transaction from the RPC, transform it, then return it */
-async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<typeof normalizeArgs>) {
+async function loadTransaction(
+    rpc: Rpc<GetTransactionApi>,
+    { signature, ...config }: ReturnType<typeof normalizeArgs>,
+) {
     const { encoding } = config;
 
     const transaction = await rpc
@@ -69,14 +72,14 @@ async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<ty
     return transformLoadedTransaction({ encoding, transaction });
 }
 
-function createTransactionBatchLoadFn(rpc: Rpc) {
+function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
     const resolveTransactionUsingRpc = loadTransaction.bind(null, rpc);
     return async (transactionQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
         return await Promise.all(transactionQueryArgs.map(async args => await resolveTransactionUsingRpc(args)));
     };
 }
 
-export function createTransactionLoader(rpc: Rpc) {
+export function createTransactionLoader(rpc: Rpc<GetTransactionApi>) {
     const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: TransactionLoaderArgs, info?: GraphQLResolveInfo) => {

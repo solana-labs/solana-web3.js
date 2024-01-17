@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Address } from '@solana/addresses';
-import { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter, Slot } from '@solana/rpc-core';
+import {
+    DataSlice,
+    GetProgramAccountsApi,
+    GetProgramAccountsDatasizeFilter,
+    GetProgramAccountsMemcmpFilter,
+    Slot,
+} from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-transport';
 import { Commitment } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
 import { cacheKeyFn } from './common/cache-key-fn';
 import { onlyPresentFieldRequested } from './common/resolve-info';
 import { transformLoadedAccount } from './transformers/account';
@@ -32,7 +38,10 @@ function normalizeArgs({
 }
 
 /* Load a program's accounts from the RPC, transform them, then return them */
-async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: ReturnType<typeof normalizeArgs>) {
+async function loadProgramAccounts(
+    rpc: Rpc<GetProgramAccountsApi>,
+    { programAddress, ...config }: ReturnType<typeof normalizeArgs>,
+) {
     const programAccounts = await rpc
         .getProgramAccounts(programAddress, config)
         .send()
@@ -49,7 +58,7 @@ async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: Retu
     );
 }
 
-function createProgramAccountsBatchLoadFn(rpc: Rpc) {
+function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>) {
     const resolveProgramAccountsUsingRpc = loadProgramAccounts.bind(null, rpc);
     return async (programAccountsQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
         return await Promise.all(
@@ -58,7 +67,7 @@ function createProgramAccountsBatchLoadFn(rpc: Rpc) {
     };
 }
 
-export function createProgramAccountsLoader(rpc: Rpc) {
+export function createProgramAccountsLoader(rpc: Rpc<GetProgramAccountsApi>) {
     const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async (args: ProgramAccountsLoaderArgs, info?: GraphQLResolveInfo) => {

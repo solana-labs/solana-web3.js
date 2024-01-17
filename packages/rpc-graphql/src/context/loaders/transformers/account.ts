@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Address } from '@solana/addresses';
 
-import { AccountLoaderArgs } from '../../loaders/account';
+import { AccountLoaderArgs } from '../account';
 
 function transformParsedAccountData(parsedAccountData: any) {
     const {
