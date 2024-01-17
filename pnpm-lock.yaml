@@ -1023,6 +1023,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
+      '@solana/programs':
+        specifier: workspace:*
+        version: link:../programs
       '@solana/rpc-core':
         specifier: workspace:*
         version: link:../rpc-core
@@ -1035,6 +1038,9 @@ importers:
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
+      '@solana/signers':
+        specifier: workspace:*
+        version: link:../signers
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
