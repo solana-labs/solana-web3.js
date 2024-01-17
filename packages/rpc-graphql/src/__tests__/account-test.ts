@@ -868,26 +868,28 @@ describe('account', () => {
             expect.assertions(2);
             const source = `
                 query testQuery {
-                    account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
-                        address
-                        ... on MintAccount {
-                            mintAuthority {
-                                address
-                                lamports
-                            }
-                        }
+                    account1: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
+                    }
+                    account2: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
+                    }
+                    account3: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
                     }
                 }
             `;
             const result = await rpcGraphQL.query(source);
             expect(result).toMatchObject({
                 data: {
-                    account: {
-                        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                        mintAuthority: {
-                            address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                            lamports: expect.any(BigInt),
-                        },
+                    account1: {
+                        lamports: expect.any(BigInt),
+                    },
+                    account2: {
+                        lamports: expect.any(BigInt),
+                    },
+                    account3: {
+                        lamports: expect.any(BigInt),
                     },
                 },
             });

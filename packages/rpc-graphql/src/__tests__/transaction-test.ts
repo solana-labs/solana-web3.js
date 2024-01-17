@@ -716,7 +716,43 @@ describe('transaction', () => {
         });
     });
     describe('cache tests', () => {
-        // Not required yet since transactions are not supported as nested queries.
-        it.todo('coalesces multiple requests for the same transaction into one');
+        it('coalesces multiple requests for the same transaction into one', async () => {
+            expect.assertions(2);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            const source = /* GraphQL */ `
+                query testQuery {
+                    transaction1: transaction(
+                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
+                    ) {
+                        slot
+                    }
+                    transaction2: transaction(
+                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
+                    ) {
+                        slot
+                    }
+                    transaction3: transaction(
+                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
+                    ) {
+                        slot
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source);
+            expect(result).toMatchObject({
+                data: {
+                    transaction1: {
+                        slot: expect.any(BigInt),
+                    },
+                    transaction2: {
+                        slot: expect.any(BigInt),
+                    },
+                    transaction3: {
+                        slot: expect.any(BigInt),
+                    },
+                },
+            });
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
     });
 });

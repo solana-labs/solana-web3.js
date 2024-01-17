@@ -11,7 +11,6 @@ export type Rpc = Parameters<typeof createRpcGraphQL>[0];
 
 export interface RpcGraphQLContext {
     loaders: RpcGraphQLLoaders;
-    rpc: Rpc;
 }
 
 export function createSolanaGraphQLContext(rpc: Rpc): RpcGraphQLContext {
@@ -22,6 +21,5 @@ export function createSolanaGraphQLContext(rpc: Rpc): RpcGraphQLContext {
             programAccounts: createProgramAccountsLoader(rpc),
             transaction: createTransactionLoader(rpc),
         },
-        rpc,
     };
 }

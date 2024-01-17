@@ -655,7 +655,30 @@ describe('programAccounts', () => {
         });
     });
     describe('cache tests', () => {
-        // Not required yet since program accounts are not supported as nested queries.
-        it.todo('coalesces multiple requests for the same program into one');
+        it('coalesces multiple requests for the same program into one', async () => {
+            expect.assertions(2);
+            const source = /* GraphQL */ `
+                query testQuery {
+                    programAccounts1: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
+                        lamports
+                    }
+                    programAccounts2: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
+                        lamports
+                    }
+                    programAccounts3: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
+                        lamports
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source);
+            expect(result).toMatchObject({
+                data: {
+                    programAccounts1: expect.arrayContaining([{ lamports: expect.any(BigInt) }]),
+                    programAccounts2: expect.arrayContaining([{ lamports: expect.any(BigInt) }]),
+                    programAccounts3: expect.arrayContaining([{ lamports: expect.any(BigInt) }]),
+                },
+            });
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
     });
 });

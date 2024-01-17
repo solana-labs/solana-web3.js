@@ -308,7 +308,37 @@ describe('block', () => {
         it.todo('can query a block with transactions as JSON parsed with specific instructions');
     });
     describe('cache tests', () => {
-        // Not required yet since blocks are not supported as nested queries.
-        it.todo('coalesces multiple requests for the same block into one');
+        it('coalesces multiple requests for the same block into one', async () => {
+            expect.assertions(2);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
+            const source = /* GraphQL */ `
+                query testQuery {
+                    block1: block(slot: 0) {
+                        blockhash
+                    }
+                    block2: block(slot: 0) {
+                        blockhash
+                    }
+                    block3: block(slot: 0) {
+                        blockhash
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source);
+            expect(result).toMatchObject({
+                data: {
+                    block1: {
+                        blockhash: expect.any(String),
+                    },
+                    block2: {
+                        blockhash: expect.any(String),
+                    },
+                    block3: {
+                        blockhash: expect.any(String),
+                    },
+                },
+            });
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
     });
 });
