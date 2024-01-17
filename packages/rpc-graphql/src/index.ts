@@ -17,13 +17,13 @@ export interface RpcGraphQL {
 }
 
 export function createRpcGraphQL(rpc: Rpc<RpcMethods>): RpcGraphQL {
-    const contextValue = createSolanaGraphQLContext(rpc);
     const schema = makeExecutableSchema({
         resolvers: createSolanaGraphQLResolvers(),
         typeDefs: createSolanaGraphQLTypeDefs(),
     });
     return {
         async query(source, variableValues?) {
+            const contextValue = createSolanaGraphQLContext(rpc);
             return graphql({
                 contextValue,
                 schema,
