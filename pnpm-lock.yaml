@@ -1879,11 +1879,11 @@ importers:
   packages/rpc-types:
     dependencies:
       '@solana/codecs-strings':
-        specifier: workspace:2.0.0-development
+        specifier: workspace:*
         version: link:../codecs-strings
     devDependencies:
       '@solana/codecs-core':
-        specifier: workspace:2.0.0-development
+        specifier: workspace:*
         version: link:../codecs-core
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
