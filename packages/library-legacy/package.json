@@ -43,7 +43,7 @@
     "build:fixtures": "set -ex; ./test/fixtures/noop-program/build.sh",
     "clean": "rimraf ./doc ./declarations ./lib",
     "dev": "cross-env NODE_ENV=development rollup -c --watch",
-    "publish-packages": "semantic-release --repository-url git@github.com:solana-labs/solana-web3.js.git",
+    "publish-packages": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || semantic-release --repository-url git@github.com:solana-labs/solana-web3.js.git",
     "test:lint": "eslint src/ test/ --ext .js,.ts",
     "test:lint:fix": "eslint src/ test/ --fix --ext .js,.ts",
     "test:live": "TEST_LIVE=1 pnpm run test:unit:node",
