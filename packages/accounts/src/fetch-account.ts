@@ -1,9 +1,9 @@
 import type { Address } from '@solana/addresses';
-import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
 import type { Commitment, Rpc, Slot } from '@solana/rpc-types';
 
 import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
 import { parseBase64RpcAccount, parseJsonRpcAccount } from './parse-account';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from './rpc-api';
 
 /** Optional configuration for fetching a singular account. */
 export type FetchAccountConfig = {

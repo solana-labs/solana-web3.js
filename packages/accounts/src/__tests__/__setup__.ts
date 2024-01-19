@@ -1,22 +1,20 @@
 import type { Address } from '@solana/addresses';
 import type { Decoder } from '@solana/codecs-core';
-import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { PendingRpcRequest, Rpc, RpcResponse } from '@solana/rpc-types';
+
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
-} from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { PendingRpcRequest, Rpc, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+    GetAccountInfoApi,
+    GetMultipleAccountsApi,
+    JsonParsedDataResponse,
+} from '../rpc-api';
 
 export type Base64RpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 export type Base58RpcAccount = AccountInfoBase & (AccountInfoWithBase58Bytes | AccountInfoWithBase58EncodedData);
-export type JsonParsedRpcAccount = AccountInfoBase & Readonly<{ data: JsonParsedData<unknown> }>;
-export type JsonParsedData<TData> = Readonly<{
-    program: string;
-    parsed: { info: TData; type: string };
-    space: U64UnsafeBeyond2Pow53Minus1;
-}>;
+export type JsonParsedRpcAccount = AccountInfoBase & { readonly data: JsonParsedDataResponse<unknown> };
 
 export function getMockRpc(
     accounts: Record<Address, Base64RpcAccount | JsonParsedRpcAccount>,
