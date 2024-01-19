@@ -8,12 +8,14 @@ import {
     Blockhash,
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Slot,
+    U64UnsafeBeyond2Pow53Minus1,
     UnixTimestamp,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
-import { Slot, TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { TokenBalance } from './common';
 import { Reward, TransactionStatus } from './common-transactions';
 
 type ReturnData = {

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Address } from '@solana/addresses';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
@@ -9,9 +8,12 @@ import type {
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
     LamportsUnsafeBeyond2Pow53Minus1,
+    PendingRpcSubscription,
+    RpcResponse,
+    RpcSubscriptions,
+    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 
-import { RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
 import { ProgramNotificationsApi } from '../program-notifications';
 
 async () => {

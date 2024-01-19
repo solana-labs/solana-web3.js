@@ -1,10 +1,8 @@
-import { Address } from '@solana/addresses';
-import { Signature } from '@solana/keys';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, UnixTimestamp } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Signature } from '@solana/keys';
+import type { Commitment, IRpcApiMethods, Slot, UnixTimestamp } from '@solana/rpc-types';
 
 import { TransactionError } from '../transaction-error';
-import { Slot } from './common';
 
 type GetSignaturesForAddressTransaction = Readonly<{
     /** transaction signature as base-58 encoded string */

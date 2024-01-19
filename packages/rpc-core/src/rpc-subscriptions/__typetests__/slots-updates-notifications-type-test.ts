@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+import type { PendingRpcSubscription, RpcSubscriptions, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
 import { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications';
 
 async () => {

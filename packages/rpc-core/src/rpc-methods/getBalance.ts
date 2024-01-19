@@ -1,8 +1,11 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import { RpcResponse, Slot } from './common';
+import type {
+    Commitment,
+    IRpcApiMethods,
+    LamportsUnsafeBeyond2Pow53Minus1,
+    RpcResponse,
+    Slot,
+} from '@solana/rpc-types';
 
 type GetBalanceApiResponse = RpcResponse<LamportsUnsafeBeyond2Pow53Minus1>;
 

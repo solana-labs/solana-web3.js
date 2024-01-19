@@ -1,7 +1,9 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import type {
+    Commitment,
+    IRpcApiMethods,
+    LamportsUnsafeBeyond2Pow53Minus1,
+    U64UnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 type GetMinimumBalanceForRentExemptionApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
 

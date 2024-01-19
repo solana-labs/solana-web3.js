@@ -1,6 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiSubscriptions } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
+import type { Commitment, IRpcApiSubscriptions, RpcResponse } from '@solana/rpc-types';
 
 import {
     AccountInfoBase,
@@ -9,7 +8,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    RpcResponse,
 } from '../rpc-methods/common';
 
 type AccountNotificationsApiCommonConfig = Readonly<{

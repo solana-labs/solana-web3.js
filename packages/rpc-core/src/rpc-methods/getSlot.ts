@@ -1,7 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { Commitment, IRpcApiMethods, Slot } from '@solana/rpc-types';
 
 type GetSlotApiResponse = Slot;
 

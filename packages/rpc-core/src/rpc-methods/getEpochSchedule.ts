@@ -1,6 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-
-import { U64UnsafeBeyond2Pow53Minus1 } from './common';
+import type { IRpcApiMethods, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetEpochScheduleApiResponse = Readonly<{
     /** the maximum number of slots in each epoch */

@@ -1,8 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, TokenAmount } from '@solana/rpc-types';
-
-import { RpcResponse } from './common';
+import type { Address } from '@solana/addresses';
+import type { Commitment, IRpcApiMethods, RpcResponse, TokenAmount } from '@solana/rpc-types';
 
 type GetTokenAccountBalanceApiResponse = RpcResponse<TokenAmount>;
 

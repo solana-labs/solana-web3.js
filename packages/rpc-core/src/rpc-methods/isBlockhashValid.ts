@@ -1,7 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import type { Blockhash, Commitment } from '@solana/rpc-types';
-
-import { RpcResponse, Slot } from './common';
+import type { Blockhash, Commitment, IRpcApiMethods, RpcResponse, Slot } from '@solana/rpc-types';
 
 type IsBlockhashValidApiResponse = RpcResponse<boolean>;
 

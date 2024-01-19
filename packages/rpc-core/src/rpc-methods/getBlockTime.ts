@@ -1,7 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { UnixTimestamp } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { IRpcApiMethods, Slot, UnixTimestamp } from '@solana/rpc-types';
 
 /** Estimated production time, as Unix timestamp (seconds since the Unix epoch) */
 type GetBlockTimeApiResponse = UnixTimestamp;

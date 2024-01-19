@@ -1,5 +1,6 @@
-import { Address } from '@solana/addresses';
-import { DataSlice, Slot } from '@solana/rpc-core';
+import type { Address } from '@solana/addresses';
+import type { DataSlice } from '@solana/rpc-core';
+import type { Slot } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 

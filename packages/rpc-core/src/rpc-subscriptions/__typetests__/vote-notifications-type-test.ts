@@ -2,10 +2,8 @@
 
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
-import type { Blockhash, UnixTimestamp } from '@solana/rpc-types';
+import type { Blockhash, PendingRpcSubscription, RpcSubscriptions, Slot, UnixTimestamp } from '@solana/rpc-types';
 
-import { Slot } from '../../rpc-methods/common';
 import { VoteNotificationsApi } from '../vote-notifications';
 
 async () => {

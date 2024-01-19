@@ -1,4 +1,5 @@
-import { Overloads } from './overloads';
+import type { Overloads } from './overloads';
+import type { Slot } from './typed-numbers';
 
 /**
  * Public RPC API.
@@ -95,6 +96,14 @@ type PendingRpcSubscriptionBuilder<TSubscriptionMethodImplementations> = UnionTo
         >;
     }>
 >;
+
+/**
+ * Rpc Response helper.
+ */
+export type RpcResponse<TValue> = Readonly<{
+    context: Readonly<{ slot: Slot }>;
+    value: TValue;
+}>;
 
 /**
  * Utility types that do terrible, awful things.

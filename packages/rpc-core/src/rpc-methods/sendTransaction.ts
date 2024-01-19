@@ -1,9 +1,6 @@
-import { Signature } from '@solana/keys';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
-import { Base64EncodedWireTransaction } from '@solana/transactions';
-
-import { Slot } from './common';
+import type { Signature } from '@solana/keys';
+import type { Commitment, IRpcApiMethods, Slot } from '@solana/rpc-types';
+import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
 type SendTransactionConfig = Readonly<{
     skipPreflight?: boolean;

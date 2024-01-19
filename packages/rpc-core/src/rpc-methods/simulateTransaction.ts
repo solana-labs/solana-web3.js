@@ -1,7 +1,14 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Base58EncodedBytes, Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
-import { Base64EncodedWireTransaction } from '@solana/transactions';
+import type { Address } from '@solana/addresses';
+import type {
+    Base58EncodedBytes,
+    Base64EncodedDataResponse,
+    Commitment,
+    IRpcApiMethods,
+    RpcResponse,
+    Slot,
+    U64UnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
+import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
 import {
@@ -9,9 +16,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    RpcResponse,
-    Slot,
-    U64UnsafeBeyond2Pow53Minus1,
 } from './common';
 
 type SimulateTransactionConfigBase = Readonly<{

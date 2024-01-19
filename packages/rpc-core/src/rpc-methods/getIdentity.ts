@@ -1,4 +1,4 @@
-import { Address } from '@solana/addresses';
+import type { Address } from '@solana/addresses';
 import type { IRpcApiMethods } from '@solana/rpc-types';
 
 type GetIdentityApiResponse = Readonly<{

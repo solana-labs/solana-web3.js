@@ -1,9 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import type { IRpcApiSubscriptions } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
+import type { Commitment, IRpcApiSubscriptions, RpcResponse } from '@solana/rpc-types';
 
-import { RpcResponse } from '../rpc-methods/common';
 import { TransactionError } from '../transaction-error';
 
 type LogsNotificationsApiNotification = RpcResponse<

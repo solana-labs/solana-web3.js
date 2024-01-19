@@ -1,6 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Commitment, IRpcApiMethods, RpcResponse, Slot } from '@solana/rpc-types';
 
 import {
     AccountInfoBase,
@@ -13,8 +12,6 @@ import {
     DataSlice,
     GetProgramAccountsDatasizeFilter,
     GetProgramAccountsMemcmpFilter,
-    RpcResponse,
-    Slot,
 } from './common';
 
 type GetProgramAccountsApiCommonConfig = Readonly<{

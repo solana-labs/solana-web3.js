@@ -6,10 +6,8 @@ import type {
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
-    RpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { PendingRpcRequest, Rpc } from '@solana/rpc-types';
+import type { PendingRpcRequest, Rpc, RpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 export type Base64RpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 export type Base58RpcAccount = AccountInfoBase & (AccountInfoWithBase58Bytes | AccountInfoWithBase58EncodedData);

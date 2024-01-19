@@ -1,8 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import { RpcResponse } from './common';
+import type { Address } from '@solana/addresses';
+import type { Commitment, IRpcApiMethods, LamportsUnsafeBeyond2Pow53Minus1, RpcResponse } from '@solana/rpc-types';
 
 type GetSupplyConfig = Readonly<{
     commitment?: Commitment;

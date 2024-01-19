@@ -1,18 +1,19 @@
 import { Address } from '@solana/addresses';
-import type { Rpc } from '@solana/rpc-types';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Rpc,
+    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../../transaction-error';
-import { GetBlockApi } from '..';
-import { TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from '../common';
+import { TokenBalance } from '../common';
 import { Reward, TransactionStatus } from '../common-transactions';
+import { GetBlockApi } from '../getBlock';
 
 function assertNotAProperty<T extends object, TPropName extends string>(
     _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },

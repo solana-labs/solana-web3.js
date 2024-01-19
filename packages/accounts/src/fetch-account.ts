@@ -1,8 +1,6 @@
 import type { Address } from '@solana/addresses';
-import type { Slot } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
-import type { GetMultipleAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getMultipleAccounts';
-import type { Commitment, Rpc } from '@solana/rpc-types';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Commitment, Rpc, Slot } from '@solana/rpc-types';
 
 import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
 import { parseBase64RpcAccount, parseJsonRpcAccount } from './parse-account';

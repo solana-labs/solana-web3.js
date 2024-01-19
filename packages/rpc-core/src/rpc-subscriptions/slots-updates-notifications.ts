@@ -1,4 +1,4 @@
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from '../rpc-methods/common';
+import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     slot: Slot;
