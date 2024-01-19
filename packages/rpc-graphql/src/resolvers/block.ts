@@ -12,3 +12,20 @@ export const resolveBlock = (fieldName: string) => {
         info: GraphQLResolveInfo | undefined,
     ) => (parent[fieldName] === null ? null : context.loaders.block.load({ ...args, slot: parent[fieldName] }, info));
 };
+
+export const blockResolvers = {
+    Block: {
+        __resolveType(block: { transactionDetails: string }) {
+            switch (block.transactionDetails) {
+                case 'accounts':
+                    return 'BlockWithAccounts';
+                case 'none':
+                    return 'BlockWithNone';
+                case 'signatures':
+                    return 'BlockWithSignatures';
+                default:
+                    return 'BlockWithFull';
+            }
+        },
+    },
+};

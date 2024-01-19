@@ -11,5 +11,3 @@ export const inputTypeDefs = /* GraphQL */ `
         offset: BigInt
     }
 `;
-
-export const inputResolvers = {};
