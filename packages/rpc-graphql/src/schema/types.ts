@@ -3,7 +3,6 @@ export const typeTypeDefs = /* GraphQL */ `
         BASE_58
         BASE_64
         BASE_64_ZSTD
-        PARSED
     }
 
     scalar Address

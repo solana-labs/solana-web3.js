@@ -1,141 +1,179 @@
 import { Address } from '@solana/addresses';
+import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountLoaderArgs } from '../loaders';
-import { onlyPresentFieldRequested } from './resolve-info';
+import { AccountLoaderValue, cacheKeyFn } from '../loaders';
+import { buildAccountLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transformParsedAccountData(parsedAccountData: any) {
-    const {
-        parsed: { info: result, type: accountType },
-        program: programName,
-        programId,
-    } = parsedAccountData;
-    // Tells GraphQL which account type has been
-    // returned by the RPC.
-    result.accountType = accountType;
-    result.programId = programId;
-    // Tells GraphQL which program the returned
-    // account belongs to.
-    result.programName = programName;
-    return result;
+type Encoding = 'base58' | 'base64' | 'base64+zstd';
+type DataSlice = { length: number; offset: number };
+
+export type EncodedAccountData = {
+    [key: string]: string;
 }
 
-export function transformLoadedAccount({
-    account,
-    address,
-    encoding = 'jsonParsed',
-}: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    account: any;
+export type AccountResult = {
     address: Address;
-    encoding: AccountLoaderArgs['encoding'];
-}) {
-    const [
-        // The account's data, either encoded or parsed.
-        data,
-        // Tells GraphQL which encoding has been returned
-        // by the RPC.
-        responseEncoding,
-    ] = Array.isArray(account.data)
-        ? encoding === 'jsonParsed'
-            ? // The requested encoding is jsonParsed,
-              // but the data could not be parsed.
-              // Defaults to base64 encoding.
-              [{ data: account.data[0] }, 'base64']
-            : // The requested encoding is base58,
-              // base64, or base64+zstd.
-              [{ data: account.data[0] }, encoding]
-        : // The account data was returned as an object,
-          // so it was parsed successfully.
-          [transformParsedAccountData(account.data), 'jsonParsed'];
-    account.address = address;
-    account.encoding = responseEncoding;
-    account.ownerProgram = account.owner;
-    return {
-        ...account,
-        ...data,
+    ownerProgram?: Address;
+    encodedData?: EncodedAccountData;
+    jsonParsedConfigs?: {
+        accountType: string;
+        programId: Address;
+        programName: string;
     };
-}
+} & Partial<Omit<AccountLoaderValue, 'data'>>;
+
+const resolveAccountData = () => {
+    return (
+        parent: AccountResult | null,
+        args: {
+            encoding: Encoding;
+            dataSlice?: DataSlice;
+        },
+    ) => {
+        return parent === null
+            ? null
+            : parent.encodedData
+              ? parent.encodedData[cacheKeyFn(args)]
+              : null;
+    };
+};
 
 export const resolveAccount = (fieldName?: string) => {
     return async (
         parent: { [x: string]: Address },
-        args: AccountLoaderArgs,
+        args: { address?: Address; commitment?: Commitment; minContextSlot?: Slot },
         context: RpcGraphQLContext,
-        info: GraphQLResolveInfo | undefined,
-    ) => {
+        info: GraphQLResolveInfo,
+    ): Promise<AccountResult | null> => {
         const address = fieldName ? parent[fieldName] : args.address;
-        if (!address) {
-            return null;
+
+        if (address) {
+            // Do not load any accounts if only the address is requested
+            if (onlyFieldsRequested(['address'], info)) {
+                return { address };
+            }
+
+            const argsSet = buildAccountLoaderArgSetFromResolveInfo({ ...args, address }, info);
+            const loadedAccounts = await context.loaders.account.loadMany(argsSet);
+
+            let result: AccountResult = {
+                address,
+                encodedData: {},
+            };
+
+            loadedAccounts.forEach((account, i) => {
+                if (account instanceof Error) {
+                    console.error(account);
+                    return;
+                }
+                if (account === null) {
+                    return;
+                }
+                if (!result.ownerProgram) {
+                    result = {
+                        ...result,
+                        ...account,
+                        ownerProgram: account.owner,
+                    };
+                }
+
+                const { data } = account;
+                const { encoding, dataSlice } = argsSet[i];
+
+                if (encoding && result.encodedData) {
+                    if (Array.isArray(data)) {
+                        result.encodedData[cacheKeyFn({
+                            dataSlice,
+                            encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
+                        })] = data[0];
+                    } else if (typeof data === 'string') {
+                        result.encodedData[cacheKeyFn({
+                            dataSlice,
+                            encoding: 'base58',
+                        })] = data;
+                    } else if (typeof data === 'object') {
+                        const {
+                            parsed: { info: parsedData, type: accountType },
+                            program: programName,
+                            programId,
+                        } = data;
+                        result.jsonParsedConfigs = {
+                            accountType,
+                            programId,
+                            programName,
+                        };
+                        result = {
+                            ...result,
+                            ...(parsedData as object),
+                        };
+                    }
+                }
+            });
+
+            return result;
         }
-        if (onlyPresentFieldRequested('address', info)) {
-            return { address };
-        }
-        const account = await context.loaders.account.load({ ...args, address });
-        return account === null ? { address } : transformLoadedAccount({ account, address, encoding: args.encoding });
+
+        return null;
     };
 };
 
+function resolveAccountType(accountResult: AccountResult) {
+    const { jsonParsedConfigs } = accountResult;
+    if (jsonParsedConfigs) {
+        if (jsonParsedConfigs.programName === 'nonce') {
+            return 'NonceAccount';
+        }
+        if (jsonParsedConfigs.accountType === 'mint' && jsonParsedConfigs.programName === 'spl-token') {
+            return 'MintAccount';
+        }
+        if (jsonParsedConfigs.accountType === 'account' && jsonParsedConfigs.programName === 'spl-token') {
+            return 'TokenAccount';
+        }
+        if (jsonParsedConfigs.programName === 'stake') {
+            return 'StakeAccount';
+        }
+        if (jsonParsedConfigs.accountType === 'vote' && jsonParsedConfigs.programName === 'vote') {
+            return 'VoteAccount';
+        }
+        if (
+            jsonParsedConfigs.accountType === 'lookupTable' &&
+            jsonParsedConfigs.programName === 'address-lookup-table'
+        ) {
+            return 'LookupTableAccount';
+        }
+    }
+    return 'GenericAccount';
+}
+
 export const accountResolvers = {
     Account: {
-        __resolveType(account: { encoding: string; programName: string; accountType: string }) {
-            if (account.encoding === 'base58') {
-                return 'AccountBase58';
-            }
-            if (account.encoding === 'base64') {
-                return 'AccountBase64';
-            }
-            if (account.encoding === 'base64+zstd') {
-                return 'AccountBase64Zstd';
-            }
-            if (account.encoding === 'jsonParsed') {
-                if (account.programName === 'nonce') {
-                    return 'NonceAccount';
-                }
-                if (account.accountType === 'mint' && account.programName === 'spl-token') {
-                    return 'MintAccount';
-                }
-                if (account.accountType === 'account' && account.programName === 'spl-token') {
-                    return 'TokenAccount';
-                }
-                if (account.programName === 'stake') {
-                    return 'StakeAccount';
-                }
-                if (account.accountType === 'vote' && account.programName === 'vote') {
-                    return 'VoteAccount';
-                }
-                if (account.accountType === 'lookupTable' && account.programName === 'address-lookup-table') {
-                    return 'LookupTableAccount';
-                }
-            }
-            return 'AccountBase64';
-        },
+        __resolveType: resolveAccountType,
+        data: resolveAccountData(),
     },
-    AccountBase58: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64Zstd: {
+    GenericAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     LookupTableAccount: {
         authority: resolveAccount('authority'),
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     MintAccount: {
+        data: resolveAccountData(),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mintAuthority: resolveAccount('mintAuthority'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     NonceAccount: {
         authority: resolveAccount('authority'),
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     StakeAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     StakeAccountDataMetaAuthorized: {
@@ -149,12 +187,14 @@ export const accountResolvers = {
         voter: resolveAccount('voter'),
     },
     TokenAccount: {
+        data: resolveAccountData(),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     VoteAccount: {
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
+        data: resolveAccountData(),
         node: resolveAccount('nodePubkey'),
         ownerProgram: resolveAccount('ownerProgram'),
     },

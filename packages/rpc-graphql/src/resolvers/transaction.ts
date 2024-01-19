@@ -3,7 +3,7 @@ import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { TransactionLoaderArgs } from '../loaders';
-import { onlyPresentFieldRequested } from './resolve-info';
+import { onlyFieldsRequested } from './resolve-info';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformParsedInstruction(parsedInstruction: any) {
@@ -63,13 +63,13 @@ export function resolveTransaction(fieldName?: string) {
         parent: { [x: string]: Signature },
         args: TransactionLoaderArgs,
         context: RpcGraphQLContext,
-        info: GraphQLResolveInfo | undefined,
+        info: GraphQLResolveInfo,
     ) => {
         const signature = fieldName ? parent[fieldName] : args.signature;
         if (!signature) {
             return null;
         }
-        if (onlyPresentFieldRequested('signature', info)) {
+        if (onlyFieldsRequested(['signature'], info)) {
             return { signature };
         }
         const transaction = await context.loaders.transaction.load({ ...args, signature });
