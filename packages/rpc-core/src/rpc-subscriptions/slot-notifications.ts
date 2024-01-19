@@ -1,4 +1,4 @@
-import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+import type { IRpcApiSubscriptions } from '@solana/rpc-types';
 
 import { Slot } from '../rpc-methods/common';
 

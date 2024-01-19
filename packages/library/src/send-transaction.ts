@@ -1,7 +1,6 @@
 import { Signature } from '@solana/keys';
 import type { SendTransactionApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-transport';
-import { Commitment, commitmentComparator } from '@solana/rpc-types';
+import { type Commitment, commitmentComparator, type Rpc } from '@solana/rpc-types';
 import {
     BaseTransaction,
     getBase64EncodedWireTransaction,

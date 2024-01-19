@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { Rpc } from '@solana/rpc-transport';
+import type { Rpc } from '@solana/rpc-types';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,

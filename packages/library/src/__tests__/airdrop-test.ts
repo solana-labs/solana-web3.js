@@ -1,8 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, RequestAirdropApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-transport';
-import { lamports } from '@solana/rpc-types';
+import { lamports, type Rpc } from '@solana/rpc-types';
 
 import { requestAndConfirmAirdrop } from '../airdrop';
 

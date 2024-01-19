@@ -1,7 +1,6 @@
 import { Address } from '@solana/addresses';
-import { GetAccountInfoApi } from '@solana/rpc-core';
-import { GetMultipleAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getMultipleAccounts';
-import { Rpc } from '@solana/rpc-transport';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Rpc } from '@solana/rpc-types';
 
 import {
     fetchEncodedAccount,

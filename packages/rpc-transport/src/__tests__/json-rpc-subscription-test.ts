@@ -1,8 +1,9 @@
+import { IRpcSubscriptionsApi, RpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+
 import { SolanaJsonRpcError } from '../json-rpc-errors';
 import { createJsonRpcMessage } from '../json-rpc-message';
 import { getNextMessageId } from '../json-rpc-message-id';
 import { createJsonSubscriptionRpc } from '../json-rpc-subscription';
-import { IRpcSubscriptionsApi, RpcSubscription, RpcSubscriptions } from '../json-rpc-types';
 import { IRpcWebSocketTransport } from '../transports/transport-types';
 
 jest.mock('../json-rpc-message-id');

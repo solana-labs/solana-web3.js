@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 
 type GetClusterNodesNode = Readonly<{
     /** The unique identifier of the node's feature set */

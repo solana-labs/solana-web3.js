@@ -1,4 +1,4 @@
-import type { IRpcSubscriptionsApi } from '@solana/rpc-transport';
+import type { IRpcSubscriptionsApi } from '@solana/rpc-types';
 
 import { createSolanaRpcSubscriptionsApi } from '../index';
 

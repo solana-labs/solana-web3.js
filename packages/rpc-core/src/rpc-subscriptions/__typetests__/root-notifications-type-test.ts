@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
+import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
 
 import { Slot } from '../../rpc-methods/common';
 import { RootNotificationsApi } from '../root-notifications';

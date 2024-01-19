@@ -1,6 +1,6 @@
 import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, SignatureNotificationsApi } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
 
 import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './transaction-confirmation-strategy-racer';
 import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';

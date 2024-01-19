@@ -1,4 +1,4 @@
-import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+import type { IRpcApiSubscriptions } from '@solana/rpc-types';
 import type { Base58EncodedBytes, Blockhash, Commitment, UnixTimestamp } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 

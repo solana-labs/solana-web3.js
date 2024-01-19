@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, RequestAirdropApi, SignatureNotificationsApi } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';

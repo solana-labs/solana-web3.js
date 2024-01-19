@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
-import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
+import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Rpc } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createSolanaRpcApi, RequestAirdropApi } from '../index';

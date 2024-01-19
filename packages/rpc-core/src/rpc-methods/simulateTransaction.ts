@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import { Base58EncodedBytes, Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 

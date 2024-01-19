@@ -7,7 +7,7 @@ import type {
     Slot,
     SlotNotificationsApi,
 } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-transport';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
 import {
     getSignatureFromTransaction,
     IDurableNonceTransaction,

@@ -1,5 +1,6 @@
-import { IRpcApi, RpcRequest } from '../../json-rpc-types';
-import { IRpcApiMethods, RpcApiConfig } from '../api-types';
+import { IRpcApi, IRpcApiMethods, RpcRequest } from '@solana/rpc-types';
+
+import { RpcApiConfig } from '../api-types';
 
 export function createJsonRpcApi<TRpcMethods extends IRpcApiMethods>(config?: RpcApiConfig): IRpcApi<TRpcMethods> {
     return new Proxy({} as IRpcApi<TRpcMethods>, {

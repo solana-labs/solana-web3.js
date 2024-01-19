@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { Rpc } from '@solana/rpc-transport';
+import { Rpc } from '@solana/rpc-types';
 
 import { SolanaRpcMethods } from '..';
 

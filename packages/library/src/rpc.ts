@@ -7,7 +7,8 @@ import {
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
-import { createJsonRpc, createJsonSubscriptionRpc, type Rpc, type RpcSubscriptions } from '@solana/rpc-transport';
+import { createJsonRpc, createJsonSubscriptionRpc } from '@solana/rpc-transport';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';

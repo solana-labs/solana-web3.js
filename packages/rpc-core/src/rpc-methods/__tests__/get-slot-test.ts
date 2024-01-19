@@ -1,5 +1,5 @@
-import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
-import { Commitment } from '@solana/rpc-types';
+import { createHttpTransport, createJsonRpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
+import type { Commitment, Rpc } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createSolanaRpcApi, GetSlotApi } from '../index';

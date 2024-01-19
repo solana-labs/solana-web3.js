@@ -1,5 +1,6 @@
-import { IRpcSubscriptionsApi, RpcSubscription } from '../../json-rpc-types';
-import { IRpcApiSubscriptions, RpcSubscriptionsApiConfig } from '../api-types';
+import { IRpcApiSubscriptions, IRpcSubscriptionsApi, RpcSubscription } from '@solana/rpc-types';
+
+import { RpcSubscriptionsApiConfig } from '../api-types';
 
 export function createJsonRpcSubscriptionsApi<TRpcSubscriptions extends IRpcApiSubscriptions>(
     config?: RpcSubscriptionsApiConfig,

@@ -1,4 +1,4 @@
-import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
+import { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
 
 import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
 
