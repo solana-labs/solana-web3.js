@@ -3,7 +3,6 @@ export const commonTypeDefs = /* GraphQL */ `
         BASE_58
         BASE_64
         BASE_64_ZSTD
-        PARSED
     }
 
     enum BlockTransactionDetails {

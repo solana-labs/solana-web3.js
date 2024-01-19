@@ -1,12 +1,6 @@
 export const rootTypeDefs = /* GraphQL */ `
     type Query {
-        account(
-            address: String!
-            commitment: Commitment
-            dataSlice: DataSlice
-            encoding: AccountEncoding
-            minContextSlot: BigInt
-        ): Account
+        account(address: String!, commitment: Commitment, minContextSlot: BigInt): Account
         block(
             slot: BigInt!
             commitment: Commitment

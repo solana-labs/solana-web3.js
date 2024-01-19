@@ -97,13 +97,11 @@ describe('programAccounts', () => {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding!) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
                         executable
-                        ... on AccountBase58 {
-                            data
-                        }
+                        data(encoding: $encoding)
                     }
                 }
             `;
@@ -134,13 +132,11 @@ describe('programAccounts', () => {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding!) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
                         executable
-                        ... on AccountBase64 {
-                            data
-                        }
+                        data(encoding: $encoding)
                     }
                 }
             `;
@@ -171,13 +167,11 @@ describe('programAccounts', () => {
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding!) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         address
                         executable
-                        ... on AccountBase64Zstd {
-                            data
-                        }
+                        data(encoding: $encoding)
                     }
                 }
             `;
@@ -584,17 +578,10 @@ describe('programAccounts', () => {
                         $programAddress: String!
                         $commitment: Commitment
                         $dataSlice: DataSlice
-                        $encoding: AccountEncoding
+                        $encoding: AccountEncoding!
                     ) {
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
-                            ... on AccountBase58 {
-                                data
-                            }
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                            data(encoding: $encoding, dataSlice: $dataSlice)
                         }
                     }
                 `;
@@ -628,17 +615,10 @@ describe('programAccounts', () => {
                         $programAddress: String!
                         $commitment: Commitment
                         $dataSlice: DataSlice
-                        $encoding: AccountEncoding
+                        $encoding: AccountEncoding!
                     ) {
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
-                            ... on AccountBase64 {
-                                data
-                            }
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                            data(dataSlice: $dataSlice, encoding: $encoding)
                         }
                     }
                 `;

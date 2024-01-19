@@ -78,18 +78,22 @@ export const resolveAccount = (fieldName?: string) => {
     };
 };
 
+export const resolveAccountData = () => {
+    return async (
+        parent: { address: Address },
+        args: { encoding: AccountLoaderArgs['encoding']; dataSlice?: AccountLoaderArgs['dataSlice'] },
+        context: RpcGraphQLContext,
+    ) => {
+        const account = await context.loaders.account.load({ ...args, address: parent.address });
+        return account === null
+            ? null
+            : transformLoadedAccount({ account, address: parent.address, encoding: args.encoding }).data;
+    };
+};
+
 export const accountResolvers = {
     Account: {
         __resolveType(account: { encoding: string; programName: string; accountType: string }) {
-            if (account.encoding === 'base58') {
-                return 'AccountBase58';
-            }
-            if (account.encoding === 'base64') {
-                return 'AccountBase64';
-            }
-            if (account.encoding === 'base64+zstd') {
-                return 'AccountBase64Zstd';
-            }
             if (account.encoding === 'jsonParsed') {
                 if (account.programName === 'nonce') {
                     return 'NonceAccount';
@@ -110,32 +114,32 @@ export const accountResolvers = {
                     return 'LookupTableAccount';
                 }
             }
-            return 'AccountBase64';
+            return 'GenericAccount';
         },
+        data: resolveAccountData(),
     },
-    AccountBase58: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64: {
-        ownerProgram: resolveAccount('ownerProgram'),
-    },
-    AccountBase64Zstd: {
+    GenericAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     LookupTableAccount: {
         authority: resolveAccount('authority'),
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     MintAccount: {
+        data: resolveAccountData(),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mintAuthority: resolveAccount('mintAuthority'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     NonceAccount: {
         authority: resolveAccount('authority'),
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     StakeAccount: {
+        data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     StakeAccountDataMetaAuthorized: {
@@ -149,12 +153,14 @@ export const accountResolvers = {
         voter: resolveAccount('voter'),
     },
     TokenAccount: {
+        data: resolveAccountData(),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     VoteAccount: {
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
+        data: resolveAccountData(),
         node: resolveAccount('nodePubkey'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
