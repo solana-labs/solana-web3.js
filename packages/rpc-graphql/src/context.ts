@@ -1,25 +1,13 @@
-import { GraphQLResolveInfo } from 'graphql';
-
-import { createRpcGraphQL } from './index';
-import { createAccountLoader } from './loaders/account';
-import { AccountLoaderArgs } from './loaders/account';
-import { createBlockLoader } from './loaders/block';
-import { BlockLoaderArgs } from './loaders/block';
-import { createProgramAccountsLoader } from './loaders/program-accounts';
-import { ProgramAccountsLoaderArgs } from './loaders/program-accounts';
-import { createTransactionLoader } from './loaders/transaction';
-import { TransactionLoaderArgs } from './loaders/transaction';
+import type { createRpcGraphQL } from './index';
+import {
+    createAccountLoader,
+    createBlockLoader,
+    createProgramAccountsLoader,
+    createTransactionLoader,
+    RpcGraphQLLoaders,
+} from './loaders';
 
 export type Rpc = Parameters<typeof createRpcGraphQL>[0];
-
-type LoadFn<TArgs> = (args: TArgs, info?: GraphQLResolveInfo | undefined) => Promise<unknown>;
-type Loader<TArgs> = { load: LoadFn<TArgs> };
-type RpcGraphQLLoaders = {
-    account: Loader<AccountLoaderArgs>;
-    block: Loader<BlockLoaderArgs>;
-    programAccounts: Loader<ProgramAccountsLoaderArgs>;
-    transaction: Loader<TransactionLoaderArgs>;
-};
 
 export interface RpcGraphQLContext {
     loaders: RpcGraphQLLoaders;

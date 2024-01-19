@@ -1,71 +1,48 @@
-import type { Commitment, Slot } from '@solana/rpc-types';
+import { GetBlockApi } from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
-import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
-import { cacheKeyFn } from './common/cache-key-fn';
-import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedBlock } from './transformers/block';
+import { BlockLoader, BlockLoaderArgs, BlockLoaderValue, cacheKeyFn } from './loader';
 
-export type BlockLoaderArgs = {
-    slot: Slot;
-    commitment?: Commitment;
-    encoding?: 'base58' | 'base64' | 'jsonParsed';
-    transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
-};
-
-/* Normalizes RPC optional configs to use GraphQL API defaults */
-function normalizeArgs({
-    commitment = 'confirmed',
-    encoding = 'jsonParsed',
+function applyDefaultArgs({
     slot,
+    commitment,
+    encoding = 'jsonParsed',
+    maxSupportedTransactionVersion = 0,
+    rewards,
     transactionDetails = 'full',
-}: BlockLoaderArgs) {
+}: BlockLoaderArgs): BlockLoaderArgs {
     return {
         commitment,
         encoding,
-        // Always use 0 to avoid silly errors
-        maxSupportedTransactionVersion: 0,
+        maxSupportedTransactionVersion,
+        rewards,
         slot,
         transactionDetails,
     };
 }
 
-/* Load a block from the RPC, transform it, then return it */
-async function loadBlock(rpc: Rpc, { slot, ...config }: ReturnType<typeof normalizeArgs>) {
-    const block = await rpc
+async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: BlockLoaderArgs): Promise<BlockLoaderValue> {
+    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+    return await rpc
         .getBlock(
             slot,
-            // @ts-expect-error FIXME: https://github.com/solana-labs/solana-web3.js/issues/1984
+            // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
             config,
         )
-        .send()
-        .catch(e => {
-            throw e;
-        });
-
-    return block === null
-        ? { slot }
-        : transformLoadedBlock({ block, encoding: config.encoding, transactionDetails: config.transactionDetails });
+        .send();
 }
 
-function createBlockBatchLoadFn(rpc: Rpc) {
+function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
     const resolveBlockUsingRpc = loadBlock.bind(null, rpc);
-    return async (blockQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
-        return await Promise.all(blockQueryArgs.map(async args => await resolveBlockUsingRpc(args)));
+    return async (blockQueryArgs: readonly BlockLoaderArgs[]) => {
+        return await Promise.all(blockQueryArgs.map(async args => await resolveBlockUsingRpc(applyDefaultArgs(args))));
     };
 }
 
-export function createBlockLoader(rpc: Rpc) {
+export function createBlockLoader(rpc: Rpc<GetBlockApi>): BlockLoader {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async (args: BlockLoaderArgs, info?: GraphQLResolveInfo) => {
-            if (onlyPresentFieldRequested('slot', info)) {
-                // If a user only requests the block's slot,
-                // don't call the RPC or the cache
-                return { slot: args.slot };
-            }
-            return loader.load(normalizeArgs(args));
-        },
+        load: async args => loader.load(applyDefaultArgs(args)),
     };
 }

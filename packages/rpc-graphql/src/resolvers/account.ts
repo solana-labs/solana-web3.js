@@ -2,16 +2,80 @@ import { Address } from '@solana/addresses';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountLoaderArgs } from '../loaders/account';
+import { AccountLoaderArgs } from '../loaders';
+import { onlyPresentFieldRequested } from './resolve-info';
 
-export const resolveAccount = (fieldName: string) => {
-    return (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformParsedAccountData(parsedAccountData: any) {
+    const {
+        parsed: { info: result, type: accountType },
+        program: programName,
+        programId,
+    } = parsedAccountData;
+    // Tells GraphQL which account type has been
+    // returned by the RPC.
+    result.accountType = accountType;
+    result.programId = programId;
+    // Tells GraphQL which program the returned
+    // account belongs to.
+    result.programName = programName;
+    return result;
+}
+
+export function transformLoadedAccount({
+    account,
+    address,
+    encoding = 'jsonParsed',
+}: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    account: any;
+    address: Address;
+    encoding: AccountLoaderArgs['encoding'];
+}) {
+    const [
+        // The account's data, either encoded or parsed.
+        data,
+        // Tells GraphQL which encoding has been returned
+        // by the RPC.
+        responseEncoding,
+    ] = Array.isArray(account.data)
+        ? encoding === 'jsonParsed'
+            ? // The requested encoding is jsonParsed,
+              // but the data could not be parsed.
+              // Defaults to base64 encoding.
+              [{ data: account.data[0] }, 'base64']
+            : // The requested encoding is base58,
+              // base64, or base64+zstd.
+              [{ data: account.data[0] }, encoding]
+        : // The account data was returned as an object,
+          // so it was parsed successfully.
+          [transformParsedAccountData(account.data), 'jsonParsed'];
+    account.address = address;
+    account.encoding = responseEncoding;
+    account.ownerProgram = account.owner;
+    return {
+        ...account,
+        ...data,
+    };
+}
+
+export const resolveAccount = (fieldName?: string) => {
+    return async (
         parent: { [x: string]: Address },
         args: AccountLoaderArgs,
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo | undefined,
-    ) =>
-        parent[fieldName] === null ? null : context.loaders.account.load({ ...args, address: parent[fieldName] }, info);
+    ) => {
+        const address = fieldName ? parent[fieldName] : args.address;
+        if (!address) {
+            return null;
+        }
+        if (onlyPresentFieldRequested('address', info)) {
+            return { address };
+        }
+        const account = await context.loaders.account.load({ ...args, address });
+        return account === null ? { address } : transformLoadedAccount({ account, address, encoding: args.encoding });
+    };
 };
 
 export const accountResolvers = {

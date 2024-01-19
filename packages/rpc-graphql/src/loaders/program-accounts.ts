@@ -1,73 +1,53 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Address } from '@solana/addresses';
-import type { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter } from '@solana/rpc-core';
-import type { Commitment, Slot } from '@solana/rpc-types';
+import { GetProgramAccountsApi } from '@solana/rpc-core';
+import { Rpc } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
-import { GraphQLResolveInfo } from 'graphql';
 
-import type { Rpc } from '../context';
-import { cacheKeyFn } from './common/cache-key-fn';
-import { onlyPresentFieldRequested } from './common/resolve-info';
-import { transformLoadedAccount } from './transformers/account';
+import { cacheKeyFn, ProgramAccountsLoader, ProgramAccountsLoaderArgs, ProgramAccountsLoaderValue } from './loader';
 
-export type ProgramAccountsLoaderArgs = {
-    programAddress: Address;
-    commitment?: Commitment;
-    dataSlice?: DataSlice;
-    encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
-    filters: (GetProgramAccountsMemcmpFilter | GetProgramAccountsDatasizeFilter)[];
-    minContextSlot?: Slot;
-};
-
-/* Normalizes RPC optional configs to use GraphQL API defaults */
-function normalizeArgs({
-    commitment = 'confirmed',
+function applyDefaultArgs({
+    commitment,
     dataSlice,
     encoding = 'jsonParsed',
     filters,
     minContextSlot,
     programAddress,
-}: ProgramAccountsLoaderArgs) {
-    return { commitment, dataSlice, encoding, filters, minContextSlot, programAddress };
+}: ProgramAccountsLoaderArgs): ProgramAccountsLoaderArgs {
+    return {
+        commitment,
+        dataSlice,
+        encoding,
+        filters,
+        minContextSlot,
+        programAddress,
+    };
 }
 
-/* Load a program's accounts from the RPC, transform them, then return them */
-async function loadProgramAccounts(rpc: Rpc, { programAddress, ...config }: ReturnType<typeof normalizeArgs>) {
-    const programAccounts = await rpc
-        .getProgramAccounts(programAddress, config)
-        .send()
-        .catch(e => {
-            throw e;
-        });
-
-    return programAccounts.map(programAccount =>
-        transformLoadedAccount({
-            account: programAccount.account,
-            address: programAccount.pubkey,
-            encoding: config.encoding,
-        }),
-    );
+async function loadProgramAccounts(
+    rpc: Rpc<GetProgramAccountsApi>,
+    { programAddress, ...config }: ProgramAccountsLoaderArgs,
+): Promise<ProgramAccountsLoaderValue> {
+    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+    return await rpc
+        .getProgramAccounts(
+            programAddress,
+            // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+            config,
+        )
+        .send();
 }
 
-function createProgramAccountsBatchLoadFn(rpc: Rpc) {
+function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>) {
     const resolveProgramAccountsUsingRpc = loadProgramAccounts.bind(null, rpc);
-    return async (programAccountsQueryArgs: readonly ReturnType<typeof normalizeArgs>[]) => {
+    return async (programAccountsQueryArgs: readonly ProgramAccountsLoaderArgs[]) => {
         return await Promise.all(
-            programAccountsQueryArgs.map(async args => await resolveProgramAccountsUsingRpc(args)),
+            programAccountsQueryArgs.map(async args => await resolveProgramAccountsUsingRpc(applyDefaultArgs(args))),
         );
     };
 }
 
-export function createProgramAccountsLoader(rpc: Rpc) {
+export function createProgramAccountsLoader(rpc: Rpc<GetProgramAccountsApi>): ProgramAccountsLoader {
     const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async (args: ProgramAccountsLoaderArgs, info?: GraphQLResolveInfo) => {
-            if (onlyPresentFieldRequested('programAddress', info)) {
-                // If a user only requests the program's address,
-                // don't call the RPC or the cache
-                return { programAddress: args.programAddress };
-            }
-            return loader.load(normalizeArgs(args));
-        },
+        load: async args => loader.load(applyDefaultArgs(args)),
     };
 }
