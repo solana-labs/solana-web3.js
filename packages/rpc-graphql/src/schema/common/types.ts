@@ -1,5 +1,3 @@
-import { resolveAccount } from '../../resolvers/account';
-
 export const commonTypeDefs = /* GraphQL */ `
     enum AccountEncoding {
         BASE_58
@@ -60,25 +58,3 @@ export const commonTypeDefs = /* GraphQL */ `
         ZERO
     }
 `;
-
-export const commonResolvers = {
-    AccountEncoding: {
-        BASE_58: 'base58',
-        BASE_64: 'base64',
-        BASE_64_ZSTD: 'base64+zstd',
-        PARSED: 'jsonParsed',
-    },
-    TokenBalance: {
-        mint: resolveAccount('mint'),
-        owner: resolveAccount('owner'),
-    },
-    TransactionEncoding: {
-        BASE_58: 'base58',
-        BASE_64: 'base64',
-        PARSED: 'jsonParsed',
-    },
-    TransactionVersion: {
-        LEGACY: 'legacy',
-        ZERO: 0,
-    },
-};
