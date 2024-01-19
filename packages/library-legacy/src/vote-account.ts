@@ -56,10 +56,18 @@ export type BlockTimestamp = Readonly<{
   timestamp: number;
 }>;
 
+// https://github.com/solana-labs/solana/blob/v1.17/sdk/program/src/vote/state/vote_state_versions.rs#L4
+type VoteAccountVersions = 'V0_23_5' | 'V1_14_11' | 'CURRENT' | 'UNKNOWN'
+type VoteAccountVersion = Readonly<Record<VoteAccountVersions, {}>>
+const VoteAccountVersionLayout = BufferLayout.union(BufferLayout.u32(), BufferLayout.struct([BufferLayout.u32()]));
+VoteAccountVersionLayout.addVariant(0, BufferLayout.struct([]), 'V0_23_5');
+VoteAccountVersionLayout.addVariant(1, BufferLayout.struct([]), 'V1_14_11');
+VoteAccountVersionLayout.addVariant(2, BufferLayout.struct([]), 'CURRENT');
+
 /**
  * See https://github.com/solana-labs/solana/blob/v1.17.15/sdk/program/src/vote/state/vote_state_1_14_11.rs#L8
  */
-type VoteAccountData_0_14_11 = Readonly<{
+type VoteAccountData_1_14_11 = Readonly<{
   authorizedVoters: AuthorizedVoterRaw[];
   authorizedWithdrawer: Uint8Array;
   commission: number;
@@ -92,7 +100,7 @@ type VoteAccountData_0_23_5 = Readonly<{
  *
  * @internal
  */
-const VoteAccountLayout_0_14_11 = BufferLayout.struct<VoteAccountData_0_14_11>([
+const VoteAccountLayout_1_14_11 = BufferLayout.struct<VoteAccountData_1_14_11>([
   Layout.publicKey('nodePubkey'),
   Layout.publicKey('authorizedWithdrawer'),
   BufferLayout.u8('commission'),
@@ -249,41 +257,35 @@ export class VoteAccount {
     buffer: Buffer | Uint8Array | Array<number>,
   ): VoteAccount {
     const versionOffset = 4;
-    let va: VoteAccountData_0_14_11 | VoteAccountData_0_23_5;
-    try {
-      va = VoteAccountLayout_0_14_11.decode(toBuffer(buffer), versionOffset);
-    } catch (err) {
-      va = VoteAccountLayout_0_23_05.decode(toBuffer(buffer), versionOffset);
+    const version = VoteAccountVersionLayout.decode(toBuffer(buffer), 0) as VoteAccountVersion
+
+    let voteAccountData: VoteAccountData_1_14_11 | VoteAccountData_0_23_5;
+    let authorizedVoters: AuthorizedVoter[] = [];
+    if (version.V0_23_5) {
+      voteAccountData = VoteAccountLayout_0_23_05.decode(toBuffer(buffer), versionOffset)
+      authorizedVoters = [{
+        epoch: voteAccountData.authorizedVoterEpoch,
+        authorizedVoter: new PublicKey(voteAccountData.authorizedVoter)
+      }];
+    } else if (version.V1_14_11 || version.CURRENT) {
+      voteAccountData = VoteAccountLayout_1_14_11.decode(toBuffer(buffer), versionOffset)
+      authorizedVoters = voteAccountData.authorizedVoters.map(parseAuthorizedVoter)
+    } else {
+      throw new Error(`fromAccountData: unknown vote account version: ${JSON.stringify(version)}`)
     }
 
-    let authorizedVoters: AuthorizedVoter[] = [];
-    if (isData0_23_5(va)) {
-         authorizedVoters = [{
-          epoch: va.authorizedVoterEpoch,
-          authorizedVoter: new PublicKey(va.authorizedVoter)
-        }];
-      } else {
-        authorizedVoters = va.authorizedVoters.map(parseAuthorizedVoter);
-      }
-
     return new VoteAccount({
-      nodePubkey: new PublicKey(va.nodePubkey),
-      authorizedWithdrawer: new PublicKey(va.authorizedWithdrawer),
-      commission: va.commission,
-      votes: va.votes,
-      rootSlot: va.rootSlot,
+      nodePubkey: new PublicKey(voteAccountData.nodePubkey),
+      authorizedWithdrawer: new PublicKey(voteAccountData.authorizedWithdrawer),
+      commission: voteAccountData.commission,
+      votes: voteAccountData.votes,
+      rootSlot: voteAccountData.rootSlot,
       authorizedVoters,
-      priorVoters: getPriorVoters(va.priorVoters),
-      epochCredits: va.epochCredits,
-      lastTimestamp: va.lastTimestamp,
+      priorVoters: getPriorVoters(voteAccountData.priorVoters),
+      epochCredits: voteAccountData.epochCredits,
+      lastTimestamp: voteAccountData.lastTimestamp,
     });
   }
-}
-
-function isData0_23_5(
-  vad: VoteAccountData_0_14_11 | VoteAccountData_0_23_5
-): vad is VoteAccountData_0_23_5 {
-  return 'authorizedVoter' in vad && 'authorizedVoterEpoch' in vad
 }
 
 function parseAuthorizedVoter({
