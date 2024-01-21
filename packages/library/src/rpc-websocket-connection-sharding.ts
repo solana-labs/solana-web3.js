@@ -2,21 +2,24 @@ import type { IRpcWebSocketTransport } from '@solana/rpc-transport';
 
 import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
 
-type Config = Readonly<{
+type Config<TTransport extends IRpcWebSocketTransport> = Readonly<{
     /**
      * You might like to open more subscriptions per connection than your RPC provider allows for.
      * Using the initial payload as input, return a shard key from this method to assign
      * subscriptions to separate connections. One socket will be opened per shard key.
      */
     getShard?: (payload: unknown) => string | symbol;
-    transport: IRpcWebSocketTransport;
+    transport: TTransport;
 }>;
 
 const NULL_SHARD_CACHE_KEY = Symbol(
     __DEV__ ? 'Cache key to use when there is no connection sharding strategy' : undefined,
 );
 
-export function getWebSocketTransportWithConnectionSharding({ getShard, transport }: Config): IRpcWebSocketTransport {
+export function getWebSocketTransportWithConnectionSharding<TTransport extends IRpcWebSocketTransport>({
+    getShard,
+    transport,
+}: Config<TTransport>): TTransport {
     return getCachedAbortableIterableFactory({
         getAbortSignalFromInputArgs: ({ signal }) => signal,
         getCacheEntryMissingError(shardKey) {
@@ -30,5 +33,5 @@ export function getWebSocketTransportWithConnectionSharding({ getShard, transpor
                 ...config,
                 signal: abortSignal,
             }),
-    });
+    }) as TTransport;
 }

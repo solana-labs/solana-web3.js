@@ -7,9 +7,16 @@ import {
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
-import { createJsonRpc, createJsonSubscriptionRpc, IRpcTransport, type RpcFromTransport } from '@solana/rpc-transport';
-import { IRpcTransportWithCluster } from '@solana/rpc-transport/dist/types/transports/transport-types';
-import type { RpcSubscriptions } from '@solana/rpc-types';
+import {
+    createJsonRpc,
+    createJsonSubscriptionRpc,
+    IRpcTransport,
+    IRpcTransportWithCluster,
+    IRpcWebSocketTransport,
+    IRpcWebSocketTransportWithCluster,
+    RpcFromTransport,
+    RpcSubscriptionsFromTransport,
+} from '@solana/rpc-transport';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
@@ -31,9 +38,13 @@ export function createSolanaRpc<TTransport extends IRpcTransport | IRpcTransport
     }) as RpcFromTransport<SolanaRpcMethodsFromTransport<TTransport>, TTransport>;
 }
 
-export function createSolanaRpcSubscriptions(
-    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>,
-): RpcSubscriptions<SolanaRpcSubscriptions> {
+type RpcSubscriptionsConfig<TTransport extends IRpcWebSocketTransport | IRpcWebSocketTransportWithCluster> = Readonly<{
+    transport: TTransport;
+}>;
+
+export function createSolanaRpcSubscriptions<
+    TTransport extends IRpcWebSocketTransport | IRpcWebSocketTransportWithCluster,
+>(config: RpcSubscriptionsConfig<TTransport>): RpcSubscriptionsFromTransport<SolanaRpcSubscriptions, TTransport> {
     return pipe(
         createJsonSubscriptionRpc({
             ...config,
@@ -44,14 +55,16 @@ export function createSolanaRpcSubscriptions(
                 getDeduplicationKey: (...args) => fastStableStringify(args),
                 rpcSubscriptions,
             }),
-    );
+    ) as RpcSubscriptionsFromTransport<SolanaRpcSubscriptions, TTransport>;
 }
 
-export function createSolanaRpcSubscriptions_UNSTABLE(
-    config: Omit<Parameters<typeof createJsonSubscriptionRpc>[0], 'api'>,
-): RpcSubscriptions<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
+export function createSolanaRpcSubscriptions_UNSTABLE<
+    TTransport extends IRpcWebSocketTransport | IRpcWebSocketTransportWithCluster,
+>(
+    config: RpcSubscriptionsConfig<TTransport>,
+): RpcSubscriptionsFromTransport<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable, TTransport> {
     return createJsonSubscriptionRpc({
         ...config,
         api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
-    });
+    }) as RpcSubscriptionsFromTransport<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable, TTransport>;
 }

@@ -1,8 +1,8 @@
 import type { IRpcWebSocketTransport } from '@solana/rpc-transport';
 
-type Config = Readonly<{
+type Config<TTransport extends IRpcWebSocketTransport> = Readonly<{
     intervalMs: number;
-    transport: IRpcWebSocketTransport;
+    transport: TTransport;
 }>;
 
 const PING_PAYLOAD = {
@@ -10,12 +10,15 @@ const PING_PAYLOAD = {
     method: 'ping',
 } as const;
 
-export function getWebSocketTransportWithAutoping({ intervalMs, transport }: Config): IRpcWebSocketTransport {
+export function getWebSocketTransportWithAutoping<TTransport extends IRpcWebSocketTransport>({
+    intervalMs,
+    transport,
+}: Config<TTransport>): TTransport {
     const pingableConnections = new Map<
         Awaited<ReturnType<IRpcWebSocketTransport>>,
         Awaited<ReturnType<IRpcWebSocketTransport>>
     >();
-    return async (...args) => {
+    return (async (...args) => {
         const connection = await transport(...args);
         let intervalId: number | undefined;
         function sendPing() {
@@ -72,5 +75,5 @@ export function getWebSocketTransportWithAutoping({ intervalMs, transport }: Con
             }
         }
         return pingableConnections.get(connection)!;
-    };
+    }) as TTransport;
 }

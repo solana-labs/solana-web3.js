@@ -1,11 +1,16 @@
 import { pipe } from '@solana/functional';
-import { createWebSocketTransport, type IRpcWebSocketTransport } from '@solana/rpc-transport';
+import { createWebSocketTransport } from '@solana/rpc-transport';
+import { ClusterUrl } from '@solana/rpc-types';
 
 import { getWebSocketTransportWithAutoping } from './rpc-websocket-autopinger';
 import { getWebSocketTransportWithConnectionSharding } from './rpc-websocket-connection-sharding';
 
-export function createDefaultRpcSubscriptionsTransport(
-    config: Omit<Parameters<typeof createWebSocketTransport>[0], 'sendBufferHighWatermark'> & {
+type Config<TClusterUrl extends ClusterUrl> = Readonly<{
+    url: TClusterUrl;
+}>;
+
+export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends ClusterUrl>(
+    config: Config<TClusterUrl> & {
         /**
          * You might like to open more subscriptions per connection than your RPC provider allows
          * for. Using the initial payload as input, return a shard key from this method to assign
@@ -15,10 +20,10 @@ export function createDefaultRpcSubscriptionsTransport(
         intervalMs?: number;
         sendBufferHighWatermark?: number;
     },
-): IRpcWebSocketTransport {
+) {
     const { getShard, intervalMs, ...rest } = config;
     return pipe(
-        createWebSocketTransport({
+        createWebSocketTransport<TClusterUrl>({
             ...rest,
             sendBufferHighWatermark:
                 config.sendBufferHighWatermark ??
