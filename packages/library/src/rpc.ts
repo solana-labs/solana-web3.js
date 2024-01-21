@@ -3,12 +3,12 @@ import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
     createSolanaRpcSubscriptionsApi_UNSTABLE,
-    SolanaRpcMethods,
+    SolanaRpcMethodsFromTransport,
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
 import { createJsonRpc, createJsonSubscriptionRpc } from '@solana/rpc-transport';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import type { RpcFromTransport, RpcSubscriptions } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
@@ -16,11 +16,14 @@ import fastStableStringify from 'fast-stable-stringify';
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
 
-export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
+export function createSolanaRpc<TConfig extends Omit<Parameters<typeof createJsonRpc>[0], 'api'>>(
+    config: TConfig,
+): RpcFromTransport<SolanaRpcMethodsFromTransport<TConfig['transport']>, TConfig['transport']> {
+    const api = createSolanaRpcApi<SolanaRpcMethodsFromTransport<TConfig['transport']>>(DEFAULT_RPC_CONFIG);
     return createJsonRpc({
         ...config,
-        api: createSolanaRpcApi(DEFAULT_RPC_CONFIG),
-    });
+        api,
+    }) as RpcFromTransport<SolanaRpcMethodsFromTransport<TConfig['transport']>, TConfig['transport']>;
 }
 
 export function createSolanaRpcSubscriptions(
