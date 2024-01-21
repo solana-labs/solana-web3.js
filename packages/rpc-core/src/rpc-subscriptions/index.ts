@@ -24,10 +24,10 @@ export type SolanaRpcSubscriptions = AccountNotificationsApi &
     SlotNotificationsApi;
 export type SolanaRpcSubscriptionsUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
-export function createSolanaRpcSubscriptionsApi_INTERNAL(
-    config?: Config,
-): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
-    return createJsonRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>({
+export function createSolanaRpcSubscriptionsApi_INTERNAL<
+    TRpcSubscriptions extends SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable,
+>(config?: Config): IRpcSubscriptionsApi<TRpcSubscriptions> {
+    return createJsonRpcSubscriptionsApi<TRpcSubscriptions>({
         parametersTransformer: getParamsPatcherForSolanaLabsRpc(config) as (params: unknown[]) => unknown[],
         responseTransformer: patchResponseForSolanaLabsRpcSubscriptions,
         subscribeNotificationNameTransformer: (notificationName: string) =>
@@ -38,15 +38,13 @@ export function createSolanaRpcSubscriptionsApi_INTERNAL(
 }
 
 export function createSolanaRpcSubscriptionsApi(config?: Config): IRpcSubscriptionsApi<SolanaRpcSubscriptions> {
-    return createSolanaRpcSubscriptionsApi_INTERNAL(config) as IRpcSubscriptionsApi<SolanaRpcSubscriptions>;
+    return createSolanaRpcSubscriptionsApi_INTERNAL(config);
 }
 
 export function createSolanaRpcSubscriptionsApi_UNSTABLE(
     config?: Config,
 ): IRpcSubscriptionsApi<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable> {
-    return createSolanaRpcSubscriptionsApi_INTERNAL(config) as IRpcSubscriptionsApi<
-        SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable
-    >;
+    return createSolanaRpcSubscriptionsApi_INTERNAL(config);
 }
 
 export type {
