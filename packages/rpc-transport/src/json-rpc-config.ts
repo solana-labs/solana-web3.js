@@ -1,6 +1,11 @@
 import { IRpcApi, IRpcSubscriptionsApi } from '@solana/rpc-types';
 
-import { IRpcTransport, IRpcTransportWithCluster, IRpcWebSocketTransport } from './transports/transport-types';
+import {
+    IRpcTransport,
+    IRpcTransportWithCluster,
+    IRpcWebSocketTransport,
+    IRpcWebSocketTransportWithCluster,
+} from './transports/transport-types';
 
 export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
@@ -9,5 +14,5 @@ export type RpcConfig<TRpcMethods> = Readonly<{
 
 export type RpcSubscriptionConfig<TRpcMethods> = Readonly<{
     api: IRpcSubscriptionsApi<TRpcMethods>;
-    transport: IRpcWebSocketTransport;
+    transport: IRpcWebSocketTransport | IRpcWebSocketTransportWithCluster;
 }>;
