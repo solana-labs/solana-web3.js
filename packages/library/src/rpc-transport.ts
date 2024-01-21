@@ -1,6 +1,6 @@
 import { pipe } from '@solana/functional';
 import { createHttpTransport } from '@solana/rpc-transport';
-import type { IRpcTransport } from '@solana/rpc-types';
+import { IRpcTransportFromClusterUrl } from '@solana/rpc-types';
 
 import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
@@ -18,7 +18,9 @@ function normalizeHeaders<T extends Record<string, string>>(
     return out as { [K in keyof T & string as Lowercase<K>]: T[K] };
 }
 
-export function createDefaultRpcTransport(config: Parameters<typeof createHttpTransport>[0]): IRpcTransport {
+export function createDefaultRpcTransport<TConfig extends Parameters<typeof createHttpTransport>[0]>(
+    config: TConfig,
+): IRpcTransportFromClusterUrl<TConfig['url']> {
     return pipe(
         createHttpTransport({
             ...config,
@@ -31,5 +33,5 @@ export function createDefaultRpcTransport(config: Parameters<typeof createHttpTr
             },
         }),
         transport => getRpcTransportWithRequestCoalescing(transport, getSolanaRpcPayloadDeduplicationKey),
-    );
+    ) as IRpcTransportFromClusterUrl<TConfig['url']>;
 }
