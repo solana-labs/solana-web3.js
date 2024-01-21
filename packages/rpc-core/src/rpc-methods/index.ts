@@ -1,5 +1,11 @@
 import { createJsonRpcApi } from '@solana/rpc-transport';
-import { IRpcApi } from '@solana/rpc-types';
+import {
+    IIRpcTransport,
+    IRpcApi,
+    IRpcTransportDevnet,
+    IRpcTransportMainnet,
+    IRpcTransportTestnet,
+} from '@solana/rpc-types';
 
 import { getParamsPatcherForSolanaLabsRpc, ParamsPatcherConfig } from '../params-patcher';
 import { patchResponseForSolanaLabsRpc } from '../response-patcher';
@@ -112,9 +118,25 @@ export type SolanaRpcMethods = GetAccountInfoApi &
     RequestAirdropApi &
     SendTransactionApi &
     SimulateTransactionApi;
+export type SolanaRpcMethodsDevnet = SolanaRpcMethods;
+export type SolanaRpcMethodsTestnet = SolanaRpcMethods;
+export type SolanaRpcMethodsMainnet = Omit<SolanaRpcMethods, 'requestAirdrop'>;
+export type SolanaRpcMethodsFromTransport<TTransport extends IIRpcTransport> = TTransport extends IRpcTransportDevnet
+    ? SolanaRpcMethodsDevnet
+    : TTransport extends IRpcTransportTestnet
+      ? SolanaRpcMethodsTestnet
+      : TTransport extends IRpcTransportMainnet
+        ? SolanaRpcMethodsMainnet
+        : SolanaRpcMethods;
 
-export function createSolanaRpcApi(config?: Config): IRpcApi<SolanaRpcMethods> {
-    return createJsonRpcApi<SolanaRpcMethods>({
+export function createSolanaRpcApi<
+    TRpcMethods extends
+        | SolanaRpcMethods
+        | SolanaRpcMethodsDevnet
+        | SolanaRpcMethodsTestnet
+        | SolanaRpcMethodsMainnet = SolanaRpcMethods,
+>(config?: Config): IRpcApi<TRpcMethods> {
+    return createJsonRpcApi<TRpcMethods>({
         parametersTransformer: getParamsPatcherForSolanaLabsRpc(config) as (params: unknown[]) => unknown[],
         responseTransformer: patchResponseForSolanaLabsRpc,
     });
