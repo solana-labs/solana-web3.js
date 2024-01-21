@@ -1,3 +1,4 @@
+import { ClusterUrl, DevnetUrl, MainnetUrl, TestnetUrl } from './cluster-url';
 import type { Overloads } from './overloads';
 import type { Slot } from './typed-numbers';
 
@@ -12,6 +13,17 @@ type RpcTransportConfig = Readonly<{
 export interface IRpcTransport {
     <TResponse>(config: RpcTransportConfig): Promise<TResponse>;
 }
+export type IRpcTransportDevnet = IRpcTransport & { '~cluster': 'devnet' };
+export type IRpcTransportTestnet = IRpcTransport & { '~cluster': 'testnet' };
+export type IRpcTransportMainnet = IRpcTransport & { '~cluster': 'mainnet' };
+export type IIRpcTransport = IRpcTransport | IRpcTransportDevnet | IRpcTransportTestnet | IRpcTransportMainnet;
+export type IRpcTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClusterUrl extends DevnetUrl
+    ? IRpcTransportDevnet
+    : TClusterUrl extends TestnetUrl
+      ? IRpcTransportTestnet
+      : TClusterUrl extends MainnetUrl
+        ? IRpcTransportMainnet
+        : IRpcTransport;
 
 /**
  * Public RPC API.
@@ -22,7 +34,22 @@ export type IRpcApi<TRpcMethods> = {
 export type IRpcSubscriptionsApi<TRpcSubscriptionMethods> = {
     [MethodName in keyof TRpcSubscriptionMethods]: RpcSubscriptionReturnTypeMapper<TRpcSubscriptionMethods[MethodName]>;
 };
+
 export type Rpc<TRpcMethods> = RpcMethods<TRpcMethods>;
+export type RpcDevnet<TRpcMethods> = RpcMethods<TRpcMethods> & { '~cluster': 'devnet' };
+export type RpcTestnet<TRpcMethods> = RpcMethods<TRpcMethods> & { '~cluster': 'testnet' };
+export type RpcMainnet<TRpcMethods> = RpcMethods<TRpcMethods> & { '~cluster': 'mainnet' };
+export type RpcFromTransport<
+    TRpcMethods,
+    TRpcTransport extends IIRpcTransport,
+> = TRpcTransport extends IRpcTransportDevnet
+    ? RpcDevnet<TRpcMethods>
+    : TRpcTransport extends IRpcTransportTestnet
+      ? RpcTestnet<TRpcMethods>
+      : TRpcTransport extends IRpcTransportMainnet
+        ? RpcMainnet<TRpcMethods>
+        : Rpc<TRpcMethods>;
+
 export type RpcSubscriptions<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods>;
 
 /**
