@@ -1,4 +1,18 @@
-import { PendingRpcRequest, Rpc, RpcRequest, SendOptions } from '@solana/rpc-types';
+import {
+    IRpcApi,
+    IRpcTransport,
+    IRpcTransportDevnet,
+    IRpcTransportMainnet,
+    IRpcTransportTestnet,
+    PendingRpcRequest,
+    Rpc,
+    RpcDevnet,
+    RpcFromTransport,
+    RpcMainnet,
+    RpcRequest,
+    RpcTestnet,
+    SendOptions,
+} from '@solana/rpc-types';
 
 import { RpcConfig } from './json-rpc-config';
 import { SolanaJsonRpcError } from './json-rpc-errors';
@@ -54,6 +68,32 @@ function makeProxy<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMeth
     }) as Rpc<TRpcMethods>;
 }
 
-export function createJsonRpc<TRpcMethods>(rpcConfig: RpcConfig<TRpcMethods>): Rpc<TRpcMethods> {
-    return makeProxy(rpcConfig);
+export function createJsonRpc<TRpcMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcApi<TRpcMethods>;
+        transport: IRpcTransportDevnet;
+    }>,
+): RpcDevnet<TRpcMethods>;
+export function createJsonRpc<TRpcMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcApi<TRpcMethods>;
+        transport: IRpcTransportTestnet;
+    }>,
+): RpcTestnet<TRpcMethods>;
+export function createJsonRpc<TRpcMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcApi<TRpcMethods>;
+        transport: IRpcTransportMainnet;
+    }>,
+): RpcMainnet<TRpcMethods>;
+export function createJsonRpc<TRpcMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcApi<TRpcMethods>;
+        transport: IRpcTransport;
+    }>,
+): Rpc<TRpcMethods>;
+export function createJsonRpc<TRpcMethods, TConfig extends RpcConfig<TRpcMethods>>(
+    rpcConfig: TConfig,
+): RpcFromTransport<TRpcMethods, TConfig['transport']> {
+    return makeProxy(rpcConfig) as RpcFromTransport<TRpcMethods, TConfig['transport']>;
 }
