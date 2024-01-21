@@ -1,4 +1,18 @@
-import { PendingRpcSubscription, RpcSubscription, RpcSubscriptions, SubscribeOptions } from '@solana/rpc-types';
+import {
+    IRpcSubscriptionsApi,
+    IRpcWebSocketTransport,
+    IRpcWebSocketTransportDevnet,
+    IRpcWebSocketTransportMainnet,
+    IRpcWebSocketTransportTestnet,
+    PendingRpcSubscription,
+    RpcSubscription,
+    RpcSubscriptions,
+    RpcSubscriptionsDevnet,
+    RpcSubscriptionsFromTransport,
+    RpcSubscriptionsMainnet,
+    RpcSubscriptionsTestnet,
+    SubscribeOptions,
+} from '@solana/rpc-types';
 
 import { JsonRpcResponse } from './json-rpc';
 import { RpcSubscriptionConfig } from './json-rpc-config';
@@ -136,7 +150,32 @@ function makeProxy<TRpcSubscriptionMethods>(
 }
 
 export function createJsonSubscriptionRpc<TRpcSubscriptionMethods>(
-    rpcConfig: RpcSubscriptionConfig<TRpcSubscriptionMethods>,
-): RpcSubscriptions<TRpcSubscriptionMethods> {
-    return makeProxy(rpcConfig);
+    rpcConfig: Readonly<{
+        api: IRpcSubscriptionsApi<TRpcSubscriptionMethods>;
+        transport: IRpcWebSocketTransportDevnet;
+    }>,
+): RpcSubscriptionsDevnet<TRpcSubscriptionMethods>;
+export function createJsonSubscriptionRpc<TRpcSubscriptionMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcSubscriptionsApi<TRpcSubscriptionMethods>;
+        transport: IRpcWebSocketTransportTestnet;
+    }>,
+): RpcSubscriptionsTestnet<TRpcSubscriptionMethods>;
+export function createJsonSubscriptionRpc<TRpcSubscriptionMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcSubscriptionsApi<TRpcSubscriptionMethods>;
+        transport: IRpcWebSocketTransportMainnet;
+    }>,
+): RpcSubscriptionsMainnet<TRpcSubscriptionMethods>;
+export function createJsonSubscriptionRpc<TRpcSubscriptionMethods>(
+    rpcConfig: Readonly<{
+        api: IRpcSubscriptionsApi<TRpcSubscriptionMethods>;
+        transport: IRpcWebSocketTransport;
+    }>,
+): RpcSubscriptions<TRpcSubscriptionMethods>;
+export function createJsonSubscriptionRpc<
+    TRpcSubscriptionMethods,
+    TConfig extends RpcSubscriptionConfig<TRpcSubscriptionMethods>,
+>(rpcConfig: TConfig): RpcSubscriptionsFromTransport<TRpcSubscriptionMethods, TConfig['transport']> {
+    return makeProxy(rpcConfig) as RpcSubscriptionsFromTransport<TRpcSubscriptionMethods, TConfig['transport']>;
 }

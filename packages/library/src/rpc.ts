@@ -39,7 +39,7 @@ export function createSolanaRpcSubscriptions(
                 getDeduplicationKey: (...args) => fastStableStringify(args),
                 rpcSubscriptions,
             }),
-    );
+    ) as RpcSubscriptions<SolanaRpcSubscriptions>;
 }
 
 export function createSolanaRpcSubscriptions_UNSTABLE(

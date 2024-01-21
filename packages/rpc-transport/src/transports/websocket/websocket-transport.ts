@@ -1,4 +1,4 @@
-import { IRpcWebSocketTransport } from '@solana/rpc-types';
+import { IRpcWebSocketTransport, IRpcWebSocketTransportFromClusterUrl } from '@solana/rpc-types';
 
 import { createWebSocketConnection } from './websocket-connection';
 
@@ -7,7 +7,10 @@ type Config = Readonly<{
     url: string;
 }>;
 
-export function createWebSocketTransport({ sendBufferHighWatermark, url }: Config): IRpcWebSocketTransport {
+export function createWebSocketTransport<TConfig extends Config>({
+    sendBufferHighWatermark,
+    url,
+}: TConfig): IRpcWebSocketTransportFromClusterUrl<TConfig['url']> {
     if (/^wss?:/i.test(url) === false) {
         const protocolMatch = url.match(/^([^:]+):/);
         throw new DOMException(
@@ -29,5 +32,5 @@ export function createWebSocketTransport({ sendBufferHighWatermark, url }: Confi
             [Symbol.asyncIterator]: connection[Symbol.asyncIterator].bind(connection),
             send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: connection.send.bind(connection),
         };
-    };
+    } as IRpcWebSocketTransportFromClusterUrl<TConfig['url']>;
 }

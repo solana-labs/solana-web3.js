@@ -1,4 +1,5 @@
-import { IRpcSubscriptionsApi, IRpcWebSocketTransport, RpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+import { IRpcSubscriptionsApi, RpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+import { IRpcWebSocketTransport } from '@solana/rpc-types';
 
 import { SolanaJsonRpcError } from '../json-rpc-errors';
 import { createJsonRpcMessage } from '../json-rpc-message';

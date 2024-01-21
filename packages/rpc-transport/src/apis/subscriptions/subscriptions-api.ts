@@ -44,5 +44,5 @@ export function createJsonRpcSubscriptionsApi<TRpcSubscriptions extends IRpcApiS
                 };
             };
         },
-    });
+    }) as IRpcSubscriptionsApi<TRpcSubscriptions>;
 }

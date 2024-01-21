@@ -44,6 +44,22 @@ export interface IRpcWebSocketTransport {
         >
     >;
 }
+export type IRpcWebSocketTransportDevnet = IRpcWebSocketTransport & { '~cluster': 'devnet' };
+export type IRpcWebSocketTransportTestnet = IRpcWebSocketTransport & { '~cluster': 'testnet' };
+export type IRpcWebSocketTransportMainnet = IRpcWebSocketTransport & { '~cluster': 'mainnet' };
+export type IIRpcWebSocketTransport =
+    | IRpcWebSocketTransport
+    | IRpcWebSocketTransportDevnet
+    | IRpcWebSocketTransportTestnet
+    | IRpcWebSocketTransportMainnet;
+export type IRpcWebSocketTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClusterUrl extends DevnetUrl
+    ? IRpcWebSocketTransportDevnet
+    : TClusterUrl extends TestnetUrl
+      ? IRpcWebSocketTransportTestnet
+      : TClusterUrl extends MainnetUrl
+        ? IRpcWebSocketTransportMainnet
+        : IRpcWebSocketTransport;
+
 /**
  * Public RPC API.
  */
@@ -70,6 +86,25 @@ export type RpcFromTransport<
         : Rpc<TRpcMethods>;
 
 export type RpcSubscriptions<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods>;
+export type RpcSubscriptionsDevnet<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods> & {
+    '~cluster': 'devnet';
+};
+export type RpcSubscriptionsTestnet<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods> & {
+    '~cluster': 'testnet';
+};
+export type RpcSubscriptionsMainnet<TRpcSubscriptionMethods> = RpcSubscriptionMethods<TRpcSubscriptionMethods> & {
+    '~cluster': 'mainnet';
+};
+export type RpcSubscriptionsFromTransport<
+    TRpcSubscriptionMethods,
+    TRpcTransport extends IIRpcWebSocketTransport,
+> = TRpcTransport extends IRpcWebSocketTransportDevnet
+    ? RpcSubscriptionsDevnet<TRpcSubscriptionMethods>
+    : TRpcTransport extends IRpcWebSocketTransportTestnet
+      ? RpcSubscriptionsTestnet<TRpcSubscriptionMethods>
+      : TRpcTransport extends IRpcWebSocketTransportMainnet
+        ? RpcSubscriptionsMainnet<TRpcSubscriptionMethods>
+        : RpcSubscriptions<TRpcSubscriptionMethods>;
 
 /**
  * Public RPC API methods.
