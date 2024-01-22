@@ -30,39 +30,26 @@ function normalizeArgs({ commitment = 'confirmed', encoding = 'jsonParsed', sign
 async function loadTransaction(rpc: Rpc, { signature, ...config }: ReturnType<typeof normalizeArgs>) {
     const { encoding } = config;
 
-    const transaction = await rpc
-        .getTransaction(
-            signature,
-            // @ts-expect-error FIXME: https://github.com/solana-labs/solana-web3.js/issues/1984
-            config,
-        )
-        .send()
-        .catch(e => {
-            throw e;
-        });
-    if (transaction === null) {
-        return null;
-    }
-
-    // If the requested encoding is `base58` or `base64`,
-    // first fetch the transaction with the requested encoding,
-    // then fetch it again with `jsonParsed` encoding.
-    // This ensures the response always has the full transaction meta.
-    if (encoding !== 'jsonParsed') {
-        const jsonParsedConfig = { ...config, encoding: 'jsonParsed' };
-        const transactionJsonParsed = await rpc
+    const [transaction, transactionJsonParsed] = await Promise.all([
+        rpc
             .getTransaction(
                 signature,
                 // @ts-expect-error FIXME: https://github.com/solana-labs/solana-web3.js/issues/1984
-                jsonParsedConfig,
+                config,
             )
-            .send()
-            .catch(e => {
-                throw e;
-            });
-        if (transactionJsonParsed === null) {
-            return null;
-        }
+            .send(),
+        (async () => {
+            // If the requested encoding is not `jsonParsed`, fetch it a second time with
+            // `jsonParsed` encoding. This ensures the response always has the full transaction meta
+            if (encoding !== 'jsonParsed') {
+                return await rpc.getTransaction(signature, { ...config, encoding: 'jsonParsed' }).send();
+            }
+        })(),
+    ]);
+    if (!transaction) {
+        return null;
+    }
+    if (transactionJsonParsed) {
         transaction.meta = transactionJsonParsed.meta;
     }
 
