@@ -1,5 +1,12 @@
 import { Signature } from '@solana/keys';
-import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
+import {
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetMultipleAccountsApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+    Rpc,
+} from '@solana/rpc';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
@@ -17,7 +24,7 @@ import {
 } from './__setup__';
 
 describe('transaction', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
 
     // Random signature for testing.

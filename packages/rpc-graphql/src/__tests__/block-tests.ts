@@ -1,4 +1,11 @@
-import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
+import {
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetMultipleAccountsApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+    Rpc,
+} from '@solana/rpc';
 import type { Slot } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
@@ -15,7 +22,7 @@ import {
 } from './__setup__';
 
 describe('block', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
 
     // Random slot for testing.
