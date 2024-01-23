@@ -42,12 +42,13 @@ describe('transaction', () => {
     });
 
     describe('basic queries', () => {
-        it("can query a transaction's slot", async () => {
+        it('can query a transaction', async () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
                 query testQuery {
                     transaction(signature: "${defaultTransactionSignature}") {
+                        blockTime
                         slot
                     }
                 }
@@ -56,6 +57,7 @@ describe('transaction', () => {
             expect(result).toMatchObject({
                 data: {
                     transaction: {
+                        blockTime: expect.any(BigInt),
                         slot: expect.any(BigInt),
                     },
                 },
