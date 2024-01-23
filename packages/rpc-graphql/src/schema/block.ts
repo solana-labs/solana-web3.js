@@ -26,7 +26,7 @@ export const blockTypeDefs = /* GraphQL */ `
     interface Block {
         blockhash: String
         blockHeight: BigInt
-        blockTime: Int
+        blockTime: BigInt
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
@@ -39,7 +39,7 @@ export const blockTypeDefs = /* GraphQL */ `
     type BlockWithAccounts implements Block {
         blockhash: String
         blockHeight: BigInt
-        blockTime: Int
+        blockTime: BigInt
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
@@ -53,7 +53,7 @@ export const blockTypeDefs = /* GraphQL */ `
     type BlockWithFull implements Block {
         blockhash: String
         blockHeight: BigInt
-        blockTime: Int
+        blockTime: BigInt
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
@@ -67,7 +67,7 @@ export const blockTypeDefs = /* GraphQL */ `
     type BlockWithNone implements Block {
         blockhash: String
         blockHeight: BigInt
-        blockTime: Int
+        blockTime: BigInt
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]
@@ -80,7 +80,7 @@ export const blockTypeDefs = /* GraphQL */ `
     type BlockWithSignatures implements Block {
         blockhash: String
         blockHeight: BigInt
-        blockTime: Int
+        blockTime: BigInt
         parentSlot: BigInt
         previousBlockhash: String
         rewards: [Reward]

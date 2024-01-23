@@ -109,7 +109,7 @@ describe('block', () => {
             expect(result).toMatchObject({
                 data: {
                     block: {
-                        blockTime: expect.any(Number),
+                        blockTime: expect.any(BigInt),
                     },
                 },
             });
