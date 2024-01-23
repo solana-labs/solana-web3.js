@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 
+import { createRpcGraphQL } from './index';
 import { createAccountLoader } from './loaders/account';
 import { AccountLoaderArgs } from './loaders/account';
 import { createBlockLoader } from './loaders/block';
@@ -8,7 +9,6 @@ import { createProgramAccountsLoader } from './loaders/program-accounts';
 import { ProgramAccountsLoaderArgs } from './loaders/program-accounts';
 import { createTransactionLoader } from './loaders/transaction';
 import { TransactionLoaderArgs } from './loaders/transaction';
-import { createRpcGraphQL } from './rpc';
 
 export type Rpc = Parameters<typeof createRpcGraphQL>[0];
 
