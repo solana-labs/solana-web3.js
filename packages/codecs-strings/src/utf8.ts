@@ -14,9 +14,9 @@ import { removeNullCharacters } from './null-characters';
 export const getUtf8Encoder = (): VariableSizeEncoder<string> => {
     let textEncoder: TextEncoder;
     return createEncoder({
-        getSizeFromValue: value => (textEncoder ||= new TextEncoder()).encode(value).length,
+        getSizeFromValue: value => (textEncoder =textEncoder || new TextEncoder()).encode(value).length,
         write: (value: string, bytes, offset) => {
-            const bytesToAdd = (textEncoder ||= new TextEncoder()).encode(value);
+            const bytesToAdd = (textEncoder =textEncoder || new TextEncoder()).encode(value);
             bytes.set(bytesToAdd, offset);
             return offset + bytesToAdd.length;
         },
@@ -28,7 +28,7 @@ export const getUtf8Decoder = (): VariableSizeDecoder<string> => {
     let textDecoder: TextDecoder;
     return createDecoder({
         read(bytes, offset) {
-            const value = (textDecoder ||= new TextDecoder()).decode(bytes.slice(offset));
+            const value = (textDecoder = textDecoder || new TextDecoder()).decode(bytes.slice(offset));
             return [removeNullCharacters(value), bytes.length];
         },
     });
