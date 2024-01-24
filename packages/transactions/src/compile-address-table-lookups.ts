@@ -15,7 +15,7 @@ export function getCompiledAddressTableLookups(orderedAccounts: OrderedAccounts)
         if (!('lookupTableAddress' in account)) {
             continue;
         }
-        const entry = (index[account.lookupTableAddress] ||= {
+        const entry = (index[account.lookupTableAddress] = index[account.lookupTableAddress] || {
             readableIndices: [],
             writableIndices: [],
         });
