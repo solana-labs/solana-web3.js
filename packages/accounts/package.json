@@ -65,7 +65,6 @@
         "@solana/addresses": "workspace:*",
         "@solana/codecs-core": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
-        "@solana/rpc-core": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
     "devDependencies": {

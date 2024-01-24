@@ -1,5 +1,4 @@
-import { Address } from '@solana/addresses';
-import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
+import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-types';
 
 import {
@@ -8,7 +7,8 @@ import {
     fetchJsonParsedAccount,
     fetchJsonParsedAccounts,
 } from '../fetch-account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
+import type { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from '../rpc-api';
 
 const rpc = {} as Rpc<GetAccountInfoApi & GetMultipleAccountsApi>;
 const address = '1111' as Address<'1111'>;

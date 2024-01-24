@@ -43,9 +43,6 @@ importers:
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
-      '@solana/rpc-core':
-        specifier: workspace:*
-        version: link:../rpc-core
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types

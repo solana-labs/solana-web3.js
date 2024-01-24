@@ -1,14 +1,15 @@
 import type { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Encoder } from '@solana/codecs-strings';
+
+import type { Account, BaseAccount, EncodedAccount } from './account';
+import { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
-} from '@solana/rpc-core/dist/types/rpc-methods/common';
-
-import type { Account, BaseAccount, EncodedAccount } from './account';
-import { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
+    JsonParsedDataResponse,
+} from './rpc-api';
 
 type Base64EncodedRpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 
@@ -50,8 +51,7 @@ export function parseBase58RpcAccount<TAddress extends string = string>(
     return Object.freeze({ ...parseBaseAccount(rpcAccount), address, data, exists: true });
 }
 
-type JsonParsedRpcAccount = AccountInfoBase & { readonly data: JsonParsedData<unknown> };
-type JsonParsedData<TData> = { readonly parsed: { readonly info: TData } };
+type JsonParsedRpcAccount = AccountInfoBase & { readonly data: JsonParsedDataResponse<unknown> };
 
 /** Parse an account object received from a json-parsed RPC call into an Account or MaybeAccount type. */
 export function parseJsonRpcAccount<TData extends object, TAddress extends string = string>(
