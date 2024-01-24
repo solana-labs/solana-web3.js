@@ -106,7 +106,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                     // Consider using the new LOOKUP_TABLE if its address is different...
                                     entry.lookupTableAddress !== accountMeta.lookupTableAddress &&
                                     // ...and sorts before the existing one.
-                                    (addressComparator ||= getAddressComparator())(
+                                    (addressComparator = addressComparator || getAddressComparator())(
                                         accountMeta.lookupTableAddress,
                                         entry.lookupTableAddress,
                                     ) < 0;
@@ -225,7 +225,7 @@ export function getOrderedAccountsFromAddressMap(addressMap: AddressMap): Ordere
                 return leftIsWritable ? -1 : 1;
             }
             // STEP 3: Sort by address.
-            addressComparator ||= getAddressComparator();
+            addressComparator = addressComparator || getAddressComparator();
             if (
                 leftEntry[TYPE] === AddressMapEntryType.LOOKUP_TABLE &&
                 rightEntry[TYPE] === AddressMapEntryType.LOOKUP_TABLE &&
