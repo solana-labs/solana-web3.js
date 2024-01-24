@@ -6022,7 +6022,9 @@ export class Connection {
     }
     const stateChangeCallbacks = (this._subscriptionStateChangeCallbacksByHash[
       hash
-    ] ||= new Set());
+    ] = this._subscriptionStateChangeCallbacksByHash[
+      hash
+    ] || new Set());
     stateChangeCallbacks.add(callback);
     return () => {
       stateChangeCallbacks.delete(callback);
