@@ -73,7 +73,7 @@ function createKeyPairFromBytes(
     keyUsages: readonly KeyUsage[],
 ): CryptoKeyPair {
     const keyPair = createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(extractable, keyUsages);
-    const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+    const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT = storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT || new WeakMap());
     cache.set(keyPair.privateKey, bytes);
     cache.set(keyPair.publicKey, bytes);
     return keyPair;
@@ -122,7 +122,7 @@ function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key: CryptoKey): Uint8Arr
 
 async function getPublicKeyBytes(key: CryptoKey): Promise<Uint8Array> {
     // Try to find the key in the public key store first
-    const publicKeyStore = (publicKeyBytesStore ||= new WeakMap());
+    const publicKeyStore = (publicKeyBytesStore = publicKeyBytesStore || new WeakMap());
     const fromPublicStore = publicKeyStore.get(key);
     if (fromPublicStore) return fromPublicStore;
 
@@ -221,7 +221,7 @@ export function importKeyPolyfill(
             usages: Object.freeze(keyUsages.filter(usage => usage === 'verify')) as KeyUsage[],
         } as CryptoKey;
 
-        const cache = (publicKeyBytesStore ||= new WeakMap());
+        const cache = (publicKeyBytesStore =publicKeyBytesStore || new WeakMap());
         cache.set(publicKey, bytes);
 
         return publicKey;
@@ -250,7 +250,7 @@ export function importKeyPolyfill(
             usages: Object.freeze(keyUsages.filter(usage => usage === 'sign')) as KeyUsage[],
         } as CryptoKey;
 
-        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+        const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT = storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT || new WeakMap());
         cache.set(privateKey, secretKeyBytes);
 
         return privateKey;
