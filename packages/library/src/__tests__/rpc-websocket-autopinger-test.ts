@@ -21,7 +21,7 @@ describe('getWebSocketTransportWithAutoping', () => {
             async *[Symbol.asyncIterator]() {
                 try {
                     while (true) {
-                        yield (resultPromise ||= new Promise((resolve, reject) => {
+                        yield (resultPromise = resultPromise || new Promise((resolve, reject) => {
                             killConnection = () => {
                                 reject('error');
                             };
