@@ -96,7 +96,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                         return {
                             ...iterable,
                             async *[Symbol.asyncIterator]() {
-                                abortPromise ||= abortSignal.aborted
+                                abortPromise = abortPromise || abortSignal.aborted
                                     ? Promise.reject(EXPLICIT_ABORT_TOKEN)
                                     : new Promise<never>((_, reject) => {
                                           abortSignal.addEventListener('abort', () => {
