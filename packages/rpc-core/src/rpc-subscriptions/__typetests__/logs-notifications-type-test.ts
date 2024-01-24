@@ -2,9 +2,8 @@
 
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+import type { PendingRpcSubscription, RpcResponse, RpcSubscriptions } from '@solana/rpc-types';
 
-import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
 import { LogsNotificationsApi } from '../logs-notifications';
 

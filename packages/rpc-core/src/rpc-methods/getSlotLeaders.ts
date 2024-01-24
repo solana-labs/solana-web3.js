@@ -1,7 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { Address } from '@solana/addresses';
+import type { IRpcApiMethods, Slot } from '@solana/rpc-types';
 
 /** array of Node identity public keys as base-58 encoded strings */
 type GetSlotLeadersApiResponse = Address[];

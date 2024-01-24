@@ -1,6 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import type { IRpcApiMethods, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type PerformanceSample = Readonly<{
     /** Slot in which sample was taken at */

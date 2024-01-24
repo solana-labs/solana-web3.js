@@ -1,7 +1,6 @@
-import { Address } from '@solana/addresses';
-import { Signature } from '@solana/keys';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Signature } from '@solana/keys';
+import type { Commitment, IRpcApiMethods, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type RequestAirdropConfig = Readonly<{
     commitment?: Commitment;

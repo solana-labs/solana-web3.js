@@ -4,10 +4,9 @@ import type {
     GetEpochInfoApi,
     GetSignatureStatusesApi,
     SignatureNotificationsApi,
-    Slot,
     SlotNotificationsApi,
 } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import type { Rpc, RpcSubscriptions, Slot } from '@solana/rpc-types';
 import {
     getSignatureFromTransaction,
     IDurableNonceTransaction,

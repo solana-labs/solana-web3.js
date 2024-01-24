@@ -5,11 +5,12 @@ import {
     Base64EncodedDataResponse,
     Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
+    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
 import { TransactionError } from '../transaction-error';
-import { SignedLamportsAsI64Unsafe, TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import { SignedLamportsAsI64Unsafe, TokenBalance } from './common';
 
 type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */

@@ -4,10 +4,9 @@ import {
     GetBlockApi,
     GetProgramAccountsApi,
     GetTransactionApi,
-    type Slot,
 } from '@solana/rpc-core';
 import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-import type { Rpc } from '@solana/rpc-types';
+import type { Rpc, Slot } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../rpc';

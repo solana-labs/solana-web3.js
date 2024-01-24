@@ -1,6 +1,12 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiSubscriptions } from '@solana/rpc-types';
-import { Base58EncodedBytes, Base64EncodedBytes, Commitment } from '@solana/rpc-types';
+import type {
+    Base58EncodedBytes,
+    Base64EncodedBytes,
+    Commitment,
+    IRpcApiSubscriptions,
+    RpcResponse,
+    U64UnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 import {
     AccountInfoBase,
@@ -9,8 +15,6 @@ import {
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-    RpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
 } from '../rpc-methods/common';
 
 type ProgramNotificationsMemcmpFilterBase58 = Readonly<{

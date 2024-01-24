@@ -1,6 +1,4 @@
-import type { IRpcApiSubscriptions } from '@solana/rpc-types';
-
-import { Slot } from '../rpc-methods/common';
+import type { IRpcApiSubscriptions, Slot } from '@solana/rpc-types';
 
 type SlotNotificationsApiNotification = Readonly<{
     parent: Slot;

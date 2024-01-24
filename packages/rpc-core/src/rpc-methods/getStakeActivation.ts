@@ -1,8 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
-
-import { Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import type { Address } from '@solana/addresses';
+import type { Commitment, IRpcApiMethods, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetStakeActivationApiResponse = Readonly<{
     /** Stake active during the epoch */

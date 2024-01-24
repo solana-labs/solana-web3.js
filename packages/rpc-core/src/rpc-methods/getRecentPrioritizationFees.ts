@@ -1,7 +1,7 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { IRpcApiMethods, Slot } from '@solana/rpc-types';
 
-import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
+import { MicroLamportsUnsafeBeyond2Pow53Minus1 } from './common';
 
 type GetRecentPrioritizationFeesApiResponse = Readonly<{
     /**

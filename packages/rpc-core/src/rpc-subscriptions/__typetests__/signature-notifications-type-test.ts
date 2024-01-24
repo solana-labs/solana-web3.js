@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Signature } from '@solana/keys';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
+import type { PendingRpcSubscription, RpcResponse, RpcSubscriptions } from '@solana/rpc-types';
 
-import { RpcResponse } from '../../rpc-methods/common';
 import { TransactionError } from '../../transaction-error';
 import { SignatureNotificationsApi } from '../signature-notifications';
 

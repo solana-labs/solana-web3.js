@@ -1,6 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
+import type { Commitment, IRpcApiMethods, RpcResponse, Slot } from '@solana/rpc-types';
 
 import {
     AccountInfoBase,
@@ -10,8 +9,6 @@ import {
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
     DataSlice,
-    RpcResponse,
-    Slot,
 } from './common';
 
 type GetAccountInfoApiResponseBase = RpcResponse<AccountInfoBase | null>;

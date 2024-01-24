@@ -1,4 +1,4 @@
-import type { Slot } from '@solana/rpc-core';
+import type { Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';

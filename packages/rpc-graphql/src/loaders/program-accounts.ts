@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Address } from '@solana/addresses';
-import { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter, Slot } from '@solana/rpc-core';
-import { Commitment } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter } from '@solana/rpc-core';
+import type { Commitment, Slot } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 

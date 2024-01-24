@@ -1,7 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { IRpcApiMethods, LamportsUnsafeBeyond2Pow53Minus1, Slot } from '@solana/rpc-types';
 
 type GetBlockCommitmentApiResponse = Readonly<{
     commitment: LamportsUnsafeBeyond2Pow53Minus1[] | null;

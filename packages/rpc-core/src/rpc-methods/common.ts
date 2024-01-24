@@ -4,8 +4,10 @@ import type {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
+    LamportsUnsafeBeyond2Pow53Minus1,
+    TokenAmount,
+    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
-import { LamportsUnsafeBeyond2Pow53Minus1, TokenAmount } from '@solana/rpc-types';
 
 export type DataSlice = Readonly<{
     offset: number;
@@ -18,13 +20,6 @@ export type DataSlice = Readonly<{
 //
 // Spefically being used to denote micro-lamports, which are 0.000001 lamports.
 export type MicroLamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __brand: unique symbol };
-
-export type Slot = U64UnsafeBeyond2Pow53Minus1;
-
-// FIXME(solana-labs/solana/issues/30341) Beware that any value above 9007199254740991 may be
-// truncated or rounded because of a downcast to JavaScript `number` between your calling code and
-// the JSON-RPC transport.
-export type U64UnsafeBeyond2Pow53Minus1 = bigint;
 
 // FIXME(solana-labs/solana/issues/30341) Beware that any value outside of range
 // +/- 9007199254740991 may be truncated or rounded because of a downcast to JavaScript `number`
@@ -39,13 +34,6 @@ export type SignedLamportsAsI64Unsafe = bigint;
 // can be truncated or rounded because of a downcast to JavaScript `number` between your calling
 // code and the JSON-RPC transport.
 export type F64UnsafeSeeDocumentation = number;
-
-export type RpcResponse<TValue> = Readonly<{
-    context: Readonly<{
-        slot: Slot;
-    }>;
-    value: TValue;
-}>;
 
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */

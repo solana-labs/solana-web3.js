@@ -1,8 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
-
-import { RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from './common';
+import type { Commitment, IRpcApiMethods, RpcResponse, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type NumberOfLeaderSlots = U64UnsafeBeyond2Pow53Minus1;
 type NumberOfBlocksProduced = U64UnsafeBeyond2Pow53Minus1;

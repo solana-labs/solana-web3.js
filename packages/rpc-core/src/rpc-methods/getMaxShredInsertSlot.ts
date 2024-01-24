@@ -1,6 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { IRpcApiMethods, Slot } from '@solana/rpc-types';
 
 type GetMaxShredInsertSlotApiResponse = Slot;
 

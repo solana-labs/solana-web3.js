@@ -1,16 +1,19 @@
 import { Address } from '@solana/addresses';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
+    PendingRpcSubscription,
+    RpcResponse,
+    RpcSubscriptions,
+    Slot,
+    U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
-import { RpcResponse, Slot } from '../../rpc-methods/common';
-import { TokenBalance, U64UnsafeBeyond2Pow53Minus1 } from '../../rpc-methods/common';
+import { TokenBalance } from '../../rpc-methods/common';
 import { Reward, TransactionStatus } from '../../rpc-methods/common-transactions';
 import { TransactionError } from '../../transaction-error';
 import { SolanaRpcSubscriptions } from '../index';

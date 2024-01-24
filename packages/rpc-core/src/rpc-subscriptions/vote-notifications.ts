@@ -1,8 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import type { Blockhash, UnixTimestamp } from '@solana/rpc-types';
-
-import { Slot } from '../rpc-methods/common';
+import type { Blockhash, Slot, UnixTimestamp } from '@solana/rpc-types';
 
 type VoteNotificationsApiNotification = Readonly<{
     hash: Blockhash;

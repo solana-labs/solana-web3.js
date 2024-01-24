@@ -1,8 +1,5 @@
-import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
-
-import { Slot } from './common';
+import type { Address } from '@solana/addresses';
+import type { Commitment, IRpcApiMethods, Slot } from '@solana/rpc-types';
 
 /**
  * This return type is a dictionary of validator identities, as base-58 encoded

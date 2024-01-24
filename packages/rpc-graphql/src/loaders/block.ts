@@ -1,5 +1,4 @@
-import { Slot } from '@solana/rpc-core';
-import { Commitment } from '@solana/rpc-types';
+import type { Commitment, Slot } from '@solana/rpc-types';
 import DataLoader from 'dataloader';
 import { GraphQLResolveInfo } from 'graphql';
 
