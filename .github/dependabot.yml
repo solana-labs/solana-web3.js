@@ -5,14 +5,14 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
       interval: daily
-      time: "01:00"
+      time: '01:00'
       timezone: America/Los_Angeles
     labels:
-      - "automerge"
+      - 'automerge'
     commit-message:
-      prefix: "chore:"
+      prefix: 'chore:'
     open-pull-requests-limit: 3
