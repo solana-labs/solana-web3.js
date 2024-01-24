@@ -88,7 +88,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDer
     }
     let textEncoder: TextEncoder;
     const seedBytes = seeds.reduce((acc, seed, ii) => {
-        const bytes = typeof seed === 'string' ? (textEncoder ||= new TextEncoder()).encode(seed) : seed;
+        const bytes = typeof seed === 'string' ? (textEncoder = textEncoder || new TextEncoder()).encode(seed) : seed;
         if (bytes.byteLength > MAX_SEED_LENGTH) {
             // TODO: Coded error.
             throw new Error(`The seed at index ${ii} exceeds the maximum length of 32 bytes`);
