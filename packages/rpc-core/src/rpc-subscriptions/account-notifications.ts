@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+import type { IRpcApiSubscriptions } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
 
 import {

@@ -1,5 +1,6 @@
 import type { Address } from '@solana/addresses';
 import type { Decoder } from '@solana/codecs-core';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from '@solana/rpc-core';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -8,9 +9,7 @@ import type {
     RpcResponse,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-core/dist/types/rpc-methods/common';
-import type { GetAccountInfoApi } from '@solana/rpc-core/dist/types/rpc-methods/getAccountInfo';
-import type { GetMultipleAccountsApi } from '@solana/rpc-core/dist/types/rpc-methods/getMultipleAccounts';
-import type { PendingRpcRequest, Rpc } from '@solana/rpc-transport/dist/types/json-rpc-types';
+import type { PendingRpcRequest, Rpc } from '@solana/rpc-types';
 
 export type Base64RpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 export type Base58RpcAccount = AccountInfoBase & (AccountInfoWithBase58Bytes | AccountInfoWithBase58EncodedData);

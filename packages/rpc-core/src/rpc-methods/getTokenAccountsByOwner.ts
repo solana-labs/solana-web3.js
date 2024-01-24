@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import type { JsonParsedTokenAccount } from '@solana/rpc-parsed-types';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
 
 import {

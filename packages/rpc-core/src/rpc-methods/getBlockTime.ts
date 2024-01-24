@@ -1,4 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import { UnixTimestamp } from '@solana/rpc-types';
 
 import { Slot } from './common';

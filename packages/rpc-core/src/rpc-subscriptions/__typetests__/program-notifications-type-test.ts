@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Address } from '@solana/addresses';
-import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-transport';
+import type { PendingRpcSubscription, RpcSubscriptions } from '@solana/rpc-types';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,

@@ -1,8 +1,7 @@
 import { FetchAccountsConfig, fetchJsonParsedAccounts } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import { GetMultipleAccountsApi } from '@solana/rpc-core';
-import { Rpc } from '@solana/rpc-transport';
-import type { Blockhash } from '@solana/rpc-types';
+import type { Blockhash, Rpc } from '@solana/rpc-types';
 import { decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
 import { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
 

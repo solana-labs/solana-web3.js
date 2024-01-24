@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createPrivateKeyFromBytes } from '@solana/keys';
-import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
-import type { Base58EncodedBytes, Commitment } from '@solana/rpc-types';
+import { createHttpTransport, createJsonRpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
+import type { Base58EncodedBytes, Commitment, Rpc } from '@solana/rpc-types';
 import { Base64EncodedWireTransaction } from '@solana/transactions';
 import fetchMock from 'jest-fetch-mock-fork';
 

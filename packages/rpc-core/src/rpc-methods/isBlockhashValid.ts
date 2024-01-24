@@ -1,4 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import type { Blockhash, Commitment } from '@solana/rpc-types';
 
 import { RpcResponse, Slot } from './common';

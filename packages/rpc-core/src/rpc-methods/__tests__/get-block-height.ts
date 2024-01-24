@@ -1,5 +1,5 @@
-import type { Rpc, SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
+import { createHttpTransport, createJsonRpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
+import type { Rpc } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 

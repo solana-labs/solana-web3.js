@@ -1,4 +1,4 @@
-// import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-transport';
+// import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 // import { createSolanaRpcApi, GetTransactionApi } from '../index';
 

@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 
 import { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from './common';
 

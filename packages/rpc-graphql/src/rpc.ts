@@ -1,5 +1,5 @@
 import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-transport';
+import type { Rpc } from '@solana/rpc-types';
 import { graphql, GraphQLSchema, Source } from 'graphql';
 
 import { createSolanaGraphQLContext, RpcGraphQLContext } from './context';

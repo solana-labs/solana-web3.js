@@ -1,5 +1,5 @@
 import { Signature } from '@solana/keys';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
 
 import { TransactionError } from '../transaction-error';

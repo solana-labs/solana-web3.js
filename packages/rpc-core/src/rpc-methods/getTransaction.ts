@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 import {
     Base58EncodedBytes,
     Base58EncodedDataResponse,

@@ -1,4 +1,5 @@
-import { createHttpTransport, createJsonRpc, type Rpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
+import { createHttpTransport, createJsonRpc, type SolanaJsonRpcErrorCode } from '@solana/rpc-transport';
+import type { Rpc } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createSolanaRpcApi, GetBlockTimeApi } from '../index';

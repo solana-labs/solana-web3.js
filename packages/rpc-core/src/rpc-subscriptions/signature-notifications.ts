@@ -1,5 +1,5 @@
 import { Signature } from '@solana/keys';
-import type { IRpcApiSubscriptions } from '@solana/rpc-transport';
+import type { IRpcApiSubscriptions } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
 
 import { RpcResponse } from '../rpc-methods/common';

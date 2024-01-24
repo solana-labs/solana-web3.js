@@ -1,4 +1,5 @@
-import { createJsonRpcSubscriptionsApi, IRpcSubscriptionsApi } from '@solana/rpc-transport';
+import { createJsonRpcSubscriptionsApi } from '@solana/rpc-transport';
+import { IRpcSubscriptionsApi } from '@solana/rpc-types';
 
 import { getParamsPatcherForSolanaLabsRpc, ParamsPatcherConfig } from '../params-patcher';
 import { patchResponseForSolanaLabsRpcSubscriptions } from '../response-patcher';

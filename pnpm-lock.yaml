@@ -46,9 +46,6 @@ importers:
       '@solana/rpc-core':
         specifier: workspace:*
         version: link:../rpc-core
-      '@solana/rpc-transport':
-        specifier: workspace:*
-        version: link:../rpc-transport
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1551,7 +1548,7 @@ importers:
         version: 1.1.1
 
   packages/rpc-core:
-    devDependencies:
+    dependencies:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
@@ -1561,9 +1558,6 @@ importers:
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
-      '@solana/eslint-config-solana':
-        specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -1579,6 +1573,10 @@ importers:
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
+    devDependencies:
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
       '@swc/jest':
         specifier: ^0.2.29
         version: 0.2.29(@swc/core@1.3.93)
@@ -1793,6 +1791,9 @@ importers:
 
   packages/rpc-transport:
     dependencies:
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
       ws:
         specifier: ^8.14.0
         version: 8.14.0

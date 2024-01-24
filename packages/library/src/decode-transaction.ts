@@ -6,7 +6,7 @@ import {
 } from '@solana/accounts';
 import { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-transport';
+import type { Rpc } from '@solana/rpc-types';
 import {
     type AddressesByLookupTableAddress,
     type CompilableTransaction,

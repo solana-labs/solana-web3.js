@@ -1,5 +1,6 @@
 import { SolanaRpcSubscriptions, SolanaRpcSubscriptionsUnstable } from '@solana/rpc-core';
-import { createJsonSubscriptionRpc, type RpcSubscriptions } from '@solana/rpc-transport';
+import { createJsonSubscriptionRpc } from '@solana/rpc-transport';
+import type { RpcSubscriptions } from '@solana/rpc-types';
 
 import { createSolanaRpcSubscriptions, createSolanaRpcSubscriptions_UNSTABLE } from '../rpc';
 

@@ -1,4 +1,4 @@
-import type { IRpcApiMethods } from '@solana/rpc-transport';
+import type { IRpcApiMethods } from '@solana/rpc-types';
 
 type GetHealthApiResponse = 'ok';
 
