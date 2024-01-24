@@ -14,15 +14,15 @@ if (__NODEJS__) {
      * Node only sets the `crypto` global variable when run with `--experimental-global-webcrypto`.
      * Let's set it unconditionally here.
      */
-    globalThis.crypto ||= cryptoImpl;
+    globalThis.crypto = globalThis.crypto || cryptoImpl;
 }
 
 if (!__BROWSER__ || globalThis.isSecureContext) {
     /**
      * Create `crypto.subtle` if it doesn't exist.
      */
-    const originalCryptoObject = (globalThis.crypto ||= {} as Crypto);
-    const originalSubtleCrypto = ((originalCryptoObject as Crypto & { subtle: SubtleCrypto }).subtle ||=
+    const originalCryptoObject = (globalThis.crypto = globalThis.crypto || {} as Crypto);
+    const originalSubtleCrypto = ((originalCryptoObject as Crypto & { subtle: SubtleCrypto }).subtle = { subtle: SubtleCrypto }).subtle ||
         {} as SubtleCrypto);
 
     /**
