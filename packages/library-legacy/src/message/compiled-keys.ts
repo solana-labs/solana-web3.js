@@ -49,8 +49,8 @@ export class CompiledKeys {
       getOrInsertDefault(ix.programId).isInvoked = true;
       for (const accountMeta of ix.keys) {
         const keyMeta = getOrInsertDefault(accountMeta.pubkey);
-        keyMeta.isSigner ||= accountMeta.isSigner;
-        keyMeta.isWritable ||= accountMeta.isWritable;
+        keyMeta.isSigner = keyMeta.isSigner || accountMeta.isSigner;
+        keyMeta.isWritable = keyMeta.isWriteable || accountMeta.isWritable;
       }
     }
 
