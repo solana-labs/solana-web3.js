@@ -782,11 +782,11 @@ export class Transaction {
     for (const {signature, publicKey} of this.signatures) {
       if (signature === null) {
         if (requireAllSignatures) {
-          (errors.missing ||= []).push(publicKey);
+          (errors.missing = errors.missing || []).push(publicKey);
         }
       } else {
         if (!verify(signature, message, publicKey.toBytes())) {
-          (errors.invalid ||= []).push(publicKey);
+          (errors.invalid = errors.invalid || []).push(publicKey);
         }
       }
     }
