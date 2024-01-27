@@ -37,7 +37,6 @@ describe('block', () => {
         });
         rpcGraphQL = createRpcGraphQL(rpc);
     });
-
     // The `block` query takes a `BigInt` as a parameter. We need to test this
     // for various input types that might occur outside of a JavaScript
     // context, such as string or number.
@@ -93,7 +92,6 @@ describe('block', () => {
             });
         });
     });
-
     describe('basic queries', () => {
         it("can query a block's block time", async () => {
             expect.assertions(1);
