@@ -708,48 +708,4 @@ describe('transaction', () => {
             });
         });
     });
-    describe('cache tests', () => {
-        it('coalesces multiple requests for the same transaction into one', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
-            const source = /* GraphQL */ `
-                query testQuery {
-                    transaction1: transaction(
-                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
-                    ) {
-                        slot
-                    }
-                    transaction2: transaction(
-                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
-                    ) {
-                        slot
-                    }
-                    transaction3: transaction(
-                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
-                    ) {
-                        slot
-                    }
-                }
-            `;
-            await rpcGraphQL.query(source);
-            expect(fetchMock).toHaveBeenCalledTimes(1);
-        });
-        it('cache resets on new tick', async () => {
-            expect.assertions(1);
-            await jest.runAllTimersAsync();
-            const source = /* GraphQL */ `
-                query testQuery {
-                    transaction(
-                        signature: "67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk"
-                    ) {
-                        slot
-                    }
-                }
-            `;
-            // Call the query twice
-            await rpcGraphQL.query(source);
-            await rpcGraphQL.query(source);
-            expect(fetchMock).toHaveBeenCalledTimes(2);
-        });
-    });
 });

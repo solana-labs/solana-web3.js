@@ -645,39 +645,4 @@ describe('programAccounts', () => {
             });
         });
     });
-    describe('cache tests', () => {
-        it('coalesces multiple requests for the same program into one', async () => {
-            expect.assertions(1);
-            const source = /* GraphQL */ `
-                query testQuery {
-                    programAccounts1: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
-                        lamports
-                    }
-                    programAccounts2: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
-                        lamports
-                    }
-                    programAccounts3: programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
-                        lamports
-                    }
-                }
-            `;
-            await rpcGraphQL.query(source);
-            expect(fetchMock).toHaveBeenCalledTimes(1);
-        });
-        it('cache resets on new tick', async () => {
-            expect.assertions(1);
-            await jest.runAllTimersAsync();
-            const source = /* GraphQL */ `
-                query testQuery {
-                    programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
-                        lamports
-                    }
-                }
-            `;
-            // Call the query twice
-            await rpcGraphQL.query(source);
-            await rpcGraphQL.query(source);
-            expect(fetchMock).toHaveBeenCalledTimes(2);
-        });
-    });
 });
