@@ -88,20 +88,3 @@ export const blockTypeDefs = /* GraphQL */ `
         transactionDetails: String
     }
 `;
-
-export const blockResolvers = {
-    Block: {
-        __resolveType(block: { transactionDetails: string }) {
-            switch (block.transactionDetails) {
-                case 'accounts':
-                    return 'BlockWithAccounts';
-                case 'none':
-                    return 'BlockWithNone';
-                case 'signatures':
-                    return 'BlockWithSignatures';
-                default:
-                    return 'BlockWithFull';
-            }
-        },
-    },
-};
