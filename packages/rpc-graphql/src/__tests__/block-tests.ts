@@ -306,7 +306,39 @@ describe('block', () => {
         it.todo('can query a block with transactions as JSON parsed with specific instructions');
     });
     describe('cache tests', () => {
-        // Not required yet since blocks are not supported as nested queries.
-        it.todo('coalesces multiple requests for the same block into one');
+        it('coalesces multiple requests for the same block into one', async () => {
+            expect.assertions(1);
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
+            const source = /* GraphQL */ `
+                query testQuery($slot: BigInt!) {
+                    block1: block(slot: $slot) {
+                        blockhash
+                    }
+                    block2: block(slot: $slot) {
+                        blockhash
+                    }
+                    block3: block(slot: $slot) {
+                        blockhash
+                    }
+                }
+            `;
+            await rpcGraphQL.query(source, { slot: defaultSlot });
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
+        it('cache resets on new tick', async () => {
+            expect.assertions(1);
+            await jest.runAllTimersAsync();
+            const source = /* GraphQL */ `
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot) {
+                        blockhash
+                    }
+                }
+            `;
+            // Call the query twice
+            await rpcGraphQL.query(source, { slot: defaultSlot });
+            await rpcGraphQL.query(source, { slot: defaultSlot });
+            expect(fetchMock).toHaveBeenCalledTimes(2);
+        });
     });
 });

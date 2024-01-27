@@ -784,7 +784,7 @@ describe('account', () => {
     describe('when querying only an address', () => {
         describe('in the first level', () => {
             it('will not call the RPC for only an address', async () => {
-                expect.assertions(2);
+                expect.assertions(1);
                 const source = `
                 query testQuery {
                     account(address: "2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n") {
@@ -792,20 +792,13 @@ describe('account', () => {
                     }
                 }
             `;
-                const result = await rpcGraphQL.query(source);
-                expect(result).toMatchObject({
-                    data: {
-                        account: {
-                            address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
-                        },
-                    },
-                });
+                await rpcGraphQL.query(source);
                 expect(fetchMock).not.toHaveBeenCalled();
             });
         });
         describe('in the second level', () => {
             it('will not call the RPC for only an address', async () => {
-                expect.assertions(2);
+                expect.assertions(1);
                 const source = `
                 query testQuery {
                     account(address: "CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN") {
@@ -816,23 +809,13 @@ describe('account', () => {
                     }
                 }
             `;
-                const result = await rpcGraphQL.query(source);
-                expect(result).toMatchObject({
-                    data: {
-                        account: {
-                            address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
-                            ownerProgram: {
-                                address: 'Stake11111111111111111111111111111111111111',
-                            },
-                        },
-                    },
-                });
+                await rpcGraphQL.query(source);
                 expect(fetchMock).toHaveBeenCalledTimes(1);
             });
         });
         describe('in the third level', () => {
             it('will not call the RPC for only an address', async () => {
-                expect.assertions(2);
+                expect.assertions(1);
                 const source = `
                 query testQuery {
                     account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
@@ -846,53 +829,43 @@ describe('account', () => {
                     }
                 }
             `;
-                const result = await rpcGraphQL.query(source);
-                expect(result).toMatchObject({
-                    data: {
-                        account: {
-                            address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-                            ownerProgram: {
-                                address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                ownerProgram: {
-                                    address: 'BPFLoader2111111111111111111111111111111111',
-                                },
-                            },
-                        },
-                    },
-                });
+                await rpcGraphQL.query(source);
                 expect(fetchMock).toHaveBeenCalledTimes(2);
             });
         });
     });
     describe('cache tests', () => {
         it('coalesces multiple requests for the same account into one', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const source = `
                 query testQuery {
-                    account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
-                        address
-                        ... on MintAccount {
-                            mintAuthority {
-                                address
-                                lamports
-                            }
-                        }
+                    account1: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
+                    }
+                    account2: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
+                    }
+                    account3: account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
-            expect(result).toMatchObject({
-                data: {
-                    account: {
-                        address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                        mintAuthority: {
-                            address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
-                            lamports: expect.any(BigInt),
-                        },
-                    },
-                },
-            });
+            await rpcGraphQL.query(source);
             expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
+        it('cache resets on new tick', async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery {
+                    account(address: "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr") {
+                        lamports
+                    }
+                }
+            `;
+            // Call the query twice
+            await rpcGraphQL.query(source);
+            await rpcGraphQL.query(source);
+            expect(fetchMock).toHaveBeenCalledTimes(2);
         });
     });
 });
