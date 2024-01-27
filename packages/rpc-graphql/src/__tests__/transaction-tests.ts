@@ -10,7 +10,7 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createRpcGraphQL, RpcGraphQL } from '../rpc';
+import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
     mockRpcResponse,
     mockTransactionAddressLookup,

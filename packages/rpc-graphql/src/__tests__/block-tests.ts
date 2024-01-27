@@ -9,7 +9,7 @@ import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
 import type { Rpc, Slot } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { createRpcGraphQL, RpcGraphQL } from '../rpc';
+import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
     mockBlockAccounts,
     mockBlockFull,
@@ -99,13 +99,13 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot) {
                         blockTime
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -118,8 +118,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot) {
                         blockhash
                         parentSlot
                         rewards {
@@ -131,7 +131,7 @@ describe('block', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -155,15 +155,15 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockSignatures)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: signatures) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot, transactionDetails: signatures) {
                         ... on BlockWithSignatures {
                             signatures
                         }
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -178,8 +178,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockAccounts)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: accounts) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot, transactionDetails: accounts) {
                         ... on BlockWithAccounts {
                             transactions {
                                 data {
@@ -191,7 +191,7 @@ describe('block', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -213,8 +213,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, transactionDetails: none) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot, transactionDetails: none) {
                         ... on BlockWithNone {
                             blockhash
                             rewards {
@@ -227,7 +227,7 @@ describe('block', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -250,8 +250,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, encoding: BASE_58) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot, encoding: BASE_58) {
                         ... on BlockWithFull {
                             transactions {
                                 ... on TransactionBase58 {
@@ -262,7 +262,7 @@ describe('block', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
@@ -279,8 +279,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase64)));
             const source = /* GraphQL */ `
-                query testQuery {
-                    block(slot: ${defaultSlot}, encoding: BASE_64) {
+                query testQuery($slot: BigInt!) {
+                    block(slot: $slot, encoding: BASE_64) {
                         ... on BlockWithFull {
                             transactions {
                                 ... on TransactionBase64 {
@@ -291,7 +291,7 @@ describe('block', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source);
+            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
             expect(result).toMatchObject({
                 data: {
                     block: {
