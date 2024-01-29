@@ -3,7 +3,7 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { BlockLoaderArgs } from '../loaders';
-import { onlyPresentFieldRequested } from './resolve-info';
+import { onlyFieldsRequested } from './resolve-info';
 import { transformLoadedTransaction } from './transaction';
 
 export function transformLoadedBlock({
@@ -47,7 +47,7 @@ export const resolveBlock = (fieldName?: string) => {
         if (!slot) {
             return null;
         }
-        if (onlyPresentFieldRequested('slot', info)) {
+        if (onlyFieldsRequested(['slot'], info)) {
             return { slot };
         }
         const block = await context.loaders.block.load({ ...args, slot });

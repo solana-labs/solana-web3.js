@@ -1,9 +1,10 @@
 import { Address } from '@solana/addresses';
+import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { AccountLoaderArgs } from '../loaders';
-import { onlyPresentFieldRequested } from './resolve-info';
+import { determineAccountLoaderArgs, onlyFieldsRequested } from './resolve-info';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function transformParsedAccountData(parsedAccountData: any) {
@@ -22,16 +23,12 @@ function transformParsedAccountData(parsedAccountData: any) {
     return result;
 }
 
-export function transformLoadedAccount({
-    account,
-    address,
-    encoding = 'jsonParsed',
-}: {
+export function transformLoadedAccount(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    account: any;
-    address: Address;
-    encoding: AccountLoaderArgs['encoding'];
-}) {
+    account: any,
+    args: AccountLoaderArgs,
+) {
+    const { address, commitment, dataSlice, encoding, minContextSlot } = args;
     const [
         // The account's data, either encoded or parsed.
         data,
@@ -51,7 +48,10 @@ export function transformLoadedAccount({
           // so it was parsed successfully.
           [transformParsedAccountData(account.data), 'jsonParsed'];
     account.address = address;
+    account.commitment = commitment;
+    account.dataSlice = dataSlice;
     account.encoding = responseEncoding;
+    account.minContextSlot = minContextSlot;
     account.ownerProgram = account.owner;
     return {
         ...account,
@@ -62,7 +62,7 @@ export function transformLoadedAccount({
 export const resolveAccount = (fieldName?: string) => {
     return async (
         parent: { [x: string]: Address },
-        args: AccountLoaderArgs,
+        args: { address?: Address; commitment?: Commitment; minContextSlot?: Slot },
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo | undefined,
     ) => {
@@ -70,24 +70,28 @@ export const resolveAccount = (fieldName?: string) => {
         if (!address) {
             return null;
         }
-        if (onlyPresentFieldRequested('address', info)) {
-            return { address };
+        // Don't go to the loader if only the address and/or data is requested
+        if (onlyFieldsRequested(['address', 'data'], info)) {
+            return { ...args, address };
         }
-        const account = await context.loaders.account.load({ ...args, address });
-        return account === null ? { address } : transformLoadedAccount({ account, address, encoding: args.encoding });
+        const loaderArgs: AccountLoaderArgs = { ...args, address };
+        determineAccountLoaderArgs(loaderArgs, info);
+        const account = await context.loaders.account.load(loaderArgs);
+        return account === null ? { address } : transformLoadedAccount(account, loaderArgs);
     };
 };
 
 export const resolveAccountData = () => {
     return async (
-        parent: { address: Address },
+        parent: { address: Address; commitment?: Commitment; minContextSlot?: Slot },
         args: { encoding: AccountLoaderArgs['encoding']; dataSlice?: AccountLoaderArgs['dataSlice'] },
         context: RpcGraphQLContext,
     ) => {
-        const account = await context.loaders.account.load({ ...args, address: parent.address });
-        return account === null
-            ? null
-            : transformLoadedAccount({ account, address: parent.address, encoding: args.encoding }).data;
+        const { address, commitment, minContextSlot } = parent;
+        const { dataSlice, encoding } = args;
+        const loaderArgs = { address, commitment, dataSlice, encoding, minContextSlot };
+        const account = await context.loaders.account.load(loaderArgs);
+        return account === null ? null : transformLoadedAccount(account, loaderArgs).data;
     };
 };
 

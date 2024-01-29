@@ -4,7 +4,7 @@ import type { GraphQLResolveInfo } from 'graphql';
 import { RpcGraphQLContext } from '../context';
 import { ProgramAccountsLoaderArgs } from '../loaders';
 import { transformLoadedAccount } from './account';
-import { onlyPresentFieldRequested } from './resolve-info';
+import { onlyFieldsRequested } from './resolve-info';
 
 export function resolveProgramAccounts(fieldName?: string) {
     return async (
@@ -17,18 +17,22 @@ export function resolveProgramAccounts(fieldName?: string) {
         if (!programAddress) {
             return null;
         }
-        if (onlyPresentFieldRequested('programAddress', info)) {
+        if (onlyFieldsRequested(['programAddress'], info)) {
             return { programAddress };
         }
         const programAccounts = await context.loaders.programAccounts.load({ ...args, programAddress });
         return programAccounts === null
             ? { programAddress }
-            : programAccounts.map(programAccount =>
-                  transformLoadedAccount({
-                      account: programAccount.account,
-                      address: programAccount.pubkey,
-                      encoding: args.encoding,
-                  }),
-              );
+            : programAccounts.map(programAccount => {
+                  const { commitment, dataSlice, encoding, minContextSlot } = args;
+                  const address = programAccount.pubkey;
+                  return transformLoadedAccount(programAccount.account, {
+                      address,
+                      commitment,
+                      dataSlice,
+                      encoding,
+                      minContextSlot,
+                  });
+              });
     };
 }
