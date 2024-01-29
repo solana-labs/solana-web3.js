@@ -1,7 +1,9 @@
 import type { Address } from '@solana/addresses';
 import type { StringifiedBigInt } from '@solana/rpc-types';
 
-export type JsonParsedAddressLookupTableAccount = Readonly<{
+import { RpcParsedInfo } from './rpc-parsed-type';
+
+export type JsonParsedAddressLookupTableAccount = RpcParsedInfo<{
     addresses: readonly Address[];
     authority?: Address;
     deactivationSlot: StringifiedBigInt;
