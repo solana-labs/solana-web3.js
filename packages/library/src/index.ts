@@ -10,6 +10,7 @@ export * from '@solana/rpc-types';
 export * from '@solana/signers';
 export * from '@solana/transactions';
 export * from './airdrop';
+export * from './decode-transaction';
 export * from './rpc';
 export * from './rpc-transport';
 export * from './rpc-websocket-transport';
