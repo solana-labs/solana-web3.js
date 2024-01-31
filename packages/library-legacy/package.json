@@ -86,7 +86,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
-    "@solana/spl-token": "^0.3.8",
+    "@solana/spl-token": "^0.4.0",
     "@types/bn.js": "^5.1.1",
     "@types/bs58": "^4.0.1",
     "@types/chai": "^4.3.5",
