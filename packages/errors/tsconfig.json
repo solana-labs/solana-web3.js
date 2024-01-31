@@ -1,0 +1,14 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": [
+            "DOM",
+            "ES2015",
+        ],
+    },
+    "display": "@solana/errors",
+    "extends": "tsconfig/base.json",
+    "include": [
+        "src"
+    ],
+}
