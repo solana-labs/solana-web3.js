@@ -5,10 +5,12 @@
             "DOM",
             "ES2015",
         ],
+        "resolveJsonModule": true
     },
     "display": "@solana/errors",
     "extends": "tsconfig/base.json",
     "include": [
+        "bin",
         "src"
     ],
 }

@@ -29,6 +29,12 @@ When your bundler sets the constant `__DEV__` to `true`, every error message wil
 
 When your bundler sets the constant `__DEV__` to `false`, error messages will be stripped from the bundle to save space. Only the error code will appear when an error is encountered. Follow the instructions in the error message to convert the error code back to the human-readable error message.
 
+For instance, to recover the error text for the error with code `123`:
+
+```shell
+npx @solana/errors decode 123
+```
+
 ## Adding a new error
 
 1. Add a new exported error code constant to `src/codes.ts`.
