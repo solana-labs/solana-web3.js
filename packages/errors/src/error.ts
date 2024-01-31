@@ -33,8 +33,6 @@ export class SolanaError<TErrorCode extends SolanaErrorCode = SolanaErrorCode> e
         super(message);
         this.context = {
             __code: code,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             ...context,
         } as SolanaErrorCodedContext[TErrorCode];
         // This is necessary so that `isSolanaError()` can identify a `SolanaError` without having

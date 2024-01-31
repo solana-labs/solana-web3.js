@@ -1,4 +1,15 @@
 /**
+ * To add a new error, follow the instructions at
+ * https://github.com/solana-labs/solana-web3.js/tree/master/packages/error#adding-a-new-error
+ *
+ * WARNING:
+ *   - Don't remove error codes
+ *   - Don't change or reorder error codes.
+ */
+export const SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES = 1 as const;
+export const SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE = 2 as const;
+
+/**
  * A union of every Solana error code
  *
  * You might be wondering why this is not a TypeScript enum or const enum.
@@ -13,4 +24,6 @@
  * actually used. Unfortunately exporting ambient (const) enums from a library like `@solana/errors`
  * is not safe, for a variety of reasons covered here: https://stackoverflow.com/a/28818850
  */
-export type SolanaErrorCode = never;
+export type SolanaErrorCode =
+    | typeof SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES
+    | typeof SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE;

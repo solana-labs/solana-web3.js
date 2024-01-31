@@ -1,6 +1,11 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { Decoder } from '@solana/codecs-core';
 import { getBase58Decoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
+    SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SolanaError,
+} from '@solana/errors';
 import { isSignerRole } from '@solana/instructions';
 import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
@@ -25,11 +30,7 @@ export function getSignatureFromTransaction(
 
     const signatureBytes = transaction.signatures[transaction.feePayer];
     if (!signatureBytes) {
-        // TODO: Coded error.
-        throw new Error(
-            "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
-        );
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE);
     }
     const transactionSignature = base58Decoder.decode(signatureBytes);
     return transactionSignature as Signature;
@@ -85,7 +86,8 @@ export function assertTransactionIsFullySigned<TTransaction extends CompilableTr
     });
 
     if (missingSigs.length > 0) {
-        // TODO coded error
-        throw new Error('Transaction is missing signatures for addresses: ' + missingSigs.join(', '));
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+            addresses: missingSigs,
+        });
     }
 }

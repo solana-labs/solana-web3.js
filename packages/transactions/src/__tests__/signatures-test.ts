@@ -7,6 +7,11 @@ import {
     getAddressEncoder,
     getAddressFromPublicKey,
 } from '@solana/addresses';
+import {
+    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
+    SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SolanaError,
+} from '@solana/errors';
 import { AccountRole } from '@solana/instructions';
 import { SignatureBytes, signBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
@@ -47,10 +52,7 @@ describe('getSignatureFromTransaction', () => {
         };
         expect(() => {
             getSignatureFromTransaction(transactionWithoutFeePayerSignature);
-        }).toThrow(
-            "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
-        );
+        }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE));
     });
 });
 
@@ -279,7 +281,9 @@ describe('signTransaction', () => {
         expect.assertions(1);
         const signedTransactionPromise = signTransaction([mockKeyPairA], MOCK_TRANSACTION);
         await expect(signedTransactionPromise).rejects.toThrow(
-            `Transaction is missing signatures for addresses: ${mockPublicKeyAddressB}`,
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressB],
+            }),
         );
     });
     it('returns a transaction object having multiple signatures', async () => {
@@ -368,7 +372,9 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signatures for addresses: A',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressA],
+            }),
         );
     });
 
@@ -387,7 +393,9 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signatures for addresses: A, B',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressA, mockPublicKeyAddressB],
+            }),
         );
     });
 
@@ -413,7 +421,9 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signatures for addresses: B',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressB],
+            }),
         );
     });
 
@@ -439,7 +449,9 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signatures for addresses: B',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressB],
+            }),
         );
     });
 
@@ -475,7 +487,9 @@ describe('assertTransactionIsFullySigned', () => {
         };
 
         expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
-            'Transaction is missing signatures for addresses: C',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: [mockPublicKeyAddressC],
+            }),
         );
     });
 
