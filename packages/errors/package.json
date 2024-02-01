@@ -32,6 +32,7 @@
         "solana",
         "web3"
     ],
+    "bin": "./bin/cli.ts",
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/build-scripts/add-js-extension-to-types.mjs",
@@ -73,6 +74,8 @@
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
         "build-scripts": "workspace:*",
+        "chalk": "^5.3.0",
+        "commander": "^11.1.0",
         "eslint": "^8.45.0",
         "eslint-plugin-jest": "^27.4.2",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
@@ -84,6 +87,7 @@
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1",
+        "tsx": "^4.7.0",
         "typescript": "^5.2.2",
         "version-from-git": "^1.1.1"
     },
