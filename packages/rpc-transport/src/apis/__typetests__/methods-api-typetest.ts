@@ -1,6 +1,6 @@
 import { IRpcApi, IRpcApiMethods } from '@solana/rpc-types';
 
-import { createJsonRpcApi } from '../apis/methods/methods-api';
+import { createJsonRpcApi } from '../methods/methods-api';
 
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
