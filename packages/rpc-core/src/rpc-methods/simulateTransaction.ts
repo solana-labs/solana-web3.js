@@ -13,6 +13,7 @@ import type { Base64EncodedWireTransaction } from '@solana/transactions';
 import { TransactionError } from '../transaction-error';
 import {
     AccountInfoBase,
+    AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
@@ -49,6 +50,26 @@ type SigVerifyAndReplaceRecentBlockhashConfig =
           replaceRecentBlockhash?: false;
       }>;
 
+type AccountsConfigWithBase58Encoding = Readonly<{
+    accounts: {
+        /** An `array` of accounts to return */
+        addresses: Address[];
+        // Optional because this is the default encoding
+        /** Encoding for returned Account data */
+        encoding?: 'base58';
+    };
+}>;
+
+type AccountsConfigWithBase64Encoding = Readonly<{
+    accounts: {
+        /** An `array` of accounts to return */
+        addresses: Address[];
+        // Optional because this is the default encoding
+        /** Encoding for returned Account data */
+        encoding?: 'base64';
+    };
+}>;
+
 type AccountsConfigWithBase64EncodingZstdCompression = Readonly<{
     accounts: {
         /** An `array` of accounts to return */
@@ -67,17 +88,7 @@ type AccountsConfigWithJsonParsedEncoding = Readonly<{
     };
 }>;
 
-type AccountsConfigWithBase64Encoding = Readonly<{
-    accounts: {
-        /** An `array` of accounts to return */
-        addresses: Address[];
-        // Optional because this is the default encoding
-        /** Encoding for returned Account data */
-        encoding?: 'base64';
-    };
-}>;
-
-type SimulateTransactionApiResponseBase = RpcResponse<{
+type SimulateTransactionApiResponseBase = Readonly<{
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
     /** Array of log messages the transaction instructions output during execution, null if simulation failed before the transaction was able to execute (for example due to an invalid blockhash or signature verification failure) */
@@ -93,7 +104,7 @@ type SimulateTransactionApiResponseBase = RpcResponse<{
     }> | null;
 }>;
 
-type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = RpcResponse<{
+type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Readonly<{
     /** Array of accounts with the same length as the `accounts.addresses` array in the request */
     accounts: (T | null)[];
 }>;
@@ -102,63 +113,140 @@ export interface SimulateTransactionApi extends IRpcApiMethods {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
-        config: SimulateTransactionConfigBase &
-            SigVerifyAndReplaceRecentBlockhashConfig &
+        config: SimulateTransactionConfigBase & { encoding?: 'base58' } & SigVerifyAndReplaceRecentBlockhashConfig &
+            AccountsConfigWithBase58Encoding,
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase58EncodedData>
+    >;
+
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config: SimulateTransactionConfigBase & { encoding?: 'base58' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithBase64Encoding,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
-        config: SimulateTransactionConfigBase &
-            SigVerifyAndReplaceRecentBlockhashConfig &
+        config: SimulateTransactionConfigBase & { encoding?: 'base58' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithBase64EncodingZstdCompression,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
-        config: SimulateTransactionConfigBase &
-            SigVerifyAndReplaceRecentBlockhashConfig &
+        config: SimulateTransactionConfigBase & { encoding?: 'base58' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithJsonParsedEncoding,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
-        config?: SimulateTransactionConfigBase & SigVerifyAndReplaceRecentBlockhashConfig,
-    ): SimulateTransactionApiResponseBase & { accounts: null };
+        config?: SimulateTransactionConfigBase & { encoding?: 'base58' } & SigVerifyAndReplaceRecentBlockhashConfig,
+    ): RpcResponse<SimulateTransactionApiResponseBase & { accounts: null }>;
+
+    //
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config?: SimulateTransactionConfigBase &
+            Partial<
+                | AccountsConfigWithBase64Encoding
+                | AccountsConfigWithBase64EncodingZstdCompression
+                | AccountsConfigWithJsonParsedEncoding
+            > &
+            SigVerifyAndReplaceRecentBlockhashConfig & { encoding?: 'base58' },
+    ): RpcResponse<
+        | (SimulateTransactionApiResponseBase &
+              SimulateTransactionApiResponseWithAccounts<
+                  AccountInfoBase &
+                      (
+                          | AccountInfoWithBase58EncodedData
+                          | AccountInfoWithBase64EncodedData
+                          | AccountInfoWithBase64EncodedZStdCompressedData
+                          | AccountInfoWithJsonData
+                      )
+              >)
+        | { accounts: null }
+    >;
+
+    /** Simulate sending a transaction */
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
+            AccountsConfigWithBase58Encoding,
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase58EncodedData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithBase64Encoding,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithBase64EncodingZstdCompression,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig &
             AccountsConfigWithJsonParsedEncoding,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+    ): RpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SimulateTransactionConfigBase & { encoding: 'base64' } & SigVerifyAndReplaceRecentBlockhashConfig,
-    ): SimulateTransactionApiResponseBase & { accounts: null };
+    ): RpcResponse<SimulateTransactionApiResponseBase & { accounts: null }>;
+    //
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config?: SimulateTransactionConfigBase &
+            Partial<
+                | AccountsConfigWithBase64Encoding
+                | AccountsConfigWithBase64EncodingZstdCompression
+                | AccountsConfigWithJsonParsedEncoding
+            > &
+            SigVerifyAndReplaceRecentBlockhashConfig & { encoding: 'base64' },
+    ): RpcResponse<
+        | (SimulateTransactionApiResponseBase &
+              SimulateTransactionApiResponseWithAccounts<
+                  AccountInfoBase &
+                      (
+                          | AccountInfoWithBase58EncodedData
+                          | AccountInfoWithBase64EncodedData
+                          | AccountInfoWithBase64EncodedZStdCompressedData
+                          | AccountInfoWithJsonData
+                      )
+              >)
+        | { accounts: null }
+    >;
 }
