@@ -1,4 +1,5 @@
-import { IRpcWebSocketTransport } from '../../transport-types';
+import type { IRpcWebSocketTransport } from '@solana/rpc-types';
+
 import { createWebSocketConnection } from '../websocket-connection';
 import { createWebSocketTransport } from '../websocket-transport';
 

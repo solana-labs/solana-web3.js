@@ -1,5 +1,6 @@
 import { pipe } from '@solana/functional';
-import { createWebSocketTransport, type IRpcWebSocketTransport } from '@solana/rpc-transport';
+import { createWebSocketTransport } from '@solana/rpc-transport';
+import type { IRpcWebSocketTransport } from '@solana/rpc-types';
 
 import { getWebSocketTransportWithAutoping } from './rpc-websocket-autopinger';
 import { getWebSocketTransportWithConnectionSharding } from './rpc-websocket-connection-sharding';

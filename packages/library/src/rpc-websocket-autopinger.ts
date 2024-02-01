@@ -1,4 +1,4 @@
-import type { IRpcWebSocketTransport } from '@solana/rpc-transport';
+import type { IRpcWebSocketTransport } from '@solana/rpc-types';
 
 type Config = Readonly<{
     intervalMs: number;
