@@ -66,6 +66,7 @@
         "node": ">=17.4"
     },
     "devDependencies": {
+        "@solana/addresses": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
