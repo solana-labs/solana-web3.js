@@ -378,4 +378,28 @@ export interface GetBlockApi extends IRpcApiMethods {
               GetBlockApiResponseWithRewards &
               GetBlockApiResponseWithTransactions<TransactionForFullJson<void>>)
         | null;
+    //
+    getBlock(
+        slot: Slot,
+        config?: GetBlockCommonConfig &
+            Readonly<{
+                encoding?: GetBlockEncoding;
+                maxSupportedTransactionVersion?: GetBlockMaxSupportedTransactionVersion;
+                rewards?: boolean;
+                transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
+            }>,
+    ):
+        | (GetBlockApiResponseBase &
+              Partial<GetBlockApiResponseWithRewards> &
+              Partial<GetBlockApiResponseWithSignatures> &
+              Partial<
+                  GetBlockApiResponseWithTransactions<
+                      | TransactionForAccounts<GetBlockMaxSupportedTransactionVersion | void>
+                      | TransactionForFullBase58<GetBlockMaxSupportedTransactionVersion | void>
+                      | TransactionForFullBase64<GetBlockMaxSupportedTransactionVersion | void>
+                      | TransactionForFullJsonParsed<GetBlockMaxSupportedTransactionVersion | void>
+                      | TransactionForFullJson<GetBlockMaxSupportedTransactionVersion | void>
+                  >
+              >)
+        | null;
 }

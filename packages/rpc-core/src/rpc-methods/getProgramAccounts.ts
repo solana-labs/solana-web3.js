@@ -126,4 +126,30 @@ export interface GetProgramAccountsApi extends IRpcApiMethods {
                 withContext?: boolean;
             }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[];
+    //
+    getProgramAccounts(
+        program: Address,
+        config?: GetProgramAccountsApiCommonConfig &
+            GetProgramAccountsApiSliceableCommonConfig &
+            Readonly<{
+                encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+                withContext?: boolean;
+            }>,
+    ):
+        | (
+              | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>
+              | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>
+              | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>
+              | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+              | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>
+          )[]
+        | RpcResponse<
+              (
+                  | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>
+                  | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>
+                  | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>
+                  | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+                  | AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>
+              )[]
+          >;
 }

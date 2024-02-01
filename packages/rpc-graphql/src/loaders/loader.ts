@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
-import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
+import { GetAccountInfoApi, GetBlockApi, GetTransactionApi } from '@solana/rpc-core';
 import { Commitment, Slot } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -48,7 +48,10 @@ export type ProgramAccountsLoaderArgs = {
     minContextSlot?: Slot;
     programAddress: Address;
 };
-export type ProgramAccountsLoaderValue = ReturnType<GetProgramAccountsApi['getProgramAccounts']> | null;
+export type ProgramAccountsLoaderValue = {
+    pubkey: Address;
+    account: ReturnType<GetAccountInfoApi['getAccountInfo']>['value'];
+}[]; // TODO
 export type ProgramAccountsLoader = Loader<ProgramAccountsLoaderArgs, ProgramAccountsLoaderValue>;
 
 // FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052

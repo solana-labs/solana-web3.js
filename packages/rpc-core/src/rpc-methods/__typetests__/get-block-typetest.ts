@@ -4,8 +4,10 @@ import type {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Blockhash,
+    Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
     Rpc,
+    Slot,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
@@ -14,13 +16,7 @@ import { TransactionError } from '../../transaction-error';
 import { TokenBalance } from '../common';
 import { Reward, TransactionStatus } from '../common-transactions';
 import { GetBlockApi } from '../getBlock';
-
-function assertNotAProperty<T extends object, TPropName extends string>(
-    _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },
-    _propName: TPropName,
-): void {}
-
-const rpc = null as unknown as Rpc<GetBlockApi>;
+import { assertNotAProperty } from './common';
 
 function assertBase(
     response: {
@@ -38,12 +34,23 @@ function assertBase(
     response.previousBlockhash satisfies string;
 }
 
+const rpc = null as unknown as Rpc<GetBlockApi>;
+const slot = 0n as Slot;
+
+// Parameters
+const params = null as unknown as Parameters<GetBlockApi['getBlock']>[1];
+params satisfies { commitment?: Omit<Commitment, 'processed'> } | undefined;
+params satisfies { encoding?: 'jsonParsed' | 'json' | 'base58' | 'base64' } | undefined;
+params satisfies { maxSupportedTransactionVersion?: 'legacy' | 0 } | undefined;
+params satisfies { rewards?: boolean } | undefined;
+params satisfies { transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures' } | undefined;
+
 async () => {
     // First overload
     // Rewards set to `false`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: false,
                 transactionDetails: 'none',
@@ -60,7 +67,7 @@ async () => {
     // Rewards set to `false`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'processed',
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -79,7 +86,7 @@ async () => {
     // Rewards defaults to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 transactionDetails: 'none',
             })
@@ -95,7 +102,7 @@ async () => {
     // Rewards defaults to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -113,7 +120,7 @@ async () => {
     // Rewards set to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: true,
                 transactionDetails: 'none',
@@ -130,7 +137,7 @@ async () => {
     // Rewards set to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -149,7 +156,7 @@ async () => {
     // Rewards set to `false`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: false,
                 transactionDetails: 'signatures',
@@ -167,7 +174,7 @@ async () => {
     // Rewards set to `false`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'json',
                 maxSupportedTransactionVersion: 0,
@@ -187,7 +194,7 @@ async () => {
     // Rewards defaults to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 transactionDetails: 'signatures',
             })
@@ -204,7 +211,7 @@ async () => {
     // Rewards defaults to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'jsonParsed',
                 maxSupportedTransactionVersion: 0,
@@ -223,7 +230,7 @@ async () => {
     // Rewards set to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: true,
                 transactionDetails: 'signatures',
@@ -241,7 +248,7 @@ async () => {
     // Rewards set to `true`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'jsonParsed',
                 maxSupportedTransactionVersion: 0,
@@ -299,7 +306,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 maxSupportedTransactionVersion: 0,
                 rewards: false,
@@ -318,7 +325,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -338,7 +345,7 @@ async () => {
     // Max supported transaction version defaults to `legacy`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: false,
                 transactionDetails: 'accounts',
@@ -362,7 +369,7 @@ async () => {
     // Max supported transaction version defaults to `legacy`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base64',
                 rewards: false,
@@ -387,7 +394,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 maxSupportedTransactionVersion: 0,
                 transactionDetails: 'accounts',
@@ -405,7 +412,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -424,7 +431,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 maxSupportedTransactionVersion: 0,
                 rewards: true,
@@ -443,7 +450,7 @@ async () => {
     // Max supported transaction version set to 0
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 commitment: 'confirmed',
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -463,7 +470,7 @@ async () => {
     // Max supported transaction version defaults to `legacy`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 transactionDetails: 'accounts',
             })
@@ -484,7 +491,7 @@ async () => {
     // Max supported transaction version defaults to `legacy`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: true,
                 transactionDetails: 'accounts',
@@ -552,7 +559,7 @@ async () => {
     // Transaction details default to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -573,7 +580,7 @@ async () => {
     // Transaction details set to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -595,7 +602,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 rewards: false,
@@ -619,7 +626,7 @@ async () => {
     // Transaction details set to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 rewards: false,
@@ -644,7 +651,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -664,7 +671,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 maxSupportedTransactionVersion: 0,
@@ -685,7 +692,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
             })
@@ -708,7 +715,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base58',
                 rewards: true,
@@ -776,7 +783,7 @@ async () => {
     // Transaction details default to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -797,7 +804,7 @@ async () => {
     // Transaction details set to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -819,7 +826,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
                 rewards: false,
@@ -843,7 +850,7 @@ async () => {
     // Transaction details set to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
                 rewards: false,
@@ -868,7 +875,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
                 maxSupportedTransactionVersion: 0,
@@ -888,7 +895,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'base64',
             })
@@ -1000,7 +1007,7 @@ async () => {
     // Transaction details default to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'jsonParsed',
                 maxSupportedTransactionVersion: 0,
@@ -1021,7 +1028,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'jsonParsed',
                 rewards: false,
@@ -1045,7 +1052,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'jsonParsed',
                 maxSupportedTransactionVersion: 0,
@@ -1066,7 +1073,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'jsonParsed',
             })
@@ -1148,7 +1155,7 @@ async () => {
     // Transaction details default to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 maxSupportedTransactionVersion: 0,
                 rewards: false,
@@ -1168,7 +1175,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 encoding: 'json',
                 maxSupportedTransactionVersion: 0,
@@ -1189,7 +1196,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 rewards: false,
             })
@@ -1212,7 +1219,7 @@ async () => {
     // Transaction details defaults to `full`
     {
         const response = await rpc
-            .getBlock(0n, {
+            .getBlock(slot, {
                 // No extra configs
                 maxSupportedTransactionVersion: 0,
             })
@@ -1230,7 +1237,7 @@ async () => {
     // Encoding defaults to `json`
     // Transaction details defaults to `full`
     {
-        const response = await rpc.getBlock(0n).send();
+        const response = await rpc.getBlock(slot).send();
         if (response) {
             assertBase(response);
             response.transactions satisfies readonly ExpectedTransactionForFullJsonLegacy[];
@@ -1244,7 +1251,7 @@ async () => {
 
     // Twenty-fourth overload with configs
     {
-        const response = await rpc.getBlock(0n, { commitment: 'confirmed' }).send();
+        const response = await rpc.getBlock(slot, { commitment: 'confirmed' }).send();
         if (response) {
             assertBase(response);
             response.transactions satisfies readonly ExpectedTransactionForFullJsonLegacy[];

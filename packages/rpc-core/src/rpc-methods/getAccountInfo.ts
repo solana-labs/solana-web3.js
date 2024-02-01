@@ -68,4 +68,20 @@ export interface GetAccountInfoApi extends IRpcApiMethods {
         address: Address,
         config?: GetAccountInfoApiCommonConfig,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58Bytes>;
+    //
+    getAccountInfo(
+        address: Address,
+        config?: GetAccountInfoApiCommonConfig &
+            GetAccountInfoApiSliceableCommonConfig &
+            Readonly<{
+                encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+            }>,
+    ): GetAccountInfoApiResponseBase &
+        NestInRpcResponseOrNull<
+            | AccountInfoWithBase58Bytes
+            | AccountInfoWithBase58EncodedData
+            | AccountInfoWithBase64EncodedData
+            | AccountInfoWithBase64EncodedZStdCompressedData
+            | AccountInfoWithJsonData
+        >;
 }

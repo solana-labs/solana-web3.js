@@ -75,7 +75,7 @@ type TransactionInstruction = Readonly<{
     data: Base58EncodedBytes;
 }>;
 
-type TransactionJson = TransactionBase &
+export type TransactionJson = TransactionBase &
     Readonly<{
         message: {
             accountKeys: readonly Address[];
@@ -103,7 +103,7 @@ type ParsedTransactionInstruction = Readonly<{
     programId: Address;
 }>;
 
-type TransactionJsonParsed = TransactionBase &
+export type TransactionJsonParsed = TransactionBase &
     Readonly<{
         message: {
             accountKeys: [
@@ -162,7 +162,7 @@ export interface GetTransactionApi extends IRpcApiMethods {
     /**
      * Returns transaction details for a confirmed transaction
      */
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | undefined = undefined>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -170,17 +170,17 @@ export interface GetTransactionApi extends IRpcApiMethods {
             }>,
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
+              (TMaxSupportedTransactionVersion extends undefined
                   ? Record<string, never>
                   : { version: TransactionVersion }) & {
                   meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
                   transaction: TransactionJsonParsed &
-                      (TMaxSupportedTransactionVersion extends void
+                      (TMaxSupportedTransactionVersion extends undefined
                           ? Record<string, never>
                           : TransactionAddressTableLookups);
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | undefined = undefined>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -188,20 +188,20 @@ export interface GetTransactionApi extends IRpcApiMethods {
             }>,
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
+              (TMaxSupportedTransactionVersion extends undefined
                   ? Record<string, never>
                   : { version: TransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
+                            (TMaxSupportedTransactionVersion extends undefined
                                 ? Record<string, never>
                                 : TransactionMetaLoadedAddresses))
                       | null;
                   transaction: Base64EncodedDataResponse;
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | undefined = undefined>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -209,20 +209,20 @@ export interface GetTransactionApi extends IRpcApiMethods {
             }>,
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
+              (TMaxSupportedTransactionVersion extends undefined
                   ? Record<string, never>
                   : { version: TransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
+                            (TMaxSupportedTransactionVersion extends undefined
                                 ? Record<string, never>
                                 : TransactionMetaLoadedAddresses))
                       | null;
                   transaction: Base58EncodedDataResponse;
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | undefined = undefined>(
         signature: Signature,
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -230,20 +230,42 @@ export interface GetTransactionApi extends IRpcApiMethods {
             }>,
     ):
         | (GetTransactionApiResponseBase &
-              (TMaxSupportedTransactionVersion extends void
+              (TMaxSupportedTransactionVersion extends undefined
                   ? Record<string, never>
                   : { version: TransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &
-                            (TMaxSupportedTransactionVersion extends void
+                            (TMaxSupportedTransactionVersion extends undefined
                                 ? Record<string, never>
                                 : TransactionMetaLoadedAddresses))
                       | null;
                   transaction: TransactionJson &
-                      (TMaxSupportedTransactionVersion extends void
+                      (TMaxSupportedTransactionVersion extends undefined
                           ? Record<string, never>
                           : TransactionAddressTableLookups);
+              })
+        | null;
+    //
+    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | undefined = undefined>(
+        signature: Signature,
+        config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
+            Readonly<{
+                encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
+            }>,
+    ):
+        | (GetTransactionApiResponseBase &
+              Partial<{ version: TransactionVersion }> & {
+                  meta:
+                      | (TransactionMetaBase & TransactionMetaInnerInstructionsParsed)
+                      | (TransactionMetaBase &
+                            TransactionMetaInnerInstructionsNotParsed &
+                            Partial<TransactionMetaLoadedAddresses>)
+                      | null;
+                  transaction:
+                      | Base58EncodedDataResponse
+                      | Base64EncodedDataResponse
+                      | (TransactionJsonParsed & Partial<TransactionAddressTableLookups>);
               })
         | null;
 }

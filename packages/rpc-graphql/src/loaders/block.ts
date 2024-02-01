@@ -23,7 +23,6 @@ function applyDefaultArgs({
 }
 
 async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: BlockLoaderArgs): Promise<BlockLoaderValue> {
-    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
     return await rpc
         .getBlock(
             slot,

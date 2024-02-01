@@ -20,14 +20,7 @@ async function loadTransaction(
     rpc: Rpc<GetTransactionApi>,
     { signature, ...config }: TransactionLoaderArgs,
 ): Promise<TransactionLoaderValue> {
-    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
-    return await rpc
-        .getTransaction(
-            signature,
-            // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
-            config,
-        )
-        .send();
+    return await rpc.getTransaction(signature, config).send();
 }
 
 function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
