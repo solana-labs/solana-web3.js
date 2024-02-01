@@ -1,12 +1,10 @@
-#!/usr/bin/env -S node_modules/.bin/tsx
-
 import chalk from 'chalk';
 import { Command, InvalidArgumentError } from 'commander';
 
 import { version } from '../package.json';
-import { SolanaErrorCode } from '../src/codes';
-import { getHumanReadableErrorMessage } from '../src/message-formatter';
-import { SolanaErrorMessages } from '../src/messages';
+import { SolanaErrorCode } from './codes';
+import { getHumanReadableErrorMessage } from './message-formatter';
+import { SolanaErrorMessages } from './messages';
 
 const program = new Command();
 
@@ -52,4 +50,6 @@ ${chalk.yellowBright(chalk.bold('[Context]'))}
         }
     });
 
-program.parse();
+export function run(argv: readonly string[]) {
+    program.parse(argv);
+}

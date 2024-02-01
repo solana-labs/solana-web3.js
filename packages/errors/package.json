@@ -32,9 +32,9 @@
         "solana",
         "web3"
     ],
-    "bin": "./bin/cli.ts",
+    "bin": "./bin/cli.js",
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
+        "compile:js": "tsup --config build-scripts/tsup.config.package.ts && tsup src/cli.ts --format esm",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "version-from-git --no-git-tag-version --template experimental.short",
@@ -65,6 +65,10 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "commander": "^11.1.0",
+        "chalk": "^5.3.0"
+    },
     "devDependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
@@ -75,8 +79,6 @@
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
         "build-scripts": "workspace:*",
-        "chalk": "^5.3.0",
-        "commander": "^11.1.0",
         "eslint": "^8.45.0",
         "eslint-plugin-jest": "^27.4.2",
         "eslint-plugin-sort-keys-fix": "^1.1.2",
@@ -88,7 +90,6 @@
         "test-config": "workspace:*",
         "tsconfig": "workspace:*",
         "tsup": "^8.0.1",
-        "tsx": "^4.7.0",
         "typescript": "^5.2.2",
         "version-from-git": "^1.1.1"
     },
