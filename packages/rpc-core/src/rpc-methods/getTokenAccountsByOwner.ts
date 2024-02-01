@@ -95,4 +95,23 @@ export interface GetTokenAccountsByOwnerApi extends IRpcApiMethods {
         filter: AccountsFilter,
         config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
+    //
+    getTokenAccountsByOwner(
+        program: Address,
+        filter: AccountsFilter,
+        config?: GetTokenAccountsByOwnerApiCommonConfig &
+            GetTokenAccountsByOwnerApiSliceableCommonConfig &
+            Readonly<{ encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed' }>,
+    ): RpcResponse<
+        AccountInfoWithPubkey<
+            AccountInfoBase &
+                (
+                    | AccountInfoWithBase58Bytes
+                    | AccountInfoWithBase58EncodedData
+                    | AccountInfoWithBase64EncodedData
+                    | AccountInfoWithBase64EncodedZStdCompressedData
+                    | TokenAccountInfoWithJsonData
+                )
+        >[]
+    >;
 }

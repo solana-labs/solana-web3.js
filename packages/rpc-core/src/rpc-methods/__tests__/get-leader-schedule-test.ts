@@ -46,7 +46,7 @@ describe('getLeaderSchedule', () => {
             describe('when called with no identity and no slot', () => {
                 it('returns the leader schedule for all cluster nodes in the current epoch', async () => {
                     expect.assertions(3);
-                    const res = await rpc.getLeaderSchedule({ commitment }).send();
+                    const res = await rpc.getLeaderSchedule(null, { commitment }).send();
                     // Does not need null check (default slot)
                     expect(res).toStrictEqual(expect.any(Object));
                     for (const key of Object.keys(res)) {
@@ -79,7 +79,7 @@ describe('getLeaderSchedule', () => {
                     expect.assertions(1);
                     const identity = await getValidatorAddress();
                     const res = await rpc
-                        .getLeaderSchedule({
+                        .getLeaderSchedule(null, {
                             commitment,
                             identity,
                         })
@@ -114,7 +114,7 @@ describe('getLeaderSchedule', () => {
             it('returns an empty object', async () => {
                 expect.assertions(1);
                 const res = await rpc
-                    .getLeaderSchedule({
+                    .getLeaderSchedule(null, {
                         commitment,
                         // See scripts/fixtures/GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G.json
                         identity: 'GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G' as Address,
@@ -128,7 +128,7 @@ describe('getLeaderSchedule', () => {
             it('returns an empty object', async () => {
                 expect.assertions(1);
                 const res = await rpc
-                    .getLeaderSchedule({
+                    .getLeaderSchedule(null, {
                         commitment,
                         // Randomly generated
                         identity: 'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address,

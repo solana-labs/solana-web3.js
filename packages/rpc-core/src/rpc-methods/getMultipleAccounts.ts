@@ -68,4 +68,22 @@ export interface GetMultipleAccountsApi extends IRpcApiMethods {
         addresses: Address[],
         config?: GetMultipleAccountsApiCommonConfig,
     ): RpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
+    //
+    getMultipleAccounts(
+        addresses: Address[],
+        config?: GetMultipleAccountsApiCommonConfig &
+            GetMultipleAccountsApiSliceableCommonConfig &
+            Readonly<{
+                encoding: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+            }>,
+    ): RpcResponse<
+        (GetMultipleAccountsApiResponseBase &
+            (
+                | AccountInfoWithBase58EncodedData
+                | AccountInfoWithBase64EncodedData
+                | AccountInfoWithBase64EncodedZStdCompressedData
+                | AccountInfoWithJsonData
+                | null
+            ))[]
+    >;
 }

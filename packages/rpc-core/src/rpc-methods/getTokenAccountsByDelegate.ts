@@ -95,4 +95,23 @@ export interface GetTokenAccountsByDelegateApi extends IRpcApiMethods {
         filter: AccountsFilter,
         config?: GetTokenAccountsByDelegateApiCommonConfig & GetTokenAccountsByDelegateApiSliceableCommonConfig,
     ): RpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
+    //
+    getTokenAccountsByDelegate(
+        program: Address,
+        filter: AccountsFilter,
+        config?: GetTokenAccountsByDelegateApiCommonConfig &
+            GetTokenAccountsByDelegateApiSliceableCommonConfig &
+            Readonly<{ encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed' }>,
+    ): RpcResponse<
+        AccountInfoWithPubkey<
+            AccountInfoBase &
+                (
+                    | AccountInfoWithBase58Bytes
+                    | AccountInfoWithBase58EncodedData
+                    | AccountInfoWithBase64EncodedData
+                    | AccountInfoWithBase64EncodedZStdCompressedData
+                    | TokenAccountInfoWithJsonData
+                )
+        >[]
+    >;
 }

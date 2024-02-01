@@ -43,4 +43,12 @@ export interface GetBlockProductionApi extends IRpcApiMethods {
     getBlockProduction(
         config?: GetBlockProductionApiConfigBase,
     ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithAllIdentities;
+    //
+    getBlockProduction<TIdentity extends Address>(
+        config?: GetBlockProductionApiConfigBase &
+            Readonly<{
+                identity?: TIdentity;
+            }>,
+    ): GetBlockProductionApiResponseBase &
+        (GetBlockProductionApiResponseWithAllIdentities | GetBlockProductionApiResponseWithSingleIdentity<TIdentity>);
 }
