@@ -4,6 +4,9 @@ on:
   pull_request:
 
 env:
+  # Among other things, opts out of Turborepo telemetry
+  # See https://consoledonottrack.com/
+  DO_NOT_TRACK: '1'
   # Enables Turborepo Remote Caching.
   TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
