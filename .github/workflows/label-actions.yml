@@ -1,4 +1,4 @@
-name: "Issue Label Actions"
+name: 'Issue Label Actions'
 
 on:
   issues:

@@ -1,4 +1,4 @@
-.github/PULL_REQUEST_TEMPLATE.md
+.github/workflows/PULL_REQUEST_TEMPLATE.md
 
 pnpm-lock.yaml
 pnpm-workspace.yaml
