@@ -1,4 +1,5 @@
-import { IRpcTransport } from '../../transport-types';
+import { IRpcTransport } from '@solana/rpc-types';
+
 import { createHttpTransport } from '../http-transport';
 import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
 

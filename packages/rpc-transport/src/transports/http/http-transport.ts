@@ -1,6 +1,6 @@
+import { IRpcTransport } from '@solana/rpc-types';
 import fetchImpl from 'fetch-impl';
 
-import { IRpcTransport } from '../transport-types';
 import { SolanaHttpError } from './http-transport-errors';
 import {
     AllowedHttpRequestHeaders,

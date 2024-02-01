@@ -1,5 +1,6 @@
 import { pipe } from '@solana/functional';
-import { createHttpTransport, type IRpcTransport } from '@solana/rpc-transport';
+import { createHttpTransport } from '@solana/rpc-transport';
+import type { IRpcTransport } from '@solana/rpc-types';
 
 import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';

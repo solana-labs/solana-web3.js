@@ -1,6 +1,6 @@
+import { IRpcTransport } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
-import { IRpcTransport } from '../../transport-types';
 import { createHttpTransport } from '../http-transport';
 import { SolanaHttpError } from '../http-transport-errors';
 

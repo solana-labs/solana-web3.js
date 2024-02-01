@@ -1,6 +1,18 @@
 import type { Overloads } from './overloads';
 import type { Slot } from './typed-numbers';
 
+type RpcTransportConfig = Readonly<{
+    payload: unknown;
+    signal?: AbortSignal;
+}>;
+
+/**
+ * Public RPC Transport API
+ */
+export interface IRpcTransport {
+    <TResponse>(config: RpcTransportConfig): Promise<TResponse>;
+}
+
 /**
  * Public RPC API.
  */

@@ -6,5 +6,5 @@ export type { SolanaJsonRpcErrorCode } from './json-rpc-errors';
 export * from './json-rpc-subscription';
 
 export * from './transports/http/http-transport';
-export type { IRpcTransport, IRpcWebSocketTransport } from './transports/transport-types';
+export type { IRpcWebSocketTransport } from './transports/transport-types';
 export * from './transports/websocket/websocket-transport';
