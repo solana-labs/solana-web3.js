@@ -125,8 +125,8 @@ describe('simulateTransaction', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<SimulateTransactionApi & GetLatestBlockhashApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<SimulateTransactionApi & GetLatestBlockhashApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

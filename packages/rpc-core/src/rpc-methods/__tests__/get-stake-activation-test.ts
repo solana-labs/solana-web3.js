@@ -13,8 +13,8 @@ describe('getStakeActivation', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetStakeActivationApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<GetStakeActivationApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

@@ -14,8 +14,8 @@ describe('getTokenLargestAccounts', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetTokenLargestAccountsApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<GetTokenLargestAccountsApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

@@ -9,8 +9,8 @@ describe('getBlockTime', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetBlockTimeApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<GetBlockTimeApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

@@ -10,8 +10,8 @@ describe('getEpochInfo', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetEpochInfoApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<GetEpochInfoApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

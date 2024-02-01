@@ -66,8 +66,8 @@ describe('getClusterNodes', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        mockRpc = createJsonRpc<GetClusterNodesApi>({
-            api: createSolanaRpcApi(),
+        mockRpc = createJsonRpc({
+            api: createSolanaRpcApi<GetClusterNodesApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });

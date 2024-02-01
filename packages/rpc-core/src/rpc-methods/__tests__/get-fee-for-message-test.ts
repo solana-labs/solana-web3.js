@@ -59,8 +59,8 @@ describe('getFeeForMessage', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetFeeForMessageApi & GetLatestBlockhashApi>({
-            api: createSolanaRpcApi(),
+        rpc = createJsonRpc({
+            api: createSolanaRpcApi<GetFeeForMessageApi & GetLatestBlockhashApi>(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
     });
