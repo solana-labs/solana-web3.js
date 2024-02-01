@@ -1,4 +1,5 @@
-import { IRpcWebSocketTransport } from '../transport-types';
+import { IRpcWebSocketTransport } from '@solana/rpc-types';
+
 import { createWebSocketConnection } from './websocket-connection';
 
 type Config = Readonly<{

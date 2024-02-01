@@ -7,6 +7,16 @@ type RpcTransportConfig = Readonly<{
     signal?: AbortSignal;
 }>;
 
+export type RpcWebSocketConnection = Readonly<{
+    send(payload: unknown): Promise<void>;
+    [Symbol.asyncIterator](): AsyncGenerator<unknown>;
+}>;
+
+type RpcWebSocketTransportConfig = Readonly<{
+    payload: unknown;
+    signal: AbortSignal;
+}>;
+
 /**
  * Public RPC Transport API
  */
@@ -25,6 +35,15 @@ export type IRpcTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClust
         ? IRpcTransportMainnet
         : IRpcTransport;
 
+export interface IRpcWebSocketTransport {
+    (config: RpcWebSocketTransportConfig): Promise<
+        Readonly<
+            Omit<RpcWebSocketConnection, 'send'> & {
+                send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: RpcWebSocketConnection['send'];
+            }
+        >
+    >;
+}
 /**
  * Public RPC API.
  */

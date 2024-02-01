@@ -1,3 +1,4 @@
+import { RpcWebSocketConnection } from '@solana/rpc-types';
 import WebSocket from 'ws-impl';
 
 type Config = Readonly<{
@@ -16,10 +17,6 @@ type IteratorState =
           __hasPolled: false;
           queuedMessages: unknown[];
       };
-export type RpcWebSocketConnection = Readonly<{
-    send(payload: unknown): Promise<void>;
-    [Symbol.asyncIterator](): AsyncGenerator<unknown>;
-}>;
 
 const EXPLICIT_ABORT_TOKEN = Symbol(
     __DEV__

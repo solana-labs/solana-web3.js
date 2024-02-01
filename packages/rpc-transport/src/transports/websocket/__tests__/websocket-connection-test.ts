@@ -1,7 +1,8 @@
+import type { RpcWebSocketConnection } from '@solana/rpc-types';
 import WS from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
 
-import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection';
+import { createWebSocketConnection } from '../websocket-connection';
 
 const MOCK_SEND_BUFFER_HIGH_WATERMARK = 42069;
 

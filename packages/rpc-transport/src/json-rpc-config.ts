@@ -1,6 +1,4 @@
-import { IIRpcTransport, IRpcApi, IRpcSubscriptionsApi } from '@solana/rpc-types';
-
-import { IRpcWebSocketTransport } from './transports/transport-types';
+import { IIRpcTransport, IRpcApi, IRpcSubscriptionsApi, IRpcWebSocketTransport } from '@solana/rpc-types';
 
 export type RpcConfig<TRpcMethods> = Readonly<{
     api: IRpcApi<TRpcMethods>;
