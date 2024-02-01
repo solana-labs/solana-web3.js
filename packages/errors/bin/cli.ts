@@ -1,4 +1,4 @@
-#!/usr/bin/env -S tsx
+#!/usr/bin/env -S node_modules/.bin/tsx
 
 import chalk from 'chalk';
 import { Command, InvalidArgumentError } from 'commander';
