@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE, SolanaError } from '@solana/errors';
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
@@ -143,8 +144,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
-            "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE),
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
@@ -260,8 +260,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
-            "Could not determine this transaction's signature. Make sure that the transaction " +
-                'has been signed by its fee payer.',
+            new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE),
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {

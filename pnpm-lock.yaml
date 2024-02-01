@@ -1074,6 +1074,9 @@ importers:
       '@solana/codecs':
         specifier: workspace:*
         version: link:../codecs
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional
@@ -2018,6 +2021,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
@@ -2225,6 +2231,9 @@ importers:
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional

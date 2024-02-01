@@ -30,6 +30,7 @@ describe('getErrorMessage', () => {
         it('renders static error messages', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
             messagesSpy.mockReturnValue({
+                // @ts-expect-error Mock error config doesn't conform to exported config.
                 123: 'static error message',
             });
             const message = getErrorMessage(
@@ -41,6 +42,7 @@ describe('getErrorMessage', () => {
         it('interpolates variables into a error message format string', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
             messagesSpy.mockReturnValue({
+                // @ts-expect-error Mock error config doesn't conform to exported config.
                 123: "Something $severity happened: '$foo'. How $severity!",
             });
             const message = getErrorMessage(

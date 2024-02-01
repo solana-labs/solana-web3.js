@@ -7,8 +7,8 @@ describe('SolanaError', () => {
     let error123: SolanaError;
     beforeEach(() => {
         error123 = new SolanaError(
-            123,
             // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+            123,
             { foo: 'bar' },
         );
     });
@@ -29,10 +29,8 @@ describe('SolanaError', () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 await import('../error');
-            const error456 = new SolanaErrorModule.SolanaError(
-                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
-                456,
-            );
+            // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+            const error456 = new SolanaErrorModule.SolanaError(456);
             expect(error456).toHaveProperty('message', 'o no');
         });
     });
@@ -41,10 +39,8 @@ describe('SolanaError', () => {
 describe('isSolanaError()', () => {
     let error123: SolanaError;
     beforeEach(() => {
-        error123 = new SolanaError(
-            // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
-            123,
-        );
+        // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+        error123 = new SolanaError(123);
     });
     it('returns `true` for an instance of `SolanaError`', () => {
         expect(isSolanaError(error123)).toBe(true);

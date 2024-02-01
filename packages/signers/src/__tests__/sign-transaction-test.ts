@@ -1,6 +1,7 @@
 import 'test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, SolanaError } from '@solana/errors';
 import { CompilableTransaction, IFullySignedTransaction, ITransactionWithSignatures } from '@solana/transactions';
 
 import {
@@ -331,7 +332,11 @@ describe('signTransactionWithSigners', () => {
 
         // Then we expect an error letting us know the transaction is not fully signed.
         // This is because sending signers are ignored by signTransactionWithSigners.
-        await expect(promise).rejects.toThrow('Transaction is missing signatures for addresses: 2222');
+        await expect(promise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+                addresses: ['2222' as Address],
+            }),
+        );
     });
 
     it('can be cancelled using an AbortSignal', async () => {

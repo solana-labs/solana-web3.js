@@ -68,6 +68,7 @@
         "@solana/accounts": "workspace:*",
         "@solana/addresses": "workspace:*",
         "@solana/codecs": "workspace:*",
+        "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",

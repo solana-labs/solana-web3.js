@@ -1,4 +1,4 @@
-import { SolanaErrorCode } from './codes';
+import { SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, SolanaErrorCode } from './codes';
 
 export type DefaultUnspecifiedErrorContextToUndefined<T> = {
     [P in SolanaErrorCode]: P extends keyof T ? T[P] : undefined;
@@ -11,4 +11,8 @@ export type DefaultUnspecifiedErrorContextToUndefined<T> = {
  * WARNING:
  *   - Don't change or remove members of an error's context.
  */
-export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<Record<string, never>>;
+export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
+    [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
+        addresses: string[];
+    };
+}>;
