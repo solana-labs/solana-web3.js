@@ -1,6 +1,7 @@
+import { ClusterUrl } from '@solana/rpc-types';
 import fetchImpl from 'fetch-impl';
 
-import { IRpcTransport } from '../transport-types';
+import { IRpcTransport, IRpcTransportFromClusterUrl } from '../transport-types';
 import { SolanaHttpError } from './http-transport-errors';
 import {
     AllowedHttpRequestHeaders,
@@ -8,12 +9,15 @@ import {
     normalizeHeaders,
 } from './http-transport-headers';
 
-type Config = Readonly<{
+type Config<TClusterUrl extends ClusterUrl> = Readonly<{
     headers?: AllowedHttpRequestHeaders;
-    url: string;
+    url: TClusterUrl;
 }>;
 
-export function createHttpTransport({ headers, url }: Config): IRpcTransport {
+export function createHttpTransport<TClusterUrl extends ClusterUrl>({
+    headers,
+    url,
+}: Config<TClusterUrl>): IRpcTransportFromClusterUrl<TClusterUrl> {
     if (__DEV__ && headers) {
         assertIsAllowedHttpRequestHeaders(headers);
     }
@@ -43,5 +47,5 @@ export function createHttpTransport({ headers, url }: Config): IRpcTransport {
             });
         }
         return (await response.json()) as TResponse;
-    };
+    } as IRpcTransportFromClusterUrl<TClusterUrl>;
 }
