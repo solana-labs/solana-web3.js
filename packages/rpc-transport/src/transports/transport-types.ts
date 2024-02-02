@@ -2,6 +2,8 @@ import { ClusterUrl, DevnetUrl, MainnetUrl, TestnetUrl } from '@solana/rpc-types
 
 import { RpcWebSocketConnection } from './websocket/websocket-connection';
 
+// HTTP transport
+
 type RpcTransportConfig = Readonly<{
     payload: unknown;
     signal?: AbortSignal;
@@ -27,6 +29,8 @@ type RpcWebSocketTransportConfig = Readonly<{
     signal: AbortSignal;
 }>;
 
+// WebSocket transport
+
 export interface IRpcWebSocketTransport {
     (config: RpcWebSocketTransportConfig): Promise<
         Readonly<
@@ -36,3 +40,18 @@ export interface IRpcWebSocketTransport {
         >
     >;
 }
+
+export type IRpcWebSocketTransportDevnet = IRpcWebSocketTransport & { '~cluster': 'devnet' };
+export type IRpcWebSocketTransportTestnet = IRpcWebSocketTransport & { '~cluster': 'testnet' };
+export type IRpcWebSocketTransportMainnet = IRpcWebSocketTransport & { '~cluster': 'mainnet' };
+export type IRpcWebSocketTransportWithCluster =
+    | IRpcWebSocketTransportDevnet
+    | IRpcWebSocketTransportTestnet
+    | IRpcWebSocketTransportMainnet;
+export type IRpcWebSocketTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClusterUrl extends DevnetUrl
+    ? IRpcWebSocketTransportDevnet
+    : TClusterUrl extends TestnetUrl
+      ? IRpcWebSocketTransportTestnet
+      : TClusterUrl extends MainnetUrl
+        ? IRpcWebSocketTransportMainnet
+        : IRpcWebSocketTransport;
