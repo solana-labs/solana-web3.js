@@ -1,4 +1,5 @@
 export * from './blockhash';
+export * from './cluster-url';
 export * from './commitment';
 export * from './encoded-bytes';
 export * from './lamports';
