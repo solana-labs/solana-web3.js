@@ -3,12 +3,13 @@ import {
     createSolanaRpcApi,
     createSolanaRpcSubscriptionsApi,
     createSolanaRpcSubscriptionsApi_UNSTABLE,
-    SolanaRpcMethods,
+    SolanaRpcMethodsFromTransport,
     SolanaRpcSubscriptions,
     SolanaRpcSubscriptionsUnstable,
 } from '@solana/rpc-core';
-import { createJsonRpc, createJsonSubscriptionRpc } from '@solana/rpc-transport';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import { createJsonRpc, createJsonSubscriptionRpc, IRpcTransport, type RpcFromTransport } from '@solana/rpc-transport';
+import { IRpcTransportWithCluster } from '@solana/rpc-transport/dist/types/transports/transport-types';
+import type { RpcSubscriptions } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
@@ -16,11 +17,18 @@ import fastStableStringify from 'fast-stable-stringify';
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscription-coalescer';
 
-export function createSolanaRpc(config: Omit<Parameters<typeof createJsonRpc>[0], 'api'>): Rpc<SolanaRpcMethods> {
+type RpcConfig<TTransport extends IRpcTransport | IRpcTransportWithCluster> = Readonly<{
+    transport: TTransport;
+}>;
+
+export function createSolanaRpc<TTransport extends IRpcTransport | IRpcTransportWithCluster>(
+    config: RpcConfig<TTransport>,
+): RpcFromTransport<SolanaRpcMethodsFromTransport<TTransport>, TTransport> {
+    const api = createSolanaRpcApi<SolanaRpcMethodsFromTransport<TTransport>>(DEFAULT_RPC_CONFIG);
     return createJsonRpc({
         ...config,
-        api: createSolanaRpcApi(DEFAULT_RPC_CONFIG),
-    });
+        api,
+    }) as RpcFromTransport<SolanaRpcMethodsFromTransport<TTransport>, TTransport>;
 }
 
 export function createSolanaRpcSubscriptions(
