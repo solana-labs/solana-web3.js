@@ -37,16 +37,14 @@ async function loadProgramAccounts(
 
 function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>) {
     const resolveProgramAccountsUsingRpc = loadProgramAccounts.bind(null, rpc);
-    return async (programAccountsQueryArgs: readonly ProgramAccountsLoaderArgs[]) => {
-        return await Promise.all(
-            programAccountsQueryArgs.map(async args => await resolveProgramAccountsUsingRpc(applyDefaultArgs(args))),
-        );
-    };
+    return async (programAccountsQueryArgs: readonly ProgramAccountsLoaderArgs[]) =>
+        Promise.all(programAccountsQueryArgs.map(async args => resolveProgramAccountsUsingRpc(applyDefaultArgs(args))));
 }
 
 export function createProgramAccountsLoader(rpc: Rpc<GetProgramAccountsApi>): ProgramAccountsLoader {
     const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async args => loader.load(applyDefaultArgs(args)),
+        loadMany: async args => loader.loadMany(args.map(applyDefaultArgs)),
     };
 }

@@ -31,16 +31,14 @@ async function loadAccount(
 
 function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi>) {
     const resolveAccountUsingRpc = loadAccount.bind(null, rpc);
-    return async (accountQueryArgs: readonly AccountLoaderArgs[]) => {
-        return await Promise.all(
-            accountQueryArgs.map(async args => await resolveAccountUsingRpc(applyDefaultArgs(args))),
-        );
-    };
+    return async (accountQueryArgs: readonly AccountLoaderArgs[]) =>
+        Promise.all(accountQueryArgs.map(async args => resolveAccountUsingRpc(applyDefaultArgs(args))));
 }
 
 export function createAccountLoader(rpc: Rpc<GetAccountInfoApi>): AccountLoader {
     const loader = new DataLoader(createAccountBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async args => loader.load(applyDefaultArgs(args)),
+        loadMany: async args => loader.loadMany(args.map(applyDefaultArgs)),
     };
 }
