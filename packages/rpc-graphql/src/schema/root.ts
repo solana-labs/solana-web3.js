@@ -1,27 +1,27 @@
 export const rootTypeDefs = /* GraphQL */ `
     type Query {
         account(
-            address: String!
+            address: Address!
             commitment: Commitment
             dataSlice: DataSlice
             encoding: AccountEncoding
-            minContextSlot: BigInt
+            minContextSlot: Slot
         ): Account
         block(
-            slot: BigInt!
+            slot: Slot!
             commitment: Commitment
             encoding: TransactionEncoding
             transactionDetails: BlockTransactionDetails
         ): Block
         programAccounts(
-            programAddress: String!
+            programAddress: Address!
             commitment: Commitment
             dataSlice: DataSlice
             encoding: AccountEncoding
             filters: [ProgramAccountsFilter]
-            minContextSlot: BigInt
+            minContextSlot: Slot
         ): [Account]
-        transaction(signature: String!, commitment: Commitment, encoding: TransactionEncoding): Transaction
+        transaction(signature: Signature!, commitment: Commitment, encoding: TransactionEncoding): Transaction
     }
 
     schema {

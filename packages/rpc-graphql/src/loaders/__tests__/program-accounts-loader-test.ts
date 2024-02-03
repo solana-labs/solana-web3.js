@@ -30,7 +30,7 @@ describe('account loader', () => {
         it('coalesces multiple requests for the same program into one', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts1: programAccounts(programAddress: $programAddress) {
                         lamports
                     }
@@ -52,7 +52,7 @@ describe('account loader', () => {
             expect.assertions(1);
             await jest.runAllTimersAsync();
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         lamports
                     }

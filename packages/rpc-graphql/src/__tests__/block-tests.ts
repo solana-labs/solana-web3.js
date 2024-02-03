@@ -33,7 +33,7 @@ describe('block', () => {
     // context, such as string or number.
     describe('bigint parameter', () => {
         const source = /* GraphQL */ `
-            query testQuery($block: BigInt!) {
+            query testQuery($block: Slot!) {
                 block(slot: $block) {
                     blockhash
                 }
@@ -88,7 +88,7 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block(slot: $slot) {
                         blockTime
                     }
@@ -107,7 +107,7 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFull)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block(slot: $slot) {
                         blockhash
                         parentSlot
@@ -144,8 +144,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockSignatures)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
-                    block(slot: $slot, transactionDetails: signatures) {
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot, transactionDetails: SIGNATURES) {
                         ... on BlockWithSignatures {
                             signatures
                         }
@@ -167,8 +167,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockAccounts)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
-                    block(slot: $slot, transactionDetails: accounts) {
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot, transactionDetails: ACCOUNTS) {
                         ... on BlockWithAccounts {
                             transactions {
                                 data {
@@ -202,8 +202,8 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockNone)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
-                    block(slot: $slot, transactionDetails: none) {
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot, transactionDetails: NONE) {
                         ... on BlockWithNone {
                             blockhash
                             rewards {
@@ -239,7 +239,7 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block(slot: $slot, encoding: BASE_58) {
                         ... on BlockWithFull {
                             transactions {
@@ -268,7 +268,7 @@ describe('block', () => {
             expect.assertions(1);
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase64)));
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block(slot: $slot, encoding: BASE_64) {
                         ... on BlockWithFull {
                             transactions {
