@@ -40,7 +40,7 @@ export function createSolanaGraphQLContext(
         loaders: {
             account: createAccountLoader(rpc, config),
             block: createBlockLoader(rpc),
-            programAccounts: createProgramAccountsLoader(rpc),
+            programAccounts: createProgramAccountsLoader(rpc, config),
             transaction: createTransactionLoader(rpc),
         },
     };

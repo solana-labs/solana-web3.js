@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { Commitment, DataSlice, Slot } from '@solana/rpc-types';
 import { ArgumentNode, GraphQLResolveInfo, isInterfaceType } from 'graphql';
 
-import { AccountLoaderArgs } from '../../loaders';
+import { AccountLoaderArgs, ProgramAccountsLoaderArgs } from '../../loaders';
 import { injectableRootVisitor, onlyFieldsRequested } from './visitor';
 
 function findArgumentNodeByName(argumentNodes: readonly ArgumentNode[], name: string): ArgumentNode | undefined {
@@ -69,19 +69,11 @@ function parseAccountDataSliceArgument(
     }
 }
 
-/**
- * Build a set of account loader args by inspecting which fields have
- * been requested in the query (ie. `data` or inline fragments).
- */
-export function buildAccountLoaderArgSetFromResolveInfo(
-    args: {
-        address: Address;
-        commitment?: Commitment;
-        minContextSlot?: Slot;
-    },
+export function buildAccountArgSetWithVisitor<TArgs extends AccountLoaderArgs | ProgramAccountsLoaderArgs>(
+    args: TArgs,
     info: GraphQLResolveInfo,
-): AccountLoaderArgs[] {
-    const argSet: AccountLoaderArgs[] = [args];
+): TArgs[] {
+    const argSet = [args];
 
     function buildArgSetWithVisitor(root: Parameters<typeof injectableRootVisitor>[1]) {
         injectableRootVisitor(info, root, {
@@ -118,4 +110,19 @@ export function buildAccountLoaderArgSetFromResolveInfo(
     buildArgSetWithVisitor(null);
 
     return argSet;
+}
+
+/**
+ * Build a set of account loader args by inspecting which fields have
+ * been requested in the query (ie. `data` or inline fragments).
+ */
+export function buildAccountLoaderArgSetFromResolveInfo(
+    args: {
+        address: Address;
+        commitment?: Commitment;
+        minContextSlot?: Slot;
+    },
+    info: GraphQLResolveInfo,
+): AccountLoaderArgs[] {
+    return buildAccountArgSetWithVisitor(args, info);
 }

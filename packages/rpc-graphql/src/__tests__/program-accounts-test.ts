@@ -85,25 +85,20 @@ describe('programAccounts', () => {
         });
     });
     describe('account data queries', () => {
+        // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
+        const programAddress = 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6';
         it("can get program accounts' data as base58", async () => {
             expect.assertions(1);
-            // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
-            const variableValues = {
-                commitment: 'CONFIRMED',
-                encoding: 'BASE_58',
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-            };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding!) {
-                    # TODO: Program accounts needs refactor
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: Address!) {
+                    programAccounts(programAddress: $programAddress) {
                         address
                         executable
-                        data(encoding: $encoding)
+                        data(encoding: BASE_58)
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source, variableValues);
+            const result = await rpcGraphQL.query(source, { programAddress });
             expect(result).toMatchObject({
                 data: {
                     programAccounts: expect.arrayContaining([
@@ -123,23 +118,16 @@ describe('programAccounts', () => {
         });
         it("can get program accounts' data as base64", async () => {
             expect.assertions(1);
-            // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
-            const variableValues = {
-                commitment: 'CONFIRMED',
-                encoding: 'BASE_64',
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-            };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding!) {
-                    # TODO: Program accounts needs refactor
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: Address!) {
+                    programAccounts(programAddress: $programAddress) {
                         address
                         executable
-                        data(encoding: $encoding)
+                        data(encoding: BASE_64)
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source, variableValues);
+            const result = await rpcGraphQL.query(source, { programAddress });
             expect(result).toMatchObject({
                 data: {
                     programAccounts: expect.arrayContaining([
@@ -159,23 +147,16 @@ describe('programAccounts', () => {
         });
         it("can get program accounts' data as base64+zstd", async () => {
             expect.assertions(1);
-            // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
-            const variableValues = {
-                commitment: 'CONFIRMED',
-                encoding: 'BASE_64_ZSTD',
-                programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-            };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding!) {
-                    # TODO: Program accounts needs refactor
-                    programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
+                query testQuery($programAddress: Address!) {
+                    programAccounts(programAddress: $programAddress) {
                         address
                         executable
-                        data(encoding: $encoding)
+                        data(encoding: BASE_64_ZSTD)
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source, variableValues);
+            const result = await rpcGraphQL.query(source, { programAddress });
             expect(result).toMatchObject({
                 data: {
                     programAccounts: expect.arrayContaining([
@@ -580,13 +561,7 @@ describe('programAccounts', () => {
                         $dataSlice: DataSlice
                         $encoding: AccountEncoding!
                     ) {
-                        # TODO: Program accounts needs refactor
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
                             data(encoding: $encoding, dataSlice: $dataSlice)
                         }
                     }
@@ -623,13 +598,7 @@ describe('programAccounts', () => {
                         $dataSlice: DataSlice
                         $encoding: AccountEncoding!
                     ) {
-                        # TODO: Program accounts needs refactor
-                        programAccounts(
-                            programAddress: $programAddress
-                            commitment: $commitment
-                            dataSlice: $dataSlice
-                            encoding: $encoding
-                        ) {
+                        programAccounts(programAddress: $programAddress, commitment: $commitment) {
                             data(dataSlice: $dataSlice, encoding: $encoding)
                         }
                     }

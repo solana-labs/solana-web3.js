@@ -1,77 +1,83 @@
 import { Address } from '@solana/addresses';
+import { Commitment, Slot } from '@solana/rpc-types';
 import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { cacheKeyFn,ProgramAccountsLoaderArgs } from '../loaders';
+import { cacheKeyFn } from '../loaders';
 import { AccountResult } from './account';
-import { onlyFieldsRequested } from './resolve-info';
+import { buildProgramAccountsLoaderArgSetFromResolveInfo } from './resolve-info';
 
 export function resolveProgramAccounts(fieldName?: string) {
     return async (
         parent: { [x: string]: Address },
-        args: ProgramAccountsLoaderArgs,
+        args: {
+            commitment?: Commitment;
+            filters?: readonly { memcmp: { offset: number; bytes: string } }[];
+            minContextSlot?: Slot;
+            programAddress: Address;
+        },
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo,
-    ) => {
+    ): Promise<AccountResult[] | null> => {
         const programAddress = fieldName ? parent[fieldName] : args.programAddress;
 
         if (programAddress) {
-            if (onlyFieldsRequested(['programAddress'], info)) {
-                return { programAddress };
-            }
-        }
+            const argsSet = buildProgramAccountsLoaderArgSetFromResolveInfo({ ...args, programAddress }, info);
+            const loadedProgramAccountsLists = await context.loaders.programAccounts.loadMany(argsSet);
 
-        // TODO: This needs to be split out from accounts. This only works for one data field at a time.
-        const programAccounts = await context.loaders.programAccounts.load({ ...args, programAddress });
-        if (programAccounts) {
-            return programAccounts.map(programAccount => {
-                const { account, pubkey: address } = programAccount;
+            const result: {
+                [address: string]: AccountResult;
+            } = {};
 
-                let result: AccountResult = {
-                    ...account,
-                    address,
-                    encodedData: {},
-                    ownerProgram: account.owner,
-                };
-
-                const { data } = account;
-                const { encoding, dataSlice } = args;
-
-                // TODO: Add encoding to this conditional once the program accounts
-                // batch loader is implemented.
-                if (result.encodedData) {
-                    if (Array.isArray(data)) {
-                        result.encodedData[cacheKeyFn({
-                            dataSlice,
-                            encoding: encoding === 'jsonParsed' ? 'base64' : encoding ?? 'base64',
-                        })] = data[0];
-                    } else if (typeof data === 'string') {
-                        result.encodedData[cacheKeyFn({
-                            dataSlice,
-                            encoding: 'base58',
-                        })] = data;
-                    } else if (typeof data === 'object') {
-                        const {
-                            parsed: { info: parsedData, type: accountType },
-                            program: programName,
-                            programId,
-                        } = data;
-                        result.jsonParsedConfigs = {
-                            accountType,
-                            programId,
-                            programName,
-                        };
-                        result = {
-                            ...result,
-                            ...(parsedData as object),
-                        };
-                    }
+            loadedProgramAccountsLists.forEach((programAccounts, i) => {
+                if (programAccounts instanceof Error) {
+                    console.error(programAccounts);
+                    return;
                 }
+                programAccounts.forEach(programAccount => {
+                    const { account, pubkey: address } = programAccount;
 
-                return result;
+                    const thisResult = (result[address] ||= {
+                        ...account,
+                        address,
+                        encodedData: {},
+                        ownerProgram: account.owner,
+                    });
+
+                    const { data } = account;
+                    const { encoding, dataSlice } = argsSet[i];
+
+                    if (encoding && thisResult.encodedData) {
+                        if (Array.isArray(data)) {
+                            thisResult.encodedData[cacheKeyFn({
+                                dataSlice,
+                                encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
+                            })] = data[0];
+                        } else if (typeof data === 'string') {
+                            thisResult.encodedData[cacheKeyFn({
+                                dataSlice,
+                                encoding: 'base58',
+                            })] = data;
+                        } else if (typeof data === 'object') {
+                            const {
+                                parsed: { info: parsedData, type: accountType },
+                                program: programName,
+                                programId,
+                            } = data;
+                            thisResult.jsonParsedConfigs = {
+                                accountType,
+                                programId,
+                                programName,
+                            };
+                            for (const key in parsedData as object) {
+                                thisResult[key as keyof typeof thisResult] = parsedData[key];
+                            }
+                        }
+                    }
+                });
             });
+            return Object.values(result);
         }
-
         return null;
     };
 }
