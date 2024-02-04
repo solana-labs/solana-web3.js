@@ -23,6 +23,8 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 
+type ScalarEnumKeyType = number | string;
+
 /**
  * Defines a scalar enum as a type from its constructor.
  *
@@ -32,7 +34,7 @@ import {
  * type DirectionType = ScalarEnum<Direction>;
  * ```
  */
-export type ScalarEnum<T> = ({ [key: number | string]: string | number | T } | number | T) & NonNullable<unknown>;
+export type ScalarEnum<T> = ({ [key in ScalarEnumKeyType as string]: string | number | T } | number | T) & NonNullable<unknown>;
 
 /** Defines the config for scalar enum codecs. */
 export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberEncoder | NumberDecoder> = {
