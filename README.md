@@ -14,7 +14,7 @@
 
 # Solana JavaScript SDK
 
-Use this to interact with accounts and programs on the Solana network through the Solana [JSON RPC API](https://docs.solana.com/apps/jsonrpc-api).
+Use this to interact with accounts and programs on the Solana network through the Solana [JSON RPC API](https://solana.com/docs/rpc).
 
 ## Installation
 
