@@ -54,6 +54,10 @@ export const typeTypeResolvers = {
         FINALIZED: 'finalized',
         PROCESSED: 'processed',
     },
+    CommitmentWithoutProcessed: {
+        CONFIRMED: 'confirmed',
+        FINALIZED: 'finalized',
+    },
     Signature: stringScalarAlias,
     Slot: bigIntScalarAlias,
     TokenBalance: {

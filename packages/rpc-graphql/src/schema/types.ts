@@ -28,6 +28,11 @@ export const typeTypeDefs = /* GraphQL */ `
         PROCESSED
     }
 
+    enum CommitmentWithoutProcessed {
+        CONFIRMED
+        FINALIZED
+    }
+
     input DataSlice {
         offset: Int!
         length: Int!
