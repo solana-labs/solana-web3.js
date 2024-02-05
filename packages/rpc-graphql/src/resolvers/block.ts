@@ -1,130 +1,128 @@
-import type { Slot } from '@solana/rpc-types';
+import type { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { BlockLoaderArgs, TransactionLoaderArgs } from '../loaders';
-import { onlyFieldsRequested } from './resolve-info';
+import { BlockLoaderValue, cacheKeyFn } from '../loaders';
+import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
+import {
+    mapJsonParsedInnerInstructions,
+    mapJsonParsedInstructions,
+    TransactionResult,
+} from './transaction';
 
-// ====================================
-// Removed in next commit
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transformParsedInstruction(parsedInstruction: any) {
-    if ('parsed' in parsedInstruction) {
-        if (typeof parsedInstruction.parsed === 'string' && parsedInstruction.program === 'spl-memo') {
-            const { parsed: memo, program: programName, programId } = parsedInstruction;
-            const instructionType = 'memo';
-            return { instructionType, memo, programId, programName };
-        }
-        const {
-            parsed: { info: data, type: instructionType },
-            program: programName,
-            programId,
-        } = parsedInstruction;
-        return { instructionType, programId, programName, ...data };
-    } else {
-        return parsedInstruction;
-    }
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transformParsedTransaction(parsedTransaction: any) {
-    const transactionData = parsedTransaction.transaction;
-    const transactionMeta = parsedTransaction.meta;
-    transactionData.message.instructions = transactionData.message.instructions.map(transformParsedInstruction);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    transactionMeta.innerInstructions = transactionMeta.innerInstructions.map((innerInstruction: any) => {
-        innerInstruction.instructions = innerInstruction.instructions.map(transformParsedInstruction);
-        return innerInstruction;
-    });
-    return [transactionData, transactionMeta];
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function transformLoadedTransaction({
-    encoding = 'jsonParsed',
-    transaction,
-}: {
-    encoding: TransactionLoaderArgs['encoding'];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    transaction: any;
-}) {
-    const [transactionData, transactionMeta] = Array.isArray(transaction.transaction)
-        ? // The requested encoding is base58 or base64.
-          [transaction.transaction[0], transaction.meta]
-        : // The transaction was either partially parsed or
-          // fully JSON-parsed, which will be sorted later.
-          transformParsedTransaction(transaction);
-    transaction.data = transactionData;
-    transaction.encoding = encoding;
-    transaction.meta = transactionMeta;
-    return transaction;
-}
-// ====================================
-
-export function transformLoadedBlock({
-    block,
-    encoding = 'jsonParsed',
-    transactionDetails = 'full',
-}: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    block: any;
-    encoding: BlockLoaderArgs['encoding'];
-    transactionDetails: BlockLoaderArgs['transactionDetails'];
-}) {
-    const transformedBlock = block;
-    if (typeof block === 'object' && 'transactions' in block) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        transformedBlock.transactions = block.transactions.map((transaction: any) => {
-            if (transactionDetails === 'accounts') {
-                return {
-                    data: transaction.transaction,
-                    meta: transaction.meta,
-                    version: transaction.version,
-                };
-            } else {
-                return transformLoadedTransaction({ encoding, transaction });
-            }
-        });
-    }
-    block.encoding = encoding;
-    block.transactionDetails = transactionDetails;
-    return block;
-}
+type BlockResult = {
+    transactionResults?: { [i: number]: TransactionResult };
+    slot: Slot;
+} & Partial<BlockLoaderValue>;
 
 export const resolveBlock = (fieldName?: string) => {
     return async (
         parent: { [x: string]: Slot },
-        args: BlockLoaderArgs,
+        args: {
+            commitment?: Omit<Commitment, 'processed'>;
+            slot?: Slot;
+        },
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo,
     ) => {
         const slot = fieldName ? parent[fieldName] : args.slot;
-        if (!slot) {
-            return null;
+
+        if (slot) {
+            if (onlyFieldsRequested(['slot'], info)) {
+                return { slot };
+            }
+
+            const argsSet = buildBlockLoaderArgSetFromResolveInfo({ ...args, slot }, info);
+            const loadedBlocks = await context.loaders.block.loadMany(argsSet);
+
+            let result: BlockResult = {
+                slot,
+            };
+
+            loadedBlocks.forEach((loadedBlock, i) => {
+                if (loadedBlock instanceof Error) {
+                    console.error(loadedBlock);
+                    return;
+                }
+                if (loadedBlock === null) {
+                    return;
+                }
+                if (!result.blockhash) {
+                    result = {
+                        ...result,
+                        ...loadedBlock,
+                    };
+                }
+                // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+                if (!result.signatures && loadedBlock.signatures) {
+                    result = {
+                        ...result,
+                        // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+                        signatures: loadedBlock.signatures,
+                    };
+                }
+                if (!result.transactionResults && loadedBlock.transactions) {
+                    result.transactionResults = Array.from({ length: loadedBlock.transactions.length }, (_, i) => ({
+                        [i]: { encodedData: {} },
+                    }));
+                }
+
+                const { transactions } = loadedBlock;
+                const { encoding } = argsSet[i];
+
+                if (encoding) {
+                    transactions.forEach((loadedTransaction, j) => {
+                        const { transaction: data } = loadedTransaction;
+
+                        if (result.transactionResults) {
+                            const thisTransactionResult = (result.transactionResults[j] ||= {
+                                encodedData: {},
+                            });
+
+                            if (Array.isArray(data)) {
+                                const thisEncodedData = (thisTransactionResult.encodedData ||=
+                                    {});
+                                thisEncodedData[cacheKeyFn({
+                                    encoding,
+                                })] = data[0];
+                            } else if (typeof data === 'object') {
+                                const jsonParsedData = data;
+                                jsonParsedData.message.instructions = mapJsonParsedInstructions(
+                                    jsonParsedData.message.instructions,
+                                ) as unknown as (typeof jsonParsedData)['message']['instructions'];
+
+                                const loadedInnerInstructions = loadedTransaction.meta?.innerInstructions;
+                                if (loadedInnerInstructions) {
+                                    const innerInstructions = mapJsonParsedInnerInstructions(loadedInnerInstructions);
+                                    const jsonParsedMeta = {
+                                        ...loadedTransaction.meta,
+                                        innerInstructions,
+                                    };
+                                    result.transactionResults[j] = {
+                                        ...thisTransactionResult,
+                                        ...jsonParsedData,
+                                        meta: jsonParsedMeta as unknown as TransactionResult['meta'],
+                                    };
+                                } else {
+                                    result.transactionResults[j] = {
+                                        ...thisTransactionResult,
+                                        ...jsonParsedData,
+                                    };
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            return result;
         }
-        if (onlyFieldsRequested(['slot'], info)) {
-            return { slot };
-        }
-        const block = await context.loaders.block.load({ ...args, slot });
-        if (block === null) {
-            return null;
-        }
-        const { encoding, transactionDetails } = args;
-        return transformLoadedBlock({ block, encoding, transactionDetails });
+        return null;
     };
 };
 
 export const blockResolvers = {
     Block: {
-        __resolveType(block: { transactionDetails: string }) {
-            switch (block.transactionDetails) {
-                case 'accounts':
-                    return 'BlockWithAccounts';
-                case 'none':
-                    return 'BlockWithNone';
-                case 'signatures':
-                    return 'BlockWithSignatures';
-                default:
-                    return 'BlockWithFull';
-            }
-        },
+        transactions: (parent?: BlockResult) =>
+            parent?.transactionResults ? Object.values(parent.transactionResults) : null,
     },
 };

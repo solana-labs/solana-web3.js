@@ -43,12 +43,6 @@ export const typeTypeResolvers = {
     Base64EncodedBytes: stringScalarAlias,
     Base64ZstdEncodedBytes: stringScalarAlias,
     BigInt: bigIntScalarAlias,
-    BlockTransactionDetails: {
-        ACCOUNTS: 'accounts',
-        FULL: 'full',
-        NONE: 'none',
-        SIGNATURES: 'signatures',
-    },
     Commitment: {
         CONFIRMED: 'confirmed',
         FINALIZED: 'finalized',
@@ -67,10 +61,5 @@ export const typeTypeResolvers = {
     TransactionEncoding: {
         BASE_58: 'base58',
         BASE_64: 'base64',
-        PARSED: 'jsonParsed',
-    },
-    TransactionVersion: {
-        LEGACY: 'legacy',
-        ZERO: 0,
     },
 };
