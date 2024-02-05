@@ -1227,8 +1227,8 @@ importers:
         specifier: ^7.23.3
         version: 7.23.3(@babel/core@7.24.0)
       '@rollup/plugin-alias':
-        specifier: ^4.0.3
-        version: 4.0.3(rollup@4.7.0)
+        specifier: ^5.1.0
+        version: 5.1.0(rollup@4.7.0)
       '@rollup/plugin-babel':
         specifier: ^6.0.4
         version: 6.0.4(@babel/core@7.24.0)(rollup@4.7.0)
@@ -5584,11 +5584,11 @@ packages:
       config-chain: 1.1.13
     dev: true
 
-  /@rollup/plugin-alias@4.0.3(rollup@4.7.0):
-    resolution: {integrity: sha512-ZuDWE1q4PQDhvm/zc5Prun8sBpLJy41DMptYrS6MhAy9s9kL/doN1613BWfEchGVfKxzliJ3BjbOPizXX38DbQ==}
+  /@rollup/plugin-alias@5.1.0(rollup@4.7.0):
+    resolution: {integrity: sha512-lpA3RZ9PdIG7qqhEfv79tBffNaoDuukFDrmhLqg9ifv99u/ehn+lOg30x2zmhf8AQqQUZaMk/B9fZraQ6/acDQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
