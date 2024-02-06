@@ -19,12 +19,15 @@ describe('getScalarEnumCodec', () => {
         LEFT = 'Left',
         RIGHT = 'Right',
     }
+    enum Hybrid {
+        NUMERIC,
+        LEXICAL = 'Lexical',
+    }
 
     it('encodes scalar enums', () => {
         // Bad.
         expect(scalarEnum(Feedback).encode(Feedback.BAD)).toStrictEqual(b('00'));
         expect(scalarEnum(Feedback).encode('BAD')).toStrictEqual(b('00'));
-        expect(scalarEnum(Feedback).encode('0')).toStrictEqual(b('00'));
         expect(scalarEnum(Feedback).encode(0)).toStrictEqual(b('00'));
         expect(scalarEnum(Feedback).read(b('00'), 0)).toStrictEqual([Feedback.BAD, 1]);
         expect(scalarEnum(Feedback).read(b('ffff00'), 2)).toStrictEqual([Feedback.BAD, 3]);
@@ -32,7 +35,6 @@ describe('getScalarEnumCodec', () => {
         // Good.
         expect(scalarEnum(Feedback).encode(Feedback.GOOD)).toStrictEqual(b('01'));
         expect(scalarEnum(Feedback).encode('GOOD')).toStrictEqual(b('01'));
-        expect(scalarEnum(Feedback).encode('1')).toStrictEqual(b('01'));
         expect(scalarEnum(Feedback).encode(1)).toStrictEqual(b('01'));
         expect(scalarEnum(Feedback).read(b('01'), 0)).toStrictEqual([Feedback.GOOD, 1]);
         expect(scalarEnum(Feedback).read(b('ffff01'), 2)).toStrictEqual([Feedback.GOOD, 3]);
@@ -43,9 +45,10 @@ describe('getScalarEnumCodec', () => {
         expect(u64Feedback.read(b('0100000000000000'), 0)).toStrictEqual([Feedback.GOOD, 8]);
 
         // Invalid examples.
+        // @ts-expect-error Invalid scalar enum variant.
         expect(() => scalarEnum(Feedback).encode('Missing')).toThrow(
             'Invalid scalar enum variant. ' +
-                'Expected one of [0, 1, BAD, GOOD] or a number between 0 and 1, ' +
+                'Expected one of [BAD, GOOD] or a number between 0 and 1, ' +
                 'got "Missing".',
         );
         expect(() => scalarEnum(Feedback).read(new Uint8Array([2]), 0)).toThrow(
@@ -56,34 +59,35 @@ describe('getScalarEnumCodec', () => {
     it('encodes lexical scalar enums', () => {
         // Up.
         expect(scalarEnum(Direction).encode(Direction.UP)).toStrictEqual(b('00'));
+        expect(scalarEnum(Direction).encode('UP')).toStrictEqual(b('00'));
         expect(scalarEnum(Direction).encode('Up' as Direction)).toStrictEqual(b('00'));
-        expect(scalarEnum(Direction).encode('UP' as Direction)).toStrictEqual(b('00'));
         expect(scalarEnum(Direction).read(b('00'), 0)).toStrictEqual([Direction.UP, 1]);
         expect(scalarEnum(Direction).read(b('ffff00'), 2)).toStrictEqual([Direction.UP, 3]);
 
         // Down.
         expect(scalarEnum(Direction).encode(Direction.DOWN)).toStrictEqual(b('01'));
+        expect(scalarEnum(Direction).encode('DOWN')).toStrictEqual(b('01'));
         expect(scalarEnum(Direction).encode('Down' as Direction)).toStrictEqual(b('01'));
-        expect(scalarEnum(Direction).encode('DOWN' as Direction)).toStrictEqual(b('01'));
         expect(scalarEnum(Direction).read(b('01'), 0)).toStrictEqual([Direction.DOWN, 1]);
         expect(scalarEnum(Direction).read(b('ffff01'), 2)).toStrictEqual([Direction.DOWN, 3]);
 
         // Left.
         expect(scalarEnum(Direction).encode(Direction.LEFT)).toStrictEqual(b('02'));
+        expect(scalarEnum(Direction).encode('LEFT')).toStrictEqual(b('02'));
         expect(scalarEnum(Direction).encode('Left' as Direction)).toStrictEqual(b('02'));
-        expect(scalarEnum(Direction).encode('LEFT' as Direction)).toStrictEqual(b('02'));
         expect(scalarEnum(Direction).read(b('02'), 0)).toStrictEqual([Direction.LEFT, 1]);
         expect(scalarEnum(Direction).read(b('ffff02'), 2)).toStrictEqual([Direction.LEFT, 3]);
 
         // Right.
         expect(scalarEnum(Direction).encode(Direction.RIGHT)).toStrictEqual(b('03'));
+        expect(scalarEnum(Direction).encode('RIGHT')).toStrictEqual(b('03'));
         expect(scalarEnum(Direction).encode('Right' as Direction)).toStrictEqual(b('03'));
-        expect(scalarEnum(Direction).encode('RIGHT' as Direction)).toStrictEqual(b('03'));
         expect(scalarEnum(Direction).read(b('03'), 0)).toStrictEqual([Direction.RIGHT, 1]);
         expect(scalarEnum(Direction).read(b('ffff03'), 2)).toStrictEqual([Direction.RIGHT, 3]);
 
         // Invalid examples.
-        expect(() => scalarEnum(Direction).encode('Diagonal' as unknown as Direction)).toThrow(
+        // @ts-expect-error Invalid scalar enum variant.
+        expect(() => scalarEnum(Direction).encode('Diagonal')).toThrow(
             'Invalid scalar enum variant. ' +
                 'Expected one of [UP, DOWN, LEFT, RIGHT, Up, Down, Left, Right] ' +
                 'or a number between 0 and 3, got "Diagonal".',
@@ -93,10 +97,38 @@ describe('getScalarEnumCodec', () => {
         );
     });
 
+    it('encodes hybrid scalar enums', () => {
+        // Numeric.
+        expect(scalarEnum(Hybrid).encode(Hybrid.NUMERIC)).toStrictEqual(b('00'));
+        expect(scalarEnum(Hybrid).encode('NUMERIC')).toStrictEqual(b('00'));
+        expect(scalarEnum(Hybrid).encode(0)).toStrictEqual(b('00'));
+        expect(scalarEnum(Hybrid).read(b('00'), 0)).toStrictEqual([Hybrid.NUMERIC, 1]);
+        expect(scalarEnum(Hybrid).read(b('ffff00'), 2)).toStrictEqual([Hybrid.NUMERIC, 3]);
+
+        // Lexical.
+        expect(scalarEnum(Hybrid).encode(Hybrid.LEXICAL)).toStrictEqual(b('01'));
+        expect(scalarEnum(Hybrid).encode('LEXICAL')).toStrictEqual(b('01'));
+        expect(scalarEnum(Hybrid).encode('Lexical' as Hybrid)).toStrictEqual(b('01'));
+        expect(scalarEnum(Hybrid).read(b('01'), 0)).toStrictEqual([Hybrid.LEXICAL, 1]);
+        expect(scalarEnum(Hybrid).read(b('ffff01'), 2)).toStrictEqual([Hybrid.LEXICAL, 3]);
+
+        // Invalid examples.
+        // @ts-expect-error Invalid scalar enum variant.
+        expect(() => scalarEnum(Hybrid).encode('Missing')).toThrow(
+            'Invalid scalar enum variant. ' +
+                'Expected one of [NUMERIC, LEXICAL, Lexical] ' +
+                'or a number between 0 and 1, got "Missing".',
+        );
+        expect(() => scalarEnum(Hybrid).read(new Uint8Array([2]), 0)).toThrow(
+            'Enum discriminator out of range. Expected a number between 0 and 1, got 2.',
+        );
+    });
+
     it('has the right sizes', () => {
         expect(scalarEnum(Empty).fixedSize).toBe(1);
         expect(scalarEnum(Feedback).fixedSize).toBe(1);
         expect(scalarEnum(Direction).fixedSize).toBe(1);
+        expect(scalarEnum(Hybrid).fixedSize).toBe(1);
         expect(scalarEnum(Feedback, { size: u32() }).fixedSize).toBe(4);
     });
 });

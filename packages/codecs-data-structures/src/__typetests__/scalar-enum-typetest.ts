@@ -14,19 +14,24 @@ enum Feedback {
     BAD,
     GOOD,
 }
+type FeedbackInput = Feedback | keyof typeof Feedback;
+
 enum Direction {
     UP = 'Up',
     DOWN = 'Down',
     LEFT = 'Left',
     RIGHT = 'Right',
 }
+type DirectionInput = Direction | keyof typeof Direction;
 
 {
     // [getScalarEnumEncoder]: It knows if the encoder is fixed size or variable size.
-    getScalarEnumEncoder(Feedback) satisfies FixedSizeEncoder<Feedback, 1>;
-    getScalarEnumEncoder(Direction) satisfies FixedSizeEncoder<Direction, 1>;
-    getScalarEnumEncoder(Feedback, { size: getU32Encoder() }) satisfies FixedSizeEncoder<Feedback, 4>;
-    getScalarEnumEncoder(Feedback, { size: {} as VariableSizeEncoder<number> }) satisfies VariableSizeEncoder<Feedback>;
+    getScalarEnumEncoder(Feedback) satisfies FixedSizeEncoder<FeedbackInput, 1>;
+    getScalarEnumEncoder(Direction) satisfies FixedSizeEncoder<DirectionInput, 1>;
+    getScalarEnumEncoder(Feedback, { size: getU32Encoder() }) satisfies FixedSizeEncoder<FeedbackInput, 4>;
+    getScalarEnumEncoder(Feedback, {
+        size: {} as VariableSizeEncoder<number>,
+    }) satisfies VariableSizeEncoder<FeedbackInput>;
 }
 
 {
@@ -39,8 +44,11 @@ enum Direction {
 
 {
     // [getScalarEnumCodec]: It knows if the codec is fixed size or variable size.
-    getScalarEnumCodec(Feedback) satisfies FixedSizeCodec<Feedback, Feedback, 1>;
-    getScalarEnumCodec(Direction) satisfies FixedSizeCodec<Direction, Direction, 1>;
-    getScalarEnumCodec(Feedback, { size: getU32Codec() }) satisfies FixedSizeCodec<Feedback, Feedback, 4>;
-    getScalarEnumCodec(Feedback, { size: {} as VariableSizeCodec<number> }) satisfies VariableSizeCodec<Feedback>;
+    getScalarEnumCodec(Feedback) satisfies FixedSizeCodec<FeedbackInput, Feedback, 1>;
+    getScalarEnumCodec(Direction) satisfies FixedSizeCodec<DirectionInput, Direction, 1>;
+    getScalarEnumCodec(Feedback, { size: getU32Codec() }) satisfies FixedSizeCodec<FeedbackInput, Feedback, 4>;
+    getScalarEnumCodec(Feedback, { size: {} as VariableSizeCodec<number> }) satisfies VariableSizeCodec<
+        FeedbackInput,
+        Feedback
+    >;
 }
