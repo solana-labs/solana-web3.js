@@ -218,8 +218,8 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_BLOCK_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_VOTE_COST_LIMIT,
     SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED,
+    SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN,
-    SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN,
     SolanaErrorCode,
 } from './codes';
@@ -595,8 +595,8 @@ export const SolanaErrorMessages: Readonly<{
         'Transaction version must be in the range [0, 127]. `$actualVersion` given',
     [SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED]:
         "The wallet '$walletName' does not support connecting to the chain `$chain`",
+    [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS]: "The wallet '$walletName' has no connected accounts",
     [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN]:
         "The wallet '$walletName' has no connected accounts for the chain `$chain`",
-    [SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS]: "The wallet '$walletName' has no connected accounts",
     [SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN]: 'The chain `$chain` is not supported',
 };

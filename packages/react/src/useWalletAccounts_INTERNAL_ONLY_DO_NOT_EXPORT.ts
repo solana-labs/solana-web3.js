@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS, SolanaError } from '@solana/errors';
 import { Wallet, WalletAccount, WalletWithFeatures } from '@wallet-standard/base';
 import { StandardEvents, StandardEventsFeature } from '@wallet-standard/features';
 import { useCallback, useRef, useSyncExternalStore } from 'react';
@@ -36,7 +36,7 @@ export function useWalletAccounts_INTERNAL_ONLY_DO_NOT_EXPORT<TWallet extends Wa
         /* getServerSnapshot */ getAccountsServerSnapshot,
     );
     if (!accounts.length) {
-        throw new SolanaError(SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS, {
+        throw new SolanaError(SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS, {
             walletName: wallet.name,
         });
     }

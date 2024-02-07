@@ -1,5 +1,5 @@
 import { address } from '@solana/addresses';
-import { SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS, SolanaError } from '@solana/errors';
 import { SOLANA_CHAINS } from '@solana/wallet-standard-chains';
 import { Wallet } from '@wallet-standard/base';
 import { StandardEvents, StandardEventsListeners } from '@wallet-standard/features';
@@ -60,7 +60,7 @@ describe('useWalletAccounts_INTERNAL_ONLY_DO_NOT_EXPORT', () => {
         );
         expect(result.__type).toBe('error');
         expect(result.current).toEqual(
-            new SolanaError(SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS, { walletName: 'Mock Wallet' }),
+            new SolanaError(SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS, { walletName: 'Mock Wallet' }),
         );
     });
     it('updates when the accounts change', () => {
@@ -96,7 +96,7 @@ describe('useWalletAccounts_INTERNAL_ONLY_DO_NOT_EXPORT', () => {
         });
         expect(result.__type).toBe('error');
         expect(result.current).toEqual(
-            new SolanaError(SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS, { walletName: 'Mock Wallet' }),
+            new SolanaError(SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS, { walletName: 'Mock Wallet' }),
         );
     });
 });

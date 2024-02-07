@@ -148,8 +148,8 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
     SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED,
+    SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN,
-    SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN,
     SolanaErrorCode,
 } from './codes';
@@ -586,11 +586,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             chain: `${string}:${string}`;
             walletName: string;
         };
-        [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN]: {
-            chain: `${string}:${string}`;
+        [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS]: {
             walletName: string;
         };
-        [SOLANA_ERROR__WALLET__HAS_NO_CONNECTED_ACCOUNTS]: {
+        [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN]: {
+            chain: `${string}:${string}`;
             walletName: string;
         };
         [SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN]: {

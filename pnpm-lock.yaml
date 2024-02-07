@@ -608,6 +608,9 @@ importers:
       '@solana/wallet-standard-chains':
         specifier: ^1.1.0
         version: 1.1.0
+      '@solana/wallet-standard-features':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@wallet-standard/base':
         specifier: ^1
         version: 1.0.1
@@ -4436,6 +4439,14 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       '@wallet-standard/base': 1.0.1
+    dev: false
+
+  /@solana/wallet-standard-features@1.2.0:
+    resolution: {integrity: sha512-tUd9srDLkRpe1BYg7we+c4UhRQkq+XQWswsr/L1xfGmoRDF47BPSXf4zE7ZU2GRBGvxtGt7lwJVAufQyQYhxTQ==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@wallet-standard/base': 1.0.1
+      '@wallet-standard/features': 1.0.3
     dev: false
 
   /@solana/web3.js@1.90.1:
