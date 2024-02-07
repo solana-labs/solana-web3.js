@@ -65,6 +65,13 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/addresses": "workspace:*",
+        "@solana/errors": "workspace:*",
+        "@solana/wallet-standard-chains": "^1.1.0",
+        "@wallet-standard/base": "^1",
+        "@wallet-standard/features": "^1"
+    },
     "devDependencies": {
         "@types/react": "^18",
         "@types/react-test-renderer": "^18",
