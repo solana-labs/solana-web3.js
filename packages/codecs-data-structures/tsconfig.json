@@ -4,6 +4,6 @@
     "extends": "tsconfig/base.json",
     "include": ["src"],
     "compilerOptions": {
-        "lib": ["DOM", "ES2017", "ES2022.Error"]
+        "lib": ["DOM", "ES2019", "ES2022.Error"]
     }
 }
