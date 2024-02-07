@@ -5,12 +5,17 @@ import {Loader} from './loader';
 import type {Connection} from './connection';
 import type {Signer} from './keypair';
 
+/**
+ * @deprecated Deprecated since Solana v1.17.20.
+ */
 export const BPF_LOADER_PROGRAM_ID = new PublicKey(
   'BPFLoader2111111111111111111111111111111111',
 );
 
 /**
  * Factory class for transactions to interact with a program loader
+ *
+ * @deprecated Deprecated since Solana v1.17.20.
  */
 export class BpfLoader {
   /**
