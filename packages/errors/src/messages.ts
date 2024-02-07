@@ -217,10 +217,12 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_ACCOUNT_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_BLOCK_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_VOTE_COST_LIMIT,
+    SOLANA_ERROR__WALLET__ACCOUNT_FEATURE_UNSUPPORTED,
     SOLANA_ERROR__WALLET__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN,
+    SOLANA_ERROR__WALLET__FEATURE_UNSUPPORTED,
     SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN,
     SolanaErrorCode,
 } from './codes';
@@ -594,6 +596,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE]:
         'Transaction version must be in the range [0, 127]. `$actualVersion` given',
+    [SOLANA_ERROR__WALLET__ACCOUNT_FEATURE_UNSUPPORTED]:
+        'The $featureName` feature is not supported by the account `$accountAddress` belonging to the wallet `$walletName`',
     [SOLANA_ERROR__WALLET__ACCOUNT_NOT_FOUND]:
         'No account having address `$accountAddress` could be found in the wallet `$walletName}`',
     [SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED]:
@@ -601,5 +605,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS]: "The wallet '$walletName' has no connected accounts",
     [SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN]:
         "The wallet '$walletName' has no connected accounts for the chain `$chain`",
+    [SOLANA_ERROR__WALLET__FEATURE_UNSUPPORTED]:
+        'The `$featureName` feature is not supported by the wallet `$walletName`',
     [SOLANA_ERROR__WALLET__INVALID_SOLANA_CHAIN]: 'The chain `$chain` is not supported',
 };
