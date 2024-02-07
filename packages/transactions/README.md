@@ -30,7 +30,7 @@ const transferTransaction = pipe(
     createTransaction({ version: 0 }),
     tx => setTransactionFeePayer(myAddress, tx),
     tx => setTransactionLifetimeUsingBlockhash(latestBlockhash, tx),
-    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx)
+    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx),
 );
 ```
 
@@ -144,7 +144,7 @@ const nonce =
 
 const durableNonceTransaction = setTransactionLifetimeUsingDurableNonce(
     { nonce, nonceAccountAddress, nonceAuthorityAddress },
-    tx
+    tx,
 );
 ```
 
@@ -210,13 +210,17 @@ const memoTransaction = appendTransactionInstruction(
         data: new TextEncoder().encode('Hello world!'),
         programAddress: address('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr'),
     },
-    tx
+    tx,
 );
 ```
+
+If you'd like to add multiple instructions to a transaction at once, you may use the `appendTransactionInstructions` function instead which accepts an array of instructions.
 
 #### `prependTransactionInstruction()`
 
 Given an instruction, this method will return a new transaction with that instruction having been added to the beginning of the list of existing instructions.
+
+If you'd like to prepend multiple instructions to a transaction at once, you may use the `prependTransactionInstructions` function instead which accepts an array of instructions.
 
 See [`appendTransactionInstruction()`](#appendtransactioninstruction) for an example of how to use this function.
 

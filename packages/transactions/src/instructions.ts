@@ -6,9 +6,16 @@ export function appendTransactionInstruction<TTransaction extends BaseTransactio
     instruction: TTransaction['instructions'][number],
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
+    return appendTransactionInstructions([instruction], transaction);
+}
+
+export function appendTransactionInstructions<TTransaction extends BaseTransaction>(
+    instructions: ReadonlyArray<TTransaction['instructions'][number]>,
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
+): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
     const out = {
         ...getUnsignedTransaction(transaction),
-        instructions: [...transaction.instructions, instruction],
+        instructions: [...transaction.instructions, ...instructions],
     };
     Object.freeze(out);
     return out;
@@ -18,9 +25,16 @@ export function prependTransactionInstruction<TTransaction extends BaseTransacti
     instruction: TTransaction['instructions'][number],
     transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
 ): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
+    return prependTransactionInstructions([instruction], transaction);
+}
+
+export function prependTransactionInstructions<TTransaction extends BaseTransaction>(
+    instructions: ReadonlyArray<TTransaction['instructions'][number]>,
+    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
+): TTransaction | Omit<TTransaction, keyof ITransactionWithSignatures> {
     const out = {
         ...getUnsignedTransaction(transaction),
-        instructions: [instruction, ...transaction.instructions],
+        instructions: [...instructions, ...transaction.instructions],
     };
     Object.freeze(out);
     return out;
