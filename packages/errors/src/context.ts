@@ -147,6 +147,7 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT,
     SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
+    SOLANA_ERROR__WALLET__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS,
     SOLANA_ERROR__WALLET__EXPECTED_CONNECTED_ACCOUNTS_FOR_CHAIN,
@@ -581,6 +582,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE]: {
             actualVersion: number;
+        };
+        [SOLANA_ERROR__WALLET__ACCOUNT_NOT_FOUND]: {
+            accountAddress: string;
+            walletName: string;
         };
         [SOLANA_ERROR__WALLET__CHAIN_UNSUPPORTED]: {
             chain: `${string}:${string}`;
