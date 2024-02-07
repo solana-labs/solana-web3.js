@@ -1,6 +1,8 @@
 import { Address } from '@solana/addresses';
+import { createTransaction } from '@solana/transactions';
 
 import { getSignersFromInstruction, getSignersFromTransaction } from '../account-signer-meta';
+import { setTransactionFeePayerSigner } from '../fee-payer-signer';
 import {
     createMockInstructionWithSigners,
     createMockTransactionModifyingSigner,
@@ -53,6 +55,19 @@ describe('getSignersFromTransaction', () => {
         expect(extractedSigners).toHaveLength(2);
         expect(extractedSigners[0]).toBe(signerA);
         expect(extractedSigners[1]).toBe(signerB);
+    });
+
+    it('extracts the fee payer signer of the provided transaction', () => {
+        // Given a transaction with a signer fee payer.
+        const feePayerSigner = createMockTransactionPartialSigner('1111' as Address);
+        const transaction = setTransactionFeePayerSigner(feePayerSigner, createTransaction({ version: 0 }));
+
+        // When we extract the signers from the transaction.
+        const extractedSigners = getSignersFromTransaction(transaction);
+
+        // Then we expect the extracted signers to contain the fee payer signer.
+        expect(extractedSigners).toHaveLength(1);
+        expect(extractedSigners[0]).toBe(feePayerSigner);
     });
 
     it('removes duplicated signers', () => {
