@@ -1,5 +1,5 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
-import { generateKeyPair, signBytes } from '@solana/keys';
+import { createKeyPairFromBytes, generateKeyPair, signBytes } from '@solana/keys';
 import { partiallySignTransaction } from '@solana/transactions';
 
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
@@ -60,4 +60,9 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
 /** Securely generates a signer capable of signing messages and transactions using a Crypto KeyPair. */
 export async function generateKeyPairSigner(): Promise<KeyPairSigner> {
     return createSignerFromKeyPair(await generateKeyPair());
+}
+
+/** Creates a signer capable of signing messages and transactions using the 64 bytes of a KeyPair. */
+export async function createKeyPairSignerFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<KeyPairSigner> {
+    return createSignerFromKeyPair(await createKeyPairFromBytes(bytes, extractable));
 }
