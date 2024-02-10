@@ -17,7 +17,7 @@ describe('SOLANA_ERROR__RPC_INTEGER_OVERFLOW', () => {
             }),
         ).toHaveProperty(
             'message',
-            'The 3rd argument to the `someMethod` RPC method was `1`. This number is unsafe for use with the Solana JSON-RPC because it exceeds `Number.MAX_SAFE_INTEGER`',
+            'The 3rd argument to the `someMethod` RPC method was `1`. This number is unsafe for use with the Solana JSON-RPC because it exceeds `Number.MAX_SAFE_INTEGER`.',
         );
     });
     it('features an informative error message for a violation with a deep path', () => {
@@ -32,7 +32,7 @@ describe('SOLANA_ERROR__RPC_INTEGER_OVERFLOW', () => {
             }),
         ).toHaveProperty(
             'message',
-            'The 1st argument to the `someMethod` RPC method at path `foo.bar` was `1`. This number is unsafe for use with the Solana JSON-RPC because it exceeds `Number.MAX_SAFE_INTEGER`',
+            'The 1st argument to the `someMethod` RPC method at path `foo.bar` was `1`. This number is unsafe for use with the Solana JSON-RPC because it exceeds `Number.MAX_SAFE_INTEGER`.',
         );
     });
 });

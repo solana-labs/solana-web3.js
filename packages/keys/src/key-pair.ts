@@ -1,4 +1,7 @@
 import { assertKeyGenerationIsAvailable } from '@solana/assertions';
+import { SOLANA_ERROR__INVALID_KEYPAIR_BYTES, SolanaError } from '@solana/errors';
+
+import { createPrivateKeyFromBytes } from './private-key';
 
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
     await assertKeyGenerationIsAvailable();
@@ -8,4 +11,15 @@ export async function generateKeyPair(): Promise<CryptoKeyPair> {
         /* allowed uses */ ['sign', 'verify'],
     );
     return keyPair as CryptoKeyPair;
+}
+
+export async function createKeyPairFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKeyPair> {
+    if (bytes.byteLength !== 64) {
+        throw new SolanaError(SOLANA_ERROR__INVALID_KEYPAIR_BYTES, { byteLength: bytes.byteLength });
+    }
+    const [publicKey, privateKey] = await Promise.all([
+        crypto.subtle.importKey('raw', bytes.slice(32), 'Ed25519', /* extractable */ true, ['verify']),
+        createPrivateKeyFromBytes(bytes.slice(0, 32), extractable),
+    ]);
+    return { privateKey, publicKey } as CryptoKeyPair;
 }
