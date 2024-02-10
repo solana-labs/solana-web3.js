@@ -1,5 +1,6 @@
 export * from './account-signer-meta';
 export * from './add-signers';
+export * from './fee-payer-signer';
 export * from './keypair-signer';
 export * from './message-modifying-signer';
 export * from './message-partial-signer';

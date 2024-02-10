@@ -9,4 +9,5 @@ export * from './message';
 export * from './serializers';
 export * from './signatures';
 export * from './types';
+export * from './unsigned-transaction';
 export * from './wire-transaction';
