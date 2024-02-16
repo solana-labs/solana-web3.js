@@ -1,4 +1,5 @@
 import {
+    SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SolanaErrorCode,
@@ -26,5 +27,8 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
         optionalPathLabel: string;
         path?: string;
         value: bigint;
+    };
+    [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
+        byteLength: number;
     };
 }>;

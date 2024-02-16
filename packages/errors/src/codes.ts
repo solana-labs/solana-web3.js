@@ -9,6 +9,7 @@
 export const SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES = 1 as const;
 export const SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE = 2 as const;
 export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 3 as const;
+export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
 
 /**
  * A union of every Solana error code
@@ -28,4 +29,5 @@ export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 3 as const;
 export type SolanaErrorCode =
     | typeof SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES
     | typeof SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE
-    | typeof SOLANA_ERROR__RPC_INTEGER_OVERFLOW;
+    | typeof SOLANA_ERROR__RPC_INTEGER_OVERFLOW
+    | typeof SOLANA_ERROR__INVALID_KEYPAIR_BYTES;

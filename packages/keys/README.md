@@ -65,6 +65,22 @@ import { generateKeyPair } from '@solana/keys';
 const { privateKey, publicKey } = await generateKeyPair();
 ```
 
+### `createKeyPairFromBytes()`
+
+Given a 64-bytes `Uint8Array` secret key, creates an Ed25519 public/private key pair for use with other methods in this package that accept `CryptoKey` objects.
+
+```ts
+import fs from 'fs';
+import { createKeyPairFromBytes } from '@solana/keys';
+
+// Get bytes from local keypair file.
+const keypairFile = fs.readFileSync('~/.config/solana/id.json');
+const keypairBytes = new Uint8Array(JSON.parse(keypairFile.toString()));
+
+// Create a CryptoKeyPair from the bytes.
+const { privateKey, publicKey } = await createKeyPairFromBytes(keypairBytes);
+```
+
 ### `isSignature()`
 
 This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `Signature` type and will refine the type for use in your program.
