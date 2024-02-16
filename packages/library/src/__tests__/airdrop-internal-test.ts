@@ -3,7 +3,7 @@ import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, RequestAirdropApi } from '@solana/rpc-core';
 import { lamports, type Rpc } from '@solana/rpc-types';
 
-import { requestAndConfirmAirdrop } from '../airdrop';
+import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from '../airdrop-internal';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
@@ -27,7 +27,7 @@ describe('requestAndConfirmAirdrop', () => {
     it('aborts the `requestAirdrop` request when aborted', async () => {
         expect.assertions(2);
         const abortController = new AbortController();
-        requestAndConfirmAirdrop({
+        requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: abortController.signal,
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
@@ -47,7 +47,7 @@ describe('requestAndConfirmAirdrop', () => {
         expect.assertions(2);
         const abortController = new AbortController();
         sendAirdropRequest.mockResolvedValue('abc' as Signature);
-        requestAndConfirmAirdrop({
+        requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: abortController.signal,
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
@@ -71,7 +71,7 @@ describe('requestAndConfirmAirdrop', () => {
     it('passes the expected input to the airdrop request', async () => {
         expect.assertions(1);
         sendAirdropRequest.mockResolvedValue('abc' as Signature);
-        requestAndConfirmAirdrop({
+        requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
@@ -84,7 +84,7 @@ describe('requestAndConfirmAirdrop', () => {
     it('passes the expected input to the transaction confirmer', async () => {
         expect.assertions(1);
         sendAirdropRequest.mockResolvedValue('abc' as Signature);
-        requestAndConfirmAirdrop({
+        requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,
@@ -103,7 +103,7 @@ describe('requestAndConfirmAirdrop', () => {
         expect.assertions(1);
         sendAirdropRequest.mockResolvedValue('abc' as Signature);
         confirmSignatureOnlyTransaction.mockResolvedValue(undefined);
-        const airdropPromise = requestAndConfirmAirdrop({
+        const airdropPromise = requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmSignatureOnlyTransaction,

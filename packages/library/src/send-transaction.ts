@@ -1,9 +1,7 @@
-import { Signature } from '@solana/keys';
 import type { SendTransactionApi } from '@solana/rpc-core';
-import { type Commitment, commitmentComparator, type Rpc } from '@solana/rpc-types';
+import type { Rpc } from '@solana/rpc-types';
 import {
     BaseTransaction,
-    getBase64EncodedWireTransaction,
     IDurableNonceTransaction,
     IFullySignedTransaction,
     ITransactionWithBlockhashLifetime,
@@ -11,104 +9,51 @@ import {
 } from '@solana/transactions';
 
 import {
+    SendableTransaction,
+    sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
+    sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
+} from './send-transaction-internal';
+import {
     createDefaultDurableNonceTransactionConfirmer,
     createDefaultRecentTransactionConfirmer,
 } from './transaction-confirmation';
 
-interface DurableNonceTransactionSenderFactoryConfig {
+interface SendAndConfirmDurableNonceTransactionFactoryConfig {
     rpc: Rpc<SendTransactionApi> & Parameters<typeof createDefaultDurableNonceTransactionConfirmer>[0]['rpc'];
     rpcSubscriptions: Parameters<typeof createDefaultDurableNonceTransactionConfirmer>[0]['rpcSubscriptions'];
 }
 
-interface TransactionWithBlockhashLifetimeSenderFactoryConfig {
+interface SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig {
     rpc: Rpc<SendTransactionApi> & Parameters<typeof createDefaultRecentTransactionConfirmer>[0]['rpc'];
     rpcSubscriptions: Parameters<typeof createDefaultRecentTransactionConfirmer>[0]['rpcSubscriptions'];
 }
 
-interface SendAndConfirmDurableNonceTransactionConfig
-    extends SendTransactionInternalConfig,
-        SendTransactionConfigWithoutEncoding {
-    confirmDurableNonceTransaction: ReturnType<typeof createDefaultDurableNonceTransactionConfirmer>;
-    transaction: SendableTransaction & IDurableNonceTransaction;
-}
+type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
+    transaction: SendableTransaction & ITransactionWithBlockhashLifetime,
+    config: Omit<
+        Parameters<typeof sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
+        'confirmRecentTransaction' | 'rpc' | 'transaction'
+    >,
+) => Promise<void>;
 
-interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
-    extends SendTransactionInternalConfig,
-        SendTransactionConfigWithoutEncoding {
-    confirmRecentTransaction: ReturnType<typeof createDefaultRecentTransactionConfirmer>;
-    transaction: SendableTransaction & ITransactionWithBlockhashLifetime;
-}
+type SendAndConfirmDurableNonceTransactionFunction = (
+    transaction: BaseTransaction & ITransactionWithFeePayer & IDurableNonceTransaction & IFullySignedTransaction,
+    config: Omit<
+        Parameters<typeof sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
+        'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
+    >,
+) => Promise<void>;
 
-interface SendTransactionInternalConfig extends SendTransactionConfigWithoutEncoding {
-    abortSignal?: AbortSignal;
-    commitment: Commitment;
-    rpc: Rpc<SendTransactionApi>;
-    transaction: SendableTransaction;
-}
-
-type SendableTransaction = BaseTransaction &
-    (ITransactionWithBlockhashLifetime | IDurableNonceTransaction) &
-    ITransactionWithFeePayer &
-    IFullySignedTransaction;
-type SendTransactionConfig = Parameters<SendTransactionApi['sendTransaction']>[1];
-interface SendTransactionConfigWithoutEncoding extends Omit<NonNullable<SendTransactionConfig>, 'encoding'> {}
-
-function getSendTransactionConfigWithAdjustedPreflightCommitment(
-    commitment: Commitment,
-    config?: SendTransactionConfigWithoutEncoding,
-): SendTransactionConfigWithoutEncoding | void {
-    if (
-        // The developer has supplied no value for `preflightCommitment`.
-        !config?.preflightCommitment &&
-        // The value of `commitment` is lower than the server default of `preflightCommitment`.
-        commitmentComparator(commitment, 'finalized' /* default value of `preflightCommitment` */) < 0
-    ) {
-        return {
-            ...config,
-            // In the common case, it is unlikely that you want to simulate a transaction at
-            // `finalized` commitment when your standard of commitment for confirming the
-            // transaction is lower. Cap the simulation commitment level to the level of the
-            // confirmation commitment.
-            preflightCommitment: commitment,
-        };
-    }
-    // The commitment at which the developer wishes to confirm the transaction is at least as
-    // high as the commitment at which they want to simulate it. Honour the config as-is.
-    return config;
-}
-
-async function sendTransaction_INTERNAL({
-    abortSignal,
-    commitment,
-    rpc,
-    transaction,
-    ...sendTransactionConfig
-}: SendTransactionInternalConfig): Promise<Signature> {
-    const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
-    return await rpc
-        .sendTransaction(base64EncodedWireTransaction, {
-            ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),
-            encoding: 'base64',
-        })
-        .send({ abortSignal });
-}
-
-export function createDefaultDurableNonceTransactionSender({
+export function sendAndConfirmDurableNonceTransactionFactory({
     rpc,
     rpcSubscriptions,
-}: DurableNonceTransactionSenderFactoryConfig) {
+}: SendAndConfirmDurableNonceTransactionFactoryConfig): SendAndConfirmDurableNonceTransactionFunction {
     const confirmDurableNonceTransaction = createDefaultDurableNonceTransactionConfirmer({
         rpc,
         rpcSubscriptions,
     });
-    return async function sendDurableNonceTransaction(
-        transaction: BaseTransaction & ITransactionWithFeePayer & IDurableNonceTransaction & IFullySignedTransaction,
-        config: Omit<
-            Parameters<typeof sendAndConfirmDurableNonceTransaction>[0],
-            'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
-        >,
-    ): Promise<void> {
-        await sendAndConfirmDurableNonceTransaction({
+    return async function sendAndConfirmDurableNonceTransaction(transaction, config) {
+        await sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             confirmDurableNonceTransaction,
             rpc,
@@ -117,72 +62,20 @@ export function createDefaultDurableNonceTransactionSender({
     };
 }
 
-export function createDefaultTransactionSender({
+export function sendAndConfirmTransactionFactory({
     rpc,
     rpcSubscriptions,
-}: TransactionWithBlockhashLifetimeSenderFactoryConfig) {
+}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig): SendAndConfirmTransactionWithBlockhashLifetimeFunction {
     const confirmRecentTransaction = createDefaultRecentTransactionConfirmer({
         rpc,
         rpcSubscriptions,
     });
-    return async function sendTransaction(
-        transaction: SendableTransaction & ITransactionWithBlockhashLifetime,
-        config: Omit<
-            Parameters<typeof sendAndConfirmTransaction>[0],
-            'confirmRecentTransaction' | 'rpc' | 'transaction'
-        >,
-    ): Promise<void> {
-        await sendAndConfirmTransaction({
+    return async function sendAndConfirmTransaction(transaction, config) {
+        await sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             confirmRecentTransaction,
             rpc,
             transaction,
         });
     };
-}
-
-export async function sendAndConfirmDurableNonceTransaction({
-    abortSignal,
-    commitment,
-    confirmDurableNonceTransaction,
-    rpc,
-    transaction,
-    ...sendTransactionConfig
-}: SendAndConfirmDurableNonceTransactionConfig): Promise<Signature> {
-    const transactionSignature = await sendTransaction_INTERNAL({
-        ...sendTransactionConfig,
-        abortSignal,
-        commitment,
-        rpc,
-        transaction,
-    });
-    await confirmDurableNonceTransaction({
-        abortSignal,
-        commitment,
-        transaction,
-    });
-    return transactionSignature;
-}
-
-export async function sendAndConfirmTransaction({
-    abortSignal,
-    commitment,
-    confirmRecentTransaction,
-    rpc,
-    transaction,
-    ...sendTransactionConfig
-}: SendAndConfirmTransactionWithBlockhashLifetimeConfig): Promise<Signature> {
-    const transactionSignature = await sendTransaction_INTERNAL({
-        ...sendTransactionConfig,
-        abortSignal,
-        commitment,
-        rpc,
-        transaction,
-    });
-    await confirmRecentTransaction({
-        abortSignal,
-        commitment,
-        transaction,
-    });
-    return transactionSignature;
 }
