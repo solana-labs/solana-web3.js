@@ -27,6 +27,7 @@ import {
     SendableTransaction,
     sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
+    sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
 } from './send-transaction-internal';
 
 interface SendAndConfirmDurableNonceTransactionFactoryConfig {
@@ -37,6 +38,10 @@ interface SendAndConfirmDurableNonceTransactionFactoryConfig {
 interface SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig {
     rpc: Rpc<GetEpochInfoApi & GetSignatureStatusesApi & SendTransactionApi>;
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
+}
+
+interface SendTransactionWithoutConfirmingFactoryConfig {
+    rpc: Rpc<SendTransactionApi>;
 }
 
 type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
@@ -54,6 +59,23 @@ type SendAndConfirmDurableNonceTransactionFunction = (
         'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
     >,
 ) => Promise<void>;
+
+type SendTransactionWithoutConfirmingFunction = (
+    transaction: SendableTransaction,
+    config: Omit<Parameters<typeof sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0], 'rpc' | 'transaction'>,
+) => Promise<void>;
+
+export function sendTransactionWithoutConfirmingFactory({
+    rpc,
+}: SendTransactionWithoutConfirmingFactoryConfig): SendTransactionWithoutConfirmingFunction {
+    return async function sendTransactionWithoutConfirming(transaction, config) {
+        await sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
+            ...config,
+            rpc,
+            transaction,
+        });
+    };
+}
 
 export function sendAndConfirmDurableNonceTransactionFactory({
     rpc,
