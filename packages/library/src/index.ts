@@ -15,7 +15,3 @@ export * from './rpc';
 export * from './rpc-transport';
 export * from './rpc-websocket-transport';
 export * from './send-transaction';
-export * from './transaction-confirmation';
-export * from './transaction-confirmation-strategy-blockheight';
-export * from './transaction-confirmation-strategy-nonce';
-export * from './transaction-confirmation-strategy-recent-signature';

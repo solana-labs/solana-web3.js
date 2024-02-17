@@ -1,4 +1,4 @@
-import { getTimeoutPromise } from '../transaction-confirmation-strategy-timeout';
+import { getTimeoutPromise } from '../confirmation-strategy-timeout';
 
 describe('getTimeoutPromise', () => {
     beforeEach(() => {

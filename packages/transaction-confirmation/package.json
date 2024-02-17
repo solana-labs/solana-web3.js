@@ -1,7 +1,7 @@
 {
-    "name": "@solana/web3.js-experimental",
+    "name": "@solana/transaction-confirmation",
     "version": "2.0.0-development",
-    "description": "Solana Javascript API",
+    "description": "Helpers for confirming Solana transactions",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -18,9 +18,6 @@
         "./dist/index.node.cjs": "./dist/index.browser.cjs",
         "./dist/index.node.js": "./dist/index.browser.js"
     },
-    "jsdelivr": "./dist/index.production.min.js",
-    "umd": "./dist/index.production.min.js",
-    "unpkg": "./dist/index.production.min.js",
     "main": "./dist/index.node.cjs",
     "module": "./dist/index.node.js",
     "react-native": "./dist/index.native.js",
@@ -36,12 +33,11 @@
         "web3"
     ],
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.library.ts",
+        "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "version-from-git --no-git-tag-version --template experimental.short",
-        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag experimental --access public --no-git-checks",
-        "publish-packages": "sed -i 's/@solana\\/web3\\.js-experimental/@solana\\/web3\\.js/g' package.json && sed -i 's/@solana\\/web3\\.js/@solana\\/web3\\.js-bak/g' ../library-legacy/package.json && pnpm publish-impl && git reset --hard",
+        "publish-packages": "pnpm publish --tag experimental --access public --no-git-checks",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
         "test:lint": "jest -c node_modules/test-config/jest-lint.config.ts --rootDir . --silent",
         "test:prettier": "jest -c node_modules/test-config/jest-prettier.config.ts --rootDir . --silent",
@@ -65,26 +61,21 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "engine": {
+        "node": ">=17.4"
+    },
     "dependencies": {
-        "@solana/accounts": "workspace:*",
         "@solana/addresses": "workspace:*",
-        "@solana/codecs": "workspace:*",
+        "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*",
-        "@solana/functional": "workspace:*",
-        "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
-        "@solana/programs": "workspace:*",
-        "@solana/rpc-core": "workspace:*",
-        "@solana/rpc-parsed-types": "workspace:*",
-        "@solana/rpc-transport": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
-        "@solana/signers": "workspace:*",
-        "@solana/transaction-confirmation": "workspace:*",
         "@solana/transactions": "workspace:*",
-        "fast-stable-stringify": "^1.0.0"
+        "@solana/rpc-core": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
     },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
+        "@solana/instructions": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/jest": "^29.5.11",
         "@typescript-eslint/eslint-plugin": "^6.13.2",

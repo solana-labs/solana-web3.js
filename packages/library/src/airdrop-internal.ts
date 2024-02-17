@@ -2,13 +2,17 @@ import { Address } from '@solana/addresses';
 import { Signature } from '@solana/keys';
 import { RequestAirdropApi } from '@solana/rpc-core';
 import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Rpc } from '@solana/rpc-types';
-
-import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
+import { waitForRecentTransactionConfirmationUntilTimeout } from '@solana/transaction-confirmation';
 
 type RequestAndConfirmAirdropConfig = Readonly<{
     abortSignal?: AbortSignal;
     commitment: Commitment;
-    confirmSignatureOnlyTransaction: ReturnType<typeof createDefaultSignatureOnlyRecentTransactionConfirmer>;
+    confirmSignatureOnlyTransaction: (
+        config: Omit<
+            Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],
+            'getRecentSignatureConfirmationPromise' | 'getTimeoutPromise'
+        >,
+    ) => Promise<void>;
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
     recipientAddress: Address;
     rpc: Rpc<RequestAirdropApi>;

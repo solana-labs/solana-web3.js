@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
-import { getBase58Encoder, getBase64Decoder } from '@solana/codecs';
+import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__NONCE_INVALID, SolanaError } from '@solana/errors';
 import { Nonce } from '@solana/transactions';
 
-import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
+import { createNonceInvalidationPromiseFactory } from '../confirmation-strategy-nonce';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

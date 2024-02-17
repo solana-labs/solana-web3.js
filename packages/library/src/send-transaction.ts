@@ -1,5 +1,20 @@
-import type { SendTransactionApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-types';
+import type {
+    AccountNotificationsApi,
+    GetAccountInfoApi,
+    GetEpochInfoApi,
+    GetSignatureStatusesApi,
+    SendTransactionApi,
+    SignatureNotificationsApi,
+    SlotNotificationsApi,
+} from '@solana/rpc-core';
+import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import {
+    createBlockHeightExceedencePromiseFactory,
+    createNonceInvalidationPromiseFactory,
+    createRecentSignatureConfirmationPromiseFactory,
+    waitForDurableNonceTransactionConfirmation,
+    waitForRecentTransactionConfirmation,
+} from '@solana/transaction-confirmation';
 import {
     BaseTransaction,
     IDurableNonceTransaction,
@@ -13,19 +28,15 @@ import {
     sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
 } from './send-transaction-internal';
-import {
-    createDefaultDurableNonceTransactionConfirmer,
-    createDefaultRecentTransactionConfirmer,
-} from './transaction-confirmation';
 
 interface SendAndConfirmDurableNonceTransactionFactoryConfig {
-    rpc: Rpc<SendTransactionApi> & Parameters<typeof createDefaultDurableNonceTransactionConfirmer>[0]['rpc'];
-    rpcSubscriptions: Parameters<typeof createDefaultDurableNonceTransactionConfirmer>[0]['rpcSubscriptions'];
+    rpc: Rpc<GetAccountInfoApi & GetSignatureStatusesApi & SendTransactionApi>;
+    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi & SignatureNotificationsApi>;
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig {
-    rpc: Rpc<SendTransactionApi> & Parameters<typeof createDefaultRecentTransactionConfirmer>[0]['rpc'];
-    rpcSubscriptions: Parameters<typeof createDefaultRecentTransactionConfirmer>[0]['rpcSubscriptions'];
+    rpc: Rpc<GetEpochInfoApi & GetSignatureStatusesApi & SendTransactionApi>;
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
 }
 
 type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
@@ -48,10 +59,23 @@ export function sendAndConfirmDurableNonceTransactionFactory({
     rpc,
     rpcSubscriptions,
 }: SendAndConfirmDurableNonceTransactionFactoryConfig): SendAndConfirmDurableNonceTransactionFunction {
-    const confirmDurableNonceTransaction = createDefaultDurableNonceTransactionConfirmer({
+    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,
-    });
+    );
+    async function confirmDurableNonceTransaction(
+        config: Omit<
+            Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
+            'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
+        >,
+    ) {
+        await waitForDurableNonceTransactionConfirmation({
+            ...config,
+            getNonceInvalidationPromise,
+            getRecentSignatureConfirmationPromise,
+        });
+    }
     return async function sendAndConfirmDurableNonceTransaction(transaction, config) {
         await sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
@@ -66,10 +90,26 @@ export function sendAndConfirmTransactionFactory({
     rpc,
     rpcSubscriptions,
 }: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig): SendAndConfirmTransactionWithBlockhashLifetimeFunction {
-    const confirmRecentTransaction = createDefaultRecentTransactionConfirmer({
+    const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory({
         rpc,
         rpcSubscriptions,
     });
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+        rpc,
+        rpcSubscriptions,
+    );
+    async function confirmRecentTransaction(
+        config: Omit<
+            Parameters<typeof waitForRecentTransactionConfirmation>[0],
+            'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
+        >,
+    ) {
+        await waitForRecentTransactionConfirmation({
+            ...config,
+            getBlockHeightExceedencePromise,
+            getRecentSignatureConfirmationPromise,
+        });
+    }
     return async function sendAndConfirmTransaction(transaction, config) {
         await sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,

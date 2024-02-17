@@ -1,7 +1,7 @@
 import { Signature } from '@solana/keys';
 import { Commitment } from '@solana/rpc-types';
 
-import { createRecentSignatureConfirmationPromiseFactory } from './transaction-confirmation-strategy-recent-signature';
+import { createRecentSignatureConfirmationPromiseFactory } from './confirmation-strategy-recent-signature';
 
 export interface BaseTransactionConfirmationStrategyConfig {
     abortSignal?: AbortSignal;
