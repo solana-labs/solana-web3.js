@@ -26,11 +26,11 @@ async function loadProgramAccounts(
     rpc: Rpc<GetProgramAccountsApi>,
     { programAddress, ...config }: ProgramAccountsLoaderArgs,
 ): Promise<ProgramAccountsLoaderValue> {
-    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+    // @ts-expect-error FIX ME: https://github.com/microsoft/TypeScript/issues/43187
     return await rpc
         .getProgramAccounts(
             programAddress,
-            // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+            // @ts-expect-error FIX ME: https://github.com/microsoft/TypeScript/issues/43187
             config,
         )
         .send();

@@ -20,11 +20,11 @@ async function loadTransaction(
     rpc: Rpc<GetTransactionApi>,
     { signature, ...config }: TransactionLoaderArgs,
 ): Promise<TransactionLoaderValue> {
-    // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+    // @ts-expect-error FIX ME: https://github.com/microsoft/TypeScript/issues/43187
     return await rpc
         .getTransaction(
             signature,
-            // @ts-expect-error FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+            // @ts-expect-error FIX ME: https://github.com/microsoft/TypeScript/issues/43187
             config,
         )
         .send();
