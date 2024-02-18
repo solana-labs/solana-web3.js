@@ -9,7 +9,7 @@ import stringify from 'json-stable-stringify';
 export type LoadFn<TArgs, T> = (args: TArgs) => Promise<T>;
 export type Loader<TArgs, T> = { load: LoadFn<TArgs, T> };
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
 // export type AccountLoaderArgs = { address: Parameters<GetAccountInfoApi['getAccountInfo']>[0] } & Parameters<
 //     GetAccountInfoApi['getAccountInfo']
 // >[1];
@@ -23,7 +23,7 @@ export type AccountLoaderArgs = {
 export type AccountLoaderValue = ReturnType<GetAccountInfoApi['getAccountInfo']>['value'] | null;
 export type AccountLoader = Loader<AccountLoaderArgs, AccountLoaderValue>;
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
 // export type BlockLoaderArgs = { slot: Parameters<GetBlockApi['getBlock']>[0] } & Parameters<GetBlockApi['getBlock']>[1];
 export type BlockLoaderArgs = {
     commitment?: Omit<Commitment, 'processed'>;
@@ -36,7 +36,7 @@ export type BlockLoaderArgs = {
 export type BlockLoaderValue = ReturnType<GetBlockApi['getBlock']> | null;
 export type BlockLoader = Loader<BlockLoaderArgs, BlockLoaderValue>;
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
 // export type ProgramAccountsLoaderArgs = {
 //     programAddress: Parameters<GetProgramAccountsApi['getProgramAccounts']>[0];
 // } & Parameters<GetProgramAccountsApi['getProgramAccounts']>[1];
@@ -51,7 +51,7 @@ export type ProgramAccountsLoaderArgs = {
 export type ProgramAccountsLoaderValue = ReturnType<GetProgramAccountsApi['getProgramAccounts']> | null;
 export type ProgramAccountsLoader = Loader<ProgramAccountsLoaderArgs, ProgramAccountsLoaderValue>;
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
+// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
 // export type TransactionLoaderArgs = { signature: Parameters<GetTransactionApi['getTransaction']>[0] } & Parameters<
 //     GetTransactionApi['getTransaction']
 // >[1];
