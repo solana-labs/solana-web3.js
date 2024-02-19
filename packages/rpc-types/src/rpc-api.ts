@@ -100,6 +100,11 @@ type PendingRpcSubscriptionBuilder<TSubscriptionMethodImplementations> = UnionTo
 /**
  * Rpc Response helper.
  */
+export type SolanaRpcResponse<TValue> = Readonly<{
+    context: Readonly<{ slot: Slot }>;
+    value: TValue;
+}>;
+/** @deprecated Use SolanaRpcResponse instead. */
 export type RpcResponse<TValue> = Readonly<{
     context: Readonly<{ slot: Slot }>;
     value: TValue;
