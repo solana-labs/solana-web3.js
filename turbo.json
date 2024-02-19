@@ -5,98 +5,173 @@
             "dependsOn": [
                 "compile:docs",
                 "compile:js",
-                "compile:typedefs",
-                "test:lint",
-                "test:prettier",
-                "test:typecheck",
-                "test:unit:browser",
-                "test:unit:node",
-                "test:live-with-test-validator",
-                "test:treeshakability:browser",
-                "test:treeshakability:native",
-                "test:treeshakability:node"
+                "compile:typedefs"
             ],
-            "outputs": ["dist/**", "lib/**"]
+            "outputs": [
+                "dist/**",
+                "lib/**"
+            ]
         },
         "clean": {
-            "outputs": ["dist/**", "lib/**"]
+            "outputs": [
+                "dist/**",
+                "lib/**"
+            ]
         },
         "compile:docs": {
-            "dependsOn": ["clean"],
-            "inputs": ["src/**"],
-            "outputs": ["doc/**"]
+            "dependsOn": [
+                "clean"
+            ],
+            "inputs": [
+                "src/**"
+            ],
+            "outputs": [
+                "doc/**"
+            ]
         },
         "compile:js": {
-            "dependsOn": ["clean", "^compile:js"],
-            "inputs": ["rollup.config.js", "tsconfig.*", "src/**"],
-            "outputs": ["dist/**", "lib/**"]
+            "dependsOn": [
+                "clean",
+                "^compile:js"
+            ],
+            "inputs": [
+                "rollup.config.js",
+                "tsconfig.*",
+                "src/**"
+            ],
+            "outputs": [
+                "dist/**",
+                "lib/**"
+            ]
         },
         "compile:typedefs": {
-            "dependsOn": ["clean", "^compile:typedefs"],
-            "inputs": ["rollup.config.types.js", "tsconfig.*", "src/**"],
-            "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
+            "dependsOn": [
+                "clean",
+                "^compile:typedefs"
+            ],
+            "inputs": [
+                "rollup.config.types.js",
+                "tsconfig.*",
+                "src/**"
+            ],
+            "outputs": [
+                "declarations/**",
+                "dist/**/*.d.ts",
+                "lib/**/*.d.ts"
+            ]
         },
         "publish-packages": {
             "cache": false,
-            "dependsOn": ["^publish-packages"],
+            "dependsOn": [
+                "^publish-packages"
+            ],
             "outputs": []
         },
         "style:fix": {
-            "inputs": ["src/**"],
+            "inputs": [
+                "src/**"
+            ],
             "outputs": []
         },
         "test:lint": {
-            "inputs": ["src/**", "test/**"],
+            "inputs": [
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         },
         "test:live-with-test-validator": {
-            "inputs": ["babel.config.json", "src/**", "test/**"],
+            "inputs": [
+                "babel.config.json",
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         },
         "test:prettier": {
-            "inputs": ["src/**", "test/**"],
+            "inputs": [
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         },
         "test:typecheck": {
-            "dependsOn": ["^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**", "test/**"],
+            "dependsOn": [
+                "^compile:typedefs"
+            ],
+            "inputs": [
+                "tsconfig.*",
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         },
         "test:unit:browser": {
-            "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
+            "dependsOn": [
+                "^compile:js"
+            ],
+            "inputs": [
+                "src/**"
+            ],
             "outputs": []
         },
         "test:unit:node": {
-            "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
+            "dependsOn": [
+                "^compile:js"
+            ],
+            "inputs": [
+                "src/**"
+            ],
             "outputs": []
         },
         "test:treeshakability:browser": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": [
+                "compile:js"
+            ],
             "outputs": []
         },
         "test:treeshakability:native": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": [
+                "compile:js"
+            ],
             "outputs": []
         },
         "test:treeshakability:node": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": [
+                "compile:js"
+            ],
             "outputs": []
         },
         "@solana/web3.js#test:unit:node": {
-            "dependsOn": ["^compile:js"],
-            "inputs": ["babel.config.json", "src/**", "test/**"],
+            "dependsOn": [
+                "^compile:js"
+            ],
+            "inputs": [
+                "babel.config.json",
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         },
         "@solana/web3.js-experimental#publish-packages": {
             "cache": false,
-            "dependsOn": ["build", "^publish-packages", "@solana/web3.js#publish-packages"],
+            "dependsOn": [
+                "build",
+                "^publish-packages",
+                "@solana/web3.js#publish-packages"
+            ],
             "outputs": []
         },
         "@solana/web3.js-legacy-sham#compile:typedefs": {
-            "dependsOn": ["@solana/web3.js#compile:typedefs", "^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**", "test/**"],
+            "dependsOn": [
+                "@solana/web3.js#compile:typedefs",
+                "^compile:typedefs"
+            ],
+            "inputs": [
+                "tsconfig.*",
+                "src/**",
+                "test/**"
+            ],
             "outputs": []
         }
     },
