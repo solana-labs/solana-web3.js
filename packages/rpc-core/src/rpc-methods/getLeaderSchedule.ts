@@ -1,6 +1,10 @@
 import type { Address } from '@solana/addresses';
 import type { Commitment, IRpcApiMethods, Slot } from '@solana/rpc-types';
 
+type GetLeaderScheduleApiConfigBase = Readonly<{
+    commitment?: Commitment;
+}>;
+
 /**
  * This return type is a dictionary of validator identities, as base-58 encoded
  * strings, and their corresponding leader slot indices as values
@@ -17,8 +21,10 @@ import type { Commitment, IRpcApiMethods, Slot } from '@solana/rpc-types';
  * }
  * ```
  */
-type GetLeaderScheduleApiResponseBase = Readonly<{
-    [key: Address]: Slot[];
+type GetLeaderScheduleApiResponseWithAllIdentities = Record<Address, Slot[]>;
+
+type GetLeaderScheduleApiResponseWithSingleIdentity<TIdentity extends string> = Readonly<{
+    [TAddress in TIdentity]?: Slot[];
 }>;
 
 export interface GetLeaderScheduleApi extends IRpcApiMethods {
@@ -28,21 +34,33 @@ export interface GetLeaderScheduleApi extends IRpcApiMethods {
      *
      * When a slot is provided, the leader schedule for the epoch that corresponds
      * to the provided slot is returned, and this can be null if the slot corresponds
-     * to an epoch that does not exist
+     * to an epoch that does not exist.
+     *
+     * The RPC request payload provides a `null` value for `slot` when the slot is not
+     * specified but the request wishes to include config.
      */
+    getLeaderSchedule<TIdentity extends Address>(
+        slot: Slot,
+        config: GetLeaderScheduleApiConfigBase &
+            Readonly<{
+                /** Only return results for this validator identity (base58 encoded address) */
+                identity: Address;
+            }>,
+    ): GetLeaderScheduleApiResponseWithSingleIdentity<TIdentity> | null;
     getLeaderSchedule(
         slot: Slot,
-        config?: Readonly<{
-            commitment?: Commitment;
-            /** Only return results for this validator identity (base58 encoded address) */
-            identity?: Address;
-        }>,
-    ): GetLeaderScheduleApiResponseBase | null;
+        config?: GetLeaderScheduleApiConfigBase,
+    ): GetLeaderScheduleApiResponseWithAllIdentities | null;
+    getLeaderSchedule<TIdentity extends Address>(
+        slot: null,
+        config: GetLeaderScheduleApiConfigBase &
+            Readonly<{
+                /** Only return results for this validator identity (base58 encoded address) */
+                identity: Address;
+            }>,
+    ): GetLeaderScheduleApiResponseWithSingleIdentity<TIdentity>;
     getLeaderSchedule(
-        config?: Readonly<{
-            commitment?: Commitment;
-            /** Only return results for this validator identity (base58 encoded address) */
-            identity?: Address;
-        }>,
-    ): GetLeaderScheduleApiResponseBase;
+        slot: null,
+        config?: GetLeaderScheduleApiConfigBase,
+    ): GetLeaderScheduleApiResponseWithAllIdentities;
 }

@@ -3,7 +3,6 @@ import type { Commitment, IRpcApiMethods, LamportsUnsafeBeyond2Pow53Minus1, RpcR
 
 type GetSupplyConfig = Readonly<{
     commitment?: Commitment;
-    excludeNonCirculatingAccountsList?: boolean;
 }>;
 
 type GetSupplyApiResponseBase = RpcResponse<{
@@ -19,14 +18,18 @@ type GetSupplyApiResponseWithNonCirculatingAccounts = GetSupplyApiResponseBase &
     Readonly<{
         value: Readonly<{
             /** an array of account addresses of non-circulating accounts */
-            nonCirculatingAccounts: [Address];
+            nonCirculatingAccounts: Address[];
         }>;
     }>;
 
 type GetSupplyApiResponseWithoutNonCirculatingAccounts = GetSupplyApiResponseBase &
     Readonly<{
         value: Readonly<{
-            nonCirculatingAccounts: [];
+            /** As per the docs:
+             * "If `excludeNonCirculatingAccountsList` is enabled, the returned array will be empty."
+             * See: https://solana.com/docs/rpc/http/getsupply
+             */
+            nonCirculatingAccounts: never[];
         }>;
     }>;
 
@@ -40,5 +43,10 @@ export interface GetSupplyApi extends IRpcApiMethods {
                 excludeNonCirculatingAccountsList: true;
             }>,
     ): GetSupplyApiResponseWithoutNonCirculatingAccounts;
-    getSupply(config?: GetSupplyConfig): GetSupplyApiResponseWithNonCirculatingAccounts;
+    getSupply(
+        config?: GetSupplyConfig &
+            Readonly<{
+                excludeNonCirculatingAccountsList?: false;
+            }>,
+    ): GetSupplyApiResponseWithNonCirculatingAccounts;
 }
