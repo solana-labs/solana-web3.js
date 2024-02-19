@@ -1,7 +1,7 @@
 {
-    "name": "@solana/rpc-subscriptions-spec",
+    "name": "@solana/rpc-spec-types",
     "version": "2.0.0-development",
-    "description": "A generic implementation of JSON RPC Subscriptions using proxies",
+    "description": "Shared generic JSON RPC specifications",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -62,9 +62,6 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "dependencies": {
-        "@solana/rpc-spec-types": "workspace:*"
-    },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",

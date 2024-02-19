@@ -1,5 +1,6 @@
+import { Callable } from '@solana/rpc-spec-types';
+
 import { RpcRequest } from './rpc-request';
-import { Callable } from './type-helpers';
 
 export type RpcApiConfig = Readonly<{
     parametersTransformer?: <T extends unknown[]>(params: T, methodName: string) => unknown[];

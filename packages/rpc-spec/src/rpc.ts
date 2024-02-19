@@ -1,11 +1,16 @@
-import { OverloadImplementations } from './overloads';
+import {
+    Callable,
+    createRpcMessage,
+    Flatten,
+    OverloadImplementations,
+    RpcError,
+    RpcResponse,
+    UnionToIntersection,
+} from '@solana/rpc-spec-types';
+
 import { RpcApi } from './rpc-api';
-import { RpcError } from './rpc-error';
-import { createRpcMessage } from './rpc-message';
 import { PendingRpcRequest, RpcRequest, RpcSendOptions } from './rpc-request';
-import { RpcResponse } from './rpc-response';
 import { RpcTransport } from './rpc-transport';
-import { Callable, Flatten, UnionToIntersection } from './type-helpers';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
     api: RpcApi<TRpcMethods>;

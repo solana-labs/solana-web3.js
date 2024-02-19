@@ -1,7 +1,13 @@
-import { OverloadImplementations } from './overloads';
-import { RpcError } from './rpc-error';
-import { createRpcMessage } from './rpc-message';
-import { RpcResponse } from './rpc-response';
+import {
+    Callable,
+    createRpcMessage,
+    Flatten,
+    OverloadImplementations,
+    RpcError,
+    RpcResponse,
+    UnionToIntersection,
+} from '@solana/rpc-spec-types';
+
 import { RpcSubscriptionsApi } from './rpc-subscriptions-api';
 import {
     PendingRpcSubscriptionsRequest,
@@ -9,7 +15,6 @@ import {
     RpcSubscriptionsRequest,
 } from './rpc-subscriptions-request';
 import { RpcSubscriptionsTransport } from './rpc-subscriptions-transport';
-import { Callable, Flatten, UnionToIntersection } from './type-helpers';
 
 export type RpcSubscriptionsConfig<
     TRpcMethods,

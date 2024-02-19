@@ -1,5 +1,6 @@
+import { Callable } from '@solana/rpc-spec-types';
+
 import { RpcSubscriptionsRequest } from './rpc-subscriptions-request';
-import { Callable } from './type-helpers';
 
 export type RpcSubscriptionsApiConfig = Readonly<{
     parametersTransformer?: <T extends unknown[]>(params: T, notificationName: string) => unknown[];

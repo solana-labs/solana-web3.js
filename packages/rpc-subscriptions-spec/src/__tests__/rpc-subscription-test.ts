@@ -1,11 +1,15 @@
-import { RpcError } from '../rpc-error';
-import { createRpcMessage } from '../rpc-message';
+import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
+
 import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions';
 import { RpcSubscriptionsApi } from '../rpc-subscriptions-api';
 import { RpcSubscriptionsRequest } from '../rpc-subscriptions-request';
 import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
 
-jest.mock('../rpc-message');
+// Partially mock the rpc-spec-types package.
+jest.mock('@solana/rpc-spec-types', () => ({
+    ...jest.requireActual('@solana/rpc-spec-types'),
+    createRpcMessage: jest.fn(),
+}));
 
 interface TestRpcSubscriptionNotifications {
     nonConformingNotif(...args: unknown[]): unknown;

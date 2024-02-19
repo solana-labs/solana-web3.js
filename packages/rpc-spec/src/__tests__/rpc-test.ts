@@ -1,7 +1,7 @@
+import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
+
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi } from '../rpc-api';
-import { RpcError } from '../rpc-error';
-import { createRpcMessage } from '../rpc-message';
 import { RpcRequest } from '../rpc-request';
 import { RpcTransport } from '../rpc-transport';
 
