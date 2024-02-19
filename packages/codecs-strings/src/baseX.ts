@@ -99,7 +99,12 @@ function partitionLeadingZeroes(value: string, zeroCharacter: string): [string, 
 
 function getBigIntFromBaseX(value: string, alphabet: string): bigint {
     const base = BigInt(alphabet.length);
-    return [...value].reduce((sum, char) => sum * base + BigInt(alphabet.indexOf(char)), 0n);
+    let sum = 0n;
+    for (const char of value) {
+        sum *= base;
+        sum += BigInt(alphabet.indexOf(char));
+    }
+    return sum;
 }
 
 function getBaseXFromBigInt(value: bigint, alphabet: string): string {
