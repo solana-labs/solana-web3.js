@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, SolanaError } from '@solana/errors';

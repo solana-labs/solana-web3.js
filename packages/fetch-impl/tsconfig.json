@@ -1,9 +1,14 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": ["DOM", "ES5"]
+        "lib": [
+            "DOM",
+            "ES5"
+        ]
     },
     "display": "Fetch Implementation",
-    "extends": "tsconfig/base.json",
-    "include": ["src"]
+    "extends": "@solana/tsconfig/base.json",
+    "include": [
+        "src"
+    ]
 }

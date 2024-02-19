@@ -41,11 +41,11 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               options.inject = [path.resolve(__dirname, 'env-shim.ts')];
                           },
                           external: [
-                              // Despite inlining `text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
+                              // Despite inlining `@solana/text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
                               'fastestsmallesttextencoderdecoder',
-                              // Despite inlining `fetch-impl`, do not recursively inline `node-fetch`.
+                              // Despite inlining `@solana/fetch-impl`, do not recursively inline `node-fetch`.
                               'node-fetch',
-                              // Despite inlining `ws-impl`, do not recursively inline `ws`.
+                              // Despite inlining `@solana/ws-impl`, do not recursively inline `ws`.
                               'ws',
                           ],
                           format,
@@ -56,10 +56,10 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                           noExternal: [
                               // @noble/ed25519 is an ESM-only module, so we have to inline it in CJS builds.
                               ...(format === 'cjs' ? ['@noble/ed25519'] : []),
-                              'crypto-impl',
-                              'fetch-impl',
-                              'text-encoding-impl',
-                              'ws-impl',
+                              '@solana/crypto-impl',
+                              '@solana/fetch-impl',
+                              '@solana/text-encoding-impl',
+                              '@solana/ws-impl',
                           ],
                           outExtension({ format }) {
                               let extension;

@@ -1,4 +1,4 @@
-import WebSocket from 'ws-impl';
+import WebSocket from '@solana/ws-impl';
 
 type Config = Readonly<{
     sendBufferHighWatermark: number;

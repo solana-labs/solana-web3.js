@@ -2,10 +2,14 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "paths": {
-            "@solana/web3.js-legacy": ["./node_modules/@solana/web3.js-legacy/declarations/index.d.ts"]
+            "@solana/web3.js-legacy": [
+                "./node_modules/@solana/web3.js-legacy/declarations/index.d.ts"
+            ]
         }
     },
     "display": "@solana/web3.js-legacy-sham",
-    "extends": "tsconfig/base.json",
-    "include": ["src"]
+    "extends": "@solana/tsconfig/base.json",
+    "include": [
+        "src"
+    ]
 }

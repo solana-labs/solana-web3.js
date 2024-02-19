@@ -1,4 +1,4 @@
-import cryptoImpl from 'crypto-impl';
+import cryptoImpl from '@solana/crypto-impl';
 
 import {
     exportKeyPolyfill,

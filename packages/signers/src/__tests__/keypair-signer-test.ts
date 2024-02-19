@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';

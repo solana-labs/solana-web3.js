@@ -1,9 +1,15 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": ["ES2015", "ES2020.BigInt", "ES2022.Error"]
+        "lib": [
+            "ES2015",
+            "ES2020.BigInt",
+            "ES2022.Error"
+        ]
     },
     "display": "@solana/rpc-types",
-    "extends": "tsconfig/base.json",
-    "include": ["src"]
+    "extends": "@solana/tsconfig/base.json",
+    "include": [
+        "src"
+    ]
 }

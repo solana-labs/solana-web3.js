@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import { address } from '@solana/addresses';
 import { CompilableTransaction } from '@solana/transactions';

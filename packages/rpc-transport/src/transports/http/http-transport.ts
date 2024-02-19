@@ -1,5 +1,5 @@
+import fetchImpl from '@solana/fetch-impl';
 import { ClusterUrl } from '@solana/rpc-types';
-import fetchImpl from 'fetch-impl';
 
 import { IRpcTransport, IRpcTransportFromClusterUrl } from '../transport-types';
 import { SolanaHttpError } from './http-transport-errors';

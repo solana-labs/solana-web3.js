@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import { createTransaction } from '../create-transaction';
 

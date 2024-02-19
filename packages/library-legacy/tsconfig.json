@@ -11,7 +11,14 @@
     "resolveJsonModule": true,
     "strict": true
   },
-  "extends": "tsconfig/base.json",
-  "include": ["src", "test"],
-  "exclude": ["declarations", "lib", "node_modules"]
+  "extends": "@solana/tsconfig/base.json",
+  "include": [
+    "src",
+    "test"
+  ],
+  "exclude": [
+    "declarations",
+    "lib",
+    "node_modules"
+  ]
 }

@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import { getBase58Encoder } from '@solana/codecs-strings';
 import type { Blockhash } from '@solana/rpc-types';

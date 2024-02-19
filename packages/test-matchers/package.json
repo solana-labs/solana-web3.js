@@ -1,5 +1,5 @@
 {
-    "name": "test-matchers",
+    "name": "@solana/test-matchers",
     "version": "0.0.0",
     "private": true,
     "files": [

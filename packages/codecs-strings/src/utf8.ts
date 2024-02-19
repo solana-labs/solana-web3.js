@@ -6,7 +6,7 @@ import {
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
-import { TextDecoder, TextEncoder } from 'text-encoding-impl';
+import { TextDecoder, TextEncoder } from '@solana/text-encoding-impl';
 
 import { removeNullCharacters } from './null-characters';
 

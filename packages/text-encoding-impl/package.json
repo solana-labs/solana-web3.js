@@ -1,5 +1,5 @@
 {
-    "name": "text-encoding-impl",
+    "name": "@solana/text-encoding-impl",
     "version": "0.0.0",
     "private": true,
     "exports": {
@@ -30,10 +30,10 @@
     "scripts": {
         "compile:js": "tsup",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
-        "dev": "jest -c node_modules/test-config/jest-dev.config.ts --rootDir . --watch",
+        "dev": "jest -c node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
-        "test:lint": "jest -c node_modules/test-config/jest-lint.config.ts --rootDir . --silent",
-        "test:prettier": "jest -c node_modules/test-config/jest-prettier.config.ts --rootDir . --silent",
+        "test:lint": "jest -c node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",
+        "test:prettier": "jest -c node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
         "test:typecheck": "tsc --noEmit"
@@ -44,6 +44,8 @@
     ],
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
+        "@solana/test-config": "workspace:*",
+        "@solana/tsconfig": "workspace:*",
         "@swc/jest": "^0.2.29",
         "@types/fastestsmallesttextencoderdecoder": "^1.0.2",
         "@types/jest": "^29.5.11",
@@ -58,8 +60,6 @@
         "jest-runner-eslint": "^2.1.2",
         "jest-runner-prettier": "^1.0.0",
         "prettier": "^3.1",
-        "test-config": "workspace:*",
-        "tsconfig": "workspace:*",
         "tsup": "^8.0.1",
         "typescript": "^5.2.2"
     },

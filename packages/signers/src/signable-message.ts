@@ -1,4 +1,4 @@
-import { TextEncoder } from 'text-encoding-impl';
+import { TextEncoder } from '@solana/text-encoding-impl';
 
 import { SignatureDictionary } from './types';
 

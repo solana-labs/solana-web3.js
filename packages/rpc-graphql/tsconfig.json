@@ -1,10 +1,21 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": ["DOM", "ES2017", "ES2020.BigInt", "ES2022.Error"],
+        "lib": [
+            "DOM",
+            "ES2017",
+            "ES2020.BigInt",
+            "ES2022.Error"
+        ],
         "resolveJsonModule": true
     },
     "display": "@solana/rpc-graphql",
-    "extends": "tsconfig/base.json",
-    "include": ["src", ".hold/transaction", ".hold/block", ".hold/program-accounts", ".hold/account"]
+    "extends": "@solana/tsconfig/base.json",
+    "include": [
+        "src",
+        ".hold/transaction",
+        ".hold/block",
+        ".hold/program-accounts",
+        ".hold/account"
+    ]
 }

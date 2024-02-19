@@ -1,6 +1,8 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "@solana/rpc-core",
-    "extends": "tsconfig/base.json",
-    "include": ["src"]
+    "extends": "@solana/tsconfig/base.json",
+    "include": [
+        "src"
+    ]
 }

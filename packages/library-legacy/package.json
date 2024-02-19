@@ -43,6 +43,7 @@
     "build:fixtures": "set -ex; ./test/fixtures/noop-program/build.sh",
     "clean": "rimraf ./doc ./declarations ./lib",
     "dev": "cross-env NODE_ENV=development rollup -c --watch",
+    "prepublishOnly": "pnpm pkg delete devDependencies",
     "publish-packages": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || semantic-release --repository-url git@github.com:solana-labs/solana-web3.js.git",
     "test:lint": "eslint src/ test/ --ext .js,.ts",
     "test:lint:fix": "eslint src/ test/ --fix --ext .js,.ts",
@@ -87,6 +88,7 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
     "@solana/spl-token": "^0.4.0",
+    "@solana/tsconfig": "workspace:*",
     "@types/bn.js": "^5.1.1",
     "@types/bs58": "^4.0.1",
     "@types/chai": "^4.3.5",
@@ -124,7 +126,6 @@
     "start-server-and-test": "^2.0.0",
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
-    "tsconfig": "workspace:*",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.4",
     "typescript": "^5.1.6"

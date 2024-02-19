@@ -1,6 +1,6 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
-import { TextEncoder } from 'text-encoding-impl';
+import { TextEncoder } from '@solana/text-encoding-impl';
 
 import { createSignableMessage } from '../signable-message';
 

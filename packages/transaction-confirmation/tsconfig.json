@@ -8,7 +8,7 @@
         ]
     },
     "display": "@solana/transaction-confirmation",
-    "extends": "tsconfig/base.json",
+    "extends": "@solana/tsconfig/base.json",
     "include": [
         "src"
     ],

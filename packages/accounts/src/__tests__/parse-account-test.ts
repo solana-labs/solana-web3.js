@@ -1,4 +1,4 @@
-import 'test-matchers/toBeFrozenObject';
+import '@solana/test-matchers/toBeFrozenObject';
 
 import type { Address } from '@solana/addresses';
 import { lamports } from '@solana/rpc-types';
