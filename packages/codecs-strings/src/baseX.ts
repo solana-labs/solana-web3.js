@@ -31,7 +31,6 @@ export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> =
             // Handle leading zeroes.
             const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
             if (!tailChars) {
-                bytes.set(new Uint8Array(leadingZeroes.length).fill(0), offset);
                 return offset + leadingZeroes.length;
             }
 
@@ -44,10 +43,8 @@ export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> =
                 tailBytes.unshift(Number(base10Number % 256n));
                 base10Number /= 256n;
             }
-
-            const bytesToAdd = [...Array(leadingZeroes.length).fill(0), ...tailBytes];
-            bytes.set(bytesToAdd, offset);
-            return offset + bytesToAdd.length;
+            bytes.set(tailBytes, offset + leadingZeroes.length);
+            return offset + leadingZeroes.length + tailBytes.length;
         },
     });
 };
