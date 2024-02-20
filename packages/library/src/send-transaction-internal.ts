@@ -77,7 +77,7 @@ function getSendTransactionConfigWithAdjustedPreflightCommitment(
     return config;
 }
 
-async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
+export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     abortSignal,
     commitment,
     rpc,
