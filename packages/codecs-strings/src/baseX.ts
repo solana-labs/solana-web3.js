@@ -18,7 +18,7 @@ export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> =
     return createEncoder({
         getSizeFromValue: (value: string): number => {
             const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
-            if (tailChars === '') return value.length;
+            if (!tailChars) return value.length;
 
             const base10Number = getBigIntFromBaseX(tailChars, alphabet);
             return leadingZeroes.length + Math.ceil(base10Number.toString(16).length / 2);
@@ -30,7 +30,7 @@ export const getBaseXEncoder = (alphabet: string): VariableSizeEncoder<string> =
 
             // Handle leading zeroes.
             const [leadingZeroes, tailChars] = partitionLeadingZeroes(value, alphabet[0]);
-            if (tailChars === '') {
+            if (!tailChars) {
                 bytes.set(new Uint8Array(leadingZeroes.length).fill(0), offset);
                 return offset + leadingZeroes.length;
             }
@@ -92,9 +92,12 @@ export const getBaseXDecoder = (alphabet: string): VariableSizeDecoder<string> =
 export const getBaseXCodec = (alphabet: string): VariableSizeCodec<string> =>
     combineCodec(getBaseXEncoder(alphabet), getBaseXDecoder(alphabet));
 
-function partitionLeadingZeroes(value: string, zeroCharacter: string): [string, string] {
-    const leadingZeroIndex = [...value].findIndex(c => c !== zeroCharacter);
-    return leadingZeroIndex === -1 ? [value, ''] : [value.slice(0, leadingZeroIndex), value.slice(leadingZeroIndex)];
+function partitionLeadingZeroes(
+    value: string,
+    zeroCharacter: string,
+): [leadingZeros: string, tailChars: string | undefined] {
+    const [leadingZeros, tailChars] = value.split(new RegExp(`((?!${zeroCharacter}).*)`));
+    return [leadingZeros, tailChars];
 }
 
 function getBigIntFromBaseX(value: string, alphabet: string): bigint {
