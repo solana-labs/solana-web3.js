@@ -1,4 +1,5 @@
 import {
+    SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
@@ -17,6 +18,10 @@ export type DefaultUnspecifiedErrorContextToUndefined<T> = {
  *   - Don't change or remove members of an error's context.
  */
 export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
+    [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
+        currentBlockHeight: bigint;
+        lastValidBlockHeight: bigint;
+    };
     [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
         addresses: string[];
     };

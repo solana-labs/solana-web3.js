@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, SolanaError } from '@solana/errors';
 import { Commitment } from '@solana/rpc-types';
 
 import { createBlockHeightExceedencePromiseFactory } from '../transaction-confirmation-strategy-blockheight';
@@ -44,7 +45,12 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             abortSignal: new AbortController().signal,
             lastValidBlockHeight: 100n,
         });
-        await expect(exceedencePromise).rejects.toThrow();
+        await expect(exceedencePromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, {
+                currentBlockHeight: 101n,
+                lastValidBlockHeight: 100n,
+            }),
+        );
     });
     it('continues to pend when the block height in the initial fetch is lower than the last valid block height', async () => {
         expect.assertions(1);
@@ -72,7 +78,12 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             abortSignal: new AbortController().signal,
             lastValidBlockHeight: 100n,
         });
-        await expect(exceedencePromise).rejects.toThrow();
+        await expect(exceedencePromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, {
+                currentBlockHeight: 101n,
+                lastValidBlockHeight: 100n,
+            }),
+        );
     });
     it('continues to pend when slot at which the block height is expected to be exceeded has not been reached', async () => {
         expect.assertions(1);
@@ -111,7 +122,12 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             abortSignal: new AbortController().signal,
             lastValidBlockHeight: 100n,
         });
-        await expect(exceedencePromise).rejects.toThrow();
+        await expect(exceedencePromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, {
+                currentBlockHeight: 101n,
+                lastValidBlockHeight: 100n,
+            }),
+        );
     });
     it('continues to pend when the slot height / block height delta grows by the time the slot at which the block height is expected to be exceeded is reached', async () => {
         expect.assertions(1);
