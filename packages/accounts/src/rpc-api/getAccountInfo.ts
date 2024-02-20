@@ -1,17 +1,19 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, IRpcApiMethods, RpcResponse, Slot } from '@solana/rpc-types';
-
-import {
+import type { RpcApiMethods } from '@solana/rpc-spec';
+import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
+    Commitment,
     DataSlice,
-} from './common';
+    Slot,
+    SolanaRpcResponse,
+} from '@solana/rpc-types';
 
-type GetAccountInfoApiResponseBase = RpcResponse<AccountInfoBase | null>;
+type GetAccountInfoApiResponseBase = SolanaRpcResponse<AccountInfoBase | null>;
 
 type NestInRpcResponseOrNull<T> = Readonly<{
     value: T | null;
@@ -29,7 +31,7 @@ type GetAccountInfoApiSliceableCommonConfig = Readonly<{
     dataSlice?: DataSlice;
 }>;
 
-export interface GetAccountInfoApi extends IRpcApiMethods {
+export interface GetAccountInfoApi extends RpcApiMethods {
     /**
      * Returns all information associated with the account of provided public key
      */

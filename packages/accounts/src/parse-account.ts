@@ -1,15 +1,15 @@
 import type { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Encoder } from '@solana/codecs-strings';
-
-import type { Account, BaseAccount, EncodedAccount } from './account';
-import { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
-    JsonParsedDataResponse,
-} from './rpc-api';
+} from '@solana/rpc-types';
+
+import type { Account, BaseAccount, EncodedAccount } from './account';
+import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
+import type { JsonParsedDataResponse } from './rpc-api';
 
 type Base64EncodedRpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 
