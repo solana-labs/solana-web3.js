@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, SolanaError } from '@solana/errors';
 import type { GetEpochInfoApi, SlotNotificationsApi } from '@solana/rpc-core';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
 import { Commitment } from '@solana/rpc-types';
@@ -35,20 +36,23 @@ export function createBlockHeightExceedencePromiseFactory({
             };
         }
         try {
-            const [slotNotifications, { blockHeight, differenceBetweenSlotHeightAndBlockHeight }] = await Promise.all([
-                rpcSubscriptions.slotNotifications().subscribe({ abortSignal: abortController.signal }),
-                getBlockHeightAndDifferenceBetweenSlotHeightAndBlockHeight(),
-            ]);
-            if (blockHeight <= lastValidBlockHeight) {
+            const [slotNotifications, { blockHeight: initialBlockHeight, differenceBetweenSlotHeightAndBlockHeight }] =
+                await Promise.all([
+                    rpcSubscriptions.slotNotifications().subscribe({ abortSignal: abortController.signal }),
+                    getBlockHeightAndDifferenceBetweenSlotHeightAndBlockHeight(),
+                ]);
+            let currentBlockHeight = initialBlockHeight;
+            if (currentBlockHeight <= lastValidBlockHeight) {
                 let lastKnownDifferenceBetweenSlotHeightAndBlockHeight = differenceBetweenSlotHeightAndBlockHeight;
                 for await (const slotNotification of slotNotifications) {
                     const { slot } = slotNotification;
                     if (slot - lastKnownDifferenceBetweenSlotHeightAndBlockHeight > lastValidBlockHeight) {
                         // Before making a final decision, recheck the actual block height.
                         const {
-                            blockHeight: currentBlockHeight,
+                            blockHeight: recheckedBlockHeight,
                             differenceBetweenSlotHeightAndBlockHeight: currentDifferenceBetweenSlotHeightAndBlockHeight,
                         } = await getBlockHeightAndDifferenceBetweenSlotHeightAndBlockHeight();
+                        currentBlockHeight = recheckedBlockHeight;
                         if (currentBlockHeight > lastValidBlockHeight) {
                             // Verfied; the block height has been exceeded.
                             break;
@@ -63,11 +67,10 @@ export function createBlockHeightExceedencePromiseFactory({
                     }
                 }
             }
-            // TODO: Coded error.
-            throw new Error(
-                'The network has progressed past the last block for which this transaction could ' +
-                    'have been committed.',
-            );
+            throw new SolanaError(SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, {
+                currentBlockHeight,
+                lastValidBlockHeight,
+            });
         } finally {
             abortController.abort();
         }

@@ -1,4 +1,5 @@
 import {
+    SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
@@ -18,6 +19,8 @@ export const SolanaErrorMessages: Readonly<{
     // TypeScript will fail to build this project if add an error code without a message.
     [P in SolanaErrorCode]: string;
 }> = {
+    [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
+        'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
     [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]:
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
