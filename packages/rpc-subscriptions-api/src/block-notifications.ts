@@ -3,21 +3,18 @@ import type {
     Base58EncodedBytes,
     Blockhash,
     Commitment,
+    Reward,
     Slot,
     SolanaRpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
-    UnixTimestamp,
-} from '@solana/rpc-types';
-import type { TransactionVersion } from '@solana/transactions';
-
-import type {
-    Reward,
     TransactionForAccounts,
     TransactionForFullBase58,
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-} from './common-transactions';
+    U64UnsafeBeyond2Pow53Minus1,
+    UnixTimestamp,
+} from '@solana/rpc-types';
+import type { TransactionVersion } from '@solana/transactions';
 
 // Subscription notification types
 

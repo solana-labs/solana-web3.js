@@ -1,15 +1,16 @@
 import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Commitment, Slot, SolanaRpcResponse } from '@solana/rpc-types';
-
-import {
+import type {
     AccountInfoBase,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
+    Commitment,
     DataSlice,
-} from './common';
+    Slot,
+    SolanaRpcResponse,
+} from '@solana/rpc-types';
 
 type GetMultipleAccountsApiResponseBase = AccountInfoBase | null;
 

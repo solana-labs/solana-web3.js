@@ -1,16 +1,13 @@
 import type { Address } from '@solana/addresses';
-import type {
-    Base58EncodedBytes,
-    Base58EncodedDataResponse,
-    Base64EncodedDataResponse,
-    Blockhash,
-    LamportsUnsafeBeyond2Pow53Minus1,
-    TransactionError,
-    U64UnsafeBeyond2Pow53Minus1,
-} from '@solana/rpc-types';
-import type { TransactionVersion } from '@solana/transactions';
 
-import { SignedLamportsAsI64Unsafe, TokenBalance } from './common';
+import type { Blockhash } from './blockhash';
+import type { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse } from './encoded-bytes';
+import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports';
+import type { TokenBalance } from './token-balance';
+import type { TransactionError } from './transaction-error';
+import type { SignedLamportsAsI64Unsafe, U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
+
+type TransactionVersion = 'legacy' | 0;
 
 type AddressTableLookup = Readonly<{
     /** public key for an address lookup table account. */

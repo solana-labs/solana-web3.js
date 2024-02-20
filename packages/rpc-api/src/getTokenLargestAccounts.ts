@@ -1,4 +1,4 @@
-import { Address } from '@solana/addresses';
+import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, SolanaRpcResponse, TokenAmount } from '@solana/rpc-types';
 

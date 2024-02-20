@@ -1,7 +1,5 @@
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import type { F64UnsafeSeeDocumentation } from './common';
+import type { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetInflationRateApiResponse = Readonly<{
     /** Epoch for which these values are valid */

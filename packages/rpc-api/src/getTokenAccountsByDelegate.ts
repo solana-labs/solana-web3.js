@@ -1,17 +1,19 @@
 import type { Address } from '@solana/addresses';
 import type { JsonParsedTokenAccount } from '@solana/rpc-parsed-types';
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Commitment, Slot, SolanaRpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-
-import {
+import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithPubkey,
+    Commitment,
     DataSlice,
-} from './common';
+    Slot,
+    SolanaRpcResponse,
+    U64UnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 type TokenAccountInfoWithJsonData = Readonly<{
     data: Readonly<{

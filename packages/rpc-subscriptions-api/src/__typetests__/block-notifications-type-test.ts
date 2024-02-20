@@ -6,16 +6,17 @@ import type {
     Base64EncodedDataResponse,
     Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Reward,
     Slot,
     SolanaRpcResponse,
+    TokenBalance,
     TransactionError,
+    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transactions';
 
 import type { BlockNotificationsApi } from '../block-notifications';
-import type { TokenBalance } from '../common';
-import type { Reward, TransactionStatus } from '../common-transactions';
 
 async () => {
     type BlockNotificationsApiNotificationBase = SolanaRpcResponse<

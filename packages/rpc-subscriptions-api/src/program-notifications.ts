@@ -1,21 +1,18 @@
 import type { Address } from '@solana/addresses';
 import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type {
-    Base58EncodedBytes,
-    Base64EncodedBytes,
-    Commitment,
-    SolanaRpcResponse,
-    U64UnsafeBeyond2Pow53Minus1,
-} from '@solana/rpc-types';
-
-import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
     AccountInfoWithBase64EncodedData,
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
-} from './common';
+    Base58EncodedBytes,
+    Base64EncodedBytes,
+    Commitment,
+    SolanaRpcResponse,
+    U64UnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 type ProgramNotificationsMemcmpFilterBase58 = Readonly<{
     offset: U64UnsafeBeyond2Pow53Minus1;

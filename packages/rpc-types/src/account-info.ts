@@ -1,18 +1,13 @@
 import type { Address } from '@solana/addresses';
+
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
-    LamportsUnsafeBeyond2Pow53Minus1,
-    TokenAmount,
-    U64UnsafeBeyond2Pow53Minus1,
-} from '@solana/rpc-types';
-
-// FIXME(solana-labs/solana/issues/30341) Beware that any value outside of range
-// +/- 9007199254740991 may be truncated or rounded because of a downcast to JavaScript `number`
-// between your calling code and the JSON-RPC transport.
-export type SignedLamportsAsI64Unsafe = bigint;
+} from './encoded-bytes';
+import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports';
+import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
 
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */
@@ -62,16 +57,4 @@ export type AccountInfoWithJsonData = Readonly<{
 export type AccountInfoWithPubkey<TAccount extends AccountInfoBase> = Readonly<{
     account: TAccount;
     pubkey: Address;
-}>;
-
-export type TokenBalance = Readonly<{
-    /** Index of the account in which the token balance is provided for. */
-    accountIndex: number;
-    /** Pubkey of the token's mint. */
-    mint: Address;
-    /** Pubkey of token balance's owner. */
-    owner?: Address;
-    /** Pubkey of the Token program that owns the account. */
-    programId?: Address;
-    uiTokenAmount: TokenAmount;
 }>;

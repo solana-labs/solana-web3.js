@@ -3,20 +3,17 @@ import type {
     Base58EncodedBytes,
     Blockhash,
     Commitment,
-    Slot,
-    U64UnsafeBeyond2Pow53Minus1,
-    UnixTimestamp,
-} from '@solana/rpc-types';
-import type { TransactionVersion } from '@solana/transactions';
-
-import {
     Reward,
+    Slot,
     TransactionForAccounts,
     TransactionForFullBase58,
     TransactionForFullBase64,
     TransactionForFullJson,
     TransactionForFullJsonParsed,
-} from './common-transactions';
+    U64UnsafeBeyond2Pow53Minus1,
+    UnixTimestamp,
+} from '@solana/rpc-types';
+import type { TransactionVersion } from '@solana/transactions';
 
 // API response types
 

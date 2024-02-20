@@ -1,6 +1,10 @@
 import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
+    AccountInfoBase,
+    AccountInfoWithBase64EncodedData,
+    AccountInfoWithBase64EncodedZStdCompressedData,
+    AccountInfoWithJsonData,
     Base58EncodedBytes,
     Base64EncodedDataResponse,
     Commitment,
@@ -10,13 +14,6 @@ import type {
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
-
-import {
-    AccountInfoBase,
-    AccountInfoWithBase64EncodedData,
-    AccountInfoWithBase64EncodedZStdCompressedData,
-    AccountInfoWithJsonData,
-} from './common';
 
 type SimulateTransactionConfigBase = Readonly<{
     /**

@@ -176,7 +176,7 @@ export type {
     SimulateTransactionApi,
 };
 
-export type { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter } from './common';
+export type { DataSlice, GetProgramAccountsDatasizeFilter, GetProgramAccountsMemcmpFilter } from '@solana/rpc-types';
 
 type Config = ParamsTransformerConfig;
 

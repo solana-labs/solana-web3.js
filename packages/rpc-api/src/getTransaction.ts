@@ -8,15 +8,15 @@ import type {
     Blockhash,
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Reward,
     Slot,
+    TokenBalance,
     TransactionError,
+    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
     UnixTimestamp,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transactions';
-
-import type { TokenBalance } from './common';
-import type { Reward, TransactionStatus } from './common-transactions';
 
 type ReturnData = {
     /** the program that generated the return data */

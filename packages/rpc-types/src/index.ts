@@ -1,3 +1,5 @@
+export * from './account-filters';
+export * from './account-info';
 export * from './blockhash';
 export * from './cluster-url';
 export * from './commitment';
@@ -8,6 +10,8 @@ export * from './rpc-errors';
 export * from './stringified-bigint';
 export * from './stringified-number';
 export * from './token-amount';
+export * from './token-balance';
+export * from './transaction';
 export * from './transaction-error';
 export * from './typed-numbers';
 export * from './unix-timestamp';

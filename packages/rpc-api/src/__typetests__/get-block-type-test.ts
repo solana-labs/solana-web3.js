@@ -6,13 +6,14 @@ import type {
     Base64EncodedDataResponse,
     Blockhash,
     LamportsUnsafeBeyond2Pow53Minus1,
+    Reward,
+    TokenBalance,
     TransactionError,
+    TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
-import { TokenBalance } from '../common';
-import { Reward, TransactionStatus } from '../common-transactions';
 import { GetBlockApi } from '../getBlock';
 
 function assertNotAProperty<T extends object, TPropName extends string>(

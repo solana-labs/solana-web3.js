@@ -1,8 +1,6 @@
 import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Commitment, Slot, SolanaRpcResponse } from '@solana/rpc-types';
-
-import {
+import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
     AccountInfoWithBase58EncodedData,
@@ -10,10 +8,13 @@ import {
     AccountInfoWithBase64EncodedZStdCompressedData,
     AccountInfoWithJsonData,
     AccountInfoWithPubkey,
+    Commitment,
     DataSlice,
     GetProgramAccountsDatasizeFilter,
     GetProgramAccountsMemcmpFilter,
-} from './common';
+    Slot,
+    SolanaRpcResponse,
+} from '@solana/rpc-types';
 
 type GetProgramAccountsApiCommonConfig = Readonly<{
     /** @defaultValue "finalized" */

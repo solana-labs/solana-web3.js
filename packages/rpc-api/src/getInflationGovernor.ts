@@ -1,7 +1,5 @@
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Commitment } from '@solana/rpc-types';
-
-import type { F64UnsafeSeeDocumentation } from './common';
+import type { Commitment, F64UnsafeSeeDocumentation } from '@solana/rpc-types';
 
 type GetInflationGovernorApiResponse = Readonly<{
     /** The initial inflation percentage from time 0 */

@@ -1,8 +1,6 @@
 import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Slot } from '@solana/rpc-types';
-
-import { MicroLamportsUnsafeBeyond2Pow53Minus1 } from './common';
+import type { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from '@solana/rpc-types';
 
 type GetRecentPrioritizationFeesApiResponse = Readonly<{
     /**
