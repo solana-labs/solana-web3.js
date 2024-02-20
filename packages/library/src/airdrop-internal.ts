@@ -1,7 +1,7 @@
-import { Address } from '@solana/addresses';
-import { Signature } from '@solana/keys';
-import { RequestAirdropApi } from '@solana/rpc-core';
-import { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Rpc } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Signature } from '@solana/keys';
+import type { RequestAirdropApi, Rpc } from '@solana/rpc';
+import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { waitForRecentTransactionConfirmationUntilTimeout } from '@solana/transaction-confirmation';
 
 type RequestAndConfirmAirdropConfig = Readonly<{

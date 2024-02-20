@@ -1,6 +1,6 @@
-import { Signature } from '@solana/keys';
-import type { GetSignatureStatusesApi, RequestAirdropApi, SignatureNotificationsApi } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import type { Signature } from '@solana/keys';
+import type { GetSignatureStatusesApi, RequestAirdropApi, Rpc } from '@solana/rpc';
+import type { RpcSubscriptions, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
 import {
     createRecentSignatureConfirmationPromiseFactory,
     getTimeoutPromise,

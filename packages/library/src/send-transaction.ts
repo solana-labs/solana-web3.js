@@ -1,13 +1,10 @@
+import type { GetAccountInfoApi, GetEpochInfoApi, GetSignatureStatusesApi, Rpc, SendTransactionApi } from '@solana/rpc';
 import type {
     AccountNotificationsApi,
-    GetAccountInfoApi,
-    GetEpochInfoApi,
-    GetSignatureStatusesApi,
-    SendTransactionApi,
+    RpcSubscriptions,
     SignatureNotificationsApi,
     SlotNotificationsApi,
-} from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+} from '@solana/rpc-subscriptions';
 import {
     createBlockHeightExceedencePromiseFactory,
     createNonceInvalidationPromiseFactory,

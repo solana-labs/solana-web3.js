@@ -4,9 +4,8 @@ import {
     type FetchAccountsConfig,
     fetchJsonParsedAccounts,
 } from '@solana/accounts';
-import { Address } from '@solana/addresses';
-import type { GetMultipleAccountsApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import {
     type AddressesByLookupTableAddress,
     type CompilableTransaction,

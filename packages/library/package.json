@@ -74,14 +74,13 @@
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/programs": "workspace:*",
-        "@solana/rpc-core": "workspace:*",
+        "@solana/rpc": "workspace:*",
         "@solana/rpc-parsed-types": "workspace:*",
-        "@solana/rpc-transport": "workspace:*",
+        "@solana/rpc-subscriptions": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/signers": "workspace:*",
         "@solana/transaction-confirmation": "workspace:*",
-        "@solana/transactions": "workspace:*",
-        "fast-stable-stringify": "^1.0.0"
+        "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",

@@ -1,5 +1,5 @@
-import { Signature } from '@solana/keys';
-import { Commitment } from '@solana/rpc-types';
+import type { Signature } from '@solana/keys';
+import type { Commitment } from '@solana/rpc-types';
 
 import { createRecentSignatureConfirmationPromiseFactory } from './confirmation-strategy-recent-signature';
 

@@ -1,11 +1,9 @@
 import { FetchAccountsConfig, fetchJsonParsedAccounts } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
-import { GetMultipleAccountsApi } from '@solana/rpc-core';
-import type { Blockhash, Rpc } from '@solana/rpc-types';
+import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
+import type { Blockhash, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
-import { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
-
-import { LamportsUnsafeBeyond2Pow53Minus1 } from '..';
+import type { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
 
 jest.mock('@solana/accounts');
 jest.mock('@solana/transactions');

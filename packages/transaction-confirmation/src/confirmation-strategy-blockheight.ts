@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, SolanaError } from '@solana/errors';
-import type { GetEpochInfoApi, SlotNotificationsApi } from '@solana/rpc-core';
-import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
-import { Commitment } from '@solana/rpc-types';
+import type { GetEpochInfoApi, Rpc } from '@solana/rpc';
+import type { RpcSubscriptions, SlotNotificationsApi } from '@solana/rpc-subscriptions';
+import type { Commitment } from '@solana/rpc-types';
 
 type GetBlockHeightExceedencePromiseFn = (config: {
     abortSignal: AbortSignal;

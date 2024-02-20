@@ -1105,15 +1105,15 @@ importers:
       '@solana/programs':
         specifier: workspace:*
         version: link:../programs
-      '@solana/rpc-core':
+      '@solana/rpc':
         specifier: workspace:*
-        version: link:../rpc-core
+        version: link:../rpc
       '@solana/rpc-parsed-types':
         specifier: workspace:*
         version: link:../rpc-parsed-types
-      '@solana/rpc-transport':
+      '@solana/rpc-subscriptions':
         specifier: workspace:*
-        version: link:../rpc-transport
+        version: link:../rpc-subscriptions
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1126,9 +1126,6 @@ importers:
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
-      fast-stable-stringify:
-        specifier: ^1.0.0
-        version: 1.0.0
     devDependencies:
       '@solana/build-scripts':
         specifier: workspace:*
@@ -3087,9 +3084,12 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      '@solana/rpc-core':
+      '@solana/rpc':
         specifier: workspace:*
-        version: link:../rpc-core
+        version: link:../rpc
+      '@solana/rpc-subscriptions':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types

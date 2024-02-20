@@ -1,7 +1,7 @@
-import { Address } from '@solana/addresses';
-import { Signature } from '@solana/keys';
-import type { GetSignatureStatusesApi, RequestAirdropApi } from '@solana/rpc-core';
-import { lamports, type Rpc } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Signature } from '@solana/keys';
+import type { GetSignatureStatusesApi, RequestAirdropApi, Rpc } from '@solana/rpc';
+import { lamports } from '@solana/rpc-types';
 
 import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from '../airdrop-internal';
 
