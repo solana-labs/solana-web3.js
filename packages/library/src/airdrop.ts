@@ -1,8 +1,12 @@
 import { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, RequestAirdropApi, SignatureNotificationsApi } from '@solana/rpc-core';
 import type { Rpc, RpcSubscriptions } from '@solana/rpc-types';
+import {
+    createRecentSignatureConfirmationPromiseFactory,
+    getTimeoutPromise,
+    waitForRecentTransactionConfirmationUntilTimeout,
+} from '@solana/transaction-confirmation';
 
-import { createDefaultSignatureOnlyRecentTransactionConfirmer } from './airdrop-confirmer';
 import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from './airdrop-internal';
 
 type AirdropFunction = (
@@ -18,10 +22,22 @@ type AirdropFactoryConfig = Readonly<{
 }>;
 
 export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig): AirdropFunction {
-    const confirmSignatureOnlyTransaction = createDefaultSignatureOnlyRecentTransactionConfirmer({
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,
-    });
+    );
+    async function confirmSignatureOnlyTransaction(
+        config: Omit<
+            Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],
+            'getRecentSignatureConfirmationPromise' | 'getTimeoutPromise'
+        >,
+    ) {
+        await waitForRecentTransactionConfirmationUntilTimeout({
+            ...config,
+            getRecentSignatureConfirmationPromise,
+            getTimeoutPromise,
+        });
+    }
     return async function airdrop(config) {
         return await requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,

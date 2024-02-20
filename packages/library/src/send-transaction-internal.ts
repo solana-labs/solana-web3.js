@@ -2,6 +2,10 @@ import { Signature } from '@solana/keys';
 import { SendTransactionApi } from '@solana/rpc-core';
 import { Commitment, commitmentComparator, Rpc } from '@solana/rpc-types';
 import {
+    waitForDurableNonceTransactionConfirmation,
+    waitForRecentTransactionConfirmation,
+} from '@solana/transaction-confirmation';
+import {
     BaseTransaction,
     getBase64EncodedWireTransaction,
     IDurableNonceTransaction,
@@ -10,22 +14,27 @@ import {
     ITransactionWithFeePayer,
 } from '@solana/transactions';
 
-import {
-    createDefaultDurableNonceTransactionConfirmer,
-    createDefaultRecentTransactionConfirmer,
-} from './transaction-confirmation';
-
 interface SendAndConfirmDurableNonceTransactionConfig
     extends SendTransactionBaseConfig,
         SendTransactionConfigWithoutEncoding {
-    confirmDurableNonceTransaction: ReturnType<typeof createDefaultDurableNonceTransactionConfirmer>;
+    confirmDurableNonceTransaction: (
+        config: Omit<
+            Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
+            'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
+        >,
+    ) => Promise<void>;
     transaction: SendableTransaction & IDurableNonceTransaction;
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
     extends SendTransactionBaseConfig,
         SendTransactionConfigWithoutEncoding {
-    confirmRecentTransaction: ReturnType<typeof createDefaultRecentTransactionConfirmer>;
+    confirmRecentTransaction: (
+        config: Omit<
+            Parameters<typeof waitForRecentTransactionConfirmation>[0],
+            'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
+        >,
+    ) => Promise<void>;
     transaction: SendableTransaction & ITransactionWithBlockhashLifetime;
 }
 

@@ -1,6 +1,6 @@
 import { Signature } from '@solana/keys';
 
-import { raceStrategies } from '../transaction-confirmation-strategy-racer';
+import { raceStrategies } from '../confirmation-strategy-racer';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
