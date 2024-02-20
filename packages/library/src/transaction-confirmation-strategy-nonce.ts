@@ -1,5 +1,6 @@
 import { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs';
+import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__NONCE_INVALID, SolanaError } from '@solana/errors';
 import type { AccountNotificationsApi, GetAccountInfoApi } from '@solana/rpc-core';
 import type { Base64EncodedDataResponse, Commitment, Rpc, RpcSubscriptions } from '@solana/rpc-types';
 import { Nonce } from '@solana/transactions';
@@ -24,7 +25,7 @@ export function createNonceInvalidationPromiseFactory(
     return async function getNonceInvalidationPromise({
         abortSignal: callerAbortSignal,
         commitment,
-        currentNonceValue,
+        currentNonceValue: expectedNonceValue,
         nonceAccountAddress,
     }) {
         const abortController = new AbortController();
@@ -48,11 +49,11 @@ export function createNonceInvalidationPromiseFactory(
         const nonceAccountDidAdvancePromise = (async () => {
             for await (const accountNotification of accountNotifications) {
                 const nonceValue = getNonceFromAccountData(accountNotification.value.data);
-                if (nonceValue !== currentNonceValue) {
-                    throw new Error(
-                        `The nonce \`${currentNonceValue}\` is no longer valid. It has advanced ` +
-                            `to \`${nonceValue}\`.`,
-                    );
+                if (nonceValue !== expectedNonceValue) {
+                    throw new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                        actualNonceValue: nonceValue,
+                        expectedNonceValue,
+                    });
                 }
             }
         })();
@@ -69,16 +70,19 @@ export function createNonceInvalidationPromiseFactory(
                 })
                 .send({ abortSignal: abortController.signal });
             if (!nonceAccount) {
-                throw new Error(`No nonce account could be found at address \`${nonceAccountAddress}\`.`);
+                throw new SolanaError(SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, {
+                    nonceAccountAddress,
+                });
             }
             const nonceValue =
                 // This works because we asked for the exact slice of data representing the nonce
                 // value, and furthermore asked for it in `base58` encoding.
                 nonceAccount.data[0] as unknown as Nonce;
-            if (nonceValue !== currentNonceValue) {
-                throw new Error(
-                    `The nonce \`${currentNonceValue}\` is no longer valid. It has advanced to \`${nonceValue}\`.`,
-                );
+            if (nonceValue !== expectedNonceValue) {
+                throw new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                    actualNonceValue: nonceValue,
+                    expectedNonceValue,
+                });
             } else {
                 await new Promise(() => {
                     /* never resolve */
