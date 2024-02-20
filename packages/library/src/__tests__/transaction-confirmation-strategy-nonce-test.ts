@@ -1,5 +1,6 @@
 import { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs';
+import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__NONCE_INVALID, SolanaError } from '@solana/errors';
 import { Nonce } from '@solana/transactions';
 
 import { createNonceInvalidationPromiseFactory } from '../transaction-confirmation-strategy-nonce';
@@ -140,6 +141,21 @@ describe('createNonceInvalidationPromiseFactory', () => {
         await jest.runAllTimersAsync();
         await expect(Promise.race([invalidationPromise, 'pending'])).resolves.toBe('pending');
     });
+    it('fatals when the nonce account can not be found', async () => {
+        expect.assertions(1);
+        getAccountInfoMock.mockResolvedValue({ value: null });
+        const invalidationPromise = getNonceInvalidationPromise({
+            abortSignal: new AbortController().signal,
+            commitment: 'finalized',
+            currentNonceValue: '4'.repeat(44) as Nonce,
+            nonceAccountAddress: '9'.repeat(44) as Address,
+        });
+        await expect(invalidationPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, {
+                nonceAccountAddress: '9'.repeat(44),
+            }),
+        );
+    });
     it('fatals when the nonce value returned by the one-shot query is different than the expected one', async () => {
         expect.assertions(1);
         getAccountInfoMock.mockResolvedValue({
@@ -154,8 +170,10 @@ describe('createNonceInvalidationPromiseFactory', () => {
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
-            'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
-                '`55555555555555555555555555555555555555555555`.',
+            new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                actualNonceValue: '55555555555555555555555555555555555555555555',
+                expectedNonceValue: '44444444444444444444444444444444444444444444',
+            }),
         );
     });
     it('continues to pend when the nonce value returned by the account subscription is the same as the expected one', async () => {
@@ -190,8 +208,10 @@ describe('createNonceInvalidationPromiseFactory', () => {
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
-            'The nonce `44444444444444444444444444444444444444444444` is no longer valid. It has advanced to ' +
-                '`55555555555555555555555555555555555555555555`.',
+            new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                actualNonceValue: '55555555555555555555555555555555555555555555',
+                expectedNonceValue: '44444444444444444444444444444444444444444444',
+            }),
         );
     });
 });

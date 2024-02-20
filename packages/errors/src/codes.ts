@@ -11,6 +11,8 @@ export const SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE = 2 as const;
 export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 3 as const;
 export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
 export const SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED = 5 as const;
+export const SOLANA_ERROR__NONCE_INVALID = 6 as const;
+export const SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND = 7 as const;
 
 /**
  * A union of every Solana error code
@@ -32,4 +34,6 @@ export type SolanaErrorCode =
     | typeof SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE
     | typeof SOLANA_ERROR__RPC_INTEGER_OVERFLOW
     | typeof SOLANA_ERROR__INVALID_KEYPAIR_BYTES
-    | typeof SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED;
+    | typeof SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED
+    | typeof SOLANA_ERROR__NONCE_INVALID
+    | typeof SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND;
