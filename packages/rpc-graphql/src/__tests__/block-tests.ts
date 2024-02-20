@@ -1,16 +1,10 @@
-import {
-    createSolanaRpcApi,
-    type GetAccountInfoApi,
-    GetBlockApi,
-    GetProgramAccountsApi,
-    GetTransactionApi,
-} from '@solana/rpc-core';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-import type { Rpc, Slot } from '@solana/rpc-types';
+import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
+import type { Slot } from '@solana/rpc-types';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
+    createLocalhostSolanaRpc,
     mockBlockAccounts,
     mockBlockFull,
     mockBlockFullBase58,
@@ -31,10 +25,7 @@ describe('block', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
-            api: createSolanaRpcApi(),
-            transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
-        });
+        rpc = createLocalhostSolanaRpc();
         rpcGraphQL = createRpcGraphQL(rpc);
     });
     // The `block` query takes a `BigInt` as a parameter. We need to test this

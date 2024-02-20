@@ -1,17 +1,10 @@
 import { Signature } from '@solana/keys';
-import {
-    createSolanaRpcApi,
-    GetAccountInfoApi,
-    GetBlockApi,
-    GetProgramAccountsApi,
-    GetTransactionApi,
-} from '@solana/rpc-core';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-import type { Rpc } from '@solana/rpc-types';
+import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
+    createLocalhostSolanaRpc,
     mockRpcResponse,
     mockTransactionAddressLookup,
     mockTransactionBase58,
@@ -35,10 +28,7 @@ describe('transaction', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
-            api: createSolanaRpcApi(),
-            transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
-        });
+        rpc = createLocalhostSolanaRpc();
         rpcGraphQL = createRpcGraphQL(rpc);
     });
 

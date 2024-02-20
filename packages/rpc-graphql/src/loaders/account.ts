@@ -1,5 +1,4 @@
-import { GetAccountInfoApi } from '@solana/rpc-core';
-import { Rpc } from '@solana/rpc-types';
+import type { GetAccountInfoApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
 import { AccountLoader, AccountLoaderArgs, AccountLoaderValue, cacheKeyFn } from './loader';

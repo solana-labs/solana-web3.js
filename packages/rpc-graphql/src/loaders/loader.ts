@@ -1,7 +1,7 @@
-import { Address } from '@solana/addresses';
-import { Signature } from '@solana/keys';
-import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
-import { Commitment, Slot } from '@solana/rpc-types';
+import type { Address } from '@solana/addresses';
+import type { Signature } from '@solana/keys';
+import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc';
+import type { Commitment, Slot } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import stringify from 'json-stable-stringify';
