@@ -11,7 +11,10 @@ import {
     ITransactionWithFeePayer,
 } from '@solana/transactions';
 
-import { sendAndConfirmDurableNonceTransaction, sendAndConfirmTransaction } from '../send-transaction';
+import {
+    sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
+    sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
+} from '../send-transaction-internal';
 
 jest.mock('@solana/transactions');
 
@@ -41,7 +44,7 @@ describe('sendAndConfirmTransaction', () => {
         );
     });
     it('encodes the transaction into wire format before sending', () => {
-        sendAndConfirmTransaction({
+        sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmRecentTransaction,
@@ -58,7 +61,7 @@ describe('sendAndConfirmTransaction', () => {
             preflightCommitment: 'confirmed' as Commitment,
             skipPreflight: false,
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
-        sendAndConfirmTransaction({
+        sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...sendTransactionConfig,
             abortSignal: new AbortController().signal,
             commitment: 'finalized' as Commitment,
@@ -82,7 +85,7 @@ describe('sendAndConfirmTransaction', () => {
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
         sendTransaction.mockResolvedValue('abc' as Signature);
         const abortSignal = new AbortController().signal;
-        sendAndConfirmTransaction({
+        sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...sendTransactionConfig,
             abortSignal,
             commitment: 'finalized' as Commitment,
@@ -104,7 +107,7 @@ describe('sendAndConfirmTransaction', () => {
     `(
         'when missing a `preflightCommitment` and the commitment is $commitment, applies a downgraded `preflightCommitment`',
         ({ commitment, expectedPreflightCommitment }) => {
-            sendAndConfirmTransaction({
+            sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment,
                 confirmRecentTransaction,
@@ -133,7 +136,7 @@ describe('sendAndConfirmTransaction', () => {
     `(
         'honours the explicit `preflightCommitment` no matter that the commitment is $commitment',
         ({ commitment, preflightCommitment, expectedPreflightCommitment }) => {
-            sendAndConfirmTransaction({
+            sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment,
                 confirmRecentTransaction,
@@ -151,7 +154,7 @@ describe('sendAndConfirmTransaction', () => {
     );
     it('when missing a `preflightCommitment` and the commitment is the same as the server default for `preflightCommitment`, does not apply a `preflightCommitment`', () => {
         expect.assertions(1);
-        sendAndConfirmTransaction({
+        sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmRecentTransaction,
@@ -165,7 +168,7 @@ describe('sendAndConfirmTransaction', () => {
         sendTransaction.mockResolvedValue('abc');
         confirmRecentTransaction.mockResolvedValue(undefined);
         await expect(
-            sendAndConfirmTransaction({
+            sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment: 'finalized',
                 confirmRecentTransaction,
@@ -198,7 +201,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
         );
     });
     it('encodes the transaction into wire format before sending', () => {
-        sendAndConfirmDurableNonceTransaction({
+        sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmDurableNonceTransaction,
@@ -215,7 +218,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             preflightCommitment: 'confirmed' as Commitment,
             skipPreflight: false,
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
-        sendAndConfirmDurableNonceTransaction({
+        sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...sendTransactionConfig,
             abortSignal: new AbortController().signal,
             commitment: 'finalized' as Commitment,
@@ -239,7 +242,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
         } as Parameters<SendTransactionApi['sendTransaction']>[1];
         sendTransaction.mockResolvedValue('abc' as Signature);
         const abortSignal = new AbortController().signal;
-        sendAndConfirmDurableNonceTransaction({
+        sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...sendTransactionConfig,
             abortSignal,
             commitment: 'finalized' as Commitment,
@@ -261,7 +264,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
     `(
         'when missing a `preflightCommitment` and the commitment is $commitment, applies a downgraded `preflightCommitment`',
         ({ commitment, expectedPreflightCommitment }) => {
-            sendAndConfirmDurableNonceTransaction({
+            sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment,
                 confirmDurableNonceTransaction,
@@ -290,7 +293,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
     `(
         'honours the explicit `preflightCommitment` no matter that the commitment is $commitment',
         ({ commitment, preflightCommitment, expectedPreflightCommitment }) => {
-            sendAndConfirmDurableNonceTransaction({
+            sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment,
                 confirmDurableNonceTransaction,
@@ -308,7 +311,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
     );
     it('when missing a `preflightCommitment` and the commitment is the same as the server default for `preflightCommitment`, does not apply a `preflightCommitment`', () => {
         expect.assertions(1);
-        sendAndConfirmDurableNonceTransaction({
+        sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
             confirmDurableNonceTransaction,
@@ -322,7 +325,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
         sendTransaction.mockResolvedValue('abc');
         confirmDurableNonceTransaction.mockResolvedValue(undefined);
         await expect(
-            sendAndConfirmDurableNonceTransaction({
+            sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
                 abortSignal: new AbortController().signal,
                 commitment: 'finalized',
                 confirmDurableNonceTransaction,
