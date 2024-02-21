@@ -11,11 +11,5 @@
     },
     "display": "@solana/rpc-graphql",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src",
-        ".hold/transaction",
-        ".hold/block",
-        ".hold/program-accounts",
-        ".hold/account"
-    ]
+    "include": ["src"]
 }
