@@ -1360,8 +1360,8 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0
       mockttp:
-        specifier: ^3.10.0
-        version: 3.10.0
+        specifier: ^3.10.1
+        version: 3.10.1
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -11491,8 +11491,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mockttp@3.10.0:
-    resolution: {integrity: sha512-5+4A+0UG8Pzgvz2eqimAoFYX9ZgdAV5jgscvQzJupIMiKHPo3jaU26mqQgLAhX7o5KcsTfWpRNUQt5Y4U9luzQ==}
+  /mockttp@3.10.1:
+    resolution: {integrity: sha512-D+8uEDJr/DDEzQ6Weg2w1hw+vA/+FzfltOUpqpjCxbaqRrDvQrfOkkYgtx4jlp7b3tfxJBMTO4MwuBhhfY93WQ==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     dependencies:
@@ -11530,7 +11530,7 @@ packages:
       performance-now: 2.1.0
       portfinder: 1.0.28
       read-tls-client-hello: 1.0.1
-      semver: 7.5.4
+      semver: 7.6.0
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.2
       uuid: 8.3.2
