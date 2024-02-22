@@ -1,11 +1,10 @@
 import { Address } from '@solana/addresses';
 import { Rpc } from '@solana/rpc-spec';
 
-import { SolanaRpcApi } from '..';
+import { GetTokenAccountsByDelegateApi } from '..';
 
-const rpc = {} as unknown as Rpc<SolanaRpcApi>;
+const rpc = {} as unknown as Rpc<GetTokenAccountsByDelegateApi>;
 
-// getTokenAccountsByDelegate
 async () => {
     const tokenAccountsByDelegate = await rpc
         .getTokenAccountsByDelegate(
@@ -16,19 +15,6 @@ async () => {
         .send();
 
     const firstAccount = tokenAccountsByDelegate.value[0];
-    firstAccount.pubkey satisfies Address;
-    firstAccount.account.data.program satisfies Address;
-    firstAccount.account.data.parsed.type satisfies 'account';
-    firstAccount.account.data.parsed.info.mint satisfies Address;
-};
-
-// getTokenAccountsByOwner
-async () => {
-    const tokenAccountsByOwner = await rpc
-        .getTokenAccountsByOwner('owner' as Address, { programId: 'program' as Address }, { encoding: 'jsonParsed' })
-        .send();
-
-    const firstAccount = tokenAccountsByOwner.value[0];
     firstAccount.pubkey satisfies Address;
     firstAccount.account.data.program satisfies Address;
     firstAccount.account.data.parsed.type satisfies 'account';
