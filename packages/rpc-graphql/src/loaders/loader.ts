@@ -43,19 +43,15 @@ export type MultipleAccountsLoaderArgs = { addresses: Address[] } & AccountLoade
 export type MultipleAccountsLoaderValue = AccountLoaderValue[];
 export type MultipleAccountsLoader = Loader<MultipleAccountsLoaderArgs, MultipleAccountsLoaderValue>;
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
-// export type ProgramAccountsLoaderArgs = {
-//     programAddress: Parameters<GetProgramAccountsApi['getProgramAccounts']>[0];
-// } & Parameters<GetProgramAccountsApi['getProgramAccounts']>[1];
-export type ProgramAccountsLoaderArgs = {
+export type ProgramAccountsLoaderArgsBase = {
     commitment?: Commitment;
     dataSlice?: { offset: number; length: number };
     encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
     filters?: readonly { memcmp: { offset: number; bytes: string } }[];
     minContextSlot?: Slot;
-    programAddress: Address;
 };
-export type ProgramAccountsLoaderValue = ReturnType<GetProgramAccountsApi['getProgramAccounts']> | null;
+export type ProgramAccountsLoaderArgs = { programAddress: Address } & ProgramAccountsLoaderArgsBase;
+export type ProgramAccountsLoaderValue = ReturnType<GetProgramAccountsApi['getProgramAccounts']>;
 export type ProgramAccountsLoader = Loader<ProgramAccountsLoaderArgs, ProgramAccountsLoaderValue>;
 
 // FIX ME: https://github.com/microsoft/TypeScript/issues/43187

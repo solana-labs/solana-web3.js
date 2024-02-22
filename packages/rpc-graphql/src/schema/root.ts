@@ -10,8 +10,6 @@ export const rootTypeDefs = /* GraphQL */ `
         programAccounts(
             programAddress: Address!
             commitment: Commitment
-            dataSlice: DataSlice
-            encoding: AccountEncoding
             filters: [ProgramAccountsFilter]
             minContextSlot: Slot
         ): [Account]
