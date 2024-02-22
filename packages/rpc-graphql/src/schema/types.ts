@@ -15,13 +15,6 @@ export const typeTypeDefs = /* GraphQL */ `
 
     scalar BigInt
 
-    enum BlockTransactionDetails {
-        ACCOUNTS
-        FULL
-        NONE
-        SIGNATURES
-    }
-
     enum Commitment {
         CONFIRMED
         FINALIZED
@@ -80,11 +73,5 @@ export const typeTypeDefs = /* GraphQL */ `
     enum TransactionEncoding {
         BASE_58
         BASE_64
-        PARSED
-    }
-
-    enum TransactionVersion {
-        LEGACY
-        ZERO
     }
 `;

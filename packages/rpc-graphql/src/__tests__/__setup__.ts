@@ -1655,39 +1655,6 @@ export const mockBlockFull = {
     ],
 };
 
-export const mockBlockAccounts = {
-    blockHeight: 257317189,
-    blockTime: 1699618066,
-    blockhash: 'bFotro8geZ9HJbE3SUJ77yQuCaECpRidocDapgM2BNW',
-    parentSlot: 257317188,
-    previousBlockhash: '3Z3gk6nNq8qRq6JnV8o9Xh7s7P8Q4qY4v9dZ5XnJzGtM',
-    rewards: mockRewards,
-    transactions: [
-        {
-            meta: {
-                fee: 5000,
-                postBalances: [1000000000000000, 1],
-                postTokenBalances: [],
-                preBalances: [1000000000000000, 1],
-                preTokenBalances: [],
-                status: {
-                    Ok: null,
-                },
-            },
-            transaction: {
-                accountKeys: [
-                    '2gZDNztVterZb7aSMifCRd4V15YY8a9QcBBQ3ARTDe95',
-                    'GGLDv8wTrSNuEq1pBhUfDFYEKFXDsvFU7YHkMj7a1EyK',
-                ],
-                signatures: [
-                    '41TfwbZi3WV5NJ7BY42r9sSkCUNfA7ab3j744DXR2wxZG9FyfctAoMYVYpQDj4je3xo89W7cvqGMzAq1nxd8R4xx',
-                    '2FaeinN3wGnytjrEZkP1KULaF24jrTHbD52TYowyErEfuhvavwRcLensJyiRicqEPKEaiBCzxn1BpR5Yi8BCYrhK',
-                ],
-            },
-        },
-    ],
-};
-
 export const mockBlockSignatures = {
     blockHeight: 257317189,
     blockTime: 1699618066,
@@ -1698,36 +1665,5 @@ export const mockBlockSignatures = {
     signatures: [
         '3mjQHJqKBrWe2LnUYsx3a7Vr68qQHCW1ru2m2ycuiFfcihcpXdQ7KqKrjqKyQkmN5jjcvMeBvJDsSTiaXzoSWXSF',
         '2Tfh6G4R9cxdtFDbCvnNR9QKjJX8o19ux4WwYiZsx9xRcAKKmZg88BqgQRJf2mrZBj1PuTPVCspWTDqqaNZAdsPJ',
-    ],
-};
-
-export const mockBlockNone = {
-    blockHeight: 257317189,
-    blockTime: 1699618066,
-    blockhash: 'bFotro8geZ9HJbE3SUJ77yQuCaECpRidocDapgM2BNW',
-    parentSlot: 257317188,
-    previousBlockhash: '3Z3gk6nNq8qRq6JnV8o9Xh7s7P8Q4qY4v9dZ5XnJzGtM',
-    rewards: [
-        {
-            commission: 0.1,
-            lamports: 50000,
-            postBalance: 1000000000000000,
-            pubkey: 'DdNzYKnkq7PqCRX4kncvwVYNZE7dZ9xdCz6yMekqjWH4',
-            rewardType: 'stake',
-        },
-        {
-            commission: 0.1,
-            lamports: 50000,
-            postBalance: 1000000000000000,
-            pubkey: 'DdNzYKnkq7PqCRX4kncvwVYNZE7dZ9xdCz6yMekqjWH4',
-            rewardType: 'stake',
-        },
-        {
-            commission: 0.1,
-            lamports: 50000,
-            postBalance: 1000000000000000,
-            pubkey: 'DdNzYKnkq7PqCRX4kncvwVYNZE7dZ9xdCz6yMekqjWH4',
-            rewardType: 'stake',
-        },
     ],
 };

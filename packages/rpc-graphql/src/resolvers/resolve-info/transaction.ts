@@ -2,14 +2,14 @@ import { Signature } from '@solana/keys';
 import { Commitment, Slot } from '@solana/rpc-types';
 import { ArgumentNode, GraphQLResolveInfo } from 'graphql';
 
-import { TransactionLoaderArgs } from '../../loaders';
+import { BlockLoaderArgs, TransactionLoaderArgs } from '../../loaders';
 import { injectableRootVisitor } from './visitor';
 
 function findArgumentNodeByName(argumentNodes: readonly ArgumentNode[], name: string): ArgumentNode | undefined {
     return argumentNodes.find(argumentNode => argumentNode.name.value === name);
 }
 
-export function parseTransactionEncodingArgument(
+function parseTransactionEncodingArgument(
     argumentNodes: readonly ArgumentNode[],
     variableValues: {
         [variable: string]: unknown;
@@ -33,19 +33,11 @@ export function parseTransactionEncodingArgument(
     }
 }
 
-/**
- * Build a set of transaction loader args by inspecting which fields have
- * been requested in the query (ie. `data` or inline fragments).
- */
-export function buildTransactionLoaderArgSetFromResolveInfo(
-    args: {
-        commitment?: Omit<Commitment, 'processed'>;
-        minContextSlot?: Slot;
-        signature: Signature;
-    },
+export function buildTransactionArgSetWithVisitor<TArgs extends BlockLoaderArgs | TransactionLoaderArgs>(
+    args: TArgs,
     info: GraphQLResolveInfo,
-): TransactionLoaderArgs[] {
-    const argSet: TransactionLoaderArgs[] = [args];
+): TArgs[] {
+    const argSet = [args];
 
     function buildArgSetWithVisitor(root: Parameters<typeof injectableRootVisitor>[1]) {
         injectableRootVisitor(info, root, {
@@ -78,4 +70,19 @@ export function buildTransactionLoaderArgSetFromResolveInfo(
     buildArgSetWithVisitor(null);
 
     return argSet;
+}
+
+/**
+ * Build a set of transaction loader args by inspecting which fields have
+ * been requested in the query (ie. `data` or inline fragments).
+ */
+export function buildTransactionLoaderArgSetFromResolveInfo(
+    args: {
+        commitment?: Omit<Commitment, 'processed'>;
+        minContextSlot?: Slot;
+        signature: Signature;
+    },
+    info: GraphQLResolveInfo,
+): TransactionLoaderArgs[] {
+    return buildTransactionArgSetWithVisitor(args, info);
 }

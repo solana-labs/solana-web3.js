@@ -26,16 +26,14 @@ export type AccountLoaderArgs = { address: Address } & AccountLoaderArgsBase;
 export type AccountLoaderValue = ReturnType<GetAccountInfoApi['getAccountInfo']>['value'] | null;
 export type AccountLoader = Loader<AccountLoaderArgs, AccountLoaderValue>;
 
-// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
-// export type BlockLoaderArgs = { slot: Parameters<GetBlockApi['getBlock']>[0] } & Parameters<GetBlockApi['getBlock']>[1];
-export type BlockLoaderArgs = {
+export type BlockLoaderArgsBase = {
     commitment?: Omit<Commitment, 'processed'>;
     encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
     maxSupportedTransactionVersion?: 0 | 'legacy';
     rewards?: boolean;
-    slot: Slot;
     transactionDetails?: 'accounts' | 'full' | 'none' | 'signatures';
 };
+export type BlockLoaderArgs = { slot: Slot } & BlockLoaderArgsBase;
 export type BlockLoaderValue = ReturnType<GetBlockApi['getBlock']> | null;
 export type BlockLoader = Loader<BlockLoaderArgs, BlockLoaderValue>;
 

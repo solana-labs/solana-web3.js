@@ -1,90 +1,15 @@
 export const blockTypeDefs = /* GraphQL */ `
-    type TransactionMetaForAccounts {
-        err: String
-        fee: BigInt
-        postBalances: [BigInt]
-        postTokenBalances: [TokenBalance]
-        preBalances: [BigInt]
-        preTokenBalances: [TokenBalance]
-        status: TransactionStatus
-    }
-
-    type TransactionDataForAccounts {
-        accountKeys: [Address]
-        signatures: [String]
-    }
-
-    type BlockTransactionAccounts {
-        meta: TransactionMetaForAccounts
-        data: TransactionDataForAccounts
-        version: String
-    }
-
     """
-    Block interface
+    A Solana block
     """
-    interface Block {
+    type Block {
         blockhash: String
         blockHeight: BigInt
         blockTime: BigInt
-        parentSlot: BigInt
+        parentSlot: Slot
         previousBlockhash: String
         rewards: [Reward]
-        transactionDetails: String
-    }
-
-    """
-    A block with account transaction details
-    """
-    type BlockWithAccounts implements Block {
-        blockhash: String
-        blockHeight: BigInt
-        blockTime: BigInt
-        parentSlot: BigInt
-        previousBlockhash: String
-        rewards: [Reward]
-        transactions: [BlockTransactionAccounts]
-        transactionDetails: String
-    }
-
-    """
-    A block with full transaction details
-    """
-    type BlockWithFull implements Block {
-        blockhash: String
-        blockHeight: BigInt
-        blockTime: BigInt
-        parentSlot: BigInt
-        previousBlockhash: String
-        rewards: [Reward]
+        signatures: [Signature]
         transactions: [Transaction]
-        transactionDetails: String
-    }
-
-    """
-    A block with no transaction details
-    """
-    type BlockWithNone implements Block {
-        blockhash: String
-        blockHeight: BigInt
-        blockTime: BigInt
-        parentSlot: BigInt
-        previousBlockhash: String
-        rewards: [Reward]
-        transactionDetails: String
-    }
-
-    """
-    A block with signature transaction details
-    """
-    type BlockWithSignatures implements Block {
-        blockhash: String
-        blockHeight: BigInt
-        blockTime: BigInt
-        parentSlot: BigInt
-        previousBlockhash: String
-        rewards: [Reward]
-        signatures: [String]
-        transactionDetails: String
     }
 `;
