@@ -30,6 +30,7 @@ const config: Partial<Config.InitialProjectOptions> = {
     ],
     testEnvironment: path.resolve(__dirname, 'browser-environment.ts'),
     testEnvironmentOptions: {},
+    testPathIgnorePatterns: [...(commonConfig.testPathIgnorePatterns ?? []), '-test.node.ts$'],
 };
 
 export default config;

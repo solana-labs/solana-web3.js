@@ -17,6 +17,7 @@ const config: Partial<Config.InitialProjectOptions> = {
         __REACTNATIVE__: false,
     },
     setupFilesAfterEnv: [...(commonConfig.setupFilesAfterEnv ?? []), path.resolve(__dirname, 'setup-undici-fetch.ts')],
+    testPathIgnorePatterns: [...(commonConfig.testPathIgnorePatterns ?? []), '-test.browser.ts$'],
 };
 
 export default config;
