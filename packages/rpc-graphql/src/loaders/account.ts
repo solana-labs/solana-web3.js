@@ -7,7 +7,7 @@ function applyDefaultArgs({
     address,
     commitment,
     dataSlice,
-    encoding = 'jsonParsed',
+    encoding = 'base64', // Fixed by batch loader
     minContextSlot,
 }: AccountLoaderArgs): AccountLoaderArgs {
     return {

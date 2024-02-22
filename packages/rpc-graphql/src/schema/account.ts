@@ -4,6 +4,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     interface Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -12,37 +13,11 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
-    An account with base58 encoded data
+    Generic base account type
     """
-    type AccountBase58 implements Account {
+    type GenericAccount implements Account {
         address: Address
-        data: Base58EncodedBytes
-        executable: Boolean
-        lamports: BigInt
-        ownerProgram: Account
-        space: BigInt
-        rentEpoch: BigInt
-    }
-
-    """
-    An account with base64 encoded data
-    """
-    type AccountBase64 implements Account {
-        address: Address
-        data: Base64EncodedBytes
-        executable: Boolean
-        lamports: BigInt
-        ownerProgram: Account
-        space: BigInt
-        rentEpoch: BigInt
-    }
-
-    """
-    An account with base64+zstd encoded data
-    """
-    type AccountBase64Zstd implements Account {
-        address: Address
-        data: Base64ZstdEncodedBytes
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -58,6 +33,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type NonceAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -73,6 +49,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type LookupTableAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -90,6 +67,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type MintAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -107,6 +85,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type TokenAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -149,6 +128,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type StakeAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
@@ -180,6 +160,7 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     type VoteAccount implements Account {
         address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
         lamports: BigInt
         ownerProgram: Account
