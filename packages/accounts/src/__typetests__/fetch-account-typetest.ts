@@ -1,5 +1,5 @@
 import type { Address } from '@solana/addresses';
-import type { Rpc } from '@solana/rpc-types';
+import type { Rpc } from '@solana/rpc-spec';
 
 import {
     fetchEncodedAccount,

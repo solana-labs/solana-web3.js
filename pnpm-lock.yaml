@@ -43,6 +43,9 @@ importers:
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
+      '@solana/rpc-spec':
+        specifier: workspace:*
+        version: link:../rpc-spec
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1105,15 +1108,15 @@ importers:
       '@solana/programs':
         specifier: workspace:*
         version: link:../programs
-      '@solana/rpc-core':
+      '@solana/rpc':
         specifier: workspace:*
-        version: link:../rpc-core
+        version: link:../rpc
       '@solana/rpc-parsed-types':
         specifier: workspace:*
         version: link:../rpc-parsed-types
-      '@solana/rpc-transport':
+      '@solana/rpc-subscriptions':
         specifier: workspace:*
-        version: link:../rpc-transport
+        version: link:../rpc-subscriptions
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1126,9 +1129,6 @@ importers:
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
-      fast-stable-stringify:
-        specifier: ^1.0.0
-        version: 1.0.0
     devDependencies:
       '@solana/build-scripts':
         specifier: workspace:*
@@ -1632,7 +1632,101 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
-  packages/rpc-core:
+  packages/rpc:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@solana/functional':
+        specifier: workspace:*
+        version: link:../functional
+      '@solana/rpc-api':
+        specifier: workspace:*
+        version: link:../rpc-api
+      '@solana/rpc-spec':
+        specifier: workspace:*
+        version: link:../rpc-spec
+      '@solana/rpc-transformers':
+        specifier: workspace:*
+        version: link:../rpc-transformers
+      '@solana/rpc-transport-http':
+        specifier: workspace:*
+        version: link:../rpc-transport-http
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-api:
     dependencies:
       '@solana/addresses':
         specifier: workspace:*
@@ -1649,9 +1743,12 @@ importers:
       '@solana/rpc-parsed-types':
         specifier: workspace:*
         version: link:../rpc-parsed-types
-      '@solana/rpc-transport':
+      '@solana/rpc-spec':
         specifier: workspace:*
-        version: link:../rpc-transport
+        version: link:../rpc-spec
+      '@solana/rpc-transformers':
+        specifier: workspace:*
+        version: link:../rpc-transformers
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1664,7 +1761,13 @@ importers:
         version: link:../build-scripts
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/rpc-spec-types':
+        specifier: workspace:*
+        version: link:../rpc-spec-types
+      '@solana/rpc-transport-http':
+        specifier: workspace:*
+        version: link:../rpc-transport-http
       '@solana/test-config':
         specifier: workspace:*
         version: link:../test-config
@@ -1679,19 +1782,19 @@ importers:
         version: 29.5.11
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
-        version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
       eslint:
         specifier: ^8.45.0
-        version: 8.45.0
+        version: 8.51.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
@@ -1706,7 +1809,7 @@ importers:
         version: 3.0.4
       jest-runner-eslint:
         specifier: ^2.1.2
-        version: 2.1.2(eslint@8.45.0)(jest@29.7.0)
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
@@ -1750,12 +1853,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      '@solana/rpc-core':
+      '@solana/rpc':
         specifier: workspace:*
-        version: link:../rpc-core
-      '@solana/rpc-transport':
-        specifier: workspace:*
-        version: link:../rpc-transport
+        version: link:../rpc
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -1874,24 +1974,427 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
-  packages/rpc-transport:
+  packages/rpc-spec:
     dependencies:
-      '@solana/rpc-types':
+      '@solana/rpc-spec-types':
         specifier: workspace:*
-        version: link:../rpc-types
-      ws:
-        specifier: ^8.14.0
-        version: 8.14.0
+        version: link:../rpc-spec-types
     devDependencies:
       '@solana/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.3.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.45.0)(typescript@5.2.2)
-      '@solana/fetch-impl':
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
         specifier: workspace:*
-        version: link:../fetch-impl
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-spec-types:
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-subscriptions:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@solana/functional':
+        specifier: workspace:*
+        version: link:../functional
+      '@solana/rpc-subscriptions-api':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-api
+      '@solana/rpc-subscriptions-spec':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-spec
+      '@solana/rpc-subscriptions-transport-websocket':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-transport-websocket
+      '@solana/rpc-transformers':
+        specifier: workspace:*
+        version: link:../rpc-transformers
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      jest-websocket-mock:
+        specifier: ^2.5.0
+        version: 2.5.0
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-subscriptions-api:
+    dependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
+      '@solana/rpc-subscriptions-spec':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-spec
+      '@solana/rpc-transformers':
+        specifier: workspace:*
+        version: link:../rpc-transformers
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
+      '@solana/transactions':
+        specifier: workspace:*
+        version: link:../transactions
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/rpc-subscriptions-transport-websocket':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-transport-websocket
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      jest-websocket-mock:
+        specifier: ^2.5.0
+        version: 2.5.0
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-subscriptions-spec:
+    dependencies:
+      '@solana/rpc-spec-types':
+        specifier: workspace:*
+        version: link:../rpc-spec-types
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-subscriptions-transport-websocket:
+    dependencies:
+      '@solana/rpc-subscriptions-spec':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-spec
+      ws:
+        specifier: ^8.14.0
+        version: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
       '@solana/test-config':
         specifier: workspace:*
         version: link:../test-config
@@ -1912,25 +2415,22 @@ importers:
         version: 18.11.19
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
-        version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
       '@typescript-eslint/parser':
         specifier: ^6.3.0
-        version: 6.3.0(eslint@8.45.0)(typescript@5.2.2)
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       agadoo:
         specifier: ^3.0.0
         version: 3.0.0
       eslint:
         specifier: ^8.45.0
-        version: 8.45.0
+        version: 8.51.0
       eslint-plugin-jest:
         specifier: ^27.4.2
-        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.45.0)(jest@29.7.0)(typescript@5.2.2)
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
       eslint-plugin-sort-keys-fix:
         specifier: ^1.1.2
         version: 1.1.2
-      fast-stable-stringify:
-        specifier: ^1.0.0
-        version: 1.0.0
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.11.19)
@@ -1942,7 +2442,7 @@ importers:
         version: 3.0.4
       jest-runner-eslint:
         specifier: ^2.1.2
-        version: 2.1.2(eslint@8.45.0)(jest@29.7.0)
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
@@ -1962,8 +2462,166 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
+  packages/rpc-transformers:
+    dependencies:
+      '@solana/rpc-spec':
+        specifier: workspace:*
+        version: link:../rpc-spec
+      '@solana/rpc-subscriptions-spec':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-spec
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
+  packages/rpc-transport-http:
+    dependencies:
+      '@solana/rpc-spec':
+        specifier: workspace:*
+        version: link:../rpc-spec
+    devDependencies:
+      '@solana/build-scripts':
+        specifier: workspace:*
+        version: link:../build-scripts
+      '@solana/eslint-config-solana':
+        specifier: ^1.0.2
+        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.4.2)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.51.0)(typescript@5.2.2)
+      '@solana/fetch-impl':
+        specifier: workspace:*
+        version: link:../fetch-impl
+      '@solana/test-config':
+        specifier: workspace:*
+        version: link:../test-config
+      '@solana/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@swc/jest':
+        specifier: ^0.2.29
+        version: 0.2.29(@swc/core@1.3.93)
+      '@types/jest':
+        specifier: ^29.5.11
+        version: 29.5.11
+      '@types/node':
+        specifier: 18.11.19
+        version: 18.11.19
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.13.2
+        version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
+      '@typescript-eslint/parser':
+        specifier: ^6.3.0
+        version: 6.8.0(eslint@8.51.0)(typescript@5.2.2)
+      agadoo:
+        specifier: ^3.0.0
+        version: 3.0.0
+      eslint:
+        specifier: ^8.45.0
+        version: 8.51.0
+      eslint-plugin-jest:
+        specifier: ^27.4.2
+        version: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
+      eslint-plugin-sort-keys-fix:
+        specifier: ^1.1.2
+        version: 1.1.2
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@18.11.19)
+      jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-fetch-mock-fork:
+        specifier: ^3.0.4
+        version: 3.0.4
+      jest-runner-eslint:
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
+      jest-runner-prettier:
+        specifier: ^1.0.0
+        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+      prettier:
+        specifier: ^3.1
+        version: 3.1.0
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
+      version-from-git:
+        specifier: ^1.1.1
+        version: 1.1.1
+
   packages/rpc-types:
     dependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
@@ -2247,9 +2905,12 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
-      '@solana/rpc-core':
+      '@solana/rpc':
         specifier: workspace:*
-        version: link:../rpc-core
+        version: link:../rpc
+      '@solana/rpc-subscriptions':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -6416,7 +7077,7 @@ packages:
       '@typescript-eslint/types': 6.13.2
       '@typescript-eslint/typescript-estree': 6.13.2(typescript@5.1.6)
       eslint: 8.45.0
-      semver: 7.5.4
+      semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -6435,7 +7096,7 @@ packages:
       '@typescript-eslint/types': 6.13.2
       '@typescript-eslint/typescript-estree': 6.13.2(typescript@5.2.2)
       eslint: 8.45.0
-      semver: 7.5.4
+      semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -6454,7 +7115,7 @@ packages:
       '@typescript-eslint/types': 6.13.2
       '@typescript-eslint/typescript-estree': 6.13.2(typescript@5.2.2)
       eslint: 8.51.0
-      semver: 7.5.4
+      semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
       - typescript

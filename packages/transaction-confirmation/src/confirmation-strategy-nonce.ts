@@ -1,9 +1,10 @@
-import { Address } from '@solana/addresses';
+import type { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
 import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__NONCE_INVALID, SolanaError } from '@solana/errors';
-import type { AccountNotificationsApi, GetAccountInfoApi } from '@solana/rpc-core';
-import type { Base64EncodedDataResponse, Commitment, Rpc, RpcSubscriptions } from '@solana/rpc-types';
-import { Nonce } from '@solana/transactions';
+import type { GetAccountInfoApi, Rpc } from '@solana/rpc';
+import type { AccountNotificationsApi, RpcSubscriptions } from '@solana/rpc-subscriptions';
+import type { Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
+import type { Nonce } from '@solana/transactions';
 
 type GetNonceInvalidationPromiseFn = (config: {
     abortSignal: AbortSignal;

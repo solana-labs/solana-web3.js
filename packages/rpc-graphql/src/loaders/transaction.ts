@@ -1,5 +1,4 @@
-import { GetTransactionApi } from '@solana/rpc-core';
-import { Rpc } from '@solana/rpc-types';
+import type { GetTransactionApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
 import { cacheKeyFn, TransactionLoader, TransactionLoaderArgs, TransactionLoaderValue } from './loader';

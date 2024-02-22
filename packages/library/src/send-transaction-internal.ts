@@ -1,6 +1,6 @@
-import { Signature } from '@solana/keys';
-import { SendTransactionApi } from '@solana/rpc-core';
-import { Commitment, commitmentComparator, Rpc } from '@solana/rpc-types';
+import type { Signature } from '@solana/keys';
+import type { Rpc, SendTransactionApi } from '@solana/rpc';
+import { Commitment, commitmentComparator } from '@solana/rpc-types';
 import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,

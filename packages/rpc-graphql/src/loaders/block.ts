@@ -1,5 +1,4 @@
-import { GetBlockApi } from '@solana/rpc-core';
-import { Rpc } from '@solana/rpc-types';
+import type { GetBlockApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
 import { BlockLoader, BlockLoaderArgs, BlockLoaderValue, cacheKeyFn } from './loader';

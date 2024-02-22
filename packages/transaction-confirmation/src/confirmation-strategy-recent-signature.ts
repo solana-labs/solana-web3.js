@@ -1,6 +1,7 @@
-import { Signature } from '@solana/keys';
-import type { GetSignatureStatusesApi, SignatureNotificationsApi } from '@solana/rpc-core';
-import { type Commitment, commitmentComparator, type Rpc, type RpcSubscriptions } from '@solana/rpc-types';
+import type { Signature } from '@solana/keys';
+import type { GetSignatureStatusesApi, Rpc } from '@solana/rpc';
+import type { RpcSubscriptions, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
+import { type Commitment, commitmentComparator } from '@solana/rpc-types';
 
 type GetRecentSignatureConfirmationPromiseFn = (config: {
     abortSignal: AbortSignal;

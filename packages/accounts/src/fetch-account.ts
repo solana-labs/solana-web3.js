@@ -1,5 +1,6 @@
 import type { Address } from '@solana/addresses';
-import type { Commitment, Rpc, Slot } from '@solana/rpc-types';
+import type { Rpc } from '@solana/rpc-spec';
+import type { Commitment, Slot } from '@solana/rpc-types';
 
 import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
 import { parseBase64RpcAccount, parseJsonRpcAccount } from './parse-account';

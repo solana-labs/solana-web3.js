@@ -70,7 +70,8 @@
         "@solana/errors": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/transactions": "workspace:*",
-        "@solana/rpc-core": "workspace:*",
+        "@solana/rpc": "workspace:*",
+        "@solana/rpc-subscriptions": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
     "devDependencies": {

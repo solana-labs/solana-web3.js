@@ -1,6 +1,5 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
-import type { Rpc } from '@solana/rpc-types';
+import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
 import { graphql } from 'graphql';
 
 import { createSolanaGraphQLContext } from './context';

@@ -62,6 +62,10 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "dependencies": {
+        "@solana/addresses": "workspace:*",
+        "@solana/codecs-strings": "workspace:*"
+    },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",
         "@solana/codecs-core": "workspace:*",
@@ -93,8 +97,5 @@
                 "path": "./dist/index*.js"
             }
         ]
-    },
-    "dependencies": {
-        "@solana/codecs-strings": "workspace:*"
     }
 }

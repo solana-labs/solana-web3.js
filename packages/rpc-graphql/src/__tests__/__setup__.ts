@@ -1,5 +1,14 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
+import { createDefaultRpcTransport, createRpc, createSolanaRpcApi, Rpc, SolanaRpcApi } from '@solana/rpc';
+
+export function createLocalhostSolanaRpc(): Rpc<SolanaRpcApi> {
+    return createRpc({
+        api: createSolanaRpcApi(),
+        transport: createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' }),
+    });
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const mockRpcResponse = (result: any) => ({
     jsonrpc: '2.0',
