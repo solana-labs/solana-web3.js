@@ -115,16 +115,11 @@ describe('transaction', () => {
     describe('transaction data queries', () => {
         it('can get a transaction as base58', async () => {
             expect.assertions(1);
-            // Mock once for requested encoding
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase58)));
-            // Mock again for jsonParsed encoding
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
-                    transaction(signature: $signature, encoding: BASE_58) {
-                        ... on TransactionBase58 {
-                            data
-                        }
+                    transaction(signature: $signature) {
+                        data(encoding: BASE_58)
                     }
                 }
             `;
@@ -139,16 +134,11 @@ describe('transaction', () => {
         });
         it('can get a transaction as base64', async () => {
             expect.assertions(1);
-            // Mock once for requested encoding
             fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase64)));
-            // Mock again for jsonParsed encoding
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
-                    transaction(signature: $signature, encoding: BASE_64) {
-                        ... on TransactionBase64 {
-                            data
-                        }
+                    transaction(signature: $signature) {
+                        data(encoding: BASE_64)
                     }
                 }
             `;
@@ -161,25 +151,15 @@ describe('transaction', () => {
                 },
             });
         });
-        it('can get a transaction as jsonParsed', async () => {
+        it('can get a transaction as multiple encodings', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase58)));
+            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase64)));
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
-                    transaction(signature: $signature, encoding: PARSED) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    accountKeys {
-                                        pubkey
-                                        signer
-                                        writable
-                                    }
-                                    recentBlockhash
-                                }
-                                signatures
-                            }
-                        }
+                    transaction(signature: $signature) {
+                        dataBase58: data(encoding: BASE_58)
+                        dataBase64: data(encoding: BASE_64)
                     }
                 }
             `;
@@ -187,19 +167,8 @@ describe('transaction', () => {
             expect(result).toMatchObject({
                 data: {
                     transaction: {
-                        data: {
-                            message: {
-                                accountKeys: expect.arrayContaining([
-                                    {
-                                        pubkey: expect.any(String),
-                                        signer: expect.any(Boolean),
-                                        writable: expect.any(Boolean),
-                                    },
-                                ]),
-                                recentBlockhash: expect.any(String),
-                            },
-                            signatures: expect.any(Array),
-                        },
+                        dataBase58: expect.any(String),
+                        dataBase64: expect.any(String),
                     },
                 },
             });
@@ -210,19 +179,15 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    accountKeys {
-                                        pubkey
-                                        signer
-                                        writable
-                                    }
-                                    recentBlockhash
-                                }
-                                signatures
+                        message {
+                            accountKeys {
+                                pubkey
+                                signer
+                                writable
                             }
+                            recentBlockhash
                         }
+                        signatures
                     }
                 }
             `;
@@ -230,52 +195,46 @@ describe('transaction', () => {
             expect(result).toMatchObject({
                 data: {
                     transaction: {
-                        data: {
-                            message: {
-                                accountKeys: expect.arrayContaining([
-                                    {
-                                        pubkey: expect.any(String),
-                                        signer: expect.any(Boolean),
-                                        writable: expect.any(Boolean),
-                                    },
-                                ]),
-                                recentBlockhash: expect.any(String),
-                            },
-                            signatures: expect.any(Array),
+                        message: {
+                            accountKeys: expect.arrayContaining([
+                                {
+                                    pubkey: expect.any(String),
+                                    signer: expect.any(Boolean),
+                                    writable: expect.any(Boolean),
+                                },
+                            ]),
+                            recentBlockhash: expect.any(String),
                         },
+                        signatures: expect.any(Array),
                     },
                 },
             });
         });
     });
     describe('specific transaction instruction queries', () => {
-        it('can get a generic instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionGeneric)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    instructions {
-                                        ... on GenericInstruction {
-                                            accounts
-                                            data
-                                            programId
-                                        }
+        describe('instructions', () => {
+            it('can get a generic instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionGeneric)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    ... on GenericInstruction {
+                                        accounts
+                                        data
+                                        programId
                                     }
                                 }
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        data: {
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
@@ -287,47 +246,41 @@ describe('transaction', () => {
                             },
                         },
                     },
-                },
+                });
             });
-        });
-        it('can get a `ExtendLookupTable` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionAddressLookup)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    instructions {
-                                        programId
-                                        ... on ExtendLookupTableInstruction {
-                                            lookupTableAccount {
-                                                address
-                                            }
-                                            lookupTableAuthority {
-                                                address
-                                            }
-                                            newAddresses
-                                            payerAccount {
-                                                address
-                                            }
-                                            systemProgram {
-                                                address
-                                            }
+            it('can get a `ExtendLookupTable` instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionAddressLookup)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on ExtendLookupTableInstruction {
+                                        lookupTableAccount {
+                                            address
+                                        }
+                                        lookupTableAuthority {
+                                            address
+                                        }
+                                        newAddresses
+                                        payerAccount {
+                                            address
+                                        }
+                                        systemProgram {
+                                            address
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        data: {
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
@@ -350,45 +303,39 @@ describe('transaction', () => {
                             },
                         },
                     },
-                },
+                });
             });
-        });
-        it('can get a `CreateAccount` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    instructions {
-                                        programId
-                                        ... on CreateAccountInstruction {
-                                            lamports
-                                            newAccount {
-                                                address
-                                            }
-                                            owner {
-                                                address
-                                            }
-                                            source {
-                                                address
-                                            }
-                                            space
+            it('can get a `CreateAccount` instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on CreateAccountInstruction {
+                                        lamports
+                                        newAccount {
+                                            address
                                         }
+                                        owner {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                        space
                                     }
                                 }
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        data: {
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
@@ -409,16 +356,104 @@ describe('transaction', () => {
                             },
                         },
                     },
-                },
+                });
+            });
+            it('can get a `SplMemoInstruction` instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionMemo)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplMemoInstruction {
+                                        memo
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        memo: 'fb_07ce1448',
+                                        programId: 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+            it('can get a `SplTokenInitializeMintInstruction` instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeMintInstruction {
+                                        decimals
+                                        freezeAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        mintAuthority {
+                                            address
+                                        }
+                                        rentSysvar {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        decimals: expect.any(BigInt),
+                                        freezeAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                        rentSysvar: { address: expect.any(String) },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
             });
         });
-        it('can get an `Allocate` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
+        describe('inner instructions', () => {
+            it('can get an `Allocate` inner instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
                             meta {
                                 innerInstructions {
                                     instructions {
@@ -434,38 +469,36 @@ describe('transaction', () => {
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        meta: {
-                            innerInstructions: expect.arrayContaining([
-                                {
-                                    instructions: expect.arrayContaining([
-                                        {
-                                            account: {
-                                                address: expect.any(String),
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            meta: {
+                                innerInstructions: expect.arrayContaining([
+                                    {
+                                        instructions: expect.arrayContaining([
+                                            {
+                                                account: {
+                                                    address: expect.any(String),
+                                                },
+                                                programId: '11111111111111111111111111111111',
+                                                space: expect.any(BigInt),
                                             },
-                                            programId: '11111111111111111111111111111111',
-                                            space: expect.any(BigInt),
-                                        },
-                                    ]),
-                                },
-                            ]),
+                                        ]),
+                                    },
+                                ]),
+                            },
                         },
                     },
-                },
+                });
             });
-        });
-        it('can get an `Assign` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
+            it('can get an `Assign` inner instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
                             meta {
                                 innerInstructions {
                                     instructions {
@@ -483,40 +516,38 @@ describe('transaction', () => {
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        meta: {
-                            innerInstructions: expect.arrayContaining([
-                                {
-                                    instructions: expect.arrayContaining([
-                                        {
-                                            account: {
-                                                address: expect.any(String),
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            meta: {
+                                innerInstructions: expect.arrayContaining([
+                                    {
+                                        instructions: expect.arrayContaining([
+                                            {
+                                                account: {
+                                                    address: expect.any(String),
+                                                },
+                                                owner: {
+                                                    address: expect.any(String),
+                                                },
+                                                programId: '11111111111111111111111111111111',
                                             },
-                                            owner: {
-                                                address: expect.any(String),
-                                            },
-                                            programId: '11111111111111111111111111111111',
-                                        },
-                                    ]),
-                                },
-                            ]),
+                                        ]),
+                                    },
+                                ]),
+                            },
                         },
                     },
-                },
+                });
             });
-        });
-        it('can get a `Transfer` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
+            it('can get a `Transfer` inner instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
                             meta {
                                 innerInstructions {
                                     instructions {
@@ -535,139 +566,39 @@ describe('transaction', () => {
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        meta: {
-                            innerInstructions: expect.arrayContaining([
-                                {
-                                    instructions: expect.arrayContaining([
-                                        {
-                                            destination: {
-                                                address: expect.any(String),
-                                            },
-                                            lamports: expect.any(BigInt),
-                                            programId: '11111111111111111111111111111111',
-                                            source: {
-                                                address: expect.any(String),
-                                            },
-                                        },
-                                    ]),
-                                },
-                            ]),
-                        },
-                    },
-                },
-            });
-        });
-        it('can get a `SplMemoInstruction` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionMemo)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    instructions {
-                                        programId
-                                        ... on SplMemoInstruction {
-                                            memo
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        data: {
-                            message: {
-                                instructions: expect.arrayContaining([
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            meta: {
+                                innerInstructions: expect.arrayContaining([
                                     {
-                                        memo: 'fb_07ce1448',
-                                        programId: 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr',
+                                        instructions: expect.arrayContaining([
+                                            {
+                                                destination: {
+                                                    address: expect.any(String),
+                                                },
+                                                lamports: expect.any(BigInt),
+                                                programId: '11111111111111111111111111111111',
+                                                source: {
+                                                    address: expect.any(String),
+                                                },
+                                            },
+                                        ]),
                                     },
                                 ]),
                             },
                         },
                     },
-                },
+                });
             });
-        });
-        it('can get a `InitializeMint` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
-                            data {
-                                message {
-                                    instructions {
-                                        programId
-                                        ... on SplTokenInitializeMintInstruction {
-                                            decimals
-                                            freezeAuthority {
-                                                address
-                                            }
-                                            mint {
-                                                address
-                                            }
-                                            mintAuthority {
-                                                address
-                                            }
-                                            rentSysvar
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        data: {
-                            message: {
-                                instructions: expect.arrayContaining([
-                                    {
-                                        decimals: expect.any(BigInt),
-                                        freezeAuthority: {
-                                            address: expect.any(String),
-                                        },
-                                        mint: {
-                                            address: expect.any(String),
-                                        },
-                                        mintAuthority: {
-                                            address: expect.any(String),
-                                        },
-                                        programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                        rentSysvar: expect.any(String),
-                                    },
-                                ]),
-                            },
-                        },
-                    },
-                },
-            });
-        });
-        it('can get a `SplTokenTransfer` instruction', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
-            const source = /* GraphQL */ `
-                query testQuery($signature: Signature!) {
-                    transaction(signature: $signature) {
-                        ... on TransactionParsed {
+            it('can get a `SplTokenTransfer` inner instruction', async () => {
+                expect.assertions(1);
+                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
                             meta {
                                 innerInstructions {
                                     instructions {
@@ -686,32 +617,32 @@ describe('transaction', () => {
                             }
                         }
                     }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { signature });
-            expect(result).toMatchObject({
-                data: {
-                    transaction: {
-                        meta: {
-                            innerInstructions: expect.arrayContaining([
-                                {
-                                    instructions: expect.arrayContaining([
-                                        {
-                                            amount: expect.any(String),
-                                            destination: {
-                                                address: expect.any(String),
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            meta: {
+                                innerInstructions: expect.arrayContaining([
+                                    {
+                                        instructions: expect.arrayContaining([
+                                            {
+                                                amount: expect.any(String),
+                                                destination: {
+                                                    address: expect.any(String),
+                                                },
+                                                programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                                source: {
+                                                    address: expect.any(String),
+                                                },
                                             },
-                                            programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                            source: {
-                                                address: expect.any(String),
-                                            },
-                                        },
-                                    ]),
-                                },
-                            ]),
+                                        ]),
+                                    },
+                                ]),
+                            },
                         },
                     },
-                },
+                });
             });
         });
     });

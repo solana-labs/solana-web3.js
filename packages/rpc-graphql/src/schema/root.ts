@@ -13,7 +13,7 @@ export const rootTypeDefs = /* GraphQL */ `
             filters: [ProgramAccountsFilter]
             minContextSlot: Slot
         ): [Account]
-        transaction(signature: Signature!, commitment: Commitment, encoding: TransactionEncoding): Transaction
+        transaction(signature: Signature!, commitment: CommitmentWithoutProcessed): Transaction
     }
 
     schema {

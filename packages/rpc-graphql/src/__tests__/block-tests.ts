@@ -14,8 +14,6 @@ import {
     createLocalhostSolanaRpc,
     mockBlockAccounts,
     mockBlockFull,
-    mockBlockFullBase58,
-    mockBlockFullBase64,
     mockBlockNone,
     mockBlockSignatures,
     mockRpcResponse,
@@ -242,64 +240,8 @@ describe('block', () => {
         });
     });
     describe('block with full transaction details', () => {
-        it('can query a block with base58 encoded transactions', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase58)));
-            const source = /* GraphQL */ `
-                query testQuery($slot: Slot!) {
-                    block(slot: $slot, encoding: BASE_58) {
-                        ... on BlockWithFull {
-                            transactions {
-                                ... on TransactionBase58 {
-                                    data
-                                }
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
-            expect(result).toMatchObject({
-                data: {
-                    block: {
-                        transactions: expect.arrayContaining([
-                            {
-                                data: expect.any(String),
-                            },
-                        ]),
-                    },
-                },
-            });
-        });
-        it('can query a block with base64 encoded transactions', async () => {
-            expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockBlockFullBase64)));
-            const source = /* GraphQL */ `
-                query testQuery($slot: Slot!) {
-                    block(slot: $slot, encoding: BASE_64) {
-                        ... on BlockWithFull {
-                            transactions {
-                                ... on TransactionBase64 {
-                                    data
-                                }
-                            }
-                        }
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, { slot: defaultSlot });
-            expect(result).toMatchObject({
-                data: {
-                    block: {
-                        transactions: expect.arrayContaining([
-                            {
-                                data: expect.any(String),
-                            },
-                        ]),
-                    },
-                },
-            });
-        });
+        it.todo('can query a block with base58 encoded transactions');
+        it.todo('can query a block with base64 encoded transactions');
         it.todo('can query a block with transactions as JSON parsed');
         it.todo('can query a block with transactions as JSON parsed with specific instructions');
     });

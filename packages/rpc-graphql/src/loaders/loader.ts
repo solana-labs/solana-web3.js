@@ -54,15 +54,11 @@ export type ProgramAccountsLoaderArgs = { programAddress: Address } & ProgramAcc
 export type ProgramAccountsLoaderValue = ReturnType<GetProgramAccountsApi['getProgramAccounts']>;
 export type ProgramAccountsLoader = Loader<ProgramAccountsLoaderArgs, ProgramAccountsLoaderValue>;
 
-// FIX ME: https://github.com/microsoft/TypeScript/issues/43187
-// export type TransactionLoaderArgs = { signature: Parameters<GetTransactionApi['getTransaction']>[0] } & Parameters<
-//     GetTransactionApi['getTransaction']
-// >[1];
-export type TransactionLoaderArgs = {
-    commitment?: Commitment;
+export type TransactionLoaderArgsBase = {
+    commitment?: Omit<Commitment, 'processed'>;
     encoding?: 'base58' | 'base64' | 'json' | 'jsonParsed';
-    signature: Signature;
 };
+export type TransactionLoaderArgs = { signature: Signature } & TransactionLoaderArgsBase;
 export type TransactionLoaderValue = ReturnType<GetTransactionApi['getTransaction']> | null;
 export type TransactionLoader = Loader<TransactionLoaderArgs, TransactionLoaderValue>;
 

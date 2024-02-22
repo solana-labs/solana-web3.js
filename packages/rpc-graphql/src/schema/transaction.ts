@@ -62,49 +62,15 @@ export const transactionTypeDefs = /* GraphQL */ `
     }
 
     """
-    Transaction interface
+    A Solana transaction
     """
-    interface Transaction {
+    type Transaction {
         blockTime: BigInt
-        meta: TransactionMeta
-        slot: BigInt
-        version: String
-    }
-
-    """
-    A transaction with base58 encoded data
-    """
-    type TransactionBase58 implements Transaction {
-        blockTime: BigInt
-        data: Base58EncodedBytes
-        meta: TransactionMeta
-        slot: BigInt
-        version: String
-    }
-
-    """
-    A transaction with base64 encoded data
-    """
-    type TransactionBase64 implements Transaction {
-        blockTime: BigInt
-        data: Base64EncodedBytes
-        meta: TransactionMeta
-        slot: BigInt
-        version: String
-    }
-
-    """
-    A transaction with JSON encoded data
-    """
-    type TransactionDataParsed {
+        data(encoding: TransactionEncoding!): String
         message: TransactionMessage
-        signatures: [String]
-    }
-    type TransactionParsed implements Transaction {
-        blockTime: BigInt
-        data: TransactionDataParsed
         meta: TransactionMeta
-        slot: BigInt
+        signatures: [Signature]
+        slot: Slot
         version: String
     }
 `;

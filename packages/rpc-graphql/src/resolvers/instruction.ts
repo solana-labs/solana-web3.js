@@ -1,9 +1,11 @@
 import { resolveAccount } from './account';
+import { InstructionResult } from './transaction';
 
 export const instructionResolvers = {
     AdvanceNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
+        recentBlockhashesSysvar: resolveAccount('recentBlockhashesSysvar'),
     },
     AllocateInstruction: {
         account: resolveAccount('account'),
@@ -40,9 +42,11 @@ export const instructionResolvers = {
     BpfUpgradeableLoaderDeployWithMaxDataLenInstruction: {
         authority: resolveAccount('authority'),
         bufferAccount: resolveAccount('bufferAccount'),
+        clockSysvar: resolveAccount('clockSysvar'),
         payerAccount: resolveAccount('payerAccount'),
         programAccount: resolveAccount('programAccount'),
         programDataAccount: resolveAccount('programDataAccount'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     BpfUpgradeableLoaderExtendProgramInstruction: {
         payerAccount: resolveAccount('payerAccount'),
@@ -66,8 +70,10 @@ export const instructionResolvers = {
     BpfUpgradeableLoaderUpgradeInstruction: {
         authority: resolveAccount('authority'),
         bufferAccount: resolveAccount('bufferAccount'),
+        clockSysvar: resolveAccount('clockSysvar'),
         programAccount: resolveAccount('programAccount'),
         programDataAccount: resolveAccount('programDataAccount'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     BpfUpgradeableLoaderWriteInstruction: {
         account: resolveAccount('account'),
@@ -111,6 +117,8 @@ export const instructionResolvers = {
     InitializeNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
+        recentBlockhashesSysvar: resolveAccount('recentBlockhashesSysvar'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     Lockup: {
         custodian: resolveAccount('custodian'),
@@ -187,6 +195,7 @@ export const instructionResolvers = {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     SplTokenInitializeAccount3Instruction: {
         account: resolveAccount('account'),
@@ -197,6 +206,7 @@ export const instructionResolvers = {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     SplTokenInitializeMint2Instruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
@@ -211,12 +221,14 @@ export const instructionResolvers = {
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     SplTokenInitializeMultisig2Instruction: {
         multisig: resolveAccount('multisig'),
     },
     SplTokenInitializeMultisigInstruction: {
         multisig: resolveAccount('multisig'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
@@ -269,6 +281,7 @@ export const instructionResolvers = {
     },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
+        clockSysvar: resolveAccount('clockSysvar'),
         custodian: resolveAccount('custodian'),
         newAuthority: resolveAccount('newAuthority'),
         stakeAccount: resolveAccount('stakeAccount'),
@@ -276,12 +289,14 @@ export const instructionResolvers = {
     StakeAuthorizeCheckedWithSeedInstruction: {
         authorityBase: resolveAccount('authorityBase'),
         authorityOwner: resolveAccount('authorityOwner'),
+        clockSysvar: resolveAccount('clockSysvar'),
         custodian: resolveAccount('custodian'),
         newAuthorized: resolveAccount('newAuthorized'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
     StakeAuthorizeInstruction: {
         authority: resolveAccount('authority'),
+        clockSysvar: resolveAccount('clockSysvar'),
         custodian: resolveAccount('custodian'),
         newAuthority: resolveAccount('newAuthority'),
         stakeAccount: resolveAccount('stakeAccount'),
@@ -289,6 +304,7 @@ export const instructionResolvers = {
     StakeAuthorizeWithSeedInstruction: {
         authorityBase: resolveAccount('authorityBase'),
         authorityOwner: resolveAccount('authorityOwner'),
+        clockSysvar: resolveAccount('clockSysvar'),
         custodian: resolveAccount('custodian'),
         newAuthorized: resolveAccount('newAuthorized'),
         stakeAccount: resolveAccount('stakeAccount'),
@@ -299,20 +315,28 @@ export const instructionResolvers = {
         voteAccount: resolveAccount('voteAccount'),
     },
     StakeDeactivateInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
     },
     StakeDelegateStakeInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
         stakeAccount: resolveAccount('stakeAccount'),
         stakeAuthority: resolveAccount('stakeAuthority'),
         stakeConfigAccount: resolveAccount('stakeConfigAccount'),
+        stakeHistorySysvar: resolveAccount('stakeHistorySysvar'),
         voteAccount: resolveAccount('voteAccount'),
+    },
+    StakeInitializeCheckedInstruction: {
+        rentSysvar: resolveAccount('rentSysvar'),
+        stakeAccount: resolveAccount('stakeAccount'),
     },
     StakeInitializeCheckedInstructionDataAuthorized: {
         staker: resolveAccount('staker'),
         withdrawer: resolveAccount('withdrawer'),
     },
     StakeInitializeInstruction: {
+        rentSysvar: resolveAccount('rentSysvar'),
         stakeAccount: resolveAccount('stakeAccount'),
     },
     StakeInitializeInstructionDataAuthorized: {
@@ -320,9 +344,11 @@ export const instructionResolvers = {
         withdrawer: resolveAccount('withdrawer'),
     },
     StakeMergeInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
         destination: resolveAccount('destination'),
         source: resolveAccount('source'),
         stakeAuthority: resolveAccount('stakeAuthority'),
+        stakeHistorySysvar: resolveAccount('stakeHistorySysvar'),
     },
     StakeRedelegateInstruction: {
         newStakeAccount: resolveAccount('newStakeAccount'),
@@ -345,287 +371,289 @@ export const instructionResolvers = {
         stakeAuthority: resolveAccount('stakeAuthority'),
     },
     StakeWithdrawInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
         destination: resolveAccount('destination'),
         stakeAccount: resolveAccount('stakeAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
     TransactionInstruction: {
-        __resolveType(instruction: { programName: string; instructionType: string }) {
-            if (instruction.programName) {
-                if (instruction.programName === 'address-lookup-table') {
-                    if (instruction.instructionType === 'createLookupTable') {
+        __resolveType(instructionResult: InstructionResult) {
+            const { jsonParsedConfigs } = instructionResult;
+            if (jsonParsedConfigs) {
+                if (jsonParsedConfigs.programName === 'address-lookup-table') {
+                    if (jsonParsedConfigs.instructionType === 'createLookupTable') {
                         return 'CreateLookupTableInstruction';
                     }
-                    if (instruction.instructionType === 'freezeLookupTable') {
+                    if (jsonParsedConfigs.instructionType === 'freezeLookupTable') {
                         return 'FreezeLookupTableInstruction';
                     }
-                    if (instruction.instructionType === 'extendLookupTable') {
+                    if (jsonParsedConfigs.instructionType === 'extendLookupTable') {
                         return 'ExtendLookupTableInstruction';
                     }
-                    if (instruction.instructionType === 'deactivateLookupTable') {
+                    if (jsonParsedConfigs.instructionType === 'deactivateLookupTable') {
                         return 'DeactivateLookupTableInstruction';
                     }
-                    if (instruction.instructionType === 'closeLookupTable') {
+                    if (jsonParsedConfigs.instructionType === 'closeLookupTable') {
                         return 'CloseLookupTableInstruction';
                     }
                 }
-                if (instruction.programName === 'bpf-loader') {
-                    if (instruction.instructionType === 'write') {
+                if (jsonParsedConfigs.programName === 'bpf-loader') {
+                    if (jsonParsedConfigs.instructionType === 'write') {
                         return 'BpfLoaderWriteInstruction';
                     }
-                    if (instruction.instructionType === 'finalize') {
+                    if (jsonParsedConfigs.instructionType === 'finalize') {
                         return 'BpfLoaderFinalizeInstruction';
                     }
                 }
-                if (instruction.programName === 'bpf-upgradeable-loader') {
-                    if (instruction.instructionType === 'initializeBuffer') {
+                if (jsonParsedConfigs.programName === 'bpf-upgradeable-loader') {
+                    if (jsonParsedConfigs.instructionType === 'initializeBuffer') {
                         return 'BpfUpgradeableLoaderInitializeBufferInstruction';
                     }
-                    if (instruction.instructionType === 'write') {
+                    if (jsonParsedConfigs.instructionType === 'write') {
                         return 'BpfUpgradeableLoaderWriteInstruction';
                     }
-                    if (instruction.instructionType === 'deployWithMaxDataLen') {
+                    if (jsonParsedConfigs.instructionType === 'deployWithMaxDataLen') {
                         return 'BpfUpgradeableLoaderDeployWithMaxDataLenInstruction';
                     }
-                    if (instruction.instructionType === 'upgrade') {
+                    if (jsonParsedConfigs.instructionType === 'upgrade') {
                         return 'BpfUpgradeableLoaderUpgradeInstruction';
                     }
-                    if (instruction.instructionType === 'setAuthority') {
+                    if (jsonParsedConfigs.instructionType === 'setAuthority') {
                         return 'BpfUpgradeableLoaderSetAuthorityInstruction';
                     }
-                    if (instruction.instructionType === 'setAuthorityChecked') {
+                    if (jsonParsedConfigs.instructionType === 'setAuthorityChecked') {
                         return 'BpfUpgradeableLoaderSetAuthorityCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'close') {
+                    if (jsonParsedConfigs.instructionType === 'close') {
                         return 'BpfUpgradeableLoaderCloseInstruction';
                     }
-                    if (instruction.instructionType === 'extendProgram') {
+                    if (jsonParsedConfigs.instructionType === 'extendProgram') {
                         return 'BpfUpgradeableLoaderExtendProgramInstruction';
                     }
                 }
-                if (instruction.programName === 'spl-associated-token-account') {
-                    if (instruction.instructionType === 'create') {
+                if (jsonParsedConfigs.programName === 'spl-associated-token-account') {
+                    if (jsonParsedConfigs.instructionType === 'create') {
                         return 'SplAssociatedTokenCreateInstruction';
                     }
-                    if (instruction.instructionType === 'createIdempotent') {
+                    if (jsonParsedConfigs.instructionType === 'createIdempotent') {
                         return 'SplAssociatedTokenCreateIdempotentInstruction';
                     }
-                    if (instruction.instructionType === 'recoverNested') {
+                    if (jsonParsedConfigs.instructionType === 'recoverNested') {
                         return 'SplAssociatedTokenRecoverNestedInstruction';
                     }
                 }
-                if (instruction.programName === 'spl-memo') {
+                if (jsonParsedConfigs.programName === 'spl-memo') {
                     return 'SplMemoInstruction';
                 }
-                if (instruction.programName === 'spl-token') {
-                    if (instruction.instructionType === 'initializeMint') {
+                if (jsonParsedConfigs.programName === 'spl-token') {
+                    if (jsonParsedConfigs.instructionType === 'initializeMint') {
                         return 'SplTokenInitializeMintInstruction';
                     }
-                    if (instruction.instructionType === 'initializeMint2') {
+                    if (jsonParsedConfigs.instructionType === 'initializeMint2') {
                         return 'SplTokenInitializeMint2Instruction';
                     }
-                    if (instruction.instructionType === 'initializeAccount') {
+                    if (jsonParsedConfigs.instructionType === 'initializeAccount') {
                         return 'SplTokenInitializeAccountInstruction';
                     }
-                    if (instruction.instructionType === 'initializeAccount2') {
+                    if (jsonParsedConfigs.instructionType === 'initializeAccount2') {
                         return 'SplTokenInitializeAccount2Instruction';
                     }
-                    if (instruction.instructionType === 'initializeAccount3') {
+                    if (jsonParsedConfigs.instructionType === 'initializeAccount3') {
                         return 'SplTokenInitializeAccount3Instruction';
                     }
-                    if (instruction.instructionType === 'initializeMultisig') {
+                    if (jsonParsedConfigs.instructionType === 'initializeMultisig') {
                         return 'SplTokenInitializeMultisigInstruction';
                     }
-                    if (instruction.instructionType === 'initializeMultisig2') {
+                    if (jsonParsedConfigs.instructionType === 'initializeMultisig2') {
                         return 'SplTokenInitializeMultisig2Instruction';
                     }
-                    if (instruction.instructionType === 'transfer') {
+                    if (jsonParsedConfigs.instructionType === 'transfer') {
                         return 'SplTokenTransferInstruction';
                     }
-                    if (instruction.instructionType === 'approve') {
+                    if (jsonParsedConfigs.instructionType === 'approve') {
                         return 'SplTokenApproveInstruction';
                     }
-                    if (instruction.instructionType === 'revoke') {
+                    if (jsonParsedConfigs.instructionType === 'revoke') {
                         return 'SplTokenRevokeInstruction';
                     }
-                    if (instruction.instructionType === 'setAuthority') {
+                    if (jsonParsedConfigs.instructionType === 'setAuthority') {
                         return 'SplTokenSetAuthorityInstruction';
                     }
-                    if (instruction.instructionType === 'mintTo') {
+                    if (jsonParsedConfigs.instructionType === 'mintTo') {
                         return 'SplTokenMintToInstruction';
                     }
-                    if (instruction.instructionType === 'burn') {
+                    if (jsonParsedConfigs.instructionType === 'burn') {
                         return 'SplTokenBurnInstruction';
                     }
-                    if (instruction.instructionType === 'closeAccount') {
+                    if (jsonParsedConfigs.instructionType === 'closeAccount') {
                         return 'SplTokenCloseAccountInstruction';
                     }
-                    if (instruction.instructionType === 'freezeAccount') {
+                    if (jsonParsedConfigs.instructionType === 'freezeAccount') {
                         return 'SplTokenFreezeAccountInstruction';
                     }
-                    if (instruction.instructionType === 'thawAccount') {
+                    if (jsonParsedConfigs.instructionType === 'thawAccount') {
                         return 'SplTokenThawAccountInstruction';
                     }
-                    if (instruction.instructionType === 'transferChecked') {
+                    if (jsonParsedConfigs.instructionType === 'transferChecked') {
                         return 'SplTokenTransferCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'approveChecked') {
+                    if (jsonParsedConfigs.instructionType === 'approveChecked') {
                         return 'SplTokenApproveCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'mintToChecked') {
+                    if (jsonParsedConfigs.instructionType === 'mintToChecked') {
                         return 'SplTokenMintToCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'burnChecked') {
+                    if (jsonParsedConfigs.instructionType === 'burnChecked') {
                         return 'SplTokenBurnCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'syncNative') {
+                    if (jsonParsedConfigs.instructionType === 'syncNative') {
                         return 'SplTokenSyncNativeInstruction';
                     }
-                    if (instruction.instructionType === 'getAccountDataSize') {
+                    if (jsonParsedConfigs.instructionType === 'getAccountDataSize') {
                         return 'SplTokenGetAccountDataSizeInstruction';
                     }
-                    if (instruction.instructionType === 'initializeImmutableOwner') {
+                    if (jsonParsedConfigs.instructionType === 'initializeImmutableOwner') {
                         return 'SplTokenInitializeImmutableOwnerInstruction';
                     }
-                    if (instruction.instructionType === 'amountToUiAmount') {
+                    if (jsonParsedConfigs.instructionType === 'amountToUiAmount') {
                         return 'SplTokenAmountToUiAmountInstruction';
                     }
-                    if (instruction.instructionType === 'uiAmountToAmount') {
+                    if (jsonParsedConfigs.instructionType === 'uiAmountToAmount') {
                         return 'SplTokenUiAmountToAmountInstruction';
                     }
-                    if (instruction.instructionType === 'initializeMintCloseAuthority') {
+                    if (jsonParsedConfigs.instructionType === 'initializeMintCloseAuthority') {
                         return 'SplTokenInitializeMintCloseAuthorityInstruction';
                     }
                 }
-                if (instruction.programName === 'stake') {
-                    if (instruction.instructionType === 'initialize') {
+                if (jsonParsedConfigs.programName === 'stake') {
+                    if (jsonParsedConfigs.instructionType === 'initialize') {
                         return 'StakeInitializeInstruction';
                     }
-                    if (instruction.instructionType === 'authorize') {
+                    if (jsonParsedConfigs.instructionType === 'authorize') {
                         return 'StakeAuthorizeInstruction';
                     }
-                    if (instruction.instructionType === 'delegate') {
+                    if (jsonParsedConfigs.instructionType === 'delegate') {
                         return 'StakeDelegateStakeInstruction';
                     }
-                    if (instruction.instructionType === 'split') {
+                    if (jsonParsedConfigs.instructionType === 'split') {
                         return 'StakeSplitInstruction';
                     }
-                    if (instruction.instructionType === 'withdraw') {
+                    if (jsonParsedConfigs.instructionType === 'withdraw') {
                         return 'StakeWithdrawInstruction';
                     }
-                    if (instruction.instructionType === 'deactivate') {
+                    if (jsonParsedConfigs.instructionType === 'deactivate') {
                         return 'StakeDeactivateInstruction';
                     }
-                    if (instruction.instructionType === 'setLockup') {
+                    if (jsonParsedConfigs.instructionType === 'setLockup') {
                         return 'StakeSetLockupInstruction';
                     }
-                    if (instruction.instructionType === 'merge') {
+                    if (jsonParsedConfigs.instructionType === 'merge') {
                         return 'StakeMergeInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeWithSeed') {
                         return 'StakeAuthorizeWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'initializeChecked') {
+                    if (jsonParsedConfigs.instructionType === 'initializeChecked') {
                         return 'StakeInitializeCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeChecked') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeChecked') {
                         return 'StakeAuthorizeCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeCheckedWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeCheckedWithSeed') {
                         return 'StakeAuthorizeCheckedWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'setLockupChecked') {
+                    if (jsonParsedConfigs.instructionType === 'setLockupChecked') {
                         return 'StakeSetLockupCheckedInstruction';
                     }
-                    if (instruction.instructionType === 'deactivateDelinquent') {
+                    if (jsonParsedConfigs.instructionType === 'deactivateDelinquent') {
                         return 'StakeDeactivateDelinquentInstruction';
                     }
-                    if (instruction.instructionType === 'redelegate') {
+                    if (jsonParsedConfigs.instructionType === 'redelegate') {
                         return 'StakeRedelegateInstruction';
                     }
                 }
-                if (instruction.programName === 'system') {
-                    if (instruction.instructionType === 'createAccount') {
+                if (jsonParsedConfigs.programName === 'system') {
+                    if (jsonParsedConfigs.instructionType === 'createAccount') {
                         return 'CreateAccountInstruction';
                     }
-                    if (instruction.instructionType === 'assign') {
+                    if (jsonParsedConfigs.instructionType === 'assign') {
                         return 'AssignInstruction';
                     }
-                    if (instruction.instructionType === 'transfer') {
+                    if (jsonParsedConfigs.instructionType === 'transfer') {
                         return 'TransferInstruction';
                     }
-                    if (instruction.instructionType === 'createAccountWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'createAccountWithSeed') {
                         return 'CreateAccountWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'advanceNonceAccount') {
+                    if (jsonParsedConfigs.instructionType === 'advanceNonceAccount') {
                         return 'AdvanceNonceAccountInstruction';
                     }
-                    if (instruction.instructionType === 'withdrawNonceAccount') {
+                    if (jsonParsedConfigs.instructionType === 'withdrawNonceAccount') {
                         return 'WithdrawNonceAccountInstruction';
                     }
-                    if (instruction.instructionType === 'initializeNonceAccount') {
+                    if (jsonParsedConfigs.instructionType === 'initializeNonceAccount') {
                         return 'InitializeNonceAccountInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeNonceAccount') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeNonceAccount') {
                         return 'AuthorizeNonceAccountInstruction';
                     }
-                    if (instruction.instructionType === 'upgradeNonceAccount') {
+                    if (jsonParsedConfigs.instructionType === 'upgradeNonceAccount') {
                         return 'UpgradeNonceAccountInstruction';
                     }
-                    if (instruction.instructionType === 'allocate') {
+                    if (jsonParsedConfigs.instructionType === 'allocate') {
                         return 'AllocateInstruction';
                     }
-                    if (instruction.instructionType === 'allocateWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'allocateWithSeed') {
                         return 'AllocateWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'assignWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'assignWithSeed') {
                         return 'AssignWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'transferWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'transferWithSeed') {
                         return 'TransferWithSeedInstruction';
                     }
                 }
-                if (instruction.programName === 'vote') {
-                    if (instruction.instructionType === 'initialize') {
+                if (jsonParsedConfigs.programName === 'vote') {
+                    if (jsonParsedConfigs.instructionType === 'initialize') {
                         return 'VoteInitializeAccountInstruction';
                     }
-                    if (instruction.instructionType === 'authorize') {
+                    if (jsonParsedConfigs.instructionType === 'authorize') {
                         return 'VoteAuthorizeInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeWithSeed') {
                         return 'VoteAuthorizeWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeCheckedWithSeed') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeCheckedWithSeed') {
                         return 'VoteAuthorizeCheckedWithSeedInstruction';
                     }
-                    if (instruction.instructionType === 'vote') {
+                    if (jsonParsedConfigs.instructionType === 'vote') {
                         return 'VoteVoteInstruction';
                     }
-                    if (instruction.instructionType === 'updatevotestate') {
+                    if (jsonParsedConfigs.instructionType === 'updatevotestate') {
                         return 'VoteUpdateVoteStateInstruction';
                     }
-                    if (instruction.instructionType === 'updatevotestateswitch') {
+                    if (jsonParsedConfigs.instructionType === 'updatevotestateswitch') {
                         return 'VoteUpdateVoteStateSwitchInstruction';
                     }
-                    if (instruction.instructionType === 'compactupdatevotestate') {
+                    if (jsonParsedConfigs.instructionType === 'compactupdatevotestate') {
                         return 'VoteCompactUpdateVoteStateInstruction';
                     }
-                    if (instruction.instructionType === 'compactupdatevotestateswitch') {
+                    if (jsonParsedConfigs.instructionType === 'compactupdatevotestateswitch') {
                         return 'VoteCompactUpdateVoteStateSwitchInstruction';
                     }
-                    if (instruction.instructionType === 'withdraw') {
+                    if (jsonParsedConfigs.instructionType === 'withdraw') {
                         return 'VoteWithdrawInstruction';
                     }
-                    if (instruction.instructionType === 'updateValidatorIdentity') {
+                    if (jsonParsedConfigs.instructionType === 'updateValidatorIdentity') {
                         return 'VoteUpdateValidatorIdentityInstruction';
                     }
-                    if (instruction.instructionType === 'updateCommission') {
+                    if (jsonParsedConfigs.instructionType === 'updateCommission') {
                         return 'VoteUpdateCommissionInstruction';
                     }
-                    if (instruction.instructionType === 'voteSwitch') {
+                    if (jsonParsedConfigs.instructionType === 'voteSwitch') {
                         return 'VoteVoteSwitchInstruction';
                     }
-                    if (instruction.instructionType === 'authorizeChecked') {
+                    if (jsonParsedConfigs.instructionType === 'authorizeChecked') {
                         return 'VoteAuthorizeCheckedInstruction';
                     }
                 }
@@ -648,21 +676,25 @@ export const instructionResolvers = {
     },
     VoteAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
+        clockSysvar: resolveAccount('clockSysvar'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
     VoteAuthorizeCheckedWithSeedInstruction: {
         authorityOwner: resolveAccount('authorityOwner'),
+        clockSysvar: resolveAccount('clockSysvar'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
     VoteAuthorizeInstruction: {
         authority: resolveAccount('authority'),
+        clockSysvar: resolveAccount('clockSysvar'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
     VoteAuthorizeWithSeedInstruction: {
         authorityOwner: resolveAccount('authorityOwner'),
+        clockSysvar: resolveAccount('clockSysvar'),
         newAuthority: resolveAccount('newAuthority'),
         voteAccount: resolveAccount('voteAccount'),
     },
@@ -677,7 +709,10 @@ export const instructionResolvers = {
     VoteInitializeAccountInstruction: {
         authorizedVoter: resolveAccount('authorizedVoter'),
         authorizedWithdrawer: resolveAccount('authorizedWithdrawer'),
+        clockSysvar: resolveAccount('clockSysvar'),
         node: resolveAccount('node'),
+
+        rentSysvar: resolveAccount('rentSysvar'),
         voteAccount: resolveAccount('voteAccount'),
     },
     VoteUpdateCommissionInstruction: {
@@ -686,6 +721,7 @@ export const instructionResolvers = {
     },
     VoteUpdateValidatorIdentityInstruction: {
         newValidatorIdentity: resolveAccount('newValidatorIdentity'),
+
         voteAccount: resolveAccount('voteAccount'),
         withdrawAuthority: resolveAccount('withdrawAuthority'),
     },
@@ -698,10 +734,14 @@ export const instructionResolvers = {
         voteAuthority: resolveAccount('voteAuthority'),
     },
     VoteVoteInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
+        slotHashesSysvar: resolveAccount('slotHashesSysvar'),
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
     VoteVoteSwitchInstruction: {
+        clockSysvar: resolveAccount('clockSysvar'),
+        slotHashesSysvar: resolveAccount('slotHashesSysvar'),
         voteAccount: resolveAccount('voteAccount'),
         voteAuthority: resolveAccount('voteAuthority'),
     },
@@ -713,5 +753,7 @@ export const instructionResolvers = {
         destination: resolveAccount('destination'),
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
+        recentBlockhashesSysvar: resolveAccount('recentBlockhashesSysvar'),
+        rentSysvar: resolveAccount('rentSysvar'),
     },
 };

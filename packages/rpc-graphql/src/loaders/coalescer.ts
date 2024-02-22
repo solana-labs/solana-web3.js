@@ -2,7 +2,7 @@ import { DataSlice } from '@solana/rpc-types';
 
 import { BatchLoadPromiseCallback, cacheKeyFn } from './loader';
 
-type Encoding = 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+type Encoding = ('base58' | 'base64' | 'base64+zstd' | 'jsonParsed') | ('base58' | 'base64' | 'json' | 'jsonParsed');
 
 export type Fetch<TArgs extends { encoding?: Encoding }, TValue> = Readonly<{
     args: TArgs;
@@ -45,6 +45,72 @@ const hashOmit = <TArgs extends object>(args: TArgs, omit: (keyof TArgs)[]) => {
     }
     return cacheKeyFn(argsObj);
 };
+
+export function buildCoalescedFetchesByArgsHash<TArgs extends { encoding?: Encoding }, TValue>(
+    toFetchMap: ToFetchMap<TArgs, TValue>,
+    orphanConfig: {
+        criteria: (args: TArgs) => boolean;
+        defaults: (args: TArgs) => TArgs;
+        hashOmit: (keyof TArgs)[];
+    },
+): FetchesByArgsHash<TArgs, TValue> {
+    const fetchesByArgsHash: FetchesByArgsHash<TArgs, TValue> = {};
+
+    // Keep track of any fetches that don't specify an encoding, to be
+    // wrapped into another fetch that does.
+    const orphanedFetches: typeof toFetchMap = {};
+
+    Object.entries(toFetchMap).forEach(([signature, toFetch]) => {
+        toFetch.forEach(({ args, promiseCallback }) => {
+            if (orphanConfig.criteria(args)) {
+                const toFetch = (orphanedFetches[signature] ||= []);
+                toFetch.push({ args, promiseCallback });
+                return;
+            }
+
+            const argsHash = hashOmit(args, []);
+            const transactionFetches = (fetchesByArgsHash[argsHash] ||= {
+                args,
+                fetches: {},
+            });
+            const { callbacks: promiseCallbacksForSignature } = (transactionFetches.fetches[signature] ||= {
+                callbacks: [],
+            });
+            promiseCallbacksForSignature.push(promiseCallback);
+        });
+    });
+
+    // Place the orphans
+    Object.entries(orphanedFetches).forEach(([signature, toFetch]) => {
+        toFetch.forEach(({ args: orphanArgs, promiseCallback: orphanPromiseCallback }) => {
+            if (Object.keys(fetchesByArgsHash).length !== 0) {
+                for (const { fetches, args } of Object.values(fetchesByArgsHash)) {
+                    // Check if the two arg sets are a match without `encoding`
+                    if (hashOmit(orphanArgs, orphanConfig.hashOmit) === hashOmit(args, orphanConfig.hashOmit)) {
+                        const { callbacks: promiseCallbacksForSignature } = (fetches[signature] ||= {
+                            callbacks: [],
+                        });
+                        promiseCallbacksForSignature.push(orphanPromiseCallback);
+                        return;
+                    }
+                }
+            }
+            // Create a new fetch.
+            const args = orphanConfig.defaults(orphanArgs);
+            const argsHash = hashOmit(args, []);
+            const transactionFetches = (fetchesByArgsHash[argsHash] ||= {
+                args,
+                fetches: {},
+            });
+            const { callbacks: promiseCallbacksForSignature } = (transactionFetches.fetches[signature] ||= {
+                callbacks: [],
+            });
+            promiseCallbacksForSignature.push(orphanPromiseCallback);
+        });
+    });
+
+    return fetchesByArgsHash;
+}
 
 export function buildCoalescedFetchesByArgsHashWithDataSlice<
     TArgs extends { dataSlice?: DataSlice; encoding?: Encoding },

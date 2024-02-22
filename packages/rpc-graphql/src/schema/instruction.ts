@@ -115,12 +115,12 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         bufferAccount: Account
-        clockSysvar: Address
+        clockSysvar: Account
         maxDataLen: BigInt
         payerAccount: Account
         programAccount: Account
         programDataAccount: Account
-        rentSysvar: Address
+        rentSysvar: Account
     }
 
     """
@@ -130,10 +130,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         bufferAccount: Account
-        clockSysvar: Address
+        clockSysvar: Account
         programAccount: Account
         programDataAccount: Account
-        rentSysvar: Address
+        rentSysvar: Account
         spillAccount: Account
     }
 
@@ -186,7 +186,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplAssociatedTokenCreateInstruction implements TransactionInstruction {
         programId: Address
         account: Account
-        mint: Address
+        mint: Account
         source: Account
         systemProgram: Account
         tokenProgram: Account
@@ -199,7 +199,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplAssociatedTokenCreateIdempotentInstruction implements TransactionInstruction {
         programId: Address
         account: Account
-        mint: Address
+        mint: Account
         source: Account
         systemProgram: Account
         tokenProgram: Account
@@ -237,7 +237,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         freezeAuthority: Account
         mint: Account
         mintAuthority: Account
-        rentSysvar: Address
+        rentSysvar: Account
     }
 
     """
@@ -259,7 +259,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         account: Account
         mint: Account
         owner: Account
-        rentSysvar: Address
+        rentSysvar: Account
     }
 
     """
@@ -270,7 +270,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         account: Account
         mint: Account
         owner: Account
-        rentSysvar: Address
+        rentSysvar: Account
     }
 
     """
@@ -290,7 +290,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         m: BigInt # FIXME:*
         multisig: Account
-        rentSysvar: Address
+        rentSysvar: Account
         signers: [Address]
     }
 
@@ -545,7 +545,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authorized: StakeInitializeInstructionDataAuthorized
         lockup: Lockup
-        rentSysvar: Address
+        rentSysvar: Account
         stakeAccount: Account
     }
 
@@ -556,7 +556,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         custodian: Account
         newAuthority: Account
         stakeAccount: Account
@@ -567,11 +567,11 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type StakeDelegateStakeInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
+        clockSysvar: Account
         stakeAccount: Account
         stakeAuthority: Account
         stakeConfigAccount: Account
-        stakeHistorySysvar: Address
+        stakeHistorySysvar: Account
         voteAccount: Account
     }
 
@@ -591,7 +591,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type StakeWithdrawInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
+        clockSysvar: Account
         destination: Account
         lamports: BigInt
         stakeAccount: Account
@@ -603,7 +603,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type StakeDeactivateInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
+        clockSysvar: Account
         stakeAccount: Account
         stakeAuthority: Account
     }
@@ -623,11 +623,11 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type StakeMergeInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
+        clockSysvar: Account
         destination: Account
         source: Account
         stakeAuthority: Account
-        stakeHistorySysvar: Address
+        stakeHistorySysvar: Account
     }
 
     """
@@ -639,7 +639,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         custodian: Account
         newAuthorized: Account
         stakeAccount: Account
@@ -656,7 +656,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authorized: StakeInitializeCheckedInstructionDataAuthorized
         lockup: Lockup
-        rentSysvar: Address
+        rentSysvar: Account
         stakeAccount: Account
     }
 
@@ -667,7 +667,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         custodian: Account
         newAuthority: Account
         stakeAccount: Account
@@ -682,7 +682,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         custodian: Account
         newAuthorized: Account
         stakeAccount: Account
@@ -770,7 +770,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         nonceAccount: Account
         nonceAuthority: Account
-        recentBlockhashesSysvar: Address
+        recentBlockhashesSysvar: Account
     }
 
     """
@@ -782,8 +782,8 @@ export const instructionTypeDefs = /* GraphQL */ `
         lamports: BigInt
         nonceAccount: Account
         nonceAuthority: Account
-        recentBlockhashesSysvar: Address
-        rentSysvar: Address
+        recentBlockhashesSysvar: Account
+        rentSysvar: Account
     }
 
     """
@@ -793,8 +793,8 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         nonceAccount: Account
         nonceAuthority: Account
-        recentBlockhashesSysvar: Address
-        rentSysvar: Address
+        recentBlockhashesSysvar: Account
+        rentSysvar: Account
     }
 
     """
@@ -868,10 +868,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authorizedVoter: Account
         authorizedWithdrawer: Account
-        clockSysvar: Address
+        clockSysvar: Account
         commission: BigInt # FIXME:*
         node: Account
-        rentSysvar: Address
+        rentSysvar: Account
         voteAccount: Account
     }
 
@@ -882,7 +882,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         newAuthority: Account
         voteAccount: Account
     }
@@ -896,7 +896,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         newAuthority: Account
         voteAccount: Account
     }
@@ -910,7 +910,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         authorityOwner: Account
         authoritySeed: String
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         newAuthority: Account
         voteAccount: Account
     }
@@ -926,8 +926,8 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteVoteInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
-        slotHashesSysvar: Address
+        clockSysvar: Account
+        slotHashesSysvar: Account
         vote: Vote
         voteAccount: Account
         voteAuthority: Account
@@ -1024,9 +1024,9 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteVoteSwitchInstruction implements TransactionInstruction {
         programId: Address
-        clockSysvar: Address
+        clockSysvar: Account
         hash: String
-        slotHashesSysvar: Address
+        slotHashesSysvar: Account
         vote: Vote
         voteAccount: Account
         voteAuthority: Account
@@ -1039,7 +1039,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         authority: Account
         authorityType: String
-        clockSysvar: Address
+        clockSysvar: Account
         newAuthority: Account
         voteAccount: Account
     }
