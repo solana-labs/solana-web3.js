@@ -23,13 +23,12 @@ import { SlotsUpdatesNotificationsApi } from './slots-updates-notifications';
 import { VoteNotificationsApi } from './vote-notifications';
 
 export type SolanaRpcSubscriptionsApi = AccountNotificationsApi &
-    BlockNotificationsApi &
     LogsNotificationsApi &
     ProgramNotificationsApi &
     RootNotificationsApi &
     SignatureNotificationsApi &
     SlotNotificationsApi;
-export type SolanaRpcSubscriptionsApiUnstable = SlotsUpdatesNotificationsApi & VoteNotificationsApi;
+export type SolanaRpcSubscriptionsApiUnstable = BlockNotificationsApi & SlotsUpdatesNotificationsApi & VoteNotificationsApi;
 
 export type {
     AccountNotificationsApi,
