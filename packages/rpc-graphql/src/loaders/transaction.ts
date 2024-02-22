@@ -31,16 +31,14 @@ async function loadTransaction(
 
 function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
     const resolveTransactionUsingRpc = loadTransaction.bind(null, rpc);
-    return async (transactionQueryArgs: readonly TransactionLoaderArgs[]) => {
-        return await Promise.all(
-            transactionQueryArgs.map(async args => await resolveTransactionUsingRpc(applyDefaultArgs(args))),
-        );
-    };
+    return async (transactionQueryArgs: readonly TransactionLoaderArgs[]) =>
+        Promise.all(transactionQueryArgs.map(async args => resolveTransactionUsingRpc(applyDefaultArgs(args))));
 }
 
 export function createTransactionLoader(rpc: Rpc<GetTransactionApi>): TransactionLoader {
     const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async args => loader.load(applyDefaultArgs(args)),
+        loadMany: async args => loader.loadMany(args.map(applyDefaultArgs)),
     };
 }

@@ -34,14 +34,14 @@ async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: BlockLoader
 
 function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
     const resolveBlockUsingRpc = loadBlock.bind(null, rpc);
-    return async (blockQueryArgs: readonly BlockLoaderArgs[]) => {
-        return await Promise.all(blockQueryArgs.map(async args => await resolveBlockUsingRpc(applyDefaultArgs(args))));
-    };
+    return async (blockQueryArgs: readonly BlockLoaderArgs[]) =>
+        Promise.all(blockQueryArgs.map(async args => resolveBlockUsingRpc(applyDefaultArgs(args))));
 }
 
 export function createBlockLoader(rpc: Rpc<GetBlockApi>): BlockLoader {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn });
     return {
         load: async args => loader.load(applyDefaultArgs(args)),
+        loadMany: async args => loader.loadMany(args.map(applyDefaultArgs)),
     };
 }

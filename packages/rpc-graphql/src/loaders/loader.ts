@@ -7,7 +7,8 @@ import type { Commitment, Slot } from '@solana/rpc-types';
 import stringify from 'json-stable-stringify';
 
 export type LoadFn<TArgs, T> = (args: TArgs) => Promise<T>;
-export type Loader<TArgs, T> = { load: LoadFn<TArgs, T> };
+export type LoadManyFn<TArgs, T> = (args: TArgs[]) => Promise<(T | Error)[]>;
+export type Loader<TArgs, T> = { load: LoadFn<TArgs, T>; loadMany: LoadManyFn<TArgs, T> };
 
 // FIX ME: https://github.com/microsoft/TypeScript/issues/43187
 // export type AccountLoaderArgs = { address: Parameters<GetAccountInfoApi['getAccountInfo']>[0] } & Parameters<
