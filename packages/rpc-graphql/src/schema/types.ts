@@ -1,4 +1,4 @@
-export const commonTypeDefs = /* GraphQL */ `
+export const typeTypeDefs = /* GraphQL */ `
     enum AccountEncoding {
         BASE_58
         BASE_64
@@ -6,17 +6,39 @@ export const commonTypeDefs = /* GraphQL */ `
         PARSED
     }
 
+    scalar Address
+
+    scalar Base58EncodedBytes
+
+    scalar Base64EncodedBytes
+
+    scalar Base64ZstdEncodedBytes
+
+    scalar BigInt
+
     enum BlockTransactionDetails {
-        accounts
-        full
-        none
-        signatures
+        ACCOUNTS
+        FULL
+        NONE
+        SIGNATURES
     }
 
     enum Commitment {
-        confirmed
-        finalized
-        processed
+        CONFIRMED
+        FINALIZED
+        PROCESSED
+    }
+
+    input DataSlice {
+        offset: Int!
+        length: Int!
+    }
+
+    input ProgramAccountsFilter {
+        bytes: BigInt
+        dataSize: BigInt
+        encoding: AccountEncoding
+        offset: BigInt
     }
 
     type ReturnData {
@@ -31,6 +53,10 @@ export const commonTypeDefs = /* GraphQL */ `
         pubkey: Address
         rewardType: String
     }
+
+    scalar Signature
+
+    scalar Slot
 
     type TokenAmount {
         amount: String

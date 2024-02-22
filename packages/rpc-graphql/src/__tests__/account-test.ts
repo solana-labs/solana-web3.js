@@ -22,7 +22,7 @@ describe('account', () => {
         it("can query an account's lamports balance", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         lamports
                     }
@@ -40,7 +40,7 @@ describe('account', () => {
         it("can query an account's executable value", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $commitment: Commitment) {
+                query testQuery($address: Address!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
                         executable
                     }
@@ -58,7 +58,7 @@ describe('account', () => {
         it("can query an account's address", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $commitment: Commitment) {
+                query testQuery($address: Address!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
                         address
                     }
@@ -76,7 +76,7 @@ describe('account', () => {
         it('can query multiple fields', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $commitment: Commitment) {
+                query testQuery($address: Address!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
                         executable
                         lamports
@@ -102,12 +102,12 @@ describe('account', () => {
         // See scripts/fixtures/spl-token-token-account.json
         const variableValues = {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-            commitment: 'confirmed',
+            commitment: 'CONFIRMED',
         };
         it("can perform a nested query for the account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $commitment: Commitment) {
+                query testQuery($address: Address!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
                         ownerProgram {
                             address
@@ -139,12 +139,12 @@ describe('account', () => {
         // See scripts/fixtures/spl-token-token-account.json
         const variableValues = {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-            commitment: 'confirmed',
+            commitment: 'CONFIRMED',
         };
         it("can perform a double nested query for each account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $commitment: Commitment) {
+                query testQuery($address: Address!, $commitment: Commitment) {
                     account(address: $address, commitment: $commitment) {
                         ownerProgram {
                             address
@@ -182,12 +182,12 @@ describe('account', () => {
         // See scripts/fixtures/spl-token-token-account.json
         const variableValues = {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
-            commitment: 'confirmed',
+            commitment: 'CONFIRMED',
         };
         it("can perform a triple nested query for each account's ownerProgram", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         ownerProgram {
                             address
@@ -228,7 +228,7 @@ describe('account', () => {
                 encoding: 'BASE_58',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $encoding: AccountEncoding) {
+                query testQuery($address: Address!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
                         address
                         ... on AccountBase58 {
@@ -255,7 +255,7 @@ describe('account', () => {
                 encoding: 'BASE_64',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $encoding: AccountEncoding) {
+                query testQuery($address: Address!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
                         address
                         ... on AccountBase64 {
@@ -282,7 +282,7 @@ describe('account', () => {
                 encoding: 'BASE_64_ZSTD',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!, $encoding: AccountEncoding) {
+                query testQuery($address: Address!, $encoding: AccountEncoding) {
                     account(address: $address, encoding: $encoding) {
                         address
                         ... on AccountBase64Zstd {
@@ -304,7 +304,7 @@ describe('account', () => {
         it('can get account data as jsonParsed', async () => {
             expect.assertions(2);
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address, encoding: PARSED) {
                         ... on AccountBase64 {
                             data
@@ -346,7 +346,7 @@ describe('account', () => {
                 address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         ... on MintAccount {
                             supply
@@ -372,7 +372,7 @@ describe('account', () => {
                 address: 'AiZExP8mK4RxDozh4r57knvqSZgkz86HrzPAMx61XMqU',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports
@@ -422,7 +422,7 @@ describe('account', () => {
                 address: '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports
@@ -472,7 +472,7 @@ describe('account', () => {
                 address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports
@@ -522,7 +522,7 @@ describe('account', () => {
                 address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports
@@ -585,7 +585,7 @@ describe('account', () => {
                 address: 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports
@@ -679,7 +679,7 @@ describe('account', () => {
                 address: '4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp',
             };
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         address
                         lamports

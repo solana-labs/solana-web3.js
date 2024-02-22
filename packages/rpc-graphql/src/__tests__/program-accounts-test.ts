@@ -17,13 +17,13 @@ describe('programAccounts', () => {
     describe('basic queries', () => {
         // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
         const variableValues = {
-            commitment: 'confirmed',
+            commitment: 'CONFIRMED',
             programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
         };
         it("can query program accounts' lamports balances", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment) {
+                query testQuery($programAddress: Address!, $commitment: Commitment) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         lamports
                     }
@@ -39,7 +39,7 @@ describe('programAccounts', () => {
         it("can query program accounts' executable value", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment) {
+                query testQuery($programAddress: Address!, $commitment: Commitment) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         executable
                     }
@@ -55,7 +55,7 @@ describe('programAccounts', () => {
         it('can query multiple fields', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment) {
+                query testQuery($programAddress: Address!, $commitment: Commitment) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment) {
                         executable
                         lamports
@@ -82,12 +82,12 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                commitment: 'confirmed',
+                commitment: 'CONFIRMED',
                 encoding: 'BASE_58',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
+                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         address
                         executable
@@ -119,12 +119,12 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                commitment: 'confirmed',
+                commitment: 'CONFIRMED',
                 encoding: 'BASE_64',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
+                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         address
                         executable
@@ -156,12 +156,12 @@ describe('programAccounts', () => {
             expect.assertions(1);
             // See scripts/fixtures/gpa2-1.json, scripts/fixtures/gpa2-2.json,
             const variableValues = {
-                commitment: 'confirmed',
+                commitment: 'CONFIRMED',
                 encoding: 'BASE_64_ZSTD',
                 programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!, $commitment: Commitment, $encoding: AccountEncoding) {
+                query testQuery($programAddress: Address!, $commitment: Commitment, $encoding: AccountEncoding) {
                     programAccounts(programAddress: $programAddress, commitment: $commitment, encoding: $encoding) {
                         address
                         executable
@@ -197,7 +197,7 @@ describe('programAccounts', () => {
                 programAddress: 'AddressLookupTab1e1111111111111111111111111',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         address
                         lamports
@@ -244,7 +244,7 @@ describe('programAccounts', () => {
                 programAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         address
                         lamports
@@ -327,7 +327,7 @@ describe('programAccounts', () => {
                 programAddress: '11111111111111111111111111111111',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         address
                         lamports
@@ -374,7 +374,7 @@ describe('programAccounts', () => {
                 programAddress: 'Stake11111111111111111111111111111111111111',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         address
                         lamports
@@ -465,7 +465,7 @@ describe('programAccounts', () => {
                 programAddress: 'Vote111111111111111111111111111111111111111',
             };
             const source = /* GraphQL */ `
-                query testQuery($programAddress: String!) {
+                query testQuery($programAddress: Address!) {
                     programAccounts(programAddress: $programAddress) {
                         address
                         lamports
@@ -561,7 +561,7 @@ describe('programAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/gpa1.json
                 const variableValues = {
-                    commitment: 'confirmed',
+                    commitment: 'CONFIRMED',
                     dataSlice: {
                         length: 5,
                         offset: 0,
@@ -571,7 +571,7 @@ describe('programAccounts', () => {
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
-                        $programAddress: String!
+                        $programAddress: Address!
                         $commitment: Commitment
                         $dataSlice: DataSlice
                         $encoding: AccountEncoding
@@ -605,7 +605,7 @@ describe('programAccounts', () => {
                 expect.assertions(1);
                 // See scripts/fixtures/gpa1.json
                 const variableValues = {
-                    commitment: 'confirmed',
+                    commitment: 'CONFIRMED',
                     dataSlice: {
                         length: 5,
                         offset: 0,
@@ -615,7 +615,7 @@ describe('programAccounts', () => {
                 };
                 const source = /* GraphQL */ `
                     query testQuery(
-                        $programAddress: String!
+                        $programAddress: Address!
                         $commitment: Commitment
                         $dataSlice: DataSlice
                         $encoding: AccountEncoding

@@ -31,7 +31,7 @@ describe('account loader', () => {
         it('coalesces multiple requests for the same block into one', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block1: block(slot: $slot) {
                         blockhash
                     }
@@ -53,7 +53,7 @@ describe('account loader', () => {
             expect.assertions(1);
             await jest.runAllTimersAsync();
             const source = /* GraphQL */ `
-                query testQuery($slot: BigInt!) {
+                query testQuery($slot: Slot!) {
                     block(slot: $slot) {
                         blockhash
                     }

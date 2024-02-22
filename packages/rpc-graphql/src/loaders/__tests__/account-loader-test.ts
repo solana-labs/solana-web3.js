@@ -30,7 +30,7 @@ describe('account loader', () => {
         it('coalesces multiple requests for the same account into one', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account1: account(address: $address) {
                         lamports
                     }
@@ -51,7 +51,7 @@ describe('account loader', () => {
         it('cache resets on new tick', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($address: String!) {
+                query testQuery($address: Address!) {
                     account(address: $address) {
                         lamports
                     }

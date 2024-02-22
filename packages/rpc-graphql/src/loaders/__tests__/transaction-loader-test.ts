@@ -30,7 +30,7 @@ describe('account loader', () => {
         it('coalesces multiple requests for the same transaction into one', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($signature: String!) {
+                query testQuery($signature: Signature!) {
                     transaction1: transaction(signature: $signature) {
                         slot
                     }
@@ -51,7 +51,7 @@ describe('account loader', () => {
         it('cache resets on new tick', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
-                query testQuery($signature: String!) {
+                query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
                         slot
                     }
