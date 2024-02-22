@@ -1,11 +1,18 @@
-import { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
+import {
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetMultipleAccountsApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+    Rpc,
+} from '@solana/rpc';
 import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
 describe('account', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
     beforeEach(() => {
         fetchMock.resetMocks();
@@ -242,6 +249,31 @@ describe('account', () => {
                 },
             });
         });
+        it('can get account data as base58 with data slice', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                encoding: 'BASE_58',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $encoding: AccountEncoding!) {
+                    account(address: $address) {
+                        address
+                        data(encoding: $encoding, dataSlice: { offset: 0, length: 5 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        data: 'E8f4pET', // As tested on local RPC
+                    },
+                },
+            });
+        });
         it('can get account data as base64', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
@@ -258,6 +290,58 @@ describe('account', () => {
                     account: {
                         address,
                         data: 'dGVzdCBkYXRh',
+                    },
+                },
+            });
+        });
+        it('can get account data as base64 with data slice', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                encoding: 'BASE_64',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $encoding: AccountEncoding!) {
+                    account(address: $address) {
+                        address
+                        data(encoding: $encoding, dataSlice: { offset: 0, length: 5 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        data: 'dGVzdCA=',
+                    },
+                },
+            });
+        });
+        it('can get account data as base64 with two data slices', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                encoding: 'BASE_64',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $encoding: AccountEncoding!) {
+                    account(address: $address) {
+                        address
+                        dataA: data(encoding: $encoding, dataSlice: { offset: 2, length: 5 })
+                        dataB: data(encoding: $encoding, dataSlice: { offset: 4, length: 5 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        dataA: 'c3QgZGE=', // As tested on local RPC
+                        dataB: 'IGRhdGE=', // As tested on local RPC
                     },
                 },
             });
@@ -282,6 +366,58 @@ describe('account', () => {
                 },
             });
         });
+        it('can get account data as base64+zstd with data slice', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                encoding: 'BASE_64_ZSTD',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $encoding: AccountEncoding!) {
+                    account(address: $address) {
+                        address
+                        data(encoding: $encoding, dataSlice: { offset: 0, length: 15 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        data: 'KLUv/QBYSQAAdGVzdCBkYXRh', // As tested on local RPC
+                    },
+                },
+            });
+        });
+        it('can get account data as base64+zstd with multiple data slices', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                encoding: 'BASE_64_ZSTD',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $encoding: AccountEncoding!) {
+                    account(address: $address) {
+                        address
+                        dataA: data(encoding: $encoding, dataSlice: { offset: 0, length: 5 })
+                        dataB: data(encoding: $encoding, dataSlice: { offset: 0, length: 15 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        dataA: 'KLUv/QBYKQAAdGVzdCA=', // As tested on local RPC
+                        dataB: 'KLUv/QBYSQAAdGVzdCBkYXRh', // As tested on local RPC
+                    },
+                },
+            });
+        });
         it('can get account data with multiple encodings', async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
@@ -302,6 +438,34 @@ describe('account', () => {
                         dataBase58: '2Uw1bpnsXxu3e',
                         dataBase64: 'dGVzdCBkYXRh',
                         dataBase64Zstd: 'KLUv/QBYSQAAdGVzdCBkYXRh',
+                    },
+                },
+            });
+        });
+        it('can get account data with multiple encodings and data slices', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/gpa1.json
+            const variableValues = {
+                address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+            };
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!) {
+                    account(address: $address) {
+                        address
+                        dataBase58: data(encoding: BASE_58, dataSlice: { offset: 0, length: 5 })
+                        dataBase64: data(encoding: BASE_64, dataSlice: { offset: 0, length: 5 })
+                        dataBase64Zstd: data(encoding: BASE_64_ZSTD, dataSlice: { offset: 0, length: 5 })
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+                        dataBase58: 'E8f4pET', // As tested on local RPC
+                        dataBase64: 'dGVzdCA=', // As tested on local RPC
+                        dataBase64Zstd: 'KLUv/QBYKQAAdGVzdCA=', // As tested on local RPC
                     },
                 },
             });

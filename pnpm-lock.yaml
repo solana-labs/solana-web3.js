@@ -1831,6 +1831,9 @@ importers:
       '@graphql-tools/schema':
         specifier: ^10.0.0
         version: 10.0.0(graphql@16.8.1)
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
       dataloader:
         specifier: ^2.2.2
         version: 2.2.2

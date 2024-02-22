@@ -64,6 +64,7 @@
     ],
     "dependencies": {
         "@graphql-tools/schema": "^10.0.0",
+        "@solana/codecs-strings": "workspace:*",
         "dataloader": "^2.2.2",
         "graphql": "^16.8.0",
         "json-stable-stringify": "^1.1.0"

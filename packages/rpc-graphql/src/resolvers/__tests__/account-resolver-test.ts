@@ -243,8 +243,9 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
         });
@@ -264,11 +265,13 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(3); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base58',
             });
         });
@@ -289,11 +292,13 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base58',
             });
             expect(rpc.getAccountInfo).not.toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
         });
@@ -317,6 +322,7 @@ describe('account resolver', () => {
             jest.runAllTimers();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base64',
             });
         });
@@ -340,8 +346,9 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base64+zstd',
             });
         });
@@ -364,8 +371,9 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
         });
@@ -388,11 +396,13 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(3); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
             expect(rpc.getAccountInfo).toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base58',
             });
         });
@@ -415,11 +425,13 @@ describe('account resolver', () => {
             // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
             await Promise.resolve();
             jest.runAllTimers();
-            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2); // Fixed with batch loader
+            expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
             expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'base64+zstd',
             });
             expect(rpc.getAccountInfo).not.toHaveBeenCalledWith('AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca', {
+                commitment: 'confirmed',
                 encoding: 'jsonParsed',
             });
         });

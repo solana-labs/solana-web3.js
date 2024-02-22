@@ -1,12 +1,9 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi, Rpc } from '@solana/rpc';
 import { graphql } from 'graphql';
 
 import { createSolanaGraphQLContext } from './context';
 import { createSolanaGraphQLResolvers } from './resolvers';
 import { createSolanaGraphQLTypeDefs } from './schema';
-
-type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi;
 
 export interface RpcGraphQL {
     query(
@@ -15,14 +12,21 @@ export interface RpcGraphQL {
     ): ReturnType<typeof graphql>;
 }
 
-export function createRpcGraphQL(rpc: Rpc<RpcMethods>): RpcGraphQL {
+export function createRpcGraphQL(
+    rpc: Parameters<typeof createSolanaGraphQLContext>[0],
+    config?: Partial<Parameters<typeof createSolanaGraphQLContext>[1]>,
+): RpcGraphQL {
+    const rpcGraphQLConfig = {
+        maxDataSliceByteRange: config?.maxDataSliceByteRange ?? 200,
+        maxMultipleAccountsBatchSize: config?.maxMultipleAccountsBatchSize ?? 100,
+    };
     const schema = makeExecutableSchema({
         resolvers: createSolanaGraphQLResolvers(),
         typeDefs: createSolanaGraphQLTypeDefs(),
     });
     return {
         async query(source, variableValues?) {
-            const contextValue = createSolanaGraphQLContext(rpc);
+            const contextValue = createSolanaGraphQLContext(rpc, rpcGraphQLConfig);
             return graphql({
                 contextValue,
                 schema,
