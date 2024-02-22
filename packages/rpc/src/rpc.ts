@@ -11,6 +11,6 @@ type RpcConfig<TTransport extends RpcTransport> = Readonly<{
 export function createSolanaRpc<TTransport extends RpcTransport>(
     config: RpcConfig<TTransport>,
 ): RpcFromTransport<SolanaRpcApiFromTransport<TTransport>, TTransport> {
-    const api = createSolanaRpcApi<SolanaRpcApiFromTransport<TTransport>>(DEFAULT_RPC_CONFIG);
+    const api = createSolanaRpcApi(DEFAULT_RPC_CONFIG);
     return createRpc({ ...config, api }) as RpcFromTransport<SolanaRpcApiFromTransport<TTransport>, TTransport>;
 }

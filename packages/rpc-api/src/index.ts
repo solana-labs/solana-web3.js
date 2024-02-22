@@ -63,7 +63,7 @@ import { RequestAirdropApi } from './requestAirdrop';
 import { SendTransactionApi } from './sendTransaction';
 import { SimulateTransactionApi } from './simulateTransaction';
 
-export type SolanaRpcApi = GetAccountInfoApi &
+type SolanaRpcApiForAllClusters = GetAccountInfoApi &
     GetBalanceApi &
     GetBlockApi &
     GetBlockCommitmentApi &
@@ -113,12 +113,13 @@ export type SolanaRpcApi = GetAccountInfoApi &
     GetVoteAccountsApi &
     IsBlockhashValidApi &
     MinimumLedgerSlotApi &
-    RequestAirdropApi &
     SendTransactionApi &
     SimulateTransactionApi;
-export type SolanaRpcApiDevnet = SolanaRpcApi;
-export type SolanaRpcApiTestnet = SolanaRpcApi;
-export type SolanaRpcApiMainnet = Omit<SolanaRpcApi, 'requestAirdrop'>;
+type SolanaRpcApiForTestClusters = SolanaRpcApiForAllClusters & RequestAirdropApi;
+export type SolanaRpcApi = SolanaRpcApiForTestClusters;
+export type SolanaRpcApiDevnet = SolanaRpcApiForTestClusters;
+export type SolanaRpcApiTestnet = SolanaRpcApiForTestClusters;
+export type SolanaRpcApiMainnet = SolanaRpcApiForAllClusters;
 
 export type {
     GetAccountInfoApi,

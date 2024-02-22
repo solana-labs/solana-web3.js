@@ -88,8 +88,7 @@ createSolanaRpc({ transport: testnetTransport }) satisfies RpcMainnet<SolanaRpcA
 
 // Mainnet cluster should be `RpcMainnet`
 createSolanaRpc({ transport: mainnetTransport }) satisfies Rpc<SolanaRpcApiMainnet>;
-//@ts-expect-error Should not have `requestAirdrop` method
-createSolanaRpc({ transport: mainnetTransport }) satisfies Rpc<SolanaRpcApi>;
+createSolanaRpc({ transport: mainnetTransport }) satisfies RpcMainnet<SolanaRpcApiMainnet>;
 //@ts-expect-error Should not have `requestAirdrop` method
 createSolanaRpc({ transport: mainnetTransport }) satisfies Rpc<RequestAirdropApi>;
 //@ts-expect-error Should not be a devnet RPC
