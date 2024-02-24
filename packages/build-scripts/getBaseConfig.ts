@@ -43,8 +43,6 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                           external: [
                               // Despite inlining `@solana/text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
                               'fastestsmallesttextencoderdecoder',
-                              // Despite inlining `@solana/fetch-impl`, do not recursively inline `node-fetch`.
-                              'node-fetch',
                               // Despite inlining `@solana/ws-impl`, do not recursively inline `ws`.
                               'ws',
                           ],
