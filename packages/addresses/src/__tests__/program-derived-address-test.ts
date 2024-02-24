@@ -1,3 +1,10 @@
+import {
+    SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
+    SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
+    SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
+    SolanaError,
+} from '@solana/errors';
+
 import { Address } from '../address';
 import { createAddressWithSeed, getProgramDerivedAddress } from '../program-derived-address';
 
@@ -9,7 +16,11 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: 'FN2R9R724eb4WaxeDmDYrUtmJgoSzkBiQMEHELV3ocyg' as Address,
                 seeds: Array(17).fill(''),
             }),
-        ).rejects.toThrow(/A maximum of 16 seeds/);
+        ).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED, {
+                maxSeeds: 16,
+            }),
+        );
     });
     it.each([
         new Uint8Array(Array(33).fill(0)),
@@ -22,7 +33,12 @@ describe('getProgramDerivedAddress()', () => {
                 programAddress: '5eUi55m4FVaDqKubGH9r6ca1TxjmimmXEU9v1WUZJ47Z' as Address,
                 seeds: [oversizedSeed],
             }),
-        ).rejects.toThrow(/exceeds the maximum length of 32 bytes/);
+        ).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+                index: 0,
+                maxSeedLength: 32,
+            }),
+        );
     });
     it('returns a program derived address given a program address and no seeds', async () => {
         expect.assertions(1);
@@ -137,7 +153,10 @@ describe('createAddressWithSeed', () => {
         const programAddress = 'FGrddpvjBUAG6VdV4fR8Q2hEZTHS6w4SEveVBgfwbfdm' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'a'.repeat(33) })).rejects.toThrow(
-            'The seed exceeds the maximum length of 32 bytes',
+            new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+                index: 0,
+                maxSeedLength: 32,
+            }),
         );
     });
     it('fails with a malicious programAddress meant to produce an address that would collide with a PDA', async () => {
@@ -147,7 +166,7 @@ describe('createAddressWithSeed', () => {
         const programAddress = '4vJ9JU1bJJE96FbKdjWme2JfVK1knU936FHTDZV7AC2' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).rejects.toThrow(
-            'programAddress cannot end with the PDA marker',
+            new SolanaError(SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER),
         );
     });
 });

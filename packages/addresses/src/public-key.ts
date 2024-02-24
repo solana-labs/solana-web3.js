@@ -1,12 +1,12 @@
 import { assertKeyExporterIsAvailable } from '@solana/assertions';
+import { SOLANA_ERROR__NOT_AN_ED25519_PUBLIC_KEY, SolanaError } from '@solana/errors';
 
 import { Address, getAddressDecoder } from './address';
 
 export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Address> {
     await assertKeyExporterIsAvailable();
     if (publicKey.type !== 'public' || publicKey.algorithm.name !== 'Ed25519') {
-        // TODO: Coded error.
-        throw new Error('The `CryptoKey` must be an `Ed25519` public key');
+        throw new SolanaError(SOLANA_ERROR__NOT_AN_ED25519_PUBLIC_KEY);
     }
     const publicKeyBytes = await crypto.subtle.exportKey('raw', publicKey);
     return getAddressDecoder().decode(new Uint8Array(publicKeyBytes));

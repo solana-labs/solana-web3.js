@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, SolanaError } from '@solana/errors';
+
 import { Address, address } from '../address';
 
 describe('coercions', () => {
@@ -11,7 +13,11 @@ describe('coercions', () => {
         });
         it('throws on invalid `Address`', () => {
             const thisThrows = () => address('3333333333333333');
-            expect(thisThrows).toThrow('`3333333333333333` is not a base-58 encoded address');
+            expect(thisThrows).toThrow(
+                new SolanaError(SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, {
+                    putativeAddress: '3333333333333333',
+                }),
+            );
         });
     });
 });

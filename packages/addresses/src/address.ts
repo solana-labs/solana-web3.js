@@ -8,6 +8,12 @@ import {
     mapEncoder,
 } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
+    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH,
+    SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS,
+    SolanaError,
+} from '@solana/errors';
 
 export type Address<TAddress extends string = string> = TAddress & {
     readonly __brand: unique symbol;
@@ -55,19 +61,21 @@ export function assertIsAddress(putativeAddress: string): asserts putativeAddres
             // Highest address (32 bytes of 255)
             putativeAddress.length > 44
         ) {
-            throw new Error('Expected input string to decode to a byte array of length 32.');
+            throw new SolanaError(SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH, {
+                actualLength: putativeAddress.length,
+            });
         }
         // Slow-path; actually attempt to decode the input string.
         const base58Encoder = getMemoizedBase58Encoder();
         const bytes = base58Encoder.encode(putativeAddress);
         const numBytes = bytes.byteLength;
         if (numBytes !== 32) {
-            throw new Error(`Expected input string to decode to a byte array of length 32. Actual length: ${numBytes}`);
+            throw new SolanaError(SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH, {
+                actualLength: numBytes,
+            });
         }
     } catch (e) {
-        throw new Error(`\`${putativeAddress}\` is not a base-58 encoded address`, {
-            cause: e,
-        });
+        throw new SolanaError(SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, { putativeAddress });
     }
 }
 
