@@ -3,6 +3,8 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
+    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
+    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -59,10 +61,14 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
+    SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
+    SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
     SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
+    SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS,
     SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
+    SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
     SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
@@ -162,6 +168,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: {
             address: string;
         };
+        [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH]: {
+            actualLength: number;
+        };
+        [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH]: {
+            actualLength: number;
+        };
         [SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR]: {
             encodedData: string;
             index: number;
@@ -178,6 +190,15 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
             byteLength: number;
         };
+        [SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED]: {
+            actual: number;
+            maxSeeds: number;
+        };
+        [SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED]: {
+            actual: number;
+            index: number;
+            maxSeedLength: number;
+        };
         [SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND]: {
             addresses: string[];
         };
@@ -188,8 +209,14 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             actualNonceValue: string;
             expectedNonceValue: string;
         };
+        [SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS]: {
+            putativeAddress: string;
+        };
         [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]: {
             addresses: string[];
+        };
+        [SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE]: {
+            bump: number;
         };
         [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
             argumentLabel: string;
