@@ -1,5 +1,7 @@
 import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__INVALID_ACCOUNT_DATA,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
@@ -20,6 +22,9 @@ export type DefaultUnspecifiedErrorContextToUndefined<T> = {
  *   - Don't change or remove members of an error's context.
  */
 export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
+    [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: {
+        addresses: string[];
+    };
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
         currentBlockHeight: bigint;
         lastValidBlockHeight: bigint;
@@ -44,5 +49,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
     [SOLANA_ERROR__NONCE_INVALID]: {
         actualNonceValue: string;
         expectedNonceValue: string;
+    };
+    [SOLANA_ERROR__INVALID_ACCOUNT_DATA]: {
+        addresses: string[];
+        cause?: Error;
     };
 }>;

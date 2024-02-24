@@ -1,5 +1,7 @@
 import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__INVALID_ACCOUNT_DATA,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
@@ -21,8 +23,10 @@ export const SolanaErrorMessages: Readonly<{
     // TypeScript will fail to build this project if add an error code without a message.
     [P in SolanaErrorCode]: string;
 }> = {
+    [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: 'Account not found at addresses: $addresses.',
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
+    [SOLANA_ERROR__INVALID_ACCOUNT_DATA]: 'Invalid account data: $addresses.',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
     [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: 'No nonce account could be found at address `$nonceAccountAddress`',
     [SOLANA_ERROR__NONCE_INVALID]:
