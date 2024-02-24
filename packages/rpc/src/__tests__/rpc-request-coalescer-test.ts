@@ -93,8 +93,7 @@ describe('RPC request coalescer', () => {
                     return await new Promise((resolve, reject) => {
                         transportResponsePromise = resolve;
                         signal?.addEventListener('abort', (e: AbortSignalEventMap['abort']) => {
-                            const abortError = new DOMException((e.target as AbortSignal).reason, 'AbortError');
-                            reject(abortError);
+                            reject((e.target as AbortSignal).reason);
                         });
                     });
                 });
@@ -109,10 +108,17 @@ describe('RPC request coalescer', () => {
                     /* empty */
                 }
             });
-            it('throws an `AbortError` from the aborted request', async () => {
+            it('throws an `AbortError` from the aborted request when no reason is specified', async () => {
+                expect.assertions(3);
+                abortControllerA.abort();
+                await expect(responsePromiseA).rejects.toThrow();
+                await expect(responsePromiseA).rejects.toBeInstanceOf(DOMException);
+                await expect(responsePromiseA).rejects.toHaveProperty('name', 'AbortError');
+            });
+            it("rejects from the aborted request with the `AbortSignal's` reason", async () => {
                 expect.assertions(1);
                 abortControllerA.abort('o no');
-                await expect(responsePromiseA).rejects.toThrow(/o no/);
+                await expect(responsePromiseA).rejects.toBe('o no');
             });
             it('aborts the transport when all of the requests abort', () => {
                 abortControllerA.abort('o no A');
@@ -134,7 +140,7 @@ describe('RPC request coalescer', () => {
                 const mockResponse = { response: 'ok' };
                 transportResponsePromise(mockResponse);
                 await Promise.all([
-                    expect(responsePromiseA).rejects.toThrow(/o no A/),
+                    expect(responsePromiseA).rejects.toBe('o no A'),
                     expect(responsePromiseB).resolves.toBe(mockResponse),
                 ]);
             });
