@@ -19,7 +19,7 @@ const stringScalarAlias = {
 
 const bigIntScalarAlias = {
     __parseLiteral(ast: { kind: Kind; value: string | number | bigint | boolean }): bigint | null {
-        if (ast.kind === Kind.STRING) {
+        if (ast.kind === Kind.STRING || ast.kind === Kind.INT || ast.kind === Kind.FLOAT) {
             return BigInt(ast.value);
         }
         return null;
