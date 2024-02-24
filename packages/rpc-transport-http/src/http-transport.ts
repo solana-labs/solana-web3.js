@@ -1,5 +1,6 @@
 import fetchImpl from '@solana/fetch-impl';
 import { RpcTransport } from '@solana/rpc-spec';
+import type Dispatcher from 'undici/types/dispatcher';
 
 import { SolanaHttpError } from './http-transport-errors';
 import {
@@ -9,13 +10,36 @@ import {
 } from './http-transport-headers';
 
 type Config = Readonly<{
+    dispatcher_NODE_ONLY?: Dispatcher;
     headers?: AllowedHttpRequestHeaders;
     url: string;
 }>;
 
-export function createHttpTransport({ headers, url }: Config): RpcTransport {
+let didWarnDispatcherWasSuppliedInNonNodeEnvironment = false;
+function warnDispatcherWasSuppliedInNonNodeEnvironment() {
+    if (didWarnDispatcherWasSuppliedInNonNodeEnvironment) {
+        return;
+    }
+    didWarnDispatcherWasSuppliedInNonNodeEnvironment = true;
+    console.warn(
+        'You have supplied a `Dispatcher` to `createHttpTransport()`. It has been ignored ' +
+            'because Undici dispatchers only work in Node environments. To eliminate this ' +
+            'warning, omit the `dispatcher_NODE_ONLY` property from your config when running in ' +
+            'a non-Node environment.',
+    );
+}
+
+export function createHttpTransport(config: Config): RpcTransport {
+    if (__DEV__ && !__NODEJS__ && 'dispatcher_NODE_ONLY' in config) {
+        warnDispatcherWasSuppliedInNonNodeEnvironment();
+    }
+    const { headers, url } = config;
     if (__DEV__ && headers) {
         assertIsAllowedHttpRequestHeaders(headers);
+    }
+    let dispatcherConfig: { dispatcher: Dispatcher | undefined } | undefined;
+    if (__NODEJS__ && 'dispatcher_NODE_ONLY' in config) {
+        dispatcherConfig = { dispatcher: config.dispatcher_NODE_ONLY };
     }
     const customHeaders = headers && normalizeHeaders(headers);
     return async function makeHttpRequest<TResponse>({
@@ -24,6 +48,7 @@ export function createHttpTransport({ headers, url }: Config): RpcTransport {
     }: Parameters<RpcTransport>[0]): Promise<TResponse> {
         const body = JSON.stringify(payload);
         const requestInfo = {
+            ...dispatcherConfig,
             body,
             headers: {
                 ...customHeaders,

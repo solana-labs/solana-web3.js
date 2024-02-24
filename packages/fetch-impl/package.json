@@ -35,12 +35,17 @@
         "test:prettier": "jest -c node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
-        "test:typecheck": "tsc --noEmit"
+        "test:typecheck": "tsc --noEmit",
+        "test:unit:browser": "jest -c node_modules/@solana/test-config/jest-unit.config.browser.ts --rootDir . --silent --passWithNoTests",
+        "test:unit:node": "jest -c node_modules/@solana/test-config/jest-unit.config.node.ts --rootDir . --silent"
     },
     "browserslist": [
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "dependencies": {
+        "undici": "^6.2.2"
+    },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/test-config": "workspace:*",

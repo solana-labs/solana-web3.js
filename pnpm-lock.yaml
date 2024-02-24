@@ -830,6 +830,10 @@ importers:
         version: 1.1.1
 
   packages/fetch-impl:
+    dependencies:
+      undici:
+        specifier: ^6.2.2
+        version: 6.6.2
     devDependencies:
       '@solana/eslint-config-solana':
         specifier: ^1.0.2
@@ -2522,6 +2526,9 @@ importers:
       '@solana/rpc-spec':
         specifier: workspace:*
         version: link:../rpc-spec
+      undici:
+        specifier: ^6.6.2
+        version: 6.6.2
     devDependencies:
       '@solana/build-scripts':
         specifier: workspace:*
@@ -4859,7 +4866,6 @@ packages:
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
-    dev: true
 
   /@graphql-tools/merge@8.3.1(graphql@15.8.0):
     resolution: {integrity: sha512-BMm99mqdNZbEYeTPK3it9r9S6rsZsQKtlqJsSBknAclXq2pGEfOxjcIZi+kBSkHZKPKCRrYDd5vY0+rUmIHVLg==}
@@ -6350,7 +6356,7 @@ packages:
   /@types/bn.js@5.1.1:
     resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
     dependencies:
-      '@types/node': 18.11.19
+      '@types/node': 20.11.20
     dev: true
 
   /@types/bs58@4.0.1:
@@ -6387,7 +6393,7 @@ packages:
   /@types/express-serve-static-core@4.17.41:
     resolution: {integrity: sha512-OaJ7XLaelTgrvlZD8/aa0vvvxZdUmlCn6MtWeB7TkiKW70BQLc9XEPpDLPdbo52ZhXUCrznlWdCHWxJWtdyajA==}
     dependencies:
-      '@types/node': 18.11.19
+      '@types/node': 20.11.20
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
       '@types/send': 0.17.1
@@ -6458,13 +6464,13 @@ packages:
   /@types/mz@2.7.4:
     resolution: {integrity: sha512-Zs0imXxyWT20j3Z2NwKpr0IO2LmLactBblNyLua5Az4UHuqOQ02V3jPTgyKwDkuc33/ahw+C3O1PIZdrhFMuQA==}
     dependencies:
-      '@types/node': 18.11.19
+      '@types/node': 20.11.20
     dev: true
 
   /@types/node-fetch@2.1.0:
     resolution: {integrity: sha512-7qhZIMCvHDJMZtdirrb/SkmTs2Dg8oVCLpUCOxNKm36xBdUZhh2JDWO/BeOdI5UyStyaCmeRv5UskaiH7kAgdg==}
     dependencies:
-      '@types/node': 18.11.19
+      '@types/node': 20.11.20
     dev: true
 
   /@types/node@12.20.55:
@@ -12141,7 +12147,7 @@ packages:
       '@httptoolkit/subscriptions-transport-ws': 0.11.2(graphql@15.8.0)
       '@httptoolkit/websocket-stream': 6.0.1
       '@types/cors': 2.8.13
-      '@types/node': 18.11.19
+      '@types/node': 20.11.20
       base64-arraybuffer: 0.1.5
       body-parser: 1.20.2
       cacheable-lookup: 6.1.0
@@ -14524,7 +14530,6 @@ packages:
     engines: {node: '>=18.0'}
     dependencies:
       '@fastify/busboy': 2.1.0
-    dev: true
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}

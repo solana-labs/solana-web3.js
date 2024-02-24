@@ -75,7 +75,7 @@ describe('createHttpRequest with custom headers', () => {
     it('is impossible to override the `Accept` header', () => {
         const makeHttpRequest = createHttpTransport({
             headers: { aCcEpT: 'text/html' },
-            url: 'fake://url',
+            url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
         expect(fetchImpl).toHaveBeenCalledWith(
@@ -90,7 +90,7 @@ describe('createHttpRequest with custom headers', () => {
     it('is impossible to override the `Content-Length` header', () => {
         const makeHttpRequest = createHttpTransport({
             headers: { 'cOnTeNt-LeNgTh': '420' },
-            url: 'fake://url',
+            url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
         expect(fetchImpl).toHaveBeenCalledWith(
@@ -105,7 +105,7 @@ describe('createHttpRequest with custom headers', () => {
     it('is impossible to override the `Content-Type` header', () => {
         const makeHttpRequest = createHttpTransport({
             headers: { 'cOnTeNt-TyPe': 'text/html' },
-            url: 'fake://url',
+            url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
         expect(fetchImpl).toHaveBeenCalledWith(
@@ -123,7 +123,7 @@ describe('createHttpRequest with custom headers', () => {
             createTransportWithForbiddenHeaders = () =>
                 createHttpTransport({
                     headers: { 'sEc-FeTcH-mOdE': 'no-cors' },
-                    url: 'fake://url',
+                    url: 'http://localhost',
                 });
         });
         it('throws in dev mode', () => {
