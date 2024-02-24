@@ -1,4 +1,10 @@
 import type { Decoder } from '@solana/codecs-core';
+import {
+    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
+    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
+    SolanaError,
+} from '@solana/errors';
 
 import type { Account, EncodedAccount } from './account';
 import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
@@ -21,11 +27,10 @@ export function decodeAccount<TData extends object, TAddress extends string = st
             return encodedAccount;
         }
         return Object.freeze({ ...encodedAccount, data: decoder.decode(encodedAccount.data) });
-    } catch (error) {
-        // TODO: Coded error.
-        const newError = new Error(`Failed to decode account [${encodedAccount.address}].`);
-        newError.cause = error;
-        throw newError;
+    } catch (e) {
+        throw new SolanaError(SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT, {
+            address: encodedAccount.address,
+        });
     }
 }
 
@@ -44,8 +49,9 @@ export function assertAccountDecoded<TData extends object, TAddress extends stri
     account: Account<TData | Uint8Array, TAddress> | MaybeAccount<TData | Uint8Array, TAddress>,
 ): asserts account is Account<TData, TAddress> | MaybeAccount<TData, TAddress> {
     if (accountExists(account) && account.data instanceof Uint8Array) {
-        // TODO: coded error.
-        throw new Error(`Expected account [${account.address}] to be decoded.`);
+        throw new SolanaError(SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT, {
+            address: account.address,
+        });
     }
 }
 
@@ -61,8 +67,9 @@ export function assertAccountsDecoded<TData extends object, TAddress extends str
 ): asserts accounts is (Account<TData, TAddress> | MaybeAccount<TData, TAddress>)[] {
     const encoded = accounts.filter(a => accountExists(a) && a.data instanceof Uint8Array);
     if (encoded.length > 0) {
-        const encodedAddresses = encoded.map(a => a.address).join(', ');
-        // TODO: Coded error.
-        throw new Error(`Expected accounts [${encodedAddresses}] to be decoded.`);
+        const encodedAddresses = encoded.map(a => a.address);
+        throw new SolanaError(SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED, {
+            addresses: encodedAddresses,
+        });
     }
 }
