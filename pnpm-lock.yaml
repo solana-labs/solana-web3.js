@@ -477,6 +477,9 @@ importers:
       '@solana/codecs-core':
         specifier: workspace:*
         version: link:../codecs-core
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
     devDependencies:
       '@solana/build-scripts':
         specifier: workspace:*

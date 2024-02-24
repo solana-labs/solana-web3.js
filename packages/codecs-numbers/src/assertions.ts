@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
+
 /**
  * Asserts that a given number is between a given range.
  */
@@ -8,9 +10,11 @@ export function assertNumberIsBetweenForCodec(
     value: number | bigint,
 ) {
     if (value < min || value > max) {
-        // TODO: Coded error.
-        throw new Error(
-            `Codec [${codecDescription}] expected number to be in the range [${min}, ${max}], got ${value}.`,
-        );
+        throw new SolanaError(SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE, {
+            codecDescription,
+            max,
+            min,
+            value,
+        });
     }
 }

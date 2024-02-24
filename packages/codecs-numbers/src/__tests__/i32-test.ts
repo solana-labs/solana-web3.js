@@ -5,6 +5,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = -Number('0x7fffffff') - 1;
 const MAX = Number('0x7fffffff');
 const i32 = getI32Codec;
+const rangeErrorValues = {
+    codecDescription: 'i32',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getI32Codec', () => {
     it('encodes and decodes i32 numbers', () => {
@@ -36,10 +41,10 @@ describe('getI32Codec', () => {
         assertValid(i32BE, MAX, '7fffffff');
 
         // Out of range.
-        assertRangeError(i32LE, MIN - 1);
-        assertRangeError(i32BE, MIN - 1);
-        assertRangeError(i32LE, MAX + 1);
-        assertRangeError(i32BE, MAX + 1);
+        assertRangeError(rangeErrorValues, i32LE, MIN - 1);
+        assertRangeError(rangeErrorValues, i32BE, MIN - 1);
+        assertRangeError(rangeErrorValues, i32LE, MAX + 1);
+        assertRangeError(rangeErrorValues, i32BE, MAX + 1);
     });
 
     it('has the right size', () => {
