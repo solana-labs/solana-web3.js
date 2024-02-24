@@ -762,9 +762,6 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
     devDependencies:
-      '@solana/addresses':
-        specifier: workspace:*
-        version: link:../addresses
       '@solana/build-scripts':
         specifier: workspace:*
         version: link:../build-scripts
