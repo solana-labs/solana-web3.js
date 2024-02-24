@@ -7,12 +7,9 @@ import {
     GetTransactionApi,
     Rpc,
 } from '@solana/rpc';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
-    createLocalhostSolanaRpc,
-    mockRpcResponse,
     mockTransactionAddressLookup,
     mockTransactionBase58,
     mockTransactionBase64,
@@ -23,8 +20,13 @@ import {
     mockTransactionVote,
 } from './__setup__';
 
+type GraphQLCompliantRpc = Rpc<
+    GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi
+>;
+
 describe('transaction', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
+    let mockRpc: GraphQLCompliantRpc;
+    let mockRpcTransport: jest.Mock;
     let rpcGraphQL: RpcGraphQL;
 
     // Random signature for testing.
@@ -33,16 +35,25 @@ describe('transaction', () => {
         '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk' as Signature;
 
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
-        rpc = createLocalhostSolanaRpc();
-        rpcGraphQL = createRpcGraphQL(rpc);
+        mockRpcTransport = jest.fn();
+        mockRpc = new Proxy<GraphQLCompliantRpc>({} as GraphQLCompliantRpc, {
+            get(target, p) {
+                if (!target[p as keyof GraphQLCompliantRpc]) {
+                    const pendingRpcRequest = { send: mockRpcTransport };
+                    target[p as keyof GraphQLCompliantRpc] = jest
+                        .fn()
+                        .mockReturnValue(pendingRpcRequest) as GraphQLCompliantRpc[keyof GraphQLCompliantRpc];
+                }
+                return target[p as keyof GraphQLCompliantRpc];
+            },
+        });
+        rpcGraphQL = createRpcGraphQL(mockRpc);
     });
 
     describe('basic queries', () => {
         it('can query a transaction', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -63,7 +74,7 @@ describe('transaction', () => {
         });
         it("can query a transaction's computeUnitsConsumed from it's meta", async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -86,7 +97,7 @@ describe('transaction', () => {
         });
         it("can query several fields from a transaction's meta", async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -115,7 +126,7 @@ describe('transaction', () => {
     describe('transaction data queries', () => {
         it('can get a transaction as base58', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase58)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionBase58);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -134,7 +145,7 @@ describe('transaction', () => {
         });
         it('can get a transaction as base64', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase64)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionBase64);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -153,8 +164,8 @@ describe('transaction', () => {
         });
         it('can get a transaction as multiple encodings', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase58)));
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionBase64)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionBase58);
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionBase64);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -175,7 +186,7 @@ describe('transaction', () => {
         });
         it('defaults to jsonParsed', async () => {
             expect.assertions(1);
-            fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionVote)));
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
@@ -215,7 +226,7 @@ describe('transaction', () => {
         describe('instructions', () => {
             it('can get a generic instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionGeneric)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionGeneric);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -250,7 +261,7 @@ describe('transaction', () => {
             });
             it('can get a `ExtendLookupTable` instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionAddressLookup)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionAddressLookup);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -307,7 +318,7 @@ describe('transaction', () => {
             });
             it('can get a `CreateAccount` instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionSystem);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -360,7 +371,7 @@ describe('transaction', () => {
             });
             it('can get a `SplMemoInstruction` instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionMemo)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionMemo);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -393,7 +404,7 @@ describe('transaction', () => {
             });
             it('can get a `SplTokenInitializeMintInstruction` instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionToken);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -450,7 +461,7 @@ describe('transaction', () => {
         describe('inner instructions', () => {
             it('can get an `Allocate` inner instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionSystem);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -495,7 +506,7 @@ describe('transaction', () => {
             });
             it('can get an `Assign` inner instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionSystem);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -544,7 +555,7 @@ describe('transaction', () => {
             });
             it('can get a `Transfer` inner instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionSystem)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionSystem);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -595,7 +606,7 @@ describe('transaction', () => {
             });
             it('can get a `SplTokenTransfer` inner instruction', async () => {
                 expect.assertions(1);
-                fetchMock.mockOnce(JSON.stringify(mockRpcResponse(mockTransactionToken)));
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionToken);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {

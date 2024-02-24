@@ -1,6 +1,5 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetInflationGovernorApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -8,8 +7,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getInflationGovernor', () => {
     let rpc: Rpc<GetInflationGovernorApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
     // TODO: I honestly have no clue how to test this

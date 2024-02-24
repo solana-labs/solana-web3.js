@@ -1,7 +1,6 @@
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetTransactionCountApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -9,8 +8,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getTransactionCount', () => {
     let rpc: Rpc<GetTransactionCountApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {

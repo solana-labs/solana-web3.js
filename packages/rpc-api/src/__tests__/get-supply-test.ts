@@ -1,6 +1,5 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetSupplyApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -12,8 +11,6 @@ const CONTEXT_MATCHER = expect.objectContaining({
 describe('getSupply', () => {
     let rpc: Rpc<GetSupplyApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

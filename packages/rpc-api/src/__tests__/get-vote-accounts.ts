@@ -1,7 +1,6 @@
 import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetVoteAccountsApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -9,8 +8,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getVoteAccounts', () => {
     let rpc: Rpc<GetVoteAccountsApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

@@ -2,7 +2,6 @@ import type { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { RequestAirdropApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -10,8 +9,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('requestAirdrop', () => {
     let rpc: Rpc<RequestAirdropApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {

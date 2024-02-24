@@ -9,13 +9,6 @@ export function createLocalhostSolanaRpc(): Rpc<SolanaRpcApi> {
     });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mockRpcResponse = (result: any) => ({
-    jsonrpc: '2.0',
-    result,
-    id: 1,
-});
-
 export const mockTransactionBase58 = {
     blockTime: 1699617771,
     meta: {

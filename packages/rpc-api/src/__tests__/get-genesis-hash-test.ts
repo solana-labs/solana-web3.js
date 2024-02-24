@@ -1,7 +1,6 @@
 import { open } from 'node:fs/promises';
 
 import type { Rpc } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetGenesisHashApi } from '../index';
@@ -28,8 +27,6 @@ async function getGenesisHashFromLogFile() {
 describe('getGenesisHash', () => {
     let rpc: Rpc<GetGenesisHashApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

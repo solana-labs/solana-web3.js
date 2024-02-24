@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import { createPrivateKeyFromBytes } from '@solana/keys';
@@ -5,7 +7,6 @@ import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetLatestBlockhashApi, SendTransactionApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -72,8 +73,6 @@ async function getSecretKey() {
 describe('sendTransaction', () => {
     let rpc: Rpc<SendTransactionApi & GetLatestBlockhashApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {

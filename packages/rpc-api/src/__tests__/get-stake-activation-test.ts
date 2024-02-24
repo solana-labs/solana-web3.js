@@ -2,7 +2,6 @@ import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetStakeActivationApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -13,8 +12,6 @@ const stakeAccountAddress = 'CSg2vQGbnwWdSyJpwK4i3qGfB6FebaV3xQTx4U1MbixN' as Ad
 describe('getStakeActivation', () => {
     let rpc: Rpc<GetStakeActivationApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

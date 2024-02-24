@@ -1,5 +1,4 @@
 import { type RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import type { SlotNotificationsApi } from '../slot-notifications';
 import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
@@ -7,8 +6,6 @@ import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
 describe('slotNotifications', () => {
     let rpc: RpcSubscriptions<SlotNotificationsApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpcSubscriptions();
     });
 
