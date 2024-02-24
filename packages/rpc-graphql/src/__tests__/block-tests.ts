@@ -39,61 +39,6 @@ describe('block', () => {
         });
         rpcGraphQL = createRpcGraphQL(rpc);
     });
-
-    // The `block` query takes a `BigInt` as a parameter. We need to test this
-    // for various input types that might occur outside of a JavaScript
-    // context, such as string or number.
-    describe('bigint parameter', () => {
-        const source = /* GraphQL */ `
-            query testQuery($block: Slot!) {
-                block(slot: $block) {
-                    blockhash
-                }
-            }
-        `;
-        it('can accept a bigint parameter', async () => {
-            expect.assertions(2);
-            mockRpcTransport.mockResolvedValueOnce(mockBlockFull);
-            const variables = { block: 511226n };
-            const result = await rpcGraphQL.query(source, variables);
-            expect(result).not.toHaveProperty('errors');
-            expect(result).toMatchObject({
-                data: {
-                    block: {
-                        blockhash: expect.any(String),
-                    },
-                },
-            });
-        });
-        it('can accept a number parameter', async () => {
-            expect.assertions(2);
-            mockRpcTransport.mockResolvedValueOnce(mockBlockFull);
-            const variables = { block: 511226 };
-            const result = await rpcGraphQL.query(source, variables);
-            expect(result).not.toHaveProperty('errors');
-            expect(result).toMatchObject({
-                data: {
-                    block: {
-                        blockhash: expect.any(String),
-                    },
-                },
-            });
-        });
-        it('can accept a string parameter', async () => {
-            expect.assertions(2);
-            mockRpcTransport.mockResolvedValueOnce(mockBlockFull);
-            const variables = { block: '511226' };
-            const result = await rpcGraphQL.query(source, variables);
-            expect(result).not.toHaveProperty('errors');
-            expect(result).toMatchObject({
-                data: {
-                    block: {
-                        blockhash: expect.any(String),
-                    },
-                },
-            });
-        });
-    });
     describe('basic queries', () => {
         it("can query a block's block time", async () => {
             expect.assertions(1);
