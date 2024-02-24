@@ -79,9 +79,7 @@ describe('getNullableCodec', () => {
 
         // Fixed nullables must wrap fixed-size items.
         // @ts-expect-error It cannot wrap a variable size item when fixed is true.
-        expect(() => nullable(string(), { fixed: true })).toThrow(
-            'Fixed nullables can only be used with fixed-size codecs',
-        );
+        expect(() => nullable(string(), { fixed: true })).toThrow(); // `SolanaError` added in later commit
     });
 
     it('has the right sizes', () => {

@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, SolanaError } from '@solana/errors';
+
 import { createCodec } from '../codec';
 import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
 import { b, getMockCodec } from './__setup__';
@@ -57,7 +59,11 @@ describe('fixCodec', () => {
         expect(mockCodec.read).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixCodec(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            'Codec [fixCodec] expected 10 bytes, got 5.',
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                bytesLength: 5,
+                codecDescription: 'fixCodec',
+                expected: 10,
+            }),
         );
     });
 
@@ -141,7 +147,11 @@ describe('fixDecoder', () => {
         expect(mockCodec.read).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixDecoder(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            'Codec [fixCodec] expected 10 bytes, got 5.',
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                bytesLength: 5,
+                codecDescription: 'fixCodec',
+                expected: 10,
+            }),
         );
     });
 });

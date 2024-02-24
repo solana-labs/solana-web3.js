@@ -29,7 +29,7 @@ describe('getStringCodec', () => {
         expect(string({ size: u8() }).decode(b('03414243'))).toBe('ABC');
 
         // Not enough bytes.
-        expect(() => string({ size: u8() }).decode(b('0341'))).toThrow('Codec [string] expected 3 bytes, got 1.');
+        expect(() => string({ size: u8() }).decode(b('0341'))).toThrow(); // `SolanaError` added in later commit
     });
 
     it('encodes fixed strings', () => {

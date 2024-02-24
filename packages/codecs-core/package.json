@@ -65,6 +65,9 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/errors": "workspace:*"
+    },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
