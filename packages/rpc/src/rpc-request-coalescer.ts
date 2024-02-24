@@ -8,6 +8,13 @@ type CoalescedRequest = {
 
 type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
 
+const EXPLICIT_ABORT_TOKEN = Symbol(
+    __DEV__
+        ? 'This symbol is thrown from the request that underlies a series of coalesced requests ' +
+              'when the last request in that series aborts'
+        : undefined,
+);
+
 export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTransport>(
     transport: TTransport,
     getDeduplicationKey: GetDeduplicationKeyFn,
@@ -34,12 +41,10 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                         signal: abortController.signal,
                     });
                 } catch (e) {
-                    if (e && typeof e === 'object' && 'name' in e && e.name === 'AbortError') {
-                        // Ignore `AbortError` thrown from the underlying transport behind which all
-                        // requests are coalesced. If it experiences an `AbortError` it is because
-                        // we triggered one when the last subscriber aborted. Letting the underlying
-                        // transport's `AbortError` bubble up from here would cause runtime fatals
-                        // where there should be none.
+                    if (e === EXPLICIT_ABORT_TOKEN) {
+                        // We triggered this error when the last subscriber aborted. Letting this
+                        // error bubble up from here would cause runtime fatals where there should
+                        // be none.
                         return;
                     }
                     throw e;
@@ -61,10 +66,9 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                     coalescedRequest.numConsumers -= 1;
                     if (coalescedRequest.numConsumers === 0) {
                         const abortController = coalescedRequest.abortController;
-                        abortController.abort();
+                        abortController.abort(EXPLICIT_ABORT_TOKEN);
                     }
-                    const abortError = new DOMException((e.target as AbortSignal).reason, 'AbortError');
-                    reject(abortError);
+                    reject((e.target as AbortSignal).reason);
                 };
                 signal.addEventListener('abort', handleAbort);
                 responsePromise.then(resolve).finally(() => {
