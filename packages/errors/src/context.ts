@@ -148,16 +148,18 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             currentBlockHeight: bigint;
             lastValidBlockHeight: bigint;
         };
-        [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
-            addresses: string[];
+        [SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR]: {
+            encodedData: string;
+            index: number;
         };
-        [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
-            argumentLabel: string;
-            keyPath: readonly (string | number | symbol)[];
-            methodName: string;
-            optionalPathLabel: string;
-            path?: string;
-            value: bigint;
+        [SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM]: {
+            code: number;
+            index: number;
+        };
+        [SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN]: {
+            errorName: string;
+            index: number;
+            instructionErrorContext?: unknown;
         };
         [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
             byteLength: number;
@@ -169,14 +171,26 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             actualNonceValue: string;
             expectedNonceValue: string;
         };
-        [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES]: {
-            programAddress: string;
+        [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
+            argumentLabel: string;
+            keyPath: readonly (string | number | symbol)[];
+            methodName: string;
+            optionalPathLabel: string;
+            path?: string;
+            value: bigint;
         };
-        [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]: {
-            programAddress: string;
+        [SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION]: {
+            index: number;
         };
-        [SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE]: {
-            actualVersion: number;
+        [SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT]: {
+            accountIndex: number;
+        };
+        [SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED]: {
+            accountIndex: number;
+        };
+        [SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN]: {
+            errorName: string;
+            transactionErrorContext?: unknown;
         };
         [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING]: {
             lookupTableAddresses: string[];
@@ -189,40 +203,17 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND]: {
             index: number;
         };
-        [SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN]: {
-            errorName: string;
-            transactionErrorContext?: unknown;
+        [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES]: {
+            programAddress: string;
         };
-        [SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION]: {
-            index: number;
+        [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]: {
+            programAddress: string;
         };
-        [SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT]: {
-            accountIndex: number;
+        [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
+            addresses: string[];
         };
-        [SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED]: {
-            accountIndex: number;
-        };
-        [SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION]: {
-            index: number;
-        };
-        [SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT]: {
-            accountIndex: number;
-        };
-        [SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED]: {
-            accountIndex: number;
-        };
-        [SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN]: {
-            errorName: string;
-            index: number;
-            instructionErrorContext?: unknown;
-        };
-        [SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR]: {
-            encodedData: string;
-            index: number;
-        };
-        [SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM]: {
-            code: number;
-            index: number;
+        [SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE]: {
+            actualVersion: number;
         };
     }
 >;
