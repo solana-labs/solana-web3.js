@@ -1,10 +1,17 @@
+import {
+    SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
+    SolanaError,
+} from '@solana/errors';
+
 /**
  * Asserts that a given byte array is not empty.
  */
 export function assertByteArrayIsNotEmptyForCodec(codecDescription: string, bytes: Uint8Array, offset = 0) {
     if (bytes.length - offset <= 0) {
-        // TODO: Coded error.
-        throw new Error(`Codec [${codecDescription}] cannot decode empty byte arrays.`);
+        throw new SolanaError(SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY, {
+            codecDescription,
+        });
     }
 }
 
@@ -19,7 +26,10 @@ export function assertByteArrayHasEnoughBytesForCodec(
 ) {
     const bytesLength = bytes.length - offset;
     if (bytesLength < expected) {
-        // TODO: Coded error.
-        throw new Error(`Codec [${codecDescription}] expected ${expected} bytes, got ${bytesLength}.`);
+        throw new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+            bytesLength,
+            codecDescription,
+            expected,
+        });
     }
 }

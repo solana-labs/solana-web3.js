@@ -1,6 +1,14 @@
 import {
     SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
+    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
+    SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH,
+    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
@@ -148,6 +156,20 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: 'Account not found at address: $address',
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
+    [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: 'Codec [$codecDescription] cannot decode empty byte arrays.',
+    [SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE]: 'Cannot reverse a codec of variable size.',
+    [SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH]:
+        'Encoder and decoder must either both be fixed-size or variable-size.',
+    [SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH]:
+        'Expected a fixed-size codec, got a variable-size one.',
+    [SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH]:
+        'Expected a variable-size codec, got a fixed-size one.',
+    [SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH]:
+        'Encoder and decoder must have the same fixed size, got [$encoderFixedSize] and [$decoderFixedSize].',
+    [SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH]:
+        'Encoder and decoder must have the same max size, got [$encoderMaxSize] and [$decoderMaxSize].',
+    [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES]:
+        'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',
     [SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED]: 'Unable to find a viable program address bump seed.',
     [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address',
     [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address',

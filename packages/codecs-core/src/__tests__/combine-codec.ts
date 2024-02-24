@@ -1,3 +1,9 @@
+import {
+    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SolanaError,
+} from '@solana/errors';
+
 import { createDecoder, createEncoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '../codec';
 import { combineCodec } from '../combine-codec';
 
@@ -51,13 +57,23 @@ describe('combineCodec', () => {
                 createEncoder({ fixedSize: 1, write: jest.fn() }),
                 createDecoder({ fixedSize: 2, read: jest.fn() }),
             ),
-        ).toThrow('Encoder and decoder must have the same fixed size, got [1] and [2]');
+        ).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH, {
+                decoderFixedSize: 2,
+                encoderFixedSize: 1,
+            }),
+        );
 
         expect(() =>
             combineCodec(
                 createEncoder({ getSizeFromValue: jest.fn(), maxSize: 1, write: jest.fn() }),
                 createDecoder({ read: jest.fn() }),
             ),
-        ).toThrow('Encoder and decoder must have the same max size, got [1] and [undefined]');
+        ).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
+                decoderMaxSize: undefined,
+                encoderMaxSize: 1,
+            }),
+        );
     });
 });

@@ -1,4 +1,11 @@
 import {
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
+    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SolanaError,
+} from '@solana/errors';
+
+import {
     Codec,
     Decoder,
     Encoder,
@@ -33,22 +40,21 @@ export function combineCodec<TFrom, TTo extends TFrom>(
     decoder: Decoder<TTo>,
 ): Codec<TFrom, TTo> {
     if (isFixedSize(encoder) !== isFixedSize(decoder)) {
-        // TODO: Coded error.
-        throw new Error(`Encoder and decoder must either both be fixed-size or variable-size.`);
+        throw new SolanaError(SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH);
     }
 
     if (isFixedSize(encoder) && isFixedSize(decoder) && encoder.fixedSize !== decoder.fixedSize) {
-        // TODO: Coded error.
-        throw new Error(
-            `Encoder and decoder must have the same fixed size, got [${encoder.fixedSize}] and [${decoder.fixedSize}].`,
-        );
+        throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH, {
+            decoderFixedSize: decoder.fixedSize,
+            encoderFixedSize: encoder.fixedSize,
+        });
     }
 
     if (!isFixedSize(encoder) && !isFixedSize(decoder) && encoder.maxSize !== decoder.maxSize) {
-        // TODO: Coded error.
-        throw new Error(
-            `Encoder and decoder must have the same max size, got [${encoder.maxSize}] and [${decoder.maxSize}].`,
-        );
+        throw new SolanaError(SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
+            decoderMaxSize: decoder.maxSize,
+            encoderMaxSize: encoder.maxSize,
+        });
     }
 
     return {

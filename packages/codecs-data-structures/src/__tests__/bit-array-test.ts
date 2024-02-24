@@ -59,7 +59,7 @@ describe('getBitArrayCodec', () => {
         expect(bitArray(1).read(b('00'), 0)).toStrictEqual([a('00000000'), 1]);
 
         // It fails if the byte array is too short.
-        expect(() => bitArray(3).read(b('ff'), 0)).toThrow('Codec [bitArray] expected 3 bytes, got 1');
+        expect(() => bitArray(3).read(b('ff'), 0)).toThrow(); // `SolanaError` added in later commit
     });
 
     it('has the right sizes', () => {

@@ -1,3 +1,9 @@
+import {
+    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
+    SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH,
+    SolanaError,
+} from '@solana/errors';
+
 /**
  * Defines an offset in bytes.
  */
@@ -182,8 +188,7 @@ export function assertIsFixedSize(
     codec: { fixedSize: number } | { maxSize?: number },
 ): asserts codec is { fixedSize: number } {
     if (!isFixedSize(codec)) {
-        // TODO: Coded error.
-        throw new Error('Expected a fixed-size codec, got a variable-size one.');
+        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH);
     }
 }
 
@@ -209,7 +214,6 @@ export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
 ): asserts codec is { maxSize?: number } {
     if (!isVariableSize(codec)) {
-        // TODO: Coded error.
-        throw new Error('Expected a variable-size codec, got a fixed-size one.');
+        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH);
     }
 }
