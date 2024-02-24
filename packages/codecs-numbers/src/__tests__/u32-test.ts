@@ -6,6 +6,11 @@ const MIN = 0;
 const MAX = Number('0xffffffff');
 const HALF = Number('0xffff');
 const u32 = getU32Codec;
+const rangeErrorValues = {
+    codecDescription: 'u32',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getU32Codec', () => {
     it('encodes and decodes u32 numbers', () => {
@@ -35,10 +40,10 @@ describe('getU32Codec', () => {
         assertValid(u32BE, MAX, 'ffffffff');
 
         // Out of range.
-        assertRangeError(u32LE, MIN - 1);
-        assertRangeError(u32BE, MIN - 1);
-        assertRangeError(u32LE, MAX + 1);
-        assertRangeError(u32BE, MAX + 1);
+        assertRangeError(rangeErrorValues, u32LE, MIN - 1);
+        assertRangeError(rangeErrorValues, u32BE, MIN - 1);
+        assertRangeError(rangeErrorValues, u32LE, MAX + 1);
+        assertRangeError(rangeErrorValues, u32BE, MAX + 1);
     });
 
     it('has the right size', () => {

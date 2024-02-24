@@ -4,6 +4,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = 0;
 const MAX = 65535;
 const shortU16 = getShortU16Codec;
+const rangeErrorValues = {
+    codecDescription: 'shortU16',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getShortU16Codec', () => {
     it('encodes and decodes short u16 numbers', () => {
@@ -25,8 +30,8 @@ describe('getShortU16Codec', () => {
         assertValid(shortU16(), MAX, 'ffff03');
 
         // Out of range.
-        assertRangeError(shortU16(), MIN - 1);
-        assertRangeError(shortU16(), MAX + 1);
+        assertRangeError(rangeErrorValues, shortU16(), MIN - 1);
+        assertRangeError(rangeErrorValues, shortU16(), MAX + 1);
 
         // Assert re-serialization.
         const codec = shortU16();

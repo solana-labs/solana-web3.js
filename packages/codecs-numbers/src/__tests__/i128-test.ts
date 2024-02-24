@@ -5,6 +5,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = -BigInt('0x7fffffffffffffffffffffffffffffff') - 1n;
 const MAX = BigInt('0x7fffffffffffffffffffffffffffffff');
 const i128 = getI128Codec;
+const rangeErrorValues = {
+    codecDescription: 'i128',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getI128Codec', () => {
     it('encodes and decodes i128 numbers', () => {
@@ -36,10 +41,10 @@ describe('getI128Codec', () => {
         assertValid(i128BE, MAX, '7fffffffffffffffffffffffffffffff');
 
         // Out of range.
-        assertRangeError(i128LE, MIN - 1n);
-        assertRangeError(i128BE, MIN - 1n);
-        assertRangeError(i128LE, MAX + 1n);
-        assertRangeError(i128BE, MAX + 1n);
+        assertRangeError(rangeErrorValues, i128LE, MIN - 1n);
+        assertRangeError(rangeErrorValues, i128BE, MIN - 1n);
+        assertRangeError(rangeErrorValues, i128LE, MAX + 1n);
+        assertRangeError(rangeErrorValues, i128BE, MAX + 1n);
     });
 
     it('has the right size', () => {
