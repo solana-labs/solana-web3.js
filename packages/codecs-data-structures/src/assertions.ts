@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
+
 /** Checks the number of items in an array-like structure is expected. */
 export function assertValidNumberOfItemsForCodec(
     codecDescription: string,
@@ -5,7 +7,10 @@ export function assertValidNumberOfItemsForCodec(
     actual: number | bigint,
 ) {
     if (expected !== actual) {
-        // TODO: Coded error.
-        throw new Error(`Expected [${codecDescription}] to have ${expected} items, got ${actual}.`);
+        throw new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+            actual,
+            codecDescription,
+            expected,
+        });
     }
 }

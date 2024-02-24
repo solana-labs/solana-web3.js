@@ -1,6 +1,11 @@
 import { assertIsFixedSize, assertIsVariableSize, isFixedSize, isVariableSize } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SolanaError,
+} from '@solana/errors';
 
 import { getArrayCodec } from '../array';
 import { getBooleanCodec } from '../boolean';
@@ -97,12 +102,17 @@ describe('getDataEnumCodec', () => {
 
     it('handles invalid variants', () => {
         expect(() => dataEnum(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
-            'Invalid data enum variant. ' +
-                'Expected one of [PageLoad, Click, KeyPress, PageUnload], ' +
-                'got "Missing".',
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT, {
+                value: 'Missing',
+                variants: ['PageLoad', 'Click', 'KeyPress', 'PageUnload'],
+            }),
         );
         expect(() => dataEnum(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.',
+            new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                discriminator: 4,
+                maxRange: 3,
+                minRange: 0,
+            }),
         );
     });
 
