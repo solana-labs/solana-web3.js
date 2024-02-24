@@ -1,5 +1,6 @@
 import { getI16Codec, getU8Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getTupleCodec } from '../tuple';
 import { b } from './__setup__';
@@ -31,6 +32,16 @@ describe('getTupleCodec', () => {
         expect(tupleU8U64.decode(b('010200000000000000'))).toStrictEqual([1, 2n]);
         expect(tupleU8U64.encode([1, 2n ** 63n])).toStrictEqual(b('010000000000000080'));
         expect(tupleU8U64.decode(b('010000000000000080'))).toStrictEqual([1, 2n ** 63n]);
+
+        // Fails if given the wrong number of items.
+        // @ts-expect-error Tuple should have the right number of items.
+        expect(() => tuple([u8(), u8()]).encode([42])).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+                actual: 1,
+                codecDescription: 'tuple',
+                expected: 2,
+            }),
+        );
     });
 
     it('has the right sizes', () => {

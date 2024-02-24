@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, SolanaError } from '@solana/errors';
+
 import { getBitArrayCodec } from '../bit-array';
 import { b } from './__setup__';
 
@@ -59,7 +61,13 @@ describe('getBitArrayCodec', () => {
         expect(bitArray(1).read(b('00'), 0)).toStrictEqual([a('00000000'), 1]);
 
         // It fails if the byte array is too short.
-        expect(() => bitArray(3).read(b('ff'), 0)).toThrow(); // `SolanaError` added in later commit
+        expect(() => bitArray(3).read(b('ff'), 0)).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                bytesLength: 1,
+                codecDescription: 'bitArray',
+                expected: 3,
+            }),
+        );
     });
 
     it('has the right sizes', () => {

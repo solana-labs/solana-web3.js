@@ -1,4 +1,5 @@
 import { getU8Codec } from '@solana/codecs-numbers';
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, SolanaError } from '@solana/errors';
 
 import { getBytesCodec } from '../bytes';
 import { b } from './__setup__';
@@ -15,7 +16,13 @@ describe('getBytesCodec', () => {
         expect(bytesU8.read(b('ff022a03ffff'), 1)).toStrictEqual([new Uint8Array([42, 3]), 4]);
 
         // Not enough bytes.
-        expect(() => bytesU8.read(b('022a'), 0)).toThrow(); // `SolanaError` added in later commit
+        expect(() => bytesU8.read(b('022a'), 0)).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                bytesLength: 1,
+                codecDescription: 'bytes',
+                expected: 2,
+            }),
+        );
     });
 
     it('encodes fixed bytes', () => {
@@ -31,7 +38,13 @@ describe('getBytesCodec', () => {
         expect(bytes5.encode(new Uint8Array([1, 2]))).toStrictEqual(b('0102000000'));
         expect(bytes5.read(b('0102000000'), 0)).toStrictEqual([new Uint8Array([1, 2, 0, 0, 0]), 5]);
         expect(bytes5.read(b('ff0102000000'), 1)).toStrictEqual([new Uint8Array([1, 2, 0, 0, 0]), 6]);
-        expect(() => bytes5.read(b('0102'), 0)).toThrow(); // `SolanaError` added in later commit
+        expect(() => bytes5.read(b('0102'), 0)).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                bytesLength: 2,
+                codecDescription: 'fixCodec',
+                expected: 5,
+            }),
+        );
 
         // Too large (truncated).
         expect(bytes2.encode(new Uint8Array([1, 2, 3, 4, 5]))).toStrictEqual(b('0102'));
