@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
+
 import { getBase10Codec } from '../base10';
 
 describe('getBase10Codec', () => {
@@ -25,6 +27,12 @@ describe('getBase10Codec', () => {
         expect(base10.encode('65535')).toStrictEqual(new Uint8Array([255, 255]));
         expect(base10.read(new Uint8Array([255, 255]), 0)).toStrictEqual(['65535', 2]);
 
-        expect(() => base10.encode('INVALID_INPUT')).toThrow('Expected a string of base 10, got [INVALID_INPUT].');
+        expect(() => base10.encode('INVALID_INPUT')).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                alphabet: '0123456789',
+                base: 10,
+                value: 'INVALID_INPUT',
+            }),
+        );
     });
 });
