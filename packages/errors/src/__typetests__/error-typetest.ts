@@ -1,5 +1,3 @@
-import { address } from '@solana/addresses';
-
 import * as SolanaErrorCodeModule from '../codes';
 import { SolanaErrorCode } from '../codes';
 import { SolanaErrorContext } from '../context';
@@ -13,7 +11,7 @@ const { SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE, SOLANA_ERROR__TRANSA
 Object.values(SolanaErrorCodeModule) satisfies SolanaErrorCode[];
 
 const transactionMissingSignaturesError = new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
-    addresses: [address('123'), '456'],
+    addresses: ['123', '456'],
 });
 
 transactionMissingSignaturesError.context.__code satisfies typeof SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES;

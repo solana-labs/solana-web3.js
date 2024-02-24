@@ -71,7 +71,6 @@
         "chalk": "^5.3.0"
     },
     "devDependencies": {
-        "@solana/addresses": "workspace:*",
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/test-config": "workspace:*",
