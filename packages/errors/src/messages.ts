@@ -75,6 +75,13 @@ import {
     SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_LOADED_TWICE,
@@ -241,6 +248,20 @@ export const SolanaErrorMessages: Readonly<{
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +
         '`Number.MAX_SAFE_INTEGER`.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING]: 'No digest implementation could be found.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING]:
+        'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +
+        'import `@solana/webcrypto-ed25519-polyfill` before generating keys in ' +
+        'environments that do not support Ed25519.\n\nFor a list of runtimes that ' +
+        'currently support Ed25519 operations, visit ' +
+        'https://github.com/WICG/webcrypto-secure-curves/issues/20.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING]: 'No signature verification implementation could be found.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING]: 'No key generation implementation could be found.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_MISSING]:
+        'Cryptographic operations are only allowed in secure browser contexts. Read more ' +
+        'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING]: 'No signing implementation could be found.',
+    [SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING]: 'No key export implementation could be found.',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING]:
         'Transaction processing left an account with an outstanding borrowed reference',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE]: 'Account in use',

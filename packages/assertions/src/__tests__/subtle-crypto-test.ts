@@ -1,4 +1,15 @@
 import {
+    SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
+    SolanaError,
+} from '@solana/errors';
+
+import {
     assertDigestCapabilityIsAvailable,
     assertKeyExporterIsAvailable,
     assertSigningCapabilityIsAvailable,
@@ -17,7 +28,9 @@ describe('assertDigestCapabilityIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertDigestCapabilityIsAvailable()).rejects.toThrow();
+                await expect(() => assertDigestCapabilityIsAvailable()).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                );
             });
         });
     }
@@ -34,7 +47,9 @@ describe('assertDigestCapabilityIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertDigestCapabilityIsAvailable()).rejects.toThrow();
+            await expect(assertDigestCapabilityIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING),
+            );
         });
     });
 });
@@ -51,7 +66,9 @@ describe('assertKeyExporterIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertKeyExporterIsAvailable()).rejects.toThrow();
+                await expect(() => assertKeyExporterIsAvailable()).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                );
             });
         });
     }
@@ -68,7 +85,9 @@ describe('assertKeyExporterIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertKeyExporterIsAvailable()).rejects.toThrow();
+            await expect(assertKeyExporterIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING),
+            );
         });
     });
 });
@@ -95,7 +114,9 @@ describe('assertKeyGenerationIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertKeyGenerationIsAvailable()).rejects.toThrow();
+                await expect(() => assertKeyGenerationIsAvailable()).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                );
             });
         });
     }
@@ -112,7 +133,9 @@ describe('assertKeyGenerationIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertKeyGenerationIsAvailable()).rejects.toThrow();
+            await expect(assertKeyGenerationIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING),
+            );
         });
     });
     describe('when the Ed25519 curve is not available', () => {
@@ -127,7 +150,9 @@ describe('assertKeyGenerationIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertKeyGenerationIsAvailable()).rejects.toThrow();
+            await expect(assertKeyGenerationIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING),
+            );
         });
         it('remembers the result from the first time it is called (parallel checks)', async () => {
             expect.assertions(1);
@@ -163,7 +188,9 @@ describe('assertSigningCapabilityIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertSigningCapabilityIsAvailable()).rejects.toThrow();
+                await expect(() => assertSigningCapabilityIsAvailable()).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                );
             });
         });
     }
@@ -180,7 +207,9 @@ describe('assertSigningCapabilityIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertSigningCapabilityIsAvailable()).rejects.toThrow();
+            await expect(assertSigningCapabilityIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING),
+            );
         });
     });
 });
@@ -197,7 +226,9 @@ describe('assertVerificationCapabilityIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertVerificationCapabilityIsAvailable()).rejects.toThrow();
+                await expect(() => assertVerificationCapabilityIsAvailable()).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                );
             });
         });
     }
@@ -214,7 +245,9 @@ describe('assertVerificationCapabilityIsAvailable()', () => {
         });
         it('rejects', async () => {
             expect.assertions(1);
-            await expect(assertVerificationCapabilityIsAvailable()).rejects.toThrow();
+            await expect(assertVerificationCapabilityIsAvailable()).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING),
+            );
         });
     });
 });
