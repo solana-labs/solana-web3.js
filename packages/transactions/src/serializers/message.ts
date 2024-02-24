@@ -9,18 +9,11 @@ import {
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
-import {
-    getArrayDecoder,
-    getArrayEncoder,
-    getStructDecoder,
-    getStructEncoder,
-    StructToDecoderTuple,
-    StructToEncoderTuple,
-} from '@solana/codecs-data-structures';
+import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
-import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
+import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { CompiledMessage } from '../message';
 import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
 import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
@@ -28,7 +21,7 @@ import { getInstructionDecoder, getInstructionEncoder } from './instruction';
 import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
 
 function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage> {
-    return getStructEncoder(getPreludeStructEncoderTuple());
+    return getStructEncoder(getPreludeStructEncoderTuple()) as VariableSizeEncoder<CompiledMessage>;
 }
 
 function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledMessage> {
@@ -36,7 +29,7 @@ function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledMessa
         getStructEncoder([
             ...getPreludeStructEncoderTuple(),
             ['addressTableLookups', getAddressTableLookupArrayEncoder()],
-        ] as StructToEncoderTuple<CompiledMessage>),
+        ]) as VariableSizeEncoder<CompiledMessage>,
         (value: CompiledMessage) => {
             if (value.version === 'legacy') {
                 return value;
@@ -46,22 +39,20 @@ function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledMessa
                 addressTableLookups: value.addressTableLookups ?? [],
             } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
         },
-    );
+    ) as VariableSizeEncoder<CompiledMessage>;
 }
 
-function getPreludeStructEncoderTuple(): StructToEncoderTuple<CompiledMessage> {
+function getPreludeStructEncoderTuple() {
     return [
         ['version', getTransactionVersionEncoder()],
         ['header', getMessageHeaderEncoder()],
         ['staticAccounts', getArrayEncoder(getAddressEncoder(), { size: getShortU16Encoder() })],
         ['lifetimeToken', getStringEncoder({ encoding: getBase58Encoder(), size: 32 })],
         ['instructions', getArrayEncoder(getInstructionEncoder(), { size: getShortU16Encoder() })],
-    ];
+    ] as const;
 }
 
-function getPreludeStructDecoderTuple(): StructToDecoderTuple<
-    CompiledMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
-> {
+function getPreludeStructDecoderTuple() {
     return [
         ['version', getTransactionVersionDecoder() as Decoder<number>],
         ['header', getMessageHeaderDecoder()],
@@ -69,7 +60,7 @@ function getPreludeStructDecoderTuple(): StructToDecoderTuple<
         ['lifetimeToken', getStringDecoder({ encoding: getBase58Decoder(), size: 32 })],
         ['instructions', getArrayDecoder(getInstructionDecoder(), { size: getShortU16Decoder() })],
         ['addressTableLookups', getAddressTableLookupArrayDecoder()],
-    ];
+    ] as const;
 }
 
 function getAddressTableLookupArrayEncoder() {
@@ -100,12 +91,20 @@ export function getCompiledMessageEncoder(): VariableSizeEncoder<CompiledMessage
 }
 
 export function getCompiledMessageDecoder(): VariableSizeDecoder<CompiledMessage> {
-    return mapDecoder(getStructDecoder(getPreludeStructDecoderTuple()), ({ addressTableLookups, ...restOfMessage }) => {
-        if (restOfMessage.version === 'legacy' || !addressTableLookups?.length) {
-            return restOfMessage;
-        }
-        return { ...restOfMessage, addressTableLookups } as Exclude<CompiledMessage, { readonly version: 'legacy' }>;
-    });
+    return mapDecoder(
+        getStructDecoder(getPreludeStructDecoderTuple()) as VariableSizeDecoder<
+            CompiledMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
+        >,
+        ({ addressTableLookups, ...restOfMessage }) => {
+            if (restOfMessage.version === 'legacy' || !addressTableLookups?.length) {
+                return restOfMessage;
+            }
+            return { ...restOfMessage, addressTableLookups } as Exclude<
+                CompiledMessage,
+                { readonly version: 'legacy' }
+            >;
+        },
+    );
 }
 
 export function getCompiledMessageCodec(): VariableSizeCodec<CompiledMessage> {
