@@ -4,7 +4,6 @@ import type { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetLargestAccountsApi } from '../index';
@@ -40,8 +39,6 @@ async function getNodeAddress(path: string) {
 describe('getLargestAccounts', () => {
     let rpc: Rpc<GetLargestAccountsApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

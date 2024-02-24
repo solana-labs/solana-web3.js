@@ -1,7 +1,10 @@
 import { RpcTransport } from '@solana/rpc-spec';
 
-import { createHttpTransport } from '../http-transport';
 import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
+
+const FOREVER_PROMISE = new Promise(() => {
+    /* never resolve */
+});
 
 describe('assertIsAllowedHttpRequestHeader', () => {
     [
@@ -52,8 +55,22 @@ describe('assertIsAllowedHttpRequestHeader', () => {
 });
 
 describe('createHttpRequest with custom headers', () => {
-    beforeEach(() => {
-        fetchMock.once(JSON.stringify({ ok: true }));
+    let createHttpTransport: typeof import('../http-transport').createHttpTransport;
+    let fetchImpl: jest.Mock;
+    beforeEach(async () => {
+        await jest.isolateModulesAsync(async () => {
+            jest.mock('@solana/fetch-impl');
+            const [fetchImplModule, httpTransportModule] = await Promise.all([
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                import('@solana/fetch-impl'),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                import('../http-transport'),
+            ]);
+            createHttpTransport = httpTransportModule.createHttpTransport;
+            fetchImpl = jest.mocked(fetchImplModule.default).mockReturnValue(FOREVER_PROMISE as Promise<Response>);
+        });
     });
     it('is impossible to override the `Accept` header', () => {
         const makeHttpRequest = createHttpTransport({
@@ -61,7 +78,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'fake://url',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchMock).toHaveBeenCalledWith(
+        expect(fetchImpl).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({
@@ -76,7 +93,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'fake://url',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchMock).toHaveBeenCalledWith(
+        expect(fetchImpl).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({
@@ -91,7 +108,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'fake://url',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchMock).toHaveBeenCalledWith(
+        expect(fetchImpl).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({

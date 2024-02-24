@@ -8,7 +8,6 @@ const config: Partial<Config.InitialProjectOptions> = {
     setupFilesAfterEnv: [
         path.resolve(__dirname, 'setup-dev-mode.ts'),
         path.resolve(__dirname, 'setup-define-version-constant.ts'),
-        path.resolve(__dirname, 'setup-fetch-mock.ts'),
         path.resolve(__dirname, 'setup-webcrypto.ts'),
     ],
     testPathIgnorePatterns: ['__setup__.ts'],

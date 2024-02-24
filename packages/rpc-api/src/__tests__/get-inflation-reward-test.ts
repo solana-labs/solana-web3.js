@@ -1,7 +1,6 @@
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetInflationRewardApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -9,8 +8,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getInflationReward', () => {
     let rpc: Rpc<GetInflationRewardApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
     [{ minContextSlot: 0n }, null].forEach(minContextConfig => {

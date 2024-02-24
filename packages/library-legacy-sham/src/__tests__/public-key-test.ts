@@ -44,8 +44,7 @@ describe('PublicKeySham', () => {
                     expect(publicKey.encode()).toEqual(Buffer.from(VALID_ADDRESS_BYTES));
                 });
             } else {
-                // FIXME(https://github.com/solana-labs/solana-web3.js/issues/1867)
-                it.failing('fatals', () => {
+                it('fatals', () => {
                     expect(() => {
                         publicKey.encode();
                     }).toThrow();
@@ -73,8 +72,7 @@ describe('PublicKeySham', () => {
                     expect(publicKey.toBuffer()).toEqual(Buffer.from(VALID_ADDRESS_BYTES));
                 });
             } else {
-                // FIXME(https://github.com/solana-labs/solana-web3.js/issues/1867)
-                it.failing('fatals', () => {
+                it('fatals', () => {
                     expect(() => {
                         publicKey.toBuffer();
                     }).toThrow();

@@ -1,17 +1,36 @@
 import { RpcTransport } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
-
-import { createHttpTransport } from '../http-transport';
-import { SolanaHttpError } from '../http-transport-errors';
 
 describe('createHttpTransport', () => {
+    let fetchMock: jest.Mock;
     let makeHttpRequest: RpcTransport;
-    beforeEach(() => {
-        makeHttpRequest = createHttpTransport({ url: 'fake://url' });
+    let oldFetch: typeof globalThis.fetch;
+    let SolanaHttpError: typeof import('../http-transport-errors').SolanaHttpError;
+    beforeEach(async () => {
+        oldFetch = globalThis.fetch;
+        globalThis.fetch = fetchMock = jest.fn();
+        await jest.isolateModulesAsync(async () => {
+            const [{ createHttpTransport }, HttpTransportErrorsModule] = await Promise.all([
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                import('../http-transport'),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                import('../http-transport-errors'),
+            ]);
+            SolanaHttpError = HttpTransportErrorsModule.SolanaHttpError;
+            makeHttpRequest = createHttpTransport({ url: 'fake://url' });
+        });
+    });
+    afterEach(() => {
+        globalThis.fetch = oldFetch;
     });
     describe('when the endpoint returns a non-200 status code', () => {
         beforeEach(() => {
-            fetchMock.once('', { status: 404, statusText: 'We looked everywhere' });
+            fetchMock.mockResolvedValue({
+                ok: false,
+                status: 404,
+                statusText: 'We looked everywhere',
+            });
         });
         it('throws HTTP errors', async () => {
             expect.assertions(3);
@@ -23,7 +42,7 @@ describe('createHttpTransport', () => {
     });
     describe('when the transport fatals', () => {
         beforeEach(() => {
-            fetchMock.mockReject(new TypeError('Failed to fetch'));
+            fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
         });
         it('passes the exception through', async () => {
             expect.assertions(1);
@@ -32,7 +51,10 @@ describe('createHttpTransport', () => {
     });
     describe('when the endpoint returns a well-formed JSON response', () => {
         beforeEach(() => {
-            fetchMock.once(JSON.stringify({ ok: true }));
+            fetchMock.mockResolvedValue({
+                json: async () => ({ ok: true }),
+                ok: true,
+            });
         });
         it('calls fetch with the specified URL', () => {
             makeHttpRequest({ payload: 123 });

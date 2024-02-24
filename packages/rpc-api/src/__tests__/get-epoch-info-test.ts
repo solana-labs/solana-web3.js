@@ -1,7 +1,6 @@
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetEpochInfoApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -9,8 +8,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getEpochInfo', () => {
     let rpc: Rpc<GetEpochInfoApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

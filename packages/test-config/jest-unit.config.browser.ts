@@ -25,6 +25,8 @@ const config: Partial<Config.InitialProjectOptions> = {
         ...(commonConfig.setupFilesAfterEnv ?? []),
         path.resolve(__dirname, 'setup-secure-context.ts'),
         path.resolve(__dirname, 'setup-text-encoder.ts'),
+        path.resolve(__dirname, 'setup-web-buffer-global.ts'),
+        path.resolve(__dirname, 'setup-whatwg-fetch.ts'),
     ],
     testEnvironment: path.resolve(__dirname, 'browser-environment.ts'),
     testEnvironmentOptions: {},

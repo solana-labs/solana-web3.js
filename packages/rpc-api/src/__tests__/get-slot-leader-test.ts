@@ -5,7 +5,6 @@ import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetSlotLeaderApi } from '../index';
@@ -35,8 +34,6 @@ async function getValidatorAddress() {
 describe('getSlotLeader', () => {
     let rpc: Rpc<GetSlotLeaderApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

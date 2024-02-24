@@ -3,7 +3,6 @@ import { open } from 'node:fs/promises';
 import type { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetIdentityApi } from '../index';
@@ -33,8 +32,6 @@ async function getValidatorAddress() {
 describe('getIdentity', () => {
     let rpc: Rpc<GetIdentityApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

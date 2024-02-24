@@ -78,7 +78,6 @@
         "eslint-plugin-sort-keys-fix": "^1.1.2",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
-        "jest-fetch-mock-fork": "^3.0.4",
         "jest-runner-eslint": "^2.1.2",
         "jest-runner-prettier": "^1.0.0",
         "prettier": "^3.1",
