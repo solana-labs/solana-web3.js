@@ -1,7 +1,6 @@
 import { open } from 'node:fs/promises';
 
 import type { Rpc } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetVersionApi } from '../index';
@@ -38,8 +37,6 @@ async function getVersionFromLogFile() {
 describe('getVersion', () => {
     let rpc: Rpc<GetVersionApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

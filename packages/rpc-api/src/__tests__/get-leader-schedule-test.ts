@@ -4,7 +4,6 @@ import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 import assert from 'assert';
 import { open } from 'fs/promises';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetLeaderScheduleApi } from '../index';
@@ -34,8 +33,6 @@ async function getValidatorAddress() {
 describe('getLeaderSchedule', () => {
     let rpc: Rpc<GetLeaderScheduleApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

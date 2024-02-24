@@ -1,6 +1,5 @@
 import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetRecentPrioritizationFeesApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -8,8 +7,6 @@ import { createLocalhostSolanaRpc } from './__setup__';
 describe('getRecentPrioritizationFees', () => {
     let rpc: Rpc<GetRecentPrioritizationFeesApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

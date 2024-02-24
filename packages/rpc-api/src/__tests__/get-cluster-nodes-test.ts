@@ -1,7 +1,6 @@
 import { open } from 'node:fs/promises';
 
 import type { Rpc } from '@solana/rpc-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 import path from 'path';
 
 import { GetClusterNodesApi } from '../index';
@@ -64,8 +63,6 @@ async function getNodeInfoFromLogFile() {
 describe('getClusterNodes', () => {
     let mockRpc: Rpc<GetClusterNodesApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         mockRpc = createLocalhostSolanaRpc();
     });
 

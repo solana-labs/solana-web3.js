@@ -1,5 +1,4 @@
 import { type RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import type { VoteNotificationsApi } from '../vote-notifications';
 import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
@@ -7,8 +6,6 @@ import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
 describe('voteNotifications', () => {
     let rpc: RpcSubscriptions<VoteNotificationsApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpcSubscriptions();
     });
 

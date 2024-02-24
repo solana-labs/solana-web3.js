@@ -1,7 +1,6 @@
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetLatestBlockhashApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -13,8 +12,6 @@ const CONTEXT_MATCHER = expect.objectContaining({
 describe('getLatestBlockhash', () => {
     let rpc: Rpc<GetLatestBlockhashApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 

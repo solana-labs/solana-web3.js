@@ -6,17 +6,18 @@ import {
     GetTransactionApi,
     Rpc,
 } from '@solana/rpc';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
+type GraphQLCompliantRpc = Rpc<
+    GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi
+>;
+
 describe('programAccounts', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: GraphQLCompliantRpc;
     let rpcGraphQL: RpcGraphQL;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
         rpcGraphQL = createRpcGraphQL(rpc);
     });

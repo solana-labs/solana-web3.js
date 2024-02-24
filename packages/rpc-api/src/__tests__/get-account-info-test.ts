@@ -2,7 +2,6 @@ import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 import { RpcError } from '@solana/rpc-spec-types';
 import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
-import fetchMock from 'jest-fetch-mock-fork';
 
 import { GetAccountInfoApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -14,8 +13,6 @@ const CONTEXT_MATCHER = expect.objectContaining({
 describe('getAccountInfo', () => {
     let rpc: Rpc<GetAccountInfoApi>;
     beforeEach(() => {
-        fetchMock.resetMocks();
-        fetchMock.dontMock();
         rpc = createLocalhostSolanaRpc();
     });
 
