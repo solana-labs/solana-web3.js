@@ -24,17 +24,6 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
         currentBlockHeight: bigint;
         lastValidBlockHeight: bigint;
     };
-    [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
-        addresses: string[];
-    };
-    [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
-        argumentLabel: string;
-        keyPath: readonly (string | number | symbol)[];
-        methodName: string;
-        optionalPathLabel: string;
-        path?: string;
-        value: bigint;
-    };
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
         byteLength: number;
     };
@@ -44,5 +33,16 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
     [SOLANA_ERROR__NONCE_INVALID]: {
         actualNonceValue: string;
         expectedNonceValue: string;
+    };
+    [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
+        argumentLabel: string;
+        keyPath: readonly (string | number | symbol)[];
+        methodName: string;
+        optionalPathLabel: string;
+        path?: string;
+        value: bigint;
+    };
+    [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
+        addresses: string[];
     };
 }>;
