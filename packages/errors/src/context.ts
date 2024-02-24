@@ -1,8 +1,13 @@
 import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
+    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
+    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SolanaErrorCode,
@@ -20,12 +25,24 @@ export type DefaultUnspecifiedErrorContextToUndefined<T> = {
  *   - Don't change or remove members of an error's context.
  */
 export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
+    [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: {
+        address: string;
+    };
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
         currentBlockHeight: bigint;
         lastValidBlockHeight: bigint;
     };
+    [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: {
+        address: string;
+    };
+    [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: {
+        address: string;
+    };
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
         byteLength: number;
+    };
+    [SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND]: {
+        addresses: string[];
     };
     [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: {
         nonceAccountAddress: string;
@@ -33,6 +50,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
     [SOLANA_ERROR__NONCE_INVALID]: {
         actualNonceValue: string;
         expectedNonceValue: string;
+    };
+    [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]: {
+        addresses: string[];
     };
     [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
         argumentLabel: string;

@@ -1,8 +1,13 @@
 import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
+    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
+    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
@@ -21,12 +26,18 @@ export const SolanaErrorMessages: Readonly<{
     // TypeScript will fail to build this project if add an error code without a message.
     [P in SolanaErrorCode]: string;
 }> = {
+    [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: 'Account not found at address: $address.',
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
+    [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address.',
+    [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address.',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
+    [SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND]: 'Accounts not found at addresses: $addresses.',
     [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: 'No nonce account could be found at address `$nonceAccountAddress`',
     [SOLANA_ERROR__NONCE_INVALID]:
         'The nonce `$expectedNonceValue` is no longer valid. It has advanced to `$actualNonceValue`',
+    [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]:
+        'Not all accounts were decoded. Encoded accounts found at addresses: $addresses.',
     [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]:
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +

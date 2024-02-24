@@ -1,4 +1,9 @@
 import { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
+    SolanaError,
+} from '@solana/errors';
 
 import { Account } from './account';
 
@@ -15,8 +20,7 @@ export function assertAccountExists<TData extends object | Uint8Array, TAddress 
     account: MaybeAccount<TData, TAddress>,
 ): asserts account is Account<TData, TAddress> & { exists: true } {
     if (!account.exists) {
-        // TODO: Coded error.
-        throw new Error(`Expected account [${account.address}] to exist.`);
+        throw new SolanaError(SOLANA_ERROR__ACCOUNT_NOT_FOUND, { address: account.address });
     }
 }
 
@@ -27,7 +31,6 @@ export function assertAccountsExist<TData extends object | Uint8Array, TAddress 
     const missingAccounts = accounts.filter(a => !a.exists);
     if (missingAccounts.length > 0) {
         const missingAddresses = missingAccounts.map(a => a.address);
-        // TODO: Coded error.
-        throw new Error(`Expected accounts [${missingAddresses.join(', ')}] to exist.`);
+        throw new SolanaError(SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND, { addresses: missingAddresses });
     }
 }
