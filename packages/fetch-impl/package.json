@@ -27,6 +27,7 @@
     ],
     "sideEffects": false,
     "scripts": {
+        "benchmark": "./src/__benchmarks__/run.ts",
         "compile:js": "tsup",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
@@ -63,6 +64,7 @@
         "jest-runner-eslint": "^2.1.2",
         "jest-runner-prettier": "^1.0.0",
         "prettier": "^3.1",
+        "tinybench": "^2.6.0",
         "tsup": "^8.0.1",
         "typescript": "^5.1.6"
     }
