@@ -31,7 +31,7 @@ describe('getStructCodec', () => {
         expect(person.decode(b('03000000426f621c'))).toStrictEqual({ age: 28, name: 'Bob' });
 
         // Different From and To types.
-        const structU64 = struct<{ value: number | bigint }, { value: bigint }>([['value', u64()]]);
+        const structU64 = struct([['value', u64()]]);
         expect(structU64.encode({ value: 2 })).toStrictEqual(b('0200000000000000'));
         expect(structU64.encode({ value: 2n })).toStrictEqual(b('0200000000000000'));
         expect(structU64.decode(b('0200000000000000'))).toStrictEqual({ value: 2n });

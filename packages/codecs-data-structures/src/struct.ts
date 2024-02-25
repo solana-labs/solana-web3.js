@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     Codec,
     combineCodec,
@@ -16,58 +17,32 @@ import {
 
 import { getFixedSize, getMaxSize, sumCodecSizes } from './utils';
 
-/** Get the name and encoder of each field in a struct. */
-export type StructToEncoderTuple<TFrom extends object> = Array<
-    {
-        [K in keyof TFrom]: [K, Encoder<TFrom[K]>];
-    }[keyof TFrom]
->;
+type Fields<T> = readonly (readonly [string, T])[];
+type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
-/** Get the name and fixed-size encoder of each field in a struct. */
-export type StructToFixedSizeEncoderTuple<TFrom extends object> = Array<
-    {
-        [K in keyof TFrom]: [K, FixedSizeEncoder<TFrom[K]>];
-    }[keyof TFrom]
->;
+type GetEncoderTypeFromFields<TFields extends Fields<Encoder<any>>> = {
+    [I in ArrayIndices<TFields> as TFields[I][0]]: TFields[I][1] extends Encoder<infer TFrom> ? TFrom : never;
+};
 
-/** Get the name and decoder of each field in a struct. */
-export type StructToDecoderTuple<TTo extends object> = Array<
-    {
-        [K in keyof TTo]: [K, Decoder<TTo[K]>];
-    }[keyof TTo]
->;
-
-/** Get the name and fixed-size decoder of each field in a struct. */
-export type StructToFixedSizeDecoderTuple<TTo extends object> = Array<
-    {
-        [K in keyof TTo]: [K, FixedSizeDecoder<TTo[K]>];
-    }[keyof TTo]
->;
-
-/** Get the name and codec of each field in a struct. */
-export type StructToCodecTuple<TFrom extends object, TTo extends TFrom> = Array<
-    {
-        [K in keyof TFrom]: [K, Codec<TFrom[K], TTo[K]>];
-    }[keyof TFrom]
->;
-
-/** Get the name and fixed-size codec of each field in a struct. */
-export type StructToFixedSizeCodecTuple<TFrom extends object, TTo extends TFrom> = Array<
-    {
-        [K in keyof TFrom]: [K, FixedSizeCodec<TFrom[K], TTo[K]>];
-    }[keyof TFrom]
->;
+type GetDecoderTypeFromFields<TFields extends Fields<Decoder<any>>> = {
+    [I in ArrayIndices<TFields> as TFields[I][0]]: TFields[I][1] extends Decoder<infer TTo> ? TTo : never;
+};
 
 /**
  * Creates a encoder for a custom object.
  *
  * @param fields - The name and encoder of each field.
  */
-export function getStructEncoder<TFrom extends object>(
-    fields: StructToFixedSizeEncoderTuple<TFrom>,
-): FixedSizeEncoder<TFrom>;
-export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTuple<TFrom>): VariableSizeEncoder<TFrom>;
-export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTuple<TFrom>): Encoder<TFrom> {
+export function getStructEncoder<const TFields extends Fields<FixedSizeEncoder<any>>>(
+    fields: TFields,
+): FixedSizeEncoder<GetEncoderTypeFromFields<TFields>>;
+export function getStructEncoder<const TFields extends Fields<Encoder<any>>>(
+    fields: TFields,
+): VariableSizeEncoder<GetEncoderTypeFromFields<TFields>>;
+export function getStructEncoder<const TFields extends Fields<Encoder<any>>>(
+    fields: TFields,
+): Encoder<GetEncoderTypeFromFields<TFields>> {
+    type TFrom = GetEncoderTypeFromFields<TFields>;
     const fieldCodecs = fields.map(([, codec]) => codec);
     const fixedSize = sumCodecSizes(fieldCodecs.map(getFixedSize));
     const maxSize = sumCodecSizes(fieldCodecs.map(getMaxSize)) ?? undefined;
@@ -77,14 +52,14 @@ export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTu
             ? {
                   getSizeFromValue: (value: TFrom) =>
                       fields
-                          .map(([key, codec]) => getEncodedSize(value[key], codec))
+                          .map(([key, codec]) => getEncodedSize(value[key as keyof TFrom], codec))
                           .reduce((all, one) => all + one, 0),
                   maxSize,
               }
             : { fixedSize }),
         write: (struct: TFrom, bytes, offset) => {
             fields.forEach(([key, codec]) => {
-                offset = codec.write(struct[key], bytes, offset);
+                offset = codec.write(struct[key as keyof TFrom], bytes, offset);
             });
             return offset;
         },
@@ -96,9 +71,16 @@ export function getStructEncoder<TFrom extends object>(fields: StructToEncoderTu
  *
  * @param fields - The name and decoder of each field.
  */
-export function getStructDecoder<TTo extends object>(fields: StructToFixedSizeDecoderTuple<TTo>): FixedSizeDecoder<TTo>;
-export function getStructDecoder<TTo extends object>(fields: StructToDecoderTuple<TTo>): VariableSizeDecoder<TTo>;
-export function getStructDecoder<TTo extends object>(fields: StructToDecoderTuple<TTo>): Decoder<TTo> {
+export function getStructDecoder<const TFields extends Fields<FixedSizeDecoder<any>>>(
+    fields: TFields,
+): FixedSizeDecoder<GetDecoderTypeFromFields<TFields>>;
+export function getStructDecoder<const TFields extends Fields<Decoder<any>>>(
+    fields: TFields,
+): VariableSizeDecoder<GetDecoderTypeFromFields<TFields>>;
+export function getStructDecoder<const TFields extends Fields<Decoder<any>>>(
+    fields: TFields,
+): Decoder<GetDecoderTypeFromFields<TFields>> {
+    type TTo = GetDecoderTypeFromFields<TFields>;
     const fieldCodecs = fields.map(([, codec]) => codec);
     const fixedSize = sumCodecSizes(fieldCodecs.map(getFixedSize));
     const maxSize = sumCodecSizes(fieldCodecs.map(getMaxSize)) ?? undefined;
@@ -106,13 +88,13 @@ export function getStructDecoder<TTo extends object>(fields: StructToDecoderTupl
     return createDecoder({
         ...(fixedSize === null ? { maxSize } : { fixedSize }),
         read: (bytes: Uint8Array, offset) => {
-            const struct: Partial<TTo> = {};
+            const struct = {} as TTo;
             fields.forEach(([key, codec]) => {
                 const [value, newOffset] = codec.read(bytes, offset);
                 offset = newOffset;
-                struct[key] = value;
+                struct[key as keyof TTo] = value;
             });
-            return [struct as TTo, offset];
+            return [struct, offset];
         },
     });
 }
@@ -122,14 +104,23 @@ export function getStructDecoder<TTo extends object>(fields: StructToDecoderTupl
  *
  * @param fields - The name and codec of each field.
  */
-export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToFixedSizeCodecTuple<TFrom, TTo>,
-): FixedSizeCodec<TFrom, TTo>;
-export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToCodecTuple<TFrom, TTo>,
-): VariableSizeCodec<TFrom, TTo>;
-export function getStructCodec<TFrom extends object, TTo extends TFrom = TFrom>(
-    fields: StructToCodecTuple<TFrom, TTo>,
-): Codec<TFrom, TTo> {
-    return combineCodec(getStructEncoder(fields), getStructDecoder(fields));
+export function getStructCodec<const TFields extends Fields<FixedSizeCodec<any>>>(
+    fields: TFields,
+): FixedSizeCodec<
+    GetEncoderTypeFromFields<TFields>,
+    GetDecoderTypeFromFields<TFields> & GetEncoderTypeFromFields<TFields>
+>;
+export function getStructCodec<const TFields extends Fields<Codec<any>>>(
+    fields: TFields,
+): VariableSizeCodec<
+    GetEncoderTypeFromFields<TFields>,
+    GetDecoderTypeFromFields<TFields> & GetEncoderTypeFromFields<TFields>
+>;
+export function getStructCodec<const TFields extends Fields<Codec<any>>>(
+    fields: TFields,
+): Codec<GetEncoderTypeFromFields<TFields>, GetDecoderTypeFromFields<TFields> & GetEncoderTypeFromFields<TFields>> {
+    return combineCodec(
+        getStructEncoder(fields),
+        getStructDecoder(fields) as Decoder<GetDecoderTypeFromFields<TFields> & GetEncoderTypeFromFields<TFields>>,
+    );
 }

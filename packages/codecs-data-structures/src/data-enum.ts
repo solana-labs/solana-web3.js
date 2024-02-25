@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     assertByteArrayIsNotEmptyForCodec,
     Codec,
@@ -56,42 +57,6 @@ export type GetDataEnumKindContent<T extends DataEnum, K extends T['__kind']> = 
     '__kind'
 >;
 
-/** Get the name and encoder of each variant in a data enum. */
-export type DataEnumToEncoderTuple<TFrom extends DataEnum> = Array<
-    TFrom extends never
-        ? never
-        : [
-              TFrom['__kind'],
-              keyof Omit<TFrom, '__kind'> extends never
-                  ? Encoder<Omit<TFrom, '__kind'>> | Encoder<void>
-                  : Encoder<Omit<TFrom, '__kind'>>,
-          ]
->;
-
-/** Get the name and decoder of each variant in a data enum. */
-export type DataEnumToDecoderTuple<TTo extends DataEnum> = Array<
-    TTo extends never
-        ? never
-        : [
-              TTo['__kind'],
-              keyof Omit<TTo, '__kind'> extends never
-                  ? Decoder<Omit<TTo, '__kind'>> | Decoder<void>
-                  : Decoder<Omit<TTo, '__kind'>>,
-          ]
->;
-
-/** Get the name and codec of each variant in a data enum. */
-export type DataEnumToCodecTuple<TFrom extends DataEnum, TTo extends TFrom = TFrom> = Array<
-    TFrom extends never
-        ? never
-        : [
-              TFrom['__kind'],
-              keyof Omit<TFrom, '__kind'> extends never
-                  ? Codec<Omit<TFrom, '__kind'>, Omit<TTo, '__kind'>> | Codec<void>
-                  : Codec<Omit<TFrom, '__kind'>, Omit<TTo, '__kind'>>,
-          ]
->;
-
 /** Defines the config for data enum codecs. */
 export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberEncoder | NumberDecoder> = {
     /**
@@ -101,16 +66,36 @@ export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberEncoder | N
     size?: TDiscriminator;
 };
 
+type Variants<T> = readonly (readonly [string, T])[];
+type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
+
+type GetEncoderTypeFromVariants<TVariants extends Variants<Encoder<any>>> = {
+    [I in ArrayIndices<TVariants>]: { __kind: TVariants[I][0] } & (TVariants[I][1] extends Encoder<infer TFrom>
+        ? TFrom extends object
+            ? TFrom
+            : object
+        : never);
+}[ArrayIndices<TVariants>];
+
+type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = {
+    [I in ArrayIndices<TVariants>]: { __kind: TVariants[I][0] } & (TVariants[I][1] extends Decoder<infer TTo>
+        ? TTo extends object
+            ? TTo
+            : object
+        : never);
+}[ArrayIndices<TVariants>];
+
 /**
  * Creates a data enum encoder.
  *
  * @param variants - The variant encoders of the data enum.
  * @param config - A set of config for the encoder.
  */
-export function getDataEnumEncoder<TFrom extends DataEnum>(
-    variants: DataEnumToEncoderTuple<TFrom>,
+export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>>>(
+    variants: TVariants,
     config: DataEnumCodecConfig<NumberEncoder> = {},
-): Encoder<TFrom> {
+): Encoder<GetEncoderTypeFromVariants<TVariants>> {
+    type TFrom = GetEncoderTypeFromVariants<TVariants>;
     const prefix = config.size ?? getU8Encoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
     return createEncoder({
@@ -142,10 +127,11 @@ export function getDataEnumEncoder<TFrom extends DataEnum>(
  * @param variants - The variant decoders of the data enum.
  * @param config - A set of config for the decoder.
  */
-export function getDataEnumDecoder<T extends DataEnum>(
-    variants: DataEnumToDecoderTuple<T>,
+export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>>>(
+    variants: TVariants,
     config: DataEnumCodecConfig<NumberDecoder> = {},
-): Decoder<T> {
+): Decoder<GetDecoderTypeFromVariants<TVariants>> {
+    type TTo = GetDecoderTypeFromVariants<TVariants>;
     const prefix = config.size ?? getU8Decoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
     return createDecoder({
@@ -164,7 +150,7 @@ export function getDataEnumDecoder<T extends DataEnum>(
             }
             const [variant, vOffset] = variantField[1].read(bytes, offset);
             offset = vOffset;
-            return [{ __kind: variantField[0], ...(variant ?? {}) } as T, offset];
+            return [{ __kind: variantField[0], ...(variant ?? {}) } as TTo, offset];
         },
     });
 }
@@ -175,15 +161,23 @@ export function getDataEnumDecoder<T extends DataEnum>(
  * @param variants - The variant codecs of the data enum.
  * @param config - A set of config for the codec.
  */
-export function getDataEnumCodec<T extends DataEnum, U extends T = T>(
-    variants: DataEnumToCodecTuple<T, U>,
+export function getDataEnumCodec<const TVariants extends Variants<Codec<any, any>>>(
+    variants: TVariants,
     config: DataEnumCodecConfig<NumberCodec> = {},
-): Codec<T, U> {
-    return combineCodec(getDataEnumEncoder<T>(variants, config), getDataEnumDecoder<U>(variants, config));
+): Codec<
+    GetEncoderTypeFromVariants<TVariants>,
+    GetDecoderTypeFromVariants<TVariants> & GetEncoderTypeFromVariants<TVariants>
+> {
+    return combineCodec(
+        getDataEnumEncoder(variants, config),
+        getDataEnumDecoder(variants, config) as Decoder<
+            GetDecoderTypeFromVariants<TVariants> & GetEncoderTypeFromVariants<TVariants>
+        >,
+    );
 }
 
-function getDataEnumFixedSize<T extends DataEnum>(
-    variants: DataEnumToEncoderTuple<T> | DataEnumToDecoderTuple<T>,
+function getDataEnumFixedSize<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+    variants: TVariants,
     prefix: { fixedSize: number } | object,
 ): number | null {
     if (variants.length === 0) return isFixedSize(prefix) ? prefix.fixedSize : null;
@@ -196,15 +190,18 @@ function getDataEnumFixedSize<T extends DataEnum>(
     return isFixedSize(prefix) ? prefix.fixedSize + variantSize : null;
 }
 
-function getDataEnumMaxSize<T extends DataEnum>(
-    variants: DataEnumToEncoderTuple<T> | DataEnumToDecoderTuple<T>,
+function getDataEnumMaxSize<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+    variants: TVariants,
     prefix: { fixedSize: number } | object,
 ) {
     const maxVariantSize = maxCodecSizes(variants.map(([, codec]) => getMaxSize(codec)));
     return sumCodecSizes([getMaxSize(prefix), maxVariantSize]) ?? undefined;
 }
 
-function getVariantDiscriminator<TFrom extends DataEnum>(variants: DataEnumToEncoderTuple<TFrom>, variant: TFrom) {
+function getVariantDiscriminator<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+    variants: TVariants,
+    variant: { __kind: string },
+) {
     const discriminator = variants.findIndex(([key]) => variant.__kind === key);
     if (discriminator < 0) {
         // TODO: Coded error.

@@ -4,7 +4,7 @@ import { getStringCodec } from '@solana/codecs-strings';
 
 import { getArrayCodec } from '../array';
 import { getBooleanCodec } from '../boolean';
-import { DataEnumToCodecTuple, getDataEnumCodec } from '../data-enum';
+import { getDataEnumCodec } from '../data-enum';
 import { getStructCodec } from '../struct';
 import { getTupleCodec } from '../tuple';
 import { getUnitCodec } from '../unit';
@@ -29,46 +29,38 @@ describe('getDataEnumCodec', () => {
         | { __kind: 'KeyPress'; fields: [string] } // Tuple variant.
         | { __kind: 'PageUnload' }; // Empty variant (using empty struct).
 
-    const getWebEvent = (): DataEnumToCodecTuple<WebEvent> => [
-        ['PageLoad', unit()],
+    const getWebEvent = () =>
         [
-            'Click',
-            struct<{ x: number; y: number }>([
-                ['x', u8()],
-                ['y', u8()],
-            ]),
-        ],
-        ['KeyPress', struct<{ fields: [string] }>([['fields', tuple([string()])]])],
-        ['PageUnload', struct<object>([])],
-    ];
+            ['PageLoad', unit()],
+            [
+                'Click',
+                struct([
+                    ['x', u8()],
+                    ['y', u8()],
+                ]),
+            ],
+            ['KeyPress', struct([['fields', tuple([string()])]])],
+            ['PageUnload', struct([])],
+        ] as const;
 
-    type SameSizeVariants =
-        | { __kind: 'A'; value: number }
-        | { __kind: 'B'; x: number; y: number }
-        | { __kind: 'C'; items: Array<boolean> };
-
-    const getSameSizeVariants = (): DataEnumToCodecTuple<SameSizeVariants> => [
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ['A', struct<any>([['value', u16()]])],
+    const getSameSizeVariants = () =>
         [
-            'B',
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            struct<any>([
-                ['x', u8()],
-                ['y', u8()],
-            ]),
-        ],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ['C', struct<any>([['items', array(boolean(), { size: 2 })]])],
-    ];
+            ['A', struct([['value', u16()]])],
+            [
+                'B',
+                struct([
+                    ['x', u8()],
+                    ['y', u8()],
+                ]),
+            ],
+            ['C', struct([['items', array(boolean(), { size: 2 })]])],
+        ] as const;
 
-    type U64EnumFrom = { __kind: 'A' } | { __kind: 'B'; value: number | bigint };
-    type U64EnumTo = { __kind: 'A' } | { __kind: 'B'; value: bigint };
-
-    const getU64Enum = (): DataEnumToCodecTuple<U64EnumFrom, U64EnumTo> => [
-        ['A', unit()],
-        ['B', struct<{ value: bigint | number }, { value: bigint }>([['value', u64()]])],
-    ];
+    const getU64Enum = () =>
+        [
+            ['A', unit()],
+            ['B', struct([['value', u64()]])],
+        ] as const;
 
     it('encodes empty variants', () => {
         const pageLoad: WebEvent = { __kind: 'PageLoad' };
