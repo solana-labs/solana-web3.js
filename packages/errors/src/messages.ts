@@ -44,6 +44,10 @@ import {
     SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS,
+    SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS,
+    SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
     SolanaErrorCode,
@@ -137,6 +141,12 @@ export const SolanaErrorMessages: Readonly<{
         'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts',
     [SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING]: 'No signing implementation could be found',
     [SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING]: 'No key export implementation could be found',
+    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE]:
+        'Transaction first instruction is not advance nonce account instruction.',
+    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS]:
+        'Transaction with no instructions cannot be durable nonce transaction.',
+    [SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS]: 'Transaction is missing an address at index: $index.',
+    [SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER]: 'Transaction is missing a fee payer.',
     [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE]:
         "Could not determine this transaction's signature. Make sure that the transaction has " +

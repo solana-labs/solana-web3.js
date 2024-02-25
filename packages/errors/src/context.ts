@@ -26,6 +26,7 @@ import {
     SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SolanaErrorCode,
 } from './codes';
@@ -146,6 +147,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
         optionalPathLabel: string;
         path?: string;
         value: bigint;
+    };
+    [SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS]: {
+        index: number;
     };
     [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: {
         addresses: string[];
