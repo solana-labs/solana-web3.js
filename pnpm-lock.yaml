@@ -629,6 +629,9 @@ importers:
 
   packages/compat:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional

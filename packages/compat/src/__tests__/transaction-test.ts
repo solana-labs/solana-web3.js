@@ -1,6 +1,11 @@
 import { Buffer } from 'node:buffer';
 
 import { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS,
+    SolanaError,
+} from '@solana/errors';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 import { ITransactionWithSignatures, Nonce } from '@solana/transactions';
@@ -639,7 +644,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
 
             expect(() => {
                 fromVersionedTransactionWithDurableNonce(oldTransaction);
-            }).toThrow('transaction with no instructions cannot be durable nonce transaction');
+            }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS));
         });
 
         it('throws for a transaction with one instruction which is not advance nonce', () => {
@@ -660,7 +665,11 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
 
             expect(() => {
                 fromVersionedTransactionWithDurableNonce(oldTransaction);
-            }).toThrow('transaction first instruction is not advance nonce account instruction');
+            }).toThrow(
+                new SolanaError(
+                    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
+                ),
+            );
         });
 
         it('converts a transaction with one instruction which is advance nonce', () => {
@@ -871,7 +880,7 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
 
             expect(() => {
                 fromVersionedTransactionWithDurableNonce(oldTransaction);
-            }).toThrow('transaction with no instructions cannot be durable nonce transaction');
+            }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS));
         });
 
         it('throws for a transaction with one instruction which is not advance nonce', () => {
@@ -892,7 +901,11 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
 
             expect(() => {
                 fromVersionedTransactionWithDurableNonce(oldTransaction);
-            }).toThrow('transaction first instruction is not advance nonce account instruction');
+            }).toThrow(
+                new SolanaError(
+                    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
+                ),
+            );
         });
 
         it('converts a transaction with one instruction which is advance nonce', () => {

@@ -66,6 +66,7 @@
         "node": ">=17.4"
     },
     "dependencies": {
+        "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
