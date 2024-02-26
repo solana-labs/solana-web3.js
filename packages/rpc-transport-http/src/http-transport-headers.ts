@@ -29,9 +29,8 @@ type ForbiddenHeaders =
     | 'Keep-Alive'
     | 'Origin'
     | 'Permissions-Policy'
-    // No currently available Typescript technique allows you to match on a prefix.
-    // | 'Proxy-'
-    // | 'Sec-'
+    | `Proxy-${string}`
+    | `Sec-${string}`
     | 'Referer'
     | 'TE'
     | 'Trailer'
@@ -61,9 +60,9 @@ const FORBIDDEN_HEADERS: Record<string, boolean> = {
     'keep-alive': true,
     origin: true,
     'permissions-policy': true,
-    // No currently available Typescript technique allows you to match on a prefix.
-    // 'proxy-':true,
-    // 'sec-':true,
+    // Prefix matching is implemented in code, below.
+    // 'proxy-': true,
+    // 'sec-': true,
     referer: true,
     te: true,
     trailer: true,
