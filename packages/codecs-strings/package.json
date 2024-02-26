@@ -77,7 +77,7 @@
         "@solana/text-encoding-impl": "workspace:*",
         "@solana/tsconfig": "workspace:*",
         "@swc/jest": "^0.2.36",
-        "@types/jest": "^29.5.11",
+        "@types/jest": "^29.5.12",
         "@types/node": "18.11.19",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.3.0",

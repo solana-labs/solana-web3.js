@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.0
@@ -65,8 +69,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -132,8 +136,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -195,8 +199,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -253,7 +257,7 @@ importers:
         version: 1.2.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
 
   packages/codecs:
     dependencies:
@@ -311,7 +315,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -337,8 +341,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -410,8 +414,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -477,8 +481,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -553,8 +557,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -644,8 +648,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -704,8 +708,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -777,8 +781,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -840,8 +844,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.1.6)
@@ -903,8 +907,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -963,8 +967,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1033,8 +1037,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1142,8 +1146,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1444,8 +1448,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -1517,8 +1521,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1589,8 +1593,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1671,8 +1675,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -1771,8 +1775,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: ^20.11.20
         version: 20.11.20
@@ -1868,8 +1872,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -1959,7 +1963,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1989,8 +1993,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2055,8 +2059,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2146,8 +2150,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2237,8 +2241,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2310,8 +2314,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2386,8 +2390,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2465,8 +2469,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2538,8 +2542,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -2614,8 +2618,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
@@ -2702,8 +2706,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -2750,11 +2754,11 @@ importers:
   packages/test-config:
     dependencies:
       jest-environment-jsdom:
-        specifier: ^29.6.4
-        version: 29.6.4
+        specifier: ^29.7.0
+        version: 29.7.0
       jest-runner-eslint:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.51.0)(jest@29.7.0)
+        specifier: ^2.1.2
+        version: 2.1.2(eslint@8.51.0)(jest@29.7.0)
       jest-runner-prettier:
         specifier: ^1.0.0
         version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
@@ -2775,14 +2779,14 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.11.20)
       jest-dev-server:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^10.0.0
+        version: 10.0.0
       undici:
         specifier: ^6.6.2
         version: 6.6.2
@@ -2793,8 +2797,8 @@ importers:
   packages/test-matchers:
     devDependencies:
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
 
   packages/text-encoding-impl:
     dependencies:
@@ -2818,8 +2822,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -2906,8 +2910,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
@@ -3003,8 +3007,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/node':
         specifier: 18.11.19
         version: 18.11.19
@@ -3072,8 +3076,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.13.2
         version: 6.13.2(@typescript-eslint/parser@6.3.0)(eslint@8.45.0)(typescript@5.2.2)
@@ -3133,8 +3137,8 @@ importers:
         specifier: ^0.2.36
         version: 0.2.36(@swc/core@1.3.93)
       '@types/jest':
-        specifier: ^29.5.11
-        version: 29.5.11
+        specifier: ^29.5.12
+        version: 29.5.12
       '@types/ws':
         specifier: ^8.5.5
         version: 8.5.5
@@ -5114,16 +5118,6 @@ packages:
       '@types/node': 20.11.20
       jest-mock: 27.5.1
 
-  /@jest/environment@29.6.4:
-    resolution: {integrity: sha512-sQ0SULEjA1XUTHmkBRl7A1dyITM9yb1yb3ZNKPX3KlTd6IG7mWUe3e2yfExtC2Zz1Q+mMckOLHmL/qLiuQJrBQ==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/fake-timers': 29.7.0
-      '@jest/types': 29.6.3
-      '@types/node': 20.11.20
-      jest-mock: 29.7.0
-    dev: false
-
   /@jest/environment@29.7.0:
     resolution: {integrity: sha512-aQIfHDq33ExsN4jP1NWGXhxgQ/wixs60gDiKO+XVMd8Mn0NWPWgc34ZQDTb2jKaUWQ7MuwoitXAsN2XVXNMpAw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -5158,18 +5152,6 @@ packages:
       jest-message-util: 27.5.1
       jest-mock: 27.5.1
       jest-util: 27.5.1
-
-  /@jest/fake-timers@29.6.4:
-    resolution: {integrity: sha512-6UkCwzoBK60edXIIWb0/KWkuj7R7Qq91vVInOe3De6DSpaEiqjKcJw4F7XUet24Wupahj9J6PlR09JqJ5ySDHw==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/types': 29.6.3
-      '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 20.11.20
-      jest-message-util: 29.7.0
-      jest-mock: 29.7.0
-      jest-util: 29.7.0
-    dev: false
 
   /@jest/fake-timers@29.7.0:
     resolution: {integrity: sha512-q4DH1Ha4TTFPdxLsqDXK1d3+ioSL7yL5oCMJZgDYm6i+6CygW5E5xVr/D1HdsGxjt1ZWSfUAs9OxSB/BNelWrQ==}
@@ -5938,6 +5920,12 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: true
 
+  /@sideway/address@4.1.5:
+    resolution: {integrity: sha512-IqO/DUQHUkPeixNQ8n0JA6102hT9CmaljNTPmQ1u8MEhBo/R4Q8eKLN/vGZxuebwOroDB4cbpjheD4+/sKFK4Q==}
+    dependencies:
+      '@hapi/hoek': 9.3.0
+    dev: true
+
   /@sideway/formula@3.0.1:
     resolution: {integrity: sha512-/poHZJJVjx3L+zVD6g9KgHfYnb443oi7wLu/XKojDviHy6HOEOA6z1Trk5aR1dGcmPenJEgb2sK2I80LeS3MIg==}
     dev: true
@@ -6438,8 +6426,8 @@ packages:
     dependencies:
       '@types/istanbul-lib-report': 3.0.0
 
-  /@types/jest@29.5.11:
-    resolution: {integrity: sha512-S2mHmYIVe13vrm6q4kN6fLYYAka15ALQki/vgDC3mIukEOx8WJlv0kQPM+d4w8Gp6u0uSdKND04IlTXBv0rwnQ==}
+  /@types/jest@29.5.12:
+    resolution: {integrity: sha512-eDC8bTvT/QhYdxJAulQikueigY5AsdBRH2yDKW3yveW7svY3+DzN84/2NUgkw10RTiJbWqZrTtoGVdYlvFJdLw==}
     dependencies:
       expect: 29.7.0
       pretty-format: 29.7.0
@@ -6490,7 +6478,6 @@ packages:
 
   /@types/node@18.11.19:
     resolution: {integrity: sha512-YUgMWAQBWLObABqrvx8qKO1enAvBUdjZOAWQ5grBAkp5LQv45jBvYKZ3oFS9iKRCQyFjqw6iuEa1vmFqtxYLZw==}
-    dev: true
 
   /@types/node@20.11.20:
     resolution: {integrity: sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==}
@@ -7443,6 +7430,16 @@ packages:
       - debug
     dev: true
 
+  /axios@1.6.7:
+    resolution: {integrity: sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==}
+    dependencies:
+      follow-redirects: 1.15.5
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /babel-jest@29.7.0(@babel/core@7.23.7):
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -8287,7 +8284,6 @@ packages:
       - babel-plugin-macros
       - supports-color
       - ts-node
-    dev: true
 
   /create-jest@29.7.0(@types/node@20.11.20):
     resolution: {integrity: sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==}
@@ -8622,13 +8618,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       is-obj: 2.0.0
+    dev: true
 
   /dot-prop@6.0.1:
     resolution: {integrity: sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==}
     engines: {node: '>=10'}
     dependencies:
       is-obj: 2.0.0
-    dev: true
 
   /dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
@@ -9615,6 +9611,16 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4(supports-color@8.1.1)
+    dev: true
+
+  /follow-redirects@1.15.5:
+    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
     dev: true
 
   /for-each@0.3.3:
@@ -10700,7 +10706,6 @@ packages:
       - babel-plugin-macros
       - supports-color
       - ts-node
-    dev: true
 
   /jest-cli@29.7.0(@types/node@20.11.20):
     resolution: {integrity: sha512-OVVobw2IubN/GSYsxETi+gOe7Ka59EFMR/twOU3Jb2GnKKeMGJB5SGUUrEz3SFVmJASUdZUzy83sLNNQ2gZslg==}
@@ -10767,7 +10772,6 @@ packages:
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
-    dev: true
 
   /jest-config@29.7.0(@types/node@20.11.20):
     resolution: {integrity: sha512-uXbpfeQ7R6TZBqI3/TxCU4q4ttk3u0PJeC+E0zbfSoSjq6bJ7buBPxzQPL0ifrkY4DNu4JUdk0ImlBUYi840eQ==}
@@ -10808,17 +10812,17 @@ packages:
       - babel-plugin-macros
       - supports-color
 
-  /jest-dev-server@9.0.0:
-    resolution: {integrity: sha512-N43EDJLy3JBHZwtTxqHy+6lxu7Zw5PLD8Jzq2+ePV3v90hQc4UoUA/fnxoKdTCgZY3P1qPl6Zmj8m/886APxoQ==}
+  /jest-dev-server@10.0.0:
+    resolution: {integrity: sha512-FtyBBDxrAIfTX3hyKSOwj5KU6Z7fFLew5pQYOFpwyf+qpPpULL8aYxtsFkbkAwcs+Mb7qhcNbVLeiWsLOd7CKw==}
     engines: {node: '>=16'}
     dependencies:
       chalk: 4.1.2
       cwd: 0.10.0
       find-process: 1.4.7
       prompts: 2.4.2
-      spawnd: 9.0.0
+      spawnd: 10.0.0
       tree-kill: 1.2.2
-      wait-on: 7.0.1(debug@4.3.4)
+      wait-on: 7.2.0
     transitivePeerDependencies:
       - debug
       - supports-color
@@ -10881,29 +10885,6 @@ packages:
       - supports-color
       - utf-8-validate
 
-  /jest-environment-jsdom@29.6.4:
-    resolution: {integrity: sha512-K6wfgUJ16DoMs02JYFid9lOsqfpoVtyJxpRlnTxUHzvZWBnnh2VNGRB9EC1Cro96TQdq5TtSjb3qUjNaJP9IyA==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      canvas: ^2.5.0
-    peerDependenciesMeta:
-      canvas:
-        optional: true
-    dependencies:
-      '@jest/environment': 29.6.4
-      '@jest/fake-timers': 29.6.4
-      '@jest/types': 29.6.3
-      '@types/jsdom': 20.0.1
-      '@types/node': 20.11.20
-      jest-mock: 29.6.3
-      jest-util: 29.6.3
-      jsdom: 22.1.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   /jest-environment-jsdom@29.7.0:
     resolution: {integrity: sha512-k9iQbsf9OyOfdzWH8HDmrRT0gSIcX+FLNW7IQq94tFX0gynPwqDTW0Ho6iMVNjGz/nb+l/vW3dWM2bbLLpkbXA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -10925,7 +10906,6 @@ packages:
       - bufferutil
       - supports-color
       - utf-8-validate
-    dev: true
 
   /jest-environment-node@27.5.1:
     resolution: {integrity: sha512-Jt4ZUnxdOsTGwSRAfKEnE6BcwsSPNOijjwifq5sDFSA2kesnXTvNqKHYgM0hDq3549Uf/KzdXNYn4wMZJPlFLw==}
@@ -11061,15 +11041,6 @@ packages:
       '@jest/types': 27.5.1
       '@types/node': 20.11.20
 
-  /jest-mock@29.6.3:
-    resolution: {integrity: sha512-Z7Gs/mOyTSR4yPsaZ72a/MtuK6RnC3JYqWONe48oLaoEcYwEDxqvbXz85G4SJrm2Z5Ar9zp6MiHF4AlFlRM4Pg==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/types': 29.6.3
-      '@types/node': 20.11.20
-      jest-util: 29.7.0
-    dev: false
-
   /jest-mock@29.7.0:
     resolution: {integrity: sha512-ITOMZn+UkYS4ZFh83xYAOzWStloNzJFO2s8DWrE4lhtGD+AorgnbkiKERe4wQVBydIGPx059g6riW5Btp6Llnw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -11151,24 +11122,6 @@ packages:
       resolve.exports: 2.0.2
       slash: 3.0.0
 
-  /jest-runner-eslint@2.0.0(eslint@8.51.0)(jest@29.7.0):
-    resolution: {integrity: sha512-7dQTbRxOhw8t+AQSEXtwezfgVomzME+enbjeWN2Emdr3FjFjJW15FLjj33GvKk/r3zq/nASihoaUVTptdBEBHA==}
-    engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      eslint: ^7 || ^8
-      jest: ^27 || ^28 || ^29
-    dependencies:
-      chalk: 4.1.2
-      cosmiconfig: 7.1.0
-      create-jest-runner: 0.11.2
-      dot-prop: 5.3.0
-      eslint: 8.51.0
-      jest: 29.7.0(@types/node@20.11.20)
-    transitivePeerDependencies:
-      - '@jest/test-result'
-      - jest-runner
-    dev: false
-
   /jest-runner-eslint@2.1.2(eslint@8.45.0)(jest@29.7.0):
     resolution: {integrity: sha512-XONe3I5YMPPyQ55EoPKk+RT59fZ/4A+NvmTCmwFLhw5+OONxGL73yojVwXZO1x2mvhH0IigknfE+mKQ5ki1RnA==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -11203,7 +11156,6 @@ packages:
     transitivePeerDependencies:
       - '@jest/test-result'
       - jest-runner
-    dev: true
 
   /jest-runner-prettier@1.0.0(jest@29.7.0)(prettier@3.1.0):
     resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
@@ -11415,18 +11367,6 @@ packages:
       graceful-fs: 4.2.11
       picomatch: 2.3.1
 
-  /jest-util@29.6.3:
-    resolution: {integrity: sha512-QUjna/xSy4B32fzcKTSz1w7YYzgiHrjjJjevdRf61HYk998R5vVMMNmrHESYZVDS5DSWs+1srPLPKxXPkeSDOA==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dependencies:
-      '@jest/types': 29.6.3
-      '@types/node': 20.11.20
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      graceful-fs: 4.2.11
-      picomatch: 2.3.1
-    dev: false
-
   /jest-util@29.7.0:
     resolution: {integrity: sha512-z6EbKajIpqGKU56y5KBUgy1dt1ihhQJgWzUlZHArA/+X2ad7Cb5iF+AK1EWVL/Bo7Rz9uurpqw6SiBCefUbCGA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -11574,7 +11514,6 @@ packages:
       - babel-plugin-macros
       - supports-color
       - ts-node
-    dev: true
 
   /jest@29.7.0(@types/node@20.11.20):
     resolution: {integrity: sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==}
@@ -11599,6 +11538,16 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
+    dev: true
+
+  /joi@17.12.2:
+    resolution: {integrity: sha512-RonXAIzCiHLc8ss3Ibuz45u28GOsWE1UpfDXLbN/9NKbL4tCJf8TWYVKsoYuuh+sAUt7fsSNpA+r2+TBA6Wjmw==}
+    dependencies:
+      '@hapi/hoek': 9.3.0
+      '@hapi/topo': 5.1.0
+      '@sideway/address': 4.1.5
+      '@sideway/formula': 3.0.1
+      '@sideway/pinpoint': 2.0.0
     dev: true
 
   /joi@17.9.2:
@@ -12962,6 +12911,10 @@ packages:
       ipaddr.js: 1.9.1
     dev: true
 
+  /proxy-from-env@1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: true
+
   /ps-tree@1.2.0:
     resolution: {integrity: sha512-0VnamPPYHl4uaU/nSFeZZpR21QAWRz+sRv4iW9+v/GS/J5U5iZB5BNN6J0RMoOvdx2gWM2+ZFMIm58q24e4UYA==}
     engines: {node: '>= 0.10'}
@@ -13635,6 +13588,11 @@ packages:
     engines: {node: '>=14'}
     dev: true
 
+  /signal-exit@4.1.0:
+    resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
+    engines: {node: '>=14'}
+    dev: true
+
   /signale@1.4.0:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
@@ -13753,11 +13711,11 @@ packages:
     resolution: {integrity: sha512-gRjMgK5uFjbCvdibeGJuy3I5OYz6VLoVdsOJdA6wV0WlfQVLFueoqMxwwYD9RODdgb6oUIvlRlsyFSiQkMKu0g==}
     dev: true
 
-  /spawnd@9.0.0:
-    resolution: {integrity: sha512-YJRGf0loiLsHTQZztPSI5pb9RmlKE5y6Nvxko6dNtGrkra+1BaJ7PN86GQ1/2ldLZgMhMG9ITopkDJ+7lHkBYw==}
+  /spawnd@10.0.0:
+    resolution: {integrity: sha512-6GKcakMTryb5b1SWCvdubCDHEsR2k+5VZUD5G19umZRarkvj1RyCGyizcqhjewI7cqZo8fTVD8HpnDZbVOLMtg==}
     engines: {node: '>=16'}
     dependencies:
-      signal-exit: 4.0.2
+      signal-exit: 4.1.0
       tree-kill: 1.2.2
     dev: true
 
@@ -14792,6 +14750,20 @@ packages:
       - debug
     dev: true
 
+  /wait-on@7.2.0:
+    resolution: {integrity: sha512-wCQcHkRazgjG5XoAq9jbTMLpNIjoSlZslrJ2+N9MxDsGEv1HnFoVjOCexL0ESva7Y9cu350j+DWADdk54s4AFQ==}
+    engines: {node: '>=12.0.0'}
+    hasBin: true
+    dependencies:
+      axios: 1.6.7
+      joi: 17.12.2
+      lodash: 4.17.21
+      minimist: 1.2.8
+      rxjs: 7.8.1
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /walker@1.0.8:
     resolution: {integrity: sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==}
     dependencies:
@@ -15078,7 +15050,3 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
