@@ -70,7 +70,7 @@
         "@solana/transactions": "workspace:*",
         "@solana/tsconfig": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
-        "@swc/jest": "^0.2.29",
+        "@swc/jest": "^0.2.36",
         "@types/jest": "^29.5.11",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.3.0",
