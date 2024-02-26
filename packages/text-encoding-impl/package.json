@@ -48,7 +48,7 @@
         "@solana/tsconfig": "workspace:*",
         "@swc/jest": "^0.2.36",
         "@types/fastestsmallesttextencoderdecoder": "^1.0.2",
-        "@types/jest": "^29.5.11",
+        "@types/jest": "^29.5.12",
         "@typescript-eslint/eslint-plugin": "^6.13.2",
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
