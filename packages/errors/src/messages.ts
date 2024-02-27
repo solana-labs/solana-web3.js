@@ -96,8 +96,17 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR_WOULD_EXCEED_MAX_ACCOUNT_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR_WOULD_EXCEED_MAX_BLOCK_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR_WOULD_EXCEED_MAX_VOTE_COST_LIMIT,
+    SOLANA_ERROR__TRANSACTION_EXPECTED_BLOCKHASH_LIFETIME,
+    SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND,
+    SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES,
+    SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE,
     SolanaErrorCode,
 } from './codes';
 
@@ -251,8 +260,27 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION_ERROR_WOULD_EXCEED_MAX_BLOCK_COST_LIMIT]:
         'Transaction would exceed max Block Cost Limit',
     [SOLANA_ERROR__TRANSACTION_ERROR_WOULD_EXCEED_MAX_VOTE_COST_LIMIT]: 'Transaction would exceed max Vote Cost Limit',
+    [SOLANA_ERROR__TRANSACTION_EXPECTED_BLOCKHASH_LIFETIME]: 'Transaction does not have a blockhash lifetime',
+    [SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME]: 'Transaction is not a durable nonce transaction',
+    [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING]:
+        'Contents of these address lookup tables unknown: $lookupTableAddresses',
+    [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE]:
+        'Lookup of address at index $highestRequestedIndex failed for lookup table ' +
+        '`$lookupTableAddress`. Highest known index is $highestKnownIndex. The lookup table ' +
+        'may have been extended since its contents were retrieved',
+    [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING]: 'No fee payer set in CompiledTransaction',
+    [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND]:
+        'Could not find program address at index $index',
+    [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES]:
+        'This transaction includes an address (`$programAddress`) which is both ' +
+        'invoked and set as the fee payer. Program addresses may not pay fees',
+    [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]:
+        'This transaction includes an address (`$programAddress`) which is both invoked and ' +
+        'marked writable. Program addresses may not be writable',
     [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE]:
         "Could not determine this transaction's signature. Make sure that the transaction has " +
         'been signed by its fee payer.',
+    [SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE]:
+        'Transaction version must be in the range [0, 127]. `$actualVersion` given',
 };
