@@ -6,10 +6,10 @@ import { RpcTransportFromClusterUrl } from './rpc-clusters';
 import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
 
-type Config<TClusterUrl extends ClusterUrl> = Readonly<{
-    headers?: Parameters<typeof createHttpTransport>[0]['headers'];
+type RpcTransportConfig = Parameters<typeof createHttpTransport>[0];
+interface Config<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {
     url: TClusterUrl;
-}>;
+}
 
 /**
  * Lowercasing header names makes it easier to override user-supplied headers.

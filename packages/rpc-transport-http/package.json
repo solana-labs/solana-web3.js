@@ -63,7 +63,8 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/rpc-spec": "workspace:*"
+        "@solana/rpc-spec": "workspace:*",
+        "undici": "^6.6.2"
     },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",

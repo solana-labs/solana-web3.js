@@ -3,13 +3,14 @@ import { RpcTransport } from '@solana/rpc-spec';
 describe('createHttpTransport', () => {
     let fetchMock: jest.Mock;
     let makeHttpRequest: RpcTransport;
-    let oldFetch: typeof globalThis.fetch;
     let SolanaHttpError: typeof import('../http-transport-errors').SolanaHttpError;
     beforeEach(async () => {
-        oldFetch = globalThis.fetch;
-        globalThis.fetch = fetchMock = jest.fn();
         await jest.isolateModulesAsync(async () => {
-            const [{ createHttpTransport }, HttpTransportErrorsModule] = await Promise.all([
+            jest.mock('@solana/fetch-impl');
+            const [fetchImplModule, { createHttpTransport }, HttpTransportErrorsModule] = await Promise.all([
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                import('@solana/fetch-impl'),
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 import('../http-transport'),
@@ -17,12 +18,10 @@ describe('createHttpTransport', () => {
                 // @ts-ignore
                 import('../http-transport-errors'),
             ]);
+            fetchMock = jest.mocked(fetchImplModule.default);
             SolanaHttpError = HttpTransportErrorsModule.SolanaHttpError;
-            makeHttpRequest = createHttpTransport({ url: 'fake://url' });
+            makeHttpRequest = createHttpTransport({ url: 'http://localhost' });
         });
-    });
-    afterEach(() => {
-        globalThis.fetch = oldFetch;
     });
     describe('when the endpoint returns a non-200 status code', () => {
         beforeEach(() => {
@@ -58,7 +57,7 @@ describe('createHttpTransport', () => {
         });
         it('calls fetch with the specified URL', () => {
             makeHttpRequest({ payload: 123 });
-            expect(fetchMock).toHaveBeenCalledWith('fake://url', expect.anything());
+            expect(fetchMock).toHaveBeenCalledWith('http://localhost', expect.anything());
         });
         it('sets the `body` to a stringfied version of the payload', () => {
             makeHttpRequest({ payload: { ok: true } });
