@@ -7,7 +7,7 @@ export const getU128Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder
     numberEncoderFactory({
         config,
         name: 'u128',
-        range: [0, BigInt('0xffffffffffffffffffffffffffffffff')],
+        range: [0n, BigInt('0xffffffffffffffffffffffffffffffff')],
         set: (view, value, le) => {
             const leftOffset = le ? 8 : 0;
             const rightOffset = le ? 0 : 8;
