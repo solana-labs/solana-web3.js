@@ -7,7 +7,7 @@ export const getU64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
     numberEncoderFactory({
         config,
         name: 'u64',
-        range: [0, BigInt('0xffffffffffffffff')],
+        range: [0n, BigInt('0xffffffffffffffff')],
         set: (view, value, le) => view.setBigUint64(0, BigInt(value), le),
         size: 8,
     });
