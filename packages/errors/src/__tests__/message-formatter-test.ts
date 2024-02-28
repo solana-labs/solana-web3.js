@@ -94,5 +94,18 @@ describe('getErrorMessage', () => {
             );
             expect(message).toBe("Something awful happened: 'bar'. How awful!");
         });
+        it('interpolates a Uint8Array variable into a error message format string', () => {
+            const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
+            messagesSpy.mockReturnValue({
+                // @ts-expect-error Mock error config doesn't conform to exported config.
+                123: 'Here is some data: $data',
+            });
+            const message = getErrorMessage(
+                // @ts-expect-error Mock error context doesn't conform to exported context.
+                123,
+                { data: new Uint8Array([1, 2, 3, 4]) },
+            );
+            expect(message).toBe('Here is some data: 1,2,3,4');
+        });
     });
 });

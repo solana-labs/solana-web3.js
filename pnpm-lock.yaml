@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.0
@@ -263,7 +267,7 @@ importers:
         version: 1.2.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
 
   packages/codecs:
     dependencies:
@@ -321,7 +325,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -973,6 +977,10 @@ importers:
         version: 1.1.1
 
   packages/instructions:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
@@ -1989,7 +1997,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -15051,7 +15059,3 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

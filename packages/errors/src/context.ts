@@ -15,6 +15,8 @@ import {
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS,
+    SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
@@ -326,6 +328,14 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE]: {
             actualVersion: number;
+        };
+        [SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS]: {
+            programAddress: string;
+            data?: Uint8Array;
+        };
+        [SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA]: {
+            programAddress: string;
+            accountAddresses?: string[];
         };
     }
 >;

@@ -62,6 +62,9 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "dependencies": {
+        "@solana/errors": "workspace:*"
+    },
     "devDependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/build-scripts": "workspace:*",
