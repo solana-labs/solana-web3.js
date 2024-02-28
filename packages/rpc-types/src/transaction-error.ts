@@ -1,6 +1,6 @@
 type CustomProgramError = number;
 
-// Keep synced with rust source: https://github.com/solana-labs/solana/blob/master/sdk/prog
+// Keep synced with RPC source: https://github.com/anza-xyz/agave/blob/master/sdk/program/src/instruction.rs
 type InstructionError =
     | 'GenericError'
     | 'InvalidArgument'
@@ -59,7 +59,7 @@ type InstructionError =
 type InstructionIndex = number;
 type AccountIndex = number;
 
-// Keep synced with rust source: https://github.com/solana-labs/solana/blob/master/sdk/src/transaction/error.rs
+// Keep synced with RPC source: https://github.com/anza-xyz/agave/blob/master/sdk/src/transaction/error.rs
 export type TransactionError =
     | 'AccountInUse'
     | 'AccountLoadedTwice'
@@ -94,4 +94,7 @@ export type TransactionError =
     | { DuplicateInstruction: InstructionIndex }
     | { InsufficientFundsForRent: { account_index: AccountIndex } }
     | 'MaxLoadedAccountsDataSizeExceeded'
-    | 'InvalidLoadedAccountsDataSizeLimit';
+    | 'InvalidLoadedAccountsDataSizeLimit'
+    | 'ResanitizationNeeded'
+    | { ProgramExecutionTemporarilyRestricted: { account_index: AccountIndex } }
+    | 'UnbalancedTransaction';
