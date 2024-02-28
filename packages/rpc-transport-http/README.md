@@ -226,7 +226,7 @@ const transports = [
     createHttpTransport({ url: 'https://mainnet-beta.my-server-2.com' }),
 ];
 
-// A failover transport that will try each transport in order until one succeeds
+// A failover transport that will try each transport in order until one succeeds before failing
 async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
     let requestError;
 
@@ -234,7 +234,7 @@ async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): 
         try {
             return await transport(...args);
         } catch (err) {
-            requestError = err;
+            console.error(err);
         }
     }
     throw requestError;
