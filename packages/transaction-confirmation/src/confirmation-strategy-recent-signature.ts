@@ -1,3 +1,4 @@
+import { getSolanaErrorFromTransactionError } from '@solana/errors';
 import type { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, Rpc } from '@solana/rpc';
 import type { RpcSubscriptions, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
@@ -32,10 +33,7 @@ export function createRecentSignatureConfirmationPromiseFactory(
         const signatureDidCommitPromise = (async () => {
             for await (const signatureStatusNotification of signatureStatusNotifications) {
                 if (signatureStatusNotification.value.err) {
-                    // TODO: Coded error.
-                    throw new Error(`The transaction with signature \`${signature}\` failed.`, {
-                        cause: signatureStatusNotification.value.err,
-                    });
+                    throw getSolanaErrorFromTransactionError(signatureStatusNotification.value.err);
                 } else {
                     return;
                 }
