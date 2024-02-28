@@ -114,7 +114,6 @@ function createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(
 function getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key: CryptoKey): Uint8Array {
     const secretKeyBytes = storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.get(key);
     if (secretKeyBytes === undefined) {
-        // TODO: Coded error.
         throw new Error('Could not find secret key material associated with this `CryptoKey`');
     }
     return secretKeyBytes;
