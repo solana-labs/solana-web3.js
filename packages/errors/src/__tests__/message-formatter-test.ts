@@ -107,5 +107,18 @@ describe('getErrorMessage', () => {
             );
             expect(message).toBe('Here is some data: 1,2,3,4');
         });
+        it('interpolates an undefined variable into a error message format string', () => {
+            const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
+            messagesSpy.mockReturnValue({
+                // @ts-expect-error Mock error config doesn't conform to exported config.
+                123: 'Here is a variable: $variable',
+            });
+            const message = getErrorMessage(
+                // @ts-expect-error Mock error context doesn't conform to exported context.
+                123,
+                { variable: undefined },
+            );
+            expect(message).toBe('Here is a variable: undefined');
+        });
     });
 });

@@ -16,6 +16,10 @@ function encodeValue(value: unknown): string {
         );
     } else if (typeof value === 'bigint') {
         return `${value}n`;
+    } else if (value === null) {
+        return 'null';
+    } else if (value === undefined) {
+        return 'undefined';
     } else {
         return encodeURIComponent(
             String(
