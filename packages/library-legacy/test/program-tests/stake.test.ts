@@ -204,13 +204,13 @@ describe('StakeProgram', () => {
       splitStakePubkey,
       lamports: 123,
     };
-    const transaction = StakeProgram.split(params);
+    const transaction = StakeProgram.split(params, 123 /* rentExemptReserve */);
     expect(transaction.instructions).to.have.length(2);
     const [systemInstruction, stakeInstruction] = transaction.instructions;
     const systemParams = {
       fromPubkey: authorizedPubkey,
       newAccountPubkey: splitStakePubkey,
-      lamports: 0,
+      lamports: 123,
       space: StakeProgram.space,
       programId: StakeProgram.programId,
     };
@@ -220,44 +220,66 @@ describe('StakeProgram', () => {
     expect(params).to.eql(StakeInstruction.decodeSplit(stakeInstruction));
   });
 
-  it('splitWithSeed', async () => {
-    const stakePubkey = Keypair.generate().publicKey;
-    const authorizedPubkey = Keypair.generate().publicKey;
-    const lamports = 123;
-    const seed = 'test string';
-    const basePubkey = Keypair.generate().publicKey;
-    const splitStakePubkey = await PublicKey.createWithSeed(
-      basePubkey,
-      seed,
-      StakeProgram.programId,
-    );
-    const transaction = StakeProgram.splitWithSeed({
-      stakePubkey,
-      authorizedPubkey,
-      lamports,
-      splitStakePubkey,
-      basePubkey,
-      seed,
+  [0, undefined, 456].forEach(rentExemptReserve => {
+    it(`splitWithSeed (rent reserve: ${rentExemptReserve})`, async () => {
+      const stakePubkey = Keypair.generate().publicKey;
+      const authorizedPubkey = Keypair.generate().publicKey;
+      const lamports = 123;
+      const seed = 'test string';
+      const basePubkey = Keypair.generate().publicKey;
+      const splitStakePubkey = await PublicKey.createWithSeed(
+        basePubkey,
+        seed,
+        StakeProgram.programId,
+      );
+      const transaction = StakeProgram.splitWithSeed(
+        {
+          stakePubkey,
+          authorizedPubkey,
+          lamports,
+          splitStakePubkey,
+          basePubkey,
+          seed,
+        },
+        rentExemptReserve,
+      );
+      const hasRentReserve = rentExemptReserve && rentExemptReserve > 0;
+      expect(transaction.instructions).to.have.length(hasRentReserve ? 3 : 2);
+      const allocateInstruction = transaction.instructions[0];
+      const splitInstruction = transaction.instructions[hasRentReserve ? 2 : 1];
+      const transferInstruction = hasRentReserve
+        ? transaction.instructions[1]
+        : undefined;
+      const allocateParams = {
+        accountPubkey: splitStakePubkey,
+        basePubkey,
+        seed,
+        space: StakeProgram.space,
+        programId: StakeProgram.programId,
+      };
+      expect(allocateParams).to.eql(
+        SystemInstruction.decodeAllocateWithSeed(allocateInstruction),
+      );
+      if (hasRentReserve) {
+        const transferParams = {
+          fromPubkey: authorizedPubkey,
+          toPubkey: splitStakePubkey,
+          lamports: 456n,
+        };
+        expect(transferParams).to.eql(
+          SystemInstruction.decodeTransfer(transferInstruction!),
+        );
+      }
+      const splitParams = {
+        stakePubkey,
+        authorizedPubkey,
+        splitStakePubkey,
+        lamports,
+      };
+      expect(splitParams).to.eql(
+        StakeInstruction.decodeSplit(splitInstruction),
+      );
     });
-    expect(transaction.instructions).to.have.length(2);
-    const [systemInstruction, stakeInstruction] = transaction.instructions;
-    const systemParams = {
-      accountPubkey: splitStakePubkey,
-      basePubkey,
-      seed,
-      space: StakeProgram.space,
-      programId: StakeProgram.programId,
-    };
-    expect(systemParams).to.eql(
-      SystemInstruction.decodeAllocateWithSeed(systemInstruction),
-    );
-    const splitParams = {
-      stakePubkey,
-      authorizedPubkey,
-      splitStakePubkey,
-      lamports,
-    };
-    expect(splitParams).to.eql(StakeInstruction.decodeSplit(stakeInstruction));
   });
 
   it('merge', () => {
@@ -538,12 +560,15 @@ describe('StakeProgram', () => {
 
       // Split stake
       const newStake = Keypair.generate();
-      let split = StakeProgram.split({
-        stakePubkey: newAccountPubkey,
-        authorizedPubkey: authorized.publicKey,
-        splitStakePubkey: newStake.publicKey,
-        lamports: STAKE_ACCOUNT_MIN_BALANCE + MIN_STAKE_DELEGATION,
-      });
+      let split = StakeProgram.split(
+        {
+          stakePubkey: newAccountPubkey,
+          authorizedPubkey: authorized.publicKey,
+          splitStakePubkey: newStake.publicKey,
+          lamports: MIN_STAKE_DELEGATION,
+        },
+        STAKE_ACCOUNT_MIN_BALANCE,
+      );
       await sendAndConfirmTransaction(
         connection,
         split,
@@ -562,14 +587,17 @@ describe('StakeProgram', () => {
         seed2,
         StakeProgram.programId,
       );
-      let splitWithSeed = StakeProgram.splitWithSeed({
-        stakePubkey: newAccountPubkey,
-        authorizedPubkey: authorized.publicKey,
-        lamports: STAKE_ACCOUNT_MIN_BALANCE + MIN_STAKE_DELEGATION,
-        splitStakePubkey: newStake2,
-        basePubkey: payer.publicKey,
-        seed: seed2,
-      });
+      let splitWithSeed = StakeProgram.splitWithSeed(
+        {
+          stakePubkey: newAccountPubkey,
+          authorizedPubkey: authorized.publicKey,
+          lamports: MIN_STAKE_DELEGATION,
+          splitStakePubkey: newStake2,
+          basePubkey: payer.publicKey,
+          seed: seed2,
+        },
+        STAKE_ACCOUNT_MIN_BALANCE,
+      );
       await sendAndConfirmTransaction(
         connection,
         splitWithSeed,
@@ -598,14 +626,17 @@ describe('StakeProgram', () => {
       );
 
       // Resplit
-      split = StakeProgram.split({
-        stakePubkey: newAccountPubkey,
-        authorizedPubkey: authorized.publicKey,
-        splitStakePubkey: newStake.publicKey,
-        // use a different amount than the first split so that this
-        // transaction is different and won't require a fresh blockhash
-        lamports: STAKE_ACCOUNT_MIN_BALANCE + MIN_STAKE_DELEGATION,
-      });
+      split = StakeProgram.split(
+        {
+          stakePubkey: newAccountPubkey,
+          authorizedPubkey: authorized.publicKey,
+          splitStakePubkey: newStake.publicKey,
+          // use a different amount than the first split so that this
+          // transaction is different and won't require a fresh blockhash
+          lamports: MIN_STAKE_DELEGATION,
+        },
+        STAKE_ACCOUNT_MIN_BALANCE,
+      );
       await sendAndConfirmTransaction(
         connection,
         split,
