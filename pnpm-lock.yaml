@@ -1294,8 +1294,8 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/bn.js':
-        specifier: ^5.1.1
-        version: 5.1.1
+        specifier: ^5.1.5
+        version: 5.1.5
       '@types/bs58':
         specifier: ^4.0.1
         version: 4.0.1
@@ -6080,7 +6080,7 @@ packages:
       '@typescript-eslint/eslint-plugin': 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.51.0)(typescript@5.2.2)
       '@typescript-eslint/parser': 6.8.0(eslint@8.51.0)(typescript@5.2.2)
       eslint: 8.51.0
-      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.45.0)(jest@29.7.0)(typescript@5.1.6)
+      eslint-plugin-jest: 27.4.2(@typescript-eslint/eslint-plugin@6.13.2)(eslint@8.51.0)(jest@29.7.0)(typescript@5.2.2)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.51.0)
       eslint-plugin-simple-import-sort: 10.0.0(eslint@8.51.0)
       eslint-plugin-sort-keys-fix: 1.1.2
@@ -6352,8 +6352,8 @@ packages:
     dependencies:
       '@babel/types': 7.23.6
 
-  /@types/bn.js@5.1.1:
-    resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
+  /@types/bn.js@5.1.5:
+    resolution: {integrity: sha512-V46N0zwKRF5Q00AZ6hWtN0T8gGmDUaUzLWQvHFo5yThtVwK/VCenFY3wXVbOvNfajEpsTfQM4IN9k/d6gUVX3A==}
     dependencies:
       '@types/node': 20.11.20
     dev: true
