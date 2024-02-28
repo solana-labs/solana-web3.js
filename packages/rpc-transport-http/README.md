@@ -234,6 +234,7 @@ async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): 
         try {
             return await transport(...args);
         } catch (err) {
+            requestError = err;
             console.error(err);
         }
     }
