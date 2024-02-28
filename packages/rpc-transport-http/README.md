@@ -216,5 +216,29 @@ async function retryingTransport<TResponse>(...args: Parameters<RpcTransport>): 
 Here’s an example of some failover logic integrated into a transport:
 
 ```ts
-// TODO: Your turn; send us a pull request with an example.
+import { RpcTransport } from '@solana/rpc-spec';
+import { createHttpTransport } from '@solana/rpc-transport-http';
+
+// Create a transport for each RPC server
+const transports = [
+    createHttpTransport({ url: 'https://mainnet-beta.my-server-1.com' }),
+    createHttpTransport({ url: 'https://mainnet-beta.my-server-2.com' }),
+    createHttpTransport({ url: 'https://mainnet-beta.my-server-2.com' }),
+];
+
+// A failover transport that will try each transport in order until one succeeds before failing
+async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
+    let requestError;
+
+    for (const transport of transports) {
+        try {
+            return await transport(...args);
+        } catch (err) {
+            requestError = err;
+            console.error(err);
+        }
+    }
+    throw requestError;
+}
+
 ```
