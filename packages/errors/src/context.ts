@@ -1,5 +1,8 @@
 import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -56,8 +59,10 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
+    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
+    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
     SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
@@ -144,9 +149,18 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR_MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR_BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS
     > & {
+        [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: {
+            address: string;
+        };
         [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
             currentBlockHeight: bigint;
             lastValidBlockHeight: bigint;
+        };
+        [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: {
+            address: string;
+        };
+        [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: {
+            address: string;
         };
         [SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR]: {
             encodedData: string;
@@ -164,12 +178,18 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
             byteLength: number;
         };
+        [SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND]: {
+            addresses: string[];
+        };
         [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: {
             nonceAccountAddress: string;
         };
         [SOLANA_ERROR__NONCE_INVALID]: {
             actualNonceValue: string;
             expectedNonceValue: string;
+        };
+        [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]: {
+            addresses: string[];
         };
         [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]: {
             argumentLabel: string;

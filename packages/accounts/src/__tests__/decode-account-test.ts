@@ -1,6 +1,11 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
+    SolanaError,
+} from '@solana/errors';
 
 import { Account, EncodedAccount } from '../account';
 import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account';
@@ -86,7 +91,11 @@ describe('assertDecodedAccount', () => {
         const fn = () => assertAccountDecoded(account);
 
         // Then we expect an error to be thrown
-        expect(fn).toThrow('Expected account [1111] to be decoded.');
+        expect(fn).toThrow(
+            new SolanaError(SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT, {
+                address: account.address,
+            }),
+        );
     });
 
     it('does not throw if the provided account is decoded', () => {
@@ -142,7 +151,11 @@ describe('assertDecodedAccounts', () => {
         const fn = () => assertAccountsDecoded(accounts);
 
         // Then we expect an error to be thrown
-        expect(fn).toThrow('Expected accounts [1111, 2222] to be decoded.');
+        expect(fn).toThrow(
+            new SolanaError(SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED, {
+                addresses: [accounts[0].address, accounts[1].address],
+            }),
+        );
     });
 
     it('does not throw if all of the provided accounts are decoded', () => {

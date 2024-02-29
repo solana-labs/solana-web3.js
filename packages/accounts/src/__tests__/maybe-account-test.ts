@@ -1,5 +1,11 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
+import {
+    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
+    SolanaError,
+} from '@solana/errors';
+
 import { assertAccountExists, assertAccountsExist, MaybeEncodedAccount } from '../maybe-account';
 
 describe('assertAccountExists', () => {
@@ -11,7 +17,11 @@ describe('assertAccountExists', () => {
         const fn = () => assertAccountExists(maybeAccount);
 
         // Then we expect an error to be thrown.
-        expect(fn).toThrow(`Expected account [1111] to exist`);
+        expect(fn).toThrow(
+            new SolanaError(SOLANA_ERROR__ACCOUNT_NOT_FOUND, {
+                address: maybeAccount.address,
+            }),
+        );
     });
 });
 
@@ -28,7 +38,11 @@ describe('assertAccountsExist', () => {
         const fn = () => assertAccountsExist(maybeAccounts);
 
         // Then we expect an error to be thrown with the non-existent accounts
-        expect(fn).toThrow('Expected accounts [1111, 2222] to exist');
+        expect(fn).toThrow(
+            new SolanaError(SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND, {
+                addresses: [maybeAccounts[0].address, maybeAccounts[1].address],
+            }),
+        );
     });
 
     it('does not fail if all accounts exist', () => {
