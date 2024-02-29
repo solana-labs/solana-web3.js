@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
 import { assertIsMessagePartialSigner, isMessagePartialSigner, MessagePartialSigner } from '../message-partial-signer';
 
@@ -24,9 +25,11 @@ describe('assertIsMessagePartialSigner', () => {
             signMessages: async () => [],
         } satisfies MessagePartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement the MessagePartialSigner interface';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsMessagePartialSigner(mySigner)).not.toThrow();
-        expect(() => assertIsMessagePartialSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsMessagePartialSigner({ address: myAddress, signMessages: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsMessagePartialSigner({ address: myAddress })).toThrow(expectedError);
+        expect(() => assertIsMessagePartialSigner({ address: myAddress, signMessages: 42 })).toThrow(expectedError);
     });
 });

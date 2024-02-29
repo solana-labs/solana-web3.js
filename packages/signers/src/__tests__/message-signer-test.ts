@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER, SolanaError } from '@solana/errors';
 
 import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer';
 
@@ -35,12 +36,14 @@ describe('assertIsMessageSigner', () => {
             modifyAndSignMessages: async () => [],
         } satisfies MessageSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement any of the MessageSigner interfaces';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsMessageSigner(myPartialSigner)).not.toThrow();
         expect(() => assertIsMessageSigner(myModifyingSigner)).not.toThrow();
         expect(() => assertIsMessageSigner({ ...myPartialSigner, ...myModifyingSigner })).not.toThrow();
-        expect(() => assertIsMessageSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsMessageSigner({ address: myAddress, signMessages: 42 })).toThrow(expectedMessage);
-        expect(() => assertIsMessageSigner({ address: myAddress, modifyAndSignMessages: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsMessageSigner({ address: myAddress })).toThrow(expectedError);
+        expect(() => assertIsMessageSigner({ address: myAddress, signMessages: 42 })).toThrow(expectedError);
+        expect(() => assertIsMessageSigner({ address: myAddress, modifyAndSignMessages: 42 })).toThrow(expectedError);
     });
 });

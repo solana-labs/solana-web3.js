@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 import {
     assertTransactionIsFullySigned,
@@ -78,10 +79,7 @@ export async function signAndSendTransactionWithSigners<
     );
 
     if (!sendingSigner) {
-        // TODO: Coded error.
-        throw new Error(
-            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.',
-        );
+        throw new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING);
     }
 
     abortSignal?.throwIfAborted();

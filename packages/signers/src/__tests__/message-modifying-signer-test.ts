@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
 
 import {
     assertIsMessageModifyingSigner,
@@ -28,11 +29,13 @@ describe('assertIsMessageModifyingSigner', () => {
             modifyAndSignMessages: async () => [],
         } satisfies MessageModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement the MessageModifyingSigner interface';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsMessageModifyingSigner(mySigner)).not.toThrow();
-        expect(() => assertIsMessageModifyingSigner({ address: myAddress })).toThrow(expectedMessage);
+        expect(() => assertIsMessageModifyingSigner({ address: myAddress })).toThrow(expectedError);
         expect(() => assertIsMessageModifyingSigner({ address: myAddress, modifyAndSignMessages: 42 })).toThrow(
-            expectedMessage,
+            expectedError,
         );
     });
 });

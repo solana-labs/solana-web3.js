@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER, SolanaError } from '@solana/errors';
 
 import { assertIsTransactionSigner, isTransactionSigner, TransactionSigner } from '../transaction-signer';
 
@@ -48,7 +49,9 @@ describe('assertIsTransactionSigner', () => {
             signAndSendTransactions: async () => [],
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement any of the TransactionSigner interfaces';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsTransactionSigner(myPartialSigner)).not.toThrow();
         expect(() => assertIsTransactionSigner(myModifyingSigner)).not.toThrow();
         expect(() => assertIsTransactionSigner(mySendingSigner)).not.toThrow();
@@ -58,13 +61,13 @@ describe('assertIsTransactionSigner', () => {
         expect(() =>
             assertIsTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner }),
         ).not.toThrow();
-        expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedMessage);
-        expect(() => assertIsTransactionSigner({ address: myAddress, signTransactions: 42 })).toThrow(expectedMessage);
+        expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedError);
+        expect(() => assertIsTransactionSigner({ address: myAddress, signTransactions: 42 })).toThrow(expectedError);
         expect(() => assertIsTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
-            expectedMessage,
+            expectedError,
         );
         expect(() => assertIsTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(
-            expectedMessage,
+            expectedError,
         );
     });
 });

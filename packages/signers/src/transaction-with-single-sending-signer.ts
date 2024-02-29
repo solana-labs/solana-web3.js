@@ -1,3 +1,8 @@
+import {
+    SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS,
+    SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
+    SolanaError,
+} from '@solana/errors';
 import { CompilableTransaction } from '@solana/transactions';
 
 import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta';
@@ -30,10 +35,7 @@ export function assertIsTransactionWithSingleSendingSigner<TTransaction extends 
     const sendingSigners = signers.filter(isTransactionSendingSigner);
 
     if (sendingSigners.length === 0) {
-        // TODO: Coded error.
-        const error = new Error('No `TransactionSendingSigner` was identified.');
-        error.name = 'MissingTransactionSendingSignerError';
-        throw error;
+        throw new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING);
     }
 
     // When identifying if there are multiple sending signers, we only need to check for
@@ -44,9 +46,6 @@ export function assertIsTransactionWithSingleSendingSigner<TTransaction extends 
     );
 
     if (sendingOnlySigners.length > 1) {
-        // TODO: Coded error.
-        const error = new Error('More than one `TransactionSendingSigner` was identified.');
-        error.name = 'MultipleTransactionSendingSignersError';
-        throw error;
+        throw new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS);
     }
 }

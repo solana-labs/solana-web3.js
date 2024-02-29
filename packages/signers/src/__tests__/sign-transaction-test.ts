@@ -1,7 +1,11 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
-import { SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, SolanaError } from '@solana/errors';
+import {
+    SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
+    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
+    SolanaError,
+} from '@solana/errors';
 import { CompilableTransaction, IFullySignedTransaction, ITransactionWithSignatures } from '@solana/transactions';
 
 import {
@@ -403,9 +407,7 @@ describe('signAndSendTransactionWithSigners', () => {
         );
 
         // Then we expect an error letting us know no sending mechanism was provided.
-        await expect(promise).rejects.toThrow(
-            'No `TransactionSendingSigner` was identified. Please provide a valid `ITransactionWithSingleSendingSigner` transaction.',
-        );
+        await expect(promise).rejects.toThrow(new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING));
     });
 
     it('uses a composite signer as a sending signer when there are no other sending signers', async () => {

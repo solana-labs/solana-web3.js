@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 import { CompilableTransaction } from '@solana/transactions';
 
 import { BaseSignerConfig, SignatureDictionary } from './types';
@@ -28,7 +29,8 @@ export function assertIsTransactionPartialSigner<TAddress extends string>(value:
     [key: string]: unknown;
 }): asserts value is TransactionPartialSigner<TAddress> {
     if (!isTransactionPartialSigner(value)) {
-        // TODO: Coded error.
-        throw new Error('The provided value does not implement the TransactionPartialSigner interface');
+        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, {
+            address: value.address,
+        });
     }
 }

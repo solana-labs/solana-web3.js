@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 import { CompilableTransaction } from '@solana/transactions';
 
@@ -29,7 +30,8 @@ export function assertIsTransactionSendingSigner<TAddress extends string>(value:
     [key: string]: unknown;
 }): asserts value is TransactionSendingSigner<TAddress> {
     if (!isTransactionSendingSigner(value)) {
-        // TODO: Coded error.
-        throw new Error('The provided value does not implement the TransactionSendingSigner interface');
+        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER, {
+            address: value.address,
+        });
     }
 }

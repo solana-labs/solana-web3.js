@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER, SolanaError } from '@solana/errors';
 
 import { isMessageModifyingSigner, MessageModifyingSigner } from './message-modifying-signer';
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
@@ -22,7 +23,8 @@ export function assertIsMessageSigner<TAddress extends string>(value: {
     [key: string]: unknown;
 }): asserts value is MessageSigner<TAddress> {
     if (!isMessageSigner(value)) {
-        // TODO: Coded error.
-        throw new Error('The provided value does not implement any of the MessageSigner interfaces');
+        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER, {
+            address: value.address,
+        });
     }
 }
