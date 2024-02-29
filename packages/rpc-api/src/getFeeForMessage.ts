@@ -17,3 +17,7 @@ export interface GetFeeForMessageApi extends RpcApiMethods {
         }>,
     ): GetFeeForMessageApiResponse;
 }
+
+export function arbitraryFunctionToTriggerCI() {
+    return 'arbitrary';
+}

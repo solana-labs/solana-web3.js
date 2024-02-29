@@ -13,3 +13,7 @@ export interface GetBlockTimeApi extends RpcApiMethods {
         blockNumber: Slot,
     ): GetBlockTimeApiResponse;
 }
+
+export function arbitraryFunctionToTriggerCI() {
+    return 'arbitrary';
+}

@@ -13,3 +13,7 @@ export interface GetFirstAvailableBlockApi extends RpcApiMethods {
         NO_CONFIG?: Record<string, never>,
     ): GetFirstAvailableBlockApiResponse;
 }
+
+export function arbitraryFunctionToTriggerCI() {
+    return 'arbitrary';
+}

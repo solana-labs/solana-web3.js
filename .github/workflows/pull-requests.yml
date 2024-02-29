@@ -7,10 +7,15 @@ env:
   # Among other things, opts out of Turborepo telemetry
   # See https://consoledonottrack.com/
   DO_NOT_TRACK: '1'
+  SSH_KEY: ${{ secrets.SSH_KEY }}
   # Enables Turborepo Remote Caching.
   TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   # Needed for grouping check-web3 strategies into one check for mergify
@@ -68,6 +73,13 @@ jobs:
 
       - name: Build & Test
         run: pnpm build --concurrency=100%
+
+      - name: Breakpoint if tests failed
+        if: failure()
+        uses: namespacelabs/breakpoint-action@v0
+        with:
+          duration: 30m
+          authorized-users: buffalojoec
 
       - name: Upload Experimental library build artifacts
         if: matrix.node == 'current'
