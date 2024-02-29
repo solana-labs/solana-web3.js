@@ -1829,8 +1829,8 @@ importers:
   packages/rpc-graphql:
     dependencies:
       '@graphql-tools/schema':
-        specifier: ^10.0.2
-        version: 10.0.2(graphql@16.8.1)
+        specifier: ^10.0.3
+        version: 10.0.3(graphql@16.8.1)
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
@@ -4876,8 +4876,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /@graphql-tools/merge@9.0.2(graphql@16.8.1):
-    resolution: {integrity: sha512-GzW1e/P+SSneFC0N3549Kvaq5h/lwTSQ0m0/zvAopzC2CzjTJgm49mb0QhSYE7u/nP/N+qgCUeBn8sYSGj1sgA==}
+  /@graphql-tools/merge@9.0.3(graphql@16.8.1):
+    resolution: {integrity: sha512-FeKv9lKLMwqDu0pQjPpF59GY3HReUkWXKsMIuMuJQOKh9BETu7zPEFUELvcw8w+lwZkl4ileJsHXC9+AnsT2Lw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -4887,13 +4887,13 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@graphql-tools/schema@10.0.2(graphql@16.8.1):
-    resolution: {integrity: sha512-TbPsIZnWyDCLhgPGnDjt4hosiNU2mF/rNtSk5BVaXWnZqvKJ6gzJV4fcHcvhRIwtscDMW2/YTnK6dLVnk8pc4w==}
+  /@graphql-tools/schema@10.0.3(graphql@16.8.1):
+    resolution: {integrity: sha512-p28Oh9EcOna6i0yLaCFOnkcBDQECVf3SCexT6ktb86QNj9idnkhI+tCxnwZDh58Qvjd2nURdkbevvoZkvxzCog==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/merge': 9.0.2(graphql@16.8.1)
+      '@graphql-tools/merge': 9.0.3(graphql@16.8.1)
       '@graphql-tools/utils': 10.0.13(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
