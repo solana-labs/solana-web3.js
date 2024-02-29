@@ -1,6 +1,11 @@
-import { SolanaErrorCode } from './codes';
-import { SolanaErrorContext } from './context';
+import {
+    SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
+    SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
+    SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
+    SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN,
+} from './codes';
 import { SolanaError } from './error';
+import { getSolanaErrorFromRpcError } from './rpc-enum-errors';
 
 /**
  * How to add an error when an entry is added to the RPC `TransactionError` enum:
@@ -53,55 +58,31 @@ const ORDERED_ERROR_NAMES = [
 ];
 
 export function getSolanaErrorFromTransactionError(transactionError: string | { [key: string]: unknown }): SolanaError {
-    let errorName;
-    let transactionErrorContext;
-    if (typeof transactionError === 'string') {
-        errorName = transactionError;
-    } else {
-        errorName = Object.keys(transactionError)[0];
-        transactionErrorContext = transactionError[errorName];
-    }
-    const codeOffset = ORDERED_ERROR_NAMES.indexOf(errorName);
-    const errorCode =
-        /**
-         * Oh, hello. You might wonder what in tarnation is going on here. Allow us to explain.
-         *
-         * One of the goals of `@solana/errors` is to allow errors that are not interesting to your
-         * application to shake out of your app bundle in production. This means that we must never
-         * export large hardcoded maps of error codes/messages.
-         *
-         * Unfortunately, where transaction errors from the RPC are concerned, we have no choice but
-         * to keep a map between the RPC `TransactionError` enum name and its corresponding
-         * `SolanaError` code. In the interest of implementing that map in as few bytes of source
-         * code as possible, we do the following:
-         *
-         *   1. Reserve sequential error codes for `TransactionError` in the range [7050000-7050999]
-         *   2. Hardcode the list of `TransactionError` enum names in that same order
-         *   3. Match the transaction error name from the RPC with its index in that list, and
-         *      reconstruct the `SolanaError` code by adding 7050001 to that index
-         */
-        (7050001 + codeOffset) as SolanaErrorCode;
-    let errorContext: SolanaErrorContext[SolanaErrorCode];
-    if (codeOffset === -1) {
-        errorContext = {
-            errorName,
-            ...(transactionErrorContext !== undefined ? { transactionErrorContext } : null),
-        };
-    } else if (codeOffset === 29 /* DuplicateInstruction */) {
-        errorContext = {
-            index: transactionErrorContext as number,
-        };
-    } else if (
-        codeOffset === 30 /* InsufficientFundsForRent */ ||
-        codeOffset === 34 /* ProgramExecutionTemporarilyRestricted */
-    ) {
-        errorContext = {
-            accountIndex: (transactionErrorContext as { account_index: number }).account_index,
-        };
-    }
-    const err = new SolanaError(errorCode, errorContext);
-    if ('captureStackTrace' in Error && typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(err, getSolanaErrorFromTransactionError);
-    }
-    return err;
+    return getSolanaErrorFromRpcError(
+        {
+            errorCodeBaseOffset: 7050001,
+            getErrorContext(errorCode, rpcErrorName, rpcErrorContext) {
+                if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN) {
+                    return {
+                        errorName: rpcErrorName,
+                        ...(rpcErrorContext !== undefined ? { transactionErrorContext: rpcErrorContext } : null),
+                    };
+                } else if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION) {
+                    return {
+                        index: rpcErrorContext as number,
+                    };
+                } else if (
+                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT ||
+                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED
+                ) {
+                    return {
+                        accountIndex: (rpcErrorContext as { account_index: number }).account_index,
+                    };
+                }
+            },
+            orderedErrorNames: ORDERED_ERROR_NAMES,
+            rpcEnumError: transactionError,
+        },
+        getSolanaErrorFromTransactionError,
+    );
 }
