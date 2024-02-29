@@ -69,7 +69,7 @@ import {
 
 type BasicInstructionErrorContext<T extends SolanaErrorCode> = Readonly<{ [P in T]: { index: number } }>;
 
-export type DefaultUnspecifiedErrorContextToUndefined<T> = {
+type DefaultUnspecifiedErrorContextToUndefined<T> = {
     [P in SolanaErrorCode]: P extends keyof T ? T[P] : undefined;
 };
 
