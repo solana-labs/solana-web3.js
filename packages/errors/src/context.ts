@@ -4,6 +4,10 @@ import {
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__NONCE_INVALID,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
+    SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
+    SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
+    SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SolanaErrorCode,
 } from './codes';
@@ -44,5 +48,18 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
     [SOLANA_ERROR__NONCE_INVALID]: {
         actualNonceValue: string;
         expectedNonceValue: string;
+    };
+    [SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN]: {
+        errorName: string;
+        transactionErrorContext?: unknown;
+    };
+    [SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION]: {
+        index: number;
+    };
+    [SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT]: {
+        accountIndex: number;
+    };
+    [SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED]: {
+        accountIndex: number;
     };
 }>;
