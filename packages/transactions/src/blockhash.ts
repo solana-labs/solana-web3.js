@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__TRANSACTION_EXPECTED_BLOCKHASH_LIFETIME, SolanaError } from '@solana/errors';
 import { assertIsBlockhash, type Blockhash } from '@solana/rpc-types';
 
 import { IDurableNonceTransaction } from './durable-nonce';
@@ -34,8 +35,7 @@ export function assertIsTransactionWithBlockhashLifetime(
     transaction: BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 ): asserts transaction is BaseTransaction & ITransactionWithBlockhashLifetime {
     if (!isTransactionWithBlockhashLifetime(transaction)) {
-        // TODO: Coded error.
-        throw new Error('Transaction does not have a blockhash lifetime');
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_EXPECTED_BLOCKHASH_LIFETIME);
     }
 }
 

@@ -1,4 +1,9 @@
 import { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+    SolanaError,
+} from '@solana/errors';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
@@ -1201,7 +1206,12 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
-                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]',
+                    new SolanaError(
+                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+                        {
+                            lookupTableAddresses: ['9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw'],
+                        },
+                    ),
                 );
             });
 
@@ -1241,7 +1251,14 @@ describe('decompileTransaction', () => {
                 const fn = () =>
                     decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
-                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
+                    new SolanaError(
+                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+                        {
+                            highestKnownIndex: 0,
+                            highestRequestedIndex: 1,
+                            lookupTableAddress: '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',
+                        },
+                    ),
                 );
             });
 
@@ -1281,7 +1298,14 @@ describe('decompileTransaction', () => {
                 const fn = () =>
                     decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
-                    'Cannot look up index 1 in lookup table [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw]. The lookup table may have been extended since the addresses provided were retrieved.',
+                    new SolanaError(
+                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+                        {
+                            highestKnownIndex: 0,
+                            highestRequestedIndex: 1,
+                            lookupTableAddress: '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',
+                        },
+                    ),
                 );
             });
         });
@@ -1657,7 +1681,15 @@ describe('decompileTransaction', () => {
 
                 const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
-                    'Addresses not provided for lookup tables: [9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw, GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg]',
+                    new SolanaError(
+                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+                        {
+                            lookupTableAddresses: [
+                                '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',
+                                'GS7Rphk6CZLoCGbTcbRaPZzD3k4ZK8XiA5BAj89Fi2Eg',
+                            ],
+                        },
+                    ),
                 );
             });
         });

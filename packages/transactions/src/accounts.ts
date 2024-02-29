@@ -1,5 +1,10 @@
 import { Address, getAddressComparator } from '@solana/addresses';
 import {
+    SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES,
+    SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
+    SolanaError,
+} from '@solana/errors';
+import {
     AccountRole,
     IAccountLookupMeta,
     IAccountMeta,
@@ -61,19 +66,13 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                 if (isWritableRole(entry.role)) {
                     switch (entry[TYPE]) {
                         case AddressMapEntryType.FEE_PAYER:
-                            // TODO: Coded error.
-                            throw new Error(
-                                'This transaction includes an address ' +
-                                    `(\`${instruction.programAddress}\`) which is both invoked ` +
-                                    'and set as the fee payer. Program addresses may not pay fees.',
-                            );
+                            throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES, {
+                                programAddress: instruction.programAddress,
+                            });
                         default:
-                            // TODO: Coded error.
-                            throw new Error(
-                                'This transaction includes an address ' +
-                                    `(\`${instruction.programAddress}\`) which is both invoked ` +
-                                    'and marked writable. Program addresses may not be writable.',
-                            );
+                            throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE, {
+                                programAddress: instruction.programAddress,
+                            });
                     }
                 }
                 if (entry[TYPE] === AddressMapEntryType.STATIC) {
@@ -141,12 +140,11 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
                                 addressesOfInvokedPrograms.has(account.address)
                             ) {
                                 if (isWritableRole(accountMeta.role)) {
-                                    // TODO: Coded error.
-                                    throw new Error(
-                                        'This transaction includes an address ' +
-                                            `(\`${account.address}\`) which is both invoked and ` +
-                                            'marked writable. Program addresses may not be ' +
-                                            'writable.',
+                                    throw new SolanaError(
+                                        SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
+                                        {
+                                            programAddress: account.address,
+                                        },
                                     );
                                 }
                                 if (entry.role !== nextRole) {

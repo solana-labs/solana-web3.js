@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME, SolanaError } from '@solana/errors';
 import {
     AccountRole,
     IInstruction,
@@ -65,8 +66,7 @@ export function assertIsDurableNonceTransaction(
     transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction),
 ): asserts transaction is BaseTransaction & IDurableNonceTransaction {
     if (!isDurableNonceTransaction(transaction)) {
-        // TODO: Coded error.
-        throw new Error('Transaction is not a durable nonce transaction');
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME);
     }
 }
 

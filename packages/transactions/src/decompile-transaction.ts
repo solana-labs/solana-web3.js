@@ -1,4 +1,11 @@
 import { Address, assertIsAddress } from '@solana/addresses';
+import {
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING,
+    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND,
+    SolanaError,
+} from '@solana/errors';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
@@ -70,9 +77,9 @@ function getAddressLookupMetas(
     const compiledAddressTableLookupAddresses = compiledAddressTableLookups.map(l => l.lookupTableAddress);
     const missing = compiledAddressTableLookupAddresses.filter(a => addressesByLookupTableAddress[a] === undefined);
     if (missing.length > 0) {
-        const missingAddresses = missing.join(', ');
-        // TODO: coded error.
-        throw new Error(`Addresses not provided for lookup tables: [${missingAddresses}]`);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING, {
+            lookupTableAddresses: missing,
+        });
     }
 
     const readOnlyMetas: IAccountLookupMeta[] = [];
@@ -84,9 +91,13 @@ function getAddressLookupMetas(
 
         const highestIndex = Math.max(...lookup.readableIndices, ...lookup.writableIndices);
         if (highestIndex >= addresses.length) {
-            // TODO coded error
-            throw new Error(
-                `Cannot look up index ${highestIndex} in lookup table [${lookup.lookupTableAddress}]. The lookup table may have been extended since the addresses provided were retrieved.`,
+            throw new SolanaError(
+                SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+                {
+                    highestKnownIndex: addresses.length - 1,
+                    highestRequestedIndex: highestIndex,
+                    lookupTableAddress: lookup.lookupTableAddress,
+                },
             );
         }
 
@@ -116,8 +127,9 @@ function convertInstruction(
 ): IInstruction {
     const programAddress = accountMetas[instruction.programAddressIndex]?.address;
     if (!programAddress) {
-        // TODO coded error
-        throw new Error(`Could not find program address at index ${instruction.programAddressIndex}`);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND, {
+            index: instruction.programAddressIndex,
+        });
     }
 
     const accounts = instruction.accountIndices?.map(accountIndex => accountMetas[accountIndex]);
@@ -196,8 +208,9 @@ export function decompileTransaction(
     const { compiledMessage } = compiledTransaction;
 
     const feePayer = compiledMessage.staticAccounts[0];
-    // TODO: coded error
-    if (!feePayer) throw new Error('No fee payer set in CompiledTransaction');
+    if (!feePayer) {
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING);
+    }
 
     const accountMetas = getAccountMetas(compiledMessage);
     const accountLookupMetas =
