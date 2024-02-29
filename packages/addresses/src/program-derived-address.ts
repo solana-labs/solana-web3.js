@@ -1,4 +1,15 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
+import {
+    isSolanaError,
+    SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED,
+    SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE,
+    SOLANA_ERROR__MALFORMED_PROGRAM_DERIVED_ADDRESS,
+    SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
+    SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
+    SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
+    SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
+    SolanaError,
+} from '@solana/errors';
 
 import { Address, assertIsAddress, getAddressCodec, isAddress } from './address';
 import { compressedPointBytesAreOnCurve } from './curve';
@@ -45,14 +56,12 @@ export function assertIsProgramDerivedAddress<TAddress extends string = string>(
     const validFormat =
         Array.isArray(value) && value.length === 2 && typeof value[0] === 'string' && typeof value[1] === 'number';
     if (!validFormat) {
-        // TODO: Coded error.
-        throw new Error(
-            `Expected given program derived address to have the following format: [Address, ProgramDerivedAddressBump].`,
-        );
+        throw new SolanaError(SOLANA_ERROR__MALFORMED_PROGRAM_DERIVED_ADDRESS);
     }
     if (value[1] < 0 || value[1] > 255) {
-        // TODO: Coded error.
-        throw new Error(`Expected program derived address bump to be in the range [0, 255], got: ${value[1]}.`);
+        throw new SolanaError(SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE, {
+            bump: value[1],
+        });
     }
     assertIsAddress(value[0]);
 }
@@ -77,21 +86,23 @@ const PDA_MARKER_BYTES = [
     80, 114, 111, 103, 114, 97, 109, 68, 101, 114, 105, 118, 101, 100, 65, 100, 100, 114, 101, 115, 115,
 ] as const;
 
-// TODO: Coded error.
-class PointOnCurveError extends Error {}
-
 async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDerivedAddressInput): Promise<Address> {
     await assertDigestCapabilityIsAvailable();
     if (seeds.length > MAX_SEEDS) {
-        // TODO: Coded error.
-        throw new Error(`A maximum of ${MAX_SEEDS} seeds may be supplied when creating an address`);
+        throw new SolanaError(SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED, {
+            actual: seeds.length,
+            maxSeeds: MAX_SEEDS,
+        });
     }
     let textEncoder: TextEncoder;
     const seedBytes = seeds.reduce((acc, seed, ii) => {
         const bytes = typeof seed === 'string' ? (textEncoder ||= new TextEncoder()).encode(seed) : seed;
         if (bytes.byteLength > MAX_SEED_LENGTH) {
-            // TODO: Coded error.
-            throw new Error(`The seed at index ${ii} exceeds the maximum length of 32 bytes`);
+            throw new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+                actual: bytes.byteLength,
+                index: ii,
+                maxSeedLength: MAX_SEED_LENGTH,
+            });
         }
         acc.push(...bytes);
         return acc;
@@ -104,8 +115,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDer
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
     if (await compressedPointBytesAreOnCurve(addressBytes)) {
-        // TODO: Coded error.
-        throw new PointOnCurveError('Invalid seeds; point must fall off the Ed25519 curve');
+        throw new SolanaError(SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE);
     }
     return base58EncodedAddressCodec.decode(addressBytes);
 }
@@ -123,15 +133,14 @@ export async function getProgramDerivedAddress({
             });
             return [address, bumpSeed as ProgramDerivedAddressBump];
         } catch (e) {
-            if (e instanceof PointOnCurveError) {
+            if (isSolanaError(e, SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE)) {
                 bumpSeed--;
             } else {
                 throw e;
             }
         }
     }
-    // TODO: Coded error.
-    throw new Error('Unable to find a viable program address bump seed');
+    throw new SolanaError(SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED);
 }
 
 export async function createAddressWithSeed({ baseAddress, programAddress, seed }: SeedInput): Promise<Address> {
@@ -139,8 +148,11 @@ export async function createAddressWithSeed({ baseAddress, programAddress, seed 
 
     const seedBytes = typeof seed === 'string' ? new TextEncoder().encode(seed) : seed;
     if (seedBytes.byteLength > MAX_SEED_LENGTH) {
-        // TODO: Coded error.
-        throw new Error(`The seed exceeds the maximum length of 32 bytes`);
+        throw new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+            actual: seedBytes.byteLength,
+            index: 0,
+            maxSeedLength: MAX_SEED_LENGTH,
+        });
     }
 
     const programAddressBytes = encode(programAddress);
@@ -148,8 +160,7 @@ export async function createAddressWithSeed({ baseAddress, programAddress, seed 
         programAddressBytes.length >= PDA_MARKER_BYTES.length &&
         programAddressBytes.slice(-PDA_MARKER_BYTES.length).every((byte, index) => byte === PDA_MARKER_BYTES[index])
     ) {
-        // TODO: Coded error.
-        throw new Error(`programAddress cannot end with the PDA marker`);
+        throw new SolanaError(SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER);
     }
 
     const addressBytesBuffer = await crypto.subtle.digest(
