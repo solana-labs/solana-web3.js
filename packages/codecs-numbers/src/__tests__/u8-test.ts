@@ -4,6 +4,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = 0;
 const MAX = Number('0xff');
 const u8 = getU8Codec;
+const rangeErrorValues = {
+    codecDescription: 'u8',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getU8Codec', () => {
     it('encodes and decodes u8 numbers', () => {
@@ -20,8 +25,8 @@ describe('getU8Codec', () => {
         assertValid(u8(), MAX, 'ff');
 
         // Out of range.
-        assertRangeError(u8(), MIN - 1);
-        assertRangeError(u8(), MAX + 1);
+        assertRangeError(rangeErrorValues, u8(), MIN - 1);
+        assertRangeError(rangeErrorValues, u8(), MAX + 1);
     });
 
     it('has the right size', () => {

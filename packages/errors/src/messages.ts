@@ -13,6 +13,7 @@ import {
     SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
     SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
@@ -184,6 +185,8 @@ export const SolanaErrorMessages: Readonly<{
         'Invalid data enum variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT]:
         'Invalid scalar enum variant. Expected one of [$variants] or a number between $minRange and $maxRange, got $value.',
+    [SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE]:
+        'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
     [SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH]:
         'Encoder and decoder must have the same max size, got [$encoderMaxSize] and [$decoderMaxSize].',
     [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES]:

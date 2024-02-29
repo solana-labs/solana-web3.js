@@ -5,6 +5,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = -Number('0x7fff') - 1;
 const MAX = Number('0x7fff');
 const i16 = getI16Codec;
+const rangeErrorValues = {
+    codecDescription: 'i16',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getI16Codec', () => {
     it('encodes and decodes i16 numbers', () => {
@@ -36,10 +41,10 @@ describe('getI16Codec', () => {
         assertValid(i16BE, MAX, '7fff');
 
         // Out of range.
-        assertRangeError(i16LE, MIN - 1);
-        assertRangeError(i16BE, MIN - 1);
-        assertRangeError(i16LE, MAX + 1);
-        assertRangeError(i16BE, MAX + 1);
+        assertRangeError(rangeErrorValues, i16LE, MIN - 1);
+        assertRangeError(rangeErrorValues, i16BE, MIN - 1);
+        assertRangeError(rangeErrorValues, i16LE, MAX + 1);
+        assertRangeError(rangeErrorValues, i16BE, MAX + 1);
     });
 
     it('has the right size', () => {

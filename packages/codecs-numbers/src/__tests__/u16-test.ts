@@ -6,6 +6,11 @@ const MIN = 0;
 const MAX = Number('0xffff');
 const HALF = Number('0xff');
 const u16 = getU16Codec;
+const rangeErrorValues = {
+    codecDescription: 'u16',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getU16Codec', () => {
     it('encodes and decodes u16 numbers', () => {
@@ -35,10 +40,10 @@ describe('getU16Codec', () => {
         assertValid(u16BE, MAX, 'ffff');
 
         // Out of range.
-        assertRangeError(u16LE, MIN - 1);
-        assertRangeError(u16BE, MIN - 1);
-        assertRangeError(u16LE, MAX + 1);
-        assertRangeError(u16BE, MAX + 1);
+        assertRangeError(rangeErrorValues, u16LE, MIN - 1);
+        assertRangeError(rangeErrorValues, u16BE, MIN - 1);
+        assertRangeError(rangeErrorValues, u16LE, MAX + 1);
+        assertRangeError(rangeErrorValues, u16BE, MAX + 1);
     });
 
     it('has the right size', () => {

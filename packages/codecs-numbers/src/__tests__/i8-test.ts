@@ -4,6 +4,11 @@ import { assertRangeError, assertValid } from './__setup__';
 const MIN = -Number('0x7f') - 1;
 const MAX = Number('0x7f');
 const i8 = getI8Codec;
+const rangeErrorValues = {
+    codecDescription: 'i8',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getI8Codec', () => {
     it('encodes and decodes i8 numbers', () => {
@@ -23,8 +28,8 @@ describe('getI8Codec', () => {
         assertValid(i8(), MAX, '7f');
 
         // Out of range.
-        assertRangeError(i8(), MIN - 1);
-        assertRangeError(i8(), MAX + 1);
+        assertRangeError(rangeErrorValues, i8(), MIN - 1);
+        assertRangeError(rangeErrorValues, i8(), MAX + 1);
     });
 
     it('has the right size', () => {

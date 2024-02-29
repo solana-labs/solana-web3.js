@@ -6,6 +6,11 @@ const MIN = 0n;
 const MAX = BigInt('0xffffffffffffffff');
 const HALF = BigInt('0xffffffff');
 const u64 = getU64Codec;
+const rangeErrorValues = {
+    codecDescription: 'u64',
+    max: MAX,
+    min: MIN,
+};
 
 describe('getU64Codec', () => {
     it('encodes and decodes u64 numbers', () => {
@@ -35,10 +40,10 @@ describe('getU64Codec', () => {
         assertValid(u64BE, MAX, 'ffffffffffffffff');
 
         // Out of range.
-        assertRangeError(u64LE, MIN - 1n);
-        assertRangeError(u64BE, MIN - 1n);
-        assertRangeError(u64LE, MAX + 1n);
-        assertRangeError(u64BE, MAX + 1n);
+        assertRangeError(rangeErrorValues, u64LE, MIN - 1n);
+        assertRangeError(rangeErrorValues, u64BE, MIN - 1n);
+        assertRangeError(rangeErrorValues, u64LE, MAX + 1n);
+        assertRangeError(rangeErrorValues, u64BE, MAX + 1n);
     });
 
     it('has the right size', () => {
