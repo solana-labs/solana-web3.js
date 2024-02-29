@@ -42,6 +42,8 @@ describe('getErrorMessage', () => {
                         ])) as CryptoKeyPair
                     ).privateKey,
                     j: Object.create(null),
+                    k: null,
+                    l: undefined,
                 },
             );
             expect(message).toBe(
@@ -56,6 +58,8 @@ describe('getErrorMessage', () => {
                     '&h=http%3A%2F%2Fanza.xyz%2F' +
                     '&i=%5Bobject%20CryptoKey%5D' +
                     '&j=%5Bobject%20Object%5D' +
+                    '&k=null' +
+                    '&l=undefined' +
                     '"`',
             );
         });
