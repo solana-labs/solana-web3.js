@@ -1,5 +1,6 @@
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getMapCodec } from '../map';
 import { b } from './__setup__';
@@ -69,9 +70,19 @@ describe('getMapCodec', () => {
 
         // It fails if the map has a different size.
         expect(() => map(u8(), u8(), { size: 1 }).encode(new Map())).toThrow(
-            'Expected [array] to have 1 items, got 0.',
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+                actual: 0,
+                codecDescription: 'array',
+                expected: 1,
+            }),
         );
-        expect(() => letters.encode(lettersMap.set('c', 3))).toThrow('Expected [array] to have 2 items, got 3.');
+        expect(() => letters.encode(lettersMap.set('c', 3))).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+                actual: 3,
+                codecDescription: 'array',
+                expected: 2,
+            }),
+        );
     });
 
     it('encodes remainder maps', () => {

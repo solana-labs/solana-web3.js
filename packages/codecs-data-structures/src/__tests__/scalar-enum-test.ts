@@ -1,4 +1,9 @@
 import { getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import {
+    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
+    SolanaError,
+} from '@solana/errors';
 
 import { getScalarEnumCodec } from '../scalar-enum';
 import { b } from './__setup__';
@@ -47,12 +52,19 @@ describe('getScalarEnumCodec', () => {
         // Invalid examples.
         // @ts-expect-error Invalid scalar enum variant.
         expect(() => scalarEnum(Feedback).encode('Missing')).toThrow(
-            'Invalid scalar enum variant. ' +
-                'Expected one of [BAD, GOOD] or a number between 0 and 1, ' +
-                'got "Missing".',
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT, {
+                maxRange: 1,
+                minRange: 0,
+                value: 'Missing',
+                variants: ['BAD', 'GOOD'],
+            }),
         );
         expect(() => scalarEnum(Feedback).read(new Uint8Array([2]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 1, got 2.',
+            new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                discriminator: 2,
+                maxRange: 1,
+                minRange: 0,
+            }),
         );
     });
 
@@ -88,12 +100,19 @@ describe('getScalarEnumCodec', () => {
         // Invalid examples.
         // @ts-expect-error Invalid scalar enum variant.
         expect(() => scalarEnum(Direction).encode('Diagonal')).toThrow(
-            'Invalid scalar enum variant. ' +
-                'Expected one of [UP, DOWN, LEFT, RIGHT, Up, Down, Left, Right] ' +
-                'or a number between 0 and 3, got "Diagonal".',
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT, {
+                maxRange: 3,
+                minRange: 0,
+                value: 'Diagonal',
+                variants: ['UP', 'DOWN', 'LEFT', 'RIGHT', 'Up', 'Down', 'Left', 'Right'],
+            }),
         );
         expect(() => scalarEnum(Direction).read(new Uint8Array([4]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 3, got 4.',
+            new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                discriminator: 4,
+                maxRange: 3,
+                minRange: 0,
+            }),
         );
     });
 
@@ -115,12 +134,19 @@ describe('getScalarEnumCodec', () => {
         // Invalid examples.
         // @ts-expect-error Invalid scalar enum variant.
         expect(() => scalarEnum(Hybrid).encode('Missing')).toThrow(
-            'Invalid scalar enum variant. ' +
-                'Expected one of [NUMERIC, LEXICAL, Lexical] ' +
-                'or a number between 0 and 1, got "Missing".',
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT, {
+                maxRange: 1,
+                minRange: 0,
+                value: 'Missing',
+                variants: ['NUMERIC', 'LEXICAL', 'Lexical'],
+            }),
         );
         expect(() => scalarEnum(Hybrid).read(new Uint8Array([2]), 0)).toThrow(
-            'Enum discriminator out of range. Expected a number between 0 and 1, got 2.',
+            new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                discriminator: 2,
+                maxRange: 1,
+                minRange: 0,
+            }),
         );
     });
 

@@ -1,6 +1,7 @@
 import { FixedSizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
+import { SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC, SolanaError } from '@solana/errors';
 
 import { getNullableCodec } from '../nullable';
 import { getUnitCodec } from '../unit';
@@ -79,7 +80,9 @@ describe('getNullableCodec', () => {
 
         // Fixed nullables must wrap fixed-size items.
         // @ts-expect-error It cannot wrap a variable size item when fixed is true.
-        expect(() => nullable(string(), { fixed: true })).toThrow(); // `SolanaError` added in later commit
+        expect(() => nullable(string(), { fixed: true })).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC),
+        );
     });
 
     it('has the right sizes', () => {

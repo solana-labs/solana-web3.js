@@ -11,6 +11,11 @@ import {
     isFixedSize,
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
+import {
+    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SolanaError,
+} from '@solana/errors';
 
 import { getMaxSize, maxCodecSizes, sumCodecSizes } from './utils';
 
@@ -142,11 +147,11 @@ export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>
             offset = dOffset;
             const variantField = variants[Number(discriminator)] ?? null;
             if (!variantField) {
-                // TODO: Coded error.
-                throw new Error(
-                    `Enum discriminator out of range. ` +
-                        `Expected a number between 0 and ${variants.length - 1}, got ${discriminator}.`,
-                );
+                throw new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                    discriminator,
+                    maxRange: variants.length - 1,
+                    minRange: 0,
+                });
             }
             const [variant, vOffset] = variantField[1].read(bytes, offset);
             offset = vOffset;
@@ -204,12 +209,10 @@ function getVariantDiscriminator<const TVariants extends Variants<Encoder<any> |
 ) {
     const discriminator = variants.findIndex(([key]) => variant.__kind === key);
     if (discriminator < 0) {
-        // TODO: Coded error.
-        throw new Error(
-            `Invalid data enum variant. ` +
-                `Expected one of [${variants.map(([key]) => key).join(', ')}], ` +
-                `got "${variant.__kind}".`,
-        );
+        throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT, {
+            value: variant.__kind,
+            variants: variants.map(([key]) => key),
+        });
     }
     return discriminator;
 }

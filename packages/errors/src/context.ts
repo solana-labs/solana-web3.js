@@ -2,9 +2,14 @@ import {
     SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
+    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
+    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
@@ -169,9 +174,27 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
             codecDescription: string;
         };
+        [SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE]: {
+            codecDescription: string;
+        };
+        [SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE]: {
+            discriminator: bigint | number;
+            maxRange: number;
+            minRange: number;
+        };
         [SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH]: {
             decoderFixedSize: number;
             encoderFixedSize: number;
+        };
+        [SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT]: {
+            value: string;
+            variants: string[];
+        };
+        [SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT]: {
+            maxRange: number;
+            minRange: number;
+            value: number | string;
+            variants: string[];
         };
         [SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
             decoderMaxSize: number | undefined;
@@ -181,6 +204,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             bytesLength: number;
             codecDescription: string;
             expected: number;
+        };
+        [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS]: {
+            actual: bigint | number;
+            codecDescription: string;
+            expected: bigint | number;
         };
         [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: {
             address: string;

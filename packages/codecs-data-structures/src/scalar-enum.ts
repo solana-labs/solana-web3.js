@@ -22,6 +22,11 @@ import {
     NumberDecoder,
     NumberEncoder,
 } from '@solana/codecs-numbers';
+import {
+    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
+    SolanaError,
+} from '@solana/errors';
 
 /**
  * Defines the "lookup object" of a scalar enum.
@@ -91,13 +96,12 @@ export function getScalarEnumEncoder<TEnum extends ScalarEnum>(
         const isInvalidNumber = typeof value === 'number' && (value < minRange || value > maxRange);
         const isInvalidString = typeof value === 'string' && !allStringInputs.includes(value);
         if (isInvalidNumber || isInvalidString) {
-            // TODO: Coded error.
-            throw new Error(
-                `Invalid scalar enum variant. ` +
-                    `Expected one of [${allStringInputs.join(', ')}] ` +
-                    `or a number between ${minRange} and ${maxRange}, ` +
-                    `got "${value}".`,
-            );
+            throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT, {
+                maxRange,
+                minRange,
+                value,
+                variants: allStringInputs,
+            });
         }
         if (typeof value === 'number') return value;
         const valueIndex = enumValues.indexOf(value as string);
@@ -132,11 +136,11 @@ export function getScalarEnumDecoder<TEnum extends ScalarEnum>(
     return mapDecoder(prefix, (value: number | bigint): ScalarEnumTo<TEnum> => {
         const valueAsNumber = Number(value);
         if (valueAsNumber < minRange || valueAsNumber > maxRange) {
-            // TODO: Coded error.
-            throw new Error(
-                `Enum discriminator out of range. ` +
-                    `Expected a number between ${minRange} and ${maxRange}, got ${valueAsNumber}.`,
-            );
+            throw new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                discriminator: valueAsNumber,
+                maxRange,
+                minRange,
+            });
         }
         return constructor[enumKeys[valueAsNumber]] as ScalarEnumTo<TEnum>;
     });

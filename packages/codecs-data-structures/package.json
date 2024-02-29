@@ -67,7 +67,8 @@
     },
     "dependencies": {
         "@solana/codecs-core": "workspace:*",
-        "@solana/codecs-numbers": "workspace:*"
+        "@solana/codecs-numbers": "workspace:*",
+        "@solana/errors": "workspace:*"
     },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",

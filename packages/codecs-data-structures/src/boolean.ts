@@ -20,6 +20,12 @@ import {
     NumberDecoder,
     NumberEncoder,
 } from '@solana/codecs-numbers';
+import {
+    isSolanaError,
+    SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
+    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
+    SolanaError,
+} from '@solana/errors';
 
 /** Defines the config for boolean codecs. */
 export type BooleanCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = {
@@ -45,8 +51,13 @@ export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}
     try {
         assertIsFixedSize(size);
     } catch (e) {
-        // TODO: Coded error, also proper catch handling
-        throw new Error('Codec [bool] requires a fixed size.');
+        if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
+            throw new SolanaError(SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE, {
+                codecDescription: 'bool',
+            });
+        } else {
+            throw e;
+        }
     }
     return mapEncoder(size, (value: boolean) => (value ? 1 : 0));
 }
@@ -66,8 +77,13 @@ export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}
     try {
         assertIsFixedSize(size);
     } catch (e) {
-        // TODO: Coded error, also proper catch handling
-        throw new Error('Codec [bool] requires a fixed size.');
+        if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
+            throw new SolanaError(SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE, {
+                codecDescription: 'bool',
+            });
+        } else {
+            throw e;
+        }
     }
     return mapDecoder(size, (value: number | bigint): boolean => Number(value) === 1);
 }

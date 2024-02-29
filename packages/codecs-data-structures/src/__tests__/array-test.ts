@@ -1,5 +1,6 @@
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
+import { SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getArrayCodec } from '../array';
 import { b } from './__setup__';
@@ -57,9 +58,19 @@ describe('getArrayCodec', () => {
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);
 
         // It fails if the array has a different size.
-        expect(() => array(string(), { size: 1 }).encode([])).toThrow('Expected [array] to have 1 items, got 0.');
+        expect(() => array(string(), { size: 1 }).encode([])).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+                actual: 0,
+                codecDescription: 'array',
+                expected: 1,
+            }),
+        );
         expect(() => array(string(), { size: 2 }).encode(['a', 'b', 'c'])).toThrow(
-            'Expected [array] to have 2 items, got 3.',
+            new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS, {
+                actual: 3,
+                codecDescription: 'array',
+                expected: 2,
+            }),
         );
     });
 
