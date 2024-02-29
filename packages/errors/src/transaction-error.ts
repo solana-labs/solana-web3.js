@@ -5,6 +5,7 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN,
 } from './codes';
 import { SolanaError } from './error';
+import { getSolanaErrorFromInstructionError } from './instruction-error';
 import { getSolanaErrorFromRpcError } from './rpc-enum-errors';
 
 /**
@@ -26,7 +27,7 @@ const ORDERED_ERROR_NAMES = [
     'InvalidAccountForFee',
     'AlreadyProcessed',
     'BlockhashNotFound',
-    // `InstructionError` intentionally omitted
+    // `InstructionError` intentionally omitted; delegated to `getSolanaErrorFromInstructionError`
     'CallChainTooDeep',
     'MissingSignatureForFee',
     'InvalidAccountIndex',
@@ -58,6 +59,11 @@ const ORDERED_ERROR_NAMES = [
 ];
 
 export function getSolanaErrorFromTransactionError(transactionError: string | { [key: string]: unknown }): SolanaError {
+    if (typeof transactionError === 'object' && 'InstructionError' in transactionError) {
+        return getSolanaErrorFromInstructionError(
+            ...(transactionError.InstructionError as Parameters<typeof getSolanaErrorFromInstructionError>),
+        );
+    }
     return getSolanaErrorFromRpcError(
         {
             errorCodeBaseOffset: 7050001,

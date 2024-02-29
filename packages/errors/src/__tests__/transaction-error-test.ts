@@ -6,7 +6,10 @@ import {
     SolanaErrorCode,
 } from '../codes';
 import { SolanaError } from '../error';
+import { getSolanaErrorFromInstructionError } from '../instruction-error';
 import { getSolanaErrorFromTransactionError } from '../transaction-error';
+
+jest.mock('../instruction-error.ts');
 
 describe('getSolanaErrorFromTransactionError', () => {
     it.each([
@@ -90,5 +93,13 @@ describe('getSolanaErrorFromTransactionError', () => {
                 transactionErrorContext: expectedContext,
             }),
         );
+    });
+    it('delegates `InstructionError` to the instruction error getter', () => {
+        const instructionError = Symbol();
+        const mockErrorResult = Symbol() as unknown as SolanaError;
+        jest.mocked(getSolanaErrorFromInstructionError).mockReturnValue(mockErrorResult);
+        const error = getSolanaErrorFromTransactionError({ InstructionError: [123, instructionError] });
+        expect(getSolanaErrorFromInstructionError).toHaveBeenCalledWith(123, instructionError);
+        expect(error).toBe(mockErrorResult);
     });
 });
