@@ -550,6 +550,9 @@ importers:
       '@solana/codecs-numbers':
         specifier: workspace:*
         version: link:../codecs-numbers
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       fastestsmallesttextencoderdecoder:
         specifier: ^1.0.22
         version: 1.0.22

@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
+
 import { getBase16Codec } from '../base16';
 
 describe('getBase16Codec', () => {
@@ -24,6 +26,12 @@ describe('getBase16Codec', () => {
         expect(base16.encode('ffff')).toStrictEqual(new Uint8Array([255, 255]));
         expect(base16.read(new Uint8Array([255, 255]), 0)).toStrictEqual(['ffff', 2]);
 
-        expect(() => base16.encode('INVALID_INPUT')).toThrow('Expected a string of base 16, got [INVALID_INPUT].');
+        expect(() => base16.encode('INVALID_INPUT')).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                alphabet: '0123456789abcdef',
+                base: 16,
+                value: 'INVALID_INPUT',
+            }),
+        );
     });
 });

@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
+
 import { getBase58Codec } from '../base58';
 
 describe('getBase58Codec', () => {
@@ -37,7 +39,13 @@ describe('getBase58Codec', () => {
         expect(base58.encode(pubkey)).toStrictEqual(bytes);
         expect(base58.read(bytes, 0)).toStrictEqual([pubkey, 32]);
 
-        expect(() => base58.encode('INVALID_INPUT')).toThrow('Expected a string of base 58, got [INVALID_INPUT].');
+        expect(() => base58.encode('INVALID_INPUT')).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                alphabet: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+                base: 58,
+                value: 'INVALID_INPUT',
+            }),
+        );
     });
 
     it('computes the buffer size of base 58 strings', () => {
