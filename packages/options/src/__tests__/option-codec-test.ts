@@ -105,9 +105,8 @@ describe('getOptionCodec', () => {
 
         // Fixed options must wrap fixed-size items.
         // @ts-expect-error Fixed options must wrap fixed-size items.
-        expect(() => option(getMockCodec({ size: null }), { fixed: true })).toThrow(
-            'Fixed options can only be used with fixed-size codecs',
-        );
+        expect(() => option(getMockCodec({ size: null }), { fixed: true })).toThrow(); // `SolanaError` added in later commit.
+        // 'Fixed options can only be used with fixed-size codecs',
     });
 
     it('has the right sizes', () => {

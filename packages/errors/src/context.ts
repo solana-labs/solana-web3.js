@@ -1,6 +1,10 @@
 import {
     SOLANA_ERROR__ACCOUNT_NOT_FOUND,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
@@ -161,6 +165,22 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
             currentBlockHeight: bigint;
             lastValidBlockHeight: bigint;
+        };
+        [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
+            codecDescription: string;
+        };
+        [SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH]: {
+            decoderFixedSize: number;
+            encoderFixedSize: number;
+        };
+        [SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
+            decoderMaxSize: number | undefined;
+            encoderMaxSize: number | undefined;
+        };
+        [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES]: {
+            bytesLength: number;
+            codecDescription: string;
+            expected: number;
         };
         [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: {
             address: string;
