@@ -601,8 +601,8 @@ export class StakeProgram {
    * Max space of a Stake account
    *
    * This is generated from the solana-stake-program StakeState struct as
-   * `StakeState::size_of()`:
-   * https://docs.rs/solana-stake-program/latest/solana_stake_program/stake_state/enum.StakeState.html
+   * `StakeStateV2::size_of()`:
+   * https://docs.rs/solana-stake-program/latest/solana_stake_program/stake_state/enum.StakeStateV2.html
    */
   static space: number = 200;
 
@@ -808,13 +808,17 @@ export class StakeProgram {
   /**
    * Generate a Transaction that splits Stake tokens into another stake account
    */
-  static split(params: SplitStakeParams): Transaction {
+  static split(
+    params: SplitStakeParams,
+    // Compute the cost of allocating the new stake account in lamports
+    rentExemptReserve: number,
+  ): Transaction {
     const transaction = new Transaction();
     transaction.add(
       SystemProgram.createAccount({
         fromPubkey: params.authorizedPubkey,
         newAccountPubkey: params.splitStakePubkey,
-        lamports: 0,
+        lamports: rentExemptReserve,
         space: this.space,
         programId: this.programId,
       }),
@@ -826,7 +830,11 @@ export class StakeProgram {
    * Generate a Transaction that splits Stake tokens into another account
    * derived from a base public key and seed
    */
-  static splitWithSeed(params: SplitStakeWithSeedParams): Transaction {
+  static splitWithSeed(
+    params: SplitStakeWithSeedParams,
+    // If this stake account is new, compute the cost of allocating it in lamports
+    rentExemptReserve?: number,
+  ): Transaction {
     const {
       stakePubkey,
       authorizedPubkey,
@@ -845,6 +853,15 @@ export class StakeProgram {
         programId: this.programId,
       }),
     );
+    if (rentExemptReserve && rentExemptReserve > 0) {
+      transaction.add(
+        SystemProgram.transfer({
+          fromPubkey: params.authorizedPubkey,
+          toPubkey: splitStakePubkey,
+          lamports: rentExemptReserve,
+        }),
+      );
+    }
     return transaction.add(
       this.splitInstruction({
         stakePubkey,
