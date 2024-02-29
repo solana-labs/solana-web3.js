@@ -1,4 +1,11 @@
 import { type Address, assertIsAddress } from '@solana/addresses';
+import {
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS,
+    SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS,
+    SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER,
+    SolanaError,
+} from '@solana/errors';
 import { pipe } from '@solana/functional';
 import type { IAccountMeta, IInstruction } from '@solana/instructions';
 import { AccountRole } from '@solana/instructions';
@@ -33,8 +40,9 @@ function convertAccount(
 ): IAccountMeta {
     const accountPublicKey = accountKeys.get(accountIndex);
     if (!accountPublicKey) {
-        // TODO coded error
-        throw new Error(`Could not find account address at index ${accountIndex}`);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS, {
+            index: accountIndex,
+        });
     }
     const isSigner = message.isAccountSigner(accountIndex);
     const isWritable = message.isAccountWritable(accountIndex);
@@ -60,8 +68,9 @@ function convertInstruction(
 ): IInstruction {
     const programAddressPublicKey = accountKeys.get(instruction.programIdIndex);
     if (!programAddressPublicKey) {
-        // TODO coded error
-        throw new Error(`Could not find program address at index ${instruction.programIdIndex}`);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS, {
+            index: instruction.programIdIndex,
+        });
     }
 
     const accounts = instruction.accountKeyIndexes.map(accountIndex =>
@@ -99,6 +108,8 @@ export function fromVersionedTransactionWithBlockhash(
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
     if (transaction.message.addressTableLookups.length > 0) {
         // TODO coded error
+        // This should probably not be a `SolanaError`, since we need to add
+        // this functionality.
         throw new Error('Cannot convert transaction with addressTableLookups');
     }
 
@@ -106,8 +117,7 @@ export function fromVersionedTransactionWithBlockhash(
 
     // Fee payer is first account
     const feePayer = accountKeys.staticAccountKeys[0];
-    // TODO: coded error
-    if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
+    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER);
 
     const blockhashLifetime = {
         blockhash: transaction.message.recentBlockhash as Blockhash,
@@ -140,6 +150,8 @@ export function fromVersionedTransactionWithDurableNonce(
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
     if (transaction.message.addressTableLookups.length > 0) {
         // TODO coded error
+        // This should probably not be a `SolanaError`, since we need to add
+        // this functionality.
         throw new Error('Cannot convert transaction with addressTableLookups');
     }
 
@@ -147,8 +159,7 @@ export function fromVersionedTransactionWithDurableNonce(
 
     // Fee payer is first account
     const feePayer = accountKeys.staticAccountKeys[0];
-    // TODO: coded error
-    if (!feePayer) throw new Error('No fee payer set in VersionedTransaction');
+    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER);
 
     const instructions = transaction.message.compiledInstructions.map(instruction =>
         convertInstruction(transaction.message, accountKeys, instruction),
@@ -156,13 +167,11 @@ export function fromVersionedTransactionWithDurableNonce(
 
     // Check first instruction is durable nonce + extract params
     if (instructions.length === 0) {
-        // TODO: coded error
-        throw new Error('transaction with no instructions cannot be durable nonce transaction');
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS);
     }
 
     if (!isAdvanceNonceAccountInstruction(instructions[0])) {
-        // TODO: coded error
-        throw new Error('transaction first instruction is not advance nonce account instruction');
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE);
     }
 
     // We know these accounts are defined because we checked `isAdvanceNonceAccountInstruction`
