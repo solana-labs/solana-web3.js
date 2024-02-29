@@ -22,6 +22,7 @@ type InstructionError =
     | 'ExecutableModified'
     | 'RentEpochModified'
     | 'NotEnoughAccountKeys'
+    | 'AccountDataSizeChanged'
     | 'AccountNotExecutable'
     | 'AccountBorrowFailed'
     | 'AccountBorrowOutstanding'
