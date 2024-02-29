@@ -74,8 +74,18 @@ export function getNullableEncoder<TFrom>(
 
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item, 'Fixed nullables can only be used with fixed-size codecs.');
-        assertIsFixedSize(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        try {
+            assertIsFixedSize(item);
+        } catch (e) {
+            // TODO: Coded error, also proper catch handling
+            throw new Error('Fixed nullables can only be used with fixed-size codecs.');
+        }
+        try {
+            assertIsFixedSize(prefix);
+        } catch (e) {
+            // TODO: Coded error, also proper catch handling
+            throw new Error('Fixed nullables can only be used with fixed-size prefix.');
+        }
         const fixedSize = prefix.fixedSize + item.fixedSize;
         return createEncoder({
             fixedSize,
@@ -131,8 +141,18 @@ export function getNullableDecoder<TTo>(
     let fixedSize: number | null = null;
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item, 'Fixed nullables can only be used with fixed-size codecs.');
-        assertIsFixedSize(prefix, 'Fixed nullables can only be used with fixed-size prefix.');
+        try {
+            assertIsFixedSize(item);
+        } catch (e) {
+            // TODO: Coded error, also proper catch handling
+            throw new Error('Fixed nullables can only be used with fixed-size codecs.');
+        }
+        try {
+            assertIsFixedSize(prefix);
+        } catch (e) {
+            // TODO: Coded error, also proper catch handling
+            throw new Error('Fixed nullables can only be used with fixed-size prefix.');
+        }
         fixedSize = prefix.fixedSize + item.fixedSize;
     }
 
