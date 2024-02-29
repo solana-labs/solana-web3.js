@@ -1,10 +1,17 @@
+import {
+    SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
+    SolanaError,
+} from '@solana/errors';
+
 function assertIsSecureContext() {
     if (__BROWSER__ && !globalThis.isSecureContext) {
-        // TODO: Coded error.
-        throw new Error(
-            'Cryptographic operations are only allowed in secure browser contexts. Read more ' +
-                'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts',
-        );
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING);
     }
 }
 
@@ -32,49 +39,37 @@ async function isEd25519CurveSupported(subtle: SubtleCrypto): Promise<boolean> {
 export async function assertDigestCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.digest !== 'function') {
-        // TODO: Coded error.
-        throw new Error('No digest implementation could be found');
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING);
     }
 }
 
 export async function assertKeyGenerationIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.generateKey !== 'function') {
-        // TODO: Coded error.
-        throw new Error('No key generation implementation could be found');
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING);
     }
     if (!(await isEd25519CurveSupported(globalThis.crypto.subtle))) {
-        // TODO: Coded error.
-        throw new Error(
-            'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +
-                'import `@solana/webcrypto-ed25519-polyfill` before generating keys in ' +
-                'environments that do not support Ed25519.\n\nFor a list of runtimes that ' +
-                'currently support Ed25519 operations, visit ' +
-                'https://github.com/WICG/webcrypto-secure-curves/issues/20',
-        );
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING);
     }
 }
 
 export async function assertKeyExporterIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.exportKey !== 'function') {
-        // TODO: Coded error.
-        throw new Error('No key export implementation could be found');
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING);
     }
 }
 
 export async function assertSigningCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.sign !== 'function') {
-        // TODO: Coded error.
-        throw new Error('No signing implementation could be found');
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING);
     }
 }
 
 export async function assertVerificationCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.verify !== 'function') {
-        // TODO: Coded error.
-        throw new Error('No signature verification implementation could be found');
+        throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING);
     }
 }
