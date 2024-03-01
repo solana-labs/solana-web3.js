@@ -22,6 +22,8 @@ import {
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
     SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS,
+    SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
@@ -204,6 +206,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS]: 'Expected [$codecDescription] to have $expected items, got $actual.',
     [SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED]: 'Unable to find a viable program address bump seed.',
     [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address',
+    [SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS]: 'The instruction does not have any accounts.',
+    [SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA]: 'The instruction does not have any data.',
     [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED]:
