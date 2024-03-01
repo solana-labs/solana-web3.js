@@ -61,9 +61,8 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                 >({
                     getAbortSignalFromInputArgs: ({ abortSignal }) => abortSignal,
                     getCacheEntryMissingError(deduplicationKey) {
-                        // TODO: Coded error.
                         return new Error(
-                            `Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``,
+                            `Invariant: Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``,
                         );
                     },
                     getCacheKeyFromInputArgs: () => deduplicationKey,

@@ -1,3 +1,8 @@
+import {
+    SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
+    SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID,
+    SolanaError,
+} from '@solana/errors';
 import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
 
 import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions';
@@ -223,13 +228,19 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             const thingNotificationsPromise = rpc
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
-            await expect(thingNotificationsPromise).rejects.toThrow('Failed to obtain a subscription id');
+            await expect(thingNotificationsPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID),
+            );
         },
     );
     it("fatals when called with a method that does not end in 'Notifications'", () => {
         expect(() => {
             rpc.nonConformingNotif().subscribe({ abortSignal: new AbortController().signal });
-        }).toThrow();
+        }).toThrow(
+            new SolanaError(SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
+                notificationName: 'nonConformingNotif',
+            }),
+        );
     });
     it('fatals when called with an already aborted signal', async () => {
         expect.assertions(1);
@@ -244,7 +255,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             yield { id: 0, result: undefined /* subscription id */ };
         });
         const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
-        await expect(subscribePromise).rejects.toThrow(/Failed to obtain a subscription id from the server/);
+        await expect(subscribePromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID),
+        );
     });
     it('fatals when the server responds with an error', async () => {
         expect.assertions(3);

@@ -1,3 +1,8 @@
+import {
+    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT,
+    SolanaError,
+} from '@solana/errors';
 import WS from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
 
@@ -38,7 +43,11 @@ describe('createWebSocketConnection', () => {
             signal: new AbortController().signal,
             url: 'ws://fake', // Wrong URL!
         });
-        await expect(connectionPromise).rejects.toThrow('WebSocket failed to connect');
+        await expect(connectionPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT, {
+                errorEvent: {} as Event,
+            }),
+        );
     });
     it('throws when the connection is aborted before the connection is established', async () => {
         expect.assertions(2);
@@ -51,7 +60,11 @@ describe('createWebSocketConnection', () => {
         const client = getLatestClient();
         expect(client).toHaveProperty('readyState', WebSocket.CONNECTING);
         abortController.abort();
-        await expect(connectionPromise).rejects.toThrow();
+        await expect(connectionPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT, {
+                errorEvent: {} as Event,
+            }),
+        );
     });
 });
 
@@ -217,7 +230,9 @@ describe('RpcWebSocketConnection', () => {
                 expect.assertions(1);
                 const sendPromise = connection.send({ some: 'message' });
                 abortController.abort();
-                await expect(sendPromise).rejects.toThrow();
+                await expect(sendPromise).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
+                );
             });
             it('fatals when the connection encounters an error while a message is queued', async () => {
                 expect.assertions(1);
@@ -227,7 +242,9 @@ describe('RpcWebSocketConnection', () => {
                     reason: 'o no',
                     wasClean: false,
                 });
-                await expect(sendPromise).rejects.toThrow();
+                await expect(sendPromise).rejects.toThrow(
+                    new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
+                );
             });
         });
     });
