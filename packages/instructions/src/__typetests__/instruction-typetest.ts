@@ -1,10 +1,14 @@
+import { Address } from '@solana/addresses';
+
 import { IAccountLookupMeta, IAccountMeta } from '../accounts';
 import {
+    assertIsInstructionForProgram,
     assertIsInstructionWithAccounts,
     assertIsInstructionWithData,
     IInstruction,
     IInstructionWithAccounts,
     IInstructionWithData,
+    isInstructionForProgram,
     isInstructionWithAccounts,
     isInstructionWithData,
 } from '../instruction';
@@ -43,4 +47,23 @@ import {
     instruction satisfies IInstruction &
         IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]> &
         IInstructionWithData<Uint8Array>;
+}
+
+// narrowing by program address
+{
+    const instruction = {} as unknown as IInstruction;
+    const myAddress = '1111' as Address<'1111'>;
+    type MyAddress = typeof myAddress;
+
+    // @ts-expect-error instruction might not have the right address
+    instruction satisfies IInstruction<MyAddress>;
+
+    if (isInstructionForProgram(instruction, myAddress)) {
+        instruction satisfies IInstruction<MyAddress>;
+        instruction satisfies IInstruction<'1111'>;
+    }
+
+    assertIsInstructionForProgram(instruction, myAddress);
+    instruction satisfies IInstruction<MyAddress>;
+    instruction satisfies IInstruction<'1111'>;
 }

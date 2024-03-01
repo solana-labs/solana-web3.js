@@ -75,6 +75,7 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
+    SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
@@ -409,6 +410,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA]: {
             programAddress: string;
             accountAddresses?: string[];
+        };
+        [SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH]: {
+            actualProgramAddress: string;
+            expectedProgramAddress: string;
         };
     }
 >;

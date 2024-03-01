@@ -2,6 +2,7 @@ import { Address } from '@solana/addresses';
 import {
     SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA,
+    SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH,
     SolanaError,
 } from '@solana/errors';
 
@@ -19,6 +20,25 @@ export interface IInstruction<
 export interface IInstructionWithAccounts<TAccounts extends readonly (IAccountMeta | IAccountLookupMeta)[]>
     extends IInstruction {
     readonly accounts: TAccounts;
+}
+
+export function isInstructionForProgram<TProgramAddress extends string, TInstruction extends IInstruction>(
+    instruction: TInstruction,
+    programAddress: Address<TProgramAddress>,
+): instruction is TInstruction & { programAddress: Address<TProgramAddress> } {
+    return instruction.programAddress === programAddress;
+}
+
+export function assertIsInstructionForProgram<TProgramAddress extends string, TInstruction extends IInstruction>(
+    instruction: TInstruction,
+    programAddress: Address<TProgramAddress>,
+): asserts instruction is TInstruction & { programAddress: Address<TProgramAddress> } {
+    if (instruction.programAddress !== programAddress) {
+        throw new SolanaError(SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH, {
+            actualProgramAddress: instruction.programAddress,
+            expectedProgramAddress: programAddress,
+        });
+    }
 }
 
 export function isInstructionWithAccounts<

@@ -2,15 +2,53 @@ import { Address } from '@solana/addresses';
 import { SolanaError } from '@solana/errors';
 
 import {
+    assertIsInstructionForProgram,
     assertIsInstructionWithAccounts,
     assertIsInstructionWithData,
     IInstruction,
+    isInstructionForProgram,
     isInstructionWithAccounts,
     isInstructionWithData,
 } from '../instruction';
 import { AccountRole } from '../roles';
 
 const programAddress = 'address' as Address;
+
+describe('isInstructionForProgram', () => {
+    it('returns true when the instruction has the given program address', () => {
+        const instruction: IInstruction = {
+            programAddress,
+        };
+        expect(isInstructionForProgram(instruction, programAddress)).toBe(true);
+    });
+
+    it('returns false when the instruction does not have the given program address', () => {
+        const instruction: IInstruction = {
+            programAddress,
+        };
+        const address = 'abc' as Address;
+        expect(isInstructionForProgram(instruction, address)).toBe(false);
+    });
+});
+
+describe('assertIsInstructionForProgram', () => {
+    it('does not throw when the instruction has the given program address', () => {
+        const instruction: IInstruction = {
+            programAddress,
+        };
+        const assert = () => assertIsInstructionForProgram(instruction, programAddress);
+        expect(assert).not.toThrow();
+    });
+
+    it('throws when the instruction does not have the given program address', () => {
+        const instruction: IInstruction = {
+            programAddress,
+        };
+        const address = 'abc' as Address;
+        const assert = () => assertIsInstructionForProgram(instruction, address);
+        expect(assert).toThrow(SolanaError);
+    });
+});
 
 describe('isInstructionWithAccounts', () => {
     it('returns true when the instruction has an array of accounts', () => {
