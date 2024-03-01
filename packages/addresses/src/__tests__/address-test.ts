@@ -1,5 +1,11 @@
 import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
+    SolanaError,
+} from '@solana/errors';
 
 import { Address, getAddressCodec, getAddressComparator } from '../address';
 
@@ -36,7 +42,11 @@ describe('Address', () => {
             it('throws when supplied a non-base58 string', () => {
                 expect(() => {
                     assertIsAddress('not-a-base-58-encoded-string');
-                }).toThrow();
+                }).toThrow(
+                    new SolanaError(SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE, {
+                        actualLength: 28,
+                    }),
+                );
             });
             it('throws when the decoded byte array has a length other than 32 bytes', () => {
                 expect(() => {
@@ -44,7 +54,11 @@ describe('Address', () => {
                         // 31 bytes [128, ..., 128]
                         '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                     );
-                }).toThrow();
+                }).toThrow(
+                    new SolanaError(SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE, {
+                        actualLength: 31,
+                    }),
+                );
             });
             it('does not throw when supplied a base-58 encoded address', () => {
                 expect(() => {
@@ -145,7 +159,13 @@ describe('Address', () => {
         });
         it('fatals when trying to deserialize a byte buffer shorter than 32-bytes', () => {
             const tooShortBuffer = new Uint8Array(Array(31).fill(0));
-            expect(() => address.decode(tooShortBuffer)).toThrow();
+            expect(() => address.decode(tooShortBuffer)).toThrow(
+                new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+                    bytesLength: 31,
+                    codecDescription: 'fixCodec',
+                    expected: 32,
+                }),
+            );
         });
         it('memoizes getBase58Encoder and getBase58Decoder when called multiple times', async () => {
             expect.assertions(2);
