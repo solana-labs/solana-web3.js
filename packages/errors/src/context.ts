@@ -87,6 +87,8 @@ import {
     SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN,
+    SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR,
     SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
     SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER,
@@ -315,6 +317,13 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             optionalPathLabel: string;
             path?: string;
             value: bigint;
+        };
+        [SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN]: {
+            headers: string[];
+        };
+        [SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR]: {
+            message: string;
+            statusCode: number;
         };
         [SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]: {
             address: string;

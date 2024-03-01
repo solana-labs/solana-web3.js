@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
 import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
@@ -42,7 +43,11 @@ describe('assertIsAllowedHttpRequestHeader', () => {
         it('throws when called with the forbidden header `' + forbiddenHeader + '`', () => {
             expect(() => {
                 assertIsAllowedHttpRequestHeaders({ [forbiddenHeader]: 'value' });
-            }).toThrow(/This header is forbidden:/);
+            }).toThrow(
+                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+                    headers: [forbiddenHeader],
+                }),
+            );
         });
     });
     ['Authorization', 'Content-Language', 'Solana-Client'].forEach(allowedHeader => {
@@ -129,7 +134,11 @@ describe('createHttpRequest with custom headers', () => {
         it('throws in dev mode', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = true;
-            expect(createTransportWithForbiddenHeaders).toThrow(/This header is forbidden:/);
+            expect(createTransportWithForbiddenHeaders).toThrow(
+                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+                    headers: ['sEc-FeTcH-mOdE'],
+                }),
+            );
         });
         it('does not throw in non-dev mode', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

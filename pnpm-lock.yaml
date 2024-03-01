@@ -2553,6 +2553,9 @@ importers:
 
   packages/rpc-transport-http:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/rpc-spec':
         specifier: workspace:*
         version: link:../rpc-spec

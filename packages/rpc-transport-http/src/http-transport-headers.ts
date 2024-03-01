@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
+
 export type AllowedHttpRequestHeaders = Readonly<
     { [headerName: string]: string } & {
         // Someone can still sneak a forbidden header past Typescript if they do something like
@@ -84,11 +86,9 @@ export function assertIsAllowedHttpRequestHeaders(
         );
     });
     if (badHeaders.length > 0) {
-        throw new Error(
-            `${badHeaders.length > 1 ? 'These headers are' : 'This header is'} forbidden: ` +
-                `\`${badHeaders.join('`, `')}\`. Learn more at ` +
-                'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.',
-        );
+        throw new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+            headers: badHeaders,
+        });
     }
 }
 

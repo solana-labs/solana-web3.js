@@ -99,6 +99,8 @@ import {
     SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN,
+    SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR,
     SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
     SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER,
@@ -326,6 +328,10 @@ export const SolanaErrorMessages: Readonly<{
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +
         '`Number.MAX_SAFE_INTEGER`.',
+    [SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN]:
+        'HTTP header(s) forbidden: $headers. Learn more at ' +
+        'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.',
+    [SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR]: 'HTTP error ($statusCode): $message',
     [SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]:
         'Multiple distinct signers were identified for address `$address`. Please ensure that ' +
         'you are using the same signer instance for each address.',

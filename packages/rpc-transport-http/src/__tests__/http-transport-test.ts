@@ -1,25 +1,21 @@
+import { SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
 describe('createHttpTransport', () => {
     let fetchMock: jest.Mock;
     let makeHttpRequest: RpcTransport;
-    let SolanaHttpError: typeof import('../http-transport-errors').SolanaHttpError;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             jest.mock('@solana/fetch-impl');
-            const [fetchImplModule, { createHttpTransport }, HttpTransportErrorsModule] = await Promise.all([
+            const [fetchImplModule, { createHttpTransport }] = await Promise.all([
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 import('@solana/fetch-impl'),
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 import('../http-transport'),
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                import('../http-transport-errors'),
             ]);
             fetchMock = jest.mocked(fetchImplModule.default);
-            SolanaHttpError = HttpTransportErrorsModule.SolanaHttpError;
             makeHttpRequest = createHttpTransport({ url: 'http://localhost' });
         });
     });
@@ -32,11 +28,14 @@ describe('createHttpTransport', () => {
             });
         });
         it('throws HTTP errors', async () => {
-            expect.assertions(3);
+            expect.assertions(1);
             const requestPromise = makeHttpRequest({ payload: 123 });
-            await expect(requestPromise).rejects.toThrow(SolanaHttpError);
-            await expect(requestPromise).rejects.toThrow(/We looked everywhere/);
-            await expect(requestPromise).rejects.toMatchObject({ statusCode: 404 });
+            await expect(requestPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR, {
+                    message: 'We looked everywhere',
+                    statusCode: 404,
+                }),
+            );
         });
     });
     describe('when the transport fatals', () => {
