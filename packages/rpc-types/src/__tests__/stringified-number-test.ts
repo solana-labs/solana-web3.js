@@ -1,13 +1,23 @@
+import { SOLANA_ERROR__MALFORMED_NUMBER_STRING, SolanaError } from '@solana/errors';
+
 import { assertIsStringifiedNumber } from '../stringified-number';
 
 describe('assertIsStringifiedNumber()', () => {
     it("throws when supplied a string that can't parse as a number", () => {
         expect(() => {
             assertIsStringifiedNumber('abc');
-        }).toThrow();
+        }).toThrow(
+            new SolanaError(SOLANA_ERROR__MALFORMED_NUMBER_STRING, {
+                value: 'abc',
+            }),
+        );
         expect(() => {
             assertIsStringifiedNumber('123a');
-        }).toThrow();
+        }).toThrow(
+            new SolanaError(SOLANA_ERROR__MALFORMED_NUMBER_STRING, {
+                value: '123a',
+            }),
+        );
     });
     it('does not throw when supplied a string that parses as a float', () => {
         expect(() => {

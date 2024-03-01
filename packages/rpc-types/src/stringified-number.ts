@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__MALFORMED_NUMBER_STRING, SolanaError } from '@solana/errors';
+
 export type StringifiedNumber = string & { readonly __brand: unique symbol };
 
 export function isStringifiedNumber(putativeNumber: string): putativeNumber is StringifiedNumber {
@@ -6,7 +8,9 @@ export function isStringifiedNumber(putativeNumber: string): putativeNumber is S
 
 export function assertIsStringifiedNumber(putativeNumber: string): asserts putativeNumber is StringifiedNumber {
     if (Number.isNaN(Number(putativeNumber))) {
-        throw new Error(`\`${putativeNumber}\` cannot be parsed as a Number`);
+        throw new SolanaError(SOLANA_ERROR__MALFORMED_NUMBER_STRING, {
+            value: putativeNumber,
+        });
     }
 }
 

@@ -1,5 +1,11 @@
 import type { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE,
+    SolanaError,
+} from '@solana/errors';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -30,17 +36,38 @@ describe('assertIsBlockhash()', () => {
         });
 
         it('throws when supplied a non-base58 string', () => {
+            const badBlockhash = 'not-a-base-58-encoded-string-but-nice-try';
             expect(() => {
-                assertIsBlockhash('not-a-base-58-encoded-string');
-            }).toThrow();
+                assertIsBlockhash(badBlockhash);
+            }).toThrow(
+                new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                    alphabet: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+                    base: 58,
+                    value: badBlockhash,
+                }),
+            );
         });
-        it('throws when the decoded byte array has a length other than 32 bytes', () => {
+        it.each([31, 45])('throws when the encoded string is of length %s', actualLength => {
+            const badBlockhash = '1'.repeat(actualLength);
             expect(() => {
-                assertIsBlockhash(
-                    // 31 bytes [128, ..., 128]
-                    '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
-                );
-            }).toThrow();
+                assertIsBlockhash(badBlockhash);
+            }).toThrow(
+                new SolanaError(SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE, {
+                    actualLength,
+                }),
+            );
+        });
+        it.each([
+            [31, 'tVojvhToWjQ8Xvo4UPx2Xz9eRy7auyYMmZBjc2XfN'],
+            [33, 'JJEfe6DcPM2ziB2vfUWDV6aHVerXRGkv3TcyvJUNGHZz'],
+        ])('throws when the decoded byte array has a length of %s bytes', (actualLength, badBlockhash) => {
+            expect(() => {
+                assertIsBlockhash(badBlockhash);
+            }).toThrow(
+                new SolanaError(SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE, {
+                    actualLength,
+                }),
+            );
         });
         it('does not throw when supplied a base-58 encoded hash', () => {
             expect(() => {
