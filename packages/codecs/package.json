@@ -72,7 +72,7 @@
         "@solana/eslint-config-solana": "^1.0.2",
         "@solana/test-config": "workspace:*",
         "@solana/tsconfig": "workspace:*",
-        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/eslint-plugin": "^7.1.0",
         "@typescript-eslint/parser": "^6.3.0",
         "agadoo": "^3.0.0",
         "eslint": "^8.45.0",
