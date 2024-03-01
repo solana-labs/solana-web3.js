@@ -1,5 +1,7 @@
 import {
     SOLANA_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
     SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE,
@@ -21,8 +23,6 @@ import {
     SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -167,6 +167,10 @@ export const SolanaErrorMessages: Readonly<{
     [P in SolanaErrorCode]: string;
 }> = {
     [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: 'Account not found at address: $address',
+    [SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE]:
+        'Expected base58 encoded address to decode to a byte array of length 32. Actual length: $actualLength.',
+    [SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE]:
+        'Expected base58-encoded address string of length in the range [32, 44]. Actual length: $actualLength.',
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: 'Codec [$codecDescription] cannot decode empty byte arrays.',
@@ -201,10 +205,6 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED]: 'Unable to find a viable program address bump seed.',
     [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address',
     [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address',
-    [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH]:
-        'Expected base58 encoded address to decode to a byte array of length 32. Actual length: $actualLength.',
-    [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH]:
-        'Expected base58-encoded string of length between 32 and 44, got $actualLength.',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED]:
         'instruction tries to borrow reference for an account which is already borrowed',

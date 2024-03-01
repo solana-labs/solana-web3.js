@@ -9,9 +9,8 @@ import {
 } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH,
-    SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS,
+    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -53,29 +52,25 @@ export function isAddress(putativeAddress: string): putativeAddress is Address<t
 }
 
 export function assertIsAddress(putativeAddress: string): asserts putativeAddress is Address<typeof putativeAddress> {
-    try {
-        // Fast-path; see if the input string is of an acceptable length.
-        if (
-            // Lowest address (32 bytes of zeroes)
-            putativeAddress.length < 32 ||
-            // Highest address (32 bytes of 255)
-            putativeAddress.length > 44
-        ) {
-            throw new SolanaError(SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH, {
-                actualLength: putativeAddress.length,
-            });
-        }
-        // Slow-path; actually attempt to decode the input string.
-        const base58Encoder = getMemoizedBase58Encoder();
-        const bytes = base58Encoder.encode(putativeAddress);
-        const numBytes = bytes.byteLength;
-        if (numBytes !== 32) {
-            throw new SolanaError(SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH, {
-                actualLength: numBytes,
-            });
-        }
-    } catch (e) {
-        throw new SolanaError(SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, { putativeAddress });
+    // Fast-path; see if the input string is of an acceptable length.
+    if (
+        // Lowest address (32 bytes of zeroes)
+        putativeAddress.length < 32 ||
+        // Highest address (32 bytes of 255)
+        putativeAddress.length > 44
+    ) {
+        throw new SolanaError(SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE, {
+            actualLength: putativeAddress.length,
+        });
+    }
+    // Slow-path; actually attempt to decode the input string.
+    const base58Encoder = getMemoizedBase58Encoder();
+    const bytes = base58Encoder.encode(putativeAddress);
+    const numBytes = bytes.byteLength;
+    if (numBytes !== 32) {
+        throw new SolanaError(SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE, {
+            actualLength: numBytes,
+        });
     }
 }
 

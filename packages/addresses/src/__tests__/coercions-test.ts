@@ -1,4 +1,8 @@
-import { SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, SolanaError } from '@solana/errors';
+import {
+    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
+    SolanaError,
+} from '@solana/errors';
 
 import { Address, address } from '../address';
 
@@ -11,11 +15,22 @@ describe('coercions', () => {
             const coerced = address('GQE2yjns7SKKuMc89tveBDpzYHwXfeuB2PGAbGaPWc6G');
             expect(coerced).toBe(raw);
         });
-        it('throws on invalid `Address`', () => {
-            const thisThrows = () => address('3333333333333333');
+        it.each([31, 45])('throws given an address with length %s', actualLength => {
+            const thisThrows = () => address('3'.repeat(actualLength));
             expect(thisThrows).toThrow(
-                new SolanaError(SOLANA_ERROR__NOT_A_BASE58_ENCODED_ADDRESS, {
-                    putativeAddress: '3333333333333333',
+                new SolanaError(SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE, {
+                    actualLength,
+                }),
+            );
+        });
+        it.each([
+            [31, 'tVojvhToWjQ8Xvo4UPx2Xz9eRy7auyYMmZBjc2XfN'],
+            [33, 'JJEfe6DcPM2ziB2vfUWDV6aHVerXRGkv3TcyvJUNGHZz'],
+        ])('throws given an address that decodes to have %s bytes', (actualLength, badAddress) => {
+            const thisThrows = () => address(badAddress);
+            expect(thisThrows).toThrow(
+                new SolanaError(SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE, {
+                    actualLength,
                 }),
             );
         });

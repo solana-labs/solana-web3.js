@@ -1,5 +1,7 @@
 import {
     SOLANA_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
     SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
@@ -14,8 +16,6 @@ import {
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
     SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH,
-    SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -170,6 +170,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: {
             address: string;
         };
+        [SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE]: {
+            actualLength: number;
+        };
+        [SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE]: {
+            actualLength: number;
+        };
         [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
             currentBlockHeight: bigint;
             lastValidBlockHeight: bigint;
@@ -229,12 +235,6 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: {
             address: string;
-        };
-        [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_BYTE_LENGTH]: {
-            actualLength: number;
-        };
-        [SOLANA_ERROR__INCORRECT_BASE58_ADDRESS_LENGTH]: {
-            actualLength: number;
         };
         [SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR]: {
             encodedData: string;
