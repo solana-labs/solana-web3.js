@@ -3,6 +3,8 @@ import {
     SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
     SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE,
     SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
@@ -82,6 +84,9 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE,
+    SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
+    SOLANA_ERROR__MALFORMED_BIGINT_STRING,
+    SOLANA_ERROR__MALFORMED_NUMBER_STRING,
     SOLANA_ERROR__MALFORMED_PROGRAM_DERIVED_ADDRESS,
     SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
     SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
@@ -112,6 +117,7 @@ import {
     SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
+    SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_LOADED_TWICE,
@@ -184,6 +190,10 @@ export const SolanaErrorMessages: Readonly<{
         'Expected base58 encoded address to decode to a byte array of length 32. Actual length: $actualLength.',
     [SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE]:
         'Expected base58-encoded address string of length in the range [32, 44]. Actual length: $actualLength.',
+    [SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE]:
+        'Expected base58 encoded blockhash to decode to a byte array of length 32. Actual length: $actualLength.',
+    [SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE]:
+        'Expected base58-encoded blockash string of length in the range [32, 44]. Actual length: $actualLength.',
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: 'Codec [$codecDescription] cannot decode empty byte arrays.',
@@ -292,6 +302,9 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR]: 'Unsupported sysvar',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
     [SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE]: 'Invalid seeds; point must fall off the Ed25519 curve.',
+    [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
+    [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: '`$value` cannot be parsed as a `BigInt`',
+    [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: '`$value` cannot be parsed as a `Number`',
     [SOLANA_ERROR__MALFORMED_PROGRAM_DERIVED_ADDRESS]:
         'Expected given program derived address to have the following format: [Address, ProgramDerivedAddressBump].',
     [SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED]:
@@ -351,6 +364,7 @@ export const SolanaErrorMessages: Readonly<{
         'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING]: 'No signing implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING]: 'No key export implementation could be found.',
+    [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: 'Timestamp value must be in the range [-8.64e15, 8.64e15]. `$value` given',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING]:
         'Transaction processing left an account with an outstanding borrowed reference',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE]: 'Account in use',

@@ -3,6 +3,8 @@ import {
     SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
+    SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
     SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
     SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
@@ -74,6 +76,8 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
+    SOLANA_ERROR__MALFORMED_BIGINT_STRING,
+    SOLANA_ERROR__MALFORMED_NUMBER_STRING,
     SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
     SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
     SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
@@ -92,6 +96,7 @@ import {
     SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER,
+    SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
     SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
     SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
@@ -187,6 +192,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE]: {
             actualLength: number;
         };
+        [SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE]: {
+            actualLength: number;
+        };
+        [SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE]: {
+            actualLength: number;
+        };
         [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]: {
             currentBlockHeight: bigint;
             lastValidBlockHeight: bigint;
@@ -263,6 +274,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: {
             byteLength: number;
         };
+        [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: {
+            value: string;
+        };
         [SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED]: {
             actual: number;
             maxSeeds: number;
@@ -287,6 +301,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]: {
             addresses: string[];
+        };
+        [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: {
+            value: string;
         };
         [SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE]: {
             bump: number;
@@ -325,6 +342,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER]: {
             address: string;
+        };
+        [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: {
+            value: number;
         };
         [SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION]: {
             index: number;

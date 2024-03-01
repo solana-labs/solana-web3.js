@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__MALFORMED_BIGINT_STRING, SolanaError } from '@solana/errors';
+
 export type StringifiedBigInt = string & { readonly __brand: unique symbol };
 
 export function isStringifiedBigInt(putativeBigInt: string): putativeBigInt is StringifiedBigInt {
@@ -12,9 +14,9 @@ export function isStringifiedBigInt(putativeBigInt: string): putativeBigInt is S
 export function assertIsStringifiedBigInt(putativeBigInt: string): asserts putativeBigInt is StringifiedBigInt {
     try {
         BigInt(putativeBigInt);
-    } catch (e) {
-        throw new Error(`\`${putativeBigInt}\` cannot be parsed as a BigInt`, {
-            cause: e,
+    } catch {
+        throw new SolanaError(SOLANA_ERROR__MALFORMED_BIGINT_STRING, {
+            value: putativeBigInt,
         });
     }
 }
