@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError } from '@solana/errors';
 
 import { MessageSigner } from './message-signer';
 import { TransactionSigner } from './transaction-signer';
@@ -12,11 +13,9 @@ export function deduplicateSigners<TSigner extends MessageSigner | TransactionSi
         if (!deduplicated[signer.address]) {
             deduplicated[signer.address] = signer;
         } else if (deduplicated[signer.address] !== signer) {
-            // TODO: Coded error.
-            throw new Error(
-                `Multiple distinct signers were identified for address "${signer.address}". ` +
-                    `Please ensure that you are using the same signer instance for each address.`,
-            );
+            throw new SolanaError(SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, {
+                address: signer.address,
+            });
         }
     });
     return Object.values(deduplicated);

@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
 import {
     assertIsTransactionPartialSigner,
@@ -28,11 +29,13 @@ describe('assertIsTransactionPartialSigner', () => {
             signTransactions: async () => [],
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement the TransactionPartialSigner interface';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsTransactionPartialSigner(mySigner)).not.toThrow();
-        expect(() => assertIsTransactionPartialSigner({ address: myAddress })).toThrow(expectedMessage);
+        expect(() => assertIsTransactionPartialSigner({ address: myAddress })).toThrow(expectedError);
         expect(() => assertIsTransactionPartialSigner({ address: myAddress, signTransactions: 42 })).toThrow(
-            expectedMessage,
+            expectedError,
         );
     });
 });

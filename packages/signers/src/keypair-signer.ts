@@ -1,4 +1,5 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { createKeyPairFromBytes, generateKeyPair, signBytes } from '@solana/keys';
 import { partiallySignTransaction } from '@solana/transactions';
 
@@ -28,8 +29,9 @@ export function assertIsKeyPairSigner<TAddress extends string>(value: {
     [key: string]: unknown;
 }): asserts value is KeyPairSigner<TAddress> {
     if (!isKeyPairSigner(value)) {
-        // TODO: Coded error.
-        throw new Error('The provided value does not implement the KeyPairSigner interface');
+        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER, {
+            address: value.address,
+        });
     }
 }
 

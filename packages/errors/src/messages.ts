@@ -94,6 +94,17 @@ import {
     SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
+    SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER,
+    SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER,
+    SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS,
+    SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
@@ -302,6 +313,30 @@ export const SolanaErrorMessages: Readonly<{
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +
         '`Number.MAX_SAFE_INTEGER`.',
+    [SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]:
+        'Multiple distinct signers were identified for address `$address`. Please ensure that ' +
+        'you are using the same signer instance for each address.',
+    [SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER]:
+        'The provided value does not implement the `KeyPairSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER]:
+        'The provided value does not implement the `MessageModifyingSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER]:
+        'The provided value does not implement the `MessagePartialSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER]:
+        'The provided value does not implement any of the `MessageSigner` interfaces',
+    [SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER]:
+        'The provided value does not implement the `TransactionModifyingSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER]:
+        'The provided value does not implement the `TransactionPartialSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER]:
+        'The provided value does not implement the `TransactionSendingSigner` interface',
+    [SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER]:
+        'The provided value does not implement any of the `TransactionSigner` interfaces',
+    [SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS]:
+        'More than one `TransactionSendingSigner` was identified.',
+    [SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING]:
+        'No `TransactionSendingSigner` was identified. Please provide a valid ' +
+        '`ITransactionWithSingleSendingSigner` transaction.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING]: 'No digest implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING]:
         'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +

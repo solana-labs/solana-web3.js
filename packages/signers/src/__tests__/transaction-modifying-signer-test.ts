@@ -1,4 +1,5 @@
 import { address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
 
 import {
     assertIsTransactionModifyingSigner,
@@ -28,11 +29,13 @@ describe('assertIsTransactionModifyingSigner', () => {
             modifyAndSignTransactions: async () => [],
         } satisfies TransactionModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedMessage = 'The provided value does not implement the TransactionModifyingSigner interface';
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER, {
+            address: myAddress,
+        });
         expect(() => assertIsTransactionModifyingSigner(mySigner)).not.toThrow();
-        expect(() => assertIsTransactionModifyingSigner({ address: myAddress })).toThrow(expectedMessage);
+        expect(() => assertIsTransactionModifyingSigner({ address: myAddress })).toThrow(expectedError);
         expect(() => assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
-            expectedMessage,
+            expectedError,
         );
     });
 });

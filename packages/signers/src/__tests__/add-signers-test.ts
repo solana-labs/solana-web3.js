@@ -1,6 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import { SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError } from '@solana/errors';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { BaseTransaction } from '@solana/transactions';
 
@@ -116,8 +117,9 @@ describe('addSignersToInstruction', () => {
 
         // Then we expect an error to be thrown.
         expect(fn).toThrow(
-            'Multiple distinct signers were identified for address "1111". ' +
-                'Please ensure that you are using the same signer instance for each address.',
+            new SolanaError(SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, {
+                address: '1111',
+            }),
         );
     });
 
