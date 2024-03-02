@@ -40,9 +40,8 @@ describe('createWebSocketConnection', () => {
         });
         await expect(connectionPromise).rejects.toThrow('WebSocket failed to connect');
     });
-    // https://github.com/thoov/mock-socket/issues/384
-    it.failing('throws when the connection is aborted before the connection is established', async () => {
-        expect.assertions(1);
+    it('throws when the connection is aborted before the connection is established', async () => {
+        expect.assertions(2);
         const abortController = new AbortController();
         const connectionPromise = createWebSocketConnection({
             sendBufferHighWatermark: 0,

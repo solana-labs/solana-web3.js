@@ -6,7 +6,7 @@ settings:
 
 overrides:
   jsdom: ^22
-  mock-socket: ^9.3.0
+  mock-socket: ^9.3.1
   shelljs: '>=0.8.5'
 
 importers:
@@ -11775,7 +11775,7 @@ packages:
     resolution: {integrity: sha512-a+UJGfowNIWvtIKIQBHoEWIUqRxxQHFx4CXT+R5KxxKBtEQ5rS3pPOV/5299sHzqbmeCzxxY5qE4+yfXePePig==}
     dependencies:
       jest-diff: 29.7.0
-      mock-socket: 9.3.0
+      mock-socket: 9.3.1
     dev: true
 
   /jest-worker@27.5.1:
@@ -12459,8 +12459,8 @@ packages:
       yargs-unparser: 2.0.0
     dev: true
 
-  /mock-socket@9.3.0:
-    resolution: {integrity: sha512-TFaQaIxXbzNke3z9nhSnMJFQn8l7QPmF+Luhh8MPHqkmr6B4fPquOTSILCjGUyxDBPv9AFxuaTGmRINDHDmkdQ==}
+  /mock-socket@9.3.1:
+    resolution: {integrity: sha512-qxBgB7Qa2sEQgHFjj0dSigq7fX4k6Saisd5Nelwp2q8mlbAFh5dHV9JTTlF8viYJLSSWgMCZFUom8PJcMNBoJw==}
     engines: {node: '>= 8'}
     dev: true
 
