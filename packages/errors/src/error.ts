@@ -25,12 +25,24 @@ type SolanaErrorCodedContext = Readonly<{
 export class SolanaError<TErrorCode extends SolanaErrorCode = SolanaErrorCode> extends Error {
     readonly context: SolanaErrorCodedContext[TErrorCode];
     constructor(
-        ...[code, context]: SolanaErrorContext[TErrorCode] extends undefined
-            ? [code: TErrorCode]
-            : [code: TErrorCode, context: SolanaErrorContext[TErrorCode]]
+        ...[code, contextAndErrorOptions]: SolanaErrorContext[TErrorCode] extends undefined
+            ? [code: TErrorCode, errorOptions?: ErrorOptions | undefined]
+            : [code: TErrorCode, contextAndErrorOptions: SolanaErrorContext[TErrorCode] & (ErrorOptions | undefined)]
     ) {
+        let context: SolanaErrorContext[TErrorCode] | undefined;
+        let errorOptions: ErrorOptions | undefined;
+        if (contextAndErrorOptions) {
+            // If the `ErrorOptions` type ever changes, update this code.
+            const { cause, ...contextRest } = contextAndErrorOptions;
+            if (cause) {
+                errorOptions = { cause };
+            }
+            if (Object.keys(contextRest).length > 0) {
+                context = contextRest as SolanaErrorContext[TErrorCode];
+            }
+        }
         const message = getErrorMessage(code, context);
-        super(message);
+        super(message, errorOptions);
         this.context = {
             __code: code,
             ...context,

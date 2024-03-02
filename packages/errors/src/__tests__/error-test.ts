@@ -4,22 +4,75 @@ import { getErrorMessage } from '../message-formatter';
 jest.mock('../message-formatter');
 
 describe('SolanaError', () => {
-    let error123: SolanaError;
-    beforeEach(() => {
-        error123 = new SolanaError(
-            // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
-            123,
-            { foo: 'bar' },
-        );
+    describe('given an error with context', () => {
+        let errorWithContext: SolanaError;
+        beforeEach(() => {
+            errorWithContext = new SolanaError(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                { foo: 'bar' },
+            );
+        });
+        it('exposes its error code', () => {
+            expect(errorWithContext.context).toHaveProperty('__code', 123);
+        });
+        it('exposes its context', () => {
+            expect(errorWithContext.context).toHaveProperty('foo', 'bar');
+        });
+        it('exposes no cause', () => {
+            expect(errorWithContext.cause).toBeUndefined();
+        });
+        it('calls the message formatter with the code and context', () => {
+            expect(getErrorMessage).toHaveBeenCalledWith(123, { foo: 'bar' });
+        });
     });
-    it('exposes its error code', () => {
-        expect(error123.context).toHaveProperty('__code', 123);
+    describe('given an error with no context', () => {
+        beforeEach(() => {
+            new SolanaError(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                undefined,
+            );
+        });
+        it('calls the message formatter with undefined context', () => {
+            expect(getErrorMessage).toHaveBeenCalledWith(123, undefined);
+        });
     });
-    it('exposes its context', () => {
-        expect(error123.context).toHaveProperty('foo', 'bar');
+    describe('given an error with a cause', () => {
+        let errorWithCause: SolanaError;
+        let cause: unknown;
+        beforeEach(() => {
+            cause = {};
+            errorWithCause = new SolanaError(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                { cause },
+            );
+        });
+        it('exposes its cause', () => {
+            expect(errorWithCause.cause).toBe(cause);
+        });
     });
-    it('calls the message formatter with the code and context', () => {
-        expect(getErrorMessage).toHaveBeenCalledWith(123, { foo: 'bar' });
+    describe.each(['cause'])('given an error with only the `%s` property from `ErrorOptions` present', propName => {
+        let errorOptionValue: unknown;
+        let errorWithOption: SolanaError;
+        beforeEach(() => {
+            errorOptionValue = Symbol();
+            errorWithOption = new SolanaError(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                { [propName]: errorOptionValue },
+            );
+        });
+        it('omits the error option from its context', () => {
+            expect(errorWithOption.context).not.toHaveProperty(propName);
+        });
+        it('calls the message formatter with the error option omitted', () => {
+            expect(getErrorMessage).toHaveBeenCalledWith(
+                123,
+                expect.not.objectContaining({ [propName]: errorOptionValue }),
+            );
+        });
     });
     it('sets its message to the output of the message formatter', async () => {
         expect.assertions(1);

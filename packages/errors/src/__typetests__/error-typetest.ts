@@ -42,3 +42,14 @@ if (isSolanaError(e, SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES)) {
     // @ts-expect-error Context belongs to another error code
     e.context satisfies SolanaErrorContext[typeof SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE];
 }
+
+// `SolanaErrorContext` must not contain any keys reserved by `ErrorOptions` (eg. `cause`)
+null as unknown as SolanaErrorContext satisfies {
+    [Code in keyof SolanaErrorContext]: SolanaErrorContext[Code] extends undefined
+        ? undefined
+        : {
+              [PP in keyof SolanaErrorContext[Code]]: PP extends keyof ErrorOptions
+                  ? never
+                  : SolanaErrorContext[Code][PP];
+          };
+};
