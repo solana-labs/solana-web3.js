@@ -6,21 +6,20 @@ import { getWebSocketTransportWithAutoping } from './rpc-subscriptions-autopinge
 import { RpcSubscriptionsTransportFromClusterUrl } from './rpc-subscriptions-clusters';
 import { getWebSocketTransportWithConnectionSharding } from './rpc-subscriptions-connection-sharding';
 
-type Config<TClusterUrl extends ClusterUrl> = Readonly<{
+export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUrl> = Readonly<{
     url: TClusterUrl;
+    /**
+     * You might like to open more subscriptions per connection than your RPC provider allows
+     * for. Using the initial payload as input, return a shard key from this method to assign
+     * subscriptions to separate connections. One socket will be opened per shard key.
+     */
+    getShard?: (payload: unknown) => string;
+    intervalMs?: number;
+    sendBufferHighWatermark?: number;
 }>;
 
 export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends ClusterUrl>(
-    config: Config<TClusterUrl> & {
-        /**
-         * You might like to open more subscriptions per connection than your RPC provider allows
-         * for. Using the initial payload as input, return a shard key from this method to assign
-         * subscriptions to separate connections. One socket will be opened per shard key.
-         */
-        getShard?: (payload: unknown) => string;
-        intervalMs?: number;
-        sendBufferHighWatermark?: number;
-    },
+    config: DefaultRpcSubscriptionsTransportConfig<TClusterUrl>,
 ): RpcSubscriptionsTransportFromClusterUrl<TClusterUrl> {
     const { getShard, intervalMs, ...rest } = config;
     return pipe(
