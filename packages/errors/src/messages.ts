@@ -6,14 +6,10 @@ import {
     SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
-    SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE,
-    SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE,
     SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
     SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
     SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH,
-    SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC,
-    SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_PREFIX,
     SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
     SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
@@ -205,8 +201,6 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED]:
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY]: 'Codec [$codecDescription] cannot decode empty byte arrays.',
-    [SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE]: 'Cannot reverse a codec of variable size.',
-    [SOLANA_ERROR__CODECS_CODEC_REQUIRES_FIXED_SIZE]: 'Codec [$codecDescription] requires a fixed size.',
     [SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH]:
         'Encoder and decoder must either both be fixed-size or variable-size.',
     [SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE]:
@@ -215,10 +209,6 @@ export const SolanaErrorMessages: Readonly<{
         'Expected a fixed-size codec, got a variable-size one.',
     [SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH]:
         'Expected a variable-size codec, got a fixed-size one.',
-    [SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC]:
-        'Fixed nullables can only be used with fixed-size codecs.',
-    [SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_PREFIX]:
-        'Fixed nullables can only be used with fixed-size prefix.',
     [SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH]:
         'Encoder and decoder must have the same fixed size, got [$encoderFixedSize] and [$decoderFixedSize].',
     [SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT]:
