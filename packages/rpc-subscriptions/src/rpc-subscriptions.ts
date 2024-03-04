@@ -1,10 +1,12 @@
 import { pipe } from '@solana/functional';
 import type { SolanaRpcSubscriptionsApi, SolanaRpcSubscriptionsApiUnstable } from '@solana/rpc-subscriptions-api';
+import { createSolanaRpcSubscriptionsApi } from '@solana/rpc-subscriptions-api';
 import {
-    createSolanaRpcSubscriptionsApi,
-    createSolanaRpcSubscriptionsApi_UNSTABLE,
-} from '@solana/rpc-subscriptions-api';
-import { createSubscriptionRpc, type RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
+    createSubscriptionRpc,
+    RpcSubscriptionsApiMethods,
+    type RpcSubscriptionsTransport,
+} from '@solana/rpc-subscriptions-spec';
+import { ClusterUrl } from '@solana/rpc-types';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
@@ -12,32 +14,51 @@ import fastStableStringify from 'fast-stable-stringify';
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
+import {
+    createDefaultRpcSubscriptionsTransport,
+    DefaultRpcSubscriptionsTransportConfig,
+} from './rpc-subscriptions-transport';
 
-type RpcSubscriptionsConfig<TTransport extends RpcSubscriptionsTransport> = Readonly<{
-    transport: TTransport;
-}>;
+export function createSolanaRpcSubscriptions<
+    TClusterUrl extends ClusterUrl,
+    TApi extends RpcSubscriptionsApiMethods = SolanaRpcSubscriptionsApi,
+>(clusterUrl: TClusterUrl, config?: Omit<DefaultRpcSubscriptionsTransportConfig<TClusterUrl>, 'url'>) {
+    const transport = createDefaultRpcSubscriptionsTransport({ url: clusterUrl, ...config });
+    return createSolanaRpcSubscriptionsFromTransport<typeof transport, TApi>(transport);
+}
 
-export function createSolanaRpcSubscriptions<TTransport extends RpcSubscriptionsTransport>(
-    config: RpcSubscriptionsConfig<TTransport>,
-): RpcSubscriptionsFromTransport<SolanaRpcSubscriptionsApi, TTransport> {
+export function createSolanaRpcSubscriptions_UNSTABLE<TClusterUrl extends ClusterUrl>(
+    clusterUrl: TClusterUrl,
+    config?: Omit<DefaultRpcSubscriptionsTransportConfig<TClusterUrl>, 'url'>,
+) {
+    return createSolanaRpcSubscriptions<TClusterUrl, SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>(
+        clusterUrl,
+        config,
+    );
+}
+
+export function createSolanaRpcSubscriptionsFromTransport<
+    TTransport extends RpcSubscriptionsTransport,
+    TApi extends RpcSubscriptionsApiMethods = SolanaRpcSubscriptionsApi,
+>(transport: TTransport) {
     return pipe(
         createSubscriptionRpc({
-            ...config,
-            api: createSolanaRpcSubscriptionsApi(DEFAULT_RPC_CONFIG),
+            api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_CONFIG),
+            transport,
         }),
         rpcSubscriptions =>
             getRpcSubscriptionsWithSubscriptionCoalescing({
                 getDeduplicationKey: (...args) => fastStableStringify(args),
                 rpcSubscriptions,
             }),
-    ) as RpcSubscriptionsFromTransport<SolanaRpcSubscriptionsApi, TTransport>;
+    ) as RpcSubscriptionsFromTransport<TApi, TTransport>;
 }
 
-export function createSolanaRpcSubscriptions_UNSTABLE<TTransport extends RpcSubscriptionsTransport>(
-    config: RpcSubscriptionsConfig<TTransport>,
-): RpcSubscriptionsFromTransport<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable, TTransport> {
-    return createSubscriptionRpc({
-        ...config,
-        api: createSolanaRpcSubscriptionsApi_UNSTABLE(DEFAULT_RPC_CONFIG),
-    }) as RpcSubscriptionsFromTransport<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable, TTransport>;
+export function createSolanaRpcSubscriptionsFromTransport_UNSTABLE<TTransport extends RpcSubscriptionsTransport>(
+    transport: TTransport,
+) {
+    return createSolanaRpcSubscriptionsFromTransport<
+        TTransport,
+        SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable
+    >(transport);
 }
