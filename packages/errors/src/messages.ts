@@ -81,6 +81,10 @@ import {
     SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE,
+    SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
+    SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE,
+    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
+    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING,
     SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
@@ -302,6 +306,21 @@ export const SolanaErrorMessages: Readonly<{
         'Expected instruction to have progress address $expectedProgramAddress, got $actualProgramAddress.',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
     [SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE]: 'Invalid seeds; point must fall off the Ed25519 curve.',
+    [SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING]:
+        'Invariant violation: Found no abortable iterable cache entry for key `$cacheKey`. It ' +
+        'should be impossible to hit this error; please file an issue at ' +
+        'https://sola.na/web3invariant',
+    [SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE]:
+        'Invariant violation: Switch statement non-exhaustive. Received unexpected value ' +
+        '`$unexpectedValue`. It should be impossible to hit this error; please file an issue at ' +
+        'https://sola.na/web3invariant',
+    [SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE]:
+        'Invariant violation: WebSocket message iterator state is corrupt; iterated without first ' +
+        'resolving existing message promise. It should be impossible to hit this error; please ' +
+        'file an issue at https://sola.na/web3invariant',
+    [SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING]:
+        'Invariant violation: WebSocket message iterator is missing state storage. It should be ' +
+        'impossible to hit this error; please file an issue at https://sola.na/web3invariant',
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
     [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: '`$value` cannot be parsed as a `BigInt`',
     [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: '`$value` cannot be parsed as a `Number`',

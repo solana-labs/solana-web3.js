@@ -1,3 +1,5 @@
+import { SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE, SolanaError } from '@solana/errors';
+
 export type Commitment = 'confirmed' | 'finalized' | 'processed';
 
 function getCommitmentScore(commitment: Commitment): number {
@@ -9,9 +11,9 @@ function getCommitmentScore(commitment: Commitment): number {
         case 'processed':
             return 0;
         default:
-            return ((_: never) => {
-                throw new Error(`Unrecognized commitment \`${commitment}\`.`);
-            })(commitment);
+            throw new SolanaError(SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE, {
+                unexpectedValue: commitment satisfies never,
+            });
     }
 }
 
