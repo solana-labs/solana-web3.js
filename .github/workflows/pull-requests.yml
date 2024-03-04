@@ -71,15 +71,21 @@ jobs:
         if: steps.cache-test-validator.outputs.cache-hit != 'true'
         run: scripts/setup-test-validator.sh
 
+      - name: Is the validator running before the tests?
+        run: ps aux | grep validator
+
       - name: Build & Test
         run: pnpm build --concurrency=100%
+
+      - name: Is the validator still running after the tests?
+        run: ps aux | grep validator
 
       - name: Breakpoint if tests failed
         if: failure()
         uses: namespacelabs/breakpoint-action@v0
         with:
           duration: 30m
-          authorized-users: buffalojoec
+          authorized-users: buffalojoec, steveluscher
 
       - name: Upload Experimental library build artifacts
         if: matrix.node == 'current'
