@@ -1,11 +1,4 @@
 import {
-    isSolanaError,
-    SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE,
-    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
-    SolanaError,
-} from '@solana/errors';
-
-import {
     assertIsFixedSize,
     createDecoder,
     createEncoder,
@@ -21,15 +14,7 @@ import { combineCodec } from './combine-codec';
 export function reverseEncoder<TFrom, TSize extends number>(
     encoder: FixedSizeEncoder<TFrom, TSize>,
 ): FixedSizeEncoder<TFrom, TSize> {
-    try {
-        assertIsFixedSize(encoder);
-    } catch (e) {
-        if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-            throw new SolanaError(SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE);
-        } else {
-            throw e;
-        }
-    }
+    assertIsFixedSize(encoder);
     return createEncoder({
         ...encoder,
         write: (value: TFrom, bytes, offset) => {
@@ -47,15 +32,7 @@ export function reverseEncoder<TFrom, TSize extends number>(
 export function reverseDecoder<TTo, TSize extends number>(
     decoder: FixedSizeDecoder<TTo, TSize>,
 ): FixedSizeDecoder<TTo, TSize> {
-    try {
-        assertIsFixedSize(decoder);
-    } catch (e) {
-        if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-            throw new SolanaError(SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE);
-        } else {
-            throw e;
-        }
-    }
+    assertIsFixedSize(decoder);
     return createDecoder({
         ...decoder,
         read: (bytes, offset) => {

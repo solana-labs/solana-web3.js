@@ -25,13 +25,6 @@ import {
     NumberDecoder,
     NumberEncoder,
 } from '@solana/codecs-numbers';
-import {
-    isSolanaError,
-    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
-    SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC,
-    SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_PREFIX,
-    SolanaError,
-} from '@solana/errors';
 
 import { getMaxSize, sumCodecSizes } from './utils';
 
@@ -81,24 +74,8 @@ export function getNullableEncoder<TFrom>(
 
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        try {
-            assertIsFixedSize(item);
-        } catch (e) {
-            if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-                throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC);
-            } else {
-                throw e;
-            }
-        }
-        try {
-            assertIsFixedSize(prefix);
-        } catch (e) {
-            if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-                throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_PREFIX);
-            } else {
-                throw e;
-            }
-        }
+        assertIsFixedSize(item);
+        assertIsFixedSize(prefix);
         const fixedSize = prefix.fixedSize + item.fixedSize;
         return createEncoder({
             fixedSize,
@@ -154,24 +131,8 @@ export function getNullableDecoder<TTo>(
     let fixedSize: number | null = null;
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        try {
-            assertIsFixedSize(item);
-        } catch (e) {
-            if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-                throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_CODEC);
-            } else {
-                throw e;
-            }
-        }
-        try {
-            assertIsFixedSize(prefix);
-        } catch (e) {
-            if (isSolanaError(e, SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH)) {
-                throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_NULLABLE_WITH_VARIABLE_SIZE_PREFIX);
-            } else {
-                throw e;
-            }
-        }
+        assertIsFixedSize(item);
+        assertIsFixedSize(prefix);
         fixedSize = prefix.fixedSize + item.fixedSize;
     }
 

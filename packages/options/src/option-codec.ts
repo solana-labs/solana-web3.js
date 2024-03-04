@@ -75,18 +75,8 @@ export function getOptionEncoder<TFrom>(
 
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        try {
-            assertIsFixedSize(item);
-        } catch (e) {
-            // TODO: Coded error, also proper catch handling
-            throw new Error('Fixed options can only be used with fixed-size codecs.');
-        }
-        try {
-            assertIsFixedSize(prefix);
-        } catch (e) {
-            // TODO: Coded error, also proper catch handling
-            throw new Error('Fixed options can only be used with fixed-size prefix.');
-        }
+        assertIsFixedSize(item);
+        assertIsFixedSize(prefix);
         const fixedSize = prefix.fixedSize + item.fixedSize;
         return createEncoder({
             fixedSize,
@@ -149,18 +139,8 @@ export function getOptionDecoder<TTo>(
     let fixedSize: number | null = null;
     const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
     if (fixed || isZeroSizeItem) {
-        try {
-            assertIsFixedSize(item);
-        } catch (e) {
-            // TODO: Coded error, also proper catch handling
-            throw new Error('Fixed options can only be used with fixed-size codecs.');
-        }
-        try {
-            assertIsFixedSize(prefix);
-        } catch (e) {
-            // TODO: Coded error, also proper catch handling
-            throw new Error('Fixed options can only be used with fixed-size prefix.');
-        }
+        assertIsFixedSize(item);
+        assertIsFixedSize(prefix);
         fixedSize = prefix.fixedSize + item.fixedSize;
     }
 

@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH, SolanaError } from '@solana/errors';
 
 import { createDecoder, createEncoder } from '../codec';
 import { fixCodec } from '../fix-codec';
@@ -31,7 +31,7 @@ describe('reverseCodec', () => {
         // Variable-size codec.
         // @ts-expect-error Reversed codec should be fixed-size.
         expect(() => reverseCodec(base16)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE),
+            new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH),
         );
     });
 });
@@ -52,7 +52,7 @@ describe('reverseEncoder', () => {
 
         // @ts-expect-error Reversed encoder should be fixed-size.
         expect(() => reverseEncoder(base16)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE),
+            new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH),
         );
     });
 });
@@ -70,7 +70,7 @@ describe('reverseDecoder', () => {
 
         // @ts-expect-error Reversed decoder should be fixed-size.
         expect(() => reverseDecoder(base16)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_CANNOT_REVERSE_CODEC_OF_VARIABLE_SIZE),
+            new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH),
         );
     });
 });
