@@ -1,3 +1,8 @@
+import {
+    SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
+    SolanaError,
+} from '@solana/errors';
+
 type CacheEntry<TIterable extends AsyncIterable<unknown>> = {
     abortController: AbortController;
     iterable: Promise<TIterable> | TIterable;
@@ -7,7 +12,6 @@ type CacheEntry<TIterable extends AsyncIterable<unknown>> = {
 type CacheKey = string | symbol;
 type Config<TInput extends unknown[], TIterable extends AsyncIterable<unknown>> = Readonly<{
     getAbortSignalFromInputArgs: (...args: TInput) => AbortSignal;
-    getCacheEntryMissingErrorMessage?: (cacheKey: CacheKey) => string;
     getCacheKeyFromInputArgs: (...args: TInput) =>
         | CacheKey
         // `undefined` implies 'do not cache'
@@ -32,7 +36,6 @@ function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: Ca
 
 export function getCachedAbortableIterableFactory<TInput extends unknown[], TIterable extends AsyncIterable<unknown>>({
     getAbortSignalFromInputArgs,
-    getCacheEntryMissingErrorMessage,
     getCacheKeyFromInputArgs,
     onCacheHit,
     onCreateIterable,
@@ -41,7 +44,9 @@ export function getCachedAbortableIterableFactory<TInput extends unknown[], TIte
     function getCacheEntryOrThrow(cacheKey: CacheKey) {
         const currentCacheEntry = cache.get(cacheKey);
         if (!currentCacheEntry) {
-            throw new Error(getCacheEntryMissingErrorMessage ? getCacheEntryMissingErrorMessage(cacheKey) : undefined);
+            throw new SolanaError(SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING, {
+                cacheKey: cacheKey.toString(),
+            });
         }
         return currentCacheEntry;
     }

@@ -1,4 +1,6 @@
 import {
+    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
+    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT,
@@ -132,13 +134,14 @@ export async function createWebSocketConnection({
                             const state = iteratorState.get(iteratorKey);
                             if (!state) {
                                 // There should always be state by now.
-                                throw new Error('Invariant: WebSocket message iterator is missing state storage');
+                                throw new SolanaError(
+                                    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING,
+                                );
                             }
                             if (state.__hasPolled) {
                                 // You should never be able to poll twice in a row.
-                                throw new Error(
-                                    'Invariant: WebSocket message iterator state is corrupt; ' +
-                                        'iterated without first resolving existing message promise',
+                                throw new SolanaError(
+                                    SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
                                 );
                             }
                             const queuedMessages = state.queuedMessages;

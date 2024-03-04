@@ -22,9 +22,6 @@ export function getWebSocketTransportWithConnectionSharding<TTransport extends R
 }: Config<TTransport>): TTransport {
     return getCachedAbortableIterableFactory({
         getAbortSignalFromInputArgs: ({ signal }) => signal,
-        getCacheEntryMissingErrorMessage: __DEV__
-            ? shardKey => `Invariant: Found no cache entry for connection with shard key \`${shardKey?.toString()}\``
-            : undefined,
         getCacheKeyFromInputArgs: ({ payload }) => (getShard ? getShard(payload) : NULL_SHARD_CACHE_KEY),
         onCacheHit: (connection, { payload }) => connection.send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED(payload),
         onCreateIterable: (abortSignal, config) =>
