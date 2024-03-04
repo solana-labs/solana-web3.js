@@ -85,6 +85,9 @@ import {
     SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE,
     SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
     SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING,
+    SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
@@ -321,6 +324,12 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING]:
         'Invariant violation: WebSocket message iterator is missing state storage. It should be ' +
         'impossible to hit this error; please file an issue at https://sola.na/web3invariant',
+    [SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH]:
+        'Expected private key bytes with length 32. Actual length: $actualLength.',
+    [SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH]:
+        'Expected base58-encoded signature to decode to a byte array of length 64. Actual length: $actualLength.',
+    [SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE]:
+        'Expected base58-encoded signature string of length in the range [64, 88]. Actual length: $actualLength.',
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
     [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: '`$value` cannot be parsed as a `BigInt`',
     [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: '`$value` cannot be parsed as a `Number`',

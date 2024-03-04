@@ -1,6 +1,11 @@
 import { assertSigningCapabilityIsAvailable, assertVerificationCapabilityIsAvailable } from '@solana/assertions';
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
+    SolanaError,
+} from '@solana/errors';
 
 export type Signature = string & { readonly __brand: unique symbol };
 export type SignatureBytes = Uint8Array & { readonly __brand: unique symbol };
@@ -9,26 +14,23 @@ let base58Encoder: Encoder<string> | undefined;
 
 export function assertIsSignature(putativeSignature: string): asserts putativeSignature is Signature {
     if (!base58Encoder) base58Encoder = getBase58Encoder();
-
-    try {
-        // Fast-path; see if the input string is of an acceptable length.
-        if (
-            // Lowest value (64 bytes of zeroes)
-            putativeSignature.length < 64 ||
-            // Highest value (64 bytes of 255)
-            putativeSignature.length > 88
-        ) {
-            throw new Error('Expected input string to decode to a byte array of length 64.');
-        }
-        // Slow-path; actually attempt to decode the input string.
-        const bytes = base58Encoder.encode(putativeSignature);
-        const numBytes = bytes.byteLength;
-        if (numBytes !== 64) {
-            throw new Error(`Expected input string to decode to a byte array of length 64. Actual length: ${numBytes}`);
-        }
-    } catch (e) {
-        throw new Error(`\`${putativeSignature}\` is not a signature`, {
-            cause: e,
+    // Fast-path; see if the input string is of an acceptable length.
+    if (
+        // Lowest value (64 bytes of zeroes)
+        putativeSignature.length < 64 ||
+        // Highest value (64 bytes of 255)
+        putativeSignature.length > 88
+    ) {
+        throw new SolanaError(SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE, {
+            actualLength: putativeSignature.length,
+        });
+    }
+    // Slow-path; actually attempt to decode the input string.
+    const bytes = base58Encoder.encode(putativeSignature);
+    const numBytes = bytes.byteLength;
+    if (numBytes !== 64) {
+        throw new SolanaError(SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH, {
+            actualLength: numBytes,
         });
     }
 }
