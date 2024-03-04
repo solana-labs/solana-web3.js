@@ -1,10 +1,10 @@
 import { SolanaError } from '@solana/errors';
 import type { RpcTransport } from '@solana/rpc-spec';
 
-import { createSolanaRpc } from '../rpc';
+import { createSolanaRpcFromTransport } from '../rpc';
 
 describe('RPC integer overflow behavior', () => {
-    let rpc: ReturnType<typeof createSolanaRpc>;
+    let rpc: ReturnType<typeof createSolanaRpcFromTransport>;
     beforeEach(() => {
         const transport = jest.fn(
             () =>
@@ -12,7 +12,7 @@ describe('RPC integer overflow behavior', () => {
                     /* never resolve */
                 }),
         ) as RpcTransport;
-        rpc = createSolanaRpc({ transport });
+        rpc = createSolanaRpcFromTransport(transport);
     });
     it('does not throw when called with a value up to `Number.MAX_SAFE_INTEGER`', () => {
         expect(() => {

@@ -7,7 +7,7 @@ import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
 
 type RpcTransportConfig = Parameters<typeof createHttpTransport>[0];
-interface Config<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {
+export interface DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {
     url: TClusterUrl;
 }
 
@@ -25,7 +25,7 @@ function normalizeHeaders<T extends Record<string, string>>(
 }
 
 export function createDefaultRpcTransport<TClusterUrl extends ClusterUrl>(
-    config: Config<TClusterUrl>,
+    config: DefaultRpcTransportConfig<TClusterUrl>,
 ): RpcTransportFromClusterUrl<TClusterUrl> {
     return pipe(
         createHttpTransport({
