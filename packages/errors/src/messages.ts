@@ -82,6 +82,7 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID,
     SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR,
+    SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH,
     SOLANA_ERROR__INVALID_KEYPAIR_BYTES,
     SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE,
     SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
@@ -307,6 +308,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN]: '',
     [SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_PROGRAM_ID]: 'Unsupported program id',
     [SOLANA_ERROR__INSTRUCTION_ERROR_UNSUPPORTED_SYSVAR]: 'Unsupported sysvar',
+    [SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH]:
+        'Expected instruction to have progress address $expectedProgramAddress, got $actualProgramAddress.',
     [SOLANA_ERROR__INVALID_KEYPAIR_BYTES]: 'Key pair bytes must be of length 64, got $byteLength.',
     [SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE]: 'Invalid seeds; point must fall off the Ed25519 curve.',
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
