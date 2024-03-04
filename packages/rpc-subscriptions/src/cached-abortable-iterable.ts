@@ -7,7 +7,7 @@ type CacheEntry<TIterable extends AsyncIterable<unknown>> = {
 type CacheKey = string | symbol;
 type Config<TInput extends unknown[], TIterable extends AsyncIterable<unknown>> = Readonly<{
     getAbortSignalFromInputArgs: (...args: TInput) => AbortSignal;
-    getCacheEntryMissingError: (cacheKey: CacheKey) => Error;
+    getCacheEntryMissingErrorMessage?: (cacheKey: CacheKey) => string;
     getCacheKeyFromInputArgs: (...args: TInput) =>
         | CacheKey
         // `undefined` implies 'do not cache'
@@ -32,7 +32,7 @@ function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: Ca
 
 export function getCachedAbortableIterableFactory<TInput extends unknown[], TIterable extends AsyncIterable<unknown>>({
     getAbortSignalFromInputArgs,
-    getCacheEntryMissingError,
+    getCacheEntryMissingErrorMessage,
     getCacheKeyFromInputArgs,
     onCacheHit,
     onCreateIterable,
@@ -41,7 +41,7 @@ export function getCachedAbortableIterableFactory<TInput extends unknown[], TIte
     function getCacheEntryOrThrow(cacheKey: CacheKey) {
         const currentCacheEntry = cache.get(cacheKey);
         if (!currentCacheEntry) {
-            throw getCacheEntryMissingError(cacheKey);
+            throw new Error(getCacheEntryMissingErrorMessage ? getCacheEntryMissingErrorMessage(cacheKey) : undefined);
         }
         return currentCacheEntry;
     }

@@ -60,11 +60,10 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                     AsyncIterable<unknown>
                 >({
                     getAbortSignalFromInputArgs: ({ abortSignal }) => abortSignal,
-                    getCacheEntryMissingError(deduplicationKey) {
-                        return new Error(
-                            `Invariant: Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``,
-                        );
-                    },
+                    getCacheEntryMissingErrorMessage: __DEV__
+                        ? deduplicationKey =>
+                              `Invariant: Found no cache entry for subscription with deduplication key \`${deduplicationKey?.toString()}\``
+                        : undefined,
                     getCacheKeyFromInputArgs: () => deduplicationKey,
                     async onCacheHit(_iterable, _config) {
                         /**
