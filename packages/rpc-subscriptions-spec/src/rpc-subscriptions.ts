@@ -1,4 +1,9 @@
 import {
+    SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
+    SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID,
+    SolanaError,
+} from '@solana/errors';
+import {
     Callable,
     createRpcMessage,
     Flatten,
@@ -76,22 +81,19 @@ function makeProxy<TRpcSubscriptionsApiMethods, TRpcSubscriptionsTransport exten
         },
         get(target, p, receiver) {
             return function (...rawParams: unknown[]) {
-                const methodName = p.toString();
-                const createRpcSubscription = Reflect.get(target, methodName, receiver);
+                const notificationName = p.toString();
+                const createRpcSubscription = Reflect.get(target, notificationName, receiver);
                 if (p.toString().endsWith('Notifications') === false && !createRpcSubscription) {
-                    // TODO: Coded error.
-                    throw new Error(
-                        "Either the notification name must end in 'Notifications' or the API " +
-                            'must supply a subscription creator function to map between the ' +
-                            'notification name and the subscribe/unsubscribe method names.',
-                    );
+                    throw new SolanaError(SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
+                        notificationName,
+                    });
                 }
                 const newRequest = createRpcSubscription
                     ? createRpcSubscription(...rawParams)
                     : {
                           params: rawParams,
-                          subscribeMethodName: methodName.replace(/Notifications$/, 'Subscribe'),
-                          unsubscribeMethodName: methodName.replace(/Notifications$/, 'Unsubscribe'),
+                          subscribeMethodName: notificationName.replace(/Notifications$/, 'Subscribe'),
+                          unsubscribeMethodName: notificationName.replace(/Notifications$/, 'Unsubscribe'),
                       };
                 return createPendingRpcSubscription(rpcConfig, newRequest);
             };
@@ -165,8 +167,7 @@ function createPendingRpcSubscription<
                 }
             }
             if (subscriptionId == null) {
-                // TODO: Coded error.
-                throw new Error('Failed to obtain a subscription id from the server');
+                throw new SolanaError(SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID);
             }
             /**
              * STEP 3: Return an iterable that yields notifications for this subscription id.

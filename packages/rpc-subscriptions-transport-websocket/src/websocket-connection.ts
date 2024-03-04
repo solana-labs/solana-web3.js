@@ -1,3 +1,9 @@
+import {
+    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED,
+    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT,
+    SolanaError,
+} from '@solana/errors';
 import WebSocket from '@solana/ws-impl';
 
 type Config = Readonly<{
@@ -66,8 +72,9 @@ export async function createWebSocketConnection({
         function handleError(ev: Event) {
             if (!hasConnected) {
                 reject(
-                    // TODO: Coded error
-                    new Error('WebSocket failed to connect', { cause: ev }),
+                    new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT, {
+                        errorEvent: ev,
+                    }),
                 );
             }
         }
@@ -99,8 +106,9 @@ export async function createWebSocketConnection({
                                 bufferDrainWatcher = undefined;
                                 clearInterval(intervalId);
                                 reject(
-                                    // TODO: Coded error
-                                    new Error('WebSocket was closed before payload could be sent'),
+                                    new SolanaError(
+                                        SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+                                    ),
                                 );
                             };
                         });
@@ -150,8 +158,9 @@ export async function createWebSocketConnection({
                                     if (e === EXPLICIT_ABORT_TOKEN) {
                                         return;
                                     } else {
-                                        // TODO: Coded error.
-                                        throw new Error('WebSocket connection closed', { cause: e });
+                                        throw new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED, {
+                                            cause: e,
+                                        });
                                     }
                                 }
                             }
