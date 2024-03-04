@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -267,7 +263,7 @@ importers:
         version: 1.2.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
 
   packages/codecs:
     dependencies:
@@ -325,7 +321,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1872,8 +1868,8 @@ importers:
         specifier: ^16.8.0
         version: 16.8.1
       json-stable-stringify:
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.1.1
+        version: 1.1.1
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
@@ -1997,7 +1993,7 @@ importers:
         version: 3.1.0
       tsup:
         specifier: ^8.0.1
-        version: 8.0.1(@swc/core@1.3.93)(typescript@5.2.2)
+        version: 8.0.1(@swc/core@1.3.93)(typescript@5.1.6)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -11955,8 +11951,8 @@ packages:
   /json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  /json-stable-stringify@1.1.0:
-    resolution: {integrity: sha512-zfA+5SuwYN2VWqN1/5HZaDzQKLJHaBVMZIIM+wuYjdptkaQsqzDdqjqf+lZZJUuJq1aanHiY8LhH8LmH+qBYJA==}
+  /json-stable-stringify@1.1.1:
+    resolution: {integrity: sha512-SU/971Kt5qVQfJpyDveVhQ/vya+5hvrjClFOcr8c0Fq5aODJjMwutrOfCU+eCnVD5gpx1Q3fEqkyom77zH1iIg==}
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.5
@@ -15332,3 +15328,7 @@ packages:
   /zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
