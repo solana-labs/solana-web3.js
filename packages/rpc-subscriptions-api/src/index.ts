@@ -28,7 +28,9 @@ export type SolanaRpcSubscriptionsApi = AccountNotificationsApi &
     RootNotificationsApi &
     SignatureNotificationsApi &
     SlotNotificationsApi;
-export type SolanaRpcSubscriptionsApiUnstable = BlockNotificationsApi & SlotsUpdatesNotificationsApi & VoteNotificationsApi;
+export type SolanaRpcSubscriptionsApiUnstable = BlockNotificationsApi &
+    SlotsUpdatesNotificationsApi &
+    VoteNotificationsApi;
 
 export type {
     AccountNotificationsApi,

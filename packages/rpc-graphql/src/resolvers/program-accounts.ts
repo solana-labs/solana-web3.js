@@ -49,15 +49,19 @@ export function resolveProgramAccounts(fieldName?: string) {
 
                     if (encoding && thisResult.encodedData) {
                         if (Array.isArray(data)) {
-                            thisResult.encodedData[cacheKeyFn({
-                                dataSlice,
-                                encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
-                            })] = data[0];
+                            thisResult.encodedData[
+                                cacheKeyFn({
+                                    dataSlice,
+                                    encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
+                                })
+                            ] = data[0];
                         } else if (typeof data === 'string') {
-                            thisResult.encodedData[cacheKeyFn({
-                                dataSlice,
-                                encoding: 'base58',
-                            })] = data;
+                            thisResult.encodedData[
+                                cacheKeyFn({
+                                    dataSlice,
+                                    encoding: 'base58',
+                                })
+                            ] = data;
                         } else if (typeof data === 'object') {
                             const {
                                 parsed: { info: parsedData, type: accountType },

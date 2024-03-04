@@ -9,7 +9,7 @@ import { buildTransactionLoaderArgSetFromResolveInfo, onlyFieldsRequested } from
 
 export type EncodedTransactionData = {
     [key: string]: string;
-}
+};
 
 export type InstructionResult = {
     jsonParsedConfigs?: {
@@ -127,9 +127,11 @@ export function resolveTransaction(fieldName?: string) {
 
                 if (encoding && result.encodedData) {
                     if (Array.isArray(data)) {
-                        result.encodedData[cacheKeyFn({
-                            encoding,
-                        })] = data[0];
+                        result.encodedData[
+                            cacheKeyFn({
+                                encoding,
+                            })
+                        ] = data[0];
                     } else if (typeof data === 'object') {
                         const jsonParsedData = data;
                         jsonParsedData.message.instructions = mapJsonParsedInstructions(

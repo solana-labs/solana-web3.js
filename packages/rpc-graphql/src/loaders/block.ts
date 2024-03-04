@@ -23,17 +23,19 @@ function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
          */
         const blocksToFetch: ToFetchMap<BlockLoaderArgsBase, BlockLoaderValue> = {};
         try {
-            return Promise.all(blockQueryArgs.map(
-                ({ slot, ...args }) =>
-                    new Promise((resolve, reject) => {
-                        const blockRecords = (blocksToFetch[slot.toString()] ||= []);
-                        // Apply the default commitment level.
-                        if (!args.commitment) {
-                            args.commitment = 'confirmed';
-                        }
-                        blockRecords.push({ args, promiseCallback: { reject, resolve } });
-                    }),
-            )) as ReturnType<BlockLoader['loadMany']>;
+            return Promise.all(
+                blockQueryArgs.map(
+                    ({ slot, ...args }) =>
+                        new Promise((resolve, reject) => {
+                            const blockRecords = (blocksToFetch[slot.toString()] ||= []);
+                            // Apply the default commitment level.
+                            if (!args.commitment) {
+                                args.commitment = 'confirmed';
+                            }
+                            blockRecords.push({ args, promiseCallback: { reject, resolve } });
+                        }),
+                ),
+            ) as ReturnType<BlockLoader['loadMany']>;
         } finally {
             /**
              * Group together blocks that are fetched with identical args.

@@ -144,20 +144,14 @@ describe('account loader', () => {
                 await Promise.resolve();
                 jest.runAllTimers();
                 expect(rpc.getProgramAccounts).toHaveBeenCalledTimes(2);
-                expect(rpc.getProgramAccounts).toHaveBeenCalledWith(
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
-                    {
-                        commitment: 'confirmed',
-                        encoding: 'base64', // GraphQL client prefers `base64`
-                    },
-                );
-                expect(rpc.getProgramAccounts).toHaveBeenCalledWith(
-                    'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
-                    {
-                        commitment: 'finalized',
-                        encoding: 'base64', // GraphQL client prefers `base64`
-                    },
-                );
+                expect(rpc.getProgramAccounts).toHaveBeenCalledWith('DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj', {
+                    commitment: 'confirmed',
+                    encoding: 'base64', // GraphQL client prefers `base64`
+                });
+                expect(rpc.getProgramAccounts).toHaveBeenCalledWith('DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj', {
+                    commitment: 'finalized',
+                    encoding: 'base64', // GraphQL client prefers `base64`
+                });
             });
         });
         describe('encoding requests', () => {
@@ -551,10 +545,7 @@ describe('account loader', () => {
                     query testQuery {
                         programAccounts(programAddress: "DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj") {
                             dataBase64ZstdWithNoSlice: data(encoding: BASE_64_ZSTD)
-                            dataBase64ZstdWithSlice1: data(
-                                encoding: BASE_64_ZSTD
-                                dataSlice: { length: 16, offset: 4 }
-                            )
+                            dataBase64ZstdWithSlice1: data(encoding: BASE_64_ZSTD, dataSlice: { length: 16, offset: 4 })
                             dataBase64ZstdWithSlice2: data(
                                 encoding: BASE_64_ZSTD
                                 dataSlice: { length: 40, offset: 12 }

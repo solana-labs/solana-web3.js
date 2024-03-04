@@ -11,7 +11,7 @@ type DataSlice = { length: number; offset: number };
 
 export type EncodedAccountData = {
     [key: string]: string;
-}
+};
 
 export type AccountResult = {
     address: Address;
@@ -32,11 +32,7 @@ const resolveAccountData = () => {
             dataSlice?: DataSlice;
         },
     ) => {
-        return parent === null
-            ? null
-            : parent.encodedData
-              ? parent.encodedData[cacheKeyFn(args)]
-              : null;
+        return parent === null ? null : parent.encodedData ? parent.encodedData[cacheKeyFn(args)] : null;
     };
 };
 
@@ -84,15 +80,19 @@ export const resolveAccount = (fieldName?: string) => {
 
                 if (encoding && result.encodedData) {
                     if (Array.isArray(data)) {
-                        result.encodedData[cacheKeyFn({
-                            dataSlice,
-                            encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
-                        })] = data[0];
+                        result.encodedData[
+                            cacheKeyFn({
+                                dataSlice,
+                                encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
+                            })
+                        ] = data[0];
                     } else if (typeof data === 'string') {
-                        result.encodedData[cacheKeyFn({
-                            dataSlice,
-                            encoding: 'base58',
-                        })] = data;
+                        result.encodedData[
+                            cacheKeyFn({
+                                dataSlice,
+                                encoding: 'base58',
+                            })
+                        ] = data;
                     } else if (typeof data === 'object') {
                         const {
                             parsed: { info: parsedData, type: accountType },

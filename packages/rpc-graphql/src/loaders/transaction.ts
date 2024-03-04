@@ -34,17 +34,19 @@ function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
          */
         const transactionsToFetch: ToFetchMap<TransactionLoaderArgsBase, TransactionLoaderValue> = {};
         try {
-            return Promise.all(transactionQueryArgs.map(
-                ({ signature, ...args }) =>
-                    new Promise((resolve, reject) => {
-                        const transactionRecords = (transactionsToFetch[signature] ||= []);
-                        // Apply the default commitment level.
-                        if (!args.commitment) {
-                            args.commitment = 'confirmed';
-                        }
-                        transactionRecords.push({ args, promiseCallback: { reject, resolve } });
-                    }),
-            )) as ReturnType<TransactionLoader['loadMany']>;
+            return Promise.all(
+                transactionQueryArgs.map(
+                    ({ signature, ...args }) =>
+                        new Promise((resolve, reject) => {
+                            const transactionRecords = (transactionsToFetch[signature] ||= []);
+                            // Apply the default commitment level.
+                            if (!args.commitment) {
+                                args.commitment = 'confirmed';
+                            }
+                            transactionRecords.push({ args, promiseCallback: { reject, resolve } });
+                        }),
+                ),
+            ) as ReturnType<TransactionLoader['loadMany']>;
         } finally {
             /**
              * Group together transactions that are fetched with identical args.

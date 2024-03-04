@@ -4,11 +4,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { RpcGraphQLContext } from '../context';
 import { BlockLoaderValue, cacheKeyFn } from '../loaders';
 import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
-import {
-    mapJsonParsedInnerInstructions,
-    mapJsonParsedInstructions,
-    TransactionResult,
-} from './transaction';
+import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
 
 type BlockResult = {
     transactionResults?: { [i: number]: TransactionResult };
@@ -80,11 +76,12 @@ export const resolveBlock = (fieldName?: string) => {
                             });
 
                             if (Array.isArray(data)) {
-                                const thisEncodedData = (thisTransactionResult.encodedData ||=
-                                    {});
-                                thisEncodedData[cacheKeyFn({
-                                    encoding,
-                                })] = data[0];
+                                const thisEncodedData = (thisTransactionResult.encodedData ||= {});
+                                thisEncodedData[
+                                    cacheKeyFn({
+                                        encoding,
+                                    })
+                                ] = data[0];
                             } else if (typeof data === 'object') {
                                 const jsonParsedData = data;
                                 jsonParsedData.message.instructions = mapJsonParsedInstructions(

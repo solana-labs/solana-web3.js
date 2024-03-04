@@ -13,7 +13,7 @@ import {
 
 type Config = {
     maxDataSliceByteRange: number;
-}
+};
 
 async function loadProgramAccounts(
     rpc: Rpc<GetProgramAccountsApi>,
@@ -40,25 +40,29 @@ function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>, confi
          */
         const programAccountsToFetch: ToFetchMap<ProgramAccountsLoaderArgsBase, ProgramAccountsLoaderValue> = {};
         try {
-            return Promise.all(accountQueryArgs.map(
-                ({ programAddress, ...args }) =>
-                    new Promise((resolve, reject) => {
-                        const accountRecords = (programAccountsToFetch[programAddress] ||= []);
-                        // Apply the default commitment level.
-                        if (!args.commitment) {
-                            args.commitment = 'confirmed';
-                        }
-                        accountRecords.push({ args, promiseCallback: { reject, resolve } });
-                    }),
-            )) as ReturnType<ProgramAccountsLoader['loadMany']>;
+            return Promise.all(
+                accountQueryArgs.map(
+                    ({ programAddress, ...args }) =>
+                        new Promise((resolve, reject) => {
+                            const accountRecords = (programAccountsToFetch[programAddress] ||= []);
+                            // Apply the default commitment level.
+                            if (!args.commitment) {
+                                args.commitment = 'confirmed';
+                            }
+                            accountRecords.push({ args, promiseCallback: { reject, resolve } });
+                        }),
+                ),
+            ) as ReturnType<ProgramAccountsLoader['loadMany']>;
         } finally {
             const { maxDataSliceByteRange } = config;
 
             /**
              * Group together program-accounts that are fetched with identical args.
              */
-            const programAccountsFetchesByArgsHash =
-                buildCoalescedFetchesByArgsHashWithDataSlice(programAccountsToFetch, maxDataSliceByteRange);
+            const programAccountsFetchesByArgsHash = buildCoalescedFetchesByArgsHashWithDataSlice(
+                programAccountsToFetch,
+                maxDataSliceByteRange,
+            );
 
             /**
              * For each set of program-accounts related to some common args, fetch them in the fewest
