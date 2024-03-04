@@ -99,11 +99,13 @@ import {
     SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
     SOLANA_ERROR__PROGRAM_DERIVED_ADDRESS_BUMP_SEED_OUT_OF_RANGE,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT,
     SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN,
     SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR,
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED,
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT,
     SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
     SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER,
@@ -115,8 +117,6 @@ import {
     SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SIGNER,
     SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS,
     SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
-    SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
-    SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID,
     SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
     SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
@@ -333,14 +333,20 @@ export const SolanaErrorMessages: Readonly<{
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +
         '`Number.MAX_SAFE_INTEGER`.',
+    [SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST]:
+        "Either the notification name must end in 'Notifications' or the API must supply a " +
+        "subscription creator function for the notification '$notificationName' to map between " +
+        'the notification name and the subscribe/unsubscribe method names.',
+    [SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID]:
+        'Failed to obtain a subscription id from the server',
+    [SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED]:
+        'WebSocket was closed before payload could be added to the send buffer',
+    [SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED]: 'WebSocket connection closed',
+    [SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT]: 'WebSocket failed to connect',
     [SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN]:
         'HTTP header(s) forbidden: $headers. Learn more at ' +
         'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.',
     [SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR]: 'HTTP error ($statusCode): $message',
-    [SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED]:
-        'WebSocket was closed before payload could be added to the send buffer',
-    [SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED]: 'WebSocket connection closed',
-    [SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT]: 'WebSocket failed to connect',
     [SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]:
         'Multiple distinct signers were identified for address `$address`. Please ensure that ' +
         'you are using the same signer instance for each address.',
@@ -365,11 +371,6 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING]:
         'No `TransactionSendingSigner` was identified. Please provide a valid ' +
         '`ITransactionWithSingleSendingSigner` transaction.',
-    [SOLANA_ERROR__SUBSCRIPTION_CANNOT_CREATE_SUBSCRIPTION_REQUEST]:
-        "Either the notification name must end in 'Notifications' or the API must supply a " +
-        "subscription creator function for the notification '$notificationName' to map between " +
-        'the notification name and the subscribe/unsubscribe method names.',
-    [SOLANA_ERROR__SUBSCRIPTION_EXPECTED_SERVER_SUBSCRIPTION_ID]: 'Failed to obtain a subscription id from the server',
     [SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING]: 'No digest implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING]:
         'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +

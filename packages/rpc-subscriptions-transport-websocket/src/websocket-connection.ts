@@ -1,7 +1,7 @@
 import {
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED,
-    SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT,
     SolanaError,
 } from '@solana/errors';
 import WebSocket from '@solana/ws-impl';
@@ -72,7 +72,7 @@ export async function createWebSocketConnection({
         function handleError(ev: Event) {
             if (!hasConnected) {
                 reject(
-                    new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_FAILED_TO_CONNECT, {
+                    new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT, {
                         errorEvent: ev,
                     }),
                 );
@@ -107,7 +107,7 @@ export async function createWebSocketConnection({
                                 clearInterval(intervalId);
                                 reject(
                                     new SolanaError(
-                                        SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+                                        SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
                                     ),
                                 );
                             };
@@ -158,9 +158,12 @@ export async function createWebSocketConnection({
                                     if (e === EXPLICIT_ABORT_TOKEN) {
                                         return;
                                     } else {
-                                        throw new SolanaError(SOLANA_ERROR__RPC_WEBSOCKET_TRANSPORT_CONNECTION_CLOSED, {
-                                            cause: e,
-                                        });
+                                        throw new SolanaError(
+                                            SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED,
+                                            {
+                                                cause: e,
+                                            },
+                                        );
                                     }
                                 }
                             }
