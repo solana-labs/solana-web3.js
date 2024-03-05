@@ -1,6 +1,6 @@
 import type { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
-import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__NONCE_INVALID, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SOLANA_ERROR__INVALID_NONCE, SolanaError } from '@solana/errors';
 import type { GetAccountInfoApi, Rpc } from '@solana/rpc';
 import type { AccountNotificationsApi, RpcSubscriptions } from '@solana/rpc-subscriptions';
 import type { Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
@@ -51,7 +51,7 @@ export function createNonceInvalidationPromiseFactory(
             for await (const accountNotification of accountNotifications) {
                 const nonceValue = getNonceFromAccountData(accountNotification.value.data);
                 if (nonceValue !== expectedNonceValue) {
-                    throw new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                    throw new SolanaError(SOLANA_ERROR__INVALID_NONCE, {
                         actualNonceValue: nonceValue,
                         expectedNonceValue,
                     });
@@ -80,7 +80,7 @@ export function createNonceInvalidationPromiseFactory(
                 // value, and furthermore asked for it in `base58` encoding.
                 nonceAccount.data[0] as unknown as Nonce;
             if (nonceValue !== expectedNonceValue) {
-                throw new SolanaError(SOLANA_ERROR__NONCE_INVALID, {
+                throw new SolanaError(SOLANA_ERROR__INVALID_NONCE, {
                     actualNonceValue: nonceValue,
                     expectedNonceValue,
                 });

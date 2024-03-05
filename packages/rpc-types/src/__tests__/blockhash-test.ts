@@ -1,7 +1,7 @@
 import type { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE,
     SolanaError,
@@ -64,7 +64,7 @@ describe('assertIsBlockhash()', () => {
             expect(() => {
                 assertIsBlockhash(badBlockhash);
             }).toThrow(
-                new SolanaError(SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE, {
+                new SolanaError(SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH, {
                     actualLength,
                 }),
             );

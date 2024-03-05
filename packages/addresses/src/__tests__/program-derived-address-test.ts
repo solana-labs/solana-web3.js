@@ -1,7 +1,7 @@
 import {
-    SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
-    SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED,
-    SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER,
+    SOLANA_ERROR__ADDRESSES_MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED,
+    SOLANA_ERROR__ADDRESSES_MAX_PDA_SEED_LENGTH_EXCEEDED,
+    SOLANA_ERROR__ADDRESSES_PDA_ENDS_WITH_PDA_MARKER,
     SolanaError,
 } from '@solana/errors';
 
@@ -17,7 +17,7 @@ describe('getProgramDerivedAddress()', () => {
                 seeds: Array(17).fill(''),
             }),
         ).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED, {
+            new SolanaError(SOLANA_ERROR__ADDRESSES_MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED, {
                 actual: 18, // With bump.
                 maxSeeds: 16,
             }),
@@ -33,7 +33,7 @@ describe('getProgramDerivedAddress()', () => {
                     seeds: [oversizedSeed],
                 }),
             ).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+                new SolanaError(SOLANA_ERROR__ADDRESSES_MAX_PDA_SEED_LENGTH_EXCEEDED, {
                     actual: 33,
                     index: 0,
                     maxSeedLength: 32,
@@ -154,7 +154,7 @@ describe('createAddressWithSeed', () => {
         const programAddress = 'FGrddpvjBUAG6VdV4fR8Q2hEZTHS6w4SEveVBgfwbfdm' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'a'.repeat(33) })).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED, {
+            new SolanaError(SOLANA_ERROR__ADDRESSES_MAX_PDA_SEED_LENGTH_EXCEEDED, {
                 actual: 33,
                 index: 0,
                 maxSeedLength: 32,
@@ -168,7 +168,7 @@ describe('createAddressWithSeed', () => {
         const programAddress = '4vJ9JU1bJJE96FbKdjWme2JfVK1knU936FHTDZV7AC2' as Address;
 
         await expect(createAddressWithSeed({ baseAddress, programAddress, seed: 'seed' })).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER),
+            new SolanaError(SOLANA_ERROR__ADDRESSES_PDA_ENDS_WITH_PDA_MARKER),
         );
     });
 });
