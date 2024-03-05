@@ -2,8 +2,8 @@ import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { Decoder } from '@solana/codecs-core';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
+    SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
 import { isSignerRole } from '@solana/instructions';

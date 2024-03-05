@@ -2,8 +2,8 @@ import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT,
     SOLANA_ERROR__ACCOUNTS__EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
+    SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT,
     SolanaError,
 } from '@solana/errors';
 
