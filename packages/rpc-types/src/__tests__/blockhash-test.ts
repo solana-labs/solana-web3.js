@@ -1,9 +1,9 @@
 import type { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
+    SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SolanaError,
 } from '@solana/errors';
 

@@ -8,8 +8,8 @@ import {
     getAddressFromPublicKey,
 } from '@solana/addresses';
 import {
-    SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
+    SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
 import { AccountRole } from '@solana/instructions';
