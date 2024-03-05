@@ -23,7 +23,6 @@
  *     - `_MISSING`: Some required input is missing. E.g. `TRANSACTION_FEE_PAYER_MISSING`.
  *     - `_UNIMPLEMENTED`: Some required component is not available in the environment. E.g. `SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED`.
  */
-export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
 export const SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED = 5 as const;
 export const SOLANA_ERROR__NONCE_INVALID = 6 as const;
 export const SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND = 7 as const;
@@ -68,9 +67,10 @@ export const SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING = 3610006 as co
 
 // Key-related errors.
 // Reserve error codes in the range [3704000-3704999].
-export const SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH = 3704000 as const;
-export const SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH = 3704001 as const;
-export const SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE = 3704002 as const;
+export const SOLANA_ERROR__KEYS_INVALID_KEY_PAIR_BYTE_LENGTH = 3704000 as const;
+export const SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH = 3704001 as const;
+export const SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH = 3704002 as const;
+export const SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE = 3704003 as const;
 
 // Instruction-related errors.
 // Reserve error codes in the range [4128000-4128999].
@@ -270,7 +270,7 @@ export type SolanaErrorCode =
     | typeof SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES
     | typeof SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE
     | typeof SOLANA_ERROR__RPC_INTEGER_OVERFLOW
-    | typeof SOLANA_ERROR__INVALID_KEYPAIR_BYTES
+    | typeof SOLANA_ERROR__KEYS_INVALID_KEY_PAIR_BYTE_LENGTH
     | typeof SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED
     | typeof SOLANA_ERROR__NONCE_INVALID
     | typeof SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND
