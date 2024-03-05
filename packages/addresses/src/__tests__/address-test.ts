@@ -1,8 +1,8 @@
 import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE,
-    SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SolanaError,
 } from '@solana/errors';
@@ -43,7 +43,7 @@ describe('Address', () => {
                 expect(() => {
                     assertIsAddress('not-a-base-58-encoded-string');
                 }).toThrow(
-                    new SolanaError(SOLANA_ERROR__ADDRESS_STRING_LENGTH_OUT_OF_RANGE, {
+                    new SolanaError(SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE, {
                         actualLength: 28,
                     }),
                 );
@@ -55,7 +55,7 @@ describe('Address', () => {
                         '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                     );
                 }).toThrow(
-                    new SolanaError(SOLANA_ERROR__ADDRESS_BYTE_LENGTH_OUT_OF_RANGE, {
+                    new SolanaError(SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH, {
                         actualLength: 31,
                     }),
                 );

@@ -1,7 +1,7 @@
 import type { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
@@ -27,7 +27,7 @@ export function assertIsBlockhash(putativeBlockhash: string): asserts putativeBl
     const bytes = base58Encoder.encode(putativeBlockhash);
     const numBytes = bytes.byteLength;
     if (numBytes !== 32) {
-        throw new SolanaError(SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE, {
+        throw new SolanaError(SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH, {
             actualLength: numBytes,
         });
     }
