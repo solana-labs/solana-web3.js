@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
 import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
@@ -44,7 +44,7 @@ describe('assertIsAllowedHttpRequestHeader', () => {
             expect(() => {
                 assertIsAllowedHttpRequestHeaders({ [forbiddenHeader]: 'value' });
             }).toThrow(
-                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN, {
                     headers: [forbiddenHeader],
                 }),
             );
@@ -135,7 +135,7 @@ describe('createHttpRequest with custom headers', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = true;
             expect(createTransportWithForbiddenHeaders).toThrow(
-                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN, {
                     headers: ['sEc-FeTcH-mOdE'],
                 }),
             );

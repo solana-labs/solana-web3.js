@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
 
 export type AllowedHttpRequestHeaders = Readonly<
     { [headerName: string]: string } & {
@@ -86,7 +86,7 @@ export function assertIsAllowedHttpRequestHeaders(
         );
     });
     if (badHeaders.length > 0) {
-        throw new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN, {
+        throw new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN, {
             headers: badHeaders,
         });
     }
