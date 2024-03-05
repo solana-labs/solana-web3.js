@@ -1,6 +1,6 @@
 import {
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
-    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
+    SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH,
     SolanaError,
 } from '@solana/errors';
 
@@ -26,7 +26,7 @@ export function assertByteArrayHasEnoughBytesForCodec(
 ) {
     const bytesLength = bytes.length - offset;
     if (bytesLength < expected) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES, {
+        throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
             bytesLength,
             codecDescription,
             expected,

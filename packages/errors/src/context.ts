@@ -13,15 +13,15 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS_INVALID_NUMBER_OF_ITEMS,
     SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
-    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
-    SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -219,7 +219,7 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             maxRange: number;
             minRange: number;
         };
-        [SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH]: {
+        [SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH]: {
             decoderFixedSize: number;
             encoderFixedSize: number;
         };
@@ -244,16 +244,16 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             min: bigint | number;
             value: bigint | number;
         };
-        [SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
+        [SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
             decoderMaxSize: number | undefined;
             encoderMaxSize: number | undefined;
         };
-        [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES]: {
+        [SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH]: {
             bytesLength: number;
             codecDescription: string;
             expected: number;
         };
-        [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS]: {
+        [SOLANA_ERROR__CODECS_INVALID_NUMBER_OF_ITEMS]: {
             actual: bigint | number;
             codecDescription: string;
             expected: bigint | number;
