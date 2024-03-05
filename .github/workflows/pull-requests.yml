@@ -78,6 +78,7 @@ jobs:
         run: pnpm build --concurrency=100%
 
       - name: Is the validator still running after the tests?
+        if: true
         run: ps aux | grep validator
 
       - name: Breakpoint if tests failed
