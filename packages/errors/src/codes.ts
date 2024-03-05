@@ -23,7 +23,6 @@
  *     - `_MISSING`: Some required input is missing. E.g. `TRANSACTION_FEE_PAYER_MISSING`.
  *     - `_UNIMPLEMENTED`: Some required component is not available in the environment. E.g. `SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED`.
  */
-export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 3 as const;
 export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
 export const SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED = 5 as const;
 export const SOLANA_ERROR__NONCE_INVALID = 6 as const;
@@ -50,8 +49,6 @@ export const SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE = 50 as const;
 export const SOLANA_ERROR__MALFORMED_BIGINT_STRING = 51 as const;
 export const SOLANA_ERROR__MALFORMED_NUMBER_STRING = 52 as const;
 export const SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE = 53 as const;
-export const SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN = 54 as const;
-export const SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR = 55 as const;
 
 // Invariant violation errors.
 // Reserve error codes in the range [3507000-3507999].
@@ -233,6 +230,12 @@ export const SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT = 8078009 as const;
 export const SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT = 8078010 as const;
 export const SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE = 8078011 as const;
 export const SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE = 8078012 as const;
+
+// RPC-related errors.
+// Reserve error codes in the range [8100000-8100999].
+export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 8100000 as const;
+export const SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN = 8100001 as const;
+export const SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR = 8100002 as const;
 
 // RPC-Subscriptions-related errors.
 // Reserve error codes in the range [8190000-8190999].
