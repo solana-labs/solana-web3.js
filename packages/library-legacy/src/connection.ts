@@ -6355,7 +6355,7 @@ export class Connection {
   /**
    * Deregister an account notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeAccountChangeListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6418,7 +6418,7 @@ export class Connection {
   /**
    * Deregister an account notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeProgramAccountChangeListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6454,7 +6454,7 @@ export class Connection {
   /**
    * Deregister a logs callback.
    *
-   * @param id client subscription id to deregister.
+   * @param clientSubscriptionId client subscription id to deregister.
    */
   async removeOnLogsListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6501,7 +6501,7 @@ export class Connection {
   /**
    * Deregister a slot notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeSlotChangeListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6544,7 +6544,7 @@ export class Connection {
   /**
    * Deregister a slot update notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeSlotUpdateListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6743,7 +6743,7 @@ export class Connection {
   /**
    * Deregister a signature notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeSignatureListener(
     clientSubscriptionId: ClientSubscriptionId,
@@ -6782,7 +6782,7 @@ export class Connection {
   /**
    * Deregister a root notification callback
    *
-   * @param id client subscription id to deregister
+   * @param clientSubscriptionId client subscription id to deregister
    */
   async removeRootChangeListener(
     clientSubscriptionId: ClientSubscriptionId,
