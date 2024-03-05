@@ -108,8 +108,8 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT,
-    SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN,
     SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR,
+    SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN,
     SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS,
     SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER,
     SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER,
@@ -362,10 +362,10 @@ export const SolanaErrorMessages: Readonly<{
         'WebSocket was closed before payload could be added to the send buffer',
     [SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED]: 'WebSocket connection closed',
     [SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT]: 'WebSocket failed to connect',
-    [SOLANA_ERROR__RPC_TRANSPORT_HEADER_FORBIDDEN]:
+    [SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR]: 'HTTP error ($statusCode): $message',
+    [SOLANA_ERROR__RPC_TRANSPORT_HTTP_HEADER_FORBIDDEN]:
         'HTTP header(s) forbidden: $headers. Learn more at ' +
         'https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name.',
-    [SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR]: 'HTTP error ($statusCode): $message',
     [SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]:
         'Multiple distinct signers were identified for address `$address`. Please ensure that ' +
         'you are using the same signer instance for each address.',
