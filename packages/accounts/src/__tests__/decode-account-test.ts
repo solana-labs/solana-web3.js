@@ -2,8 +2,8 @@ import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
-    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
     SolanaError,
 } from '@solana/errors';
 
@@ -92,7 +92,7 @@ describe('assertDecodedAccount', () => {
 
         // Then we expect an error to be thrown
         expect(fn).toThrow(
-            new SolanaError(SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT, {
+            new SolanaError(SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT, {
                 address: account.address,
             }),
         );
@@ -152,7 +152,7 @@ describe('assertDecodedAccounts', () => {
 
         // Then we expect an error to be thrown
         expect(fn).toThrow(
-            new SolanaError(SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED, {
+            new SolanaError(SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED, {
                 addresses: [accounts[0].address, accounts[1].address],
             }),
         );

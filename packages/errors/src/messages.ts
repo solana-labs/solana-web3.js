@@ -1,5 +1,9 @@
 import {
-    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__ACCOUNTS_ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__ACCOUNTS_FAILED_TO_DECODE_ACCOUNT,
+    SOLANA_ERROR__ACCOUNTS_ONE_OR_MORE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__ADDRESSES_FAILED_TO_FIND_VIABLE_PDA_BUMP_SEED,
     SOLANA_ERROR__ADDRESSES_INVALID_BASE58_ENCODED_ADDRESS,
     SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH,
@@ -26,8 +30,6 @@ import {
     SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES,
     SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS,
-    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
-    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED,
     SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
@@ -99,9 +101,7 @@ import {
     SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
-    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
-    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID,
@@ -196,7 +196,12 @@ export const SolanaErrorMessages: Readonly<{
     // TypeScript will fail to build this project if add an error code without a message.
     [P in SolanaErrorCode]: string;
 }> = {
-    [SOLANA_ERROR__ACCOUNT_NOT_FOUND]: 'Account not found at address: $address',
+    [SOLANA_ERROR__ACCOUNTS_ACCOUNT_NOT_FOUND]: 'Account not found at address: $address',
+    [SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED]:
+        'Not all accounts were decoded. Encoded accounts found at addresses: $addresses.',
+    [SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address',
+    [SOLANA_ERROR__ACCOUNTS_FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address',
+    [SOLANA_ERROR__ACCOUNTS_ONE_OR_MORE_ACCOUNTS_NOT_FOUND]: 'Accounts not found at addresses: $addresses',
     [SOLANA_ERROR__ADDRESSES_FAILED_TO_FIND_VIABLE_PDA_BUMP_SEED]: 'Unable to find a viable program address bump seed.',
     [SOLANA_ERROR__ADDRESSES_INVALID_BASE58_ENCODED_ADDRESS]: '$putativeAddress is not a base58-encoded address.',
     [SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH]:
@@ -241,8 +246,6 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES]:
         'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',
     [SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_ITEMS]: 'Expected [$codecDescription] to have $expected items, got $actual.',
-    [SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT]: 'Expected decoded account at address: $address',
-    [SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT]: 'Failed to decode account data at address: $address',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR_ACCOUNT_BORROW_FAILED]:
         'instruction tries to borrow reference for an account which is already borrowed',
@@ -346,10 +349,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
     [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: '`$value` cannot be parsed as a `BigInt`',
     [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: '`$value` cannot be parsed as a `Number`',
-    [SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND]: 'Accounts not found at addresses: $addresses',
     [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: 'No nonce account could be found at address `$nonceAccountAddress`',
-    [SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED]:
-        'Not all accounts were decoded. Encoded accounts found at addresses: $addresses.',
     [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]:
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +

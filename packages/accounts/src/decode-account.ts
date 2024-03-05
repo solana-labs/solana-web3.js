@@ -1,8 +1,8 @@
 import type { Decoder } from '@solana/codecs-core';
 import {
-    SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT,
-    SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT,
-    SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT,
+    SOLANA_ERROR__ACCOUNTS_FAILED_TO_DECODE_ACCOUNT,
+    SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
     SolanaError,
 } from '@solana/errors';
 
@@ -28,7 +28,7 @@ export function decodeAccount<TData extends object, TAddress extends string = st
         }
         return Object.freeze({ ...encodedAccount, data: decoder.decode(encodedAccount.data) });
     } catch (e) {
-        throw new SolanaError(SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT, {
+        throw new SolanaError(SOLANA_ERROR__ACCOUNTS_FAILED_TO_DECODE_ACCOUNT, {
             address: encodedAccount.address,
         });
     }
@@ -49,7 +49,7 @@ export function assertAccountDecoded<TData extends object, TAddress extends stri
     account: Account<TData | Uint8Array, TAddress> | MaybeAccount<TData | Uint8Array, TAddress>,
 ): asserts account is Account<TData, TAddress> | MaybeAccount<TData, TAddress> {
     if (accountExists(account) && account.data instanceof Uint8Array) {
-        throw new SolanaError(SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT, {
+        throw new SolanaError(SOLANA_ERROR__ACCOUNTS_EXPECTED_DECODED_ACCOUNT, {
             address: account.address,
         });
     }
@@ -68,7 +68,7 @@ export function assertAccountsDecoded<TData extends object, TAddress extends str
     const encoded = accounts.filter(a => accountExists(a) && a.data instanceof Uint8Array);
     if (encoded.length > 0) {
         const encodedAddresses = encoded.map(a => a.address);
-        throw new SolanaError(SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED, {
+        throw new SolanaError(SOLANA_ERROR__ACCOUNTS_EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED, {
             addresses: encodedAddresses,
         });
     }
