@@ -1,11 +1,11 @@
 import {
-    SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING,
-    SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING,
+    SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_UNIMPLEMENTED,
+    SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_UNIMPLEMENTED,
+    SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_UNIMPLEMENTED,
+    SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_UNIMPLEMENTED,
+    SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT,
+    SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_UNIMPLEMENTED,
+    SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED,
     SolanaError,
 } from '@solana/errors';
 
@@ -29,7 +29,7 @@ describe('assertDigestCapabilityIsAvailable()', () => {
             it('rejects', async () => {
                 expect.assertions(1);
                 await expect(() => assertDigestCapabilityIsAvailable()).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
         });
@@ -48,7 +48,7 @@ describe('assertDigestCapabilityIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertDigestCapabilityIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DIGEST_UNIMPLEMENTED),
             );
         });
     });
@@ -67,7 +67,7 @@ describe('assertKeyExporterIsAvailable()', () => {
             it('rejects', async () => {
                 expect.assertions(1);
                 await expect(() => assertKeyExporterIsAvailable()).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
         });
@@ -86,7 +86,7 @@ describe('assertKeyExporterIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertKeyExporterIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_EXPORT_FUNCTION_UNIMPLEMENTED),
             );
         });
     });
@@ -115,7 +115,7 @@ describe('assertKeyGenerationIsAvailable()', () => {
             it('rejects', async () => {
                 expect.assertions(1);
                 await expect(() => assertKeyGenerationIsAvailable()).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
         });
@@ -134,7 +134,7 @@ describe('assertKeyGenerationIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertKeyGenerationIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_GENERATE_FUNCTION_UNIMPLEMENTED),
             );
         });
     });
@@ -151,7 +151,7 @@ describe('assertKeyGenerationIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertKeyGenerationIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_ED25519_ALGORITHM_UNIMPLEMENTED),
             );
         });
         it('remembers the result from the first time it is called (parallel checks)', async () => {
@@ -189,7 +189,7 @@ describe('assertSigningCapabilityIsAvailable()', () => {
             it('rejects', async () => {
                 expect.assertions(1);
                 await expect(() => assertSigningCapabilityIsAvailable()).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
         });
@@ -208,7 +208,7 @@ describe('assertSigningCapabilityIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertSigningCapabilityIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_UNIMPLEMENTED),
             );
         });
     });
@@ -227,7 +227,7 @@ describe('assertVerificationCapabilityIsAvailable()', () => {
             it('rejects', async () => {
                 expect.assertions(1);
                 await expect(() => assertVerificationCapabilityIsAvailable()).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_MISSING),
+                    new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
         });
@@ -246,7 +246,7 @@ describe('assertVerificationCapabilityIsAvailable()', () => {
         it('rejects', async () => {
             expect.assertions(1);
             await expect(assertVerificationCapabilityIsAvailable()).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_MISSING),
+                new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED),
             );
         });
     });
