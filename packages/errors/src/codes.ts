@@ -50,16 +50,6 @@ export const SOLANA_ERROR__MALFORMED_BIGINT_STRING = 51 as const;
 export const SOLANA_ERROR__MALFORMED_NUMBER_STRING = 52 as const;
 export const SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE = 53 as const;
 
-// Invariant violation errors.
-// Reserve error codes in the range [3507000-3507999].
-// These errors should only be thrown when there is a bug with the
-// library itself and should, in theory, never reach the end user.
-export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING = 3507000 as const;
-export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE =
-    3507001 as const;
-export const SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING = 3507002 as const;
-export const SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE = 3507003 as const;
-
 // Subtle-Crypto-related errors.
 // Reserve error codes in the range [3610000-3610999].
 export const SOLANA_ERROR__SUBTLE_CRYPTO_MISSING = 3610000 as const;
@@ -244,6 +234,16 @@ export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID = 8
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED = 8190002 as const;
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CONNECTION_CLOSED = 8190003 as const;
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT = 8190004 as const;
+
+// Invariant violation errors.
+// Reserve error codes in the range [9900000-9900999].
+// These errors should only be thrown when there is a bug with the
+// library itself and should, in theory, never reach the end user.
+export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING = 9900000 as const;
+export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE =
+    9900001 as const;
+export const SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING = 9900002 as const;
+export const SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE = 9900003 as const;
 
 /**
  * A union of every Solana error code
