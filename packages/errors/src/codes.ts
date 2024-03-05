@@ -27,11 +27,6 @@ export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
 export const SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED = 5 as const;
 export const SOLANA_ERROR__NONCE_INVALID = 6 as const;
 export const SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND = 7 as const;
-export const SOLANA_ERROR__ACCOUNT_NOT_FOUND = 8 as const;
-export const SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND = 9 as const;
-export const SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT = 10 as const;
-export const SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT = 11 as const;
-export const SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED = 12 as const;
 export const SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE = 48 as const;
 export const SOLANA_ERROR__BLOCKHASH_BYTE_LENGTH_OUT_OF_RANGE = 49 as const;
 export const SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE = 50 as const;
@@ -52,6 +47,14 @@ export const SOLANA_ERROR__MAX_PDA_SEED_LENGTH_EXCEEDED = 2800007 as const;
 export const SOLANA_ERROR__INVALID_SEEDS_POINT_ON_CURVE = 2800008 as const;
 export const SOLANA_ERROR__COULD_NOT_FIND_VIABLE_PDA_BUMP_SEED = 2800009 as const;
 export const SOLANA_ERROR__PROGRAM_ADDRESS_ENDS_WITH_PDA_MARKER = 2800010 as const;
+
+// Account-related errors.
+// Reserve error codes in the range [3230000-3230999].
+export const SOLANA_ERROR__ACCOUNT_NOT_FOUND = 3230001 as const;
+export const SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND = 32300002 as const;
+export const SOLANA_ERROR__FAILED_TO_DECODE_ACCOUNT = 3230003 as const;
+export const SOLANA_ERROR__EXPECTED_DECODED_ACCOUNT = 3230004 as const;
+export const SOLANA_ERROR__NOT_ALL_ACCOUNTS_DECODED = 3230005 as const;
 
 // Subtle-Crypto-related errors.
 // Reserve error codes in the range [3610000-3610999].
