@@ -5,6 +5,23 @@
  * WARNING:
  *   - Don't remove error codes
  *   - Don't change or reorder error codes.
+ *
+ * Good naming conventions:
+ *   - Prefixing common errors — e.g. under the same package — can be a good way to namespace them. E.g. All codec-related errors start with `SOLANA_ERROR__CODECS_`.
+ *   - Use consistent names — e.g. choose `PDA` or `PROGRAM_DERIVED_ADDRESS` and stick with it. Ensure your names are consistent with existing error codes. The decision might have been made for you.
+ *   - Recommended prefixes and suffixes:
+ *     - `MALFORMED_`: Some input was not constructed properly. E.g. `MALFORMED_BASE58_ENCODED_ADDRESS`.
+ *     - `INVALID_`: Some input is invalid (other than because it was MALFORMED). E.g. `INVALID_NUMBER_OF_BYTES`.
+ *     - `EXPECTED_`: Some input was different than expected, no need to specify the "GOT" part unless necessary. E.g. `EXPECTED_DECODED_ACCOUNT`.
+ *     - `_CANNOT_`: Some operation cannot be performed or some input cannot be used due to some condition. E.g. `CANNOT_DECODE_EMPTY_BYTE_ARRAY` or `PDA_CANNOT_END_WITH_PDA_MARKER`.
+ *     - `_MUST_BE_`: Some condition must be true. E.g. `NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE`.
+ *     - `_FAILED_TO_`: Tried to perform some operation and failed. E.g. `FAILED_TO_DECODE_ACCOUNT`.
+ *     - `_NOT_FOUND`: Some operation lead to not finding something. E.g. `ACCOUNT_NOT_FOUND`.
+ *     - `_OUT_OF_RANGE`: Some value is out of range. E.g. `ENUM_DISCRIMINATOR_OUT_OF_RANGE`.
+ *     - `_EXCEEDED`: Some limit was exceeded. E.g. `PDA_MAX_SEED_LENGTH_EXCEEDED`.
+ *     - `_MISMATCH`: Some elements do not match. E.g. `ENCODER_DECODER_FIXED_SIZE_MISMATCH`.
+ *     - `_MISSING`: Some required input is missing. E.g. `TRANSACTION_FEE_PAYER_MISSING`.
+ *     - `_UNIMPLEMENTED`: Some required component is not available in the environment. E.g. `SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED`.
  */
 export const SOLANA_ERROR__RPC_INTEGER_OVERFLOW = 3 as const;
 export const SOLANA_ERROR__INVALID_KEYPAIR_BYTES = 4 as const;
@@ -45,17 +62,26 @@ export const SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR = 55 as const;
 export const SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_ACCOUNTS = 70 as const;
 export const SOLANA_ERROR__EXPECTED_INSTRUCTION_TO_HAVE_DATA = 71 as const;
 export const SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH = 72 as const;
-// Reserve error codes starting with [3507000-3507999] for invariant violations
+
+// Invariant violation errors.
+// Reserve error codes in the range [3507000-3507999].
+// These errors should only be thrown when there is a bug with the
+// library itself and should, in theory, never reach the end user.
 export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING = 3507000 as const;
 export const SOLANA_ERROR__INVARIANT_VIOLATION_WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE =
     3507001 as const;
 export const SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING = 3507002 as const;
 export const SOLANA_ERROR__INVARIANT_VIOLATION_SWITCH_MUST_BE_EXHAUSTIVE = 3507003 as const;
-// Reserve key-related error codes in the range [3704000-3704999]
+
+// Key-related errors.
+// Reserve error codes in the range [3704000-3704999].
 export const SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH = 3704000 as const;
 export const SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH = 3704001 as const;
 export const SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE = 3704002 as const;
-// Reserve error codes starting with [4615000-4615999] for the Rust enum `InstructionError`
+
+// Instruction errors.
+// Reserve error codes starting with [4615000-4615999] for the Rust enum `InstructionError`.
+// Error names here are dictated by the RPC (see ./instruction-error.ts).
 export const SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN = 4615000 as const;
 export const SOLANA_ERROR__INSTRUCTION_ERROR_GENERIC_ERROR = 4615001 as const;
 export const SOLANA_ERROR__INSTRUCTION_ERROR_INVALID_ARGUMENT = 4615002 as const;
@@ -111,7 +137,9 @@ export const SOLANA_ERROR__INSTRUCTION_ERROR_MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEE
 export const SOLANA_ERROR__INSTRUCTION_ERROR_MAX_ACCOUNTS_EXCEEDED = 4615052 as const;
 export const SOLANA_ERROR__INSTRUCTION_ERROR_MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED = 4615053 as const;
 export const SOLANA_ERROR__INSTRUCTION_ERROR_BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS = 4615054 as const;
-// Reserve signer-related error codes in the range [5508000-5508999]
+
+// Signer-related errors.
+// Reserve error codes in the range [5508000-5508999].
 export const SOLANA_ERROR__SIGNER_ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS = 5508000 as const;
 export const SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER = 5508001 as const;
 export const SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_SIGNER = 5508002 as const;
@@ -123,7 +151,9 @@ export const SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER = 5508007 
 export const SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER = 5508008 as const;
 export const SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS = 5508009 as const;
 export const SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING = 5508010 as const;
-// Reserve transaction-related error codes in the range [5663000-5663999]
+
+// Transaction-related errors.
+// Reserve error codes in the range [5663000-5663999].
 export const SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES = 5663001 as const;
 export const SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE = 5663002 as const;
 export const SOLANA_ERROR__TRANSACTION_EXPECTED_BLOCKHASH_LIFETIME = 5663003 as const;
@@ -139,7 +169,10 @@ export const SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS = 5663012 as const;
 export const SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER = 5663013 as const;
 export const SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS = 5663014 as const;
 export const SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE = 5663015 as const;
-// Reserve error codes starting with [7050000-7050999] for the Rust enum `TransactionError`
+
+// Transaction errors.
+// Reserve error codes starting with [7050000-7050999] for the Rust enum `TransactionError`.
+// Error names here are dictated by the RPC (see ./transaction-error.ts).
 export const SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN = 7050000 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE = 7050001 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_LOADED_TWICE = 7050002 as const;
@@ -149,7 +182,7 @@ export const SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_FEE = 705000
 export const SOLANA_ERROR__TRANSACTION_ERROR_INVALID_ACCOUNT_FOR_FEE = 7050006 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_ALREADY_PROCESSED = 7050007 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_BLOCKHASH_NOT_FOUND = 7050008 as const;
-// `InstructionError` intentionally omitted
+// `InstructionError` intentionally omitted.
 export const SOLANA_ERROR__TRANSACTION_ERROR_CALL_CHAIN_TOO_DEEP = 7050009 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_MISSING_SIGNATURE_FOR_FEE = 7050010 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_INVALID_ACCOUNT_INDEX = 7050011 as const;
@@ -178,7 +211,9 @@ export const SOLANA_ERROR__TRANSACTION_ERROR_INVALID_LOADED_ACCOUNTS_DATA_SIZE_L
 export const SOLANA_ERROR__TRANSACTION_ERROR_RESANITIZATION_NEEDED = 7050034 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED = 7050035 as const;
 export const SOLANA_ERROR__TRANSACTION_ERROR_UNBALANCED_TRANSACTION = 7050036 as const;
-// Reserve codec-related error codes in the range [8078000-8078999]
+
+// Codec-related errors.
+// Reserve error codes in the range [8078000-8078999].
 export const SOLANA_ERROR__CODECS_CANNOT_DECODE_EMPTY_BYTE_ARRAY = 8078000 as const;
 export const SOLANA_ERROR__CODECS_WRONG_NUMBER_OF_BYTES = 8078001 as const;
 export const SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH = 8078002 as const;
@@ -192,7 +227,9 @@ export const SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT = 8078009 as const;
 export const SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT = 8078010 as const;
 export const SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE = 8078011 as const;
 export const SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE = 8078012 as const;
-// Reserve subscription-related error codes in the range [8160000-8160999]
+
+// RPC-Subscriptions-related errors.
+// Reserve error codes in the range [8190000-8190999].
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST = 8190000 as const;
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID = 8190001 as const;
 export const SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED = 8190002 as const;
