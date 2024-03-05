@@ -1435,8 +1435,8 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       typedoc:
-        specifier: ^0.25.4
-        version: 0.25.4(typescript@5.1.6)
+        specifier: ^0.25.10
+        version: 0.25.10(typescript@5.1.6)
       typescript:
         specifier: ^5.1.6
         version: 5.1.6
@@ -13856,8 +13856,8 @@ packages:
       rechoir: 0.6.2
     dev: true
 
-  /shiki@0.14.2:
-    resolution: {integrity: sha512-ltSZlSLOuSY0M0Y75KA+ieRaZ0Trf5Wl3gutE7jzLuIcWxLp5i/uEnLoQWNvgKXQ5OMpGkJnVMRLAuzjc0LJ2A==}
+  /shiki@0.14.7:
+    resolution: {integrity: sha512-dNPAPrxSc87ua2sKJ3H5dQ/6ZaY8RNnaAqK+t0eG7p0Soi2ydiqbGOTaZCqaYvA/uZYfS1LJnemt3Q+mSfcPCg==}
     dependencies:
       ansi-sequence-parser: 1.1.0
       jsonc-parser: 3.2.0
@@ -14801,8 +14801,8 @@ packages:
     dependencies:
       is-typedarray: 1.0.0
 
-  /typedoc@0.25.4(typescript@5.1.6):
-    resolution: {integrity: sha512-Du9ImmpBCw54bX275yJrxPVnjdIyJO/84co0/L9mwe0R3G4FSR6rQ09AlXVRvZEGMUg09+z/usc8mgygQ1aidA==}
+  /typedoc@0.25.10(typescript@5.1.6):
+    resolution: {integrity: sha512-v10rtOFojrjW9og3T+6wAKeJaGMuojU87DXGZ33sfs+554wgPTRG+s07Ag1BjPZI85Y5QPVouPI63JQ6fcQM5w==}
     engines: {node: '>= 16'}
     hasBin: true
     peerDependencies:
@@ -14811,7 +14811,7 @@ packages:
       lunr: 2.3.9
       marked: 4.3.0
       minimatch: 9.0.3
-      shiki: 0.14.2
+      shiki: 0.14.7
       typescript: 5.1.6
     dev: true
 
