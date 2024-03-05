@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
-    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SolanaError,
 } from '@solana/errors';
 
@@ -58,7 +58,7 @@ describe('combineCodec', () => {
                 createDecoder({ fixedSize: 2, read: jest.fn() }),
             ),
         ).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH, {
+            new SolanaError(SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH, {
                 decoderFixedSize: 2,
                 encoderFixedSize: 1,
             }),
@@ -70,7 +70,7 @@ describe('combineCodec', () => {
                 createDecoder({ read: jest.fn() }),
             ),
         ).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
+            new SolanaError(SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
                 decoderMaxSize: undefined,
                 encoderMaxSize: 1,
             }),

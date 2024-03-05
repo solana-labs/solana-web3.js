@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH,
-    SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH,
+    SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH,
+    SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH,
     SolanaError,
 } from '@solana/errors';
 
@@ -188,7 +188,7 @@ export function assertIsFixedSize(
     codec: { fixedSize: number } | { maxSize?: number },
 ): asserts codec is { fixedSize: number } {
     if (!isFixedSize(codec)) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH_GOT_VARIABLE_LENGTH);
+        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH);
     }
 }
 
@@ -214,6 +214,6 @@ export function assertIsVariableSize(
     codec: { fixedSize: number } | { maxSize?: number },
 ): asserts codec is { maxSize?: number } {
     if (!isVariableSize(codec)) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH_GOT_FIXED_LENGTH);
+        throw new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_VARIABLE_LENGTH);
     }
 }

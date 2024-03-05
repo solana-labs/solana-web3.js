@@ -1,7 +1,7 @@
 import {
     SOLANA_ERROR__CODECS_ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
-    SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH,
-    SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH,
+    SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SolanaError,
 } from '@solana/errors';
 
@@ -44,14 +44,14 @@ export function combineCodec<TFrom, TTo extends TFrom>(
     }
 
     if (isFixedSize(encoder) && isFixedSize(decoder) && encoder.fixedSize !== decoder.fixedSize) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_FIXED_SIZE_ENCODER_DECODER_SIZE_MISMATCH, {
+        throw new SolanaError(SOLANA_ERROR__CODECS_ENCODER_DECODER_FIXED_SIZE_MISMATCH, {
             decoderFixedSize: decoder.fixedSize,
             encoderFixedSize: encoder.fixedSize,
         });
     }
 
     if (!isFixedSize(encoder) && !isFixedSize(decoder) && encoder.maxSize !== decoder.maxSize) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_VARIABLE_SIZE_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
+        throw new SolanaError(SOLANA_ERROR__CODECS_ENCODER_DECODER_MAX_SIZE_MISMATCH, {
             decoderMaxSize: decoder.maxSize,
             encoderMaxSize: encoder.maxSize,
         });
