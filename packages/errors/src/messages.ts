@@ -129,6 +129,7 @@ import {
     SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE,
+    SOLANA_ERROR__TRANSACTION_ADDRESS_MISSING,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE,
     SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_LOADED_TWICE,
@@ -172,14 +173,13 @@ import {
     SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING,
     SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND,
-    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
-    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS,
+    SOLANA_ERROR__TRANSACTION_FEE_PAYER_MISSING,
+    SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING,
     SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES,
     SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
-    SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS,
-    SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER,
-    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
-    SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE,
     SolanaErrorCode,
 } from './codes';
@@ -408,6 +408,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__SUBTLE_CRYPTO_SIGN_FUNCTION_UNIMPLEMENTED]: 'No signing implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO_VERIFY_FUNCTION_UNIMPLEMENTED]: 'No key export implementation could be found.',
     [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: 'Timestamp value must be in the range [-8.64e15, 8.64e15]. `$value` given',
+    [SOLANA_ERROR__TRANSACTION_ADDRESS_MISSING]: 'Transaction is missing an address at index: $index.',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_BORROW_OUTSTANDING]:
         'Transaction processing left an account with an outstanding borrowed reference',
     [SOLANA_ERROR__TRANSACTION_ERROR_ACCOUNT_IN_USE]: 'Account in use',
@@ -477,9 +478,13 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_FEE_PAYER_MISSING]: 'No fee payer set in CompiledTransaction',
     [SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND]:
         'Could not find program address at index $index',
-    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE]:
+    [SOLANA_ERROR__TRANSACTION_FEE_PAYER_MISSING]: 'Transaction is missing a fee payer.',
+    [SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING]:
+        "Could not determine this transaction's signature. Make sure that the transaction has " +
+        'been signed by its fee payer.',
+    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE]:
         'Transaction first instruction is not advance nonce account instruction.',
-    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS]:
+    [SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING]:
         'Transaction with no instructions cannot be durable nonce transaction.',
     [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_CANNOT_PAY_FEES]:
         'This transaction includes an address (`$programAddress`) which is both ' +
@@ -487,12 +492,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION_INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]:
         'This transaction includes an address (`$programAddress`) which is both invoked and ' +
         'marked writable. Program addresses may not be writable',
-    [SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS]: 'Transaction is missing an address at index: $index.',
-    [SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER]: 'Transaction is missing a fee payer.',
-    [SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES]: 'Transaction is missing signatures for addresses: $addresses.',
-    [SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE]:
-        "Could not determine this transaction's signature. Make sure that the transaction has " +
-        'been signed by its fee payer.',
+    [SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE]:
         'Transaction version must be in the range [0, 127]. `$actualVersion` given',
 };

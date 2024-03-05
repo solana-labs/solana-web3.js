@@ -1,9 +1,9 @@
 import { type Address, assertIsAddress } from '@solana/addresses';
 import {
-    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE,
-    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS,
-    SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS,
-    SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE,
+    SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING,
+    SOLANA_ERROR__TRANSACTION_ADDRESS_MISSING,
+    SOLANA_ERROR__TRANSACTION_FEE_PAYER_MISSING,
     SolanaError,
 } from '@solana/errors';
 import { pipe } from '@solana/functional';
@@ -40,7 +40,7 @@ function convertAccount(
 ): IAccountMeta {
     const accountPublicKey = accountKeys.get(accountIndex);
     if (!accountPublicKey) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS, {
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_ADDRESS_MISSING, {
             index: accountIndex,
         });
     }
@@ -68,7 +68,7 @@ function convertInstruction(
 ): IInstruction {
     const programAddressPublicKey = accountKeys.get(instruction.programIdIndex);
     if (!programAddressPublicKey) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_ADDRESS, {
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_ADDRESS_MISSING, {
             index: instruction.programIdIndex,
         });
     }
@@ -117,7 +117,7 @@ export function fromVersionedTransactionWithBlockhash(
 
     // Fee payer is first account
     const feePayer = accountKeys.staticAccountKeys[0];
-    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER);
+    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_FEE_PAYER_MISSING);
 
     const blockhashLifetime = {
         blockhash: transaction.message.recentBlockhash as Blockhash,
@@ -159,7 +159,7 @@ export function fromVersionedTransactionWithDurableNonce(
 
     // Fee payer is first account
     const feePayer = accountKeys.staticAccountKeys[0];
-    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_FEE_PAYER);
+    if (!feePayer) throw new SolanaError(SOLANA_ERROR__TRANSACTION_FEE_PAYER_MISSING);
 
     const instructions = transaction.message.compiledInstructions.map(instruction =>
         convertInstruction(transaction.message, accountKeys, instruction),
@@ -167,11 +167,13 @@ export function fromVersionedTransactionWithDurableNonce(
 
     // Check first instruction is durable nonce + extract params
     if (instructions.length === 0) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_NO_INSTRUCTIONS);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING);
     }
 
     if (!isAdvanceNonceAccountInstruction(instructions[0])) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_NOT_ADVANCE_NONCE);
+        throw new SolanaError(
+            SOLANA_ERROR__TRANSACTION_INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE,
+        );
     }
 
     // We know these accounts are defined because we checked `isAdvanceNonceAccountInstruction`
