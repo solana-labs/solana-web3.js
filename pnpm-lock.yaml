@@ -1303,8 +1303,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1(rollup@4.7.0)
       '@rollup/plugin-multi-entry':
-        specifier: ^6.0.0
-        version: 6.0.0(rollup@4.7.0)
+        specifier: ^6.0.1
+        version: 6.0.1(rollup@4.7.0)
       '@rollup/plugin-node-resolve':
         specifier: ^15.2.3
         version: 15.2.3(rollup@4.7.0)
@@ -5708,11 +5708,11 @@ packages:
       rollup: 4.7.0
     dev: true
 
-  /@rollup/plugin-multi-entry@6.0.0(rollup@4.7.0):
-    resolution: {integrity: sha512-msBgVncGQwh/ahxeP/rc8MXVZNBOjoVCsBuDk6uqyFzDv/SZN7jksfAsu6DJ2w4r5PaBX3/OXOjVPeCxya2waA==}
+  /@rollup/plugin-multi-entry@6.0.1(rollup@4.7.0):
+    resolution: {integrity: sha512-AXm6toPyTSfbYZWghQGbom1Uh7dHXlrGa+HoiYNhQtDUE3Q7LqoUYdVQx9E1579QWS1uOiu+cZRSE4okO7ySgw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
