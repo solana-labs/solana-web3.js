@@ -1,8 +1,8 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import {
-    SOLANA_ERROR__ACCOUNT_NOT_FOUND,
-    SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND,
+    SOLANA_ERROR__ACCOUNTS_ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__ACCOUNTS_ONE_OR_MORE_ACCOUNTS_NOT_FOUND,
     SolanaError,
 } from '@solana/errors';
 
@@ -18,7 +18,7 @@ describe('assertAccountExists', () => {
 
         // Then we expect an error to be thrown.
         expect(fn).toThrow(
-            new SolanaError(SOLANA_ERROR__ACCOUNT_NOT_FOUND, {
+            new SolanaError(SOLANA_ERROR__ACCOUNTS_ACCOUNT_NOT_FOUND, {
                 address: maybeAccount.address,
             }),
         );
@@ -39,7 +39,7 @@ describe('assertAccountsExist', () => {
 
         // Then we expect an error to be thrown with the non-existent accounts
         expect(fn).toThrow(
-            new SolanaError(SOLANA_ERROR__MULTIPLE_ACCOUNTS_NOT_FOUND, {
+            new SolanaError(SOLANA_ERROR__ACCOUNTS_ONE_OR_MORE_ACCOUNTS_NOT_FOUND, {
                 addresses: [maybeAccounts[0].address, maybeAccounts[1].address],
             }),
         );
