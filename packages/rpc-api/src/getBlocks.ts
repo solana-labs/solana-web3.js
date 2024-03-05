@@ -16,7 +16,3 @@ export interface GetBlocksApi extends RpcApiMethods {
         }>,
     ): GetBlocksApiResponse;
 }
-
-export function arbitraryFunctionToTriggerCI() {
-    return 'arbitrary';
-}
