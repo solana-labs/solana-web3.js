@@ -2,8 +2,8 @@ import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { Decoder } from '@solana/codecs-core';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
-    SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING,
+    SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING,
     SolanaError,
 } from '@solana/errors';
 import { isSignerRole } from '@solana/instructions';
@@ -30,7 +30,7 @@ export function getSignatureFromTransaction(
 
     const signatureBytes = transaction.signatures[transaction.feePayer];
     if (!signatureBytes) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING);
     }
     const transactionSignature = base58Decoder.decode(signatureBytes);
     return transactionSignature as Signature;
@@ -86,7 +86,7 @@ export function assertTransactionIsFullySigned<TTransaction extends CompilableTr
     });
 
     if (missingSigs.length > 0) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES, {
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING, {
             addresses: missingSigs,
         });
     }
