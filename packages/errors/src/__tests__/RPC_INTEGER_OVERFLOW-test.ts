@@ -1,14 +1,14 @@
-import { SOLANA_ERROR__RPC_INTEGER_OVERFLOW } from '../codes';
+import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW } from '../codes';
 import { SolanaError } from '../error';
 
-describe('SOLANA_ERROR__RPC_INTEGER_OVERFLOW', () => {
+describe('SOLANA_ERROR__RPC__INTEGER_OVERFLOW', () => {
     beforeEach(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (globalThis as any).__DEV__ = true;
     });
     it('features an informative error message for a path-less violation', () => {
         expect(
-            new SolanaError(SOLANA_ERROR__RPC_INTEGER_OVERFLOW, {
+            new SolanaError(SOLANA_ERROR__RPC__INTEGER_OVERFLOW, {
                 argumentLabel: '3rd',
                 keyPath: [2 /* third argument */],
                 methodName: 'someMethod',
@@ -22,7 +22,7 @@ describe('SOLANA_ERROR__RPC_INTEGER_OVERFLOW', () => {
     });
     it('features an informative error message for a violation with a deep path', () => {
         expect(
-            new SolanaError(SOLANA_ERROR__RPC_INTEGER_OVERFLOW, {
+            new SolanaError(SOLANA_ERROR__RPC__INTEGER_OVERFLOW, {
                 argumentLabel: '1st',
                 keyPath: [0 /* first argument */, 'foo', 'bar'],
                 methodName: 'someMethod',

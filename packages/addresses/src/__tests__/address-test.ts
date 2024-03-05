@@ -1,9 +1,9 @@
 import { VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH,
-    SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SolanaError,
 } from '@solana/errors';
 
@@ -43,7 +43,7 @@ describe('Address', () => {
                 expect(() => {
                     assertIsAddress('not-a-base-58-encoded-string');
                 }).toThrow(
-                    new SolanaError(SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE, {
+                    new SolanaError(SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE, {
                         actualLength: 28,
                     }),
                 );
@@ -55,7 +55,7 @@ describe('Address', () => {
                         '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                     );
                 }).toThrow(
-                    new SolanaError(SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH, {
+                    new SolanaError(SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH, {
                         actualLength: 31,
                     }),
                 );
@@ -160,7 +160,7 @@ describe('Address', () => {
         it('fatals when trying to deserialize a byte buffer shorter than 32-bytes', () => {
             const tooShortBuffer = new Uint8Array(Array(31).fill(0));
             expect(() => address.decode(tooShortBuffer)).toThrow(
-                new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
+                new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                     bytesLength: 31,
                     codecDescription: 'fixCodec',
                     expected: 32,

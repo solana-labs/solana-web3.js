@@ -1,6 +1,6 @@
 import { getU32Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
-import { SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
 
 import { getBooleanCodec } from '../boolean';
 import { b } from './__setup__';
@@ -28,7 +28,7 @@ describe('getBooleanCodec', () => {
         // Fails if the codec is not fixed size.
         // @ts-expect-error Boolean codec should be fixed-size.
         expect(() => boolean({ size: string() }).read(b('00000000'), 0)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_EXPECTED_FIXED_LENGTH),
+            new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH),
         );
     });
 

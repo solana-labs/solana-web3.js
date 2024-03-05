@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__INSTRUCTION_EXPECTED_TO_HAVE_ACCOUNTS,
-    SOLANA_ERROR__INSTRUCTION_EXPECTED_TO_HAVE_DATA,
-    SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH,
+    SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
+    SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
+    SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH,
     SolanaError,
 } from '@solana/errors';
 
@@ -34,7 +34,7 @@ export function assertIsInstructionForProgram<TProgramAddress extends string, TI
     programAddress: Address<TProgramAddress>,
 ): asserts instruction is TInstruction & { programAddress: Address<TProgramAddress> } {
     if (instruction.programAddress !== programAddress) {
-        throw new SolanaError(SOLANA_ERROR__INSTRUCTION_PROGRAM_ID_MISMATCH, {
+        throw new SolanaError(SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH, {
             actualProgramAddress: instruction.programAddress,
             expectedProgramAddress: programAddress,
         });
@@ -53,7 +53,7 @@ export function assertIsInstructionWithAccounts<
     TInstruction extends IInstruction = IInstruction,
 >(instruction: TInstruction): asserts instruction is TInstruction & IInstructionWithAccounts<TAccounts> {
     if (instruction.accounts === undefined) {
-        throw new SolanaError(SOLANA_ERROR__INSTRUCTION_EXPECTED_TO_HAVE_ACCOUNTS, {
+        throw new SolanaError(SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS, {
             data: instruction.data,
             programAddress: instruction.programAddress,
         });
@@ -76,7 +76,7 @@ export function assertIsInstructionWithData<
     TInstruction extends IInstruction = IInstruction,
 >(instruction: TInstruction): asserts instruction is TInstruction & IInstructionWithData<TData> {
     if (instruction.data === undefined) {
-        throw new SolanaError(SOLANA_ERROR__INSTRUCTION_EXPECTED_TO_HAVE_DATA, {
+        throw new SolanaError(SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA, {
             accountAddresses: instruction.accounts?.map(a => a.address),
             programAddress: instruction.programAddress,
         });

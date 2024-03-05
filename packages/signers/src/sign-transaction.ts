@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 import {
     assertTransactionIsFullySigned,
@@ -79,7 +79,7 @@ export async function signAndSendTransactionWithSigners<
     );
 
     if (!sendingSigner) {
-        throw new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING);
+        throw new SolanaError(SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING);
     }
 
     abortSignal?.throwIfAborted();

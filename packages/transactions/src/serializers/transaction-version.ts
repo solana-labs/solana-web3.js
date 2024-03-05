@@ -6,7 +6,7 @@ import {
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
-import { SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
 import { TransactionVersion } from '../types';
 
@@ -21,7 +21,7 @@ export function getTransactionVersionEncoder(): VariableSizeEncoder<TransactionV
                 return offset;
             }
             if (value < 0 || value > 127) {
-                throw new SolanaError(SOLANA_ERROR__TRANSACTION_VERSION_NUMBER_OUT_OF_RANGE, {
+                throw new SolanaError(SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE, {
                     actualVersion: value,
                 });
             }

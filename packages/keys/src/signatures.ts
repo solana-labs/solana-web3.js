@@ -2,8 +2,8 @@ import { assertSigningCapabilityIsAvailable, assertVerificationCapabilityIsAvail
 import { Encoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH,
-    SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -21,7 +21,7 @@ export function assertIsSignature(putativeSignature: string): asserts putativeSi
         // Highest value (64 bytes of 255)
         putativeSignature.length > 88
     ) {
-        throw new SolanaError(SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE, {
+        throw new SolanaError(SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE, {
             actualLength: putativeSignature.length,
         });
     }
@@ -29,7 +29,7 @@ export function assertIsSignature(putativeSignature: string): asserts putativeSi
     const bytes = base58Encoder.encode(putativeSignature);
     const numBytes = bytes.byteLength;
     if (numBytes !== 64) {
-        throw new SolanaError(SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH, {
+        throw new SolanaError(SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH, {
             actualLength: numBytes,
         });
     }

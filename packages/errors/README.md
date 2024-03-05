@@ -59,8 +59,8 @@ When you catch a `SolanaError` and assert its error code using `isSolanaError()`
 
 ```ts
 import {
-    SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURE,
-    SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING,
+    SOLANA_ERROR__TRANSACTION__MISSING_SIGNATURE,
+    SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
     isSolanaError,
 } from '@solana/errors';
 import { assertTransactionIsFullySigned, getSignatureFromTransaction } from '@solana/transactions';
@@ -70,14 +70,14 @@ try {
     assertTransactionIsFullySigned(tx);
     /* ... */
 } catch (e) {
-    if (isSolanaError(e, SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING)) {
+    if (isSolanaError(e, SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING)) {
         displayError(
             "We can't send this transaction without signatures for these addresses:\n- %s",
             // The type of the `context` object is now refined to contain `addresses`.
             e.context.addresses.join('\n- '),
         );
         return;
-    } else if (isSolanaError(e, SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING)) {
+    } else if (isSolanaError(e, SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING)) {
         if (!tx.feePayer) {
             displayError('Choose a fee payer for this transaction before sending it');
         } else {

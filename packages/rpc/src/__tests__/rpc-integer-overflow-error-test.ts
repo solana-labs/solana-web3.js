@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__RPC_INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
 
 import { createSolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error';
 
@@ -7,14 +7,14 @@ describe('createSolanaJsonRpcIntegerOverflowError()', () => {
         const error = createSolanaJsonRpcIntegerOverflowError('someMethod', [2 /* third argument */], 1n);
         expect(error).toBeInstanceOf(SolanaError);
     });
-    it('creates a `SolanaError` with the code `SOLANA_ERROR__RPC_INTEGER_OVERFLOW`', () => {
+    it('creates a `SolanaError` with the code `SOLANA_ERROR__RPC__INTEGER_OVERFLOW`', () => {
         const error = createSolanaJsonRpcIntegerOverflowError('someMethod', [2 /* third argument */], 1n);
-        expect(error).toHaveProperty('context.__code', SOLANA_ERROR__RPC_INTEGER_OVERFLOW);
+        expect(error).toHaveProperty('context.__code', SOLANA_ERROR__RPC__INTEGER_OVERFLOW);
     });
     it('creates a `SolanaError` with the correct context for a path-less violation', () => {
         const error = createSolanaJsonRpcIntegerOverflowError('someMethod', [2 /* third argument */], 1n);
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__RPC_INTEGER_OVERFLOW, {
+            new SolanaError(SOLANA_ERROR__RPC__INTEGER_OVERFLOW, {
                 argumentLabel: '3rd',
                 keyPath: [2],
                 methodName: 'someMethod',

@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID,
     SolanaError,
 } from '@solana/errors';
 import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
@@ -229,7 +229,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
             await expect(thingNotificationsPromise).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID),
+                new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID),
             );
         },
     );
@@ -237,7 +237,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         expect(() => {
             rpc.nonConformingNotif().subscribe({ abortSignal: new AbortController().signal });
         }).toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
+            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
                 notificationName: 'nonConformingNotif',
             }),
         );
@@ -256,7 +256,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         });
         const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID),
+            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID),
         );
     });
     it('fatals when the server responds with an error', async () => {

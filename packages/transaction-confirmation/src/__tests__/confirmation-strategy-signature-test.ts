@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN, SolanaError } from '@solana/errors';
 import { Signature } from '@solana/keys';
 
 import { createRecentSignatureConfirmationPromiseFactory } from '../confirmation-strategy-recent-signature';
@@ -138,7 +138,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
             signature: 'abc' as Signature,
         });
         await expect(signatureConfirmationPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN, { errorName: 'o no' }),
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN, { errorName: 'o no' }),
         );
     });
     it('calls the abort signal passed to the signature statuses query when aborted', async () => {

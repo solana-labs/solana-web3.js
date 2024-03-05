@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS,
-    SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
+    SOLANA_ERROR__SIGNER__TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS,
+    SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING,
     SolanaError,
 } from '@solana/errors';
 
@@ -88,7 +88,7 @@ describe('assertIsTransactionWithSingleSendingSigner', () => {
 
         // Then we expect the assertion to fail.
         expect(() => assertIsTransactionWithSingleSendingSigner(transaction)).toThrow(
-            new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS),
+            new SolanaError(SOLANA_ERROR__SIGNER__TRANSACTION_CANNOT_HAVE_MULTIPLE_SENDING_SIGNERS),
         );
     });
 
@@ -100,7 +100,7 @@ describe('assertIsTransactionWithSingleSendingSigner', () => {
 
         // Then we expect the assertion to fail.
         expect(() => assertIsTransactionWithSingleSendingSigner(transaction)).toThrow(
-            new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING),
+            new SolanaError(SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING),
         );
     });
 });

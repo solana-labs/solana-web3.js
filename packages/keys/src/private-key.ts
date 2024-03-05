@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
 function addPkcs8Header(bytes: Uint8Array): Uint8Array {
     // prettier-ignore
@@ -40,7 +40,7 @@ function addPkcs8Header(bytes: Uint8Array): Uint8Array {
 export async function createPrivateKeyFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKey> {
     const actualLength = bytes.byteLength;
     if (actualLength !== 32) {
-        throw new SolanaError(SOLANA_ERROR__KEYS_INVALID_PRIVATE_KEY_BYTE_LENGTH, {
+        throw new SolanaError(SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH, {
             actualLength,
         });
     }

@@ -1,7 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { address, getAddressFromPublicKey } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
 import { CompilableTransaction, partiallySignTransaction } from '@solana/transactions';
 
@@ -59,7 +59,7 @@ describe('assertIsKeyPairSigner', () => {
             signTransactions: async () => [],
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_KEY_PAIR_SIGNER, {
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, {
             address: myAddress,
         });
         expect(() => assertIsKeyPairSigner(mySigner)).not.toThrow();

@@ -1,5 +1,5 @@
 import { address } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError } from '@solana/errors';
 
 import {
     assertIsTransactionSendingSigner,
@@ -29,7 +29,7 @@ describe('assertIsTransactionSendingSigner', () => {
             signAndSendTransactions: async () => [],
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_SENDING_SIGNER, {
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, {
             address: myAddress,
         });
         expect(() => assertIsTransactionSendingSigner(mySigner)).not.toThrow();

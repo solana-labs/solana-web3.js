@@ -1,5 +1,5 @@
 import {
-    SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
+    SOLANA_ERROR__INVARIANT_VIOLATION__CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
     SolanaError,
 } from '@solana/errors';
 
@@ -44,7 +44,7 @@ export function getCachedAbortableIterableFactory<TInput extends unknown[], TIte
     function getCacheEntryOrThrow(cacheKey: CacheKey) {
         const currentCacheEntry = cache.get(cacheKey);
         if (!currentCacheEntry) {
-            throw new SolanaError(SOLANA_ERROR__INVARIANT_VIOLATION_CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING, {
+            throw new SolanaError(SOLANA_ERROR__INVARIANT_VIOLATION__CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING, {
                 cacheKey: cacheKey.toString(),
             });
         }

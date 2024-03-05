@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST,
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID,
     SolanaError,
 } from '@solana/errors';
 import {
@@ -84,7 +84,7 @@ function makeProxy<TRpcSubscriptionsApiMethods, TRpcSubscriptionsTransport exten
                 const notificationName = p.toString();
                 const createRpcSubscription = Reflect.get(target, notificationName, receiver);
                 if (p.toString().endsWith('Notifications') === false && !createRpcSubscription) {
-                    throw new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
+                    throw new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST, {
                         notificationName,
                     });
                 }
@@ -167,7 +167,7 @@ function createPendingRpcSubscription<
                 }
             }
             if (subscriptionId == null) {
-                throw new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_EXPECTED_SERVER_SUBSCRIPTION_ID);
+                throw new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID);
             }
             /**
              * STEP 3: Return an iterable that yields notifications for this subscription id.

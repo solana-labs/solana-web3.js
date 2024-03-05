@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
 import { CompilableTransaction } from '@solana/transactions';
 
 import { BaseSignerConfig } from './types';
@@ -29,7 +29,7 @@ export function assertIsTransactionModifyingSigner<TAddress extends string>(valu
     [key: string]: unknown;
 }): asserts value is TransactionModifyingSigner<TAddress> {
     if (!isTransactionModifyingSigner(value)) {
-        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_MODIFYING_SIGNER, {
+        throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_MODIFYING_SIGNER, {
             address: value.address,
         });
     }

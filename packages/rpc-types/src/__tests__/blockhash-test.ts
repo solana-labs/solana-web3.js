@@ -3,7 +3,7 @@ import { getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE,
+    SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SolanaError,
 } from '@solana/errors';
 
@@ -40,7 +40,7 @@ describe('assertIsBlockhash()', () => {
             expect(() => {
                 assertIsBlockhash(badBlockhash);
             }).toThrow(
-                new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                     alphabet: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
                     base: 58,
                     value: badBlockhash,

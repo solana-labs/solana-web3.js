@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH,
-    SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -19,7 +19,7 @@ describe('signature', () => {
     it.each([63, 89])('throws on a `Signature` whose string length is %s', actualLength => {
         const thisThrows = () => signature('t'.repeat(actualLength));
         expect(thisThrows).toThrow(
-            new SolanaError(SOLANA_ERROR__KEYS_SIGNATURE_STRING_LENGTH_OUT_OF_RANGE, {
+            new SolanaError(SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE, {
                 actualLength,
             }),
         );
@@ -30,7 +30,7 @@ describe('signature', () => {
     ])('throws on a `Signature` whose decoded byte length is %s', (actualLength, encodedSignature) => {
         const thisThrows = () => signature(encodedSignature);
         expect(thisThrows).toThrow(
-            new SolanaError(SOLANA_ERROR__KEYS_INVALID_SIGNATURE_BYTE_LENGTH, {
+            new SolanaError(SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH, {
                 actualLength,
             }),
         );
