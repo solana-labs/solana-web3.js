@@ -1,5 +1,5 @@
 import { Codec, createCodec, Encoder } from '@solana/codecs-core';
-import { SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
 export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decodedNumber?: T): void => {
     // Serialize.
@@ -31,7 +31,7 @@ export const assertRangeError = <T extends bigint | number>(
 ): void => {
     const { codecDescription, max, min } = config;
     expect(() => encoder.encode(value)).toThrow(
-        new SolanaError(SOLANA_ERROR__CODECS_NUMBER_OUT_OF_RANGE, {
+        new SolanaError(SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE, {
             codecDescription,
             max,
             min,

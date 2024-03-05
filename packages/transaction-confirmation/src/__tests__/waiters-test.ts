@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SolanaError } from '@solana/errors';
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
@@ -145,7 +145,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING),
+            new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING),
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
@@ -261,7 +261,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             transaction: transactionWithoutFeePayerSignature,
         });
         await expect(commitmentPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_FEE_PAYER_SIGNATURE_MISSING),
+            new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING),
         );
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {

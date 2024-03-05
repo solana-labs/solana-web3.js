@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
 describe('createHttpTransport', () => {
@@ -31,7 +31,7 @@ describe('createHttpTransport', () => {
             expect.assertions(1);
             const requestPromise = makeHttpRequest({ payload: 123 });
             await expect(requestPromise).rejects.toThrow(
-                new SolanaError(SOLANA_ERROR__RPC_TRANSPORT_HTTP_ERROR, {
+                new SolanaError(SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, {
                     message: 'We looked everywhere',
                     statusCode: 404,
                 }),

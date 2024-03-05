@@ -9,8 +9,8 @@ import {
 } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH,
-    SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -59,7 +59,7 @@ export function assertIsAddress(putativeAddress: string): asserts putativeAddres
         // Highest address (32 bytes of 255)
         putativeAddress.length > 44
     ) {
-        throw new SolanaError(SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE, {
+        throw new SolanaError(SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE, {
             actualLength: putativeAddress.length,
         });
     }
@@ -68,7 +68,7 @@ export function assertIsAddress(putativeAddress: string): asserts putativeAddres
     const bytes = base58Encoder.encode(putativeAddress);
     const numBytes = bytes.byteLength;
     if (numBytes !== 32) {
-        throw new SolanaError(SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH, {
+        throw new SolanaError(SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH, {
             actualLength: numBytes,
         });
     }

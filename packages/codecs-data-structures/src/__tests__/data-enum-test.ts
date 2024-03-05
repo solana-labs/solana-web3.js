@@ -2,8 +2,8 @@ import { assertIsFixedSize, assertIsVariableSize, isFixedSize, isVariableSize } 
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT,
     SolanaError,
 } from '@solana/errors';
 
@@ -102,13 +102,13 @@ describe('getDataEnumCodec', () => {
 
     it('handles invalid variants', () => {
         expect(() => dataEnum(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT, {
                 value: 'Missing',
                 variants: ['PageLoad', 'Click', 'KeyPress', 'PageUnload'],
             }),
         );
         expect(() => dataEnum(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+            new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
                 discriminator: 4,
                 maxRange: 3,
                 minRange: 0,

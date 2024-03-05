@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH,
-    SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE,
+    SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -18,7 +18,7 @@ describe('coercions', () => {
         it.each([31, 45])('throws given an address with length %s', actualLength => {
             const thisThrows = () => address('3'.repeat(actualLength));
             expect(thisThrows).toThrow(
-                new SolanaError(SOLANA_ERROR__ADDRESSES_STRING_LENGTH_OUT_OF_RANGE, {
+                new SolanaError(SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE, {
                     actualLength,
                 }),
             );
@@ -29,7 +29,7 @@ describe('coercions', () => {
         ])('throws given an address that decodes to have %s bytes', (actualLength, badAddress) => {
             const thisThrows = () => address(badAddress);
             expect(thisThrows).toThrow(
-                new SolanaError(SOLANA_ERROR__ADDRESSES_INVALID_BYTE_LENGTH, {
+                new SolanaError(SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH, {
                     actualLength,
                 }),
             );

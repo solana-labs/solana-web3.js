@@ -1,7 +1,7 @@
 import {
-    SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR,
-    SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM,
-    SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN,
+    SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR,
+    SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
+    SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN,
     SolanaErrorCode,
 } from '../codes';
 import { SolanaError } from '../error';
@@ -68,7 +68,7 @@ describe('getSolanaErrorFromInstructionError', () => {
     it('produces the correct `SolanaError` for a `Custom` error', () => {
         const error = getSolanaErrorFromInstructionError(123, { Custom: 789 });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM, {
+            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM, {
                 code: 789,
                 index: 123,
             }),
@@ -77,7 +77,7 @@ describe('getSolanaErrorFromInstructionError', () => {
     it('produces the correct `SolanaError` for a `BorshIoError` error', () => {
         const error = getSolanaErrorFromInstructionError(123, { BorshIoError: 'abc' });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR, {
+            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR, {
                 encodedData: 'abc',
                 index: 123,
             }),
@@ -86,7 +86,7 @@ describe('getSolanaErrorFromInstructionError', () => {
     it("returns the unknown error when encountering an enum name that's missing from the map", () => {
         const error = getSolanaErrorFromInstructionError(123, 'ThisDoesNotExist');
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN, {
+            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN, {
                 errorName: 'ThisDoesNotExist',
                 index: 123,
             }),
@@ -96,7 +96,7 @@ describe('getSolanaErrorFromInstructionError', () => {
         const expectedContext = {} as const;
         const error = getSolanaErrorFromInstructionError(123, { ThisDoesNotExist: expectedContext });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN, {
+            new SolanaError(SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN, {
                 errorName: 'ThisDoesNotExist',
                 index: 123,
                 instructionErrorContext: expectedContext,

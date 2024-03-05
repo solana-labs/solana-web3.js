@@ -8,7 +8,7 @@ import {
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
-import { SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
 import { assertValidBaseString } from './assertions';
 import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
@@ -23,7 +23,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
                 try {
                     return (atob as Window['atob'])(value).length;
                 } catch (e) {
-                    throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                    throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                         alphabet,
                         base: 64,
                         value,
@@ -38,7 +38,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
                     bytes.set(bytesToAdd, offset);
                     return bytesToAdd.length + offset;
                 } catch (e) {
-                    throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                    throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                         alphabet,
                         base: 64,
                         value,

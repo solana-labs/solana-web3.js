@@ -1,8 +1,8 @@
 import {
-    SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
-    SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
-    SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
-    SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN,
+    SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION,
+    SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT,
+    SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
+    SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
 } from './codes';
 import { SolanaError } from './error';
 import { getSolanaErrorFromInstructionError } from './instruction-error';
@@ -68,18 +68,18 @@ export function getSolanaErrorFromTransactionError(transactionError: string | { 
         {
             errorCodeBaseOffset: 7050001,
             getErrorContext(errorCode, rpcErrorName, rpcErrorContext) {
-                if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN) {
+                if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN) {
                     return {
                         errorName: rpcErrorName,
                         ...(rpcErrorContext !== undefined ? { transactionErrorContext: rpcErrorContext } : null),
                     };
-                } else if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION) {
+                } else if (errorCode === SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION) {
                     return {
                         index: rpcErrorContext as number,
                     };
                 } else if (
-                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT ||
-                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED
+                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT ||
+                    errorCode === SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED
                 ) {
                     return {
                         accountIndex: (rpcErrorContext as { account_index: number }).account_index,

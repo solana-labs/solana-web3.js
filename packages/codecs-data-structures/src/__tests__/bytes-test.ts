@@ -1,5 +1,5 @@
 import { getU8Codec } from '@solana/codecs-numbers';
-import { SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
 import { getBytesCodec } from '../bytes';
 import { b } from './__setup__';
@@ -17,7 +17,7 @@ describe('getBytesCodec', () => {
 
         // Not enough bytes.
         expect(() => bytesU8.read(b('022a'), 0)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 1,
                 codecDescription: 'bytes',
                 expected: 2,
@@ -39,7 +39,7 @@ describe('getBytesCodec', () => {
         expect(bytes5.read(b('0102000000'), 0)).toStrictEqual([new Uint8Array([1, 2, 0, 0, 0]), 5]);
         expect(bytes5.read(b('ff0102000000'), 1)).toStrictEqual([new Uint8Array([1, 2, 0, 0, 0]), 6]);
         expect(() => bytes5.read(b('0102'), 0)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 2,
                 codecDescription: 'fixCodec',
                 expected: 5,

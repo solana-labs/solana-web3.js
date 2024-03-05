@@ -1,8 +1,8 @@
 import {
-    SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION,
-    SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT,
-    SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
-    SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN,
+    SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION,
+    SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT,
+    SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
+    SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
     SolanaErrorCode,
 } from '../codes';
 import { SolanaError } from '../error';
@@ -53,7 +53,7 @@ describe('getSolanaErrorFromTransactionError', () => {
     it('produces the correct `SolanaError` for a `DuplicateInstruction` error', () => {
         const error = getSolanaErrorFromTransactionError({ DuplicateInstruction: 1 });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_DUPLICATE_INSTRUCTION, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION, {
                 index: 1,
             }),
         );
@@ -61,7 +61,7 @@ describe('getSolanaErrorFromTransactionError', () => {
     it('produces the correct `SolanaError` for a `InsufficientFundsForRent` error', () => {
         const error = getSolanaErrorFromTransactionError({ InsufficientFundsForRent: { account_index: 1 } });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_INSUFFICIENT_FUNDS_FOR_RENT, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT, {
                 accountIndex: 1,
             }),
         );
@@ -71,7 +71,7 @@ describe('getSolanaErrorFromTransactionError', () => {
             ProgramExecutionTemporarilyRestricted: { account_index: 1 },
         });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED, {
                 accountIndex: 1,
             }),
         );
@@ -79,7 +79,7 @@ describe('getSolanaErrorFromTransactionError', () => {
     it("returns the unknown error when encountering an enum name that's missing from the map", () => {
         const error = getSolanaErrorFromTransactionError('ThisDoesNotExist');
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN, {
                 errorName: 'ThisDoesNotExist',
             }),
         );
@@ -88,7 +88,7 @@ describe('getSolanaErrorFromTransactionError', () => {
         const expectedContext = {} as const;
         const error = getSolanaErrorFromTransactionError({ ThisDoesNotExist: expectedContext });
         expect(error).toEqual(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR_UNKNOWN, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN, {
                 errorName: 'ThisDoesNotExist',
                 transactionErrorContext: expectedContext,
             }),

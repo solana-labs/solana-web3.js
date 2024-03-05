@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
-    SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+    SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+    SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
@@ -1207,7 +1207,7 @@ describe('decompileTransaction', () => {
                 const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
                     new SolanaError(
-                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+                        SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
                         {
                             lookupTableAddresses: ['9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw'],
                         },
@@ -1252,7 +1252,7 @@ describe('decompileTransaction', () => {
                     decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
                     new SolanaError(
-                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+                        SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
                         {
                             highestKnownIndex: 0,
                             highestRequestedIndex: 1,
@@ -1299,7 +1299,7 @@ describe('decompileTransaction', () => {
                     decompileTransaction(compiledTransaction, { addressesByLookupTableAddress: lookupTables });
                 expect(fn).toThrow(
                     new SolanaError(
-                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
+                        SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_INDEX_OUT_OF_RANGE,
                         {
                             highestKnownIndex: 0,
                             highestRequestedIndex: 1,
@@ -1682,7 +1682,7 @@ describe('decompileTransaction', () => {
                 const fn = () => decompileTransaction(compiledTransaction);
                 expect(fn).toThrow(
                     new SolanaError(
-                        SOLANA_ERROR__TRANSACTION_FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
+                        SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
                         {
                             lookupTableAddresses: [
                                 '9wnrQTq5MKhYfp379pKvpy1PvRyteseQmKv4Bw3uQrUw',

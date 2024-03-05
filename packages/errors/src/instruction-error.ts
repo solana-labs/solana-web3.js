@@ -1,7 +1,7 @@
 import {
-    SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR,
-    SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM,
-    SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN,
+    SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR,
+    SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
+    SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN,
 } from './codes';
 import { SolanaError } from './error';
 import { getSolanaErrorFromRpcError } from './rpc-enum-errors';
@@ -74,18 +74,18 @@ export function getSolanaErrorFromInstructionError(
         {
             errorCodeBaseOffset: 4615001,
             getErrorContext(errorCode, rpcErrorName, rpcErrorContext) {
-                if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR_UNKNOWN) {
+                if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN) {
                     return {
                         errorName: rpcErrorName,
                         index,
                         ...(rpcErrorContext !== undefined ? { instructionErrorContext: rpcErrorContext } : null),
                     };
-                } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR_CUSTOM) {
+                } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM) {
                     return {
                         code: rpcErrorContext as number,
                         index,
                     };
-                } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR_BORSH_IO_ERROR) {
+                } else if (errorCode === SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR) {
                     return {
                         encodedData: rpcErrorContext as string,
                         index,

@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
 import { SignableMessage } from './signable-message';
 import { BaseSignerConfig, SignatureDictionary } from './types';
@@ -29,7 +29,7 @@ export function assertIsMessagePartialSigner<TAddress extends string>(value: {
     [key: string]: unknown;
 }): asserts value is MessagePartialSigner<TAddress> {
     if (!isMessagePartialSigner(value)) {
-        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, {
+        throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, {
             address: value.address,
         });
     }

@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
 import { createCodec } from '../codec';
 import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
@@ -59,7 +59,7 @@ describe('fixCodec', () => {
         expect(mockCodec.read).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixCodec(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 5,
                 codecDescription: 'fixCodec',
                 expected: 10,
@@ -147,7 +147,7 @@ describe('fixDecoder', () => {
         expect(mockCodec.read).toHaveBeenCalledWith(b('08050c0c0f0000000000'), 0);
 
         expect(() => fixDecoder(mockCodec, 10).decode(b('08050c0c0f'))).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_BYTE_LENGTH, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 5,
                 codecDescription: 'fixCodec',
                 expected: 10,

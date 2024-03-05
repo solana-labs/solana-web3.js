@@ -1,11 +1,11 @@
-import { SOLANA_ERROR__RPC_INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
 import type { KeyPath } from '@solana/rpc-transformers';
 
 export function createSolanaJsonRpcIntegerOverflowError(
     methodName: string,
     keyPath: KeyPath,
     value: bigint,
-): SolanaError<typeof SOLANA_ERROR__RPC_INTEGER_OVERFLOW> {
+): SolanaError<typeof SOLANA_ERROR__RPC__INTEGER_OVERFLOW> {
     let argumentLabel = '';
     if (typeof keyPath[0] === 'number') {
         const argPosition = keyPath[0] + 1;
@@ -30,7 +30,7 @@ export function createSolanaJsonRpcIntegerOverflowError(
                   .map(pathPart => (typeof pathPart === 'number' ? `[${pathPart}]` : pathPart))
                   .join('.')
             : undefined;
-    const error = new SolanaError(SOLANA_ERROR__RPC_INTEGER_OVERFLOW, {
+    const error = new SolanaError(SOLANA_ERROR__RPC__INTEGER_OVERFLOW, {
         argumentLabel,
         keyPath: keyPath as readonly (string | number | symbol)[],
         methodName,

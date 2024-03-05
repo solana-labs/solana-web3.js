@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME, SolanaError } from '@solana/errors';
 import {
     AccountRole,
     IInstruction,
@@ -66,7 +66,7 @@ export function assertIsDurableNonceTransaction(
     transaction: BaseTransaction | (BaseTransaction & IDurableNonceTransaction),
 ): asserts transaction is BaseTransaction & IDurableNonceTransaction {
     if (!isDurableNonceTransaction(transaction)) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION_EXPECTED_NONCE_LIFETIME);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME);
     }
 }
 

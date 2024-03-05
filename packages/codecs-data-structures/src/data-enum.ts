@@ -12,8 +12,8 @@ import {
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 import {
-    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT,
     SolanaError,
 } from '@solana/errors';
 
@@ -147,7 +147,7 @@ export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>
             offset = dOffset;
             const variantField = variants[Number(discriminator)] ?? null;
             if (!variantField) {
-                throw new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+                throw new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
                     discriminator,
                     maxRange: variants.length - 1,
                     minRange: 0,
@@ -209,7 +209,7 @@ function getVariantDiscriminator<const TVariants extends Variants<Encoder<any> |
 ) {
     const discriminator = variants.findIndex(([key]) => variant.__kind === key);
     if (discriminator < 0) {
-        throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_DATA_ENUM_VARIANT, {
+        throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT, {
             value: variant.__kind,
             variants: variants.map(([key]) => key),
         });

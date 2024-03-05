@@ -1,6 +1,6 @@
 import {
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
-    SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED,
+    SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT,
     SolanaError,
 } from '@solana/errors';
 import WS from 'jest-websocket-mock';
@@ -44,7 +44,7 @@ describe('createWebSocketConnection', () => {
             url: 'ws://fake', // Wrong URL!
         });
         await expect(connectionPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT, {
+            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT, {
                 errorEvent: {} as Event,
             }),
         );
@@ -61,7 +61,7 @@ describe('createWebSocketConnection', () => {
         expect(client).toHaveProperty('readyState', WebSocket.CONNECTING);
         abortController.abort();
         await expect(connectionPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_FAILED_TO_CONNECT, {
+            new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT, {
                 errorEvent: {} as Event,
             }),
         );
@@ -231,7 +231,7 @@ describe('RpcWebSocketConnection', () => {
                 const sendPromise = connection.send({ some: 'message' });
                 abortController.abort();
                 await expect(sendPromise).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
+                    new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
                 );
             });
             it('fatals when the connection encounters an error while a message is queued', async () => {
@@ -243,7 +243,7 @@ describe('RpcWebSocketConnection', () => {
                     wasClean: false,
                 });
                 await expect(sendPromise).rejects.toThrow(
-                    new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS_TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
+                    new SolanaError(SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_CLOSED_BEFORE_MESSAGE_BUFFERED),
                 );
             });
         });

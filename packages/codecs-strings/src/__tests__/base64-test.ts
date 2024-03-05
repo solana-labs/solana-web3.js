@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
 import { getBase16Codec } from '../base16';
 import { getBase64Codec } from '../base64';
@@ -30,7 +30,7 @@ describe('getBase64Codec', () => {
         expect(base64.read(bytes, 0)).toStrictEqual([sentence, 27]);
 
         expect(() => base64.encode('INVALID_INPUT')).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                 alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
                 base: 64,
                 value: 'INVALID_INPUT',
@@ -50,14 +50,14 @@ describe('getBase64Codec', () => {
         it('fails if base64 strings do not have the expected padding', () => {
             // This is because atob is not tolerant to missing padding.
             expect(() => base64.encode('A')).toThrow(
-                new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                     alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
                     base: 64,
                     value: 'A',
                 }),
             );
             expect(() => base64.encode('AA=')).toThrow(
-                new SolanaError(SOLANA_ERROR__CODECS_INVALID_STRING_FOR_BASE, {
+                new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
                     alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
                     base: 64,
                     value: 'AA=',

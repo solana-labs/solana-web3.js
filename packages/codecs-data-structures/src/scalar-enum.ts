@@ -23,8 +23,8 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 import {
-    SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT,
     SolanaError,
 } from '@solana/errors';
 
@@ -96,7 +96,7 @@ export function getScalarEnumEncoder<TEnum extends ScalarEnum>(
         const isInvalidNumber = typeof value === 'number' && (value < minRange || value > maxRange);
         const isInvalidString = typeof value === 'string' && !allStringInputs.includes(value);
         if (isInvalidNumber || isInvalidString) {
-            throw new SolanaError(SOLANA_ERROR__CODECS_INVALID_SCALAR_ENUM_VARIANT, {
+            throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT, {
                 maxRange,
                 minRange,
                 value,
@@ -136,7 +136,7 @@ export function getScalarEnumDecoder<TEnum extends ScalarEnum>(
     return mapDecoder(prefix, (value: number | bigint): ScalarEnumTo<TEnum> => {
         const valueAsNumber = Number(value);
         if (valueAsNumber < minRange || valueAsNumber > maxRange) {
-            throw new SolanaError(SOLANA_ERROR__CODECS_ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
+            throw new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
                 discriminator: valueAsNumber,
                 maxRange,
                 minRange,

@@ -1,5 +1,5 @@
 import { address } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
 import { assertIsMessagePartialSigner, isMessagePartialSigner, MessagePartialSigner } from '../message-partial-signer';
 
@@ -25,7 +25,7 @@ describe('assertIsMessagePartialSigner', () => {
             signMessages: async () => [],
         } satisfies MessagePartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_PARTIAL_SIGNER, {
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, {
             address: myAddress,
         });
         expect(() => assertIsMessagePartialSigner(mySigner)).not.toThrow();

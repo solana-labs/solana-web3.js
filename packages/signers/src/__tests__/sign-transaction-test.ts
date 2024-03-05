@@ -2,8 +2,8 @@ import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 import {
-    SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING,
-    SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING,
+    SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING,
+    SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
 import { CompilableTransaction, IFullySignedTransaction, ITransactionWithSignatures } from '@solana/transactions';
@@ -337,7 +337,7 @@ describe('signTransactionWithSigners', () => {
         // Then we expect an error letting us know the transaction is not fully signed.
         // This is because sending signers are ignored by signTransactionWithSigners.
         await expect(promise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION_SIGNATURES_MISSING, {
+            new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: ['2222' as Address],
             }),
         );
@@ -407,7 +407,9 @@ describe('signAndSendTransactionWithSigners', () => {
         );
 
         // Then we expect an error letting us know no sending mechanism was provided.
-        await expect(promise).rejects.toThrow(new SolanaError(SOLANA_ERROR__SIGNER_TRANSACTION_SENDING_SIGNER_MISSING));
+        await expect(promise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING),
+        );
     });
 
     it('uses a composite signer as a sending signer when there are no other sending signers', async () => {

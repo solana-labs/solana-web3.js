@@ -1,5 +1,5 @@
 import { address } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
 import {
     assertIsTransactionPartialSigner,
@@ -29,7 +29,7 @@ describe('assertIsTransactionPartialSigner', () => {
             signTransactions: async () => [],
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
-        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_TRANSACTION_PARTIAL_SIGNER, {
+        const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, {
             address: myAddress,
         });
         expect(() => assertIsTransactionPartialSigner(mySigner)).not.toThrow();

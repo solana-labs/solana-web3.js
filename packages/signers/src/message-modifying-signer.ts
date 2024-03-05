@@ -1,5 +1,5 @@
 import { Address, isAddress } from '@solana/addresses';
-import { SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
 
 import { SignableMessage } from './signable-message';
 import { BaseSignerConfig } from './types';
@@ -33,7 +33,7 @@ export function assertIsMessageModifyingSigner<TAddress extends string>(value: {
     [key: string]: unknown;
 }): asserts value is MessageModifyingSigner<TAddress> {
     if (!isMessageModifyingSigner(value)) {
-        throw new SolanaError(SOLANA_ERROR__SIGNER_EXPECTED_MESSAGE_MODIFYING_SIGNER, {
+        throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_MODIFYING_SIGNER, {
             address: value.address,
         });
     }
