@@ -55,6 +55,12 @@ jobs:
         if: steps.cache-test-validator.outputs.cache-hit != 'true'
         run: scripts/setup-test-validator.sh
 
+      - name: Start Test Validator
+        id: test-validator
+        run: |
+          ./scripts/start-shared-test-validator.sh &
+          echo "TEST_VALIDATOR_PID=$!" >> "$GITHUB_OUTPUT"
+
       - name: Publish NPM
         run: |
           pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
@@ -62,6 +68,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Stop Test Validator
+        run: kill ${{ steps.test-validator.outputs.TEST_VALIDATOR_PID}}
 
       - name: Deploy Github Page
         uses: peaceiris/actions-gh-pages@v3

@@ -66,8 +66,17 @@ jobs:
         if: steps.cache-test-validator.outputs.cache-hit != 'true'
         run: scripts/setup-test-validator.sh
 
+      - name: Start Test Validator
+        id: test-validator
+        run: |
+          ./scripts/start-shared-test-validator.sh &
+          echo "TEST_VALIDATOR_PID=$!" >> "$GITHUB_OUTPUT"
+
       - name: Build & Test
         run: pnpm build --concurrency=100%
+
+      - name: Stop Test Validator
+        run: kill ${{ steps.test-validator.outputs.TEST_VALIDATOR_PID}}
 
       - name: Upload Experimental library build artifacts
         if: matrix.node == 'current'
