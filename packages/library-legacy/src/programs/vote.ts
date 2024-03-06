@@ -94,7 +94,7 @@ export type UpdateValidatorIdentityParams = {
   votePubkey: PublicKey;
   authorizedWithdrawerPubkey: PublicKey;
   nodePubkey: PublicKey;
-}
+};
 
 /**
  * Vote Instruction class
@@ -267,7 +267,11 @@ export type VoteInstructionType =
   // It would be preferable for this type to be `keyof VoteInstructionInputData`
   // but Typedoc does not transpile `keyof` expressions.
   // See https://github.com/TypeStrong/typedoc/issues/1894
-  'Authorize' | 'AuthorizeWithSeed' | 'InitializeAccount' | 'Withdraw' | 'UpdateValidatorIdentity';
+  | 'Authorize'
+  | 'AuthorizeWithSeed'
+  | 'InitializeAccount'
+  | 'Withdraw'
+  | 'UpdateValidatorIdentity';
 
 /** @internal */
 export type VoteAuthorizeWithSeedArgs = Readonly<{
@@ -551,7 +555,7 @@ export class VoteProgram {
   ): Transaction {
     if (params.lamports > currentVoteAccountBalance - rentExemptMinimum) {
       throw new Error(
-        'Withdraw will leave vote account with insuffcient funds.',
+        'Withdraw will leave vote account with insufficient funds.',
       );
     }
     return VoteProgram.withdraw(params);
@@ -561,16 +565,16 @@ export class VoteProgram {
    * Generate a transaction to update the validator identity (node pubkey) of a Vote account.
    */
   static updateValidatorIdentity(
-    params: UpdateValidatorIdentityParams
+    params: UpdateValidatorIdentityParams,
   ): Transaction {
-    const { votePubkey, authorizedWithdrawerPubkey, nodePubkey } = params;
+    const {votePubkey, authorizedWithdrawerPubkey, nodePubkey} = params;
     const type = VOTE_INSTRUCTION_LAYOUTS.UpdateValidatorIdentity;
     const data = encodeData(type);
 
     const keys = [
-      { pubkey: votePubkey, isSigner: false, isWritable: true },
-      { pubkey: nodePubkey, isSigner: true, isWritable: false },
-      { pubkey: authorizedWithdrawerPubkey, isSigner: true, isWritable: false },
+      {pubkey: votePubkey, isSigner: false, isWritable: true},
+      {pubkey: nodePubkey, isSigner: true, isWritable: false},
+      {pubkey: authorizedWithdrawerPubkey, isSigner: true, isWritable: false},
     ];
 
     return new Transaction().add({

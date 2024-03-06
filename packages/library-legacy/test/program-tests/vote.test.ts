@@ -305,7 +305,7 @@ describe('VoteProgram', () => {
           voteBalance,
           minimumAmount,
         ),
-      ).to.throw('Withdraw will leave vote account with insuffcient funds.');
+      ).to.throw('Withdraw will leave vote account with insufficient funds.');
 
       let withdraw = VoteProgram.withdraw({
         votePubkey: newVoteAccount.publicKey,
