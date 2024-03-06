@@ -9,7 +9,12 @@
     "noImplicitReturns": true,
     "outDir": "lib",
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "@types/jest": [
+        "./test/__shadow-jest-types.d.ts"
+      ]
+    }
   },
   "extends": "@solana/tsconfig/base.json",
   "include": [

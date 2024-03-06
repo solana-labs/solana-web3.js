@@ -22,4 +22,4 @@ rm lib/index.d.ts.bak
 pnpm prettier --write lib/index.d.ts
 
 # Check result
-pnpm tsc lib/index.d.ts
+pnpm tsc --types ./test/__shadow-jest-types.d.ts lib/index.d.ts

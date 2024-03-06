@@ -4,8 +4,5 @@
     "private": true,
     "files": [
         "toBeFrozenObject.ts"
-    ],
-    "devDependencies": {
-        "@types/jest": "^29.5.12"
-    }
+    ]
 }
