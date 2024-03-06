@@ -1,6 +1,6 @@
 {
     "name": "@solana/errors",
-    "version": "2.0.0-development",
+    "version": "2.0.0-preview.1",
     "description": "Throw, identify, and decode Solana JavaScript errors",
     "exports": {
         "browser": {
@@ -37,8 +37,8 @@
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts && tsup src/cli.ts --format esm",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
-        "prepublishOnly": "version-from-git --no-git-tag-version --template experimental.short && pnpm pkg delete devDependencies",
-        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag experimental --access public --no-git-checks",
+        "prepublishOnly": "pnpm pkg delete devDependencies",
+        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag preview --access public --no-git-checks",
         "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
         "test:lint": "jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",

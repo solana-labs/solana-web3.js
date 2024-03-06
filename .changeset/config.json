@@ -1,0 +1,18 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "access": "public",
+  "baseBranch": "master",
+  "bumpVersionsWithWorkspaceProtocolOnly": true,
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "solana-labs/solana-web3.js"
+    }
+  ],
+  "commit": false,
+  "fixed": [["@solana/!({*-impl,build-scripts,test-*,tsconfig,web3.js-legacy-sham})"]],
+  "ignore": ["@solana/web3.js"],
+  "linked": [],
+  "privatePackages": false,
+  "updateInternalDependencies": "patch"
+}
