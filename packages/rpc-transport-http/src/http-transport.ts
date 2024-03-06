@@ -1,5 +1,4 @@
 import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
-import fetchImpl from '@solana/fetch-impl';
 import { RpcTransport } from '@solana/rpc-spec';
 import type Dispatcher from 'undici/types/dispatcher';
 
@@ -60,7 +59,7 @@ export function createHttpTransport(config: Config): RpcTransport {
             method: 'POST',
             signal,
         };
-        const response = await fetchImpl(url, requestInfo);
+        const response = await fetch(url, requestInfo);
         if (!response.ok) {
             throw new SolanaError(SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, {
                 message: response.statusText,
