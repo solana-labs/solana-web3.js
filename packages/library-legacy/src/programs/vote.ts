@@ -88,6 +88,15 @@ export type WithdrawFromVoteAccountParams = {
 };
 
 /**
+ * Update validator identity (node pubkey) vote account instruction params.
+ */
+export type UpdateValidatorIdentityParams = {
+  votePubkey: PublicKey;
+  authorizedWithdrawerPubkey: PublicKey;
+  nodePubkey: PublicKey;
+}
+
+/**
  * Vote Instruction class
  */
 export class VoteInstruction {
@@ -258,7 +267,7 @@ export type VoteInstructionType =
   // It would be preferable for this type to be `keyof VoteInstructionInputData`
   // but Typedoc does not transpile `keyof` expressions.
   // See https://github.com/TypeStrong/typedoc/issues/1894
-  'Authorize' | 'AuthorizeWithSeed' | 'InitializeAccount' | 'Withdraw';
+  'Authorize' | 'AuthorizeWithSeed' | 'InitializeAccount' | 'Withdraw' | 'UpdateValidatorIdentity';
 
 /** @internal */
 export type VoteAuthorizeWithSeedArgs = Readonly<{
@@ -286,6 +295,7 @@ type VoteInstructionInputData = {
   Withdraw: IInstructionInputData & {
     lamports: number;
   };
+  UpdateValidatorIdentity: IInstructionInputData;
 };
 
 const VOTE_INSTRUCTION_LAYOUTS = Object.freeze<{
@@ -314,6 +324,12 @@ const VOTE_INSTRUCTION_LAYOUTS = Object.freeze<{
       BufferLayout.u32('instruction'),
       BufferLayout.ns64('lamports'),
     ]),
+  },
+  UpdateValidatorIdentity: {
+    index: 4,
+    layout: BufferLayout.struct<
+      VoteInstructionInputData['UpdateValidatorIdentity']
+    >([BufferLayout.u32('instruction')]),
   },
   AuthorizeWithSeed: {
     index: 10,
@@ -539,5 +555,28 @@ export class VoteProgram {
       );
     }
     return VoteProgram.withdraw(params);
+  }
+
+  /**
+   * Generate a transaction to update the validator identity (node pubkey) of a Vote account.
+   */
+  static updateValidatorIdentity(
+    params: UpdateValidatorIdentityParams
+  ): Transaction {
+    const { votePubkey, authorizedWithdrawerPubkey, nodePubkey } = params;
+    const type = VOTE_INSTRUCTION_LAYOUTS.UpdateValidatorIdentity;
+    const data = encodeData(type);
+
+    const keys = [
+      { pubkey: votePubkey, isSigner: false, isWritable: true },
+      { pubkey: nodePubkey, isSigner: true, isWritable: false },
+      { pubkey: authorizedWithdrawerPubkey, isSigner: true, isWritable: false },
+    ];
+
+    return new Transaction().add({
+      keys,
+      programId: this.programId,
+      data,
+    });
   }
 }
