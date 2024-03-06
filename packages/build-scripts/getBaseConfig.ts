@@ -10,9 +10,7 @@ type Platform =
     // React Native
     | 'native';
 
-const BROWSERSLIST_TARGETS = browsersListToEsBuild()
-    // FIXME(https://github.com/evanw/esbuild/issues/3501) Have to filter out versions like `safariTP`
-    .filter(v => !v.endsWith('TP')) as Options['target'];
+const BROWSERSLIST_TARGETS = browsersListToEsBuild();
 
 export function getBaseConfig(platform: Platform, formats: Format[], _options: Options): Options[] {
     return [true, false]
