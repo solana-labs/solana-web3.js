@@ -551,7 +551,7 @@ export class VoteProgram {
   ): Transaction {
     if (params.lamports > currentVoteAccountBalance - rentExemptMinimum) {
       throw new Error(
-        'Withdraw will leave vote account with insufficient funds.',
+        'Withdraw will leave vote account with insuffcient funds.',
       );
     }
     return VoteProgram.withdraw(params);
