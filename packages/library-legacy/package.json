@@ -88,7 +88,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
-    "@solana/spl-token": "^0.4.0",
+    "@solana/spl-token": "^0.4.1",
     "@solana/tsconfig": "workspace:*",
     "@types/bn.js": "^5.1.5",
     "@types/bs58": "^4.0.1",
