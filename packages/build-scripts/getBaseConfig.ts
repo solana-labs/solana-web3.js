@@ -43,8 +43,6 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                           external: [
                               // Despite inlining `@solana/text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
                               'fastestsmallesttextencoderdecoder',
-                              // Despite inlining `@solana/fetch-impl`, do not recursively inline `undici`.
-                              'undici',
                               // Despite inlining `@solana/ws-impl`, do not recursively inline `ws`.
                               'ws',
                           ],
@@ -57,7 +55,6 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               // @noble/ed25519 is an ESM-only module, so we have to inline it in CJS builds.
                               ...(format === 'cjs' ? ['@noble/ed25519'] : []),
                               '@solana/crypto-impl',
-                              '@solana/fetch-impl',
                               '@solana/text-encoding-impl',
                               '@solana/ws-impl',
                           ],

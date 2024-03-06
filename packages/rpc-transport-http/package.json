@@ -33,6 +33,7 @@
         "web3"
     ],
     "scripts": {
+        "benchmark": "./src/__benchmarks__/run.ts",
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
@@ -70,7 +71,6 @@
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^1.0.2",
-        "@solana/fetch-impl": "workspace:*",
         "@solana/test-config": "workspace:*",
         "@solana/tsconfig": "workspace:*",
         "@swc/jest": "^0.2.36",
@@ -87,9 +87,11 @@
         "jest-runner-eslint": "^2.2.0",
         "jest-runner-prettier": "^1.0.0",
         "prettier": "^3.1",
+        "tinybench": "^2.6.0",
         "tsup": "^8.0.1",
         "typescript": "^5.2.2",
-        "version-from-git": "^1.1.1"
+        "version-from-git": "^1.1.1",
+        "zx": "^7.2.3"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",

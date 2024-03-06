@@ -61,20 +61,15 @@ describe('assertIsAllowedHttpRequestHeader', () => {
 
 describe('createHttpRequest with custom headers', () => {
     let createHttpTransport: typeof import('../http-transport').createHttpTransport;
-    let fetchImpl: jest.Mock;
+    let fetchSpy: jest.SpyInstance;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
-            jest.mock('@solana/fetch-impl');
-            const [fetchImplModule, httpTransportModule] = await Promise.all([
+            fetchSpy = jest.spyOn(globalThis, 'fetch').mockReturnValue(FOREVER_PROMISE as Promise<Response>);
+            const httpTransportModule =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                import('@solana/fetch-impl'),
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                import('../http-transport'),
-            ]);
+                await import('../http-transport');
             createHttpTransport = httpTransportModule.createHttpTransport;
-            fetchImpl = jest.mocked(fetchImplModule.default).mockReturnValue(FOREVER_PROMISE as Promise<Response>);
         });
     });
     it('is impossible to override the `Accept` header', () => {
@@ -83,7 +78,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchImpl).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({
@@ -98,7 +93,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchImpl).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({
@@ -113,7 +108,7 @@ describe('createHttpRequest with custom headers', () => {
             url: 'http://localhost',
         });
         makeHttpRequest({ payload: 123 });
-        expect(fetchImpl).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
                 headers: expect.objectContaining({

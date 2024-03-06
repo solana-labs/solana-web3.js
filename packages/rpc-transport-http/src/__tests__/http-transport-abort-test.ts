@@ -55,19 +55,14 @@ describe('createHttpTransport and `AbortSignal`', () => {
     describe('when it receives an abort signal after responding', () => {
         let abortController: AbortController;
         let abortSignal: AbortSignal;
-        let fetchImpl: typeof import('@solana/fetch-impl').default;
+        let fetchSpy: jest.SpyInstance;
         beforeEach(async () => {
-            jest.mock('@solana/fetch-impl');
+            fetchSpy = jest.spyOn(globalThis, 'fetch');
             await jest.isolateModulesAsync(async () => {
-                const [fetchImplModule, { createHttpTransport }] = await Promise.all([
+                const { createHttpTransport } =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    import('@solana/fetch-impl'),
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    import('../http-transport'),
-                ]);
-                fetchImpl = fetchImplModule.default;
+                    await import('../http-transport');
                 makeHttpRequest = createHttpTransport({ url: 'http://localhost' });
             });
             abortController = new AbortController();
@@ -75,7 +70,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
         });
         it('resolves with the response', async () => {
             expect.assertions(1);
-            jest.mocked(fetchImpl).mockResolvedValueOnce({
+            jest.mocked(fetchSpy).mockResolvedValueOnce({
                 json: async () => ({ ok: true }),
                 ok: true,
             } as unknown as Response);
