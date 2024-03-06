@@ -1251,8 +1251,8 @@ importers:
         specifier: ^0.4.3
         version: 0.4.3(rollup@4.7.0)
       '@solana/spl-token':
-        specifier: ^0.4.0
-        version: 0.4.0(@solana/web3.js@1.89.1)(fastestsmallesttextencoderdecoder@1.0.22)
+        specifier: ^0.4.1
+        version: 0.4.1(@solana/web3.js@1.90.1)(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -6004,7 +6004,7 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@solana/buffer-layout': 4.0.1
-      '@solana/web3.js': 1.89.1
+      '@solana/web3.js': 1.90.1
       bigint-buffer: 1.1.5
       bignumber.js: 9.1.1
     transitivePeerDependencies:
@@ -6149,7 +6149,7 @@ packages:
       prettier: 3.1.0
     dev: true
 
-  /@solana/spl-token-metadata@0.1.2(@solana/web3.js@1.89.1)(fastestsmallesttextencoderdecoder@1.0.22):
+  /@solana/spl-token-metadata@0.1.2(@solana/web3.js@1.90.1)(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-hJYnAJNkDrtkE2Q41YZhCpeOGU/0JgRFXbtrtOuGGeKc3pkEUHB9DDoxZAxx+XRno13GozUleyBi0qypz4c3bw==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -6161,21 +6161,21 @@ packages:
       '@solana/codecs-strings': 2.0.0-experimental.8618508(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/options': 2.0.0-experimental.8618508
       '@solana/spl-type-length-value': 0.1.0
-      '@solana/web3.js': 1.89.1
+      '@solana/web3.js': 1.90.1
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
     dev: true
 
-  /@solana/spl-token@0.4.0(@solana/web3.js@1.89.1)(fastestsmallesttextencoderdecoder@1.0.22):
-    resolution: {integrity: sha512-jjBIBG9IsclqQVl5Y82npGE6utdCh7Z9VFcF5qgJa5EUq2XgspW3Dt1wujWjH/vQDRnkp9zGO+BqQU/HhX/3wg==}
+  /@solana/spl-token@0.4.1(@solana/web3.js@1.90.1)(fastestsmallesttextencoderdecoder@1.0.22):
+    resolution: {integrity: sha512-DEe15GI0l+XLHwtau/3GUwGQJ9YY/VWNE0k/QuXaaGKo4adMZLEAIQUktRc/S2sRqPjvUdR5anZGxQ9p5khWZw==}
     engines: {node: '>=16'}
     peerDependencies:
-      '@solana/web3.js': ^1.89.1
+      '@solana/web3.js': ^1.90.0
     dependencies:
       '@solana/buffer-layout': 4.0.1
       '@solana/buffer-layout-utils': 0.2.0
-      '@solana/spl-token-metadata': 0.1.2(@solana/web3.js@1.89.1)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.89.1
+      '@solana/spl-token-metadata': 0.1.2(@solana/web3.js@1.90.1)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.90.1
       buffer: 6.0.3
     transitivePeerDependencies:
       - bufferutil
@@ -6191,8 +6191,8 @@ packages:
       buffer: 6.0.3
     dev: true
 
-  /@solana/web3.js@1.89.1:
-    resolution: {integrity: sha512-t9TTLtPQxtQB3SAf/5E8xPXfVDsC6WGOsgKY02l2cbe0HLymT7ynE8Hu48Lk5qynHCquj6nhISfEHcjMkYpu/A==}
+  /@solana/web3.js@1.90.1:
+    resolution: {integrity: sha512-BaopDf3TN54N9/T1iILu+Fz2gthIZzi+6X2A7bb0FWvGlwI/78iKRb2WjSnCfrHmMbWVLJR5n/pmXteezMXgVw==}
     dependencies:
       '@babel/runtime': 7.23.4
       '@noble/curves': 1.2.0
