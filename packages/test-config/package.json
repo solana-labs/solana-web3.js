@@ -3,32 +3,16 @@
     "version": "0.0.0",
     "private": true,
     "files": [
-        "jest-dev.config.ts",
-        "jest-lint.config.ts",
-        "jest-prettier.config.ts",
-        "jest-unit.config.browser.ts",
-        "jest-unit.config.node.ts",
         "test-validator-setup.js",
         "test-validator-teardown.js"
     ],
     "peerDependencies": {
-        "jest": "^29.7.0",
         "jest-dev-server": "^10.0.0",
-        "jest-environment-jsdom": "^29.7.0",
-        "jest-runner-eslint": "^2.1.2",
-        "jest-runner-prettier": "^1.0.0",
-        "jest-watch-master": "^1.0.0",
-        "jest-watch-select-projects": "^2.0.0",
-        "jest-watch-typeahead": "^2.2.2",
         "undici": "^6.6.2",
         "whatwg-fetch": "^3.6.20"
     },
     "devDependencies": {
         "@jest/types": "^29.6.3",
-        "@solana/tsconfig": "workspace:*",
-        "@types/jest": "^29.5.12",
-        "jest": "^29.7.0",
-        "jest-dev-server": "^10.0.0",
         "undici": "^6.6.2",
         "whatwg-fetch": "^3.6.20"
     }

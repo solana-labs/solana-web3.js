@@ -2,7 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "emitDeclarationOnly": true,
-    "stripInternal": true
+    "stripInternal": true,
+    "paths": {
+      "@types/jest": [
+        "./test/__shadow-jest-types.d.ts"
+      ]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

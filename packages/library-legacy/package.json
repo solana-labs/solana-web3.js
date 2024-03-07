@@ -80,6 +80,7 @@
     "@babel/plugin-transform-runtime": "^7.23.7",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@commitlint/config-conventional": "^18.4.4",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -89,7 +90,6 @@
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
     "@solana/spl-token": "^0.4.1",
-    "@solana/tsconfig": "workspace:*",
     "@types/bn.js": "^5.1.5",
     "@types/bs58": "^4.0.1",
     "@types/chai": "^4.3.5",
@@ -97,16 +97,13 @@
     "@types/express-serve-static-core": "^4.17.41",
     "@types/mocha": "^10.0.6",
     "@types/mz": "^2.7.4",
-    "@types/node": "18.11.19",
     "@types/node-fetch": "2",
     "@types/sinon": "^10.0.16",
     "@types/sinon-chai": "^3.2.12",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^6.3.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "commitlint": "^18.6.1",
     "cross-env": "7.0.3",
-    "eslint": "^8.45.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-mocha": "^10.1.0",
@@ -128,7 +125,6 @@
     "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.1",
     "tslib": "^2.6.2",
-    "typedoc": "^0.25.10",
-    "typescript": "^5.1.6"
+    "typedoc": "^0.25.10"
   }
 }

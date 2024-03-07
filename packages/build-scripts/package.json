@@ -9,9 +9,6 @@
         "tsup.config.package.ts"
     ],
     "devDependencies": {
-        "@solana/tsconfig": "workspace:*",
-        "@types/node": "18.11.19",
-        "browserslist-to-esbuild": "^2.1.1",
-        "tsup": "^8.0.1"
+        "browserslist-to-esbuild": "^2.1.1"
     }
 }
