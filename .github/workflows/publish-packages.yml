@@ -45,11 +45,7 @@ jobs:
 
       - name: Choose Build Step
         id: build-step-decider
-        description: |
-          If there are changesets yet to be committed, just build and test. Otherwise, build, test,
-          and publish.
-        run: |
-          echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages' || 'build' }}" >> $GITHUB_OUTPUT
+        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages' || 'build' }}" >> $GITHUB_OUTPUT
 
       - name: Run Build Step (force)
         if: steps.changesets.outputs.hasChangesets == 'false'
