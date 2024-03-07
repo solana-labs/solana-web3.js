@@ -18,48 +18,18 @@ env:
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-  build:
+  build-and-publish-to-npm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install package manager
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8.6.1
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Get Test Validator Latest Release
-        id: get-test-validator-version
-        run: |
-          echo "version=$(./scripts/get-latest-validator-release-version.sh)" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - name: Cache Test Validator
-        id: cache-test-validator
-        uses: actions/cache@v3
-        with:
-          path: .solana
-          key: ${{ runner.os }}-test-validator-${{ steps.get-test-validator-version.outputs.version }}
-
-      - name: Install Test Validator
-        if: steps.cache-test-validator.outputs.cache-hit != 'true'
-        run: scripts/setup-test-validator.sh
-
-      - name: Start Test Validator
+      - name: Setup Solana Test Validator
         id: test-validator
-        run: |
-          ./scripts/start-shared-test-validator.sh &
-          echo "TEST_VALIDATOR_PID=$!" >> "$GITHUB_OUTPUT"
+        uses: ./.github/workflows/actions/setup-validator
 
       - name: Publish NPM
         run: |
@@ -70,8 +40,12 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Stop Test Validator
-        run: kill ${{ steps.test-validator.outputs.TEST_VALIDATOR_PID}}
+        run: kill ${{ steps.test-validator.outputs.pid }}
 
+  deploy-docs:
+    needs: build-and-publish-to-npm
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy Github Page
         uses: peaceiris/actions-gh-pages@v3
         with:

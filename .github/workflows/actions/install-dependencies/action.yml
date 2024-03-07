@@ -1,0 +1,20 @@
+name: Install Dependencies
+description: Sets up Node and its package manager, then installs all dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: Install package manager
+      uses: pnpm/action-setup@v3
+      with:
+        version: 8.15.4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install
