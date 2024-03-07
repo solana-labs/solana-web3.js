@@ -31,13 +31,8 @@ jobs:
         id: start-test-validator
         uses: ./.github/workflows/actions/setup-validator
 
-      - name: Publish NPM
-        run: |
-          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
-          pnpm publish-packages --concurrency=100%
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build and Test (force)
+        run: pnpm turbo run build --concurrency=100% --force=true
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'
@@ -48,3 +43,28 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./packages/library-legacy/doc
+
+      - name: Configure NPM token
+        run: |
+          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Legacy Library
+        run: pnpm turbo publish-packages --concurrency=100% --filter=@solana/web3.js
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create Changesets Pull Request or Trigger an NPM Publish
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Experimental Library
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: pnpm turbo publish-packages --concurrency=100% --filter=\!@solana/web3.js
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
