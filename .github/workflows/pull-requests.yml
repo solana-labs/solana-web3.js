@@ -38,14 +38,15 @@ jobs:
         uses: ./.github/workflows/actions/install-dependencies
 
       - name: Setup Solana Test Validator
-        id: test-validator
+        id: start-test-validator
         uses: ./.github/workflows/actions/setup-validator
 
       - name: Build & Test
         run: pnpm build --concurrency=100%
 
       - name: Stop Test Validator
-        run: kill ${{ steps.test-validator.outputs.pid }}
+        if: steps.start-test-validator.outcome == 'success'
+        run: kill ${{ steps.start-test-validator.outputs.pid }}
 
       - name: Upload Experimental Library Bundle
         if: matrix.node == 'current'
