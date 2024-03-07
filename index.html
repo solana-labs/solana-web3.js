@@ -1,0 +1,100 @@
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@solana/web3.js</title><meta name="description" content="Documentation for @solana/web3.js"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@solana/web3.js</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h2>@solana/web3.js</h2></div><div class="tsd-panel tsd-typography"><p><a href="https://www.npmjs.com/package/@solana/web3.js"><img src="https://img.shields.io/npm/v/@solana/web3.js.svg?style=flat" alt="npm"></a>
+<a href="https://www.npmjs.com/package/@solana/web3.js"><img src="https://img.shields.io/npm/dm/@solana/web3.js.svg?style=flat" alt="npm-downloads"></a>
+<a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release"></a>
+<br />
+<a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square" alt="code-style-prettier"></a></p>
+<a id="md:solana-javascript-sdk" class="tsd-anchor"></a><h1><a href="#md:solana-javascript-sdk">Solana JavaScript SDK</a></h1><p>Use this to interact with accounts and programs on the Solana network through the Solana <a href="https://solana.com/docs/rpc">JSON RPC API</a>.</p>
+<a id="md:installation" class="tsd-anchor"></a><h2><a href="#md:installation">Installation</a></h2><a id="md:for-use-in-nodejs-or-a-web-application" class="tsd-anchor"></a><h3><a href="#md:for-use-in-nodejs-or-a-web-application">For use in Node.js or a web application</a></h3><pre><code><span class="hl-0">$</span><span class="hl-1"> </span><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-0">install</span><span class="hl-1"> --</span><span class="hl-0">save</span><span class="hl-1"> @</span><span class="hl-0">solana</span><span class="hl-1">/</span><span class="hl-0">web3</span><span class="hl-1">.</span><span class="hl-0">js</span>
+</code><button>Copy</button></pre>
+<a id="md:for-use-in-a-browser-without-a-build-system" class="tsd-anchor"></a><h3><a href="#md:for-use-in-a-browser-without-a-build-system">For use in a browser, without a build system</a></h3><pre><code class="language-html"><span class="hl-2">&lt;!-- Development (un-minified) --&gt;</span><br/><span class="hl-3">&lt;</span><span class="hl-4">script</span><span class="hl-5"> </span><span class="hl-6">src</span><span class="hl-5">=</span><span class="hl-7">&quot;https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js&quot;</span><span class="hl-3">&gt;&lt;/</span><span class="hl-4">script</span><span class="hl-3">&gt;</span><br/><br/><span class="hl-2">&lt;!-- Production (minified) --&gt;</span><br/><span class="hl-3">&lt;</span><span class="hl-4">script</span><span class="hl-5"> </span><span class="hl-6">src</span><span class="hl-5">=</span><span class="hl-7">&quot;https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js&quot;</span><span class="hl-3">&gt;&lt;/</span><span class="hl-4">script</span><span class="hl-3">&gt;</span>
+</code><button>Copy</button></pre>
+<a id="md:documentation-and-examples" class="tsd-anchor"></a><h2><a href="#md:documentation-and-examples">Documentation and examples</a></h2><ul>
+<li><a href="https://solanacookbook.com/">The Solana Cookbook</a> has extensive task-based documentation using this library.</li>
+<li>For more detail on individual functions, see the <a href="https://solana-labs.github.io/solana-web3.js">latest API Documentation</a></li>
+</ul>
+<a id="md:getting-help" class="tsd-anchor"></a><h2><a href="#md:getting-help">Getting help</a></h2><p>Have a question or a problem? Check the <a href="https://solana.stackexchange.com">Solana Stack Exchange</a> to see if anyone else is having the same one. If not, <a href="https://solana.stackexchange.com/questions/ask">post a new question</a>.</p>
+<p>Include:</p>
+<ul>
+<li>A detailed description of what you&#39;re trying to achieve</li>
+<li>Source code, if possible</li>
+<li>The text of any errors you encountered, with stacktraces if available</li>
+</ul>
+<a id="md:compatibility" class="tsd-anchor"></a><h2><a href="#md:compatibility">Compatibility</a></h2><p>This library requires a JavaScript runtime that supports <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt"><code>BigInt</code></a> and the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Exponentiation">exponentiation operator</a>. Both are supported in the following runtimes:</p>
+<ul>
+<li>Browsers, by <a href="https://caniuse.com/bigint">release date</a>:<ul>
+<li>Chrome: May 2018</li>
+<li>Firefox: July 2019</li>
+<li>Safari: September 2020</li>
+<li>Mobile Safari: September 2020</li>
+<li>Edge: January 2020</li>
+<li>Opera: June 2018</li>
+<li>Samsung Internet: April 2019</li>
+</ul>
+</li>
+<li>Runtimes, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt">by version</a>:<ul>
+<li>Deno: &gt;=1.0</li>
+<li>Node: &gt;=10.4.0</li>
+</ul>
+</li>
+<li>React Native:<ul>
+<li>&gt;=0.7.0 using the <a href="https://reactnative.dev/blog/2022/07/08/hermes-as-the-default">Hermes</a> engine (<a href="https://solanacookbook.com/integrations/react-native.html#how-to-use-solana-web3-js-in-a-react-native-app">integration guide</a>):</li>
+</ul>
+</li>
+</ul>
+<a id="md:development-environment-setup" class="tsd-anchor"></a><h2><a href="#md:development-environment-setup">Development environment setup</a></h2><a id="md:testing" class="tsd-anchor"></a><h3><a href="#md:testing">Testing</a></h3><a id="md:unit-tests" class="tsd-anchor"></a><h4><a href="#md:unit-tests">Unit tests</a></h4><p>To run the full suite of unit tests, execute the following in the root:</p>
+<pre><code class="language-shell"><span class="hl-8">$</span><span class="hl-1"> </span><span class="hl-9">npm</span><span class="hl-1"> </span><span class="hl-9">test</span>
+</code><button>Copy</button></pre>
+<a id="md:integration-tests" class="tsd-anchor"></a><h4><a href="#md:integration-tests">Integration tests</a></h4><p>Integration tests require a validator client running on your machine.</p>
+<p>To install a test validator:</p>
+<pre><code class="language-shell"><span class="hl-8">$</span><span class="hl-1"> </span><span class="hl-9">npm</span><span class="hl-1"> </span><span class="hl-9">run</span><span class="hl-1"> </span><span class="hl-9">test:live-with-test-validator:setup</span>
+</code><button>Copy</button></pre>
+<p>To start the test validator and run all of the integration tests in live mode:</p>
+<pre><code class="language-shell"><span class="hl-8">$</span><span class="hl-1"> </span><span class="hl-9">cd</span><span class="hl-1"> </span><span class="hl-9">packages/library-legacy</span><br/><span class="hl-8">$</span><span class="hl-1"> </span><span class="hl-9">npm</span><span class="hl-1"> </span><span class="hl-9">run</span><span class="hl-1"> </span><span class="hl-9">test:live-with-test-validator</span>
+</code><button>Copy</button></pre>
+<a id="md:speed-up-build-times-with-remote-caching" class="tsd-anchor"></a><h3><a href="#md:speed-up-build-times-with-remote-caching">Speed up build times with remote caching</a></h3><p>Cache build artifacts remotely so that you, others, and the CI server can take advantage of each others&#39; build efforts.</p>
+<ol>
+<li>Log the Turborepo CLI into the Solana Vercel account<pre><code class="language-shell"><span class="hl-8">pnpm</span><span class="hl-1"> </span><span class="hl-9">turbo</span><span class="hl-1"> </span><span class="hl-9">login</span>
+</code><button>Copy</button></pre>
+</li>
+<li>Link the repository to the remote cache<pre><code class="language-shell"><span class="hl-8">pnpm</span><span class="hl-1"> </span><span class="hl-9">turbo</span><span class="hl-1"> </span><span class="hl-9">link</span>
+</code><button>Copy</button></pre>
+</li>
+</ol>
+<a id="md:contributing" class="tsd-anchor"></a><h2><a href="#md:contributing">Contributing</a></h2><p>If you found a bug or would like to request a feature, please <a href="https://github.com/solana-labs/solana-web3.js/issues/new">file an issue</a>. If, based on the discussion on an issue you would like to offer a code change, please make a <a href="https://github.com/solana-labs/solana-web3.js/compare">pull request</a>. If neither of these describes what you would like to contribute, read the <a href="#md:getting-help">getting help</a> section above.</p>
+<a id="md:disclaimer" class="tsd-anchor"></a><h2><a href="#md:disclaimer">Disclaimer</a></h2><p>All claims, content, designs, algorithms, estimates, roadmaps,
+specifications, and performance measurements described in this project
+are done with the Solana Foundation&#39;s (&quot;SF&quot;) best efforts. It is up to
+the reader to check and validate their accuracy and truthfulness.
+Furthermore nothing in this project constitutes a solicitation for
+investment.</p>
+<p>Any content produced by SF or developer resources that SF provides, are
+for educational and inspiration purposes only. SF does not encourage,
+induce or sanction the deployment, integration or use of any such
+applications (including the code comprising the Solana blockchain
+protocol) in violation of applicable laws or regulations and hereby
+prohibits any such deployment, integration or use. This includes use of
+any such applications by the reader (a) in violation of export control
+or sanctions laws of the United States or any other applicable
+jurisdiction, (b) if the reader is located in or ordinarily resident in
+a country or territory subject to comprehensive sanctions administered
+by the U.S. Office of Foreign Assets Control (OFAC), or (c) if the
+reader is or is working on behalf of a Specially Designated National
+(SDN) or a person subject to similar blocking or denied party
+prohibitions.</p>
+<p>The reader should be aware that U.S. export control and sanctions laws
+prohibit U.S. persons (and other persons that are subject to such laws)
+from transacting with persons in certain countries and territories or
+that are on the SDN list. As a project based primarily on open-source
+software, it is possible that such sanctioned persons may nevertheless
+bypass prohibitions, obtain the code comprising the Solana blockchain
+protocol (or other project code or applications) and deploy, integrate,
+or otherwise use it. Accordingly, there is a risk to individuals that
+other persons using the Solana blockchain protocol may be sanctioned
+persons and that transactions with such persons would be a violation of
+U.S. export controls and sanctions law. This risk applies to
+individuals, organizations, and other ecosystem participants that
+deploy, integrate, or use the Solana blockchain protocol code directly
+(e.g., as a node operator), and individuals that transact on the Solana
+blockchain through light clients, third party interfaces, and/or wallet
+software.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-index-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><h4 class="uppercase">Member Visibility</h4><form><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div><div class="tsd-theme-toggle"><h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-index-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><ul><li><ul><li><a href="#md:solana-javascript-sdk"><span>Solana <wbr/>Java<wbr/>Script SDK</span></a></li><li><ul><li><a href="#md:installation"><span>Installation</span></a></li><li><ul><li><a href="#md:for-use-in-nodejs-or-a-web-application"><span>For use in <wbr/>Node.js or a web application</span></a></li><li><a href="#md:for-use-in-a-browser-without-a-build-system"><span>For use in a browser, without a build system</span></a></li></ul></li><li><a href="#md:documentation-and-examples"><span>Documentation and examples</span></a></li><li><a href="#md:getting-help"><span>Getting help</span></a></li><li><a href="#md:compatibility"><span>Compatibility</span></a></li><li><a href="#md:development-environment-setup"><span>Development environment setup</span></a></li><li><ul><li><a href="#md:testing"><span>Testing</span></a></li><li><ul><li><a href="#md:unit-tests"><span>Unit tests</span></a></li><li><a href="#md:integration-tests"><span>Integration tests</span></a></li></ul></li><li><a href="#md:speed-up-build-times-with-remote-caching"><span>Speed up build times with remote caching</span></a></li></ul></li><li><a href="#md:contributing"><span>Contributing</span></a></li><li><a href="#md:disclaimer"><span>Disclaimer</span></a></li></ul></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="assets/icons.svg#icon-1"></use></svg><span>@solana/web3.js</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="."><li>Loading...</li></ul></nav></div></div></div><div class="tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div></body></html>
