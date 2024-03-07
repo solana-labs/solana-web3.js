@@ -42,10 +42,6 @@ jobs:
       - name: Stop Test Validator
         run: kill ${{ steps.test-validator.outputs.pid }}
 
-  deploy-docs:
-    needs: build-and-publish-to-npm
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy Github Page
         uses: peaceiris/actions-gh-pages@v3
         with:
