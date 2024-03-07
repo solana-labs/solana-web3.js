@@ -1,0 +1,34 @@
+name: Install Solana Test Validator
+description: Downloads and caches an install of the latest Solana Test Validator
+
+outputs:
+  pid:
+    description: The process id of the running test validator
+    value: ${{ steps.start-validator.outputs.pid }}
+
+runs:
+  using: composite
+  steps:
+    - name: Get Test Validator Latest Release
+      id: get-test-validator-version
+      shell: bash
+      run: echo "version=$(./scripts/get-latest-validator-release-version.sh)" >> $GITHUB_OUTPUT
+
+    - name: Cache Test Validator
+      id: cache-test-validator
+      uses: actions/cache@v4
+      with:
+        path: .solana
+        key: ${{ runner.os }}-test-validator-${{ steps.get-test-validator-version.outputs.version }}
+
+    - name: Install Test Validator
+      if: steps.cache-test-validator.outputs.cache-hit != 'true'
+      shell: bash
+      run: ./scripts/setup-test-validator.sh
+
+    - name: Start Test Validator
+      id: start-validator
+      shell: bash
+      run: |
+        ./scripts/start-shared-test-validator.sh &
+        echo "pid=$!" >> $GITHUB_OUTPUT

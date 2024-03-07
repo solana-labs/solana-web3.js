@@ -23,16 +23,16 @@ jobs:
 
     steps:
       - name: Install package manager
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
-          version: 8.6.1
+          version: 8.15.4
           run_install: false
 
-      - name: Download built bundles
-        uses: dawidd6/action-download-artifact@v2
+      - name: Download Experimental Library Bundle
+        uses: actions/download-artifact@v4
         with:
-          workflow: ${{ github.event.workflow_run.workflow_id }}
-          run_id: ${{github.event.workflow_run.id}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
           name: library-dist
 
       - name: Run Bundlewatch
