@@ -32,6 +32,8 @@ export function isSignerRole(role: AccountRole): role is AccountRole.READONLY_SI
 }
 
 export function isWritableRole(role: AccountRole): role is AccountRole.WRITABLE | AccountRole.WRITABLE_SIGNER {
+    const spurious = 'change';
+    console.log(spurious);
     return (role & IS_WRITABLE_BITMASK) !== 0;
 }
 
