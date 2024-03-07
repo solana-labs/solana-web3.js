@@ -16,11 +16,6 @@ jobs:
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
 
-    env:
-      # Configuration for Bundlewatch
-      BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
-      CI_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-
     steps:
       - name: Install package manager
         uses: pnpm/action-setup@v3
@@ -37,3 +32,8 @@ jobs:
 
       - name: Run Bundlewatch
         run: pnpx bundlewatch
+        env:
+          BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
+          CI_BRANCH: ${{ github.ref	}}
+          CI_BRANCH_BASE: refs/heads/master
+          CI_COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
