@@ -18,7 +18,7 @@ env:
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-  compile-docs-and-publish
+  compile-docs-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
