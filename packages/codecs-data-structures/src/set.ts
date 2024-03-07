@@ -17,7 +17,7 @@ import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-number
 import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
 
 /** Defines the config for set codecs. */
-export type SetCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type SetCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The size of the set.
      * @defaultValue u32 prefix.

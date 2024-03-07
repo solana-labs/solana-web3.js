@@ -7,19 +7,19 @@ type FeeCalculator = Readonly<{
 }>;
 
 type JsonParsedClockAccount = Readonly<{
-    slot: Slot;
     epoch: Epoch;
     epochStartTimestamp: UnixTimestamp;
     leaderScheduleEpoch: Epoch;
+    slot: Slot;
     unixTimestamp: UnixTimestamp;
 }>;
 
 type JsonParsedEpochScheduleAccount = Readonly<{
-    slotsPerEpoch: bigint;
-    leaderScheduleSlotOffset: bigint;
-    warmup: boolean;
     firstNormalEpoch: Epoch;
     firstNormalSlot: Slot;
+    leaderScheduleSlotOffset: bigint;
+    slotsPerEpoch: bigint;
+    warmup: boolean;
 }>;
 
 type JsonParsedFeesAccount_DEPRECATED = Readonly<{
@@ -32,9 +32,9 @@ type JsonParsedRecentBlockhashesAccount_DEPRECATED = Readonly<{
 }>[];
 
 type JsonParsedRentAccount = Readonly<{
-    lamportsPerByteYear: StringifiedBigInt;
-    exemptionThreshold: number;
     burnPercent: number;
+    exemptionThreshold: number;
+    lamportsPerByteYear: StringifiedBigInt;
 }>;
 
 type JsonParsedSlotHashesAccount = Readonly<{
@@ -61,19 +61,19 @@ type JsonParsedLastRestartSlotAccount = Readonly<{
 }>;
 
 type JsonParsedEpochRewardsAccount = Readonly<{
-    totalRewards: bigint;
     distributedRewards: bigint;
     distributionCompleteBlockHeight: bigint;
+    totalRewards: bigint;
 }>;
 
 export type JsonParsedSysvarAccount =
     | RpcParsedType<'clock', JsonParsedClockAccount>
+    | RpcParsedType<'epochRewards', JsonParsedEpochRewardsAccount>
     | RpcParsedType<'epochSchedule', JsonParsedEpochScheduleAccount>
     | RpcParsedType<'fees', JsonParsedFeesAccount_DEPRECATED>
+    | RpcParsedType<'lastRestartSlot', JsonParsedLastRestartSlotAccount>
     | RpcParsedType<'recentBlockhashes', JsonParsedRecentBlockhashesAccount_DEPRECATED>
     | RpcParsedType<'rent', JsonParsedRentAccount>
     | RpcParsedType<'slotHashes', JsonParsedSlotHashesAccount>
     | RpcParsedType<'slotHistory', JsonParsedSlotHistoryAccount>
-    | RpcParsedType<'stakeHistory', JsonParsedStakeHistoryAccount>
-    | RpcParsedType<'lastRestartSlot', JsonParsedLastRestartSlotAccount>
-    | RpcParsedType<'epochRewards', JsonParsedEpochRewardsAccount>;
+    | RpcParsedType<'stakeHistory', JsonParsedStakeHistoryAccount>;

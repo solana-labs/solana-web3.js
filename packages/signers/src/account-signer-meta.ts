@@ -14,8 +14,8 @@ export interface IAccountSignerMeta<
 }
 
 type IAccountMetaWithSigner<TSigner extends TransactionSigner = TransactionSigner> =
-    | IAccountMeta
     | IAccountLookupMeta
+    | IAccountMeta
     | IAccountSignerMeta<string, TSigner>;
 
 /** A variation of the instruction type that allows IAccountSignerMeta in its account metas. */

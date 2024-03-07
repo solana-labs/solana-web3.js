@@ -29,9 +29,9 @@ describe('getDataEnumCodec', () => {
     const unit = getUnitCodec;
 
     type WebEvent =
-        | { __kind: 'PageLoad' } // Empty variant.
         | { __kind: 'Click'; x: number; y: number } // Struct variant.
         | { __kind: 'KeyPress'; fields: [string] } // Tuple variant.
+        | { __kind: 'PageLoad' } // Empty variant.
         | { __kind: 'PageUnload' }; // Empty variant (using empty struct).
 
     const getWebEvent = () =>

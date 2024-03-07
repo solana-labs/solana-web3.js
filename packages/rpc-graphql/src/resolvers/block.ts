@@ -6,10 +6,10 @@ import { BlockLoaderValue, cacheKeyFn } from '../loaders';
 import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
 
-type BlockResult = {
-    transactionResults?: { [i: number]: TransactionResult };
+type BlockResult = Partial<BlockLoaderValue> & {
     slot: Slot;
-} & Partial<BlockLoaderValue>;
+    transactionResults?: { [i: number]: TransactionResult };
+};
 
 export const resolveBlock = (fieldName?: string) => {
     return async (

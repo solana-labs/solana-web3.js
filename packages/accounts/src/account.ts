@@ -6,13 +6,13 @@ export const BASE_ACCOUNT_SIZE = 128;
 
 /** Describe the generic account details applicable to every account. */
 export type BaseAccount = {
-    readonly programAddress: Address;
     readonly executable: boolean;
     readonly lamports: LamportsUnsafeBeyond2Pow53Minus1;
+    readonly programAddress: Address;
 };
 
 /** Defines a Solana account with its generic details and parsed or encoded data. */
-export type Account<TData extends object | Uint8Array, TAddress extends string = string> = BaseAccount & {
+export type Account<TData extends Uint8Array | object, TAddress extends string = string> = BaseAccount & {
     readonly address: Address<TAddress>;
     readonly data: TData;
 };

@@ -30,13 +30,7 @@ import { isOption, isSome, none, Option, OptionOrNullable, some } from './option
 import { wrapNullable } from './unwrap-option';
 
 /** Defines the config for option codecs. */
-export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
-    /**
-     * The codec to use for the boolean prefix.
-     * @defaultValue u8 prefix.
-     */
-    prefix?: TPrefix;
-
+export type OptionCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * Whether the item codec should be of fixed size.
      *
@@ -46,6 +40,12 @@ export type OptionCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Numb
      * @defaultValue `false`
      */
     fixed?: boolean;
+
+    /**
+     * The codec to use for the boolean prefix.
+     * @defaultValue u8 prefix.
+     */
+    prefix?: TPrefix;
 };
 
 /**

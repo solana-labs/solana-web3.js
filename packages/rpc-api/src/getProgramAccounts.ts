@@ -19,10 +19,10 @@ import type {
 type GetProgramAccountsApiCommonConfig = Readonly<{
     /** @defaultValue "finalized" */
     commitment?: Commitment;
+    /** filter results (up to 4 filters allowed) @see https://docs.solana.com/api/http#filter-criteria */
+    filters?: (GetProgramAccountsDatasizeFilter | GetProgramAccountsMemcmpFilter)[];
     /** The minimum slot that the request can be evaluated at */
     minContextSlot?: Slot;
-    /** filter results (up to 4 filters allowed) @see https://docs.solana.com/api/http#filter-criteria */
-    filters?: (GetProgramAccountsMemcmpFilter | GetProgramAccountsDatasizeFilter)[];
 }>;
 
 type GetProgramAccountsApiSliceableCommonConfig = Readonly<{

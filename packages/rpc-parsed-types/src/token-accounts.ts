@@ -3,34 +3,34 @@ import type { StringifiedBigInt, TokenAmount } from '@solana/rpc-types';
 
 import { RpcParsedType } from './rpc-parsed-type';
 
-type TokenAccountState = 'initialized' | 'uninitialized' | 'frozen';
+type TokenAccountState = 'frozen' | 'initialized' | 'uninitialized';
 
 export type JsonParsedTokenAccount = Readonly<{
+    closeAuthority?: Address;
+    delegate?: Address;
+    delegatedAmount?: TokenAmount;
+    extensions?: readonly unknown[];
+    isNative: boolean;
     mint: Address;
     owner: Address;
-    tokenAmount: TokenAmount;
-    delegate?: Address;
-    state: TokenAccountState;
-    isNative: boolean;
     rentExemptReserve?: TokenAmount;
-    delegatedAmount?: TokenAmount;
-    closeAuthority?: Address;
-    extensions?: readonly unknown[];
+    state: TokenAccountState;
+    tokenAmount: TokenAmount;
 }>;
 
 type JsonParsedMintAccount = Readonly<{
+    decimals: number;
+    extensions?: readonly unknown[];
+    freezeAuthority: Address | null;
+    isInitialized: boolean;
     mintAuthority: Address | null;
     supply: StringifiedBigInt;
-    decimals: number;
-    isInitialized: boolean;
-    freezeAuthority: Address | null;
-    extensions?: readonly unknown[];
 }>;
 
 type JsonParsedMultisigAccount = Readonly<{
+    isInitialized: boolean;
     numRequiredSigners: number;
     numValidSigners: number;
-    isInitialized: boolean;
     signers: readonly Address[];
 }>;
 

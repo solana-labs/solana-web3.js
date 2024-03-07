@@ -29,13 +29,13 @@ import { getFixedSize, getMaxSize } from './utils';
  *   the rest of the byte array by the fixed size of its item.
  *   Note that this option is only available for fixed-size items.
  */
-export type ArrayLikeCodecSize<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> =
+export type ArrayLikeCodecSize<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> =
     | TPrefix
     | number
     | 'remainder';
 
 /** Defines the configs for array codecs. */
-export type ArrayCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type ArrayCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The size of the array.
      * @defaultValue u32 prefix.
@@ -172,7 +172,7 @@ export function getArrayCodec<TFrom, TTo extends TFrom = TFrom>(
     return combineCodec(getArrayEncoder(item, config as object), getArrayDecoder(item, config as object));
 }
 
-function computeArrayLikeCodecSize(size: object | number | 'remainder', itemSize: number | null): number | null {
+function computeArrayLikeCodecSize(size: number | object | 'remainder', itemSize: number | null): number | null {
     if (typeof size !== 'number') return null;
     if (size === 0) return 0;
     return itemSize === null ? null : itemSize * size;

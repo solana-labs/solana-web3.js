@@ -67,9 +67,9 @@ function getMockTransactionMessageWithAdditionalAccount({
     memoString,
     version = 0x80, // 0 + version mask
 }: {
+    accountAddressBytes: Uint8Array;
     blockhash: string;
     feePayerAddressBytes: Uint8Array;
-    accountAddressBytes: Uint8Array;
     memoString: string;
     version?: number;
 }) {
@@ -124,7 +124,7 @@ async function getSecretKey() {
 }
 
 describe('simulateTransaction', () => {
-    let rpc: Rpc<SimulateTransactionApi & GetLatestBlockhashApi>;
+    let rpc: Rpc<GetLatestBlockhashApi & SimulateTransactionApi>;
     beforeEach(() => {
         rpc = createLocalhostSolanaRpc();
     });

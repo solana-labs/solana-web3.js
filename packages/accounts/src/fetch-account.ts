@@ -8,9 +8,9 @@ import type { GetAccountInfoApi, GetMultipleAccountsApi } from './rpc-api';
 
 /** Optional configuration for fetching a singular account. */
 export type FetchAccountConfig = {
+    abortSignal?: AbortSignal;
     commitment?: Commitment;
     minContextSlot?: Slot;
-    abortSignal?: AbortSignal;
 };
 
 /** Fetch a base64-encoded account that may or may not exist using an RPC client. */
@@ -41,9 +41,9 @@ export async function fetchJsonParsedAccount<TData extends object, TAddress exte
 
 /** Optional configuration for fetching multiple accounts. */
 export type FetchAccountsConfig = {
+    abortSignal?: AbortSignal;
     commitment?: Commitment;
     minContextSlot?: Slot;
-    abortSignal?: AbortSignal;
 };
 
 /** Fetch multiple base64-encoded accounts that may or may not exist using an RPC client. */
@@ -79,12 +79,12 @@ export async function fetchJsonParsedAccounts<
             ? parseJsonRpcAccount(addresses[index], account as Parameters<typeof parseJsonRpcAccount>[1])
             : parseBase64RpcAccount(addresses[index], account as Parameters<typeof parseBase64RpcAccount>[1]);
     }) as {
-        [P in keyof TData]:
-            | MaybeAccount<TData[P], TAddresses[P & keyof TAddresses]>
-            | MaybeEncodedAccount<TAddresses[P & keyof TAddresses]>;
-    } & {
         [P in keyof TAddresses]:
             | MaybeAccount<TData[P & keyof TData], TAddresses[P]>
             | MaybeEncodedAccount<TAddresses[P]>;
+    } & {
+        [P in keyof TData]:
+            | MaybeAccount<TData[P], TAddresses[P & keyof TAddresses]>
+            | MaybeEncodedAccount<TAddresses[P & keyof TAddresses]>;
     };
 }

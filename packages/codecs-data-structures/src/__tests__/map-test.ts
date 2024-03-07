@@ -35,7 +35,7 @@ describe('getMapCodec', () => {
         expect(map(string(), u8()).read(b('02000000010000006101010000006202'), 0)).toStrictEqual([letters, 16]);
 
         // Different From and To types.
-        const mapU8U64 = map<number, number | bigint, number, bigint>(u8(), u64());
+        const mapU8U64 = map<number, bigint | number, number, bigint>(u8(), u64());
         expect(mapU8U64.encode(new Map().set(42, 2))).toStrictEqual(b('010000002a0200000000000000'));
         expect(mapU8U64.encode(new Map().set(42, 2n))).toStrictEqual(b('010000002a0200000000000000'));
         expect(mapU8U64.read(b('010000002a0200000000000000'), 0)).toStrictEqual([new Map().set(42, 2n), 13]);
@@ -61,7 +61,7 @@ describe('getMapCodec', () => {
         expect(letters.read(b('010000006101010000006202'), 0)).toStrictEqual([lettersMap, 12]);
 
         // Different From and To types.
-        const mapU64 = map<number, number | bigint, number, bigint>(u8(), u64(), {
+        const mapU64 = map<number, bigint | number, number, bigint>(u8(), u64(), {
             size: 1,
         });
         expect(mapU64.encode(new Map([[1, 2]]))).toStrictEqual(b('010200000000000000'));
@@ -116,7 +116,7 @@ describe('getMapCodec', () => {
         expect(prefixedLetters.read(b('01610602626307'), 0)).toStrictEqual([prefixedLettersMap, 7]);
 
         // Different From and To types.
-        const mapU64 = map<number, number | bigint, number, bigint>(u8(), u64(), remainder);
+        const mapU64 = map<number, bigint | number, number, bigint>(u8(), u64(), remainder);
         expect(mapU64.encode(new Map([[1, 2]]))).toStrictEqual(b('010200000000000000'));
         expect(mapU64.encode(new Map([[1, 2n]]))).toStrictEqual(b('010200000000000000'));
         expect(mapU64.read(b('010200000000000000'), 0)).toStrictEqual([new Map([[1, 2n]]), 9]);

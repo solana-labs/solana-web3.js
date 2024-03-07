@@ -29,13 +29,7 @@ import {
 import { getMaxSize, sumCodecSizes } from './utils';
 
 /** Defines the config for nullable codecs. */
-export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
-    /**
-     * The codec to use for the boolean prefix.
-     * @defaultValue u8 prefix.
-     */
-    prefix?: TPrefix;
-
+export type NullableCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * Whether the item codec should be of fixed size.
      *
@@ -45,6 +39,12 @@ export type NullableCodecConfig<TPrefix extends NumberCodec | NumberEncoder | Nu
      * @defaultValue `false`
      */
     fixed?: boolean;
+
+    /**
+     * The codec to use for the boolean prefix.
+     * @defaultValue u8 prefix.
+     */
+    prefix?: TPrefix;
 };
 
 /**

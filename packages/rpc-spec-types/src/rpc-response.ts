@@ -4,4 +4,4 @@ interface IHasIdentifier {
     readonly id: number;
 }
 
-export type RpcResponse<TResponse> = IHasIdentifier & Readonly<{ result: TResponse } | { error: RpcErrorResponse }>;
+export type RpcResponse<TResponse> = IHasIdentifier & Readonly<{ error: RpcErrorResponse } | { result: TResponse }>;

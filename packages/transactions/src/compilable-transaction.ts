@@ -10,4 +10,4 @@ export type CompilableTransaction<
     TInstruction extends IInstruction = IInstruction,
 > = BaseTransaction<TVersion, TInstruction> &
     ITransactionWithFeePayer &
-    (ITransactionWithBlockhashLifetime | IDurableNonceTransaction);
+    (IDurableNonceTransaction | ITransactionWithBlockhashLifetime);

@@ -49,7 +49,7 @@ describe('getOptionCodec', () => {
         expect(variableSizeMock.read).toHaveBeenCalledWith(b('017777777777'), 1);
 
         // Different From and To types.
-        const optionU64 = option<number | bigint, bigint>(u64());
+        const optionU64 = option<bigint | number, bigint>(u64());
         expect(optionU64.encode(some(2))).toStrictEqual(b('010200000000000000'));
         expect(optionU64.encode(some(2n))).toStrictEqual(b('010200000000000000'));
         expect(optionU64.encode(2)).toStrictEqual(b('010200000000000000'));
@@ -96,7 +96,7 @@ describe('getOptionCodec', () => {
         expect(fixedU8WithU16Prefix.read(b('01002a'), 0)).toStrictEqual([some(42), 3]);
 
         // Different From and To types.
-        const optionU64 = option<number | bigint, bigint>(u64());
+        const optionU64 = option<bigint | number, bigint>(u64());
         expect(optionU64.encode(some(2))).toStrictEqual(b('010200000000000000'));
         expect(optionU64.encode(some(2n))).toStrictEqual(b('010200000000000000'));
         expect(optionU64.encode(2)).toStrictEqual(b('010200000000000000'));

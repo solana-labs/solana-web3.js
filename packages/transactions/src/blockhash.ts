@@ -41,15 +41,15 @@ export function assertIsTransactionWithBlockhashLifetime(
 
 export function setTransactionLifetimeUsingBlockhash<TTransaction extends BaseTransaction & IDurableNonceTransaction>(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
-): Omit<TTransaction, keyof ITransactionWithSignatures | 'lifetimeConstraint'> & ITransactionWithBlockhashLifetime;
+    transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
+): ITransactionWithBlockhashLifetime & Omit<TTransaction, keyof ITransactionWithSignatures | 'lifetimeConstraint'>;
 
 export function setTransactionLifetimeUsingBlockhash<
     TTransaction extends BaseTransaction | (BaseTransaction & ITransactionWithBlockhashLifetime),
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
-): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithBlockhashLifetime;
+    transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
+): ITransactionWithBlockhashLifetime & Omit<TTransaction, keyof ITransactionWithSignatures>;
 
 export function setTransactionLifetimeUsingBlockhash(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,

@@ -3,8 +3,8 @@ import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@sol
 /** Checks the number of items in an array-like structure is expected. */
 export function assertValidNumberOfItemsForCodec(
     codecDescription: string,
-    expected: number | bigint,
-    actual: number | bigint,
+    expected: bigint | number,
+    actual: bigint | number,
 ) {
     if (expected !== actual) {
         throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, {

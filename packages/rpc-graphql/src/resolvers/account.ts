@@ -13,23 +13,23 @@ export type EncodedAccountData = {
     [key: string]: string;
 };
 
-export type AccountResult = {
+export type AccountResult = Partial<Omit<AccountLoaderValue, 'data'>> & {
     address: Address;
-    ownerProgram?: Address;
     encodedData?: EncodedAccountData;
     jsonParsedConfigs?: {
         accountType: string;
         programId: Address;
         programName: string;
     };
-} & Partial<Omit<AccountLoaderValue, 'data'>>;
+    ownerProgram?: Address;
+};
 
 const resolveAccountData = () => {
     return (
         parent: AccountResult | null,
         args: {
-            encoding: Encoding;
             dataSlice?: DataSlice;
+            encoding: Encoding;
         },
     ) => {
         return parent === null ? null : parent.encodedData ? parent.encodedData[cacheKeyFn(args)] : null;

@@ -35,7 +35,7 @@ type FeePayerAccountEntry = Omit<WritableSignerAccount, 'address'> & {
 type LookupTableAccountEntry = Omit<ReadonlyAccountLookup | WritableAccountLookup, 'address'> & {
     [TYPE]: AddressMapEntryType.LOOKUP_TABLE;
 };
-export type OrderedAccounts = (IAccountMeta | IAccountLookupMeta)[] & { readonly __brand: unique symbol };
+export type OrderedAccounts = (IAccountLookupMeta | IAccountMeta)[] & { readonly __brand: unique symbol };
 type StaticAccountEntry = Omit<
     ReadonlyAccount | ReadonlySignerAccount | WritableAccount | WritableSignerAccount,
     'address'
@@ -45,7 +45,7 @@ function upsert(
     addressMap: AddressMap,
     address: Address,
     update: (
-        entry: FeePayerAccountEntry | LookupTableAccountEntry | StaticAccountEntry | Record<never, never>,
+        entry: FeePayerAccountEntry | LookupTableAccountEntry | Record<never, never> | StaticAccountEntry,
     ) => AddressMap[Address],
 ) {
     addressMap[address] = update(addressMap[address] ?? { role: AccountRole.READONLY });
@@ -199,7 +199,7 @@ export function getAddressMapFromInstructions(feePayer: Address, instructions: r
 
 export function getOrderedAccountsFromAddressMap(addressMap: AddressMap): OrderedAccounts {
     let addressComparator: ReturnType<typeof getAddressComparator>;
-    const orderedAccounts: (IAccountMeta | IAccountLookupMeta)[] = Object.entries(addressMap)
+    const orderedAccounts: (IAccountLookupMeta | IAccountMeta)[] = Object.entries(addressMap)
         .sort(([leftAddress, leftEntry], [rightAddress, rightEntry]) => {
             // STEP 1: Rapid precedence check. Fee payer, then static addresses, then lookups.
             if (leftEntry[TYPE] !== rightEntry[TYPE]) {

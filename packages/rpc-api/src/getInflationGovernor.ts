@@ -2,12 +2,12 @@ import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, F64UnsafeSeeDocumentation } from '@solana/rpc-types';
 
 type GetInflationGovernorApiResponse = Readonly<{
-    /** The initial inflation percentage from time 0 */
-    initial: F64UnsafeSeeDocumentation;
     /** Percentage of total inflation allocated to the foundation */
     foundation: F64UnsafeSeeDocumentation;
     /** Duration of foundation pool inflation in years */
     foundationTerm: F64UnsafeSeeDocumentation;
+    /** The initial inflation percentage from time 0 */
+    initial: F64UnsafeSeeDocumentation;
     /**
      * Rate per year at which inflation is lowered.
      * (Rate reduction is derived using the target

@@ -55,24 +55,24 @@ const otherAddress = '2222' as Address<'2222'>;
     type MockData = { foo: 42 };
     type OtherMockData = { bar: 42 };
     fetchJsonParsedAccounts<MockData[]>(rpc, [] as Address[]) satisfies Promise<
-        (MaybeEncodedAccount | MaybeAccount<MockData>)[]
+        (MaybeAccount<MockData> | MaybeEncodedAccount)[]
     >;
     fetchJsonParsedAccounts<MockData[], ['1111', '2222']>(rpc, [address, otherAddress]) satisfies Promise<
         [
-            MaybeEncodedAccount<'1111'> | MaybeAccount<MockData, '1111'>,
-            MaybeEncodedAccount<'2222'> | MaybeAccount<MockData, '2222'>,
+            MaybeAccount<MockData, '1111'> | MaybeEncodedAccount<'1111'>,
+            MaybeAccount<MockData, '2222'> | MaybeEncodedAccount<'2222'>,
         ]
     >;
     fetchJsonParsedAccounts<[MockData, OtherMockData]>(rpc, [address, otherAddress]) satisfies Promise<
-        [MaybeEncodedAccount | MaybeAccount<MockData>, MaybeEncodedAccount | MaybeAccount<OtherMockData>]
+        [MaybeAccount<MockData> | MaybeEncodedAccount, MaybeAccount<OtherMockData> | MaybeEncodedAccount]
     >;
     fetchJsonParsedAccounts<[MockData, OtherMockData], ['1111', '2222']>(rpc, [
         address,
         otherAddress,
     ]) satisfies Promise<
         [
-            MaybeEncodedAccount<'1111'> | MaybeAccount<MockData, '1111'>,
-            MaybeEncodedAccount<'2222'> | MaybeAccount<OtherMockData, '2222'>,
+            MaybeAccount<MockData, '1111'> | MaybeEncodedAccount<'1111'>,
+            MaybeAccount<OtherMockData, '2222'> | MaybeEncodedAccount<'2222'>,
         ]
     >;
 }

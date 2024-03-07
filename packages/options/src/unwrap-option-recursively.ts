@@ -6,20 +6,20 @@ import { isOption, isSome, None, Some } from './option';
  * @see {@link UnwrappedOption}
  */
 type UnUnwrappables =
-    | string
-    | number
-    | boolean
-    | symbol
-    | bigint
-    | undefined
-    | null
-    | Uint8Array
+    | Date
     | Int8Array
-    | Uint16Array
     | Int16Array
-    | Uint32Array
     | Int32Array
-    | Date;
+    | Uint8Array
+    | Uint16Array
+    | Uint32Array
+    | bigint
+    | boolean
+    | number
+    | string
+    | symbol
+    | null
+    | undefined;
 
 /**
  * A type that defines the recursive unwrapping of a type `T`
@@ -29,17 +29,18 @@ type UnUnwrappables =
  * it returns the type of its value, otherwise, it returns the provided
  * fallback type `U` which defaults to `null`.
  */
-export type UnwrappedOption<T, U = null> = T extends Some<infer TValue>
-    ? UnwrappedOption<TValue, U>
-    : T extends None
-      ? U
-      : T extends UnUnwrappables
-        ? T
-        : T extends object
-          ? { [key in keyof T]: UnwrappedOption<T[key], U> }
-          : T extends Array<infer TItem>
-            ? Array<UnwrappedOption<TItem, U>>
-            : T;
+export type UnwrappedOption<T, U = null> =
+    T extends Some<infer TValue>
+        ? UnwrappedOption<TValue, U>
+        : T extends None
+          ? U
+          : T extends UnUnwrappables
+            ? T
+            : T extends object
+              ? { [key in keyof T]: UnwrappedOption<T[key], U> }
+              : T extends Array<infer TItem>
+                ? Array<UnwrappedOption<TItem, U>>
+                : T;
 
 /**
  * Recursively go through a type `T` such that all

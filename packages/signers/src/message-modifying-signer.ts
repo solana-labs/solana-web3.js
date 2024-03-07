@@ -17,8 +17,8 @@ export type MessageModifyingSigner<TAddress extends string = string> = Readonly<
 
 /** Checks whether the provided value implements the {@link MessageModifyingSigner} interface. */
 export function isMessageModifyingSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): value is MessageModifyingSigner<TAddress> {
     return (
         isAddress(value.address) &&
@@ -29,8 +29,8 @@ export function isMessageModifyingSigner<TAddress extends string>(value: {
 
 /** Asserts that the provided value implements the {@link MessageModifyingSigner} interface. */
 export function assertIsMessageModifyingSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): asserts value is MessageModifyingSigner<TAddress> {
     if (!isMessageModifyingSigner(value)) {
         throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_MODIFYING_SIGNER, {

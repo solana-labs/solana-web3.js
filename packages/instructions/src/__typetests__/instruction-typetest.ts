@@ -18,14 +18,14 @@ import {
     const instruction = {} as unknown as IInstruction;
 
     // @ts-expect-error instruction might not have accounts
-    instruction satisfies IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]>;
+    instruction satisfies IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
 
     // @ts-expect-error instruction might not have data
     instruction satisfies IInstructionWithData<Uint8Array>;
 
     if (isInstructionWithAccounts(instruction) && isInstructionWithData(instruction)) {
         instruction satisfies IInstruction &
-            IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]> &
+            IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]> &
             IInstructionWithData<Uint8Array>;
     }
 }
@@ -35,17 +35,17 @@ import {
     const instruction = {} as unknown as IInstruction;
 
     // @ts-expect-error instruction might not have accounts
-    instruction satisfies IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]>;
+    instruction satisfies IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
 
     // @ts-expect-error instruction might not have data
     instruction satisfies IInstructionWithData<Uint8Array>;
 
     assertIsInstructionWithAccounts(instruction);
-    instruction satisfies IInstruction & IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]>;
+    instruction satisfies IInstruction & IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]>;
 
     assertIsInstructionWithData(instruction);
     instruction satisfies IInstruction &
-        IInstructionWithAccounts<readonly (IAccountMeta | IAccountLookupMeta)[]> &
+        IInstructionWithAccounts<readonly (IAccountLookupMeta | IAccountMeta)[]> &
         IInstructionWithData<Uint8Array>;
 }
 

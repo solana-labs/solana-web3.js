@@ -7,28 +7,28 @@ type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
     type: 'completed' | 'firstShredReceived' | 'optimisticConfirmation' | 'root';
 }>;
 
-type SlotsUpdatesNotificationsApiNotificationCreatedBank = SlotsUpdatesNotificationsApiNotificationBase &
-    Readonly<{
-        parent: Slot;
-        type: 'createdBank';
-    }>;
+type SlotsUpdatesNotificationsApiNotificationCreatedBank = Readonly<{
+    parent: Slot;
+    type: 'createdBank';
+}> &
+    SlotsUpdatesNotificationsApiNotificationBase;
 
-type SlotsUpdatesNotificationsApiNotificationDead = SlotsUpdatesNotificationsApiNotificationBase &
-    Readonly<{
-        err: string;
-        type: 'dead';
-    }>;
+type SlotsUpdatesNotificationsApiNotificationDead = Readonly<{
+    err: string;
+    type: 'dead';
+}> &
+    SlotsUpdatesNotificationsApiNotificationBase;
 
-type SlotsUpdatesNotificationsApiNotificationFrozen = SlotsUpdatesNotificationsApiNotificationBase &
-    Readonly<{
-        stats: Readonly<{
-            maxTransactionsPerEntry: U64UnsafeBeyond2Pow53Minus1;
-            numFailedTransactions: U64UnsafeBeyond2Pow53Minus1;
-            numSuccessfulTransactions: U64UnsafeBeyond2Pow53Minus1;
-            numTransactionEntries: U64UnsafeBeyond2Pow53Minus1;
-        }>;
-        type: 'frozen';
+type SlotsUpdatesNotificationsApiNotificationFrozen = Readonly<{
+    stats: Readonly<{
+        maxTransactionsPerEntry: U64UnsafeBeyond2Pow53Minus1;
+        numFailedTransactions: U64UnsafeBeyond2Pow53Minus1;
+        numSuccessfulTransactions: U64UnsafeBeyond2Pow53Minus1;
+        numTransactionEntries: U64UnsafeBeyond2Pow53Minus1;
     }>;
+    type: 'frozen';
+}> &
+    SlotsUpdatesNotificationsApiNotificationBase;
 
 type SlotsUpdatesNotificationsApiNotification =
     | SlotsUpdatesNotificationsApiNotificationBase

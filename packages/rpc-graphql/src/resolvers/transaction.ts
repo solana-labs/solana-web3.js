@@ -12,20 +12,20 @@ export type EncodedTransactionData = {
 };
 
 export type InstructionResult = {
+    [key: string]: unknown;
+} & {
     jsonParsedConfigs?: {
         instructionType: string;
         programId: Address;
         programName: string;
     };
     programId?: Address;
-} & {
-    [key: string]: unknown;
 };
 
-export type TransactionResult = {
-    signature?: Signature;
+export type TransactionResult = Partial<TransactionLoaderValue> & {
     encodedData?: EncodedTransactionData;
-} & Partial<TransactionLoaderValue>;
+    signature?: Signature;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mapJsonParsedInstructions(instructions: readonly any[]): InstructionResult[] {
@@ -86,8 +86,8 @@ export function resolveTransaction(fieldName?: string) {
     return async (
         parent: { [x: string]: Signature },
         args: {
-            signature?: Signature;
             commitment?: Omit<Commitment, 'processed'>;
+            signature?: Signature;
         },
         context: RpcGraphQLContext,
         info: GraphQLResolveInfo,

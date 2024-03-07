@@ -17,12 +17,12 @@ import type {
 
 type TokenAccountInfoWithJsonData = Readonly<{
     data: Readonly<{
-        /** Name of the program that owns this account. */
-        program: Address;
         parsed: {
             info: JsonParsedTokenAccount;
             type: 'account';
         };
+        /** Name of the program that owns this account. */
+        program: Address;
         space: U64UnsafeBeyond2Pow53Minus1;
     }>;
 }>;

@@ -3,7 +3,7 @@ import { Kind } from 'graphql';
 import { resolveAccount } from './account';
 
 const stringScalarAlias = {
-    __parseLiteral(ast: { kind: Kind; value: string | number | bigint | boolean }): string | null {
+    __parseLiteral(ast: { kind: Kind; value: bigint | boolean | number | string }): string | null {
         if (ast.kind === Kind.STRING) {
             return ast.value.toString();
         }
@@ -18,7 +18,7 @@ const stringScalarAlias = {
 };
 
 const bigIntScalarAlias = {
-    __parseLiteral(ast: { kind: Kind; value: string | number | bigint | boolean }): bigint | null {
+    __parseLiteral(ast: { kind: Kind; value: bigint | boolean | number | string }): bigint | null {
         if (ast.kind === Kind.STRING || ast.kind === Kind.INT || ast.kind === Kind.FLOAT) {
             return BigInt(ast.value);
         }

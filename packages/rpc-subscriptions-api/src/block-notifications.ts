@@ -150,8 +150,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithSignatures &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithSignatures)
                     | null;
             }>
     >;
@@ -209,10 +209,10 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
+                          BlockNotificationsNotificationBlockWithRewards &
                           BlockNotificationsNotificationBlockWithTransactions<
                               TransactionForAccounts<BlockNotificationsMaxSupportedTransactionVersion>
-                          > &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          >)
                     | null;
             }>
     >;
@@ -230,8 +230,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithTransactions<TransactionForAccounts<void>> &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithTransactions<TransactionForAccounts<void>>)
                     | null;
             }>
     >;
@@ -289,10 +289,10 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
+                          BlockNotificationsNotificationBlockWithRewards &
                           BlockNotificationsNotificationBlockWithTransactions<
                               TransactionForFullBase58<BlockNotificationsMaxSupportedTransactionVersion>
-                          > &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          >)
                     | null;
             }>
     >;
@@ -310,8 +310,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullBase58<void>> &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullBase58<void>>)
                     | null;
             }>
     >;
@@ -369,10 +369,10 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
+                          BlockNotificationsNotificationBlockWithRewards &
                           BlockNotificationsNotificationBlockWithTransactions<
                               TransactionForFullBase64<BlockNotificationsMaxSupportedTransactionVersion>
-                          > &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          >)
                     | null;
             }>
     >;
@@ -390,8 +390,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullBase64<void>> &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullBase64<void>>)
                     | null;
             }>
     >;
@@ -449,10 +449,10 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
+                          BlockNotificationsNotificationBlockWithRewards &
                           BlockNotificationsNotificationBlockWithTransactions<
                               TransactionForFullJsonParsed<BlockNotificationsMaxSupportedTransactionVersion>
-                          > &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          >)
                     | null;
             }>
     >;
@@ -470,8 +470,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullJsonParsed<void>> &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullJsonParsed<void>>)
                     | null;
             }>
     >;
@@ -529,10 +529,10 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
+                          BlockNotificationsNotificationBlockWithRewards &
                           BlockNotificationsNotificationBlockWithTransactions<
                               TransactionForFullJson<BlockNotificationsMaxSupportedTransactionVersion>
-                          > &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          >)
                     | null;
             }>
     >;
@@ -550,8 +550,8 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
             Readonly<{
                 block:
                     | (BlockNotificationsNotificationBlock &
-                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullJson<void>> &
-                          BlockNotificationsNotificationBlockWithRewards)
+                          BlockNotificationsNotificationBlockWithRewards &
+                          BlockNotificationsNotificationBlockWithTransactions<TransactionForFullJson<void>>)
                     | null;
             }>
     >;

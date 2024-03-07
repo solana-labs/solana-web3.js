@@ -403,7 +403,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // When we try to force sign and send this transaction.
         const promise = signAndSendTransactionWithSigners(
-            transaction as typeof transaction & ITransactionWithSingleSendingSigner,
+            transaction as ITransactionWithSingleSendingSigner & typeof transaction,
         );
 
         // Then we expect an error letting us know no sending mechanism was provided.

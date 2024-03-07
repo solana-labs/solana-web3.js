@@ -18,7 +18,7 @@ describe('downgradeRoleToNonSigner', () => {
         ${'WRITABLE_SIGNER'} | ${'WRITABLE'}
     `(
         'downgrades $role to $expected',
-        ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
+        ({ role, expected }: { expected: keyof typeof AccountRole; role: keyof typeof AccountRole }) => {
             expect(downgradeRoleToNonSigner(AccountRole[role])).toBe(AccountRole[expected]);
         },
     );
@@ -33,7 +33,7 @@ describe('downgradeRoleToReadonly', () => {
         ${'WRITABLE_SIGNER'} | ${'READONLY_SIGNER'}
     `(
         'downgrades $role to $expected',
-        ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
+        ({ role, expected }: { expected: keyof typeof AccountRole; role: keyof typeof AccountRole }) => {
             expect(downgradeRoleToReadonly(AccountRole[role])).toBe(AccountRole[expected]);
         },
     );
@@ -104,7 +104,7 @@ describe('upgradeRoleToSigner', () => {
         ${'WRITABLE_SIGNER'} | ${'WRITABLE_SIGNER'}
     `(
         'upgrades $role to $expected',
-        ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
+        ({ role, expected }: { expected: keyof typeof AccountRole; role: keyof typeof AccountRole }) => {
             expect(upgradeRoleToSigner(AccountRole[role])).toBe(AccountRole[expected]);
         },
     );
@@ -119,7 +119,7 @@ describe('upgradeRoleToWritable', () => {
         ${'WRITABLE_SIGNER'} | ${'WRITABLE_SIGNER'}
     `(
         'upgrades $role to $expected',
-        ({ role, expected }: { role: keyof typeof AccountRole; expected: keyof typeof AccountRole }) => {
+        ({ role, expected }: { expected: keyof typeof AccountRole; role: keyof typeof AccountRole }) => {
             expect(upgradeRoleToWritable(AccountRole[role])).toBe(AccountRole[expected]);
         },
     );

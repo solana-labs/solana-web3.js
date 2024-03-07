@@ -5,7 +5,7 @@ import type { ClusterUrl, DevnetUrl, MainnetUrl, TestnetUrl } from '@solana/rpc-
 export type RpcTransportDevnet = RpcTransport & { '~cluster': 'devnet' };
 export type RpcTransportTestnet = RpcTransport & { '~cluster': 'testnet' };
 export type RpcTransportMainnet = RpcTransport & { '~cluster': 'mainnet' };
-export type RpcTransportWithCluster = RpcTransportDevnet | RpcTransportTestnet | RpcTransportMainnet;
+export type RpcTransportWithCluster = RpcTransportDevnet | RpcTransportMainnet | RpcTransportTestnet;
 export type RpcTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClusterUrl extends DevnetUrl
     ? RpcTransportDevnet
     : TClusterUrl extends TestnetUrl

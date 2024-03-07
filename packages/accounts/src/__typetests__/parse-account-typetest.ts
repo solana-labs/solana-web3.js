@@ -6,7 +6,7 @@ import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
 import { parseBase58RpcAccount, parseBase64RpcAccount, parseJsonRpcAccount } from '../parse-account';
 
 const address = '1111' as Address<'1111'>;
-type MyData = { token: Address; mint: Address };
+type MyData = { mint: Address; token: Address };
 
 {
     // [parseBase64RpcAccount]: It returns a EncodedAccount when the RPC account is not nullable.

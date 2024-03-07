@@ -7,12 +7,12 @@ type GetSupplyConfig = Readonly<{
 }>;
 
 type GetSupplyApiResponseBase = SolanaRpcResponse<{
-    /** Total supply in lamports */
-    total: LamportsUnsafeBeyond2Pow53Minus1;
     /** Circulating supply in lamports */
     circulating: LamportsUnsafeBeyond2Pow53Minus1;
     /** Non-circulating supply in lamports */
     nonCirculating: LamportsUnsafeBeyond2Pow53Minus1;
+    /** Total supply in lamports */
+    total: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
 type GetSupplyApiResponseWithNonCirculatingAccounts = GetSupplyApiResponseBase &

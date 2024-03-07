@@ -31,7 +31,7 @@ import { createUnimplementedFunction, getUnimplementedError } from './unimplemen
 
 export class Transaction {
     #tx: BaseTransaction | (BaseTransaction & ITransactionWithSignatures);
-    constructor(opts?: TransactionBlockhashCtor | TransactionNonceCtor | TransactionCtorFields_DEPRECATED) {
+    constructor(opts?: TransactionBlockhashCtor | TransactionCtorFields_DEPRECATED | TransactionNonceCtor) {
         if (opts) {
             throw getUnimplementedError('Constructing a `Transaction` with options');
         }
@@ -150,7 +150,7 @@ export class Transaction {
     get signatures(): Array<SignaturePubkeyPair> {
         throw getUnimplementedError('Transaction#signatures (getter)');
     }
-    static from(data: Buffer | Uint8Array | Array<number>) {
+    static from(data: Array<number> | Buffer | Uint8Array) {
         const newTransaction = new this();
         const byteArray = Array.isArray(data) ? new Uint8Array(data) : data;
         newTransaction.#tx = getTransactionDecoder().decode(byteArray);

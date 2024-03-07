@@ -12,13 +12,13 @@ import { assertNumberIsBetweenForCodec } from './assertions';
 import { Endian, NumberCodecConfig } from './common';
 
 type NumberFactorySharedInput<TSize extends number> = {
+    config?: NumberCodecConfig;
     name: string;
     size: TSize;
-    config?: NumberCodecConfig;
 };
 
 type NumberFactoryEncoderInput<TFrom, TSize extends number> = NumberFactorySharedInput<TSize> & {
-    range?: [number | bigint, number | bigint];
+    range?: [bigint | number, bigint | number];
     set: (view: DataView, value: TFrom, littleEndian?: boolean) => void;
 };
 
@@ -30,7 +30,7 @@ function isLittleEndian(config?: NumberCodecConfig): boolean {
     return config?.endian === Endian.BIG ? false : true;
 }
 
-export function numberEncoderFactory<TFrom extends number | bigint, TSize extends number>(
+export function numberEncoderFactory<TFrom extends bigint | number, TSize extends number>(
     input: NumberFactoryEncoderInput<TFrom, TSize>,
 ): FixedSizeEncoder<TFrom, TSize> {
     return createEncoder({
@@ -47,7 +47,7 @@ export function numberEncoderFactory<TFrom extends number | bigint, TSize extend
     });
 }
 
-export function numberDecoderFactory<TTo extends number | bigint, TSize extends number>(
+export function numberDecoderFactory<TTo extends bigint | number, TSize extends number>(
     input: NumberFactoryDecoderInput<TTo, TSize>,
 ): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({

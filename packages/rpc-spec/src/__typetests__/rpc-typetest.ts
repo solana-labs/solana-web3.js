@@ -3,8 +3,8 @@ import { createRpcApi, RpcApiMethods } from '../rpc-api';
 import { RpcTransport } from '../rpc-transport';
 
 interface MyApiMethods extends RpcApiMethods {
-    foo(): number;
     bar(): string;
+    foo(): number;
 }
 
 const api = createRpcApi<MyApiMethods>();

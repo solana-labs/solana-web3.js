@@ -11,7 +11,7 @@ const FOREVER_PROMISE = new Promise(() => {
 
 describe('requestAndConfirmAirdrop', () => {
     let confirmSignatureOnlyTransaction: jest.Mock;
-    let rpc: Rpc<RequestAirdropApi & GetSignatureStatusesApi>;
+    let rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi>;
     let requestAirdrop: jest.Mock;
     let sendAirdropRequest: jest.Mock;
     beforeEach(() => {

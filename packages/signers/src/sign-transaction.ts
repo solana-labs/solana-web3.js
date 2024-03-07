@@ -29,7 +29,7 @@ export async function partiallySignTransactionWithSigners<
 >(
     transaction: TTransaction,
     config: { abortSignal?: AbortSignal } = {},
-): Promise<TTransaction & ITransactionWithSignatures> {
+): Promise<ITransactionWithSignatures & TTransaction> {
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
         deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
         { identifySendingSigner: false },
@@ -49,7 +49,7 @@ export async function signTransactionWithSigners<
 >(
     transaction: TTransaction,
     config: { abortSignal?: AbortSignal } = {},
-): Promise<TTransaction & IFullySignedTransaction> {
+): Promise<IFullySignedTransaction & TTransaction> {
     const signedTransaction = await partiallySignTransactionWithSigners(transaction, config);
     assertTransactionIsFullySigned(signedTransaction);
     return signedTransaction;
@@ -173,7 +173,7 @@ async function signModifyingAndPartialTransactionSigners<
     modifyingSigners: readonly TransactionModifyingSigner[] = [],
     partialSigners: readonly TransactionPartialSigner[] = [],
     abortSignal?: AbortSignal,
-): Promise<TTransaction & ITransactionWithSignatures> {
+): Promise<ITransactionWithSignatures & TTransaction> {
     // Handle modifying signers sequentially.
     const modifiedTransaction = await modifyingSigners.reduce(
         async (transaction, modifyingSigner) => {
@@ -192,7 +192,7 @@ async function signModifyingAndPartialTransactionSigners<
             return signatures;
         }),
     );
-    const signedTransaction: TTransaction & ITransactionWithSignatures = {
+    const signedTransaction: ITransactionWithSignatures & TTransaction = {
         ...modifiedTransaction,
         signatures: Object.freeze(
             signatureDictionaries.reduce((signatures, signatureDictionary) => {

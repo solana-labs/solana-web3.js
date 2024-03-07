@@ -4,10 +4,10 @@ import type { Commitment, Slot } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
 type SendTransactionConfig = Readonly<{
-    skipPreflight?: boolean;
-    preflightCommitment?: Commitment;
     maxRetries?: bigint;
     minContextSlot?: Slot;
+    preflightCommitment?: Commitment;
+    skipPreflight?: boolean;
 }>;
 
 type SendTransactionResponse = Signature;

@@ -13,7 +13,7 @@ export type SignableMessage = Readonly<{
  * If a string is provided, it will be UTF-8 encoded.
  */
 export function createSignableMessage(
-    content: string | Uint8Array,
+    content: Uint8Array | string,
     signatures: SignatureDictionary = {},
 ): SignableMessage {
     return Object.freeze({

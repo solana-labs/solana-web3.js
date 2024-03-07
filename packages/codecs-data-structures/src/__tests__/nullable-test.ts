@@ -39,7 +39,7 @@ describe('getNullableCodec', () => {
         expect(nullable(string()).read(b('010500000048656c6c6f'), 0)).toStrictEqual(['Hello', 10]);
 
         // Different From and To types.
-        const nullableU64 = nullable<number | bigint, bigint>(u64());
+        const nullableU64 = nullable<bigint | number, bigint>(u64());
         expect(nullableU64.encode(2)).toStrictEqual(b('010200000000000000'));
         expect(nullableU64.encode(2n)).toStrictEqual(b('010200000000000000'));
         expect(nullableU64.read(b('010200000000000000'), 0)).toStrictEqual([2n, 9]);
@@ -73,7 +73,7 @@ describe('getNullableCodec', () => {
         expect(fixedString.read(b('0148656c6c6f'), 0)).toStrictEqual(['Hello', 6]);
 
         // Different From and To types.
-        const nullableU64 = nullable<number | bigint, bigint>(u64());
+        const nullableU64 = nullable<bigint | number, bigint>(u64());
         expect(nullableU64.encode(2)).toStrictEqual(b('010200000000000000'));
         expect(nullableU64.encode(2n)).toStrictEqual(b('010200000000000000'));
         expect(nullableU64.read(b('010200000000000000'), 0)).toStrictEqual([2n, 9]);

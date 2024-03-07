@@ -31,7 +31,7 @@ describe('getArrayCodec', () => {
         expect(array(string()).read(b('0200000001000000610100000062'), 0)).toStrictEqual([['a', 'b'], 4 + 10]);
 
         // Different From and To types.
-        const arrayU64 = array<number | bigint, bigint>(u64());
+        const arrayU64 = array<bigint | number, bigint>(u64());
         expect(arrayU64.encode([2])).toStrictEqual(b('010000000200000000000000'));
         expect(arrayU64.encode([2n])).toStrictEqual(b('010000000200000000000000'));
         expect(arrayU64.read(b('010000000200000000000000'), 0)).toStrictEqual([[2n], 4 + 8]);
@@ -52,7 +52,7 @@ describe('getArrayCodec', () => {
         expect(array(string(), { size: 2 }).read(b('01000000610100000062'), 0)).toStrictEqual([['a', 'b'], 10]);
 
         // Different From and To types.
-        const arrayU64 = array<number | bigint, bigint>(u64(), { size: 1 });
+        const arrayU64 = array<bigint | number, bigint>(u64(), { size: 1 });
         expect(arrayU64.encode([2])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.encode([2n])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);
@@ -95,7 +95,7 @@ describe('getArrayCodec', () => {
         expect(array(string({ size: u8() }), remainder).read(b('0161026263'), 0)).toStrictEqual([['a', 'bc'], 5]);
 
         // Different From and To types.
-        const arrayU64 = array<number | bigint, bigint>(u64(), remainder);
+        const arrayU64 = array<bigint | number, bigint>(u64(), remainder);
         expect(arrayU64.encode([2])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.encode([2n])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);

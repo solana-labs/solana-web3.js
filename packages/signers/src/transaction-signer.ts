@@ -7,14 +7,14 @@ import { isTransactionSendingSigner, TransactionSendingSigner } from './transact
 
 /** Defines a signer capable of signing transactions. */
 export type TransactionSigner<TAddress extends string = string> =
-    | TransactionPartialSigner<TAddress>
     | TransactionModifyingSigner<TAddress>
+    | TransactionPartialSigner<TAddress>
     | TransactionSendingSigner<TAddress>;
 
 /** Checks whether the provided value implements the {@link TransactionSigner} interface. */
 export function isTransactionSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): value is TransactionSigner<TAddress> {
     return (
         isTransactionPartialSigner(value) || isTransactionModifyingSigner(value) || isTransactionSendingSigner(value)
@@ -23,8 +23,8 @@ export function isTransactionSigner<TAddress extends string>(value: {
 
 /** Asserts that the provided value implements the {@link TransactionSigner} interface. */
 export function assertIsTransactionSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): asserts value is TransactionSigner<TAddress> {
     if (!isTransactionSigner(value)) {
         throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SIGNER, {

@@ -26,7 +26,7 @@ describe('getTupleCodec', () => {
         expect(tuple([string(), u8()]).decode(b('0500000048656c6c6f2a'))).toStrictEqual(['Hello', 42]);
 
         // Different From and To types.
-        const tupleU8U64 = tuple<[number, number | bigint], [number, bigint]>([u8(), u64()]);
+        const tupleU8U64 = tuple<[number, bigint | number], [number, bigint]>([u8(), u64()]);
         expect(tupleU8U64.encode([1, 2])).toStrictEqual(b('010200000000000000'));
         expect(tupleU8U64.encode([1, 2n])).toStrictEqual(b('010200000000000000'));
         expect(tupleU8U64.decode(b('010200000000000000'))).toStrictEqual([1, 2n]);

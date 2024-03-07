@@ -63,7 +63,7 @@ export type GetDataEnumKindContent<T extends DataEnum, K extends T['__kind']> = 
 >;
 
 /** Defines the config for data enum codecs. */
-export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberEncoder | NumberDecoder> = {
+export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The codec to use for the enum discriminator prefixing the variant.
      * @defaultValue u8 prefix.
@@ -75,19 +75,19 @@ type Variants<T> = readonly (readonly [string, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
 type GetEncoderTypeFromVariants<TVariants extends Variants<Encoder<any>>> = {
-    [I in ArrayIndices<TVariants>]: { __kind: TVariants[I][0] } & (TVariants[I][1] extends Encoder<infer TFrom>
+    [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Encoder<infer TFrom>
         ? TFrom extends object
             ? TFrom
             : object
-        : never);
+        : never) & { __kind: TVariants[I][0] };
 }[ArrayIndices<TVariants>];
 
 type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = {
-    [I in ArrayIndices<TVariants>]: { __kind: TVariants[I][0] } & (TVariants[I][1] extends Decoder<infer TTo>
+    [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Decoder<infer TTo>
         ? TTo extends object
             ? TTo
             : object
-        : never);
+        : never) & { __kind: TVariants[I][0] };
 }[ArrayIndices<TVariants>];
 
 /**
@@ -112,7 +112,7 @@ export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>
                       const variantEncoder = variants[discriminator][1];
                       return (
                           getEncodedSize(discriminator, prefix) +
-                          getEncodedSize(variant as void & TFrom, variantEncoder)
+                          getEncodedSize(variant as TFrom & void, variantEncoder)
                       );
                   },
                   maxSize: getDataEnumMaxSize(variants, prefix),
@@ -121,7 +121,7 @@ export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>
             const discriminator = getVariantDiscriminator(variants, variant);
             offset = prefix.write(discriminator, bytes, offset);
             const variantEncoder = variants[discriminator][1];
-            return variantEncoder.write(variant as void & TFrom, bytes, offset);
+            return variantEncoder.write(variant as TFrom & void, bytes, offset);
         },
     });
 }
@@ -181,9 +181,9 @@ export function getDataEnumCodec<const TVariants extends Variants<Codec<any, any
     );
 }
 
-function getDataEnumFixedSize<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+function getDataEnumFixedSize<const TVariants extends Variants<Decoder<any> | Encoder<any>>>(
     variants: TVariants,
-    prefix: { fixedSize: number } | object,
+    prefix: object | { fixedSize: number },
 ): number | null {
     if (variants.length === 0) return isFixedSize(prefix) ? prefix.fixedSize : null;
     if (!isFixedSize(variants[0][1])) return null;
@@ -195,15 +195,15 @@ function getDataEnumFixedSize<const TVariants extends Variants<Encoder<any> | De
     return isFixedSize(prefix) ? prefix.fixedSize + variantSize : null;
 }
 
-function getDataEnumMaxSize<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+function getDataEnumMaxSize<const TVariants extends Variants<Decoder<any> | Encoder<any>>>(
     variants: TVariants,
-    prefix: { fixedSize: number } | object,
+    prefix: object | { fixedSize: number },
 ) {
     const maxVariantSize = maxCodecSizes(variants.map(([, codec]) => getMaxSize(codec)));
     return sumCodecSizes([getMaxSize(prefix), maxVariantSize]) ?? undefined;
 }
 
-function getVariantDiscriminator<const TVariants extends Variants<Encoder<any> | Decoder<any>>>(
+function getVariantDiscriminator<const TVariants extends Variants<Decoder<any> | Encoder<any>>>(
     variants: TVariants,
     variant: { __kind: string },
 ) {

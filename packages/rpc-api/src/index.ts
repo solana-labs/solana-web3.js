@@ -115,7 +115,7 @@ type SolanaRpcApiForAllClusters = GetAccountInfoApi &
     MinimumLedgerSlotApi &
     SendTransactionApi &
     SimulateTransactionApi;
-type SolanaRpcApiForTestClusters = SolanaRpcApiForAllClusters & RequestAirdropApi;
+type SolanaRpcApiForTestClusters = RequestAirdropApi & SolanaRpcApiForAllClusters;
 export type SolanaRpcApi = SolanaRpcApiForTestClusters;
 export type SolanaRpcApiDevnet = SolanaRpcApiForTestClusters;
 export type SolanaRpcApiTestnet = SolanaRpcApiForTestClusters;
@@ -180,7 +180,7 @@ export type {
 type Config = ParamsTransformerConfig;
 
 export function createSolanaRpcApi<
-    TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiTestnet | SolanaRpcApiMainnet = SolanaRpcApi,
+    TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiMainnet | SolanaRpcApiTestnet = SolanaRpcApi,
 >(config?: Config): RpcApi<TRpcMethods> {
     return createRpcApi<TRpcMethods>({
         parametersTransformer: getDefaultParamsTransformerForSolanaRpc(config) as (params: unknown[]) => unknown[],

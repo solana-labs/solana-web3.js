@@ -159,12 +159,12 @@ async () => {
             TNotificationBase & {
                 account: {
                     data:
+                        | Base64EncodedDataResponse
                         | Readonly<{
-                              program: string;
                               parsed: unknown;
+                              program: string;
                               space: U64UnsafeBeyond2Pow53Minus1;
-                          }>
-                        | Base64EncodedDataResponse;
+                          }>;
                 };
             }
         >
@@ -177,12 +177,12 @@ async () => {
                 TNotificationBase & {
                     account: {
                         data:
+                            | Base64EncodedDataResponse
                             | Readonly<{
-                                  program: string;
                                   parsed: unknown;
+                                  program: string;
                                   space: U64UnsafeBeyond2Pow53Minus1;
-                              }>
-                            | Base64EncodedDataResponse;
+                              }>;
                     };
                 }
             >

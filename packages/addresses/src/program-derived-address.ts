@@ -77,7 +77,7 @@ type SeedInput = Readonly<{
     seed: Seed;
 }>;
 
-type Seed = string | Uint8Array;
+type Seed = Uint8Array | string;
 
 const MAX_SEED_LENGTH = 32;
 const MAX_SEEDS = 16;

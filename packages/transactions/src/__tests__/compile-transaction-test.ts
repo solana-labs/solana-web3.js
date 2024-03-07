@@ -41,7 +41,7 @@ describe('getCompiledTransaction', () => {
         const mockSignatureB = new Uint8Array(64).fill(2);
         const transactionWithSignatures = {
             signatures: { [addressA]: mockSignatureA, [addressB]: mockSignatureB },
-        } as Parameters<typeof getCompiledTransaction>[0] & ITransactionWithSignatures;
+        } as ITransactionWithSignatures & Parameters<typeof getCompiledTransaction>[0];
         const compiledTransaction = getCompiledTransaction(transactionWithSignatures);
         expect(compiledTransaction).toHaveProperty('signatures', [
             // Two signers, in the order they're found in `mockCompiledMessage.staticAccounts`
@@ -53,7 +53,7 @@ describe('getCompiledTransaction', () => {
         const mockSignatureA = new Uint8Array(64).fill(1);
         const transactionWithSignatures = {
             signatures: { [addressA]: mockSignatureA },
-        } as Parameters<typeof getCompiledTransaction>[0] & ITransactionWithSignatures;
+        } as ITransactionWithSignatures & Parameters<typeof getCompiledTransaction>[0];
         const compiledTransaction = getCompiledTransaction(transactionWithSignatures);
         expect(compiledTransaction).toHaveProperty('signatures', [
             new Uint8Array(Array(64).fill(0)), // Missing signature for account B

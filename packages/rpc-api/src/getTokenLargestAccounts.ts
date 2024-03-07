@@ -2,7 +2,7 @@ import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, SolanaRpcResponse, TokenAmount } from '@solana/rpc-types';
 
-type GetTokenLargestAccountsApiResponse = SolanaRpcResponse<TokenAmount & { address: Address }[]>;
+type GetTokenLargestAccountsApiResponse = SolanaRpcResponse<{ address: Address }[] & TokenAmount>;
 
 export interface GetTokenLargestAccountsApi extends RpcApiMethods {
     /**

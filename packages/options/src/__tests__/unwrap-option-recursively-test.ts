@@ -38,7 +38,7 @@ describe('unwrapOptionRecursively', () => {
         expect(unwrapOptionRecursively({ foo: none<string>() })).toStrictEqual({ foo: null });
         expect(unwrapOptionRecursively({ foo: some(none<string>()) })).toStrictEqual({ foo: null });
         expect(unwrapOptionRecursively(some({ baz: none<number>(), foo: some('bar') }))).toStrictEqual(<
-            { foo: string | null; baz: number | null } | null
+            { baz: number | null; foo: string | null } | null
         >{ baz: null, foo: 'bar' });
 
         // Arrays.
@@ -74,18 +74,18 @@ describe('unwrapOptionRecursively', () => {
         };
         const unwrappedPerson = unwrapOptionRecursively(person);
         type ExpectedUnwrappedPerson = {
-            name: string;
-            age: number;
-            gender: string | null;
-            interests: Array<{ name: string; category: string | null }>;
             address: {
-                street: string;
                 city: string;
-                zipcode: string;
-                region: string | null;
                 country: string;
                 phone: string | null;
+                region: string | null;
+                street: string;
+                zipcode: string;
             };
+            age: number;
+            gender: string | null;
+            interests: Array<{ category: string | null; name: string }>;
+            name: string;
         };
         expect(unwrappedPerson).toStrictEqual(<ExpectedUnwrappedPerson>{
             address: {
@@ -122,7 +122,7 @@ describe('unwrapOptionRecursively', () => {
 
         // Nested Some and None.
         expect(unwrapOptionRecursively(some(some(some(false))), fallback)).toBe(<boolean | 42>false);
-        expect(unwrapOptionRecursively(some(some(none<100>())), fallback)).toBe(<100 | 42>42);
+        expect(unwrapOptionRecursively(some(some(none<100>())), fallback)).toBe(<42 | 100>42);
 
         // Combination.
         const person = {
@@ -145,18 +145,18 @@ describe('unwrapOptionRecursively', () => {
         };
         const unwrappedPerson = unwrapOptionRecursively(person, fallback);
         type ExpectedUnwrappedPerson = {
-            name: string;
-            age: number;
-            gender: string | 42;
-            interests: Array<{ name: string; category: string | 42 }>;
             address: {
-                street: string;
                 city: string;
-                zipcode: string;
-                region: string | 42;
                 country: string;
                 phone: string | 42;
+                region: string | 42;
+                street: string;
+                zipcode: string;
             };
+            age: number;
+            gender: string | 42;
+            interests: Array<{ category: string | 42; name: string }>;
+            name: string;
         };
         expect(unwrappedPerson).toStrictEqual(<ExpectedUnwrappedPerson>{
             address: {

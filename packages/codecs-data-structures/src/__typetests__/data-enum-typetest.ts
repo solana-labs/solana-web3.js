@@ -43,9 +43,9 @@ import { getUnitCodec } from '../unit';
         ['KeyPress', getStructCodec([['fields', {} as Codec<[string]>]])],
         ['PageUnload', {} as Codec<object>],
     ]) satisfies Codec<
-        | { __kind: 'PageLoad' }
         | { __kind: 'Click'; x: number; y: number }
         | { __kind: 'KeyPress'; fields: [string] }
+        | { __kind: 'PageLoad' }
         | { __kind: 'PageUnload' }
     >;
 }
@@ -56,7 +56,7 @@ import { getUnitCodec } from '../unit';
         ['A', getUnitCodec()],
         ['B', getStructCodec([['value', getU64Codec()]])],
     ]) satisfies Codec<
-        { __kind: 'A' } | { __kind: 'B'; value: number | bigint },
+        { __kind: 'A' } | { __kind: 'B'; value: bigint | number },
         { __kind: 'A' } | { __kind: 'B'; value: bigint }
     >;
 }

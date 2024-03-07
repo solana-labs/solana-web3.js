@@ -20,15 +20,15 @@ type TransactionStatusErr = Readonly<{
 
 type SignatureStatusResult = Readonly<{
     /**
-     * Number of blocks since signature confirmation, null if rooted,
-     * as well as finalized by a supermajority of the cluster
-     */
-    confirmations: U64UnsafeBeyond2Pow53Minus1 | null;
-    /**
      * The transaction's cluster confirmation status; either `processed`,
      * `confirmed`, or `finalized`.
      */
     confirmationStatus: Commitment | null;
+    /**
+     * Number of blocks since signature confirmation, null if rooted,
+     * as well as finalized by a supermajority of the cluster
+     */
+    confirmations: U64UnsafeBeyond2Pow53Minus1 | null;
     /** Error if transaction failed, null if transaction succeeded */
     err: TransactionError | null;
     /** The slot the transaction was processed */
@@ -36,7 +36,7 @@ type SignatureStatusResult = Readonly<{
     /**
      * @deprecated Transaction status
      */
-    status: TransactionStatusOk | TransactionStatusErr;
+    status: TransactionStatusErr | TransactionStatusOk;
 }>;
 
 type GetSignatureStatusesBase = ReadonlyArray<SignatureStatusResult | null>;

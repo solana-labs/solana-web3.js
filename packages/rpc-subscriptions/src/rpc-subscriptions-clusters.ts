@@ -6,8 +6,8 @@ export type RpcSubscriptionsTransportTestnet = RpcSubscriptionsTransport & { '~c
 export type RpcSubscriptionsTransportMainnet = RpcSubscriptionsTransport & { '~cluster': 'mainnet' };
 export type RpcSubscriptionsTransportWithCluster =
     | RpcSubscriptionsTransportDevnet
-    | RpcSubscriptionsTransportTestnet
-    | RpcSubscriptionsTransportMainnet;
+    | RpcSubscriptionsTransportMainnet
+    | RpcSubscriptionsTransportTestnet;
 export type RpcSubscriptionsTransportFromClusterUrl<TClusterUrl extends ClusterUrl> = TClusterUrl extends DevnetUrl
     ? RpcSubscriptionsTransportDevnet
     : TClusterUrl extends TestnetUrl

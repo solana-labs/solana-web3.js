@@ -7,7 +7,6 @@ import { RpcSubscriptionsTransportFromClusterUrl } from './rpc-subscriptions-clu
 import { getWebSocketTransportWithConnectionSharding } from './rpc-subscriptions-connection-sharding';
 
 export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUrl> = Readonly<{
-    url: TClusterUrl;
     /**
      * You might like to open more subscriptions per connection than your RPC provider allows
      * for. Using the initial payload as input, return a shard key from this method to assign
@@ -16,6 +15,7 @@ export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUr
     getShard?: (payload: unknown) => string;
     intervalMs?: number;
     sendBufferHighWatermark?: number;
+    url: TClusterUrl;
 }>;
 
 export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends ClusterUrl>(

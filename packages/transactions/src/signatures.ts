@@ -38,8 +38,8 @@ export function getSignatureFromTransaction(
 
 export async function partiallySignTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
-): Promise<TTransaction & ITransactionWithSignatures> {
+    transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
+): Promise<ITransactionWithSignatures & TTransaction> {
     const compiledMessage = compileMessage(transaction);
     const nextSignatures: Record<Address, SignatureBytes> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
@@ -62,8 +62,8 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
 
 export async function signTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSignatures),
-): Promise<TTransaction & IFullySignedTransaction> {
+    transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
+): Promise<IFullySignedTransaction & TTransaction> {
     const out = await partiallySignTransaction(keyPairs, transaction);
     assertTransactionIsFullySigned(out);
     Object.freeze(out);
@@ -71,8 +71,8 @@ export async function signTransaction<TTransaction extends CompilableTransaction
 }
 
 export function assertTransactionIsFullySigned<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction & ITransactionWithSignatures,
-): asserts transaction is TTransaction & IFullySignedTransaction {
+    transaction: ITransactionWithSignatures & TTransaction,
+): asserts transaction is IFullySignedTransaction & TTransaction {
     const signerAddressesFromInstructions = transaction.instructions
         .flatMap(i => i.accounts?.filter(a => isSignerRole(a.role)) ?? [])
         .map(a => a.address);

@@ -30,9 +30,9 @@ describe('combineCodec', () => {
     });
 
     it('can join encoders and decoders with different but matching types', () => {
-        const u8Encoder: FixedSizeEncoder<number | bigint> = createEncoder({
+        const u8Encoder: FixedSizeEncoder<bigint | number> = createEncoder({
             fixedSize: 1,
-            write: (value: number | bigint, buffer, offset) => {
+            write: (value: bigint | number, buffer, offset) => {
                 buffer.set([Number(value)], offset);
                 return offset + 1;
             },
@@ -43,7 +43,7 @@ describe('combineCodec', () => {
             read: (bytes: Uint8Array, offset = 0) => [BigInt(bytes[offset]), offset + 1],
         });
 
-        const u8Codec: FixedSizeCodec<number | bigint, bigint> = combineCodec(u8Encoder, u8Decoder);
+        const u8Codec: FixedSizeCodec<bigint | number, bigint> = combineCodec(u8Encoder, u8Decoder);
 
         expect(u8Codec.fixedSize).toBe(1);
         expect(u8Codec.encode(42)).toStrictEqual(new Uint8Array([42]));

@@ -18,7 +18,7 @@ import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
 import { getTupleDecoder, getTupleEncoder } from './tuple';
 
 /** Defines the config for Map codecs. */
-export type MapCodecConfig<TPrefix extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type MapCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The size of the array.
      * @defaultValue u32 prefix.

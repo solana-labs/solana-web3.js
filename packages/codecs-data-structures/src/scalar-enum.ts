@@ -36,7 +36,7 @@ import {
  * enum Direction { Left, Right };
  * ```
  */
-export type ScalarEnum = { [key: string]: string | number };
+export type ScalarEnum = { [key: string]: number | string };
 
 /**
  * Returns the allowed input for a scalar enum.
@@ -47,7 +47,7 @@ export type ScalarEnum = { [key: string]: string | number };
  * type DirectionInput = ScalarEnumFrom<Direction>; // "Left" | "Right" | 0 | 1
  * ```
  */
-export type ScalarEnumFrom<TEnum extends ScalarEnum> = keyof TEnum | TEnum[keyof TEnum];
+export type ScalarEnumFrom<TEnum extends ScalarEnum> = TEnum[keyof TEnum] | keyof TEnum;
 
 /**
  * Returns all the available variants of a scalar enum.
@@ -61,7 +61,7 @@ export type ScalarEnumFrom<TEnum extends ScalarEnum> = keyof TEnum | TEnum[keyof
 export type ScalarEnumTo<TEnum extends ScalarEnum> = TEnum[keyof TEnum];
 
 /** Defines the config for scalar enum codecs. */
-export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type ScalarEnumCodecConfig<TDiscriminator extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The codec to use for the enum discriminator.
      * @defaultValue u8 discriminator.
@@ -133,7 +133,7 @@ export function getScalarEnumDecoder<TEnum extends ScalarEnum>(
 ): Decoder<ScalarEnumTo<TEnum>> {
     const prefix = config.size ?? getU8Decoder();
     const { minRange, maxRange, enumKeys } = getScalarEnumStats(constructor);
-    return mapDecoder(prefix, (value: number | bigint): ScalarEnumTo<TEnum> => {
+    return mapDecoder(prefix, (value: bigint | number): ScalarEnumTo<TEnum> => {
         const valueAsNumber = Number(value);
         if (valueAsNumber < minRange || valueAsNumber > maxRange) {
             throw new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
@@ -175,14 +175,14 @@ function getScalarEnumStats<TEnum extends ScalarEnum>(
 ): {
     allStringInputs: string[];
     enumKeys: string[];
-    enumValues: (string | number)[];
-    minRange: number;
+    enumValues: (number | string)[];
     maxRange: number;
+    minRange: number;
 } {
     const numericValues = Object.values(constructor).filter(v => typeof v === 'number') as number[];
     const deduplicatedConstructor = Object.fromEntries(
         Object.entries(constructor).slice(numericValues.length),
-    ) as Record<string, string | number>;
+    ) as Record<string, number | string>;
     const enumKeys = Object.keys(deduplicatedConstructor);
     const enumValues = Object.values(deduplicatedConstructor);
     const minRange = 0;
