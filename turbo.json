@@ -38,7 +38,34 @@
         },
         "publish-packages": {
             "cache": false,
-            "dependsOn": ["^publish-packages"],
+            "dependsOn": [
+                "compile:js",
+                "compile:typedefs",
+                "^publish-packages",
+                "test:lint",
+                "test:prettier",
+                "test:typecheck",
+                "test:unit:browser",
+                "test:unit:node",
+                "test:treeshakability:browser",
+                "test:treeshakability:native",
+                "test:treeshakability:node"
+            ],
+            "outputs": []
+        },
+        "publish-packages-legacy": {
+            "cache": false,
+            "dependsOn": [
+                "compile:docs",
+                "compile:js",
+                "compile:typedefs",
+                "^publish-packages",
+                "test:lint",
+                "test:live-with-test-validator",
+                "test:prettier",
+                "test:typecheck",
+                "test:unit:node"
+            ],
             "outputs": []
         },
         "style:fix": {
@@ -63,12 +90,12 @@
             "outputs": []
         },
         "test:unit:browser": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "inputs": ["src/**"],
             "outputs": []
         },
         "test:unit:node": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "inputs": ["src/**"],
             "outputs": []
         },
@@ -85,13 +112,8 @@
             "outputs": []
         },
         "@solana/web3.js#test:unit:node": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
-            "outputs": []
-        },
-        "@solana/web3.js-experimental#publish-packages": {
-            "cache": false,
-            "dependsOn": ["build", "^publish-packages", "@solana/web3.js#publish-packages"],
             "outputs": []
         },
         "@solana/web3.js-legacy-sham#compile:typedefs": {
