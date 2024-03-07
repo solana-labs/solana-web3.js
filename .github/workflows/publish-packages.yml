@@ -1,4 +1,4 @@
-name: CI/CD
+name: Publish Packages
 
 on:
   workflow_dispatch:
@@ -31,29 +31,10 @@ jobs:
         id: start-test-validator
         uses: ./.github/workflows/actions/setup-validator
 
-      - name: Build and Test (force)
-        run: pnpm turbo run build --concurrency=100% --force=true
-
-      - name: Stop Test Validator
-        if: always() && steps.start-test-validator.outcome == 'success'
-        run: kill ${{ steps.start-test-validator.outputs.pid }}
-
-      - name: Deploy Github Page
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/library-legacy/doc
-
       - name: Configure NPM token
         run: |
           pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish Legacy Library
-        run: pnpm turbo publish-packages --concurrency=100% --filter=@solana/web3.js
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create Changesets Pull Request or Trigger an NPM Publish
@@ -62,9 +43,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish Experimental Library
+      - name: Choose Build Step
+        id: build-step-decider
+        description: |
+          If there are changesets yet to be committed, just build and test. Otherwise, build, test,
+          and publish.
+        run: |
+          echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages' || 'build' }}" >> $GITHUB_OUTPUT
+
+      - name: Run Build Step (force)
         if: steps.changesets.outputs.hasChangesets == 'false'
-        run: pnpm turbo publish-packages --concurrency=100% --filter=\!@solana/web3.js
+        run: pnpm turbo ${{ steps.build-step-decider.step-name }} --concurrency=100% --filter=!\@solana/web3.js --force=true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Stop Test Validator
+        if: always() && steps.start-test-validator.outcome == 'success'
+        run: kill ${{ steps.start-test-validator.outputs.pid }}
