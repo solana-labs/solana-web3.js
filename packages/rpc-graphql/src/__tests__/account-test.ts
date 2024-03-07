@@ -890,7 +890,7 @@ describe('account', () => {
                         priorVoters: expect.any(Array),
                         rentEpoch: expect.any(BigInt),
                         rootSlot: expect.any(BigInt),
-                        space: 3731n,
+                        space: 3762n,
                         votes: expect.arrayContaining([
                             {
                                 confirmationCount: expect.any(Number),
