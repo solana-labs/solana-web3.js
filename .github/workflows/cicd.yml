@@ -40,7 +40,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Stop Test Validator
-        if: steps.start-test-validator.outcome == 'success'
+        if: always() && steps.start-test-validator.outcome == 'success'
         run: kill ${{ steps.start-test-validator.outputs.pid }}
 
       - name: Deploy Github Page

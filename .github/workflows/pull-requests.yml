@@ -45,7 +45,7 @@ jobs:
         run: pnpm build --concurrency=100%
 
       - name: Stop Test Validator
-        if: steps.start-test-validator.outcome == 'success'
+        if: always() && steps.start-test-validator.outcome == 'success'
         run: kill ${{ steps.start-test-validator.outputs.pid }}
 
       - name: Upload Experimental Library Bundle
