@@ -102,7 +102,7 @@ function convertSignatures(
 export function fromVersionedTransactionWithBlockhash(
     transaction: VersionedTransaction,
     lastValidBlockHeight?: bigint,
-): Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime {
+): ITransactionWithBlockhashLifetime & ITransactionWithFeePayer & Transaction {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate
@@ -144,7 +144,7 @@ export function fromVersionedTransactionWithBlockhash(
 
 export function fromVersionedTransactionWithDurableNonce(
     transaction: VersionedTransaction,
-): Transaction & ITransactionWithFeePayer & IDurableNonceTransaction {
+): IDurableNonceTransaction & ITransactionWithFeePayer & Transaction {
     // TODO: add support for address table lookups
     // - will need to take `AddressLookupTableAccounts[]` as input
     // - will need to convert account instructions to `IAccountLookupMeta` when appropriate

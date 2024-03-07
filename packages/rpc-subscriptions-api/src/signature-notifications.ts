@@ -24,18 +24,18 @@ export interface SignatureNotificationsApi extends RpcSubscriptionsApiMethods {
     signatureNotifications(
         // Transaction Signature, as base-58 encoded string
         signature: Signature,
-        config: SignatureNotificationsApiConfigBase &
-            Readonly<{
-                // Whether or not to subscribe for notifications when signatures are received
-                // by the RPC, in addition to when they are processed.
-                enableReceivedNotification: true;
-            }>,
-    ): SignatureNotificationsApiNotificationReceived | SignatureNotificationsApiNotificationProcessed;
+        config: Readonly<{
+            // Whether or not to subscribe for notifications when signatures are received
+            // by the RPC, in addition to when they are processed.
+            enableReceivedNotification: true;
+        }> &
+            SignatureNotificationsApiConfigBase,
+    ): SignatureNotificationsApiNotificationProcessed | SignatureNotificationsApiNotificationReceived;
     signatureNotifications(
         signature: Signature,
-        config?: SignatureNotificationsApiConfigBase &
-            Readonly<{
-                enableReceivedNotification?: false;
-            }>,
+        config?: Readonly<{
+            enableReceivedNotification?: false;
+        }> &
+            SignatureNotificationsApiConfigBase,
     ): SignatureNotificationsApiNotificationProcessed;
 }

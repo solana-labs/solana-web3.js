@@ -22,7 +22,7 @@ import {
 } from '@solana/codecs-numbers';
 
 /** Defines the config for boolean codecs. */
-export type BooleanCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type BooleanCodecConfig<TSize extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The number codec to delegate to.
      * @defaultValue u8 size.
@@ -59,7 +59,7 @@ export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): De
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
     const size = config.size ?? getU8Decoder();
     assertIsFixedSize(size);
-    return mapDecoder(size, (value: number | bigint): boolean => Number(value) === 1);
+    return mapDecoder(size, (value: bigint | number): boolean => Number(value) === 1);
 }
 
 /**

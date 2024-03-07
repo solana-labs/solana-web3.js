@@ -20,7 +20,7 @@ const MOCK_LIFETIME_CONSTRAINT =
     'SOME_CONSTRAINT' as unknown as ITransactionWithBlockhashLifetime['lifetimeConstraint'];
 
 describe('compileMessage', () => {
-    let baseTx: BaseTransaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
+    let baseTx: BaseTransaction & ITransactionWithBlockhashLifetime & ITransactionWithFeePayer;
     beforeEach(() => {
         baseTx = {
             feePayer: 'abc' as Address<'abc'>,
@@ -35,7 +35,7 @@ describe('compileMessage', () => {
             jest.mocked(getCompiledAddressTableLookups).mockReturnValue(expectedAddressTableLookups);
         });
         describe("when the transaction version is `'legacy'`", () => {
-            let legacyBaseTx: typeof baseTx & Readonly<{ version: 'legacy' }>;
+            let legacyBaseTx: Readonly<{ version: 'legacy' }> & typeof baseTx;
             beforeEach(() => {
                 legacyBaseTx = { ...baseTx, version: 'legacy' };
             });

@@ -25,9 +25,9 @@ const rpc = null as unknown as Rpc<GetBlockApi>;
 
 function assertBase(
     response: {
-        blockhash: string;
         blockHeight: bigint;
         blockTime: number;
+        blockhash: string;
         parentSlot: bigint;
         previousBlockhash: string;
     } & { [key: string]: unknown },
@@ -261,10 +261,10 @@ async () => {
     type ExpectedMetaForAccountsBase = {
         err: TransactionError | null;
         fee: LamportsUnsafeBeyond2Pow53Minus1;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         status: TransactionStatus;
     };
 
@@ -287,7 +287,7 @@ async () => {
             accountKeys: readonly Readonly<{
                 pubkey: string;
                 signer: boolean;
-                source: 'transaction' | 'lookupTable';
+                source: 'lookupTable' | 'transaction';
                 writable: boolean;
             }>[];
             signatures: readonly Base58EncodedBytes[];
@@ -515,15 +515,15 @@ async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
-        rewards: readonly Reward[] | null;
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
+        rewards: readonly Reward[] | null;
         status: TransactionStatus;
     };
 
@@ -537,8 +537,8 @@ async () => {
             | (ExpectedMetaForFullBase58 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Address[];
                           readonly: readonly Address[];
+                          writable: readonly Address[];
                       };
                   }>)
             | null;
@@ -739,15 +739,15 @@ async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
-        rewards: readonly Reward[] | null;
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
+        rewards: readonly Reward[] | null;
         status: TransactionStatus;
     };
 
@@ -761,8 +761,8 @@ async () => {
             | (ExpectedMetaForFullBase64 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Address[];
                           readonly: readonly Address[];
+                          writable: readonly Address[];
                       };
                   }>)
             | null;
@@ -907,8 +907,8 @@ async () => {
 
     type ExpectedParsedTransactionInstruction = Readonly<{
         parsed: {
-            type: string;
             info?: object;
+            type: string;
         };
         program: string;
         programId: Address;
@@ -933,22 +933,22 @@ async () => {
             instructions: readonly ExpectedTransactionInstructionForFullJsonParsed[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
-        rewards: readonly Reward[] | null;
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
+        rewards: readonly Reward[] | null;
         status: TransactionStatus;
     };
 
     type ExpectedMetaForFullJsonParsedLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Address[];
             readonly: readonly Address[];
+            writable: readonly Address[];
         };
     }>;
 
@@ -1084,9 +1084,9 @@ async () => {
     }
 
     type ExpectedTransactionInstructionForFullJson = {
-        programIdIndex: number;
         accounts: readonly number[];
         data: Base58EncodedBytes;
+        programIdIndex: number;
     };
 
     type ExpectedMetaForFullJsonBase = {
@@ -1098,22 +1098,22 @@ async () => {
             instructions: readonly ExpectedTransactionInstructionForFullJson[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
-        rewards: readonly Reward[] | null;
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
+        rewards: readonly Reward[] | null;
         status: TransactionStatus;
     };
 
     type ExpectedMetaForFullJsonLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Address[];
             readonly: readonly Address[];
+            writable: readonly Address[];
         };
     }>;
 

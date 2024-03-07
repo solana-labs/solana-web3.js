@@ -5,6 +5,16 @@ import type { Address } from '@solana/addresses';
  */
 export type Program<TAddress extends string = string> = {
     /**
+     * The base58 address of the program.
+     */
+    address: Address<TAddress>;
+
+    /**
+     * Retrieves a program-specific error from a given error code.
+     */
+    getErrorFromCode?: (code: number, cause?: Error) => Error;
+
+    /**
      * A unique name for the Program.
      *
      * To avoid conflict with other organizations, it is recommended
@@ -14,16 +24,6 @@ export type Program<TAddress extends string = string> = {
      * `splMemo` or `splToken`.
      */
     name: string;
-
-    /**
-     * The base58 address of the program.
-     */
-    address: Address<TAddress>;
-
-    /**
-     * Retrieves a program-specific error from a given error code.
-     */
-    getErrorFromCode?: (code: number, cause?: Error) => Error;
 };
 
 /**

@@ -18,12 +18,12 @@ import type { TransactionVersion } from '@solana/transactions';
 // API response types
 
 type GetBlockApiResponseBase = Readonly<{
-    /** the blockhash of this block */
-    blockhash: Blockhash;
     /** The number of blocks beneath this block */
     blockHeight: U64UnsafeBeyond2Pow53Minus1;
     /** The number of blocks beneath this block */
     blockTime: UnixTimestamp;
+    /** the blockhash of this block */
+    blockhash: Blockhash;
     /** The slot index of this block's parent */
     parentSlot: Slot;
     /** The blockhash of this block's parent */

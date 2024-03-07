@@ -11,22 +11,22 @@ export interface ITransactionWithFeePayer<TAddress extends string = string> {
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayer: Address<TFeePayerAddress>,
     transaction:
-        | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
-): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithFeePayer<TFeePayerAddress>;
+        | (ITransactionWithFeePayer<string> & ITransactionWithSignatures & TTransaction)
+        | (ITransactionWithSignatures & TTransaction),
+): ITransactionWithFeePayer<TFeePayerAddress> & Omit<TTransaction, keyof ITransactionWithSignatures>;
 
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayer: Address<TFeePayerAddress>,
-    transaction: TTransaction | (TTransaction & ITransactionWithFeePayer<string>),
-): TTransaction & ITransactionWithFeePayer<TFeePayerAddress>;
+    transaction: TTransaction | (ITransactionWithFeePayer<string> & TTransaction),
+): ITransactionWithFeePayer<TFeePayerAddress> & TTransaction;
 
 export function setTransactionFeePayer<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayer: Address<TFeePayerAddress>,
     transaction:
         | TTransaction
-        | (TTransaction & ITransactionWithFeePayer<string>)
-        | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
+        | (ITransactionWithFeePayer<string> & ITransactionWithSignatures & TTransaction)
+        | (ITransactionWithFeePayer<string> & TTransaction)
+        | (ITransactionWithSignatures & TTransaction),
 ) {
     if ('feePayer' in transaction && feePayer === transaction.feePayer) {
         return transaction;

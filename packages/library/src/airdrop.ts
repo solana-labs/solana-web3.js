@@ -17,7 +17,7 @@ type AirdropFunction = (
 ) => Promise<Signature>;
 
 type AirdropFactoryConfig = Readonly<{
-    rpc: Rpc<RequestAirdropApi & GetSignatureStatusesApi>;
+    rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi>;
     rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>;
 }>;
 

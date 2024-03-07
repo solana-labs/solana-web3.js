@@ -1,10 +1,10 @@
 import type { Commitment } from '@solana/rpc-types';
 
 type Config = Readonly<{
-    params: unknown[];
     commitmentPropertyName: string;
     optionsObjectPositionInParams: number;
     overrideCommitment?: Commitment;
+    params: unknown[];
 }>;
 
 export function applyDefaultCommitment({

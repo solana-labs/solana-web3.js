@@ -8,10 +8,10 @@ import { TransactionSigner } from './transaction-signer';
 /** Attaches the provided signers to the account metas of an instruction when applicable. */
 export function addSignersToInstruction<TInstruction extends IInstruction>(
     signers: TransactionSigner[],
-    instruction: TInstruction | (TInstruction & IInstructionWithSigners),
-): TInstruction & IInstructionWithSigners {
+    instruction: TInstruction | (IInstructionWithSigners & TInstruction),
+): IInstructionWithSigners & TInstruction {
     if (!instruction.accounts || instruction.accounts.length === 0) {
-        return instruction as TInstruction & IInstructionWithSigners;
+        return instruction as IInstructionWithSigners & TInstruction;
     }
 
     const signerByAddress = new Map(deduplicateSigners(signers).map(signer => [signer.address, signer]));
@@ -30,10 +30,10 @@ export function addSignersToInstruction<TInstruction extends IInstruction>(
 /** Attaches the provided signers to the account metas of a transaction when applicable. */
 export function addSignersToTransaction<TTransaction extends BaseTransaction>(
     signers: TransactionSigner[],
-    transaction: TTransaction | (TTransaction & ITransactionWithSigners),
-): TTransaction & ITransactionWithSigners {
+    transaction: TTransaction | (ITransactionWithSigners & TTransaction),
+): ITransactionWithSigners & TTransaction {
     if (transaction.instructions.length === 0) {
-        return transaction as TTransaction & ITransactionWithSigners;
+        return transaction as ITransactionWithSigners & TTransaction;
     }
 
     return Object.freeze({

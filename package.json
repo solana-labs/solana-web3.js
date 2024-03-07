@@ -15,8 +15,8 @@
     },
     "devDependencies": {
         "@solana/build-scripts": "workspace:*",
-        "@solana/eslint-config-solana": "^1.0.2",
-        "@solana/prettier-config-solana": "^0.0.4",
+        "@solana/eslint-config-solana": "^3.0.0",
+        "@solana/prettier-config-solana": "0.0.4",
         "@solana/test-config": "workspace:*",
         "@solana/test-matchers": "workspace:*",
         "@solana/tsconfig": "workspace:*",

@@ -61,13 +61,13 @@ export type VariableSizeDecoder<TTo> = BaseDecoder<TTo> & {
  */
 export type Decoder<TTo> = FixedSizeDecoder<TTo> | VariableSizeDecoder<TTo>;
 
-export type FixedSizeCodec<TFrom, TTo extends TFrom = TFrom, TSize extends number = number> = FixedSizeEncoder<
-    TFrom,
+export type FixedSizeCodec<TFrom, TTo extends TFrom = TFrom, TSize extends number = number> = FixedSizeDecoder<
+    TTo,
     TSize
 > &
-    FixedSizeDecoder<TTo, TSize>;
+    FixedSizeEncoder<TFrom, TSize>;
 
-export type VariableSizeCodec<TFrom, TTo extends TFrom = TFrom> = VariableSizeEncoder<TFrom> & VariableSizeDecoder<TTo>;
+export type VariableSizeCodec<TFrom, TTo extends TFrom = TFrom> = VariableSizeDecoder<TTo> & VariableSizeEncoder<TFrom>;
 
 /**
  * An object that can encode and decode a value to and from a `Uint8Array`.
@@ -130,20 +130,20 @@ export function createDecoder<TTo>(
 
 /** Fills the missing `encode` and `decode` function using the existing `write` and `read` functions. */
 export function createCodec<TFrom, TTo extends TFrom = TFrom, TSize extends number = number>(
-    codec: Omit<FixedSizeCodec<TFrom, TTo, TSize>, 'encode' | 'decode'>,
+    codec: Omit<FixedSizeCodec<TFrom, TTo, TSize>, 'decode' | 'encode'>,
 ): FixedSizeCodec<TFrom, TTo, TSize>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
-    codec: Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
+    codec: Omit<VariableSizeCodec<TFrom, TTo>, 'decode' | 'encode'>,
 ): VariableSizeCodec<TFrom, TTo>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
     codec:
-        | Omit<FixedSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
-        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
+        | Omit<FixedSizeCodec<TFrom, TTo>, 'decode' | 'encode'>
+        | Omit<VariableSizeCodec<TFrom, TTo>, 'decode' | 'encode'>,
 ): Codec<TFrom, TTo>;
 export function createCodec<TFrom, TTo extends TFrom = TFrom>(
     codec:
-        | Omit<FixedSizeCodec<TFrom, TTo>, 'encode' | 'decode'>
-        | Omit<VariableSizeCodec<TFrom, TTo>, 'encode' | 'decode'>,
+        | Omit<FixedSizeCodec<TFrom, TTo>, 'decode' | 'encode'>
+        | Omit<VariableSizeCodec<TFrom, TTo>, 'decode' | 'encode'>,
 ): Codec<TFrom, TTo> {
     return Object.freeze({
         ...codec,

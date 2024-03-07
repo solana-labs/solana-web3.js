@@ -1,7 +1,7 @@
 export type MainnetUrl = string & { '~cluster': 'mainnet' };
 export type DevnetUrl = string & { '~cluster': 'devnet' };
 export type TestnetUrl = string & { '~cluster': 'testnet' };
-export type ClusterUrl = string | MainnetUrl | DevnetUrl | TestnetUrl;
+export type ClusterUrl = DevnetUrl | MainnetUrl | TestnetUrl | string;
 
 export function mainnet(putativeString: string): MainnetUrl {
     return putativeString as MainnetUrl;

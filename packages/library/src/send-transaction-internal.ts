@@ -23,7 +23,7 @@ interface SendAndConfirmDurableNonceTransactionConfig
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: SendableTransaction & IDurableNonceTransaction;
+    transaction: IDurableNonceTransaction & SendableTransaction;
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
@@ -35,7 +35,7 @@ interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: SendableTransaction & ITransactionWithBlockhashLifetime;
+    transaction: ITransactionWithBlockhashLifetime & SendableTransaction;
 }
 
 interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding {
@@ -49,9 +49,9 @@ interface SendTransactionConfigWithoutEncoding
     extends Omit<NonNullable<Parameters<SendTransactionApi['sendTransaction']>[1]>, 'encoding'> {}
 
 export type SendableTransaction = BaseTransaction &
-    (ITransactionWithBlockhashLifetime | IDurableNonceTransaction) &
+    IFullySignedTransaction &
     ITransactionWithFeePayer &
-    IFullySignedTransaction;
+    (IDurableNonceTransaction | ITransactionWithBlockhashLifetime);
 
 function getSendTransactionConfigWithAdjustedPreflightCommitment(
     commitment: Commitment,

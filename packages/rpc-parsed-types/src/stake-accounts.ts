@@ -5,29 +5,29 @@ import { RpcParsedType } from './rpc-parsed-type';
 
 type JsonParsedStakeAccount = Readonly<{
     meta: Readonly<{
-        rentExemptReserve: StringifiedBigInt;
         authorized: Readonly<{
             staker: Address;
             withdrawer: Address;
         }>;
         lockup: Readonly<{
-            unixTimestamp: UnixTimestamp;
-            epoch: bigint;
             custodian: Address;
+            epoch: bigint;
+            unixTimestamp: UnixTimestamp;
         }>;
+        rentExemptReserve: StringifiedBigInt;
     }>;
     stake: Readonly<{
+        creditsObserved: bigint;
         delegation: Readonly<{
-            voter: Address;
-            stake: StringifiedBigInt;
             activationEpoch: StringifiedBigInt;
             deactivationEpoch: StringifiedBigInt;
+            stake: StringifiedBigInt;
+            voter: Address;
             warmupCooldownRate: number;
         }>;
-        creditsObserved: bigint;
     }> | null;
 }>;
 
 export type JsonParsedStakeProgramAccount =
-    | RpcParsedType<'initialized', JsonParsedStakeAccount>
-    | RpcParsedType<'delegated', JsonParsedStakeAccount>;
+    | RpcParsedType<'delegated', JsonParsedStakeAccount>
+    | RpcParsedType<'initialized', JsonParsedStakeAccount>;

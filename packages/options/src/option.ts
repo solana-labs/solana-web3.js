@@ -4,7 +4,7 @@
  * - <code>{@link Some}<T></code>: Meaning there is a value of type T.
  * - <code>{@link None}</code>: Meaning there is no value.
  */
-export type Option<T> = Some<T> | None;
+export type Option<T> = None | Some<T>;
 
 /**
  * Defines a looser type that can be used when serializing an {@link Option}.

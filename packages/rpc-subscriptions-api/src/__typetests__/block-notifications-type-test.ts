@@ -242,8 +242,8 @@ async () => {
         // @ts-expect-error no rewards
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -255,8 +255,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
@@ -292,8 +292,8 @@ async () => {
         // @ts-expect-error no rewards
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -307,8 +307,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
@@ -319,8 +319,8 @@ async () => {
         transactionDetails: 'signatures',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -330,8 +330,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
@@ -344,8 +344,8 @@ async () => {
         transactionDetails: 'signatures',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -357,8 +357,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
@@ -370,8 +370,8 @@ async () => {
         transactionDetails: 'signatures',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -382,8 +382,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
@@ -396,8 +396,8 @@ async () => {
         transactionDetails: 'signatures',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithSignatures &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithSignatures
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -409,18 +409,18 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithSignatures &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithSignatures
         >
     >;
 
     type ExpectedMetaForAccountsBase = {
         err: TransactionError | null;
         fee: LamportsUnsafeBeyond2Pow53Minus1;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         status: TransactionStatus;
     };
 
@@ -443,7 +443,7 @@ async () => {
             accountKeys: readonly Readonly<{
                 pubkey: string;
                 signer: boolean;
-                source: 'transaction' | 'lookupTable';
+                source: 'lookupTable' | 'transaction';
                 writable: boolean;
             }>[];
             signatures: readonly Base58EncodedBytes[];
@@ -617,8 +617,8 @@ async () => {
         transactionDetails: 'accounts',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -630,8 +630,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned>
         >
     >;
 
@@ -646,8 +646,8 @@ async () => {
         transactionDetails: 'accounts',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -660,8 +660,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseVersioned>
         >
     >;
 
@@ -673,8 +673,8 @@ async () => {
         transactionDetails: 'accounts',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -684,8 +684,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy>
         >
     >;
 
@@ -698,8 +698,8 @@ async () => {
         transactionDetails: 'accounts',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -710,8 +710,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForAccountsBaseLegacy>
         >
     >;
 
@@ -728,13 +728,13 @@ async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
         rewards: readonly Reward[] | null;
         status: TransactionStatus;
@@ -750,8 +750,8 @@ async () => {
             | (ExpectedMetaForFullBase58 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Address[];
                           readonly: readonly Address[];
+                          writable: readonly Address[];
                       };
                   }>)
             | null;
@@ -909,8 +909,8 @@ async () => {
         showRewards: true,
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Versioned> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Versioned>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -922,8 +922,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Versioned> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Versioned>
         >
     >;
 
@@ -937,8 +937,8 @@ async () => {
         encoding: 'base58',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -948,8 +948,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy>
         >
     >;
 
@@ -964,8 +964,8 @@ async () => {
         showRewards: true,
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -976,8 +976,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase58Legacy>
         >
     >;
 
@@ -994,13 +994,13 @@ async () => {
             }>[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
         rewards: readonly Reward[] | null;
         status: TransactionStatus;
@@ -1016,8 +1016,8 @@ async () => {
             | (ExpectedMetaForFullBase64 &
                   Readonly<{
                       loadedAddresses: {
-                          writable: readonly Address[];
                           readonly: readonly Address[];
+                          writable: readonly Address[];
                       };
                   }>)
             | null;
@@ -1148,8 +1148,8 @@ async () => {
         maxSupportedTransactionVersion: 0,
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -1160,8 +1160,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy>
         >
     >;
 
@@ -1175,8 +1175,8 @@ async () => {
         encoding: 'base64',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -1186,15 +1186,15 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullBase64Legacy>
         >
     >;
 
     type ExpectedParsedTransactionInstruction = Readonly<{
         parsed: {
-            type: string;
             info?: object;
+            type: string;
         };
         program: string;
         programId: Address;
@@ -1219,13 +1219,13 @@ async () => {
             instructions: readonly ExpectedTransactionInstructionForFullJsonParsed[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
         rewards: readonly Reward[] | null;
         status: TransactionStatus;
@@ -1233,8 +1233,8 @@ async () => {
 
     type ExpectedMetaForFullJsonParsedLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Address[];
             readonly: readonly Address[];
+            writable: readonly Address[];
         };
     }>;
 
@@ -1345,8 +1345,8 @@ async () => {
         maxSupportedTransactionVersion: 0,
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedVersioned> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedVersioned>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -1357,8 +1357,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedVersioned> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedVersioned>
         >
     >;
 
@@ -1372,8 +1372,8 @@ async () => {
         encoding: 'jsonParsed',
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -1383,15 +1383,15 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonParsedLegacy>
         >
     >;
 
     type ExpectedTransactionInstructionForFullJson = {
-        programIdIndex: number;
         accounts: readonly number[];
         data: Base58EncodedBytes;
+        programIdIndex: number;
     };
 
     type ExpectedMetaForFullJsonBase = {
@@ -1403,13 +1403,13 @@ async () => {
             instructions: readonly ExpectedTransactionInstructionForFullJson[];
         }>[];
         logMessages: readonly string[] | null;
-        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
         postBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
-        preTokenBalances?: readonly TokenBalance[];
         postTokenBalances?: readonly TokenBalance[];
+        preBalances: readonly LamportsUnsafeBeyond2Pow53Minus1[];
+        preTokenBalances?: readonly TokenBalance[];
         returnData?: Readonly<{
-            programId: Address;
             data: Base64EncodedDataResponse;
+            programId: Address;
         }>;
         rewards: readonly Reward[] | null;
         status: TransactionStatus;
@@ -1417,8 +1417,8 @@ async () => {
 
     type ExpectedMetaForFullJsonLoadedAddresses = Readonly<{
         loadedAddresses: {
-            writable: readonly Address[];
             readonly: readonly Address[];
+            writable: readonly Address[];
         };
     }>;
 
@@ -1535,8 +1535,8 @@ async () => {
         maxSupportedTransactionVersion: 0,
     }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', {
@@ -1546,8 +1546,8 @@ async () => {
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
         >
     >;
 
@@ -1558,32 +1558,32 @@ async () => {
     // Transaction details defaults to `full`
     rpcSubscriptions.blockNotifications('all') satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all')
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
         >
     >;
 
     // Twenty-fourth overload with configs
     rpcSubscriptions.blockNotifications('all', { commitment: 'confirmed' }) satisfies PendingRpcSubscriptionsRequest<
         BlockNotificationsApiNotificationBase &
-            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-            BlockNotificationsApiNotificationWithRewards
+            BlockNotificationsApiNotificationWithRewards &
+            BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
     >;
     rpcSubscriptions
         .blockNotifications('all', { commitment: 'confirmed' })
         .subscribe({ abortSignal: new AbortController().signal }) satisfies Promise<
         AsyncIterable<
             BlockNotificationsApiNotificationBase &
-                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy> &
-                BlockNotificationsApiNotificationWithRewards
+                BlockNotificationsApiNotificationWithRewards &
+                BlockNotificationsApiNotificationWithTransactions<ExpectedTransactionForFullJsonLegacy>
         >
     >;
 };

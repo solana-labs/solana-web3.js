@@ -19,22 +19,22 @@ export interface ITransactionWithFeePayerSigner<
 export function setTransactionFeePayerSigner<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayerSigner: TransactionSigner<TFeePayerAddress>,
     transaction:
-        | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
-): Omit<TTransaction, keyof ITransactionWithSignatures> & ITransactionWithFeePayerSigner<TFeePayerAddress>;
+        | (ITransactionWithFeePayer<string> & ITransactionWithSignatures & TTransaction)
+        | (ITransactionWithSignatures & TTransaction),
+): ITransactionWithFeePayerSigner<TFeePayerAddress> & Omit<TTransaction, keyof ITransactionWithSignatures>;
 
 export function setTransactionFeePayerSigner<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayerSigner: TransactionSigner<TFeePayerAddress>,
-    transaction: TTransaction | (TTransaction & ITransactionWithFeePayer<string>),
-): TTransaction & ITransactionWithFeePayerSigner<TFeePayerAddress>;
+    transaction: TTransaction | (ITransactionWithFeePayer<string> & TTransaction),
+): ITransactionWithFeePayerSigner<TFeePayerAddress> & TTransaction;
 
 export function setTransactionFeePayerSigner<TFeePayerAddress extends string, TTransaction extends BaseTransaction>(
     feePayerSigner: TransactionSigner<TFeePayerAddress>,
     transaction:
         | TTransaction
-        | (TTransaction & ITransactionWithFeePayer<string>)
-        | (TTransaction & ITransactionWithSignatures)
-        | (TTransaction & ITransactionWithFeePayer<string> & ITransactionWithSignatures),
+        | (ITransactionWithFeePayer<string> & ITransactionWithSignatures & TTransaction)
+        | (ITransactionWithFeePayer<string> & TTransaction)
+        | (ITransactionWithSignatures & TTransaction),
 ) {
     if ('feePayer' in transaction && feePayerSigner.address === transaction.feePayer) {
         if ('feePayerSigner' in transaction) return transaction;

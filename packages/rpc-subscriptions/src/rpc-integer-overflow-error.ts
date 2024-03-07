@@ -32,7 +32,7 @@ export function createSolanaJsonRpcIntegerOverflowError(
             : undefined;
     const error = new SolanaError(SOLANA_ERROR__RPC__INTEGER_OVERFLOW, {
         argumentLabel,
-        keyPath: keyPath as readonly (string | number | symbol)[],
+        keyPath: keyPath as readonly (number | string | symbol)[],
         methodName,
         optionalPathLabel: path ? ` at path \`${path}\`` : '',
         value,

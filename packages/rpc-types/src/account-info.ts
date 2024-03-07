@@ -40,18 +40,16 @@ export type AccountInfoWithBase64EncodedZStdCompressedData = Readonly<{
 
 export type AccountInfoWithJsonData = Readonly<{
     data:
+        | Base64EncodedDataResponse // If `jsonParsed` encoding is requested but a parser cannot be found for the given account the `data` field falls back to `base64`.
         | Readonly<{
-              // Name of the program that owns this account.
-              program: string;
               parsed: {
                   info?: object;
                   type: string;
               };
+              // Name of the program that owns this account.
+              program: string;
               space: U64UnsafeBeyond2Pow53Minus1;
-          }>
-        // If `jsonParsed` encoding is requested but a parser cannot be found for the given
-        // account the `data` field falls back to `base64`.
-        | Base64EncodedDataResponse;
+          }>;
 }>;
 
 export type AccountInfoWithPubkey<TAccount extends AccountInfoBase> = Readonly<{

@@ -92,9 +92,9 @@ import {
 
 {
     // [isVariableSize]: It works with codec sizes only.
-    const codec = {} as { fixedSize: 42 } | { maxSize?: number; foo: 'bar' };
+    const codec = {} as { fixedSize: 42 } | { foo: 'bar'; maxSize?: number };
     if (isVariableSize(codec)) {
-        codec satisfies { maxSize?: number; foo: 'bar' };
+        codec satisfies { foo: 'bar'; maxSize?: number };
     }
 }
 
@@ -107,7 +107,7 @@ import {
 
 {
     // [assertIsVariableSize]: It works with codec sizes only.
-    const codec = {} as { fixedSize: 42 } | { maxSize?: number; foo: 'bar' };
+    const codec = {} as { fixedSize: 42 } | { foo: 'bar'; maxSize?: number };
     assertIsVariableSize(codec);
-    codec satisfies { maxSize?: number; foo: 'bar' };
+    codec satisfies { foo: 'bar'; maxSize?: number };
 }

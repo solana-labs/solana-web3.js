@@ -154,9 +154,9 @@ export function setTransactionLifetimeUsingDurableNonce<
         nonceAccountAddress,
         nonceAuthorityAddress,
     }: DurableNonceConfig<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>,
-    transaction: TTransaction | (TTransaction & IDurableNonceTransaction),
-): Omit<TTransaction, keyof ITransactionWithSignatures> &
-    IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> {
+    transaction: TTransaction | (IDurableNonceTransaction & TTransaction),
+): IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
+    Omit<TTransaction, keyof ITransactionWithSignatures> {
     let newInstructions: [
         AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
         ...IInstruction[],
@@ -166,8 +166,12 @@ export function setTransactionLifetimeUsingDurableNonce<
     if (firstInstruction && isAdvanceNonceAccountInstruction(firstInstruction)) {
         if (isAdvanceNonceAccountInstructionForNonce(firstInstruction, nonceAccountAddress, nonceAuthorityAddress)) {
             if (isDurableNonceTransaction(transaction) && transaction.lifetimeConstraint.nonce === nonce) {
-                return transaction as TTransaction &
-                    IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+                return transaction as IDurableNonceTransaction<
+                    TNonceAccountAddress,
+                    TNonceAuthorityAddress,
+                    TNonceValue
+                > &
+                    TTransaction;
             } else {
                 // we already have the right first instruction, leave it as-is
                 newInstructions = [firstInstruction, ...transaction.instructions.slice(1)];
@@ -193,7 +197,7 @@ export function setTransactionLifetimeUsingDurableNonce<
         lifetimeConstraint: {
             nonce,
         },
-    } as TTransaction & IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>;
+    } as IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> & TTransaction;
     Object.freeze(out);
     return out;
 }

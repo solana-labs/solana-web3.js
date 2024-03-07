@@ -15,15 +15,15 @@ import type {
 } from '@solana/rpc-types';
 
 type ProgramNotificationsMemcmpFilterBase58 = Readonly<{
-    offset: U64UnsafeBeyond2Pow53Minus1;
     bytes: Base58EncodedBytes;
     encoding: 'base58';
+    offset: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
 type ProgramNotificationsMemcmpFilterBase64 = Readonly<{
-    offset: U64UnsafeBeyond2Pow53Minus1;
     bytes: Base64EncodedBytes;
     encoding: 'base64';
+    offset: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
 type ProgramNotificationsDatasizeFilter = Readonly<{
@@ -32,8 +32,8 @@ type ProgramNotificationsDatasizeFilter = Readonly<{
 
 type ProgramNotificationsApiNotificationBase<TData> = SolanaRpcResponse<
     Readonly<{
-        pubkey: Address;
         account: AccountInfoBase & TData;
+        pubkey: Address;
     }>
 >;
 
@@ -41,9 +41,9 @@ type ProgramNotificationsApiCommonConfig = Readonly<{
     commitment?: Commitment;
     // The resultant account must meet ALL filter criteria to be included in the returned results
     filters?: readonly (
+        | ProgramNotificationsDatasizeFilter
         | ProgramNotificationsMemcmpFilterBase58
         | ProgramNotificationsMemcmpFilterBase64
-        | ProgramNotificationsDatasizeFilter
     )[];
 }>;
 

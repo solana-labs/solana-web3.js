@@ -16,12 +16,12 @@ export interface DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> exten
  */
 function normalizeHeaders<T extends Record<string, string>>(
     headers: T,
-): { [K in keyof T & string as Lowercase<K>]: T[K] } {
+): { [K in string & keyof T as Lowercase<K>]: T[K] } {
     const out: Record<string, string> = {};
     for (const headerName in headers) {
         out[headerName.toLowerCase()] = headers[headerName];
     }
-    return out as { [K in keyof T & string as Lowercase<K>]: T[K] };
+    return out as { [K in string & keyof T as Lowercase<K>]: T[K] };
 }
 
 export function createDefaultRpcTransport<TClusterUrl extends ClusterUrl>(

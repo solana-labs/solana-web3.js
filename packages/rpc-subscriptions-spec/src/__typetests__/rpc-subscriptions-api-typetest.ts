@@ -4,8 +4,8 @@ type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
     circulatingSupply: number;
     description: string;
-    erc721: boolean;
     erc1155: boolean;
+    erc721: boolean;
     genesisBlock: string;
     genesisTransaction: string;
     name: string;

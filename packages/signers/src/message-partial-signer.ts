@@ -17,16 +17,16 @@ export type MessagePartialSigner<TAddress extends string = string> = Readonly<{
 
 /** Checks whether the provided value implements the {@link MessagePartialSigner} interface. */
 export function isMessagePartialSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): value is MessagePartialSigner<TAddress> {
     return 'signMessages' in value && typeof value.signMessages === 'function';
 }
 
 /** Asserts that the provided value implements the {@link MessagePartialSigner} interface. */
 export function assertIsMessagePartialSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): asserts value is MessagePartialSigner<TAddress> {
     if (!isMessagePartialSigner(value)) {
         throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, {

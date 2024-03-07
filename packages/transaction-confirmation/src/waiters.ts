@@ -14,7 +14,7 @@ import { getTimeoutPromise } from './confirmation-strategy-timeout';
 
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseTransactionConfirmationStrategyConfig {
     getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;
-    transaction: ITransactionWithFeePayer & ITransactionWithSignatures & IDurableNonceTransaction;
+    transaction: IDurableNonceTransaction & ITransactionWithFeePayer & ITransactionWithSignatures;
 }
 
 interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig

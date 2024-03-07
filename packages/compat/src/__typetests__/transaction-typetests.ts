@@ -12,12 +12,12 @@ import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDura
 {
     const transaction = null as unknown as VersionedTransaction;
     const returned = fromVersionedTransactionWithBlockhash(transaction);
-    returned satisfies Transaction & ITransactionWithFeePayer & ITransactionWithBlockhashLifetime;
+    returned satisfies ITransactionWithBlockhashLifetime & ITransactionWithFeePayer & Transaction;
 }
 
 // Durable nonce
 {
     const transaction = null as unknown as VersionedTransaction;
     const returned = fromVersionedTransactionWithDurableNonce(transaction);
-    returned satisfies Transaction & ITransactionWithFeePayer & IDurableNonceTransaction;
+    returned satisfies IDurableNonceTransaction & ITransactionWithFeePayer & Transaction;
 }

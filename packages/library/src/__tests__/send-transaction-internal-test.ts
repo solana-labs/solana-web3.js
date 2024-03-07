@@ -24,9 +24,9 @@ const FOREVER_PROMISE = new Promise(() => {
 
 describe('sendAndConfirmTransaction', () => {
     const MOCK_TRANSACTION = {} as unknown as BaseTransaction &
-        ITransactionWithFeePayer &
         IFullySignedTransaction &
-        ITransactionWithBlockhashLifetime;
+        ITransactionWithBlockhashLifetime &
+        ITransactionWithFeePayer;
     let confirmRecentTransaction: jest.Mock;
     let createPendingRequest: jest.Mock;
     let rpc: Rpc<SendTransactionApi>;
@@ -181,9 +181,9 @@ describe('sendAndConfirmTransaction', () => {
 
 describe('sendAndConfirmDurableNonceTransaction', () => {
     const MOCK_DURABLE_NONCE_TRANSACTION = {} as unknown as BaseTransaction &
-        ITransactionWithFeePayer &
+        IDurableNonceTransaction &
         IFullySignedTransaction &
-        IDurableNonceTransaction;
+        ITransactionWithFeePayer;
     let confirmDurableNonceTransaction: jest.Mock;
     let createPendingRequest: jest.Mock;
     let rpc: Rpc<SendTransactionApi>;

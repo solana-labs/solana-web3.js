@@ -23,9 +23,15 @@ import { getUtf8Decoder, getUtf8Encoder } from './utf8';
 
 /** Defines the config for string codecs. */
 export type StringCodecConfig<
-    TPrefix extends NumberCodec | NumberEncoder | NumberDecoder,
-    TEncoding extends Codec<string> | Encoder<string> | Decoder<string>,
+    TPrefix extends NumberCodec | NumberDecoder | NumberEncoder,
+    TEncoding extends Codec<string> | Decoder<string> | Encoder<string>,
 > = {
+    /**
+     * The codec to use for encoding and decoding the content.
+     * @defaultValue UTF-8 encoding.
+     */
+    encoding?: TEncoding;
+
     /**
      * The size of the string. It can be one of the following:
      * - a {@link NumberCodec} that prefixes the string with its size.
@@ -34,12 +40,6 @@ export type StringCodecConfig<
      * @defaultValue u32 prefix.
      */
     size?: TPrefix | number | 'variable';
-
-    /**
-     * The codec to use for encoding and decoding the content.
-     * @defaultValue UTF-8 encoding.
-     */
-    encoding?: TEncoding;
 };
 
 /** Encodes strings from a given encoding and size strategy. */
@@ -48,8 +48,8 @@ export function getStringEncoder<TSize extends number>(
 ): FixedSizeEncoder<string, TSize>;
 export function getStringEncoder<TSize extends number>(
     config: StringCodecConfig<NumberEncoder, Encoder<string>> & {
-        size: 'variable';
         encoding: FixedSizeEncoder<string, TSize>;
+        size: 'variable';
     },
 ): FixedSizeEncoder<string, TSize>;
 export function getStringEncoder(
@@ -86,8 +86,8 @@ export function getStringDecoder<TSize extends number>(
 ): FixedSizeDecoder<string, TSize>;
 export function getStringDecoder<TSize extends number>(
     config: StringCodecConfig<NumberDecoder, Decoder<string>> & {
-        size: 'variable';
         encoding: FixedSizeDecoder<string, TSize>;
+        size: 'variable';
     },
 ): FixedSizeDecoder<string, TSize>;
 export function getStringDecoder(
@@ -126,8 +126,8 @@ export function getStringCodec<TSize extends number>(
 ): FixedSizeCodec<string, string, TSize>;
 export function getStringCodec<TSize extends number>(
     config: StringCodecConfig<NumberCodec, Codec<string>> & {
-        size: 'variable';
         encoding: FixedSizeCodec<string, string, TSize>;
+        size: 'variable';
     },
 ): FixedSizeCodec<string, string, TSize>;
 export function getStringCodec(config?: StringCodecConfig<NumberCodec, Codec<string>>): VariableSizeCodec<string>;

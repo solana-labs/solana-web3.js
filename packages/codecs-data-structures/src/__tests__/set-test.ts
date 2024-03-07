@@ -31,7 +31,7 @@ describe('getSetCodec', () => {
         expect(set(string()).read(b('0200000001000000610100000062'), 0)).toStrictEqual([new Set(['a', 'b']), 4 + 10]);
 
         // Different From and To types.
-        const setU64 = set<number | bigint, bigint>(u64());
+        const setU64 = set<bigint | number, bigint>(u64());
         expect(setU64.encode(new Set([2]))).toStrictEqual(b('010000000200000000000000'));
         expect(setU64.encode(new Set([2n]))).toStrictEqual(b('010000000200000000000000'));
         expect(setU64.read(b('010000000200000000000000'), 0)).toStrictEqual([new Set([2n]), 4 + 8]);
@@ -52,7 +52,7 @@ describe('getSetCodec', () => {
         expect(set(string(), { size: 2 }).read(b('01000000610100000062'), 0)).toStrictEqual([new Set(['a', 'b']), 10]);
 
         // Different From and To types.
-        const setU64 = set<number | bigint, bigint>(u64(), { size: 1 });
+        const setU64 = set<bigint | number, bigint>(u64(), { size: 1 });
         expect(setU64.encode(new Set([2]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.encode(new Set([2n]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.read(b('0200000000000000'), 0)).toStrictEqual([new Set([2n]), 8]);
@@ -98,7 +98,7 @@ describe('getSetCodec', () => {
         ]);
 
         // Different From and To types.
-        const setU64 = set<number | bigint, bigint>(u64(), remainder);
+        const setU64 = set<bigint | number, bigint>(u64(), remainder);
         expect(setU64.encode(new Set([2]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.encode(new Set([2n]))).toStrictEqual(b('0200000000000000'));
         expect(setU64.read(b('0200000000000000'), 0)).toStrictEqual([new Set([2n]), 8]);

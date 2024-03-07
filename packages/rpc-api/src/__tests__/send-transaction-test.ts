@@ -71,7 +71,7 @@ async function getSecretKey() {
 }
 
 describe('sendTransaction', () => {
-    let rpc: Rpc<SendTransactionApi & GetLatestBlockhashApi>;
+    let rpc: Rpc<GetLatestBlockhashApi & SendTransactionApi>;
     beforeEach(() => {
         rpc = createLocalhostSolanaRpc();
     });

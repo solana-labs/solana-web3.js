@@ -20,7 +20,7 @@ import {
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
 /** Defines the config for bytes codecs. */
-export type BytesCodecConfig<TSize extends NumberCodec | NumberEncoder | NumberDecoder> = {
+export type BytesCodecConfig<TSize extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
      * The size of the byte array. It can be one of the following:
      * - a {@link NumberSerializer} that prefixes the byte array with its size.

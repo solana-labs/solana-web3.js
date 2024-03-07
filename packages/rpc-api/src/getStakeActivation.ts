@@ -8,7 +8,7 @@ type GetStakeActivationApiResponse = Readonly<{
     /** Stake inactive during the epoch */
     inactive: U64UnsafeBeyond2Pow53Minus1;
     /** The stake account's activation state */
-    state: 'active' | 'inactive' | 'activating' | 'deactivating';
+    state: 'activating' | 'active' | 'deactivating' | 'inactive';
 }>;
 
 export interface GetStakeActivationApi extends RpcApiMethods {
@@ -19,9 +19,9 @@ export interface GetStakeActivationApi extends RpcApiMethods {
         address: Address,
         config?: Readonly<{
             commitment?: Commitment;
-            minContextSlot?: Slot;
             /** Defaults to current epoch */
             epoch?: U64UnsafeBeyond2Pow53Minus1;
+            minContextSlot?: Slot;
         }>,
     ): GetStakeActivationApiResponse;
 }

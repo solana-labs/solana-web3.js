@@ -16,13 +16,13 @@ type Config = Readonly<{
 type IteratorKey = symbol;
 type IteratorState =
     | {
-          __hasPolled: true;
-          onMessage: Parameters<ConstructorParameters<typeof Promise>[0]>[0];
-          onError: Parameters<ConstructorParameters<typeof Promise>[0]>[1];
-      }
-    | {
           __hasPolled: false;
           queuedMessages: unknown[];
+      }
+    | {
+          __hasPolled: true;
+          onError: Parameters<ConstructorParameters<typeof Promise>[0]>[1];
+          onMessage: Parameters<ConstructorParameters<typeof Promise>[0]>[0];
       };
 export type RpcWebSocketConnection = Readonly<{
     send(payload: unknown): Promise<void>;

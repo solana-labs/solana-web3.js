@@ -3,8 +3,8 @@ import { createRpcSubscriptionsApi, RpcSubscriptionsApiMethods } from '../rpc-su
 import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
 
 interface MySubscriptionApiMethods extends RpcSubscriptionsApiMethods {
-    foo(): number;
     bar(): string;
+    foo(): number;
 }
 
 const api = createRpcSubscriptionsApi<MySubscriptionApiMethods>();

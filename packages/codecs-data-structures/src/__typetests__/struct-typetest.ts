@@ -16,11 +16,11 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
     getStructEncoder([
         ['name', {} as FixedSizeEncoder<string>],
         ['age', {} as FixedSizeEncoder<number>],
-    ]) satisfies FixedSizeEncoder<{ name: string; age: number }>;
+    ]) satisfies FixedSizeEncoder<{ age: number; name: string }>;
     getStructEncoder([
         ['name', {} as VariableSizeEncoder<string>],
         ['age', {} as FixedSizeEncoder<number>],
-    ]) satisfies VariableSizeEncoder<{ name: string; age: number }>;
+    ]) satisfies VariableSizeEncoder<{ age: number; name: string }>;
     getStructEncoder([['age', getU32Encoder()]]) satisfies FixedSizeEncoder<{ age: number }>;
     getStructEncoder([['name', getStringEncoder()]]) satisfies VariableSizeEncoder<{ name: string }>;
 }
@@ -30,11 +30,11 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
     getStructDecoder([
         ['name', {} as FixedSizeDecoder<string>],
         ['age', {} as FixedSizeDecoder<number>],
-    ]) satisfies FixedSizeDecoder<{ name: string; age: number }>;
+    ]) satisfies FixedSizeDecoder<{ age: number; name: string }>;
     getStructDecoder([
         ['name', {} as VariableSizeDecoder<string>],
         ['age', {} as FixedSizeDecoder<number>],
-    ]) satisfies VariableSizeDecoder<{ name: string; age: number }>;
+    ]) satisfies VariableSizeDecoder<{ age: number; name: string }>;
     getStructDecoder([['age', getU32Decoder()]]) satisfies FixedSizeDecoder<{ age: number }>;
     getStructDecoder([['name', getStringDecoder()]]) satisfies VariableSizeDecoder<{ name: string }>;
 }
@@ -44,11 +44,11 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
     getStructCodec([
         ['name', {} as FixedSizeCodec<string>],
         ['age', {} as FixedSizeCodec<number>],
-    ]) satisfies FixedSizeCodec<{ name: string; age: number }>;
+    ]) satisfies FixedSizeCodec<{ age: number; name: string }>;
     getStructCodec([
         ['name', {} as VariableSizeCodec<string>],
         ['age', {} as FixedSizeCodec<number>],
-    ]) satisfies VariableSizeCodec<{ name: string; age: number }>;
+    ]) satisfies VariableSizeCodec<{ age: number; name: string }>;
     getStructCodec([['age', getU32Codec()]]) satisfies FixedSizeCodec<{ age: number }>;
     getStructCodec([['name', getStringCodec()]]) satisfies VariableSizeCodec<{ name: string }>;
 }
@@ -57,7 +57,7 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
     // [getStructEncoder]: It can infer complex struct types from fields.
     getStructEncoder([
         ['name', {} as VariableSizeEncoder<string>],
-        ['id', {} as FixedSizeEncoder<number | bigint>],
+        ['id', {} as FixedSizeEncoder<bigint | number>],
         [
             'address',
             getStructEncoder([
@@ -67,9 +67,9 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
             ]),
         ],
     ]) satisfies VariableSizeEncoder<{
+        address: { city: string; country: string; street: string };
+        id: bigint | number;
         name: string;
-        id: number | bigint;
-        address: { street: string; city: string; country: string };
     }>;
 }
 
@@ -87,9 +87,9 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
             ]),
         ],
     ]) satisfies VariableSizeDecoder<{
-        name: string;
+        address: { city: string; country: string; street: string };
         id: bigint;
-        address: { street: string; city: string; country: string };
+        name: string;
     }>;
 }
 
@@ -97,7 +97,7 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
     // [getStructCodec]: It can infer complex struct types from fields.
     getStructCodec([
         ['name', {} as VariableSizeCodec<string>],
-        ['id', {} as FixedSizeCodec<number | bigint, bigint>],
+        ['id', {} as FixedSizeCodec<bigint | number, bigint>],
         [
             'address',
             getStructCodec([
@@ -108,14 +108,14 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
         ],
     ]) satisfies VariableSizeCodec<
         {
+            address: { city: string; country: string; street: string };
+            id: bigint | number;
             name: string;
-            id: number | bigint;
-            address: { street: string; city: string; country: string };
         },
         {
-            name: string;
+            address: { city: string; country: string; street: string };
             id: bigint;
-            address: { street: string; city: string; country: string };
+            name: string;
         }
     >;
 }

@@ -1,5 +1,5 @@
 export type KeyPathWildcard = { readonly __brand: unique symbol };
-export type KeyPath = ReadonlyArray<KeyPathWildcard | number | string | KeyPath>;
+export type KeyPath = ReadonlyArray<KeyPath | KeyPathWildcard | number | string>;
 
 export const KEYPATH_WILDCARD = {} as KeyPathWildcard;
 
@@ -19,7 +19,7 @@ export function getTreeWalker(visitors: NodeVisitor[]) {
                 return traverse(element, nextState);
             });
         } else if (typeof node === 'object' && node !== null) {
-            const out: Record<string | number | symbol, unknown> = {};
+            const out: Record<number | string | symbol, unknown> = {};
             for (const propName in node) {
                 if (!Object.prototype.hasOwnProperty.call(node, propName)) {
                     continue;

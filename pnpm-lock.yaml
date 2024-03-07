@@ -17,10 +17,10 @@ importers:
         specifier: workspace:*
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
-        specifier: ^1.0.2
-        version: 1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.57.0)(typescript@5.2.2)
+        specifier: ^3.0.0
+        version: 3.0.0(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2)
       '@solana/prettier-config-solana':
-        specifier: ^0.0.4
+        specifier: 0.0.4
         version: 0.0.4(prettier@3.1.0)
       '@solana/test-config':
         specifier: workspace:*
@@ -3858,8 +3858,8 @@ packages:
       fastestsmallesttextencoderdecoder: 1.0.22
     dev: true
 
-  /@solana/eslint-config-solana@1.0.2(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint@8.57.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-/mBi2xFsX0fq3ukZ3ugA+Zh2+Ct+bh713ZSdOJAv1G7ARzyOEDxmiUz8TLzHu4joOC/3Ok4Yl7cjupOcIRzMHw==}
+  /@solana/eslint-config-solana@3.0.0(@typescript-eslint/eslint-plugin@6.13.2)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-K8qBl5LQRET4H0+JHEfawA5qB9bjkkgOUB0fUHJ6B8bPAvMkzfQ5f5U7udyFeDMH0LsJuL9XRUZuXU4h/l6HNw==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0
       '@typescript-eslint/parser': ^6.0.0
@@ -3868,6 +3868,7 @@ packages:
       eslint-plugin-react-hooks: ^4.6.0
       eslint-plugin-simple-import-sort: ^10.0.0
       eslint-plugin-sort-keys-fix: ^1.1.2
+      eslint-plugin-typescript-sort-keys: ^3.2.0
       typescript: ^5.1.6
     dependencies:
       '@typescript-eslint/eslint-plugin': 6.13.2(@typescript-eslint/parser@6.8.0)(eslint@8.57.0)(typescript@5.2.2)
@@ -3877,6 +3878,7 @@ packages:
       eslint-plugin-react-hooks: 4.6.0(eslint@8.57.0)
       eslint-plugin-simple-import-sort: 10.0.0(eslint@8.57.0)
       eslint-plugin-sort-keys-fix: 1.1.2
+      eslint-plugin-typescript-sort-keys: 3.2.0(@typescript-eslint/parser@6.8.0)(eslint@8.57.0)(typescript@5.2.2)
       typescript: 5.2.2
     dev: true
 

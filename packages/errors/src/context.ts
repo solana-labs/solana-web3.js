@@ -136,72 +136,96 @@ type DefaultUnspecifiedErrorContextToUndefined<T> = {
  */
 export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
     BasicInstructionErrorContext<
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__GENERIC_ERROR
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ARGUMENT
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_INSTRUCTION_DATA
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ACCOUNT_DATA
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_DATA_TOO_SMALL
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INSUFFICIENT_FUNDS
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INCORRECT_PROGRAM_ID
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MISSING_REQUIRED_SIGNATURE
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_ALREADY_INITIALIZED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNINITIALIZED_ACCOUNT
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNBALANCED_INSTRUCTION
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MODIFIED_PROGRAM_ID
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXTERNAL_ACCOUNT_LAMPORT_SPEND
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXTERNAL_ACCOUNT_DATA_MODIFIED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__READONLY_LAMPORT_CHANGE
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__READONLY_DATA_MODIFIED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__DUPLICATE_ACCOUNT_INDEX
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_MODIFIED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__RENT_EPOCH_MODIFIED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__NOT_ENOUGH_ACCOUNT_KEYS
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_DATA_SIZE_CHANGED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_NOT_EXECUTABLE
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_BORROW_FAILED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_BORROW_OUTSTANDING
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__DUPLICATE_ACCOUNT_OUT_OF_SYNC
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_DATA_SIZE_CHANGED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_DATA_TOO_SMALL
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_NOT_EXECUTABLE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_NOT_RENT_EXEMPT
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ARITHMETIC_OVERFLOW
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__CALL_DEPTH
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__COMPUTATIONAL_BUDGET_EXCEEDED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ERROR
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__DUPLICATE_ACCOUNT_INDEX
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__DUPLICATE_ACCOUNT_OUT_OF_SYNC
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_ACCOUNT_NOT_RENT_EXEMPT
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_DATA_MODIFIED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_LAMPORT_CHANGE
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_ACCOUNT_NOT_RENT_EXEMPT
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNSUPPORTED_PROGRAM_ID
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__CALL_DEPTH
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MISSING_ACCOUNT
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__REENTRANCY_NOT_ALLOWED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MAX_SEED_LENGTH_EXCEEDED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_SEEDS
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_REALLOC
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__COMPUTATIONAL_BUDGET_EXCEEDED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PRIVILEGE_ESCALATION
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_ENVIRONMENT_SETUP_FAILURE
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_FAILED_TO_COMPLETE
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_FAILED_TO_COMPILE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXECUTABLE_MODIFIED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXTERNAL_ACCOUNT_DATA_MODIFIED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__EXTERNAL_ACCOUNT_LAMPORT_SPEND
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__GENERIC_ERROR
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ILLEGAL_OWNER
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__IMMUTABLE
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INCORRECT_AUTHORITY
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_NOT_RENT_EXEMPT
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INCORRECT_PROGRAM_ID
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INSUFFICIENT_FUNDS
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ACCOUNT_DATA
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ACCOUNT_OWNER
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ARITHMETIC_OVERFLOW
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNSUPPORTED_SYSVAR
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__ILLEGAL_OWNER
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ARGUMENT
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_ERROR
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_INSTRUCTION_DATA
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_REALLOC
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__INVALID_SEEDS
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MAX_ACCOUNTS_DATA_ALLOCATIONS_EXCEEDED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MAX_ACCOUNTS_EXCEEDED
         | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MAX_INSTRUCTION_TRACE_LENGTH_EXCEEDED
-        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__BUILTIN_PROGRAMS_MUST_CONSUME_COMPUTE_UNITS
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MAX_SEED_LENGTH_EXCEEDED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MISSING_ACCOUNT
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MISSING_REQUIRED_SIGNATURE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__MODIFIED_PROGRAM_ID
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__NOT_ENOUGH_ACCOUNT_KEYS
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PRIVILEGE_ESCALATION
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_ENVIRONMENT_SETUP_FAILURE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_FAILED_TO_COMPILE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__PROGRAM_FAILED_TO_COMPLETE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__READONLY_DATA_MODIFIED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__READONLY_LAMPORT_CHANGE
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__REENTRANCY_NOT_ALLOWED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__RENT_EPOCH_MODIFIED
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNBALANCED_INSTRUCTION
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNINITIALIZED_ACCOUNT
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNSUPPORTED_PROGRAM_ID
+        | typeof SOLANA_ERROR__INSTRUCTION_ERROR__UNSUPPORTED_SYSVAR
     > & {
         [SOLANA_ERROR__ACCOUNTS__ACCOUNT_NOT_FOUND]: {
             address: string;
         };
+        [SOLANA_ERROR__ACCOUNTS__EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED]: {
+            addresses: string[];
+        };
+        [SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT]: {
+            address: string;
+        };
+        [SOLANA_ERROR__ACCOUNTS__FAILED_TO_DECODE_ACCOUNT]: {
+            address: string;
+        };
+        [SOLANA_ERROR__ACCOUNTS__ONE_OR_MORE_ACCOUNTS_NOT_FOUND]: {
+            addresses: string[];
+        };
+        [SOLANA_ERROR__ADDRESSES__INVALID_BASE58_ENCODED_ADDRESS]: {
+            putativeAddress: string;
+        };
         [SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH]: {
             actualLength: number;
         };
-        [SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE]: {
-            actualLength: number;
+        [SOLANA_ERROR__ADDRESSES__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED]: {
+            actual: number;
+            maxSeeds: number;
         };
-        [SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH]: {
+        [SOLANA_ERROR__ADDRESSES__MAX_PDA_SEED_LENGTH_EXCEEDED]: {
+            actual: number;
+            index: number;
+            maxSeedLength: number;
+        };
+        [SOLANA_ERROR__ADDRESSES__PDA_BUMP_SEED_OUT_OF_RANGE]: {
+            bump: number;
+        };
+        [SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE]: {
             actualLength: number;
         };
         [SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE]: {
@@ -214,18 +238,32 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
             codecDescription: string;
         };
+        [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]: {
+            decoderFixedSize: number;
+            encoderFixedSize: number;
+        };
+        [SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
+            decoderMaxSize: number | undefined;
+            encoderMaxSize: number | undefined;
+        };
         [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]: {
             discriminator: bigint | number;
             maxRange: number;
             minRange: number;
         };
-        [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]: {
-            decoderFixedSize: number;
-            encoderFixedSize: number;
+        [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]: {
+            bytesLength: number;
+            codecDescription: string;
+            expected: number;
         };
         [SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT]: {
             value: string;
             variants: string[];
+        };
+        [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
+            actual: bigint | number;
+            codecDescription: string;
+            expected: bigint | number;
         };
         [SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT]: {
             maxRange: number;
@@ -244,26 +282,6 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             min: bigint | number;
             value: bigint | number;
         };
-        [SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH]: {
-            decoderMaxSize: number | undefined;
-            encoderMaxSize: number | undefined;
-        };
-        [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]: {
-            bytesLength: number;
-            codecDescription: string;
-            expected: number;
-        };
-        [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
-            actual: bigint | number;
-            codecDescription: string;
-            expected: bigint | number;
-        };
-        [SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT]: {
-            address: string;
-        };
-        [SOLANA_ERROR__ACCOUNTS__FAILED_TO_DECODE_ACCOUNT]: {
-            address: string;
-        };
         [SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR]: {
             encodedData: string;
             index: number;
@@ -277,14 +295,33 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             index: number;
             instructionErrorContext?: unknown;
         };
-        [SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH]: {
-            byteLength: number;
+        [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS]: {
+            data?: Uint8Array;
+            programAddress: string;
+        };
+        [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA]: {
+            accountAddresses?: string[];
+            programAddress: string;
+        };
+        [SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH]: {
+            actualProgramAddress: string;
+            expectedProgramAddress: string;
+        };
+        [SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH]: {
+            actualLength: number;
+        };
+        [SOLANA_ERROR__INVALID_NONCE]: {
+            actualNonceValue: string;
+            expectedNonceValue: string;
         };
         [SOLANA_ERROR__INVARIANT_VIOLATION__CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING]: {
             cacheKey: string;
         };
         [SOLANA_ERROR__INVARIANT_VIOLATION__SWITCH_MUST_BE_EXHAUSTIVE]: {
             unexpectedValue: unknown;
+        };
+        [SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH]: {
+            byteLength: number;
         };
         [SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH]: {
             actualLength: number;
@@ -298,54 +335,32 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: {
             value: string;
         };
-        [SOLANA_ERROR__ADDRESSES__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED]: {
-            actual: number;
-            maxSeeds: number;
-        };
-        [SOLANA_ERROR__ADDRESSES__MAX_PDA_SEED_LENGTH_EXCEEDED]: {
-            actual: number;
-            index: number;
-            maxSeedLength: number;
-        };
-        [SOLANA_ERROR__ACCOUNTS__ONE_OR_MORE_ACCOUNTS_NOT_FOUND]: {
-            addresses: string[];
+        [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: {
+            value: string;
         };
         [SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND]: {
             nonceAccountAddress: string;
         };
-        [SOLANA_ERROR__INVALID_NONCE]: {
-            actualNonceValue: string;
-            expectedNonceValue: string;
+        [SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST]: {
+            notificationName: string;
         };
-        [SOLANA_ERROR__ADDRESSES__INVALID_BASE58_ENCODED_ADDRESS]: {
-            putativeAddress: string;
-        };
-        [SOLANA_ERROR__ACCOUNTS__EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED]: {
-            addresses: string[];
-        };
-        [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: {
-            value: string;
-        };
-        [SOLANA_ERROR__ADDRESSES__PDA_BUMP_SEED_OUT_OF_RANGE]: {
-            bump: number;
+        [SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT]: {
+            errorEvent: Event;
         };
         [SOLANA_ERROR__RPC__INTEGER_OVERFLOW]: {
             argumentLabel: string;
-            keyPath: readonly (string | number | symbol)[];
+            keyPath: readonly (number | string | symbol)[];
             methodName: string;
             optionalPathLabel: string;
             path?: string;
             value: bigint;
         };
-        [SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN]: {
-            headers: string[];
-        };
         [SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR]: {
             message: string;
             statusCode: number;
         };
-        [SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT]: {
-            errorEvent: Event;
+        [SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN]: {
+            headers: string[];
         };
         [SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS]: {
             address: string;
@@ -374,9 +389,6 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SIGNER]: {
             address: string;
         };
-        [SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST]: {
-            notificationName: string;
-        };
         [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: {
             value: number;
         };
@@ -392,6 +404,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN]: {
             errorName: string;
             transactionErrorContext?: unknown;
+        };
+        [SOLANA_ERROR__TRANSACTION__ADDRESS_MISSING]: {
+            index: number;
         };
         [SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING]: {
             lookupTableAddresses: string[];
@@ -410,26 +425,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]: {
             programAddress: string;
         };
-        [SOLANA_ERROR__TRANSACTION__ADDRESS_MISSING]: {
-            index: number;
-        };
         [SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING]: {
             addresses: string[];
         };
         [SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE]: {
             actualVersion: number;
-        };
-        [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS]: {
-            programAddress: string;
-            data?: Uint8Array;
-        };
-        [SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA]: {
-            programAddress: string;
-            accountAddresses?: string[];
-        };
-        [SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH]: {
-            actualProgramAddress: string;
-            expectedProgramAddress: string;
         };
     }
 >;

@@ -11,7 +11,7 @@ import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nul
 
 {
     // [getNullableEncoder]: It knows if the encoder is fixed size or variable size.
-    getNullableEncoder({} as FixedSizeEncoder<void, 0>) satisfies FixedSizeEncoder<void | null>;
+    getNullableEncoder({} as FixedSizeEncoder<void, 0>) satisfies FixedSizeEncoder<null | void>;
     getNullableEncoder({} as FixedSizeEncoder<string>, { fixed: true }) satisfies FixedSizeEncoder<string | null>;
     getNullableEncoder({} as FixedSizeEncoder<string>) satisfies VariableSizeEncoder<string | null>;
 
@@ -21,7 +21,7 @@ import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nul
 
 {
     // [getNullableDecoder]: It knows if the decoder is fixed size or variable size.
-    getNullableDecoder({} as FixedSizeDecoder<void, 0>) satisfies FixedSizeDecoder<void | null>;
+    getNullableDecoder({} as FixedSizeDecoder<void, 0>) satisfies FixedSizeDecoder<null | void>;
     getNullableDecoder({} as FixedSizeDecoder<string>, { fixed: true }) satisfies FixedSizeDecoder<string | null>;
     getNullableDecoder({} as FixedSizeDecoder<string>) satisfies VariableSizeDecoder<string | null>;
 
@@ -31,7 +31,7 @@ import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nul
 
 {
     // [getNullableCodec]: It knows if the codec is fixed size or variable size.
-    getNullableCodec({} as FixedSizeCodec<void, void, 0>) satisfies FixedSizeCodec<void | null>;
+    getNullableCodec({} as FixedSizeCodec<void, void, 0>) satisfies FixedSizeCodec<null | void>;
     getNullableCodec({} as FixedSizeCodec<string>, { fixed: true }) satisfies FixedSizeCodec<string | null>;
     getNullableCodec({} as FixedSizeCodec<string>) satisfies VariableSizeCodec<string | null>;
 

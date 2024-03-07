@@ -1,28 +1,28 @@
 import { Codec, Decoder, Encoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
 /** Defines a encoder for numbers and bigints. */
-export type NumberEncoder = Encoder<number> | Encoder<number | bigint>;
+export type NumberEncoder = Encoder<bigint | number> | Encoder<number>;
 
 /** Defines a fixed-size encoder for numbers and bigints. */
 export type FixedSizeNumberEncoder<TSize extends number = number> =
-    | FixedSizeEncoder<number, TSize>
-    | FixedSizeEncoder<number | bigint, TSize>;
+    | FixedSizeEncoder<bigint | number, TSize>
+    | FixedSizeEncoder<number, TSize>;
 
 /** Defines a decoder for numbers and bigints. */
-export type NumberDecoder = Decoder<number> | Decoder<bigint>;
+export type NumberDecoder = Decoder<bigint> | Decoder<number>;
 
 /** Defines a fixed-size decoder for numbers and bigints. */
 export type FixedSizeNumberDecoder<TSize extends number = number> =
-    | FixedSizeDecoder<number, TSize>
-    | FixedSizeDecoder<bigint, TSize>;
+    | FixedSizeDecoder<bigint, TSize>
+    | FixedSizeDecoder<number, TSize>;
 
 /** Defines a codec for numbers and bigints. */
-export type NumberCodec = Codec<number> | Codec<number | bigint, bigint>;
+export type NumberCodec = Codec<bigint | number, bigint> | Codec<number>;
 
 /** Defines a fixed-size codec for numbers and bigints. */
 export type FixedSizeNumberCodec<TSize extends number = number> =
-    | FixedSizeCodec<number, number, TSize>
-    | FixedSizeCodec<number | bigint, bigint, TSize>;
+    | FixedSizeCodec<bigint | number, bigint, TSize>
+    | FixedSizeCodec<number, number, TSize>;
 
 /** Defines the config for number codecs that use more than one byte. */
 export type NumberCodecConfig = {

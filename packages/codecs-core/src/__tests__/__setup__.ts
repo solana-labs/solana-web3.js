@@ -28,7 +28,7 @@ export const getMockCodec = (
         read: jest.fn().mockReturnValue([config.defaultValue ?? '', 0]),
         write: jest.fn().mockReturnValue(0),
     }) as Codec<unknown> & {
-        readonly read: jest.Mock;
         readonly getSizeFromValue: jest.Mock;
+        readonly read: jest.Mock;
         readonly write: jest.Mock;
     };

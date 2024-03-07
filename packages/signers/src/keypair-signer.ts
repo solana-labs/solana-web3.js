@@ -12,8 +12,8 @@ export type KeyPairSigner<TAddress extends string = string> = MessagePartialSign
 
 /** Checks whether the provided value implements the {@link KeyPairSigner} interface. */
 export function isKeyPairSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): value is KeyPairSigner<TAddress> {
     return (
         'keyPair' in value &&
@@ -25,8 +25,8 @@ export function isKeyPairSigner<TAddress extends string>(value: {
 
 /** Asserts that the provided value implements the {@link KeyPairSigner} interface. */
 export function assertIsKeyPairSigner<TAddress extends string>(value: {
-    address: Address<TAddress>;
     [key: string]: unknown;
+    address: Address<TAddress>;
 }): asserts value is KeyPairSigner<TAddress> {
     if (!isKeyPairSigner(value)) {
         throw new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, {

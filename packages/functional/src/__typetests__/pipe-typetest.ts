@@ -67,7 +67,7 @@ function assertNotAProperty<T extends object, TPropName extends string>(
 {
     // TypeScript will infer this as an array
     const value = pipe([1, 'test', true]);
-    value satisfies (number | string | boolean)[];
+    value satisfies (boolean | number | string)[];
 }
 
 // Single-value tuples

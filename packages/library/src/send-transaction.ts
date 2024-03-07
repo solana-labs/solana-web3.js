@@ -42,7 +42,7 @@ interface SendTransactionWithoutConfirmingFactoryConfig {
 }
 
 type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
-    transaction: SendableTransaction & ITransactionWithBlockhashLifetime,
+    transaction: ITransactionWithBlockhashLifetime & SendableTransaction,
     config: Omit<
         Parameters<typeof sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmRecentTransaction' | 'rpc' | 'transaction'
@@ -50,7 +50,7 @@ type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
 ) => Promise<void>;
 
 type SendAndConfirmDurableNonceTransactionFunction = (
-    transaction: BaseTransaction & ITransactionWithFeePayer & IDurableNonceTransaction & IFullySignedTransaction,
+    transaction: BaseTransaction & IDurableNonceTransaction & IFullySignedTransaction & ITransactionWithFeePayer,
     config: Omit<
         Parameters<typeof sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
