@@ -28,7 +28,7 @@ jobs:
         uses: ./.github/workflows/actions/install-dependencies
 
       - name: Setup Solana Test Validator
-        id: test-validator
+        id: start-test-validator
         uses: ./.github/workflows/actions/setup-validator
 
       - name: Publish NPM
@@ -40,7 +40,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Stop Test Validator
-        run: kill ${{ steps.test-validator.outputs.pid }}
+        if: steps.start-test-validator.outcome == 'success'
+        run: kill ${{ steps.start-test-validator.outputs.pid }}
 
       - name: Deploy Github Page
         uses: peaceiris/actions-gh-pages@v3
