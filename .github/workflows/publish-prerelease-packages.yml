@@ -1,0 +1,57 @@
+name: Publish Package Snapshots
+
+on:
+  workflow_dispatch:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+env:
+  # Among other things, opts out of Turborepo telemetry
+  # See https://consoledonottrack.com/
+  DO_NOT_TRACK: '1'
+  # Enables Turborepo Remote Caching.
+  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+jobs:
+  build-and-publish-snapshots-to-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
+
+      - name: Setup Solana Test Validator
+        id: start-test-validator
+        uses: ./.github/workflows/actions/setup-validator
+
+      - name: Run Build Step (force)
+        run: pnpm turbo build --concurrency=100% --filter=\!@solana/web3.js --force=true
+
+      - name: Stop Test Validator
+        if: always() && steps.start-test-validator.outcome == 'success'
+        run: kill ${{ steps.start-test-validator.outputs.pid }}
+
+      - name: Configure NPM token
+        run: |
+          pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Snapshots
+        run: |
+          pnpm changeset pre exit
+          find packages/* -maxdepth 0 -type d -print0 | \
+            xargs -t0 -n 1 -P $(nproc) -I {} \
+              sh -c 'cd {} && pnpm pkg delete devDependencies'
+          pnpm changeset version --snapshot experimental
+          pnpm turbo publish-packages --concurrency=100% --filter=\!@solana/web3.js
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

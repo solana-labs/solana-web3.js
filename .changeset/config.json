@@ -13,6 +13,10 @@
   "fixed": [["@solana/!({*-impl,build-scripts,test-*,tsconfig,web3.js-legacy-sham})"]],
   "ignore": ["@solana/web3.js"],
   "linked": [],
+  "snapshot": {
+    "prereleaseTemplate": "{tag}-{datetime}.{commit}",
+    "useCalculatedVersion": true
+  },
   "privatePackages": false,
   "updateInternalDependencies": "patch"
 }
