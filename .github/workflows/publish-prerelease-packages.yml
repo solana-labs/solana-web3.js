@@ -34,10 +34,6 @@ jobs:
       - name: Run Build Step (force)
         run: pnpm turbo build --concurrency=100% --filter=\!@solana/web3.js --force=true
 
-      - name: Stop Test Validator
-        if: always() && steps.start-test-validator.outcome == 'success'
-        run: kill ${{ steps.start-test-validator.outputs.pid }}
-
       - name: Configure NPM token
         run: |
           pnpm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
@@ -55,3 +51,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Stop Test Validator
+        if: always() && steps.start-test-validator.outcome == 'success'
+        run: kill ${{ steps.start-test-validator.outputs.pid }}
