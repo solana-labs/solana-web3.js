@@ -41,7 +41,6 @@
             "dependsOn": [
                 "compile:js",
                 "compile:typedefs",
-                "^publish-packages",
                 "test:lint",
                 "test:prettier",
                 "test:typecheck",
@@ -59,7 +58,6 @@
                 "compile:docs",
                 "compile:js",
                 "compile:typedefs",
-                "^publish-packages",
                 "test:lint",
                 "test:live-with-test-validator",
                 "test:prettier",
