@@ -46,11 +46,12 @@ jobs:
           find packages/* -maxdepth 0 -type d -print0 | \
             xargs -t0 -n 1 -P $(nproc) -I {} \
               sh -c 'cd {} && pnpm pkg delete devDependencies'
-          pnpm changeset version --snapshot experimental
+          pnpm changeset version --snapshot preview
           pnpm turbo publish-packages --concurrency=100% --filter=\!@solana/web3.js
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PUBLISH_TAG: experimental
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'

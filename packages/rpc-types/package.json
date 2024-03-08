@@ -37,7 +37,7 @@
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
-        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag preview --access public --no-git-checks",
+        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
         "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
         "test:lint": "jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",
