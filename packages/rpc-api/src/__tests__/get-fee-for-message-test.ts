@@ -1,8 +1,12 @@
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SolanaError,
+} from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Blockhash, Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Blockhash, Commitment } from '@solana/rpc-types';
 import type { SerializedMessageBytesBase64 } from '@solana/transactions';
 
 import { GetFeeForMessageApi, GetLatestBlockhashApi } from '../index';
@@ -106,18 +110,19 @@ describe('getFeeForMessage', () => {
 
     describe('when called with an invalid message', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const sendPromise = rpc.getFeeForMessage('someInvalidMessage' as SerializedMessageBytesBase64).send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(sendPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'invalid base64 encoding: InvalidPadding',
+                }),
+            );
         });
     });
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             const latestBlockhash = await rpc.getLatestBlockhash().send();
             const message = getMockTransactionMessage(latestBlockhash.value.blockhash);
             const sendPromise = rpc
@@ -125,10 +130,14 @@ describe('getFeeForMessage', () => {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(sendPromise).rejects.toThrow(SolanaError),
+                expect(sendPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 });

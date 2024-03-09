@@ -2,8 +2,9 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__CANNOT_CREATE_SUBSCRIPTION_REQUEST,
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID,
     SolanaError,
+    SolanaErrorCode,
 } from '@solana/errors';
-import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
+import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions';
 import { RpcSubscriptionsApi } from '../rpc-subscriptions-api';
@@ -260,17 +261,15 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         );
     });
     it('fatals when the server responds with an error', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         iterable.mockImplementation(async function* () {
             yield {
-                error: { code: 123, data: 'abc', message: 'o no' },
+                error: { code: 123, message: 'o no' },
                 id: 0,
             };
         });
         const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
-        await expect(subscribePromise).rejects.toThrow(RpcError);
-        await expect(subscribePromise).rejects.toThrow(/o no/);
-        await expect(subscribePromise).rejects.toMatchObject({ code: 123, data: 'abc' });
+        await expect(subscribePromise).rejects.toThrow(new SolanaError(123 as SolanaErrorCode, undefined));
     });
     it('throws errors when the connection fails to construct', async () => {
         expect.assertions(1);

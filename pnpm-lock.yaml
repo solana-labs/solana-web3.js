@@ -632,6 +632,9 @@ importers:
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -703,6 +706,9 @@ importers:
 
   packages/rpc-spec:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/rpc-spec-types':
         specifier: workspace:*
         version: link:../rpc-spec-types

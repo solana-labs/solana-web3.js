@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
+import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 
 import { GetTokenAccountBalanceApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -39,17 +39,18 @@ describe('getTokenAccountBalance', () => {
 
     describe('when called with an account that is not a token account', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const sendPromise = rpc
                 .getTokenAccountBalance(
                     // Randomly generated
                     'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address,
                 )
                 .send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(sendPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid params: missing field `commitment`.',
+                }),
+            );
         });
     });
 });

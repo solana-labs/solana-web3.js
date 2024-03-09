@@ -1,6 +1,5 @@
+import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_NOT_AVAILABLE, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { SolanaRpcErrorCode } from '@solana/rpc-types';
 
 import { GetBlockTimeApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -30,13 +29,14 @@ describe('getBlockTime', () => {
 
     describe('when called with a block higher than the highest block available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const blockNumber = 2n ** 63n - 1n; // u64:MAX; safe bet it'll be too high.
             const blockTimePromise = rpc.getBlockTime(blockNumber).send();
-            await expect(blockTimePromise).rejects.toThrow(RpcError);
-            await expect(blockTimePromise).rejects.toMatchObject({
-                code: -32004 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_BLOCK_NOT_AVAILABLE'],
-            });
+            await expect(blockTimePromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_NOT_AVAILABLE, {
+                    __serverMessage: 'Block not available for slot 9223372036854776000',
+                }),
+            );
         });
     });
 });

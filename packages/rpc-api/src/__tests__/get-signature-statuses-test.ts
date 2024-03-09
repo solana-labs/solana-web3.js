@@ -1,7 +1,6 @@
+import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/errors';
 import type { Signature } from '@solana/keys';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { SolanaRpcErrorCode } from '@solana/rpc-types';
 
 import { GetSignatureStatusesApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -45,12 +44,13 @@ describe('getSignatureStatuses', () => {
 
     describe('when called with an invalid transaction signature', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const signatureStatusPromise = rpc.getSignatureStatuses(['invalid_signature' as Signature]).send();
-            await expect(signatureStatusPromise).rejects.toThrow(RpcError);
-            await expect(signatureStatusPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(signatureStatusPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid param: Invalid',
+                }),
+            );
         });
     });
 

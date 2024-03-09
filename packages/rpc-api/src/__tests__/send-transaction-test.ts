@@ -2,13 +2,22 @@ import { Buffer } from 'node:buffer';
 
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE,
+    SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__TRANSACTION_ERROR__BLOCKHASH_NOT_FOUND,
+    SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_FEE,
+    SolanaError,
+} from '@solana/errors';
 import { createPrivateKeyFromBytes } from '@solana/keys';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { GetLatestBlockhashApi, SendTransactionApi } from '../index';
+import { GetLatestBlockhashApi, GetMinimumBalanceForRentExemptionApi, SendTransactionApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
 function getMockTransactionMessage({
@@ -66,12 +75,24 @@ const MOCK_PUBLIC_KEY_BYTES = // DRtXHDgC312wpNdNCSb8vCoXDcofCJcPHdAw4VkJ8L9i
         0x42, 0xfa, 0x3b, 0xb8, 0x25, 0xf0, 0xec, 0xfc, 0xe2, 0x27, 0x4d, 0x7d, 0xad, 0xad, 0x51, 0x2d,
     ]);
 
-async function getSecretKey() {
-    return await createPrivateKeyFromBytes(MOCK_PRIVATE_KEY_BYTES, /* extractable */ false);
+const MOCK_INSUFFICIENT_BALANCE_PRIVATE_KEY_BYTES = new Uint8Array([
+    153, 77, 119, 0, 167, 108, 113, 105, 100, 122, 229, 212, 244, 214, 192, 210, 79, 109, 245, 95, 24, 121, 235, 17, 55,
+    166, 132, 117, 31, 134, 31, 171,
+]);
+// See scripts/fixtures/send-transaction-fee-payer-insuffcient-funds.json
+const MOCK_INSUFFICIENT_BALANCE_PUBLIC_KEY_BYTES = // 6Zs91PMyhqyMgNVuT8EnM6f3YjVAVabvVWLjpFSC288q
+    // prettier-ignore
+    new Uint8Array([
+        0x52, 0xb5, 0xb6, 0x37, 0xf1, 0x28, 0x73, 0x8d, 0x25, 0x61, 0x59, 0xba, 0xca, 0x2b, 0x99, 0x20,
+        0x1c, 0xa8, 0xa6, 0xb3, 0xa1, 0x95, 0xfc, 0x07, 0x9d, 0xa2, 0xf1, 0xb7, 0x33, 0xc0, 0xa5, 0x3a,
+    ]);
+
+async function getSecretKey(privateKeyBytes: Uint8Array) {
+    return await createPrivateKeyFromBytes(privateKeyBytes, /* extractable */ false);
 }
 
 describe('sendTransaction', () => {
-    let rpc: Rpc<GetLatestBlockhashApi & SendTransactionApi>;
+    let rpc: Rpc<GetLatestBlockhashApi & GetMinimumBalanceForRentExemptionApi & SendTransactionApi>;
     beforeEach(() => {
         rpc = createLocalhostSolanaRpc();
     });
@@ -86,7 +107,7 @@ describe('sendTransaction', () => {
             it('returns the transaction signature', async () => {
                 expect.assertions(1);
                 const [secretKey, { value: latestBlockhash }] = await Promise.all([
-                    getSecretKey(),
+                    getSecretKey(MOCK_PRIVATE_KEY_BYTES),
                     rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
                 ]);
                 const message = getMockTransactionMessage({
@@ -112,7 +133,7 @@ describe('sendTransaction', () => {
         });
     });
     it('fatals when called with a transaction having an invalid signature', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const { value: latestBlockhash } = await rpc.getLatestBlockhash({ commitment: 'processed' }).send();
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -132,16 +153,14 @@ describe('sendTransaction', () => {
                 { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toThrow(/Transaction signature verification failure/);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32003 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE'],
-        });
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE),
+        );
     });
     it('fatals when called with a transaction having an unsupported version', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
-            getSecretKey(),
+            getSecretKey(MOCK_PRIVATE_KEY_BYTES),
             rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
@@ -163,17 +182,18 @@ describe('sendTransaction', () => {
                 { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
         await expect(resultPromise).rejects.toThrow(
-            /invalid value: integer `126`, expected a valid transaction message version/,
+            new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                __serverMessage:
+                    'failed to deserialize solana_sdk::transaction::versioned::' +
+                    'VersionedTransaction: invalid value: integer `126`, expected a valid ' +
+                    'transaction message version',
+            }),
         );
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-        });
     });
     it('fatals when called with a malformed transaction message', async () => {
-        expect.assertions(3);
-        const secretKey = await getSecretKey();
+        expect.assertions(1);
+        const secretKey = await getSecretKey(MOCK_PRIVATE_KEY_BYTES);
         const message = new Uint8Array([4, 5, 6]);
         const signature = new Uint8Array(await crypto.subtle.sign('Ed25519', secretKey, message));
         const resultPromise = rpc
@@ -188,14 +208,16 @@ describe('sendTransaction', () => {
                 { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toThrow(/failed to fill whole buffer/);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-        });
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                __serverMessage:
+                    'failed to deserialize solana_sdk::transaction::versioned::' +
+                    'VersionedTransaction: io error: failed to fill whole buffer',
+            }),
+        );
     });
-    it('fatals when the fee payer has insufficient funds', async () => {
-        expect.assertions(3);
+    it("fatals when the fee payer's account does not exist", async () => {
+        expect.assertions(1);
         const [[secretKey, publicKeyBytes], { value: latestBlockhash }] = await Promise.all([
             (async () => {
                 const keyPair = (await crypto.subtle.generateKey('Ed25519', /* extractable */ false, [
@@ -224,17 +246,53 @@ describe('sendTransaction', () => {
                 { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
         await expect(resultPromise).rejects.toThrow(
-            /Attempt to debit an account but found no record of a prior credit/,
+            new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
+                accounts: null,
+                cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_NOT_FOUND),
+                logs: [],
+                returnData: null,
+                unitsConsumed: 0,
+            }),
         );
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32002 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE'],
+    });
+    it('fatals when the fee payer has insufficient funds to pay rent', async () => {
+        expect.assertions(1);
+        const [secretKey, { value: latestBlockhash }] = await Promise.all([
+            getSecretKey(MOCK_INSUFFICIENT_BALANCE_PRIVATE_KEY_BYTES),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
+        ]);
+        const message = getMockTransactionMessage({
+            blockhash: latestBlockhash.blockhash,
+            feePayerAddressBytes: MOCK_INSUFFICIENT_BALANCE_PUBLIC_KEY_BYTES,
+            memoString: `Hello from the web3.js tests! [${performance.now()}]`,
         });
+        const signature = new Uint8Array(await crypto.subtle.sign('Ed25519', secretKey, message));
+        const resultPromise = rpc
+            .sendTransaction(
+                Buffer.from(
+                    new Uint8Array([
+                        0x1, // Length of signatures
+                        ...signature,
+                        ...message,
+                    ]),
+                ).toString('base64') as Base64EncodedWireTransaction,
+                { encoding: 'base64', preflightCommitment: 'processed' },
+            )
+            .send();
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
+                accounts: null,
+                cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_FEE),
+                logs: [],
+                returnData: null,
+                unitsConsumed: 0,
+            }),
+        );
     });
     it('fatals when the blockhash does not exist', async () => {
-        expect.assertions(3);
-        const secretKey = await getSecretKey();
+        expect.assertions(1);
+        const secretKey = await getSecretKey(MOCK_PRIVATE_KEY_BYTES);
         const message = getMockTransactionMessage({
             blockhash: getBase58Decoder().decode(new Uint8Array(Array(32).fill(0))),
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
@@ -253,17 +311,21 @@ describe('sendTransaction', () => {
                 { encoding: 'base64', preflightCommitment: 'processed' },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toThrow(/Blockhash not found/);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32002 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE'],
-        });
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
+                accounts: null,
+                cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__BLOCKHASH_NOT_FOUND),
+                logs: [],
+                returnData: null,
+                unitsConsumed: 0,
+            }),
+        );
     });
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             const [secretKey, { value: latestBlockhash }] = await Promise.all([
-                getSecretKey(),
+                getSecretKey(MOCK_PRIVATE_KEY_BYTES),
                 rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
             ]);
             const message = getMockTransactionMessage({
@@ -288,10 +350,14 @@ describe('sendTransaction', () => {
                     },
                 )
                 .send();
-            await expect(resultPromise).rejects.toThrow(RpcError);
-            await expect(resultPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(resultPromise).rejects.toThrow(SolanaError),
+                expect(resultPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(resultPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 });

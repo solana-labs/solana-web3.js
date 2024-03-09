@@ -3,12 +3,12 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__EXPECTED_SERVER_SUBSCRIPTION_ID,
     SolanaError,
 } from '@solana/errors';
+import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
 import {
     Callable,
     createRpcMessage,
     Flatten,
     OverloadImplementations,
-    RpcError,
     RpcResponse,
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
@@ -159,7 +159,7 @@ function createPendingRpcSubscription<
             >) {
                 if ('id' in message && message.id === subscribeMessage.id) {
                     if ('error' in message) {
-                        throw new RpcError(message.error);
+                        throw getSolanaErrorFromJsonRpcError(message.error);
                     } else {
                         subscriptionId = message.result as RpcSubscriptionId;
                         break;
