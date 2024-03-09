@@ -232,8 +232,7 @@ enum Direction {
 }
 
 getScalarEnumCodec(Direction).encode(Direction.Right); // 0x01
-getScalarEnumCodec(Direction).encode(1); // 0x01
-getScalarEnumCodec(Direction).encode('Right'); // 0x01
+getScalarEnumCodec(Direction).encode('Right' as Direction); // 0x01
 getScalarEnumCodec(Direction).encode('RIGHT'); // 0x01
 ```
 
@@ -270,7 +269,7 @@ It requires the name and codec of each variant as a first argument. Similarly to
 Here is how we can create a data enum codec for our previous example.
 
 ```ts
-const messageCodec = getDataEnumCodec<Message>([
+const messageCodec = getDataEnumCodec([
     // Empty variant.
     ['Quit', getUnitCodec()],
 
@@ -311,7 +310,7 @@ messageCodec.encode({ __kind: 'Move', x: 5, y: 6 });
 However, you may provide a number codec as the `size` option of the `getDataEnumCodec` function to customise that behaviour.
 
 ```ts
-const u32MessageCodec = getDataEnumCodec<Message>([...], {
+const u32MessageCodec = getDataEnumCodec([...], {
     size: getU32Codec(),
 });
 
