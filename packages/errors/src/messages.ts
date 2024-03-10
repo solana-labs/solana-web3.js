@@ -31,6 +31,7 @@ import {
     SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
     SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH,
@@ -271,6 +272,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE]: 'Invalid value $value for base $base with alphabet $alphabet.',
     [SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
+    [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]:
+        'Codec [$codecDescription] expected offset to be in the range [0, $bytesLength], got $offset.',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_BORROW_FAILED]:
         'instruction tries to borrow reference for an account which is already borrowed',

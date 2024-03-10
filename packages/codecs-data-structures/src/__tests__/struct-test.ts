@@ -1,4 +1,5 @@
-import { getU8Codec, getU64Codec } from '@solana/codecs-numbers';
+import { offsetCodec, resizeCodec } from '@solana/codecs-core';
+import { getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
 import { getNullableCodec } from '../nullable';
@@ -10,6 +11,7 @@ describe('getStructCodec', () => {
     const string = getStringCodec;
     const nullable = getNullableCodec;
     const u8 = getU8Codec;
+    const u32 = getU32Codec;
     const u64 = getU64Codec;
 
     it('encodes structs', () => {
@@ -55,5 +57,23 @@ describe('getStructCodec', () => {
             ['balance', u64()],
         ]);
         expect(fixedPerson.fixedSize).toBe(9);
+    });
+
+    it('offsets fields within a struct', () => {
+        const person = struct([
+            ['name', string({ size: 8 })],
+            // There is a 4-byte padding between name and age.
+            [
+                'age',
+                offsetCodec(
+                    resizeCodec(u32(), size => size + 4),
+                    { preOffset: ({ preOffset }) => preOffset + 4 },
+                ),
+            ],
+        ]);
+        const alice = { age: 32, name: 'Alice' };
+        expect(person.encode(alice)).toStrictEqual(b('416c6963650000000000000020000000'));
+        expect(person.read(b('416c6963650000000000000020000000'), 0)).toStrictEqual([alice, 16]);
+        expect(person.read(b('ff416c6963650000000000000020000000'), 1)).toStrictEqual([alice, 17]);
     });
 });

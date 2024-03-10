@@ -407,7 +407,7 @@ const personCodec = getStructCodec([
         'age',
         offsetCodec(
             resizeCodec(getU32Codec(), size => size + 4),
-            ({ preOffset }) => preOffset + 4,
+            { preOffset: ({ preOffset }) => preOffset + 4 },
         ),
     ],
 ]);
@@ -425,6 +425,111 @@ As usual, the `resizeEncoder` and `resizeDecoder` functions can also be used to 
 const getBiggerU32Encoder = () => resizeEncoder(getU32Codec(), size => size + 4);
 const getBiggerU32Decoder = () => resizeDecoder(getU32Codec(), size => size + 4);
 const getBiggerU32Codec = () => combineCodec(getBiggerU32Encoder(), getBiggerU32Decoder());
+```
+
+## Offsetting codecs
+
+The `offsetCodec` function is a powerful codec primitive that allows you to move the offset of a given codec forward or backwards. It accepts one or two functions that takes the current offset and returns a new offset.
+
+To understand how this works, let's take our previous `biggerU32Codec` example which encodes a `u32` number inside an 8-byte buffer.
+
+```ts
+const biggerU32Codec = resizeCodec(getU32Codec(), size => size + 4);
+biggerU32Codec.encode(0xffffffff);
+// 0xffffffff00000000
+//   |       └-- Empty buffer space caused by the resizeCodec function.
+//   └-- Our encoded u32 number.
+```
+
+Now, let's say we want to move the offset of that codec 2 bytes forward so that the encoded number sits in the middle of the buffer. To achieve, this we can use the `offsetCodec` helper and provide a `preOffset` function that moves the "pre-offset" of the codec 2 bytes forward.
+
+```ts
+const u32InTheMiddleCodec = offsetCodec(biggerU32Codec, {
+    preOffset: ({ preOffset }) => preOffset + 2,
+});
+u32InTheMiddleCodec.encode(0xffffffff);
+// 0x0000ffffffff0000
+//       └-- Our encoded u32 number is now in the middle of the buffer.
+```
+
+We refer to this offset as the "pre-offset" because, once the inner codec is encoded or decoded, an additional offset will be returned which we refer to as the "post-offset". That "post-offset" is important as, unless we are reaching the end of our codec, it will be used by any further codecs to continue encoding or decoding data.
+
+By default, that "post-offset" is simply the addition of the "pre-offset" and the size of the encoded or decoded inner data.
+
+```ts
+const u32InTheMiddleCodec = offsetCodec(biggerU32Codec, {
+    preOffset: ({ preOffset }) => preOffset + 2,
+});
+u32InTheMiddleCodec.encode(0xffffffff);
+// 0x0000ffffffff0000
+//   |   |       └-- Post-offset.
+//   |   └-- New pre-offset: The original pre-offset + 2.
+//   └-- Pre-offset: The original pre-offset before we adjusted it.
+```
+
+However, you may also provide a `postOffset` function to adjust the "post-offset". For instance, let's push the "post-offset" 2 bytes forward as well such that any further codecs will start doing their job at the end of our 8-byte `u32` number.
+
+```ts
+const u32InTheMiddleCodec = offsetCodec(biggerU32Codec, {
+    preOffset: ({ preOffset }) => preOffset + 2,
+    postOffset: ({ postOffset }) => postOffset + 2,
+});
+u32InTheMiddleCodec.encode(0xffffffff);
+// 0x0000ffffffff0000
+//   |   |       |   └-- New post-offset: The original post-offset + 2.
+//   |   |       └-- Post-offset: The original post-offset before we adjusted it.
+//   |   └-- New pre-offset: The original pre-offset + 2.
+//   └-- Pre-offset: The original pre-offset before we adjusted it.
+```
+
+Both the `preOffset` and `postOffset` functions offer the following attributes:
+
+-   `bytes`: The entire byte array being encoded or decoded.
+-   `preOffset`: The original and unaltered pre-offset.
+-   `wrapBytes`: A helper function that wraps the given offset around the byte array length. E.g. `wrapBytes(-1)` will refer to the last byte of the byte array.
+
+Additionally, the post-offset function also provides the following attributes:
+
+-   `newPreOffset`: The new pre-offset after the pre-offset function has been applied.
+-   `postOffset`: The original and unaltered post-offset.
+
+Note that you may also decide to ignore these attributes to achieve absolute offsets. However, relative offsets are usually recommended as they won't break your codecs when composed with other codecs.
+
+```ts
+const u32InTheMiddleCodec = offsetCodec(biggerU32Codec, {
+    preOffset: () => 2,
+    postOffset: () => 8,
+});
+u32InTheMiddleCodec.encode(0xffffffff);
+// 0x0000ffffffff0000
+```
+
+Also note that any negative offset or offset that exceeds the size of the byte array will throw a `SolanaError` of code `SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE`.
+
+```ts
+const u32InTheEndCodec = offsetCodec(biggerU32Codec, { preOffset: () => -4 });
+u32InTheEndCodec.encode(0xffffffff);
+// throws new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE)
+```
+
+To avoid this, you may use the `wrapBytes` function to wrap the offset around the byte array length. For instance, here's how we can use the `wrapBytes` function to move the pre-offset 4 bytes from the end of the byte array.
+
+```ts
+const u32InTheEndCodec = offsetCodec(biggerU32Codec, {
+    preOffset: ({ wrapBytes }) => wrapBytes(-4),
+});
+u32InTheEndCodec.encode(0xffffffff);
+// 0x00000000ffffffff
+```
+
+As you can see, the `offsetCodec` helper allows you to jump all over the place with your codecs. This non-linear approach to encoding and decoding data allows you to achieve complex serialization strategies that would otherwise be impossible.
+
+As usual, the `offsetEncoder` and `offsetDecoder` functions can also be used to split your codec logic into tree-shakeable functions.
+
+```ts
+const getU32InTheMiddleEncoder = () => offsetEncoder(biggerU32Encoder, { preOffset: ({ preOffset }) => preOffset + 2 });
+const getU32InTheMiddleDecoder = () => offsetDecoder(biggerU32Decoder, { preOffset: ({ preOffset }) => preOffset + 2 });
+const getU32InTheMiddleCodec = () => combineCodec(getU32InTheMiddleEncoder(), getU32InTheMiddleDecoder());
 ```
 
 ## Reversing codecs

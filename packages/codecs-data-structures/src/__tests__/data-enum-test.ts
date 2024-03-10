@@ -1,4 +1,11 @@
-import { assertIsFixedSize, assertIsVariableSize, isFixedSize, isVariableSize } from '@solana/codecs-core';
+import {
+    assertIsFixedSize,
+    assertIsVariableSize,
+    isFixedSize,
+    isVariableSize,
+    offsetCodec,
+    resizeCodec,
+} from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import {
@@ -153,5 +160,26 @@ describe('getDataEnumCodec', () => {
         expect(isVariableSize(u64Enum)).toBe(true);
         assertIsVariableSize(u64Enum);
         expect(u64Enum.maxSize).toBe(9);
+    });
+
+    it('offsets variants within a data enum', () => {
+        const offsettedU32 = offsetCodec(
+            resizeCodec(u32(), size => size + 2),
+            { preOffset: ({ preOffset }) => preOffset + 2 },
+        );
+        const codec = dataEnum([
+            ['Simple', struct([['n', u32()]])],
+            ['WithOffset', struct([['n', offsettedU32]])],
+        ]);
+
+        const simple = { __kind: 'Simple', n: 42 } as const;
+        expect(codec.encode(simple)).toStrictEqual(b('002a000000'));
+        expect(codec.read(b('002a000000'), 0)).toStrictEqual([simple, 5]);
+        expect(codec.read(b('ffff002a000000'), 2)).toStrictEqual([simple, 7]);
+
+        const withOffset = { __kind: 'WithOffset', n: 42 } as const;
+        expect(codec.encode(withOffset)).toStrictEqual(b('0100002a000000'));
+        expect(codec.read(b('0100002a000000'), 0)).toStrictEqual([withOffset, 7]);
+        expect(codec.read(b('ffff0100002a000000'), 2)).toStrictEqual([withOffset, 9]);
     });
 });

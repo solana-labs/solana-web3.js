@@ -1,3 +1,4 @@
+import { offsetCodec } from '@solana/codecs-core';
 import { getI16Codec, getU8Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -51,5 +52,23 @@ describe('getTupleCodec', () => {
         expect(tuple([u8(), string(), i16()]).getSizeFromValue([1, 'ABC', 2])).toBe(1 + (4 + 3) + 2);
         expect(tuple([u8(), string(), i16()]).maxSize).toBeUndefined();
         expect(tuple([string(), u8()]).getSizeFromValue(['Hello', 42])).toBe(4 + 5 + 1);
+    });
+
+    it('offsets items within a tuple', () => {
+        const person = tuple([
+            // Name, pushes 8 bytes forward then handles 8 bytes.
+            offsetCodec(string({ size: 8 }), {
+                preOffset: ({ preOffset }) => preOffset + 8,
+            }),
+            // Age, pushes 16 bytes backward then handles 8 bytes.
+            offsetCodec(u64(), {
+                postOffset: ({ preOffset }) => preOffset, // Restores original offset.
+                preOffset: ({ preOffset }) => preOffset - 16,
+            }),
+            // The cursor is now at the end of the buffer.
+        ]);
+        expect(person.encode(['Alice', 32])).toStrictEqual(b('2000000000000000416c696365000000'));
+        expect(person.read(b('2000000000000000416c696365000000'), 0)).toStrictEqual([['Alice', 32n], 16]);
+        expect(person.read(b('ff2000000000000000416c696365000000'), 1)).toStrictEqual([['Alice', 32n], 17]);
     });
 });

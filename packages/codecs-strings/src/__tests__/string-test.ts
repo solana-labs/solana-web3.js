@@ -1,3 +1,4 @@
+import { offsetCodec } from '@solana/codecs-core';
 import { getU8Codec } from '@solana/codecs-numbers';
 
 import { getBase16Codec } from '../base16';
@@ -95,5 +96,16 @@ describe('getStringCodec', () => {
         expect(string({ size: 'variable' }).getSizeFromValue('ABC')).toBe(3);
         expect(string({ size: 'variable' }).maxSize).toBeUndefined();
         expect(string({ size: 42 }).fixedSize).toBe(42);
+    });
+
+    it('offsets prefixed strings', () => {
+        const codec = string({
+            size: offsetCodec(u8(), {
+                postOffset: () => 0,
+                preOffset: ({ wrapBytes }) => wrapBytes(-1),
+            }),
+        });
+        expect(codec.encode('ABC')).toStrictEqual(b('41424303'));
+        expect(codec.decode(b('41424303'))).toBe('ABC');
     });
 });
