@@ -362,6 +362,71 @@ const get32BytesBase58Decoder = () => fixDecoder(getBase58Decoder(), 32);
 const get32BytesBase58Codec = () => combineCodec(get32BytesBase58Encoder(), get32BytesBase58Codec());
 ```
 
+## Adjusting the size of codecs
+
+The `resizeCodec` helper re-defines the size of a given codec by accepting a function that takes the current size of the codec and returns a new size. This works for both fixed-size and variable-size codecs.
+
+```ts
+// Fixed-size codec.
+const getBiggerU32Codec = () => resizeCodec(getU32Codec(), size => size + 4);
+getBiggerU32Codec().encode(42);
+// 0x2a00000000000000
+//   |       └-- Empty buffer space caused by the resizeCodec function.
+//   └-- Our encoded u32 number.
+
+// Variable-size codec.
+const getBiggerStringCodec = () => resizeCodec(getStringCodec(), size => size + 4);
+getBiggerStringCodec().encode('ABC');
+// 0x0300000041424300000000
+//   |             └-- Empty buffer space caused by the resizeCodec function.
+//   └-- Our encoded string with a 4-byte size prefix.
+```
+
+Note that the `resizeCodec` function doesn't change any encoded or decoded bytes, it merely tells the `encode` and `decode` functions how big the `Uint8Array` should be before delegating to their respective `write` and `read` functions. In fact, this is completely bypassed when using the `write` and `read` functions directly. For instance:
+
+```ts
+const getBiggerU32Codec = () => resizeCodec(getU32Codec(), size => size + 4);
+
+// Using the encode function.
+getBiggerU32Codec().encode(42);
+// 0x2a00000000000000
+
+// Using the lower-level write function.
+const myCustomBytes = new Uint8Array(4);
+getBiggerU32Codec().write(42, myCustomBytes, 0);
+// 0x2a000000
+```
+
+So when would it make sense to use the `resizeCodec` function? This function is particularly useful when combined with the `offsetCodec` function described below. Whilst the `offsetCodec` may help us push the offset forward — e.g. to skip some padding — it won't change the size of the encoded data which means the last bytes will be truncated by how much we pushed the offset forward. The `resizeCodec` function can be used to fix that. For instance, here's how we can use the `resizeCodec` and the `offsetCodec` functions together to create a struct codec that includes some padding.
+
+```ts
+const personCodec = getStructCodec([
+    ['name', getStringCodec({ size: 8 })],
+    // There is a 4-byte padding between name and age.
+    [
+        'age',
+        offsetCodec(
+            resizeCodec(getU32Codec(), size => size + 4),
+            ({ preOffset }) => preOffset + 4,
+        ),
+    ],
+]);
+
+personCodec.encode({ name: 'Alice', age: 42 });
+// 0x416c696365000000000000002a000000
+//   |               |       └-- Our encoded u32 (42).
+//   |               └-- The 4-bytes of padding we are skipping.
+//   └-- Our 8-byte encoded string ("Alice").
+```
+
+As usual, the `resizeEncoder` and `resizeDecoder` functions can also be used to achieve that.
+
+```ts
+const getBiggerU32Encoder = () => resizeEncoder(getU32Codec(), size => size + 4);
+const getBiggerU32Decoder = () => resizeDecoder(getU32Codec(), size => size + 4);
+const getBiggerU32Codec = () => combineCodec(getBiggerU32Encoder(), getBiggerU32Decoder());
+```
+
 ## Reversing codecs
 
 The `reverseCodec` helper reverses the bytes of the provided `FixedSizeCodec`.
@@ -376,7 +441,7 @@ Note that number codecs can already do that for you via their `endian` option.
 const getBigEndianU64Codec = () => getU64Codec({ endian: Endian.BIG });
 ```
 
-As usual, the `reverseEncoder` and `reverseDecoder` can also be used to achieve that.
+As usual, the `reverseEncoder` and `reverseDecoder` functions can also be used to achieve that.
 
 ```ts
 const getBigEndianU64Encoder = () => reverseEncoder(getU64Encoder());
