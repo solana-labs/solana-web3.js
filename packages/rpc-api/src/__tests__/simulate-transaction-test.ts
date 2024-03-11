@@ -141,7 +141,7 @@ describe('simulateTransaction', () => {
                 expect.assertions(1);
                 const [secretKey, { value: latestBlockhash }] = await Promise.all([
                     getSecretKey(),
-                    rpc.getLatestBlockhash().send(),
+                    rpc.getLatestBlockhash({ commitment }).send(),
                 ]);
                 const message = getMockTransactionMessage({
                     blockhash: latestBlockhash.blockhash,
@@ -180,7 +180,7 @@ describe('simulateTransaction', () => {
         expect.assertions(2);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -212,7 +212,7 @@ describe('simulateTransaction', () => {
 
     it('throws when called with an invalid signature if `sigVerify` is true', async () => {
         expect.assertions(3);
-        const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+        const { value: latestBlockhash } = await rpc.getLatestBlockhash({ commitment: 'processed' }).send();
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
@@ -245,7 +245,7 @@ describe('simulateTransaction', () => {
 
     it('does not throw when called with an invalid signature when `sigVerify` is false', async () => {
         expect.assertions(1);
-        const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+        const { value: latestBlockhash } = await rpc.getLatestBlockhash({ commitment: 'processed' }).send();
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
@@ -361,7 +361,7 @@ describe('simulateTransaction', () => {
         expect.assertions(3);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -427,7 +427,7 @@ describe('simulateTransaction', () => {
                 ])) as CryptoKeyPair;
                 return [keyPair.privateKey, new Uint8Array(await crypto.subtle.exportKey('raw', keyPair.publicKey))];
             })(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -464,7 +464,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -512,7 +512,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -560,7 +560,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessageWithAdditionalAccount({
             accountAddressBytes: getBase58Encoder().encode('4QUZQ4c7bZuJ4o4L8tYAEGnePFV27SUFEVmC7BYfsXRp'), // see scripts/fixtures/vote-account.json
@@ -625,7 +625,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -674,7 +674,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -721,7 +721,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -774,7 +774,7 @@ describe('simulateTransaction', () => {
         expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,

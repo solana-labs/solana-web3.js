@@ -72,7 +72,7 @@ describe('getFeeForMessage', () => {
             describe('when called with a recent blockhash', () => {
                 it('returns the result as a bigint', async () => {
                     expect.assertions(1);
-                    const latestBlockhash = await rpc.getLatestBlockhash().send();
+                    const latestBlockhash = await rpc.getLatestBlockhash({ commitment }).send();
                     const message = getMockTransactionMessage(latestBlockhash.value.blockhash);
                     const result = await rpc.getFeeForMessage(message, { commitment }).send();
                     expect(result).toStrictEqual({
