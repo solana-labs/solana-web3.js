@@ -873,6 +873,8 @@ importers:
         specifier: workspace:*
         version: link:../text-encoding-impl
 
+  packages/sysvars: {}
+
   packages/test-config:
     dependencies:
       jest-dev-server:
