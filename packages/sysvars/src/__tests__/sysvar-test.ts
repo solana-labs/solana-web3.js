@@ -6,6 +6,7 @@ import {
     fetchJsonParsedSysvarAccount,
     SYSVAR_CLOCK_ADDRESS,
     SYSVAR_EPOCH_SCHEDULE_ADDRESS,
+    SYSVAR_FEES_ADDRESS,
 } from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -66,6 +67,22 @@ describe('sysvar account', () => {
                     leaderScheduleSlotOffset: expect.any(BigInt),
                     slotsPerEpoch: expect.any(BigInt),
                     warmup: expect.any(Boolean),
+                },
+            });
+        });
+    });
+    describe('fees', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_FEES_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_FEES_ADDRESS, {
+                data: {
+                    feeCalculator: {
+                        lamportsPerSignature: expect.any(String), // JsonParsed converts to string
+                    },
                 },
             });
         });
