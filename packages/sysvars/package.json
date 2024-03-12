@@ -67,7 +67,8 @@
     },
     "dependencies": {
         "@solana/accounts": "workspace:*",
-        "@solana/codecs": "workspace:*"
+        "@solana/codecs": "workspace:*",
+        "@solana/errors": "workspace:*"
     },
     "devDependencies": {
         "@solana/addresses": "workspace:*",
