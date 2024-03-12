@@ -8,6 +8,7 @@ import {
     SYSVAR_EPOCH_SCHEDULE_ADDRESS,
     SYSVAR_FEES_ADDRESS,
     SYSVAR_LAST_RESTART_SLOT_ADDRESS,
+    SYSVAR_RECENT_BLOCKHASHES_ADDRESS,
 } from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -100,6 +101,25 @@ describe('sysvar account', () => {
                 data: {
                     lastRestartSlot: expect.any(BigInt),
                 },
+            });
+        });
+    });
+    describe('recent blockhashes', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_RECENT_BLOCKHASHES_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_RECENT_BLOCKHASHES_ADDRESS, {
+                data: expect.arrayContaining([
+                    {
+                        blockhash: expect.any(String),
+                        feeCalculator: {
+                            lamportsPerSignature: expect.any(String), // JsonParsed converts to string
+                        },
+                    },
+                ]),
             });
         });
     });
