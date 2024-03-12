@@ -1,4 +1,4 @@
-import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
+import { safeCaptureStackTrace, SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
 import type { KeyPath } from '@solana/rpc-transformers';
 
 export function createSolanaJsonRpcIntegerOverflowError(
@@ -38,8 +38,6 @@ export function createSolanaJsonRpcIntegerOverflowError(
         value,
         ...(path !== undefined ? { path } : undefined),
     });
-    if ('captureStackTrace' in Error && typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(error, createSolanaJsonRpcIntegerOverflowError);
-    }
+    safeCaptureStackTrace(error, createSolanaJsonRpcIntegerOverflowError);
     return error;
 }

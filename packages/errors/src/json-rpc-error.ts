@@ -18,6 +18,7 @@ import {
 } from './codes';
 import { SolanaErrorContext } from './context';
 import { SolanaError } from './error';
+import { safeCaptureStackTrace } from './stack-trace';
 import { getSolanaErrorFromTransactionError } from './transaction-error';
 
 interface RpcErrorResponse {
@@ -126,8 +127,6 @@ export function getSolanaErrorFromJsonRpcError({ code, data, message }: RpcError
         }
         out = new SolanaError(code as SolanaErrorCode, errorContext as SolanaErrorContext[SolanaErrorCode]);
     }
-    if ('captureStackTrace' in Error && typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(out, getSolanaErrorFromJsonRpcError);
-    }
+    safeCaptureStackTrace(out, getSolanaErrorFromJsonRpcError);
     return out;
 }
