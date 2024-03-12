@@ -9,6 +9,7 @@ import { fetchSysvarFees, type SysvarFees } from '../fees';
 import { fetchSysvarLastRestartSlot, type SysvarLastRestartSlot } from '../last-restart-slot';
 import { fetchSysvarRecentBlockhashes, type SysvarRecentBlockhashes } from '../recent-blockhashes';
 import { fetchSysvarRent, type SysvarRent } from '../rent';
+import { fetchSysvarSlotHashes, type SysvarSlotHashes } from '../slot-hashes';
 import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
@@ -105,4 +106,12 @@ const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
     fetchSysvarRent(rpc) satisfies Promise<SysvarRent>;
     // @ts-expect-error Returns a `SysvarRent`.
     fetchSysvarRent(rpc) satisfies Promise<{ foo: string }>;
+}
+
+// `fetchSysvarSlotHashes`
+{
+    // Returns a `SysvarSlotHashes`.
+    fetchSysvarSlotHashes(rpc) satisfies Promise<SysvarSlotHashes>;
+    // @ts-expect-error Returns a `SysvarSlotHashes`.
+    fetchSysvarSlotHashes(rpc) satisfies Promise<{ foo: string }>;
 }

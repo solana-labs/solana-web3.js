@@ -5,4 +5,5 @@ export * from './fees';
 export * from './last-restart-slot';
 export * from './recent-blockhashes';
 export * from './rent';
+export * from './slot-hashes';
 export * from './sysvar';
