@@ -7,6 +7,7 @@ import {
     SYSVAR_CLOCK_ADDRESS,
     SYSVAR_EPOCH_SCHEDULE_ADDRESS,
     SYSVAR_FEES_ADDRESS,
+    SYSVAR_LAST_RESTART_SLOT_ADDRESS,
 } from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -88,4 +89,18 @@ describe('sysvar account', () => {
         });
     });
     // `Instructions` does not exist on-chain.
+    describe('last restart slot', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_LAST_RESTART_SLOT_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_LAST_RESTART_SLOT_ADDRESS, {
+                data: {
+                    lastRestartSlot: expect.any(BigInt),
+                },
+            });
+        });
+    });
 });
