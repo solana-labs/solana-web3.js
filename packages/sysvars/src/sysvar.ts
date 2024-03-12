@@ -14,8 +14,13 @@ export const SYSVAR_CLOCK_ADDRESS =
     'SysvarC1ock11111111111111111111111111111111' as Address<'SysvarC1ock11111111111111111111111111111111'>;
 export const SYSVAR_EPOCH_REWARDS_ADDRESS =
     'SysvarEpochRewards1111111111111111111111111' as Address<'SysvarEpochRewards1111111111111111111111111'>;
+export const SYSVAR_EPOCH_SCHEDULE_ADDRESS =
+    'SysvarEpochSchedu1e111111111111111111111111' as Address<'SysvarEpochSchedu1e111111111111111111111111'>;
 
-type SysvarAddress = typeof SYSVAR_CLOCK_ADDRESS | typeof SYSVAR_EPOCH_REWARDS_ADDRESS;
+type SysvarAddress =
+    | typeof SYSVAR_CLOCK_ADDRESS
+    | typeof SYSVAR_EPOCH_REWARDS_ADDRESS
+    | typeof SYSVAR_EPOCH_SCHEDULE_ADDRESS;
 
 /**
  * Fetch an encoded sysvar account.
