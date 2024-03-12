@@ -1,36 +1,12 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME, SolanaError } from '@solana/errors';
-import {
-    AccountRole,
-    IInstruction,
-    IInstructionWithAccounts,
-    IInstructionWithData,
-    isSignerRole,
-    ReadonlyAccount,
-    ReadonlySignerAccount,
-    WritableAccount,
-    WritableSignerAccount,
-} from '@solana/instructions';
+import { AccountRole, IInstruction, isSignerRole } from '@solana/instructions';
+import { AdvanceNonceAccountInstruction, getAdvanceNonceAccountInstructionRaw } from '@solana-program/system';
 
 import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 import { getUnsignedTransaction } from './unsigned-transaction';
 
-type AdvanceNonceAccountInstruction<
-    TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string,
-> = IInstruction<'11111111111111111111111111111111'> &
-    IInstructionWithAccounts<
-        readonly [
-            WritableAccount<TNonceAccountAddress>,
-            ReadonlyAccount<'SysvarRecentB1ockHashes11111111111111111111'>,
-            ReadonlySignerAccount<TNonceAuthorityAddress> | WritableSignerAccount<TNonceAuthorityAddress>,
-        ]
-    > &
-    IInstructionWithData<AdvanceNonceAccountInstructionData>;
-type AdvanceNonceAccountInstructionData = Uint8Array & {
-    readonly __brand: unique symbol;
-};
 type DurableNonceConfig<
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string,
@@ -56,7 +32,12 @@ export interface IDurableNonceTransaction<
 > {
     readonly instructions: readonly [
         // The first instruction *must* be the system program's `AdvanceNonceAccount` instruction.
-        AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
+        AdvanceNonceAccountInstruction<
+            '11111111111111111111111111111111',
+            TNonceAccountAddress,
+            'SysvarRecentB1ockHashes11111111111111111111',
+            TNonceAuthorityAddress
+        >,
         ...IInstruction[],
     ];
     readonly lifetimeConstraint: NonceLifetimeConstraint<TNonceValue>;
@@ -68,27 +49,6 @@ export function assertIsDurableNonceTransaction(
     if (!isDurableNonceTransaction(transaction)) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME);
     }
-}
-
-function createAdvanceNonceAccountInstruction<
-    TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string,
->(
-    nonceAccountAddress: Address<TNonceAccountAddress>,
-    nonceAuthorityAddress: Address<TNonceAuthorityAddress>,
-): AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
-    return {
-        accounts: [
-            { address: nonceAccountAddress, role: AccountRole.WRITABLE },
-            {
-                address: RECENT_BLOCKHASHES_SYSVAR_ADDRESS,
-                role: AccountRole.READONLY,
-            },
-            { address: nonceAuthorityAddress, role: AccountRole.READONLY_SIGNER },
-        ],
-        data: new Uint8Array([4, 0, 0, 0]) as AdvanceNonceAccountInstructionData,
-        programAddress: SYSTEM_PROGRAM_ADDRESS,
-    };
 }
 
 export function isAdvanceNonceAccountInstruction(
@@ -113,7 +73,7 @@ export function isAdvanceNonceAccountInstruction(
     );
 }
 
-function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is AdvanceNonceAccountInstructionData {
+function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is AdvanceNonceAccountInstruction['data'] {
     // AdvanceNonceAccount is the fifth instruction in the System Program (index 4)
     return data.byteLength === 4 && data[0] === 4 && data[1] === 0 && data[2] === 0 && data[3] === 0;
 }
@@ -136,7 +96,12 @@ function isAdvanceNonceAccountInstructionForNonce<
     instruction: AdvanceNonceAccountInstruction,
     nonceAccountAddress: TNonceAccountAddress,
     nonceAuthorityAddress: TNonceAuthorityAddress,
-): instruction is AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress> {
+): instruction is AdvanceNonceAccountInstruction<
+    '11111111111111111111111111111111',
+    TNonceAccountAddress,
+    'SysvarRecentB1ockHashes11111111111111111111',
+    TNonceAuthorityAddress
+> {
     return (
         instruction.accounts[0].address === nonceAccountAddress &&
         instruction.accounts[2].address === nonceAuthorityAddress
@@ -158,7 +123,12 @@ export function setTransactionLifetimeUsingDurableNonce<
 ): IDurableNonceTransaction<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
     Omit<TTransaction, keyof ITransactionWithSignatures> {
     let newInstructions: [
-        AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
+        AdvanceNonceAccountInstruction<
+            '11111111111111111111111111111111',
+            TNonceAccountAddress,
+            'SysvarRecentB1ockHashes11111111111111111111',
+            TNonceAuthorityAddress
+        >,
         ...IInstruction[],
     ];
 
@@ -179,14 +149,28 @@ export function setTransactionLifetimeUsingDurableNonce<
         } else {
             // we have a different advance nonce instruction as the first instruction, replace it
             newInstructions = [
-                createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+                getAdvanceNonceAccountInstructionRaw({
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore FIXME: https://github.com/solana-program/create-solana-program/issues/19
+                    nonceAccount: nonceAccountAddress,
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore FIXME: https://github.com/solana-program/create-solana-program/issues/19
+                    nonceAuthority: nonceAuthorityAddress,
+                }),
                 ...transaction.instructions.slice(1),
             ];
         }
     } else {
         // we don't have an existing advance nonce instruction as the first instruction, prepend one
         newInstructions = [
-            createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+            getAdvanceNonceAccountInstructionRaw({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore FIXME: https://github.com/solana-program/create-solana-program/issues/19
+                nonceAccount: nonceAccountAddress,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore FIXME: https://github.com/solana-program/create-solana-program/issues/19
+                nonceAuthority: nonceAuthorityAddress,
+            }),
             ...transaction.instructions,
         ];
     }

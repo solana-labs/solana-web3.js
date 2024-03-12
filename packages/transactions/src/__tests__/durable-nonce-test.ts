@@ -187,6 +187,8 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
     describe('given a transaction with an advance nonce account instruction but no nonce lifetime constraint', () => {
         it('does not modify an `AdvanceNonceAccount` instruction if the existing one matches the constraint added', () => {
             const instruction = createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             instruction.accounts[2].role = AccountRole.WRITABLE_SIGNER;
             const transaction: BaseTransaction = { ...baseTx, instructions: [instruction, baseTx.instructions[0]] };
             const durableNonceTxWithConstraintA = setTransactionLifetimeUsingDurableNonce(

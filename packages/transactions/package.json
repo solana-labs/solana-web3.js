@@ -70,7 +70,8 @@
         "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
-        "@solana/keys": "workspace:*"
+        "@solana/keys": "workspace:*",
+        "@solana-program/system": "^0.1.0"
     },
     "devDependencies": {
         "@solana/instructions": "workspace:*",
