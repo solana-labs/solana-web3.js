@@ -9,6 +9,7 @@ import {
     SYSVAR_FEES_ADDRESS,
     SYSVAR_LAST_RESTART_SLOT_ADDRESS,
     SYSVAR_RECENT_BLOCKHASHES_ADDRESS,
+    SYSVAR_RENT_ADDRESS,
 } from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -120,6 +121,22 @@ describe('sysvar account', () => {
                         },
                     },
                 ]),
+            });
+        });
+    });
+    describe('rent', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_RENT_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_RENT_ADDRESS, {
+                data: {
+                    burnPercent: expect.any(Number),
+                    exemptionThreshold: expect.any(Number),
+                    lamportsPerByteYear: expect.any(String), // JsonParsed converts to string
+                },
             });
         });
     });
