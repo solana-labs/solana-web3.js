@@ -87,7 +87,7 @@ describe('sendTransaction', () => {
                 expect.assertions(1);
                 const [secretKey, { value: latestBlockhash }] = await Promise.all([
                     getSecretKey(),
-                    rpc.getLatestBlockhash().send(),
+                    rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
                 ]);
                 const message = getMockTransactionMessage({
                     blockhash: latestBlockhash.blockhash,
@@ -113,7 +113,7 @@ describe('sendTransaction', () => {
     });
     it('fatals when called with a transaction having an invalid signature', async () => {
         expect.assertions(3);
-        const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();
+        const { value: latestBlockhash } = await rpc.getLatestBlockhash({ commitment: 'processed' }).send();
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
             feePayerAddressBytes: MOCK_PUBLIC_KEY_BYTES,
@@ -142,7 +142,7 @@ describe('sendTransaction', () => {
         expect.assertions(3);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -204,7 +204,7 @@ describe('sendTransaction', () => {
                 ])) as CryptoKeyPair;
                 return [keyPair.privateKey, new Uint8Array(await crypto.subtle.exportKey('raw', keyPair.publicKey))];
             })(),
-            rpc.getLatestBlockhash().send(),
+            rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
         ]);
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -264,7 +264,7 @@ describe('sendTransaction', () => {
             expect.assertions(2);
             const [secretKey, { value: latestBlockhash }] = await Promise.all([
                 getSecretKey(),
-                rpc.getLatestBlockhash().send(),
+                rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
             ]);
             const message = getMockTransactionMessage({
                 blockhash: latestBlockhash.blockhash,
