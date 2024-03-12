@@ -66,10 +66,11 @@
     "dependencies": {
         "@solana/errors": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
-        "undici": "^6.6.2"
+        "undici-types": "^6.7.1"
     },
     "devDependencies": {
         "tinybench": "^2.6.0",
+        "undici": "^6.7.1",
         "zx": "^7.2.3"
     },
     "bundlewatch": {

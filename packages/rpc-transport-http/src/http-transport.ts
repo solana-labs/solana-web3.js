@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
-import type Dispatcher from 'undici/types/dispatcher';
+import type Dispatcher from 'undici-types/dispatcher';
 
 import {
     AllowedHttpRequestHeaders,
