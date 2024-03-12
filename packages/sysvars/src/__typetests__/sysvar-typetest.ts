@@ -3,6 +3,7 @@ import type { Address } from '@solana/addresses';
 import type { JsonParsedSysvarAccount } from '@solana/rpc-parsed-types';
 
 import { fetchSysvarClock, type SysvarClock } from '../clock';
+import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewards';
 import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
@@ -51,4 +52,12 @@ const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
     fetchSysvarClock(rpc) satisfies Promise<SysvarClock>;
     // @ts-expect-error Returns a `SysvarClock`.
     fetchSysvarClock(rpc) satisfies Promise<{ foo: string }>;
+}
+
+// `fetchSysvarEpochRewards`
+{
+    // Returns a `SysvarEpochRewards`.
+    fetchSysvarEpochRewards(rpc) satisfies Promise<SysvarEpochRewards>;
+    // @ts-expect-error Returns a `SysvarEpochRewards`.
+    fetchSysvarEpochRewards(rpc) satisfies Promise<{ foo: string }>;
 }
