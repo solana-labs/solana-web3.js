@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
+import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 
 import { GetBlockProductionApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -62,7 +62,7 @@ describe('getBlockProduction', () => {
 
     describe('when called with a `lastSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             const blockProductionPromise = rpc
                 .getBlockProduction({
                     range: {
@@ -71,10 +71,17 @@ describe('getBlockProduction', () => {
                     },
                 })
                 .send();
-            await expect(blockProductionPromise).rejects.toThrow(RpcError);
-            await expect(blockProductionPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await Promise.all([
+                expect(blockProductionPromise).rejects.toThrow(SolanaError),
+                expect(blockProductionPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+                ),
+                expect(blockProductionPromise).rejects.toHaveProperty(
+                    'context.__serverMessage',
+                    expect.stringMatching(/lastSlot, 9223372036854776000, is too large; max \d+/),
+                ),
+            ]);
         });
     });
 });

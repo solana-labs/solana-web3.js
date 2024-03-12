@@ -2,9 +2,8 @@ import { open } from 'node:fs/promises';
 
 import type { Address } from '@solana/addresses';
 import { getBase58Decoder } from '@solana/codecs-strings';
+import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { SolanaRpcErrorCode } from '@solana/rpc-types';
 import path from 'path';
 
 import { GetSlotLeadersApi } from '../index';
@@ -51,30 +50,32 @@ describe('getSlotLeaders', () => {
 
     describe('when called with a `startSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const sendPromise = rpc
                 .getSlotLeaders(
                     2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                     3,
                 )
                 .send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(sendPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid slot range: leader schedule for epoch 21350398233460 is unavailable',
+                }),
+            );
         });
     });
 
     describe('when called with a `limit` greater than 5000', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const minimumLedgerSlot = (await rpc.minimumLedgerSlot().send()) as bigint;
 
             const sendPromise = rpc.getSlotLeaders(minimumLedgerSlot, 5001).send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(sendPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid limit; max 5000',
+                }),
+            );
         });
     });
 });

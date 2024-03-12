@@ -1,5 +1,5 @@
+import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY, SolanaError } from '@solana/errors';
 import { createRpc, type Rpc } from '@solana/rpc-spec';
-import type { SolanaRpcErrorCode } from '@solana/rpc-types';
 
 import { createSolanaRpcApi, GetHealthApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -20,26 +20,26 @@ describe('getHealth', () => {
     describe('when the node is unhealthy', () => {
         let rpc: Rpc<GetHealthApi>;
         const errorMessage = 'Node is unhealthy';
-        const errorCode = -32005;
+        const errorCode = SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY;
         const errorObject = {
             code: errorCode,
+            data: { numSlotsBehind: 123 },
             message: errorMessage,
-            name: 'RpcError',
         };
         beforeEach(() => {
             rpc = createRpc({
                 api: createSolanaRpcApi(),
-                transport: jest.fn().mockRejectedValue(errorObject),
+                transport: jest.fn().mockResolvedValue({ error: errorObject }),
             });
         });
         it('returns an error message', async () => {
             expect.assertions(1);
             const healthPromise = rpc.getHealth().send();
-            await expect(healthPromise).rejects.toMatchObject({
-                code: errorCode satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_NODE_UNHEALTHY'],
-                message: errorMessage,
-                name: 'RpcError',
-            });
+            await expect(healthPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY, {
+                    numSlotsBehind: 123,
+                }),
+            );
         });
     });
 });

@@ -1,7 +1,11 @@
 import type { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SolanaError,
+} from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 
 import { GetStakeActivationApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -31,47 +35,54 @@ describe('getStakeActivation', () => {
 
     describe('when called with an account that is not a stake account', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const stakeActivationPromise = rpc
                 .getStakeActivation(
                     // Randomly generated
                     'BnWCFuxmi6uH3ceVx4R8qcbWBMPVVYVVFWtAiiTA1PAu' as Address,
                 )
                 .send();
-            await expect(stakeActivationPromise).rejects.toThrow(RpcError);
-            await expect(stakeActivationPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(stakeActivationPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid param: account not found',
+                }),
+            );
         });
     });
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             const stakeActivationPromise = rpc
                 .getStakeActivation(stakeAccountAddress, {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(stakeActivationPromise).rejects.toThrow(RpcError);
-            await expect(stakeActivationPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(stakeActivationPromise).rejects.toThrow(SolanaError),
+                expect(stakeActivationPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(stakeActivationPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 
     describe('when called with an `epoch` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             const stakeActivationPromise = rpc
                 .getStakeActivation(stakeAccountAddress, {
                     epoch: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(stakeActivationPromise).rejects.toThrow(RpcError);
-            await expect(stakeActivationPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(stakeActivationPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage:
+                        'Invalid param: epoch 9223372036854776000. Only the current epoch (0) is supported',
+                }),
+            );
         });
     });
 });

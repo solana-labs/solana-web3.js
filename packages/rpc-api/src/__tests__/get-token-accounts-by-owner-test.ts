@@ -1,7 +1,11 @@
 import type { Address } from '@solana/addresses';
+import {
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SolanaError,
+} from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 
 import { GetTokenAccountsByOwnerApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -64,7 +68,7 @@ describe('getTokenAccountsByOwner', () => {
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws a slot not reached error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -82,10 +86,14 @@ describe('getTokenAccountsByOwner', () => {
                     },
                 )
                 .send();
-            await expect(accountInfoPromise).rejects.toThrow(RpcError);
-            await expect(accountInfoPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(accountInfoPromise).rejects.toThrow(SolanaError),
+                expect(accountInfoPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(accountInfoPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 
@@ -109,7 +117,7 @@ describe('getTokenAccountsByOwner', () => {
 
     describe('when called with a mint that does not exist', () => {
         it('throws an error for mint not existing', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -119,10 +127,11 @@ describe('getTokenAccountsByOwner', () => {
                 'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4' as Address<'bYaTaiLtMmTfqZaVbo2rwQrdj1iA2DdjMrSACLCSZj4'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { mint }).send();
-            await expect(accountInfoPromise).rejects.toThrow(RpcError);
-            await expect(accountInfoPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(accountInfoPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid param: could not find mint',
+                }),
+            );
         });
     });
 
@@ -191,7 +200,7 @@ describe('getTokenAccountsByOwner', () => {
 
     describe('when called with a program that is not a Token program', () => {
         it('throws an error for unrecognized program', async () => {
-            expect.assertions(2);
+            expect.assertions(1);
             // Owner for fixtures/spl-token-token-account-owner.json
             const owner =
                 'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL' as Address<'G4QJANEpvEN8vLaaMZoWwZtqHfWxuWpd5RrVVYXPCgeL'>;
@@ -201,10 +210,11 @@ describe('getTokenAccountsByOwner', () => {
                 'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk' as Address<'AfFRmCFz8yUWzug2jiRc13xEEzBwyxxYSRGVE5uQMpHk'>;
 
             const accountInfoPromise = rpc.getTokenAccountsByOwner(owner, { programId }).send();
-            await expect(accountInfoPromise).rejects.toThrow(RpcError);
-            await expect(accountInfoPromise).rejects.toMatchObject({
-                code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-            });
+            await expect(accountInfoPromise).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                    __serverMessage: 'Invalid param: unrecognized Token program id',
+                }),
+            );
         });
     });
 

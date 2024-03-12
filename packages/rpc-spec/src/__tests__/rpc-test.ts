@@ -1,4 +1,5 @@
-import { createRpcMessage, RpcError } from '@solana/rpc-spec-types';
+import { SOLANA_ERROR__JSON_RPC__PARSE_ERROR, SolanaError } from '@solana/errors';
+import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi } from '../rpc-api';
@@ -39,12 +40,14 @@ describe('JSON-RPC 2.0', () => {
         expect(result).toBe(123);
     });
     it('throws errors from the transport', async () => {
-        expect.assertions(3);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ error: { code: 123, data: 'abc', message: 'o no' } });
+        expect.assertions(1);
+        (makeHttpRequest as jest.Mock).mockResolvedValueOnce({
+            error: { code: SOLANA_ERROR__JSON_RPC__PARSE_ERROR, message: 'o no' },
+        });
         const sendPromise = rpc.someMethod().send();
-        await expect(sendPromise).rejects.toThrow(RpcError);
-        await expect(sendPromise).rejects.toThrow(/o no/);
-        await expect(sendPromise).rejects.toMatchObject({ code: 123, data: 'abc' });
+        await expect(sendPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__PARSE_ERROR, { __serverMessage: 'o no' }),
+        );
     });
     describe('when calling a method having a concrete implementation', () => {
         let rpc: Rpc<TestRpcMethods>;

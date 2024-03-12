@@ -3,10 +3,15 @@ import { Buffer } from 'node:buffer';
 import type { Address } from '@solana/addresses';
 import { fixEncoder } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import {
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE,
+    SolanaError,
+} from '@solana/errors';
 import { createPrivateKeyFromBytes } from '@solana/keys';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Base58EncodedBytes, Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Base58EncodedBytes, Commitment } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
 import { GetLatestBlockhashApi, SimulateTransactionApi } from '../index';
@@ -177,7 +182,7 @@ describe('simulateTransaction', () => {
     });
 
     it('throws when called with a `minContextSlot` higher than the highest slot available', async () => {
-        expect.assertions(2);
+        expect.assertions(3);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
             rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
@@ -204,14 +209,18 @@ describe('simulateTransaction', () => {
                 },
             )
             .send();
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-        });
+        await Promise.all([
+            expect(resultPromise).rejects.toThrow(SolanaError),
+            expect(resultPromise).rejects.toHaveProperty(
+                'context.__code',
+                SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+            ),
+            expect(resultPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+        ]);
     });
 
     it('throws when called with an invalid signature if `sigVerify` is true', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const { value: latestBlockhash } = await rpc.getLatestBlockhash({ commitment: 'processed' }).send();
         const message = getMockTransactionMessage({
             blockhash: latestBlockhash.blockhash,
@@ -236,11 +245,9 @@ describe('simulateTransaction', () => {
             )
             .send();
 
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toThrow(/Transaction signature verification failure/);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32003 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE'],
-        });
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE),
+        );
     });
 
     it('does not throw when called with an invalid signature when `sigVerify` is false', async () => {
@@ -358,7 +365,7 @@ describe('simulateTransaction', () => {
     });
 
     it('throws when called with a transaction having an unsupported version', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const [secretKey, { value: latestBlockhash }] = await Promise.all([
             getSecretKey(),
             rpc.getLatestBlockhash({ commitment: 'processed' }).send(),
@@ -382,18 +389,18 @@ describe('simulateTransaction', () => {
                 { commitment: 'processed', encoding: 'base64' },
             )
             .send();
-
-        await expect(resultPromise).rejects.toThrow(RpcError);
         await expect(resultPromise).rejects.toThrow(
-            /invalid value: integer `126`, expected a valid transaction message version/,
+            new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                __serverMessage:
+                    'failed to deserialize solana_sdk::transaction::versioned::' +
+                    'VersionedTransaction: invalid value: integer `126`, expected a valid ' +
+                    'transaction message version',
+            }),
         );
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-        });
     });
 
     it('throws when called with a malformed transaction message', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const secretKey = await getSecretKey();
         const message = new Uint8Array([4, 5, 6]);
         const signature = new Uint8Array(await crypto.subtle.sign('Ed25519', secretKey, message));
@@ -409,12 +416,13 @@ describe('simulateTransaction', () => {
                 { commitment: 'processed', encoding: 'base64' },
             )
             .send();
-
-        await expect(resultPromise).rejects.toThrow(RpcError);
-        await expect(resultPromise).rejects.toThrow(/failed to fill whole buffer/);
-        await expect(resultPromise).rejects.toMatchObject({
-            code: -32602 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_INVALID_PARAMS'],
-        });
+        await expect(resultPromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
+                __serverMessage:
+                    'failed to deserialize solana_sdk::transaction::versioned::' +
+                    'VersionedTransaction: io error: failed to fill whole buffer',
+            }),
+        );
     });
 
     it('returns an AccountNotFound error when the fee payer is an unknown account', async () => {

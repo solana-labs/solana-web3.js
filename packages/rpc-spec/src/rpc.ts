@@ -1,9 +1,9 @@
+import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
 import {
     Callable,
     createRpcMessage,
     Flatten,
     OverloadImplementations,
-    RpcError,
     RpcResponse,
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
@@ -75,7 +75,7 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
                 signal: options?.abortSignal,
             });
             if ('error' in response) {
-                throw new RpcError(response.error);
+                throw getSolanaErrorFromJsonRpcError(response.error);
             }
             return (
                 responseTransformer ? responseTransformer(response.result, methodName) : response.result

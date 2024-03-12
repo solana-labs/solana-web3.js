@@ -1,6 +1,6 @@
+import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { Commitment, SolanaRpcErrorCode } from '@solana/rpc-types';
+import type { Commitment } from '@solana/rpc-types';
 
 import { GetEpochInfoApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -30,16 +30,20 @@ describe('getEpochInfo', () => {
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             const epochInfoPromise = rpc
                 .getEpochInfo({
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(epochInfoPromise).rejects.toThrow(RpcError);
-            await expect(epochInfoPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(epochInfoPromise).rejects.toThrow(SolanaError),
+                expect(epochInfoPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(epochInfoPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 });

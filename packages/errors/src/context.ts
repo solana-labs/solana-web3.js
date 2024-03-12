@@ -84,6 +84,23 @@ import {
     SOLANA_ERROR__INVALID_NONCE,
     SOLANA_ERROR__INVARIANT_VIOLATION__CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
     SOLANA_ERROR__INVARIANT_VIOLATION__SWITCH_MUST_BE_EXHAUSTIVE,
+    SOLANA_ERROR__JSON_RPC__INTERNAL_ERROR,
+    SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
+    SOLANA_ERROR__JSON_RPC__INVALID_REQUEST,
+    SOLANA_ERROR__JSON_RPC__METHOD_NOT_FOUND,
+    SOLANA_ERROR__JSON_RPC__PARSE_ERROR,
+    SOLANA_ERROR__JSON_RPC__SCAN_ERROR,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_CLEANED_UP,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_NOT_AVAILABLE,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_STATUS_NOT_AVAILABLE_YET,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_KEY_EXCLUDED_FROM_SECONDARY_INDEX,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_LONG_TERM_STORAGE_SLOT_SKIPPED,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SLOT_SKIPPED,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_PRECOMPILE_VERIFICATION_FAILURE,
+    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_UNSUPPORTED_TRANSACTION_VERSION,
     SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH,
@@ -120,6 +137,7 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
     SolanaErrorCode,
 } from './codes';
+import { RpcSimulateTransactionResult } from './json-rpc-error';
 
 type BasicInstructionErrorContext<T extends SolanaErrorCode> = Readonly<{ [P in T]: { index: number } }>;
 
@@ -319,6 +337,58 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__INVARIANT_VIOLATION__SWITCH_MUST_BE_EXHAUSTIVE]: {
             unexpectedValue: unknown;
+        };
+        [SOLANA_ERROR__JSON_RPC__INTERNAL_ERROR]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__INVALID_PARAMS]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__INVALID_REQUEST]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__METHOD_NOT_FOUND]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__PARSE_ERROR]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SCAN_ERROR]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_CLEANED_UP]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_NOT_AVAILABLE]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_STATUS_NOT_AVAILABLE_YET]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_KEY_EXCLUDED_FROM_SECONDARY_INDEX]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_LONG_TERM_STORAGE_SLOT_SKIPPED]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED]: {
+            contextSlot: number;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY]: {
+            numSlotsBehind?: number;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE]: Omit<
+            RpcSimulateTransactionResult,
+            'err'
+        >;
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SLOT_SKIPPED]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_PRECOMPILE_VERIFICATION_FAILURE]: {
+            __serverMessage: string;
+        };
+        [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_UNSUPPORTED_TRANSACTION_VERSION]: {
+            __serverMessage: string;
         };
         [SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH]: {
             byteLength: number;

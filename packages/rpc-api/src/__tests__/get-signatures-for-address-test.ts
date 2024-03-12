@@ -1,7 +1,6 @@
 import type { Address } from '@solana/addresses';
+import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
-import { RpcError } from '@solana/rpc-spec-types';
-import type { SolanaRpcErrorCode } from '@solana/rpc-types';
 
 import { GetSignaturesForAddressApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -39,7 +38,7 @@ describe('getSignaturesForAddress', () => {
 
     describe('when called with a `minContextSlot` higher than the highest slot available', () => {
         it('throws an error', async () => {
-            expect.assertions(2);
+            expect.assertions(3);
             // This key is random, don't re-use in any tests that perform transactions
             const publicKey = '3F6rba4VRgdGeYzgCNWQaEJUerUEQVVuwKrETigvHhJP' as Address;
             const sendPromise = rpc
@@ -47,10 +46,14 @@ describe('getSignaturesForAddress', () => {
                     minContextSlot: 2n ** 63n - 1n, // u64:MAX; safe bet it'll be too high.
                 })
                 .send();
-            await expect(sendPromise).rejects.toThrow(RpcError);
-            await expect(sendPromise).rejects.toMatchObject({
-                code: -32016 satisfies (typeof SolanaRpcErrorCode)['JSON_RPC_SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED'],
-            });
+            await Promise.all([
+                expect(sendPromise).rejects.toThrow(SolanaError),
+                expect(sendPromise).rejects.toHaveProperty(
+                    'context.__code',
+                    SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
+                ),
+                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+            ]);
         });
     });
 });
