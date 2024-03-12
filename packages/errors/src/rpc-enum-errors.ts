@@ -1,6 +1,7 @@
 import { SolanaErrorCode } from './codes';
 import { SolanaErrorContext } from './context';
 import { SolanaError } from './error';
+import { safeCaptureStackTrace } from './stack-trace';
 
 type Config = Readonly<{
     /**
@@ -47,8 +48,6 @@ export function getSolanaErrorFromRpcError(
     const errorCode = (errorCodeBaseOffset + codeOffset) as SolanaErrorCode;
     const errorContext = getErrorContext(errorCode, rpcErrorName, rpcErrorContext);
     const err = new SolanaError(errorCode, errorContext);
-    if ('captureStackTrace' in Error && typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(err, constructorOpt);
-    }
+    safeCaptureStackTrace(err, constructorOpt);
     return err;
 }
