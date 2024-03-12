@@ -873,7 +873,33 @@ importers:
         specifier: workspace:*
         version: link:../text-encoding-impl
 
-  packages/sysvars: {}
+  packages/sysvars:
+    dependencies:
+      '@solana/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@solana/codecs':
+        specifier: workspace:*
+        version: link:../codecs
+    devDependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
+      '@solana/rpc-api':
+        specifier: workspace:*
+        version: link:../rpc-api
+      '@solana/rpc-parsed-types':
+        specifier: workspace:*
+        version: link:../rpc-parsed-types
+      '@solana/rpc-spec':
+        specifier: workspace:*
+        version: link:../rpc-spec
+      '@solana/rpc-transport-http':
+        specifier: workspace:*
+        version: link:../rpc-transport-http
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
 
   packages/test-config:
     dependencies:
