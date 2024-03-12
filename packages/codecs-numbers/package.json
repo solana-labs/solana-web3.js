@@ -39,7 +39,7 @@
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
         "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
-        "style:fix": "pnpm eslint --fix src/* && pnpm prettier -w src/* package.json",
+        "style:fix": "pnpm eslint --fix \"src/**\" && pnpm prettier -w src/* package.json",
         "test:lint": "jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",
         "test:prettier": "jest -c ../../node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
