@@ -59,6 +59,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Fixing the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs).
     -   [Adjusting the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#adjusting-the-size-of-codecs).
     -   [Offsetting codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#offsetting-codecs).
+    -   [Padding codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#padding-codecs).
     -   [Reversing codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#reversing-codecs).
     -   [Byte helpers](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#byte-helpers).
 -   [`@solana/codecs-numbers`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-numbers) This package offers codecs for numbers of various sizes and characteristics.

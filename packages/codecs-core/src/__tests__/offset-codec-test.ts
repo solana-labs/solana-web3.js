@@ -1,39 +1,12 @@
 import { SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
-import { FixedSizeCodec } from '../codec';
 import { offsetCodec } from '../offset-codec';
-import { b, getMockCodec as getBaseMockCodec } from './__setup__';
-
-function getMockCodec({ innerSize, totalSize }: { innerSize: number; totalSize: number }) {
-    const mockCodec = getBaseMockCodec({ size: totalSize });
-    mockCodec.write.mockImplementation((_value, _bytes, offset) => offset + innerSize);
-    mockCodec.read.mockImplementation((bytes, offset) => [bytes, offset + innerSize]);
-    return mockCodec as typeof mockCodec & { fixedSize: number };
-}
-
-function expectNewPreOffset(
-    codec: FixedSizeCodec<unknown>,
-    mockCodec: FixedSizeCodec<unknown>,
-    preOffset: number,
-    expectedNewPreOffset: number,
-) {
-    const bytes = new Uint8Array(Array.from({ length: codec.fixedSize }, () => 0));
-    codec.write(null, bytes, preOffset);
-    expect(mockCodec.write).toHaveBeenCalledWith(null, bytes, expectedNewPreOffset);
-    codec.read(bytes, preOffset)[1];
-    expect(mockCodec.read).toHaveBeenCalledWith(bytes, expectedNewPreOffset);
-}
-
-function expectNewPostOffset(codec: FixedSizeCodec<unknown>, preOffset: number, expectedNewPostOffset: number) {
-    const bytes = new Uint8Array(Array.from({ length: codec.fixedSize }, () => 0));
-    expect(codec.write(null, bytes, preOffset)).toBe(expectedNewPostOffset);
-    expect(codec.read(bytes, preOffset)[1]).toBe(expectedNewPostOffset);
-}
+import { b, expectNewPostOffset, expectNewPreOffset, getMockCodec } from './__setup__';
 
 describe('offsetCodec', () => {
     describe('with relative offsets', () => {
         it('keeps the same pre-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ preOffset }) => preOffset });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 3);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -41,7 +14,7 @@ describe('offsetCodec', () => {
         });
 
         it('keeps the same post-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: ({ postOffset }) => postOffset });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 7);
             // Before: 0x000000[pre=3]ffffffff[post=7]000000
@@ -49,7 +22,7 @@ describe('offsetCodec', () => {
         });
 
         it('doubles the pre-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ preOffset }) => preOffset * 2 });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 6);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -57,7 +30,7 @@ describe('offsetCodec', () => {
         });
 
         it('doubles the post-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 1, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 1, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: ({ postOffset }) => postOffset * 2 });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 8);
             // Before: 0x000000[pre=3]ff[post=4]000000000000
@@ -65,7 +38,7 @@ describe('offsetCodec', () => {
         });
 
         it('goes forwards and restores the original offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 2, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 2, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ preOffset }) => preOffset,
                 preOffset: ({ preOffset }) => preOffset + 2,
@@ -77,7 +50,7 @@ describe('offsetCodec', () => {
         });
 
         it('goes backwards and restores the original offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 2, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 2, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ preOffset }) => preOffset,
                 preOffset: ({ preOffset }) => preOffset - 3,
@@ -91,7 +64,7 @@ describe('offsetCodec', () => {
 
     describe('with absolute offsets', () => {
         it('sets an absolute pre-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: () => 6 });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 6);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -99,7 +72,7 @@ describe('offsetCodec', () => {
         });
 
         it('sets an absolute post-offset', () => {
-            const mockCodec = getMockCodec({ innerSize: 1, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 1, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: () => 8 });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 8);
             // Before: 0x000000[pre=3]ff[post=4]000000000000
@@ -109,7 +82,7 @@ describe('offsetCodec', () => {
 
     describe('with wrapped relative offsets', () => {
         it('uses the provided pre-offset as-is if within the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ preOffset, wrapBytes }) => wrapBytes(preOffset + 2) });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 5);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -117,7 +90,7 @@ describe('offsetCodec', () => {
         });
 
         it('uses the provided post-offset as-is if within the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ postOffset, wrapBytes }) => wrapBytes(postOffset + 2),
             });
@@ -127,7 +100,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the pre-offset if it is below the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 preOffset: ({ preOffset, wrapBytes }) => wrapBytes(preOffset - 12),
             });
@@ -137,7 +110,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the post-offset if it is below the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ postOffset, wrapBytes }) => wrapBytes(postOffset - 12),
             });
@@ -147,7 +120,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the pre-offset if it is above the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 preOffset: ({ preOffset, wrapBytes }) => wrapBytes(preOffset + 12),
             });
@@ -157,7 +130,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the post-offset if it is above the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ postOffset, wrapBytes }) => wrapBytes(postOffset + 12),
             });
@@ -167,7 +140,7 @@ describe('offsetCodec', () => {
         });
 
         it('always uses a zero offset if the byte array is empty', () => {
-            const mockCodec = getMockCodec({ innerSize: 0, totalSize: 0 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 0 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ postOffset, wrapBytes }) => wrapBytes(postOffset - 42),
                 preOffset: ({ preOffset, wrapBytes }) => wrapBytes(preOffset + 42),
@@ -181,7 +154,7 @@ describe('offsetCodec', () => {
 
     describe('with wrapped absolute offsets', () => {
         it('uses the provided pre-offset as-is if within the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ wrapBytes }) => wrapBytes(5) });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 5);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -189,7 +162,7 @@ describe('offsetCodec', () => {
         });
 
         it('uses the provided post-offset as-is if within the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: ({ wrapBytes }) => wrapBytes(9) });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 9);
             // Before: 0x000000[pre=3]ffffffff[post=7]000000
@@ -197,7 +170,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the pre-offset if it is below the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ wrapBytes }) => wrapBytes(-19) });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 1);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -205,7 +178,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the post-offset if it is below the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: ({ wrapBytes }) => wrapBytes(-15) });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 5);
             // Before: 0x000000[pre=3]ffffffff[post=7]000000
@@ -213,7 +186,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the pre-offset if it is above the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: ({ wrapBytes }) => wrapBytes(105) });
             expectNewPreOffset(codec, mockCodec, /* preOffset */ 3, /* newPreOffset */ 5);
             // Before: 0x000000[pre=3]ffffffff000000
@@ -221,7 +194,7 @@ describe('offsetCodec', () => {
         });
 
         it('wraps the post-offset if it is above the byte range', () => {
-            const mockCodec = getMockCodec({ innerSize: 4, totalSize: 10 });
+            const mockCodec = getMockCodec({ innerSize: 4, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: ({ wrapBytes }) => wrapBytes(109) });
             expectNewPostOffset(codec, /* preOffset */ 3, /* newPostOffset */ 9);
             // Before: 0x000000[pre=3]ffffffff[post=7]000000
@@ -229,7 +202,7 @@ describe('offsetCodec', () => {
         });
 
         it('always uses a zero offset if the byte array is empty', () => {
-            const mockCodec = getMockCodec({ innerSize: 0, totalSize: 0 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 0 });
             const codec = offsetCodec(mockCodec, {
                 postOffset: ({ wrapBytes }) => wrapBytes(-42),
                 preOffset: ({ wrapBytes }) => wrapBytes(42),
@@ -243,7 +216,7 @@ describe('offsetCodec', () => {
 
     describe('with offset overflow', () => {
         it('throws an error if the pre-offset is negatif', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: () => -1 });
             expect(() => codec.encode(42)).toThrow(
                 new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, {
@@ -262,7 +235,7 @@ describe('offsetCodec', () => {
         });
 
         it('throws an error if the pre-offset is above the byte array length', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: () => 11 });
             expect(() => codec.encode(42)).toThrow(
                 new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, {
@@ -281,14 +254,14 @@ describe('offsetCodec', () => {
         });
 
         it('does not throw an error if the pre-offset is equal to the byte array length', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { preOffset: () => 10 });
             expect(() => codec.encode(42)).not.toThrow();
             expect(() => codec.decode(b('00'.repeat(10)))).not.toThrow();
         });
 
         it('throws an error if the post-offset is negatif', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: () => -1 });
             expect(() => codec.encode(42)).toThrow(
                 new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, {
@@ -307,7 +280,7 @@ describe('offsetCodec', () => {
         });
 
         it('throws an error if the post-offset is above the byte array length', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: () => 11 });
             expect(() => codec.encode(42)).toThrow(
                 new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, {
@@ -326,7 +299,7 @@ describe('offsetCodec', () => {
         });
 
         it('does not throw an error if the post-offset is equal to the byte array length', () => {
-            const mockCodec = getBaseMockCodec({ size: 10 });
+            const mockCodec = getMockCodec({ innerSize: 0, size: 10 });
             const codec = offsetCodec(mockCodec, { postOffset: () => 10 });
             expect(() => codec.encode(42)).not.toThrow();
             expect(() => codec.decode(b('00'.repeat(10)))).not.toThrow();
