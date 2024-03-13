@@ -904,8 +904,7 @@ export class Transaction {
     const signatureCount = shortvec.decodeLength(byteArray);
     let signatures = [];
     for (let i = 0; i < signatureCount; i++) {
-      const signature = byteArray.slice(0, SIGNATURE_LENGTH_IN_BYTES);
-      byteArray = byteArray.slice(SIGNATURE_LENGTH_IN_BYTES);
+      const signature = byteArray.splice(0, SIGNATURE_LENGTH_IN_BYTES);
       signatures.push(bs58.encode(Buffer.from(signature)));
     }
 
