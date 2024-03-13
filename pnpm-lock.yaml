@@ -834,6 +834,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-numbers':
+        specifier: workspace:*
+        version: link:../codecs-numbers
       '@solana/codecs-strings':
         specifier: workspace:*
         version: link:../codecs-strings
