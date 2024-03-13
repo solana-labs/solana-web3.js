@@ -284,25 +284,21 @@ export class Message {
     const accountCount = shortvec.decodeLength(byteArray);
     let accountKeys = [];
     for (let i = 0; i < accountCount; i++) {
-      const account = byteArray.slice(0, PUBLIC_KEY_LENGTH);
-      byteArray = byteArray.slice(PUBLIC_KEY_LENGTH);
+      const account = byteArray.splice(0, PUBLIC_KEY_LENGTH);
       accountKeys.push(new PublicKey(Buffer.from(account)));
     }
 
-    const recentBlockhash = byteArray.slice(0, PUBLIC_KEY_LENGTH);
-    byteArray = byteArray.slice(PUBLIC_KEY_LENGTH);
+    const recentBlockhash = byteArray.splice(0, PUBLIC_KEY_LENGTH);
 
     const instructionCount = shortvec.decodeLength(byteArray);
     let instructions: CompiledInstruction[] = [];
     for (let i = 0; i < instructionCount; i++) {
       const programIdIndex = byteArray.shift()!;
       const accountCount = shortvec.decodeLength(byteArray);
-      const accounts = byteArray.slice(0, accountCount);
-      byteArray = byteArray.slice(accountCount);
+      const accounts = byteArray.splice(0, accountCount);
       const dataLength = shortvec.decodeLength(byteArray);
-      const dataSlice = byteArray.slice(0, dataLength);
+      const dataSlice = byteArray.splice(0, dataLength);
       const data = bs58.encode(Buffer.from(dataSlice));
-      byteArray = byteArray.slice(dataLength);
       instructions.push({
         programIdIndex,
         accounts,

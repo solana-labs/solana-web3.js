@@ -83,10 +83,8 @@ export class ValidatorInfo {
 
     const configKeys: Array<ConfigKey> = [];
     for (let i = 0; i < 2; i++) {
-      const publicKey = new PublicKey(byteArray.slice(0, PUBLIC_KEY_LENGTH));
-      byteArray = byteArray.slice(PUBLIC_KEY_LENGTH);
-      const isSigner = byteArray.slice(0, 1)[0] === 1;
-      byteArray = byteArray.slice(1);
+      const publicKey = new PublicKey(byteArray.splice(0, PUBLIC_KEY_LENGTH));
+      const isSigner = byteArray.splice(0, 1)[0] === 1;
       configKeys.push({publicKey, isSigner});
     }
 
