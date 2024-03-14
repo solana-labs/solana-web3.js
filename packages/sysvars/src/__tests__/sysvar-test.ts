@@ -87,4 +87,5 @@ describe('sysvar account', () => {
             });
         });
     });
+    // `Instructions` does not exist on-chain.
 });
