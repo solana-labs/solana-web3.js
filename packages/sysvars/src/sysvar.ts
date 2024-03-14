@@ -12,8 +12,10 @@ import type { Rpc } from '@solana/rpc-spec';
 
 export const SYSVAR_CLOCK_ADDRESS =
     'SysvarC1ock11111111111111111111111111111111' as Address<'SysvarC1ock11111111111111111111111111111111'>;
+export const SYSVAR_EPOCH_REWARDS_ADDRESS =
+    'SysvarEpochRewards1111111111111111111111111' as Address<'SysvarEpochRewards1111111111111111111111111'>;
 
-type SysvarAddress = typeof SYSVAR_CLOCK_ADDRESS;
+type SysvarAddress = typeof SYSVAR_CLOCK_ADDRESS | typeof SYSVAR_EPOCH_REWARDS_ADDRESS;
 
 /**
  * Fetch an encoded sysvar account.
