@@ -6,6 +6,7 @@ import { fetchSysvarClock, type SysvarClock } from '../clock';
 import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewards';
 import { fetchSysvarEpochSchedule, type SysvarEpochSchedule } from '../epoch-schedule';
 import { fetchSysvarFees, type SysvarFees } from '../fees';
+import { fetchSysvarLastRestartSlot, type SysvarLastRestartSlot } from '../last-restart-slot';
 import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
@@ -78,4 +79,12 @@ const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
     fetchSysvarFees(rpc) satisfies Promise<SysvarFees>;
     // @ts-expect-error Returns a `SysvarFees`.
     fetchSysvarFees(rpc) satisfies Promise<{ foo: string }>;
+}
+
+// `fetchSysvarLastRestartSlot`
+{
+    // Returns a `SysvarLastRestartSlot`.
+    fetchSysvarLastRestartSlot(rpc) satisfies Promise<SysvarLastRestartSlot>;
+    // @ts-expect-error Returns a `SysvarLastRestartSlot`.
+    fetchSysvarLastRestartSlot(rpc) satisfies Promise<{ foo: string }>;
 }
