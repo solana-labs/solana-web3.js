@@ -1,7 +1,12 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
+import {
+    fetchEncodedSysvarAccount,
+    fetchJsonParsedSysvarAccount,
+    SYSVAR_CLOCK_ADDRESS,
+    SYSVAR_EPOCH_SCHEDULE_ADDRESS,
+} from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
 describe('sysvar account', () => {
@@ -47,4 +52,22 @@ describe('sysvar account', () => {
     });
     // `EpochRewards` will only appear at the start of an epoch, after epoch 0 concludes.
     // See https://github.com/solana-labs/solana/blob/e0203f22dc83cb792fa97f91dbe6e924cbd08af1/docs/src/runtime/sysvars.md?plain=1#L155-L168
+    describe('epoch schedule', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_EPOCH_SCHEDULE_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_EPOCH_SCHEDULE_ADDRESS, {
+                data: {
+                    firstNormalEpoch: expect.any(BigInt),
+                    firstNormalSlot: expect.any(BigInt),
+                    leaderScheduleSlotOffset: expect.any(BigInt),
+                    slotsPerEpoch: expect.any(BigInt),
+                    warmup: expect.any(Boolean),
+                },
+            });
+        });
+    });
 });

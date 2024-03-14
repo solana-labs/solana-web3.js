@@ -4,6 +4,7 @@ import type { JsonParsedSysvarAccount } from '@solana/rpc-parsed-types';
 
 import { fetchSysvarClock, type SysvarClock } from '../clock';
 import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewards';
+import { fetchSysvarEpochSchedule, type SysvarEpochSchedule } from '../epoch-schedule';
 import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
@@ -60,4 +61,12 @@ const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
     fetchSysvarEpochRewards(rpc) satisfies Promise<SysvarEpochRewards>;
     // @ts-expect-error Returns a `SysvarEpochRewards`.
     fetchSysvarEpochRewards(rpc) satisfies Promise<{ foo: string }>;
+}
+
+// `fetchSysvarEpochSchedule`
+{
+    // Returns a `SysvarEpochSchedule`.
+    fetchSysvarEpochSchedule(rpc) satisfies Promise<SysvarEpochSchedule>;
+    // @ts-expect-error Returns a `SysvarEpochSchedule`.
+    fetchSysvarEpochSchedule(rpc) satisfies Promise<{ foo: string }>;
 }
