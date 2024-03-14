@@ -26,6 +26,8 @@ export const SYSVAR_RECENT_BLOCKHASHES_ADDRESS =
     'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>;
 export const SYSVAR_RENT_ADDRESS =
     'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
+export const SYSVAR_SLOT_HASHES_ADDRESS =
+    'SysvarS1otHashes111111111111111111111111111' as Address<'SysvarS1otHashes111111111111111111111111111'>;
 
 type SysvarAddress =
     | typeof SYSVAR_CLOCK_ADDRESS
@@ -35,7 +37,8 @@ type SysvarAddress =
     | typeof SYSVAR_INSTRUCTIONS_ADDRESS
     | typeof SYSVAR_LAST_RESTART_SLOT_ADDRESS
     | typeof SYSVAR_RECENT_BLOCKHASHES_ADDRESS
-    | typeof SYSVAR_RENT_ADDRESS;
+    | typeof SYSVAR_RENT_ADDRESS
+    | typeof SYSVAR_SLOT_HASHES_ADDRESS;
 
 /**
  * Fetch an encoded sysvar account.
