@@ -23,6 +23,7 @@ import {
     SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
     SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH,
@@ -304,6 +305,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             max: bigint | number;
             min: bigint | number;
             value: bigint | number;
+        };
+        [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]: {
+            bytesLength: number;
+            codecDescription: string;
+            offset: number;
         };
         [SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR]: {
             encodedData: string;

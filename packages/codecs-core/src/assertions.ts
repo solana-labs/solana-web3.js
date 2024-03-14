@@ -1,6 +1,7 @@
 import {
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -30,6 +31,22 @@ export function assertByteArrayHasEnoughBytesForCodec(
             bytesLength,
             codecDescription,
             expected,
+        });
+    }
+}
+
+/**
+ * Asserts that a given offset is within the byte array bounds.
+ * This range is between 0 and the byte array length and is inclusive.
+ * An offset equals to the byte array length is considered a valid offset
+ * as it allows the post-offset of codecs to signal the end of the byte array.
+ */
+export function assertByteArrayOffsetIsNotOutOfRange(codecDescription: string, offset: number, bytesLength: number) {
+    if (offset < 0 || offset > bytesLength) {
+        throw new SolanaError(SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, {
+            bytesLength,
+            codecDescription,
+            offset,
         });
     }
 }
