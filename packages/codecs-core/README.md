@@ -532,6 +532,34 @@ const getU32InTheMiddleDecoder = () => offsetDecoder(biggerU32Decoder, { preOffs
 const getU32InTheMiddleCodec = () => combineCodec(getU32InTheMiddleEncoder(), getU32InTheMiddleDecoder());
 ```
 
+## Padding codecs
+
+The `padLeftCodec` and `padRightCodec` helpers can be used to add padding to the left or right of a given codec. They accept an `offset` number that tells us how big the padding should be.
+
+```ts
+const getLeftPaddedCodec = () => padLeftCodec(getU16Codec(), 4);
+getLeftPaddedCodec().encode(0xffff);
+// 0x00000000ffff
+//   |       └-- Our encoded u16 number.
+//   └-- Our 4-byte padding.
+
+const getRightPaddedCodec = () => padRightCodec(getU16Codec(), 4);
+getRightPaddedCodec().encode(0xffff);
+// 0xffff00000000
+//   |   └-- Our 4-byte padding.
+//   └-- Our encoded u16 number.
+```
+
+Note that both the `padLeftCodec` and `padRightCodec` functions are simple wrappers around the `offsetCodec` and `resizeCodec` functions. For more complex padding strategies, you may want to use the `offsetCodec` and `resizeCodec` functions directly instead.
+
+As usual, encoder-only and decoder-only helpers are available for these padding functions. Namely, `padLeftEncoder`, `padRightEncoder`, `padLeftDecoder` and `padRightDecoder`.
+
+```ts
+const getMyPaddedEncoder = () => padLeftEncoder(getU16Encoder());
+const getMyPaddedDecoder = () => padLeftDecoder(getU16Decoder());
+const getMyPaddedCodec = () => combineCodec(getMyPaddedEncoder(), getMyPaddedDecoder());
+```
+
 ## Reversing codecs
 
 The `reverseCodec` helper reverses the bytes of the provided `FixedSizeCodec`.
