@@ -11,6 +11,7 @@ import {
     SYSVAR_RECENT_BLOCKHASHES_ADDRESS,
     SYSVAR_RENT_ADDRESS,
     SYSVAR_SLOT_HASHES_ADDRESS,
+    SYSVAR_SLOT_HISTORY_ADDRESS,
 } from '../sysvar';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -155,6 +156,21 @@ describe('sysvar account', () => {
                         slot: expect.any(BigInt),
                     },
                 ]),
+            });
+        });
+    });
+    describe('slot history', () => {
+        it('fetch encoded', async () => {
+            expect.assertions(3);
+            await assertValidEncodedSysvarAccount(SYSVAR_SLOT_HISTORY_ADDRESS);
+        });
+        it('fetch JSON-parsed', async () => {
+            expect.assertions(3);
+            await assertValidJsonParsedSysvarAccount(SYSVAR_SLOT_HISTORY_ADDRESS, {
+                data: {
+                    bits: expect.any(String), // JsonParsed converts to string
+                    nextSlot: expect.any(BigInt),
+                },
             });
         });
     });

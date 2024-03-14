@@ -881,6 +881,9 @@ importers:
       '@solana/codecs':
         specifier: workspace:*
         version: link:../codecs
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
