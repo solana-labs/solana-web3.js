@@ -65,6 +65,18 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/accounts": "workspace:*",
+        "@solana/codecs": "workspace:*"
+    },
+    "devDependencies": {
+        "@solana/addresses": "workspace:*",
+        "@solana/rpc-api": "workspace:*",
+        "@solana/rpc-parsed-types": "workspace:*",
+        "@solana/rpc-spec": "workspace:*",
+        "@solana/rpc-transport-http": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [
