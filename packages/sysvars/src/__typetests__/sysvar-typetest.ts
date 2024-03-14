@@ -7,6 +7,7 @@ import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewar
 import { fetchSysvarEpochSchedule, type SysvarEpochSchedule } from '../epoch-schedule';
 import { fetchSysvarFees, type SysvarFees } from '../fees';
 import { fetchSysvarLastRestartSlot, type SysvarLastRestartSlot } from '../last-restart-slot';
+import { fetchSysvarRecentBlockhashes, type SysvarRecentBlockhashes } from '../recent-blockhashes';
 import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
@@ -87,4 +88,12 @@ const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
     fetchSysvarLastRestartSlot(rpc) satisfies Promise<SysvarLastRestartSlot>;
     // @ts-expect-error Returns a `SysvarLastRestartSlot`.
     fetchSysvarLastRestartSlot(rpc) satisfies Promise<{ foo: string }>;
+}
+
+// `fetchSysvarRecentBlockhashes`
+{
+    // Returns a `SysvarRecentBlockhashes`.
+    fetchSysvarRecentBlockhashes(rpc) satisfies Promise<SysvarRecentBlockhashes>;
+    // @ts-expect-error Returns a `SysvarRecentBlockhashes`.
+    fetchSysvarRecentBlockhashes(rpc) satisfies Promise<{ foo: string }>;
 }

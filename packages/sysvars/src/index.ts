@@ -3,4 +3,5 @@ export * from './epoch-rewards';
 export * from './epoch-schedule';
 export * from './fees';
 export * from './last-restart-slot';
+export * from './recent-blockhashes';
 export * from './sysvar';
