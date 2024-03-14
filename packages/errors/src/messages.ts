@@ -23,6 +23,7 @@ import {
     SOLANA_ERROR__CODECS__ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH,
+    SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT,
@@ -256,6 +257,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]:
         'Enum discriminator out of range. Expected a number between $minRange and $maxRange, got $discriminator.',
     [SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH]: 'Expected a fixed-size codec, got a variable-size one.',
+    [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]:
+        'Codec [$codecDescription] expected a positive byte length, got $bytesLength.',
     [SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH]: 'Expected a variable-size codec, got a fixed-size one.',
     [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]:
         'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',

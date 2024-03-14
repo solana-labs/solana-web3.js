@@ -16,6 +16,7 @@ import {
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS,
@@ -268,6 +269,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             discriminator: bigint | number;
             maxRange: number;
             minRange: number;
+        };
+        [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]: {
+            bytesLength: number;
+            codecDescription: string;
         };
         [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]: {
             bytesLength: number;
