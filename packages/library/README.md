@@ -47,7 +47,7 @@ npm install --save @solana/web3.js@tp
 <script src="https://unpkg.com/@solana/web3.js@tp/dist/index.production.min.js"></script>
 ```
 
-What follows is an overview of *why* the library was re-engineered, what changes have been introduced, and how the JavaScript landscape might look across Solana in the near future.
+What follows is an overview of _why_ the library was re-engineered, what changes have been introduced, and how the JavaScript landscape might look across Solana in the near future.
 
 # Community feedback in action
 
@@ -59,11 +59,11 @@ The object-oriented design of the web3.js (1.x) API prevents optimizing compiler
 
 Read more about tree-shaking here:
 
-- [Mozilla Developer Docs: Tree Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)
-- [WebPack Docs: Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
-- [Web.Dev Blog Article: Reduce JavaScript Payloads with Tree Shaking](https://web.dev/articles/reduce-javascript-payloads-with-tree-shaking)
+-   [Mozilla Developer Docs: Tree Shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)
+-   [WebPack Docs: Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
+-   [Web.Dev Blog Article: Reduce JavaScript Payloads with Tree Shaking](https://web.dev/articles/reduce-javascript-payloads-with-tree-shaking)
 
-One example of an API that can’t be tree-shaken is the `Connection` class. It has dozens of methods, but because it’s a *class* you have no choice but to include every method in your application’s final bundle, no matter how many you *actually* use.
+One example of an API that can’t be tree-shaken is the `Connection` class. It has dozens of methods, but because it’s a _class_ you have no choice but to include every method in your application’s final bundle, no matter how many you _actually_ use.
 
 Needlessly large JavaScript bundles can cause issues with deployments to cloud compute providers like Cloudflare or AWS Lambda. They also impact webapp startup performance because of longer download and JavaScript parse times.
 
@@ -73,28 +73,28 @@ Depending on your use case and your tolerance for certain application behaviours
 
 The inability to customize web3.js has been a source of frustration for some:
 
-- The Mango team wanted to customize the transaction confirmation strategy, but all of that functionality is hidden away behind `confirmTransaction` – a static method of `Connection`. [Here’s the code for `confirmTransaction` on GitHub](https://github.com/solana-labs/solana-web3.js/blob/69a8ad25ef09f9e6d5bff1ffa8428d9be0bd32ac/packages/library-legacy/src/connection.ts#L3734).
-- Solana developer ‘mPaella’ [wanted us to add a feature in the RPC](https://github.com/solana-labs/solana-web3.js/issues/1143#issuecomment-1435927152) that would failover to a set of backup URLs in case the primary one failed.
-- Solana developer ‘epicfaace’ wanted first-class support for automatic time-windowed batching in the RPC transport. [Here’s their pull request](https://github.com/solana-labs/solana/pull/23628).
-- Multiple folks have expressed the need for custom retry logic for failed requests or transactions. [Here’s a pull request from ‘dafyddd’](https://github.com/solana-labs/solana/pull/11811) and [another from ‘abrkn’](https://github.com/solana-labs/solana-web3.js/issues/1041) attempting to modify retry logic to suit their individual use cases.
+-   The Mango team wanted to customize the transaction confirmation strategy, but all of that functionality is hidden away behind `confirmTransaction` – a static method of `Connection`. [Here’s the code for `confirmTransaction` on GitHub](https://github.com/solana-labs/solana-web3.js/blob/69a8ad25ef09f9e6d5bff1ffa8428d9be0bd32ac/packages/library-legacy/src/connection.ts#L3734).
+-   Solana developer ‘mPaella’ [wanted us to add a feature in the RPC](https://github.com/solana-labs/solana-web3.js/issues/1143#issuecomment-1435927152) that would failover to a set of backup URLs in case the primary one failed.
+-   Solana developer ‘epicfaace’ wanted first-class support for automatic time-windowed batching in the RPC transport. [Here’s their pull request](https://github.com/solana-labs/solana/pull/23628).
+-   Multiple folks have expressed the need for custom retry logic for failed requests or transactions. [Here’s a pull request from ‘dafyddd’](https://github.com/solana-labs/solana/pull/11811) and [another from ‘abrkn’](https://github.com/solana-labs/solana-web3.js/issues/1041) attempting to modify retry logic to suit their individual use cases.
 
 ## Lagging Behind Modern JavaScript
 
 The advance of modern JavaScript features presents an opportunity to developers of crypto applications, such as the ability to use native Ed25519 keys and to express large values as native `bigint`.
 
-The Web Incubator Community Group has advocated for the addition of Ed25519 support to the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), and support has already landed in *most* modern JavaScript runtimes.
+The Web Incubator Community Group has advocated for the addition of Ed25519 support to the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), and support has already landed in _most_ modern JavaScript runtimes.
 
-Support for `bigint` values has also become commonplace. The older  `number` primitive in JavaScript has a maximum value of 2^53 - 1, whereas Rust’s `u64` can represent values up to 2^64.
+Support for `bigint` values has also become commonplace. The older `number` primitive in JavaScript has a maximum value of 2^53 - 1, whereas Rust’s `u64` can represent values up to 2^64.
 
 ## Class-Based Architecture
 
-The object oriented, class-based architecture of the legacy library causes unnecessary bundle bloat. Your application has no choice but to bundle *all* of the functionality and dependencies of a class no matter how many methods you actually use at runtime.
+The object oriented, class-based architecture of the legacy library causes unnecessary bundle bloat. Your application has no choice but to bundle _all_ of the functionality and dependencies of a class no matter how many methods you actually use at runtime.
 
 Class-based architecture also presents unique risks to developers who trigger the dual-package hazard. This describes a situation you can find yourself in if you build for both CommonJS and ES modules. The situation arises when two “copies” of the same class are present in the dependency tree, causing checks like `instanceof` to fail, which introduces aggravating and difficult to debug problems.
 
 Read more about dual-package hazard:
 
-- [NodeJS: Dual Package Hazard](https://nodejs.org/api/packages.html#dual-package-hazard)
+-   [NodeJS: Dual Package Hazard](https://nodejs.org/api/packages.html#dual-package-hazard)
 
 # The New web3.js
 
@@ -110,10 +110,10 @@ The 2.0 library is tree-shakable, and that tree-shakeability is enforced in the 
 
 The new library itself is comprised of several smaller, modular packages under the `@solana` organization, including:
 
-- `@solana/rpc-transport`: For building and managing RPC transports
-- `@solana/rpc-core`: The type-spec of the Solana JSON RPC
-- `@solana/transactions`: For building and transforming Solana transaction objects
-- `@solana/codecs-*`: For building data (de)serializers
+-   `@solana/rpc-transport`: For building and managing RPC transports
+-   `@solana/rpc-core`: The type-spec of the Solana JSON RPC
+-   `@solana/transactions`: For building and transforming Solana transaction objects
+-   `@solana/codecs-*`: For building data (de)serializers
 
 Developers can use the default configurations within the library itself (`@solana/web3.js:2.0`) or import any number of the modular packages for additional customization.
 
@@ -123,7 +123,7 @@ The individual modules that make up web3.js are assembled in a **default** confi
 
 Each package uses types and generics liberally, allowing you to inject new functionality, to make extensions to each API via composition and supertypes, and to encourage you to create higher-level opinionated abstractions of your own.
 
- In fact, we expect you to do so, and to open source some of those for use by others with similar needs.
+In fact, we expect you to do so, and to open source some of those for use by others with similar needs.
 
 ### Modern JavaScript
 
@@ -133,15 +133,15 @@ One such example is the integration of Ed25519 `CryptoKeys` – native platform 
 
 Read more about the Web Crypto API here:
 
-- [Mozilla Developer Docs: Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
-- [Node JS Documentation: Web Crypto API](https://nodejs.org/api/webcrypto.html)
-- [Nieky Allen (Blog): The Web Crypto API in Action](https://medium.com/slalom-build/the-web-cryptography-api-in-action-89b2f68c602c)
+-   [Mozilla Developer Docs: Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
+-   [Node JS Documentation: Web Crypto API](https://nodejs.org/api/webcrypto.html)
+-   [Nieky Allen (Blog): The Web Crypto API in Action](https://medium.com/slalom-build/the-web-cryptography-api-in-action-89b2f68c602c)
 
 web3.js 2.0 also further eliminates dependencies such as `BN.js` by implementing large integers with `bigint`.
 
 ### Interface-Based Architecture
 
-The new library employs interfaces and types for just about *everything*, expressing most objects as data. The dual-package hazard is no longer a threat to your development; any objects compatible with an interface are usable with functions that specify that interface.
+The new library employs interfaces and types for just about _everything_, expressing most objects as data. The dual-package hazard is no longer a threat to your development; any objects compatible with an interface are usable with functions that specify that interface.
 
 This interface-based approach also allows for easy customization; for extending the library’s functionality or building on top of it.
 
@@ -149,15 +149,15 @@ This interface-based approach also allows for easy customization; for extending 
 
 Consider these statistical comparisons between web3.js 2.0 and the legacy 1.x.
 
-|  | 1.x (Legacy) | 2.0 | +/- % |
-| --- | --- | --- | --- |
-| Total minified size of library | 90 KB | 33 KB | -63% |
-| Total minified size of library (when runtime supports Ed25519) | 90 KB | 17 KB | -81% |
-| Bundled size of a web application that only executes a transfer of lamports | 67 KB | 4.5 KB | -93% |
-| Bundled size of a web application that only executes a transfer of lamports (when runtime supports Ed25519) | 67 KB | 4.5 KB | -93% |
-| Bundled size of a worker that signs and sends a transaction | 5.4 MB | 1.7 MB | -68% |
-| Performance of key generation, signing, and verifying signatures (Brave with Experimental API flag) | 700 ops/s | 7000 ops/s | +900% |
-| First-load size for Solana Explorer | 311 KB | 228 KB | -26% |
+|                                                                                                             | 1.x (Legacy) | 2.0        | +/- % |
+| ----------------------------------------------------------------------------------------------------------- | ------------ | ---------- | ----- |
+| Total minified size of library                                                                              | 90 KB        | 33 KB      | -63%  |
+| Total minified size of library (when runtime supports Ed25519)                                              | 90 KB        | 17 KB      | -81%  |
+| Bundled size of a web application that only executes a transfer of lamports                                 | 67 KB        | 4.5 KB     | -93%  |
+| Bundled size of a web application that only executes a transfer of lamports (when runtime supports Ed25519) | 67 KB        | 4.5 KB     | -93%  |
+| Bundled size of a worker that signs and sends a transaction                                                 | 5.4 MB       | 1.7 MB     | -68%  |
+| Performance of key generation, signing, and verifying signatures (Brave with Experimental API flag)         | 700 ops/s    | 7000 ops/s | +900% |
+| First-load size for Solana Explorer                                                                         | 311 KB       | 228 KB     | -26%  |
 
 The re-engineered library achieves these speedups and reductions in bundle size in large part through use of modern JavaScript APIs.
 
@@ -207,16 +207,16 @@ const rpcSubscriptions = createSolanaRpcSubscriptions({ transport });
 const abortController = new AbortController();
 
 // Subscribe for slot notifications
-const slotNotifications = await rpcSubscriptions
-    .slotNotifications()
-    .subscribe({ abortSignal: abortController.signal });
+const slotNotifications = await rpcSubscriptions.slotNotifications().subscribe({ abortSignal: abortController.signal });
 
 // Set a timer for 5 seconds, then abort the controller
-setTimeout(() => { abortController.abort(); }, 5000);
+setTimeout(() => {
+    abortController.abort();
+}, 5000);
 
 // Log slot notifications
 for await (const notif of slotNotifications) {
-  console.log('Slot notification', notif);
+    console.log('Slot notification', notif);
 }
 
 console.log('Done.');
@@ -224,9 +224,9 @@ console.log('Done.');
 
 Read more about `AbortController` at the following links:
 
-- [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
-- [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
-- [JavaScript.info: Fetch: Abort](https://javascript.info/fetch-abort)
+-   [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+-   [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
+-   [JavaScript.info: Fetch: Abort](https://javascript.info/fetch-abort)
 
 ### Scoping the RPC API
 
@@ -264,7 +264,7 @@ const getAccountInfoRpc = createJsonRpc<GetAccountInfoApi>({ api, transport });
 
 ### Creating a Custom RPC API
 
-The new library’s RPC specification supports an *infinite* number of JSON-RPC methods with **zero increase** in bundle size.
+The new library’s RPC specification supports an _infinite_ number of JSON-RPC methods with **zero increase** in bundle size.
 
 This means the library can support future additions to the official [Solana JSON RPC](https://docs.solana.com/api), or [custom RPC methods](https://www.quicknode.com/docs/ethereum/qn_fetchNFTCollectionDetails_v2) defined by some development team – for example QuickNode or Helius.
 
@@ -287,9 +287,7 @@ type NftCollectionDetailsApiResponse = Readonly<{
 // Set up an interface for the request method
 interface NftCollectionDetailsApi {
     // Define the method's name, parameters and response type
-    qn_fetchNFTCollectionDetails(args: {
-        contracts: string[],
-    }): NftCollectionDetailsApiResponse;
+    qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
 }
 
 // Export the type spec for downstream users
@@ -374,37 +372,37 @@ const defaultTransport = createDefaultRpcTransport({ url: 'https://mainnet-beta.
 
 // Sleep function to wait for a given number of milliseconds
 function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // Calculate the delay for a given attempt
 function calculateRetryDelay(attempt: number): number {
-  // Exponential backoff with a maximum of 1.5 seconds
-  return Math.min(100 * Math.pow(2, attempt), 1500);
+    // Exponential backoff with a maximum of 1.5 seconds
+    return Math.min(100 * Math.pow(2, attempt), 1500);
 }
 
 // A retrying transport that will retry up to MAX_ATTEMPTS times before failing
 async function retryingTransport<TResponse>(...args: Parameters<IRpcTransport>): Promise<TResponse> {
-  let requestError;
-  for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
-    try {
-      return await defaultTransport(...args);
-    } catch (err) {
-      requestError = err;
-      // Only sleep if we have more attempts remaining
-      if (attempts < MAX_ATTEMPTS - 1) {
-        const retryDelay = calculateRetryDelay(attempts);
-        await sleep(retryDelay);
-      }
+    let requestError;
+    for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
+        try {
+            return await defaultTransport(...args);
+        } catch (err) {
+            requestError = err;
+            // Only sleep if we have more attempts remaining
+            if (attempts < MAX_ATTEMPTS - 1) {
+                const retryDelay = calculateRetryDelay(attempts);
+                await sleep(retryDelay);
+            }
+        }
     }
-  }
-  throw requestError;
+    throw requestError;
 }
 
 // Create the RPC client
 const rpc = createJsonRpc({
-  api: createSolanaRpcApi(),
-  transport: retryingTransport,
+    api: createSolanaRpcApi(),
+    transport: retryingTransport,
 });
 ```
 
@@ -513,12 +511,12 @@ const unstableRpc = createSolanaRpcSubscriptions_UNSTABLE({ transport });
 
 You can read more about `AsyncIterator` at the following links:
 
-- [Mozilla Developer Docs: `AsyncIterator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncIterator)
-- [Luciano Mammino (Blog): JavaScript Async Iterators](https://www.nodejsdesignpatterns.com/blog/javascript-async-iterators/)
+-   [Mozilla Developer Docs: `AsyncIterator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncIterator)
+-   [Luciano Mammino (Blog): JavaScript Async Iterators](https://www.nodejsdesignpatterns.com/blog/javascript-async-iterators/)
 
 ### Cancelling Subscriptions
 
-Similar to the `AbortSignal` logic in the HTTP methods provided by `@solana/rpc-core`, applications can terminate active subscriptions using an `AbortController`. In fact, this parameter is *required* for subscriptions to encourage you to cleanup subscriptions that your application no longer needs.
+Similar to the `AbortSignal` logic in the HTTP methods provided by `@solana/rpc-core`, applications can terminate active subscriptions using an `AbortController`. In fact, this parameter is _required_ for subscriptions to encourage you to cleanup subscriptions that your application no longer needs.
 
 Consider this example of cancelling a subscription using an `AbortController`:
 
@@ -531,7 +529,9 @@ const accountNotifications = await rpc
 // Consume messages
 let previousOwner = null;
 for await (const notification of accountNotifications) {
-    const { value: { owner } } = notification;
+    const {
+        value: { owner },
+    } = notification;
     // Check the owner to see if it has changed
     if (previousOwner && owner !== previousOwner) {
         // If so, abort the subscription
@@ -556,7 +556,7 @@ try {
     for await (const notif of accountNotifications) {
         updateAccountBalance(notif.lamports);
     }
-} catch(e) {
+} catch (e) {
     // The subscription failed.
     // First, reestablish the subscription.
     await setupAccountBalanceSubscription(address);
@@ -572,11 +572,11 @@ The new library takes a brand-new approach to Solana key pairs and addresses, wh
 
 ### Web Crypto API
 
-All key operations now use the native Ed25519 implementation in JavaScript’s Web Crypto API. 
+All key operations now use the native Ed25519 implementation in JavaScript’s Web Crypto API.
 
-The API itself is designed to be a more reliably secure way to manage highly sensitive secret key information, but **********************************************************************************************************************************developers should still use extreme caution when dealing with secret key bytes in their applications**********************************************************************************************************************************.
+The API itself is designed to be a more reliably secure way to manage highly sensitive secret key information, but **developers should still use extreme caution when dealing with secret key bytes in their applications**.
 
-One thing to note is that many operations from Web Crypto – such as importing, generating, signing, and verifying are now ************************asynchronous************************.
+One thing to note is that many operations from Web Crypto – such as importing, generating, signing, and verifying are now **asynchronous**.
 
 Here’s an example of generating a `CryptoKeyPair` using the Web Crypto API and signing a message:
 
@@ -612,13 +612,13 @@ const keyPair: CryptoKeyPair = await generateKeyPair();
 
 You can see where Ed25519 is currently supported in [this GitHub issue](https://github.com/WICG/webcrypto-secure-curves/issues/20) on the Web Crypto repository. Consider sniffing the user-agent when deciding whether or not to deliver the polyfill to browsers.
 
-Operations on `CryptoKey` objects using the Web Crypto API *or* the polyfill are mostly handled by the `@solana/keys` package.
+Operations on `CryptoKey` objects using the Web Crypto API _or_ the polyfill are mostly handled by the `@solana/keys` package.
 
 ### String Addresses
 
 All addresses are now JavaScript strings. They are represented by the opaque type `Address`, which describes exactly what a Solana address actually is.
 
-Consequently, that means no more `PublicKey`. 
+Consequently, that means no more `PublicKey`.
 
 Here’s what they look like in development:
 
@@ -666,30 +666,30 @@ const feePayer = address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3');
 
 // Create a new transaction (legacy)
 const transactionLegacy = createTransaction({ version: 'legacy' });
-			// ^ LegacyTransaction
+// ^ LegacyTransaction
 
 const transactionWithFeePayerLegacy = setTransactionFeePayer(feePayer, transactionLegacy);
-			// ^ LegacyTransaction & ITransactionWithFeePayer
+// ^ LegacyTransaction & ITransactionWithFeePayer
 
 const transactionWithFeePayerAndLifetimeLegacy = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
-    transactionWithFeePayerLegacy
+    transactionWithFeePayerLegacy,
 );
-			// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 
 // Create a new transaction (v0)
 const transactionV0 = createTransaction({ version: 0 });
-			// ^ V0Transaction
+// ^ V0Transaction
 
 // Set the fee payer
 const transactionWithFeePayerV0 = setTransactionFeePayer(feePayer, transactionV0);
-			// ^ V0Transaction & ITransactionWithFeePayer
+// ^ V0Transaction & ITransactionWithFeePayer
 
 const transactionWithFeePayerAndLifetimeV0 = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
-    transactionWithFeePayerV0
+    transactionWithFeePayerV0,
 );
-			// ^ V0Transaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+// ^ V0Transaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 ```
 
 As you can see, each time a transaction is modified, the type reflects the current state. If you add a fee payer, you’ll get a type representing a transaction with a fee payer, and so on.
@@ -718,20 +718,17 @@ const transaction = createTransaction({ version: 'legacy' });
 const transactionWithFeePayer = setTransactionFeePayer(feePayer, transaction);
 const transactionWithFeePayerAndLifetime = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
-    transactionWithFeePayer
+    transactionWithFeePayer,
 );
-const transactionSignedWithFeePayerAndLifetime = await signTransaction(
-    [signer],
-    transactionWithFeePayerAndLifetime
-);
-			// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash & ITransactionWithSignatures
+const transactionSignedWithFeePayerAndLifetime = await signTransaction([signer], transactionWithFeePayerAndLifetime);
+// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash & ITransactionWithSignatures
 
 // Setting the lifetime again will remove the signatures from the object
 const transactionSignaturesStripped = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
     transactionSignedWithFeePayerAndLifetime,
 );
-			// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 ```
 
 The `signTransaction(..)` function will raise a type error if your unsigned transaction is not already equipped with a fee payer and a lifetime.
@@ -745,12 +742,12 @@ const transactionWithFeePayer = setTransactionFeePayer(feePayer, transaction);
 
 // Attempting to sign the transaction without a lifetime will throw a type error
 const transactionSignedWithFeePayer = await signTransaction([signer], transactionWithFeePayer);
-				// => "Property 'lifetimeConstraint' is missing in type"
+// => "Property 'lifetimeConstraint' is missing in type"
 ```
 
-Transaction objects are also ********frozen by these functions******** to prevent transactions from being mutated in place by functions you pass them to.
+Transaction objects are also **frozen by these functions** to prevent transactions from being mutated in place by functions you pass them to.
 
-Building transactions in this manner might feel different from what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transactions to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transactions in **********************************pipelines**********************************. Here’s how it can be used:
+Building transactions in this manner might feel different from what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transactions to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transactions in **pipelines**. Here’s how it can be used:
 
 ```tsx
 import { pipe } from '@solana/functional';
@@ -766,7 +763,7 @@ import {
 const transaction = pipe(
     createTransaction({ version: 0 }),
     tx => setTransactionFeePayer(feePayer, tx),
-    tx => setTransactionLifetimeUsingBlockhash(recentBlockhash, tx)
+    tx => setTransactionLifetimeUsingBlockhash(recentBlockhash, tx),
 );
 ```
 
@@ -778,20 +775,20 @@ We have taken steps to make it easier to write data (de)serializers, especially 
 
 Solana’s codecs libraries are broken up into modular components so you only need to import the ones you need. They are:
 
-- `@solana/codecs-core`: The core codecs library for working with codecs serializers and creating custom ones
-- `@solana/codecs-numbers`: Used for serialization of numbers (little-endian and big-endian bytes, etc.)
-- `@solana/codecs-strings`: Used for serialization of strings
-- `@solana/codecs-data-structures`: Codecs and serializers for structs
-- `@solana/options`: Designed to build codecs and serializers for types that mimic Rust’s enums, which can include embedded data within their variants such as values, tuples, and structs
+-   `@solana/codecs-core`: The core codecs library for working with codecs serializers and creating custom ones
+-   `@solana/codecs-numbers`: Used for serialization of numbers (little-endian and big-endian bytes, etc.)
+-   `@solana/codecs-strings`: Used for serialization of strings
+-   `@solana/codecs-data-structures`: Codecs and serializers for structs
+-   `@solana/options`: Designed to build codecs and serializers for types that mimic Rust’s enums, which can include embedded data within their variants such as values, tuples, and structs
 
 These packages are included in the main `@solana/web3.js` library but you may also import them from `@solana/codecs` if you only need the codecs.
 
 Here’s an example of encoding and decoding a custom struct with some strings and numbers:
 
 ```tsx
-import { getStructCodec } from "@solana/codecs-data-structures";
-import { getU64Codec, getU8Codec } from "@solana/codecs-numbers";
-import { getStringCodec } from "@solana/codecs-strings";
+import { getStructCodec } from '@solana/codecs-data-structures';
+import { getU64Codec, getU8Codec } from '@solana/codecs-numbers';
+import { getStringCodec } from '@solana/codecs-strings';
 
 // Equivalent in Rust:
 // struct {
@@ -800,63 +797,63 @@ import { getStringCodec } from "@solana/codecs-strings";
 //     name: String,
 // }
 const structCodec = getStructCodec([
-  ["amount", getU64Codec()],
-  ["decimals", getU8Codec()],
-  ["name", getStringCodec()],
+    ['amount', getU64Codec()],
+    ['decimals', getU8Codec()],
+    ['name', getStringCodec()],
 ]);
 
 const myToken = {
-  amount: 1000000000000000n, // `bigint` or `number` is supported
-  decimals: 2,
-  name: "My Token",
+    amount: 1000000000000000n, // `bigint` or `number` is supported
+    decimals: 2,
+    name: 'My Token',
 };
 
 const myEncodedToken: Uint8Array = structCodec.encode(myToken);
 const myDecodedToken = structCodec.decode(myEncodedToken);
 
 myDecodedToken satisfies {
-  amount: bigint;
-  decimals: number;
-  name: string;
-}
+    amount: bigint;
+    decimals: number;
+    name: string;
+};
 ```
 
 You may only need to encode or decode data, but not both. Importing one or the other allows your optimizing compiler to tree-shake the other implementation away:
 
 ```tsx
-import { Codec, combineCodec, Decoder, Encoder } from "@solana/codecs-core";
-import { getStructDecoder, getStructEncoder } from "@solana/codecs-data-structures";
-import { getU8Decoder, getU8Encoder, getU64Decoder, getU64Encoder } from "@solana/codecs-numbers";
-import { getStringDecoder, getStringEncoder } from "@solana/codecs-strings";
+import { Codec, combineCodec, Decoder, Encoder } from '@solana/codecs-core';
+import { getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
+import { getU8Decoder, getU8Encoder, getU64Decoder, getU64Encoder } from '@solana/codecs-numbers';
+import { getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
 export type MyToken = {
-  amount: bigint,
-  decimals: number,
-  name: string,
-}
+    amount: bigint;
+    decimals: number;
+    name: string;
+};
 
 export type MyTokenArgs = {
-  amount: number | bigint,
-  decimals: number,
-  name: string,
-}
+    amount: number | bigint;
+    decimals: number;
+    name: string;
+};
 
-export const getMyTokenEncoder = (): Encoder<MyTokenArgs> => getStructEncoder([
-  ["amount", getU64Encoder()],
-  ["decimals", getU8Encoder()],
-  ["name", getStringEncoder()],
-]);
+export const getMyTokenEncoder = (): Encoder<MyTokenArgs> =>
+    getStructEncoder([
+        ['amount', getU64Encoder()],
+        ['decimals', getU8Encoder()],
+        ['name', getStringEncoder()],
+    ]);
 
-export const getMyTokenDecoder = (): Decoder<MyToken> => getStructDecoder([
-  ["amount", getU64Decoder()],
-  ["decimals", getU8Decoder()],
-  ["name", getStringDecoder()],
-]);
+export const getMyTokenDecoder = (): Decoder<MyToken> =>
+    getStructDecoder([
+        ['amount', getU64Decoder()],
+        ['decimals', getU8Decoder()],
+        ['name', getStringDecoder()],
+    ]);
 
-export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> => combineCodec(
-  getMyTokenEncoder(),
-  getMyTokenDecoder()
-);
+export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> =>
+    combineCodec(getMyTokenEncoder(), getMyTokenDecoder());
 ```
 
 See more in the different packages’ [README files on GitHub](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs-data-structures/README.md).
@@ -865,7 +862,7 @@ See more in the different packages’ [README files on GitHub](https://github.co
 
 The new library makes use of some advanced TypeScript features, including generic types, conditional types, `Parameters<..>`, `ReturnType<..>` and more.
 
-We’ve described the RPC API in detail so that TypeScript can determine the *exact* type of the result you will receive from the server given a particular input. Change the type of the input, and you will see the return type reflect that change.
+We’ve described the RPC API in detail so that TypeScript can determine the _exact_ type of the result you will receive from the server given a particular input. Change the type of the input, and you will see the return type reflect that change.
 
 ### RPC Types
 
@@ -883,30 +880,36 @@ Here’s an example of this in action:
 //     parentSlot: bigint;
 //     previousBlockhash: Blockhash;
 // }
-const blockResponse = await rpc.getBlock(0n, {
-    rewards: false,
-    transactionDetails: 'none'
-}).send();
+const blockResponse = await rpc
+    .getBlock(0n, {
+        rewards: false,
+        transactionDetails: 'none',
+    })
+    .send();
 
 // Switch `rewards` to `true`, get `rewards` in the return type
 // {
 //     /* ... Previous response */
 //     rewards: Reward[];
 // }
-const blockWithRewardsResponse = await rpc.getBlock(0n, {
-    rewards: true,
-    transactionDetails: 'none'
-}).send();
+const blockWithRewardsResponse = await rpc
+    .getBlock(0n, {
+        rewards: true,
+        transactionDetails: 'none',
+    })
+    .send();
 
 // Switch `transactionDetails` to `full`, get `transactions` in the return type
 // {
 //     /* ... Previous response */
 //     transactions: TransactionResponse[];
 // }
-const blockWithRewardsAndTransactionsResponse = await rpc.getBlock(0n, {
-    rewards: true,
-    transactionDetails: 'full'
-}).send();
+const blockWithRewardsAndTransactionsResponse = await rpc
+    .getBlock(0n, {
+        rewards: true,
+        transactionDetails: 'full',
+    })
+    .send();
 ```
 
 ### Catching Compile-Time Bugs with TypeScript
@@ -951,13 +954,10 @@ Are you working with a nonce transaction and forgot to make `AdvanceNonce` the f
 const feePayer = await generateKeyPair();
 const feePayerAddress = await getAddressFromPublicKey(feePayer.publicKey);
 
-const notNonceTransaction = pipe(
-    createTransaction({ version: 0 }),
-    tx => setTransactionFeePayer(feePayerAddress, tx),
-);
+const notNonceTransaction = pipe(createTransaction({ version: 0 }), tx => setTransactionFeePayer(feePayerAddress, tx));
 
 notNonceTransaction satisfies IDurableNonceTransaction;
-                    // => Property 'lifetimeConstraint' is missing in type
+// => Property 'lifetimeConstraint' is missing in type
 
 const nonceConfig = {
     nonce: 'nonce' as Nonce,
@@ -971,7 +971,7 @@ const stillNotNonceTransaction = {
 };
 
 stillNotNonceTransaction satisfies IDurableNonceTransaction;
-                        // => 'readonly IInstruction<string>[]' is not assignable to type 'readonly [AdvanceNonceAccountInstruction<string, string>, ...IInstruction<string>[]]'
+// => 'readonly IInstruction<string>[]' is not assignable to type 'readonly [AdvanceNonceAccountInstruction<string, string>, ...IInstruction<string>[]]'
 
 const validNonceTransaction = pipe(
     createTransaction({ version: 0 }),
@@ -1036,38 +1036,126 @@ const tx = fromVersionedTransactionWithDurableNonce(transaction, lastValidBlockh
 
 To see more conversions supported by `@solana/compat`, you can check out the package’s [README on GitHub](https://github.com/solana-labs/solana-web3.js/blob/master/packages/compat/README.md).
 
+## Program Clients
+
+Writing JavaScript clients for on-chain programs has been done manually up until now. Without an IDL for some of the native programs, this process has been necessarily manual and has resulted in clients that lag behind the actual capabilities of the programs themselves.
+
+We think that program clients should be _generated_ rather than written. Developers should be able to write Rust programs, compile the program code, and generate all of the JavaScript client-side code to interact with the program.
+
+We use [Kinobi](https://github.com/metaplex-foundation/kinobi) to represent Solana programs and generate clients for them. This includes a JavaScript client compatible with this library. For instance, here is how you’d construct a transaction composed of instructions from three different core programs.
+
+```tsx
+import { createTransaction, pipe } from '@solana/web3.js';
+import { getAddMemoInstruction } from '@solana-program/memo';
+import { getSetComputeUnitLimitInstruction } from '@solana-program/compute-budget';
+import { getTransferSolInstruction } from '@solana-program/system';
+
+const instructions = [
+    getSetComputeUnitLimitInstruction({ units: 600_000 }),
+    getTransferSolInstruction({ source, destination, amount: 1_000_000_000 }),
+    getAddMemoInstruction({ memo: "I'm transferring some SOL!" }),
+];
+
+// Creates a V0 transaction with 3 instructions inside.
+const transaction = pipe(createTransaction({ version: 0 }), tx => appendTransactionInstructions(instructions, tx));
+```
+
+As you can see, each program now generates its own library allowing you to cherry-pick your dependencies.
+
+Note that asynchronous versions may be available for some instructions which allows them to resolve more inputs on your behalf — such as PDA derivation. For instance, the `CreateLookupTable` instruction offers an asynchronous builder that derives the `address` account and the `bump` argument for us.
+
+```ts
+const rpc = createSolanaRpc('http://127.0.0.1:8899');
+const [authority, recentSlot] = await Promise.all([
+    generateKeyPairSigner(),
+    rpc.getSlot({ commitment: 'finalized' }).send(),
+]);
+
+const instruction = await getCreateLookupTableInstructionAsync({
+    authority,
+    recentSlot,
+});
+```
+
+Alternatively, you may use the synchronous builder if you already have all the required inputs at hand.
+
+```ts
+const [address, bump] = await findAddressLookupTablePda({
+    authority: authority.address,
+    recentSlot,
+});
+
+const instruction = getCreateLookupTableInstruction({
+    address,
+    authority,
+    bump,
+    recentSlot,
+});
+```
+
+On top of instruction builders, these clients offer a variety of utilities such as:
+
+-   Instruction codecs — e.g. `getTransferSolInstructionDataCodec`.
+-   Account types — e.g. `AddressLookupTable`.
+-   Account codecs — e.g. `getAddressLookupTableAccountDataCodec`.
+-   Account helpers — e.g. `fetchAddressLookupTable`.
+-   PDA helpers — e.g. `findAddressLookupTablePda`, `fetchAddressLookupTableFromSeeds`.
+-   Defined types and their codecs — e.g. `NonceState`, `getNonceStateCodec`.
+-   Program helpers — e.g. `SYSTEM_PROGRAM_ADDRESS`, `SystemAccount` enum, `SystemAccount` enum, `identifySystemInstruction`.
+-   And much more!
+
+Here’s another example that fetches an `AddressLookupTable` PDA from its seeds.
+
+```ts
+const account = await fetchAddressLookupTableFromSeeds(rpc, {
+    authority: authority.address,
+    recentSlot,
+});
+
+account.address; // Address
+account.lamports; // LamportsUnsafeBeyond2Pow53Minus1
+account.data.addresses; // Address[]
+account.data.authority; // Some<Address>
+account.data.deactivationSlot; // Slot
+account.data.lastExtendedSlot; // Slot
+account.data.lastExtendedSlotStartIndex; // number
+```
+
+### How does this work?
+
+All of this code is 100% auto-generated by Kinobi from a tree of standardized nodes that represent our programs. It contains obvious nodes such as `AccountNode` but also more specified nodes such as `ConditionalValueNode` that allows us to resolve account or argument default values conditionally.
+
+Kinobi allows us to hydrate our tree of nodes from IDLs which are typically generated by program frameworks such as [Anchor](https://github.com/coral-xyz/anchor) or [Shank](https://github.com/metaplex-foundation/shank). Additionally, visitors can be used on our nodes to expand the knowledge of our programs since the IDL itself doesn’t yet contain that level of information. Finally, special visitors called “renderers” visit our tree to generate clients such as this JavaScript client.
+
+Currently, there is one other renderer that generates Rust clients but this is only the beginning. In the future, you can expect renderers for auto-generated Python clients, documentation, CLIs, etc.
+
+## Create Solana Program
+
+We believe the whole ecosystem could benefit from generated program clients. That’s why we introduced a new NPM binary that allows you to create your Solana program — and generate clients for it — in no time. Simply run the following and follow the prompts to get started.
+
+```sh
+pnpm create solana-program
+```
+
+This [`create-solana-program`](https://github.com/solana-program/create-solana-program) installer will create a new repository including:
+
+-   An example program using the framework of your choice (Anchor coming soon).
+-   Generated clients for any of the selected clients.
+-   A set of scripts that allows you to:
+    -   Start a local validator including all programs and accounts you depend on.
+    -   Build, lint and test your programs.
+    -   Generate IDLs from your programs.
+    -   Generate clients from the generated IDLs.
+    -   Build and test each of your clients.
+-   GitHub Actions pipelines to test your program, test your clients, and even manually publish new packages or crates for your clients. (Coming soon).
+
+When selecting the JavaScript client, you will get a fully generated library compatible with the new web3.js much like the `@solana-program` packages showcased above.
+
 # Going Forward
 
 This Technology Preview is just that, and development on the new web3.js is ongoing. We are working on tooling to accompany the new library to make building web applications on Solana easier, safer, and more scalable.
 
 Although this new approach to JavaScript tooling is drastically different than the tooling you are used to, we are confident that the customizability, performance, bundle size, and safety characteristics of the new library will make it worth the migration. We’re here to help you every step of the way, via Github issues when you find problems with the library, and on the [Solana Stack Exchange](https://sola.na/sse) when you have questions on how something is supposed to work.
-
-## Program Clients
-
-Writing JavaScript clients for on-chain programs has been done manually up until now. Without an IDL for some of the native programs, this process has been necessarily manual and has resulted in clients that lag behind the actual capabilities of the programs themselves.
-
-We think that program clients should be *generated* rather than written. Developers should be able to write Rust programs, compile the program code, and generate all of the JavaScript client-side code to interact with the program.
-
-Developers familiar with Shank and Solita may recognize this idea. We want to take it even further.
-
-Here’s what the code could look like for a program client that includes Solana’s core programs like the System program or the Compute Budget program.
-
-```tsx
-import { createTransaction, pipe } from '@solana/web3.js';
-import { addMemo, setComputeUnitLimit, transferSol } from '@solana/spl-core';
-
-const instructions = await Promise.all([
-  setComputeUnitLimit({ units: 600_000 }),
-  transferSol({ source, destination, amount: 1_000_000_000 }),
-  addMemo({ memo: "I'm transferring some SOL!" })
-]);
-
-// Creates a V0 transaction with 3 instructions inside.
-const transaction = pipe(
-  createTransaction({ version: 0 }),
-  tx => appendTransactionInstructions(instructions, tx),
-);
-```
 
 ## GraphQL
 
@@ -1101,7 +1189,7 @@ expect(result).toMatchObject({
 });
 ```
 
-Using GraphQL allows developers to only specify which fields they *actually* need, and do away with the rest of the response.
+Using GraphQL allows developers to only specify which fields they _actually_ need, and do away with the rest of the response.
 
 However, GraphQL is also extremely powerful for **nesting queries**, which can be particularly useful if you want to, say, get the **sum** of every lamports balance of every **owner of the owner** of each token account, while discarding any mint accounts.
 
@@ -1166,7 +1254,7 @@ const variableValues = {
     signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
     commitment: 'confirmed',
 };
-                                        
+
 const result = await rpcGraphQL.query(source, variableValues);
 
 expect(result).toMatchObject({
@@ -1174,15 +1262,17 @@ expect(result).toMatchObject({
         transaction: {
             transaction: {
                 message: {
-                    instructions: expect.arrayContaining([{
-                        parsed: {
-                            info: {
-                                lamports: expect.any(BigInt),
-                                space: expect.any(BigInt),
+                    instructions: expect.arrayContaining([
+                        {
+                            parsed: {
+                                info: {
+                                    lamports: expect.any(BigInt),
+                                    space: expect.any(BigInt),
+                                },
+                                program: 'system',
                             },
-                            program: 'system',
                         },
-                    }])
+                    ]),
                 },
             },
         },
