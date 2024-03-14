@@ -7,4 +7,5 @@ export * from './recent-blockhashes';
 export * from './rent';
 export * from './slot-hashes';
 export * from './slot-history';
+export * from './stake-history';
 export * from './sysvar';
