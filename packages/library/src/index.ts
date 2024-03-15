@@ -1,6 +1,7 @@
 export * from '@solana/accounts';
 export * from '@solana/addresses';
 export * from '@solana/codecs';
+export * from '@solana/errors';
 export * from '@solana/functional';
 export * from '@solana/instructions';
 export * from '@solana/keys';
