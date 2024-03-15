@@ -5,5 +5,6 @@ export * from './combine-codec';
 export * from './fix-codec';
 export * from './map-codec';
 export * from './offset-codec';
+export * from './pad-codec';
 export * from './resize-codec';
 export * from './reverse-codec';
