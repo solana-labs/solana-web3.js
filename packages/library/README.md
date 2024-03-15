@@ -1169,6 +1169,8 @@ Here’s an example of retrieving account data with GraphQL:
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
+            dataBase58: data(encoding: BASE_58)
+            dataBase64: data(encoding: BASE_64)
             lamports
         }
     }
@@ -1183,6 +1185,8 @@ const result = await rpcGraphQL.query(source, variableValues);
 expect(result).toMatchObject({
     data: {
         account: {
+            dataBase58: '2Uw1bpnsXxu3e',
+            dataBase64: 'dGVzdCBkYXRh',
             lamports: 10290815n,
         },
     },
@@ -1198,15 +1202,9 @@ const source = `
     query getLamportsOfOwnersOfOwnersOfTokenAccounts {
         programAccounts(programAddress: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
             ... on TokenAccount {
-                data {
-                    parsed {
-                        info {
-                            owner {
-                                owner {
-                                    lamports
-                                }
-                            }
-                        }
+                owner {
+                    ownerProgram {
+                        lamports
                     }
                 }
             }
@@ -1217,7 +1215,7 @@ const source = `
 const result = await rpcGraphQL.query(source);
 
 const sumOfAllLamportsOfOwnersOfOwnersOfTokenAccounts = result
-    .map(o => o.account.data.parsed.info.owner.owner.lamports)
+    .map(o => o.account.owner.ownerProgram.lamports)
     .reduce((acc, lamports) => acc + lamports, 0);
 ```
 
@@ -1227,22 +1225,12 @@ The new GraphQL package supports this same style of nested querying on transacti
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionJsonParsed {
-                transaction {
-                    message {
-                        ... on TransactionMessageParsed {
-                            instructions {
-                                ... on CreateAccountInstruction {
-                                    parsed {
-                                        info {
-                                            lamports
-                                            space
-                                        }
-                                        program
-                                    }
-                                }
-                            }
-                        }
+            message {
+                instructions {
+                    ... on CreateAccountInstruction {
+                        lamports
+                        programId
+                        space
                     }
                 }
             }
@@ -1260,20 +1248,14 @@ const result = await rpcGraphQL.query(source, variableValues);
 expect(result).toMatchObject({
     data: {
         transaction: {
-            transaction: {
-                message: {
-                    instructions: expect.arrayContaining([
-                        {
-                            parsed: {
-                                info: {
-                                    lamports: expect.any(BigInt),
-                                    space: expect.any(BigInt),
-                                },
-                                program: 'system',
-                            },
-                        },
-                    ]),
-                },
+            message: {
+                instructions: expect.arrayContaining([
+                    {
+                        lamports: expect.any(BigInt),
+                        programId: '11111111111111111111111111111111',
+                        space: expect.any(BigInt),
+                    },
+                ]),
             },
         },
     },

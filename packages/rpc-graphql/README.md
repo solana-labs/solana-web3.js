@@ -3,60 +3,57 @@
 This package defines a GraphQL client resolver built on top of the
 [Solana JSON-RPC](https://docs.solana.com/api/http).
 
+A client resolver in this context is simply a client-side RPC interface
+designed to give application developers the ability to use GraphQL to interact
+with data on the Solana blockchain.
+
+The resolver presents developers with a new schema for working with Solana data
+(see [Schema](#schema)), as well as new features only possible with GraphQL.
+Additionally, the resolver is designed to make highly-optimized use of the
+Solana JSON RPC, balancing RPC requests, batch loading, and caching
+(see [RPC Optimizations](#rpc-optimizations)).
+
 GraphQL is a query language for your API, and a server-side runtime for
 executing queries using a type system you define for your data.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/GraphQL_Logo.svg/1024px-GraphQL_Logo.svg.png?20161105194737" alt="graphql-icon" width="24" align="center"/> [**GraphQL**](https://graphql.org/learn/)
 
-This library attempts to define a type schema for Solana. With the proper
-type schema, developers can take advantage of the best features of GraphQL
-to make interacting with Solana via RPC smoother, faster, more reliable,
-and involve less code.
+# Quick Start
 
-# Design
+The RPC-GraphQL client requires an RPC client, as defined by the package
+`@solana/rpc-spec`. Such a client is available in `@solana/web3.js:2.0` or
+can be created manually with a custom implementation.
 
-On-chain data can be categorized into three main types:
+```ts
+Rpc<TRpcMethods>;
+```
 
-- Accounts
-- Transactions
-- Blocks
+The RPC-GraphQL requires an RPC client with the following API methods available
+for use in order to properly execute all queries.
 
-These types encompass everything that can be queried from the Solana ledger.
+```ts
+Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
+```
 
-The Solana RPC provides a parsing method known as `jsonParsed` for supported
-types, such as accounts and transaction instructions.
+To initialize the RPC-GraphQL client, simple use `createRpcGraphQL`.
 
-This library leverages GraphQL **interfaces** for each of these types paired
-with specific GraphQL types for each `jsonParsed` object. This allows for
-powerful querying of `jsonParsed` data, including nested and chained queries!
-
-## Setting up a GraphQL RPC Client
-
-Initializing an RPC-GraphQL using `@solana/rpc-graphql` requires an RPC client,
-either built using `@solana/web3.js` or it's child libraries `@solana/rpc-core`
-and `@solana/rpc-transport`.
-
-```typescript
-import { createSolanaRpc, createDefaultRpcTransport } from '@solana/web3.js';
-import { createRpcGraphQL } from '@solana/rpc-graphql';
-
-// Set up an HTTP transport
-const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
+```ts
+import { createSolanaRpc } from '@solana/rpc';
 
 // Create the RPC client
-const rpc = createSolanaRpc({ transport });
+const rpc = createSolanaRpc('https://api.devnet.solana.com');
 
 // Create the RPC-GraphQL client
 const rpcGraphQL = createRpcGraphQL(rpc);
 ```
 
-The `RpcGraphQL` type supports one method `query(..)` which accepts a string
+The `RpcGraphQL` type supports one method `query` which accepts a string
 query source and an optional `variableValues` parameter - which is an object
 containing any variables to pipe into the query string.
 
 You can define queries with hard-coded parameters.
 
-```typescript
+```ts
 const source = `
     query myQuery {
         account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
@@ -78,7 +75,7 @@ data: {
 
 You can also pass the variable values.
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -104,7 +101,7 @@ data: {
 
 Queries with variable values can also be re-used!
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -122,19 +119,28 @@ const lamportsAccountB = await rpcGraphQL.query(source, {
 });
 ```
 
-## Querying Accounts
+# Schema
+
+Solana data can be categorized into three main types:
+
+-   Accounts
+-   Transactions
+-   Blocks
+
+These types encompass everything that can be queried from the Solana ledger.
+
+## Accounts
 
 The `Account` interface contains common fields across all accounts.
 
-`src/schema/account/types.ts: AccountInterface`
-
 ```graphql
 interface Account {
-    address: String
-    encoding: String
+    address: Address
+    data(encoding: AccountEncoding!, dataSlice: DataSlice): String
     executable: Boolean
     lamports: BigInt
-    owner: Account
+    ownerProgram: Account
+    space: BigInt
     rentEpoch: BigInt
 }
 ```
@@ -142,7 +148,7 @@ interface Account {
 Any account can be queried by these fields without specifying the specific
 account type.
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -170,25 +176,51 @@ data: {
 }
 ```
 
-### Specific Account Types
+### Querying Account Data
 
-Each `jsonParsed` account type has its own GraphQL type that can be used in a
-GraphQL query.
+Querying accounts by their encoded data (`base58`, `base64`, `base64+zstd`) is
+still fully supported.
 
-- `AccountBase58`: A Solana account with base58 encoded data
-- `AccountBase64`: A Solana account with base64 encoded data
-- `AccountBase64Zstd`: A Solana account with base64 encoded data compressed with zstd
-- `NonceAccount`: A nonce account
-- `LookupTableAccount`: An address lookup table account
-- `MintAccount`: An SPL mint
-- `TokenAccount`: An SPL token account
-- `StakeAccount`: A stake account
-- `VoteAccount`: A vote account
+```ts
+const source = `
+    query myQuery($address: String!) {
+        account(address: $address) {
+            data(encoding: BASE_64)
+        }
+    }
+`;
+
+const variableValues = {
+    address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
+};
+
+const result = await rpcGraphQL.query(source, variableValues);
+```
+
+```
+data: {
+    account: {
+        data: 'dGVzdCBkYXRh',
+    },
+}
+```
+
+### Querying Specific Account Types
+
+A set of specific parsed account types are supported in GraphQL.
+
+-   `GenericAccount`: A generic base account type
+-   `NonceAccount`: A nonce account
+-   `LookupTableAccount`: An address lookup table account
+-   `MintAccount`: An SPL mint
+-   `TokenAccount`: An SPL token account
+-   `StakeAccount`: A stake account
+-   `VoteAccount`: A vote account
 
 You can choose how to handle querying of specific account types. For example,
 you might _only_ want specifically any account that matches `MintAccount`.
 
-```typescript
+```ts
 const maybeMintAddresses = [
     'J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ',
     'JAbWqZ7S2c6jomQr8ofAYBo257bE1QJtHwbX1yWc2osZ',
@@ -218,9 +250,7 @@ for (const address of maybeMintAddresses) {
     if (result != null) {
         const {
             data: {
-                account: {
-                    data: mintInfo,
-                },
+                account: { data: mintInfo },
             },
         } = result;
         mintAccounts.push(mintInfo);
@@ -230,7 +260,7 @@ for (const address of maybeMintAddresses) {
 
 Maybe you want to handle both mints _and_ token accounts.
 
-```typescript
+```ts
 const mintOrTokenAccountAddresses = [
     'J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ',
     'JAbWqZ7S2c6jomQr8ofAYBo257bE1QJtHwbX1yWc2osZ',
@@ -245,24 +275,16 @@ const source = `
     query myQuery($address: String!) {
         account(address: $address) {
             ... on MintAccount {
-                data {
-                    decimals
-                    isInitialized
-                    supply
-                }
-                meta {
-                    type
-                }
+                __typename
+                decimals
+                isInitialized
+                supply
             }
             ... on TokenAccount {
-                data {
-                    isNative
-                    mint
-                    state
-                }
-                meta {
-                    type
-                }
+                __typename
+                isNative
+                mint
+                state
             }
         }
     }
@@ -272,41 +294,36 @@ for (const address of mintOrTokenAccountAddresses) {
     const result = await rpcGraphQL.query(source, { address });
     if (result != null) {
         const {
-            data: {
-                account: {
-                    data: accountParsedInfo,
-                    meta: {
-                        type: accountType,
-                    }
-                }
-            }
+            data: { account: accountParsedData },
         } = result;
-        if (accountType === 'mint') {
-            mintAccounts.push(accountParsedInfo)
+        if (accountParsedData.__typename === 'MintAccount') {
+            mintAccounts.push(accountParsedInfo);
         } else {
-            tokenAccounts.push(accountParsedInfo)
+            tokenAccounts.push(accountParsedInfo);
         }
     }
 }
 ```
 
-Querying accounts by their encoded data (`base58`, `base64`, `base64+zstd`) is
-still fully supported.
+### Querying Program Accounts
 
-```typescript
+Another account-based query that can be performed with RPC-GraphQL is the
+`programAccounts` query. The response will be a list of `Account` types as
+defined above.
+
+```ts
 const source = `
-    query myQuery($address: String!, $encoding: AccountEncoding) {
-        account(address: $address, encoding: $encoding) {
-            ... on AccountBase64 {
-                data
-            }
+    query myQuery($programAddress: String!) {
+        programAccounts(programAddress: $address) {
+            executable
+            lamports
+            rentEpoch
         }
     }
 `;
 
 const variableValues = {
-    address: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
-    encoding: 'base64',
+    programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
 };
 
 const result = await rpcGraphQL.query(source, variableValues);
@@ -314,10 +331,95 @@ const result = await rpcGraphQL.query(source, variableValues);
 
 ```
 data: {
-    account: {
-        data: 'dGVzdCBkYXRh',
-    },
+    programAccounts: [
+        {
+            executable: false,
+            lamports: 10290815n,
+            rentEpoch: 0n,
+        },
+        {
+            executable: false,
+            lamports: 10290815n,
+            rentEpoch: 0n,
+        },
+        /* .. */
+    ]
 }
+```
+
+Account data encoding in `base58`, `base64`, and `base64+zstd` is also
+supported with this query, as well as `dataSlice` and `filter`.
+
+```ts
+const source = `
+    query myQuery($programAddress: String!) {
+        programAccounts(programAddress: $programAddress) {
+            data(encoding: BASE_64, dataSlice: { length: 5, offset: 0 })
+        }
+    }
+`;
+
+const variableValues = {
+    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
+};
+
+const result = await rpcGraphQL.query(source, variableValues);
+```
+
+```
+data: {
+    programAccounts: [
+        {
+            data: 'dGVzdCA=',
+        },
+        /* .. */
+    ],
+}
+```
+
+Although specific parsed account types are directly tied to the program which
+owns them, it's still possible to handle various specific account types within
+the same program accounts response.
+
+```ts
+const source = `
+    query myQuery($programAddress: String!) {
+        programAccounts(programAddress: $address) {
+            ... on MintAccount {
+                __typename
+                decimals
+                isInitialized
+                mintAuthority
+                supply
+            }
+            ... on TokenAccount {
+                __typename
+                isNative
+                mint
+                owner
+                state
+            }
+        }
+    }
+`;
+
+const variableValues = {
+    programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
+};
+
+const result = await rpcGraphQL.query(source, variableValues);
+
+const { mints, tokenAccounts } = result.data.programAccounts.reduce(
+    (acc: { mints: any[]; tokenAccounts: any[] }, account) => {
+        if (account.__typename === 'MintAccount') {
+            acc.mints.push(accountParsedInfo);
+        } else {
+            acc.tokenAccounts.push(accountParsedInfo);
+        }
+        return acc;
+    },
+    { mints: [], tokenAccounts: [] },
+);
 ```
 
 ### Nested Account Queries
@@ -325,7 +427,7 @@ data: {
 Notice the `owner` field of the `Account` interface is also an `Account`
 interface. This powers nested queries against the `owner` field of an account.
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -365,7 +467,7 @@ information!
 
 You can nest queries as far as you want!
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -409,7 +511,7 @@ data: {
 
 Nested queries can also be applied to specific account types.
 
-```typescript
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -447,216 +549,42 @@ data: {
 }
 ```
 
-## Querying Program Accounts
+Nested account queries are also supported on `programAccounts` queries.
 
-A very common way to query Solana accounts from an RPC is to request all of
-the accounts owned by a particular program.
+## Transactions
 
-With RPC-GraphQL, querying program-owned accounts is a list-based extension of
-the account query defined previously. This means program accounts queries will
-return a list of objects implementing the `Account` interface.
-
-Setting up the query is very similar to the `account` query.
-
-```typescript
-const source = `
-    query myQuery($programAddress: String!) {
-        programAccounts(programAddress: $address) {
-            executable
-            lamports
-            rentEpoch
-        }
-    }
-`;
-
-const variableValues = {
-    programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-};
-
-const result = await rpcGraphQL.query(source, variableValues);
-```
-
-```
-data: {
-    programAccounts: [
-        {
-            executable: false,
-            lamports: 10290815n,
-            rentEpoch: 0n,
-        },
-        {
-            executable: false,
-            lamports: 10290815n,
-            rentEpoch: 0n,
-        }
-    ]
-}
-```
-
-### Specific Program Account Types
-
-Although specific parsed account types are directly tied to the program which
-owns them, it's still possible to handle various specific account types within
-the same program accounts response.
-
-```typescript
-const source = `
-    query myQuery($programAddress: String!) {
-        programAccounts(programAddress: $address) {
-            ... on MintAccount {
-                data {
-                    decimals
-                    isInitialized
-                    mintAuthority
-                    supply
-                }
-                meta {
-                    type
-                }
-            }
-            ... on TokenAccount {
-                data {
-                    isNative
-                    mint
-                    owner
-                    state
-                }
-                meta {
-                    type
-                }
-            }
-        }
-    }
-`;
-
-const variableValues = {
-    programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-};
-
-const result = await rpcGraphQL.query(source, variableValues);
-
-const { mints, tokenAccounts } = result.data.programAccounts.reduce(
-  (acc: { mints: any[]; tokenAccounts: any[] }, account) => {
-    const {
-        data: accountParsedInfo,
-        meta: {
-            type: accountType,
-        }
-    } = account;
-    if (accountType === "mint") {
-      acc.mints.push(accountParsedInfo);
-    } else {
-      acc.tokenAccounts.push(accountParsedInfo);
-    }
-    return acc;
-  },
-  { mints: [], tokenAccounts: [] }
-);
-```
-
-Account data encoding in `base58`, `base64`, and `base64+zstd` is also
-supported, as well as `dataSlice` and `filter`!
-
-```typescript
-const source = `
-    query myQuery(
-        $programAddress: String!,
-        $commitment: Commitment,
-        $dataSlice: DataSlice,
-        $encoding: AccountEncoding,
-    ) {
-        programAccounts(
-            programAddress: $programAddress,
-            commitment: $commitment,
-            dataSlice: $dataSlice,
-            encoding: $encoding,
-        ) {
-            ... on AccountBase64 {
-                data
-            }
-        }
-    }
-`;
-
-const variableValues = {
-    programAddress: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
-    commitment: 'confirmed',
-    dataSlice: {
-        length: 5,
-        offset: 0,
-    },
-    encoding: 'base64',
-};
-
-const result = await rpcGraphQL.query(source, variableValues);
-```
-
-```
-data: {
-    programAccounts: [
-        {
-            data: 'dGVzdCA=',
-        },
-    ],
-}
-```
-
-### Nested Program Account Queries
-
-Querying program accounts and applying nested queries to the objects within the
-response list is an area where RPC-GraphQL really shines.
-
-Consider an example where we want to get the **sum** of every lamports balance
-of every **owner of the owner** of each token account, while discarding any
-mint accounts.
-
-```typescript
-const source = `
-    query getLamportsOfOwnersOfOwnersOfTokenAccounts {
-        programAccounts(programAddress: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
-            ... on TokenAccount {
-                data {
-                    owner {
-                        owner {
-                            lamports
-                        }
-                    }
-                }
-            }
-        }
-    }
-`;
-
-const result = await rpcGraphQL.query(source);
-
-const sumOfAllLamportsOfOwnersOfOwnersOfTokenAccounts = result.data
-    .map(o => o.account.data.owner.owner.lamports)
-    .reduce((acc, lamports) => acc + lamports, 0);
-```
-
-## Querying Transactions
-
-The `Transaction` interface contains common fields across all transactions.
-
-`src/schema/transaction/types.ts: TransactionInterface`
+The `Transaction` type contains common fields across all transactions.
 
 ```graphql
-interface Transaction {
-    blockTime: String
-    encoding: String
+type Transaction {
+    blockTime: BigInt
+    data(encoding: TransactionEncoding!): String
+    message: TransactionMessage
     meta: TransactionMeta
-    slot: BigInt
+    signatures: [Signature]
+    slot: Slot
+    version: String
 }
 ```
 
-Similar to account types, any transaction can be queried by these fields
-without specifying the specific transaction type or the transaction meta
-type.
+Note that unlike accounts, the `Transaction` type is not an interface, so the
+base response type of a transaction query remains constant. However, the list
+of instructions contained in a parsed transaction are returned as the
+`TransactionInstruction` interface, which can be queried by specific type.
+See [Querying Specific Transaction Instruction Types](#querying-specific-transaction-instruction-types).
 
-```typescript
+```graphql
+interface TransactionInstruction {
+    programId: Address
+}
+```
+
+A transaction can be queried by the `transaction` query.
+
+```ts
 const source = `
-    query myQuery($signature: String!, $commitment: Commitment) {
-        transaction(signature: $signature, commitment: $commitment) {
+    query myQuery($signature: String!) {
+        transaction(signature: $signature) {
             blockTime
             meta {
                 computeUnitsConsumed
@@ -669,7 +597,6 @@ const source = `
 
 const variableValues = {
     signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
-    commitment: 'confirmed',
 };
 
 const result = await rpcGraphQL.query(source, variableValues);
@@ -694,55 +621,78 @@ data: {
 }
 ```
 
-### Specific Transaction Types
+### Querying Transaction Data
 
-Each `jsonParsed` instruction type has its own GraphQL type that can be used in
-a GraphQL transaction query.
+Querying encoded transaction data (`base58`, `base64`) is fully supported.
+
+```ts
+const source = `
+    query myQuery($signature: String!, $commitment: Commitment) {
+        transaction(signature: $signature, commitment: $commitment) {
+            data(encoding: BASE_64)
+        }
+    }
+`;
+
+const variableValues = {
+    signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
+    commitment: 'confirmed',
+};
+
+const result = await rpcGraphQL.query(source, variableValues);
+```
+
+```
+{
+  "data": {
+    "transaction": {
+      "data": "AbgFjqLTBtoAaHXexSN1OYXf+UNox6qe3JcyCmEwE57iUHxCkHp8zKTJVznd6nLtUFNMYJWHCtMb+yPjk7QIxAQBAAEDeXJtpS2Z1gsH6tc7L28L9gg8yFx3qU401pHXj4vK/skUvD7y/LnapfCdSx3FfTguy49UDQVvGgOK0ix/P42YuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA5uE0ATTHEABQrIB1+aoEdYJxvQthXPLHFxSH2y+ACK4BAgIAAQwCAAAAAMqaOwAAAAA="
+    }
+  }
+}
+```
+
+### Querying Specific Transaction Instruction Types
+
+As mentioned above, parsed transactions return a list of instructions that
+implement the `TransactionInstruction` interface. These instructions can be
+queried by specific instruction types.
 
 Instructions for the following programs are supported.
 
-- Address Lookup Table
-- BPF Loader
-- BPF Upgradeable Loader
-- Stake
-- SPL Associated Token
-- SPL Memo
-- SPL Token
-- System
-- Vote
+-   Address Lookup Table
+-   BPF Loader
+-   BPF Upgradeable Loader
+-   Stake
+-   SPL Associated Token
+-   SPL Memo
+-   SPL Token
+-   System
+-   Vote
 
-Note at this time Token 2022 extensions are not yet supported.
+Additionally, the `GenericInstruction` type is the base parsed instruction type.
 
-Similar to accounts, transactions with encoded data are also supported.
+```graphql
+type GenericInstruction implements TransactionInstruction {
+    accounts: [Address]
+    data: Base64EncodedBytes
+    programId: Address
+}
+```
 
-- `TransactionBase58`: A Solana transaction with base58 encoded data
-- `TransactionBase64`: A Solana transaction with base64 encoded data
-- `TransactionJson`: A Solana transaction with JSON data
+Specific transaction instruction types can be queried within a `Transaction`
+response like so.
 
-Specific instruction types can be used in the transaction's instructions. The
-default instruction if it cannot be parsed using `jsonParsed` is the JSON
-version dubbed `GenericInstruction`.
-
-```typescript
+```ts
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionParsed {
-                data {
-                    message {
-                        accountKeys {
-                            pubkey
-                            signer
-                            source
-                            writable
-                        }
-                        instructions {
-                            ... on GenericInstruction {
-                                accounts
-                                data
-                                programId
-                            }
-                        }
+            message {
+                instructions {
+                    ... on CreateAccountInstruction {
+                        lamports
+                        programId
+                        space
                     }
                 }
             }
@@ -754,138 +704,23 @@ const variableValues = {
     signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
     commitment: 'confirmed',
 };
-                                        
+
 const result = await rpcGraphQL.query(source, variableValues);
 ```
 
 ```
 data: {
     transaction: {
-        data: {
-            message: {
-                accountKeys: [
-                    {
-                        pubkey: '81EBmTWaMkFqW6LPNPfU2478nJkrhCLuiFUPSdvQKQj7',
-                        signer: false,
-                        source: 'transaction',
-                        writable: true,
-                    },
-                    {
-                        pubkey: 'G6TmQyEoxbUzdyncwxVN9GgfALpYErHSkXZeqJj7fwFz',
-                        signer: true,
-                        source: 'transaction',
-                        writable: true,
-                    },
-                ],
-                instructions: [
-                    {
-                        accounts: [
-                            '81EBmTWaMkFqW6LPNPfU2478nJkrhCLuiFUPSdvQKQj7',
-                            'G6TmQyEoxbUzdyncwxVN9GgfALpYErHSkXZeqJj7fwFz'
-                        ]
-                        data: 'WzIsIDU0LCA5LCAgNzYsIDM1LCA2NCwgOCwgOCwgNCwgMywgMiwgNV0=',
-                        programId: 'EksBYH1iSR8farQc9X26pYrXotj1D2JjXGuj8uM8xMcb',
-                    }
-                ]
-            },
+        message: {
+            instructions: [
+                {
+                    lamports: 890880n,
+                    programId: '11111111111111111111111111111111',
+                    space: 0n,
+                },
+                /* .. */
+            ]
         },
-    },
-}
-```
-
-However, whenever JSON-parseable instructions are present in the list of
-instructions, they can be queried using specific instruction types.
-
-```typescript
-const source = `
-    query myQuery($signature: String!, $commitment: Commitment) {
-        transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionParsed {
-                data {
-                    message {
-                        instructions {
-                            ... on CreateAccountInstruction {
-                                data {
-                                    lamports
-                                    space
-                                }
-                                meta {
-                                    program
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-`;
-
-const variableValues = {
-    signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
-    commitment: 'confirmed',
-};
-                                        
-const result = await rpcGraphQL.query(source, variableValues);
-```
-
-```
-data: {
-    transaction: {
-        data: {
-            message: {
-                instructions: [
-                    {
-                        data: {
-                            lamports: 890880n,
-                            space: 0n,
-                        },
-                        meta: {
-                            program: 'system',
-                        },
-                    }
-                ]
-            },
-        },
-    },
-}
-```
-
-Querying transactions by their encoded data (`base58`, `base64`, `json`) is
-still fully supported.
-
-```typescript
-const source = `
-    query myQuery(
-        $signature: String!,
-        $commitment: Commitment,
-        $encoding: TransactionEncoding!,
-    ) {
-        transaction(
-            signature: $signature,
-            commitment: $commitment,
-            encoding: $encoding,
-        ) {
-            ... on TransactionBase64 {
-                data
-            }
-        }
-    }
-`;
-
-const variableValues = {
-    signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
-    commitment: 'confirmed',
-    encoding: 'base64',
-};
-                                        
-const result = await rpcGraphQL.query(source, variableValues);
-```
-
-```
-data: {
-    transaction: {
-        data: 'WzIsIDU0LCA5LCAgNzYsIDM1LCA2NCwgOCwgOCwgNCwgMywgMiwgNV0=',
     },
 }
 ```
@@ -899,62 +734,52 @@ Similar to nested querying accounts, it's possible to nest queries inside your
 transaction queries to look up other objects, such as accounts, as they appear
 in the transaction response.
 
-```typescript
+```ts
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
-            ... on TransactionParsed {
-                data {
-                    message {
-                        instructions {
-                            ... on SplTokenTransferInstruction {
-                                data {
-                                    amount
-                                    authority {
+            message {
+                instructions {
+                    ... on SplTokenTransferInstruction {
+                        amount
+                        authority {
+                            # Account
+                            address
+                            lamports
+                        }
+                        destination {
+                            # Account
+                            ... on TokenAccount {
+                                address
+                                mint {
+                                    ... on MintAccount {
+                                        # Account
                                         address
-                                        lamports
-                                    }
-                                    destination {
-                                        ... on TokenAccount {
-                                            data {
-                                                address
-                                                mint {
-                                                    ... on MintAccount {
-                                                        data {
-                                                            address
-                                                            decimals
-                                                        }
-                                                    }
-                                                }
-                                                owner {
-                                                    address
-                                                    lamports
-                                                }
-                                            }
-                                        }
-                                    }
-                                    source {
-                                        ... on TokenAccount {
-                                            data {
-                                                address
-                                                mint {
-                                                    ... on MintAccount {
-                                                        data {
-                                                            address
-                                                            decimals
-                                                        }
-                                                    }
-                                                }
-                                                owner {
-                                                    address
-                                                    lamports
-                                                }
-                                            }
-                                        }
+                                        decimals
                                     }
                                 }
-                                meta {
-                                    program
+                                owner {
+                                    # Account
+                                    address
+                                    lamports
+                                }
+                            }
+                        }
+                        source {
+                            # Account
+                            ... on TokenAccount {
+                                address
+                                mint {
+                                    ... on MintAccount {
+                                        # Account
+                                        address
+                                        decimals
+                                    }
+                                }
+                                owner {
+                                    # Account
+                                    address
+                                    lamports
                                 }
                             }
                         }
@@ -969,74 +794,74 @@ const variableValues = {
     signature: '63zkpxATgAwXRGFQZPDESTw2m4uZQ99sX338ibgKtTcgG6v34E3MSS3zckCwJHrimS71cvei6h1Bn1K1De53BNWC',
     commitment: 'confirmed',
 };
-                                        
+
 const result = await rpcGraphQL.query(source, variableValues);
 ```
 
 ```
 data: {
     transaction: {
-        data: {
-            message: {
-                instructions: [
-                    {
-                        data: {
-                            amount: '50',
-                            authority: {
-                                address: 'AHPPMhzDQix9sKULBqeaQ5BUZgrKdz8tg6DzPxsofB12',
-                                lamports: 890880n,
-                            },
-                            destination: {
-                                data: {
-                                    address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
-                                    mint: data: {
-                                        address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                        decimals: 6,
-                                    },
-                                    owner: {
-                                        address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
-                                        lamports: 890880n,
-                                    },
-                                }
-                            },
-                            source: {
-                                data: {
-                                    parsed: {
-                                        info: {
-                                            address: 'BqFCPqXUm4cq6jaZZx1TDTvUR1wdEuNNwAHBEVR6mJhM',
-                                            mint: data: {
-                                                address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
-                                                decimals: 6,
-                                            },
-                                            owner: {
-                                                address: '3dPmVLMD7PC5faZNyJUH9WFrUxAsbjydJfoozwmR1wDG',
-                                                lamports: e890880n,
-                                            },
-                                        }
-                                    }
-                                }
-                            },
+        message: {
+            instructions: [
+                {
+                    amount: '50',
+                    authority: {
+                        address: 'AHPPMhzDQix9sKULBqeaQ5BUZgrKdz8tg6DzPxsofB12',
+                        lamports: 890880n,
+                    },
+                    destination: {
+                        address: '2W8mUY75zxqwAcpirn75r3Cc7TStMirFyHwKqo13fmB1',
+                        mint: {
+                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                            decimals: 6,
                         },
-                        meta: {
-                            program: 'spl-token',
+                        owner: {
+                            address: '7tRxJ2znbTFpwW9XaMMiDsXDudoPEUXRcpDpm8qjWgAZ',
+                            lamports: 890880n,
+                        }
+                    },
+                    source: {
+                        address: 'BqFCPqXUm4cq6jaZZx1TDTvUR1wdEuNNwAHBEVR6mJhM',
+                        mint: {
+                            address: '8poKMotB2cEYVv5sbjrdyssASZj1vwYCe7GJFeXo2QP7',
+                            decimals: 6,
+                        },
+                        owner: {
+                            address: '3dPmVLMD7PC5faZNyJUH9WFrUxAsbjydJfoozwmR1wDG',
+                            lamports: e890880n,
                         }
                     }
-                ]
-            },
-        },
-    },
+                },
+                /* .. */
+            ]
+        }
+    }
 }
 ```
 
-## Querying Blocks
+## Blocks
 
-Querying blocks is very similar to querying transactions, since a block
-contains a list of transactions. There's a bit more data at the highest level
-for a block, but you can query the list of transactions using a block query and
-transaction types in the same fashion you can query the lsit of accounts using
-a program accounts query and account types.
+The `Block` type contains common fields across all blocks.
 
-```typescript
+```graphql
+type Block {
+    blockhash: String
+    blockHeight: BigInt
+    blockTime: BigInt
+    parentSlot: Slot
+    previousBlockhash: String
+    rewards: [Reward]
+    signatures: [Signature]
+    transactions: [Transaction]
+}
+```
+
+Just like the `programAccounts` query will return a list of `Account` types, on
+which you can perform many operations, the `block` query will return a list of
+`Transaction` types, however blocks also contain their own high-level data
+fields, such as `blockhash` and `blockTime`.
+
+```ts
 const source = `
     query myQuery($slot: BigInt!, $commitment: Commitment) {
         block(slot: $slot, commitment: $commitment) {
@@ -1049,20 +874,12 @@ const source = `
                 rewardType
             }
             transactions {
-                ... on TransactionParsed {
-                    data {
-                        message {
-                            instructions {
-                                ... on CreateAccountInstruction {
-                                    data {
-                                        lamports
-                                        space
-                                    }
-                                    meta {
-                                        program
-                                    }
-                                }
-                            }
+                message {
+                    instructions {
+                        ... on CreateAccountInstruction {
+                            lamports
+                            programId
+                            space
                         }
                     }
                 }
@@ -1075,7 +892,7 @@ const variableValues = {
     slot: 43596n,
     commitment: 'confirmed',
 };
-                                        
+
 const result = await rpcGraphQL.query(source, variableValues);
 ```
 
@@ -1098,24 +915,213 @@ data: {
             }
         ],
         transactions: [
-            data: {
-                    {
-                    message: {
-                        instructions: [
-                            {
-                                data: {
-                                    lamports: 890880n,
-                                    space: 0n,
-                                },
-                                meta: {
-                                    program: 'system',
-                                },
-                            }
-                        ]
-                    },
-                }
+            {
+                message: {
+                    instructions: [
+                        {
+                            lamports: 890880n,
+                            programId: '11111111111111111111111111111111',
+                            space: 0n,
+                        },
+                        /* .. */
+                    ]
+                },
             }
         ],
     },
 }
 ```
+
+# RPC Optimizations
+
+RPC-GraphQL ships highly-optimized use of the Solana JSON RPC out of the box,
+so developers can focus on building dynamic web applications without worrying
+about abusing their RPC endpoint.
+
+The resolver leverages query inspection before making any requests to the RPC,
+in order to determine the most resource-conservative way to vend to your
+application the requested response.
+
+This results in four main benefits:
+
+-   Caching
+-   Request coalescing
+-   Minimized network payloads
+-   Batch loading
+
+## Caching
+
+Caching is a fairly standard part of any good GraphQL library, and
+`@solana/rpc-graphql` makes no exception.
+
+If a query contains fetches for the same resource, the resolver can simply
+fetch this information from the cache, ensuring no duplicate RPC requests
+are ever made.
+
+For example, if we were to query for a `MintAccount` and the `mintAuthority`
+also happened to be the mint itself, the following query would ensure we only
+fetch this account once.
+
+```graphql
+query {
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        lamports
+        data(encoding: BASE_64)
+        ... on MintAccount {
+            mintAuthority {
+                lamports
+                data(encoding: BASE_64)
+            }
+        }
+    }
+}
+```
+
+## Request Coalescing
+
+Sometimes more than one request can be coalesced into the same request, again
+saving on network round-trips.
+
+In the example below, we're making two queries for the same account, but
+different fields.
+
+```graphql
+query {
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        lamports
+        space
+    }
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        ... on NonceAccount {
+            authority {
+                address
+            }
+            blockhash
+            feeCalculator {
+                lamportsPerSignature
+            }
+        }
+    }
+}
+```
+
+Rather than requesting this account twice, the resolver will combine these
+two queries into the same RPC request, and then split the response out to the
+corresponding query results.
+
+## Minimized Network Payloads
+
+When it comes to retrieving data from an RPC endpoint, fetching more
+information than you need can be a signifcant waste of network resources, and
+even impact application performance.
+
+The RPC-GraphQL resolver takes steps to minimize this network overhead based on
+the contents of the query provided.
+
+For example, in the following `account` query, we're going to request multiple
+repsonses for `base64` encoded data on the same account.
+
+```graphql
+query {
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        firstEightBytes: data(encoding: BASE_64, dataSlice: { length: 8, offset: 0 })
+        nextEightBytes: data(encoding: BASE_64, dataSlice: { length: 8, offset: 8 })
+        anotherEightBytes: data(encoding: BASE_64, dataSlice: { length: 8, offset: 16 })
+    }
+}
+```
+
+To gather this information, a developer may elect for one of two solutions:
+
+1. Call the RPC three times with each data slice. This will result in `3n`
+   requests where `n` is the number of times your application may invoke this
+   query.
+2. Call the RPC once for the data, convert from `base64` to raw bytes, slice
+   the raw bytes, then encode each subset back to `base64`. This requires a lot
+   of overhead on application development.
+
+RPC-GraphQL will perform solution two for you automatically, choosing to save
+on network calls and bytes over the wire in favor of slicing the returned data
+locally.
+
+In fact, the resolver will minimize bytes over the wire by only requesting the
+specific slice of the data that encompasses all requested data slices. In the
+above example, we've requested three ranges of data:
+
+-   `0` - `8`
+-   `8` - `16`
+-   `16` - `24`
+
+If this account has a massive amount of data, fetching more than the query asks
+for would be wasteful. The resolver will only fetch `0` - `24` and slice the
+response to serve the requested query.
+
+## Batch Loading
+
+In some cases, the Solana JSON RPC offers batch loading for certain data types.
+One such example is the RPC methods `getAccountInfo` and `getMultipleAccounts`.
+
+As one might predict, whenever multiple accounts are requested with parameters
+that can be coalesced, one single call to `getMultipleAccounts` can be made.
+
+In the example above from [Request Coalescing](#request-coalescing), let's
+simply change the query to request two different accounts.
+
+```graphql
+query {
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        lamports
+        space
+    }
+    account(address: "EVW3CoyogapBfQxBFFEKGMM1bn3JyoFiqkAJdw3FHX1b") {
+        ... on NonceAccount {
+            authority {
+                address
+            }
+            blockhash
+            feeCalculator {
+                lamportsPerSignature
+            }
+        }
+    }
+}
+```
+
+Now the resolver would recognize the distinction between the two accounts, but
+it would still see the ability to coalesce request parameters. As a result,
+RPC-GraphQL would make one call to `getMultipleAccounts` as follows.
+
+```ts
+rpc.getMultipleAccounts([
+    'J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ',
+    'EVW3CoyogapBfQxBFFEKGMM1bn3JyoFiqkAJdw3FHX1b',
+]);
+```
+
+This batch loading can work in conjunction with the other forms of
+optimization as well, such as minimized network payloads.
+
+```graphql
+query {
+    account(address: "J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ") {
+        data(encoding: BASE_64, dataSlice: { length: 32, offset: 0 })
+    }
+    account(address: "EVW3CoyogapBfQxBFFEKGMM1bn3JyoFiqkAJdw3FHX1b") {
+        authorityData: data(encoding: BASE_64, dataSlice: { length: 32, offset: 0 })
+        u64Data: data(encoding: BASE_64, dataSlice: { length: 8, offset: 32 })
+    }
+}
+```
+
+```ts
+rpc.getMultipleAccounts(
+    ['J7iup799j5BVjKXACZycYef7WQ4x1wfzhUsc5v357yWQ', 'EVW3CoyogapBfQxBFFEKGMM1bn3JyoFiqkAJdw3FHX1b'],
+    {
+        encoding: 'base64',
+        dataSlice: { length: 40, offset: 0 },
+    },
+);
+```
+
+In this case the resolver would ensure the proper data slices are dealt out
+from the single `getMultipleAccounts` response.
