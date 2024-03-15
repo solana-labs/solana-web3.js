@@ -8,12 +8,17 @@ type CoalescedRequest = {
 
 type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
 
-const EXPLICIT_ABORT_TOKEN = Symbol(
-    __DEV__
-        ? 'This symbol is thrown from the request that underlies a series of coalesced requests ' +
-              'when the last request in that series aborts'
-        : undefined,
-);
+// This used to be a `Symbol()`, but there's a bug in Node <21 where the `undici` library passes
+// the `reason` property of the `AbortSignal` straight to `Error.captureStackTrace()` without first
+// typechecking it. `Error.captureStackTrace()` fatals when given a `Symbol`.
+// See https://github.com/nodejs/undici/pull/2597
+const EXPLICIT_ABORT_TOKEN = __DEV__
+    ? {
+          EXPLICIT_ABORT_TOKEN:
+              'This object is thrown from the request that underlies a series of coalesced ' +
+              'requests when the last request in that series aborts',
+      }
+    : {};
 
 export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTransport>(
     transport: TTransport,
