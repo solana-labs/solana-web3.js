@@ -403,7 +403,7 @@ export const SolanaErrorMessages: Readonly<{
         'Expected base58-encoded signature to decode to a byte array of length 64. Actual length: $actualLength.',
     [SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE]:
         'Expected base58-encoded signature string of length in the range [64, 88]. Actual length: $actualLength.',
-    [SOLANA_ERROR__KEYS__VERIFY_SIGNATURE_FAILURE]: 'public key has failed to verify signature',
+    [SOLANA_ERROR__KEYS__VERIFY_SIGNATURE_FAILURE]: 'The provided private key and public key are not a valid key pair',
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
     [SOLANA_ERROR__MALFORMED_BIGINT_STRING]: '`$value` cannot be parsed as a `BigInt`',
     [SOLANA_ERROR__MALFORMED_NUMBER_STRING]: '`$value` cannot be parsed as a `Number`',
