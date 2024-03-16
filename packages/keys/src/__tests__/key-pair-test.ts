@@ -98,4 +98,4 @@ describe('key-pair', () => {
             await expect(createKeyPairFromBytes(MOCK_KEY_BYTES.slice(0,31))).rejects.toThrow(new SolanaError(SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH, { byteLength: 31 }));
         });
     });
-})
+});
