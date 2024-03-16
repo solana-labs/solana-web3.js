@@ -71,7 +71,7 @@ This library requires a JavaScript runtime that supports [`BigInt`](https://deve
 
 ### Installing node modules
 
-To install the modules, use `pnpm install`
+To install the modules locally, use pnpm
 
 If you don't have pnpm installed:
 
