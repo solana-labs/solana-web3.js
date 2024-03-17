@@ -119,7 +119,7 @@ describe('RpcWebSocketConnection', () => {
             await expect(resultPromiseA).resolves.toMatchObject({ done: false, value: expectedMessage });
             await expect(resultPromiseB).resolves.toMatchObject({ done: false, value: expectedMessage });
         });
-        it('does not queue messsages for a consumer until it has started to poll', async () => {
+        it('does not queue messages for a consumer until it has started to poll', async () => {
             expect.assertions(3);
             const iterator = connection[Symbol.asyncIterator]();
             ws.send({ some: 'lost message' });
