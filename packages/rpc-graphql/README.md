@@ -1012,14 +1012,14 @@ corresponding query results.
 ## Minimized Network Payloads
 
 When it comes to retrieving data from an RPC endpoint, fetching more
-information than you need can be a signifcant waste of network resources, and
+information than you need can be a significant waste of network resources, and
 even impact application performance.
 
 The RPC-GraphQL resolver takes steps to minimize this network overhead based on
 the contents of the query provided.
 
 For example, in the following `account` query, we're going to request multiple
-repsonses for `base64` encoded data on the same account.
+responses for `base64` encoded data on the same account.
 
 ```graphql
 query {
