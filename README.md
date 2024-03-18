@@ -69,6 +69,22 @@ This library requires a JavaScript runtime that supports [`BigInt`](https://deve
 
 ## Development environment setup
 
+### Installing node modules
+
+To install the modules locally, use `pnpm`.
+
+If you don't have `pnpm` installed:
+
+```shell
+$ npm install pnpm
+```
+
+To install the node modules:
+
+```shell
+$ pnpm install
+```
+
 ### Testing
 
 #### Unit tests
