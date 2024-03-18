@@ -1,3 +1,4 @@
+import { offsetCodec, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -99,6 +100,28 @@ describe('getArrayCodec', () => {
         expect(arrayU64.encode([2])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.encode([2n])).toStrictEqual(b('0200000000000000'));
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);
+    });
+
+    it('offsets the size of the array', () => {
+        const codec = array(u8(), {
+            size: offsetCodec(u8(), {
+                postOffset: ({ preOffset }) => preOffset,
+                preOffset: ({ wrapBytes }) => wrapBytes(-1),
+            }),
+        });
+        expect(codec.encode([65, 66, 67])).toStrictEqual(b('41424303'));
+        expect(codec.read(b('41424303'), 0)).toStrictEqual([[65, 66, 67], 3]);
+        expect(codec.read(b('ffff41424303'), 2)).toStrictEqual([[65, 66, 67], 5]);
+    });
+
+    it('offsets each item in the array', () => {
+        const itemCodec = offsetCodec(u8(), {
+            preOffset: ({ preOffset }) => preOffset + 2,
+        });
+        const codec = resizeCodec(array(itemCodec), () => 13);
+        expect(codec.encode([65, 66, 67])).toStrictEqual(b('03000000000041000042000043'));
+        expect(codec.read(b('03000000000041000042000043'), 0)).toStrictEqual([[65, 66, 67], 13]);
+        expect(codec.read(b('ffff03000000000041000042000043'), 2)).toStrictEqual([[65, 66, 67], 15]);
     });
 
     it('has the right sizes', () => {
