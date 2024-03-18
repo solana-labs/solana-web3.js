@@ -178,183 +178,79 @@ Here’s an overview of how to use the new library to interact with the RPC, con
 
 web3.js 2.0 ships with an implementation of the [JSON RPC specification](https://www.jsonrpc.org/specification) and a type spec for the [Solana JSON RPC](https://docs.solana.com/api).
 
-### Initializing a Default RPC API
+The main package responsible for managing communication with an RPC is `@solana/rpc`. However, this package makes use of more granular packages to break down the RPC logic into smaller pieces. Namely, these packages are:
 
-Here’s an example of creating the default API for interacting with the Solana JSON RPC:
+-   `@solana/rpc`: Contains all logic related to sending Solana RPC calls.
+-   `@solana/rpc-api`: Describes all Solana RPC methods using types.
+-   `@solana/rpc-transport-http`: Provides a concrete implementation of an RPC transport using HTTP requests.
+-   `@solana/rpc-spec`: Defines the JSON RPC spec for sending RPC requests.
+-   `@solana/rpc-spec-types`: Shared JSON RPC specifications types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions` (described in the next section).
+-   `@solana/rpc-types`: Shared Solana RPC types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.
+
+That being said, the main `@solana/web3.js` library re-exports the `@solana/rpc` package so, going forward, we will import RPC types and functions from the library directly.
+
+### Getting Started with RPC Calls
+
+To get started with RPC calls, you may use the `createSolanaRpc` function by providing the URL of the Solana JSON RPC server. This will create a default client for interacting with the Solana JSON RPC.
 
 ```tsx
-import { createSolanaRpc, createDefaultRpcTransport } from '@solana/web3.js';
+import { createSolanaRpc } from '@solana/web3.js';
 
-// Create an HTTP transport
-const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
+// Create an RPC client.
+const rpc = createSolanaRpc('http://127.0.0.1:8899');
+//    ^? Rpc<SolanaRpcApi>
 
-// Create an RPC client
-const rpc = createSolanaRpc({ transport });
-//     ^ RpcMethods<SolanaRpcMethods>
-
-// Send a request
+// Send a request.
 const slot = await rpc.getSlot().send();
 ```
 
-The function `createSolanaRpc(..)` accepts a transport to some endpoint that implements JSON RPC and provides all of the capabilities specified by the [Solana JSON RPC HTTP Methods](https://docs.solana.com/api/http).
+### Using Custom RPC Transports
 
-### Aborting Requests
-
-RPC requests are now abortable with modern `AbortControllers`. The `send(..)` method on any `PendingRpcRequest<..>` allows an optional `abortSignal?: AbortSignal` argument.
-
-Here’s an example of a custom `AbortController` used to abort a subscription:
+The `createSolanaRpc` function communicates with the RPC server using a default HTTP transport that should satisfy most use cases. However, you may provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a transport and use it to create a new RPC client via the `createSolanaRpcFromTransport` function.
 
 ```tsx
-import { createSolanaRpcSubscriptions, createDefaultRpcSubscriptionsTransport } from '@solana/web3.js';
+import { createSolanaRpcFromTransport, createDefaultRpcTransport } from '@solana/web3.js';
 
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
-const rpcSubscriptions = createSolanaRpcSubscriptions({ transport });
+// Create an HTTP transport or any custom transport of your choice.
+const transport = createDefaultRpcTransport({ url: 'https://api.devnet.solana.com' });
 
-// Create a new AbortController
-const abortController = new AbortController();
+// Create an RPC client using that transport.
+const rpc = createSolanaRpcFromTransport(transport);
+//    ^? Rpc<SolanaRpcApi>
 
-// Subscribe for slot notifications
-const slotNotifications = await rpcSubscriptions.slotNotifications().subscribe({ abortSignal: abortController.signal });
-
-// Set a timer for 5 seconds, then abort the controller
-setTimeout(() => {
-    abortController.abort();
-}, 5000);
-
-// Log slot notifications
-for await (const notif of slotNotifications) {
-    console.log('Slot notification', notif);
-}
-
-console.log('Done.');
+// Send a request.
+const slot = await rpc.getSlot().send();
 ```
 
-Read more about `AbortController` at the following links:
+Using custom RPC transports, one can implement highly specialized functionality for leveraging multiple transports, attempting/handling retries, and more. Let's take a look at some concrete examples.
 
--   [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
--   [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
--   [JavaScript.info: Fetch: Abort](https://javascript.info/fetch-abort)
-
-### Scoping the RPC API
-
-The new library is comprised of many smaller modular libraries. The packages responsible for managing communication with an RPC are `@solana/rpc-transport` and `@solana/rpc-core`.
-
-The `@solana/rpc-transport` library is responsible for creating transports to an RPC using some specified API – such as the Solana [JSON RPC HTTP API](https://docs.solana.com/api/http), while `@solana/rpc-core` provides the actual Solana JSON RPC API (a specification of each of its supported methods).
-
-Here’s an example of using `@solana/rpc-transport` and `@solana/rpc-core` to create an RPC transport with the Solana API (note: this is the manual implementation of the code snippet above):
-
-```tsx
-import { createSolanaRpcApi, SolanaRpcMethods } from '@solana/rpc-core';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-
-const api = createSolanaRpcApi();
-
-const transport = createHttpTransport({ url: 'http://127.0.0.1:8899' });
-
-const rpc = createJsonRpc<SolanaRpcMethods>({ api, transport });
-//     ^ RpcMethods<SolanaRpcMethods>
-```
-
-If you want to, you can also reduce the scope of the API’s type-spec so you are left only with the types you need. Keep in mind types don’t affect bundle size, but you may choose to scope the type-spec for a variety of reasons, including reducing TypeScript noise.
-
-```tsx
-import { createSolanaRpcApi, type GetAccountInfoApi } from '@solana/rpc-core';
-import { createHttpTransport, createJsonRpc } from '@solana/rpc-transport';
-
-const api = createSolanaRpcApi();
-
-const transport = createHttpTransport({ url: 'http://127.0.0.1:8899' });
-
-const getAccountInfoRpc = createJsonRpc<GetAccountInfoApi>({ api, transport });
-//    ^ RpcMethods<GetAccountInfoApi>
-```
-
-### Creating a Custom RPC API
-
-The new library’s RPC specification supports an _infinite_ number of JSON-RPC methods with **zero increase** in bundle size.
-
-This means the library can support future additions to the official [Solana JSON RPC](https://docs.solana.com/api), or [custom RPC methods](https://www.quicknode.com/docs/ethereum/qn_fetchNFTCollectionDetails_v2) defined by some development team – for example QuickNode or Helius.
-
-Here’s an example of how a developer at QuickNode might build a custom RPC type-spec for their in-house RPC methods:
-
-```tsx
-// Define the method's response payload
-type NftCollectionDetailsApiResponse = Readonly<{
-    address: string;
-    circulatingSupply: number;
-    description: string;
-    erc721: boolean;
-    erc1155: boolean;
-    genesisBlock: string;
-    genesisTransaction: string;
-    name: string;
-    totalSupply: number;
-}>;
-
-// Set up an interface for the request method
-interface NftCollectionDetailsApi {
-    // Define the method's name, parameters and response type
-    qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
-}
-
-// Export the type spec for downstream users
-export type QuickNodeRpcMethods = NftCollectionDetailsApi;
-```
-
-Here’s how a developer might use it:
-
-```tsx
-import { createHttpTransport, createJsonRpc, createJsonRpcApi } from '@solana/rpc-transport';
-
-// Create the custom API
-const api = createJsonRpcApi<QuickNodeRpcMethods>();
-
-// Set up an HTTP transport
-const transport = createHttpTransport({ url: 'http://127.0.0.1:8899' });
-
-// Create the RPC client
-const quickNodeRpc = createJsonRpc<QuickNodeRpcMethods>({ api, transport });
-//    ^ RpcMethods<QuickNodeRpcMethods>
-```
-
-As long as a particular JSON RPC method adheres to the [official JSON RPC specification](https://www.jsonrpc.org/specification), it will be supported by web3.js 2.0.
-
-## Transports
-
-Using the `@solana/rpc-transport` package, developers can create custom RPC transports. With this library, one can implement highly specialized functionality for leveraging multiple transports, attempting/handling retries, and more.
-
-### Round Robin
+#### Round Robin
 
 Here’s an example of how someone might implement a “round robin” approach to leveraging multiple RPC transports within their application:
 
 ```tsx
-import { createSolanaRpcApi } from '@solana/rpc-core';
-import { createJsonRpc, type IRpcTransport } from '@solana/rpc-transport';
-import { createDefaultRpcTransport } from '@solana/web3.js';
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
-// Create a transport for each RPC server
+// Create an HTTP transport for each RPC server.
 const transports = [
     createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' }),
     createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' }),
     createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' }),
 ];
 
-// Set up the round robin factory
+// Set up the round-robin factory.
 let nextTransport = 0;
-async function roundRobinTransport<TResponse>(...args: Parameters<IRpcTransport>): Promise<TResponse> {
+async function roundRobinTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
     const transport = transports[nextTransport];
     nextTransport = (nextTransport + 1) % transports.length;
     return await transport(...args);
 }
 
-// Create the RPC client
-const rpc = createJsonRpc({
-    api: createSolanaRpcApi(),
-    transport: roundRobinTransport,
-});
+// Create the RPC client using the round-robin transport.
+const rpc = createSolanaRpcFromTransport(roundRobinTransport);
 ```
 
-### Sharding
+#### Sharding
 
 Another example of a possible customization for RPC transports is sharding. Here’s an example:
 
@@ -362,41 +258,39 @@ Another example of a possible customization for RPC transports is sharding. Here
 // TODO: Your turn; send us a pull request with an example.
 ```
 
-### Retry Logic
+#### Retry Logic
 
 The transport library can also be used to implement custom retry logic on any request:
 
 ```tsx
-import { createDefaultRpcTransport } from '@solana/web3.js';
-import { createJsonRpc, IRpcTransport } from '@solana/rpc-transport';
-import { createSolanaRpcApi } from '@solana/rpc-core';
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
-// Set the maximum number of attempts to retry a request
+// Set the maximum number of attempts to retry a request.
 const MAX_ATTEMPTS = 4;
 
-// Create the default transport
+// Create the default transport.
 const defaultTransport = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
 
-// Sleep function to wait for a given number of milliseconds
+// Sleep function to wait for a given number of milliseconds.
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Calculate the delay for a given attempt
+// Calculate the delay for a given attempt.
 function calculateRetryDelay(attempt: number): number {
-    // Exponential backoff with a maximum of 1.5 seconds
+    // Exponential backoff with a maximum of 1.5 seconds.
     return Math.min(100 * Math.pow(2, attempt), 1500);
 }
 
-// A retrying transport that will retry up to MAX_ATTEMPTS times before failing
-async function retryingTransport<TResponse>(...args: Parameters<IRpcTransport>): Promise<TResponse> {
+// A retrying transport that will retry up to MAX_ATTEMPTS times before failing.
+async function retryingTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
     let requestError;
     for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
         try {
             return await defaultTransport(...args);
         } catch (err) {
             requestError = err;
-            // Only sleep if we have more attempts remaining
+            // Only sleep if we have more attempts remaining.
             if (attempts < MAX_ATTEMPTS - 1) {
                 const retryDelay = calculateRetryDelay(attempts);
                 await sleep(retryDelay);
@@ -406,14 +300,11 @@ async function retryingTransport<TResponse>(...args: Parameters<IRpcTransport>):
     throw requestError;
 }
 
-// Create the RPC client
-const rpc = createJsonRpc({
-    api: createSolanaRpcApi(),
-    transport: retryingTransport,
-});
+// Create the RPC client using the retrying transport.
+const rpc = createSolanaRpcFromTransport(retryingTransport);
 ```
 
-### Failover
+#### Failover
 
 Support for handling failover can be implemented as a first-class citizen in your application using the new transport library. Here’s an example of some failover logic integrated into a transport:
 
@@ -421,23 +312,21 @@ Support for handling failover can be implemented as a first-class citizen in you
 // TODO: Your turn; send us a pull request with an example.
 ```
 
-### Fanning Out
+#### Fanning Out
 
-Perhaps your application needs to make a large number of requests, or needs to fan request for different methods out to different servers. Here’s an example of an implementation that does the latter:
+Perhaps your application needs to make a large number of requests or needs to fan requests for different methods out to different servers. Here’s an example of an implementation that does the latter:
 
 ```tsx
-import { createSolanaRpcApi } from '@solana/rpc-core';
-import { createJsonRpc, IRpcTransport } from '@solana/rpc-transport';
-import { createDefaultRpcTransport } from '@solana/web3.js';
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
-// Create multiple transports
+// Create multiple transports.
 const transportA = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
 const transportB = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' });
 const transportC = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' });
 const transportD = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-4.com' });
 
-// Function to determine which shard to use based on the request method
-function selectShard(method: string): IRpcTransport {
+// Function to determine which shard to use based on the request method.
+function selectShard(method: string): RpcTransport {
     switch (method) {
         case 'getAccountInfo':
         case 'getBalance':
@@ -452,21 +341,180 @@ function selectShard(method: string): IRpcTransport {
     }
 }
 
-const rpc = createJsonRpc({
-    api: createSolanaRpcApi(),
-    transport: async (...args: Parameters<IRpcTransport>): Promise<any> => {
-        const payload = args[0].payload as { method: string };
-        const selectedTransport = selectShard(payload.method);
-        return await selectedTransport(...args);
-    },
+const rpc = createSolanaRpcFromTransport(async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
+    const payload = args[0].payload as { method: string };
+    const selectedTransport = selectShard(payload.method);
+    return (await selectedTransport(...args)) as TResponse;
 });
 ```
 
-## Subscriptions
+### Scoping the RPC API
 
-Subscriptions in the legacy library do not allow custom retry logic, and do not give you the opportunity to recover from having potentially missed messages. The new version does away with silent retries, surfaces transport errors to your application, and gives you the opportunity to recover from gap events.
+Using the `createSolanaRpc` or `createSolanaRpcFromTransport` methods, we always get the same RPC API, including all Solana RPC methods. However, since the RPC API is described using types only, it is possible to scope the API to a specific set of methods and even add your own custom methods.
 
-### Async Iterator
+When reducing the API scope, keep in mind that types don’t affect bundle size. However, you may choose to scope the type-spec for a variety of reasons, including reducing TypeScript noise.
+
+#### Scoping by Cluster
+
+If you're using a specific cluster, you may wrap your RPC URL inside a helper function like `mainnet` or `devnet` to inject that information into the RPC type system.
+
+```ts
+import { createSolanaRpc, mainnet, devnet } from '@solana/web3.js';
+
+const mainnetRpc = createSolanaRpc(mainnet('https://api.mainnet-beta.solana.com'));
+//    ^? RpcMainnet<SolanaRpcApiMainnet>
+
+const devnetRpc = createSolanaRpc(devnet('https://api.devnet.solana.com'));
+//    ^? RpcDevnet<SolanaRpcApiDevnet>
+```
+
+In the example above, `devnetRpc.requestAirdrop(..)` will work, but `mainnetRpc.requestAirdrop(..)` will throw a TypeScript error as `requestAirdrop` is not a valid method of the mainnet cluster.
+
+#### Cherry-Picking API Methods
+
+You may reduce the scope of the API’s type-spec even further so you are left only with the methods you need. The simplest way to do this is to cast the created RPC client to a type that only includes the methods you need.
+
+```ts
+import { createSolanaRpc, type Rpc, type GetAccountInfoApi, type GetMultipleAccountsApi } from '@solana/web3.js';
+
+const rpc = createSolanaRpc('http://127.0.0.1:8899') as Rpc<GetAccountInfoApi & GetMultipleAccountsApi>;
+```
+
+Alternatively, you may explicitly create the RPC API using the `createSolanaRpcApi` function. You will then need to create your own transport explicitly and bind the two together using the `createRpc` function.
+
+```ts
+import {
+    createDefaultRpcTransport,
+    createRpc,
+    createSolanaRpcApi,
+    DEFAULT_RPC_CONFIG,
+    type GetAccountInfoApi,
+    type GetMultipleAccountsApi,
+} from '@solana/web3.js';
+
+const api = createSolanaRpcApi<GetAccountInfoApi & GetMultipleAccountsApi>(DEFAULT_RPC_CONFIG);
+const transport = createDefaultRpcTransport({ url: 'http:127.0.0.1:8899' });
+
+const rpc = createRpc({ api, transport });
+```
+
+Note that the `createSolanaRpcApi` function is a wrapper on top of the `createRpcApi` function which adds some Solana-specific transformers such as setting a default commitment on all methods or throwing an error when an integer overflow is detected.
+
+#### Creating your Own API Methods
+
+The new library’s RPC specification supports an _infinite_ number of JSON-RPC methods with **zero increase** in bundle size.
+
+This means the library can support future additions to the official [Solana JSON RPC](https://docs.solana.com/api), or [custom RPC methods](https://www.quicknode.com/docs/ethereum/qn_fetchNFTCollectionDetails_v2) defined by some development team – for example, QuickNode or Helius.
+
+Here’s an example of how a developer at QuickNode might build a custom RPC type-spec for their in-house RPC methods:
+
+```tsx
+// Define the method's response payload.
+type NftCollectionDetailsApiResponse = Readonly<{
+    address: string;
+    circulatingSupply: number;
+    description: string;
+    erc721: boolean;
+    erc1155: boolean;
+    genesisBlock: string;
+    genesisTransaction: string;
+    name: string;
+    totalSupply: number;
+}>;
+
+// Set up an interface for the request method.
+interface NftCollectionDetailsApi {
+    // Define the method's name, parameters and response type
+    qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
+}
+
+// Export the type spec for downstream users.
+export type QuickNodeRpcApi = NftCollectionDetailsApi;
+```
+
+Here’s how a developer might use it:
+
+```tsx
+import { createDefaultRpcTransport, createRpc, createRpcApi } from '@solana/web3.js';
+
+// Create the custom API.
+const api = createRpcApi<QuickNodeRpcApi>();
+
+// Set up an HTTP transport.
+const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
+
+// Create the RPC client.
+const quickNodeRpc = createRpc({ api, transport });
+//    ^? Rpc<QuickNodeRpcApi>
+```
+
+As long as a particular JSON RPC method adheres to the [official JSON RPC specification](https://www.jsonrpc.org/specification), it will be supported by web3.js 2.0.
+
+### Aborting RPC Requests
+
+RPC requests are now abortable with modern `AbortControllers`. When calling an RPC method such as `getSlot`, it will return a `PendingRpcRequest` proxy object that contains a `send` method to send the request to the server.
+
+```ts
+const pendingRequest: PendingRpcRequest<Slot> = rpc.getSlot();
+
+const slot: Slot = await pendingRequest.send();
+```
+
+Since the arguments of the `getSlot` method are reserved for the request payload, the `send` method is the one that can accept additional arguments such as an `AbortSignal` to abort the request.
+
+Aborting RPC requests can be useful for a variety of things such as setting a timeout on a request or cancelling a request when a user navigates away from a page.
+
+```tsx
+import { createSolanaRpc } from '@solana/web3.js';
+
+const rpc = createSolanaRpc('http://127.0.0.1:8900');
+
+// Create a new AbortController.
+const abortController = new AbortController();
+
+// Abort the request when the user navigates away from the current page.
+function onUserNavigateAway() {
+    abortController.abort();
+}
+
+// The request will be aborted if and only if the user navigates away from the page.
+const slot = await rpc.getSlot().send({ abortSignal: abortController.signal });
+```
+
+Read more about `AbortController` at the following links:
+
+-   [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+-   [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
+-   [JavaScript.info: Fetch: Abort](https://javascript.info/fetch-abort)
+
+## RPC Subscriptions
+
+Subscriptions in the legacy library do not allow custom retry logic and do not allow you to recover from potentially missed messages. The new version does away with silent retries, surfaces transport errors to your application, and gives you the opportunity to recover from gap events.
+
+The main package responsible for managing communication with RPC subscriptions is `@solana/rpc-subscriptions`. However, similarly to `@solana/rpc`, this package also makes use of more granular packages. These packages are:
+
+-   `@solana/rpc-subscriptions`: Contains all logic related to subscribing to Solana RPC notifications.
+-   `@solana/rpc-subscriptions-api`: Describes all Solana RPC subscriptions using types.
+-   `@solana/rpc-subscriptions-transport-websocket`: Provides a concrete implementation of an RPC Subscriptions transport using WebSockets.
+-   `@solana/rpc-subscriptions-spec`: Defines the JSON RPC spec for subscribing to RPC notifications.
+-   `@solana/rpc-spec-types`: Shared JSON RPC specifications types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.
+-   `@solana/rpc-types`: Shared Solana RPC types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.
+
+Since the main `@solana/web3.js` library also re-exports the `@solana/rpc-subscriptions` package we will import RPC Subscriptions types and functions directly from the main library going forward.
+
+### Getting Started with RPC Subscriptions
+
+To get started with RPC Subscriptions, you may use the `createSolanaRpcSubscriptions` function by providing the WebSocket URL of the Solana JSON RPC server. This will create a default client for interacting with Solana RPC Subscriptions.
+
+```tsx
+import { createSolanaRpcSubscriptions } from '@solana/web3.js';
+
+// Create an RPC Subscriptions client.
+const rpcSubscriptions = createSolanaRpcSubscriptions('ws://127.0.0.1:8900');
+//    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi>
+```
+
+### Subscriptions as Async Iterators
 
 The new subscriptions API vends subscription notifications as an `AsyncIterator`. The `AsyncIterator` conforms to the [async iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), which allows developers to consume messages using a `for await...of` loop.
 
@@ -475,45 +523,27 @@ Here’s an example of working with a subscription in the new library:
 ```tsx
 import { address, createSolanaRpcSubscriptions, createDefaultRpcSubscriptionsTransport } from '@solana/web3.js';
 
-// Create the subscriptions transport
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+// Create the RPC Subscriptions client.
+const rpcSubscriptions = createSolanaRpcSubscriptions('ws://127.0.0.1:8900');
 
-// Create the RPC client
-const rpc = createSolanaRpcSubscriptions({ transport });
-
-// Set up an abort controller
+// Set up an abort controller.
 const abortController = new AbortController();
 
-// Subscribe to account notifications
-const accountNotifications = await rpc
+// Subscribe to account notifications.
+const accountNotifications = await rpcSubscriptions
     .accountNotifications(address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3'), { commitment: 'confirmed' })
     .subscribe({ abortSignal: abortController.signal });
 
-// Consume messages
 try {
+    // Consume messages.
     for await (const notification of accountNotifications) {
         console.log('New balance', notification.value.lamports);
     }
-    // Reaching this line means the subscription was aborted (ie. unsubscribed).
 } catch (e) {
     // The subscription went down.
     // Retry it and then recover from potentially having missed
-    // a balance update, here (eg. by making a `getBalance()` call)
-} finally {
-    // Whether the subscription failed or was aborted, you can run cleanup code here.
+    // a balance update, here (eg. by making a `getBalance()` call).
 }
-```
-
-The new subscriptions API also offers a separate rpc creator if you would like to use Solana’s [unstable subscription methods](https://docs.solana.com/api/websocket#blocksubscribe).
-
-```tsx
-import { createSolanaRpcSubscriptions_UNSTABLE, createDefaultRpcSubscriptionsTransport } from '@solana/web3.js';
-
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
-
-// For unstable methods, explicitly request them in the type spec
-const unstableRpc = createSolanaRpcSubscriptions_UNSTABLE({ transport });
-// ^ RpcSubscriptionMethods<SolanaRpcSubscriptions & SolanaRpcSubscriptionsUnstable>
 ```
 
 You can read more about `AsyncIterator` at the following links:
@@ -521,19 +551,51 @@ You can read more about `AsyncIterator` at the following links:
 -   [Mozilla Developer Docs: `AsyncIterator`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncIterator)
 -   [Luciano Mammino (Blog): JavaScript Async Iterators](https://www.nodejsdesignpatterns.com/blog/javascript-async-iterators/)
 
-### Cancelling Subscriptions
+### Aborting RPC Subscriptions
 
-Similar to the `AbortSignal` logic in the HTTP methods provided by `@solana/rpc-core`, applications can terminate active subscriptions using an `AbortController`. In fact, this parameter is _required_ for subscriptions to encourage you to cleanup subscriptions that your application no longer needs.
+Similarly to RPC calls, applications can terminate active subscriptions using an `AbortController` attribute on the `subscribe` method. In fact, this parameter is _required_ for subscriptions to encourage you to clean up subscriptions that your application no longer needs.
 
-Consider this example of cancelling a subscription using an `AbortController`:
+Let's take a look at some concrete examples that demonstrate how to abort subscriptions.
+
+#### Subscription Timeout
+
+Here's an example of an `AbortController` used to abort a subscription after a 5-second timeout:
 
 ```tsx
-// Subscribe to account notifications
+import { createSolanaRpcSubscriptions } from '@solana/web3.js';
+
+const rpcSubscriptions = createSolanaRpcSubscriptions('ws://127.0.0.1:8900');
+
+// Subscribe for slot notifications using an AbortSignal that times out after 5 seconds.
+const slotNotifications = await rpcSubscriptions
+    .slotNotifications()
+    .subscribe({ abortSignal: AbortSignal.timeout(5000) });
+
+// Log slot notifications.
+for await (const notification of slotNotifications) {
+    console.log('Slot notification', notification);
+}
+
+console.log('Done.');
+```
+
+Read more about `AbortController` at the following links:
+
+-   [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+-   [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
+-   [JavaScript.info: Fetch: Abort](https://javascript.info/fetch-abort)
+
+#### Cancelling Subscriptions
+
+It is also possible to abort a subscription inside the `for await...of` loop. This enables us to cancel a subscription based on some condition, such as a change in the state of an account. For instance, the following example cancels a subscription when the owner of an account changes:
+
+```tsx
+// Subscribe to account notifications.
 const accountNotifications = await rpc
     .accountNotifications(address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3'), { commitment: 'confirmed' })
     .subscribe({ abortSignal });
 
-// Consume messages
+// Consume messages.
 let previousOwner = null;
 for await (const notification of accountNotifications) {
     const {
@@ -550,11 +612,29 @@ for await (const notification of accountNotifications) {
 }
 ```
 
+### Failed versus Aborted Subscriptions
+
+It is important to note that a subscription failure behaves differently from a subscription abort. A subscription failure occurs when the subscription goes down and will throw an error that can be intercepted in a `try/catch`. However, an aborted subscription will not throw an error, but will instead exit the `for await...of` loop.
+
+```ts
+try {
+    for await (const notification of notifications) {
+        // Consume messages.
+    }
+    // [ABORTED] Reaching this line means the subscription was aborted — i.e. unsubscribed.
+} catch (e) {
+    // [FAILED] Reaching this line means the subscription went down.
+    // Retry it, then recover from potential missed messages.
+} finally {
+    // [ABORTED or FAILED] Whether the subscription failed or was aborted, you can run cleanup code here.
+}
+```
+
 ### Message Gap Recovery
 
 One of the most crucial aspects of any subscription API is managing potential missed messages. Missing messages, such as account state updates, could be catastrophic for an application. That’s why the new library provides native support for recovering missed messages using the `AsyncIterator`.
 
-When a connection fails unexpectedly, any messages you miss while disconnected can result in your UI falling behind or becoming corrupt. Because subscription failure is now made explicit in the new API, you can implement ‘catch up’ logic after re-establishing the subscription.
+When a connection fails unexpectedly, any messages you miss while disconnected can result in your UI falling behind or becoming corrupt. Because subscription failure is now made explicit in the new API, you can implement ‘catch-up’ logic after re-establishing the subscription.
 
 Here’s an example of such logic:
 
@@ -565,13 +645,102 @@ try {
     }
 } catch (e) {
     // The subscription failed.
-    // First, reestablish the subscription.
+    // First, re-establish the subscription.
     await setupAccountBalanceSubscription(address);
     // Then make a one-shot request to 'catch up' on any missed balance changes.
     const { value: lamports } = await rpc.getBalance(address).send();
     updateAccountBalance(lamports);
 }
 ```
+
+### Using Custom RPC Subscriptions Transports
+
+The `createSolanaRpcSubscriptions` function communicates with the RPC server using a default WebSocket transport that should satisfy most use cases. However, you may here as well provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a WebSocket transport and use it to create a new RPC Subscriptions client via the `createSolanaRpcSubscriptionsFromTransport` function.
+
+```tsx
+import { createDefaultRpcSubscriptionsTransport, createSolanaRpcSubscriptionsFromTransport } from '@solana/web3.js';
+
+// Create a WebSocket transport or any custom transport of your choice.
+const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+
+// Create an RPC client using that transport.
+const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport(transport);
+//    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi>
+```
+
+### Scoping the RPC Subscriptions API
+
+Using the `createSolanaRpcSubscriptions` or `createSolanaRpcSubscriptionsFromTransport` functions, we always get the same RPC Subscriptions API, including all Solana RPC stable subscriptions. However, since the RPC Subscriptions API is described using types only, it is possible to scope the API to a specific set of subscriptions and even add your own custom subscriptions.
+
+#### Scoping by Cluster
+
+If you're using a specific cluster, you may wrap your RPC URL inside a helper function like `mainnet` or `devnet` to inject that information into the RPC type system.
+
+```ts
+import { createSolanaRpcSubscriptions, mainnet, devnet } from '@solana/web3.js';
+
+const mainnetRpc = createSolanaRpcSubscriptions(mainnet('https://api.mainnet-beta.solana.com'));
+//    ^? RpcSubscriptionsMainnet<SolanaRpcSubscriptionsApi>
+
+const devnetRpc = createSolanaRpcSubscriptions(devnet('https://api.devnet.solana.com'));
+//    ^? RpcSubscriptionsDevnet<SolanaRpcSubscriptionsApi>
+```
+
+#### Including Unstable Subscriptions
+
+If your app needs access to [unstable RPC Subscriptions](https://docs.solana.com/api/websocket#blocksubscribe) — e.g. `BlockNotificationsApi` or `SlotsUpdatesNotificationsApi` — and your RPC server supports them, you may use the `createSolanaRpcSubscriptions_UNSTABLE` and `createSolanaRpcSubscriptionsFromTransport_UNSTABLE` functions to create an RPC Subscriptions client that includes those subscriptions.
+
+```ts
+import {
+    createSolanaRpcSubscriptions_UNSTABLE,
+    createSolanaRpcSubscriptionsFromTransport_UNSTABLE,
+} from '@solana/web3.js';
+
+// Using the default WebSocket transport.
+const rpcSubscriptions = createSolanaRpcSubscriptions_UNSTABLE('ws://127.0.0.1:8900');
+//    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>
+
+// Using a custom transport.
+const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport_UNSTABLE(transport);
+//    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>
+```
+
+#### Cherry-Picking API Methods
+
+You may reduce the scope of the Subscription API even further so you are left only with the subscriptions you need. The simplest way to do this is to cast the created RPC client to a type that only includes the methods you need.
+
+```ts
+import {
+    createSolanaRpcSubscriptions,
+    type RpcSubscriptions,
+    type AccountNotificationsApi,
+    type SlotNotificationsApi,
+} from '@solana/web3.js';
+
+const rpc = createSolanaRpcSubscriptions('ws://127.0.0.1:8900') as RpcSubscriptions<
+    AccountNotificationsApi & SlotNotificationsApi
+>;
+```
+
+Alternatively, you may explicitly create the RPC Subscriptions API using the `createSolanaRpcSubscriptionsApi` function. You will then need to create your own transport explicitly and bind the two together using the `createSubscriptionRpc` function.
+
+```ts
+import {
+    createDefaultRpcSubscriptionsTransport,
+    createSubscriptionRpc,
+    createSolanaRpcSubscriptionsApi,
+    DEFAULT_RPC_CONFIG,
+    type AccountNotificationsApi,
+    type SlotNotificationsApi,
+} from '@solana/web3.js';
+
+const api = createSolanaRpcSubscriptionsApi<AccountNotificationsApi & SlotNotificationsApi>(DEFAULT_RPC_CONFIG);
+const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+const rpcSubscriptions = createSubscriptionRpc({ api, transport });
+```
+
+Note that the `createSolanaRpcSubscriptionsApi` function is a wrapper on top of the `createRpcSubscriptionsApi` function which adds some Solana-specific transformers such as setting a default commitment on all methods or throwing an error when an integer overflow is detected.
 
 ## Keys
 
@@ -595,7 +764,7 @@ const keyPair: CryptoKeyPair = await generateKeyPair();
 const message = new Uint8Array(8).fill(0);
 
 const signedMessage = await signBytes(keyPair.privateKey, message);
-//    ^ Signature
+//    ^? Signature
 
 const verified = await verifySignature(keyPair.publicKey, signedMessage, message);
 ```
@@ -673,30 +842,30 @@ const feePayer = address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3');
 
 // Create a new transaction (legacy)
 const transactionLegacy = createTransaction({ version: 'legacy' });
-// ^ LegacyTransaction
+//    ^? LegacyTransaction
 
 const transactionWithFeePayerLegacy = setTransactionFeePayer(feePayer, transactionLegacy);
-// ^ LegacyTransaction & ITransactionWithFeePayer
+//    ^? LegacyTransaction & ITransactionWithFeePayer
 
 const transactionWithFeePayerAndLifetimeLegacy = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
     transactionWithFeePayerLegacy,
 );
-// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+//    ^? LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 
 // Create a new transaction (v0)
 const transactionV0 = createTransaction({ version: 0 });
-// ^ V0Transaction
+//    ^? V0Transaction
 
 // Set the fee payer
 const transactionWithFeePayerV0 = setTransactionFeePayer(feePayer, transactionV0);
-// ^ V0Transaction & ITransactionWithFeePayer
+//    ^? V0Transaction & ITransactionWithFeePayer
 
 const transactionWithFeePayerAndLifetimeV0 = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
     transactionWithFeePayerV0,
 );
-// ^ V0Transaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+//    ^? V0Transaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 ```
 
 As you can see, each time a transaction is modified, the type reflects the current state. If you add a fee payer, you’ll get a type representing a transaction with a fee payer, and so on.
@@ -728,14 +897,14 @@ const transactionWithFeePayerAndLifetime = setTransactionLifetimeUsingBlockhash(
     transactionWithFeePayer,
 );
 const transactionSignedWithFeePayerAndLifetime = await signTransaction([signer], transactionWithFeePayerAndLifetime);
-// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash & ITransactionWithSignatures
+//    ^? LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash & ITransactionWithSignatures
 
 // Setting the lifetime again will remove the signatures from the object
 const transactionSignaturesStripped = setTransactionLifetimeUsingBlockhash(
     recentBlockhash,
     transactionSignedWithFeePayerAndLifetime,
 );
-// ^ LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
+//    ^? LegacyTransaction & ITransactionWithFeePayer & ITransactionWithBlockhash
 ```
 
 The `signTransaction(..)` function will raise a type error if your unsigned transaction is not already equipped with a fee payer and a lifetime.
