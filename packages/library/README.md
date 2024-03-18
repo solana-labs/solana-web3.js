@@ -1032,7 +1032,7 @@ export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> =>
     combineCodec(getMyTokenEncoder(), getMyTokenDecoder());
 ```
 
-See more in the different packages’ [README files on GitHub](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs-data-structures/README.md).
+You can read me about codecs in [the official Codec documentation](https://github.com/solana-labs/solana-web3.js/blob/master/packages/codecs/README.md).
 
 ## Type-Safety
 
