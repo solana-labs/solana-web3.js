@@ -48,7 +48,6 @@ jobs:
         run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages' || 'build' }}" >> $GITHUB_OUTPUT
 
       - name: Run Build Step (force)
-        if: steps.changesets.outputs.hasChangesets == 'false'
         run: pnpm turbo ${{ steps.build-step-decider.outputs.step-name }} --concurrency=100% --filter=!\@solana/web3.js --force=true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
