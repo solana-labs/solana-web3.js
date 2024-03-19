@@ -1,6 +1,6 @@
 {
     "name": "@solana/web3.js-legacy-sham",
-    "version": "1.0.0-preview.1",
+    "version": "1.0.0-preview.2",
     "description": "A drop-in replacement for @solana/web3.js@1 that you can use to break your dependency on the legacy library, particularly when one of your dependencies pulls it in transitively",
     "exports": {
         "browser": {

@@ -36,7 +36,17 @@
     "@solana/web3.js": "0.0.0-development",
     "@solana/web3.js-experimental": "2.0.0-preview.1",
     "@solana/web3.js-legacy-sham": "1.0.0-preview.1",
-    "@solana/webcrypto-ed25519-polyfill": "2.0.0-preview.1"
+    "@solana/webcrypto-ed25519-polyfill": "2.0.0-preview.1",
+    "@solana/build-scripts": "0.0.0",
+    "@solana/crypto-impl": "0.0.0",
+    "@solana/sysvars": "2.0.0-preview.1",
+    "@solana/test-config": "0.0.0",
+    "@solana/test-matchers": "0.0.0",
+    "@solana/text-encoding-impl": "0.0.0",
+    "@solana/tsconfig": "0.0.0",
+    "@solana/ws-impl": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "three-guests-study"
+  ]
 }
