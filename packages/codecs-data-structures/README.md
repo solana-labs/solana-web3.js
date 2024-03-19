@@ -137,16 +137,16 @@ const map = getMapDecoder(keyDecoder, valueDecoder).decode(bytes);
 The `getTupleCodec` function accepts any number of codecs — `T`, `U`, `V`, etc. — and returns a tuple codec of type `[T, U, V, …]` such that each item is in the order of the provided codecs.
 
 ```ts
-const itemCodecs = [getStringCodec(), getU8Codec(), getU64Codec()];
-const bytes = getTupleCodec(itemCodecs).encode(['alice', 42, 123]);
-const tuple = getTupleCodec(itemCodecs).decode(bytes);
+const codec = getTupleCodec([getStringCodec(), getU8Codec(), getU64Codec()]);
+const bytes = codec.encode(['alice', 42, 123]);
+const tuple = codec.decode(bytes);
 ```
 
 Separate `getTupleEncoder` and `getTupleDecoder` functions are also available.
 
 ```ts
-const bytes = getTupleEncoder(itemEncoders).encode(['alice', 42, 123]);
-const tuple = getTupleDecoder(itemDecoders).decode(bytes);
+const bytes = getTupleEncoder([getStringCodec(), getU8Codec()]).encode(['alice', 42]);
+const tuple = getTupleDecoder([getStringCodec(), getU8Codec()]).decode(bytes);
 ```
 
 ## Struct codec
