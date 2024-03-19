@@ -1169,7 +1169,7 @@ It will force you to cast the numerical value for your airdrop (or transfer, etc
 
 ```tsx
 const airdropAmount = lamports(1000000000n);
-const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();With the new library, it’s possible to specify the nature of a transaction instruction completely, just using TypeScrip
+const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();
 ```
 
 ## Compatibility Layer
