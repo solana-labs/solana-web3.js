@@ -1,6 +1,6 @@
 {
     "name": "@solana/functional",
-    "version": "2.0.0-preview.1",
+    "version": "2.0.0-preview.2",
     "description": "Functional JavaScript helpers",
     "exports": {
         "browser": {
