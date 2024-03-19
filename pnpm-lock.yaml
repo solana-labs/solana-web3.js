@@ -475,8 +475,8 @@ importers:
         specifier: ^7.1.1
         version: 7.1.1(chai@4.3.7)
       commitlint:
-        specifier: ^19.2.0
-        version: 19.2.0(@types/node@18.19.21)(typescript@5.2.2)
+        specifier: ^19.2.1
+        version: 19.2.1(@types/node@18.19.21)(typescript@5.2.2)
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
@@ -2505,15 +2505,15 @@ packages:
     dev: true
     optional: true
 
-  /@commitlint/cli@19.2.0(@types/node@18.19.21)(typescript@5.2.2):
-    resolution: {integrity: sha512-8XnQDMyQR+1/ldbmIyhonvnDS2enEw48Wompo/967fsEvy9Vj5/JbDutzmSBKxANWDVeEbR9QQm0yHpw6ArrFw==}
+  /@commitlint/cli@19.2.1(@types/node@18.19.21)(typescript@5.2.2):
+    resolution: {integrity: sha512-cbkYUJsLqRomccNxvoJTyv5yn0bSy05BBizVyIcLACkRbVUqYorC351Diw/XFSWC/GtpwiwT2eOvQgFZa374bg==}
     engines: {node: '>=v18'}
     hasBin: true
     dependencies:
       '@commitlint/format': 19.0.3
       '@commitlint/lint': 19.1.0
       '@commitlint/load': 19.2.0(@types/node@18.19.21)(typescript@5.2.2)
-      '@commitlint/read': 19.2.0
+      '@commitlint/read': 19.2.1
       '@commitlint/types': 19.0.3
       execa: 8.0.1
       yargs: 17.7.2
@@ -2613,8 +2613,8 @@ packages:
       conventional-commits-parser: 5.0.0
     dev: true
 
-  /@commitlint/read@19.2.0:
-    resolution: {integrity: sha512-HlGeEd/jyp2a5Fb9mvtsaDm5hFCmj80dJYjLQkpG3DzWneWBc37YU3kM8Za1D1HUazZaTkdsWq73M3XDE4CvCA==}
+  /@commitlint/read@19.2.1:
+    resolution: {integrity: sha512-qETc4+PL0EUv7Q36lJbPG+NJiBOGg7SSC7B5BsPWOmei+Dyif80ErfWQ0qXoW9oCh7GTpTNRoaVhiI8RbhuaNw==}
     engines: {node: '>=v18'}
     dependencies:
       '@commitlint/top-level': 19.0.0
@@ -5948,12 +5948,12 @@ packages:
     engines: {node: '>= 6'}
     dev: false
 
-  /commitlint@19.2.0(@types/node@18.19.21)(typescript@5.2.2):
-    resolution: {integrity: sha512-gZkAkODO4meW5VHQ325MQBo+rMmtuVbrCo8Nbb9wqsGDJEXPC8RIXPLm5NNJSMqeuGMJzG7GMuoNayCPP/X9lA==}
+  /commitlint@19.2.1(@types/node@18.19.21)(typescript@5.2.2):
+    resolution: {integrity: sha512-avW7E38gbdbUK7NIi/7gfkaKwlw8tjXy2HlmEdBS9A9+HeoHV1o/i96Sc9qjX0rKyPzKEsLi6cP3Wt3xM0kjEA==}
     engines: {node: '>=v18'}
     hasBin: true
     dependencies:
-      '@commitlint/cli': 19.2.0(@types/node@18.19.21)(typescript@5.2.2)
+      '@commitlint/cli': 19.2.1(@types/node@18.19.21)(typescript@5.2.2)
       '@commitlint/types': 19.0.3
     transitivePeerDependencies:
       - '@types/node'
