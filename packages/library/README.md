@@ -110,10 +110,17 @@ The 2.0 library is tree-shakable, and that tree-shakeability is enforced in the 
 
 The new library itself is comprised of several smaller, modular packages under the `@solana` organization, including:
 
--   `@solana/rpc-transport`: For building and managing RPC transports
--   `@solana/rpc-core`: The type-spec of the Solana JSON RPC
+-   `@solana/accounts`: For fetching and decoding accounts
+-   `@solana/codecs`: For composing data (de)serializers from a set of primitives or building custom ones
+-   `@solana/errors`: For identifying and refining coded errors thrown in the `@solana` namespace
+-   `@solana/rpc`: For sending RPC requests
+-   `@solana/rpc-subscriptions`: For subscribing to RPC notifications
+-   `@solana/signers`: For building message and/or transaction signer objects
+-   `@solana/sysvars`: For fetching and decoding sysvar accounts
 -   `@solana/transactions`: For building and transforming Solana transaction objects
--   `@solana/codecs-*`: For building data (de)serializers
+-   And many more!
+
+Some of these packages are themselves composed of smaller packages. For instance, `@solana/rpc` is composed of `@solana/rpc-spec` (for core JSON RPC specification types), `@solana/rpc-api` (for the Solana-specific RPC methods), `@solana/rpc-transport-http` (for the default HTTP transport) and so on.
 
 Developers can use the default configurations within the library itself (`@solana/web3.js:2.0`) or import any number of the modular packages for additional customization.
 
