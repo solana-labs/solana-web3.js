@@ -1454,4 +1454,4 @@ You can find issues to tackle in the repository’s “issues” section, just m
 
 ## Thank you
 
-We’re grateful that you have read this far. If you are interested in migrating an existing application to the new web3.js to take advantage of some of the benefits we’ve demonstrated, we want to give you some direct support. Reach out to [@steveluscher](https://twitter.com/steveluscher/) on Twitter to start a conversation.
+We’re grateful that you have read this far. If you are interested in migrating an existing application to the new web3.js to take advantage of some of the benefits we’ve demonstrated, we want to give you some direct support. Reach out to [@steveluscher](https://t.me/steveluscher/) on Telegram to start a conversation.
