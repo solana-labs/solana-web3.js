@@ -50,6 +50,7 @@ jobs:
           pnpm turbo publish-packages --concurrency=100% --filter=\!@solana/web3.js
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PUBLISH_TAG: experimental
 
