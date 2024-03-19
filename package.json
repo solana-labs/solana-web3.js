@@ -24,7 +24,7 @@
         "@swc/jest": "^0.2.36",
         "@types/jest": "^29.5.12",
         "@types/node": "^18",
-        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.0.0",
         "agadoo": "^3.0.0",
         "eslint": "^8.57.0",
