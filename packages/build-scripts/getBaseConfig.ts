@@ -6,9 +6,9 @@ import { Format, Options } from 'tsup';
 
 type Platform =
     | 'browser'
-    | 'node'
     // React Native
-    | 'native';
+    | 'native'
+    | 'node';
 
 const BROWSERSLIST_TARGETS = browsersListToEsBuild();
 
