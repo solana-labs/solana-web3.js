@@ -99,12 +99,16 @@ function createKeyPair_INTERNAL_ONLY_DO_NOT_EXPORT(
         type: 'private',
         usages: Object.freeze(keyUsages.filter(usage => usage === 'sign')) as KeyUsage[],
     } as CryptoKey;
+    Object.setPrototypeOf(privateKey, CryptoKey.prototype);
+
     const publicKey = {
         ...base,
         extractable: true,
         type: 'public',
         usages: Object.freeze(keyUsages.filter(usage => usage === 'verify')) as KeyUsage[],
     } as CryptoKey;
+    Object.setPrototypeOf(publicKey, CryptoKey.prototype);
+
     return Object.freeze({
         privateKey: Object.freeze(privateKey),
         publicKey: Object.freeze(publicKey),
@@ -219,6 +223,7 @@ export function importKeyPolyfill(
             type: 'public',
             usages: Object.freeze(keyUsages.filter(usage => usage === 'verify')) as KeyUsage[],
         } as CryptoKey;
+        Object.setPrototypeOf(publicKey, CryptoKey.prototype);
 
         const cache = (publicKeyBytesStore ||= new WeakMap());
         cache.set(publicKey, bytes);
@@ -248,6 +253,7 @@ export function importKeyPolyfill(
             type: 'private',
             usages: Object.freeze(keyUsages.filter(usage => usage === 'sign')) as KeyUsage[],
         } as CryptoKey;
+        Object.setPrototypeOf(privateKey, CryptoKey.prototype);
 
         const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
         cache.set(privateKey, secretKeyBytes);
