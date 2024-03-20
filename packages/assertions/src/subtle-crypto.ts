@@ -36,7 +36,7 @@ async function isEd25519CurveSupported(subtle: SubtleCrypto): Promise<boolean> {
     }
 }
 
-export async function assertDigestCapabilityIsAvailable() {
+export function assertDigestCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.digest !== 'function') {
         throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DIGEST_UNIMPLEMENTED);
@@ -53,21 +53,21 @@ export async function assertKeyGenerationIsAvailable() {
     }
 }
 
-export async function assertKeyExporterIsAvailable() {
+export function assertKeyExporterIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.exportKey !== 'function') {
         throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__EXPORT_FUNCTION_UNIMPLEMENTED);
     }
 }
 
-export async function assertSigningCapabilityIsAvailable() {
+export function assertSigningCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.sign !== 'function') {
         throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__SIGN_FUNCTION_UNIMPLEMENTED);
     }
 }
 
-export async function assertVerificationCapabilityIsAvailable() {
+export function assertVerificationCapabilityIsAvailable() {
     assertIsSecureContext();
     if (typeof globalThis.crypto === 'undefined' || typeof globalThis.crypto.subtle?.verify !== 'function') {
         throw new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__VERIFY_FUNCTION_UNIMPLEMENTED);
