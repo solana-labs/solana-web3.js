@@ -92,7 +92,7 @@ export const SOLANA_ERROR__SUBTLE_CRYPTO__VERIFY_FUNCTION_UNIMPLEMENTED = 361000
 
 // Crypto-related errors.
 // Reserve error codes in the range [3611000-3611050].
-export const SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED = 3610007 as const;
+export const SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED = 3611000 as const;
 
 // Key-related errors.
 // Reserve error codes in the range [3704000-3704999].
