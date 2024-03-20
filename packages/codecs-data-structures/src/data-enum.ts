@@ -17,7 +17,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { getMaxSize, maxCodecSizes, sumCodecSizes } from './utils';
+import { DrainOuterGeneric, getMaxSize, maxCodecSizes, sumCodecSizes } from './utils';
 
 /**
  * Defines a data enum using discriminated union types.
@@ -74,21 +74,21 @@ export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberDecoder | N
 type Variants<T> = readonly (readonly [string, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
-type GetEncoderTypeFromVariants<TVariants extends Variants<Encoder<any>>> = {
+type GetEncoderTypeFromVariants<TVariants extends Variants<Encoder<any>>> = DrainOuterGeneric<{
     [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Encoder<infer TFrom>
         ? TFrom extends object
             ? TFrom
             : object
         : never) & { __kind: TVariants[I][0] };
-}[ArrayIndices<TVariants>];
+}>[ArrayIndices<TVariants>];
 
-type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = {
+type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = DrainOuterGeneric<{
     [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Decoder<infer TTo>
         ? TTo extends object
             ? TTo
             : object
         : never) & { __kind: TVariants[I][0] };
-}[ArrayIndices<TVariants>];
+}>[ArrayIndices<TVariants>];
 
 /**
  * Creates a data enum encoder.

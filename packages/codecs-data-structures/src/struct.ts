@@ -15,18 +15,18 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { getFixedSize, getMaxSize, sumCodecSizes } from './utils';
+import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils';
 
 type Fields<T> = readonly (readonly [string, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
-type GetEncoderTypeFromFields<TFields extends Fields<Encoder<any>>> = {
+type GetEncoderTypeFromFields<TFields extends Fields<Encoder<any>>> = DrainOuterGeneric<{
     [I in ArrayIndices<TFields> as TFields[I][0]]: TFields[I][1] extends Encoder<infer TFrom> ? TFrom : never;
-};
+}>;
 
-type GetDecoderTypeFromFields<TFields extends Fields<Decoder<any>>> = {
+type GetDecoderTypeFromFields<TFields extends Fields<Decoder<any>>> = DrainOuterGeneric<{
     [I in ArrayIndices<TFields> as TFields[I][0]]: TFields[I][1] extends Decoder<infer TTo> ? TTo : never;
-};
+}>;
 
 /**
  * Creates a encoder for a custom object.
