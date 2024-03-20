@@ -1,10 +1,12 @@
 import { assertKeyGenerationIsAvailable } from '@solana/assertions';
-import { SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH, SolanaError, SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY } from '@solana/errors';
+import {
+    SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY,
+    SolanaError,
+} from '@solana/errors';
 
 import { createPrivateKeyFromBytes } from './private-key';
-import { verifySignature, signBytes } from './signatures';
-
-const TEST_DATA = new Uint8Array([1, 2, 3, 4, 5]);
+import { signBytes, verifySignature } from './signatures';
 
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
     await assertKeyGenerationIsAvailable();
@@ -26,10 +28,12 @@ export async function createKeyPairFromBytes(bytes: Uint8Array, extractable?: bo
     ]);
 
     // Verify the key pair
-    const signedData = await signBytes(privateKey, TEST_DATA);
-    const isValid = await verifySignature(publicKey, signedData, TEST_DATA);
+    const randomBytes = new Uint8Array(32);
+    crypto.getRandomValues(randomBytes);
+    const signedData = await signBytes(privateKey, randomBytes);
+    const isValid = await verifySignature(publicKey, signedData, randomBytes);
     if (!isValid) {
-        throw new SolanaError(SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY, { address: bytes.slice(32) });
+        throw new SolanaError(SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY);
     }
 
     return { privateKey, publicKey } as CryptoKeyPair;
