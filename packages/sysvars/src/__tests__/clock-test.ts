@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarClock, getSysvarClockCodec } from '../clock';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarClock, getSysvarClockCodec } from '../clock.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('clock', () => {
     let rpc: Rpc<GetAccountInfoApi>;

@@ -8,7 +8,7 @@ import type {
 } from '@solana/rpc';
 import type { Slot } from '@solana/rpc-types';
 
-import { createRpcGraphQL, RpcGraphQL } from '../../index';
+import { createRpcGraphQL, RpcGraphQL } from '../../index.js';
 
 describe('account loader', () => {
     let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;

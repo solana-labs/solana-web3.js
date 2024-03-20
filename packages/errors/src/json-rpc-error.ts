@@ -15,11 +15,11 @@ import {
     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_PRECOMPILE_VERIFICATION_FAILURE,
     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_UNSUPPORTED_TRANSACTION_VERSION,
     SolanaErrorCode,
-} from './codes';
-import { SolanaErrorContext } from './context';
-import { SolanaError } from './error';
-import { safeCaptureStackTrace } from './stack-trace';
-import { getSolanaErrorFromTransactionError } from './transaction-error';
+} from './codes.js';
+import { SolanaErrorContext } from './context.js';
+import { SolanaError } from './error.js';
+import { safeCaptureStackTrace } from './stack-trace.js';
+import { getSolanaErrorFromTransactionError } from './transaction-error.js';
 
 interface RpcErrorResponse {
     code: number;

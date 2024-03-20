@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarEpochSchedule, getSysvarEpochScheduleCodec } from '../epoch-schedule';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarEpochSchedule, getSysvarEpochScheduleCodec } from '../epoch-schedule.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('epoch rewards', () => {
     let rpc: Rpc<GetAccountInfoApi>;

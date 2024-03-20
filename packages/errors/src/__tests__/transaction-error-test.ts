@@ -4,10 +4,10 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
     SolanaErrorCode,
-} from '../codes';
-import { SolanaError } from '../error';
-import { getSolanaErrorFromInstructionError } from '../instruction-error';
-import { getSolanaErrorFromTransactionError } from '../transaction-error';
+} from '../codes.js';
+import { SolanaError } from '../error.js';
+import { getSolanaErrorFromInstructionError } from '../instruction-error.js';
+import { getSolanaErrorFromTransactionError } from '../transaction-error.js';
 
 jest.mock('../instruction-error.ts');
 

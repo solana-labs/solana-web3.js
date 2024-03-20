@@ -1,5 +1,5 @@
-import { Codec, createCodec, createDecoder, createEncoder } from '../codec';
-import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
+import { Codec, createCodec, createDecoder, createEncoder } from '../codec.js';
+import { mapCodec, mapDecoder, mapEncoder } from '../map-codec.js';
 
 const numberCodec: Codec<number> = createCodec({
     fixedSize: 1,

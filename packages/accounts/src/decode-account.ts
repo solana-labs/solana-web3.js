@@ -6,8 +6,8 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import type { Account, EncodedAccount } from './account';
-import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
+import type { Account, EncodedAccount } from './account.js';
+import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account.js';
 
 /** Decodes the data of a given account using the provided decoder. */
 export function decodeAccount<TData extends object, TAddress extends string = string>(

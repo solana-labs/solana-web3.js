@@ -1,5 +1,5 @@
-import { ITransactionWithSignatures } from '.';
-import { BaseTransaction } from './types';
+import { ITransactionWithSignatures } from './index.js';
+import { BaseTransaction } from './types.js';
 
 export function getUnsignedTransaction<TTransaction extends BaseTransaction>(
     transaction: TTransaction | (ITransactionWithSignatures & TTransaction),

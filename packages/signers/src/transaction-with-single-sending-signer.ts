@@ -5,10 +5,10 @@ import {
 } from '@solana/errors';
 import { CompilableTransaction } from '@solana/transactions';
 
-import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta';
-import { isTransactionModifyingSigner } from './transaction-modifying-signer';
-import { isTransactionPartialSigner } from './transaction-partial-signer';
-import { isTransactionSendingSigner } from './transaction-sending-signer';
+import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta.js';
+import { isTransactionModifyingSigner } from './transaction-modifying-signer.js';
+import { isTransactionPartialSigner } from './transaction-partial-signer.js';
+import { isTransactionSendingSigner } from './transaction-sending-signer.js';
 
 /** Defines a transaction with exactly one {@link TransactionSendingSigner}. */
 export type ITransactionWithSingleSendingSigner = ITransactionWithSigners & {

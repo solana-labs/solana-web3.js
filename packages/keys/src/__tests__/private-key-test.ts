@@ -1,4 +1,4 @@
-import { createPrivateKeyFromBytes } from '../private-key';
+import { createPrivateKeyFromBytes } from '../private-key.js';
 
 const MOCK_DATA = new Uint8Array([1, 2, 3]);
 const MOCK_DATA_SIGNATURE = new Uint8Array([

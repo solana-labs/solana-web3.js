@@ -1,7 +1,7 @@
 import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
-import { NumberCodecConfig } from './common';
-import { numberDecoderFactory, numberEncoderFactory } from './utils';
+import { NumberCodecConfig } from './common.js';
+import { numberDecoderFactory, numberEncoderFactory } from './utils.js';
 
 export const getF64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number, 8> =>
     numberEncoderFactory({

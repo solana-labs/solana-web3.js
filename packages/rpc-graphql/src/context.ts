@@ -13,7 +13,7 @@ import {
     createProgramAccountsLoader,
     createTransactionLoader,
     RpcGraphQLLoaders,
-} from './loaders';
+} from './loaders/index.js';
 
 type Config = {
     /**

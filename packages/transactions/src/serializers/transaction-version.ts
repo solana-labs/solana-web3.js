@@ -8,7 +8,7 @@ import {
 } from '@solana/codecs-core';
 import { SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
-import { TransactionVersion } from '../types';
+import { TransactionVersion } from '../types.js';
 
 const VERSION_FLAG_MASK = 0x80;
 

@@ -1,4 +1,4 @@
-import { Connection } from '../connection';
+import { Connection } from '../connection.js';
 
 describe('ConnectionSham', () => {
     it.each(['gopher:', 'tel:', 'ws://', 'wss://'])('fatals if the endpoint supplied starts with `%s`', scheme => {

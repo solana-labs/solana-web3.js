@@ -3,8 +3,8 @@ import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
-import { getArrayCodec } from '../array';
-import { b } from './__setup__';
+import { getArrayCodec } from '../array.js';
+import { b } from './__setup__.js';
 
 describe('getArrayCodec', () => {
     const array = getArrayCodec;

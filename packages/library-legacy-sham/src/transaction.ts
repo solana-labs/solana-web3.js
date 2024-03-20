@@ -26,8 +26,8 @@ import {
     TransactionNonceCtor,
 } from '@solana/web3.js-legacy/declarations';
 
-import { PublicKey } from './public-key';
-import { createUnimplementedFunction, getUnimplementedError } from './unimplemented';
+import { PublicKey } from './public-key.js';
+import { createUnimplementedFunction, getUnimplementedError } from './unimplemented.js';
 
 export class Transaction {
     #tx: BaseTransaction | (BaseTransaction & ITransactionWithSignatures);

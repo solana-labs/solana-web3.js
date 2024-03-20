@@ -1,3 +1,3 @@
-export * from './key-pair';
-export * from './private-key';
-export * from './signatures';
+export * from './key-pair.js';
+export * from './private-key.js';
+export * from './signatures.js';

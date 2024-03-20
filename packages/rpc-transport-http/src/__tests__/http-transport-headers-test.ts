@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
-import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
+import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
@@ -60,7 +60,7 @@ describe('assertIsAllowedHttpRequestHeader', () => {
 });
 
 describe('createHttpRequest with custom headers', () => {
-    let createHttpTransport: typeof import('../http-transport').createHttpTransport;
+    let createHttpTransport: typeof import('../http-transport.js').createHttpTransport;
     let fetchSpy: jest.SpyInstance;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
@@ -68,7 +68,7 @@ describe('createHttpRequest with custom headers', () => {
             const httpTransportModule =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../http-transport');
+                await import('../http-transport.js');
             createHttpTransport = httpTransportModule.createHttpTransport;
         });
     });

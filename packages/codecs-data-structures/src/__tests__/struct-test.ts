@@ -2,9 +2,9 @@ import { offsetCodec, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 
-import { getNullableCodec } from '../nullable';
-import { getStructCodec } from '../struct';
-import { b } from './__setup__';
+import { getNullableCodec } from '../nullable.js';
+import { getStructCodec } from '../struct.js';
+import { b } from './__setup__.js';
 
 describe('getStructCodec', () => {
     const struct = getStructCodec;

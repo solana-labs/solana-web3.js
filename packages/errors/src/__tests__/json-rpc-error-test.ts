@@ -21,11 +21,11 @@ import {
     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_TRANSACTION_SIGNATURE_VERIFICATION_FAILURE,
     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_UNSUPPORTED_TRANSACTION_VERSION,
     SolanaErrorCode,
-} from '../codes';
-import { SolanaErrorContext } from '../context';
-import { SolanaError } from '../error';
-import { getSolanaErrorFromJsonRpcError } from '../json-rpc-error';
-import { getSolanaErrorFromTransactionError } from '../transaction-error';
+} from '../codes.js';
+import { SolanaErrorContext } from '../context.js';
+import { SolanaError } from '../error.js';
+import { getSolanaErrorFromJsonRpcError } from '../json-rpc-error.js';
+import { getSolanaErrorFromTransactionError } from '../transaction-error.js';
 
 jest.mock('../transaction-error.ts');
 

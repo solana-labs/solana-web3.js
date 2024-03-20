@@ -6,7 +6,7 @@ import {
     getLamportsEncoder,
     lamports,
     LamportsUnsafeBeyond2Pow53Minus1,
-} from '../lamports';
+} from '../lamports.js';
 
 describe('assertIsLamports()', () => {
     it('throws when supplied a negative number', () => {

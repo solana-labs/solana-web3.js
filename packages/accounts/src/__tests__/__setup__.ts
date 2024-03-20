@@ -9,7 +9,7 @@ import type {
     SolanaRpcResponse,
 } from '@solana/rpc-types';
 
-import type { GetAccountInfoApi, GetMultipleAccountsApi, JsonParsedDataResponse } from '../rpc-api';
+import type { GetAccountInfoApi, GetMultipleAccountsApi, JsonParsedDataResponse } from '../rpc-api/index.js';
 
 export type Base64RpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 export type Base58RpcAccount = AccountInfoBase & (AccountInfoWithBase58Bytes | AccountInfoWithBase58EncodedData);

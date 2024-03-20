@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__MALFORMED_BIGINT_STRING, SolanaError } from '@solana/errors';
 
-import { assertIsStringifiedBigInt } from '../stringified-bigint';
+import { assertIsStringifiedBigInt } from '../stringified-bigint.js';
 
 describe('assertIsStringifiedBigInt()', () => {
     it("throws when supplied a string that can't parse as a number", () => {

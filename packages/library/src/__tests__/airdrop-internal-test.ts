@@ -3,7 +3,7 @@ import type { Signature } from '@solana/keys';
 import type { GetSignatureStatusesApi, RequestAirdropApi, Rpc } from '@solana/rpc';
 import { lamports } from '@solana/rpc-types';
 
-import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from '../airdrop-internal';
+import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from '../airdrop-internal.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

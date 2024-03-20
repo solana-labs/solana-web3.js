@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
-import { getBase58Codec } from '../base58';
+import { getBase58Codec } from '../base58.js';
 
 describe('getBase58Codec', () => {
     it('can encode base 58 strings', () => {

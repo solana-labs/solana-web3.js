@@ -19,7 +19,7 @@ import {
 } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { getUtf8Decoder, getUtf8Encoder } from './utf8';
+import { getUtf8Decoder, getUtf8Encoder } from './utf8.js';
 
 /** Defines the config for string codecs. */
 export type StringCodecConfig<

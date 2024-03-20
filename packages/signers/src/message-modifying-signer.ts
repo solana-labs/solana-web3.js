@@ -1,8 +1,8 @@
 import { Address, isAddress } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
 
-import { SignableMessage } from './signable-message';
-import { BaseSignerConfig } from './types';
+import { SignableMessage } from './signable-message.js';
+import { BaseSignerConfig } from './types.js';
 
 export type MessageModifyingSignerConfig = BaseSignerConfig;
 

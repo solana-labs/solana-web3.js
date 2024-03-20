@@ -1,7 +1,7 @@
 import { address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SIGNER, SolanaError } from '@solana/errors';
 
-import { assertIsTransactionSigner, isTransactionSigner, TransactionSigner } from '../transaction-signer';
+import { assertIsTransactionSigner, isTransactionSigner, TransactionSigner } from '../transaction-signer.js';
 
 describe('isTransactionSigner', () => {
     it('checks whether a given value is a TransactionSigner', () => {

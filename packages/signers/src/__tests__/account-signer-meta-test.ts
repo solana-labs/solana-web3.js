@@ -1,14 +1,14 @@
 import { Address } from '@solana/addresses';
 import { createTransaction } from '@solana/transactions';
 
-import { getSignersFromInstruction, getSignersFromTransaction } from '../account-signer-meta';
-import { setTransactionFeePayerSigner } from '../fee-payer-signer';
+import { getSignersFromInstruction, getSignersFromTransaction } from '../account-signer-meta.js';
+import { setTransactionFeePayerSigner } from '../fee-payer-signer.js';
 import {
     createMockInstructionWithSigners,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
     createMockTransactionWithSigners,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('getSignersFromInstruction', () => {
     it('extracts signers from the account meta of the provided instruction', () => {

@@ -280,11 +280,11 @@ export type {
     WithdrawStakeParams,
 } from '@solana/web3.js-legacy/declarations';
 
-export * from './connection';
-export * from './key-pair';
-export * from './public-key';
-export * from './transaction';
-export * from './versioned-transaction';
+export * from './connection.js';
+export * from './key-pair.js';
+export * from './public-key.js';
+export * from './transaction.js';
+export * from './versioned-transaction.js';
 export const LAMPORTS_PER_SOL = 1_000_000_000;
 export const MAX_SEED_LENGTH = 32;
 export const NONCE_ACCOUNT_LENGTH = 80;

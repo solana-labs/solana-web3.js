@@ -1,8 +1,8 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetSupplyApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetSupplyApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

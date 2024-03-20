@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarSlotHistory, getSysvarSlotHistoryCodec } from '../slot-history';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarSlotHistory, getSysvarSlotHistoryCodec } from '../slot-history.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const BITVEC_DISCRIMINATOR = 1;
 const BITVEC_NUM_BITS = 1024 * 1024;

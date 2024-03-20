@@ -1,7 +1,7 @@
 import { NonceInformation } from '@solana/web3.js-legacy/declarations';
 
-import { PublicKey } from '../public-key';
-import { Transaction } from '../transaction';
+import { PublicKey } from '../public-key.js';
+import { Transaction } from '../transaction.js';
 
 const TRANSACTION_MESSAGE_IN_WIRE_FORMAT =
     // prettier-ignore

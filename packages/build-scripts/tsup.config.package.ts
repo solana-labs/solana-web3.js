@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsup';
 
-import { getBaseConfig } from './getBaseConfig';
+import { getBaseConfig } from './getBaseConfig.js';
 
 export default defineConfig(options => [
     ...getBaseConfig('node', ['cjs', 'esm'], options),

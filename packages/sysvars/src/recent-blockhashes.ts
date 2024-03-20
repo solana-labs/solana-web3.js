@@ -20,7 +20,7 @@ import {
     type LamportsUnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_RECENT_BLOCKHASHES_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_RECENT_BLOCKHASHES_ADDRESS } from './sysvar.js';
 
 type FeeCalculator = Readonly<{
     lamportsPerSignature: LamportsUnsafeBeyond2Pow53Minus1;

@@ -7,7 +7,7 @@ import type {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../../index';
+import { createRpcGraphQL, RpcGraphQL } from '../../index.js';
 
 describe('account loader', () => {
     let rpc: {

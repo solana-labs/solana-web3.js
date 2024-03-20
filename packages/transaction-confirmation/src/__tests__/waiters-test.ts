@@ -9,7 +9,7 @@ import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,
     waitForRecentTransactionConfirmationUntilTimeout,
-} from '../waiters';
+} from '../waiters.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

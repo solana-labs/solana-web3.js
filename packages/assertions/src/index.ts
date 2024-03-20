@@ -1,1 +1,1 @@
-export * from './subtle-crypto';
+export * from './subtle-crypto.js';

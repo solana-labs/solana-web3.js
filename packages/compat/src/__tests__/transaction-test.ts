@@ -11,7 +11,7 @@ import { SignatureBytes } from '@solana/keys';
 import { ITransactionWithSignatures, Nonce } from '@solana/transactions';
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
 
-import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDurableNonce } from '../transaction';
+import { fromVersionedTransactionWithBlockhash, fromVersionedTransactionWithDurableNonce } from '../transaction.js';
 
 describe('fromVersionedTransactionWithBlockhash', () => {
     const U64_MAX = 2n ** 64n - 1n;

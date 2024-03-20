@@ -14,7 +14,7 @@ import {
 } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
+import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array.js';
 
 /** Defines the config for set codecs. */
 export type SetCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {

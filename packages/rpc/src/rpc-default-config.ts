@@ -1,6 +1,6 @@
 import type { createSolanaRpcApi } from '@solana/rpc-api';
 
-import { createSolanaJsonRpcIntegerOverflowError } from './rpc-integer-overflow-error';
+import { createSolanaJsonRpcIntegerOverflowError } from './rpc-integer-overflow-error.js';
 
 export const DEFAULT_RPC_CONFIG: Partial<Parameters<typeof createSolanaRpcApi>[0]> = {
     defaultCommitment: 'confirmed',

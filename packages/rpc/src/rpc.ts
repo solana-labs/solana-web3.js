@@ -2,9 +2,9 @@ import { createSolanaRpcApi } from '@solana/rpc-api';
 import { createRpc, RpcTransport } from '@solana/rpc-spec';
 import { ClusterUrl } from '@solana/rpc-types';
 
-import type { RpcFromTransport, SolanaRpcApiFromTransport } from './rpc-clusters';
-import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
-import { createDefaultRpcTransport, DefaultRpcTransportConfig } from './rpc-transport';
+import type { RpcFromTransport, SolanaRpcApiFromTransport } from './rpc-clusters.js';
+import { DEFAULT_RPC_CONFIG } from './rpc-default-config.js';
+import { createDefaultRpcTransport, DefaultRpcTransportConfig } from './rpc-transport.js';
 
 /** Creates a new Solana RPC using the default decorated HTTP transport. */
 export function createSolanaRpc<TClusterUrl extends ClusterUrl>(

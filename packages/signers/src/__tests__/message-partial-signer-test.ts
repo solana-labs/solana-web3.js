@@ -1,7 +1,11 @@
 import { address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
-import { assertIsMessagePartialSigner, isMessagePartialSigner, MessagePartialSigner } from '../message-partial-signer';
+import {
+    assertIsMessagePartialSigner,
+    isMessagePartialSigner,
+    MessagePartialSigner,
+} from '../message-partial-signer.js';
 
 describe('isMessagePartialSigner', () => {
     it('checks whether a given value is a MessagePartialSigner', () => {

@@ -5,9 +5,9 @@ import type {
     Base58EncodedDataResponse,
     Base64EncodedDataResponse,
     Base64EncodedZStdCompressedDataResponse,
-} from './encoded-bytes';
-import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports';
-import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
+} from './encoded-bytes.js';
+import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports.js';
+import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers.js';
 
 export type AccountInfoBase = Readonly<{
     /** indicates if the account contains a program (and is strictly read-only) */

@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
-import { getBase10Codec } from '../base10';
+import { getBase10Codec } from '../base10.js';
 
 describe('getBase10Codec', () => {
     it('can encode base 10 strings', () => {

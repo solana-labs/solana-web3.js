@@ -7,8 +7,8 @@ import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 import path from 'path';
 
-import { GetSlotLeaderApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetSlotLeaderApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../test-ledger/validator-keypair.json');
 

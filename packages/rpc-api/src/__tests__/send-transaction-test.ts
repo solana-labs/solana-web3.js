@@ -17,8 +17,8 @@ import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { GetLatestBlockhashApi, GetMinimumBalanceForRentExemptionApi, SendTransactionApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetLatestBlockhashApi, GetMinimumBalanceForRentExemptionApi, SendTransactionApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 function getMockTransactionMessage({
     blockhash,

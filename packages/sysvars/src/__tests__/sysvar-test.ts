@@ -13,8 +13,8 @@ import {
     SYSVAR_SLOT_HASHES_ADDRESS,
     SYSVAR_SLOT_HISTORY_ADDRESS,
     SYSVAR_STAKE_HISTORY_ADDRESS,
-} from '../sysvar';
-import { createLocalhostSolanaRpc } from './__setup__';
+} from '../sysvar.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('sysvar account', () => {
     let rpc: Rpc<GetAccountInfoApi>;

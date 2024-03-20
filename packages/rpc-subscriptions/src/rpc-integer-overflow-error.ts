@@ -1,4 +1,5 @@
-import { safeCaptureStackTrace, SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
+import { safeCaptureStackTrace } from '@solana/errors/internal';
 import type { KeyPath } from '@solana/rpc-transformers';
 
 export function createSolanaJsonRpcIntegerOverflowError(

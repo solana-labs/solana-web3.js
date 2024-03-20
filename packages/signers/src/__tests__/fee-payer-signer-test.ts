@@ -3,9 +3,9 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { Address } from '@solana/addresses';
 import { BaseTransaction, ITransactionWithFeePayer, ITransactionWithSignatures } from '@solana/transactions';
 
-import { ITransactionWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer';
-import { TransactionSigner } from '../transaction-signer';
-import { createMockTransactionPartialSigner } from './__setup__';
+import { ITransactionWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer.js';
+import { TransactionSigner } from '../transaction-signer.js';
+import { createMockTransactionPartialSigner } from './__setup__.js';
 
 describe('setTransactionFeePayerSigner', () => {
     let feePayerSignerA: TransactionSigner;

@@ -1,5 +1,5 @@
-import { assertByteArrayHasEnoughBytesForCodec } from './assertions';
-import { fixBytes } from './bytes';
+import { assertByteArrayHasEnoughBytesForCodec } from './assertions.js';
+import { fixBytes } from './bytes.js';
 import {
     Codec,
     createDecoder,
@@ -11,8 +11,8 @@ import {
     FixedSizeEncoder,
     isFixedSize,
     Offset,
-} from './codec';
-import { combineCodec } from './combine-codec';
+} from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 /**
  * Creates a fixed-size encoder from a given encoder.

@@ -1,6 +1,6 @@
 import { RpcTransport } from '@solana/rpc-spec';
 
-import { createHttpTransport } from '../http-transport';
+import { createHttpTransport } from '../http-transport.js';
 
 describe('createHttpTransport and `AbortSignal`', () => {
     let makeHttpRequest: RpcTransport;
@@ -62,7 +62,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
                 const { createHttpTransport } =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    await import('../http-transport');
+                    await import('../http-transport.js');
                 makeHttpRequest = createHttpTransport({ url: 'http://localhost' });
             });
             abortController = new AbortController();

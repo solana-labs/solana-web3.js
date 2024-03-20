@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetMaxRetransmitSlotApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetMaxRetransmitSlotApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getMaxRetransmitSlot', () => {
     let rpc: Rpc<GetMaxRetransmitSlotApi>;

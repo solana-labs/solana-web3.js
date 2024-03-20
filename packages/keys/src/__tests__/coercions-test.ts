@@ -4,7 +4,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Signature, signature } from '../signatures';
+import { Signature, signature } from '../signatures.js';
 
 describe('signature', () => {
     it('can coerce to `Signature`', () => {

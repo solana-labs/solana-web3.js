@@ -2,8 +2,8 @@ import { getU32Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
 
-import { getBooleanCodec } from '../boolean';
-import { b } from './__setup__';
+import { getBooleanCodec } from '../boolean.js';
+import { b } from './__setup__.js';
 
 describe('getBooleanCodec', () => {
     const boolean = getBooleanCodec;

@@ -1,8 +1,8 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Blockhash, Commitment } from '@solana/rpc-types';
 
-import { IsBlockhashValidApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { IsBlockhashValidApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('isBlockhashValid', () => {
     let rpc: Rpc<IsBlockhashValidApi>;

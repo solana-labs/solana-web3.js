@@ -7,8 +7,8 @@ import {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../..';
-import { mockBlockFull } from '../../__tests__/__setup__';
+import { mockBlockFull } from '../../__tests__/__setup__.js';
+import { createRpcGraphQL, RpcGraphQL } from '../../index.js';
 
 type GraphQLCompliantRpc = Rpc<
     GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi

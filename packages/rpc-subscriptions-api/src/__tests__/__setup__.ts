@@ -5,7 +5,7 @@ import {
     createSolanaRpcSubscriptionsApi_UNSTABLE,
     SolanaRpcSubscriptionsApi,
     SolanaRpcSubscriptionsApiUnstable,
-} from '..';
+} from '../index.js';
 
 export function createLocalhostSolanaRpcSubscriptions(): RpcSubscriptions<
     SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable

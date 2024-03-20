@@ -14,8 +14,8 @@ import type { Rpc } from '@solana/rpc-spec';
 import type { Base58EncodedBytes, Commitment } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
-import { GetLatestBlockhashApi, SimulateTransactionApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetLatestBlockhashApi, SimulateTransactionApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

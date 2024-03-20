@@ -1,9 +1,9 @@
 import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
 
-import { createDecoder, createEncoder } from '../codec';
-import { fixCodec } from '../fix-codec';
-import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
-import { b, base16 } from './__setup__';
+import { createDecoder, createEncoder } from '../codec.js';
+import { fixCodec } from '../fix-codec.js';
+import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec.js';
+import { b, base16 } from './__setup__.js';
 
 describe('reverseCodec', () => {
     it('can reverse the bytes of a fixed-size codec', () => {

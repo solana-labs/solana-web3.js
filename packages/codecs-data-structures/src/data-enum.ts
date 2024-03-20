@@ -17,7 +17,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { DrainOuterGeneric, getMaxSize, maxCodecSizes, sumCodecSizes } from './utils';
+import { DrainOuterGeneric, getMaxSize, maxCodecSizes, sumCodecSizes } from './utils.js';
 
 /**
  * Defines a data enum using discriminated union types.

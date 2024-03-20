@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 
-import { getCompiledTransaction } from '../compile-transaction';
-import { CompiledMessage, compileMessage } from '../message';
-import { ITransactionWithSignatures } from '../signatures';
+import { getCompiledTransaction } from '../compile-transaction.js';
+import { CompiledMessage, compileMessage } from '../message.js';
+import { ITransactionWithSignatures } from '../signatures.js';
 
 jest.mock('../message');
 

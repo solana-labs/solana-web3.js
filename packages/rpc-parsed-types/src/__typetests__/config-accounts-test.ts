@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { JsonParsedConfigProgramAccount } from '../config-accounts';
+import { JsonParsedConfigProgramAccount } from '../config-accounts.js';
 
 // stake config account
 {

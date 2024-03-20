@@ -1,9 +1,9 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphql } from 'graphql';
 
-import { createSolanaGraphQLContext } from './context';
-import { createSolanaGraphQLResolvers } from './resolvers';
-import { createSolanaGraphQLTypeDefs } from './schema';
+import { createSolanaGraphQLContext } from './context.js';
+import { createSolanaGraphQLResolvers } from './resolvers/index.js';
+import { createSolanaGraphQLTypeDefs } from './schema/index.js';
 
 export interface RpcGraphQL {
     query(

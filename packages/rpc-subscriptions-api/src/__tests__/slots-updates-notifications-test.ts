@@ -1,7 +1,7 @@
 import { type RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 
-import type { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications';
-import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
+import type { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications.js';
+import { createLocalhostSolanaRpcSubscriptions } from './__setup__.js';
 
 describe('slotsUpdatesNotifications', () => {
     let rpc: RpcSubscriptions<SlotsUpdatesNotificationsApi>;

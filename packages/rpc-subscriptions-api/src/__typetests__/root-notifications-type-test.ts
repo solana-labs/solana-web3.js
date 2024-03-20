@@ -3,7 +3,7 @@
 import type { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 import type { Slot } from '@solana/rpc-types';
 
-import type { RootNotificationsApi } from '../root-notifications';
+import type { RootNotificationsApi } from '../root-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<RootNotificationsApi>;

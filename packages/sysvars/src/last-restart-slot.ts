@@ -13,7 +13,7 @@ import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Slot } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_LAST_RESTART_SLOT_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_LAST_RESTART_SLOT_ADDRESS } from './sysvar.js';
 
 type SysvarLastRestartSlotSize = 8;
 

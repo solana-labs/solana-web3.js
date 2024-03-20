@@ -1,4 +1,4 @@
-import { KeyPath, KEYPATH_WILDCARD, TraversalState } from './tree-traversal';
+import { KeyPath, KEYPATH_WILDCARD, TraversalState } from './tree-traversal.js';
 
 function keyPathIsAllowedToBeNumeric(keyPath: KeyPath, allowedNumericKeyPaths: readonly KeyPath[]) {
     return allowedNumericKeyPaths.some(prohibitedKeyPath => {

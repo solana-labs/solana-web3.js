@@ -1,9 +1,9 @@
 import { IInstruction } from '@solana/instructions';
 
-import { ITransactionWithBlockhashLifetime } from './blockhash';
-import { IDurableNonceTransaction } from './durable-nonce';
-import { ITransactionWithFeePayer } from './fee-payer';
-import { BaseTransaction, TransactionVersion } from './types';
+import { ITransactionWithBlockhashLifetime } from './blockhash.js';
+import { IDurableNonceTransaction } from './durable-nonce.js';
+import { ITransactionWithFeePayer } from './fee-payer.js';
+import { BaseTransaction, TransactionVersion } from './types.js';
 
 export type CompilableTransaction<
     TVersion extends TransactionVersion = TransactionVersion,

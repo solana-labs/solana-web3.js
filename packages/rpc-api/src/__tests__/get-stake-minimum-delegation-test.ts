@@ -1,8 +1,8 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetStakeMinimumDelegationApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetStakeMinimumDelegationApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getStakeMinimumDelegation', () => {
     let rpc: Rpc<GetStakeMinimumDelegationApi>;

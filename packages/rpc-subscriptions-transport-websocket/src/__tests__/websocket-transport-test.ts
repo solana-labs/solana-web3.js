@@ -1,7 +1,7 @@
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 
-import { createWebSocketConnection } from '../websocket-connection';
-import { createWebSocketTransport } from '../websocket-transport';
+import { createWebSocketConnection } from '../websocket-connection.js';
+import { createWebSocketTransport } from '../websocket-transport.js';
 
 jest.mock('../websocket-connection');
 

@@ -1,10 +1,10 @@
-import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
-import { CompilableTransaction } from './compilable-transaction';
-import { getCompiledAddressTableLookups } from './compile-address-table-lookups';
-import { getCompiledMessageHeader } from './compile-header';
-import { getCompiledInstructions } from './compile-instructions';
-import { getCompiledLifetimeToken } from './compile-lifetime-token';
-import { getCompiledStaticAccounts } from './compile-static-accounts';
+import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts.js';
+import { CompilableTransaction } from './compilable-transaction.js';
+import { getCompiledAddressTableLookups } from './compile-address-table-lookups.js';
+import { getCompiledMessageHeader } from './compile-header.js';
+import { getCompiledInstructions } from './compile-instructions.js';
+import { getCompiledLifetimeToken } from './compile-lifetime-token.js';
+import { getCompiledStaticAccounts } from './compile-static-accounts.js';
 
 type BaseCompiledMessage = Readonly<{
     header: ReturnType<typeof getCompiledMessageHeader>;

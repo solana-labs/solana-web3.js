@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt } from '@solana/rpc-types';
 
-import { JsonParsedAddressLookupTableAccount } from '../address-lookup-table-accounts';
+import { JsonParsedAddressLookupTableAccount } from '../address-lookup-table-accounts.js';
 
 const account = {
     info: {

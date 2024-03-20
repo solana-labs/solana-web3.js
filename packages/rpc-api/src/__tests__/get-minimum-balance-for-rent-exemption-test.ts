@@ -1,8 +1,8 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetMinimumBalanceForRentExemptionApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetMinimumBalanceForRentExemptionApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getMinimumBalanceForRentExemption', () => {
     let rpc: Rpc<GetMinimumBalanceForRentExemptionApi>;

@@ -25,7 +25,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               __REACTNATIVE__: `${platform === 'native'}`,
                               __VERSION__: `"${env.npm_package_version}"`,
                           },
-                          entry: [`./src/index.ts`],
+                          entry: ['./src/index.ts', './src/__internal.ts'],
                           esbuildOptions(options, context) {
                               const { format } = context;
                               options.minify = format === 'iife' && !isDebugBuild;
@@ -70,6 +70,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                           platform: platform === 'node' ? 'node' : 'browser',
                           pure: ['process'],
                           sourcemap: format !== 'iife' || isDebugBuild,
+                          splitting: false,
                           treeshake: true,
                       },
             ),

@@ -7,8 +7,8 @@ import {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { createRpcGraphQL, RpcGraphQL } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 type GraphQLCompliantRpc = Rpc<
     GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi

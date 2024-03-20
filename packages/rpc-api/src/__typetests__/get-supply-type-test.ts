@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 
-import type { GetSupplyApi } from '../getSupply';
+import type { GetSupplyApi } from '../getSupply.js';
 
 const rpc = null as unknown as Rpc<GetSupplyApi>;
 

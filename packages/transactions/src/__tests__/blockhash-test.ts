@@ -7,9 +7,9 @@ import {
     assertIsTransactionWithBlockhashLifetime,
     ITransactionWithBlockhashLifetime,
     setTransactionLifetimeUsingBlockhash,
-} from '../blockhash';
-import { ITransactionWithSignatures } from '../signatures';
-import { BaseTransaction } from '../types';
+} from '../blockhash.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { BaseTransaction } from '../types.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),

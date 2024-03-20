@@ -9,10 +9,10 @@ import {
 import { isSignerRole } from '@solana/instructions';
 import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
-import { CompilableTransaction } from './compilable-transaction';
-import { ITransactionWithFeePayer } from './fee-payer';
-import { compileMessage } from './message';
-import { getCompiledMessageEncoder } from './serializers/message';
+import { CompilableTransaction } from './compilable-transaction.js';
+import { ITransactionWithFeePayer } from './fee-payer.js';
+import { compileMessage } from './message.js';
+import { getCompiledMessageEncoder } from './serializers/message.js';
 
 export interface IFullySignedTransaction extends ITransactionWithSignatures {
     readonly __brand: unique symbol;

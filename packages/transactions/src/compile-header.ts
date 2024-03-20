@@ -1,6 +1,6 @@
 import { isSignerRole, isWritableRole } from '@solana/instructions';
 
-import { OrderedAccounts } from './accounts';
+import { OrderedAccounts } from './accounts.js';
 
 type MessageHeader = Readonly<{
     numReadonlyNonSignerAccounts: number;

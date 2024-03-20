@@ -1,6 +1,6 @@
-import { AllowedNumericKeypaths } from './response-transformer-allowed-numeric-values';
-import { getBigIntUpcastVisitor } from './response-transformer-bigint-upcast';
-import { getTreeWalker } from './tree-traversal';
+import { AllowedNumericKeypaths } from './response-transformer-allowed-numeric-values.js';
+import { getBigIntUpcastVisitor } from './response-transformer-bigint-upcast.js';
+import { getTreeWalker } from './tree-traversal.js';
 
 export type ResponseTransformerConfig<TApi> = Readonly<{
     allowedNumericKeyPaths?: AllowedNumericKeypaths<TApi>;

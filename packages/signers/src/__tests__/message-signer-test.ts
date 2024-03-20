@@ -1,7 +1,7 @@
 import { address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_SIGNER, SolanaError } from '@solana/errors';
 
-import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer';
+import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer.js';
 
 describe('isMessageSigner', () => {
     it('checks whether a given value is a MessageSigner', () => {

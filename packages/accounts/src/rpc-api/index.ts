@@ -1,3 +1,3 @@
-export * from './common';
-export * from './getAccountInfo';
-export * from './getMultipleAccounts';
+export * from './common.js';
+export * from './getAccountInfo.js';
+export * from './getMultipleAccounts.js';

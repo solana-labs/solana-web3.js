@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getI64Codec } from '../i64';
-import { assertRangeError, assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getI64Codec } from '../i64.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = -BigInt('0x7fffffffffffffff') - 1n;
 const MAX = BigInt('0x7fffffffffffffff');

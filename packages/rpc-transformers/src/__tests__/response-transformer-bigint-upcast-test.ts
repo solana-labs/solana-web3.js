@@ -1,5 +1,5 @@
-import { getBigIntUpcastVisitor } from '../response-transformer-bigint-upcast';
-import { TraversalState } from '../tree-traversal';
+import { getBigIntUpcastVisitor } from '../response-transformer-bigint-upcast.js';
+import { TraversalState } from '../tree-traversal.js';
 
 const MOCK_TRAVERSAL_STATE = {
     keyPath: [],

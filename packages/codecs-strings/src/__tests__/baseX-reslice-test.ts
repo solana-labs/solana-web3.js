@@ -1,5 +1,5 @@
-import { getBase16Encoder } from '../base16';
-import { getBaseXResliceCodec } from '../baseX-reslice';
+import { getBase16Encoder } from '../base16.js';
+import { getBaseXResliceCodec } from '../baseX-reslice.js';
 
 describe('getBaseXResliceCodec', () => {
     const base8 = getBaseXResliceCodec('01234567', 3);

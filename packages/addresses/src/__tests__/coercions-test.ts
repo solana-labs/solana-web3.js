@@ -4,7 +4,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Address, address } from '../address';
+import { Address, address } from '../address.js';
 
 describe('coercions', () => {
     describe('address', () => {

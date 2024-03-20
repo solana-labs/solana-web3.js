@@ -5,7 +5,7 @@ import {
     isPolyfilledKey,
     signPolyfill,
     verifyPolyfill,
-} from '../secrets';
+} from '../secrets.js';
 
 jest.mock('../secrets');
 
@@ -23,7 +23,7 @@ describe('exportKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('delegates `exportKey` calls to the polyfill when supplied a polyfill-generated key', async () => {
@@ -58,7 +58,7 @@ describe('exportKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         afterEach(() => {
@@ -84,7 +84,7 @@ describe('exportKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         if (__BROWSER__) {
@@ -116,7 +116,7 @@ describe('generateKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         afterEach(() => {
@@ -166,7 +166,7 @@ describe('generateKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('calls the original `generateKey` once as a test when the algorithm is "Ed25519" but never again (parallel version)', async () => {
@@ -197,7 +197,7 @@ describe('generateKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('overrides `generateKey`', () => {
@@ -258,7 +258,7 @@ describe('generateKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         if (__BROWSER__) {
@@ -287,7 +287,7 @@ describe('sign() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('delegates `sign` calls to the polyfill when supplied a polyfill-generated key', async () => {
@@ -324,7 +324,7 @@ describe('sign() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         afterEach(() => {
@@ -352,7 +352,7 @@ describe('sign() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         if (__BROWSER__) {
@@ -381,7 +381,7 @@ describe('verify() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
@@ -420,7 +420,7 @@ describe('verify() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         afterEach(() => {
@@ -452,7 +452,7 @@ describe('verify() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         if (__BROWSER__) {
@@ -490,7 +490,7 @@ describe('importKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         afterEach(() => {
@@ -544,7 +544,7 @@ describe('importKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('calls the original `importKey` once as a test when the algorithm is "Ed25519" but never again (parallel version)', async () => {
@@ -592,7 +592,7 @@ describe('importKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         it('overrides `importKey`', () => {
@@ -675,7 +675,7 @@ describe('importKey() polyfill', () => {
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../index');
+                await import('../index.js');
             });
         });
         if (__BROWSER__) {

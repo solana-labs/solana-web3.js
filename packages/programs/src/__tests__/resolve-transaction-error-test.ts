@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { pipe } from '@solana/functional';
 import { appendTransactionInstruction, createTransaction } from '@solana/transactions';
 
-import { Program, ProgramWithErrors } from '../program';
-import { resolveTransactionError } from '../resolve-transaction-error';
+import { Program, ProgramWithErrors } from '../program.js';
+import { resolveTransactionError } from '../resolve-transaction-error.js';
 
 function getMockProgram<TAddress extends string>(
     address: Address<TAddress>,

@@ -2,6 +2,9 @@
     "name": "@solana/test-matchers",
     "version": "0.0.0",
     "private": true,
+    "exports": {
+        "./toBeFrozenObject": "./toBeFrozenObject.ts"
+    },
     "files": [
         "toBeFrozenObject.ts"
     ]

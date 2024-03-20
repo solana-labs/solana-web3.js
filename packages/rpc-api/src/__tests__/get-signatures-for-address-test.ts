@@ -2,8 +2,8 @@ import type { Address } from '@solana/addresses';
 import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetSignaturesForAddressApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetSignaturesForAddressApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getSignaturesForAddress', () => {
     let rpc: Rpc<GetSignaturesForAddressApi>;

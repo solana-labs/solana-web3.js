@@ -8,8 +8,8 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
-import { resizeCodec, resizeDecoder, resizeEncoder } from '../resize-codec';
+} from '../codec.js';
+import { resizeCodec, resizeDecoder, resizeEncoder } from '../resize-codec.js';
 
 type NumberToArray<N extends number, T extends unknown[] = []> = T['length'] extends N
     ? T

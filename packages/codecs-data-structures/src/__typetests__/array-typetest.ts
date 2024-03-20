@@ -10,7 +10,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { getArrayCodec, getArrayDecoder, getArrayEncoder } from '../array';
+import { getArrayCodec, getArrayDecoder, getArrayEncoder } from '../array.js';
 
 {
     // [getArrayEncoder]: It knows if the encoder is fixed size or variable size.

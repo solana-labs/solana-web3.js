@@ -1,6 +1,6 @@
 import { address } from '@solana/addresses';
 
-import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer';
+import { assertIsMessageSigner, isMessageSigner, MessageSigner } from '../message-signer.js';
 
 const signMessages = () => {};
 

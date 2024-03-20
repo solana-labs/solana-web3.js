@@ -1,7 +1,7 @@
 import { createRpc, Rpc } from '@solana/rpc-spec';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
-import { createSolanaRpcApi, SolanaRpcApi } from '..';
+import { createSolanaRpcApi, SolanaRpcApi } from '../index.js';
 
 export function createLocalhostSolanaRpc(): Rpc<SolanaRpcApi> {
     return createRpc({

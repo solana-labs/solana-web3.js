@@ -1,6 +1,6 @@
 import type { Address } from '@solana/addresses';
 
-import type { TokenAmount } from './token-amount';
+import type { TokenAmount } from './token-amount.js';
 
 export type TokenBalance = Readonly<{
     /** Index of the account in which the token balance is provided for. */

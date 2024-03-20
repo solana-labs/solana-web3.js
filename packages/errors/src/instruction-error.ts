@@ -2,9 +2,9 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR,
     SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
     SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN,
-} from './codes';
-import { SolanaError } from './error';
-import { getSolanaErrorFromRpcError } from './rpc-enum-errors';
+} from './codes.js';
+import { SolanaError } from './error.js';
+import { getSolanaErrorFromRpcError } from './rpc-enum-errors.js';
 
 const ORDERED_ERROR_NAMES = [
     // Keep synced with RPC source: https://github.com/anza-xyz/agave/blob/master/sdk/program/src/instruction.rs

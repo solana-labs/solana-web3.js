@@ -10,7 +10,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { getSetCodec, getSetDecoder, getSetEncoder } from '../set';
+import { getSetCodec, getSetDecoder, getSetEncoder } from '../set.js';
 
 {
     // [getSetEncoder]: It knows if the encoder is fixed size or variable size.

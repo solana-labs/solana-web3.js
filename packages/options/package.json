@@ -34,7 +34,7 @@
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
+        "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",

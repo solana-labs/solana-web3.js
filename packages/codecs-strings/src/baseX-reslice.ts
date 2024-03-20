@@ -7,7 +7,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { assertValidBaseString } from './assertions';
+import { assertValidBaseString } from './assertions.js';
 
 /**
  * Encodes a string using a custom alphabet by reslicing the bits of the byte array.

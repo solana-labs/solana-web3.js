@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN, SolanaError } from '@solana/errors';
 import { Signature } from '@solana/keys';
 
-import { createRecentSignatureConfirmationPromiseFactory } from '../confirmation-strategy-recent-signature';
+import { createRecentSignatureConfirmationPromiseFactory } from '../confirmation-strategy-recent-signature.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

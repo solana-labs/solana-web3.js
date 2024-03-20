@@ -1,10 +1,10 @@
 import { SOLANA_ERROR__TRANSACTION__EXPECTED_BLOCKHASH_LIFETIME, SolanaError } from '@solana/errors';
 import { assertIsBlockhash, type Blockhash } from '@solana/rpc-types';
 
-import { IDurableNonceTransaction } from './durable-nonce';
-import { ITransactionWithSignatures } from './signatures';
-import { BaseTransaction } from './types';
-import { getUnsignedTransaction } from './unsigned-transaction';
+import { IDurableNonceTransaction } from './durable-nonce.js';
+import { ITransactionWithSignatures } from './signatures.js';
+import { BaseTransaction } from './types.js';
+import { getUnsignedTransaction } from './unsigned-transaction.js';
 
 type BlockhashLifetimeConstraint = Readonly<{
     blockhash: Blockhash;

@@ -2,7 +2,7 @@ import { FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/code
 import { getStructCodec, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getU8Codec, getU8Decoder, getU8Encoder } from '@solana/codecs-numbers';
 
-import { getCompiledMessageHeader } from '../compile-header';
+import { getCompiledMessageHeader } from '../compile-header.js';
 
 type MessageHeader = ReturnType<typeof getCompiledMessageHeader>;
 

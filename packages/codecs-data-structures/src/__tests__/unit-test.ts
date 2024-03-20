@@ -1,5 +1,5 @@
-import { getUnitCodec } from '../unit';
-import { b } from './__setup__';
+import { getUnitCodec } from '../unit.js';
+import { b } from './__setup__.js';
 
 describe('getUnitCodec', () => {
     const unit = getUnitCodec;

@@ -2,17 +2,17 @@ import type { MaybeAccount, MaybeEncodedAccount } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { JsonParsedSysvarAccount } from '@solana/rpc-parsed-types';
 
-import { fetchSysvarClock, type SysvarClock } from '../clock';
-import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewards';
-import { fetchSysvarEpochSchedule, type SysvarEpochSchedule } from '../epoch-schedule';
-import { fetchSysvarFees, type SysvarFees } from '../fees';
-import { fetchSysvarLastRestartSlot, type SysvarLastRestartSlot } from '../last-restart-slot';
-import { fetchSysvarRecentBlockhashes, type SysvarRecentBlockhashes } from '../recent-blockhashes';
-import { fetchSysvarRent, type SysvarRent } from '../rent';
-import { fetchSysvarSlotHashes, type SysvarSlotHashes } from '../slot-hashes';
-import { fetchSysvarSlotHistory, type SysvarSlotHistory } from '../slot-history';
-import { fetchSysvarStakeHistory, type SysvarStakeHistory } from '../stake-history';
-import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar';
+import { fetchSysvarClock, type SysvarClock } from '../clock.js';
+import { fetchSysvarEpochRewards, type SysvarEpochRewards } from '../epoch-rewards.js';
+import { fetchSysvarEpochSchedule, type SysvarEpochSchedule } from '../epoch-schedule.js';
+import { fetchSysvarFees, type SysvarFees } from '../fees.js';
+import { fetchSysvarLastRestartSlot, type SysvarLastRestartSlot } from '../last-restart-slot.js';
+import { fetchSysvarRecentBlockhashes, type SysvarRecentBlockhashes } from '../recent-blockhashes.js';
+import { fetchSysvarRent, type SysvarRent } from '../rent.js';
+import { fetchSysvarSlotHashes, type SysvarSlotHashes } from '../slot-hashes.js';
+import { fetchSysvarSlotHistory, type SysvarSlotHistory } from '../slot-history.js';
+import { fetchSysvarStakeHistory, type SysvarStakeHistory } from '../stake-history.js';
+import { fetchEncodedSysvarAccount, fetchJsonParsedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from '../sysvar.js';
 
 const rpc = null as unknown as Parameters<typeof fetchEncodedSysvarAccount>[0];
 

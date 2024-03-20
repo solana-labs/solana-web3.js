@@ -1,4 +1,4 @@
-import { getBaseXCodec, getBaseXDecoder, getBaseXEncoder } from './baseX';
+import { getBaseXCodec, getBaseXDecoder, getBaseXEncoder } from './baseX.js';
 
 const alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 

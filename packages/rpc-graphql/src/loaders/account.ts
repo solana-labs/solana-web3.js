@@ -3,7 +3,7 @@ import { getBase58Codec, getBase64Codec } from '@solana/codecs-strings';
 import type { GetAccountInfoApi, GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
-import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer';
+import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer.js';
 import {
     AccountLoader,
     AccountLoaderArgs,
@@ -11,7 +11,7 @@ import {
     AccountLoaderValue,
     cacheKeyFn,
     MultipleAccountsLoaderArgs,
-} from './loader';
+} from './loader.js';
 
 type Config = {
     maxDataSliceByteRange: number;

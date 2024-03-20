@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Rpc } from '@solana/rpc-spec';
 
-import { GetTokenAccountsByOwnerApi } from '..';
+import { GetTokenAccountsByOwnerApi } from '../index.js';
 
 const rpc = {} as unknown as Rpc<GetTokenAccountsByOwnerApi>;
 

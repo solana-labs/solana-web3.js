@@ -1,9 +1,9 @@
 import { Codec, Decoder, Encoder } from '@solana/codecs-core';
 import { getU64Codec } from '@solana/codecs-numbers';
 
-import { getDataEnumCodec, getDataEnumDecoder, getDataEnumEncoder } from '../data-enum';
-import { getStructCodec } from '../struct';
-import { getUnitCodec } from '../unit';
+import { getDataEnumCodec, getDataEnumDecoder, getDataEnumEncoder } from '../data-enum.js';
+import { getStructCodec } from '../struct.js';
+import { getUnitCodec } from '../unit.js';
 
 {
     // [getDataEnumEncoder]: It constructs data enums from a list of encoder variants.

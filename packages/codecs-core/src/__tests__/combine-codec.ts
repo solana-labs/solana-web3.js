@@ -4,8 +4,8 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { createDecoder, createEncoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '../codec';
-import { combineCodec } from '../combine-codec';
+import { createDecoder, createEncoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '../codec.js';
+import { combineCodec } from '../combine-codec.js';
 
 describe('combineCodec', () => {
     it('can join encoders and decoders with the same type', () => {

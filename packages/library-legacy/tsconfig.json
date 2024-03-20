@@ -6,6 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "declarationDir": "declarations",
     "module": "esnext",
+    "moduleResolution": "Node",
     "noImplicitReturns": true,
     "outDir": "lib",
     "resolveJsonModule": true,

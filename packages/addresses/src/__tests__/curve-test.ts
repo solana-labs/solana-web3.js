@@ -1,4 +1,4 @@
-import { compressedPointBytesAreOnCurve } from '../curve';
+import { compressedPointBytesAreOnCurve } from '../curve.js';
 
 const OFF_CURVE_KEY_BYTES = [
     new Uint8Array([

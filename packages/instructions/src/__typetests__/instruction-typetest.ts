@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { IAccountLookupMeta, IAccountMeta } from '../accounts';
+import { IAccountLookupMeta, IAccountMeta } from '../accounts.js';
 import {
     assertIsInstructionForProgram,
     assertIsInstructionWithAccounts,
@@ -11,7 +11,7 @@ import {
     isInstructionForProgram,
     isInstructionWithAccounts,
     isInstructionWithData,
-} from '../instruction';
+} from '../instruction.js';
 
 // narrowing using if checks
 {

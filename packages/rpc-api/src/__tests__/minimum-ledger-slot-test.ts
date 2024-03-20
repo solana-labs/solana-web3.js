@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { MinimumLedgerSlotApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { MinimumLedgerSlotApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('minimumLedgerSlot', () => {
     let rpc: Rpc<MinimumLedgerSlotApi>;

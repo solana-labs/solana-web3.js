@@ -8,8 +8,8 @@ import {
 } from '@solana/rpc';
 import type { Slot } from '@solana/rpc-types';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
-import { mockBlockFull, mockBlockFullBase58, mockBlockFullBase64, mockBlockSignatures } from './__setup__';
+import { createRpcGraphQL, RpcGraphQL } from '../index.js';
+import { mockBlockFull, mockBlockFullBase58, mockBlockFullBase64, mockBlockSignatures } from './__setup__.js';
 
 type GraphQLCompliantRpc = Rpc<
     GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi

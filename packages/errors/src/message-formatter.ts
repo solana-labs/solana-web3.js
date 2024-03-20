@@ -1,5 +1,5 @@
-import { SolanaErrorCode } from './codes';
-import { SolanaErrorMessages } from './messages';
+import { SolanaErrorCode } from './codes.js';
+import { SolanaErrorMessages } from './messages.js';
 
 function encodeValue(value: unknown): string {
     if (Array.isArray(value)) {

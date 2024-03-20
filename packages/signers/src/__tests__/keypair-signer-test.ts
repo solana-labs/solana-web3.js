@@ -11,8 +11,8 @@ import {
     generateKeyPairSigner,
     isKeyPairSigner,
     KeyPairSigner,
-} from '../keypair-signer';
-import { createSignableMessage } from '../signable-message';
+} from '../keypair-signer.js';
+import { createSignableMessage } from '../signable-message.js';
 
 const getMockCryptoKeyPair = () => ({ privateKey: {}, publicKey: {} }) as CryptoKeyPair;
 

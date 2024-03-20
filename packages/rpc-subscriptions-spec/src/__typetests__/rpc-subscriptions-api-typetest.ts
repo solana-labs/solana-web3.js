@@ -1,4 +1,8 @@
-import { createRpcSubscriptionsApi, RpcSubscriptionsApi, RpcSubscriptionsApiMethods } from '../rpc-subscriptions-api';
+import {
+    createRpcSubscriptionsApi,
+    RpcSubscriptionsApi,
+    RpcSubscriptionsApiMethods,
+} from '../rpc-subscriptions-api.js';
 
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;

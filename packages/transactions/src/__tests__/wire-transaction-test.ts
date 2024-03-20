@@ -3,7 +3,7 @@ import { AccountRole } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
 
-import { getBase64EncodedWireTransaction } from '../wire-transaction';
+import { getBase64EncodedWireTransaction } from '../wire-transaction.js';
 
 describe('getBase64EncodedWireTransaction', () => {
     it('serializes a transaction to wire format', () => {

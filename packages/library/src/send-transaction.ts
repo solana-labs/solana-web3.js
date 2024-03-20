@@ -25,7 +25,7 @@ import {
     sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
-} from './send-transaction-internal';
+} from './send-transaction-internal.js';
 
 interface SendAndConfirmDurableNonceTransactionFactoryConfig {
     rpc: Rpc<GetAccountInfoApi & GetSignatureStatusesApi & SendTransactionApi>;

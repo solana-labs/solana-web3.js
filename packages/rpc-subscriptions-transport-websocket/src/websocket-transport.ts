@@ -1,6 +1,6 @@
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 
-import { createWebSocketConnection } from './websocket-connection';
+import { createWebSocketConnection } from './websocket-connection.js';
 
 type Config = Readonly<{
     sendBufferHighWatermark: number;

@@ -13,7 +13,7 @@ import type {
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 
-import type { ProgramNotificationsApi } from '../program-notifications';
+import type { ProgramNotificationsApi } from '../program-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<ProgramNotificationsApi>;

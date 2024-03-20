@@ -3,7 +3,7 @@
 import type { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import type { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications';
+import type { SlotsUpdatesNotificationsApi } from '../slots-updates-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<SlotsUpdatesNotificationsApi>;

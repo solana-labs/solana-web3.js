@@ -13,13 +13,13 @@ import {
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
 
-import { RpcSubscriptionsApi } from './rpc-subscriptions-api';
+import { RpcSubscriptionsApi } from './rpc-subscriptions-api.js';
 import {
     PendingRpcSubscriptionsRequest,
     RpcSubscribeOptions,
     RpcSubscriptionsRequest,
-} from './rpc-subscriptions-request';
-import { RpcSubscriptionsTransport } from './rpc-subscriptions-transport';
+} from './rpc-subscriptions-request.js';
+import { RpcSubscriptionsTransport } from './rpc-subscriptions-transport.js';
 
 export type RpcSubscriptionsConfig<
     TRpcMethods,

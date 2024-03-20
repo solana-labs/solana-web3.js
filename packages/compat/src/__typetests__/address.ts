@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { PublicKey } from '@solana/web3.js';
 
-import { fromLegacyPublicKey } from '../address';
+import { fromLegacyPublicKey } from '../address.js';
 
 {
     const publicKey = null as unknown as PublicKey;

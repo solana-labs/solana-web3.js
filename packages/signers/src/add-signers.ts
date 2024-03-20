@@ -1,9 +1,9 @@
 import { IInstruction, isSignerRole } from '@solana/instructions';
 import { BaseTransaction } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from './account-signer-meta';
-import { deduplicateSigners } from './deduplicate-signers';
-import { TransactionSigner } from './transaction-signer';
+import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from './account-signer-meta.js';
+import { deduplicateSigners } from './deduplicate-signers.js';
+import { TransactionSigner } from './transaction-signer.js';
 
 /** Attaches the provided signers to the account metas of an instruction when applicable. */
 export function addSignersToInstruction<TInstruction extends IInstruction>(

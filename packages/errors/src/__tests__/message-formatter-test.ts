@@ -1,5 +1,5 @@
-import { getErrorMessage } from '../message-formatter';
-import * as MessagesModule from '../messages';
+import { getErrorMessage } from '../message-formatter.js';
+import * as MessagesModule from '../messages.js';
 
 jest.mock('../messages', () => ({
     get SolanaErrorMessages() {

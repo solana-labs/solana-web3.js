@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt, StringifiedNumber } from '@solana/rpc-types';
 
-import { JsonParsedTokenProgramAccount } from '../token-accounts';
+import { JsonParsedTokenProgramAccount } from '../token-accounts.js';
 
 // token account
 {

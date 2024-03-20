@@ -9,13 +9,13 @@ import {
     setTransactionLifetimeUsingBlockhash,
 } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from '../account-signer-meta';
-import { MessageModifyingSigner } from '../message-modifying-signer';
-import { MessagePartialSigner } from '../message-partial-signer';
-import { TransactionModifyingSigner } from '../transaction-modifying-signer';
-import { TransactionPartialSigner } from '../transaction-partial-signer';
-import { TransactionSendingSigner } from '../transaction-sending-signer';
-import { TransactionSigner } from '../transaction-signer';
+import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from '../account-signer-meta.js';
+import { MessageModifyingSigner } from '../message-modifying-signer.js';
+import { MessagePartialSigner } from '../message-partial-signer.js';
+import { TransactionModifyingSigner } from '../transaction-modifying-signer.js';
+import { TransactionPartialSigner } from '../transaction-partial-signer.js';
+import { TransactionSendingSigner } from '../transaction-sending-signer.js';
+import { TransactionSigner } from '../transaction-signer.js';
 
 export function createMockInstructionWithSigners(signers: TransactionSigner[]): IInstruction & IInstructionWithSigners {
     return {

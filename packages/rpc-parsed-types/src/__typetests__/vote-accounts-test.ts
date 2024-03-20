@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import { JsonParsedVoteAccount } from '../vote-accounts';
+import { JsonParsedVoteAccount } from '../vote-accounts.js';
 
 const account = {
     info: {

@@ -13,12 +13,12 @@ import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } 
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
-import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
-import { CompiledMessage } from '../message';
-import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
-import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
-import { getInstructionDecoder, getInstructionEncoder } from './instruction';
-import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
+import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups.js';
+import { CompiledMessage } from '../message.js';
+import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup.js';
+import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header.js';
+import { getInstructionDecoder, getInstructionEncoder } from './instruction.js';
+import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version.js';
 
 function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage> {
     return getStructEncoder(getPreludeStructEncoderTuple()) as VariableSizeEncoder<CompiledMessage>;

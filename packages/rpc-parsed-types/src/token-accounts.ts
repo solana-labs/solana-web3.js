@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import type { StringifiedBigInt, TokenAmount } from '@solana/rpc-types';
 
-import { RpcParsedType } from './rpc-parsed-type';
+import { RpcParsedType } from './rpc-parsed-type.js';
 
 type TokenAccountState = 'frozen' | 'initialized' | 'uninitialized';
 

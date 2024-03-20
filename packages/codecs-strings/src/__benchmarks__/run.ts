@@ -4,7 +4,7 @@ import { webcrypto as crypto } from 'node:crypto';
 
 import { Bench } from 'tinybench';
 
-import { getBase58Codec } from '../base58';
+import { getBase58Codec } from '../base58.js';
 
 const bench = new Bench({
     throws: true,

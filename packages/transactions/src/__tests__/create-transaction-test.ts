@@ -1,6 +1,6 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
-import { createTransaction } from '../create-transaction';
+import { createTransaction } from '../create-transaction.js';
 
 describe('createTransaction', () => {
     it('creates a legacy transaction', () => {

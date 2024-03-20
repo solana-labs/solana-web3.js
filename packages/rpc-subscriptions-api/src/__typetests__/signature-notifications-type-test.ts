@@ -4,7 +4,7 @@ import type { Signature } from '@solana/keys';
 import type { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 import type { SolanaRpcResponse, TransactionError } from '@solana/rpc-types';
 
-import type { SignatureNotificationsApi } from '../signature-notifications';
+import type { SignatureNotificationsApi } from '../signature-notifications.js';
 
 async () => {
     const rpcSubscriptions = null as unknown as RpcSubscriptions<SignatureNotificationsApi>;

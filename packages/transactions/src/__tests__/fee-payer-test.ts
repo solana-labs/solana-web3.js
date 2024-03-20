@@ -2,9 +2,9 @@ import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
 
-import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer';
-import { ITransactionWithSignatures } from '../signatures';
-import { BaseTransaction } from '../types';
+import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { BaseTransaction } from '../types.js';
 
 const EXAMPLE_FEE_PAYER_A =
     '7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE' as Address<'7mvYAxeCui21xYkAyQSjh6iBVZPpgVyt7PYv9km8V5mE'>;

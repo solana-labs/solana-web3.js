@@ -1,6 +1,6 @@
 // import { createHttpTransport, createJsonRpc, type Rpc } from '@solana/rpc-types';
 
-// import { createSolanaRpcApi, GetTransactionApi } from '../index';
+// import { createSolanaRpcApi, GetTransactionApi } from '../index.js';
 
 describe('getTransaction', () => {
     // let rpc: Rpc<GetTransactionApi>;

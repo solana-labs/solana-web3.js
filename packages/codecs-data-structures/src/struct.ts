@@ -15,7 +15,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils';
+import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils.js';
 
 type Fields<T> = readonly (readonly [string, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;

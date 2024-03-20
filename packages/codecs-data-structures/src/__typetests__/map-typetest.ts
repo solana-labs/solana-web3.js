@@ -10,7 +10,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { getMapCodec, getMapDecoder, getMapEncoder } from '../map';
+import { getMapCodec, getMapDecoder, getMapEncoder } from '../map.js';
 
 {
     // [getMapEncoder]: It knows if the encoder is fixed size or variable size.

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Keypair as LegacyKeypairWithPrivateKeypairProperty } from '@solana/web3.js-legacy';
 
-import { Keypair } from '../key-pair';
+import { Keypair } from '../key-pair.js';
 
 type LegacyKeypair = Omit<LegacyKeypairWithPrivateKeypairProperty, '_keypair'>;
 

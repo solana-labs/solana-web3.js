@@ -2,9 +2,9 @@ import chalk from 'chalk';
 import { Command, InvalidArgumentError } from 'commander';
 
 import { version } from '../package.json';
-import { SolanaErrorCode } from './codes';
-import { getHumanReadableErrorMessage } from './message-formatter';
-import { SolanaErrorMessages } from './messages';
+import { SolanaErrorCode } from './codes.js';
+import { getHumanReadableErrorMessage } from './message-formatter.js';
+import { SolanaErrorMessages } from './messages.js';
 
 const program = new Command();
 

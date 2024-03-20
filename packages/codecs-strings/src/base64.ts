@@ -10,8 +10,8 @@ import {
 } from '@solana/codecs-core';
 import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
-import { assertValidBaseString } from './assertions';
-import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice';
+import { assertValidBaseString } from './assertions.js';
+import { getBaseXResliceDecoder, getBaseXResliceEncoder } from './baseX-reslice.js';
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 

@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetInflationRateApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetInflationRateApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getInflationRate', () => {
     let rpc: Rpc<GetInflationRateApi>;

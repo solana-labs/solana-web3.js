@@ -2,8 +2,8 @@ import { Signature } from '@solana/keys';
 import { Commitment, Slot } from '@solana/rpc-types';
 import { ArgumentNode, GraphQLResolveInfo } from 'graphql';
 
-import { BlockLoaderArgs, TransactionLoaderArgs } from '../../loaders';
-import { injectableRootVisitor } from './visitor';
+import { BlockLoaderArgs, TransactionLoaderArgs } from '../../loaders/index.js';
+import { injectableRootVisitor } from './visitor.js';
 
 function findArgumentNodeByName(argumentNodes: readonly ArgumentNode[], name: string): ArgumentNode | undefined {
     return argumentNodes.find(argumentNode => argumentNode.name.value === name);

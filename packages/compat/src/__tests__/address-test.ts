@@ -1,6 +1,6 @@
 import { Keypair } from '@solana/web3.js';
 
-import { fromLegacyPublicKey } from '../address';
+import { fromLegacyPublicKey } from '../address.js';
 
 describe('fromLegacyPublicKey', () => {
     it('should convert from a Legacy Web3 JS PublicKey to an `Address`', () => {

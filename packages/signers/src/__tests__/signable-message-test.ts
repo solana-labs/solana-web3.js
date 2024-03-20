@@ -2,7 +2,7 @@ import '@solana/test-matchers/toBeFrozenObject';
 
 import { TextEncoder } from '@solana/text-encoding-impl';
 
-import { createSignableMessage } from '../signable-message';
+import { createSignableMessage } from '../signable-message.js';
 
 describe('createSignableMessage', () => {
     it('creates a SignableMessage from a byte array', () => {

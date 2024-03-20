@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { Decoder, Encoder } from '@solana/codecs-core';
 
-import { CompiledMessage } from '../../message';
-import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
+import { CompiledMessage } from '../../message.js';
+import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message.js';
 
 describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
     'Transaction message serializer %p',

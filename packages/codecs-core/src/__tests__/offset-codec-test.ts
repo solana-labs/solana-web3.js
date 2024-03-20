@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
-import { offsetCodec } from '../offset-codec';
-import { b, expectNewPostOffset, expectNewPreOffset, getMockCodec } from './__setup__';
+import { offsetCodec } from '../offset-codec.js';
+import { b, expectNewPostOffset, expectNewPreOffset, getMockCodec } from './__setup__.js';
 
 describe('offsetCodec', () => {
     describe('with relative offsets', () => {

@@ -15,8 +15,8 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { assertValidNumberOfItemsForCodec } from './assertions';
-import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils';
+import { assertValidNumberOfItemsForCodec } from './assertions.js';
+import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils.js';
 
 type GetEncoderTypeFromItems<TItems extends readonly Encoder<any>[]> = DrainOuterGeneric<{
     [I in keyof TItems]: TItems[I] extends Encoder<infer TFrom> ? TFrom : never;

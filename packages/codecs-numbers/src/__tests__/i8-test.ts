@@ -1,5 +1,5 @@
-import { getI8Codec } from '../i8';
-import { assertRangeError, assertValid } from './__setup__';
+import { getI8Codec } from '../i8.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = -Number('0x7f') - 1;
 const MAX = Number('0x7f');

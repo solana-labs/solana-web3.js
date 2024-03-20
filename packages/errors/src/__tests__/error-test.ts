@@ -1,5 +1,5 @@
-import { isSolanaError, SolanaError } from '../error';
-import { getErrorMessage } from '../message-formatter';
+import { isSolanaError, SolanaError } from '../error.js';
+import { getErrorMessage } from '../message-formatter.js';
 
 jest.mock('../message-formatter');
 
@@ -81,7 +81,7 @@ describe('SolanaError', () => {
             const SolanaErrorModule =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../error');
+                await import('../error.js');
             // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
             const error456 = new SolanaErrorModule.SolanaError(456);
             expect(error456).toHaveProperty('message', 'o no');

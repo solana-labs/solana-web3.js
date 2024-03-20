@@ -3,8 +3,8 @@ import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED, Sola
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetAccountInfoApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetAccountInfoApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

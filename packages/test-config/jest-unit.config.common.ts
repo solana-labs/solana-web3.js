@@ -2,6 +2,11 @@ import { Config } from '@jest/types';
 import path from 'path';
 
 const config: Partial<Config.InitialProjectOptions> = {
+    moduleNameMapper: {
+        // Strip `.js` from imports
+        // https://github.com/swc-project/jest/issues/64#issuecomment-1029753225
+        '^(\\.{1,2}/.*)\\.js$': '$1',
+    },
     resetMocks: true,
     restoreMocks: true,
     roots: ['<rootDir>/src/'],

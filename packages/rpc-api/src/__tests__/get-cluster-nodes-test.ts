@@ -3,8 +3,8 @@ import { open } from 'node:fs/promises';
 import type { Rpc } from '@solana/rpc-spec';
 import path from 'path';
 
-import { GetClusterNodesApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetClusterNodesApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const logFilePath = path.resolve(__dirname, '../../../../test-ledger/validator.log');
 

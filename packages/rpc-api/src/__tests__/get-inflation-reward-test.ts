@@ -6,8 +6,8 @@ import {
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetInflationRewardApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetInflationRewardApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getInflationReward', () => {
     let rpc: Rpc<GetInflationRewardApi>;

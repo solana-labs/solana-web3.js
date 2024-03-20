@@ -1,6 +1,6 @@
 import { FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
-import { getBitArrayCodec, getBitArrayDecoder, getBitArrayEncoder } from '../bit-array';
+import { getBitArrayCodec, getBitArrayDecoder, getBitArrayEncoder } from '../bit-array.js';
 
 {
     // [getBitArrayEncoder]: It keeps track of the encoder's fixed size.

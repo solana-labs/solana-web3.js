@@ -5,8 +5,8 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { getScalarEnumCodec } from '../scalar-enum';
-import { b } from './__setup__';
+import { getScalarEnumCodec } from '../scalar-enum.js';
+import { b } from './__setup__.js';
 
 describe('getScalarEnumCodec', () => {
     const scalarEnum = getScalarEnumCodec;

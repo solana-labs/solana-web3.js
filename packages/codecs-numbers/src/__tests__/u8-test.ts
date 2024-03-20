@@ -1,5 +1,5 @@
-import { getU8Codec } from '../u8';
-import { assertRangeError, assertValid } from './__setup__';
+import { getU8Codec } from '../u8.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = 0;
 const MAX = Number('0xff');

@@ -1,4 +1,4 @@
-import { pipe } from '../pipe';
+import { pipe } from '../pipe.js';
 
 describe('pipe', () => {
     it('can pipe a single value', () => {

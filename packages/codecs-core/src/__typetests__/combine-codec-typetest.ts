@@ -8,8 +8,8 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
-import { combineCodec } from '../combine-codec';
+} from '../codec.js';
+import { combineCodec } from '../combine-codec.js';
 
 {
     // [combineCodec]: It keeps track of the fixed or variable size types.

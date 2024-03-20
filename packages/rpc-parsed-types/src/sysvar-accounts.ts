@@ -1,6 +1,6 @@
 import type { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import { RpcParsedType } from './rpc-parsed-type';
+import { RpcParsedType } from './rpc-parsed-type.js';
 
 type FeeCalculator = Readonly<{
     lamportsPerSignature: StringifiedBigInt;

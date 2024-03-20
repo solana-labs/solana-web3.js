@@ -2,9 +2,9 @@ import { pipe } from '@solana/functional';
 import { createWebSocketTransport } from '@solana/rpc-subscriptions-transport-websocket';
 import type { ClusterUrl } from '@solana/rpc-types';
 
-import { getWebSocketTransportWithAutoping } from './rpc-subscriptions-autopinger';
-import { RpcSubscriptionsTransportFromClusterUrl } from './rpc-subscriptions-clusters';
-import { getWebSocketTransportWithConnectionSharding } from './rpc-subscriptions-connection-sharding';
+import { getWebSocketTransportWithAutoping } from './rpc-subscriptions-autopinger.js';
+import { RpcSubscriptionsTransportFromClusterUrl } from './rpc-subscriptions-clusters.js';
+import { getWebSocketTransportWithConnectionSharding } from './rpc-subscriptions-connection-sharding.js';
 
 export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUrl> = Readonly<{
     /**

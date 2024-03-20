@@ -6,7 +6,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { assertAccountExists, assertAccountsExist, MaybeEncodedAccount } from '../maybe-account';
+import { assertAccountExists, assertAccountsExist, MaybeEncodedAccount } from '../maybe-account.js';
 
 describe('assertAccountExists', () => {
     it('fails if the provided MaybeAccount does not exist', () => {

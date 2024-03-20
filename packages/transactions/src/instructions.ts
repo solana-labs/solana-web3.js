@@ -1,6 +1,6 @@
-import { ITransactionWithSignatures } from './signatures';
-import { BaseTransaction } from './types';
-import { getUnsignedTransaction } from './unsigned-transaction';
+import { ITransactionWithSignatures } from './signatures.js';
+import { BaseTransaction } from './types.js';
+import { getUnsignedTransaction } from './unsigned-transaction.js';
 
 export function appendTransactionInstruction<TTransaction extends BaseTransaction>(
     instruction: TTransaction['instructions'][number],

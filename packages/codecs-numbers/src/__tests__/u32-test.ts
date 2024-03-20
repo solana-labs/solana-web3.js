@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getU32Codec } from '../u32';
-import { assertRangeError, assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getU32Codec } from '../u32.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = 0;
 const MAX = Number('0xffffffff');

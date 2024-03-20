@@ -16,7 +16,7 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from './codec';
+} from './codec.js';
 
 /**
  * Combines an encoder and a decoder into a codec.

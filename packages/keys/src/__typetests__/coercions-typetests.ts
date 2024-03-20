@@ -1,3 +1,3 @@
-import { Signature, signature } from '../signatures';
+import { Signature, signature } from '../signatures.js';
 
 signature('x') satisfies Signature;

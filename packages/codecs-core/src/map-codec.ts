@@ -12,7 +12,7 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from './codec';
+} from './codec.js';
 
 /**
  * Converts an encoder A to a encoder B by mapping their values.

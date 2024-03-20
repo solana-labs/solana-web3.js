@@ -26,7 +26,7 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 
-import { getMaxSize, sumCodecSizes } from './utils';
+import { getMaxSize, sumCodecSizes } from './utils.js';
 
 /** Defines the config for nullable codecs. */
 export type NullableCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {

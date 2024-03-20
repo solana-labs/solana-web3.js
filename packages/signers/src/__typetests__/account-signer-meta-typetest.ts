@@ -1,8 +1,8 @@
 import { address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
-import { IAccountSignerMeta } from '../account-signer-meta';
-import { TransactionSigner } from '../transaction-signer';
+import { IAccountSignerMeta } from '../account-signer-meta.js';
+import { TransactionSigner } from '../transaction-signer.js';
 
 {
     // [IAccountSignerMeta]: It adds a transaction signer to a valid account meta.

@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { AccountRole } from './roles';
+import { AccountRole } from './roles.js';
 
 export interface IAccountMeta<TAddress extends string = string> {
     readonly address: Address<TAddress>;

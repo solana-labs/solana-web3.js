@@ -1,4 +1,4 @@
-import { Codec, createCodec, createDecoder, createEncoder, Encoder } from '../codec';
+import { Codec, createCodec, createDecoder, createEncoder, Encoder } from '../codec.js';
 
 describe('Encoder', () => {
     it('can define Encoder instances', () => {

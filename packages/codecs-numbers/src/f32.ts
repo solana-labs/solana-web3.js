@@ -1,7 +1,7 @@
 import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
-import { NumberCodecConfig } from './common';
-import { numberDecoderFactory, numberEncoderFactory } from './utils';
+import { NumberCodecConfig } from './common.js';
+import { numberDecoderFactory, numberEncoderFactory } from './utils.js';
 
 export const getF32Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<number, 4> =>
     numberEncoderFactory({

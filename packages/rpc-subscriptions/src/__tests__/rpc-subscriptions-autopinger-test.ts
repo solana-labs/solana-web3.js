@@ -1,6 +1,6 @@
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 
-import { getWebSocketTransportWithAutoping } from '../rpc-subscriptions-autopinger';
+import { getWebSocketTransportWithAutoping } from '../rpc-subscriptions-autopinger.js';
 
 jest.mock('@solana/rpc-subscriptions-transport-websocket');
 

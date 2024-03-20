@@ -6,7 +6,7 @@ import {
     ITransactionWithSignatures,
 } from '@solana/transactions';
 
-import { TransactionSigner } from './transaction-signer';
+import { TransactionSigner } from './transaction-signer.js';
 
 export interface ITransactionWithFeePayerSigner<
     TAddress extends string = string,

@@ -1,5 +1,5 @@
-import { getDefaultResponseTransformerForSolanaRpc } from '../response-transformer';
-import { KEYPATH_WILDCARD } from '../tree-traversal';
+import { getDefaultResponseTransformerForSolanaRpc } from '../response-transformer.js';
+import { KEYPATH_WILDCARD } from '../tree-traversal.js';
 
 describe('getDefaultResponseTransformerForSolanaRpc', () => {
     describe('given an array as input', () => {

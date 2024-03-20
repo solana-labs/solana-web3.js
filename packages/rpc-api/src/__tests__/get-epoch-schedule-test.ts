@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetEpochScheduleApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetEpochScheduleApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getEpochSchedule', () => {
     let rpc: Rpc<GetEpochScheduleApi>;

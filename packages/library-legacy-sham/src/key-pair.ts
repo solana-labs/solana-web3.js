@@ -2,8 +2,8 @@ import { etc, getPublicKey, utils } from '@noble/ed25519';
 import { sha512 } from '@noble/hashes/sha512';
 import { getAddressDecoder } from '@solana/addresses';
 
-import { PublicKey } from './public-key';
-import { createUnimplementedFunction } from './unimplemented';
+import { PublicKey } from './public-key.js';
+import { createUnimplementedFunction } from './unimplemented.js';
 
 export class Keypair {
     #cachedPublicKey: PublicKey | undefined;

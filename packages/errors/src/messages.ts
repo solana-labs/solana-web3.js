@@ -205,7 +205,7 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_BLOCK_COST_LIMIT,
     SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_VOTE_COST_LIMIT,
     SolanaErrorCode,
-} from './codes';
+} from './codes.js';
 
 /**
  * To add a new error, follow the instructions at

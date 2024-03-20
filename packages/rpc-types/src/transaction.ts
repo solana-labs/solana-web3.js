@@ -1,11 +1,11 @@
 import type { Address } from '@solana/addresses';
 
-import type { Blockhash } from './blockhash';
-import type { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse } from './encoded-bytes';
-import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports';
-import type { TokenBalance } from './token-balance';
-import type { TransactionError } from './transaction-error';
-import type { SignedLamportsAsI64Unsafe, U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
+import type { Blockhash } from './blockhash.js';
+import type { Base58EncodedBytes, Base58EncodedDataResponse, Base64EncodedDataResponse } from './encoded-bytes.js';
+import type { LamportsUnsafeBeyond2Pow53Minus1 } from './lamports.js';
+import type { TokenBalance } from './token-balance.js';
+import type { TransactionError } from './transaction-error.js';
+import type { SignedLamportsAsI64Unsafe, U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers.js';
 
 type TransactionVersion = 'legacy' | 0;
 

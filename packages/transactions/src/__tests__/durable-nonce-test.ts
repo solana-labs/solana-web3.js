@@ -4,15 +4,15 @@ import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import type { Blockhash } from '@solana/rpc-types';
 
-import { ITransactionWithBlockhashLifetime } from '../blockhash';
+import { ITransactionWithBlockhashLifetime } from '../blockhash.js';
 import {
     assertIsDurableNonceTransaction,
     IDurableNonceTransaction,
     Nonce,
     setTransactionLifetimeUsingDurableNonce,
-} from '../durable-nonce';
-import { ITransactionWithSignatures } from '../signatures';
-import { BaseTransaction } from '../types';
+} from '../durable-nonce.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { BaseTransaction } from '../types.js';
 
 function createMockAdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,

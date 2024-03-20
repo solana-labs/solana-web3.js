@@ -21,7 +21,7 @@ import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Slot } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_SLOT_HISTORY_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_SLOT_HISTORY_ADDRESS } from './sysvar.js';
 
 const BITVEC_DISCRIMINATOR = 1;
 // Max number of bits in the bitvector.

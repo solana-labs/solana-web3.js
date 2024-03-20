@@ -5,8 +5,8 @@ import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
 import path from 'path';
 
-import { GetIdentityApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetIdentityApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../test-ledger/validator-keypair.json');
 

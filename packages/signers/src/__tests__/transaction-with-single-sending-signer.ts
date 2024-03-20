@@ -8,14 +8,14 @@ import {
 import {
     assertIsTransactionWithSingleSendingSigner,
     isTransactionWithSingleSendingSigner,
-} from '../transaction-with-single-sending-signer';
+} from '../transaction-with-single-sending-signer.js';
 import {
     createMockTransactionCompositeSigner,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
     createMockTransactionSendingSigner,
     createMockTransactionWithSigners,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('isTransactionWithSingleSendingSigner', () => {
     it('returns true if a transaction contains a single sending only signer', () => {

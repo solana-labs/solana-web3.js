@@ -6,14 +6,14 @@ const WARNING_MESSAGE =
     '`dispatcher_NODE_ONLY` property from your config when running in a non-Node environment.';
 
 describe('createHttpTransport()', () => {
-    let createHttpTransport: typeof import('../http-transport').createHttpTransport;
+    let createHttpTransport: typeof import('../http-transport.js').createHttpTransport;
     beforeEach(async () => {
         jest.spyOn(console, 'warn').mockImplementation();
         await jest.isolateModulesAsync(async () => {
             createHttpTransport =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                (await import('../http-transport')).createHttpTransport;
+                (await import('../http-transport.js')).createHttpTransport;
         });
     });
     describe('in development mode', () => {

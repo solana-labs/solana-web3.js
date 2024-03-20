@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import type { Base64EncodedDataResponse, Slot } from '@solana/rpc-types';
 
-import type { RpcParsedType } from './rpc-parsed-type';
+import type { RpcParsedType } from './rpc-parsed-type.js';
 
 type JsonParsedBpfProgramAccount = Readonly<{
     programData: Address;

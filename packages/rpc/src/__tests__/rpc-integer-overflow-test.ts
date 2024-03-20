@@ -1,7 +1,7 @@
 import { SolanaError } from '@solana/errors';
 import type { RpcTransport } from '@solana/rpc-spec';
 
-import { createSolanaRpcFromTransport } from '../rpc';
+import { createSolanaRpcFromTransport } from '../rpc.js';
 
 describe('RPC integer overflow behavior', () => {
     let rpc: ReturnType<typeof createSolanaRpcFromTransport>;

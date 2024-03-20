@@ -1,8 +1,8 @@
 import { createEncoder, VariableSizeEncoder } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 
-import { createPrivateKeyFromBytes } from '../private-key';
-import { SignatureBytes, signBytes, verifySignature } from '../signatures';
+import { createPrivateKeyFromBytes } from '../private-key.js';
+import { SignatureBytes, signBytes, verifySignature } from '../signatures.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -29,14 +29,14 @@ const originalBase58Module = jest.requireActual('@solana/codecs-strings');
 const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
 
 describe('assertIsSignature()', () => {
-    let assertIsSignature: typeof import('../signatures').assertIsSignature;
+    let assertIsSignature: typeof import('../signatures.js').assertIsSignature;
     // Reload `assertIsSignature` before each test to reset memoized state
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const base58ModulePromise =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                import('../signatures');
+                import('../signatures.js');
             assertIsSignature = (await base58ModulePromise).assertIsSignature;
         });
     });

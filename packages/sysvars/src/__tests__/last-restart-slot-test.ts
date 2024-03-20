@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarLastRestartSlot, getSysvarLastRestartSlotCodec } from '../last-restart-slot';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarLastRestartSlot, getSysvarLastRestartSlotCodec } from '../last-restart-slot.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('last restart slot', () => {
     let rpc: Rpc<GetAccountInfoApi>;

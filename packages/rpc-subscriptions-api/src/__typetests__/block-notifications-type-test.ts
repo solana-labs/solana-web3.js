@@ -16,7 +16,7 @@ import type {
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transactions';
 
-import type { BlockNotificationsApi } from '../block-notifications';
+import type { BlockNotificationsApi } from '../block-notifications.js';
 
 async () => {
     type BlockNotificationsApiNotificationBase = SolanaRpcResponse<

@@ -1,9 +1,9 @@
 import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { BlockLoaderArgs } from '../../loaders';
-import { buildTransactionArgSetWithVisitor } from './transaction';
-import { injectableRootVisitor } from './visitor';
+import { BlockLoaderArgs } from '../../loaders/index.js';
+import { buildTransactionArgSetWithVisitor } from './transaction.js';
+import { injectableRootVisitor } from './visitor.js';
 
 /**
  * Build a set of block loader args by inspecting which fields have

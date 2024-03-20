@@ -1,6 +1,6 @@
 import type { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 
-import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
+import { getCachedAbortableIterableFactory } from './cached-abortable-iterable.js';
 
 type Config<TTransport extends RpcSubscriptionsTransport> = Readonly<{
     /**

@@ -15,7 +15,7 @@ import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 import { getLamportsDecoder, getLamportsEncoder, type LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_RENT_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_RENT_ADDRESS } from './sysvar.js';
 
 type SysvarRentSize = 17;
 

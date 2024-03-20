@@ -8,8 +8,8 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
-import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec';
+} from '../codec.js';
+import { fixCodec, fixDecoder, fixEncoder } from '../fix-codec.js';
 
 {
     // [fixEncoder]: It transforms any encoder into a fixed size encoder.

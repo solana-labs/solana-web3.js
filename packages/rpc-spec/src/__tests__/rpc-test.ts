@@ -1,10 +1,10 @@
 import { SOLANA_ERROR__JSON_RPC__PARSE_ERROR, SolanaError } from '@solana/errors';
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
-import { createRpc, Rpc } from '../rpc';
-import { RpcApi } from '../rpc-api';
-import { RpcRequest } from '../rpc-request';
-import { RpcTransport } from '../rpc-transport';
+import { createRpc, Rpc } from '../rpc.js';
+import { RpcApi } from '../rpc-api.js';
+import { RpcRequest } from '../rpc-request.js';
+import { RpcTransport } from '../rpc-transport.js';
 
 interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;

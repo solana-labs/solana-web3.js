@@ -2,9 +2,9 @@ import { Address } from '@solana/addresses';
 import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { RpcGraphQLContext } from '../context';
-import { AccountLoaderValue, cacheKeyFn } from '../loaders';
-import { buildAccountLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
+import { RpcGraphQLContext } from '../context.js';
+import { AccountLoaderValue, cacheKeyFn } from '../loaders/index.js';
+import { buildAccountLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info/index.js';
 
 type Encoding = 'base58' | 'base64' | 'base64+zstd';
 type DataSlice = { length: number; offset: number };

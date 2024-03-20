@@ -7,7 +7,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Address, getAddressCodec, getAddressComparator } from '../address';
+import { Address, getAddressCodec, getAddressComparator } from '../address.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -22,14 +22,14 @@ const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
 describe('Address', () => {
     describe('assertIsAddress()', () => {
-        let assertIsAddress: typeof import('../address').assertIsAddress;
+        let assertIsAddress: typeof import('../address.js').assertIsAddress;
         // Reload `assertIsAddress` before each test to reset memoized state
         beforeEach(async () => {
             await jest.isolateModulesAsync(async () => {
                 const base58ModulePromise =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    import('../address');
+                    import('../address.js');
                 assertIsAddress = (await base58ModulePromise).assertIsAddress;
             });
         });
@@ -171,12 +171,12 @@ describe('Address', () => {
             expect.assertions(2);
 
             // reload the module to reset memoized state
-            let getAddressCodec: typeof import('../address').getAddressCodec;
+            let getAddressCodec: typeof import('../address.js').getAddressCodec;
             await jest.isolateModulesAsync(async () => {
                 const base58ModulePromise =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    import('../address');
+                    import('../address.js');
                 getAddressCodec = (await base58ModulePromise).getAddressCodec;
             });
 

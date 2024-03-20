@@ -12,7 +12,7 @@ import {
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchEncodedSysvarAccount, SYSVAR_EPOCH_REWARDS_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_EPOCH_REWARDS_ADDRESS } from './sysvar.js';
 
 type SysvarEpochRewardsSize = 24;
 

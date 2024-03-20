@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW, SolanaError } from '@solana/errors';
 
-import { createSolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error';
+import { createSolanaJsonRpcIntegerOverflowError } from '../rpc-integer-overflow-error.js';
 
 describe('createSolanaJsonRpcIntegerOverflowError()', () => {
     it('creates a `SolanaError`', () => {

@@ -12,7 +12,7 @@ import {
 import { getU8Codec, getU8Decoder, getU8Encoder } from '@solana/codecs-numbers';
 import { getUtf8Codec, getUtf8Decoder, getUtf8Encoder } from '@solana/codecs-strings';
 
-import { getTupleCodec, getTupleDecoder, getTupleEncoder } from '../tuple';
+import { getTupleCodec, getTupleDecoder, getTupleEncoder } from '../tuple.js';
 
 {
     // [getTupleEncoder]: It knows if the encoder is fixed size or variable size.

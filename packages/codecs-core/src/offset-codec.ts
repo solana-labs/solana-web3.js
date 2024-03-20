@@ -1,6 +1,6 @@
-import { assertByteArrayOffsetIsNotOutOfRange } from './assertions';
-import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec';
-import { combineCodec } from './combine-codec';
+import { assertByteArrayOffsetIsNotOutOfRange } from './assertions.js';
+import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 type OffsetConfig = {
     postOffset?: PostOffsetFunction;

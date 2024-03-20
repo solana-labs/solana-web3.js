@@ -8,7 +8,7 @@ import {
 } from '@solana/transactions';
 import { VersionedMessage } from '@solana/web3.js-legacy/declarations';
 
-import { createUnimplementedFunction, getUnimplementedError } from './unimplemented';
+import { createUnimplementedFunction, getUnimplementedError } from './unimplemented.js';
 
 export class VersionedTransaction {
     #tx: BaseTransaction | (BaseTransaction & ITransactionWithSignatures);

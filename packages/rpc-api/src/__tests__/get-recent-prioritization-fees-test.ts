@@ -1,8 +1,8 @@
 import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetRecentPrioritizationFeesApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetRecentPrioritizationFeesApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getRecentPrioritizationFees', () => {
     let rpc: Rpc<GetRecentPrioritizationFeesApi>;

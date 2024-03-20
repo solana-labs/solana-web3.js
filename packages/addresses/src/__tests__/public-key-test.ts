@@ -1,4 +1,4 @@
-import { getAddressFromPublicKey } from '../public-key';
+import { getAddressFromPublicKey } from '../public-key.js';
 
 // Corresponds to address `DcESq8KFcdTdpjWtr2DoGcvu5McM3VJoBetgM1X1vVct`
 const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([

@@ -1,5 +1,5 @@
-import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW } from '../codes';
-import { SolanaError } from '../error';
+import { SOLANA_ERROR__RPC__INTEGER_OVERFLOW } from '../codes.js';
+import { SolanaError } from '../error.js';
 
 describe('SOLANA_ERROR__RPC__INTEGER_OVERFLOW', () => {
     beforeEach(() => {

@@ -1,9 +1,9 @@
 import { offsetCodec } from '@solana/codecs-core';
 import { getU8Codec } from '@solana/codecs-numbers';
 
-import { getBase16Codec } from '../base16';
-import { getBase58Codec } from '../base58';
-import { getStringCodec } from '../string';
+import { getBase16Codec } from '../base16.js';
+import { getBase58Codec } from '../base58.js';
+import { getStringCodec } from '../string.js';
 
 describe('getStringCodec', () => {
     const string = getStringCodec;

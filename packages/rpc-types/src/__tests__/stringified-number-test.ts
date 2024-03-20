@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__MALFORMED_NUMBER_STRING, SolanaError } from '@solana/errors';
 
-import { assertIsStringifiedNumber } from '../stringified-number';
+import { assertIsStringifiedNumber } from '../stringified-number.js';
 
 describe('assertIsStringifiedNumber()', () => {
     it("throws when supplied a string that can't parse as a number", () => {

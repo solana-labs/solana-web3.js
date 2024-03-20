@@ -1,10 +1,10 @@
 import { Commitment } from '@solana/rpc-types';
 
-import { applyDefaultCommitment } from './default-commitment';
-import { downcastNodeToNumberIfBigint } from './params-transformer-bigint-downcast';
-import { getIntegerOverflowNodeVisitor } from './params-transformer-integer-overflow';
-import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './params-transformer-options-object-position-config';
-import { getTreeWalker, KeyPath } from './tree-traversal';
+import { applyDefaultCommitment } from './default-commitment.js';
+import { downcastNodeToNumberIfBigint } from './params-transformer-bigint-downcast.js';
+import { getIntegerOverflowNodeVisitor } from './params-transformer-integer-overflow.js';
+import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './params-transformer-options-object-position-config.js';
+import { getTreeWalker, KeyPath } from './tree-traversal.js';
 
 export type ParamsTransformerConfig = Readonly<{
     defaultCommitment?: Commitment;

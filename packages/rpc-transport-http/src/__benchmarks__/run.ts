@@ -6,7 +6,7 @@ import { Bench } from 'tinybench';
 import { Agent, Dispatcher } from 'undici';
 import { $ } from 'zx';
 
-import { createHttpTransport } from '../index';
+import { createHttpTransport } from '../index.js';
 
 let VALIDATOR_URL = process.argv[2];
 ok(

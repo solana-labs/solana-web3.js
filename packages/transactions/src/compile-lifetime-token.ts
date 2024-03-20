@@ -1,4 +1,4 @@
-import { IDurableNonceTransaction, ITransactionWithBlockhashLifetime } from './index';
+import { IDurableNonceTransaction, ITransactionWithBlockhashLifetime } from './index.js';
 
 export function getCompiledLifetimeToken(
     lifetimeConstraint: (IDurableNonceTransaction | ITransactionWithBlockhashLifetime)['lifetimeConstraint'],

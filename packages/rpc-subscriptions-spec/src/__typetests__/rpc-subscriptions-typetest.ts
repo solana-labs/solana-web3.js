@@ -1,6 +1,6 @@
-import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions';
-import { createRpcSubscriptionsApi, RpcSubscriptionsApiMethods } from '../rpc-subscriptions-api';
-import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
+import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions.js';
+import { createRpcSubscriptionsApi, RpcSubscriptionsApiMethods } from '../rpc-subscriptions-api.js';
+import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport.js';
 
 interface MySubscriptionApiMethods extends RpcSubscriptionsApiMethods {
     bar(): string;

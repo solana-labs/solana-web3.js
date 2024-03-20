@@ -18,11 +18,11 @@ import {
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { SignatureBytes } from '@solana/keys';
 
-import { CompilableTransaction } from '../compilable-transaction';
-import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction';
-import { decompileTransaction, DecompileTransactionConfig } from '../decompile-transaction';
-import { ITransactionWithSignatures } from '../signatures';
-import { getCompiledMessageDecoder, getCompiledMessageEncoder } from './message';
+import { CompilableTransaction } from '../compilable-transaction.js';
+import { CompiledTransaction, getCompiledTransaction } from '../compile-transaction.js';
+import { decompileTransaction, DecompileTransactionConfig } from '../decompile-transaction.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { getCompiledMessageDecoder, getCompiledMessageEncoder } from './message.js';
 
 function getCompiledTransactionEncoder(): VariableSizeEncoder<CompiledTransaction> {
     return getStructEncoder([

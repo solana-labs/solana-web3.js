@@ -1,5 +1,5 @@
-import { getIntegerOverflowNodeVisitor } from '../params-transformer-integer-overflow';
-import { TraversalState } from '../tree-traversal';
+import { getIntegerOverflowNodeVisitor } from '../params-transformer-integer-overflow.js';
+import { TraversalState } from '../tree-traversal.js';
 
 const MOCK_TRAVERSAL_STATE = {
     keyPath: [1, 'foo', 'bar'],

@@ -7,7 +7,7 @@ import {
     createSolanaRpcSubscriptions_UNSTABLE,
     createSolanaRpcSubscriptionsFromTransport,
     createSolanaRpcSubscriptionsFromTransport_UNSTABLE,
-} from '../rpc-subscriptions';
+} from '../rpc-subscriptions.js';
 import type {
     RpcSubscriptionsDevnet,
     RpcSubscriptionsMainnet,
@@ -15,8 +15,8 @@ import type {
     RpcSubscriptionsTransportDevnet,
     RpcSubscriptionsTransportMainnet,
     RpcSubscriptionsTransportTestnet,
-} from '../rpc-subscriptions-clusters';
-import { createDefaultRpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
+} from '../rpc-subscriptions-clusters.js';
+import { createDefaultRpcSubscriptionsTransport } from '../rpc-subscriptions-transport.js';
 
 // Define cluster-aware URLs and transports.
 

@@ -15,8 +15,8 @@ import {
 } from '@solana/codecs-core';
 import { getU32Decoder, getU32Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { assertValidNumberOfItemsForCodec } from './assertions';
-import { getFixedSize, getMaxSize } from './utils';
+import { assertValidNumberOfItemsForCodec } from './assertions.js';
+import { getFixedSize, getMaxSize } from './utils.js';
 
 /**
  * Represents all the size options for array-like codecs

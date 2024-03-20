@@ -1,6 +1,6 @@
 import { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import { JsonParsedSysvarAccount } from '../sysvar-accounts';
+import { JsonParsedSysvarAccount } from '../sysvar-accounts.js';
 
 // clock sysvar
 {

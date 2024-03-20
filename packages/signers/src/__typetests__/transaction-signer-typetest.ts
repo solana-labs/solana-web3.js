@@ -1,6 +1,6 @@
 import { address } from '@solana/addresses';
 
-import { assertIsTransactionSigner, isTransactionSigner, TransactionSigner } from '../transaction-signer';
+import { assertIsTransactionSigner, isTransactionSigner, TransactionSigner } from '../transaction-signer.js';
 
 const signTransactions = () => {};
 

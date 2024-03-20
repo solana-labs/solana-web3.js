@@ -11,13 +11,13 @@ import { ClusterUrl } from '@solana/rpc-types';
 // @ts-ignore
 import fastStableStringify from 'fast-stable-stringify';
 
-import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
-import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
-import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
+import { DEFAULT_RPC_CONFIG } from './rpc-default-config.js';
+import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters.js';
+import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer.js';
 import {
     createDefaultRpcSubscriptionsTransport,
     DefaultRpcSubscriptionsTransportConfig,
-} from './rpc-subscriptions-transport';
+} from './rpc-subscriptions-transport.js';
 
 export function createSolanaRpcSubscriptions<
     TClusterUrl extends ClusterUrl,

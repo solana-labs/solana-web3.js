@@ -1,8 +1,8 @@
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetInflationGovernorApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetInflationGovernorApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getInflationGovernor', () => {
     let rpc: Rpc<GetInflationGovernorApi>;

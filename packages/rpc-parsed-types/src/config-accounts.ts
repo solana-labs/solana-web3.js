@@ -1,6 +1,6 @@
 import type { Address } from '@solana/addresses';
 
-import type { RpcParsedType } from './rpc-parsed-type';
+import type { RpcParsedType } from './rpc-parsed-type.js';
 
 type JsonParsedStakeConfigAccount = Readonly<{
     slashPenalty: number;

@@ -5,7 +5,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Account } from './account';
+import { Account } from './account.js';
 
 /** Defines a Solana account that may or may not exist after having tried to fetch it. */
 export type MaybeAccount<TData extends Uint8Array | object, TAddress extends string = string> =

@@ -14,7 +14,7 @@ import type {
 } from '@solana/rpc-types';
 import { TransactionVersion } from '@solana/transactions';
 
-import { GetBlockApi } from '../getBlock';
+import { GetBlockApi } from '../getBlock.js';
 
 function assertNotAProperty<T extends object, TPropName extends string>(
     _: { [Prop in keyof T]: Prop extends TPropName ? never : T[Prop] },

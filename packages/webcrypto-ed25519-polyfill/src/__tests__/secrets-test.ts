@@ -5,7 +5,7 @@ import {
     isPolyfilledKey,
     signPolyfill,
     verifyPolyfill,
-} from '../secrets';
+} from '../secrets.js';
 
 const MOCK_DATA = new Uint8Array([1, 2, 3]);
 const MOCK_DATA_SIGNATURE = new Uint8Array([

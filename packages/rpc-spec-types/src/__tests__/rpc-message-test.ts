@@ -1,4 +1,4 @@
-import { createRpcMessage } from '../rpc-message';
+import { createRpcMessage } from '../rpc-message.js';
 
 describe('createRpcMessage', () => {
     it('auto-increments ids with each new message', () => {

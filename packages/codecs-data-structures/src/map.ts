@@ -14,8 +14,8 @@ import {
 } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array';
-import { getTupleDecoder, getTupleEncoder } from './tuple';
+import { ArrayLikeCodecSize, getArrayDecoder, getArrayEncoder } from './array.js';
+import { getTupleDecoder, getTupleEncoder } from './tuple.js';
 
 /** Defines the config for Map codecs. */
 export type MapCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {

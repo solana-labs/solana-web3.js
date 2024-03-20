@@ -3,9 +3,9 @@ import {
     SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
     SOLANA_ERROR__INSTRUCTION_ERROR__UNKNOWN,
     SolanaErrorCode,
-} from '../codes';
-import { SolanaError } from '../error';
-import { getSolanaErrorFromInstructionError } from '../instruction-error';
+} from '../codes.js';
+import { SolanaError } from '../error.js';
+import { getSolanaErrorFromInstructionError } from '../instruction-error.js';
 
 describe('getSolanaErrorFromInstructionError', () => {
     it.each([

@@ -6,8 +6,8 @@ import assert from 'assert';
 import { open } from 'fs/promises';
 import path from 'path';
 
-import { GetLeaderScheduleApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetLeaderScheduleApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../test-ledger/validator-keypair.json');
 

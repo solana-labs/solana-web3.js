@@ -3,10 +3,10 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_RENT,
     SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
-} from './codes';
-import { SolanaError } from './error';
-import { getSolanaErrorFromInstructionError } from './instruction-error';
-import { getSolanaErrorFromRpcError } from './rpc-enum-errors';
+} from './codes.js';
+import { SolanaError } from './error.js';
+import { getSolanaErrorFromInstructionError } from './instruction-error.js';
+import { getSolanaErrorFromRpcError } from './rpc-enum-errors.js';
 
 /**
  * How to add an error when an entry is added to the RPC `TransactionError` enum:

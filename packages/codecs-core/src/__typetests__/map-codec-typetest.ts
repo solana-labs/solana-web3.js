@@ -8,8 +8,8 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
-import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
+} from '../codec.js';
+import { mapCodec, mapDecoder, mapEncoder } from '../map-codec.js';
 
 {
     // [mapEncoder]: It keeps track of the nested encoder's size.

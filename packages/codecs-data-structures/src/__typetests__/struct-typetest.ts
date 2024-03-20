@@ -9,7 +9,7 @@ import {
 import { getU32Codec, getU32Decoder, getU32Encoder } from '@solana/codecs-numbers';
 import { getStringCodec, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
 
-import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
+import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct.js';
 
 {
     // [getStructEncoder]: It knows if the encoder is fixed size or variable size.

@@ -1,6 +1,6 @@
 import type { Commitment } from '@solana/rpc-types';
 
-import { applyDefaultCommitment } from '../default-commitment';
+import { applyDefaultCommitment } from '../default-commitment.js';
 
 const MOCK_COMMITMENT_PROPERTY_NAME = 'commitmentProperty';
 

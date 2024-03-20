@@ -1,6 +1,6 @@
 export * from '@solana/rpc-api';
 export * from '@solana/rpc-spec';
 
-export * from './rpc';
-export * from './rpc-clusters';
-export * from './rpc-transport';
+export * from './rpc.js';
+export * from './rpc-clusters.js';
+export * from './rpc-transport.js';

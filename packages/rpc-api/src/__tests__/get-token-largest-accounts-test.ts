@@ -3,8 +3,8 @@ import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/err
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment } from '@solana/rpc-types';
 
-import { GetTokenLargestAccountsApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetTokenLargestAccountsApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

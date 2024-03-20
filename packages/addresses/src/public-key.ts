@@ -1,7 +1,7 @@
 import { assertKeyExporterIsAvailable } from '@solana/assertions';
 import { SOLANA_ERROR__ADDRESSES__INVALID_ED25519_PUBLIC_KEY, SolanaError } from '@solana/errors';
 
-import { Address, getAddressDecoder } from './address';
+import { Address, getAddressDecoder } from './address.js';
 
 export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Address> {
     assertKeyExporterIsAvailable();

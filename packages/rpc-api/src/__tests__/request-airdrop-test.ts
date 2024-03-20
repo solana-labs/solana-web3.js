@@ -3,8 +3,8 @@ import { getBase58Decoder } from '@solana/codecs-strings';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
-import { RequestAirdropApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { RequestAirdropApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('requestAirdrop', () => {
     let rpc: Rpc<RequestAirdropApi>;

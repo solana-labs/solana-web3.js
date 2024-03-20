@@ -5,8 +5,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-} from './codec';
-import { combineCodec } from './combine-codec';
+} from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 /**
  * Reverses the bytes of a fixed-size encoder.

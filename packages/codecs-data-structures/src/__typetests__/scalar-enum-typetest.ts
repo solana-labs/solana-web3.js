@@ -8,7 +8,7 @@ import {
 } from '@solana/codecs-core';
 import { getU32Codec, getU32Decoder, getU32Encoder } from '@solana/codecs-numbers';
 
-import { getScalarEnumCodec, getScalarEnumDecoder, getScalarEnumEncoder } from '../scalar-enum';
+import { getScalarEnumCodec, getScalarEnumDecoder, getScalarEnumEncoder } from '../scalar-enum.js';
 
 enum Feedback {
     BAD,

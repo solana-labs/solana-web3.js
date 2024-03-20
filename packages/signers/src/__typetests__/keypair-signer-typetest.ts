@@ -1,6 +1,6 @@
 import { address } from '@solana/addresses';
 
-import { assertIsKeyPairSigner, isKeyPairSigner, KeyPairSigner } from '../keypair-signer';
+import { assertIsKeyPairSigner, isKeyPairSigner, KeyPairSigner } from '../keypair-signer.js';
 
 const keyPair = {} as CryptoKeyPair;
 const signMessages = () => {};

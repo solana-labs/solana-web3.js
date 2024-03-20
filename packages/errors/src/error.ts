@@ -1,6 +1,6 @@
-import { SolanaErrorCode } from './codes';
-import { SolanaErrorContext } from './context';
-import { getErrorMessage } from './message-formatter';
+import { SolanaErrorCode } from './codes.js';
+import { SolanaErrorContext } from './context.js';
+import { getErrorMessage } from './message-formatter.js';
 
 export function isSolanaError<TErrorCode extends SolanaErrorCode>(
     e: unknown,

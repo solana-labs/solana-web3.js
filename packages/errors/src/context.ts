@@ -138,8 +138,8 @@ import {
     SOLANA_ERROR__TRANSACTION_ERROR__PROGRAM_EXECUTION_TEMPORARILY_RESTRICTED,
     SOLANA_ERROR__TRANSACTION_ERROR__UNKNOWN,
     SolanaErrorCode,
-} from './codes';
-import { RpcSimulateTransactionResult } from './json-rpc-error';
+} from './codes.js';
+import { RpcSimulateTransactionResult } from './json-rpc-error.js';
 
 type BasicInstructionErrorContext<T extends SolanaErrorCode> = Readonly<{ [P in T]: { index: number } }>;
 

@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED, SolanaError } from '@solana/errors';
 import { Commitment } from '@solana/rpc-types';
 
-import { createBlockHeightExceedencePromiseFactory } from '../confirmation-strategy-blockheight';
+import { createBlockHeightExceedencePromiseFactory } from '../confirmation-strategy-blockheight.js';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */

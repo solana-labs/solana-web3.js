@@ -2,7 +2,7 @@ import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Slot } from '@solana/rpc-types';
 
-import type { GetLeaderScheduleApi } from '../getLeaderSchedule';
+import type { GetLeaderScheduleApi } from '../getLeaderSchedule.js';
 
 const rpc = null as unknown as Rpc<GetLeaderScheduleApi>;
 const slot = 0n as Slot;

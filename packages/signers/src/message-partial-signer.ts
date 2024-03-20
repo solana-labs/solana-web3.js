@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 
-import { SignableMessage } from './signable-message';
-import { BaseSignerConfig, SignatureDictionary } from './types';
+import { SignableMessage } from './signable-message.js';
+import { BaseSignerConfig, SignatureDictionary } from './types.js';
 
 export type MessagePartialSignerConfig = BaseSignerConfig;
 

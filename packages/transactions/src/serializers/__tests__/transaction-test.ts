@@ -1,10 +1,10 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
-import { AddressesByLookupTableAddress, decompileTransaction } from '../../decompile-transaction';
-import { CompiledMessage, compileMessage } from '../../message';
-import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
-import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
+import { AddressesByLookupTableAddress, decompileTransaction } from '../../decompile-transaction.js';
+import { CompiledMessage, compileMessage } from '../../message.js';
+import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message.js';
+import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction.js';
 
 jest.mock('../../message');
 jest.mock('../message');

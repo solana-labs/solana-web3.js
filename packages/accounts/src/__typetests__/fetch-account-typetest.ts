@@ -6,9 +6,9 @@ import {
     fetchEncodedAccounts,
     fetchJsonParsedAccount,
     fetchJsonParsedAccounts,
-} from '../fetch-account';
-import type { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
-import type { GetAccountInfoApi, GetMultipleAccountsApi } from '../rpc-api';
+} from '../fetch-account.js';
+import type { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from '../rpc-api/index.js';
 
 const rpc = {} as Rpc<GetAccountInfoApi & GetMultipleAccountsApi>;
 const address = '1111' as Address<'1111'>;

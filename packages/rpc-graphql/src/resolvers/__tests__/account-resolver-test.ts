@@ -8,7 +8,7 @@ import type {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../../index';
+import { createRpcGraphQL, RpcGraphQL } from '../../index.js';
 
 describe('account resolver', () => {
     let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;

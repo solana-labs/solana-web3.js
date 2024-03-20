@@ -1,14 +1,14 @@
 import { Address } from '@solana/addresses';
 
-import { ITransactionWithBlockhashLifetime } from '../blockhash';
-import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
-import { getCompiledMessageHeader } from '../compile-header';
-import { getCompiledInstructions } from '../compile-instructions';
-import { getCompiledLifetimeToken } from '../compile-lifetime-token';
-import { getCompiledStaticAccounts } from '../compile-static-accounts';
-import { ITransactionWithFeePayer } from '../fee-payer';
-import { compileMessage } from '../message';
-import { BaseTransaction } from '../types';
+import { ITransactionWithBlockhashLifetime } from '../blockhash.js';
+import { getCompiledAddressTableLookups } from '../compile-address-table-lookups.js';
+import { getCompiledMessageHeader } from '../compile-header.js';
+import { getCompiledInstructions } from '../compile-instructions.js';
+import { getCompiledLifetimeToken } from '../compile-lifetime-token.js';
+import { getCompiledStaticAccounts } from '../compile-static-accounts.js';
+import { ITransactionWithFeePayer } from '../fee-payer.js';
+import { compileMessage } from '../message.js';
+import { BaseTransaction } from '../types.js';
 
 jest.mock('../compile-address-table-lookups');
 jest.mock('../compile-header');

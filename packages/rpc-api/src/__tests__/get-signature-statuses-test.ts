@@ -2,8 +2,8 @@ import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/err
 import type { Signature } from '@solana/keys';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetSignatureStatusesApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetSignatureStatusesApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

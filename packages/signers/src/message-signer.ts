@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_SIGNER, SolanaError } from '@solana/errors';
 
-import { isMessageModifyingSigner, MessageModifyingSigner } from './message-modifying-signer';
-import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
+import { isMessageModifyingSigner, MessageModifyingSigner } from './message-modifying-signer.js';
+import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer.js';
 
 /** Defines a signer capable of signing messages. */
 export type MessageSigner<TAddress extends string = string> =

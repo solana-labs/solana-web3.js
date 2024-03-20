@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
-import { getBitArrayCodec } from '../bit-array';
-import { b } from './__setup__';
+import { getBitArrayCodec } from '../bit-array.js';
+import { b } from './__setup__.js';
 
 describe('getBitArrayCodec', () => {
     const bitArray = getBitArrayCodec;

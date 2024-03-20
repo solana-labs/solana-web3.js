@@ -1,5 +1,5 @@
-import { StringifiedBigInt } from './stringified-bigint';
-import { StringifiedNumber } from './stringified-number';
+import { StringifiedBigInt } from './stringified-bigint.js';
+import { StringifiedNumber } from './stringified-number.js';
 
 export type TokenAmount = Readonly<{
     amount: StringifiedBigInt;

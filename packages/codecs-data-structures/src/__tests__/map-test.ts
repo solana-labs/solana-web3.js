@@ -2,8 +2,8 @@ import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
-import { getMapCodec } from '../map';
-import { b } from './__setup__';
+import { getMapCodec } from '../map.js';
+import { b } from './__setup__.js';
 
 describe('getMapCodec', () => {
     const map = getMapCodec;

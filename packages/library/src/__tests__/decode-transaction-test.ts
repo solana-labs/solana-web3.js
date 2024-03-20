@@ -3,7 +3,8 @@ import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import type { Blockhash, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 import { decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
-import type { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
+
+import { CompiledTransaction } from '../../../transactions/dist/types/compile-transaction.js';
 
 jest.mock('@solana/accounts');
 jest.mock('@solana/transactions');
@@ -16,13 +17,13 @@ describe('decodeTransaction', () => {
     };
 
     // Reload `decodeTransaction` before each test to reset memoized state
-    let decodeTransaction: typeof import('../decode-transaction').decodeTransaction;
+    let decodeTransaction: typeof import('../decode-transaction.js').decodeTransaction;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const decodeTransactionModule =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                import('../decode-transaction');
+                import('../decode-transaction.js');
             decodeTransaction = (await decodeTransactionModule).decodeTransaction;
         });
 

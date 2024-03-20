@@ -8,8 +8,8 @@ import {
     Offset,
 } from '@solana/codecs-core';
 
-import { assertNumberIsBetweenForCodec } from './assertions';
-import { Endian, NumberCodecConfig } from './common';
+import { assertNumberIsBetweenForCodec } from './assertions.js';
+import { Endian, NumberCodecConfig } from './common.js';
 
 type NumberFactorySharedInput<TSize extends number> = {
     config?: NumberCodecConfig;

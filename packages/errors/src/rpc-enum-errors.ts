@@ -1,7 +1,7 @@
-import { SolanaErrorCode } from './codes';
-import { SolanaErrorContext } from './context';
-import { SolanaError } from './error';
-import { safeCaptureStackTrace } from './stack-trace';
+import { SolanaErrorCode } from './codes.js';
+import { SolanaErrorContext } from './context.js';
+import { SolanaError } from './error.js';
+import { safeCaptureStackTrace } from './stack-trace.js';
 
 type Config = Readonly<{
     /**

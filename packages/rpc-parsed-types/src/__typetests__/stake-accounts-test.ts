@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import type { JsonParsedStakeProgramAccount } from '../stake-accounts';
+import type { JsonParsedStakeProgramAccount } from '../stake-accounts.js';
 
 // initialized stake account
 {

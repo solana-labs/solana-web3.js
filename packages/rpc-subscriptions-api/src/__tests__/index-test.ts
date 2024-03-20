@@ -1,6 +1,6 @@
 import type { RpcSubscriptionsApi, RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 
-import { createSolanaRpcSubscriptionsApi } from '..';
+import { createSolanaRpcSubscriptionsApi } from '../index.js';
 
 interface TestRpcSubscriptionNotifications extends RpcSubscriptionsApiMethods {
     thingNotifications(...args: unknown[]): unknown;

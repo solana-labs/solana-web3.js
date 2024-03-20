@@ -1,8 +1,8 @@
 import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_BLOCK_NOT_AVAILABLE, SolanaError } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetBlockTimeApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetBlockTimeApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getBlockTime', () => {
     let rpc: Rpc<GetBlockTimeApi>;

@@ -16,15 +16,15 @@ import { AccountRole } from '@solana/instructions';
 import { SignatureBytes, signBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
 
-import { CompilableTransaction } from '../compilable-transaction';
-import { CompiledMessage, compileMessage } from '../message';
+import { CompilableTransaction } from '../compilable-transaction.js';
+import { CompiledMessage, compileMessage } from '../message.js';
 import {
     assertTransactionIsFullySigned,
     getSignatureFromTransaction,
     ITransactionWithSignatures,
     partiallySignTransaction,
     signTransaction,
-} from '../signatures';
+} from '../signatures.js';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');

@@ -1,11 +1,11 @@
 import { Decoder, Encoder } from '@solana/codecs-core';
 
-import { TransactionVersion } from '../../types';
+import { TransactionVersion } from '../../types.js';
 import {
     getTransactionVersionCodec,
     getTransactionVersionDecoder,
     getTransactionVersionEncoder,
-} from '../transaction-version';
+} from '../transaction-version.js';
 
 const VERSION_FLAG_MASK = 0x80;
 const VERSION_TEST_CASES = // Versions 0–127

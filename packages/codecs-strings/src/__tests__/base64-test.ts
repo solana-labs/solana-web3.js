@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, SolanaError } from '@solana/errors';
 
-import { getBase16Codec } from '../base16';
-import { getBase64Codec } from '../base64';
+import { getBase16Codec } from '../base16.js';
+import { getBase64Codec } from '../base64.js';
 
 describe('getBase64Codec', () => {
     const base64 = getBase64Codec();

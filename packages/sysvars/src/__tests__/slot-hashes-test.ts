@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarSlotHashes, getSysvarSlotHashesCodec } from '../slot-hashes';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarSlotHashes, getSysvarSlotHashesCodec } from '../slot-hashes.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('slot hashes', () => {
     let rpc: Rpc<GetAccountInfoApi>;

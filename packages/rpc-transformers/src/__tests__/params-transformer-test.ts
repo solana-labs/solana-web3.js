@@ -1,7 +1,7 @@
 import type { Commitment } from '@solana/rpc-types';
 
-import { getDefaultParamsTransformerForSolanaRpc } from '../params-transformer';
-import { OPTIONS_OBJECT_POSITION_BY_METHOD } from '../params-transformer-options-object-position-config';
+import { getDefaultParamsTransformerForSolanaRpc } from '../params-transformer.js';
+import { OPTIONS_OBJECT_POSITION_BY_METHOD } from '../params-transformer-options-object-position-config.js';
 
 describe('getDefaultParamsTransformerForSolanaRpc', () => {
     describe('given no config', () => {

@@ -1,4 +1,4 @@
-import { KeyPath, KEYPATH_WILDCARD } from './tree-traversal';
+import { KeyPath, KEYPATH_WILDCARD } from './tree-traversal.js';
 
 export type AllowedNumericKeypaths<TApi> = Partial<Record<keyof TApi, readonly KeyPath[]>>;
 

@@ -1,13 +1,13 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError } from '@solana/errors';
 
-import { deduplicateSigners } from '../deduplicate-signers';
+import { deduplicateSigners } from '../deduplicate-signers.js';
 import {
     createMockMessagePartialSigner,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
     createMockTransactionSendingSigner,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('deduplicateSigners', () => {
     it('removes duplicated signers by address', () => {

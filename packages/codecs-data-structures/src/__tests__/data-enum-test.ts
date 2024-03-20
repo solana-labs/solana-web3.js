@@ -14,13 +14,13 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { getArrayCodec } from '../array';
-import { getBooleanCodec } from '../boolean';
-import { getDataEnumCodec } from '../data-enum';
-import { getStructCodec } from '../struct';
-import { getTupleCodec } from '../tuple';
-import { getUnitCodec } from '../unit';
-import { b } from './__setup__';
+import { getArrayCodec } from '../array.js';
+import { getBooleanCodec } from '../boolean.js';
+import { getDataEnumCodec } from '../data-enum.js';
+import { getStructCodec } from '../struct.js';
+import { getTupleCodec } from '../tuple.js';
+import { getUnitCodec } from '../unit.js';
+import { b } from './__setup__.js';
 
 describe('getDataEnumCodec', () => {
     const dataEnum = getDataEnumCodec;

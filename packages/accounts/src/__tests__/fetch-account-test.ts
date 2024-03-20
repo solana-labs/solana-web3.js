@@ -7,9 +7,9 @@ import {
     fetchEncodedAccounts,
     fetchJsonParsedAccount,
     fetchJsonParsedAccounts,
-} from '../fetch-account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
-import { Base64RpcAccount, getMockRpc, JsonParsedRpcAccount } from './__setup__';
+} from '../fetch-account.js';
+import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
+import { Base64RpcAccount, getMockRpc, JsonParsedRpcAccount } from './__setup__.js';
 
 describe('fetchEncodedAccount', () => {
     it('fetches and parses an existing base64-encoded account from an RPC', async () => {

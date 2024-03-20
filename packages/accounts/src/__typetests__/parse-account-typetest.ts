@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
 
-import { Base58RpcAccount, Base64RpcAccount, JsonParsedRpcAccount } from '../__tests__/__setup__';
-import { Account, EncodedAccount } from '../account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
-import { parseBase58RpcAccount, parseBase64RpcAccount, parseJsonRpcAccount } from '../parse-account';
+import { Base58RpcAccount, Base64RpcAccount, JsonParsedRpcAccount } from '../__tests__/__setup__.js';
+import { Account, EncodedAccount } from '../account.js';
+import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
+import { parseBase58RpcAccount, parseBase64RpcAccount, parseJsonRpcAccount } from '../parse-account.js';
 
 const address = '1111' as Address<'1111'>;
 type MyData = { mint: Address; token: Address };

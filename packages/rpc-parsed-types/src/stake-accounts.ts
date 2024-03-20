@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
 
-import { RpcParsedType } from './rpc-parsed-type';
+import { RpcParsedType } from './rpc-parsed-type.js';
 
 type JsonParsedStakeAccount = Readonly<{
     meta: Readonly<{

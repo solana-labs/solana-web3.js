@@ -1,10 +1,10 @@
 import type { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { RpcGraphQLContext } from '../context';
-import { BlockLoaderValue, cacheKeyFn } from '../loaders';
-import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
-import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
+import { RpcGraphQLContext } from '../context.js';
+import { BlockLoaderValue, cacheKeyFn } from '../loaders/index.js';
+import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info/index.js';
+import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction.js';
 
 type BlockResult = Partial<BlockLoaderValue> & {
     slot: Slot;

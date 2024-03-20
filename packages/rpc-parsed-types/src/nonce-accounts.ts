@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import type { Blockhash, StringifiedBigInt } from '@solana/rpc-types';
 
-import { RpcParsedInfo } from './rpc-parsed-type';
+import { RpcParsedInfo } from './rpc-parsed-type.js';
 
 export type JsonParsedNonceAccount = RpcParsedInfo<{
     authority: Address;

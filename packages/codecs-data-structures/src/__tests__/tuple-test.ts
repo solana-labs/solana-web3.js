@@ -3,8 +3,8 @@ import { getI16Codec, getU8Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
-import { getTupleCodec } from '../tuple';
-import { b } from './__setup__';
+import { getTupleCodec } from '../tuple.js';
+import { b } from './__setup__.js';
 
 describe('getTupleCodec', () => {
     const tuple = getTupleCodec;

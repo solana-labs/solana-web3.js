@@ -7,7 +7,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nullable';
+import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nullable.js';
 
 {
     // [getNullableEncoder]: It knows if the encoder is fixed size or variable size.

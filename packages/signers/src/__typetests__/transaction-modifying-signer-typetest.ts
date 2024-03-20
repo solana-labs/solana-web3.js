@@ -4,7 +4,7 @@ import {
     assertIsTransactionModifyingSigner,
     isTransactionModifyingSigner,
     TransactionModifyingSigner,
-} from '../transaction-modifying-signer';
+} from '../transaction-modifying-signer.js';
 
 const modifyAndSignTransactions = () => {};
 

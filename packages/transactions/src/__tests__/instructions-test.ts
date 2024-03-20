@@ -8,9 +8,9 @@ import {
     appendTransactionInstructions,
     prependTransactionInstruction,
     prependTransactionInstructions,
-} from '../instructions';
-import { ITransactionWithSignatures } from '../signatures';
-import { BaseTransaction } from '../types';
+} from '../instructions.js';
+import { ITransactionWithSignatures } from '../signatures.js';
+import { BaseTransaction } from '../types.js';
 
 const PROGRAM_A =
     'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL' as Address<'AALQD2dt1k43Acrkp4SvdhZaN4S115Ff2Bi7rHPti3sL'>;

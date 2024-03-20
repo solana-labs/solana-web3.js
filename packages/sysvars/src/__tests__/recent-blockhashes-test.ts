@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarRecentBlockhashes, getSysvarRecentBlockhashesCodec } from '../recent-blockhashes';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarRecentBlockhashes, getSysvarRecentBlockhashesCodec } from '../recent-blockhashes.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('recent blockhashes', () => {
     let rpc: Rpc<GetAccountInfoApi>;

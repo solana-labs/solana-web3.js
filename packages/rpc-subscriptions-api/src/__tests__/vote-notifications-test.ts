@@ -1,7 +1,7 @@
 import { type RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 
-import type { VoteNotificationsApi } from '../vote-notifications';
-import { createLocalhostSolanaRpcSubscriptions } from './__setup__';
+import type { VoteNotificationsApi } from '../vote-notifications.js';
+import { createLocalhostSolanaRpcSubscriptions } from './__setup__.js';
 
 describe('voteNotifications', () => {
     let rpc: RpcSubscriptions<VoteNotificationsApi>;

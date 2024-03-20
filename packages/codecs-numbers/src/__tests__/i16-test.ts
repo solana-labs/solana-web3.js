@@ -1,6 +1,6 @@
-import { Endian } from '../common';
-import { getI16Codec } from '../i16';
-import { assertRangeError, assertValid } from './__setup__';
+import { Endian } from '../common.js';
+import { getI16Codec } from '../i16.js';
+import { assertRangeError, assertValid } from './__setup__.js';
 
 const MIN = -Number('0x7fff') - 1;
 const MAX = Number('0x7fff');

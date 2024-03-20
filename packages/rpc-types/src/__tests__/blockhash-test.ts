@@ -8,7 +8,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Blockhash, getBlockhashCodec, getBlockhashComparator } from '../blockhash';
+import { Blockhash, getBlockhashCodec, getBlockhashComparator } from '../blockhash.js';
 
 jest.mock('@solana/codecs-strings', () => ({
     ...jest.requireActual('@solana/codecs-strings'),
@@ -22,14 +22,14 @@ const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
 const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
 describe('assertIsBlockhash()', () => {
-    let assertIsBlockhash: typeof import('../blockhash').assertIsBlockhash;
+    let assertIsBlockhash: typeof import('../blockhash.js').assertIsBlockhash;
     // Reload `assertIsBlockhash` before each test to reset memoized state
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const base58ModulePromise =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                import('../blockhash');
+                import('../blockhash.js');
             assertIsBlockhash = (await base58ModulePromise).assertIsBlockhash;
         });
     });
@@ -179,12 +179,12 @@ describe('assertIsBlockhash()', () => {
             expect.assertions(2);
 
             // reload the module to reset memoized state
-            let getBlockhashCodec: typeof import('../blockhash').getBlockhashCodec;
+            let getBlockhashCodec: typeof import('../blockhash.js').getBlockhashCodec;
             await jest.isolateModulesAsync(async () => {
                 const base58ModulePromise =
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    import('../blockhash');
+                    import('../blockhash.js');
                 getBlockhashCodec = (await base58ModulePromise).getBlockhashCodec;
             });
 

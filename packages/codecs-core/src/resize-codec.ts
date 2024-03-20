@@ -10,8 +10,8 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     isFixedSize,
-} from './codec';
-import { combineCodec } from './combine-codec';
+} from './codec.js';
+import { combineCodec } from './combine-codec.js';
 
 /**
  * Updates the size of a given encoder.

@@ -1,3 +1,3 @@
-export * from './address';
-export * from './keypair';
-export * from './transaction';
+export * from './address.js';
+export * from './keypair.js';
+export * from './transaction.js';

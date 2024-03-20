@@ -6,10 +6,10 @@ import {
 } from '@solana/errors';
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
-import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions';
-import { RpcSubscriptionsApi } from '../rpc-subscriptions-api';
-import { RpcSubscriptionsRequest } from '../rpc-subscriptions-request';
-import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
+import { createSubscriptionRpc, RpcSubscriptions } from '../rpc-subscriptions.js';
+import { RpcSubscriptionsApi } from '../rpc-subscriptions-api.js';
+import { RpcSubscriptionsRequest } from '../rpc-subscriptions-request.js';
+import { RpcSubscriptionsTransport } from '../rpc-subscriptions-transport.js';
 
 // Partially mock the rpc-spec-types package.
 jest.mock('@solana/rpc-spec-types', () => ({

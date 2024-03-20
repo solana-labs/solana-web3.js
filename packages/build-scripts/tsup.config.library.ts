@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsup';
 
-import { getBaseConfig } from './getBaseConfig';
+import { getBaseConfig } from './getBaseConfig.js';
 import packageConfigOrConfigsOrPromiseGetterForSame from './tsup.config.package';
 
 export default defineConfig(async options => {

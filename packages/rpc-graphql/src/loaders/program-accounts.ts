@@ -1,15 +1,15 @@
 import type { GetProgramAccountsApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
-import { sliceData } from './account';
-import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer';
+import { sliceData } from './account.js';
+import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer.js';
 import {
     cacheKeyFn,
     ProgramAccountsLoader,
     ProgramAccountsLoaderArgs,
     ProgramAccountsLoaderArgsBase,
     ProgramAccountsLoaderValue,
-} from './loader';
+} from './loader.js';
 
 type Config = {
     maxDataSliceByteRange: number;

@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -13296,7 +13300,3 @@ packages:
       which: 3.0.1
       yaml: 2.3.1
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

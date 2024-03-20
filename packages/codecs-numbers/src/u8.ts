@@ -1,6 +1,6 @@
 import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 
-import { numberDecoderFactory, numberEncoderFactory } from './utils';
+import { numberDecoderFactory, numberEncoderFactory } from './utils.js';
 
 export const getU8Encoder = (): FixedSizeEncoder<number, 1> =>
     numberEncoderFactory({

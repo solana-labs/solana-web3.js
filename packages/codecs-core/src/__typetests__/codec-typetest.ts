@@ -15,7 +15,7 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
+} from '../codec.js';
 
 {
     // [createEncoder]: It knows if the encoder is fixed size or variable size.

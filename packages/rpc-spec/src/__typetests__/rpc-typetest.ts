@@ -1,6 +1,6 @@
-import { createRpc, Rpc } from '../rpc';
-import { createRpcApi, RpcApiMethods } from '../rpc-api';
-import { RpcTransport } from '../rpc-transport';
+import { createRpc, Rpc } from '../rpc.js';
+import { createRpcApi, RpcApiMethods } from '../rpc-api.js';
+import { RpcTransport } from '../rpc-transport.js';
 
 interface MyApiMethods extends RpcApiMethods {
     bar(): string;

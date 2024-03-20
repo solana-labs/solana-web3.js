@@ -9,8 +9,8 @@ import {
     isInstructionForProgram,
     isInstructionWithAccounts,
     isInstructionWithData,
-} from '../instruction';
-import { AccountRole } from '../roles';
+} from '../instruction.js';
+import { AccountRole } from '../roles.js';
 
 const programAddress = 'address' as Address;
 

@@ -8,7 +8,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { assertNumberIsBetweenForCodec } from './assertions';
+import { assertNumberIsBetweenForCodec } from './assertions.js';
 
 /**
  * Encodes short u16 numbers.

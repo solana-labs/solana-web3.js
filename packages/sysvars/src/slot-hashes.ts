@@ -15,7 +15,7 @@ import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 import { type Blockhash, getBlockhashDecoder, getBlockhashEncoder, type Slot } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_SLOT_HASHES_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_SLOT_HASHES_ADDRESS } from './sysvar.js';
 
 type Entry = Readonly<{
     hash: Blockhash;

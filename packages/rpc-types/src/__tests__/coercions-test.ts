@@ -6,10 +6,10 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { lamports, LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports';
-import { StringifiedBigInt, stringifiedBigInt } from '../stringified-bigint';
-import { StringifiedNumber, stringifiedNumber } from '../stringified-number';
-import { UnixTimestamp, unixTimestamp } from '../unix-timestamp';
+import { lamports, LamportsUnsafeBeyond2Pow53Minus1 } from '../lamports.js';
+import { StringifiedBigInt, stringifiedBigInt } from '../stringified-bigint.js';
+import { StringifiedNumber, stringifiedNumber } from '../stringified-number.js';
+import { UnixTimestamp, unixTimestamp } from '../unix-timestamp.js';
 
 describe('coercions', () => {
     describe('lamports', () => {

@@ -6,7 +6,7 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { IAccountLookupMeta, IAccountMeta } from './accounts';
+import { IAccountLookupMeta, IAccountMeta } from './accounts.js';
 
 export interface IInstruction<
     TProgramAddress extends string = string,

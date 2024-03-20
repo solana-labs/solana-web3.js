@@ -5,7 +5,7 @@ import {
     assertIsTransactionModifyingSigner,
     isTransactionModifyingSigner,
     TransactionModifyingSigner,
-} from '../transaction-modifying-signer';
+} from '../transaction-modifying-signer.js';
 
 describe('isTransactionModifyingSigner', () => {
     it('checks whether a given value is a TransactionModifyingSigner', () => {

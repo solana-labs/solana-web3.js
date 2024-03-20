@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetFirstAvailableBlockApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetFirstAvailableBlockApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getFirstAvailableBlock', () => {
     let rpc: Rpc<GetFirstAvailableBlockApi>;

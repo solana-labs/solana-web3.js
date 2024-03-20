@@ -1,4 +1,4 @@
-import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers';
+import type { U64UnsafeBeyond2Pow53Minus1 } from './typed-numbers.js';
 
 export type DataSlice = Readonly<{
     length: number;

@@ -6,8 +6,8 @@ import { SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, SolanaError } from '@solana/err
 import type { Rpc } from '@solana/rpc-spec';
 import path from 'path';
 
-import { GetSlotLeadersApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetSlotLeadersApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const validatorKeypairPath = path.resolve(__dirname, '../../../../test-ledger/validator-keypair.json');
 

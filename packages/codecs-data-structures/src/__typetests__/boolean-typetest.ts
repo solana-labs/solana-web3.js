@@ -1,7 +1,7 @@
 import { Codec, Decoder, Encoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '@solana/codecs-core';
 import { getU32Codec, getU32Decoder, getU32Encoder } from '@solana/codecs-numbers';
 
-import { getBooleanCodec, getBooleanDecoder, getBooleanEncoder } from '../boolean';
+import { getBooleanCodec, getBooleanDecoder, getBooleanEncoder } from '../boolean.js';
 
 {
     // [getBooleanEncoder]: It knows if the encoder is fixed size or variable size.

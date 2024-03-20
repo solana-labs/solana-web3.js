@@ -1,6 +1,6 @@
 import { Address, assertIsAddress, getAddressEncoder } from '@solana/addresses';
 
-import { createUnimplementedFunction } from './unimplemented';
+import { createUnimplementedFunction } from './unimplemented.js';
 
 // FIXME(https://github.com/evanw/esbuild/issues/3500): This should be a private static property.
 let defaultPublicKey: PublicKey<'11111111111111111111111111111111'> | undefined;

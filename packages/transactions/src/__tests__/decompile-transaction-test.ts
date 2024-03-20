@@ -7,10 +7,10 @@ import {
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 
-import { decompileTransaction } from '../decompile-transaction';
-import { Nonce } from '../durable-nonce';
-import { CompiledMessage } from '../message';
-import { ITransactionWithSignatures } from '../signatures';
+import { decompileTransaction } from '../decompile-transaction.js';
+import { Nonce } from '../durable-nonce.js';
+import { CompiledMessage } from '../message.js';
+import { ITransactionWithSignatures } from '../signatures.js';
 
 type CompiledTransaction = Readonly<{
     compiledMessage: CompiledMessage;

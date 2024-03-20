@@ -1,7 +1,7 @@
 import type { Rpc } from '@solana/rpc-spec';
 
-import { GetMaxShredInsertSlotApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetMaxShredInsertSlotApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getMaxShredInsertSlot', () => {
     let rpc: Rpc<GetMaxShredInsertSlotApi>;

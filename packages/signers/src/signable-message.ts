@@ -1,6 +1,6 @@
 import { TextEncoder } from '@solana/text-encoding-impl';
 
-import { SignatureDictionary } from './types';
+import { SignatureDictionary } from './types.js';
 
 /** Defines a message that needs signing and its current set of signatures if any. */
 export type SignableMessage = Readonly<{

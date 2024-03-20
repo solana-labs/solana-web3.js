@@ -2,7 +2,7 @@ import type { SolanaRpcApi, SolanaRpcApiDevnet, SolanaRpcApiMainnet, SolanaRpcAp
 import type { Rpc, RpcTransport } from '@solana/rpc-spec';
 import { devnet, mainnet, testnet } from '@solana/rpc-types';
 
-import { createSolanaRpc, createSolanaRpcFromTransport } from '../rpc';
+import { createSolanaRpc, createSolanaRpcFromTransport } from '../rpc.js';
 import type {
     RpcDevnet,
     RpcMainnet,
@@ -10,8 +10,8 @@ import type {
     RpcTransportDevnet,
     RpcTransportMainnet,
     RpcTransportTestnet,
-} from '../rpc-clusters';
-import { createDefaultRpcTransport } from '../rpc-transport';
+} from '../rpc-clusters.js';
+import { createDefaultRpcTransport } from '../rpc-transport.js';
 
 // Define cluster-aware URLs and transports.
 

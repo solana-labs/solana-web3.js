@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Blockhash, StringifiedBigInt } from '@solana/rpc-types';
 
-import { JsonParsedNonceAccount } from '../nonce-accounts';
+import { JsonParsedNonceAccount } from '../nonce-accounts.js';
 
 {
     const account = {

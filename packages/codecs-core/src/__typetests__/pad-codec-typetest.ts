@@ -8,7 +8,7 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
+} from '../codec.js';
 import {
     padLeftCodec,
     padLeftDecoder,
@@ -16,7 +16,7 @@ import {
     padRightCodec,
     padRightDecoder,
     padRightEncoder,
-} from '../pad-codec';
+} from '../pad-codec.js';
 
 type BrandedEncoder = Encoder<42> & { readonly __brand: unique symbol };
 type BrandedDecoder = Decoder<42> & { readonly __brand: unique symbol };

@@ -7,9 +7,9 @@ import type {
     AccountInfoWithBase64EncodedData,
 } from '@solana/rpc-types';
 
-import type { Account, BaseAccount, EncodedAccount } from './account';
-import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
-import type { JsonParsedDataResponse } from './rpc-api';
+import type { Account, BaseAccount, EncodedAccount } from './account.js';
+import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account.js';
+import type { JsonParsedDataResponse } from './rpc-api/index.js';
 
 type Base64EncodedRpcAccount = AccountInfoBase & AccountInfoWithBase64EncodedData;
 

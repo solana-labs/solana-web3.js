@@ -1,5 +1,5 @@
-export { createAccountLoader } from './account';
-export { createBlockLoader } from './block';
-export * from './loader';
-export { createProgramAccountsLoader } from './program-accounts';
-export { createTransactionLoader } from './transaction';
+export { createAccountLoader } from './account.js';
+export { createBlockLoader } from './block.js';
+export * from './loader.js';
+export { createProgramAccountsLoader } from './program-accounts.js';
+export { createTransactionLoader } from './transaction.js';

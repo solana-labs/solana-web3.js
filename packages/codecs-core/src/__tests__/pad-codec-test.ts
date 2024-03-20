@@ -1,5 +1,5 @@
-import { padLeftCodec, padRightCodec } from '../pad-codec';
-import { expectNewPostOffset, expectNewPreOffset, getMockCodec } from './__setup__';
+import { padLeftCodec, padRightCodec } from '../pad-codec.js';
+import { expectNewPostOffset, expectNewPreOffset, getMockCodec } from './__setup__.js';
 
 describe('padLeftCodec', () => {
     it('offsets and resizes the codec', () => {

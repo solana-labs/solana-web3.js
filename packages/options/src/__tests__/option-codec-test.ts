@@ -1,8 +1,8 @@
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 
-import { none, some } from '../option';
-import { getOptionCodec } from '../option-codec';
-import { b, base16, getMockCodec } from './__setup__';
+import { none, some } from '../option.js';
+import { getOptionCodec } from '../option-codec.js';
+import { b, base16, getMockCodec } from './__setup__.js';
 
 describe('getOptionCodec', () => {
     const option = getOptionCodec;

@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarStakeHistory, getSysvarStakeHistoryCodec } from '../stake-history';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarStakeHistory, getSysvarStakeHistoryCodec } from '../stake-history.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('stake history', () => {
     let rpc: Rpc<GetAccountInfoApi>;

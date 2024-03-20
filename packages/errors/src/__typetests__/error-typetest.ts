@@ -1,7 +1,7 @@
-import * as SolanaErrorCodeModule from '../codes';
-import { SolanaErrorCode } from '../codes';
-import { SolanaErrorContext } from '../context';
-import { isSolanaError, SolanaError } from '../error';
+import * as SolanaErrorCodeModule from '../codes.js';
+import { SolanaErrorCode } from '../codes.js';
+import { SolanaErrorContext } from '../context.js';
+import { isSolanaError, SolanaError } from '../error.js';
 
 const { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING } =
     SolanaErrorCodeModule;

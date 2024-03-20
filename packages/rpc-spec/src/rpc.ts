@@ -8,9 +8,9 @@ import {
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
 
-import { RpcApi } from './rpc-api';
-import { PendingRpcRequest, RpcRequest, RpcSendOptions } from './rpc-request';
-import { RpcTransport } from './rpc-transport';
+import { RpcApi } from './rpc-api.js';
+import { PendingRpcRequest, RpcRequest, RpcSendOptions } from './rpc-request.js';
+import { RpcTransport } from './rpc-transport.js';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
     api: RpcApi<TRpcMethods>;

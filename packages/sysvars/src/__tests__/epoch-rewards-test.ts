@@ -1,4 +1,4 @@
-import { getSysvarEpochRewardsCodec } from '../epoch-rewards';
+import { getSysvarEpochRewardsCodec } from '../epoch-rewards.js';
 
 describe('epoch rewards', () => {
     it('decode', () => {

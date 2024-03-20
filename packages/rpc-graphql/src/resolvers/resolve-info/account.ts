@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { Commitment, DataSlice, Slot } from '@solana/rpc-types';
 import { ArgumentNode, GraphQLResolveInfo, isInterfaceType } from 'graphql';
 
-import { AccountLoaderArgs, ProgramAccountsLoaderArgs } from '../../loaders';
-import { injectableRootVisitor, onlyFieldsRequested } from './visitor';
+import { AccountLoaderArgs, ProgramAccountsLoaderArgs } from '../../loaders/index.js';
+import { injectableRootVisitor, onlyFieldsRequested } from './visitor.js';
 
 function findArgumentNodeByName(argumentNodes: readonly ArgumentNode[], name: string): ArgumentNode | undefined {
     return argumentNodes.find(argumentNode => argumentNode.name.value === name);

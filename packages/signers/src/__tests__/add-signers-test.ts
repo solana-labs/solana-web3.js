@@ -5,9 +5,9 @@ import { SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError
 import { AccountRole, IInstruction } from '@solana/instructions';
 import { BaseTransaction } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta';
-import { addSignersToInstruction, addSignersToTransaction } from '../add-signers';
-import { createMockTransactionModifyingSigner, createMockTransactionPartialSigner } from './__setup__';
+import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta.js';
+import { addSignersToInstruction, addSignersToTransaction } from '../add-signers.js';
+import { createMockTransactionModifyingSigner, createMockTransactionPartialSigner } from './__setup__.js';
 
 describe('addSignersToInstruction', () => {
     it('adds signers to the account metas of the instruction', () => {

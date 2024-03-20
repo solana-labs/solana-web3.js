@@ -1,7 +1,7 @@
 import type { Address } from '@solana/addresses';
 import type { Transaction } from '@solana/transactions';
 
-import { Program, ProgramWithErrors } from './program';
+import { Program, ProgramWithErrors } from './program.js';
 
 /**
  * Resolves a custom program error from a transaction error

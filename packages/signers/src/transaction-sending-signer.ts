@@ -3,7 +3,7 @@ import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError 
 import { SignatureBytes } from '@solana/keys';
 import { CompilableTransaction } from '@solana/transactions';
 
-import { BaseSignerConfig } from './types';
+import { BaseSignerConfig } from './types.js';
 
 export type TransactionSendingSignerConfig = BaseSignerConfig;
 

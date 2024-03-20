@@ -1,6 +1,6 @@
 import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
 
-import { getWebSocketTransportWithConnectionSharding } from '../rpc-subscriptions-connection-sharding';
+import { getWebSocketTransportWithConnectionSharding } from '../rpc-subscriptions-connection-sharding.js';
 
 describe('getWebSocketTransportWithConnectionSharding', () => {
     let getShard: jest.Mock;

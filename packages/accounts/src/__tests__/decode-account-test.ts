@@ -7,10 +7,10 @@ import {
     SolanaError,
 } from '@solana/errors';
 
-import { Account, EncodedAccount } from '../account';
-import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
-import { getMockDecoder } from './__setup__';
+import { Account, EncodedAccount } from '../account.js';
+import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account.js';
+import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
+import { getMockDecoder } from './__setup__.js';
 
 describe('decodeAccount', () => {
     it('decodes the account data of an existing encoded account', () => {

@@ -2,7 +2,7 @@
 
 import { Bench } from 'tinybench';
 
-import { generateKeyPair, SignatureBytes, signBytes, verifySignature } from '../index';
+import { generateKeyPair, SignatureBytes, signBytes, verifySignature } from '../index.js';
 
 Object.assign(globalThis, {
     __BROWSER__: false,

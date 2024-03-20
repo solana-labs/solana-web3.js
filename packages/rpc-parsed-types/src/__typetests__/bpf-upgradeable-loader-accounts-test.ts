@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { Base64EncodedDataResponse } from '@solana/rpc-types';
 
-import { JsonParsedBpfUpgradeableLoaderProgramAccount } from '../bpf-upgradeable-loader-accounts';
+import { JsonParsedBpfUpgradeableLoaderProgramAccount } from '../bpf-upgradeable-loader-accounts.js';
 
 // program account
 {

@@ -1,9 +1,9 @@
 import { Address } from '@solana/addresses';
 import { Decoder } from '@solana/codecs-core';
 
-import { Account, EncodedAccount } from '../account';
-import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
+import { Account, EncodedAccount } from '../account.js';
+import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account.js';
+import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
 
 type MockData = { foo: 42 };
 type MockDataDecoder = Decoder<MockData>;

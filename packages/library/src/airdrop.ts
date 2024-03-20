@@ -7,7 +7,7 @@ import {
     waitForRecentTransactionConfirmationUntilTimeout,
 } from '@solana/transaction-confirmation';
 
-import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from './airdrop-internal';
+import { requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT } from './airdrop-internal.js';
 
 type AirdropFunction = (
     config: Omit<

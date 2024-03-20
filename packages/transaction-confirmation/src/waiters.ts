@@ -7,10 +7,10 @@ import {
     ITransactionWithSignatures,
 } from '@solana/transactions';
 
-import { createBlockHeightExceedencePromiseFactory } from './confirmation-strategy-blockheight';
-import { createNonceInvalidationPromiseFactory } from './confirmation-strategy-nonce';
-import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './confirmation-strategy-racer';
-import { getTimeoutPromise } from './confirmation-strategy-timeout';
+import { createBlockHeightExceedencePromiseFactory } from './confirmation-strategy-blockheight.js';
+import { createNonceInvalidationPromiseFactory } from './confirmation-strategy-nonce.js';
+import { BaseTransactionConfirmationStrategyConfig, raceStrategies } from './confirmation-strategy-racer.js';
+import { getTimeoutPromise } from './confirmation-strategy-timeout.js';
 
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseTransactionConfirmationStrategyConfig {
     getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;

@@ -3,25 +3,31 @@
     "version": "2.0.0-preview.2",
     "description": "Throw, identify, and decode Solana JavaScript errors",
     "exports": {
-        "browser": {
-            "import": "./dist/index.browser.js",
-            "require": "./dist/index.browser.cjs"
+        ".": {
+            "browser": {
+                "import": "./dist/index.browser.js",
+                "require": "./dist/index.browser.cjs"
+            },
+            "node": {
+                "import": "./dist/index.node.js",
+                "require": "./dist/index.node.cjs"
+            },
+            "react-native": "./dist/index.native.js",
+            "types": "./dist/types/index.d.ts"
         },
-        "node": {
-            "import": "./dist/index.node.js",
-            "require": "./dist/index.node.cjs"
-        },
-        "react-native": "./dist/index.native.js",
-        "types": "./dist/types/index.d.ts"
+        "./internal": {
+            "browser": {
+                "import": "./dist/__internal.browser.js",
+                "require": "./dist/__internal.browser.cjs"
+            },
+            "node": {
+                "import": "./dist/__internal.node.js",
+                "require": "./dist/__internal.node.cjs"
+            },
+            "react-native": "./dist/__internal.native.js",
+            "types": "./dist/types/__internal.d.ts"
+        }
     },
-    "browser": {
-        "./dist/index.node.cjs": "./dist/index.browser.cjs",
-        "./dist/index.node.js": "./dist/index.browser.js"
-    },
-    "main": "./dist/index.node.cjs",
-    "module": "./dist/index.node.js",
-    "react-native": "./dist/index.native.js",
-    "types": "./dist/types/index.d.ts",
     "type": "module",
     "files": [
         "./dist/"
@@ -35,7 +41,7 @@
     "bin": "./bin/cli.js",
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts && tsup src/cli.ts --format esm",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
+        "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",

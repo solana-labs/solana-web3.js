@@ -2,10 +2,10 @@ import { Address } from '@solana/addresses';
 import { Commitment, Slot } from '@solana/rpc-types';
 import type { GraphQLResolveInfo } from 'graphql';
 
-import { RpcGraphQLContext } from '../context';
-import { cacheKeyFn } from '../loaders';
-import { AccountResult } from './account';
-import { buildProgramAccountsLoaderArgSetFromResolveInfo } from './resolve-info';
+import { RpcGraphQLContext } from '../context.js';
+import { cacheKeyFn } from '../loaders/index.js';
+import { AccountResult } from './account.js';
+import { buildProgramAccountsLoaderArgSetFromResolveInfo } from './resolve-info/index.js';
 
 export function resolveProgramAccounts(fieldName?: string) {
     return async (

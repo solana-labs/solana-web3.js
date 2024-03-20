@@ -8,8 +8,8 @@ import {
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
-} from '../codec';
-import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
+} from '../codec.js';
+import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec.js';
 
 {
     // [reverseEncoder]: It only works with fixed size encoders.

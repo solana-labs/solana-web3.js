@@ -1,8 +1,8 @@
 import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY, SolanaError } from '@solana/errors';
 import { createRpc, type Rpc } from '@solana/rpc-spec';
 
-import { createSolanaRpcApi, GetHealthApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { createSolanaRpcApi, GetHealthApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('getHealth', () => {
     describe('when the node is healthy', () => {

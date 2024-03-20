@@ -2,9 +2,9 @@ import { pipe } from '@solana/functional';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 import type { ClusterUrl } from '@solana/rpc-types';
 
-import { RpcTransportFromClusterUrl } from './rpc-clusters';
-import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
-import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
+import { RpcTransportFromClusterUrl } from './rpc-clusters.js';
+import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer.js';
+import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication.js';
 
 type RpcTransportConfig = Parameters<typeof createHttpTransport>[0];
 export interface DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {

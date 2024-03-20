@@ -9,8 +9,8 @@ import type { Rpc } from '@solana/rpc-spec';
 import type { Blockhash, Commitment } from '@solana/rpc-types';
 import type { SerializedMessageBytesBase64 } from '@solana/transactions';
 
-import { GetFeeForMessageApi, GetLatestBlockhashApi } from '../index';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { GetFeeForMessageApi, GetLatestBlockhashApi } from '../index.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 const CONTEXT_MATCHER = expect.objectContaining({
     slot: expect.any(BigInt),

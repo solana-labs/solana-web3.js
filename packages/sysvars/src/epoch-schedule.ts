@@ -15,7 +15,7 @@ import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Epoch, Slot } from '@solana/rpc-types';
 
-import { fetchEncodedSysvarAccount, SYSVAR_EPOCH_SCHEDULE_ADDRESS } from './sysvar';
+import { fetchEncodedSysvarAccount, SYSVAR_EPOCH_SCHEDULE_ADDRESS } from './sysvar.js';
 
 type SysvarEpochScheduleSize = 33;
 

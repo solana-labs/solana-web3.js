@@ -1,8 +1,8 @@
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
 
-import { fetchSysvarFees, getSysvarFeesCodec } from '../fees';
-import { createLocalhostSolanaRpc } from './__setup__';
+import { fetchSysvarFees, getSysvarFeesCodec } from '../fees.js';
+import { createLocalhostSolanaRpc } from './__setup__.js';
 
 describe('fees', () => {
     let rpc: Rpc<GetAccountInfoApi>;

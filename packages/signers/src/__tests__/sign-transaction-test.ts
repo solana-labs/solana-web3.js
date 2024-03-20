@@ -12,18 +12,18 @@ import {
     partiallySignTransactionWithSigners,
     signAndSendTransactionWithSigners,
     signTransactionWithSigners,
-} from '../sign-transaction';
+} from '../sign-transaction.js';
 import {
     assertIsTransactionWithSingleSendingSigner,
     ITransactionWithSingleSendingSigner,
-} from '../transaction-with-single-sending-signer';
+} from '../transaction-with-single-sending-signer.js';
 import {
     createMockTransactionCompositeSigner,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
     createMockTransactionSendingSigner,
     createMockTransactionWithSigners,
-} from './__setup__';
+} from './__setup__.js';
 
 describe('partiallySignTransactionWithSigners', () => {
     it('signs the transaction with its extracted signers', async () => {

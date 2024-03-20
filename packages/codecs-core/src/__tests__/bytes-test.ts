@@ -1,4 +1,4 @@
-import { fixBytes, mergeBytes, padBytes } from '../bytes';
+import { fixBytes, mergeBytes, padBytes } from '../bytes.js';
 
 describe('mergeBytes', () => {
     it('can merge multiple arrays of bytes together', () => {

@@ -14,7 +14,7 @@ import {
     assertKeyExporterIsAvailable,
     assertSigningCapabilityIsAvailable,
     assertVerificationCapabilityIsAvailable,
-} from '../subtle-crypto';
+} from '../subtle-crypto.js';
 
 describe('assertDigestCapabilityIsAvailable()', () => {
     describe('when `SubtleCrypto::digest` is available', () => {
@@ -97,13 +97,13 @@ describe('assertKeyExporterIsAvailable()', () => {
 });
 
 describe('assertKeyGenerationIsAvailable()', () => {
-    let assertKeyGenerationIsAvailable: typeof import('../subtle-crypto').assertKeyGenerationIsAvailable;
+    let assertKeyGenerationIsAvailable: typeof import('../subtle-crypto.js').assertKeyGenerationIsAvailable;
     beforeEach(async () => {
         await jest.isolateModulesAsync(async () => {
             const guardModulePromise =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                import('../subtle-crypto');
+                import('../subtle-crypto.js');
             assertKeyGenerationIsAvailable = (await guardModulePromise).assertKeyGenerationIsAvailable;
         });
     });

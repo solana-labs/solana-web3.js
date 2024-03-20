@@ -7,8 +7,8 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 
-import { Option, OptionOrNullable } from '../option';
-import { getOptionCodec, getOptionDecoder, getOptionEncoder } from '../option-codec';
+import { Option, OptionOrNullable } from '../option.js';
+import { getOptionCodec, getOptionDecoder, getOptionEncoder } from '../option-codec.js';
 
 {
     // [getOptionEncoder]: It knows if the encoder is fixed size or variable size.

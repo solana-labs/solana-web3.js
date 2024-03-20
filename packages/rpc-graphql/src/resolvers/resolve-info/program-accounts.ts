@@ -2,8 +2,8 @@ import { Address } from '@solana/addresses';
 import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
-import { ProgramAccountsLoaderArgs } from '../../loaders';
-import { buildAccountArgSetWithVisitor } from './account';
+import { ProgramAccountsLoaderArgs } from '../../loaders/index.js';
+import { buildAccountArgSetWithVisitor } from './account.js';
 
 /**
  * Build a set of account loader args by inspecting which fields have

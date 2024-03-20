@@ -1,5 +1,5 @@
-import { resolveAccount } from './account';
-import { InstructionResult } from './transaction';
+import { resolveAccount } from './account.js';
+import { InstructionResult } from './transaction.js';
 
 export const instructionResolvers = {
     AdvanceNonceAccountInstruction: {

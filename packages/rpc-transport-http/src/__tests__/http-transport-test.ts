@@ -10,7 +10,7 @@ describe('createHttpTransport', () => {
             const { createHttpTransport } =
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                await import('../http-transport');
+                await import('../http-transport.js');
             makeHttpRequest = createHttpTransport({ url: 'http://localhost' });
         });
     });

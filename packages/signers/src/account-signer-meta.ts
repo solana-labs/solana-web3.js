@@ -1,8 +1,8 @@
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { BaseTransaction, TransactionVersion } from '@solana/transactions';
 
-import { deduplicateSigners } from './deduplicate-signers';
-import { TransactionSigner } from './transaction-signer';
+import { deduplicateSigners } from './deduplicate-signers.js';
+import { TransactionSigner } from './transaction-signer.js';
 
 /** An extension of the IAccountMeta type that keeps track of its transaction signer. */
 export interface IAccountSignerMeta<

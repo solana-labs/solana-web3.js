@@ -1,8 +1,8 @@
 import { SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
-import { FixedSizeCodec } from '../codec';
-import { resizeCodec } from '../resize-codec';
-import { getMockCodec } from './__setup__';
+import { FixedSizeCodec } from '../codec.js';
+import { resizeCodec } from '../resize-codec.js';
+import { getMockCodec } from './__setup__.js';
 
 describe('resizeCodec', () => {
     it('resizes fixed-size codecs', () => {

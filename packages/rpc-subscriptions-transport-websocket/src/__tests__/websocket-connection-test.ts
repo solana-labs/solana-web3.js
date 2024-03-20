@@ -3,10 +3,10 @@ import {
     SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT,
     SolanaError,
 } from '@solana/errors';
-import WS from 'jest-websocket-mock';
+import { WS } from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
 
-import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection';
+import { createWebSocketConnection, RpcWebSocketConnection } from '../websocket-connection.js';
 
 const MOCK_SEND_BUFFER_HIGH_WATERMARK = 42069;
 

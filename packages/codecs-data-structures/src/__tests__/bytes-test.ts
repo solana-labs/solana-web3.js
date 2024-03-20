@@ -1,8 +1,8 @@
 import { getU8Codec } from '@solana/codecs-numbers';
 import { SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
-import { getBytesCodec } from '../bytes';
-import { b } from './__setup__';
+import { getBytesCodec } from '../bytes.js';
+import { b } from './__setup__.js';
 
 describe('getBytesCodec', () => {
     const bytes = getBytesCodec;

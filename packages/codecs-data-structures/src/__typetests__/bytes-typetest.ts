@@ -8,7 +8,7 @@ import {
 } from '@solana/codecs-core';
 import { NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 
-import { getBytesCodec, getBytesDecoder, getBytesEncoder } from '../bytes';
+import { getBytesCodec, getBytesDecoder, getBytesEncoder } from '../bytes.js';
 
 {
     // [getBytesEncoder]: It knows if the encoder is fixed size or variable size.

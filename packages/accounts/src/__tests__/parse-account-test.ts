@@ -3,10 +3,10 @@ import '@solana/test-matchers/toBeFrozenObject';
 import type { Address } from '@solana/addresses';
 import { lamports } from '@solana/rpc-types';
 
-import { Account, EncodedAccount } from '../account';
-import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account';
-import { parseBase58RpcAccount, parseBase64RpcAccount, parseJsonRpcAccount } from '../parse-account';
-import { Base58RpcAccount, Base64RpcAccount, JsonParsedRpcAccount } from './__setup__';
+import { Account, EncodedAccount } from '../account.js';
+import { MaybeAccount, MaybeEncodedAccount } from '../maybe-account.js';
+import { parseBase58RpcAccount, parseBase64RpcAccount, parseJsonRpcAccount } from '../parse-account.js';
+import { Base58RpcAccount, Base64RpcAccount, JsonParsedRpcAccount } from './__setup__.js';
 
 describe('parseBase64RpcAccount', () => {
     it('parses an encoded account with base64 data', () => {

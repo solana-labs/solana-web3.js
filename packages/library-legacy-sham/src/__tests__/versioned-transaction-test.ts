@@ -1,4 +1,4 @@
-import { VersionedTransaction } from '../versioned-transaction';
+import { VersionedTransaction } from '../versioned-transaction.js';
 
 const TRANSACTION_MESSAGE_IN_WIRE_FORMAT =
     // prettier-ignore

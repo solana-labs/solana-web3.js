@@ -7,7 +7,7 @@ import {
     isPolyfilledKey,
     signPolyfill,
     verifyPolyfill,
-} from './secrets';
+} from './secrets.js';
 
 if (__NODEJS__) {
     /**

@@ -1,7 +1,7 @@
 import { assertKeyGenerationIsAvailable } from '@solana/assertions';
 import { SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH, SolanaError } from '@solana/errors';
 
-import { createPrivateKeyFromBytes } from './private-key';
+import { createPrivateKeyFromBytes } from './private-key.js';
 
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
     await assertKeyGenerationIsAvailable();

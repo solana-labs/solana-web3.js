@@ -2,9 +2,9 @@ import type { Address } from '@solana/addresses';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 
-import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account';
-import { parseBase64RpcAccount, parseJsonRpcAccount } from './parse-account';
-import type { GetAccountInfoApi, GetMultipleAccountsApi } from './rpc-api';
+import type { MaybeAccount, MaybeEncodedAccount } from './maybe-account.js';
+import { parseBase64RpcAccount, parseJsonRpcAccount } from './parse-account.js';
+import type { GetAccountInfoApi, GetMultipleAccountsApi } from './rpc-api/index.js';
 
 /** Optional configuration for fetching a singular account. */
 export type FetchAccountConfig = {

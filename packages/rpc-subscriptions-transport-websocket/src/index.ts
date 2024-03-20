@@ -1,1 +1,1 @@
-export * from './websocket-transport';
+export * from './websocket-transport.js';

@@ -1,4 +1,4 @@
-import { KeyPath, TraversalState } from './tree-traversal';
+import { KeyPath, TraversalState } from './tree-traversal.js';
 
 type IntegerOverflowHandler = (keyPath: KeyPath, value: bigint) => void;
 

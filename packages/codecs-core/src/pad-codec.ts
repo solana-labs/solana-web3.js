@@ -1,7 +1,7 @@
-import { Codec, Decoder, Encoder, Offset } from './codec';
-import { combineCodec } from './combine-codec';
-import { offsetDecoder, offsetEncoder } from './offset-codec';
-import { resizeDecoder, resizeEncoder } from './resize-codec';
+import { Codec, Decoder, Encoder, Offset } from './codec.js';
+import { combineCodec } from './combine-codec.js';
+import { offsetDecoder, offsetEncoder } from './offset-codec.js';
+import { resizeDecoder, resizeEncoder } from './resize-codec.js';
 
 /**
  * Adds left padding to the given encoder.
