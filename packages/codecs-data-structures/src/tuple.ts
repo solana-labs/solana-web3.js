@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     Codec,
     combineCodec,
@@ -15,40 +16,31 @@ import {
 } from '@solana/codecs-core';
 
 import { assertValidNumberOfItemsForCodec } from './assertions';
-import { getFixedSize, getMaxSize, sumCodecSizes } from './utils';
+import { DrainOuterGeneric, getFixedSize, getMaxSize, sumCodecSizes } from './utils';
 
-type WrapInFixedSizeEncoder<TFrom> = {
-    [P in keyof TFrom]: FixedSizeEncoder<TFrom[P]>;
-};
-type WrapInEncoder<TFrom> = {
-    [P in keyof TFrom]: Encoder<TFrom[P]>;
-};
-type WrapInFixedSizeDecoder<TTo> = {
-    [P in keyof TTo]: FixedSizeDecoder<TTo[P]>;
-};
-type WrapInDecoder<TTo> = {
-    [P in keyof TTo]: Decoder<TTo[P]>;
-};
-type WrapInCodec<TFrom, TTo extends TFrom> = {
-    [P in keyof TFrom]: Codec<TFrom[P], TTo[P]>;
-};
-type WrapInFixedSizeCodec<TFrom, TTo extends TFrom> = {
-    [P in keyof TFrom]: FixedSizeCodec<TFrom[P], TTo[P]>;
-};
+type GetEncoderTypeFromItems<TItems extends readonly Encoder<any>[]> = DrainOuterGeneric<{
+    [I in keyof TItems]: TItems[I] extends Encoder<infer TFrom> ? TFrom : never;
+}>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyArray = any[];
+type GetDecoderTypeFromItems<TItems extends readonly Decoder<any>[]> = DrainOuterGeneric<{
+    [I in keyof TItems]: TItems[I] extends Decoder<infer TTo> ? TTo : never;
+}>;
 
 /**
  * Creates a encoder for a tuple-like array.
  *
  * @param items - The encoders to use for each item in the tuple.
  */
-export function getTupleEncoder<TFrom extends AnyArray>(
-    items: WrapInFixedSizeEncoder<[...TFrom]>,
-): FixedSizeEncoder<TFrom>;
-export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): VariableSizeEncoder<TFrom>;
-export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[...TFrom]>): Encoder<TFrom> {
+export function getTupleEncoder<const TItems extends readonly FixedSizeEncoder<any>[]>(
+    items: TItems,
+): FixedSizeEncoder<GetEncoderTypeFromItems<TItems>>;
+export function getTupleEncoder<const TItems extends readonly Encoder<any>[]>(
+    items: TItems,
+): VariableSizeEncoder<GetEncoderTypeFromItems<TItems>>;
+export function getTupleEncoder<const TItems extends readonly Encoder<any>[]>(
+    items: TItems,
+): Encoder<GetEncoderTypeFromItems<TItems>> {
+    type TFrom = GetEncoderTypeFromItems<TItems>;
     const fixedSize = sumCodecSizes(items.map(getFixedSize));
     const maxSize = sumCodecSizes(items.map(getMaxSize)) ?? undefined;
 
@@ -75,16 +67,24 @@ export function getTupleEncoder<TFrom extends AnyArray>(items: WrapInEncoder<[..
  *
  * @param items - The decoders to use for each item in the tuple.
  */
-export function getTupleDecoder<TTo extends AnyArray>(items: WrapInFixedSizeDecoder<[...TTo]>): FixedSizeDecoder<TTo>;
-export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...TTo]>): VariableSizeDecoder<TTo>;
-export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...TTo]>): Decoder<TTo> {
+
+export function getTupleDecoder<const TItems extends readonly FixedSizeDecoder<any>[]>(
+    items: TItems,
+): FixedSizeDecoder<GetDecoderTypeFromItems<TItems>>;
+export function getTupleDecoder<const TItems extends readonly Decoder<any>[]>(
+    items: TItems,
+): VariableSizeDecoder<GetDecoderTypeFromItems<TItems>>;
+export function getTupleDecoder<const TItems extends readonly Decoder<any>[]>(
+    items: TItems,
+): Decoder<GetDecoderTypeFromItems<TItems>> {
+    type TTo = GetDecoderTypeFromItems<TItems>;
     const fixedSize = sumCodecSizes(items.map(getFixedSize));
     const maxSize = sumCodecSizes(items.map(getMaxSize)) ?? undefined;
 
     return createDecoder({
         ...(fixedSize === null ? { maxSize } : { fixedSize }),
         read: (bytes: Uint8Array, offset) => {
-            const values = [] as AnyArray as TTo;
+            const values = [] as Array<any> & TTo;
             items.forEach(item => {
                 const [newValue, newOffset] = item.read(bytes, offset);
                 values.push(newValue);
@@ -100,17 +100,20 @@ export function getTupleDecoder<TTo extends AnyArray>(items: WrapInDecoder<[...T
  *
  * @param items - The codecs to use for each item in the tuple.
  */
-export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInFixedSizeCodec<[...TFrom], [...TTo]>,
-): FixedSizeCodec<TFrom, TTo>;
-export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInCodec<[...TFrom], [...TTo]>,
-): VariableSizeCodec<TFrom, TTo>;
-export function getTupleCodec<TFrom extends AnyArray, TTo extends TFrom = TFrom>(
-    items: WrapInCodec<[...TFrom], [...TTo]>,
-): Codec<TFrom, TTo> {
+export function getTupleCodec<const TItems extends readonly FixedSizeCodec<any>[]>(
+    items: TItems,
+): FixedSizeCodec<GetEncoderTypeFromItems<TItems>, GetDecoderTypeFromItems<TItems> & GetEncoderTypeFromItems<TItems>>;
+export function getTupleCodec<const TItems extends readonly Codec<any>[]>(
+    items: TItems,
+): VariableSizeCodec<
+    GetEncoderTypeFromItems<TItems>,
+    GetDecoderTypeFromItems<TItems> & GetEncoderTypeFromItems<TItems>
+>;
+export function getTupleCodec<const TItems extends readonly Codec<any>[]>(
+    items: TItems,
+): Codec<GetEncoderTypeFromItems<TItems>, GetDecoderTypeFromItems<TItems> & GetEncoderTypeFromItems<TItems>> {
     return combineCodec(
-        getTupleEncoder(items as WrapInEncoder<[...TFrom]>),
-        getTupleDecoder(items as WrapInDecoder<[...TTo]>),
+        getTupleEncoder(items),
+        getTupleDecoder(items) as Decoder<GetDecoderTypeFromItems<TItems> & GetEncoderTypeFromItems<TItems>>,
     );
 }

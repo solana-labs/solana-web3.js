@@ -87,7 +87,7 @@ export function getMapDecoder<TToKey, TToValue>(
     config: MapCodecConfig<NumberDecoder> = {},
 ): Decoder<Map<TToKey, TToValue>> {
     return mapDecoder(
-        getArrayDecoder(getTupleDecoder([key, value]), config as object),
+        getArrayDecoder(getTupleDecoder([key, value]), config as object) as Decoder<[TToKey, TToValue][]>,
         (entries: [TToKey, TToValue][]): Map<TToKey, TToValue> => new Map(entries),
     );
 }
