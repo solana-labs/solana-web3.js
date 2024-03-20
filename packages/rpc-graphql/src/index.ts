@@ -25,9 +25,9 @@ export function createRpcGraphQL(
         typeDefs: createSolanaGraphQLTypeDefs(),
     });
     return {
-        async query(source, variableValues?) {
+        query(source, variableValues?) {
             const contextValue = createSolanaGraphQLContext(rpc, rpcGraphQLConfig);
-            return await graphql({
+            return graphql({
                 contextValue,
                 schema,
                 source,

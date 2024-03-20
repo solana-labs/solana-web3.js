@@ -25,11 +25,11 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
     getDeduplicationKey: GetDeduplicationKeyFn,
 ): TTransport {
     let coalescedRequestsByDeduplicationKey: Record<string, CoalescedRequest> | undefined;
-    return async function makeCoalescedHttpRequest<TResponse>(config: Parameters<RpcTransport>[0]): Promise<TResponse> {
+    return function makeCoalescedHttpRequest<TResponse>(config: Parameters<RpcTransport>[0]): Promise<TResponse> {
         const { payload, signal } = config;
         const deduplicationKey = getDeduplicationKey(payload);
         if (deduplicationKey === undefined) {
-            return await transport(config);
+            return transport(config);
         }
         if (!coalescedRequestsByDeduplicationKey) {
             Promise.resolve().then(() => {
@@ -39,22 +39,18 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
         }
         if (coalescedRequestsByDeduplicationKey[deduplicationKey] == null) {
             const abortController = new AbortController();
-            const responsePromise = (async () => {
-                try {
-                    return await transport<TResponse>({
-                        ...config,
-                        signal: abortController.signal,
-                    });
-                } catch (e) {
-                    if (e === EXPLICIT_ABORT_TOKEN) {
-                        // We triggered this error when the last subscriber aborted. Letting this
-                        // error bubble up from here would cause runtime fatals where there should
-                        // be none.
-                        return;
-                    }
-                    throw e;
+            const responsePromise = transport<TResponse>({
+                ...config,
+                signal: abortController.signal,
+            }).catch(e => {
+                if (e === EXPLICIT_ABORT_TOKEN) {
+                    // We triggered this error when the last subscriber aborted. Letting this
+                    // error bubble up from here would cause runtime fatals where there should
+                    // be none.
+                    return;
                 }
-            })();
+                throw e;
+            });
             coalescedRequestsByDeduplicationKey[deduplicationKey] = {
                 abortController,
                 numConsumers: 0,
@@ -65,7 +61,7 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
         coalescedRequest.numConsumers++;
         if (signal) {
             const responsePromise = coalescedRequest.responsePromise as Promise<TResponse>;
-            return await new Promise<TResponse>((resolve, reject) => {
+            return new Promise<TResponse>((resolve, reject) => {
                 const handleAbort = (e: AbortSignalEventMap['abort']) => {
                     signal.removeEventListener('abort', handleAbort);
                     coalescedRequest.numConsumers -= 1;
@@ -81,7 +77,7 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                 });
             });
         } else {
-            return (await coalescedRequest.responsePromise) as TResponse;
+            return coalescedRequest.responsePromise as Promise<TResponse>;
         }
     } as TTransport;
 }

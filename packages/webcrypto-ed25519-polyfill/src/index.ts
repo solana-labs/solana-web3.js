@@ -29,12 +29,12 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
      * Override `SubtleCrypto#exportKey`
      */
     const originalExportKey = originalSubtleCrypto.exportKey as SubtleCrypto['exportKey'] | undefined;
-    originalSubtleCrypto.exportKey = (async (...args: Parameters<SubtleCrypto['exportKey']>) => {
+    originalSubtleCrypto.exportKey = ((...args: Parameters<SubtleCrypto['exportKey']>) => {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
-            return await exportKeyPolyfill(...args);
+            return exportKeyPolyfill(...args);
         } else if (originalExportKey) {
-            return await originalExportKey.apply(originalSubtleCrypto, args);
+            return originalExportKey.apply(originalSubtleCrypto, args);
         } else {
             throw new TypeError('No native `exportKey` function exists to handle this call');
         }
@@ -49,7 +49,9 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
         const [algorithm] = args;
         if (algorithm !== 'Ed25519') {
             if (originalGenerateKey) {
-                return await originalGenerateKey.apply(originalSubtleCrypto, args);
+                return await (originalGenerateKey.apply(originalSubtleCrypto, args) as ReturnType<
+                    SubtleCrypto['generateKey']
+                >);
             } else {
                 throw new TypeError('No native `generateKey` function exists to handle this call');
             }
@@ -92,7 +94,9 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             if (optimisticallyGeneratedKeyPair) {
                 return optimisticallyGeneratedKeyPair;
             } else if (originalGenerateKey) {
-                return await originalGenerateKey.apply(originalSubtleCrypto, args);
+                return await (originalGenerateKey.apply(originalSubtleCrypto, args) as ReturnType<
+                    SubtleCrypto['generateKey']
+                >);
             } else {
                 throw new TypeError('No native `generateKey` function exists to handle this call');
             }
@@ -106,13 +110,13 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
      * Override `SubtleCrypto#sign`
      */
     const originalSign = originalSubtleCrypto.sign as SubtleCrypto['sign'] | undefined;
-    originalSubtleCrypto.sign = (async (...args: Parameters<SubtleCrypto['sign']>) => {
+    originalSubtleCrypto.sign = ((...args: Parameters<SubtleCrypto['sign']>) => {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
             const [_, ...rest] = args;
-            return await signPolyfill(...rest);
+            return signPolyfill(...rest);
         } else if (originalSign) {
-            return await originalSign.apply(originalSubtleCrypto, args);
+            return originalSign.apply(originalSubtleCrypto, args);
         } else {
             throw new TypeError('No native `sign` function exists to handle this call');
         }
@@ -122,13 +126,13 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
      * Override `SubtleCrypto#verify`
      */
     const originalVerify = originalSubtleCrypto.verify as SubtleCrypto['verify'] | undefined;
-    originalSubtleCrypto.verify = (async (...args: Parameters<SubtleCrypto['verify']>) => {
+    originalSubtleCrypto.verify = ((...args: Parameters<SubtleCrypto['verify']>) => {
         const [_, key] = args;
         if (isPolyfilledKey(key)) {
             const [_, ...rest] = args;
-            return await verifyPolyfill(...rest);
+            return verifyPolyfill(...rest);
         } else if (originalVerify) {
-            return await originalVerify.apply(originalSubtleCrypto, args);
+            return originalVerify.apply(originalSubtleCrypto, args);
         } else {
             throw new TypeError('No native `verify` function exists to handle this call');
         }
@@ -143,7 +147,9 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
         const [format, keyData, algorithm] = args;
         if (algorithm !== 'Ed25519') {
             if (originalImportKey) {
-                return await originalImportKey.apply(originalSubtleCrypto, args);
+                return await (originalImportKey.apply(originalSubtleCrypto, args) as ReturnType<
+                    SubtleCrypto['importKey']
+                >);
             } else {
                 throw new TypeError('No native `importKey` function exists to handle this call');
             }
@@ -186,7 +192,9 @@ if (!__BROWSER__ || globalThis.isSecureContext) {
             if (optimisticallyImportedKey) {
                 return optimisticallyImportedKey;
             } else if (originalImportKey) {
-                return await originalImportKey.apply(originalSubtleCrypto, args);
+                return await (originalImportKey.apply(originalSubtleCrypto, args) as ReturnType<
+                    SubtleCrypto['importKey']
+                >);
             } else {
                 throw new TypeError('No native `importKey` function exists to handle this call');
             }

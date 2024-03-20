@@ -37,7 +37,7 @@ function addPkcs8Header(bytes: Uint8Array): Uint8Array {
     ]);
 }
 
-export async function createPrivateKeyFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKey> {
+export function createPrivateKeyFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKey> {
     const actualLength = bytes.byteLength;
     if (actualLength !== 32) {
         throw new SolanaError(SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH, {
@@ -45,5 +45,5 @@ export async function createPrivateKeyFromBytes(bytes: Uint8Array, extractable?:
         });
     }
     const privateKeyBytesPkcs8 = addPkcs8Header(bytes);
-    return await crypto.subtle.importKey('pkcs8', privateKeyBytesPkcs8, 'Ed25519', extractable ?? false, ['sign']);
+    return crypto.subtle.importKey('pkcs8', privateKeyBytesPkcs8, 'Ed25519', extractable ?? false, ['sign']);
 }

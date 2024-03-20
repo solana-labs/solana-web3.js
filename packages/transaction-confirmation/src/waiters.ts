@@ -35,10 +35,10 @@ interface WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig
     signature: Signature;
 }
 
-export async function waitForDurableNonceTransactionConfirmation(
+export function waitForDurableNonceTransactionConfirmation(
     config: WaitForDurableNonceTransactionConfirmationConfig,
 ): Promise<void> {
-    await raceStrategies(
+    return raceStrategies(
         getSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({ abortSignal, commitment, getNonceInvalidationPromise, transaction }) {
@@ -51,13 +51,13 @@ export async function waitForDurableNonceTransactionConfirmation(
                 }),
             ];
         },
-    );
+    ).then(() => {});
 }
 
-export async function waitForRecentTransactionConfirmation(
+export function waitForRecentTransactionConfirmation(
     config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig,
 ): Promise<void> {
-    await raceStrategies(
+    return raceStrategies(
         getSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({
@@ -74,14 +74,14 @@ export async function waitForRecentTransactionConfirmation(
                 }),
             ];
         },
-    );
+    ).then(() => {});
 }
 
 /** @deprecated */
-export async function waitForRecentTransactionConfirmationUntilTimeout(
+export function waitForRecentTransactionConfirmationUntilTimeout(
     config: WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig,
 ): Promise<void> {
-    await raceStrategies(
+    return raceStrategies(
         config.signature,
         config,
         function getSpecificStrategiesForRace({ abortSignal, commitment, getTimeoutPromise }) {
@@ -92,5 +92,5 @@ export async function waitForRecentTransactionConfirmationUntilTimeout(
                 }),
             ];
         },
-    );
+    ).then(() => {});
 }

@@ -71,11 +71,10 @@ describe('exportKey() polyfill', () => {
             await globalThis.crypto.subtle.exportKey('raw', mockPublicKey);
             expect(exportKeyPolyfill).toHaveBeenCalledWith('raw', mockPublicKey);
         });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
+        it('fatals when supplied a native-generated key', () => {
             (isPolyfilledKey as jest.Mock).mockReturnValue(false);
             const mockPublicKey = {} as CryptoKey;
-            await expect(() => globalThis.crypto.subtle.exportKey('raw', mockPublicKey)).rejects.toThrow();
+            expect(() => globalThis.crypto.subtle.exportKey('raw', mockPublicKey)).toThrow();
         });
     });
     describe('when imported in an insecure context', () => {
@@ -156,12 +155,12 @@ describe('generateKey() polyfill', () => {
     describe('when imported in an environment that does not support Ed25519', () => {
         beforeEach(async () => {
             const originalGenerateKeyImpl = originalGenerateKey;
-            (originalGenerateKey as jest.Mock).mockImplementation(async (...args) => {
+            (originalGenerateKey as jest.Mock).mockImplementation((...args) => {
                 const [algorithm] = args;
                 if (algorithm === 'Ed25519') {
-                    throw new Error('Ed25519 not supported');
+                    return Promise.reject(new Error('Ed25519 not supported'));
                 }
-                return await originalGenerateKeyImpl.apply(globalThis.crypto.subtle, args);
+                return originalGenerateKeyImpl.apply(globalThis.crypto.subtle, args);
             });
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -338,12 +337,11 @@ describe('sign() polyfill', () => {
             await globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData);
             expect(signPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockData);
         });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
+        it('fatals when supplied a native-generated key', () => {
             (isPolyfilledKey as jest.Mock).mockReturnValue(false);
             const mockPrivateKey = {} as CryptoKey;
             const mockData = new Uint8Array([1, 2, 3]);
-            await expect(() => globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData)).rejects.toThrow();
+            expect(() => globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData)).toThrow();
         });
     });
     describe('when imported in an insecure context', () => {
@@ -435,15 +433,12 @@ describe('verify() polyfill', () => {
             await globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData);
             expect(verifyPolyfill).toHaveBeenCalledWith(mockPrivateKey, mockSignature, mockData);
         });
-        it('fatals when supplied a native-generated key', async () => {
-            expect.assertions(1);
+        it('fatals when supplied a native-generated key', () => {
             (isPolyfilledKey as jest.Mock).mockReturnValue(false);
             const mockPrivateKey = {} as CryptoKey;
             const mockData = new Uint8Array([1, 2, 3]);
             const mockSignature = new Uint8Array(Array(64).fill(1));
-            await expect(() =>
-                globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData),
-            ).rejects.toThrow();
+            expect(() => globalThis.crypto.subtle.verify('Ed25519', mockPrivateKey, mockSignature, mockData)).toThrow();
         });
     });
     describe('when imported in an insecure context', () => {
@@ -534,12 +529,12 @@ describe('importKey() polyfill', () => {
     describe('when imported in an environment that does not support Ed25519', () => {
         beforeEach(async () => {
             const originalImportKeyImpl = originalImportKey;
-            (originalImportKey as jest.Mock).mockImplementation(async (...args) => {
+            (originalImportKey as jest.Mock).mockImplementation((...args) => {
                 const [_format, _keyData, algorithm] = args;
                 if (algorithm === 'Ed25519') {
-                    throw new Error('Ed25519 not supported');
+                    return Promise.reject(new Error('Ed25519 not supported'));
                 }
-                return await originalImportKeyImpl.apply(globalThis.crypto.subtle, args);
+                return originalImportKeyImpl.apply(globalThis.crypto.subtle, args);
             });
             await jest.isolateModulesAsync(async () => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

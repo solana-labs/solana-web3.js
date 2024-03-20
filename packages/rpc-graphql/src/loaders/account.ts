@@ -71,10 +71,8 @@ export function sliceData(
  * Load an account using the RPC's `getAccountInfo` method.
  */
 async function loadAccount(rpc: Rpc<GetAccountInfoApi>, { address, ...config }: AccountLoaderArgs) {
-    return await rpc
-        .getAccountInfo(address, config)
-        .send()
-        .then(res => res.value);
+    const { value } = await rpc.getAccountInfo(address, config).send();
+    return value;
 }
 
 /**
@@ -84,10 +82,8 @@ async function loadMultipleAccounts(
     rpc: Rpc<GetMultipleAccountsApi>,
     { addresses, ...config }: MultipleAccountsLoaderArgs,
 ) {
-    return await rpc
-        .getMultipleAccounts(addresses, config)
-        .send()
-        .then(res => res.value);
+    const { value } = await rpc.getMultipleAccounts(addresses, config).send();
+    return value;
 }
 
 function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi & GetMultipleAccountsApi>, config: Config) {

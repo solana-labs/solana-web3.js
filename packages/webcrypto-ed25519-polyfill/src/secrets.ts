@@ -133,9 +133,9 @@ async function getPublicKeyBytes(key: CryptoKey): Promise<Uint8Array> {
     return publicKeyBytes;
 }
 
-export async function exportKeyPolyfill(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
-export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>;
-export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey> {
+export function exportKeyPolyfill(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
+export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>;
+export function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey> {
     if (key.extractable === false) {
         throw new DOMException('key is not extractable', 'InvalidAccessException');
     }
@@ -144,15 +144,14 @@ export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Prom
             if (key.type !== 'public') {
                 throw new DOMException(`Unable to export a raw Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
-            const publicKeyBytes = await getPublicKeyBytes(key);
-            return publicKeyBytes;
+            return getPublicKeyBytes(key);
         }
         case 'pkcs8': {
             if (key.type !== 'private') {
                 throw new DOMException(`Unable to export a pkcs8 Ed25519 ${key.type} key`, 'InvalidAccessError');
             }
             const secretKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
-            return new Uint8Array([...ED25519_PKCS8_HEADER, ...secretKeyBytes]);
+            return Promise.resolve(new Uint8Array([...ED25519_PKCS8_HEADER, ...secretKeyBytes]));
         }
         default:
             throw new Error(`Exporting polyfilled Ed25519 keys in the "${format}" format is unimplemented`);
@@ -175,14 +174,13 @@ export function isPolyfilledKey(key: CryptoKey): boolean {
     return !!storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT?.has(key) || !!publicKeyBytesStore?.has(key);
 }
 
-export async function signPolyfill(key: CryptoKey, data: BufferSource): Promise<ArrayBuffer> {
+export function signPolyfill(key: CryptoKey, data: BufferSource): Promise<ArrayBuffer> {
     if (key.type !== 'private' || !key.usages.includes('sign')) {
         throw new DOMException('Unable to use this key to sign', 'InvalidAccessError');
     }
     const privateKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
     const payload = bufferSourceToUint8Array(data);
-    const signature = await signAsync(payload, privateKeyBytes);
-    return signature;
+    return signAsync(payload, privateKeyBytes);
 }
 
 export async function verifyPolyfill(key: CryptoKey, signature: BufferSource, data: BufferSource): Promise<boolean> {

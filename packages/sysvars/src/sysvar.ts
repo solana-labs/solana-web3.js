@@ -52,12 +52,12 @@ type SysvarAddress =
  * Sysvars are special accounts that contain dynamically-updated data about the
  * network cluster, the blockchain history, and the executing transaction.
  */
-export async function fetchEncodedSysvarAccount<TAddress extends SysvarAddress>(
+export function fetchEncodedSysvarAccount<TAddress extends SysvarAddress>(
     rpc: Rpc<GetAccountInfoApi>,
     address: TAddress,
     config?: FetchAccountConfig,
 ): Promise<MaybeEncodedAccount<TAddress>> {
-    return await fetchEncodedAccount<TAddress>(rpc, address, config);
+    return fetchEncodedAccount<TAddress>(rpc, address, config);
 }
 
 /**
@@ -66,10 +66,10 @@ export async function fetchEncodedSysvarAccount<TAddress extends SysvarAddress>(
  * Sysvars are special accounts that contain dynamically-updated data about the
  * network cluster, the blockchain history, and the executing transaction.
  */
-export async function fetchJsonParsedSysvarAccount<TAddress extends SysvarAddress>(
+export function fetchJsonParsedSysvarAccount<TAddress extends SysvarAddress>(
     rpc: Rpc<GetAccountInfoApi>,
     address: TAddress,
     config?: FetchAccountConfig,
 ): Promise<MaybeAccount<JsonParsedSysvarAccount, TAddress> | MaybeEncodedAccount<TAddress>> {
-    return await fetchJsonParsedAccount<JsonParsedSysvarAccount, TAddress>(rpc, address, config);
+    return fetchJsonParsedAccount<JsonParsedSysvarAccount, TAddress>(rpc, address, config);
 }

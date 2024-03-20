@@ -26,20 +26,20 @@ export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig):
         rpc,
         rpcSubscriptions,
     );
-    async function confirmSignatureOnlyTransaction(
+    function confirmSignatureOnlyTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],
             'getRecentSignatureConfirmationPromise' | 'getTimeoutPromise'
         >,
-    ) {
-        await waitForRecentTransactionConfirmationUntilTimeout({
+    ): Promise<void> {
+        return waitForRecentTransactionConfirmationUntilTimeout({
             ...config,
             getRecentSignatureConfirmationPromise,
             getTimeoutPromise,
         });
     }
-    return async function airdrop(config) {
-        return await requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
+    return function airdrop(config) {
+        return requestAndConfirmAirdrop_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             confirmSignatureOnlyTransaction,
             rpc,

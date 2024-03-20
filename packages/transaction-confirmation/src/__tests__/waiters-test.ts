@@ -48,18 +48,18 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         getNonceInvalidationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
         getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
     });
-    it('throws when the signal is already aborted', async () => {
-        expect.assertions(1);
+    it('throws when the signal is already aborted', () => {
         const abortController = new AbortController();
         abortController.abort();
-        const commitmentPromise = waitForDurableNonceTransactionConfirmation({
-            abortSignal: abortController.signal,
-            commitment: 'finalized',
-            getNonceInvalidationPromise,
-            getRecentSignatureConfirmationPromise,
-            transaction: MOCK_DURABLE_NONCE_TRANSACTION,
-        });
-        await expect(commitmentPromise).rejects.toThrow('aborted');
+        expect(() => {
+            waitForDurableNonceTransactionConfirmation({
+                abortSignal: abortController.signal,
+                commitment: 'finalized',
+                getNonceInvalidationPromise,
+                getRecentSignatureConfirmationPromise,
+                transaction: MOCK_DURABLE_NONCE_TRANSACTION,
+            });
+        }).toThrow('aborted');
     });
     it('calls `getNonceInvalidationPromise` with the necessary input', () => {
         waitForDurableNonceTransactionConfirmation({
@@ -124,8 +124,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
             signature: '1111111111111111111111111111111111111111111111111111111111111111' as Signature,
         });
     });
-    it('throws when supplied a transaction that has not been signed by the fee payer', async () => {
-        expect.assertions(1);
+    it('throws when supplied a transaction that has not been signed by the fee payer', () => {
         const transactionWithoutFeePayerSignature = {
             ...MOCK_DURABLE_NONCE_TRANSACTION,
             signatures: {
@@ -133,16 +132,15 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
                 ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
             } as const,
         };
-        const commitmentPromise = waitForDurableNonceTransactionConfirmation({
-            abortSignal: new AbortController().signal,
-            commitment: 'finalized',
-            getNonceInvalidationPromise,
-            getRecentSignatureConfirmationPromise,
-            transaction: transactionWithoutFeePayerSignature,
-        });
-        await expect(commitmentPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING),
-        );
+        expect(() => {
+            waitForDurableNonceTransactionConfirmation({
+                abortSignal: new AbortController().signal,
+                commitment: 'finalized',
+                getNonceInvalidationPromise,
+                getRecentSignatureConfirmationPromise,
+                transaction: transactionWithoutFeePayerSignature,
+            });
+        }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING));
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
         expect.assertions(1);
@@ -197,18 +195,18 @@ describe('waitForRecentTransactionConfirmation', () => {
         getBlockHeightExceedencePromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
         getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
     });
-    it('throws when the signal is already aborted', async () => {
-        expect.assertions(1);
+    it('throws when the signal is already aborted', () => {
         const abortController = new AbortController();
         abortController.abort();
-        const commitmentPromise = waitForRecentTransactionConfirmation({
-            abortSignal: abortController.signal,
-            commitment: 'finalized',
-            getBlockHeightExceedencePromise,
-            getRecentSignatureConfirmationPromise,
-            transaction: MOCK_TRANSACTION,
-        });
-        await expect(commitmentPromise).rejects.toThrow('aborted');
+        expect(() => {
+            waitForRecentTransactionConfirmation({
+                abortSignal: abortController.signal,
+                commitment: 'finalized',
+                getBlockHeightExceedencePromise,
+                getRecentSignatureConfirmationPromise,
+                transaction: MOCK_TRANSACTION,
+            });
+        }).toThrow('aborted');
     });
     it('calls `getBlockHeightExceededPromise` with the necessary input', () => {
         waitForRecentTransactionConfirmation({
@@ -238,8 +236,7 @@ describe('waitForRecentTransactionConfirmation', () => {
             signature: '1111111111111111111111111111111111111111111111111111111111111111' as Signature,
         });
     });
-    it('throws when supplied a transaction that has not been signed by the fee payer', async () => {
-        expect.assertions(1);
+    it('throws when supplied a transaction that has not been signed by the fee payer', () => {
         const transactionWithoutFeePayerSignature = {
             ...MOCK_TRANSACTION,
             signatures: {
@@ -247,16 +244,15 @@ describe('waitForRecentTransactionConfirmation', () => {
                 ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
             } as const,
         };
-        const commitmentPromise = waitForRecentTransactionConfirmation({
-            abortSignal: new AbortController().signal,
-            commitment: 'finalized',
-            getBlockHeightExceedencePromise,
-            getRecentSignatureConfirmationPromise,
-            transaction: transactionWithoutFeePayerSignature,
-        });
-        await expect(commitmentPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING),
-        );
+        expect(() => {
+            waitForRecentTransactionConfirmation({
+                abortSignal: new AbortController().signal,
+                commitment: 'finalized',
+                getBlockHeightExceedencePromise,
+                getRecentSignatureConfirmationPromise,
+                transaction: transactionWithoutFeePayerSignature,
+            });
+        }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING));
     });
     it('resolves when the signature confirmation promise resolves despite the block height exceedence promise having thrown', async () => {
         expect.assertions(1);
@@ -339,18 +335,18 @@ describe('waitForRecentTransactionConfirmationUntilTimeout', () => {
         getTimeoutPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
         getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
     });
-    it('throws when the signal is already aborted', async () => {
-        expect.assertions(1);
+    it('throws when the signal is already aborted', () => {
         const abortController = new AbortController();
         abortController.abort();
-        const commitmentPromise = waitForRecentTransactionConfirmationUntilTimeout({
-            abortSignal: abortController.signal,
-            commitment: 'finalized',
-            getRecentSignatureConfirmationPromise,
-            getTimeoutPromise,
-            signature: MOCK_SIGNATURE,
-        });
-        await expect(commitmentPromise).rejects.toThrow('aborted');
+        expect(() => {
+            waitForRecentTransactionConfirmationUntilTimeout({
+                abortSignal: abortController.signal,
+                commitment: 'finalized',
+                getRecentSignatureConfirmationPromise,
+                getTimeoutPromise,
+                signature: MOCK_SIGNATURE,
+            });
+        }).toThrow('aborted');
     });
     it('calls `getTimeoutPromise` with the necessary input', () => {
         waitForRecentTransactionConfirmationUntilTimeout({

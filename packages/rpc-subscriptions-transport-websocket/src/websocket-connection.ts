@@ -35,12 +35,12 @@ const EXPLICIT_ABORT_TOKEN = Symbol(
         : undefined,
 );
 
-export async function createWebSocketConnection({
+export function createWebSocketConnection({
     sendBufferHighWatermark,
     signal,
     url,
 }: Config): Promise<RpcWebSocketConnection> {
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         signal.addEventListener('abort', handleAbort, { once: true });
         const iteratorState: Map<IteratorKey, IteratorState> = new Map();
         function errorAndClearAllIteratorStates(reason: unknown) {

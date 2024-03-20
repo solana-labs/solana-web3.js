@@ -24,7 +24,7 @@ type CompilableTransactionWithSigners = CompilableTransaction &
  * as well as any signers provided explicitly to this function.
  * It will ignore TransactionSendingSigners since this function does not send the transaction.
  */
-export async function partiallySignTransactionWithSigners<
+export function partiallySignTransactionWithSigners<
     TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
 >(
     transaction: TTransaction,
@@ -34,13 +34,7 @@ export async function partiallySignTransactionWithSigners<
         deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
         { identifySendingSigner: false },
     );
-
-    return await signModifyingAndPartialTransactionSigners(
-        transaction,
-        modifyingSigners,
-        partialSigners,
-        config.abortSignal,
-    );
+    return signModifyingAndPartialTransactionSigners(transaction, modifyingSigners, partialSigners, config.abortSignal);
 }
 
 /**

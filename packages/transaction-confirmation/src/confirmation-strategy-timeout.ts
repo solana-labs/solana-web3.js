@@ -5,8 +5,8 @@ type Config = Readonly<{
     commitment: Commitment;
 }>;
 
-export async function getTimeoutPromise({ abortSignal: callerAbortSignal, commitment }: Config) {
-    return await new Promise((_, reject) => {
+export function getTimeoutPromise({ abortSignal: callerAbortSignal, commitment }: Config) {
+    return new Promise((_, reject) => {
         const handleAbort = (e: AbortSignalEventMap['abort']) => {
             clearTimeout(timeoutId);
             const abortError = new DOMException((e.target as AbortSignal).reason, 'AbortError');

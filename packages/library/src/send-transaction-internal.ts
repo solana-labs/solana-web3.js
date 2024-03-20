@@ -77,7 +77,7 @@ function getSendTransactionConfigWithAdjustedPreflightCommitment(
     return config;
 }
 
-export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
+export function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     abortSignal,
     commitment,
     rpc,
@@ -85,7 +85,7 @@ export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     ...sendTransactionConfig
 }: SendTransactionBaseConfig): Promise<Signature> {
     const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
-    return await rpc
+    return rpc
         .sendTransaction(base64EncodedWireTransaction, {
             ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),
             encoding: 'base64',

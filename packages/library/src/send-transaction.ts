@@ -65,12 +65,12 @@ type SendTransactionWithoutConfirmingFunction = (
 export function sendTransactionWithoutConfirmingFactory({
     rpc,
 }: SendTransactionWithoutConfirmingFactoryConfig): SendTransactionWithoutConfirmingFunction {
-    return async function sendTransactionWithoutConfirming(transaction, config) {
-        await sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
+    return function sendTransactionWithoutConfirming(transaction, config): Promise<void> {
+        return sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             rpc,
             transaction,
-        });
+        }).then(() => {});
     };
 }
 
@@ -83,25 +83,25 @@ export function sendAndConfirmDurableNonceTransactionFactory({
         rpc,
         rpcSubscriptions,
     );
-    async function confirmDurableNonceTransaction(
+    function confirmDurableNonceTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >,
-    ) {
-        await waitForDurableNonceTransactionConfirmation({
+    ): Promise<void> {
+        return waitForDurableNonceTransactionConfirmation({
             ...config,
             getNonceInvalidationPromise,
             getRecentSignatureConfirmationPromise,
         });
     }
-    return async function sendAndConfirmDurableNonceTransaction(transaction, config) {
-        await sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
+    return function sendAndConfirmDurableNonceTransaction(transaction, config): Promise<void> {
+        return sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             confirmDurableNonceTransaction,
             rpc,
             transaction,
-        });
+        }).then(() => {});
     };
 }
 
@@ -117,24 +117,24 @@ export function sendAndConfirmTransactionFactory({
         rpc,
         rpcSubscriptions,
     );
-    async function confirmRecentTransaction(
+    function confirmRecentTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmation>[0],
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >,
-    ) {
-        await waitForRecentTransactionConfirmation({
+    ): Promise<void> {
+        return waitForRecentTransactionConfirmation({
             ...config,
             getBlockHeightExceedencePromise,
             getRecentSignatureConfirmationPromise,
         });
     }
-    return async function sendAndConfirmTransaction(transaction, config) {
-        await sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
+    return function sendAndConfirmTransaction(transaction, config): Promise<void> {
+        return sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT({
             ...config,
             confirmRecentTransaction,
             rpc,
             transaction,
-        });
+        }).then(() => {});
     };
 }

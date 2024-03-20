@@ -67,7 +67,7 @@ export function signature(putativeSignature: string): Signature {
     return putativeSignature;
 }
 
-export async function verifySignature(key: CryptoKey, signature: SignatureBytes, data: Uint8Array): Promise<boolean> {
+export function verifySignature(key: CryptoKey, signature: SignatureBytes, data: Uint8Array): Promise<boolean> {
     assertVerificationCapabilityIsAvailable();
-    return await crypto.subtle.verify('Ed25519', key, signature, data);
+    return crypto.subtle.verify('Ed25519', key, signature, data);
 }

@@ -88,9 +88,9 @@ describe('RPC request coalescer', () => {
             beforeEach(() => {
                 abortControllerA = new AbortController();
                 abortControllerB = new AbortController();
-                mockTransport.mockImplementation(async ({ signal }) => {
+                mockTransport.mockImplementation(({ signal }) => {
                     signal?.throwIfAborted();
-                    return await new Promise((resolve, reject) => {
+                    return new Promise((resolve, reject) => {
                         transportResponsePromise = resolve;
                         signal?.addEventListener('abort', (e: AbortSignalEventMap['abort']) => {
                             reject((e.target as AbortSignal).reason);

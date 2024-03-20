@@ -629,8 +629,7 @@ describe('transaction', () => {
                         }
                     }
                 `;
-                const result = await rpcGraphQL.query(source, { signature });
-                expect(result).toMatchObject({
+                await expect(rpcGraphQL.query(source, { signature })).resolves.toMatchObject({
                     data: {
                         transaction: {
                             meta: {

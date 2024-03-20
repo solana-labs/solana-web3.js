@@ -11,7 +11,7 @@ export interface BaseTransactionConfirmationStrategyConfig {
 
 type WithNonNullableAbortSignal<T> = Omit<T, 'abortSignal'> & Readonly<{ abortSignal: AbortSignal }>;
 
-export async function raceStrategies<TConfig extends BaseTransactionConfirmationStrategyConfig>(
+export function raceStrategies<TConfig extends BaseTransactionConfirmationStrategyConfig>(
     signature: Signature,
     config: TConfig,
     getSpecificStrategiesForRace: (config: WithNonNullableAbortSignal<TConfig>) => readonly Promise<unknown>[],
@@ -25,20 +25,18 @@ export async function raceStrategies<TConfig extends BaseTransactionConfirmation
         };
         callerAbortSignal.addEventListener('abort', handleAbort, { signal: abortController.signal });
     }
-    try {
-        const specificStrategies = getSpecificStrategiesForRace({
-            ...config,
+    const specificStrategies = getSpecificStrategiesForRace({
+        ...config,
+        abortSignal: abortController.signal,
+    });
+    return Promise.race([
+        getRecentSignatureConfirmationPromise({
             abortSignal: abortController.signal,
-        });
-        return await Promise.race([
-            getRecentSignatureConfirmationPromise({
-                abortSignal: abortController.signal,
-                commitment,
-                signature,
-            }),
-            ...specificStrategies,
-        ]);
-    } finally {
+            commitment,
+            signature,
+        }),
+        ...specificStrategies,
+    ]).finally(() => {
         abortController.abort();
-    }
+    });
 }

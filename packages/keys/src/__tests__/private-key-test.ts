@@ -12,9 +12,8 @@ const MOCK_PRIVATE_KEY_BYTES = new Uint8Array([
 ]);
 
 describe('createPrivateKeyFromBytes', () => {
-    it.each([0, 16, 31, 33])('throws when the bytes are of length %s', async length => {
-        expect.assertions(1);
-        await expect(createPrivateKeyFromBytes(new Uint8Array(length))).rejects.toThrow();
+    it.each([0, 16, 31, 33])('throws when the bytes are of length %s', length => {
+        expect(() => createPrivateKeyFromBytes(new Uint8Array(length))).toThrow();
     });
     describe('given a key created from valid private key bytes', () => {
         let privateKey: CryptoKey;
