@@ -17,18 +17,21 @@ import {
 } from '../subtle-crypto';
 
 describe('assertDigestCapabilityIsAvailable()', () => {
-    it('resolves to `undefined` without throwing', async () => {
-        expect.assertions(1);
-        await expect(assertDigestCapabilityIsAvailable()).resolves.toBeUndefined();
+    describe('when `SubtleCrypto::digest` is available', () => {
+        it('does not throw', () => {
+            expect(assertDigestCapabilityIsAvailable).not.toThrow();
+        });
+        it('returns `undefined`', () => {
+            expect(assertDigestCapabilityIsAvailable()).toBeUndefined();
+        });
     });
     if (__BROWSER__) {
         describe('when in an insecure browser context', () => {
             beforeEach(() => {
                 globalThis.isSecureContext = false;
             });
-            it('rejects', async () => {
-                expect.assertions(1);
-                await expect(() => assertDigestCapabilityIsAvailable()).rejects.toThrow(
+            it('throws', () => {
+                expect(assertDigestCapabilityIsAvailable).toThrow(
                     new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
@@ -45,9 +48,8 @@ describe('assertDigestCapabilityIsAvailable()', () => {
         afterEach(() => {
             globalThis.crypto.subtle.digest = oldDigest;
         });
-        it('rejects', async () => {
-            expect.assertions(1);
-            await expect(assertDigestCapabilityIsAvailable()).rejects.toThrow(
+        it('throws', () => {
+            expect(assertDigestCapabilityIsAvailable).toThrow(
                 new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DIGEST_UNIMPLEMENTED),
             );
         });
@@ -55,18 +57,21 @@ describe('assertDigestCapabilityIsAvailable()', () => {
 });
 
 describe('assertKeyExporterIsAvailable()', () => {
-    it('resolves to `undefined` without throwing', async () => {
-        expect.assertions(1);
-        await expect(assertKeyExporterIsAvailable()).resolves.toBeUndefined();
+    describe('when `SubtleCrypto::exportKey` is available', () => {
+        it('does not throw', () => {
+            expect(assertKeyExporterIsAvailable).not.toThrow();
+        });
+        it('returns `undefined`', () => {
+            expect(assertKeyExporterIsAvailable()).toBeUndefined();
+        });
     });
     if (__BROWSER__) {
         describe('when in an insecure browser context', () => {
             beforeEach(() => {
                 globalThis.isSecureContext = false;
             });
-            it('rejects', async () => {
-                expect.assertions(1);
-                await expect(() => assertKeyExporterIsAvailable()).rejects.toThrow(
+            it('throws', () => {
+                expect(assertKeyExporterIsAvailable).toThrow(
                     new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
@@ -83,9 +88,8 @@ describe('assertKeyExporterIsAvailable()', () => {
         afterEach(() => {
             globalThis.crypto.subtle.exportKey = oldExportKey;
         });
-        it('rejects', async () => {
-            expect.assertions(1);
-            await expect(assertKeyExporterIsAvailable()).rejects.toThrow(
+        it('throws', () => {
+            expect(assertKeyExporterIsAvailable).toThrow(
                 new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__EXPORT_FUNCTION_UNIMPLEMENTED),
             );
         });
@@ -114,7 +118,7 @@ describe('assertKeyGenerationIsAvailable()', () => {
             });
             it('rejects', async () => {
                 expect.assertions(1);
-                await expect(() => assertKeyGenerationIsAvailable()).rejects.toThrow(
+                await expect(assertKeyGenerationIsAvailable()).rejects.toThrow(
                     new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
@@ -177,18 +181,21 @@ describe('assertKeyGenerationIsAvailable()', () => {
 });
 
 describe('assertSigningCapabilityIsAvailable()', () => {
-    it('resolves to `undefined` without throwing', async () => {
-        expect.assertions(1);
-        await expect(assertSigningCapabilityIsAvailable()).resolves.toBeUndefined();
+    describe('when `SubtleCrypto::sign` is available', () => {
+        it('does not throw', () => {
+            expect(assertSigningCapabilityIsAvailable).not.toThrow();
+        });
+        it('returns `undefined`', () => {
+            expect(assertSigningCapabilityIsAvailable()).toBeUndefined();
+        });
     });
     if (__BROWSER__) {
         describe('when in an insecure browser context', () => {
             beforeEach(() => {
                 globalThis.isSecureContext = false;
             });
-            it('rejects', async () => {
-                expect.assertions(1);
-                await expect(() => assertSigningCapabilityIsAvailable()).rejects.toThrow(
+            it('throws', () => {
+                expect(assertSigningCapabilityIsAvailable).toThrow(
                     new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
@@ -205,9 +212,8 @@ describe('assertSigningCapabilityIsAvailable()', () => {
         afterEach(() => {
             globalThis.crypto.subtle.sign = oldSign;
         });
-        it('rejects', async () => {
-            expect.assertions(1);
-            await expect(assertSigningCapabilityIsAvailable()).rejects.toThrow(
+        it('throws', () => {
+            expect(assertSigningCapabilityIsAvailable).toThrow(
                 new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__SIGN_FUNCTION_UNIMPLEMENTED),
             );
         });
@@ -215,18 +221,21 @@ describe('assertSigningCapabilityIsAvailable()', () => {
 });
 
 describe('assertVerificationCapabilityIsAvailable()', () => {
-    it('resolves to `undefined` without throwing', async () => {
-        expect.assertions(1);
-        await expect(assertVerificationCapabilityIsAvailable()).resolves.toBeUndefined();
+    describe('when `SubtleCrypto::verify` is available', () => {
+        it('does not throw', () => {
+            expect(assertVerificationCapabilityIsAvailable).not.toThrow();
+        });
+        it('returns `undefined`', () => {
+            expect(assertVerificationCapabilityIsAvailable()).toBeUndefined();
+        });
     });
     if (__BROWSER__) {
         describe('when in an insecure browser context', () => {
             beforeEach(() => {
                 globalThis.isSecureContext = false;
             });
-            it('rejects', async () => {
-                expect.assertions(1);
-                await expect(() => assertVerificationCapabilityIsAvailable()).rejects.toThrow(
+            it('throws', () => {
+                expect(assertVerificationCapabilityIsAvailable).toThrow(
                     new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__DISALLOWED_IN_INSECURE_CONTEXT),
                 );
             });
@@ -243,9 +252,8 @@ describe('assertVerificationCapabilityIsAvailable()', () => {
         afterEach(() => {
             globalThis.crypto.subtle.verify = oldVerify;
         });
-        it('rejects', async () => {
-            expect.assertions(1);
-            await expect(assertVerificationCapabilityIsAvailable()).rejects.toThrow(
+        it('throws', () => {
+            expect(assertVerificationCapabilityIsAvailable).toThrow(
                 new SolanaError(SOLANA_ERROR__SUBTLE_CRYPTO__VERIFY_FUNCTION_UNIMPLEMENTED),
             );
         });

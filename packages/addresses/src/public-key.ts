@@ -4,7 +4,7 @@ import { SOLANA_ERROR__ADDRESSES__INVALID_ED25519_PUBLIC_KEY, SolanaError } from
 import { Address, getAddressDecoder } from './address';
 
 export async function getAddressFromPublicKey(publicKey: CryptoKey): Promise<Address> {
-    await assertKeyExporterIsAvailable();
+    assertKeyExporterIsAvailable();
     if (publicKey.type !== 'public' || publicKey.algorithm.name !== 'Ed25519') {
         throw new SolanaError(SOLANA_ERROR__ADDRESSES__INVALID_ED25519_PUBLIC_KEY);
     }

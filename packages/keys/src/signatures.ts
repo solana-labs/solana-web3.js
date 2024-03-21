@@ -57,7 +57,7 @@ export function isSignature(putativeSignature: string): putativeSignature is Sig
 }
 
 export async function signBytes(key: CryptoKey, data: Uint8Array): Promise<SignatureBytes> {
-    await assertSigningCapabilityIsAvailable();
+    assertSigningCapabilityIsAvailable();
     const signedData = await crypto.subtle.sign('Ed25519', key, data);
     return new Uint8Array(signedData) as SignatureBytes;
 }
@@ -68,6 +68,6 @@ export function signature(putativeSignature: string): Signature {
 }
 
 export async function verifySignature(key: CryptoKey, signature: SignatureBytes, data: Uint8Array): Promise<boolean> {
-    await assertVerificationCapabilityIsAvailable();
+    assertVerificationCapabilityIsAvailable();
     return await crypto.subtle.verify('Ed25519', key, signature, data);
 }

@@ -87,7 +87,7 @@ const PDA_MARKER_BYTES = [
 ] as const;
 
 async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDerivedAddressInput): Promise<Address> {
-    await assertDigestCapabilityIsAvailable();
+    assertDigestCapabilityIsAvailable();
     if (seeds.length > MAX_SEEDS) {
         throw new SolanaError(SOLANA_ERROR__ADDRESSES__MAX_NUMBER_OF_PDA_SEEDS_EXCEEDED, {
             actual: seeds.length,
