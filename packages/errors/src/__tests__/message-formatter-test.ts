@@ -13,7 +13,7 @@ jest.mock('../messages', () => ({
 
 describe('getErrorMessage', () => {
     describe('in production mode', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = false;
         });
@@ -49,8 +49,7 @@ describe('getErrorMessage', () => {
             );
             expect(encodeContextObject).toHaveBeenCalledWith(context);
         });
-        it('renders advice on where to decode an error with encoded context', async () => {
-            expect.assertions(1);
+        it('renders advice on where to decode an error with encoded context', () => {
             jest.mocked(encodeContextObject).mockReturnValue('ENCODED_CONTEXT');
             const context = { foo: 'bar' };
             const message = getErrorMessage(123 as SolanaErrorCode, context);
@@ -58,8 +57,7 @@ describe('getErrorMessage', () => {
                 "Solana error #123; Decode this error by running `npx @solana/errors decode -- 123 'ENCODED_CONTEXT'`",
             );
         });
-        it('renders no encoded context in the decoding advice when the context has no keys', async () => {
-            expect.assertions(1);
+        it('renders no encoded context in the decoding advice when the context has no keys', () => {
             jest.mocked(encodeContextObject).mockReturnValue('ENCODED_CONTEXT');
             const context = {};
             const message = getErrorMessage(123 as SolanaErrorCode, context);
@@ -67,7 +65,7 @@ describe('getErrorMessage', () => {
         });
     });
     describe('in dev mode', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = true;
         });

@@ -10,5 +10,5 @@ export async function fromLegacyKeypair(keypair: Keypair, extractable?: boolean)
     const bytes = new Uint8Array(64);
     bytes.set(keypair.secretKey);
     bytes.set(keypair.publicKey.toBytes(), /* offset */ 32);
-    return createKeyPairFromBytes(bytes, extractable);
+    return await createKeyPairFromBytes(bytes, extractable);
 }

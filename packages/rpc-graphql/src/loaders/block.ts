@@ -17,7 +17,7 @@ async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: BlockLoader
 
 function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
     const resolveBlockUsingRpc = loadBlock.bind(null, rpc);
-    return async (blockQueryArgs: readonly BlockLoaderArgs[]): ReturnType<BlockLoader['loadMany']> => {
+    return (blockQueryArgs: readonly BlockLoaderArgs[]): ReturnType<BlockLoader['loadMany']> => {
         /**
          * Gather all the blocks that need to be fetched, grouped by slot.
          */
@@ -76,7 +76,7 @@ function createBlockBatchLoadFn(rpc: Rpc<GetBlockApi>) {
 export function createBlockLoader(rpc: Rpc<GetBlockApi>): BlockLoader {
     const loader = new DataLoader(createBlockBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async args => loader.load({ ...args, maxSupportedTransactionVersion: 0 }),
-        loadMany: async args => loader.loadMany(args.map(a => ({ ...a, maxSupportedTransactionVersion: 0 }))),
+        load: args => loader.load({ ...args, maxSupportedTransactionVersion: 0 }),
+        loadMany: args => loader.loadMany(args.map(a => ({ ...a, maxSupportedTransactionVersion: 0 }))),
     };
 }

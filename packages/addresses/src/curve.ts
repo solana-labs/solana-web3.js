@@ -15,7 +15,7 @@ function decompressPointBytes(bytes: Uint8Array): bigint {
     return BigInt(integerLiteralString);
 }
 
-export async function compressedPointBytesAreOnCurve(bytes: Uint8Array): Promise<boolean> {
+export function compressedPointBytesAreOnCurve(bytes: Uint8Array): boolean {
     if (bytes.byteLength !== 32) {
         return false;
     }

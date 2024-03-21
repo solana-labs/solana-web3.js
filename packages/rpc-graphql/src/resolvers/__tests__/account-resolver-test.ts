@@ -10,6 +10,10 @@ import type {
 
 import { createRpcGraphQL, RpcGraphQL } from '../../index';
 
+const FOREVER_PROMISE = new Promise(() => {
+    /* never resolve */
+});
+
 describe('account resolver', () => {
     let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
@@ -22,21 +26,22 @@ describe('account resolver', () => {
                         ? 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
                         : 'BPFLoader2111111111111111111111111111111111';
                 return {
-                    send: async () => ({
-                        context: {
-                            slot: 0,
-                        },
-                        value: {
-                            data: ['AA', 'base64'],
-                            owner,
-                        },
-                    }),
+                    send: () =>
+                        Promise.resolve({
+                            context: {
+                                slot: 0,
+                            },
+                            value: {
+                                data: ['AA', 'base64'],
+                                owner,
+                            },
+                        }),
                 };
             }),
-            getBlock: jest.fn(),
-            getMultipleAccounts: jest.fn(),
-            getProgramAccounts: jest.fn(),
-            getTransaction: jest.fn(),
+            getBlock: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getMultipleAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getProgramAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getTransaction: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
         };
         rpcGraphQL = createRpcGraphQL(rpc);
     });

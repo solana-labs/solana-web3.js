@@ -12,7 +12,7 @@ describe('isTransactionPartialSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            signTransactions: async () => [],
+            signTransactions: () => Promise.resolve([]),
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionPartialSigner(mySigner)).toBe(true);
@@ -26,7 +26,7 @@ describe('assertIsTransactionPartialSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            signTransactions: async () => [],
+            signTransactions: () => Promise.resolve([]),
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, {

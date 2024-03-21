@@ -35,7 +35,12 @@ export async function partiallySignTransactionWithSigners<
         { identifySendingSigner: false },
     );
 
-    return signModifyingAndPartialTransactionSigners(transaction, modifyingSigners, partialSigners, config.abortSignal);
+    return await signModifyingAndPartialTransactionSigners(
+        transaction,
+        modifyingSigners,
+        partialSigners,
+        config.abortSignal,
+    );
 }
 
 /**

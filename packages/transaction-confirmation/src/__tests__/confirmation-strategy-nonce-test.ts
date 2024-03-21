@@ -68,8 +68,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
             abortSignal: expect.objectContaining({ aborted: true }),
         });
     });
-    it('calls the abort signal passed to the account subscription when aborted', async () => {
-        expect.assertions(2);
+    it('calls the abort signal passed to the account subscription when aborted', () => {
         const abortController = new AbortController();
         getNonceInvalidationPromise({
             abortSignal: abortController.signal,

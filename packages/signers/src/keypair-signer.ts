@@ -61,10 +61,10 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
 
 /** Securely generates a signer capable of signing messages and transactions using a Crypto KeyPair. */
 export async function generateKeyPairSigner(): Promise<KeyPairSigner> {
-    return createSignerFromKeyPair(await generateKeyPair());
+    return await createSignerFromKeyPair(await generateKeyPair());
 }
 
 /** Creates a signer capable of signing messages and transactions using the 64 bytes of a KeyPair. */
 export async function createKeyPairSignerFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<KeyPairSigner> {
-    return createSignerFromKeyPair(await createKeyPairFromBytes(bytes, extractable));
+    return await createSignerFromKeyPair(await createKeyPairFromBytes(bytes, extractable));
 }

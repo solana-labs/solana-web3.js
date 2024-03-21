@@ -93,7 +93,7 @@ async function loadMultipleAccounts(
 function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi & GetMultipleAccountsApi>, config: Config) {
     const resolveAccountUsingRpc = loadAccount.bind(null, rpc);
     const resolveMultipleAccountsUsingRpc = loadMultipleAccounts.bind(null, rpc);
-    return async (accountQueryArgs: readonly AccountLoaderArgs[]): ReturnType<AccountLoader['loadMany']> => {
+    return (accountQueryArgs: readonly AccountLoaderArgs[]): ReturnType<AccountLoader['loadMany']> => {
         /**
          * Gather all the accounts that need to be fetched, grouped by address.
          */
@@ -182,7 +182,7 @@ export function createAccountLoader(
 ): AccountLoader {
     const loader = new DataLoader(createAccountBatchLoadFn(rpc, config), { cacheKeyFn });
     return {
-        load: async args => loader.load(args),
-        loadMany: async args => loader.loadMany(args),
+        load: args => loader.load(args),
+        loadMany: args => loader.loadMany(args),
     };
 }

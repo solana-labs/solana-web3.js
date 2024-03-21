@@ -71,7 +71,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
         it('resolves with the response', async () => {
             expect.assertions(1);
             jest.mocked(fetchSpy).mockResolvedValueOnce({
-                json: async () => ({ ok: true }),
+                json: () => ({ ok: true }),
                 ok: true,
             } as unknown as Response);
             const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal });

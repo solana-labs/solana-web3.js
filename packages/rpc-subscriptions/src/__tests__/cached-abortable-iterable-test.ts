@@ -208,8 +208,7 @@ describe('getCachedAbortableIterableFactory', () => {
         await jest.runAllTimersAsync();
         expect(onCacheHit).toHaveBeenCalledWith(iterable, 'B');
     });
-    it('calls `onCacheHit` in the same runloop when the cached iterable is already resolved', async () => {
-        expect.assertions(1);
+    it('calls `onCacheHit` in the same runloop when the cached iterable is already resolved', () => {
         const iterable = asyncGenerator();
         onCreateIterable.mockReturnValue(iterable);
         Promise.all([factory('A'), factory('B')]);

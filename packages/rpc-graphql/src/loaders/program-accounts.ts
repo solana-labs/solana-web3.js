@@ -31,9 +31,7 @@ async function loadProgramAccounts(
 
 function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>, config: Config) {
     const resolveProgramAccountsUsingRpc = loadProgramAccounts.bind(null, rpc);
-    return async (
-        accountQueryArgs: readonly ProgramAccountsLoaderArgs[],
-    ): ReturnType<ProgramAccountsLoader['loadMany']> => {
+    return (accountQueryArgs: readonly ProgramAccountsLoaderArgs[]): ReturnType<ProgramAccountsLoader['loadMany']> => {
         /**
          * Gather all the program-accounts that need to be fetched, grouped by
          * program address.
@@ -94,7 +92,7 @@ function createProgramAccountsBatchLoadFn(rpc: Rpc<GetProgramAccountsApi>, confi
 export function createProgramAccountsLoader(rpc: Rpc<GetProgramAccountsApi>, config: Config): ProgramAccountsLoader {
     const loader = new DataLoader(createProgramAccountsBatchLoadFn(rpc, config), { cacheKeyFn });
     return {
-        load: async args => loader.load(args),
-        loadMany: async args => loader.loadMany(args),
+        load: args => loader.load(args),
+        loadMany: args => loader.loadMany(args),
     };
 }

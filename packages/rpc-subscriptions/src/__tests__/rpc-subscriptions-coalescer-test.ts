@@ -99,7 +99,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         it('publishes the same messages through both iterables', async () => {
             expect.assertions(2);
             asyncGenerator.mockImplementation(async function* () {
-                yield 'hello';
+                yield Promise.resolve('hello');
             });
             const iterableA = await rpcSubscriptions
                 .thingNotifications({ payload: 'hello' })
@@ -118,7 +118,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         it('aborting a subscription causes it to return', async () => {
             expect.assertions(1);
             asyncGenerator.mockImplementation(async function* () {
-                yield 'hello';
+                yield Promise.resolve('hello');
             });
             const abortController = new AbortController();
             const iterable = await rpcSubscriptions
@@ -132,7 +132,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         it('aborting one subscription does not abort the other', async () => {
             expect.assertions(1);
             asyncGenerator.mockImplementation(async function* () {
-                yield 'hello';
+                yield Promise.resolve('hello');
             });
             const abortControllerA = new AbortController();
             await rpcSubscriptions
@@ -219,7 +219,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
             expect.assertions(2);
             subscribe.mockResolvedValueOnce({
                 async *[Symbol.asyncIterator]() {
-                    yield 'hello';
+                    yield Promise.resolve('hello');
                 },
             });
             const iterableA = await rpcSubscriptions
@@ -227,7 +227,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
                 .subscribe({ abortSignal: new AbortController().signal });
             subscribe.mockResolvedValueOnce({
                 async *[Symbol.asyncIterator]() {
-                    yield 'world';
+                    yield Promise.resolve('world');
                 },
             });
             const iterableB = await rpcSubscriptions
@@ -244,7 +244,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         it('aborting a subscription causes it to return', async () => {
             expect.assertions(1);
             asyncGenerator.mockImplementation(async function* () {
-                yield 'hello';
+                yield Promise.resolve('hello');
             });
             const abortController = new AbortController();
             const iterable = await rpcSubscriptions
@@ -258,7 +258,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         it('aborting one subscription does not abort the other', async () => {
             expect.assertions(1);
             asyncGenerator.mockImplementation(async function* () {
-                yield 'hello';
+                yield Promise.resolve('hello');
             });
             const abortControllerA = new AbortController();
             await rpcSubscriptions
