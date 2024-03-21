@@ -11,8 +11,8 @@ export type NoopSigner<TAddress extends string = string> = MessagePartialSigner<
 export function createNoopSigner(address: Address): NoopSigner {
     const out: NoopSigner = {
         address,
-        signMessages: async messages => messages.map(() => Object.freeze({})),
-        signTransactions: async transactions => transactions.map(() => Object.freeze({})),
+        signMessages: messages => Promise.resolve(messages.map(() => Object.freeze({}))),
+        signTransactions: transactions => Promise.resolve(transactions.map(() => Object.freeze({}))),
     };
 
     return Object.freeze(out);

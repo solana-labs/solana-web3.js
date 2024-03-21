@@ -57,7 +57,7 @@ export async function fetchEncodedSysvarAccount<TAddress extends SysvarAddress>(
     address: TAddress,
     config?: FetchAccountConfig,
 ): Promise<MaybeEncodedAccount<TAddress>> {
-    return fetchEncodedAccount<TAddress>(rpc, address, config);
+    return await fetchEncodedAccount<TAddress>(rpc, address, config);
 }
 
 /**
@@ -71,5 +71,5 @@ export async function fetchJsonParsedSysvarAccount<TAddress extends SysvarAddres
     address: TAddress,
     config?: FetchAccountConfig,
 ): Promise<MaybeAccount<JsonParsedSysvarAccount, TAddress> | MaybeEncodedAccount<TAddress>> {
-    return fetchJsonParsedAccount<JsonParsedSysvarAccount, TAddress>(rpc, address, config);
+    return await fetchJsonParsedAccount<JsonParsedSysvarAccount, TAddress>(rpc, address, config);
 }

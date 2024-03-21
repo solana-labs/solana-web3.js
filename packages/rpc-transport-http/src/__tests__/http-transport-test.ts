@@ -45,7 +45,7 @@ describe('createHttpTransport', () => {
     describe('when the endpoint returns a well-formed JSON response', () => {
         beforeEach(() => {
             fetchSpy.mockResolvedValue({
-                json: async () => ({ ok: true }),
+                json: () => ({ ok: true }),
                 ok: true,
             });
         });

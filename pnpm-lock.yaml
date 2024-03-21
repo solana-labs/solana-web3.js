@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -19,8 +23,8 @@ importers:
         specifier: workspace:*
         version: link:packages/build-scripts
       '@solana/eslint-config-solana':
-        specifier: ^3.0.0
-        version: 3.0.0(@typescript-eslint/eslint-plugin@6.21.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2)
+        specifier: ^3.0.3
+        version: 3.0.3(@typescript-eslint/eslint-plugin@6.21.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2)
       '@solana/prettier-config-solana':
         specifier: 0.0.4
         version: 0.0.4(prettier@3.1.0)
@@ -4129,8 +4133,8 @@ packages:
       fastestsmallesttextencoderdecoder: 1.0.22
     dev: true
 
-  /@solana/eslint-config-solana@3.0.0(@typescript-eslint/eslint-plugin@6.21.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-K8qBl5LQRET4H0+JHEfawA5qB9bjkkgOUB0fUHJ6B8bPAvMkzfQ5f5U7udyFeDMH0LsJuL9XRUZuXU4h/l6HNw==}
+  /@solana/eslint-config-solana@3.0.3(@typescript-eslint/eslint-plugin@6.21.0)(@typescript-eslint/parser@6.8.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-yTaeCbOBwjmK4oUkknixOpwOzzAK8+4YWvJEJFNHuueESetieDnAeEHV7rzJllFgHEWa9nXps9Q3aD4/XJp71A==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.0.0
       '@typescript-eslint/parser': ^6.0.0
@@ -13296,7 +13300,3 @@ packages:
       which: 3.0.1
       yaml: 2.3.1
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

@@ -12,7 +12,7 @@ describe('isTransactionModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignTransactions: async () => [],
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionModifyingSigner(mySigner)).toBe(true);
@@ -26,7 +26,7 @@ describe('assertIsTransactionModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignTransactions: async () => [],
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_MODIFYING_SIGNER, {

@@ -18,6 +18,7 @@ describe('getWebSocketTransportWithAutoping', () => {
         send = jest.fn();
         let resultPromise;
         mockInnerTransport = jest.fn(() => ({
+            // eslint-disable-next-line @typescript-eslint/require-await
             async *[Symbol.asyncIterator]() {
                 try {
                     while (true) {

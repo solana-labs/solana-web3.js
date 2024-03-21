@@ -71,6 +71,7 @@
             "outputs": []
         },
         "test:lint": {
+            "dependsOn": ["compile:typedefs"],
             "inputs": ["src/**", "test/**"],
             "outputs": []
         },

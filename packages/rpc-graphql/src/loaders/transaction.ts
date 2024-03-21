@@ -26,9 +26,7 @@ async function loadTransaction(
 
 function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
     const resolveTransactionUsingRpc = loadTransaction.bind(null, rpc);
-    return async (
-        transactionQueryArgs: readonly TransactionLoaderArgs[],
-    ): ReturnType<TransactionLoader['loadMany']> => {
+    return (transactionQueryArgs: readonly TransactionLoaderArgs[]): ReturnType<TransactionLoader['loadMany']> => {
         /**
          * Gather all the transactions that need to be fetched, grouped by signature.
          */
@@ -83,7 +81,7 @@ function createTransactionBatchLoadFn(rpc: Rpc<GetTransactionApi>) {
 export function createTransactionLoader(rpc: Rpc<GetTransactionApi>): TransactionLoader {
     const loader = new DataLoader(createTransactionBatchLoadFn(rpc), { cacheKeyFn });
     return {
-        load: async args => loader.load(args),
-        loadMany: async args => loader.loadMany(args),
+        load: args => loader.load(args),
+        loadMany: args => loader.loadMany(args),
     };
 }

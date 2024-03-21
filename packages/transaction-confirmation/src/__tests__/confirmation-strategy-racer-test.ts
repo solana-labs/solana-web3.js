@@ -31,8 +31,7 @@ describe('raceStrategies', () => {
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
-    it('aborts the `AbortController` passed to `getRecentSignatureConfirmationPromise` when the caller-supplied `AbortSignal` aborts', async () => {
-        expect.assertions(2);
+    it('aborts the `AbortController` passed to `getRecentSignatureConfirmationPromise` when the caller-supplied `AbortSignal` aborts', () => {
         const getRecentSignatureConfirmationPromise = jest.fn().mockReturnValue(FOREVER_PROMISE);
         const abortController = new AbortController();
         raceStrategies(
@@ -73,8 +72,7 @@ describe('raceStrategies', () => {
             expect.objectContaining({ abortSignal: expect.objectContaining({ aborted: true }) }),
         );
     });
-    it('aborts the `AbortController` passed to the specific strategies when the caller-supplied `AbortSignal` aborts', async () => {
-        expect.assertions(2);
+    it('aborts the `AbortController` passed to the specific strategies when the caller-supplied `AbortSignal` aborts', () => {
         const getSpecificStrategiesForRace = jest.fn().mockReturnValue([]);
         const abortController = new AbortController();
         raceStrategies(

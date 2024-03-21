@@ -65,7 +65,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('returns from the iterator when the connection iterator returns', async () => {
         expect.assertions(1);
         iterable.mockImplementation(async function* () {
-            yield { id: 0, result: 42 /* subscription id */ };
+            yield Promise.resolve({ id: 0, result: 42 /* subscription id */ });
             return;
         });
         const thingNotifications = await rpc
@@ -81,7 +81,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('throws from the iterator when the connection iterator throws', async () => {
         expect.assertions(1);
         iterable.mockImplementation(async function* () {
-            yield { id: 0, result: 42 /* subscription id */ };
+            yield Promise.resolve({ id: 0, result: 42 /* subscription id */ });
             throw new Error('o no');
         });
         const thingNotifications = await rpc
@@ -142,8 +142,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             }),
         );
     });
-    it('does not send an unsubscribe request to the transport when aborted if the subscription has not yet been established', async () => {
-        expect.assertions(1);
+    it('does not send an unsubscribe request to the transport when aborted if the subscription has not yet been established', () => {
         jest.useFakeTimers();
         const abortController = new AbortController();
         rpc.thingNotifications(123).subscribe({ abortSignal: abortController.signal });
@@ -209,9 +208,9 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('delivers only messages destined for a particular subscription', async () => {
         expect.assertions(1);
         iterable.mockImplementation(async function* () {
-            yield { id: 0, result: 42 /* subscription id */ };
-            yield { params: { result: 123, subscription: 41 } };
-            yield { params: { result: 456, subscription: 42 } };
+            yield Promise.resolve({ id: 0, result: 42 /* subscription id */ });
+            yield Promise.resolve({ params: { result: 123, subscription: 41 } });
+            yield Promise.resolve({ params: { result: 456, subscription: 42 } });
         });
         const thingNotifications = await rpc
             .thingNotifications()
@@ -224,7 +223,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         async subscriptionId => {
             expect.assertions(1);
             iterable.mockImplementation(async function* () {
-                yield { id: 0, result: subscriptionId /* subscription id */ };
+                yield Promise.resolve({ id: 0, result: subscriptionId /* subscription id */ });
             });
             const thingNotificationsPromise = rpc
                 .thingNotifications()
@@ -253,7 +252,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('fatals when the server fails to respond with a subscription id', async () => {
         expect.assertions(1);
         iterable.mockImplementation(async function* () {
-            yield { id: 0, result: undefined /* subscription id */ };
+            yield Promise.resolve({ id: 0, result: undefined /* subscription id */ });
         });
         const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(
@@ -263,10 +262,10 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
     it('fatals when the server responds with an error', async () => {
         expect.assertions(1);
         iterable.mockImplementation(async function* () {
-            yield {
+            yield Promise.resolve({
                 error: { code: 123, message: 'o no' },
                 id: 0,
-            };
+            });
         });
         const subscribePromise = rpc.thingNotifications().subscribe({ abortSignal: new AbortController().signal });
         await expect(subscribePromise).rejects.toThrow(new SolanaError(123 as SolanaErrorCode, undefined));
@@ -342,8 +341,8 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         it('calls the response processor with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
             iterable.mockImplementation(async function* () {
-                yield { id: 0, result: 42 /* subscription id */ };
-                yield { params: { result: 123, subscription: 42 } };
+                yield Promise.resolve({ id: 0, result: 42 /* subscription id */ });
+                yield Promise.resolve({ params: { result: 123, subscription: 42 } });
             });
             const thingNotifications = await rpc
                 .thingNotifications()
@@ -354,8 +353,8 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         it('returns the processed response', async () => {
             expect.assertions(1);
             iterable.mockImplementation(async function* () {
-                yield { id: 0, result: 42 /* subscription id */ };
-                yield { params: { result: 123, subscription: 42 } };
+                yield Promise.resolve({ id: 0, result: 42 /* subscription id */ });
+                yield Promise.resolve({ params: { result: 123, subscription: 42 } });
             });
             const thingNotifications = await rpc
                 .thingNotifications()

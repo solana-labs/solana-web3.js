@@ -62,11 +62,11 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // And mock implementations for both signers such that they append events to an array.
         const events: string[] = [];
-        signerA.modifyAndSignTransactions.mockImplementation(async (transactions: CompilableTransaction[]) => {
+        signerA.modifyAndSignTransactions.mockImplementation((transactions: CompilableTransaction[]) => {
             events.push('signerA');
             return transactions.map(tx => ({ ...tx, signatures: { '1111': '1111_signature' } }));
         });
-        signerB.signTransactions.mockImplementation(async (transactions: CompilableTransaction[]) => {
+        signerB.signTransactions.mockImplementation((transactions: CompilableTransaction[]) => {
             events.push('signerB');
             return transactions.map(() => ({ '2222': '2222_signature' }));
         });

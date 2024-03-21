@@ -40,7 +40,7 @@ describe('RpcSubscriptionsTransport', () => {
     let iterator: jest.Mock;
     let send: jest.Mock;
     let sendWebSocketMessage: RpcSubscriptionsTransport;
-    beforeEach(async () => {
+    beforeEach(() => {
         abortController = new AbortController();
         iterator = jest.fn();
         send = jest.fn();
@@ -95,12 +95,12 @@ describe('RpcSubscriptionsTransport', () => {
     });
     it('throws if the signal is aborted after the socket connects but before the message is sent', async () => {
         expect.assertions(1);
-        jest.mocked(createWebSocketConnection).mockImplementation(async () => {
+        jest.mocked(createWebSocketConnection).mockImplementation(() => {
             abortController.abort();
-            return {
+            return Promise.resolve({
                 [Symbol.asyncIterator]: iterator,
                 send,
-            };
+            });
         });
         const sendPromise = sendWebSocketMessage({ payload: 'hello', signal: abortController.signal });
         await expect(sendPromise).rejects.toThrow('operation was aborted');

@@ -10,7 +10,7 @@ jest.mock('../messages', () => ({
 
 describe('getErrorMessage', () => {
     describe('in production mode', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = false;
         });
@@ -65,7 +65,7 @@ describe('getErrorMessage', () => {
         });
     });
     describe('in dev mode', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = true;
         });
