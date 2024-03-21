@@ -514,3 +514,36 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
     }
 >;
+
+export function decodeEncodedContext(encodedContext: string): object {
+    const decodedUrlString = __NODEJS__ ? Buffer.from(encodedContext, 'base64').toString('utf8') : atob(encodedContext);
+    return Object.fromEntries(new URLSearchParams(decodedUrlString).entries());
+}
+
+function encodeValue(value: unknown): string {
+    if (Array.isArray(value)) {
+        const commaSeparatedValues = value.map(encodeValue).join('%2C%20' /* ", " */);
+        return '%5B' /* "[" */ + commaSeparatedValues + /* "]" */ '%5D';
+    } else if (typeof value === 'bigint') {
+        return `${value}n`;
+    } else {
+        return encodeURIComponent(
+            String(
+                value != null && Object.getPrototypeOf(value) === null
+                    ? // Plain objects with no protoype don't have a `toString` method.
+                      // Convert them before stringifying them.
+                      { ...(value as object) }
+                    : value,
+            ),
+        );
+    }
+}
+
+function encodeObjectContextEntry([key, value]: [string, unknown]): `${typeof key}=${string}` {
+    return `${key}=${encodeValue(value)}`;
+}
+
+export function encodeContextObject(context: object): string {
+    const searchParamsString = Object.entries(context).map(encodeObjectContextEntry).join('&');
+    return __NODEJS__ ? Buffer.from(searchParamsString, 'utf8').toString('base64') : btoa(searchParamsString);
+}
