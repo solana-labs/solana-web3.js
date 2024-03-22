@@ -3,6 +3,10 @@ import { RpcTransport } from '@solana/rpc-spec';
 
 import { assertIsAllowedHttpRequestHeaders } from '../http-transport-headers';
 
+// HACK: Pierce the veil of `jest.isolateModules` so that the modules inside get the same version of
+//       `@solana/errors` that is imported above.
+jest.mock('@solana/errors', () => jest.requireActual('@solana/errors'));
+
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
 });

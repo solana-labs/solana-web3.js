@@ -1,6 +1,10 @@
 import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
 import { RpcTransport } from '@solana/rpc-spec';
 
+// HACK: Pierce the veil of `jest.isolateModules` so that the modules inside get the same version of
+//       `@solana/errors` that is imported above.
+jest.mock('@solana/errors', () => jest.requireActual('@solana/errors'));
+
 describe('createHttpTransport', () => {
     let fetchSpy: jest.SpyInstance;
     let makeHttpRequest: RpcTransport;
