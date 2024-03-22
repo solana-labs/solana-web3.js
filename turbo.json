@@ -28,12 +28,12 @@
         },
         "compile:js": {
             "dependsOn": ["clean", "^compile:js"],
-            "inputs": ["rollup.config.js", "tsconfig.*", "src/**"],
+            "inputs": ["rollup.config.mjs", "tsconfig.*", "src/**"],
             "outputs": ["dist/**", "lib/**"]
         },
         "compile:typedefs": {
             "dependsOn": ["clean", "^compile:typedefs"],
-            "inputs": ["rollup.config.types.js", "tsconfig.*", "src/**"],
+            "inputs": ["rollup.config.types.mjs", "tsconfig.*", "src/**"],
             "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
         },
         "publish-packages": {

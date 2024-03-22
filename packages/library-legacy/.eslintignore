@@ -4,7 +4,7 @@ declarations/
 deploy/
 doc/
 lib/
-rollup.config.js
+rollup.config.mjs
+rollup.config.types.mjs
 test/.eslintrc.js
 test/dist/
-test/rollup.config.js
