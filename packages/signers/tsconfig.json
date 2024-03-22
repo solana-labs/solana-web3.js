@@ -1,15 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2017",
-            "ES2019.Array"
-        ]
+        "lib": ["DOM", "ES2017", "ES2019.Array"]
     },
     "display": "@solana/signers",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }

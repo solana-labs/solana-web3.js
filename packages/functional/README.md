@@ -44,6 +44,6 @@ const transferTransaction = pipe(
     // The return value of that function gets passed to the next...
     tx => setTransactionLifetimeUsingBlockhash(latestBlockhash, tx),
     // ...and so on.
-    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx)
+    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx),
 );
 ```

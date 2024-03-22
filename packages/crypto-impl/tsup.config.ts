@@ -9,5 +9,5 @@ export default defineConfig(_options =>
         platform,
         sourcemap: true,
         treeshake: true,
-    }))
+    })),
 );

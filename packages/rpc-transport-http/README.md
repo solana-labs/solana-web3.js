@@ -240,5 +240,4 @@ async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): 
     }
     throw requestError;
 }
-
 ```

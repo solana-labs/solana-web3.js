@@ -1,15 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2017",
-            "ES2022.Error"
-        ]
+        "lib": ["DOM", "ES2017", "ES2022.Error"]
     },
     "display": "@solana/transactions",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }

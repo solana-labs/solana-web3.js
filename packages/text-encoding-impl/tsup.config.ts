@@ -9,5 +9,5 @@ export default defineConfig(_options =>
         platform: platform === 'node' ? 'node' : 'browser',
         sourcemap: true,
         treeshake: true,
-    }))
+    })),
 );

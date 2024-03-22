@@ -1,17 +1,10 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2015",
-            "ES2022.Error"
-        ],
+        "lib": ["DOM", "ES2015", "ES2022.Error"],
         "resolveJsonModule": true
     },
     "display": "@solana/errors",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "bin",
-        "src"
-    ],
+    "include": ["bin", "src"]
 }

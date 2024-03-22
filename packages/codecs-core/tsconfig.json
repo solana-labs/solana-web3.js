@@ -2,14 +2,8 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "@solana/codecs-core",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ],
+    "include": ["src"],
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2020",
-            "ES2022.Error"
-        ]
+        "lib": ["DOM", "ES2020", "ES2022.Error"]
     }
 }
