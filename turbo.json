@@ -67,8 +67,8 @@
             "outputs": []
         },
         "style:fix": {
-            "inputs": ["src/**"],
-            "outputs": []
+            "inputs": ["*"],
+            "outputs": ["*"]
         },
         "test:lint": {
             "inputs": ["src/**", "test/**"],
