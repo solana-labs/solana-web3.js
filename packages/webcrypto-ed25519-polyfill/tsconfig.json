@@ -1,16 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2015",
-            "ES2022.Error",
-            "ES2022"
-        ]
+        "lib": ["DOM", "ES2015", "ES2022.Error", "ES2022"]
     },
     "display": "@solana/webcrypto-ed25519-polyfill",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }

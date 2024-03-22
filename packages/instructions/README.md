@@ -84,7 +84,7 @@ Use this type to specify an instruction that contains certain accounts.
 type InstructionWithTwoAccounts = IInstructionWithAccounts<
     [
         WritableAccount, // First account
-        RentSysvar // Second account
+        RentSysvar, // Second account
     ]
 >;
 ```
@@ -98,13 +98,13 @@ For example, here is how the `AdvanceNonce` instruction is typed.
 ```ts
 type AdvanceNonceAccountInstruction<
     TNonceAccountAddress extends string = string,
-    TNonceAuthorityAddress extends string = string
+    TNonceAuthorityAddress extends string = string,
 > = IInstruction<'11111111111111111111111111111111'> &
     IInstructionWithAccounts<
         [
             WritableAccount<TNonceAccountAddress>,
             ReadonlyAccount<'SysvarRecentB1ockHashes11111111111111111111'>,
-            ReadonlySignerAccount<TNonceAuthorityAddress>
+            ReadonlySignerAccount<TNonceAuthorityAddress>,
         ]
     > &
     IInstructionWithData<AdvanceNonceAccountInstructionData>;

@@ -33,7 +33,7 @@ const [messageSignatures] = await mySigner.signMessages([myMessage]);
 
 // Sign one or multiple transactions.
 const myTransaction = pipe(
-    createTransaction({ version: 0 })
+    createTransaction({ version: 0 }),
     // Add instructions, fee payer, lifetime, etc.
 );
 const [transactionSignatures] = await mySigner.signTransactions([myTransaction]);

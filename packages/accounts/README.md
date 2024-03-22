@@ -158,7 +158,7 @@ assertAccountsExist(myAccounts);
 
 // Now we can use them as an array of accounts
 for (const a of myAccounts) {
-  a satisfies EncodedAccount<Address>;
+    a satisfies EncodedAccount<Address>;
 }
 ```
 
@@ -284,16 +284,15 @@ account.data satisfies MyAccountData;
 
 This is particularly useful for narrowing the result of fetching a JSON parsed account.
 
-
 ```ts
-    const account: MaybeAccount<MockData | Uint8Array> = await fetchJsonParsedAccount<MockData>(
-        rpc, 
-        '1234..5678' as Address,
-    )
+const account: MaybeAccount<MockData | Uint8Array> = await fetchJsonParsedAccount<MockData>(
+    rpc,
+    '1234..5678' as Address,
+);
 
-    assertAccountDecoded(account);
-    // now we have a MaybeAccount<MockData>
-    account satisfies MaybeAccount<MockData>
+assertAccountDecoded(account);
+// now we have a MaybeAccount<MockData>
+account satisfies MaybeAccount<MockData>;
 ```
 
 ### `assertAccountsDecoded`
@@ -307,7 +306,7 @@ const myAccounts: Account<MyAccountData | Uint8Array, Address>[];
 assertAccountsDecoded(myAccounts);
 
 // now the account data can be used as MyAccountData
-for(const a of account) {
+for (const a of account) {
     account.data satisfies MyAccountData;
 }
 ```

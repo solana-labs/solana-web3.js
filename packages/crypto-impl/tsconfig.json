@@ -1,13 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM"
-        ]
+        "lib": ["DOM"]
     },
     "display": "Crypto Implementation",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }

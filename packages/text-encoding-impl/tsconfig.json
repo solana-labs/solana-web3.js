@@ -1,14 +1,9 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "lib": [
-            "DOM",
-            "ES2016"
-        ]
+        "lib": ["DOM", "ES2016"]
     },
     "display": "TextEncoder and TextDecoder Implementation",
     "extends": "@solana/tsconfig/base.json",
-    "include": [
-        "src"
-    ]
+    "include": ["src"]
 }
