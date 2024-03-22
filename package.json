@@ -7,7 +7,7 @@
         "build": "turbo run build",
         "compile": "turbo run compile:js compile:typedefs",
         "lint": "turbo run test:lint",
-        "style:fix": "turbo style:fix && prettier --write '{.,!packages}/**/*.{ts,js,md,json,ya?ml}'",
+        "style:fix": "turbo style:fix && pnpm prettier --log-level warn --ignore-unknown --write '{.,!packages}/*'",
         "test": "turbo run test:unit:browser test:unit:node",
         "test:live-with-test-validator": "turbo run test:live-with-test-validator",
         "test:live-with-test-validator:setup": "./scripts/setup-test-validator.sh"

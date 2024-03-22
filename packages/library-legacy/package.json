@@ -50,7 +50,7 @@
     "test:live": "TEST_LIVE=1 pnpm run test:unit:node",
     "test:live-with-test-validator": "start-server-and-test '../../scripts/start-shared-test-validator.sh' http://127.0.0.1:8899/health test:live",
     "test:prettier": "prettier --check '{,{src,test}/**/}*.{j,t}s'",
-    "test:prettier:fix": "prettier --write '{,{src,test}/**/}*.{j,t}s'",
+    "test:prettier:fix": "pnpm prettier --write '{,{src,test}/**/}*.{j,t}s'",
     "test:typecheck": "tsc --noEmit",
     "test:unit:node": "cross-env NODE_ENV=test TS_NODE_COMPILER_OPTIONS='{ \"module\": \"commonjs\", \"target\": \"es2019\" }' ts-mocha --require esm './test/**/*.test.ts'"
   },
