@@ -32,9 +32,9 @@
             "outputs": ["dist/**", "lib/**"]
         },
         "compile:typedefs": {
-            "dependsOn": ["clean", "^compile:typedefs"],
-            "inputs": ["rollup.config.types.mjs", "tsconfig.*", "src/**"],
-            "outputs": ["declarations/**", "dist/**/*.d.ts", "lib/**/*.d.ts"]
+            "dependsOn": ["^compile:typedefs"],
+            "inputs": ["tsconfig.*", "src/**"],
+            "outputs": ["dist/**/*.d.ts"]
         },
         "publish-packages": {
             "cache": false,
@@ -98,6 +98,11 @@
         },
         "test:treeshakability:node": {
             "dependsOn": ["compile:js"]
+        },
+        "@solana/web3.js#compile:typedefs": {
+            "dependsOn": ["clean", "^compile:typedefs"],
+            "inputs": ["rollup.config.types.mjs", "tsconfig.*", "src/**"],
+            "outputs": ["declarations/**", "lib/**/*.d.ts"]
         },
         "@solana/web3.js#test:unit:node": {
             "dependsOn": ["^compile:js"],
