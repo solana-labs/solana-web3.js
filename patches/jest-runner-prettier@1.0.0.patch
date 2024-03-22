@@ -1,0 +1,44 @@
+diff --git a/dist/run.js b/dist/run.js
+index fdee17d2377dd013d55de1d54bee9d241894e800..7139e496da63da74b3e7966f4a3f5a613a7f3b3b 100644
+--- a/dist/run.js
++++ b/dist/run.js
+@@ -11,7 +11,7 @@ export default async ({ testPath }) => {
+         ...config,
+         filepath: testPath,
+     };
+-    const isPretty = prettier.check(contents, prettierConfig);
++    const isPretty = await prettier.check(contents, prettierConfig);
+     if (isPretty) {
+         return pass({
+             start,
+@@ -19,7 +19,7 @@ export default async ({ testPath }) => {
+             test: { path: testPath },
+         });
+     }
+-    const formatted = prettier.format(contents, prettierConfig);
++    const formatted = await prettier.format(contents, prettierConfig);
+     return fail({
+         start,
+         end: Date.now(),
+diff --git a/src/run.ts b/src/run.ts
+index 1775851defdca87b753f1f9bae1cb663332eb640..b6c72e13f82d9e9ed3aef5095f8b8d82e2b4391b 100644
+--- a/src/run.ts
++++ b/src/run.ts
+@@ -19,7 +19,7 @@ export default async ({ testPath }: Parameters): Promise<TestResult> => {
+     filepath: testPath,
+   };
+ 
+-  const isPretty = prettier.check(contents, prettierConfig);
++  const isPretty = await prettier.check(contents, prettierConfig);
+   if (isPretty) {
+     return pass({
+       start,
+@@ -28,7 +28,7 @@ export default async ({ testPath }: Parameters): Promise<TestResult> => {
+     });
+   }
+ 
+-  const formatted = prettier.format(contents, prettierConfig);
++  const formatted = await prettier.format(contents, prettierConfig);
+ 
+   return fail({
+     start,
