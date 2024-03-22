@@ -3,6 +3,7 @@ import { Command, InvalidArgumentError } from 'commander';
 
 import { version } from '../package.json';
 import { SolanaErrorCode } from './codes';
+import { decodeEncodedContext } from './context';
 import { getHumanReadableErrorMessage } from './message-formatter';
 import { SolanaErrorMessages } from './messages';
 
@@ -23,9 +24,13 @@ program
         }
         return code;
     })
-    .argument('[encodedContext]', 'encoded context to interpolate into the error message', encodedContext =>
-        Object.fromEntries(new URLSearchParams(encodedContext).entries()),
-    )
+    .argument('[encodedContext]', 'encoded context to interpolate into the error message', encodedContext => {
+        try {
+            return decodeEncodedContext(encodedContext);
+        } catch (e) {
+            throw new InvalidArgumentError('Encoded context malformed');
+        }
+    })
     .action((code: number, context) => {
         const message = getHumanReadableErrorMessage(code as SolanaErrorCode, context);
         console.log(`

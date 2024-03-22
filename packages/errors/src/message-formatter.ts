@@ -1,41 +1,6 @@
 import { SolanaErrorCode } from './codes';
+import { encodeContextObject } from './context';
 import { SolanaErrorMessages } from './messages';
-
-function encodeValue(value: unknown): string {
-    if (Array.isArray(value)) {
-        return (
-            /* "[" */ '%5B' +
-            value
-                .map(element =>
-                    typeof element === 'string'
-                        ? encodeURIComponent(`"${element.replace(/"/g, '\\"')}"`)
-                        : encodeValue(element),
-                )
-                .join(/* ", " */ '%2C%20') +
-            /* "]" */ '%5D'
-        );
-    } else if (typeof value === 'bigint') {
-        return `${value}n`;
-    } else {
-        return encodeURIComponent(
-            String(
-                value != null && Object.getPrototypeOf(value) === null
-                    ? // Plain objects with no protoype don't have a `toString` method.
-                      // Convert them before stringifying them.
-                      { ...(value as object) }
-                    : value,
-            ),
-        );
-    }
-}
-
-function encodeObjectContextEntry([key, value]: [string, unknown]): `${typeof key}=${string}` {
-    return `${key}=${encodeValue(value)}`;
-}
-
-function encodeContextObject(context: object) {
-    return Object.entries(context).map(encodeObjectContextEntry).join('&');
-}
 
 export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>(
     code: TErrorCode,
@@ -59,7 +24,7 @@ export function getErrorMessage<TErrorCode extends SolanaErrorCode>(code: TError
              *         impossible for someone to craft malicious context values that would result in
              *         an exploit against anyone who bindly copy/pastes it into their terminal.
              */
-            decodingAdviceMessage += ` $"${encodeContextObject(context)}"`;
+            decodingAdviceMessage += ` '${encodeContextObject(context)}'`;
         }
         return `${decodingAdviceMessage}\``;
     }

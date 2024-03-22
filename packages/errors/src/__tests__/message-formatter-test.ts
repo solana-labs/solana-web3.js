@@ -1,6 +1,9 @@
+import { SolanaErrorCode } from '../codes';
+import { encodeContextObject } from '../context';
 import { getErrorMessage } from '../message-formatter';
 import * as MessagesModule from '../messages';
 
+jest.mock('../context');
 jest.mock('../messages', () => ({
     get SolanaErrorMessages() {
         return {};
@@ -14,54 +17,53 @@ describe('getErrorMessage', () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (globalThis as any).__DEV__ = false;
         });
-        it('renders advice on where to decode a detail-less error', () => {
+        it('renders advice on where to decode a context-less error', () => {
             const message = getErrorMessage(
                 // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
                 123,
             );
             expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode 123`');
         });
-        it('renders advice on where to decode an error with sanitized context', async () => {
-            expect.assertions(1);
-            const message = getErrorMessage(
+        it('does not call the context encoder when the error has no context', () => {
+            getErrorMessage(
                 // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
                 123,
-                {
-                    a: 1n,
-                    b: '"bar"',
-                    c: "'baz'",
-                    d: '!$&ymbo;s\\',
-                    e: [1, ["'2a'", '"2b"', '2c'], 3],
-                    f: Symbol('hi'),
-                    g: { foo: 'bar' },
-                    h: new URL('http://anza.xyz'),
-                    i: (
-                        (await crypto.subtle.generateKey('Ed25519', false /* extractable */, [
-                            'sign',
-                            'verify',
-                        ])) as CryptoKeyPair
-                    ).privateKey,
-                    j: Object.create(null),
-                    k: null,
-                    l: undefined,
-                },
             );
+            expect(encodeContextObject).not.toHaveBeenCalled();
+        });
+        it('does not call the context encoder when the error context has no keys', () => {
+            const context = {};
+            getErrorMessage(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                context,
+            );
+            expect(encodeContextObject).not.toHaveBeenCalled();
+        });
+        it('calls the context encoder with the context', () => {
+            const context = { foo: 'bar' };
+            getErrorMessage(
+                // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
+                123,
+                context,
+            );
+            expect(encodeContextObject).toHaveBeenCalledWith(context);
+        });
+        it('renders advice on where to decode an error with encoded context', async () => {
+            expect.assertions(1);
+            jest.mocked(encodeContextObject).mockReturnValue('ENCODED_CONTEXT');
+            const context = { foo: 'bar' };
+            const message = getErrorMessage(123 as SolanaErrorCode, context);
             expect(message).toBe(
-                'Solana error #123; Decode this error by running `npx @solana/errors decode 123 $"' +
-                    'a=1n' +
-                    '&b=%22bar%22' +
-                    "&c='baz'" +
-                    '&d=!%24%26ymbo%3Bs%5C' +
-                    "&e=%5B1%2C%20%5B%22'2a'%22%2C%20%22%5C%222b%5C%22%22%2C%20%222c%22%5D%2C%203%5D" +
-                    '&f=Symbol(hi)' +
-                    '&g=%5Bobject%20Object%5D' +
-                    '&h=http%3A%2F%2Fanza.xyz%2F' +
-                    '&i=%5Bobject%20CryptoKey%5D' +
-                    '&j=%5Bobject%20Object%5D' +
-                    '&k=null' +
-                    '&l=undefined' +
-                    '"`',
+                "Solana error #123; Decode this error by running `npx @solana/errors decode 123 'ENCODED_CONTEXT'`",
             );
+        });
+        it('renders no encoded context in the decoding advice when the context has no keys', async () => {
+            expect.assertions(1);
+            jest.mocked(encodeContextObject).mockReturnValue('ENCODED_CONTEXT');
+            const context = {};
+            const message = getErrorMessage(123 as SolanaErrorCode, context);
+            expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode 123`');
         });
     });
     describe('in dev mode', () => {

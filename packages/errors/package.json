@@ -34,7 +34,7 @@
     ],
     "bin": "./bin/cli.js",
     "scripts": {
-        "compile:js": "tsup --config build-scripts/tsup.config.package.ts && tsup src/cli.ts --format esm",
+        "compile:js": "tsup --config build-scripts/tsup.config.package.ts && tsup src/cli.ts --define.__NODEJS__ true --format esm --treeshake",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
