@@ -76,7 +76,7 @@
             "inputs": ["babel.config.json", "src/**", "test/**"]
         },
         "test:prettier": {
-            "inputs": ["src/**", "test/**"]
+            "inputs": ["*"]
         },
         "test:typecheck": {
             "dependsOn": ["^compile:typedefs"],
