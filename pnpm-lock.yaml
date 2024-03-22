@@ -9,6 +9,11 @@ overrides:
   mock-socket: ^9.3.1
   shelljs: '>=0.8.5'
 
+patchedDependencies:
+  jest-runner-prettier@1.0.0:
+    hash: wxyu3ekhzy6qhvwrai2xltdhn4
+    path: patches/jest-runner-prettier@1.0.0.patch
+
 importers:
 
   .:
@@ -87,7 +92,7 @@ importers:
         version: 2.2.0(eslint@8.57.0)(jest@29.7.0)
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(jest@29.7.0)(prettier@3.1.0)
+        version: 1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(jest@29.7.0)(prettier@3.1.0)
       jest-watch-master:
         specifier: ^1.0.0
         version: 1.0.0(jest-validate@29.7.0)(jest@29.7.0)
@@ -9161,7 +9166,7 @@ packages:
       - jest-runner
     dev: true
 
-  /jest-runner-prettier@1.0.0(jest@29.7.0)(prettier@3.1.0):
+  /jest-runner-prettier@1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(jest@29.7.0)(prettier@3.1.0):
     resolution: {integrity: sha512-da4LdL12MyUo6DPsebcsmi1pOrWr3o3K5MxL5IAyqe99Lb4j3SpH4HIDGc4rHCAUJvvkeEi2Kv1USa5W2Tw65w==}
     peerDependencies:
       jest: '>= 27.0.0'
@@ -9180,6 +9185,7 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
+    patched: true
 
   /jest-runner@27.5.1:
     resolution: {integrity: sha512-g4NPsM4mFCOwFKXO4p/H/kWGdJp9V8kURY2lX8Me2drgXqG7rrZAx5kv+5H7wtt/cdFIjhqYx1HrlqWHaOvDaQ==}
