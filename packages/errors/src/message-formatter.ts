@@ -17,7 +17,7 @@ export function getErrorMessage<TErrorCode extends SolanaErrorCode>(code: TError
     if (__DEV__) {
         return getHumanReadableErrorMessage(code, context);
     } else {
-        let decodingAdviceMessage = `Solana error #${code}; Decode this error by running \`npx @solana/errors decode ${code}`;
+        let decodingAdviceMessage = `Solana error #${code}; Decode this error by running \`npx @solana/errors decode -- ${code}`;
         if (Object.keys(context).length) {
             /**
              * DANGER: Be sure that the shell command is escaped in such a way that makes it

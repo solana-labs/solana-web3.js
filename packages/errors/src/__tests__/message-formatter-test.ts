@@ -22,7 +22,7 @@ describe('getErrorMessage', () => {
                 // @ts-expect-error Mock error codes don't conform to `SolanaErrorCode`
                 123,
             );
-            expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode 123`');
+            expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode -- 123`');
         });
         it('does not call the context encoder when the error has no context', () => {
             getErrorMessage(
@@ -55,7 +55,7 @@ describe('getErrorMessage', () => {
             const context = { foo: 'bar' };
             const message = getErrorMessage(123 as SolanaErrorCode, context);
             expect(message).toBe(
-                "Solana error #123; Decode this error by running `npx @solana/errors decode 123 'ENCODED_CONTEXT'`",
+                "Solana error #123; Decode this error by running `npx @solana/errors decode -- 123 'ENCODED_CONTEXT'`",
             );
         });
         it('renders no encoded context in the decoding advice when the context has no keys', async () => {
@@ -63,7 +63,7 @@ describe('getErrorMessage', () => {
             jest.mocked(encodeContextObject).mockReturnValue('ENCODED_CONTEXT');
             const context = {};
             const message = getErrorMessage(123 as SolanaErrorCode, context);
-            expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode 123`');
+            expect(message).toBe('Solana error #123; Decode this error by running `npx @solana/errors decode -- 123`');
         });
     });
     describe('in dev mode', () => {
