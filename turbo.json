@@ -99,6 +99,26 @@
         "test:treeshakability:node": {
             "dependsOn": ["compile:js"]
         },
+        "@solana/codecs-strings#compile:js": {
+            "dependsOn": ["^@solana/text-encoding-impl#compile:js"],
+            "inputs": ["tsconfig.*", "src/**"],
+            "outputs": ["dist/**"]
+        },
+        "@solana/signers#compile:js": {
+            "dependsOn": ["^@solana/text-encoding-impl#compile:js"],
+            "inputs": ["tsconfig.*", "src/**"],
+            "outputs": ["dist/**"]
+        },
+        "@solana/rpc-subscriptions-transport-websocket#compile:js": {
+            "dependsOn": ["^@solana/ws-impl#compile:js"],
+            "inputs": ["tsconfig.*", "src/**"],
+            "outputs": ["dist/**"]
+        },
+        "@solana/webcrypto-ed25519-polyfill#compile:js": {
+            "dependsOn": ["^@solana/crypto-impl#compile:js"],
+            "inputs": ["tsconfig.*", "src/**"],
+            "outputs": ["dist/**"]
+        },
         "@solana/web3.js#compile:js": {
             "dependsOn": ["clean", "^compile:js"],
             "inputs": ["babel.config.json", "rollup.config.mjs", "tsconfig.*", "src/**"],
