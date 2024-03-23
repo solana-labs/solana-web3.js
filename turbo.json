@@ -75,6 +75,7 @@
             "outputs": []
         },
         "test:live-with-test-validator": {
+            "dependsOn": ["^compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },
@@ -88,12 +89,12 @@
             "outputs": []
         },
         "test:unit:browser": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "inputs": ["src/**"],
             "outputs": []
         },
         "test:unit:node": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "inputs": ["src/**"],
             "outputs": []
         },
@@ -110,7 +111,7 @@
             "outputs": []
         },
         "@solana/web3.js#test:unit:node": {
-            "dependsOn": ["compile:js"],
+            "dependsOn": ["^compile:js"],
             "inputs": ["babel.config.json", "src/**", "test/**"],
             "outputs": []
         },
