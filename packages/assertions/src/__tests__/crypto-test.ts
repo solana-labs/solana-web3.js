@@ -3,9 +3,13 @@ import { SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED, SolanaError
 import { assertPRNGIsAvailable } from '../crypto';
 
 describe('assertPRNGIsAvailable()', () => {
-    it('resolves to `undefined` without throwing', async () => {
-        expect.assertions(1);
-        await expect(assertPRNGIsAvailable()).resolves.toBeUndefined();
+    describe('when getRandomValues is available', () => {
+        it('does not throw', () => {
+            expect(assertPRNGIsAvailable).not.toThrow();
+        });
+        it('returns `undefined`', () => {
+            expect(assertPRNGIsAvailable()).toBeUndefined();
+        });
     });
     describe('when getRandomValues is not available', () => {
         let oldCrypto: InstanceType<typeof Crypto>['getRandomValues'];
@@ -18,9 +22,8 @@ describe('assertPRNGIsAvailable()', () => {
         afterEach(() => {
             globalThis.crypto.getRandomValues = oldCrypto;
         });
-        it('rejects', async () => {
-            expect.assertions(1);
-            await expect(() => assertPRNGIsAvailable()).rejects.toThrow(
+        it('throws', () => {
+            expect(assertPRNGIsAvailable).toThrow(
                 new SolanaError(SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED),
             );
         });
