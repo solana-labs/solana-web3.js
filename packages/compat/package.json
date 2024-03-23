@@ -66,6 +66,7 @@
         "node": ">=17.4"
     },
     "dependencies": {
+        "@solana/addresses": "workspace:*",
         "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
@@ -73,7 +74,6 @@
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
-        "@solana/addresses": "workspace:*",
         "@solana/keys": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/web3.js": "workspace:../library-legacy"

@@ -69,10 +69,10 @@
         "@noble/ed25519": "^2.0.0",
         "@noble/hashes": "^1.3.3",
         "@solana/addresses": "workspace:*",
-        "@solana/transactions": "workspace:*"
+        "@solana/transactions": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
     },
     "devDependencies": {
-        "@solana/rpc-types": "workspace:*",
         "@solana/web3.js-legacy": "workspace:../library-legacy"
     },
     "bundlewatch": {
