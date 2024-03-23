@@ -20,7 +20,7 @@ export async function generateKeyPair(): Promise<CryptoKeyPair> {
 
 export async function createKeyPairFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKeyPair> {
     assertPRNGIsAvailable();
-    
+
     if (bytes.byteLength !== 64) {
         throw new SolanaError(SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH, { byteLength: bytes.byteLength });
     }
