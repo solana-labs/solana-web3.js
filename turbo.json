@@ -49,8 +49,7 @@
                 "test:treeshakability:browser",
                 "test:treeshakability:native",
                 "test:treeshakability:node"
-            ],
-            "outputs": []
+            ]
         },
         "publish-packages-legacy": {
             "cache": false,
@@ -63,62 +62,50 @@
                 "test:prettier",
                 "test:typecheck",
                 "test:unit:node"
-            ],
-            "outputs": []
+            ]
         },
         "style:fix": {
             "inputs": ["*"],
             "outputs": ["*"]
         },
         "test:lint": {
-            "inputs": ["src/**", "test/**"],
-            "outputs": []
+            "inputs": ["src/**", "test/**"]
         },
         "test:live-with-test-validator": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["babel.config.json", "src/**", "test/**"],
-            "outputs": []
+            "inputs": ["babel.config.json", "src/**", "test/**"]
         },
         "test:prettier": {
-            "inputs": ["src/**", "test/**"],
-            "outputs": []
+            "inputs": ["src/**", "test/**"]
         },
         "test:typecheck": {
             "dependsOn": ["^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**", "test/**"],
-            "outputs": []
+            "inputs": ["tsconfig.*", "src/**", "test/**"]
         },
         "test:unit:browser": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
-            "outputs": []
+            "inputs": ["src/**"]
         },
         "test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
-            "outputs": []
+            "inputs": ["src/**"]
         },
         "test:treeshakability:browser": {
-            "dependsOn": ["compile:js"],
-            "outputs": []
+            "dependsOn": ["compile:js"]
         },
         "test:treeshakability:native": {
-            "dependsOn": ["compile:js"],
-            "outputs": []
+            "dependsOn": ["compile:js"]
         },
         "test:treeshakability:node": {
-            "dependsOn": ["compile:js"],
-            "outputs": []
+            "dependsOn": ["compile:js"]
         },
         "@solana/web3.js#test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["babel.config.json", "src/**", "test/**"],
-            "outputs": []
+            "inputs": ["babel.config.json", "src/**", "test/**"]
         },
         "@solana/web3.js-legacy-sham#compile:typedefs": {
             "dependsOn": ["@solana/web3.js#compile:typedefs", "^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**", "test/**"],
-            "outputs": []
+            "inputs": ["tsconfig.*", "src/**", "test/**"]
         }
     },
     "remoteCache": {
