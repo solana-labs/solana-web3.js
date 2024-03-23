@@ -64,12 +64,10 @@
     ],
     "dependencies": {
         "@solana/addresses": "workspace:*",
+        "@solana/codecs-core": "workspace:*",
         "@solana/codecs-numbers": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*"
-    },
-    "devDependencies": {
-        "@solana/codecs-core": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",

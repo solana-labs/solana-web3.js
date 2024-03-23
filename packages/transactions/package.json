@@ -70,10 +70,8 @@
         "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
-        "@solana/keys": "workspace:*"
-    },
-    "devDependencies": {
         "@solana/instructions": "workspace:*",
+        "@solana/keys": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
     "bundlewatch": {

@@ -68,15 +68,15 @@
     "dependencies": {
         "@solana/accounts": "workspace:*",
         "@solana/codecs": "workspace:*",
-        "@solana/errors": "workspace:*"
+        "@solana/errors": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
     },
     "devDependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/rpc-api": "workspace:*",
         "@solana/rpc-parsed-types": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
-        "@solana/rpc-transport-http": "workspace:*",
-        "@solana/rpc-types": "workspace:*"
+        "@solana/rpc-transport-http": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",

@@ -236,6 +236,9 @@ importers:
 
   packages/compat:
     dependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
@@ -252,9 +255,6 @@ importers:
         specifier: workspace:*
         version: link:../transactions
     devDependencies:
-      '@solana/addresses':
-        specifier: workspace:*
-        version: link:../addresses
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
@@ -571,13 +571,13 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
     devDependencies:
-      '@solana/rpc-types':
-        specifier: workspace:*
-        version: link:../rpc-types
       '@solana/web3.js-legacy':
         specifier: workspace:../library-legacy
         version: link:../library-legacy
@@ -843,6 +843,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@solana/codecs-numbers':
         specifier: workspace:*
         version: link:../codecs-numbers
@@ -852,10 +855,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-    devDependencies:
-      '@solana/codecs-core':
-        specifier: workspace:*
-        version: link:../codecs-core
 
   packages/signers:
     dependencies:
@@ -893,6 +892,9 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
     devDependencies:
       '@solana/addresses':
         specifier: workspace:*
@@ -909,9 +911,6 @@ importers:
       '@solana/rpc-transport-http':
         specifier: workspace:*
         version: link:../rpc-transport-http
-      '@solana/rpc-types':
-        specifier: workspace:*
-        version: link:../rpc-types
 
   packages/test-config:
     dependencies:
@@ -995,13 +994,12 @@ importers:
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional
-      '@solana/keys':
-        specifier: workspace:*
-        version: link:../keys
-    devDependencies:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
