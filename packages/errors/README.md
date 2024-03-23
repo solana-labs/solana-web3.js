@@ -32,7 +32,7 @@ When your bundler sets the constant `__DEV__` to `false`, error messages will be
 For instance, to recover the error text for the error with code `123`:
 
 ```shell
-npx @solana/errors decode 123
+npx @solana/errors decode -- 123
 ```
 
 ## Adding a new error
