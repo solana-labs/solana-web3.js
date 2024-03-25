@@ -6,7 +6,13 @@ import {
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
-import { CompilableTransaction, IFullySignedTransaction, ITransactionWithSignatures } from '@solana/transactions';
+import {
+    CompilableTransaction,
+    CompiledMessage,
+    compileMessage,
+    IFullySignedTransaction,
+    ITransactionWithSignatures,
+} from '@solana/transactions';
 
 import {
     partiallySignTransactionWithSigners,
@@ -201,7 +207,11 @@ describe('partiallySignTransactionWithSigners', () => {
         const transaction = createMockTransactionWithSigners([signerA, signerB]);
 
         // And given the following mocked signatures.
-        const modifiedTransaction = { ...transaction, signatures: { '1111': '1111_signature' } };
+        const modifiedTransaction = {
+            ...transaction,
+            compiledMessage: {} as unknown as CompiledMessage,
+            signatures: { '1111': '1111_signature' },
+        };
         signerA.modifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
         signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
@@ -385,7 +395,13 @@ describe('signAndSendTransactionWithSigners', () => {
         // Then the sending signer was used to send the transaction.
         expect(signerA.signTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
-            [{ ...transaction, signatures: { '1111': '1111_signature' } }],
+            [
+                {
+                    ...transaction,
+                    compiledMessage: compileMessage(transaction),
+                    signatures: { '1111': '1111_signature' },
+                },
+            ],
             { abortSignal: undefined },
         );
 
@@ -428,7 +444,13 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // Then the composite signer was used as a sending signer.
         expect(signerA.signAndSendTransactions).toHaveBeenCalledWith(
-            [{ ...transaction, signatures: { '2222': '2222_signature' } }],
+            [
+                {
+                    ...transaction,
+                    compiledMessage: compileMessage(transaction),
+                    signatures: { '2222': '2222_signature' },
+                },
+            ],
             { abortSignal: undefined },
         );
         expect(signerA.signTransactions).not.toHaveBeenCalled();
@@ -447,7 +469,11 @@ describe('signAndSendTransactionWithSigners', () => {
         const transaction = createMockTransactionWithSigners([signerA, signerB]);
 
         // And given the following mocked signatures for these signers.
-        const modifiedTransaction = { ...transaction, signatures: { '1111': '1111_signature' } };
+        const modifiedTransaction = {
+            ...transaction,
+            compiledMessage: {} as unknown as CompiledMessage,
+            signatures: { '1111': '1111_signature' },
+        };
         signerA.modifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
         signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
@@ -478,7 +504,11 @@ describe('signAndSendTransactionWithSigners', () => {
         // And given the following mocked signatures for these signers.
         signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
-        const modifiedTransaction = { ...transaction, signatures: { '3333': '3333_signature' } };
+        const modifiedTransaction = {
+            ...transaction,
+            compiledMessage: {} as unknown as CompiledMessage,
+            signatures: { '3333': '3333_signature' },
+        };
         signerC.modifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
 
         // When we sign and send this transaction.
@@ -494,7 +524,13 @@ describe('signAndSendTransactionWithSigners', () => {
         expect(signerC.modifyAndSignTransactions).toHaveBeenCalledWith([transaction], { abortSignal: undefined });
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
-            [{ ...transaction, signatures: { '1111': '1111_signature', '3333': '3333_signature' } }],
+            [
+                {
+                    ...transaction,
+                    compiledMessage: {} as unknown as CompiledMessage,
+                    signatures: { '1111': '1111_signature', '3333': '3333_signature' },
+                },
+            ],
             { abortSignal: undefined },
         );
     });

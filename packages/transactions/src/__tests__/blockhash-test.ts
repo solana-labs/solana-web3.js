@@ -8,6 +8,7 @@ import {
     ITransactionWithBlockhashLifetime,
     setTransactionLifetimeUsingBlockhash,
 } from '../blockhash';
+import { CompiledMessage } from '../message';
 import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
@@ -134,6 +135,7 @@ describe('setTransactionLifetimeUsingBlockhash', () => {
             beforeEach(() => {
                 txWithBlockhashLifetimeConstraintAndSignatures = {
                     ...txWithBlockhashLifetimeConstraint,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });

@@ -1,7 +1,12 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
-import { BaseTransaction, ITransactionWithFeePayer, ITransactionWithSignatures } from '@solana/transactions';
+import {
+    BaseTransaction,
+    CompiledMessage,
+    ITransactionWithFeePayer,
+    ITransactionWithSignatures,
+} from '@solana/transactions';
 
 import { ITransactionWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer';
 import { TransactionSigner } from '../transaction-signer';
@@ -44,6 +49,7 @@ describe('setTransactionFeePayerSigner', () => {
             beforeEach(() => {
                 txWithFeePayerAndSignatures = {
                     ...txWithFeePayerA,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });
@@ -84,6 +90,7 @@ describe('setTransactionFeePayerSigner', () => {
             beforeEach(() => {
                 txWithFeePayerAndSignatures = {
                     ...txWithFeePayerA,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });

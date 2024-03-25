@@ -3,6 +3,7 @@ import { SignatureBytes } from '@solana/keys';
 import {
     assertTransactionIsFullySigned,
     CompilableTransaction,
+    compileMessage,
     IFullySignedTransaction,
     ITransactionWithSignatures,
 } from '@solana/transactions';
@@ -192,8 +193,13 @@ async function signModifyingAndPartialTransactionSigners<
             return signatures;
         }),
     );
+    let compiledMessage = modifiedTransaction.compiledMessage;
+    if (!compiledMessage) {
+        compiledMessage = compileMessage(modifiedTransaction);
+    }
     const signedTransaction: ITransactionWithSignatures & TTransaction = {
         ...modifiedTransaction,
+        compiledMessage,
         signatures: Object.freeze(
             signatureDictionaries.reduce((signatures, signatureDictionary) => {
                 return { ...signatures, ...signatureDictionary };

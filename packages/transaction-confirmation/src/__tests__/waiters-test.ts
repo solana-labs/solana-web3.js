@@ -3,7 +3,7 @@ import { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SolanaError } f
 import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
-import { IDurableNonceTransaction, Nonce } from '@solana/transactions';
+import { CompiledMessage, IDurableNonceTransaction, Nonce } from '@solana/transactions';
 
 import {
     waitForDurableNonceTransactionConfirmation,
@@ -17,6 +17,7 @@ const FOREVER_PROMISE = new Promise(() => {
 
 describe('waitForDurableNonceTransactionConfirmation', () => {
     const MOCK_DURABLE_NONCE_TRANSACTION = {
+        compiledMessage: {} as unknown as CompiledMessage,
         feePayer: '9'.repeat(44) as Address,
         instructions: [
             // Mock AdvanceNonce instruction.
@@ -189,6 +190,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
 
 describe('waitForRecentTransactionConfirmation', () => {
     const MOCK_TRANSACTION = {
+        compiledMessage: {} as unknown as CompiledMessage,
         feePayer: '9'.repeat(44) as Address,
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
         signatures: {

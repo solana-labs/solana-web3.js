@@ -9,6 +9,7 @@ import {
     prependTransactionInstruction,
     prependTransactionInstructions,
 } from '../instructions';
+import { CompiledMessage } from '../message';
 import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
@@ -49,6 +50,7 @@ describe('Transaction instruction helpers', () => {
             beforeEach(() => {
                 txWithSignatures = {
                     ...baseTx,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });
@@ -80,6 +82,7 @@ describe('Transaction instruction helpers', () => {
             beforeEach(() => {
                 txWithSignatures = {
                     ...baseTx,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });
@@ -107,6 +110,7 @@ describe('Transaction instruction helpers', () => {
             beforeEach(() => {
                 txWithSignatures = {
                     ...baseTx,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });
@@ -138,6 +142,7 @@ describe('Transaction instruction helpers', () => {
             beforeEach(() => {
                 txWithSignatures = {
                     ...baseTx,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });

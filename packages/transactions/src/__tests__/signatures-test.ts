@@ -33,6 +33,7 @@ jest.mock('../message');
 describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {
         const transactionWithoutFeePayerSignature = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: '123' as Address,
             signatures: {
                 ['123' as Address]: new Uint8Array(new Array(64).fill(9)) as SignatureBytes,
@@ -44,6 +45,7 @@ describe('getSignatureFromTransaction', () => {
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', () => {
         const transactionWithoutFeePayerSignature = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: '123' as Address,
             signatures: {
                 // No signature by the fee payer.
@@ -397,6 +399,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('throws if the transaction has no signature for the fee payer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [],
             lifetimeConstraint: mockBlockhashConstraint,
@@ -413,6 +416,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('throws all missing signers if the transaction has no signature for multiple signers', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -434,6 +438,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('throws if the transaction has no signature for an instruction readonly signer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -462,6 +467,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('throws if the transaction has no signature for an instruction writable signer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -490,6 +496,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('throws if the transaction has multiple instructions and one is missing a signer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -528,6 +535,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has no instructions and is signed by the fee payer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [],
             lifetimeConstraint: mockBlockhashConstraint,
@@ -542,6 +550,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has an instruction and is signed by the fee payer and instruction signer', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -567,6 +576,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has multiple instructions and is signed by all signers', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -602,6 +612,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has an instruction with a non-signer account', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {
@@ -626,6 +637,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has an instruction with no accounts', () => {
         const transaction: SignedTransaction = {
+            compiledMessage: {} as unknown as CompiledMessage,
             feePayer: mockPublicKeyAddressA,
             instructions: [
                 {

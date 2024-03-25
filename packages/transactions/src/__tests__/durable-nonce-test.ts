@@ -11,6 +11,7 @@ import {
     Nonce,
     setTransactionLifetimeUsingDurableNonce,
 } from '../durable-nonce';
+import { CompiledMessage } from '../message';
 import { ITransactionWithSignatures } from '../signatures';
 import { BaseTransaction } from '../types';
 
@@ -256,6 +257,7 @@ describe('setTransactionLifetimeUsingDurableNonce', () => {
             beforeEach(() => {
                 durableNonceTxWithConstraintAAndSignatures = {
                     ...durableNonceTxWithConstraintA,
+                    compiledMessage: {} as unknown as CompiledMessage,
                     signatures: {},
                 };
             });

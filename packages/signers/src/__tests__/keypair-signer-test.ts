@@ -3,7 +3,7 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
-import { CompilableTransaction, partiallySignTransaction } from '@solana/transactions';
+import { CompilableTransaction, CompiledMessage, partiallySignTransaction } from '@solana/transactions';
 
 import {
     assertIsKeyPairSigner,
@@ -150,10 +150,12 @@ describe('createSignerFromKeyPair', () => {
         const mockSignatures = [new Uint8Array([101, 101, 101]), new Uint8Array([201, 201, 201])] as SignatureBytes[];
         jest.mocked(partiallySignTransaction).mockResolvedValueOnce({
             ...mockTransactions[0],
+            compiledMessage: {} as unknown as CompiledMessage,
             signatures: { [myAddress]: mockSignatures[0] },
         });
         jest.mocked(partiallySignTransaction).mockResolvedValueOnce({
             ...mockTransactions[1],
+            compiledMessage: {} as unknown as CompiledMessage,
             signatures: { [myAddress]: mockSignatures[1] },
         });
 
