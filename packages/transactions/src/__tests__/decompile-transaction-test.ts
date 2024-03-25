@@ -221,6 +221,29 @@ describe('decompileTransaction', () => {
             });
         });
 
+        it('caches the existing compiledMessage when there are signatures', () => {
+            const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
+
+            const compiledMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 0,
+                    numReadonlySignerAccounts: 0,
+                    numSignerAccounts: 1,
+                },
+                instructions: [],
+                lifetimeToken: blockhash,
+                staticAccounts: [feePayer],
+                version: 0,
+            };
+            const compiledTransaction: CompiledTransaction = {
+                compiledMessage,
+                signatures: [feePayerSignature],
+            };
+
+            const transaction = decompileTransaction(compiledTransaction) as ITransactionWithSignatures;
+            expect(transaction.compiledMessage).toStrictEqual(compiledMessage);
+        });
+
         it('converts a transaction with multiple signers', () => {
             const feePayerSignature = new Uint8Array(Array(64).fill(1)) as SignatureBytes;
 
