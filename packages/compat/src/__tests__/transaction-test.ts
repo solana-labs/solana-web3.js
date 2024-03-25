@@ -197,6 +197,24 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             });
         });
 
+        it('caches the existing compiledMessage for a signed transaction', () => {
+            const compiledMessage = new TransactionMessage({
+                instructions: [],
+                payerKey: feePayerPublicKey,
+                recentBlockhash: blockhashString,
+            }).compileToLegacyMessage();
+            const oldTransaction = new VersionedTransaction(compiledMessage);
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const transaction = fromVersionedTransactionWithBlockhash(
+                oldTransaction,
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.compiledMessage).toStrictEqual(compiledMessage.serialize());
+        });
+
         it('converts a transaction with multiple signers', () => {
             const otherSigner1PublicKey = new PublicKey('8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e');
             const otherSigner2PublicKey = new PublicKey('3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd');
@@ -485,6 +503,24 @@ describe('fromVersionedTransactionWithBlockhash', () => {
             expect(transaction.signatures).toStrictEqual({
                 '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK': feePayerSignature as SignatureBytes,
             });
+        });
+
+        it('caches the existing compiledMessage for a signed transaction', () => {
+            const compiledMessage = new TransactionMessage({
+                instructions: [],
+                payerKey: feePayerPublicKey,
+                recentBlockhash: blockhashString,
+            }).compileToV0Message();
+            const oldTransaction = new VersionedTransaction(compiledMessage);
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const transaction = fromVersionedTransactionWithBlockhash(
+                oldTransaction,
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.compiledMessage).toStrictEqual(compiledMessage.serialize());
         });
 
         it('converts a transaction with multiple signers', () => {
@@ -796,6 +832,31 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             });
         });
 
+        it('caches the existing compiledMessage for a signed transaction', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const compiledMessage = new TransactionMessage({
+                instructions: [nonceAdvanceInstruction],
+                // Note there's a bug in legacy web3js where if the feepayer
+                // is the same as authorizedPubkey, it gets the wrong role
+                // in the advance nonce instruction
+                // So for our test just use a different account as fee payer
+                payerKey: feePayerPublicKey,
+                recentBlockhash: nonce,
+            }).compileToLegacyMessage();
+
+            const oldTransaction = new VersionedTransaction(compiledMessage);
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const transaction = fromVersionedTransactionWithBlockhash(
+                oldTransaction,
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.compiledMessage).toStrictEqual(compiledMessage.serialize());
+        });
+
         it('converts a durable nonce transaction with multiple signers', () => {
             const nonceAdvanceInstruction = createNonceAdvanceInstruction();
 
@@ -1030,6 +1091,31 @@ describe('fromVersionedTransactionWithDurableNonce', () => {
             expect(transaction.signatures).toStrictEqual({
                 '2KntmCrnaf63tpNb8UMFFjFGGnYYAKQdmW9SbuCiRvhM': signature as SignatureBytes,
             });
+        });
+
+        it('caches the existing compiledMessage for a signed transaction', () => {
+            const nonceAdvanceInstruction = createNonceAdvanceInstruction();
+
+            const compiledMessage = new TransactionMessage({
+                instructions: [nonceAdvanceInstruction],
+                // Note there's a bug in legacy web3js where if the feepayer
+                // is the same as authorizedPubkey, it gets the wrong role
+                // in the advance nonce instruction
+                // So for our test just use a different account as fee payer
+                payerKey: feePayerPublicKey,
+                recentBlockhash: nonce,
+            }).compileToV0Message();
+
+            const oldTransaction = new VersionedTransaction(compiledMessage);
+
+            const feePayerSignature = new Uint8Array(Array(64).fill(1));
+            oldTransaction.addSignature(feePayerPublicKey, feePayerSignature);
+
+            const transaction = fromVersionedTransactionWithBlockhash(
+                oldTransaction,
+            ) as unknown as ITransactionWithSignatures;
+
+            expect(transaction.compiledMessage).toStrictEqual(compiledMessage.serialize());
         });
 
         it('converts a durable nonce transaction with multiple signers', () => {

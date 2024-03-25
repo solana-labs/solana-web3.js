@@ -129,6 +129,7 @@ export function fromVersionedTransactionWithBlockhash(
     );
 
     const signatures = convertSignatures(transaction, accountKeys.staticAccountKeys);
+    const compiledMessage = transaction.message.serialize();
 
     return pipe(
         createTransaction({ version: transaction.version }),
@@ -138,7 +139,7 @@ export function fromVersionedTransactionWithBlockhash(
             instructions.reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
             }, tx),
-        tx => (transaction.signatures.length ? { ...tx, signatures } : tx),
+        tx => (transaction.signatures.length ? { ...tx, compiledMessage, signatures } : tx),
     );
 }
 
@@ -190,6 +191,7 @@ export function fromVersionedTransactionWithDurableNonce(
     };
 
     const signatures = convertSignatures(transaction, accountKeys.staticAccountKeys);
+    const compiledMessage = transaction.message.serialize();
 
     return pipe(
         createTransaction({ version: transaction.version }),
@@ -199,6 +201,6 @@ export function fromVersionedTransactionWithDurableNonce(
             instructions.slice(1).reduce((acc, instruction) => {
                 return appendTransactionInstruction(instruction, acc);
             }, tx),
-        tx => (transaction.signatures.length ? { ...tx, signatures } : tx),
+        tx => (transaction.signatures.length ? { ...tx, compiledMessage, signatures } : tx),
     );
 }
