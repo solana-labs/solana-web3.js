@@ -8,6 +8,7 @@ export function getUnsignedTransaction<TTransaction extends BaseTransaction>(
         // The implication of the lifetime constraint changing is that any existing signatures are invalid.
         const {
             signatures: _, // eslint-disable-line @typescript-eslint/no-unused-vars
+            compiledMessage: _c, // eslint-disable-line @typescript-eslint/no-unused-vars
             ...unsignedTransaction
         } = transaction;
         return unsignedTransaction;
