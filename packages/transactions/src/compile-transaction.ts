@@ -12,7 +12,12 @@ export type CompiledTransaction = Readonly<{
 export function getCompiledTransaction(
     transaction: CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures),
 ): CompiledTransaction {
-    const compiledMessage = compileMessage(transaction);
+    let compiledMessage: CompiledMessage;
+    if ('compiledMessage' in transaction && transaction.compiledMessage) {
+        compiledMessage = transaction.compiledMessage;
+    } else {
+        compiledMessage = compileMessage(transaction);
+    }
     let signatures;
     if ('signatures' in transaction) {
         signatures = [];

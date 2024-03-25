@@ -27,6 +27,7 @@ describe('getCompiledTransaction', () => {
             staticAccounts: [addressB, addressA],
         } as CompiledMessage;
         (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (compileMessage as jest.Mock).mockClear();
     });
     it('compiles the transaction message', () => {
         const compiledTransaction = getCompiledTransaction({} as Parameters<typeof getCompiledTransaction>[0]);
@@ -59,5 +60,21 @@ describe('getCompiledTransaction', () => {
             new Uint8Array(Array(64).fill(0)), // Missing signature for account B
             mockSignatureA,
         ]);
+    });
+    it('uses an existing compiled message if there is one', () => {
+        const compiledMessage = {
+            header: {
+                numReadonlyNonSignerAccounts: 1,
+                numReadonlySignerAccounts: 0,
+                numSignerAccounts: 1,
+            },
+            staticAccounts: [addressA, addressB],
+        } as CompiledMessage;
+        const transactionWithCompiledMessage = {
+            compiledMessage,
+        } as ITransactionWithSignatures & Parameters<typeof getCompiledTransaction>[0];
+        const compiledTransaction = getCompiledTransaction(transactionWithCompiledMessage);
+        expect(compiledTransaction).toHaveProperty('compiledMessage', compiledMessage);
+        expect(compileMessage).not.toHaveBeenCalled();
     });
 });

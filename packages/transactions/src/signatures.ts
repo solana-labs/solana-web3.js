@@ -11,13 +11,17 @@ import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
 import { CompilableTransaction } from './compilable-transaction';
 import { ITransactionWithFeePayer } from './fee-payer';
-import { compileMessage } from './message';
+import { CompiledMessage, compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
 
 export interface IFullySignedTransaction extends ITransactionWithSignatures {
     readonly __brand: unique symbol;
 }
 export interface ITransactionWithSignatures {
+    // The ordering of eg. addresses within a compiled message is not defined
+    // This means that if we have a transaction with existing signatures, we need
+    // to re-use its precise message instead of re-compiling it
+    readonly compiledMessage: Readonly<CompiledMessage>;
     readonly signatures: Readonly<Record<Address, SignatureBytes>>;
 }
 
@@ -40,7 +44,8 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
 ): Promise<ITransactionWithSignatures & TTransaction> {
-    const compiledMessage = compileMessage(transaction);
+    const compiledMessage =
+        'compiledMessage' in transaction ? transaction.compiledMessage : compileMessage(transaction);
     const nextSignatures: Record<Address, SignatureBytes> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
     const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);
@@ -54,6 +59,7 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
     }
     const out = {
         ...transaction,
+        compiledMessage,
         signatures: nextSignatures,
     };
     Object.freeze(out);

@@ -67,28 +67,30 @@ describe('partiallySignTransaction', () => {
     const mockPublicKeyAddressA = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' as Address<'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'>;
     const mockPublicKeyAddressB = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Address<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
     const mockPublicKeyAddressC = 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC' as Address<'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'>;
-    beforeEach(async () => {
-        (compileMessage as jest.Mock).mockReturnValue({
-            header: {
-                numReadonlyNonSignerAccounts: 2,
-                numReadonlySignerAccounts: 1,
-                numSignerAccounts: 2,
+    const mockCompiledMessage: CompiledMessage = {
+        header: {
+            numReadonlyNonSignerAccounts: 2,
+            numReadonlySignerAccounts: 1,
+            numSignerAccounts: 2,
+        },
+        instructions: [
+            {
+                accountIndices: [/* mockPublicKeyAddressB */ 1, /* mockPublicKeyAddressC */ 2],
+                programAddressIndex: 3 /* system program */,
             },
-            instructions: [
-                {
-                    accountIndices: [/* mockPublicKeyAddressB */ 1, /* mockPublicKeyAddressC */ 2],
-                    programAddressIndex: 3 /* system program */,
-                },
-            ],
-            lifetimeToken: 'fBrpLg4qfyVH8e3z4zbjAXy4kCZP2jCFdqy113vndcj' as Blockhash,
-            staticAccounts: [
-                /* 0: fee payer */ mockPublicKeyAddressA,
-                /* 1: read-only instruction signer address */ mockPublicKeyAddressB,
-                /* 2: readonly address */ mockPublicKeyAddressC,
-                /* 3: system program */ '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
-            ],
-            version: 0,
-        } as CompiledMessage);
+        ],
+        lifetimeToken: 'fBrpLg4qfyVH8e3z4zbjAXy4kCZP2jCFdqy113vndcj' as Blockhash,
+        staticAccounts: [
+            /* 0: fee payer */ mockPublicKeyAddressA,
+            /* 1: read-only instruction signer address */ mockPublicKeyAddressB,
+            /* 2: readonly address */ mockPublicKeyAddressC,
+            /* 3: system program */ '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
+        ],
+        version: 0,
+    };
+    beforeEach(async () => {
+        (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (compileMessage as jest.Mock).mockClear();
         (getAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
             switch (publicKey) {
                 case mockKeyPairA.publicKey:
@@ -207,6 +209,37 @@ describe('partiallySignTransaction', () => {
     it('freezes the object', async () => {
         expect.assertions(1);
         await expect(partiallySignTransaction([mockKeyPairA], MOCK_TRANSACTION)).resolves.toBeFrozenObject();
+    });
+    it('sets compiledMessage on the returned transaction', async () => {
+        expect.assertions(1);
+        await expect(partiallySignTransaction([mockKeyPairA], MOCK_TRANSACTION)).resolves.toHaveProperty(
+            'compiledMessage',
+            mockCompiledMessage,
+        );
+    });
+    it('uses the existing compiledMessage if there is one', async () => {
+        expect.assertions(2);
+        const compiledMessage: CompiledMessage = {
+            header: {
+                numReadonlyNonSignerAccounts: 1,
+                numReadonlySignerAccounts: 2,
+                numSignerAccounts: 3,
+            },
+            instructions: [],
+            lifetimeToken: 'fBrpLg4qfyVH8e3z4zbjAXy4kCZP2jCFdqy113vndcj' as Blockhash,
+            staticAccounts: ['abc' as Address, 'xyz' as Address, 'def' as Address],
+            version: 0,
+        };
+        const tx = {
+            ...MOCK_TRANSACTION,
+            compiledMessage,
+            signatures: {},
+        };
+        await expect(partiallySignTransaction([mockKeyPairA], tx)).resolves.toHaveProperty(
+            'compiledMessage',
+            compiledMessage,
+        );
+        expect(compileMessage).not.toHaveBeenCalled();
     });
 });
 
