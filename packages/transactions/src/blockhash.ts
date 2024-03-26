@@ -63,6 +63,7 @@ export function setTransactionLifetimeUsingBlockhash(
         return transaction;
     }
     const out = {
+        // A change in lifetime constraint implies that any existing signatures are invalid.
         ...getUnsignedTransaction(transaction),
         lifetimeConstraint: blockhashLifetimeConstraint,
     };
