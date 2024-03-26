@@ -86,7 +86,8 @@ export type DataEnumCodecConfig<
     size?: TDiscriminatorSize;
 };
 
-type Variants<T> = readonly (readonly [string, T])[];
+type DiscriminatorValue = number | string | symbol;
+type Variants<T> = readonly (readonly [DiscriminatorValue, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
 type GetEncoderTypeFromVariants<
@@ -239,7 +240,7 @@ function getDataEnumMaxSize<const TVariants extends Variants<Decoder<any> | Enco
 
 function getVariantDiscriminator<const TVariants extends Variants<Decoder<any> | Encoder<any>>>(
     variants: TVariants,
-    discriminatorValue: string,
+    discriminatorValue: DiscriminatorValue,
 ) {
     const discriminator = variants.findIndex(([key]) => discriminatorValue === key);
     if (discriminator < 0) {

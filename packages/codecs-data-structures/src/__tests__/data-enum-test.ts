@@ -150,6 +150,34 @@ describe('getDataEnumCodec', () => {
         expect(codec.read(b('012a000000'), 0)).toStrictEqual([{ size: 'large', value: 42 }, 5]);
     });
 
+    it('encodes data enums with number discriminator values', () => {
+        const codec = dataEnum([
+            [1, struct([['one', u8()]])],
+            [2, struct([['two', u32()]])],
+        ]);
+        expect(codec.encode({ __kind: 1, one: 42 })).toStrictEqual(b('002a'));
+        expect(codec.read(b('002a'), 0)).toStrictEqual([{ __kind: 1, one: 42 }, 2]);
+    });
+
+    it('encodes data enums with enum discriminator values', () => {
+        enum Event {
+            Click,
+            KeyPress,
+        }
+        const codec = dataEnum([
+            [
+                Event.Click,
+                struct([
+                    ['x', u8()],
+                    ['y', u8()],
+                ]),
+            ],
+            [Event.KeyPress, struct([['key', u32()]])],
+        ]);
+        expect(codec.encode({ __kind: Event.Click, x: 1, y: 2 })).toStrictEqual(b('000102'));
+        expect(codec.read(b('000102'), 0)).toStrictEqual([{ __kind: Event.Click, x: 1, y: 2 }, 3]);
+    });
+
     it('has the right sizes', () => {
         const webEvent = dataEnum(getWebEvent());
         expect(isVariableSize(webEvent)).toBe(true);

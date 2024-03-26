@@ -25,6 +25,26 @@ import { getUnitCodec } from '../unit';
             { discriminator: 'myType' },
         ) satisfies Encoder<{ myType: 'A'; value: string } | { myType: 'B'; x: number; y: number }>;
     }
+
+    // It can use numbers as discriminator values.
+    {
+        getDataEnumEncoder([
+            [1, {} as Encoder<{ value: string }>],
+            [2, {} as Encoder<{ x: number; y: number }>],
+        ]) satisfies Encoder<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
+    }
+
+    // It can use enums as discriminator values.
+    {
+        const enum Event {
+            Click,
+            KeyPress,
+        }
+        getDataEnumEncoder([
+            [Event.Click, {} as Encoder<{ x: number; y: number }>],
+            [Event.KeyPress, {} as Encoder<{ key: string }>],
+        ]) satisfies Encoder<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
+    }
 }
 
 // [DESCRIBE] getDataEnumDecoder.
@@ -47,6 +67,26 @@ import { getUnitCodec } from '../unit';
             { discriminator: 'myType' },
         ) satisfies Decoder<{ myType: 'A'; value: string } | { myType: 'B'; x: number; y: number }>;
     }
+
+    // It can use numbers as discriminator values.
+    {
+        getDataEnumDecoder([
+            [1, {} as Decoder<{ value: string }>],
+            [2, {} as Decoder<{ x: number; y: number }>],
+        ]) satisfies Decoder<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
+    }
+
+    // It can use enums as discriminator values.
+    {
+        const enum Event {
+            Click,
+            KeyPress,
+        }
+        getDataEnumDecoder([
+            [Event.Click, {} as Decoder<{ x: number; y: number }>],
+            [Event.KeyPress, {} as Decoder<{ key: string }>],
+        ]) satisfies Decoder<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
+    }
 }
 
 // [DESCRIBE] getDataEnumCodec.
@@ -68,6 +108,26 @@ import { getUnitCodec } from '../unit';
             ],
             { discriminator: 'myType' },
         ) satisfies Codec<{ myType: 'A'; value: string } | { myType: 'B'; x: number; y: number }>;
+    }
+
+    // It can use numbers as discriminator values.
+    {
+        getDataEnumCodec([
+            [1, {} as Codec<{ value: string }>],
+            [2, {} as Codec<{ x: number; y: number }>],
+        ]) satisfies Codec<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
+    }
+
+    // It can use enums as discriminator values.
+    {
+        const enum Event {
+            Click,
+            KeyPress,
+        }
+        getDataEnumCodec([
+            [Event.Click, {} as Codec<{ x: number; y: number }>],
+            [Event.KeyPress, {} as Codec<{ key: string }>],
+        ]) satisfies Codec<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
     }
 
     // It can infer complex data enum types from provided variants.
