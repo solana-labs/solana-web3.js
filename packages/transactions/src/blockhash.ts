@@ -70,17 +70,18 @@ export function setTransactionLifetimeUsingBlockhash(
     return out;
 }
 
-function deepFreeze<T>(object: T): T {
+function deepFreeze<T extends Record<string, unknown>>(object: T): T {
     Object.freeze(object);
-    Object.getOwnPropertyNames(object).forEach(prop => {
+    Object.keys(object).forEach(prop => {
+        const value = object[prop];
         if (
-            Object.prototype.hasOwnProperty.call(object, prop) &&
-            object[prop] !== null &&
-            (typeof object[prop] === 'object' || typeof object[prop] === 'function') &&
-            !Object.isFrozen(object[prop])
+            value !== null &&
+            (typeof value === 'object' || typeof value === 'function') &&
+            !Object.isFrozen(value)
         ) {
-            deepFreeze(object[prop]);
+            deepFreeze(value as Record<string, unknown>);
         }
     });
     return object;
 }
+
