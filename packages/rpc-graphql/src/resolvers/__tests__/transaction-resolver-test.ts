@@ -43,9 +43,7 @@ describe('transaction resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { signature });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
                 commitment: 'confirmed',
@@ -69,9 +67,7 @@ describe('transaction resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { signature });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
                 commitment: 'confirmed',
@@ -97,9 +93,7 @@ describe('transaction resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { signature });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
                 commitment: 'confirmed',
@@ -126,9 +120,7 @@ describe('transaction resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { signature });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(2);
             expect(rpc.getTransaction).toHaveBeenCalledWith(signature, {
                 commitment: 'confirmed',
@@ -152,9 +144,7 @@ describe('transaction resolver', () => {
                 }
             `;
             rpcGraphQL.query(source, { signature });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getTransaction).toHaveBeenCalledTimes(1);
             expect(rpc.getTransaction).toHaveBeenLastCalledWith(signature, {
                 commitment: 'confirmed',

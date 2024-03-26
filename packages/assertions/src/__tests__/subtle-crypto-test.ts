@@ -16,6 +16,10 @@ import {
     assertVerificationCapabilityIsAvailable,
 } from '../subtle-crypto';
 
+// HACK: Pierce the veil of `jest.isolateModules` so that the modules inside get the same version of
+//       `@solana/errors` that is imported above.
+jest.mock('@solana/errors', () => jest.requireActual('@solana/errors'));
+
 describe('assertDigestCapabilityIsAvailable()', () => {
     describe('when `SubtleCrypto::digest` is available', () => {
         it('does not throw', () => {

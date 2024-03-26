@@ -57,9 +57,7 @@ describe('account loader', () => {
                 }
             `;
             rpcGraphQL.query(source, { address });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
         });
         it('cache resets on new tick', async () => {
@@ -74,9 +72,7 @@ describe('account loader', () => {
             // Call the query twice
             rpcGraphQL.query(source, { address });
             rpcGraphQL.query(source, { address });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
         });
     });
@@ -100,9 +96,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -122,9 +116,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -147,9 +139,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { address: 'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
                 expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -185,9 +175,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(1);
                 expect(rpc.getMultipleAccounts).toHaveBeenLastCalledWith(
                     [
@@ -265,9 +253,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(1);
                 expect(rpc.getMultipleAccounts).toHaveBeenLastCalledWith(
                     [
@@ -381,9 +367,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(2);
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                     [
@@ -606,9 +590,7 @@ describe('account loader', () => {
 
                 rpcGraphQL.query(source);
 
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(2);
                 expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                     [
@@ -638,9 +620,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -657,9 +637,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -676,9 +654,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -695,9 +671,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -716,9 +690,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -737,9 +709,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -758,9 +728,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -779,9 +747,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -802,9 +768,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -829,9 +793,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                 expect(rpc.getAccountInfo).toHaveBeenLastCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -851,9 +813,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
                 expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -882,9 +842,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source);
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getAccountInfo).toHaveBeenCalledTimes(3);
                 expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                     commitment: 'confirmed',
@@ -914,9 +872,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                     expect(rpc.getAccountInfo).toHaveBeenLastCalledWith(
                         'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
@@ -938,9 +894,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                     expect(rpc.getAccountInfo).toHaveBeenLastCalledWith(
                         'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr',
@@ -963,9 +917,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
                     expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                         commitment: 'confirmed',
@@ -994,9 +946,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(3);
                     expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                         commitment: 'confirmed',
@@ -1027,9 +977,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(1);
                     expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                         commitment: 'confirmed',
@@ -1048,9 +996,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(2);
                     expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                         commitment: 'confirmed',
@@ -1082,9 +1028,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getAccountInfo).toHaveBeenCalledTimes(4);
                     expect(rpc.getAccountInfo).toHaveBeenCalledWith('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr', {
                         commitment: 'confirmed',
@@ -1131,9 +1075,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(1);
                     expect(rpc.getMultipleAccounts).toHaveBeenLastCalledWith(
                         [
@@ -1167,9 +1109,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(1);
                     expect(rpc.getMultipleAccounts).toHaveBeenLastCalledWith(
                         [
@@ -1208,9 +1148,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(2);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [
@@ -1263,9 +1201,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(1);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [
@@ -1299,9 +1235,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(2);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [
@@ -1369,9 +1303,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source, { maxDataSliceByteRange });
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(2);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [
@@ -1441,9 +1373,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source);
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(4);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [
@@ -1550,9 +1480,7 @@ describe('account loader', () => {
                         }
                     `;
                     rpcGraphQL.query(source, { maxDataSliceByteRange });
-                    // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                    await Promise.resolve();
-                    jest.runAllTimers();
+                    await jest.runAllTimersAsync();
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledTimes(4);
                     expect(rpc.getMultipleAccounts).toHaveBeenCalledWith(
                         [

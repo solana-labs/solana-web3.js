@@ -48,9 +48,7 @@ describe('account loader', () => {
                 }
             `;
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(1);
         });
         it('cache resets on new tick', async () => {
@@ -66,9 +64,7 @@ describe('account loader', () => {
             // Call the query twice
             rpcGraphQL.query(source, { slot });
             rpcGraphQL.query(source, { slot });
-            // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-            await Promise.resolve();
-            jest.runAllTimers();
+            await jest.runAllTimersAsync();
             expect(rpc.getBlock).toHaveBeenCalledTimes(2);
         });
     });
@@ -90,9 +86,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -113,9 +107,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -139,9 +131,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
                     commitment: 'confirmed',
@@ -166,9 +156,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -188,9 +176,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -211,9 +197,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -236,9 +220,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -260,9 +242,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -284,9 +264,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -314,9 +292,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -350,9 +326,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -387,9 +361,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
                     commitment: 'confirmed',
@@ -417,9 +389,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(2);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
                     commitment: 'confirmed',
@@ -446,9 +416,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -468,9 +436,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(1);
                 expect(rpc.getBlock).toHaveBeenLastCalledWith(slot, {
                     commitment: 'confirmed',
@@ -494,9 +460,7 @@ describe('account loader', () => {
                     }
                 `;
                 rpcGraphQL.query(source, { slot });
-                // FIXME: Prefer async version of this timer runner. See https://github.com/jestjs/jest/issues/14549
-                await Promise.resolve();
-                jest.runAllTimers();
+                await jest.runAllTimersAsync();
                 expect(rpc.getBlock).toHaveBeenCalledTimes(3);
                 expect(rpc.getBlock).toHaveBeenCalledWith(slot, {
                     commitment: 'confirmed',

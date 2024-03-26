@@ -14,6 +14,9 @@ jest.mock('@solana/codecs-strings', () => ({
     getBase58Decoder: jest.fn(),
     getBase58Encoder: jest.fn(),
 }));
+// HACK: Pierce the veil of `jest.isolateModules` so that the modules inside get the same version of
+//       `@solana/errors` that is imported above.
+jest.mock('@solana/errors', () => jest.requireActual('@solana/errors'));
 
 // real implementations
 const originalBase58Module = jest.requireActual('@solana/codecs-strings');
