@@ -1,15 +1,19 @@
 import { Codec, Decoder, Encoder } from '@solana/codecs-core';
 import { getU64Codec } from '@solana/codecs-numbers';
 
-import { getDataEnumCodec, getDataEnumDecoder, getDataEnumEncoder } from '../data-enum';
+import {
+    getDiscriminatedUnionCodec,
+    getDiscriminatedUnionDecoder,
+    getDiscriminatedUnionEncoder,
+} from '../discriminated-union';
 import { getStructCodec } from '../struct';
 import { getUnitCodec } from '../unit';
 
-// [DESCRIBE] getDataEnumEncoder.
+// [DESCRIBE] getDiscriminatedUnionEncoder.
 {
-    // It constructs data enums from a list of encoder variants.
+    // It constructs discriminated unions from a list of encoder variants.
     {
-        getDataEnumEncoder([
+        getDiscriminatedUnionEncoder([
             ['A', {} as Encoder<{ value: string }>],
             ['B', {} as Encoder<{ x: number; y: number }>],
         ]) satisfies Encoder<{ __kind: 'A'; value: string } | { __kind: 'B'; x: number; y: number }>;
@@ -17,7 +21,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use a custom discriminator property.
     {
-        getDataEnumEncoder(
+        getDiscriminatedUnionEncoder(
             [
                 ['A', {} as Encoder<{ value: string }>],
                 ['B', {} as Encoder<{ x: number; y: number }>],
@@ -28,7 +32,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use numbers as discriminator values.
     {
-        getDataEnumEncoder([
+        getDiscriminatedUnionEncoder([
             [1, {} as Encoder<{ value: string }>],
             [2, {} as Encoder<{ x: number; y: number }>],
         ]) satisfies Encoder<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
@@ -40,18 +44,18 @@ import { getUnitCodec } from '../unit';
             Click,
             KeyPress,
         }
-        getDataEnumEncoder([
+        getDiscriminatedUnionEncoder([
             [Event.Click, {} as Encoder<{ x: number; y: number }>],
             [Event.KeyPress, {} as Encoder<{ key: string }>],
         ]) satisfies Encoder<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
     }
 }
 
-// [DESCRIBE] getDataEnumDecoder.
+// [DESCRIBE] getDiscriminatedUnionDecoder.
 {
-    // It constructs data enums from a list of decoder variants.
+    // It constructs discriminated unions from a list of decoder variants.
     {
-        getDataEnumDecoder([
+        getDiscriminatedUnionDecoder([
             ['A', {} as Decoder<{ value: string }>],
             ['B', {} as Decoder<{ x: number; y: number }>],
         ]) satisfies Decoder<{ __kind: 'A'; value: string } | { __kind: 'B'; x: number; y: number }>;
@@ -59,7 +63,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use a custom discriminator property.
     {
-        getDataEnumDecoder(
+        getDiscriminatedUnionDecoder(
             [
                 ['A', {} as Decoder<{ value: string }>],
                 ['B', {} as Decoder<{ x: number; y: number }>],
@@ -70,7 +74,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use numbers as discriminator values.
     {
-        getDataEnumDecoder([
+        getDiscriminatedUnionDecoder([
             [1, {} as Decoder<{ value: string }>],
             [2, {} as Decoder<{ x: number; y: number }>],
         ]) satisfies Decoder<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
@@ -82,18 +86,18 @@ import { getUnitCodec } from '../unit';
             Click,
             KeyPress,
         }
-        getDataEnumDecoder([
+        getDiscriminatedUnionDecoder([
             [Event.Click, {} as Decoder<{ x: number; y: number }>],
             [Event.KeyPress, {} as Decoder<{ key: string }>],
         ]) satisfies Decoder<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
     }
 }
 
-// [DESCRIBE] getDataEnumCodec.
+// [DESCRIBE] getDiscriminatedUnionCodec.
 {
-    // It constructs data enums from a list of codec variants.
+    // It constructs discriminated unions from a list of codec variants.
     {
-        getDataEnumCodec([
+        getDiscriminatedUnionCodec([
             ['A', {} as Codec<{ value: string }>],
             ['B', {} as Codec<{ x: number; y: number }>],
         ]) satisfies Codec<{ __kind: 'A'; value: string } | { __kind: 'B'; x: number; y: number }>;
@@ -101,7 +105,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use a custom discriminator property.
     {
-        getDataEnumCodec(
+        getDiscriminatedUnionCodec(
             [
                 ['A', {} as Codec<{ value: string }>],
                 ['B', {} as Codec<{ x: number; y: number }>],
@@ -112,7 +116,7 @@ import { getUnitCodec } from '../unit';
 
     // It can use numbers as discriminator values.
     {
-        getDataEnumCodec([
+        getDiscriminatedUnionCodec([
             [1, {} as Codec<{ value: string }>],
             [2, {} as Codec<{ x: number; y: number }>],
         ]) satisfies Codec<{ __kind: 1; value: string } | { __kind: 2; x: number; y: number }>;
@@ -124,15 +128,15 @@ import { getUnitCodec } from '../unit';
             Click,
             KeyPress,
         }
-        getDataEnumCodec([
+        getDiscriminatedUnionCodec([
             [Event.Click, {} as Codec<{ x: number; y: number }>],
             [Event.KeyPress, {} as Codec<{ key: string }>],
         ]) satisfies Codec<{ __kind: Event.Click; x: number; y: number } | { __kind: Event.KeyPress; key: string }>;
     }
 
-    // It can infer complex data enum types from provided variants.
+    // It can infer complex discriminated union types from provided variants.
     {
-        getDataEnumCodec(
+        getDiscriminatedUnionCodec(
             [
                 ['PageLoad', {} as Codec<void>],
                 [
@@ -154,9 +158,9 @@ import { getUnitCodec } from '../unit';
         >;
     }
 
-    // It can infer codec data enum with different from and to types.
+    // It can infer codec discriminated union with different from and to types.
     {
-        getDataEnumCodec([
+        getDiscriminatedUnionCodec([
             ['A', getUnitCodec()],
             ['B', getStructCodec([['value', getU64Codec()]])],
         ]) satisfies Codec<

@@ -243,7 +243,7 @@ const bytes = getScalarEnumEncoder(Direction).encode(Direction.Left);
 const direction = getScalarEnumDecoder(Direction).decode(bytes);
 ```
 
-## Data enum codec
+## Discriminated union codec
 
 In Rust, enums are powerful data types whose variants can be one of the following:
 
@@ -251,9 +251,9 @@ In Rust, enums are powerful data types whose variants can be one of the followin
 -   A tuple variant — e.g. `enum Message { Write(String) }`.
 -   A struct variant — e.g. `enum Message { Move { x: i32, y: i32 } }`.
 
-Whilst we do not have such powerful enums in JavaScript, we can emulate them in TypeScript using a union of objects such that each object is differentiated by a specific field. **We call this a data enum**.
+Whilst we do not have such powerful enums in JavaScript, we can emulate them in TypeScript using a union of objects such that each object is differentiated by a specific field. **We call this a discriminated union**.
 
-We use a special field named `__kind` to distinguish between the different variants of a data enum. Additionally, since all variants are objects, we can use a `fields` property to wrap the array of tuple variants. Here is an example.
+We use a special field named `__kind` to distinguish between the different variants of a discriminated union. Additionally, since all variants are objects, we can use a `fields` property to wrap the array of tuple variants. Here is an example.
 
 ```ts
 type Message =
@@ -262,14 +262,14 @@ type Message =
     | { __kind: 'Move'; x: number; y: number }; // Struct variant.
 ```
 
-The `getDataEnumCodec` function helps us encode and decode these data enums.
+The `getDiscriminatedUnionCodec` function helps us encode and decode these discriminated unions.
 
 It requires the discriminator and codec of each variant as a first argument. Similarly to the struct codec, these are defined as an array of variant tuples where the first item is the discriminator of the variant and the second item is its codec. Since empty variants do not have data to encode, they simply use the unit codec — documented below — which does nothing.
 
-Here is how we can create a data enum codec for our previous example.
+Here is how we can create a discriminated union codec for our previous example.
 
 ```ts
-const messageCodec = getDataEnumCodec([
+const messageCodec = getDiscriminatedUnionCodec([
     // Empty variant.
     ['Quit', getUnitCodec()],
 
@@ -287,7 +287,7 @@ const messageCodec = getDataEnumCodec([
 ]);
 ```
 
-And here’s how we can use such a codec to encode data enums. Notice that by default, they use a `u8` number prefix to distinguish between the different types of variants.
+And here’s how we can use such a codec to encode discriminated unions. Notice that by default, they use a `u8` number prefix to distinguish between the different types of variants.
 
 ```ts
 messageCodec.encode({ __kind: 'Quit' });
@@ -307,10 +307,10 @@ messageCodec.encode({ __kind: 'Move', x: 5, y: 6 });
 //   └-- 1-byte discriminator (Index 2 — the "Move" variant).
 ```
 
-However, you may provide a number codec as the `size` option of the `getDataEnumCodec` function to customise that behaviour.
+However, you may provide a number codec as the `size` option of the `getDiscriminatedUnionCodec` function to customise that behaviour.
 
 ```ts
-const u32MessageCodec = getDataEnumCodec([...], {
+const u32MessageCodec = getDiscriminatedUnionCodec([...], {
     size: getU32Codec(),
 });
 
@@ -330,7 +330,7 @@ u32MessageCodec.encode({ __kind: 'Move', x: 5, y: 6 });
 You may also customize the discriminator property — which defaults to `__kind` — by providing the desired property name as the `discriminator` option like so:
 
 ```ts
-const messageCodec = getDataEnumCodec([...], {
+const messageCodec = getDiscriminatedUnionCodec([...], {
     discriminator: 'message',
 });
 
@@ -347,7 +347,7 @@ enum Message {
     Write,
     Move,
 }
-const messageCodec = getDataEnumCodec([
+const messageCodec = getDiscriminatedUnionCodec([
     [Message.Quit, getUnitCodec()],
     [Message.Write, getStructCodec([...])],
     [Message.Move, getStructCodec([...])],
@@ -358,11 +358,11 @@ codec.encode({ __kind: Message.Write, fields: ['Hi'] });
 codec.encode({ __kind: Message.Move, x: 5, y: 6 });
 ```
 
-Finally, note that separate `getDataEnumEncoder` and `getDataEnumDecoder` functions are available.
+Finally, note that separate `getDiscriminatedUnionEncoder` and `getDiscriminatedUnionDecoder` functions are available.
 
 ```ts
-const bytes = getDataEnumEncoder(variantEncoders).encode({ __kind: 'Quit' });
-const message = getDataEnumDecoder(variantDecoders).decode(bytes);
+const bytes = getDiscriminatedUnionEncoder(variantEncoders).encode({ __kind: 'Quit' });
+const message = getDiscriminatedUnionDecoder(variantDecoders).decode(bytes);
 ```
 
 ## Boolean codec
@@ -514,7 +514,7 @@ const decodedBooleans = getBitArrayDecoder(1).decode(bytes);
 
 ## Unit codec
 
-The `getUnitCodec` function returns a `Codec<void>` that encodes `undefined` into an empty `Uint8Array` and returns `undefined` without consuming any bytes when decoding. This is more of a low-level codec that can be used internally by other codecs. For instance, this is how data enum codecs describe the codecs of empty variants.
+The `getUnitCodec` function returns a `Codec<void>` that encodes `undefined` into an empty `Uint8Array` and returns `undefined` without consuming any bytes when decoding. This is more of a low-level codec that can be used internally by other codecs. For instance, this is how discriminated union codecs describe the codecs of empty variants.
 
 ```ts
 getUnitCodec().encode(undefined); // Empty Uint8Array

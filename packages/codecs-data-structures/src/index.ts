@@ -3,7 +3,7 @@ export * from './assertions';
 export * from './bit-array';
 export * from './boolean';
 export * from './bytes';
-export * from './data-enum';
+export * from './discriminated-union';
 export * from './map';
 export * from './nullable';
 export * from './scalar-enum';

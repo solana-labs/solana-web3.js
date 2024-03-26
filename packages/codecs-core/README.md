@@ -43,7 +43,7 @@ There is a significant library of composable codecs at your disposal, enabling y
 
 -   [`@solana/codecs-numbers`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-numbers) for number codecs.
 -   [`@solana/codecs-strings`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings) for string codecs.
--   [`@solana/codecs-data-structures`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures) for many data structure codecs such as objects, arrays, tuples, sets, maps, scalar enums, data enums, booleans, etc.
+-   [`@solana/codecs-data-structures`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures) for many data structure codecs such as objects, arrays, tuples, sets, maps, scalar enums, discriminated unions, booleans, etc.
 -   [`@solana/options`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options) for a Rust-like `Option` type and associated codec.
 
 You may also be interested in some of the helpers of this `@solana/codecs-core` library such as `mapCodec`, `fixCodec` or `reverseCodec` that create new codecs from existing ones.
