@@ -2,6 +2,7 @@ import {
     SOLANA_ERROR__CHAIN_NOT_SUPPORTED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
+    SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET,
     SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN,
     SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN,
     SolanaErrorCode,
@@ -32,6 +33,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<{
         optionalPathLabel: string;
         path?: string;
         value: bigint;
+    };
+    [SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET]: {
+        accountAddress: string;
+        walletName: string;
     };
     [SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN]: {
         chain: `${string}:${string}`;

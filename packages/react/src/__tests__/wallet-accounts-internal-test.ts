@@ -1,6 +1,7 @@
 import { address } from '@solana/addresses';
 import {
     SOLANA_ERROR__CHAIN_NOT_SUPPORTED,
+    SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET,
     SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN,
     SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN,
     SolanaError,
@@ -11,7 +12,66 @@ import { StandardEvents, StandardEventsListeners } from '@wallet-standard/featur
 import { act } from 'react-test-renderer';
 
 import { renderHook } from '../test-renderer';
-import { useWalletAccounts_INTERNAL_ONLY_DO_NOT_EXPORT } from '../wallet-accounts-internal';
+import {
+    useWalletAccount_INTERNAL_ONLY_DO_NOT_EXPORT,
+    useWalletAccounts_INTERNAL_ONLY_DO_NOT_EXPORT,
+} from '../wallet-accounts-internal';
+
+describe('useWalletAccount', () => {
+    let mockWallet: Wallet;
+    beforeEach(() => {
+        mockWallet = {
+            accounts: [
+                {
+                    address: address('Httx5rAMNW3zA6NtXbgpnq22RdS9qK6rRBiNi8Msoc8a'),
+                    chains: ['solana:devnet'],
+                    features: ['solana:signMessage', 'solana:signAndSendTransaction'],
+                    icon: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEAAAAALAAAAAABAAEAAAIBAAA=',
+                    label: 'My Test Account',
+                    publicKey: new Uint8Array([
+                        251, 6, 90, 16, 167, 85, 10, 206, 169, 88, 60, 180, 238, 49, 109, 108, 152, 101, 243, 178, 93,
+                        190, 195, 73, 206, 97, 76, 131, 200, 38, 175, 179,
+                    ]),
+                },
+            ],
+            chains: SOLANA_CHAINS,
+            features: {},
+            icon: 'data:image/svg+xml;base64,ABC',
+            name: 'Mock Wallet',
+            version: '1.0.0',
+        };
+        // Suppresses console output when an `ErrorBoundary` is hit.
+        // See https://stackoverflow.com/a/72632884/802047
+        jest.spyOn(console, 'error').mockImplementation();
+        jest.spyOn(console, 'warn').mockImplementation();
+    });
+    it('returns the account matching the given address', () => {
+        const { result } = renderHook(() =>
+            useWalletAccount_INTERNAL_ONLY_DO_NOT_EXPORT(
+                mockWallet,
+                address('Httx5rAMNW3zA6NtXbgpnq22RdS9qK6rRBiNi8Msoc8a'),
+                'devnet',
+            ),
+        );
+        expect(result.current).toBe(mockWallet.accounts[0]);
+    });
+    it('fatals when a wallet has no account matching the given address', () => {
+        const { result } = renderHook(() =>
+            useWalletAccount_INTERNAL_ONLY_DO_NOT_EXPORT(
+                mockWallet,
+                address('6bDQKLGyVpAUzhZa8jDvKbAPPs33ESMdTAjN4HX5PEVu'),
+                'devnet',
+            ),
+        );
+        expect(result.__type).toBe('error');
+        expect(result.current).toEqual(
+            new SolanaError(SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET, {
+                accountAddress: '6bDQKLGyVpAUzhZa8jDvKbAPPs33ESMdTAjN4HX5PEVu',
+                walletName: 'Mock Wallet',
+            }),
+        );
+    });
+});
 
 describe('useWalletAccounts', () => {
     let emitWalletChangeEvent: StandardEventsListeners['change'];

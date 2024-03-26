@@ -3,6 +3,7 @@ import {
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET,
     SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN,
     SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN,
     SolanaErrorCode,
@@ -29,6 +30,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE]:
         "Could not determine this transaction's signature. Make sure that the transaction has " +
         'been signed by its fee payer.',
+    [SOLANA_ERROR__WALLET_ACCOUNT_NOT_FOUND_IN_WALLET]:
+        'No account having address `$accountAddress` could be found in the wallet `$walletName}`',
     [SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN]:
         "The wallet '$walletName' does not support connecting to the chain `$chain`",
     [SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN]:
