@@ -124,16 +124,30 @@ describe('getDataEnumCodec', () => {
     });
 
     it('encodes data enums with different From and To types', () => {
-        const x = dataEnum(getU64Enum());
-        expect(x.encode({ __kind: 'B', value: 2 })).toStrictEqual(b('010200000000000000'));
-        expect(x.encode({ __kind: 'B', value: 2n })).toStrictEqual(b('010200000000000000'));
-        expect(x.read(b('010200000000000000'), 0)).toStrictEqual([{ __kind: 'B', value: 2n }, 9]);
+        const codec = dataEnum(getU64Enum());
+        expect(codec.encode({ __kind: 'B', value: 2 })).toStrictEqual(b('010200000000000000'));
+        expect(codec.encode({ __kind: 'B', value: 2n })).toStrictEqual(b('010200000000000000'));
+        expect(codec.read(b('010200000000000000'), 0)).toStrictEqual([{ __kind: 'B', value: 2n }, 9]);
     });
 
-    it('encodes data enums with custom prefix', () => {
-        const x = dataEnum(getSameSizeVariants(), { size: u32() });
-        expect(x.encode({ __kind: 'A', value: 42 })).toStrictEqual(b('000000002a00'));
-        expect(x.read(b('000000002a00'), 0)).toStrictEqual([{ __kind: 'A', value: 42 }, 6]);
+    it('encodes data enums with a custom prefix', () => {
+        const codec = dataEnum(getSameSizeVariants(), { size: u32() });
+        expect(codec.encode({ __kind: 'A', value: 42 })).toStrictEqual(b('000000002a00'));
+        expect(codec.read(b('000000002a00'), 0)).toStrictEqual([{ __kind: 'A', value: 42 }, 6]);
+    });
+
+    it('encodes data enums with a custom discriminator property', () => {
+        const codec = dataEnum(
+            [
+                ['small', struct([['value', u8()]])],
+                ['large', struct([['value', u32()]])],
+            ],
+            { discriminator: 'size' },
+        );
+        expect(codec.encode({ size: 'small', value: 42 })).toStrictEqual(b('002a'));
+        expect(codec.read(b('002a'), 0)).toStrictEqual([{ size: 'small', value: 42 }, 2]);
+        expect(codec.encode({ size: 'large', value: 42 })).toStrictEqual(b('012a000000'));
+        expect(codec.read(b('012a000000'), 0)).toStrictEqual([{ size: 'large', value: 42 }, 5]);
     });
 
     it('has the right sizes', () => {

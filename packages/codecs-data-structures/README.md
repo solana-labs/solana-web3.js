@@ -253,7 +253,7 @@ In Rust, enums are powerful data types whose variants can be one of the followin
 
 Whilst we do not have such powerful enums in JavaScript, we can emulate them in TypeScript using a union of objects such that each object is differentiated by a specific field. **We call this a data enum**.
 
-We use a special field named `__kind` to distinguish between the different variants of a data enum. Additionally, since all variants are objects, we use a `fields` property to wrap the array of tuple variants. Here is an example.
+We use a special field named `__kind` to distinguish between the different variants of a data enum. Additionally, since all variants are objects, we can use a `fields` property to wrap the array of tuple variants. Here is an example.
 
 ```ts
 type Message =
@@ -264,7 +264,7 @@ type Message =
 
 The `getDataEnumCodec` function helps us encode and decode these data enums.
 
-It requires the name and codec of each variant as a first argument. Similarly to the struct codec, these are defined as an array of variant tuples where the first item is the name of the variant and the second item is its codec. Since empty variants do not have data to encode, they simply use the unit codec — documented below — which does nothing.
+It requires the discriminator and codec of each variant as a first argument. Similarly to the struct codec, these are defined as an array of variant tuples where the first item is the discriminator of the variant and the second item is its codec. Since empty variants do not have data to encode, they simply use the unit codec — documented below — which does nothing.
 
 Here is how we can create a data enum codec for our previous example.
 
@@ -274,12 +274,12 @@ const messageCodec = getDataEnumCodec([
     ['Quit', getUnitCodec()],
 
     // Tuple variant.
-    ['Write', getStructCodec<{ fields: [string] }>([['fields', getTupleCodec([getStringCodec()])]])],
+    ['Write', getStructCodec([['fields', getTupleCodec([getStringCodec()])]])],
 
     // Struct variant.
     [
         'Move',
-        getStructCodec<{ x: number; y: number }>([
+        getStructCodec([
             ['x', getI32Codec()],
             ['y', getI32Codec()],
         ]),
@@ -327,7 +327,19 @@ u32MessageCodec.encode({ __kind: 'Move', x: 5, y: 6 });
 //   └------┘ 4-byte discriminator (Index 2).
 ```
 
-Separate `getDataEnumEncoder` and `getDataEnumDecoder` functions are also available.
+You may also customize the discriminator property — which defaults to `__kind` — by providing the desired property name as the `discriminator` option like so:
+
+```ts
+const messageCodec = getDataEnumCodec([...], {
+    discriminator: 'message',
+});
+
+messageCodec.encode({ message: 'Quit' });
+messageCodec.encode({ message: 'Write', fields: ['Hi'] });
+messageCodec.encode({ message: 'Move', x: 5, y: 6 });
+```
+
+Finally, note that separate `getDataEnumEncoder` and `getDataEnumDecoder` functions are available.
 
 ```ts
 const bytes = getDataEnumEncoder(variantEncoders).encode({ __kind: 'Quit' });
