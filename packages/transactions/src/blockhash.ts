@@ -66,6 +66,21 @@ export function setTransactionLifetimeUsingBlockhash(
         ...getUnsignedTransaction(transaction),
         lifetimeConstraint: blockhashLifetimeConstraint,
     };
-    Object.freeze(out);
+    deepFreeze(out);
     return out;
 }
+
+function deepFreeze(object: any) {
+    Object.freeze(object);
+    Object.getOwnPropertyNames(object).forEach(prop => {
+        if (
+            object.hasOwnProperty(prop) &&
+            object[prop] !== null &&
+            (typeof object[prop] === 'object' || typeof object[prop] === 'function') &&
+            !Object.isFrozen(object[prop])
+        ) {
+            deepFreeze(object[prop]);
+        }
+    });
+}
+
