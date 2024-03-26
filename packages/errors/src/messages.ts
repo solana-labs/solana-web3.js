@@ -1,7 +1,10 @@
 import {
+    SOLANA_ERROR__CHAIN_NOT_SUPPORTED,
     SOLANA_ERROR__RPC_INTEGER_OVERFLOW,
     SOLANA_ERROR__TRANSACTION_MISSING_SIGNATURES,
     SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE,
+    SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN,
+    SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN,
     SolanaErrorCode,
 } from './codes';
 
@@ -17,6 +20,7 @@ export const SolanaErrorMessages: Readonly<{
     // TypeScript will fail to build this project if add an error code without a message.
     [P in SolanaErrorCode]: string;
 }> = {
+    [SOLANA_ERROR__CHAIN_NOT_SUPPORTED]: 'The chain `$chain` is not supported',
     [SOLANA_ERROR__RPC_INTEGER_OVERFLOW]:
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +
@@ -25,4 +29,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION_SIGNATURE_NOT_COMPUTABLE]:
         "Could not determine this transaction's signature. Make sure that the transaction has " +
         'been signed by its fee payer.',
+    [SOLANA_ERROR__WALLET_DOES_NOT_SUPPORT_CHAIN]:
+        "The wallet '$walletName' does not support connecting to the chain `$chain`",
+    [SOLANA_ERROR__WALLET_HAS_NO_CONNECTED_ACCOUNTS_FOR_CHAIN]:
+        "The wallet '$walletName' has no connected accounts for the chain `$chain`",
 };

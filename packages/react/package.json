@@ -64,6 +64,13 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/addresses": "workspace:*",
+        "@solana/errors": "workspace:*",
+        "@solana/wallet-standard-chains": "^1.1.0",
+        "@wallet-standard/base": "^1",
+        "@wallet-standard/features": "^1"
+    },
     "devDependencies": {
         "@solana/eslint-config-solana": "^1.0.2",
         "@swc/jest": "^0.2.29",
