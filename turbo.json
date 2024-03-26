@@ -14,20 +14,17 @@
                 "test:unit:browser",
                 "test:unit:node"
             ],
-            "outputs": ["dist/**"],
-            "outputMode": "errors-only"
+            "outputs": ["dist/**"]
         },
         "compile:js": {
             "dependsOn": ["^compile:js"],
             "inputs": ["tsconfig.*", "src/**"],
-            "outputs": ["dist/**"],
-            "outputMode": "errors-only"
+            "outputs": ["dist/**"]
         },
         "compile:typedefs": {
             "dependsOn": ["^compile:typedefs"],
             "inputs": ["tsconfig.*", "src/**"],
-            "outputs": ["dist/**/*.d.ts"],
-            "outputMode": "errors-only"
+            "outputs": ["dist/**/*.d.ts"]
         },
         "publish-packages": {
             "cache": false,
@@ -42,8 +39,7 @@
                 "test:treeshakability:browser",
                 "test:treeshakability:native",
                 "test:treeshakability:node"
-            ],
-            "outputMode": "errors-only"
+            ]
         },
         "publish-packages-legacy": {
             "cache": false,
@@ -56,55 +52,44 @@
                 "test:prettier",
                 "test:typecheck",
                 "test:unit:node"
-            ],
-            "outputMode": "errors-only"
+            ]
         },
         "style:fix": {
             "inputs": ["*"],
-            "outputs": ["*"],
-            "outputMode": "errors-only"
+            "outputs": ["*"]
         },
         "test:lint": {
             "dependsOn": ["^compile:typedefs"],
             "inputs": ["src/**", "test/**"],
-            "outputs": [],
-            "outputMode": "errors-only"
+            "outputs": []
         },
         "test:live-with-test-validator": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**"]
         },
         "test:prettier": {
-            "inputs": ["*"],
-            "outputMode": "errors-only"
+            "inputs": ["*"]
         },
         "test:typecheck": {
             "dependsOn": ["^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**"],
-            "outputMode": "errors-only"
+            "inputs": ["tsconfig.*", "src/**"]
         },
         "test:unit:browser": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**"]
         },
         "test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**"]
         },
         "test:treeshakability:browser": {
-            "dependsOn": ["compile:js"],
-            "outputMode": "errors-only"
+            "dependsOn": ["compile:js"]
         },
         "test:treeshakability:native": {
-            "dependsOn": ["compile:js"],
-            "outputMode": "errors-only"
+            "dependsOn": ["compile:js"]
         },
         "test:treeshakability:node": {
-            "dependsOn": ["compile:js"],
-            "outputMode": "errors-only"
+            "dependsOn": ["compile:js"]
         },
         "@solana/web3.js#build": {
             "dependsOn": [
@@ -118,24 +103,20 @@
                 "test:typecheck",
                 "test:unit:node"
             ],
-            "outputs": ["doc/**", "declarations/**", "lib/**"],
-            "outputMode": "errors-only"
+            "outputs": ["doc/**", "declarations/**", "lib/**"]
         },
         "@solana/web3.js#clean": {
-            "outputs": ["doc/**", "declarations/**", "lib/**"],
-            "outputMode": "errors-only"
+            "outputs": ["doc/**", "declarations/**", "lib/**"]
         },
         "@solana/web3.js#compile:docs": {
             "dependsOn": ["clean"],
             "inputs": ["src/**"],
-            "outputs": ["doc/**"],
-            "outputMode": "errors-only"
+            "outputs": ["doc/**"]
         },
         "@solana/web3.js#compile:js": {
             "dependsOn": ["clean", "^compile:js"],
             "inputs": ["babel.config.json", "rollup.config.mjs", "tsconfig.*", "src/**"],
-            "outputs": ["lib/**"],
-            "outputMode": "errors-only"
+            "outputs": ["lib/**"]
         },
         "@solana/web3.js#compile:typedefs": {
             "dependsOn": ["clean", "^compile:typedefs"],
@@ -146,32 +127,26 @@
                 "test/__shadow-jest-types.d.ts",
                 "tsconfig.*"
             ],
-            "outputs": ["declarations/**", "lib/**/*.d.ts"],
-            "outputMode": "errors-only"
+            "outputs": ["declarations/**", "lib/**/*.d.ts"]
         },
         "@solana/web3.js#test:lint": {
-            "inputs": ["src/**", "test/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**", "test/**"]
         },
         "@solana/web3.js#test:live-with-test-validator": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**", "test/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**", "test/**"]
         },
         "@solana/web3.js#test:typecheck": {
             "dependsOn": ["^compile:typedefs"],
-            "inputs": ["src/**", "test/**", "tsconfig.*"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**", "test/**", "tsconfig.*"]
         },
         "@solana/web3.js#test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["src/**", "test/**"],
-            "outputMode": "errors-only"
+            "inputs": ["src/**", "test/**"]
         },
         "@solana/web3.js-legacy-sham#compile:typedefs": {
             "dependsOn": ["@solana/web3.js#compile:typedefs", "^compile:typedefs"],
-            "inputs": ["tsconfig.*", "src/**", "test/**"],
-            "outputMode": "errors-only"
+            "inputs": ["tsconfig.*", "src/**", "test/**"]
         }
     },
     "remoteCache": {
