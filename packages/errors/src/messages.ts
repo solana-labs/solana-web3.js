@@ -32,6 +32,7 @@ import {
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
     SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH,
@@ -120,6 +121,7 @@ import {
     SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY,
     SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE,
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
@@ -274,6 +276,7 @@ export const SolanaErrorMessages: Readonly<{
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
     [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected offset to be in the range [0, $bytesLength], got $offset.',
+    [SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED]: 'No random values implementation could be found.',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_BORROW_FAILED]:
         'instruction tries to borrow reference for an account which is already borrowed',
@@ -400,6 +403,8 @@ export const SolanaErrorMessages: Readonly<{
         'Expected private key bytes with length 32. Actual length: $actualLength.',
     [SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH]:
         'Expected base58-encoded signature to decode to a byte array of length 64. Actual length: $actualLength.',
+    [SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY]:
+        'The provided private key does not match the provided public key.',
     [SOLANA_ERROR__KEYS__SIGNATURE_STRING_LENGTH_OUT_OF_RANGE]:
         'Expected base58-encoded signature string of length in the range [64, 88]. Actual length: $actualLength.',
     [SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE]: 'Lamports value must be in the range [0, 2e64-1]',
