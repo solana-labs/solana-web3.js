@@ -21,8 +21,7 @@ describe('createPrivateKeyFromBytes', () => {
         beforeEach(async () => {
             privateKey = await createPrivateKeyFromBytes(MOCK_PRIVATE_KEY_BYTES);
         });
-        it('is non-extractable', async () => {
-            expect.assertions(1);
+        it('is non-extractable', () => {
             expect(privateKey).toHaveProperty('extractable', false);
         });
         it('has the expected metadata', () => {

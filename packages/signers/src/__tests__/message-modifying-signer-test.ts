@@ -12,7 +12,7 @@ describe('isMessageModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignMessages: async () => [],
+            modifyAndSignMessages: () => Promise.resolve([]),
         } satisfies MessageModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isMessageModifyingSigner(mySigner)).toBe(true);
@@ -26,7 +26,7 @@ describe('assertIsMessageModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignMessages: async () => [],
+            modifyAndSignMessages: () => Promise.resolve([]),
         } satisfies MessageModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_MODIFYING_SIGNER, {

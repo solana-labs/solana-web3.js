@@ -8,15 +8,15 @@ describe('isTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signTransactions: async () => [],
+            signTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignTransactions: async () => [],
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            signAndSendTransactions: async () => [],
+            signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSigner(myPartialSigner)).toBe(true);
@@ -38,15 +38,15 @@ describe('assertIsTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signTransactions: async () => [],
+            signTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignTransactions: async () => [],
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            signAndSendTransactions: async () => [],
+            signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SIGNER, {

@@ -8,11 +8,11 @@ describe('isMessageSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signMessages: async () => [],
+            signMessages: () => Promise.resolve([]),
         } satisfies MessageSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignMessages: async () => [],
+            modifyAndSignMessages: () => Promise.resolve([]),
         } satisfies MessageSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isMessageSigner(myPartialSigner)).toBe(true);
@@ -29,11 +29,11 @@ describe('assertIsMessageSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            signMessages: async () => [],
+            signMessages: () => Promise.resolve([]),
         } satisfies MessageSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            modifyAndSignMessages: async () => [],
+            modifyAndSignMessages: () => Promise.resolve([]),
         } satisfies MessageSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_MESSAGE_SIGNER, {

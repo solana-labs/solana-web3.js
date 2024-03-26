@@ -37,8 +37,8 @@ describe('isKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            signMessages: async () => [],
-            signTransactions: async () => [],
+            signMessages: () => Promise.resolve([]),
+            signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isKeyPairSigner(mySigner)).toBe(true);
@@ -55,8 +55,8 @@ describe('assertIsKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            signMessages: async () => [],
-            signTransactions: async () => [],
+            signMessages: () => Promise.resolve([]),
+            signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, {

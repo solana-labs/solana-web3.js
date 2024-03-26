@@ -16,7 +16,7 @@ describe('createWebSocketConnection', () => {
         const clients = ws.server.clients();
         return clients[clients.length - 1];
     }
-    beforeEach(async () => {
+    beforeEach(() => {
         ws = new WS('wss://fake', {
             jsonProtocol: true,
         });
@@ -76,7 +76,7 @@ describe('RpcWebSocketConnection', () => {
         const clients = ws.server.clients();
         return clients[clients.length - 1];
     }
-    beforeEach(async () => {
+    beforeEach(() => {
         abortController = new AbortController();
         ws = new WS('wss://fake', {
             jsonProtocol: true,

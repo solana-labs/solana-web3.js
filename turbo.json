@@ -65,7 +65,9 @@
             "outputMode": "errors-only"
         },
         "test:lint": {
-            "inputs": ["src/**"],
+            "dependsOn": ["^compile:typedefs"],
+            "inputs": ["src/**", "test/**"],
+            "outputs": [],
             "outputMode": "errors-only"
         },
         "test:live-with-test-validator": {

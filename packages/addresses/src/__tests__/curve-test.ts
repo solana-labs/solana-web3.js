@@ -22,15 +22,10 @@ const ON_CURVE_KEY_BYTES = [
 ];
 
 describe('compressedPointBytesAreOnCurve', () => {
-    it.each(OFF_CURVE_KEY_BYTES)(
-        'returns false when a public key does not lie on the Ed25519 curve [%#]',
-        async bytes => {
-            expect.assertions(1);
-            await expect(compressedPointBytesAreOnCurve(bytes)).resolves.toBe(false);
-        },
-    );
-    it.each(ON_CURVE_KEY_BYTES)('returns true when a public key lies on the Ed25519 curve [%#]', async bytes => {
-        expect.assertions(1);
-        await expect(compressedPointBytesAreOnCurve(bytes)).resolves.toBe(true);
+    it.each(OFF_CURVE_KEY_BYTES)('returns false when a public key does not lie on the Ed25519 curve [%#]', bytes => {
+        expect(compressedPointBytesAreOnCurve(bytes)).toBe(false);
+    });
+    it.each(ON_CURVE_KEY_BYTES)('returns true when a public key lies on the Ed25519 curve [%#]', bytes => {
+        expect(compressedPointBytesAreOnCurve(bytes)).toBe(true);
     });
 });

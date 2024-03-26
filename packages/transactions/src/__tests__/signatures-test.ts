@@ -67,7 +67,7 @@ describe('partiallySignTransaction', () => {
     const mockPublicKeyAddressA = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' as Address<'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'>;
     const mockPublicKeyAddressB = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Address<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
     const mockPublicKeyAddressC = 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC' as Address<'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'>;
-    beforeEach(async () => {
+    beforeEach(() => {
         (compileMessage as jest.Mock).mockReturnValue({
             header: {
                 numReadonlyNonSignerAccounts: 2,
@@ -89,7 +89,7 @@ describe('partiallySignTransaction', () => {
             ],
             version: 0,
         } as CompiledMessage);
-        (getAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
+        (getAddressFromPublicKey as jest.Mock).mockImplementation(publicKey => {
             switch (publicKey) {
                 case mockKeyPairA.publicKey:
                     return mockPublicKeyAddressA;
@@ -101,7 +101,7 @@ describe('partiallySignTransaction', () => {
                     return '99999999999999999999999999999999' as Address<'99999999999999999999999999999999'>;
             }
         });
-        (signBytes as jest.Mock).mockImplementation(async secretKey => {
+        (signBytes as jest.Mock).mockImplementation(secretKey => {
             switch (secretKey) {
                 case mockKeyPairA.privateKey:
                     return MOCK_SIGNATURE_A;
@@ -226,7 +226,7 @@ describe('signTransaction', () => {
     const MOCK_SIGNATURE_B = new Uint8Array(Array(64).fill(2));
     const mockKeyPairA = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
     const mockKeyPairB = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
-    beforeEach(async () => {
+    beforeEach(() => {
         (compileMessage as jest.Mock).mockReturnValue({
             header: {
                 numReadonlyNonSignerAccounts: 1,
@@ -247,7 +247,7 @@ describe('signTransaction', () => {
             ],
             version: 0,
         } as CompiledMessage);
-        (getAddressFromPublicKey as jest.Mock).mockImplementation(async publicKey => {
+        (getAddressFromPublicKey as jest.Mock).mockImplementation(publicKey => {
             switch (publicKey) {
                 case mockKeyPairA.publicKey:
                     return mockPublicKeyAddressA;
@@ -257,7 +257,7 @@ describe('signTransaction', () => {
                     return '99999999999999999999999999999999' as Address<'99999999999999999999999999999999'>;
             }
         });
-        (signBytes as jest.Mock).mockImplementation(async secretKey => {
+        (signBytes as jest.Mock).mockImplementation(secretKey => {
             switch (secretKey) {
                 case mockKeyPairA.privateKey:
                     return MOCK_SIGNATURE_A;

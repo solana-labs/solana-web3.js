@@ -9,6 +9,10 @@ import type {
 
 import { createRpcGraphQL, RpcGraphQL } from '../../index';
 
+const FOREVER_PROMISE = new Promise(() => {
+    /* never resolve */
+});
+
 describe('account loader', () => {
     let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
@@ -18,11 +22,11 @@ describe('account loader', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         rpc = {
-            getAccountInfo: jest.fn(),
-            getBlock: jest.fn(),
-            getMultipleAccounts: jest.fn(),
-            getProgramAccounts: jest.fn(),
-            getTransaction: jest.fn(),
+            getAccountInfo: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getBlock: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getMultipleAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getProgramAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getTransaction: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
         };
         rpcGraphQL = createRpcGraphQL(rpc);
     });

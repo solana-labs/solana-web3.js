@@ -9,6 +9,10 @@ import type {
 
 import { createRpcGraphQL, RpcGraphQL } from '../../index';
 
+const FOREVER_PROMISE = new Promise(() => {
+    /* never resolve */
+});
+
 describe('account loader', () => {
     let rpc: {
         getAccountInfo: jest.MockedFunction<Rpc<GetAccountInfoApi>['getAccountInfo']>;
@@ -24,11 +28,11 @@ describe('account loader', () => {
     beforeEach(() => {
         jest.useFakeTimers();
         rpc = {
-            getAccountInfo: jest.fn(),
-            getBlock: jest.fn(),
-            getMultipleAccounts: jest.fn(),
-            getProgramAccounts: jest.fn(),
-            getTransaction: jest.fn(),
+            getAccountInfo: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getBlock: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getMultipleAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getProgramAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
+            getTransaction: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
         };
         rpcGraphQL = createRpcGraphQL(
             rpc as unknown as Rpc<
@@ -431,48 +435,52 @@ describe('account loader', () => {
                 // First we should see `getMultipleAccounts` used for the first two layers
                 rpc.getMultipleAccounts
                     .mockImplementationOnce(() => ({
-                        send: async () =>
-                            getMultipleAccountsMockResponse([
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: '11111111111111111111111111111111',
-                                },
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-                                },
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'Stake11111111111111111111111111111111111111',
-                                },
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'Vote111111111111111111111111111111111111111',
-                                },
-                            ]),
+                        send: () =>
+                            Promise.resolve(
+                                getMultipleAccountsMockResponse([
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: '11111111111111111111111111111111',
+                                    },
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+                                    },
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'Stake11111111111111111111111111111111111111',
+                                    },
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'Vote111111111111111111111111111111111111111',
+                                    },
+                                ]),
+                            ),
                     }))
                     .mockImplementationOnce(() => ({
-                        send: async () =>
-                            getMultipleAccountsMockResponse([
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'NativeLoader1111111111111111111111111111111',
-                                },
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'BPFLoader2111111111111111111111111111111111',
-                                },
-                                {
-                                    data: ['AA', 'base64'],
-                                    owner: 'NativeLoader1111111111111111111111111111111',
-                                },
-                            ]),
+                        send: () =>
+                            Promise.resolve(
+                                getMultipleAccountsMockResponse([
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'NativeLoader1111111111111111111111111111111',
+                                    },
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'BPFLoader2111111111111111111111111111111111',
+                                    },
+                                    {
+                                        data: ['AA', 'base64'],
+                                        owner: 'NativeLoader1111111111111111111111111111111',
+                                    },
+                                ]),
+                            ),
                     }));
 
                 // Then we should see `getAccountInfo` used for the single
                 // account in the last layer
                 rpc.getAccountInfo.mockReturnValue({
-                    send: jest.fn().mockReturnValueOnce({
+                    send: jest.fn().mockResolvedValueOnce({
                         context: {
                             slot: 0,
                         },

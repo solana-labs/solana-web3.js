@@ -114,7 +114,7 @@ async function createProgramDerivedAddress({ programAddress, seeds }: ProgramDer
         new Uint8Array([...seedBytes, ...programAddressBytes, ...PDA_MARKER_BYTES]),
     );
     const addressBytes = new Uint8Array(addressBytesBuffer);
-    if (await compressedPointBytesAreOnCurve(addressBytes)) {
+    if (compressedPointBytesAreOnCurve(addressBytes)) {
         throw new SolanaError(SOLANA_ERROR__ADDRESSES__INVALID_SEEDS_POINT_ON_CURVE);
     }
     return base58EncodedAddressCodec.decode(addressBytes);

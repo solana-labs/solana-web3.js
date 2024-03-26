@@ -160,8 +160,7 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             expect(getEpochInfoMock).toHaveBeenCalledWith({ commitment });
         },
     );
-    it('calls the abort signal passed to the epoch info fetcher when aborted', async () => {
-        expect.assertions(2);
+    it('calls the abort signal passed to the epoch info fetcher when aborted', () => {
         const abortController = new AbortController();
         (async () => {
             try {
@@ -181,8 +180,7 @@ describe('createBlockHeightExceedencePromiseFactory', () => {
             abortSignal: expect.objectContaining({ aborted: true }),
         });
     });
-    it('calls the abort signal passed to the slot subscription when aborted', async () => {
-        expect.assertions(2);
+    it('calls the abort signal passed to the slot subscription when aborted', () => {
         const abortController = new AbortController();
         (async () => {
             try {

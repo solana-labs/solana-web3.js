@@ -40,7 +40,7 @@ export async function createWebSocketConnection({
     signal,
     url,
 }: Config): Promise<RpcWebSocketConnection> {
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
         signal.addEventListener('abort', handleAbort, { once: true });
         const iteratorState: Map<IteratorKey, IteratorState> = new Map();
         function errorAndClearAllIteratorStates(reason: unknown) {
