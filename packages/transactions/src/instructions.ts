@@ -14,6 +14,7 @@ export function appendTransactionInstructions<TTransaction extends BaseTransacti
     transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
 ): Omit<TTransaction, keyof ITransactionWithSignatures> | TTransaction {
     const out = {
+        // The addition of an instruction implies that any existing signatures are invalid.
         ...getUnsignedTransaction(transaction),
         instructions: [...transaction.instructions, ...instructions],
     };
@@ -33,6 +34,7 @@ export function prependTransactionInstructions<TTransaction extends BaseTransact
     transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
 ): Omit<TTransaction, keyof ITransactionWithSignatures> | TTransaction {
     const out = {
+        // The addition of an instruction implies that any existing signatures are invalid.
         ...getUnsignedTransaction(transaction),
         instructions: [...instructions, ...transaction.instructions],
     };

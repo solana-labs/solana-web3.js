@@ -43,6 +43,7 @@ export function setTransactionFeePayerSigner<TFeePayerAddress extends string, TT
         return out;
     }
     const out = {
+        // A change in fee payer implies that any existing signatures are invalid.
         ...getUnsignedTransaction(transaction),
         feePayer: feePayerSigner.address,
         feePayerSigner,

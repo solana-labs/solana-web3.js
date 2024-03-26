@@ -192,6 +192,7 @@ export function setTransactionLifetimeUsingDurableNonce<
     }
 
     const out = {
+        // A change in lifetime constraint implies that any existing signatures are invalid.
         ...getUnsignedTransaction(transaction),
         instructions: newInstructions,
         lifetimeConstraint: {
