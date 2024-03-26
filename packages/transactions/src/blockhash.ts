@@ -76,7 +76,7 @@ function deepFreeze<T>(object: T): T {
         if (
             Object.prototype.hasOwnProperty.call(object, prop) &&
             object[prop] !== null &&
-            (typeof object[prop] === "object" || typeof object[prop] === "function") &&
+            (typeof object[prop] === 'object' || typeof object[prop] === 'function') &&
             !Object.isFrozen(object[prop])
         ) {
             deepFreeze(object[prop]);
