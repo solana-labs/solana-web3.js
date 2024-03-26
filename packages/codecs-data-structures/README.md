@@ -179,9 +179,9 @@ const bytes = personEncoder.encode({ name: 'alice', age: 42 });
 const person = personDecoder.decode(bytes);
 ```
 
-## Scalar enum codec
+## Enum codec
 
-The `getScalarEnumCodec` function accepts a JavaScript enum constructor and returns a codec for encoding and decoding values of that enum.
+The `getEnumCodec` function accepts a JavaScript enum constructor and returns a codec for encoding and decoding values of that enum.
 
 ```ts
 enum Direction {
@@ -191,11 +191,11 @@ enum Direction {
     Down,
 }
 
-const bytes = getScalarEnumCodec(Direction).encode(Direction.Left);
-const direction = getScalarEnumCodec(Direction).decode(bytes);
+const bytes = getEnumCodec(Direction).encode(Direction.Left);
+const direction = getEnumCodec(Direction).decode(bytes);
 ```
 
-When encoding a scalar enum, you may pass the value as an enum value, as a number or even as a string by passing the variant’s name.
+When encoding an enum, you may pass the value as an enum value, as a number or even as a string by passing the variant’s name.
 
 ```ts
 enum Direction {
@@ -205,23 +205,23 @@ enum Direction {
     Down,
 }
 
-getScalarEnumCodec(Direction).encode(Direction.Left); // 0x00
-getScalarEnumCodec(Direction).encode(Direction.Right); // 0x01
-getScalarEnumCodec(Direction).encode(0); // 0x00
-getScalarEnumCodec(Direction).encode(1); // 0x01
-getScalarEnumCodec(Direction).encode('Left'); // 0x00
-getScalarEnumCodec(Direction).encode('Right'); // 0x01
+getEnumCodec(Direction).encode(Direction.Left); // 0x00
+getEnumCodec(Direction).encode(Direction.Right); // 0x01
+getEnumCodec(Direction).encode(0); // 0x00
+getEnumCodec(Direction).encode(1); // 0x01
+getEnumCodec(Direction).encode('Left'); // 0x00
+getEnumCodec(Direction).encode('Right'); // 0x01
 ```
 
 As you can see, by default, a `u8` number is being used to store the enum value. However, a number codec may be passed as the `size` option to configure that behaviour.
 
 ```ts
-const u32DirectionCodec = getScalarEnumCodec(Direction, { size: getU32Codec() });
+const u32DirectionCodec = getEnumCodec(Direction, { size: getU32Codec() });
 u32DirectionCodec.encode(Direction.Left); // 0x00000000
 u32DirectionCodec.encode(Direction.Right); // 0x01000000
 ```
 
-Note that if you provide a string enum — e.g. `enum Direction { Left = 'LEFT' }` — to the `getScalarEnumCodec` function, it will only store the index of the variant. However, the string value may be used to encode that index.
+Note that if you provide a string enum — e.g. `enum Direction { Left = 'LEFT' }` — to the `getEnumCodec` function, it will only store the index of the variant. However, the string value may be used to encode that index.
 
 ```ts
 enum Direction {
@@ -231,16 +231,16 @@ enum Direction {
     Down = 'DOWN',
 }
 
-getScalarEnumCodec(Direction).encode(Direction.Right); // 0x01
-getScalarEnumCodec(Direction).encode('Right' as Direction); // 0x01
-getScalarEnumCodec(Direction).encode('RIGHT'); // 0x01
+getEnumCodec(Direction).encode(Direction.Right); // 0x01
+getEnumCodec(Direction).encode('Right' as Direction); // 0x01
+getEnumCodec(Direction).encode('RIGHT'); // 0x01
 ```
 
-Separate `getScalarEnumEncoder` and `getScalarEnumDecoder` functions are also available.
+Separate `getEnumEncoder` and `getEnumDecoder` functions are also available.
 
 ```ts
-const bytes = getScalarEnumEncoder(Direction).encode(Direction.Left);
-const direction = getScalarEnumDecoder(Direction).decode(bytes);
+const bytes = getEnumEncoder(Direction).encode(Direction.Left);
+const direction = getEnumDecoder(Direction).decode(bytes);
 ```
 
 ## Discriminated union codec
