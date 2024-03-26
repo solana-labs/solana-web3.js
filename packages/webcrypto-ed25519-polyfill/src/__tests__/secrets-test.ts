@@ -160,6 +160,10 @@ describe('importKeyPolyfill', () => {
         it('allows importing valid public key bytes', () => {
             expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify'])).not.toThrow();
         });
+        it('imported public key to be instance of CryptoKey', () => {
+            const key = importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, ['verify']);
+            expect(key).toBeInstanceOf(CryptoKey);
+        });
         it('allows importing with empty keyUsages', () => {
             expect(() => importKeyPolyfill('raw', MOCK_PUBLIC_KEY_BYTES, false, [])).not.toThrow();
         });
@@ -243,6 +247,10 @@ describe('importKeyPolyfill', () => {
 
         it('allows importing valid private key bytes', () => {
             expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign'])).not.toThrow();
+        });
+        it('imported private key to be instance of CryptoKey', () => {
+            const key = importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, ['sign']);
+            expect(key).toBeInstanceOf(CryptoKey);
         });
         it('allows importing with empty keyUsages', () => {
             expect(() => importKeyPolyfill('pkcs8', mockSecretKeyWithHeader, false, [])).not.toThrow();
@@ -331,6 +339,11 @@ describe('generateKeyPolyfill', () => {
         jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(expectedSecretKey);
         generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
         expect(weakMapSetSpy).toHaveBeenCalledWith(expect.anything(), expectedSecretKey);
+    });
+    it('generated keys to be instance of CryptoKey', () => {
+        const key = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
+        expect(key.publicKey).toBeInstanceOf(CryptoKey);
+        expect(key.privateKey).toBeInstanceOf(CryptoKey);
     });
     describe.each(['public', 'private'])('when generating a %s key', type => {
         let keyPair: CryptoKeyPair;
