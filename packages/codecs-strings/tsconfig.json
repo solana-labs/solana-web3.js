@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2020", "ES2020.BigInt", "ES2022.Error"]
     },
     "display": "@solana/codecs-strings",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

@@ -156,7 +156,12 @@ describe('generateKey() polyfill', () => {
     describe('when imported in an environment that does not support Ed25519', () => {
         beforeEach(async () => {
             const originalGenerateKeyImpl = originalGenerateKey;
-            (originalGenerateKey as jest.Mock).mockImplementation(async (...args) => {
+            (
+                originalGenerateKey as jest.Mock<
+                    ReturnType<typeof originalGenerateKey>,
+                    Parameters<typeof originalGenerateKey>
+                >
+            ).mockImplementation(async (...args) => {
                 const [algorithm] = args;
                 if (algorithm === 'Ed25519') {
                     throw new Error('Ed25519 not supported');
@@ -534,7 +539,12 @@ describe('importKey() polyfill', () => {
     describe('when imported in an environment that does not support Ed25519', () => {
         beforeEach(async () => {
             const originalImportKeyImpl = originalImportKey;
-            (originalImportKey as jest.Mock).mockImplementation(async (...args) => {
+            (
+                originalImportKey as unknown as jest.Mock<
+                    ReturnType<typeof originalImportKey>,
+                    Parameters<typeof originalImportKey>
+                >
+            ).mockImplementation(async (...args) => {
                 const [_format, _keyData, algorithm] = args;
                 if (algorithm === 'Ed25519') {
                     throw new Error('Ed25519 not supported');

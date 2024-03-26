@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2017", "ES2022.Error"]
     },
     "display": "@solana/transactions",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

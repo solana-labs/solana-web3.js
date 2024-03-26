@@ -5,6 +5,6 @@
         "resolveJsonModule": true
     },
     "display": "@solana/rpc-graphql",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

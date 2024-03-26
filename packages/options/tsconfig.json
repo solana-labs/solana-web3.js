@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2019"]
     },
     "display": "@solana/options",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

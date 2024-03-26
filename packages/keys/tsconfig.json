@@ -1,7 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "@solana/keys",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"],
     "compilerOptions": {
         "lib": ["DOM", "ES2015", "ES2022.Error"]

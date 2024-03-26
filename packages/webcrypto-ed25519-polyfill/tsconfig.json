@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2015", "ES2022.Error", "ES2022"]
     },
     "display": "@solana/webcrypto-ed25519-polyfill",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

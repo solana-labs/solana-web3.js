@@ -1,7 +1,7 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "@solana/codecs-numbers",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"],
     "compilerOptions": {
         "lib": ["DOM", "ES2015", "ES2017.String", "ES2020.BigInt", "ES2022.Error"]
