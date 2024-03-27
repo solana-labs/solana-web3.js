@@ -1,5 +1,14 @@
 # @solana/web3.js-legacy-sham
 
+## 1.0.0-preview.3
+
+### Patch Changes
+
+-   Updated dependencies [[`125fc15`](https://github.com/solana-labs/solana-web3.js/commit/125fc1540cfbc0a4afdba5aabac0884c750e58c1)]:
+    -   @solana/addresses@2.0.0-preview.3
+    -   @solana/rpc-types@2.0.0-preview.3
+    -   @solana/transactions@2.0.0-preview.3
+
 ## 1.0.0-preview.2
 
 ### Patch Changes

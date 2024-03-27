@@ -1,5 +1,13 @@
 # @solana/options
 
+## 2.0.0-preview.3
+
+### Patch Changes
+
+-   Updated dependencies [[`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026)]:
+    -   @solana/codecs-core@2.0.0-preview.3
+    -   @solana/codecs-numbers@2.0.0-preview.3
+
 ## 2.0.0-preview.2
 
 ### Patch Changes

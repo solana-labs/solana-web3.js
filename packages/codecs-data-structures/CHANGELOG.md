@@ -1,5 +1,83 @@
 # @solana/codecs-data-structures
 
+## 2.0.0-preview.3
+
+### Patch Changes
+
+-   [#2344](https://github.com/solana-labs/solana-web3.js/pull/2344) [`deb7b80`](https://github.com/solana-labs/solana-web3.js/commit/deb7b806b4cbe620b1714be1765c981d88c3a2f6) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Improve `getTupleCodec` type inferences and performance
+
+    The tuple codec now infers its encoded/decoded type from the provided codec array and uses the new `DrainOuterGeneric` helper to reduce the number of TypeScript instantiations.
+
+-   [#2322](https://github.com/solana-labs/solana-web3.js/pull/2322) [`6dcf548`](https://github.com/solana-labs/solana-web3.js/commit/6dcf5483bb6bbb8d343db28dedb258c8da91ffac) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Use `DrainOuterGeneric` helper on codec type mappings
+
+    This significantly reduces the number of TypeScript instantiations on object mappings,
+    which increases TypeScript performance and prevents "Type instantiation is excessively deep and possibly infinite" errors.
+
+-   [#2381](https://github.com/solana-labs/solana-web3.js/pull/2381) [`49a764c`](https://github.com/solana-labs/solana-web3.js/commit/49a764c6d481886501540f8dbfe8be75d754355b) Thanks [@lorisleiva](https://github.com/lorisleiva)! - DataEnum codecs can now use numbers or symbols as discriminator values
+
+    ```ts
+    const codec = getDataEnumCodec([[1, getStructCodec([[['one', u32]]])][(2, getStructCodec([[['two', u32]]]))]]);
+
+    codec.encode({ __kind: 1, one: 42 });
+    codec.encode({ __kind: 2, two: 42 });
+    ```
+
+    This means you can also use enum values as discriminators, like so:
+
+    ```ts
+    enum Event {
+        Click,
+        KeyPress,
+    }
+    const codec = getDataEnumCodec([
+        [
+            Event.Click,
+            getStructCodec([
+                [
+                    ['x', u32],
+                    ['y', u32],
+                ],
+            ]),
+        ],
+        [Event.KeyPress, getStructCodec([[['key', u32]]])],
+    ]);
+
+    codec.encode({ __kind: Event.Click, x: 1, y: 2 });
+    codec.encode({ __kind: Event.KeyPress, key: 3 });
+    ```
+
+-   [#2383](https://github.com/solana-labs/solana-web3.js/pull/2383) [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getScalarEnumCodec` is now called `getEnumCodec`
+
+-   [#2382](https://github.com/solana-labs/solana-web3.js/pull/2382) [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getDataEnumCodec` is now called `getDiscriminatedUnionCodec`
+
+-   [#2380](https://github.com/solana-labs/solana-web3.js/pull/2380) [`bf029dd`](https://github.com/solana-labs/solana-web3.js/commit/bf029dd90230405b3d59f70aedd57fc0117b926e) Thanks [@lorisleiva](https://github.com/lorisleiva)! - DataEnum codecs now support custom discriminator properties
+
+    ```ts
+    const codec = getDataEnumCodec(
+        [
+            [
+                'click',
+                getStructCodec([
+                    [
+                        ['x', u32],
+                        ['y', u32],
+                    ],
+                ]),
+            ],
+            ['keyPress', getStructCodec([[['key', u32]]])],
+        ],
+        { discriminator: 'event' },
+    );
+
+    codec.encode({ event: 'click', x: 1, y: 2 });
+    codec.encode({ event: 'keyPress', key: 3 });
+    ```
+
+-   Updated dependencies [[`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8)]:
+    -   @solana/errors@2.0.0-preview.3
+    -   @solana/codecs-core@2.0.0-preview.3
+    -   @solana/codecs-numbers@2.0.0-preview.3
+
 ## 2.0.0-preview.2
 
 ### Patch Changes

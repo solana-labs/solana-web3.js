@@ -1,5 +1,20 @@
 # @solana/codecs
 
+## 2.0.0-preview.3
+
+### Patch Changes
+
+-   [#2383](https://github.com/solana-labs/solana-web3.js/pull/2383) [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getScalarEnumCodec` is now called `getEnumCodec`
+
+-   [#2382](https://github.com/solana-labs/solana-web3.js/pull/2382) [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getDataEnumCodec` is now called `getDiscriminatedUnionCodec`
+
+-   Updated dependencies [[`deb7b80`](https://github.com/solana-labs/solana-web3.js/commit/deb7b806b4cbe620b1714be1765c981d88c3a2f6), [`6dcf548`](https://github.com/solana-labs/solana-web3.js/commit/6dcf5483bb6bbb8d343db28dedb258c8da91ffac), [`49a764c`](https://github.com/solana-labs/solana-web3.js/commit/49a764c6d481886501540f8dbfe8be75d754355b), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`bf029dd`](https://github.com/solana-labs/solana-web3.js/commit/bf029dd90230405b3d59f70aedd57fc0117b926e)]:
+    -   @solana/codecs-data-structures@2.0.0-preview.3
+    -   @solana/codecs-core@2.0.0-preview.3
+    -   @solana/codecs-numbers@2.0.0-preview.3
+    -   @solana/codecs-strings@2.0.0-preview.3
+    -   @solana/options@2.0.0-preview.3
+
 ## 2.0.0-preview.2
 
 ### Patch Changes

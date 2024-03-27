@@ -1,5 +1,7 @@
 # @solana/functional
 
+## 2.0.0-preview.3
+
 ## 2.0.0-preview.2
 
 ### Patch Changes
