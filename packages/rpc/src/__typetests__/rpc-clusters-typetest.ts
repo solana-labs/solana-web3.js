@@ -25,7 +25,7 @@ const devnetTransport = createDefaultRpcTransport({ url: devnetUrl });
 const testnetTransport = createDefaultRpcTransport({ url: testnetUrl });
 const mainnetTransport = createDefaultRpcTransport({ url: mainnetUrl });
 
-// [DEFINE] createDefaultRpcTransport.
+// [DESCRIBE] createDefaultRpcTransport.
 {
     // No cluster specified should be generic `RpcTransport`.
     {
@@ -66,7 +66,7 @@ const mainnetTransport = createDefaultRpcTransport({ url: mainnetUrl });
     }
 }
 
-// [DEFINE] createSolanaRpcFromTransport.
+// [DESCRIBE] createSolanaRpcFromTransport.
 {
     const genericRpc = createSolanaRpcFromTransport(genericTransport);
     const devnetRpc = createSolanaRpcFromTransport(devnetTransport);
@@ -121,7 +121,7 @@ const mainnetTransport = createDefaultRpcTransport({ url: mainnetUrl });
     }
 }
 
-// [DEFINE] createSolanaRpc.
+// [DESCRIBE] createSolanaRpc.
 {
     const genericRpc = createSolanaRpc(genericUrl);
     const devnetRpc = createSolanaRpc(devnetUrl);

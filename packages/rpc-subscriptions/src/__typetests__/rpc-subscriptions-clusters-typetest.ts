@@ -30,7 +30,7 @@ const devnetTransport = createDefaultRpcSubscriptionsTransport({ url: devnetUrl 
 const testnetTransport = createDefaultRpcSubscriptionsTransport({ url: testnetUrl });
 const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUrl });
 
-// [DEFINE] createDefaultRpcSubscriptionsTransport.
+// [DESCRIBE] createDefaultRpcSubscriptionsTransport.
 {
     // No cluster specified should be generic `RpcSubscriptionsTransport`.
     {
@@ -71,7 +71,7 @@ const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUr
     }
 }
 
-// [DEFINE] createSolanaRpcSubscriptionsFromTransport.
+// [DESCRIBE] createSolanaRpcSubscriptionsFromTransport.
 {
     const genericRpc = createSolanaRpcSubscriptionsFromTransport(genericTransport);
     const devnetRpc = createSolanaRpcSubscriptionsFromTransport(devnetTransport);
@@ -137,7 +137,7 @@ const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUr
     }
 }
 
-// [DEFINE] createSolanaRpcSubscriptionsFromTransport_UNSTABLE.
+// [DESCRIBE] createSolanaRpcSubscriptionsFromTransport_UNSTABLE.
 {
     const genericRpc = createSolanaRpcSubscriptionsFromTransport_UNSTABLE(genericTransport);
     const devnetRpc = createSolanaRpcSubscriptionsFromTransport_UNSTABLE(devnetTransport);
@@ -153,7 +153,7 @@ const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUr
     }
 }
 
-// [DEFINE] createSolanaRpcSubscriptions.
+// [DESCRIBE] createSolanaRpcSubscriptions.
 {
     const genericRpc = createSolanaRpcSubscriptions(genericUrl);
     const devnetRpc = createSolanaRpcSubscriptions(devnetUrl);
@@ -219,7 +219,7 @@ const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUr
     }
 }
 
-// [DEFINE] createSolanaRpcSubscriptions_UNSTABLE.
+// [DESCRIBE] createSolanaRpcSubscriptions_UNSTABLE.
 {
     const genericRpc = createSolanaRpcSubscriptions_UNSTABLE(genericUrl);
     const devnetRpc = createSolanaRpcSubscriptions_UNSTABLE(devnetUrl);
