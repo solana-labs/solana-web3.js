@@ -27,8 +27,8 @@ import {
     SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
+    SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS,
-    SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
@@ -267,10 +267,10 @@ export const SolanaErrorMessages: Readonly<{
         'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',
     [SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT]:
         'Invalid discriminated union variant. Expected one of [$variants], got $value.',
+    [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]:
+        'Invalid enum variant. Expected one of [$variants] or a number between $minRange and $maxRange, got $value.',
     [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]:
         'Expected [$codecDescription] to have $expected items, got $actual.',
-    [SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT]:
-        'Invalid scalar enum variant. Expected one of [$variants] or a number between $minRange and $maxRange, got $value.',
     [SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE]: 'Invalid value $value for base $base with alphabet $alphabet.',
     [SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',

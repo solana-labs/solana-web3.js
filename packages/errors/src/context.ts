@@ -19,8 +19,8 @@ import {
     SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
+    SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS,
-    SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
@@ -284,16 +284,16 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             value: number | string | symbol;
             variants: (number | string | symbol)[];
         };
-        [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
-            actual: bigint | number;
-            codecDescription: string;
-            expected: bigint | number;
-        };
-        [SOLANA_ERROR__CODECS__INVALID_SCALAR_ENUM_VARIANT]: {
+        [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]: {
             maxRange: number;
             minRange: number;
             value: number | string;
             variants: string[];
+        };
+        [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
+            actual: bigint | number;
+            codecDescription: string;
+            expected: bigint | number;
         };
         [SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE]: {
             alphabet: string;
