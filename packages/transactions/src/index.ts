@@ -6,6 +6,7 @@ export * from './durable-nonce';
 export * from './fee-payer';
 export * from './instructions';
 export * from './message';
+export * from './new-signatures';
 export * from './serializers';
 export * from './signatures';
 export * from './types';
