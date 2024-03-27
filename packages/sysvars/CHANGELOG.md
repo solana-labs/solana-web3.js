@@ -1,5 +1,15 @@
 # @solana/sysvars
 
+## 2.0.0-preview.3
+
+### Patch Changes
+
+-   Updated dependencies [[`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb), [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77), [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199), [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026), [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8)]:
+    -   @solana/errors@2.0.0-preview.3
+    -   @solana/codecs@2.0.0-preview.3
+    -   @solana/accounts@2.0.0-preview.3
+    -   @solana/rpc-types@2.0.0-preview.3
+
 ## 2.0.0-preview.2
 
 ### Patch Changes

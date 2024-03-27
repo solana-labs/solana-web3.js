@@ -1,5 +1,19 @@
 # @solana/errors
 
+## 2.0.0-preview.3
+
+### Patch Changes
+
+-   [#2376](https://github.com/solana-labs/solana-web3.js/pull/2376) [`9370133`](https://github.com/solana-labs/solana-web3.js/commit/9370133e414bfa863517248d97905449e9a867eb) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a bug that prevented the production error decoder from decoding negative error codes
+
+-   [#2383](https://github.com/solana-labs/solana-web3.js/pull/2383) [`ce1be3f`](https://github.com/solana-labs/solana-web3.js/commit/ce1be3fe37ea9b744fd836f3d6c2c8e5e31efd77) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getScalarEnumCodec` is now called `getEnumCodec`
+
+-   [#2358](https://github.com/solana-labs/solana-web3.js/pull/2358) [`2d54650`](https://github.com/solana-labs/solana-web3.js/commit/2d5465018d8060eceb00efbf4f718df26d145199) Thanks [@steveluscher](https://github.com/steveluscher)! - The encoded `SolanaError` context that is thrown in production is now base64-encoded for compatibility with more terminal shells
+
+-   [#2382](https://github.com/solana-labs/solana-web3.js/pull/2382) [`7e86583`](https://github.com/solana-labs/solana-web3.js/commit/7e86583da68695076ec62033f3fe078b3890f026) Thanks [@lorisleiva](https://github.com/lorisleiva)! - `getDataEnumCodec` is now called `getDiscriminatedUnionCodec`
+
+-   [#2329](https://github.com/solana-labs/solana-web3.js/pull/2329) [`478443f`](https://github.com/solana-labs/solana-web3.js/commit/478443fedac06678f12e8ac285aa7c7fcf503ee8) Thanks [@luu-alex](https://github.com/luu-alex)! - `createKeyPairFromBytes()` now validates that the public key imported is the one that would be derived from the private key imported
+
 ## 2.0.0-preview.2
 
 ### Patch Changes
