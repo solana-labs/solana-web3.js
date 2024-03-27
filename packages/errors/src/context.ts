@@ -281,8 +281,8 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             expected: number;
         };
         [SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT]: {
-            value: string;
-            variants: string[];
+            value: number | string | symbol;
+            variants: (number | string | symbol)[];
         };
         [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
             actual: bigint | number;

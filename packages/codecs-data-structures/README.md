@@ -339,6 +339,25 @@ messageCodec.encode({ message: 'Write', fields: ['Hi'] });
 messageCodec.encode({ message: 'Move', x: 5, y: 6 });
 ```
 
+Note that, the discriminator value of a variant may also be a `number`, `symbol` or a JavaScript `enum`. For instance, the following is also valid:
+
+```ts
+enum Message {
+    Quit,
+    Write,
+    Move,
+}
+const messageCodec = getDataEnumCodec([
+    [Message.Quit, getUnitCodec()],
+    [Message.Write, getStructCodec([...])],
+    [Message.Move, getStructCodec([...])],
+]);
+
+codec.encode({ __kind: Message.Quit });
+codec.encode({ __kind: Message.Write, fields: ['Hi'] });
+codec.encode({ __kind: Message.Move, x: 5, y: 6 });
+```
+
 Finally, note that separate `getDataEnumEncoder` and `getDataEnumDecoder` functions are available.
 
 ```ts
