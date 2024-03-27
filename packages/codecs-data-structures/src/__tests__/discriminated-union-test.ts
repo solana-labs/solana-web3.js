@@ -10,20 +10,20 @@ import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codec
 import { getStringCodec } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
-    SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
     SolanaError,
 } from '@solana/errors';
 
 import { getArrayCodec } from '../array';
 import { getBooleanCodec } from '../boolean';
-import { getDataEnumCodec } from '../data-enum';
+import { getDiscriminatedUnionCodec } from '../discriminated-union';
 import { getStructCodec } from '../struct';
 import { getTupleCodec } from '../tuple';
 import { getUnitCodec } from '../unit';
 import { b } from './__setup__';
 
-describe('getDataEnumCodec', () => {
-    const dataEnum = getDataEnumCodec;
+describe('getDiscriminatedUnionCodec', () => {
+    const discriminatedUnion = getDiscriminatedUnionCodec;
     const array = getArrayCodec;
     const boolean = getBooleanCodec;
     const string = getStringCodec;
@@ -76,45 +76,45 @@ describe('getDataEnumCodec', () => {
 
     it('encodes empty variants', () => {
         const pageLoad: WebEvent = { __kind: 'PageLoad' };
-        expect(dataEnum(getWebEvent()).encode(pageLoad)).toStrictEqual(b('00'));
-        expect(dataEnum(getWebEvent()).read(b('00'), 0)).toStrictEqual([pageLoad, 1]);
-        expect(dataEnum(getWebEvent()).read(b('ffff00'), 2)).toStrictEqual([pageLoad, 3]);
+        expect(discriminatedUnion(getWebEvent()).encode(pageLoad)).toStrictEqual(b('00'));
+        expect(discriminatedUnion(getWebEvent()).read(b('00'), 0)).toStrictEqual([pageLoad, 1]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff00'), 2)).toStrictEqual([pageLoad, 3]);
         const pageUnload: WebEvent = { __kind: 'PageUnload' };
-        expect(dataEnum(getWebEvent()).encode(pageUnload)).toStrictEqual(b('03'));
-        expect(dataEnum(getWebEvent()).read(b('03'), 0)).toStrictEqual([pageUnload, 1]);
-        expect(dataEnum(getWebEvent()).read(b('ffff03'), 2)).toStrictEqual([pageUnload, 3]);
+        expect(discriminatedUnion(getWebEvent()).encode(pageUnload)).toStrictEqual(b('03'));
+        expect(discriminatedUnion(getWebEvent()).read(b('03'), 0)).toStrictEqual([pageUnload, 1]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff03'), 2)).toStrictEqual([pageUnload, 3]);
     });
 
     it('encodes struct variants', () => {
         const click = (x: number, y: number): WebEvent => ({ __kind: 'Click', x, y });
-        expect(dataEnum(getWebEvent()).encode(click(0, 0))).toStrictEqual(b('010000'));
-        expect(dataEnum(getWebEvent()).read(b('010000'), 0)).toStrictEqual([click(0, 0), 3]);
-        expect(dataEnum(getWebEvent()).read(b('ffff010000'), 2)).toStrictEqual([click(0, 0), 5]);
-        expect(dataEnum(getWebEvent()).encode(click(1, 2))).toStrictEqual(b('010102'));
-        expect(dataEnum(getWebEvent()).read(b('010102'), 0)).toStrictEqual([click(1, 2), 3]);
-        expect(dataEnum(getWebEvent()).read(b('ffff010102'), 2)).toStrictEqual([click(1, 2), 5]);
+        expect(discriminatedUnion(getWebEvent()).encode(click(0, 0))).toStrictEqual(b('010000'));
+        expect(discriminatedUnion(getWebEvent()).read(b('010000'), 0)).toStrictEqual([click(0, 0), 3]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff010000'), 2)).toStrictEqual([click(0, 0), 5]);
+        expect(discriminatedUnion(getWebEvent()).encode(click(1, 2))).toStrictEqual(b('010102'));
+        expect(discriminatedUnion(getWebEvent()).read(b('010102'), 0)).toStrictEqual([click(1, 2), 3]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff010102'), 2)).toStrictEqual([click(1, 2), 5]);
     });
 
     it('encodes tuple variants', () => {
         const press = (k: string): WebEvent => ({ __kind: 'KeyPress', fields: [k] });
-        expect(dataEnum(getWebEvent()).encode(press(''))).toStrictEqual(b('0200000000'));
-        expect(dataEnum(getWebEvent()).read(b('0200000000'), 0)).toStrictEqual([press(''), 5]);
-        expect(dataEnum(getWebEvent()).read(b('ffff0200000000'), 2)).toStrictEqual([press(''), 7]);
-        expect(dataEnum(getWebEvent()).encode(press('1'))).toStrictEqual(b('020100000031'));
-        expect(dataEnum(getWebEvent()).read(b('020100000031'), 0)).toStrictEqual([press('1'), 6]);
-        expect(dataEnum(getWebEvent()).read(b('ffff020100000031'), 2)).toStrictEqual([press('1'), 8]);
-        expect(dataEnum(getWebEvent()).encode(press('語'))).toStrictEqual(b('0203000000e8aa9e'));
-        expect(dataEnum(getWebEvent()).encode(press('enter'))).toStrictEqual(b('0205000000656e746572'));
+        expect(discriminatedUnion(getWebEvent()).encode(press(''))).toStrictEqual(b('0200000000'));
+        expect(discriminatedUnion(getWebEvent()).read(b('0200000000'), 0)).toStrictEqual([press(''), 5]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff0200000000'), 2)).toStrictEqual([press(''), 7]);
+        expect(discriminatedUnion(getWebEvent()).encode(press('1'))).toStrictEqual(b('020100000031'));
+        expect(discriminatedUnion(getWebEvent()).read(b('020100000031'), 0)).toStrictEqual([press('1'), 6]);
+        expect(discriminatedUnion(getWebEvent()).read(b('ffff020100000031'), 2)).toStrictEqual([press('1'), 8]);
+        expect(discriminatedUnion(getWebEvent()).encode(press('語'))).toStrictEqual(b('0203000000e8aa9e'));
+        expect(discriminatedUnion(getWebEvent()).encode(press('enter'))).toStrictEqual(b('0205000000656e746572'));
     });
 
     it('handles invalid variants', () => {
-        expect(() => dataEnum(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT, {
+        expect(() => discriminatedUnion(getWebEvent()).encode({ __kind: 'Missing' } as unknown as WebEvent)).toThrow(
+            new SolanaError(SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT, {
                 value: 'Missing',
                 variants: ['PageLoad', 'Click', 'KeyPress', 'PageUnload'],
             }),
         );
-        expect(() => dataEnum(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
+        expect(() => discriminatedUnion(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
                 discriminator: 4,
                 maxRange: 3,
@@ -123,21 +123,21 @@ describe('getDataEnumCodec', () => {
         );
     });
 
-    it('encodes data enums with different From and To types', () => {
-        const codec = dataEnum(getU64Enum());
+    it('encodes discriminated unions with different From and To types', () => {
+        const codec = discriminatedUnion(getU64Enum());
         expect(codec.encode({ __kind: 'B', value: 2 })).toStrictEqual(b('010200000000000000'));
         expect(codec.encode({ __kind: 'B', value: 2n })).toStrictEqual(b('010200000000000000'));
         expect(codec.read(b('010200000000000000'), 0)).toStrictEqual([{ __kind: 'B', value: 2n }, 9]);
     });
 
-    it('encodes data enums with a custom prefix', () => {
-        const codec = dataEnum(getSameSizeVariants(), { size: u32() });
+    it('encodes discriminated unions with a custom prefix', () => {
+        const codec = discriminatedUnion(getSameSizeVariants(), { size: u32() });
         expect(codec.encode({ __kind: 'A', value: 42 })).toStrictEqual(b('000000002a00'));
         expect(codec.read(b('000000002a00'), 0)).toStrictEqual([{ __kind: 'A', value: 42 }, 6]);
     });
 
-    it('encodes data enums with a custom discriminator property', () => {
-        const codec = dataEnum(
+    it('encodes discriminated unions with a custom discriminator property', () => {
+        const codec = discriminatedUnion(
             [
                 ['small', struct([['value', u8()]])],
                 ['large', struct([['value', u32()]])],
@@ -150,8 +150,8 @@ describe('getDataEnumCodec', () => {
         expect(codec.read(b('012a000000'), 0)).toStrictEqual([{ size: 'large', value: 42 }, 5]);
     });
 
-    it('encodes data enums with number discriminator values', () => {
-        const codec = dataEnum([
+    it('encodes discriminated unions with number discriminator values', () => {
+        const codec = discriminatedUnion([
             [1, struct([['one', u8()]])],
             [2, struct([['two', u32()]])],
         ]);
@@ -159,12 +159,12 @@ describe('getDataEnumCodec', () => {
         expect(codec.read(b('002a'), 0)).toStrictEqual([{ __kind: 1, one: 42 }, 2]);
     });
 
-    it('encodes data enums with enum discriminator values', () => {
+    it('encodes discriminated unions with enum discriminator values', () => {
         enum Event {
             Click,
             KeyPress,
         }
-        const codec = dataEnum([
+        const codec = discriminatedUnion([
             [
                 Event.Click,
                 struct([
@@ -179,7 +179,7 @@ describe('getDataEnumCodec', () => {
     });
 
     it('has the right sizes', () => {
-        const webEvent = dataEnum(getWebEvent());
+        const webEvent = discriminatedUnion(getWebEvent());
         expect(isVariableSize(webEvent)).toBe(true);
         assertIsVariableSize(webEvent);
         expect(webEvent.getSizeFromValue({ __kind: 'PageLoad' })).toBe(1);
@@ -188,28 +188,28 @@ describe('getDataEnumCodec', () => {
         expect(webEvent.getSizeFromValue({ __kind: 'KeyPress', fields: ['ABC'] })).toBe(1 + 4 + 3);
         expect(webEvent.maxSize).toBeUndefined();
 
-        const sameSize = dataEnum(getSameSizeVariants());
+        const sameSize = discriminatedUnion(getSameSizeVariants());
         expect(isFixedSize(sameSize)).toBe(true);
         assertIsFixedSize(sameSize);
         expect(sameSize.fixedSize).toBe(3);
 
-        const sameSizeU32 = dataEnum(getSameSizeVariants(), { size: u32() });
+        const sameSizeU32 = discriminatedUnion(getSameSizeVariants(), { size: u32() });
         expect(isFixedSize(sameSizeU32)).toBe(true);
         assertIsFixedSize(sameSizeU32);
         expect(sameSizeU32.fixedSize).toBe(6);
 
-        const u64Enum = dataEnum(getU64Enum());
+        const u64Enum = discriminatedUnion(getU64Enum());
         expect(isVariableSize(u64Enum)).toBe(true);
         assertIsVariableSize(u64Enum);
         expect(u64Enum.maxSize).toBe(9);
     });
 
-    it('offsets variants within a data enum', () => {
+    it('offsets variants within a discriminated union', () => {
         const offsettedU32 = offsetCodec(
             resizeCodec(u32(), size => size + 2),
             { preOffset: ({ preOffset }) => preOffset + 2 },
         );
-        const codec = dataEnum([
+        const codec = discriminatedUnion([
             ['Simple', struct([['n', u32()]])],
             ['WithOffset', struct([['n', offsettedU32]])],
         ]);
