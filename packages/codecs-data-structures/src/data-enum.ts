@@ -29,7 +29,9 @@ import { DrainOuterGeneric, getMaxSize, maxCodecSizes, sumCodecSizes } from './u
  *   | { __kind: 'click', x: number, y: number };
  * ```
  */
-export type DataEnum = { __kind: string };
+export type DataEnum<TDiscriminatorProperty extends string = '__kind', TDiscriminatorValue extends string = string> = {
+    [P in TDiscriminatorProperty]: TDiscriminatorValue;
+};
 
 /**
  * Extracts a variant from a data enum.
@@ -39,11 +41,15 @@ export type DataEnum = { __kind: string };
  * type WebPageEvent =
  *   | { __kind: 'pageview', url: string }
  *   | { __kind: 'click', x: number, y: number };
- * type ClickEvent = GetDataEnumKind<WebPageEvent, 'click'>;
+ * type ClickEvent = GetDataEnumKind<WebPageEvent, '__kind', 'click'>;
  * // -> { __kind: 'click', x: number, y: number }
  * ```
  */
-export type GetDataEnumKind<T extends DataEnum, K extends T['__kind']> = Extract<T, { __kind: K }>;
+export type GetDataEnumKind<
+    TDataEnum extends DataEnum<TDiscriminatorProperty>,
+    TDiscriminatorProperty extends string,
+    TDiscriminatorValue extends TDataEnum[TDiscriminatorProperty],
+> = Extract<TDataEnum, DataEnum<TDiscriminatorProperty, TDiscriminatorValue>>;
 
 /**
  * Extracts a variant from a data enum without its discriminator.
@@ -53,41 +59,56 @@ export type GetDataEnumKind<T extends DataEnum, K extends T['__kind']> = Extract
  * type WebPageEvent =
  *   | { __kind: 'pageview', url: string }
  *   | { __kind: 'click', x: number, y: number };
- * type ClickEvent = GetDataEnumKindContent<WebPageEvent, 'click'>;
+ * type ClickEvent = GetDataEnumKindContent<WebPageEvent, '__kind', 'click'>;
  * // -> { x: number, y: number }
  * ```
  */
-export type GetDataEnumKindContent<T extends DataEnum, K extends T['__kind']> = Omit<
-    Extract<T, { __kind: K }>,
-    '__kind'
->;
+export type GetDataEnumKindContent<
+    TDataEnum extends DataEnum<TDiscriminatorProperty>,
+    TDiscriminatorProperty extends string,
+    TDiscriminatorValue extends TDataEnum[TDiscriminatorProperty],
+> = Omit<GetDataEnumKind<TDataEnum, TDiscriminatorProperty, TDiscriminatorValue>, TDiscriminatorProperty>;
 
 /** Defines the config for data enum codecs. */
-export type DataEnumCodecConfig<TDiscriminator = NumberCodec | NumberDecoder | NumberEncoder> = {
+export type DataEnumCodecConfig<
+    TDiscriminatorProperty extends string = '__kind',
+    TDiscriminatorSize = NumberCodec | NumberDecoder | NumberEncoder,
+> = {
+    /**
+     * The property name of the discriminator.
+     * @defaultValue `__kind`.
+     */
+    discriminator?: TDiscriminatorProperty;
     /**
      * The codec to use for the enum discriminator prefixing the variant.
      * @defaultValue u8 prefix.
      */
-    size?: TDiscriminator;
+    size?: TDiscriminatorSize;
 };
 
 type Variants<T> = readonly (readonly [string, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 
-type GetEncoderTypeFromVariants<TVariants extends Variants<Encoder<any>>> = DrainOuterGeneric<{
+type GetEncoderTypeFromVariants<
+    TVariants extends Variants<Encoder<any>>,
+    TDiscriminatorProperty extends string,
+> = DrainOuterGeneric<{
     [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Encoder<infer TFrom>
         ? TFrom extends object
             ? TFrom
             : object
-        : never) & { __kind: TVariants[I][0] };
+        : never) & { [P in TDiscriminatorProperty]: TVariants[I][0] };
 }>[ArrayIndices<TVariants>];
 
-type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = DrainOuterGeneric<{
+type GetDecoderTypeFromVariants<
+    TVariants extends Variants<Decoder<any>>,
+    TDiscriminatorProperty extends string,
+> = DrainOuterGeneric<{
     [I in ArrayIndices<TVariants>]: (TVariants[I][1] extends Decoder<infer TTo>
         ? TTo extends object
             ? TTo
             : object
-        : never) & { __kind: TVariants[I][0] };
+        : never) & { [P in TDiscriminatorProperty]: TVariants[I][0] };
 }>[ArrayIndices<TVariants>];
 
 /**
@@ -96,11 +117,15 @@ type GetDecoderTypeFromVariants<TVariants extends Variants<Decoder<any>>> = Drai
  * @param variants - The variant encoders of the data enum.
  * @param config - A set of config for the encoder.
  */
-export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>>>(
+export function getDataEnumEncoder<
+    const TVariants extends Variants<Encoder<any>>,
+    const TDiscriminatorProperty extends string = '__kind',
+>(
     variants: TVariants,
-    config: DataEnumCodecConfig<NumberEncoder> = {},
-): Encoder<GetEncoderTypeFromVariants<TVariants>> {
-    type TFrom = GetEncoderTypeFromVariants<TVariants>;
+    config: DataEnumCodecConfig<TDiscriminatorProperty, NumberEncoder> = {},
+): Encoder<GetEncoderTypeFromVariants<TVariants, TDiscriminatorProperty>> {
+    type TFrom = GetEncoderTypeFromVariants<TVariants, TDiscriminatorProperty>;
+    const discriminatorProperty = (config.discriminator ?? '__kind') as TDiscriminatorProperty;
     const prefix = config.size ?? getU8Encoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
     return createEncoder({
@@ -108,7 +133,7 @@ export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>
             ? { fixedSize }
             : {
                   getSizeFromValue: (variant: TFrom) => {
-                      const discriminator = getVariantDiscriminator(variants, variant);
+                      const discriminator = getVariantDiscriminator(variants, variant[discriminatorProperty]);
                       const variantEncoder = variants[discriminator][1];
                       return (
                           getEncodedSize(discriminator, prefix) +
@@ -118,7 +143,7 @@ export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>
                   maxSize: getDataEnumMaxSize(variants, prefix),
               }),
         write: (variant: TFrom, bytes, offset) => {
-            const discriminator = getVariantDiscriminator(variants, variant);
+            const discriminator = getVariantDiscriminator(variants, variant[discriminatorProperty]);
             offset = prefix.write(discriminator, bytes, offset);
             const variantEncoder = variants[discriminator][1];
             return variantEncoder.write(variant as TFrom & void, bytes, offset);
@@ -132,11 +157,15 @@ export function getDataEnumEncoder<const TVariants extends Variants<Encoder<any>
  * @param variants - The variant decoders of the data enum.
  * @param config - A set of config for the decoder.
  */
-export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>>>(
+export function getDataEnumDecoder<
+    const TVariants extends Variants<Decoder<any>>,
+    const TDiscriminatorProperty extends string = '__kind',
+>(
     variants: TVariants,
-    config: DataEnumCodecConfig<NumberDecoder> = {},
-): Decoder<GetDecoderTypeFromVariants<TVariants>> {
-    type TTo = GetDecoderTypeFromVariants<TVariants>;
+    config: DataEnumCodecConfig<TDiscriminatorProperty, NumberDecoder> = {},
+): Decoder<GetDecoderTypeFromVariants<TVariants, TDiscriminatorProperty>> {
+    type TTo = GetDecoderTypeFromVariants<TVariants, TDiscriminatorProperty>;
+    const discriminatorProperty = config.discriminator ?? '__kind';
     const prefix = config.size ?? getU8Decoder();
     const fixedSize = getDataEnumFixedSize(variants, prefix);
     return createDecoder({
@@ -155,7 +184,7 @@ export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>
             }
             const [variant, vOffset] = variantField[1].read(bytes, offset);
             offset = vOffset;
-            return [{ __kind: variantField[0], ...(variant ?? {}) } as TTo, offset];
+            return [{ [discriminatorProperty]: variantField[0], ...(variant ?? {}) } as TTo, offset];
         },
     });
 }
@@ -166,17 +195,22 @@ export function getDataEnumDecoder<const TVariants extends Variants<Decoder<any>
  * @param variants - The variant codecs of the data enum.
  * @param config - A set of config for the codec.
  */
-export function getDataEnumCodec<const TVariants extends Variants<Codec<any, any>>>(
+export function getDataEnumCodec<
+    const TVariants extends Variants<Codec<any, any>>,
+    const TDiscriminatorProperty extends string = '__kind',
+>(
     variants: TVariants,
-    config: DataEnumCodecConfig<NumberCodec> = {},
+    config: DataEnumCodecConfig<TDiscriminatorProperty, NumberCodec> = {},
 ): Codec<
-    GetEncoderTypeFromVariants<TVariants>,
-    GetDecoderTypeFromVariants<TVariants> & GetEncoderTypeFromVariants<TVariants>
+    GetEncoderTypeFromVariants<TVariants, TDiscriminatorProperty>,
+    GetDecoderTypeFromVariants<TVariants, TDiscriminatorProperty> &
+        GetEncoderTypeFromVariants<TVariants, TDiscriminatorProperty>
 > {
     return combineCodec(
         getDataEnumEncoder(variants, config),
         getDataEnumDecoder(variants, config) as Decoder<
-            GetDecoderTypeFromVariants<TVariants> & GetEncoderTypeFromVariants<TVariants>
+            GetDecoderTypeFromVariants<TVariants, TDiscriminatorProperty> &
+                GetEncoderTypeFromVariants<TVariants, TDiscriminatorProperty>
         >,
     );
 }
@@ -205,12 +239,12 @@ function getDataEnumMaxSize<const TVariants extends Variants<Decoder<any> | Enco
 
 function getVariantDiscriminator<const TVariants extends Variants<Decoder<any> | Encoder<any>>>(
     variants: TVariants,
-    variant: { __kind: string },
+    discriminatorValue: string,
 ) {
-    const discriminator = variants.findIndex(([key]) => variant.__kind === key);
+    const discriminator = variants.findIndex(([key]) => discriminatorValue === key);
     if (discriminator < 0) {
         throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_DATA_ENUM_VARIANT, {
-            value: variant.__kind,
+            value: discriminatorValue,
             variants: variants.map(([key]) => key),
         });
     }
