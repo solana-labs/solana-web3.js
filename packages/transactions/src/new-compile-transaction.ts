@@ -1,14 +1,9 @@
 import { Address } from '@solana/addresses';
-import { SignatureBytes } from '@solana/keys';
+import { ReadonlyUint8Array, SignatureBytes } from '@solana/keys';
 
 import { CompilableTransaction } from './compilable-transaction';
 import { compileMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
-
-type TypedArrayMutableProperties = 'copyWithin' | 'fill' | 'reverse' | 'set' | 'sort';
-interface ReadonlyUint8Array extends Omit<Uint8Array, TypedArrayMutableProperties> {
-    readonly [n: number]: number;
-}
 
 export type TransactionMessageBytes = ReadonlyUint8Array & { readonly __brand: unique symbol };
 export type OrderedMap<K extends string, V> = Record<K, V>;
