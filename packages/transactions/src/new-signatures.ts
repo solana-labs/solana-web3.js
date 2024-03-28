@@ -15,18 +15,18 @@ import { getCompiledMessageEncoder } from './serializers';
 
 export type OrderedMap<K extends string, V> = Record<K, V>;
 
-export interface INewTransactionWithSignatures {
+export interface NewTransaction {
     messageBytes: TransactionMessageBytes;
     signatures: OrderedMap<Address, SignatureBytes | null>;
 }
 
-export interface INewFullySignedTransaction extends INewTransactionWithSignatures {
+export interface FullySignedTransaction extends NewTransaction {
     readonly __brand: unique symbol;
 }
 
 let base58Decoder: Decoder<string> | undefined;
 
-export function newGetSignatureFromTransaction(transaction: INewTransactionWithSignatures): Signature {
+export function newGetSignatureFromTransaction(transaction: NewTransaction): Signature {
     if (!base58Decoder) base58Decoder = getBase58Decoder();
 
     // We have ordered signatures from the compiled message accounts
@@ -42,7 +42,7 @@ export function newGetSignatureFromTransaction(transaction: INewTransactionWithS
 export async function newPartiallySignTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction,
-): Promise<INewTransactionWithSignatures> {
+): Promise<NewTransaction> {
     const compiledMessage = compileMessage(transaction);
     const transactionSigners = compiledMessage.staticAccounts.slice(0, compiledMessage.header.numSignerAccounts);
     const messageBytes = getCompiledMessageEncoder().encode(compiledMessage) as TransactionMessageBytes;
@@ -60,7 +60,7 @@ export async function newPartiallySignTransaction<TTransaction extends Compilabl
         signatures[signerAddress] = signature;
     }
 
-    const out: INewTransactionWithSignatures = {
+    const out: NewTransaction = {
         messageBytes,
         signatures,
     };
@@ -71,7 +71,7 @@ export async function newPartiallySignTransaction<TTransaction extends Compilabl
 export async function newSignTransaction<TTransaction extends CompilableTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction,
-): Promise<INewFullySignedTransaction> {
+): Promise<FullySignedTransaction> {
     const out = await newPartiallySignTransaction(keyPairs, transaction);
     newAssertTransactionIsFullySigned(out);
     Object.freeze(out);
@@ -79,8 +79,8 @@ export async function newSignTransaction<TTransaction extends CompilableTransact
 }
 
 export function newAssertTransactionIsFullySigned(
-    transaction: INewTransactionWithSignatures,
-): asserts transaction is INewFullySignedTransaction {
+    transaction: NewTransaction,
+): asserts transaction is FullySignedTransaction {
     const missingSigs: Address[] = [];
     Object.entries(transaction.signatures).forEach(([address, signatureBytes]) => {
         if (!signatureBytes) {
