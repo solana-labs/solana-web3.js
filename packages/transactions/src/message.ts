@@ -26,11 +26,11 @@ type VersionedCompiledMessage = BaseCompiledMessage &
         version: number;
     }>;
 
-export function compileMessage(
+export function compileTransactionMessage(
     transaction: CompilableTransaction & Readonly<{ version: 'legacy' }>,
 ): LegacyCompiledMessage;
-export function compileMessage(transaction: CompilableTransaction): VersionedCompiledMessage;
-export function compileMessage(transaction: CompilableTransaction): CompiledMessage {
+export function compileTransactionMessage(transaction: CompilableTransaction): VersionedCompiledMessage;
+export function compileTransactionMessage(transaction: CompilableTransaction): CompiledMessage {
     const addressMap = getAddressMapFromInstructions(transaction.feePayer, transaction.instructions);
     const orderedAccounts = getOrderedAccountsFromAddressMap(addressMap);
     return {

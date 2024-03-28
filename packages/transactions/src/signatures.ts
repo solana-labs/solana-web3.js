@@ -11,7 +11,7 @@ import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
 import { CompilableTransaction } from './compilable-transaction';
 import { ITransactionWithFeePayer } from './fee-payer';
-import { compileMessage } from './message';
+import { compileTransactionMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
 
 export interface IFullySignedTransaction extends ITransactionWithSignatures {
@@ -40,7 +40,7 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
     keyPairs: CryptoKeyPair[],
     transaction: TTransaction | (ITransactionWithSignatures & TTransaction),
 ): Promise<ITransactionWithSignatures & TTransaction> {
-    const compiledMessage = compileMessage(transaction);
+    const compiledMessage = compileTransactionMessage(transaction);
     const nextSignatures: Record<Address, SignatureBytes> =
         'signatures' in transaction ? { ...transaction.signatures } : {};
     const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);

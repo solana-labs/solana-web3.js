@@ -1,7 +1,7 @@
 import { SignatureBytes } from '@solana/keys';
 
 import { CompilableTransaction } from './compilable-transaction';
-import { CompiledMessage, compileMessage } from './message';
+import { CompiledMessage, compileTransactionMessage } from './message';
 import { ITransactionWithSignatures } from './signatures';
 
 export type CompiledTransaction = Readonly<{
@@ -12,7 +12,7 @@ export type CompiledTransaction = Readonly<{
 export function getCompiledTransaction(
     transaction: CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures),
 ): CompiledTransaction {
-    const compiledMessage = compileMessage(transaction);
+    const compiledMessage = compileTransactionMessage(transaction);
     let signatures;
     if ('signatures' in transaction) {
         signatures = [];

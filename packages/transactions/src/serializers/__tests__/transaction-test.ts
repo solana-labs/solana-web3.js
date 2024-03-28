@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
 
 import { AddressesByLookupTableAddress, decompileTransaction } from '../../decompile-transaction';
-import { CompiledMessage, compileMessage } from '../../message';
+import { CompiledMessage, compileTransactionMessage } from '../../message';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
 import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
 
@@ -44,7 +44,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction seriali
         (getCompiledMessageDecoder as jest.Mock).mockReturnValue({
             read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
-        (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (compileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
         transaction = serializerFactory({});
     });
     it('serializes a transaction with no signatures', () => {
