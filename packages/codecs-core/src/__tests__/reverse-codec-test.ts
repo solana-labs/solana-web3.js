@@ -2,6 +2,7 @@ import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solan
 
 import { createDecoder, createEncoder } from '../codec';
 import { fixCodec } from '../fix-codec';
+import { ReadonlyUint8Array } from '../readonly-uint8array';
 import { reverseCodec, reverseDecoder, reverseEncoder } from '../reverse-codec';
 import { b, base16 } from './__setup__';
 
@@ -57,7 +58,10 @@ describe('reverseDecoder', () => {
     it('can reverse the bytes of a fixed-size decoder', () => {
         const decoder = createDecoder({
             fixedSize: 2,
-            read: (bytes: Uint8Array, offset = 0) => [`${bytes[offset]}-${bytes[offset + 1]}`, offset + 2],
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [
+                `${bytes[offset]}-${bytes[offset + 1]}`,
+                offset + 2,
+            ],
         });
 
         const reversedDecoder = reverseDecoder(decoder);
@@ -66,5 +70,20 @@ describe('reverseDecoder', () => {
 
         // @ts-expect-error Reversed decoder should be fixed-size.
         expect(() => reverseDecoder(base16)).toThrow(new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH));
+    });
+
+    it('does not modify the input bytes in-place', () => {
+        const decoder = createDecoder({
+            fixedSize: 2,
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [
+                `${bytes[offset]}-${bytes[offset + 1]}`,
+                offset + 2,
+            ],
+        });
+
+        const reversedDecoder = reverseDecoder(decoder);
+        const inputBytes = new Uint8Array([42, 0]);
+        reversedDecoder.read(inputBytes, 0);
+        expect(inputBytes).toStrictEqual(new Uint8Array([42, 0]));
     });
 });

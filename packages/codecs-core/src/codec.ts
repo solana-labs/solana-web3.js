@@ -4,6 +4,8 @@ import {
     SolanaError,
 } from '@solana/errors';
 
+import { ReadonlyUint8Array } from './readonly-uint8array';
+
 /**
  * Defines an offset in bytes.
  */
@@ -38,12 +40,12 @@ export type Encoder<TFrom> = FixedSizeEncoder<TFrom> | VariableSizeEncoder<TFrom
 
 type BaseDecoder<TTo> = {
     /** Decodes the provided byte array at the given offset (or zero) and returns the value directly. */
-    readonly decode: (bytes: Uint8Array, offset?: Offset) => TTo;
+    readonly decode: (bytes: ReadonlyUint8Array | Uint8Array, offset?: Offset) => TTo;
     /**
      * Reads the encoded value from the provided byte array at the given offset.
      * Returns the decoded value and the offset of the next byte after the encoded value.
      */
-    readonly read: (bytes: Uint8Array, offset: Offset) => [TTo, Offset];
+    readonly read: (bytes: ReadonlyUint8Array | Uint8Array, offset: Offset) => [TTo, Offset];
 };
 
 export type FixedSizeDecoder<TTo, TSize extends number = number> = BaseDecoder<TTo> & {

@@ -3,6 +3,7 @@ import {
     createDecoder,
     createEncoder,
     Offset,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -52,7 +53,7 @@ export const getShortU16Encoder = (): VariableSizeEncoder<number> =>
 export const getShortU16Decoder = (): VariableSizeDecoder<number> =>
     createDecoder({
         maxSize: 3,
-        read: (bytes: Uint8Array, offset): [number, Offset] => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset): [number, Offset] => {
             let value = 0;
             let byteCount = 0;
             while (++byteCount) {

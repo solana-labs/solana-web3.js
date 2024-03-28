@@ -6,6 +6,7 @@ import {
 
 import { createDecoder, createEncoder, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder } from '../codec';
 import { combineCodec } from '../combine-codec';
+import { ReadonlyUint8Array } from '../readonly-uint8array';
 
 describe('combineCodec', () => {
     it('can join encoders and decoders with the same type', () => {
@@ -19,7 +20,7 @@ describe('combineCodec', () => {
 
         const u8Decoder = createDecoder({
             fixedSize: 1,
-            read: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         });
 
         const u8Codec = combineCodec(u8Encoder, u8Decoder);
@@ -40,7 +41,7 @@ describe('combineCodec', () => {
 
         const u8Decoder: FixedSizeDecoder<bigint> = createDecoder({
             fixedSize: 1,
-            read: (bytes: Uint8Array, offset = 0) => [BigInt(bytes[offset]), offset + 1],
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [BigInt(bytes[offset]), offset + 1],
         });
 
         const u8Codec: FixedSizeCodec<bigint | number, bigint> = combineCodec(u8Encoder, u8Decoder);

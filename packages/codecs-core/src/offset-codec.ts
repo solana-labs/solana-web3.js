@@ -1,6 +1,7 @@
 import { assertByteArrayOffsetIsNotOutOfRange } from './assertions';
 import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from './codec';
 import { combineCodec } from './combine-codec';
+import { ReadonlyUint8Array } from './readonly-uint8array';
 
 type OffsetConfig = {
     postOffset?: PostOffsetFunction;
@@ -9,7 +10,7 @@ type OffsetConfig = {
 
 type PreOffsetFunctionScope = {
     /** The entire byte array. */
-    bytes: Uint8Array;
+    bytes: ReadonlyUint8Array | Uint8Array;
     /** The original offset prior to encode or decode. */
     preOffset: Offset;
     /** Wraps the offset to the byte array length. */

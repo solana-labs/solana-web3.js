@@ -5,6 +5,7 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    ReadonlyUint8Array,
 } from '@solana/codecs-core';
 
 /**
@@ -23,7 +24,7 @@ export function getUnitEncoder(): FixedSizeEncoder<void, 0> {
 export function getUnitDecoder(): FixedSizeDecoder<void, 0> {
     return createDecoder({
         fixedSize: 0,
-        read: (_bytes: Uint8Array, offset) => [undefined, offset],
+        read: (_bytes: ReadonlyUint8Array | Uint8Array, offset) => [undefined, offset],
     });
 }
 

@@ -38,7 +38,7 @@ export function reverseDecoder<TTo, TSize extends number>(
         read: (bytes, offset) => {
             const reverseEnd = offset + decoder.fixedSize;
             if (offset === 0 && bytes.length === reverseEnd) {
-                return decoder.read(bytes.reverse(), offset);
+                return decoder.read(new Uint8Array([...bytes]).reverse(), offset);
             }
             const reversedBytes = bytes.slice();
             reversedBytes.set(bytes.slice(offset, reverseEnd).reverse(), offset);

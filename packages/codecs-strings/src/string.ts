@@ -13,6 +13,7 @@ import {
     FixedSizeEncoder,
     fixEncoder,
     getEncodedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -106,7 +107,7 @@ export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decode
     }
 
     return createDecoder({
-        read: (bytes: Uint8Array, offset = 0) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => {
             assertByteArrayIsNotEmptyForCodec('string', bytes, offset);
             const [lengthBigInt, lengthOffset] = size.read(bytes, offset);
             const length = Number(lengthBigInt);

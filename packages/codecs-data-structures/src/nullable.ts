@@ -11,6 +11,7 @@ import {
     FixedSizeEncoder,
     getEncodedSize,
     isFixedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -140,7 +141,7 @@ export function getNullableDecoder<TTo>(
         ...(fixedSize === null
             ? { maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined }
             : { fixedSize }),
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             if (bytes.length - offset <= 0) {
                 return [null, offset];
             }

@@ -13,6 +13,7 @@ import {
     FixedSizeEncoder,
     fixEncoder,
     getEncodedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -81,7 +82,7 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
     const size = config.size ?? 'variable';
 
     const byteDecoder: Decoder<Uint8Array> = createDecoder({
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             const slice = bytes.slice(offset);
             return [slice, offset + slice.length];
         },
@@ -96,7 +97,7 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
     }
 
     return createDecoder({
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             assertByteArrayIsNotEmptyForCodec('bytes', bytes, offset);
             const [lengthBigInt, lengthOffset] = size.read(bytes, offset);
             const length = Number(lengthBigInt);

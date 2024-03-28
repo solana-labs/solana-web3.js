@@ -10,6 +10,7 @@ import {
     getU64Codec,
     getU64Decoder,
     getU64Encoder,
+    ReadonlyUint8Array,
 } from '@solana/codecs';
 import {
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
@@ -103,7 +104,7 @@ export function getSysvarSlotHistoryEncoder(): FixedSizeEncoder<SysvarSlotHistor
 export function getSysvarSlotHistoryDecoder(): FixedSizeDecoder<SysvarSlotHistory, SysvarSlotHistorySize> {
     return createDecoder({
         fixedSize: SLOT_HISTORY_ACCOUNT_DATA_STATIC_SIZE,
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             // Byte length should be exact.
             if (bytes.length != SLOT_HISTORY_ACCOUNT_DATA_STATIC_SIZE) {
                 throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {

@@ -9,6 +9,7 @@ import {
     Encoder,
     getEncodedSize,
     isFixedSize,
+    ReadonlyUint8Array,
 } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 import {
@@ -174,7 +175,7 @@ export function getDiscriminatedUnionDecoder<
     const fixedSize = getDiscriminatedUnionFixedSize(variants, prefix);
     return createDecoder({
         ...(fixedSize !== null ? { fixedSize } : { maxSize: getDiscriminatedUnionMaxSize(variants, prefix) }),
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             assertByteArrayIsNotEmptyForCodec('discriminatedUnion', bytes, offset);
             const [discriminator, dOffset] = prefix.read(bytes, offset);
             offset = dOffset;

@@ -13,6 +13,7 @@ import {
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from './codec';
+import { ReadonlyUint8Array } from './readonly-uint8array';
 
 /**
  * Converts an encoder A to a encoder B by mapping their values.
@@ -46,23 +47,23 @@ export function mapEncoder<TOldFrom, TNewFrom>(
  */
 export function mapDecoder<TOldTo, TNewTo, TSize extends number>(
     decoder: FixedSizeDecoder<TOldTo, TSize>,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): FixedSizeDecoder<TNewTo, TSize>;
 export function mapDecoder<TOldTo, TNewTo>(
     decoder: VariableSizeDecoder<TOldTo>,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): VariableSizeDecoder<TNewTo>;
 export function mapDecoder<TOldTo, TNewTo>(
     decoder: Decoder<TOldTo>,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): Decoder<TNewTo>;
 export function mapDecoder<TOldTo, TNewTo>(
     decoder: Decoder<TOldTo>,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): Decoder<TNewTo> {
     return createDecoder({
         ...decoder,
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             const [value, newOffset] = decoder.read(bytes, offset);
             return [map(value, bytes, offset), newOffset];
         },
@@ -87,22 +88,22 @@ export function mapCodec<TOldFrom, TNewFrom, TTo extends TNewFrom & TOldFrom>(
 export function mapCodec<TOldFrom, TNewFrom, TOldTo extends TOldFrom, TNewTo extends TNewFrom, TSize extends number>(
     codec: FixedSizeCodec<TOldFrom, TOldTo, TSize>,
     unmap: (value: TNewFrom) => TOldFrom,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): FixedSizeCodec<TNewFrom, TNewTo, TSize>;
 export function mapCodec<TOldFrom, TNewFrom, TOldTo extends TOldFrom, TNewTo extends TNewFrom>(
     codec: VariableSizeCodec<TOldFrom, TOldTo>,
     unmap: (value: TNewFrom) => TOldFrom,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): VariableSizeCodec<TNewFrom, TNewTo>;
 export function mapCodec<TOldFrom, TNewFrom, TOldTo extends TOldFrom, TNewTo extends TNewFrom>(
     codec: Codec<TOldFrom, TOldTo>,
     unmap: (value: TNewFrom) => TOldFrom,
-    map: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): Codec<TNewFrom, TNewTo>;
 export function mapCodec<TOldFrom, TNewFrom, TOldTo extends TOldFrom, TNewTo extends TNewFrom>(
     codec: Codec<TOldFrom, TOldTo>,
     unmap: (value: TNewFrom) => TOldFrom,
-    map?: (value: TOldTo, bytes: Uint8Array, offset: number) => TNewTo,
+    map?: (value: TOldTo, bytes: ReadonlyUint8Array | Uint8Array, offset: number) => TNewTo,
 ): Codec<TNewFrom, TNewTo> {
     return createCodec({
         ...mapEncoder(codec, unmap),

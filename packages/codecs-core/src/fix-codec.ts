@@ -13,6 +13,7 @@ import {
     Offset,
 } from './codec';
 import { combineCodec } from './combine-codec';
+import { ReadonlyUint8Array } from './readonly-uint8array';
 
 /**
  * Creates a fixed-size encoder from a given encoder.
@@ -51,7 +52,7 @@ export function fixDecoder<TTo, TSize extends number>(
 ): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: fixedBytes,
-        read: (bytes: Uint8Array, offset: Offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset: Offset) => {
             assertByteArrayHasEnoughBytesForCodec('fixCodec', fixedBytes, bytes, offset);
             // Slice the byte array to the fixed size if necessary.
             if (offset > 0 || bytes.length > fixedBytes) {
