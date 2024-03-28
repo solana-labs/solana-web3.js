@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { Decoder } from '@solana/codecs-core';
+import { Decoder, ReadonlyUint8Array } from '@solana/codecs-core';
 
 import { Account, EncodedAccount } from '../account';
 import { assertAccountDecoded, assertAccountsDecoded, decodeAccount } from '../decode-account';
@@ -33,9 +33,9 @@ type MockDataDecoder = Decoder<MockData>;
 {
     // It narrows a list of accounts with data MockData | Uint8Array to MockData
     const accounts = [
-        {} as unknown as Account<MockData | Uint8Array, '1111'>,
-        {} as unknown as Account<MockData | Uint8Array, '2222'>,
-        {} as unknown as Account<MockData | Uint8Array, '3333'>,
+        {} as unknown as Account<MockData | ReadonlyUint8Array, '1111'>,
+        {} as unknown as Account<MockData | ReadonlyUint8Array, '2222'>,
+        {} as unknown as Account<MockData | ReadonlyUint8Array, '3333'>,
     ];
     assertAccountsDecoded(accounts);
     accounts satisfies Account<MockData, Address>[];

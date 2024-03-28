@@ -1,4 +1,5 @@
 import type { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import type { LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 /** The amount of bytes required to store the base account information without its data. */
@@ -18,4 +19,4 @@ export type Account<TData extends Uint8Array | object, TAddress extends string =
 };
 
 /** Defines a Solana account with its generic details and encoded data. */
-export type EncodedAccount<TAddress extends string = string> = Account<Uint8Array, TAddress>;
+export type EncodedAccount<TAddress extends string = string> = Account<ReadonlyUint8Array, TAddress>;

@@ -46,7 +46,10 @@ export async function partiallySignTransaction<TTransaction extends CompilableTr
     const wireMessageBytes = getCompiledMessageEncoder().encode(compiledMessage);
     const publicKeySignaturePairs = await Promise.all(
         keyPairs.map(keyPair =>
-            Promise.all([getAddressFromPublicKey(keyPair.publicKey), signBytes(keyPair.privateKey, wireMessageBytes)]),
+            Promise.all([
+                getAddressFromPublicKey(keyPair.publicKey),
+                signBytes(keyPair.privateKey, wireMessageBytes as Uint8Array),
+            ]),
         ),
     );
     for (const [signerPublicKey, signature] of publicKeySignaturePairs) {
