@@ -6,19 +6,9 @@ import {
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
-import { Signature, SignatureBytes, signBytes } from '@solana/keys';
+import { Signature, signBytes } from '@solana/keys';
 
-import { CompilableTransaction } from './compilable-transaction';
-import { compileMessage } from './message';
-import { TransactionMessageBytes } from './new-compile-transaction';
-import { getCompiledMessageEncoder } from './serializers';
-
-export type OrderedMap<K extends string, V> = Record<K, V>;
-
-export interface NewTransaction {
-    messageBytes: TransactionMessageBytes;
-    signatures: OrderedMap<Address, SignatureBytes | null>;
-}
+import { NewTransaction } from './new-compile-transaction';
 
 export interface FullySignedTransaction extends NewTransaction {
     readonly __brand: unique symbol;
@@ -39,38 +29,30 @@ export function newGetSignatureFromTransaction(transaction: NewTransaction): Sig
     return transactionSignature as Signature;
 }
 
-export async function newPartiallySignTransaction<TTransaction extends CompilableTransaction>(
+export async function newPartiallySignTransaction(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction,
+    transaction: NewTransaction,
 ): Promise<NewTransaction> {
-    const compiledMessage = compileMessage(transaction);
-    const transactionSigners = compiledMessage.staticAccounts.slice(0, compiledMessage.header.numSignerAccounts);
-    const messageBytes = getCompiledMessageEncoder().encode(compiledMessage) as TransactionMessageBytes;
-
-    const publicKeySignaturePairs = await Promise.all(
-        keyPairs.map(keyPair =>
-            Promise.all([getAddressFromPublicKey(keyPair.publicKey), signBytes(keyPair.privateKey, messageBytes)]),
+    const addressPrivateKeyPairs = await Promise.all(
+        keyPairs.map(keyPair => Promise.all([getAddressFromPublicKey(keyPair.publicKey), keyPair.privateKey])),
+    );
+    const newAddressPrivateKeyPairs = addressPrivateKeyPairs.filter(
+        ([address, _privateKey]) => transaction.signatures[address] === null,
+    );
+    const newAddressSignaturePairs = await Promise.all(
+        newAddressPrivateKeyPairs.map(([address, privateKey]) =>
+            Promise.all([address, signBytes(privateKey, transaction.messageBytes)]),
         ),
     );
-    const publickKeySignatureMap = new Map(publicKeySignaturePairs);
-
-    const signatures: OrderedMap<Address, SignatureBytes | null> = {};
-    for (const signerAddress of transactionSigners) {
-        const signature = publickKeySignatureMap.get(signerAddress) ?? null;
-        signatures[signerAddress] = signature;
+    for (const [address, signature] of newAddressSignaturePairs) {
+        transaction.signatures[address] = signature;
     }
-
-    const out: NewTransaction = {
-        messageBytes,
-        signatures,
-    };
-    Object.freeze(out);
-    return out;
+    return Object.freeze(transaction);
 }
 
-export async function newSignTransaction<TTransaction extends CompilableTransaction>(
+export async function newSignTransaction(
     keyPairs: CryptoKeyPair[],
-    transaction: TTransaction,
+    transaction: NewTransaction,
 ): Promise<FullySignedTransaction> {
     const out = await newPartiallySignTransaction(keyPairs, transaction);
     newAssertTransactionIsFullySigned(out);
