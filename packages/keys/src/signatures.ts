@@ -1,5 +1,5 @@
 import { assertSigningCapabilityIsAvailable, assertVerificationCapabilityIsAvailable } from '@solana/assertions';
-import { Encoder } from '@solana/codecs-core';
+import { Encoder, ReadonlyUint8Array } from '@solana/codecs-core';
 import { getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__KEYS__INVALID_SIGNATURE_BYTE_LENGTH,
@@ -56,7 +56,7 @@ export function isSignature(putativeSignature: string): putativeSignature is Sig
     return true;
 }
 
-export async function signBytes(key: CryptoKey, data: Uint8Array): Promise<SignatureBytes> {
+export async function signBytes(key: CryptoKey, data: ReadonlyUint8Array): Promise<SignatureBytes> {
     assertSigningCapabilityIsAvailable();
     const signedData = await crypto.subtle.sign('Ed25519', key, data);
     return new Uint8Array(signedData) as SignatureBytes;
@@ -67,7 +67,11 @@ export function signature(putativeSignature: string): Signature {
     return putativeSignature;
 }
 
-export async function verifySignature(key: CryptoKey, signature: SignatureBytes, data: Uint8Array): Promise<boolean> {
+export async function verifySignature(
+    key: CryptoKey,
+    signature: SignatureBytes,
+    data: ReadonlyUint8Array,
+): Promise<boolean> {
     assertVerificationCapabilityIsAvailable();
     return await crypto.subtle.verify('Ed25519', key, signature, data);
 }
