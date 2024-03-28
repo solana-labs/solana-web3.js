@@ -11,8 +11,9 @@ import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 import { CompilableTransaction } from './compilable-transaction';
 import { compileMessage } from './message';
 import { TransactionMessageBytes } from './new-compile-transaction';
-import { OrderedMap } from './ordered-map';
 import { getCompiledMessageEncoder } from './serializers';
+
+export type OrderedMap<K extends string, V> = Record<K, V>;
 
 export interface INewTransactionWithSignatures {
     messageBytes: TransactionMessageBytes;
@@ -30,7 +31,7 @@ export function newGetSignatureFromTransaction(transaction: INewTransactionWithS
 
     // We have ordered signatures from the compiled message accounts
     // first signature is the fee payer
-    const signatureBytes = transaction.signatures.firstValue();
+    const signatureBytes = Object.values(transaction.signatures)[0];
     if (!signatureBytes) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING);
     }
@@ -53,10 +54,10 @@ export async function newPartiallySignTransaction<TTransaction extends Compilabl
     );
     const publickKeySignatureMap = new Map(publicKeySignaturePairs);
 
-    const signatures = new OrderedMap<Address, SignatureBytes | null>();
+    const signatures: OrderedMap<Address, SignatureBytes | null> = {};
     for (const signerAddress of transactionSigners) {
         const signature = publickKeySignatureMap.get(signerAddress) ?? null;
-        signatures.set(signerAddress, signature);
+        signatures[signerAddress] = signature;
     }
 
     const out: INewTransactionWithSignatures = {
@@ -81,9 +82,9 @@ export function newAssertTransactionIsFullySigned(
     transaction: INewTransactionWithSignatures,
 ): asserts transaction is INewFullySignedTransaction {
     const missingSigs: Address[] = [];
-    transaction.signatures.forEach((address, signatureBytes) => {
+    Object.entries(transaction.signatures).forEach(([address, signatureBytes]) => {
         if (!signatureBytes) {
-            missingSigs.push(address);
+            missingSigs.push(address as Address);
         }
     });
 
