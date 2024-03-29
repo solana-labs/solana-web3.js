@@ -3,11 +3,17 @@ import { combineCodec } from './combine-codec';
 import { offsetDecoder, offsetEncoder } from './offset-codec';
 import { resizeDecoder, resizeEncoder } from './resize-codec';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyEncoder = Encoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyDecoder = Decoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyCodec = Codec<any>;
+
 /**
  * Adds left padding to the given encoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padLeftEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder, offset: Offset): TEncoder {
+export function padLeftEncoder<TEncoder extends AnyEncoder>(encoder: TEncoder, offset: Offset): TEncoder {
     return offsetEncoder(
         resizeEncoder(encoder, size => size + offset),
         { preOffset: ({ preOffset }) => preOffset + offset },
@@ -17,8 +23,7 @@ export function padLeftEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder,
 /**
  * Adds right padding to the given encoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padRightEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder, offset: Offset): TEncoder {
+export function padRightEncoder<TEncoder extends AnyEncoder>(encoder: TEncoder, offset: Offset): TEncoder {
     return offsetEncoder(
         resizeEncoder(encoder, size => size + offset),
         { postOffset: ({ postOffset }) => postOffset + offset },
@@ -28,8 +33,7 @@ export function padRightEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder
 /**
  * Adds left padding to the given decoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padLeftDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder, offset: Offset): TDecoder {
+export function padLeftDecoder<TDecoder extends AnyDecoder>(decoder: TDecoder, offset: Offset): TDecoder {
     return offsetDecoder(
         resizeDecoder(decoder, size => size + offset),
         { preOffset: ({ preOffset }) => preOffset + offset },
@@ -39,8 +43,7 @@ export function padLeftDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder,
 /**
  * Adds right padding to the given decoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padRightDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder, offset: Offset): TDecoder {
+export function padRightDecoder<TDecoder extends AnyDecoder>(decoder: TDecoder, offset: Offset): TDecoder {
     return offsetDecoder(
         resizeDecoder(decoder, size => size + offset),
         { postOffset: ({ postOffset }) => postOffset + offset },
@@ -50,15 +53,13 @@ export function padRightDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder
 /**
  * Adds left padding to the given codec.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padLeftCodec<TCodec extends Codec<any>>(codec: TCodec, offset: Offset): TCodec {
+export function padLeftCodec<TCodec extends AnyCodec>(codec: TCodec, offset: Offset): TCodec {
     return combineCodec(padLeftEncoder(codec, offset), padLeftDecoder(codec, offset)) as TCodec;
 }
 
 /**
  * Adds right padding to the given codec.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function padRightCodec<TCodec extends Codec<any>>(codec: TCodec, offset: Offset): TCodec {
+export function padRightCodec<TCodec extends AnyCodec>(codec: TCodec, offset: Offset): TCodec {
     return combineCodec(padRightEncoder(codec, offset), padRightDecoder(codec, offset)) as TCodec;
 }

@@ -3,6 +3,13 @@ import { Codec, createDecoder, createEncoder, Decoder, Encoder, Offset } from '.
 import { combineCodec } from './combine-codec';
 import { ReadonlyUint8Array } from './readonly-uint8array';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyEncoder = Encoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyDecoder = Decoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyCodec = Codec<any>;
+
 type OffsetConfig = {
     postOffset?: PostOffsetFunction;
     preOffset?: PreOffsetFunction;
@@ -30,8 +37,7 @@ type PostOffsetFunction = (
 /**
  * Moves the offset of a given encoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function offsetEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder, config: OffsetConfig): TEncoder {
+export function offsetEncoder<TEncoder extends AnyEncoder>(encoder: TEncoder, config: OffsetConfig): TEncoder {
     return createEncoder({
         ...encoder,
         write: (value, bytes, preOffset) => {
@@ -51,8 +57,7 @@ export function offsetEncoder<TEncoder extends Encoder<any>>(encoder: TEncoder, 
 /**
  * Moves the offset of a given decoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function offsetDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder, config: OffsetConfig): TDecoder {
+export function offsetDecoder<TDecoder extends AnyDecoder>(decoder: TDecoder, config: OffsetConfig): TDecoder {
     return createDecoder({
         ...decoder,
         read: (bytes, preOffset) => {
@@ -72,8 +77,7 @@ export function offsetDecoder<TDecoder extends Decoder<any>>(decoder: TDecoder, 
 /**
  * Moves the offset of a given codec.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function offsetCodec<TCodec extends Codec<any>>(codec: TCodec, config: OffsetConfig): TCodec {
+export function offsetCodec<TCodec extends AnyCodec>(codec: TCodec, config: OffsetConfig): TCodec {
     return combineCodec(offsetEncoder(codec, config), offsetDecoder(codec, config)) as TCodec;
 }
 
