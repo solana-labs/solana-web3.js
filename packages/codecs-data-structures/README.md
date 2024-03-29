@@ -339,7 +339,7 @@ messageCodec.encode({ message: 'Write', fields: ['Hi'] });
 messageCodec.encode({ message: 'Move', x: 5, y: 6 });
 ```
 
-Note that, the discriminator value of a variant may also be a `number`, `symbol` or a JavaScript `enum`. For instance, the following is also valid:
+Note that, the discriminator value of a variant may be any scalar value — such as `number`, `bigint`, `boolean`, a JavaScript `enum`, etc. For instance, the following is also valid:
 
 ```ts
 enum Message {

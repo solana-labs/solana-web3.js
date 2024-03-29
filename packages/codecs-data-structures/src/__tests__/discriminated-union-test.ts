@@ -159,6 +159,15 @@ describe('getDiscriminatedUnionCodec', () => {
         expect(codec.read(b('002a'), 0)).toStrictEqual([{ __kind: 1, one: 42 }, 2]);
     });
 
+    it('encodes discriminated unions with boolean discriminator values', () => {
+        const codec = discriminatedUnion([
+            [true, struct([['truth', u8()]])],
+            [false, struct([['lie', u32()]])],
+        ]);
+        expect(codec.encode({ __kind: true, truth: 42 })).toStrictEqual(b('002a'));
+        expect(codec.read(b('002a'), 0)).toStrictEqual([{ __kind: true, truth: 42 }, 2]);
+    });
+
     it('encodes discriminated unions with enum discriminator values', () => {
         enum Event {
             Click,
