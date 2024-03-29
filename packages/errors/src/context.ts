@@ -20,8 +20,10 @@ import {
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT,
+    SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS,
     SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE,
+    SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
@@ -290,6 +292,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             value: number | string;
             variants: string[];
         };
+        [SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT]: {
+            value: bigint | boolean | number | string | null | undefined;
+            variants: readonly (bigint | boolean | number | string | null | undefined)[];
+        };
         [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]: {
             actual: bigint | number;
             codecDescription: string;
@@ -299,6 +305,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             alphabet: string;
             base: number;
             value: string;
+        };
+        [SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE]: {
+            discriminator: bigint | number;
+            maxRange: number;
+            minRange: number;
         };
         [SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE]: {
             codecDescription: string;
