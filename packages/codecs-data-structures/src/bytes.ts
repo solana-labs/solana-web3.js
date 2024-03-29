@@ -1,6 +1,4 @@
 import {
-    assertByteArrayHasEnoughBytesForCodec,
-    assertByteArrayIsNotEmptyForCodec,
     Codec,
     combineCodec,
     createDecoder,
@@ -12,8 +10,8 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoder,
-    getEncodedSize,
-    ReadonlyUint8Array,
+    prefixDecoder,
+    prefixEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -43,7 +41,6 @@ export function getBytesEncoder<TSize extends number>(
 export function getBytesEncoder(config?: BytesCodecConfig<NumberEncoder>): VariableSizeEncoder<Uint8Array>;
 export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): Encoder<Uint8Array> {
     const size = config.size ?? 'variable';
-
     const byteEncoder: Encoder<Uint8Array> = createEncoder({
         getSizeFromValue: (value: Uint8Array) => value.length,
         write: (value: Uint8Array, bytes, offset) => {
@@ -60,13 +57,7 @@ export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): E
         return fixEncoder(byteEncoder, size);
     }
 
-    return createEncoder({
-        getSizeFromValue: (value: Uint8Array) => getEncodedSize(value.length, size) + value.length,
-        write: (value: Uint8Array, bytes, offset) => {
-            offset = size.write(value.length, bytes, offset);
-            return byteEncoder.write(value, bytes, offset);
-        },
-    });
+    return prefixEncoder(byteEncoder, size);
 }
 
 /**
@@ -82,7 +73,7 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
     const size = config.size ?? 'variable';
 
     const byteDecoder: Decoder<Uint8Array> = createDecoder({
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
+        read: (bytes, offset) => {
             const slice = bytes.slice(offset);
             return [slice, offset + slice.length];
         },
@@ -96,19 +87,7 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
         return fixDecoder(byteDecoder, size);
     }
 
-    return createDecoder({
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
-            assertByteArrayIsNotEmptyForCodec('bytes', bytes, offset);
-            const [lengthBigInt, lengthOffset] = size.read(bytes, offset);
-            const length = Number(lengthBigInt);
-            offset = lengthOffset;
-            const contentBytes = bytes.slice(offset, offset + length);
-            assertByteArrayHasEnoughBytesForCodec('bytes', length, contentBytes);
-            const [value, contentOffset] = byteDecoder.read(contentBytes, 0);
-            offset += contentOffset;
-            return [value, offset];
-        },
-    });
+    return prefixDecoder(byteDecoder, size);
 }
 
 /**

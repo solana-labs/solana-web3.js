@@ -362,6 +362,31 @@ const get32BytesBase58Decoder = () => fixDecoder(getBase58Decoder(), 32);
 const get32BytesBase58Codec = () => combineCodec(get32BytesBase58Encoder(), get32BytesBase58Codec());
 ```
 
+## Prefixing the size of codecs
+
+The `prefixCodec` function allows you to store the byte size of any codec as a number prefix. This allows you to contain variable-size codecs to their actual size.
+
+When encoding, the size of the encoded data is stored before the encoded data itself. When decoding, the size is read first to know how many bytes to read next.
+
+For example, say we want to represent a variable-size base-58 string using a `u32` size prefix — the equivalent of a Borsh `String` in Rust. Here’s how you can use the `prefixCodec` function to achieve that.
+
+```ts
+const getU32Base58Codec = () => prefixCodec(getBase58Codec(), getU32Codec());
+
+getU32Base58Codec().encode('hello world');
+// 0x0b00000068656c6c6f20776f726c64
+//   |       └-- Our encoded base-58 string.
+//   └-- Our encoded u32 size prefix.
+```
+
+You may also use the `prefixEncoder` and `prefixDecoder` functions to separate your codec logic like so:
+
+```ts
+const getU32Base58Encoder = () => prefixEncoder(getBase58Encoder(), getU32Encoder());
+const getU32Base58Decoder = () => prefixDecoder(getBase58Decoder(), getU32Decoder());
+const getU32Base58Codec = () => combineCodec(getU32Base58Encoder(), getU32Base58Decoder());
+```
+
 ## Adjusting the size of codecs
 
 The `resizeCodec` helper re-defines the size of a given codec by accepting a function that takes the current size of the codec and returns a new size. This works for both fixed-size and variable-size codecs.
