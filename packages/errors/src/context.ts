@@ -26,6 +26,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
     SOLANA_ERROR__INSTRUCTION__PROGRAM_ID_MISMATCH,
@@ -321,6 +322,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             bytesLength: number;
             codecDescription: string;
             offset: number;
+        };
+        [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]: {
+            maxRange: number;
+            minRange: number;
+            variant: number;
         };
         [SOLANA_ERROR__INSTRUCTION_ERROR__BORSH_IO_ERROR]: {
             encodedData: string;

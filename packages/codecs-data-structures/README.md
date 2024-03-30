@@ -243,6 +243,40 @@ const bytes = getEnumEncoder(Direction).encode(Direction.Left);
 const direction = getEnumDecoder(Direction).decode(bytes);
 ```
 
+## Literal union codec
+
+The `getLiteralUnionCodec` function works similarly to the `getUnionCodec` function but does not require a JavaScript `enum` to exist.
+
+It accepts an array of literal values — such as `string`, `number`, `boolean`, etc. — and returns a codec that encodes and decodes such values using by using their index in the array. It uses TypeScript unions to represent all the possible values.
+
+```ts
+const codec = getLiteralUnionCodec(['left', 'right', 'up', 'down']);
+// ^? FixedSizeCodec<"left" | "right" | "up" | "down">
+
+const bytes = codec.encode('left'); // 0x00
+const value = codec.decode(bytes); // 'left'
+```
+
+As you can see, it uses a `u8` number by default to store the index of the value. However, you may provide a number codec as the `size` option of the `getLiteralUnionCodec` function to customise that behaviour.
+
+```ts
+const codec = getLiteralUnionCodec(['left', 'right', 'up', 'down'], {
+    size: getU32Codec(),
+});
+
+codec.encode('left'); // 0x00000000
+codec.encode('right'); // 0x01000000
+codec.encode('up'); // 0x02000000
+codec.encode('down'); // 0x03000000
+```
+
+Separate `getLiteralUnionEncoder` and `getLiteralUnionDecoder` functions are also available.
+
+```ts
+const bytes = getLiteralUnionEncoder(['left', 'right']).encode('left'); // 0x00
+const value = getLiteralUnionDecoder(['left', 'right']).decode(bytes); // 'left'
+```
+
 ## Discriminated union codec
 
 In Rust, enums are powerful data types whose variants can be one of the following:
@@ -365,38 +399,32 @@ const bytes = getDiscriminatedUnionEncoder(variantEncoders).encode({ __kind: 'Qu
 const message = getDiscriminatedUnionDecoder(variantDecoders).decode(bytes);
 ```
 
-## Literal union codec
+## Union codec
 
-The `getLiteralUnionCodec` function works similarly to the `getUnionCodec` function but does not require a JavaScript `enum` to exist.
+The `getUnionCodec` is a lower-lever codec helper that can be used to encode/decode any TypeScript union.
 
-It accepts an array of literal values — such as `string`, `number`, `boolean`, etc. — and returns a codec that encodes and decodes such values using by using their index in the array. It uses TypeScript unions to represent all the possible values.
+It accepts the following arguments:
+
+-   An array of codecs, each defining a variant of the union.
+-   A `getIndexFromValue` function which, given a value of the union, returns the index of the codec that should be used to encode that value.
+-   A `getIndexFromBytes` function which, given the byte array to decode at a given offset, returns the index of the codec that should be used to decode the next bytes.
 
 ```ts
-const codec = getLiteralUnionCodec(['left', 'right', 'up', 'down']);
-// ^? FixedSizeCodec<"left" | "right" | "up" | "down">
+const codec: Codec<number | boolean> = getUnionCodec(
+    [getU16Codec(), getBooleanCodec()],
+    value => (typeof value === 'number' ? 0 : 1),
+    (bytes, offset) => (bytes.slice(offset).length > 1 ? 0 : 1),
+);
 
-const bytes = codec.encode('left'); // 0x00
-const value = codec.decode(bytes); // 'left'
+codec.encode(42); // 0x2a00
+codec.encode(true); // 0x01
 ```
 
-As you can see, it uses a `u8` number by default to store the index of the value. However, you may provide a number codec as the `size` option of the `getLiteralUnionCodec` function to customise that behaviour.
+As usual, separate `getUnionEncoder` and `getUnionDecoder` functions are also available.
 
 ```ts
-const codec = getLiteralUnionCodec(['left', 'right', 'up', 'down'], {
-    size: getU32Codec(),
-});
-
-codec.encode('left'); // 0x00000000
-codec.encode('right'); // 0x01000000
-codec.encode('up'); // 0x02000000
-codec.encode('down'); // 0x03000000
-```
-
-Separate `getLiteralUnionEncoder` and `getLiteralUnionDecoder` functions are also available.
-
-```ts
-const bytes = getLiteralUnionEncoder(['left', 'right']).encode('left'); // 0x00
-const value = getLiteralUnionDecoder(['left', 'right']).decode(bytes); // 'left'
+const bytes = getUnionEncoder(encoders, getIndexFromValue).encode(42);
+const value = getUnionDecoder(decoders, getIndexFromBytes).decode(bytes);
 ```
 
 ## Boolean codec

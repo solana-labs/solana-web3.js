@@ -34,6 +34,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
@@ -282,6 +283,8 @@ export const SolanaErrorMessages: Readonly<{
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
     [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected offset to be in the range [0, $bytesLength], got $offset.',
+    [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]:
+        'Union variant out of range. Expected an index between $minRange and $maxRange, got $variant.',
     [SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED]: 'No random values implementation could be found.',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_ALREADY_INITIALIZED]: 'instruction requires an uninitialized account',
     [SOLANA_ERROR__INSTRUCTION_ERROR__ACCOUNT_BORROW_FAILED]:

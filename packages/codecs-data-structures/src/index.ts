@@ -10,4 +10,5 @@ export * from './nullable';
 export * from './set';
 export * from './struct';
 export * from './tuple';
+export * from './union';
 export * from './unit';
