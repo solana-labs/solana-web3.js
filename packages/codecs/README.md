@@ -92,6 +92,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Bit array codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#bit-array-codec).
     -   [Constant codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#constant-codec).
     -   [Unit codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#unit-codec).
+    -   [Hidden prefix and suffix codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#hidden-prefix-and-suffix-codec).
 -   [`@solana/options`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options) This package adds Rust-like `Options` to JavaScript and offers codecs and helpers to manage them.
     -   [Creating options](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#creating-options).
     -   [Option helpers](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#option-helpers).

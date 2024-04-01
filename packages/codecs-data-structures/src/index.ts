@@ -6,6 +6,8 @@ export * from './bytes';
 export * from './constant';
 export * from './discriminated-union';
 export * from './enum';
+export * from './hidden-prefix';
+export * from './hidden-suffix';
 export * from './map';
 export * from './nullable';
 export * from './set';
