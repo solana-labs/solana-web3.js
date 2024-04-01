@@ -8,6 +8,7 @@ import * as shortvec from '../utils/shortvec-encoding';
 import * as Layout from '../layout';
 import {sign} from '../utils/ed25519';
 import {PublicKey} from '../publickey';
+import {guardedSplice} from '../utils/guarded-array-utils';
 
 export type TransactionVersion = 'legacy' | 0;
 
@@ -82,7 +83,7 @@ export class VersionedTransaction {
     const signaturesLength = shortvec.decodeLength(byteArray);
     for (let i = 0; i < signaturesLength; i++) {
       signatures.push(
-        new Uint8Array(byteArray.splice(0, SIGNATURE_LENGTH_IN_BYTES)),
+        new Uint8Array(guardedSplice(byteArray, 0, SIGNATURE_LENGTH_IN_BYTES)),
       );
     }
 

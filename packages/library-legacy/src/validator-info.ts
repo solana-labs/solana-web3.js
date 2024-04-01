@@ -9,6 +9,7 @@ import {
 import * as Layout from './layout';
 import * as shortvec from './utils/shortvec-encoding';
 import {PublicKey, PUBLIC_KEY_LENGTH} from './publickey';
+import {guardedShift, guardedSplice} from './utils/guarded-array-utils';
 
 export const VALIDATOR_INFO_KEY = new PublicKey(
   'Va1idator1nfo111111111111111111111111111111',
@@ -83,8 +84,10 @@ export class ValidatorInfo {
 
     const configKeys: Array<ConfigKey> = [];
     for (let i = 0; i < 2; i++) {
-      const publicKey = new PublicKey(byteArray.splice(0, PUBLIC_KEY_LENGTH));
-      const isSigner = byteArray.splice(0, 1)[0] === 1;
+      const publicKey = new PublicKey(
+        guardedSplice(byteArray, 0, PUBLIC_KEY_LENGTH),
+      );
+      const isSigner = guardedShift(byteArray) === 1;
       configKeys.push({publicKey, isSigner});
     }
 
