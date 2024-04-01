@@ -26,6 +26,7 @@ import {
     SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
+    SOLANA_ERROR__CODECS__INVALID_CONSTANT,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT,
     SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT,
@@ -268,6 +269,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH]: 'Expected a variable-size codec, got a fixed-size one.',
     [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]:
         'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',
+    [SOLANA_ERROR__CODECS__INVALID_CONSTANT]:
+        'Expected byte array constant [$hexConstant] to be present in data [$hexData] at offset [$offset].',
     [SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT]:
         'Invalid discriminated union variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]:
