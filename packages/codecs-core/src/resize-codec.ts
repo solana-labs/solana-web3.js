@@ -13,6 +13,13 @@ import {
 } from './codec';
 import { combineCodec } from './combine-codec';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyEncoder = Encoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyDecoder = Decoder<any>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyCodec = Codec<any>;
+
 /**
  * Updates the size of a given encoder.
  */
@@ -20,13 +27,11 @@ export function resizeEncoder<TFrom, TSize extends number, TNewSize extends numb
     encoder: FixedSizeEncoder<TFrom, TSize>,
     resize: (size: TSize) => TNewSize,
 ): FixedSizeEncoder<TFrom, TNewSize>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeEncoder<TEncoder extends Encoder<any>>(
+export function resizeEncoder<TEncoder extends AnyEncoder>(
     encoder: TEncoder,
     resize: (size: number) => number,
 ): TEncoder;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeEncoder<TEncoder extends Encoder<any>>(
+export function resizeEncoder<TEncoder extends AnyEncoder>(
     encoder: TEncoder,
     resize: (size: number) => number,
 ): TEncoder {
@@ -58,19 +63,16 @@ export function resizeEncoder<TEncoder extends Encoder<any>>(
 /**
  * Updates the size of a given decoder.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 export function resizeDecoder<TFrom, TSize extends number, TNewSize extends number>(
     decoder: FixedSizeDecoder<TFrom, TSize>,
     resize: (size: TSize) => TNewSize,
 ): FixedSizeDecoder<TFrom, TNewSize>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeDecoder<TDecoder extends Decoder<any>>(
+export function resizeDecoder<TDecoder extends AnyDecoder>(
     decoder: TDecoder,
     resize: (size: number) => number,
 ): TDecoder;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeDecoder<TDecoder extends Decoder<any>>(
+export function resizeDecoder<TDecoder extends AnyDecoder>(
     decoder: TDecoder,
     resize: (size: number) => number,
 ): TDecoder {
@@ -90,14 +92,11 @@ export function resizeDecoder<TDecoder extends Decoder<any>>(
 /**
  * Updates the size of a given codec.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resizeCodec<TFrom, TTo extends TFrom, TSize extends number, TNewSize extends number>(
     codec: FixedSizeCodec<TFrom, TTo, TSize>,
     resize: (size: TSize) => TNewSize,
 ): FixedSizeCodec<TFrom, TTo, TNewSize>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeCodec<TCodec extends Codec<any>>(codec: TCodec, resize: (size: number) => number): TCodec;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function resizeCodec<TCodec extends Codec<any>>(codec: TCodec, resize: (size: number) => number): TCodec {
+export function resizeCodec<TCodec extends AnyCodec>(codec: TCodec, resize: (size: number) => number): TCodec;
+export function resizeCodec<TCodec extends AnyCodec>(codec: TCodec, resize: (size: number) => number): TCodec {
     return combineCodec(resizeEncoder(codec, resize), resizeDecoder(codec, resize)) as TCodec;
 }
