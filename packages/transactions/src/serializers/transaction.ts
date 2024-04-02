@@ -1,6 +1,8 @@
 import {
     combineCodec,
+    fixDecoderSize,
     FixedSizeDecoder,
+    fixEncoderSize,
     mapDecoder,
     mapEncoder,
     VariableSizeCodec,
@@ -26,7 +28,7 @@ import { getCompiledMessageDecoder, getCompiledMessageEncoder } from './message'
 
 function getCompiledTransactionEncoder(): VariableSizeEncoder<CompiledTransaction> {
     return getStructEncoder([
-        ['signatures', getArrayEncoder(getBytesEncoder({ size: 64 }), { size: getShortU16Encoder() })],
+        ['signatures', getArrayEncoder(fixEncoderSize(getBytesEncoder(), 64), { size: getShortU16Encoder() })],
         ['compiledMessage', getCompiledMessageEncoder()],
     ]);
 }
@@ -35,7 +37,7 @@ export function getCompiledTransactionDecoder(): VariableSizeDecoder<CompiledTra
     return getStructDecoder([
         [
             'signatures',
-            getArrayDecoder(getBytesDecoder({ size: 64 }) as FixedSizeDecoder<SignatureBytes, 64>, {
+            getArrayDecoder(fixDecoderSize(getBytesDecoder(), 64) as FixedSizeDecoder<SignatureBytes, 64>, {
                 size: getShortU16Decoder(),
             }),
         ],

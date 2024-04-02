@@ -2,6 +2,8 @@ import {
     combineCodec,
     mapDecoder,
     mapEncoder,
+    prefixDecoderSize,
+    prefixEncoderSize,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -27,7 +29,7 @@ export function getInstructionEncoder(): VariableSizeEncoder<Instruction> {
             getStructEncoder([
                 ['programAddressIndex', getU8Encoder()],
                 ['accountIndices', getArrayEncoder(getU8Encoder(), { size: getShortU16Encoder() })],
-                ['data', getBytesEncoder({ size: getShortU16Encoder() })],
+                ['data', prefixEncoderSize(getBytesEncoder(), getShortU16Encoder())],
             ]),
             // Convert an instruction to have all fields defined
             (instruction: Instruction): Required<Instruction> => {
@@ -53,7 +55,7 @@ export function getInstructionDecoder(): VariableSizeDecoder<Instruction> {
             getStructDecoder([
                 ['programAddressIndex', getU8Decoder()],
                 ['accountIndices', getArrayDecoder(getU8Decoder(), { size: getShortU16Decoder() })],
-                ['data', getBytesDecoder({ size: getShortU16Decoder() }) as VariableSizeDecoder<Uint8Array>],
+                ['data', prefixDecoderSize(getBytesDecoder(), getShortU16Decoder()) as VariableSizeDecoder<Uint8Array>],
             ]),
             // Convert an instruction to exclude optional fields if they are empty
             (instruction: Required<Instruction>): Instruction => {
