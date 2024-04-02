@@ -554,26 +554,24 @@ const bytes = getBytesCodec().encode(new Uint8Array([42])); // 0x2a
 const value = getBytesCodec().decode(bytes); // 0x2a
 ```
 
-By default, when decoding a `Uint8Array`, all the remaining bytes will be used. However, the `getBytesCodec` function accepts a `size` option that allows us to configure how many bytes should be included in our decoded `Uint8Array`. It can be one of the following three strategies:
+The `getBytesCodec` function will encode and decode `Uint8Arrays` using as much bytes as necessary. If you'd like to restrict the number of bytes used by this codec, you may combine it with the [`fixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs) or [`prefixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs) primitives.
 
--   `Codec<number>`: When a number codec is provided, that codec will be used to encode and decode a size prefix for that `Uint8Array`. This prefix allows us to know when to stop reading the `Uint8Array` when decoding an arbitrary byte array.
--   `number`: When a fixed number is provided, a `FixedSizeCodec` of that size will be returned such that exactly that amount of bytes will be used to encode and decode the `Uint8Array`.
--   `"variable"`: When the string `"variable"` is passed as a size, a `VariableSizeCodec` will be returned without any size boundary. This is the default behaviour.
+Here are some examples of how you might use the `getBytesCodec` function.
 
 ```ts
-// Default behaviour: variable size.
+// Variable size.
 getBytesCodec().encode(new Uint8Array([42]));
 // 0x2a
 //   └-- Uint8Array content using any bytes available.
 
-// Custom size: u16 size.
-getBytesCodec({ size: getU16Codec() }).encode(new Uint8Array([42]));
+// Prefixing the size with a 2-byte u16.
+prefixCodecSize(getBytesCodec(), getU16Codec()).encode(new Uint8Array([42]));
 // 0x01002a
 //   |   └-- Uint8Array content.
 //   └-- 2-byte prefix telling us to read 1 bytes
 
-// Custom size: 5 bytes.
-getBytesCodec({ size: 5 }).encode(new Uint8Array([42]));
+// Fixing the size to 5 bytes.
+fixCodecSize(getBytesCodec(), 5).encode(new Uint8Array([42]));
 // 0x2a00000000
 //   └-- Uint8Array content padded to use exactly 5 bytes.
 ```

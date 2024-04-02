@@ -1,9 +1,11 @@
 import {
     combineCodec,
     containsBytes,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    fixEncoderSize,
     mapDecoder,
     mapEncoder,
     ReadonlyUint8Array,
@@ -40,7 +42,7 @@ export function getZeroableNullableEncoder<TFrom, TSize extends number>(
 ): FixedSizeEncoder<TFrom | null, TSize> {
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionEncoder(
-        [mapEncoder(getBytesEncoder({ size: item.fixedSize }), (_value: null) => zeroValue), item],
+        [mapEncoder(fixEncoderSize(getBytesEncoder(), item.fixedSize), (_value: null) => zeroValue), item],
         variant => Number(variant !== null),
     ) as FixedSizeEncoder<TFrom | null, TSize>;
 }
@@ -58,7 +60,7 @@ export function getZeroableNullableDecoder<TTo, TSize extends number>(
 ): FixedSizeDecoder<TTo | null, TSize> {
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionDecoder(
-        [mapDecoder(getBytesDecoder({ size: item.fixedSize }), () => null), item],
+        [mapDecoder(fixDecoderSize(getBytesDecoder(), item.fixedSize), () => null), item],
         (bytes, offset) => (containsBytes(bytes, zeroValue, offset) ? 0 : 1),
     ) as FixedSizeDecoder<TTo | null, TSize>;
 }
