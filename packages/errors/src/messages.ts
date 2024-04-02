@@ -18,6 +18,7 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
@@ -36,6 +37,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES,
     SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
@@ -257,6 +259,8 @@ export const SolanaErrorMessages: Readonly<{
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]:
         'Codec [$codecDescription] cannot decode empty byte arrays.',
+    [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]:
+        'Sentinel [$hexSentinel] must not be present in encoded bytes [$hexEncodedBytes].',
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]:
         'Encoder and decoder must have the same fixed size, got [$encoderFixedSize] and [$decoderFixedSize].',
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH]:
@@ -290,6 +294,8 @@ export const SolanaErrorMessages: Readonly<{
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
     [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected offset to be in the range [0, $bytesLength], got $offset.',
+    [SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES]:
+        'Expected sentinel [$hexSentinel] to be present in decoded bytes [$hexDecodedBytes].',
     [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]:
         'Union variant out of range. Expected an index between $minRange and $maxRange, got $variant.',
     [SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED]: 'No random values implementation could be found.',

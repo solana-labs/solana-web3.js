@@ -385,6 +385,35 @@ const getU32Base58Decoder = () => addDecoderSizePrefix(getBase58Decoder(), getU3
 const getU32Base58Codec = () => combineCodec(getU32Base58Encoder(), getU32Base58Decoder());
 ```
 
+## Adding sentinels to codecs
+
+Another way of delimiting the size of a codec is to use sentinels. The `addCodecSentinel` function allows us to add a sentinel to the end of the encoded data and to read until that sentinel is found when decoding. It accepts any codec and a `Uint8Array` sentinel responsible for delimiting the encoded data.
+
+```ts
+const codec = addCodecSentinel(getUtf8Codec(), new Uint8Array([255, 255]));
+codec.encode('hello');
+// 0x68656c6c6fffff
+//   |        └-- Our sentinel.
+//   └-- Our encoded string.
+```
+
+Note that the sentinel _must not_ be present in the encoded data and _must_ be present in the decoded data for this to work. If this is not the case, dedicated errors will be thrown.
+
+```ts
+const sentinel = new Uint8Array([108, 108]); // 'll'
+const codec = addCodecSentinel(getUtf8Codec(), sentinel);
+
+codec.encode('hello'); // Throws: sentinel is in encoded data.
+codec.decode(new Uint8Array([1, 2, 3])); // Throws: sentinel missing in decoded data.
+```
+
+Separate `addEncoderSentinel` and `addDecoderSentinel` functions are also available.
+
+```ts
+const bytes = addEncoderSentinel(getUtf8Encoder(), sentinel).encode('hello');
+const value = addDecoderSentinel(getUtf8Decoder(), sentinel).decode(bytes);
+```
+
 ## Adjusting the size of codecs
 
 The `resizeCodec` helper re-defines the size of a given codec by accepting a function that takes the current size of the codec and returns a new size. This works for both fixed-size and variable-size codecs.
