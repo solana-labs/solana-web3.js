@@ -3,13 +3,13 @@ import {
     combineCodec,
     Decoder,
     Encoder,
-    fixDecoder,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    fixEncoder,
-    prefixDecoder,
-    prefixEncoder,
+    fixEncoderSize,
+    prefixDecoderSize,
+    prefixEncoderSize,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -61,10 +61,10 @@ export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encode
     }
 
     if (typeof size === 'number') {
-        return fixEncoder(encoding, size);
+        return fixEncoderSize(encoding, size);
     }
 
-    return prefixEncoder(encoding, size);
+    return prefixEncoderSize(encoding, size);
 }
 
 /** Decodes strings from a given encoding and size strategy. */
@@ -89,10 +89,10 @@ export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decode
     }
 
     if (typeof size === 'number') {
-        return fixDecoder(encoding, size);
+        return fixDecoderSize(encoding, size);
     }
 
-    return prefixDecoder(encoding, size);
+    return prefixDecoderSize(encoding, size);
 }
 
 /** Encodes and decodes strings from a given encoding and size strategy. */

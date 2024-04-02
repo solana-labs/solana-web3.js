@@ -173,7 +173,7 @@ describe('assertIsBlockhash()', () => {
             expect(() => blockhash.decode(tooShortBuffer)).toThrow(
                 new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                     bytesLength: 31,
-                    codecDescription: 'fixCodec',
+                    codecDescription: 'fixCodecSize',
                     expected: 32,
                 }),
             );

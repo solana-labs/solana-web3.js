@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 
 import type { Address } from '@solana/addresses';
-import { fixEncoder, ReadonlyUint8Array } from '@solana/codecs-core';
+import { fixEncoderSize, ReadonlyUint8Array } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
@@ -32,7 +32,7 @@ function getMockTransactionMessage({
     memoString: string;
     version?: number;
 }) {
-    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
+    const blockhashBytes = fixEncoderSize(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     return new Uint8Array([
         /** VERSION HEADER */
@@ -78,7 +78,7 @@ function getMockTransactionMessageWithAdditionalAccount({
     memoString: string;
     version?: number;
 }) {
-    const blockhashBytes = fixEncoder(getBase58Encoder(), 32).encode(blockhash);
+    const blockhashBytes = fixEncoderSize(getBase58Encoder(), 32).encode(blockhash);
     // prettier-ignore
     return new Uint8Array([
         /** VERSION HEADER */

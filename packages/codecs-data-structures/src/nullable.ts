@@ -4,11 +4,11 @@ import {
     combineCodec,
     Decoder,
     Encoder,
-    fixDecoder,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    fixEncoder,
+    fixEncoderSize,
     mapDecoder,
     mapEncoder,
     VariableSizeCodec,
@@ -83,7 +83,7 @@ export function getNullableEncoder<TFrom>(
     if (!fixed) return encoder;
     assertIsFixedSize(item);
     assertIsFixedSize(prefix);
-    return fixEncoder(encoder, prefix.fixedSize + item.fixedSize);
+    return fixEncoderSize(encoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -121,7 +121,7 @@ export function getNullableDecoder<TTo>(
     if (!fixed) return decoder;
     assertIsFixedSize(item);
     assertIsFixedSize(prefix);
-    return fixDecoder(decoder, prefix.fixedSize + item.fixedSize);
+    return fixDecoderSize(decoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**

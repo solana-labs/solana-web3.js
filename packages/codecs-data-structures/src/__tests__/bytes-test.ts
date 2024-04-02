@@ -19,7 +19,7 @@ describe('getBytesCodec', () => {
         expect(() => bytesU8.read(b('022a'), 0)).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 1,
-                codecDescription: 'prefixDecoder',
+                codecDescription: 'prefixDecoderSize',
                 expected: 2,
             }),
         );
@@ -41,7 +41,7 @@ describe('getBytesCodec', () => {
         expect(() => bytes5.read(b('0102'), 0)).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH, {
                 bytesLength: 2,
-                codecDescription: 'fixCodec',
+                codecDescription: 'fixCodecSize',
                 expected: 5,
             }),
         );

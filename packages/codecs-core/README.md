@@ -46,7 +46,7 @@ There is a significant library of composable codecs at your disposal, enabling y
 -   [`@solana/codecs-data-structures`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures) for many data structure codecs such as objects, arrays, tuples, sets, maps, enums, discriminated unions, booleans, etc.
 -   [`@solana/options`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options) for a Rust-like `Option` type and associated codec.
 
-You may also be interested in some of the helpers of this `@solana/codecs-core` library such as `mapCodec`, `fixCodec` or `reverseCodec` that create new codecs from existing ones.
+You may also be interested in some of the helpers of this `@solana/codecs-core` library such as `mapCodec`, `fixCodecSize` or `reverseCodec` that create new codecs from existing ones.
 
 Note that all of these libraries are included in the [`@solana/codecs` package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs) as well as the main `@solana/web3.js` package for your convenience.
 
@@ -346,32 +346,32 @@ const getStringU32Codec = () => combineCodec(getStringU32Encoder(), getStringU32
 
 ## Fixing the size of codecs
 
-The `fixCodec` function allows you to bind the size of a given codec to the given fixed size.
+The `fixCodecSize` function allows you to bind the size of a given codec to the given fixed size.
 
-For instance, say you want to represent a base-58 string that uses exactly 32 bytes when decoded. Here’s how you can use the `fixCodec` helper to achieve that.
+For instance, say you want to represent a base-58 string that uses exactly 32 bytes when decoded. Here’s how you can use the `fixCodecSize` helper to achieve that.
 
 ```ts
-const get32BytesBase58Codec = () => fixCodec(getBase58Codec(), 32);
+const get32BytesBase58Codec = () => fixCodecSize(getBase58Codec(), 32);
 ```
 
-You may also use the `fixEncoder` and `fixDecoder` functions to separate your codec logic like so:
+You may also use the `fixEncoderSize` and `fixDecoderSize` functions to separate your codec logic like so:
 
 ```ts
-const get32BytesBase58Encoder = () => fixEncoder(getBase58Encoder(), 32);
-const get32BytesBase58Decoder = () => fixDecoder(getBase58Decoder(), 32);
-const get32BytesBase58Codec = () => combineCodec(get32BytesBase58Encoder(), get32BytesBase58Codec());
+const get32BytesBase58Encoder = () => fixEncoderSize(getBase58Encoder(), 32);
+const get32BytesBase58Decoder = () => fixDecoderSize(getBase58Decoder(), 32);
+const get32BytesBase58Codec = () => combineCodec(get32BytesBase58Encoder(), get32BytesBase58Decoder());
 ```
 
 ## Prefixing the size of codecs
 
-The `prefixCodec` function allows you to store the byte size of any codec as a number prefix. This allows you to contain variable-size codecs to their actual size.
+The `prefixCodecSize` function allows you to store the byte size of any codec as a number prefix. This allows you to contain variable-size codecs to their actual size.
 
 When encoding, the size of the encoded data is stored before the encoded data itself. When decoding, the size is read first to know how many bytes to read next.
 
-For example, say we want to represent a variable-size base-58 string using a `u32` size prefix — the equivalent of a Borsh `String` in Rust. Here’s how you can use the `prefixCodec` function to achieve that.
+For example, say we want to represent a variable-size base-58 string using a `u32` size prefix — the equivalent of a Borsh `String` in Rust. Here’s how you can use the `prefixCodecSize` function to achieve that.
 
 ```ts
-const getU32Base58Codec = () => prefixCodec(getBase58Codec(), getU32Codec());
+const getU32Base58Codec = () => prefixCodecSize(getBase58Codec(), getU32Codec());
 
 getU32Base58Codec().encode('hello world');
 // 0x0b00000068656c6c6f20776f726c64
@@ -379,11 +379,11 @@ getU32Base58Codec().encode('hello world');
 //   └-- Our encoded u32 size prefix.
 ```
 
-You may also use the `prefixEncoder` and `prefixDecoder` functions to separate your codec logic like so:
+You may also use the `prefixEncoderSize` and `prefixDecoderSize` functions to separate your codec logic like so:
 
 ```ts
-const getU32Base58Encoder = () => prefixEncoder(getBase58Encoder(), getU32Encoder());
-const getU32Base58Decoder = () => prefixDecoder(getBase58Decoder(), getU32Decoder());
+const getU32Base58Encoder = () => prefixEncoderSize(getBase58Encoder(), getU32Encoder());
+const getU32Base58Decoder = () => prefixDecoderSize(getBase58Decoder(), getU32Decoder());
 const getU32Base58Codec = () => combineCodec(getU32Base58Encoder(), getU32Base58Decoder());
 ```
 
