@@ -33,7 +33,7 @@ myAccount satisfies EncodedAccount<'1234..5678'>;
 // Decode.
 type MyAccountData = { name: string; age: number };
 const myDecoder: Decoder<MyAccountData> = getStructDecoder([
-    ['name', getStringDecoder({ size: getU32Decoder() })],
+    ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
     ['age', getU32Decoder()],
 ]);
 const myDecodedAccount = decodeAccount(myAccount, myDecoder);
@@ -260,7 +260,7 @@ type MyAccountData = { name: string; age: number };
 
 const myAccount: EncodedAccount<'1234..5678'>;
 const myDecoder: Decoder<MyAccountData> = getStructDecoder([
-    ['name', getStringDecoder({ size: getU32Decoder() })],
+    ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
     ['age', getU32Decoder()],
 ]);
 

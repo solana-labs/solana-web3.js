@@ -6,5 +6,4 @@ export * from './base64';
 export * from './baseX';
 export * from './baseX-reslice';
 export * from './null-characters';
-export * from './string';
 export * from './utf8';

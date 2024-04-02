@@ -1,6 +1,6 @@
-import { offsetCodec } from '@solana/codecs-core';
-import { getI16Codec, getU8Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { fixCodecSize, offsetCodec, prefixCodecSize } from '@solana/codecs-core';
+import { getI16Codec, getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getTupleCodec } from '../tuple';
@@ -8,23 +8,24 @@ import { b } from './__setup__';
 
 describe('getTupleCodec', () => {
     const tuple = getTupleCodec;
-    const string = getStringCodec;
     const i16 = getI16Codec;
     const u8 = getU8Codec;
     const u64 = getU64Codec;
+    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const fixedString8 = fixCodecSize(getUtf8Codec(), 8);
 
     it('encodes tuples', () => {
         // Encode.
         expect(tuple([]).encode([])).toStrictEqual(b(''));
         expect(tuple([u8()]).encode([42])).toStrictEqual(b('2a'));
         expect(tuple([u8(), i16()]).encode([0, -42])).toStrictEqual(b('00d6ff'));
-        expect(tuple([string(), u8()]).encode(['Hello', 42])).toStrictEqual(b('0500000048656c6c6f2a'));
+        expect(tuple([u32String, u8()]).encode(['Hello', 42])).toStrictEqual(b('0500000048656c6c6f2a'));
 
         // Decode.
         expect(tuple([]).decode(b(''))).toStrictEqual([]);
         expect(tuple([u8()]).decode(b('2a'))).toStrictEqual([42]);
         expect(tuple([u8(), i16()]).decode(b('00d6ff'))).toStrictEqual([0, -42]);
-        expect(tuple([string(), u8()]).decode(b('0500000048656c6c6f2a'))).toStrictEqual(['Hello', 42]);
+        expect(tuple([u32String, u8()]).decode(b('0500000048656c6c6f2a'))).toStrictEqual(['Hello', 42]);
 
         // Different From and To types.
         const tupleU8U64 = tuple([u8(), u64()]);
@@ -49,15 +50,15 @@ describe('getTupleCodec', () => {
         expect(tuple([]).fixedSize).toBe(0);
         expect(tuple([u8()]).fixedSize).toBe(1);
         expect(tuple([u8(), i16()]).fixedSize).toBe(1 + 2);
-        expect(tuple([u8(), string(), i16()]).getSizeFromValue([1, 'ABC', 2])).toBe(1 + (4 + 3) + 2);
-        expect(tuple([u8(), string(), i16()]).maxSize).toBeUndefined();
-        expect(tuple([string(), u8()]).getSizeFromValue(['Hello', 42])).toBe(4 + 5 + 1);
+        expect(tuple([u8(), u32String, i16()]).getSizeFromValue([1, 'ABC', 2])).toBe(1 + (4 + 3) + 2);
+        expect(tuple([u8(), u32String, i16()]).maxSize).toBeUndefined();
+        expect(tuple([u32String, u8()]).getSizeFromValue(['Hello', 42])).toBe(4 + 5 + 1);
     });
 
     it('offsets items within a tuple', () => {
         const person = tuple([
             // Name, pushes 8 bytes forward then handles 8 bytes.
-            offsetCodec(string({ size: 8 }), {
+            offsetCodec(fixedString8, {
                 preOffset: ({ preOffset }) => preOffset + 8,
             }),
             // Age, pushes 16 bytes backward then handles 8 bytes.

@@ -1,8 +1,8 @@
 import {
-    Codec,
     combineCodec,
     createDecoder,
     createEncoder,
+    VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
@@ -35,4 +35,4 @@ export const getUtf8Decoder = (): VariableSizeDecoder<string> => {
 };
 
 /** Encodes and decodes UTF-8 strings using the native `TextEncoder` and `TextDecoder` API. */
-export const getUtf8Codec = (): Codec<string> => combineCodec(getUtf8Encoder(), getUtf8Decoder());
+export const getUtf8Codec = (): VariableSizeCodec<string> => combineCodec(getUtf8Encoder(), getUtf8Decoder());

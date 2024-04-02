@@ -1,5 +1,6 @@
-import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { fixCodecSize, prefixCodecSize } from '@solana/codecs-core';
+import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getMapCodec } from '../map';
@@ -10,7 +11,8 @@ describe('getMapCodec', () => {
     const u8 = getU8Codec;
     const u16 = getU16Codec;
     const u64 = getU64Codec;
-    const string = getStringCodec;
+    const u8String = prefixCodecSize(getUtf8Codec(), getU8Codec());
+    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
 
     it('encodes prefixed maps', () => {
         // Empty.
@@ -31,8 +33,8 @@ describe('getMapCodec', () => {
             ['a', 1],
             ['b', 2],
         ]);
-        expect(map(string(), u8()).encode(letters)).toStrictEqual(b('02000000010000006101010000006202'));
-        expect(map(string(), u8()).read(b('02000000010000006101010000006202'), 0)).toStrictEqual([letters, 16]);
+        expect(map(u32String, u8()).encode(letters)).toStrictEqual(b('02000000010000006101010000006202'));
+        expect(map(u32String, u8()).read(b('02000000010000006101010000006202'), 0)).toStrictEqual([letters, 16]);
 
         // Different From and To types.
         const mapU8U64 = map<number, bigint | number, number, bigint>(u8(), u64());
@@ -52,7 +54,7 @@ describe('getMapCodec', () => {
         expect(map(u8(), u8(), { size: 1 }).read(b('ffff0102'), 2)).toStrictEqual([new Map([[1, 2]]), 4]);
 
         // Strings.
-        const letters = map(string(), u8(), { size: 2 });
+        const letters = map(u32String, u8(), { size: 2 });
         const lettersMap = new Map([
             ['a', 1],
             ['b', 2],
@@ -98,7 +100,7 @@ describe('getMapCodec', () => {
         expect(map(u8(), u8(), remainder).read(b('ffff0102'), 2)).toStrictEqual([new Map([[1, 2]]), 4]);
 
         // Strings.
-        const letters = map(string({ size: 1 }), u8(), { size: 2 });
+        const letters = map(fixCodecSize(getUtf8Codec(), 1), u8(), { size: 2 });
         const lettersMap = new Map([
             ['a', 1],
             ['b', 2],
@@ -107,7 +109,7 @@ describe('getMapCodec', () => {
         expect(letters.read(b('61016202'), 0)).toStrictEqual([lettersMap, 4]);
 
         // Variable sized items.
-        const prefixedLetters = map(string({ size: u8() }), u8(), remainder);
+        const prefixedLetters = map(u8String, u8(), remainder);
         const prefixedLettersMap = new Map([
             ['a', 6],
             ['bc', 7],
@@ -135,7 +137,7 @@ describe('getMapCodec', () => {
         expect(map(u8(), u8(), { size: 'remainder' }).maxSize).toBeUndefined();
         expect(map(u8(), u8(), { size: 42 }).fixedSize).toBe(2 * 42);
         expect(map(u8(), u16(), { size: 42 }).fixedSize).toBe(3 * 42);
-        expect(map(u8(), string(), { size: 42 }).maxSize).toBeUndefined();
-        expect(map(u8(), string(), { size: 0 }).fixedSize).toBe(0);
+        expect(map(u8(), u32String, { size: 42 }).maxSize).toBeUndefined();
+        expect(map(u8(), u32String, { size: 0 }).fixedSize).toBe(0);
     });
 });

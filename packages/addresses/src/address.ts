@@ -2,12 +2,14 @@ import {
     combineCodec,
     Decoder,
     Encoder,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    fixEncoderSize,
     mapEncoder,
 } from '@solana/codecs-core';
-import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__ADDRESSES__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__ADDRESSES__STRING_LENGTH_OUT_OF_RANGE,
@@ -80,13 +82,11 @@ export function address<TAddress extends string = string>(putativeAddress: TAddr
 }
 
 export function getAddressEncoder(): FixedSizeEncoder<Address, 32> {
-    return mapEncoder(getStringEncoder({ encoding: getMemoizedBase58Encoder(), size: 32 }), putativeAddress =>
-        address(putativeAddress),
-    );
+    return mapEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeAddress => address(putativeAddress));
 }
 
 export function getAddressDecoder(): FixedSizeDecoder<Address, 32> {
-    return getStringDecoder({ encoding: getMemoizedBase58Decoder(), size: 32 }) as FixedSizeDecoder<Address, 32>;
+    return fixDecoderSize(getMemoizedBase58Decoder(), 32) as FixedSizeDecoder<Address, 32>;
 }
 
 export function getAddressCodec(): FixedSizeCodec<Address, Address, 32> {

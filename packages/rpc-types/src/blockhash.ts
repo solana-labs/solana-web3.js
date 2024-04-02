@@ -2,12 +2,14 @@ import {
     combineCodec,
     Decoder,
     Encoder,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    fixEncoderSize,
     mapEncoder,
 } from '@solana/codecs-core';
-import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
@@ -78,13 +80,13 @@ export function blockhash(putativeBlockhash: string): Blockhash {
 }
 
 export function getBlockhashEncoder(): FixedSizeEncoder<Blockhash, 32> {
-    return mapEncoder(getStringEncoder({ encoding: getMemoizedBase58Encoder(), size: 32 }), putativeBlockhash =>
+    return mapEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeBlockhash =>
         blockhash(putativeBlockhash),
     );
 }
 
 export function getBlockhashDecoder(): FixedSizeDecoder<Blockhash, 32> {
-    return getStringDecoder({ encoding: getMemoizedBase58Decoder(), size: 32 }) as FixedSizeDecoder<Blockhash, 32>;
+    return fixDecoderSize(getMemoizedBase58Decoder(), 32) as FixedSizeDecoder<Blockhash, 32>;
 }
 
 export function getBlockhashCodec(): FixedSizeCodec<Blockhash, Blockhash, 32> {
