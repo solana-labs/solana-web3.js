@@ -2,6 +2,7 @@ import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { Decoder } from '@solana/codecs-core';
 import { getBase58Decoder } from '@solana/codecs-strings';
 import {
+    SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
@@ -38,14 +39,27 @@ export async function newPartiallySignTransaction(
     transaction: NewTransaction,
 ): Promise<NewTransaction> {
     let newSignatures: Record<Address, SignatureBytes> | undefined;
+    let unexpectedSigners: Set<Address> | undefined;
 
     await Promise.all(
         keyPairs.map(async keyPair => {
             const address = await getAddressFromPublicKey(keyPair.publicKey);
-            const newSignature = await signBytes(keyPair.privateKey, transaction.messageBytes);
             const existingSignature = transaction.signatures[address];
 
-            // what to do if existingSignature is undefined, ie not a valid signer?
+            // Check if the address is expected to sign the transaction
+            if (existingSignature === undefined) {
+                // address is not an expected signer for this transaction
+                unexpectedSigners ||= new Set();
+                unexpectedSigners.add(address);
+                return;
+            }
+
+            // Return if there are any unexpected signers already since we won't be using signatures
+            if (unexpectedSigners) {
+                return;
+            }
+
+            const newSignature = await signBytes(keyPair.privateKey, transaction.messageBytes);
 
             if (existingSignature !== null && uint8ArraysEqual(newSignature, existingSignature)) {
                 // already have the same signature set
@@ -56,6 +70,14 @@ export async function newPartiallySignTransaction(
             newSignatures[address] = newSignature;
         }),
     );
+
+    if (unexpectedSigners && unexpectedSigners.size > 0) {
+        const expectedSigners = Object.keys(transaction.signatures);
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION, {
+            expectedAddresses: expectedSigners,
+            unexpectedAddresses: [...unexpectedSigners],
+        });
+    }
 
     if (!newSignatures) {
         return transaction;

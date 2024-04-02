@@ -3,6 +3,7 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
+    SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
@@ -232,6 +233,36 @@ describe('partiallySignTransaction', () => {
             },
         };
         await expect(newPartiallySignTransaction([mockKeyPairA], transaction)).resolves.toBe(transaction);
+    });
+    it('throws if a keypair is for an address that is not in the signatures of the transaction', async () => {
+        expect.assertions(1);
+        const transaction: NewTransaction = {
+            messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
+            signatures: {
+                [mockPublicKeyAddressA]: null,
+            },
+        };
+        await expect(newPartiallySignTransaction([mockKeyPairB], transaction)).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION, {
+                expectedAddresses: [mockPublicKeyAddressA],
+                unexpectedAddresses: [mockPublicKeyAddressB],
+            }),
+        );
+    });
+    it('throws with multiple addresses if there are multiple keypairs that are not in the signatures', async () => {
+        expect.assertions(1);
+        const transaction: NewTransaction = {
+            messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
+            signatures: {
+                [mockPublicKeyAddressA]: null,
+            },
+        };
+        await expect(newPartiallySignTransaction([mockKeyPairB, mockKeyPairC], transaction)).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION, {
+                expectedAddresses: [mockPublicKeyAddressA],
+                unexpectedAddresses: [mockPublicKeyAddressB, mockPublicKeyAddressC],
+            }),
+        );
     });
 });
 
