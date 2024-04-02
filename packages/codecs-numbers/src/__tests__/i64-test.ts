@@ -15,7 +15,7 @@ describe('getI64Codec', () => {
     it('encodes and decodes i64 numbers', () => {
         expect.hasAssertions();
         const i64LE = i64();
-        const i64BE = i64({ endian: Endian.BIG });
+        const i64BE = i64({ endian: Endian.Big });
 
         assertValid(i64LE, 0n, '0000000000000000');
         assertValid(i64BE, 0n, '0000000000000000');

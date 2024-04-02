@@ -28,13 +28,13 @@ export type FixedSizeNumberCodec<TSize extends number = number> =
 export type NumberCodecConfig = {
     /**
      * Whether the serializer should use little-endian or big-endian encoding.
-     * @defaultValue `Endian.LITTLE`
+     * @defaultValue `Endian.Little`
      */
     endian?: Endian;
 };
 
 /** Defines the endianness of a number serializer. */
 export enum Endian {
-    LITTLE,
-    BIG,
+    Little,
+    Big,
 }

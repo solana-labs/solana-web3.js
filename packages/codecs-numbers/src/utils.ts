@@ -28,7 +28,7 @@ type NumberFactoryDecoderInput<TTo, TSize extends number> = NumberFactorySharedI
 };
 
 function isLittleEndian(config?: NumberCodecConfig): boolean {
-    return config?.endian === Endian.BIG ? false : true;
+    return config?.endian === Endian.Big ? false : true;
 }
 
 export function numberEncoderFactory<TFrom extends bigint | number, TSize extends number>(

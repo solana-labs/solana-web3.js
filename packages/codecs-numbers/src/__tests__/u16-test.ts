@@ -16,7 +16,7 @@ describe('getU16Codec', () => {
     it('encodes and decodes u16 numbers', () => {
         expect.hasAssertions();
         const u16LE = u16();
-        const u16BE = u16({ endian: Endian.BIG });
+        const u16BE = u16({ endian: Endian.Big });
 
         assertValid(u16LE, 1, '0100');
         assertValid(u16BE, 1, '0001');
