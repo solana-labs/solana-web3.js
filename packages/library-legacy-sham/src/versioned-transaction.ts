@@ -1,7 +1,7 @@
 import {
     BaseTransaction,
     CompilableTransaction,
-    compileMessage,
+    compileTransactionMessage,
     createTransaction,
     getTransactionDecoder,
     ITransactionWithSignatures,
@@ -28,7 +28,7 @@ export class VersionedTransaction {
         const {
             header: { numSignerAccounts },
             staticAccounts,
-        } = compileMessage(this.#tx as unknown as CompilableTransaction);
+        } = compileTransactionMessage(this.#tx as unknown as CompilableTransaction);
         return staticAccounts.slice(0, numSignerAccounts).reduce((acc, account) => {
             acc.push('signatures' in this.#tx ? this.#tx.signatures[account] : new Uint8Array(64));
             return acc;

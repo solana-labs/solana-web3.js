@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 
 import { getCompiledTransaction } from '../compile-transaction';
-import { CompiledMessage, compileMessage } from '../message';
+import { CompiledMessage, compileTransactionMessage } from '../message';
 import { ITransactionWithSignatures } from '../signatures';
 
 jest.mock('../message');
@@ -26,7 +26,7 @@ describe('getCompiledTransaction', () => {
             },
             staticAccounts: [addressB, addressA],
         } as CompiledMessage;
-        (compileMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (compileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
     });
     it('compiles the transaction message', () => {
         const compiledTransaction = getCompiledTransaction({} as Parameters<typeof getCompiledTransaction>[0]);

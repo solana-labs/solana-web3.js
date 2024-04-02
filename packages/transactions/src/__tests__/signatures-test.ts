@@ -17,7 +17,7 @@ import { SignatureBytes, signBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
 
 import { CompilableTransaction } from '../compilable-transaction';
-import { CompiledMessage, compileMessage } from '../message';
+import { CompiledMessage, compileTransactionMessage } from '../message';
 import {
     assertTransactionIsFullySigned,
     getSignatureFromTransaction,
@@ -68,7 +68,7 @@ describe('partiallySignTransaction', () => {
     const mockPublicKeyAddressB = 'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB' as Address<'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'>;
     const mockPublicKeyAddressC = 'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC' as Address<'CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC'>;
     beforeEach(() => {
-        (compileMessage as jest.Mock).mockReturnValue({
+        (compileTransactionMessage as jest.Mock).mockReturnValue({
             header: {
                 numReadonlyNonSignerAccounts: 2,
                 numReadonlySignerAccounts: 1,
@@ -227,7 +227,7 @@ describe('signTransaction', () => {
     const mockKeyPairA = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
     const mockKeyPairB = { privateKey: {} as CryptoKey, publicKey: {} as CryptoKey } as CryptoKeyPair;
     beforeEach(() => {
-        (compileMessage as jest.Mock).mockReturnValue({
+        (compileTransactionMessage as jest.Mock).mockReturnValue({
             header: {
                 numReadonlyNonSignerAccounts: 1,
                 numReadonlySignerAccounts: 1,

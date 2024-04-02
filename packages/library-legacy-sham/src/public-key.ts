@@ -15,7 +15,7 @@ export class PublicKey<TAddress extends string = string> {
         return this.#address;
     }
     #getByteArray() {
-        return getAddressEncoder().encode(this.#address);
+        return getAddressEncoder().encode(this.#address) as Uint8Array;
     }
     #getBuffer() {
         if (!__NODEJS__ && typeof Buffer === 'undefined') {

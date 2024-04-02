@@ -18,7 +18,7 @@ import {
 } from '..';
 import { createTransaction } from '../create-transaction';
 import { ITransactionWithFeePayer, setTransactionFeePayer } from '../fee-payer';
-import { CompiledMessage, compileMessage } from '../message';
+import { CompiledMessage, compileTransactionMessage } from '../message';
 import { BaseTransaction, Transaction } from '../types';
 import { getUnsignedTransaction } from '../unsigned-transaction';
 
@@ -407,13 +407,13 @@ signTransaction(
         ITransactionWithFeePayer<'feePayer'>
 >;
 
-// compileMessage
-compileMessage(
+// compileTransactionMessage
+compileTransactionMessage(
     null as unknown as Extract<Transaction, { version: 'legacy' }> &
         ITransactionWithBlockhashLifetime &
         ITransactionWithFeePayer<'feePayer'>,
 ) satisfies Extract<CompiledMessage, { version: 'legacy' }>;
-compileMessage(
+compileTransactionMessage(
     null as unknown as Extract<Transaction, { version: 0 }> &
         ITransactionWithBlockhashLifetime &
         ITransactionWithFeePayer<'feePayer'>,
