@@ -1,6 +1,6 @@
-import { offsetCodec, resizeCodec } from '@solana/codecs-core';
-import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { fixCodecSize, offsetCodec, prefixCodecSize, resizeCodec } from '@solana/codecs-core';
+import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
 
 import { getArrayCodec } from '../array';
@@ -11,7 +11,6 @@ describe('getArrayCodec', () => {
     const u8 = getU8Codec;
     const u16 = getU16Codec;
     const u64 = getU64Codec;
-    const string = getStringCodec;
 
     it('encodes prefixed arrays', () => {
         // Empty.
@@ -28,8 +27,9 @@ describe('getArrayCodec', () => {
         expect(array(u8()).read(b('ffff030000002a0102'), 2)).toStrictEqual([[42, 1, 2], 2 + 4 + 3]);
 
         // Strings.
-        expect(array(string()).encode(['a', 'b'])).toStrictEqual(b('0200000001000000610100000062'));
-        expect(array(string()).read(b('0200000001000000610100000062'), 0)).toStrictEqual([['a', 'b'], 4 + 10]);
+        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        expect(array(u32String).encode(['a', 'b'])).toStrictEqual(b('0200000001000000610100000062'));
+        expect(array(u32String).read(b('0200000001000000610100000062'), 0)).toStrictEqual([['a', 'b'], 4 + 10]);
 
         // Different From and To types.
         const arrayU64 = array<bigint | number, bigint>(u64());
@@ -49,8 +49,9 @@ describe('getArrayCodec', () => {
         expect(array(u8(), { size: 3 }).read(b('ffff2a0102'), 2)).toStrictEqual([[42, 1, 2], 5]);
 
         // Strings.
-        expect(array(string(), { size: 2 }).encode(['a', 'b'])).toStrictEqual(b('01000000610100000062'));
-        expect(array(string(), { size: 2 }).read(b('01000000610100000062'), 0)).toStrictEqual([['a', 'b'], 10]);
+        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        expect(array(u32String, { size: 2 }).encode(['a', 'b'])).toStrictEqual(b('01000000610100000062'));
+        expect(array(u32String, { size: 2 }).read(b('01000000610100000062'), 0)).toStrictEqual([['a', 'b'], 10]);
 
         // Different From and To types.
         const arrayU64 = array<bigint | number, bigint>(u64(), { size: 1 });
@@ -59,14 +60,14 @@ describe('getArrayCodec', () => {
         expect(arrayU64.read(b('0200000000000000'), 0)).toStrictEqual([[2n], 8]);
 
         // It fails if the array has a different size.
-        expect(() => array(string(), { size: 1 }).encode([])).toThrow(
+        expect(() => array(u32String, { size: 1 }).encode([])).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, {
                 actual: 0,
                 codecDescription: 'array',
                 expected: 1,
             }),
         );
-        expect(() => array(string(), { size: 2 }).encode(['a', 'b', 'c'])).toThrow(
+        expect(() => array(u32String, { size: 2 }).encode(['a', 'b', 'c'])).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, {
                 actual: 3,
                 codecDescription: 'array',
@@ -88,12 +89,14 @@ describe('getArrayCodec', () => {
         expect(array(u8(), remainder).read(b('ffff2a0102'), 2)).toStrictEqual([[42, 1, 2], 5]);
 
         // Strings.
-        expect(array(string({ size: 1 }), remainder).encode(['a', 'b'])).toStrictEqual(b('6162'));
-        expect(array(string({ size: 1 }), remainder).read(b('6162'), 0)).toStrictEqual([['a', 'b'], 2]);
+        const charString = fixCodecSize(getUtf8Codec(), 1);
+        expect(array(charString, remainder).encode(['a', 'b'])).toStrictEqual(b('6162'));
+        expect(array(charString, remainder).read(b('6162'), 0)).toStrictEqual([['a', 'b'], 2]);
 
         // Variable sized items.
-        expect(array(string({ size: u8() }), remainder).encode(['a', 'bc'])).toStrictEqual(b('0161026263'));
-        expect(array(string({ size: u8() }), remainder).read(b('0161026263'), 0)).toStrictEqual([['a', 'bc'], 5]);
+        const u8String = prefixCodecSize(getUtf8Codec(), getU8Codec());
+        expect(array(u8String, remainder).encode(['a', 'bc'])).toStrictEqual(b('0161026263'));
+        expect(array(u8String, remainder).read(b('0161026263'), 0)).toStrictEqual([['a', 'bc'], 5]);
 
         // Different From and To types.
         const arrayU64 = array<bigint | number, bigint>(u64(), remainder);
@@ -133,7 +136,8 @@ describe('getArrayCodec', () => {
         expect(array(u8(), { size: 'remainder' }).maxSize).toBeUndefined();
         expect(array(u8(), { size: 42 }).fixedSize).toBe(42);
         expect(array(u16(), { size: 42 }).fixedSize).toBe(2 * 42);
-        expect(array(string(), { size: 42 }).maxSize).toBeUndefined();
-        expect(array(string(), { size: 0 }).fixedSize).toBe(0);
+        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        expect(array(u32String, { size: 42 }).maxSize).toBeUndefined();
+        expect(array(u32String, { size: 0 }).fixedSize).toBe(0);
     });
 });

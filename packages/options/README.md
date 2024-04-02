@@ -118,13 +118,15 @@ The `getOptionCodec` function behaves exactly the same as the [`getNullableCodec
 Namely, it accepts a codec of type `T` and returns a codec of type `Option<T>`. It stores whether or not the item exists as a boolean prefix using a `u8` by default.
 
 ```ts
-getOptionCodec(getStringCodec()).encode(some('Hi'));
+const optionStringCodec = getOptionCodec(prefixCodecSize(getUtf8Codec(), getU32Codec()));
+
+optionStringCodec.encode(some('Hi'));
 // 0x01020000004869
 //   | |       └-- utf8 string content ("Hi").
 //   | └-- u32 string prefix (2 characters).
 //   └-- 1-byte prefix (Some).
 
-getOptionCodec(getStringCodec()).encode(none());
+optionStringCodec.encode(none());
 // 0x00
 //   └-- 1-byte prefix (None).
 ```
@@ -132,7 +134,7 @@ getOptionCodec(getStringCodec()).encode(none());
 You may provide a number codec as the `prefix` option of the `getOptionCodec` function to configure how to store the boolean prefix.
 
 ```ts
-const u32OptionStringCodec = getOptionCodec(getStringCodec(), {
+const u32OptionStringCodec = getOptionCodec(prefixCodecSize(getUtf8Codec(), getU32Codec()), {
     prefix: getU32Codec(),
 });
 
@@ -149,7 +151,7 @@ Additionally, if the item is a `FixedSizeCodec`, you may set the `fixed` option 
 
 ```ts
 const fixedOptionStringCodec = getOptionCodec(
-    getStringCodec({ size: 8 }), // Only works with fixed-size items.
+    fixCodecSize(getUtf8Codec(), 8), // Only works with fixed-size items.
     { fixed: true },
 );
 
@@ -167,8 +169,8 @@ fixedOptionStringCodec.encode(none());
 Separate `getOptionEncoder` and `getOptionDecoder` functions are also available.
 
 ```ts
-const bytes = getOptionEncoder(getStringEncoder()).encode(some('Hi'));
-const value = getOptionDecoder(getStringDecoder()).decode(bytes);
+const bytes = getOptionEncoder(getU32Encoder()).encode(some(42));
+const value = getOptionDecoder(getU32Decoder()).decode(bytes);
 ```
 
 ## Zeroable option codec

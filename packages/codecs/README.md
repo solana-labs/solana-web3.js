@@ -25,7 +25,7 @@ Here's a quick example that encodes and decodes a simple `Person` object.
 type Person = { name: string; age: number };
 const getPersonCodec = (): Codec<Person> =>
     getStructCodec([
-        ['name', getStringCodec()],
+        ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
         ['age', getU32Codec()],
     ]);
 
@@ -41,7 +41,7 @@ Whilst Codecs can both encode and decode, it is possible to only focus on encodi
 ```ts
 const getPersonDecoder = (): Decoder<Person> =>
     getStructDecoder([
-        ['name', getStringDecoder()],
+        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
         ['age', getU32Decoder()],
     ]);
 ```
@@ -68,7 +68,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Decimal number codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-numbers#decimal-number-codecs).
     -   [Short u16 codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-numbers#short-u16-codec).
 -   [`@solana/codecs-strings`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings) This package provides codecs for strings of various encodings and size strategies.
-    -   [String helper codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings#string-helper-codec).
+    -   [Sizing string codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings#sizing-string-codecs).
     -   [Utf8 codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings#utf8-codec).
     -   [Base 64 codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings#base-64-codec).
     -   [Base 58 codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-strings#base-58-codec).

@@ -26,7 +26,7 @@ The easiest way to create your own codecs is to compose the [various codecs](htt
 type Person = { name: string; age: number };
 const getPersonCodec = (): Codec<Person> =>
     getStructCodec([
-        ['name', getStringCodec()],
+        ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
         ['age', getU32Codec()],
     ]);
 ```
@@ -57,7 +57,7 @@ Whilst Codecs can both encode and decode, it is possible to only focus on encodi
 ```ts
 const getPersonEncoder = (): Encoder<Person> =>
     getStructEncoder([
-        ['name', getStringEncoder()],
+        ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
         ['age', getU32Encoder()],
     ]);
 
@@ -69,7 +69,7 @@ The same can be done for decoding the `Person` type by using Decoders like so.
 ```ts
 const getPersonDecoder = (): Decoder<Person> =>
     getStructDecoder([
-        ['name', getStringDecoder()],
+        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
         ['age', getU32Decoder()],
     ]);
 
@@ -122,16 +122,16 @@ type PersonInput = { name: string, age?: number };
 const getPersonEncoder = (): Encoder<PersonInput> =>
     mapEncoder(
         getStructEncoder([
-            ['name', getStringEncoder()],
+            ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
             ['age', getU32Encoder()],
         ]),
         input => { ...input, age: input.age ?? 42 }
     );
 
 const getPersonDecoder = (): Decoder<Person> =>
-    getStructEncoder([
-        ['name', getStringEncoder()],
-        ['age', getU32Encoder()],
+    getStructDecoder([
+        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+        ['age', getU32Decoder()],
     ]);
 
 const getPersonCodec = (): Codec<PersonInput, Person> =>
@@ -152,9 +152,7 @@ myCodec.fixedSize; // 4 bytes.
 On the other hand, `VariableSizeCodecs` do not know the size of their encoded data in advance. Instead, they will grab that information either from the provided encoded data or from the value to encode. For the former, we can simply access the length of the `Uint8Array`. For the latter, it provides a `getSizeFromValue` that tells us the encoded byte size of the provided value.
 
 ```ts
-const myCodec: VariableSizeCodec<string> = getStringCodec({
-    size: getU32Codec(),
-});
+const myCodec: VariableSizeCodec<string> = prefixCodecSize(getUtf8Codec(), getU32Codec());
 myCodec.getSizeFromValue('hello world'); // 4 + 11 bytes.
 ```
 
@@ -400,11 +398,11 @@ getBiggerU32Codec().encode(42);
 //   └-- Our encoded u32 number.
 
 // Variable-size codec.
-const getBiggerStringCodec = () => resizeCodec(getStringCodec(), size => size + 4);
-getBiggerStringCodec().encode('ABC');
-// 0x0300000041424300000000
-//   |             └-- Empty buffer space caused by the resizeCodec function.
-//   └-- Our encoded string with a 4-byte size prefix.
+const getBiggerUtf8Codec = () => resizeCodec(getUtf8Codec(), size => size + 4);
+getBiggerUtf8Codec().encode('ABC');
+// 0x41424300000000
+//   |     └-- Empty buffer space caused by the resizeCodec function.
+//   └-- Our encoded string.
 ```
 
 Note that the `resizeCodec` function doesn't change any encoded or decoded bytes, it merely tells the `encode` and `decode` functions how big the `Uint8Array` should be before delegating to their respective `write` and `read` functions. In fact, this is completely bypassed when using the `write` and `read` functions directly. For instance:
@@ -426,7 +424,7 @@ So when would it make sense to use the `resizeCodec` function? This function is 
 
 ```ts
 const personCodec = getStructCodec([
-    ['name', getStringCodec({ size: 8 })],
+    ['name', fixCodecSize(getUtf8Codec(), 8)],
     // There is a 4-byte padding between name and age.
     [
         'age',

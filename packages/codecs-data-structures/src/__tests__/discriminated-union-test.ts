@@ -4,10 +4,11 @@ import {
     isFixedSize,
     isVariableSize,
     offsetCodec,
+    prefixCodecSize,
     resizeCodec,
 } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { getUtf8Codec } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
     SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
@@ -26,7 +27,6 @@ describe('getDiscriminatedUnionCodec', () => {
     const discriminatedUnion = getDiscriminatedUnionCodec;
     const array = getArrayCodec;
     const boolean = getBooleanCodec;
-    const string = getStringCodec;
     const struct = getStructCodec;
     const tuple = getTupleCodec;
     const u8 = getU8Codec;
@@ -34,6 +34,7 @@ describe('getDiscriminatedUnionCodec', () => {
     const u32 = getU32Codec;
     const u64 = getU64Codec;
     const unit = getUnitCodec;
+    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
 
     type WebEvent =
         | { __kind: 'Click'; x: number; y: number } // Struct variant.
@@ -51,7 +52,7 @@ describe('getDiscriminatedUnionCodec', () => {
                     ['y', u8()],
                 ]),
             ],
-            ['KeyPress', struct([['fields', tuple([string()])]])],
+            ['KeyPress', struct([['fields', tuple([u32String])]])],
             ['PageUnload', struct([])],
         ] as const;
 

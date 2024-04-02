@@ -93,7 +93,7 @@ const set = getSetDecoder(getU8Decoder()).decode(bytes);
 The `getMapCodec` function accepts two codecs of type `K` and `V` and returns a codec of type `Map<K, V>`. For instance, here’s how we can create a codec for maps such that the keys are fixed strings of 8 bytes and the values are `u8` numbers.
 
 ```ts
-const keyCodec = getStringCodec({ size: 8 });
+const keyCodec = fixCodecSize(getUtf8Codec(), 8);
 const valueCodec = getU8Codec();
 const bytes = getMapCodec(keyCodec, valueCodec).encode(new Map([['alice', 42]]));
 const map = getMapCodec(keyCodec, valueCodec).decode(bytes);
@@ -102,7 +102,7 @@ const map = getMapCodec(keyCodec, valueCodec).decode(bytes);
 Just like the array codec, it uses a `u32` size prefix by default.
 
 ```ts
-const keyCodec = getStringCodec({ size: 8 });
+const keyCodec = fixCodecSize(getUtf8Codec(), 8);
 const valueCodec = getU8Codec();
 const myMap = new Map<string, number>();
 myMap.set('alice', 42);
@@ -137,7 +137,7 @@ const map = getMapDecoder(keyDecoder, valueDecoder).decode(bytes);
 The `getTupleCodec` function accepts any number of codecs — `T`, `U`, `V`, etc. — and returns a tuple codec of type `[T, U, V, …]` such that each item is in the order of the provided codecs.
 
 ```ts
-const codec = getTupleCodec([getStringCodec(), getU8Codec(), getU64Codec()]);
+const codec = getTupleCodec([prefixCodecSize(getUtf8Codec(), getU32Codec()), getU8Codec(), getU64Codec()]);
 const bytes = codec.encode(['alice', 42, 123]);
 const tuple = codec.decode(bytes);
 ```
@@ -145,8 +145,8 @@ const tuple = codec.decode(bytes);
 Separate `getTupleEncoder` and `getTupleDecoder` functions are also available.
 
 ```ts
-const bytes = getTupleEncoder([getStringCodec(), getU8Codec()]).encode(['alice', 42]);
-const tuple = getTupleDecoder([getStringCodec(), getU8Codec()]).decode(bytes);
+const bytes = getTupleEncoder([getU8Encoder(), getU64Encoder()]).encode([42, 123]);
+const tuple = getTupleDecoder([getU8Decoder(), getU64Decoder()]).decode(bytes);
 ```
 
 ## Struct codec
@@ -156,7 +156,7 @@ The `getStructCodec` function accepts any number of field codecs and returns a c
 ```ts
 type Person = { name: string; age: number };
 const personCodec: Codec<Person> = getStructCodec([
-    ['name', getStringCodec()],
+    ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
     ['age', getU8Codec()],
 ]);
 
@@ -168,11 +168,11 @@ Separate `getStructEncoder` and `getStructDecoder` functions are also available.
 
 ```ts
 const personEncoder: Encoder<Person> = getStructEncoder([
-    ['name', getStringEncoder()],
+    ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
     ['age', getU8Encoder()],
 ]);
 const personDecoder: Decoder<Person> = getStructDecoder([
-    ['name', getStringDecoder()],
+    ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
     ['age', getU8Decoder()],
 ]);
 const bytes = personEncoder.encode({ name: 'alice', age: 42 });
@@ -308,7 +308,7 @@ const messageCodec = getDiscriminatedUnionCodec([
     ['Quit', getUnitCodec()],
 
     // Tuple variant.
-    ['Write', getStructCodec([['fields', getTupleCodec([getStringCodec()])]])],
+    ['Write', getStructCodec([['fields', getTupleCodec([prefixCodecSize(getUtf8Codec(), getU32Codec())])]])],
 
     // Struct variant.
     [
@@ -458,13 +458,15 @@ const value = getBooleanDecoder().decode(bytes); // true
 The `getNullableCodec` function accepts a codec of type `T` and returns a codec of type `T | null`. It stores whether or not the item exists as a boolean prefix using a `u8` by default.
 
 ```ts
-getNullableCodec(getStringCodec()).encode('Hi');
+const stringCodec = prefixCodecSize(getUtf8Codec(), getU32Codec());
+
+getNullableCodec(stringCodec).encode('Hi');
 // 0x01020000004869
 //   | |       └-- utf8 string content ("Hi").
 //   | └-- u32 string prefix (2 characters).
 //   └-- 1-byte prefix (true — The item exists).
 
-getNullableCodec(getStringCodec()).encode(null);
+getNullableCodec(stringCodec).encode(null);
 // 0x00
 //   └-- 1-byte prefix (false — The item is null).
 ```
@@ -472,7 +474,7 @@ getNullableCodec(getStringCodec()).encode(null);
 You may provide a number codec as the `prefix` option of the `getNullableCodec` function to configure how to store the boolean prefix.
 
 ```ts
-const u32NullableStringCodec = getNullableCodec(getStringCodec(), {
+const u32NullableStringCodec = getNullableCodec(stringCodec, {
     prefix: getU32Codec(),
 });
 
@@ -489,7 +491,7 @@ Additionally, if the item is a `FixedSizeCodec`, you may set the `fixed` option 
 
 ```ts
 const fixedNullableStringCodec = getNullableCodec(
-    getStringCodec({ size: 8 }), // Only works with fixed-size items.
+    fixCodecSize(getUtf8Codec(), 8), // Only works with fixed-size items.
     { fixed: true },
 );
 
@@ -509,8 +511,8 @@ Note that you might be interested in the Rust-like alternative version of nullab
 Separate `getNullableEncoder` and `getNullableDecoder` functions are also available.
 
 ```ts
-const bytes = getNullableEncoder(getStringEncoder()).encode('Hi');
-const value = getNullableDecoder(getStringDecoder()).decode(bytes);
+const bytes = getNullableEncoder(getU32Encoder()).encode(42);
+const value = getNullableDecoder(getU32Decoder()).decode(bytes);
 ```
 
 ## Zeroable nullable codec

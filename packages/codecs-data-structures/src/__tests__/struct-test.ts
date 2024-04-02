@@ -1,6 +1,6 @@
-import { offsetCodec, resizeCodec } from '@solana/codecs-core';
+import { fixCodecSize, offsetCodec, prefixCodecSize, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { getUtf8Codec } from '@solana/codecs-strings';
 
 import { getNullableCodec } from '../nullable';
 import { getStructCodec } from '../struct';
@@ -8,11 +8,12 @@ import { b } from './__setup__';
 
 describe('getStructCodec', () => {
     const struct = getStructCodec;
-    const string = getStringCodec;
     const nullable = getNullableCodec;
     const u8 = getU8Codec;
     const u32 = getU32Codec;
     const u64 = getU64Codec;
+    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const fixedString8 = fixCodecSize(getUtf8Codec(), 8);
 
     it('encodes structs', () => {
         // Empty struct.
@@ -21,7 +22,7 @@ describe('getStructCodec', () => {
 
         // Person struct.
         const person = struct([
-            ['name', string()],
+            ['name', u32String],
             ['age', u8()],
         ]);
         const alice = { age: 32, name: 'Alice' };
@@ -46,7 +47,7 @@ describe('getStructCodec', () => {
         expect(struct([['age', nullable(u8())]]).maxSize).toBe(2);
 
         const person = struct([
-            ['name', string()],
+            ['name', u32String],
             ['age', u8()],
         ]);
         expect(person.getSizeFromValue({ age: 42, name: 'ABC' })).toBe(8);
@@ -61,7 +62,7 @@ describe('getStructCodec', () => {
 
     it('offsets fields within a struct', () => {
         const person = struct([
-            ['name', string({ size: 8 })],
+            ['name', fixedString8],
             // There is a 4-byte padding between name and age.
             [
                 'age',

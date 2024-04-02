@@ -3,6 +3,8 @@ import {
     combineCodec,
     createEncoder,
     Decoder,
+    fixDecoderSize,
+    fixEncoderSize,
     mapDecoder,
     mapEncoder,
     VariableSizeCodec,
@@ -11,7 +13,7 @@ import {
 } from '@solana/codecs-core';
 import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
-import { getBase58Decoder, getBase58Encoder, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
+import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
 import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { CompiledMessage } from '../message';
@@ -47,7 +49,7 @@ function getPreludeStructEncoderTuple() {
         ['version', getTransactionVersionEncoder()],
         ['header', getMessageHeaderEncoder()],
         ['staticAccounts', getArrayEncoder(getAddressEncoder(), { size: getShortU16Encoder() })],
-        ['lifetimeToken', getStringEncoder({ encoding: getBase58Encoder(), size: 32 })],
+        ['lifetimeToken', fixEncoderSize(getBase58Encoder(), 32)],
         ['instructions', getArrayEncoder(getInstructionEncoder(), { size: getShortU16Encoder() })],
     ] as const;
 }
@@ -57,7 +59,7 @@ function getPreludeStructDecoderTuple() {
         ['version', getTransactionVersionDecoder() as Decoder<number>],
         ['header', getMessageHeaderDecoder()],
         ['staticAccounts', getArrayDecoder(getAddressDecoder(), { size: getShortU16Decoder() })],
-        ['lifetimeToken', getStringDecoder({ encoding: getBase58Decoder(), size: 32 })],
+        ['lifetimeToken', fixDecoderSize(getBase58Decoder(), 32)],
         ['instructions', getArrayDecoder(getInstructionDecoder(), { size: getShortU16Decoder() })],
         ['addressTableLookups', getAddressTableLookupArrayDecoder()],
     ] as const;

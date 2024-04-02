@@ -7,7 +7,7 @@ import {
     VariableSizeEncoder,
 } from '@solana/codecs-core';
 import { getU32Codec, getU32Decoder, getU32Encoder } from '@solana/codecs-numbers';
-import { getStringCodec, getStringDecoder, getStringEncoder } from '@solana/codecs-strings';
+import { getUtf8Codec, getUtf8Decoder, getUtf8Encoder } from '@solana/codecs-strings';
 
 import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
 
@@ -22,7 +22,7 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
         ['age', {} as FixedSizeEncoder<number>],
     ]) satisfies VariableSizeEncoder<{ age: number; name: string }>;
     getStructEncoder([['age', getU32Encoder()]]) satisfies FixedSizeEncoder<{ age: number }>;
-    getStructEncoder([['name', getStringEncoder()]]) satisfies VariableSizeEncoder<{ name: string }>;
+    getStructEncoder([['name', getUtf8Encoder()]]) satisfies VariableSizeEncoder<{ name: string }>;
 }
 
 {
@@ -36,7 +36,7 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
         ['age', {} as FixedSizeDecoder<number>],
     ]) satisfies VariableSizeDecoder<{ age: number; name: string }>;
     getStructDecoder([['age', getU32Decoder()]]) satisfies FixedSizeDecoder<{ age: number }>;
-    getStructDecoder([['name', getStringDecoder()]]) satisfies VariableSizeDecoder<{ name: string }>;
+    getStructDecoder([['name', getUtf8Decoder()]]) satisfies VariableSizeDecoder<{ name: string }>;
 }
 
 {
@@ -50,7 +50,7 @@ import { getStructCodec, getStructDecoder, getStructEncoder } from '../struct';
         ['age', {} as FixedSizeCodec<number>],
     ]) satisfies VariableSizeCodec<{ age: number; name: string }>;
     getStructCodec([['age', getU32Codec()]]) satisfies FixedSizeCodec<{ age: number }>;
-    getStructCodec([['name', getStringCodec()]]) satisfies VariableSizeCodec<{ name: string }>;
+    getStructCodec([['name', getUtf8Codec()]]) satisfies VariableSizeCodec<{ name: string }>;
 }
 
 {

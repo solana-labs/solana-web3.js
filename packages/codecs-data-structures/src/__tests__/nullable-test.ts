@@ -1,5 +1,6 @@
-import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
-import { getStringCodec } from '@solana/codecs-strings';
+import { fixCodecSize, prefixCodecSize } from '@solana/codecs-core';
+import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
 
 import { getNullableCodec } from '../nullable';
@@ -11,8 +12,9 @@ describe('getNullableCodec', () => {
     const u8 = getU8Codec;
     const u16 = getU16Codec;
     const u64 = getU64Codec;
-    const string = getStringCodec;
     const unit = getUnitCodec;
+    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const fixedString5 = fixCodecSize(getUtf8Codec(), 5);
 
     it('encodes nullables', () => {
         // Null.
@@ -34,8 +36,8 @@ describe('getNullableCodec', () => {
         expect(nullable(u8(), { prefix: u16() }).read(b('01002a'), 0)).toStrictEqual([42, 3]);
 
         // Some with strings.
-        expect(nullable(string()).encode('Hello')).toStrictEqual(b('010500000048656c6c6f'));
-        expect(nullable(string()).read(b('010500000048656c6c6f'), 0)).toStrictEqual(['Hello', 10]);
+        expect(nullable(u32String).encode('Hello')).toStrictEqual(b('010500000048656c6c6f'));
+        expect(nullable(u32String).read(b('010500000048656c6c6f'), 0)).toStrictEqual(['Hello', 10]);
 
         // Different From and To types.
         const nullableU64 = nullable<bigint | number, bigint>(u64());
@@ -47,7 +49,7 @@ describe('getNullableCodec', () => {
     it('encodes fixed nullables', () => {
         const fixedU8 = nullable(u8(), { fixed: true });
         const fixedU8WithU16Prefix = nullable(u8(), { fixed: true, prefix: u16() });
-        const fixedString = nullable(string({ size: 5 }), { fixed: true });
+        const fixedString = nullable(fixedString5, { fixed: true });
 
         // Null.
         expect(fixedU8.encode(null)).toStrictEqual(b('0000'));
@@ -79,7 +81,7 @@ describe('getNullableCodec', () => {
 
         // Fixed nullables must wrap fixed-size items.
         // @ts-expect-error It cannot wrap a variable size item when fixed is true.
-        expect(() => nullable(string(), { fixed: true })).toThrow(
+        expect(() => nullable(u32String, { fixed: true })).toThrow(
             new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH),
         );
     });
@@ -88,16 +90,16 @@ describe('getNullableCodec', () => {
         expect(nullable(u8()).getSizeFromValue(null)).toBe(1);
         expect(nullable(u8()).getSizeFromValue(42)).toBe(2);
         expect(nullable(u8()).maxSize).toBe(2);
-        expect(nullable(string()).getSizeFromValue(null)).toBe(1);
-        expect(nullable(string()).getSizeFromValue('ABC')).toBe(1 + 4 + 3);
-        expect(nullable(string()).maxSize).toBeUndefined();
+        expect(nullable(u32String).getSizeFromValue(null)).toBe(1);
+        expect(nullable(u32String).getSizeFromValue('ABC')).toBe(1 + 4 + 3);
+        expect(nullable(u32String).maxSize).toBeUndefined();
         expect(nullable(u8(), { prefix: u16() }).getSizeFromValue(null)).toBe(2);
         expect(nullable(u8(), { prefix: u16() }).getSizeFromValue(42)).toBe(3);
         expect(nullable(u8(), { prefix: u16() }).maxSize).toBe(3);
 
         // Fixed.
         expect(nullable(u8(), { fixed: true }).fixedSize).toBe(2);
-        expect(nullable(string({ size: 5 }), { fixed: true }).fixedSize).toBe(6);
+        expect(nullable(fixedString5, { fixed: true }).fixedSize).toBe(6);
         expect(nullable(u8(), { fixed: true, prefix: u16() }).fixedSize).toBe(3);
 
         // Zero-size items.
