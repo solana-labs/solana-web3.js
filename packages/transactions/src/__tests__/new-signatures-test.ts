@@ -167,7 +167,7 @@ describe('partiallySignTransaction', () => {
         const orderedAddresses = Object.keys(signatures);
         expect(orderedAddresses).toEqual([mockPublicKeyAddressA, mockPublicKeyAddressB, mockPublicKeyAddressC]);
     });
-    it('does not modify an existing signature', async () => {
+    it('does not modify an existing signature when the signature is the same', async () => {
         expect.assertions(1);
         const transaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -179,7 +179,7 @@ describe('partiallySignTransaction', () => {
         const { signatures } = await newPartiallySignTransaction([mockKeyPairB], transaction);
         expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
     });
-    it('does not produce a new signature for an existing signature', async () => {
+    it('produces a new signature for an existing signer', async () => {
         expect.assertions(1);
         const transaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -188,7 +188,18 @@ describe('partiallySignTransaction', () => {
             },
         };
         await newPartiallySignTransaction([mockKeyPairA], transaction);
-        expect(signBytes as jest.Mock).not.toHaveBeenCalled();
+        expect(signBytes as jest.Mock).toHaveBeenCalledTimes(1);
+    });
+    it('modifies the existing signature when the signature is different', async () => {
+        expect.assertions(1);
+        const transaction: NewTransaction = {
+            messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
+            signatures: {
+                [mockPublicKeyAddressA]: new Uint8Array([1, 2, 3, 4]) as ReadonlyUint8Array as SignatureBytes,
+            },
+        };
+        const { signatures } = await newPartiallySignTransaction([mockKeyPairA], transaction);
+        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
     });
     it('produces a signature for a new signer when there is an existing one', async () => {
         expect.assertions(1);
@@ -211,6 +222,16 @@ describe('partiallySignTransaction', () => {
             },
         };
         await expect(newPartiallySignTransaction([mockKeyPairA], transaction)).resolves.toBeFrozenObject();
+    });
+    it('returns the input transaction object if no signatures changed', async () => {
+        expect.assertions(1);
+        const transaction: NewTransaction = {
+            messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
+            signatures: {
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            },
+        };
+        await expect(newPartiallySignTransaction([mockKeyPairA], transaction)).resolves.toBe(transaction);
     });
 });
 

@@ -6,7 +6,7 @@ import {
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SolanaError,
 } from '@solana/errors';
-import { Signature, signBytes } from '@solana/keys';
+import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
 import { NewTransaction } from './new-compile-transaction';
 
@@ -29,25 +29,45 @@ export function newGetSignatureFromTransaction(transaction: NewTransaction): Sig
     return transactionSignature as Signature;
 }
 
+function uint8ArraysEqual(arr1: Uint8Array, arr2: Uint8Array) {
+    return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+}
+
 export async function newPartiallySignTransaction(
     keyPairs: CryptoKeyPair[],
     transaction: NewTransaction,
 ): Promise<NewTransaction> {
-    const addressPrivateKeyPairs = await Promise.all(
-        keyPairs.map(keyPair => Promise.all([getAddressFromPublicKey(keyPair.publicKey), keyPair.privateKey])),
+    let newSignatures: Record<Address, SignatureBytes> | undefined;
+
+    await Promise.all(
+        keyPairs.map(async keyPair => {
+            const address = await getAddressFromPublicKey(keyPair.publicKey);
+            const newSignature = await signBytes(keyPair.privateKey, transaction.messageBytes);
+            const existingSignature = transaction.signatures[address];
+
+            // what to do if existingSignature is undefined, ie not a valid signer?
+
+            if (existingSignature !== null && uint8ArraysEqual(newSignature, existingSignature)) {
+                // already have the same signature set
+                return;
+            }
+
+            newSignatures ||= {};
+            newSignatures[address] = newSignature;
+        }),
     );
-    const newAddressPrivateKeyPairs = addressPrivateKeyPairs.filter(
-        ([address, _privateKey]) => transaction.signatures[address] === null,
-    );
-    const newAddressSignaturePairs = await Promise.all(
-        newAddressPrivateKeyPairs.map(([address, privateKey]) =>
-            Promise.all([address, signBytes(privateKey, transaction.messageBytes)]),
-        ),
-    );
-    for (const [address, signature] of newAddressSignaturePairs) {
-        transaction.signatures[address] = signature;
+
+    if (!newSignatures) {
+        return transaction;
     }
-    return Object.freeze(transaction);
+
+    return Object.freeze({
+        ...transaction,
+        signatures: Object.freeze({
+            ...transaction.signatures,
+            ...newSignatures,
+        }),
+    });
 }
 
 export async function newSignTransaction(
