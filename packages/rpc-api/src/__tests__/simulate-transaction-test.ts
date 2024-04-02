@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 
 import type { Address } from '@solana/addresses';
-import { fixEncoder } from '@solana/codecs-core';
+import { fixEncoder, ReadonlyUint8Array } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
     SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
@@ -72,9 +72,9 @@ function getMockTransactionMessageWithAdditionalAccount({
     memoString,
     version = 0x80, // 0 + version mask
 }: {
-    accountAddressBytes: Uint8Array;
+    accountAddressBytes: ReadonlyUint8Array;
     blockhash: string;
-    feePayerAddressBytes: Uint8Array;
+    feePayerAddressBytes: ReadonlyUint8Array;
     memoString: string;
     version?: number;
 }) {

@@ -1,6 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     SOLANA_ERROR__ACCOUNTS__EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
     SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT,
@@ -17,7 +18,7 @@ describe('decodeAccount', () => {
         // Given an encoded account.
         const encodedAccount = <EncodedAccount>{
             address: '1111',
-            data: new Uint8Array([1, 2, 3]),
+            data: new Uint8Array([1, 2, 3]) as ReadonlyUint8Array,
             executable: false,
             lamports: 1_000_000_000n,
             programAddress: '9999',
@@ -46,7 +47,7 @@ describe('decodeAccount', () => {
         // Given an encoded account.
         const encodedAccount = <EncodedAccount>{
             address: '1111',
-            data: new Uint8Array([1, 2, 3]),
+            data: new Uint8Array([1, 2, 3]) as ReadonlyUint8Array,
             executable: false,
             lamports: 1_000_000_000n,
             programAddress: '9999',
@@ -84,7 +85,7 @@ describe('assertDecodedAccount', () => {
         // Given an account with Uint8Array data
         const account = <EncodedAccount>{
             address: '1111' as Address,
-            data: new Uint8Array([]),
+            data: new Uint8Array([]) as ReadonlyUint8Array,
         };
 
         // When we assert that the account is decoded
@@ -135,11 +136,11 @@ describe('assertDecodedAccounts', () => {
         const accounts = [
             <EncodedAccount>{
                 address: '1111' as Address,
-                data: new Uint8Array([]),
+                data: new Uint8Array([]) as ReadonlyUint8Array,
             },
             <EncodedAccount>{
                 address: '2222' as Address,
-                data: new Uint8Array([]),
+                data: new Uint8Array([]) as ReadonlyUint8Array,
             },
             <Account<MockData>>{
                 address: '3333' as Address,

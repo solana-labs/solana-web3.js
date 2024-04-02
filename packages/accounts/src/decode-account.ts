@@ -1,4 +1,4 @@
-import type { Decoder } from '@solana/codecs-core';
+import type { Decoder, ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     SOLANA_ERROR__ACCOUNTS__EXPECTED_ALL_ACCOUNTS_TO_BE_DECODED,
     SOLANA_ERROR__ACCOUNTS__EXPECTED_DECODED_ACCOUNT,
@@ -57,13 +57,13 @@ export function assertAccountDecoded<TData extends object, TAddress extends stri
 
 /** Asserts that all accounts have been decoded. */
 export function assertAccountsDecoded<TData extends object, TAddress extends string = string>(
-    accounts: Account<TData | Uint8Array, TAddress>[],
+    accounts: Account<ReadonlyUint8Array | TData, TAddress>[],
 ): asserts accounts is Account<TData, TAddress>[];
 export function assertAccountsDecoded<TData extends object, TAddress extends string = string>(
-    accounts: MaybeAccount<TData | Uint8Array, TAddress>[],
+    accounts: MaybeAccount<ReadonlyUint8Array | TData, TAddress>[],
 ): asserts accounts is MaybeAccount<TData, TAddress>[];
 export function assertAccountsDecoded<TData extends object, TAddress extends string = string>(
-    accounts: (Account<TData | Uint8Array, TAddress> | MaybeAccount<TData | Uint8Array, TAddress>)[],
+    accounts: (Account<ReadonlyUint8Array | TData, TAddress> | MaybeAccount<ReadonlyUint8Array | TData, TAddress>)[],
 ): asserts accounts is (Account<TData, TAddress> | MaybeAccount<TData, TAddress>)[] {
     const encoded = accounts.filter(a => accountExists(a) && a.data instanceof Uint8Array);
     if (encoded.length > 0) {

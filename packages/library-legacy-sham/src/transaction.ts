@@ -55,7 +55,7 @@ export class Transaction {
                     'us know: https://github.com/solana-labs/solana-web3.js/issues/new/choose',
             );
         }
-        const byteArray = getTransactionEncoder().encode(this.#tx as CompilableTransaction);
+        const byteArray = getTransactionEncoder().encode(this.#tx as CompilableTransaction) as Uint8Array;
         return __NODEJS__ ? Buffer.from(byteArray) : (byteArray as Buffer);
     }
     setSigners = createUnimplementedFunction('Transaction#setSigners');
