@@ -50,7 +50,7 @@ export type OptionCodecConfig<TPrefix extends NumberCodec | NumberDecoder | Numb
 };
 
 /**
- * Creates a encoder for an optional value using `null` as the `None` value.
+ * Creates a encoder for an optional value using the `Option<T>` type.
  *
  * @param item - The encoder to use for the value that may be present.
  * @param config - A set of config for the encoder.
@@ -93,7 +93,7 @@ export function getOptionEncoder<TFrom>(
 }
 
 /**
- * Creates a decoder for an optional value using `null` as the `None` value.
+ * Creates a decoder for an optional value using the `Option<T>` type.
  *
  * @param item - The decoder to use for the value that may be present.
  * @param config - A set of config for the decoder.
@@ -131,7 +131,7 @@ export function getOptionDecoder<TTo>(
 }
 
 /**
- * Creates a codec for an optional value using `null` as the `None` value.
+ * Creates a codec for an optional value using the `Option<T>` type.
  *
  * @param item - The codec to use for the value that may be present.
  * @param config - A set of config for the codec.

@@ -88,6 +88,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Union codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#union-codec).
     -   [Boolean codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#boolean-codec).
     -   [Nullable codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#nullable-codec).
+    -   [Zeroable nullable codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#zeroable-nullable-codec).
     -   [Bytes codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#bytes-codec).
     -   [Bit array codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#bit-array-codec).
     -   [Constant codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#constant-codec).
@@ -98,3 +99,4 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Option helpers](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#option-helpers).
     -   [Unwrapping options](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#unwrapping-options).
     -   [Option codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#option-codec).
+    -   [Zeroable option codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options#zeroable-option-codec).

@@ -1,20 +1,8 @@
 import { Codec, createCodec } from '@solana/codecs-core';
+import { getBase16Codec } from '@solana/codecs-strings';
 
+export const base16 = getBase16Codec();
 export const b = (s: string) => base16.encode(s);
-
-export const base16: Codec<string> = createCodec({
-    getSizeFromValue: (value: string) => Math.ceil(value.length / 2),
-    read(bytes, offset) {
-        const value = bytes.slice(offset).reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-        return [value, bytes.length];
-    },
-    write(value: string, bytes, offset) {
-        const matches = value.toLowerCase().match(/.{1,2}/g);
-        const hexBytes = matches ? matches.map((byte: string) => parseInt(byte, 16)) : [];
-        bytes.set(hexBytes, offset);
-        return offset + hexBytes.length;
-    },
-});
 
 export const getMockCodec = (
     config: {

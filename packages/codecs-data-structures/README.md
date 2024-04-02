@@ -504,13 +504,45 @@ fixedNullableStringCodec.encode(null);
 //   └-- 1-byte prefix (false — The item is null).
 ```
 
-Note that you might be interested in the Rust-like alternative version of nullable codecs, available in [the ￼￼`@solana/options`￼￼ package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options).
+Note that you might be interested in the Rust-like alternative version of nullable codecs, available in [the `@solana/options` package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options).
 
 Separate `getNullableEncoder` and `getNullableDecoder` functions are also available.
 
 ```ts
 const bytes = getNullableEncoder(getStringEncoder()).encode('Hi');
 const value = getNullableDecoder(getStringDecoder()).decode(bytes);
+```
+
+## Zeroable nullable codec
+
+Similarly to the `getNullableCodec` function, The `getZeroableNullableCodec` function accepts a codec of type `T` and returns a codec of type `T | null`. However, instead of relying on a boolean prefix to determine whether the item exists, it uses a zero value to represent `null`. This means, you may only use this codec with fixed-size items.
+
+```ts
+const codec = getZeroableNullableCodec(getU16Codec());
+codec.encode(42); // 0x2a00
+codec.encode(null); // 0x0000
+codec.decode(new Uint8Array([42, 0])); // 42
+codec.encode(new Uint8Array([0, 0])); // null
+```
+
+As you can see, by default, it uses a `Uint8Array` of zeroes to represent `null`. However, you may provide a custom zero value that will be used to encode/decode null values. Note that this zero value must be a `Uint8Array` of the same length as the codec's fixed size.
+
+```ts
+const codec = getZeroableNullableCodec(getU16Codec(), {
+    zeroValue: new Uint8Array([255, 255]),
+});
+codec.encode(42); // 0x2a00
+codec.encode(null); // 0xfffff
+codec.encode(new Uint8Array([0, 0])); // 0
+codec.decode(new Uint8Array([42, 0])); // 42
+codec.decode(new Uint8Array([255, 255])); // null
+```
+
+Separate `getZeroableNullableEncoder` and `getZeroableNullableDecoder` functions are also available.
+
+```ts
+const bytes = getZeroableNullableEncoder(getU16Encoder()).encode(42);
+const value = getZeroableNullableDecoder(getU16Decoder()).decode(bytes);
 ```
 
 ## Bytes codec

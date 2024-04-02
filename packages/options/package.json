@@ -68,7 +68,9 @@
     "dependencies": {
         "@solana/codecs-core": "workspace:*",
         "@solana/codecs-data-structures": "workspace:*",
-        "@solana/codecs-numbers": "workspace:*"
+        "@solana/codecs-numbers": "workspace:*",
+        "@solana/codecs-strings": "workspace:*",
+        "@solana/errors": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
