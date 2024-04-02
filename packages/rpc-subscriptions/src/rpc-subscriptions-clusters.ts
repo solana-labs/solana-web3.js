@@ -29,3 +29,13 @@ export type RpcSubscriptionsFromTransport<
       : TRpcSubscriptionsTransport extends RpcSubscriptionsTransportMainnet
         ? RpcSubscriptionsMainnet<TRpcMethods>
         : RpcSubscriptions<TRpcMethods>;
+export type RpcSubscriptionsFromCluster<
+    TRpcMethods,
+    TCluster extends 'devnet' | 'mainnet' | 'testnet' | undefined = undefined,
+> = TCluster extends 'devnet'
+    ? RpcSubscriptionsDevnet<TRpcMethods>
+    : TCluster extends 'testnet'
+      ? RpcSubscriptionsTestnet<TRpcMethods>
+      : TCluster extends 'mainnet'
+        ? RpcSubscriptionsMainnet<TRpcMethods>
+        : RpcSubscriptions<TRpcMethods>;

@@ -1,6 +1,6 @@
 import type { Signature } from '@solana/keys';
-import type { GetSignatureStatusesApi, RequestAirdropApi, Rpc } from '@solana/rpc';
-import type { RpcSubscriptions, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
+import type { GetSignatureStatusesApi, RequestAirdropApi, RpcFromCluster } from '@solana/rpc';
+import type { RpcSubscriptionsFromCluster, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
 import {
     createRecentSignatureConfirmationPromiseFactory,
     getTimeoutPromise,
@@ -16,12 +16,14 @@ type AirdropFunction = (
     >,
 ) => Promise<Signature>;
 
-type AirdropFactoryConfig = Readonly<{
-    rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi>;
-    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>;
+type AirdropFactoryConfig<TCluster extends 'devnet' | 'testnet'> = Readonly<{
+    rpc: RpcFromCluster<GetSignatureStatusesApi & RequestAirdropApi, TCluster>;
+    rpcSubscriptions: RpcSubscriptionsFromCluster<SignatureNotificationsApi, TCluster>;
 }>;
 
-export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig): AirdropFunction {
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'devnet'>): AirdropFunction;
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'testnet'>): AirdropFunction;
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'devnet' | 'testnet'>): AirdropFunction {
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,
