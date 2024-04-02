@@ -90,7 +90,7 @@ export type DiscriminatedUnionCodecConfig<
     size?: TDiscriminatorSize;
 };
 
-type DiscriminatorValue = number | string | symbol;
+type DiscriminatorValue = bigint | boolean | number | string | null | undefined;
 type Variants<T> = readonly (readonly [DiscriminatorValue, T])[];
 type ArrayIndices<T extends readonly unknown[]> = Exclude<Partial<T>['length'], T['length']> & number;
 

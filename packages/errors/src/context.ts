@@ -283,8 +283,8 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             expected: number;
         };
         [SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT]: {
-            value: number | string | symbol;
-            variants: (number | string | symbol)[];
+            value: bigint | boolean | number | string | null | undefined;
+            variants: readonly (bigint | boolean | number | string | null | undefined)[];
         };
         [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]: {
             maxRange: number;
