@@ -1,10 +1,6 @@
 import {
-    assertByteArrayHasEnoughBytesForCodec,
-    assertByteArrayIsNotEmptyForCodec,
     Codec,
     combineCodec,
-    createDecoder,
-    createEncoder,
     Decoder,
     Encoder,
     fixDecoder,
@@ -12,8 +8,8 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoder,
-    getEncodedSize,
-    ReadonlyUint8Array,
+    prefixDecoder,
+    prefixEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -68,17 +64,7 @@ export function getStringEncoder(config: StringCodecConfig<NumberEncoder, Encode
         return fixEncoder(encoding, size);
     }
 
-    return createEncoder({
-        getSizeFromValue: (value: string) => {
-            const contentSize = getEncodedSize(value, encoding);
-            return getEncodedSize(contentSize, size) + contentSize;
-        },
-        write: (value: string, bytes, offset) => {
-            const contentSize = getEncodedSize(value, encoding);
-            offset = size.write(contentSize, bytes, offset);
-            return encoding.write(value, bytes, offset);
-        },
-    });
+    return prefixEncoder(encoding, size);
 }
 
 /** Decodes strings from a given encoding and size strategy. */
@@ -106,19 +92,7 @@ export function getStringDecoder(config: StringCodecConfig<NumberDecoder, Decode
         return fixDecoder(encoding, size);
     }
 
-    return createDecoder({
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => {
-            assertByteArrayIsNotEmptyForCodec('string', bytes, offset);
-            const [lengthBigInt, lengthOffset] = size.read(bytes, offset);
-            const length = Number(lengthBigInt);
-            offset = lengthOffset;
-            const contentBytes = bytes.slice(offset, offset + length);
-            assertByteArrayHasEnoughBytesForCodec('string', length, contentBytes);
-            const [value, contentOffset] = encoding.read(contentBytes, 0);
-            offset += contentOffset;
-            return [value, offset];
-        },
-    });
+    return prefixDecoder(encoding, size);
 }
 
 /** Encodes and decodes strings from a given encoding and size strategy. */
