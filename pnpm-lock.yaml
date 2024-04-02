@@ -583,6 +583,9 @@ importers:
       '@solana/codecs-core':
         specifier: workspace:*
         version: link:../codecs-core
+      '@solana/codecs-data-structures':
+        specifier: workspace:*
+        version: link:../codecs-data-structures
       '@solana/codecs-numbers':
         specifier: workspace:*
         version: link:../codecs-numbers

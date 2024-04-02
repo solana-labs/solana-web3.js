@@ -1,3 +1,4 @@
+import { getUnitCodec } from '@solana/codecs-data-structures';
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 
 import { none, some } from '../option';
@@ -9,6 +10,7 @@ describe('getOptionCodec', () => {
     const u8 = getU8Codec;
     const u16 = getU16Codec;
     const u64 = getU64Codec;
+    const unit = getUnitCodec;
 
     it('encodes options', () => {
         // None.
@@ -121,5 +123,8 @@ describe('getOptionCodec', () => {
         expect(option(u8(), { fixed: true }).fixedSize).toBe(2);
         expect(option(u64(), { fixed: true }).fixedSize).toBe(9);
         expect(option(u8(), { fixed: true, prefix: u16() }).fixedSize).toBe(3);
+
+        // Zero-size items.
+        expect(option(unit()).fixedSize).toBe(1);
     });
 });

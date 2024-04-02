@@ -2,16 +2,15 @@ import {
     assertIsFixedSize,
     Codec,
     combineCodec,
-    createDecoder,
-    createEncoder,
     Decoder,
     Encoder,
+    fixDecoder,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    getEncodedSize,
-    isFixedSize,
-    ReadonlyUint8Array,
+    fixEncoder,
+    mapDecoder,
+    mapEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -27,7 +26,8 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 
-import { getMaxSize, sumCodecSizes } from './utils';
+import { getTupleDecoder, getTupleEncoder } from './tuple';
+import { getUnionDecoder, getUnionEncoder } from './union';
 
 /** Defines the config for nullable codecs. */
 export type NullableCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
@@ -72,36 +72,18 @@ export function getNullableEncoder<TFrom>(
 ): Encoder<TFrom | null> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
+    const encoder = getUnionEncoder(
+        [
+            mapEncoder(prefix, (_value: null) => 0),
+            mapEncoder(getTupleEncoder([prefix, item]), (value: TFrom): [number, TFrom] => [1, value]),
+        ],
+        variant => Number(variant !== null),
+    );
 
-    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
-    if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item);
-        assertIsFixedSize(prefix);
-        const fixedSize = prefix.fixedSize + item.fixedSize;
-        return createEncoder({
-            fixedSize,
-            write: (option: TFrom | null, bytes, offset) => {
-                const prefixOffset = prefix.write(Number(option !== null), bytes, offset);
-                if (option !== null) {
-                    item.write(option, bytes, prefixOffset);
-                }
-                return offset + fixedSize;
-            },
-        });
-    }
-
-    return createEncoder({
-        getSizeFromValue: (option: TFrom | null) =>
-            getEncodedSize(Number(option !== null), prefix) + (option !== null ? getEncodedSize(option, item) : 0),
-        maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined,
-        write: (option: TFrom | null, bytes, offset) => {
-            offset = prefix.write(Number(option !== null), bytes, offset);
-            if (option !== null) {
-                offset = item.write(option, bytes, offset);
-            }
-            return offset;
-        },
-    });
+    if (!fixed) return encoder;
+    assertIsFixedSize(item);
+    assertIsFixedSize(prefix);
+    return fixEncoder(encoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -128,31 +110,18 @@ export function getNullableDecoder<TTo>(
 ): Decoder<TTo | null> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
+    const decoder = getUnionDecoder(
+        [
+            mapDecoder(prefix, (_value: bigint | number) => null),
+            mapDecoder(getTupleDecoder([prefix, item]), ([, value]): TTo => value),
+        ],
+        (bytes, offset) => Number(prefix.read(bytes, offset)[0] !== 0),
+    );
 
-    let fixedSize: number | null = null;
-    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
-    if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item);
-        assertIsFixedSize(prefix);
-        fixedSize = prefix.fixedSize + item.fixedSize;
-    }
-
-    return createDecoder({
-        ...(fixedSize === null
-            ? { maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined }
-            : { fixedSize }),
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
-            if (bytes.length - offset <= 0) {
-                return [null, offset];
-            }
-            const [isSome, prefixOffset] = prefix.read(bytes, offset);
-            if (isSome === 0) {
-                return [null, fixedSize !== null ? offset + fixedSize : prefixOffset];
-            }
-            const [value, newOffset] = item.read(bytes, prefixOffset);
-            return [value, fixedSize !== null ? offset + fixedSize : newOffset];
-        },
-    });
+    if (!fixed) return decoder;
+    assertIsFixedSize(item);
+    assertIsFixedSize(prefix);
+    return fixDecoder(decoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -177,6 +146,9 @@ export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
     config: NullableCodecConfig<NumberCodec> = {},
 ): Codec<TFrom | null, TTo | null> {
-    const configCast = config as NullableCodecConfig<NumberCodec> & { fixed?: false };
-    return combineCodec(getNullableEncoder<TFrom>(item, configCast), getNullableDecoder<TTo>(item, configCast));
+    type ConfigCast = NullableCodecConfig<NumberCodec> & { fixed?: false };
+    return combineCodec(
+        getNullableEncoder<TFrom>(item, config as ConfigCast),
+        getNullableDecoder<TTo>(item, config as ConfigCast),
+    );
 }
