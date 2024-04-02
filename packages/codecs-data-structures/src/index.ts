@@ -3,6 +3,7 @@ export * from './assertions';
 export * from './bit-array';
 export * from './boolean';
 export * from './bytes';
+export * from './constant';
 export * from './discriminated-union';
 export * from './enum';
 export * from './map';

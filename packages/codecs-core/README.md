@@ -614,6 +614,7 @@ This package also provides utility functions for managing bytes such as:
 -   `mergeBytes`: Concatenates an array of `Uint8Arrays` into a single `Uint8Array`.
 -   `padBytes`: Pads a `Uint8Array` with zeroes (to the right) to the specified length.
 -   `fixBytes`: Pads or truncates a `Uint8Array` so it has the specified length.
+-   `containsBytes`: Checks if a `Uint8Array` contains another `Uint8Array` at a given offset.
 
 ```ts
 // Merge multiple Uint8Array buffers into one.
@@ -626,6 +627,10 @@ padBytes(new Uint8Array([1, 2, 3, 4]), 2); // Uint8Array([1, 2, 3, 4])
 // Pad and truncate a Uint8Array buffer to the given size.
 fixBytes(new Uint8Array([1, 2]), 4); // Uint8Array([1, 2, 0, 0])
 fixBytes(new Uint8Array([1, 2, 3, 4]), 2); // Uint8Array([1, 2])
+
+// Check if a Uint8Array contains another Uint8Array at a given offset.
+containsBytes(new Uint8Array([1, 2, 3, 4]), new Uint8Array([2, 3]), 1); // true
+containsBytes(new Uint8Array([1, 2, 3, 4]), new Uint8Array([2, 3]), 2); // false
 ```
 
 ---

@@ -574,6 +574,25 @@ const bytes = getBitArrayEncoder(1).encode(booleans);
 const decodedBooleans = getBitArrayDecoder(1).decode(bytes);
 ```
 
+## Constant codec
+
+The `getConstantCodec` function accepts any `Uint8Array` and returns a `Codec<void>`. When encoding, it will set the provided `Uint8Array` as-is. When decoding, it will assert that the next bytes contain the provided `Uint8Array` and move the offset forward.
+
+```ts
+const codec = getConstantCodec(new Uint8Array([1, 2, 3]));
+
+codec.encode(undefined); // 0x010203
+codec.decode(new Uint8Array([1, 2, 3])); // undefined
+codec.decode(new Uint8Array([1, 2, 4])); // Throws an error.
+```
+
+Separate `getConstantEncoder` and `getConstantDecoder` functions are also available.
+
+```ts
+getConstantEncoder(new Uint8Array([1, 2, 3])).encode(undefined);
+getConstantDecoder(new Uint8Array([1, 2, 3])).decode(new Uint8Array([1, 2, 3]));
+```
+
 ## Unit codec
 
 The `getUnitCodec` function returns a `Codec<void>` that encodes `undefined` into an empty `Uint8Array` and returns `undefined` without consuming any bytes when decoding. This is more of a low-level codec that can be used internally by other codecs. For instance, this is how discriminated union codecs describe the codecs of empty variants.
