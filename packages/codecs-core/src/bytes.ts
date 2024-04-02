@@ -1,3 +1,5 @@
+import { ReadonlyUint8Array } from './readonly-uint8array';
+
 /**
  * Concatenates an array of `Uint8Array`s into a single `Uint8Array`.
  * Reuses the original byte array when applicable.
@@ -26,7 +28,7 @@ export const mergeBytes = (byteArrays: Uint8Array[]): Uint8Array => {
  * Pads a `Uint8Array` with zeroes to the specified length.
  * If the array is longer than the specified length, it is returned as-is.
  */
-export const padBytes = (bytes: Uint8Array, length: number): Uint8Array => {
+export const padBytes = (bytes: ReadonlyUint8Array | Uint8Array, length: number): ReadonlyUint8Array | Uint8Array => {
     if (bytes.length >= length) return bytes;
     const paddedBytes = new Uint8Array(length).fill(0);
     paddedBytes.set(bytes);
@@ -38,5 +40,5 @@ export const padBytes = (bytes: Uint8Array, length: number): Uint8Array => {
  * If the array is longer than the specified length, it is truncated.
  * If the array is shorter than the specified length, it is padded with zeroes.
  */
-export const fixBytes = (bytes: Uint8Array, length: number): Uint8Array =>
+export const fixBytes = (bytes: ReadonlyUint8Array | Uint8Array, length: number): ReadonlyUint8Array | Uint8Array =>
     padBytes(bytes.length <= length ? bytes : bytes.slice(0, length), length);

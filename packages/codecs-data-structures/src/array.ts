@@ -9,6 +9,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     getEncodedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -120,7 +121,7 @@ export function getArrayDecoder<TTo>(item: Decoder<TTo>, config: ArrayCodecConfi
 
     return createDecoder({
         ...(fixedSize !== null ? { fixedSize } : { maxSize }),
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             const array: TTo[] = [];
             if (typeof size === 'object' && bytes.slice(offset).length === 0) {
                 return [array, offset];

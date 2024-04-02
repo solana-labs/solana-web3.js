@@ -6,5 +6,6 @@ export * from './fix-codec';
 export * from './map-codec';
 export * from './offset-codec';
 export * from './pad-codec';
+export * from './readonly-uint8array';
 export * from './resize-codec';
 export * from './reverse-codec';

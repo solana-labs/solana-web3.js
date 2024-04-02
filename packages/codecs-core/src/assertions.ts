@@ -5,10 +5,16 @@ import {
     SolanaError,
 } from '@solana/errors';
 
+import { ReadonlyUint8Array } from './readonly-uint8array';
+
 /**
  * Asserts that a given byte array is not empty.
  */
-export function assertByteArrayIsNotEmptyForCodec(codecDescription: string, bytes: Uint8Array, offset = 0) {
+export function assertByteArrayIsNotEmptyForCodec(
+    codecDescription: string,
+    bytes: ReadonlyUint8Array | Uint8Array,
+    offset = 0,
+) {
     if (bytes.length - offset <= 0) {
         throw new SolanaError(SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY, {
             codecDescription,
@@ -22,7 +28,7 @@ export function assertByteArrayIsNotEmptyForCodec(codecDescription: string, byte
 export function assertByteArrayHasEnoughBytesForCodec(
     codecDescription: string,
     expected: number,
-    bytes: Uint8Array,
+    bytes: ReadonlyUint8Array | Uint8Array,
     offset = 0,
 ) {
     const bytesLength = bytes.length - offset;

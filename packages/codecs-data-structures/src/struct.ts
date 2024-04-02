@@ -10,6 +10,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     getEncodedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -87,7 +88,7 @@ export function getStructDecoder<const TFields extends Fields<Decoder<any>>>(
 
     return createDecoder({
         ...(fixedSize === null ? { maxSize } : { fixedSize }),
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             const struct = {} as TTo;
             fields.forEach(([key, codec]) => {
                 const [value, newOffset] = codec.read(bytes, offset);

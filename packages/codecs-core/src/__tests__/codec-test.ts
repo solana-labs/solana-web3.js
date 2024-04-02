@@ -1,4 +1,5 @@
 import { Codec, createCodec, createDecoder, createEncoder, Encoder } from '../codec';
+import { ReadonlyUint8Array } from '../readonly-uint8array';
 
 describe('Encoder', () => {
     it('can define Encoder instances', () => {
@@ -27,7 +28,7 @@ describe('Decoder', () => {
     it('can define Decoder instances', () => {
         const myDecoder = createDecoder({
             fixedSize: 32,
-            read: (bytes: Uint8Array, offset) => {
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
                 const slice = bytes.slice(offset, offset + 32);
                 const str = [...slice].map(charCode => String.fromCharCode(charCode)).join('');
                 return [str, offset + 32];
@@ -45,7 +46,7 @@ describe('Codec', () => {
     it('can define Codec instances', () => {
         const myCodec: Codec<string> = createCodec({
             fixedSize: 32,
-            read: (bytes: Uint8Array, offset) => {
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
                 const slice = bytes.slice(offset, offset + 32);
                 const str = [...slice].map(charCode => String.fromCharCode(charCode)).join('');
                 return [str, offset + 32];

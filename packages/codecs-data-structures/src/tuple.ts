@@ -10,6 +10,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     getEncodedSize,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -83,7 +84,7 @@ export function getTupleDecoder<const TItems extends readonly Decoder<any>[]>(
 
     return createDecoder({
         ...(fixedSize === null ? { maxSize } : { fixedSize }),
-        read: (bytes: Uint8Array, offset) => {
+        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
             const values = [] as Array<any> & TTo;
             items.forEach(item => {
                 const [newValue, newOffset] = item.read(bytes, offset);

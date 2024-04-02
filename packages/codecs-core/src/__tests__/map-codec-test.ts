@@ -1,9 +1,10 @@
 import { Codec, createCodec, createDecoder, createEncoder } from '../codec';
 import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
+import { ReadonlyUint8Array } from '../readonly-uint8array';
 
 const numberCodec: Codec<number> = createCodec({
     fixedSize: 1,
-    read: (bytes: Uint8Array): [number, number] => [bytes[0], 1],
+    read: (bytes: ReadonlyUint8Array | Uint8Array): [number, number] => [bytes[0], 1],
     write: (value: number, bytes, offset) => {
         bytes.set([value], offset);
         return offset + 1;
@@ -74,7 +75,7 @@ describe('mapCodec', () => {
         type Strict = { discriminator: number; label: string };
         const strictCodec: Codec<Strict> = createCodec({
             fixedSize: 2,
-            read: (bytes: Uint8Array): [Strict, number] => [
+            read: (bytes: ReadonlyUint8Array | Uint8Array): [Strict, number] => [
                 { discriminator: bytes[0], label: 'x'.repeat(bytes[1]) },
                 1,
             ],
@@ -118,7 +119,10 @@ describe('mapCodec', () => {
     it('can loosen a tuple codec', () => {
         const codec: Codec<[number, string]> = createCodec({
             fixedSize: 2,
-            read: (bytes: Uint8Array): [[number, string], number] => [[bytes[0], 'x'.repeat(bytes[1])], 2],
+            read: (bytes: ReadonlyUint8Array | Uint8Array): [[number, string], number] => [
+                [bytes[0], 'x'.repeat(bytes[1])],
+                2,
+            ],
             write: (value: [number, string], bytes, offset) => {
                 bytes.set([value[0], value[1].length], offset);
                 return offset + 2;
@@ -163,7 +167,7 @@ describe('mapDecoder', () => {
     it('can map an encoder to another encoder', () => {
         const decoder = createDecoder({
             fixedSize: 1,
-            read: (bytes: Uint8Array, offset = 0) => [bytes[offset], offset + 1],
+            read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         });
 
         const decoderB = mapDecoder(decoder, (value: number): string => 'x'.repeat(value));
