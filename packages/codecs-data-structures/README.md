@@ -137,7 +137,7 @@ const map = getMapDecoder(keyDecoder, valueDecoder).decode(bytes);
 The `getTupleCodec` function accepts any number of codecs — `T`, `U`, `V`, etc. — and returns a tuple codec of type `[T, U, V, …]` such that each item is in the order of the provided codecs.
 
 ```ts
-const codec = getTupleCodec([prefixCodecSize(getUtf8Codec(), getU32Codec()), getU8Codec(), getU64Codec()]);
+const codec = getTupleCodec([addCodecSizePrefix(getUtf8Codec(), getU32Codec()), getU8Codec(), getU64Codec()]);
 const bytes = codec.encode(['alice', 42, 123]);
 const tuple = codec.decode(bytes);
 ```
@@ -156,7 +156,7 @@ The `getStructCodec` function accepts any number of field codecs and returns a c
 ```ts
 type Person = { name: string; age: number };
 const personCodec: Codec<Person> = getStructCodec([
-    ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
+    ['name', addCodecSizePrefix(getUtf8Codec(), getU32Codec())],
     ['age', getU8Codec()],
 ]);
 
@@ -168,11 +168,11 @@ Separate `getStructEncoder` and `getStructDecoder` functions are also available.
 
 ```ts
 const personEncoder: Encoder<Person> = getStructEncoder([
-    ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
+    ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
     ['age', getU8Encoder()],
 ]);
 const personDecoder: Decoder<Person> = getStructDecoder([
-    ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
     ['age', getU8Decoder()],
 ]);
 const bytes = personEncoder.encode({ name: 'alice', age: 42 });
@@ -308,7 +308,7 @@ const messageCodec = getDiscriminatedUnionCodec([
     ['Quit', getUnitCodec()],
 
     // Tuple variant.
-    ['Write', getStructCodec([['fields', getTupleCodec([prefixCodecSize(getUtf8Codec(), getU32Codec())])]])],
+    ['Write', getStructCodec([['fields', getTupleCodec([addCodecSizePrefix(getUtf8Codec(), getU32Codec())])]])],
 
     // Struct variant.
     [
@@ -458,7 +458,7 @@ const value = getBooleanDecoder().decode(bytes); // true
 The `getNullableCodec` function accepts a codec of type `T` and returns a codec of type `T | null`. It stores whether or not the item exists as a boolean prefix using a `u8` by default.
 
 ```ts
-const stringCodec = prefixCodecSize(getUtf8Codec(), getU32Codec());
+const stringCodec = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 
 getNullableCodec(stringCodec).encode('Hi');
 // 0x01020000004869
@@ -556,7 +556,7 @@ const bytes = getBytesCodec().encode(new Uint8Array([42])); // 0x2a
 const value = getBytesCodec().decode(bytes); // 0x2a
 ```
 
-The `getBytesCodec` function will encode and decode `Uint8Arrays` using as much bytes as necessary. If you'd like to restrict the number of bytes used by this codec, you may combine it with the [`fixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs) or [`prefixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs) primitives.
+The `getBytesCodec` function will encode and decode `Uint8Arrays` using as much bytes as necessary. If you'd like to restrict the number of bytes used by this codec, you may combine it with the [`fixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs) or [`addCodecSizePrefix`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs) primitives.
 
 Here are some examples of how you might use the `getBytesCodec` function.
 
@@ -567,7 +567,7 @@ getBytesCodec().encode(new Uint8Array([42]));
 //   └-- Uint8Array content using any bytes available.
 
 // Prefixing the size with a 2-byte u16.
-prefixCodecSize(getBytesCodec(), getU16Codec()).encode(new Uint8Array([42]));
+addCodecSizePrefix(getBytesCodec(), getU16Codec()).encode(new Uint8Array([42]));
 // 0x01002a
 //   |   └-- Uint8Array content.
 //   └-- 2-byte prefix telling us to read 1 bytes

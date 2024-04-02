@@ -962,7 +962,7 @@ These packages are included in the main `@solana/web3.js` library but you may al
 Here’s an example of encoding and decoding a custom struct with some strings and numbers:
 
 ```tsx
-import { prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix } from '@solana/codecs-core';
 import { getStructCodec } from '@solana/codecs-data-structures';
 import { getU32Codec, getU64Codec, getU8Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
@@ -976,7 +976,7 @@ import { getUtf8Codec } from '@solana/codecs-strings';
 const structCodec = getStructCodec([
     ['amount', getU64Codec()],
     ['decimals', getU8Codec()],
-    ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
+    ['name', addCodecSizePrefix(getUtf8Codec(), getU32Codec())],
 ]);
 
 const myToken = {
@@ -998,7 +998,7 @@ myDecodedToken satisfies {
 You may only need to encode or decode data, but not both. Importing one or the other allows your optimizing compiler to tree-shake the other implementation away:
 
 ```tsx
-import { Codec, combineCodec, Decoder, Encoder, prefixDecoderSize, prefixEncoderSize } from '@solana/codecs-core';
+import { Codec, combineCodec, Decoder, Encoder, addDecoderSizePrefix, addEncoderSizePrefix } from '@solana/codecs-core';
 import { getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import {
     getU8Decoder,
@@ -1026,14 +1026,14 @@ export const getMyTokenEncoder = (): Encoder<MyTokenArgs> =>
     getStructEncoder([
         ['amount', getU64Encoder()],
         ['decimals', getU8Encoder()],
-        ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
+        ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
     ]);
 
 export const getMyTokenDecoder = (): Decoder<MyToken> =>
     getStructDecoder([
         ['amount', getU64Decoder()],
         ['decimals', getU8Decoder()],
-        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+        ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
     ]);
 
 export const getMyTokenCodec = (): Codec<MyTokenArgs, MyToken> =>

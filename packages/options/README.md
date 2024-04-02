@@ -118,7 +118,7 @@ The `getOptionCodec` function behaves exactly the same as the [`getNullableCodec
 Namely, it accepts a codec of type `T` and returns a codec of type `Option<T>`. It stores whether or not the item exists as a boolean prefix using a `u8` by default.
 
 ```ts
-const optionStringCodec = getOptionCodec(prefixCodecSize(getUtf8Codec(), getU32Codec()));
+const optionStringCodec = getOptionCodec(addCodecSizePrefix(getUtf8Codec(), getU32Codec()));
 
 optionStringCodec.encode(some('Hi'));
 // 0x01020000004869
@@ -134,7 +134,7 @@ optionStringCodec.encode(none());
 You may provide a number codec as the `prefix` option of the `getOptionCodec` function to configure how to store the boolean prefix.
 
 ```ts
-const u32OptionStringCodec = getOptionCodec(prefixCodecSize(getUtf8Codec(), getU32Codec()), {
+const u32OptionStringCodec = getOptionCodec(addCodecSizePrefix(getUtf8Codec(), getU32Codec()), {
     prefix: getU32Codec(),
 });
 

@@ -1,4 +1,4 @@
-import { fixCodecSize, prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
@@ -13,7 +13,7 @@ describe('getNullableCodec', () => {
     const u16 = getU16Codec;
     const u64 = getU64Codec;
     const unit = getUnitCodec;
-    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
     const fixedString5 = fixCodecSize(getUtf8Codec(), 5);
 
     it('encodes nullables', () => {

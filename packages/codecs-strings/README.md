@@ -40,7 +40,7 @@ codec.decode(new Uint8Array([0x68, 0x65, 0x6c, 0x6c, 0x6f]));
 // 'hello'
 ```
 
-This might be what you want — e.g. when having a string at the end of a data structure — but in many cases, you might want to have a size boundary for your string. You may achieve this by composing your string codec with the [`fixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs) or [`prefixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs) functions.
+This might be what you want — e.g. when having a string at the end of a data structure — but in many cases, you might want to have a size boundary for your string. You may achieve this by composing your string codec with the [`fixCodecSize`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs) or [`addCodecSizePrefix`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs) functions.
 
 The `fixCodecSize` function accepts a fixed byte length and returns a `FixedSizeCodec<string>` that will always use that amount of bytes to encode and decode a string. Any string longer or smaller than that size will be truncated or padded respectively. Here's how you can use it with a `utf8` codec:
 
@@ -63,10 +63,10 @@ codec.decode(new Uint8Array([0x68, 0x65, 0x6c, 0x6c, 0x6f, 0xff, 0xff, 0xff, 0xf
 // 'hello'
 ```
 
-The `prefixCodecSize` function accepts an additional number codec that will be used to encode and decode a size prefix for the string. This prefix allows us to know when to stop reading the string when decoding a given byte array. Here's how you can use it with a `utf8` codec:
+The `addCodecSizePrefix` function accepts an additional number codec that will be used to encode and decode a size prefix for the string. This prefix allows us to know when to stop reading the string when decoding a given byte array. Here's how you can use it with a `utf8` codec:
 
 ```ts
-const codec = prefixCodecSize(getUtf8Codec(), getU32Codec());
+const codec = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 
 codec.encode('hello');
 // 0x0500000068656c6c6f

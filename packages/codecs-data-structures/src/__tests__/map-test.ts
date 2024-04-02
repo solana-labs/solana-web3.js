@@ -1,4 +1,4 @@
-import { fixCodecSize, prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -11,8 +11,8 @@ describe('getMapCodec', () => {
     const u8 = getU8Codec;
     const u16 = getU16Codec;
     const u64 = getU64Codec;
-    const u8String = prefixCodecSize(getUtf8Codec(), getU8Codec());
-    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const u8String = addCodecSizePrefix(getUtf8Codec(), getU8Codec());
+    const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 
     it('encodes prefixed maps', () => {
         // Empty.

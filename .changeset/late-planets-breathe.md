@@ -6,7 +6,7 @@
 '@solana/rpc-types': patch
 ---
 
-Removed `getStringCodec` in favour of `fixCodecSize` and `prefixCodecSize`
+Removed `getStringCodec` in favour of `fixCodecSize` and `addCodecSizePrefix`
 
 The `getStringCodec` function now always returns a `VariableSizeCodec` that uses as many bytes as necessary to encode and/or decode strings. In order to fix or prefix the size of a `getStringCodec`, you may now use the `fixCodecSize` or `prefixCodecSide` accordingly. Here are some examples:
 
@@ -22,5 +22,5 @@ getStringCodec({ encoding: getUtf8Codec(), size: getU32Codec() }); // Prefixed (
 // After.
 getUtf8Codec(); // Variable.
 fixCodecSize(getUtf8Codec(), 5); // Fixed.
-prefixCodecSize(getUtf8Codec(), getU32Codec()); // Prefixed.
+addCodecSizePrefix(getUtf8Codec(), getU32Codec()); // Prefixed.
 ```

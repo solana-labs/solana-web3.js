@@ -4,10 +4,10 @@
 '@solana/codecs-core': patch
 ---
 
-Added a new `prefixCodecSize` primitive
+Added a new `addCodecSizePrefix` primitive
 
 ```ts
-const codec = prefixCodecSize(getBase58Codec(), getU32Codec());
+const codec = addCodecSizePrefix(getBase58Codec(), getU32Codec());
 
 codec.encode('hello world');
 // 0x0b00000068656c6c6f20776f726c64

@@ -1,4 +1,4 @@
-import { fixCodecSize, offsetCodec, prefixCodecSize, resizeCodec } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize, offsetCodec, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -27,7 +27,7 @@ describe('getArrayCodec', () => {
         expect(array(u8()).read(b('ffff030000002a0102'), 2)).toStrictEqual([[42, 1, 2], 2 + 4 + 3]);
 
         // Strings.
-        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
         expect(array(u32String).encode(['a', 'b'])).toStrictEqual(b('0200000001000000610100000062'));
         expect(array(u32String).read(b('0200000001000000610100000062'), 0)).toStrictEqual([['a', 'b'], 4 + 10]);
 
@@ -49,7 +49,7 @@ describe('getArrayCodec', () => {
         expect(array(u8(), { size: 3 }).read(b('ffff2a0102'), 2)).toStrictEqual([[42, 1, 2], 5]);
 
         // Strings.
-        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
         expect(array(u32String, { size: 2 }).encode(['a', 'b'])).toStrictEqual(b('01000000610100000062'));
         expect(array(u32String, { size: 2 }).read(b('01000000610100000062'), 0)).toStrictEqual([['a', 'b'], 10]);
 
@@ -94,7 +94,7 @@ describe('getArrayCodec', () => {
         expect(array(charString, remainder).read(b('6162'), 0)).toStrictEqual([['a', 'b'], 2]);
 
         // Variable sized items.
-        const u8String = prefixCodecSize(getUtf8Codec(), getU8Codec());
+        const u8String = addCodecSizePrefix(getUtf8Codec(), getU8Codec());
         expect(array(u8String, remainder).encode(['a', 'bc'])).toStrictEqual(b('0161026263'));
         expect(array(u8String, remainder).read(b('0161026263'), 0)).toStrictEqual([['a', 'bc'], 5]);
 
@@ -136,7 +136,7 @@ describe('getArrayCodec', () => {
         expect(array(u8(), { size: 'remainder' }).maxSize).toBeUndefined();
         expect(array(u8(), { size: 42 }).fixedSize).toBe(42);
         expect(array(u16(), { size: 42 }).fixedSize).toBe(2 * 42);
-        const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
         expect(array(u32String, { size: 42 }).maxSize).toBeUndefined();
         expect(array(u32String, { size: 0 }).fixedSize).toBe(0);
     });

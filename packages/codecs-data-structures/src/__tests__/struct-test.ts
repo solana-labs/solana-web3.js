@@ -1,4 +1,4 @@
-import { fixCodecSize, offsetCodec, prefixCodecSize, resizeCodec } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize, offsetCodec, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 
@@ -12,7 +12,7 @@ describe('getStructCodec', () => {
     const u8 = getU8Codec;
     const u32 = getU32Codec;
     const u64 = getU64Codec;
-    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
     const fixedString8 = fixCodecSize(getUtf8Codec(), 8);
 
     it('encodes structs', () => {
