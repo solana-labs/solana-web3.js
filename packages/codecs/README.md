@@ -83,6 +83,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Struct codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#struct-codec).
     -   [Enum codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#enum-codec).
     -   [Discriminated union codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#discriminated-union-codec).
+    -   [Literal union codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#literal-union-codec).
     -   [Boolean codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#boolean-codec).
     -   [Nullable codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#nullable-codec).
     -   [Bytes codec](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures#bytes-codec).
