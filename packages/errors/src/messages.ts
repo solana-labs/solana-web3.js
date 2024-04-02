@@ -25,6 +25,7 @@ import {
     SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH,
     SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH,
+    SOLANA_ERROR__CODECS__EXPECTED_ZERO_VALUE_TO_MATCH_ITEM_FIXED_SIZE,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_CONSTANT,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
@@ -267,6 +268,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]:
         'Codec [$codecDescription] expected a positive byte length, got $bytesLength.',
     [SOLANA_ERROR__CODECS__EXPECTED_VARIABLE_LENGTH]: 'Expected a variable-size codec, got a fixed-size one.',
+    [SOLANA_ERROR__CODECS__EXPECTED_ZERO_VALUE_TO_MATCH_ITEM_FIXED_SIZE]:
+        'Codec [$codecDescription] expected zero-value [$hexZeroValue] to have the same size as the provided fixed-size item [$expectedSize bytes].',
     [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]:
         'Codec [$codecDescription] expected $expected bytes, got $bytesLength.',
     [SOLANA_ERROR__CODECS__INVALID_CONSTANT]:

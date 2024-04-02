@@ -53,7 +53,7 @@ export function getInstructionDecoder(): VariableSizeDecoder<Instruction> {
             getStructDecoder([
                 ['programAddressIndex', getU8Decoder()],
                 ['accountIndices', getArrayDecoder(getU8Decoder(), { size: getShortU16Decoder() })],
-                ['data', getBytesDecoder({ size: getShortU16Decoder() })],
+                ['data', getBytesDecoder({ size: getShortU16Decoder() }) as VariableSizeDecoder<Uint8Array>],
             ]),
             // Convert an instruction to exclude optional fields if they are empty
             (instruction: Required<Instruction>): Instruction => {

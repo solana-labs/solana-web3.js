@@ -12,6 +12,7 @@ import {
     fixEncoder,
     prefixDecoder,
     prefixEncoder,
+    ReadonlyUint8Array,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -37,13 +38,17 @@ export type BytesCodecConfig<TSize extends NumberCodec | NumberDecoder | NumberE
  */
 export function getBytesEncoder<TSize extends number>(
     config: BytesCodecConfig<NumberEncoder> & { size: TSize },
-): FixedSizeEncoder<Uint8Array, TSize>;
-export function getBytesEncoder(config?: BytesCodecConfig<NumberEncoder>): VariableSizeEncoder<Uint8Array>;
-export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): Encoder<Uint8Array> {
+): FixedSizeEncoder<ReadonlyUint8Array | Uint8Array, TSize>;
+export function getBytesEncoder(
+    config?: BytesCodecConfig<NumberEncoder>,
+): VariableSizeEncoder<ReadonlyUint8Array | Uint8Array>;
+export function getBytesEncoder(
+    config: BytesCodecConfig<NumberEncoder> = {},
+): Encoder<ReadonlyUint8Array | Uint8Array> {
     const size = config.size ?? 'variable';
-    const byteEncoder: Encoder<Uint8Array> = createEncoder({
-        getSizeFromValue: (value: Uint8Array) => value.length,
-        write: (value: Uint8Array, bytes, offset) => {
+    const byteEncoder: Encoder<ReadonlyUint8Array | Uint8Array> = createEncoder({
+        getSizeFromValue: value => value.length,
+        write: (value, bytes, offset) => {
             bytes.set(value, offset);
             return offset + value.length;
         },
@@ -67,12 +72,12 @@ export function getBytesEncoder(config: BytesCodecConfig<NumberEncoder> = {}): E
  */
 export function getBytesDecoder<TSize extends number>(
     config: BytesCodecConfig<NumberDecoder> & { size: TSize },
-): FixedSizeDecoder<Uint8Array, TSize>;
-export function getBytesDecoder(config?: BytesCodecConfig<NumberDecoder>): VariableSizeDecoder<Uint8Array>;
-export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): Decoder<Uint8Array> {
+): FixedSizeDecoder<ReadonlyUint8Array, TSize>;
+export function getBytesDecoder(config?: BytesCodecConfig<NumberDecoder>): VariableSizeDecoder<ReadonlyUint8Array>;
+export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): Decoder<ReadonlyUint8Array> {
     const size = config.size ?? 'variable';
 
-    const byteDecoder: Decoder<Uint8Array> = createDecoder({
+    const byteDecoder: Decoder<ReadonlyUint8Array> = createDecoder({
         read: (bytes, offset) => {
             const slice = bytes.slice(offset);
             return [slice, offset + slice.length];
@@ -97,8 +102,12 @@ export function getBytesDecoder(config: BytesCodecConfig<NumberDecoder> = {}): D
  */
 export function getBytesCodec<TSize extends number>(
     config: BytesCodecConfig<NumberCodec> & { size: TSize },
-): FixedSizeCodec<Uint8Array, Uint8Array, TSize>;
-export function getBytesCodec(config?: BytesCodecConfig<NumberCodec>): VariableSizeCodec<Uint8Array>;
-export function getBytesCodec(config: BytesCodecConfig<NumberCodec> = {}): Codec<Uint8Array> {
+): FixedSizeCodec<ReadonlyUint8Array | Uint8Array, ReadonlyUint8Array, TSize>;
+export function getBytesCodec(
+    config?: BytesCodecConfig<NumberCodec>,
+): VariableSizeCodec<ReadonlyUint8Array | Uint8Array, ReadonlyUint8Array>;
+export function getBytesCodec(
+    config: BytesCodecConfig<NumberCodec> = {},
+): Codec<ReadonlyUint8Array | Uint8Array, ReadonlyUint8Array> {
     return combineCodec(getBytesEncoder(config), getBytesDecoder(config));
 }

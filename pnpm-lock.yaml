@@ -589,6 +589,12 @@ importers:
       '@solana/codecs-numbers':
         specifier: workspace:*
         version: link:../codecs-numbers
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
 
   packages/programs:
     devDependencies:

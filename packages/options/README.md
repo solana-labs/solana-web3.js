@@ -171,4 +171,36 @@ const bytes = getOptionEncoder(getStringEncoder()).encode(some('Hi'));
 const value = getOptionDecoder(getStringDecoder()).decode(bytes);
 ```
 
+## Zeroable option codec
+
+Similarly to the `getOptionCodec` function, The `getZeroableOptionCodec` function accepts a codec of type `T` and returns a codec of type `Option<T>`. However, instead of relying on a boolean prefix to determine whether the item exists, it uses a zero value to represent `None`. This means, you may only use this codec with fixed-size items.
+
+```ts
+const codec = getZeroableOptionCodec(getU16Codec());
+codec.encode(some(42)); // 0x2a00
+codec.encode(none()); // 0x0000
+codec.decode(new Uint8Array([42, 0])); // Some<42>
+codec.encode(new Uint8Array([0, 0])); // None
+```
+
+As you can see, by default, it uses a `Uint8Array` of zeroes to represent `None`. However, you may provide a custom zero value that will be used to encode/decode None values. Note that this zero value must be a `Uint8Array` of the same length as the codec's fixed size.
+
+```ts
+const codec = getZeroableOptionCodec(getU16Codec(), {
+    zeroValue: new Uint8Array([255, 255]),
+});
+codec.encode(some(42)); // 0x2a00
+codec.encode(none()); // 0xfffff
+codec.encode(new Uint8Array([0, 0])); // Some<0>
+codec.decode(new Uint8Array([42, 0])); // Some<42>
+codec.decode(new Uint8Array([255, 255])); // None
+```
+
+Separate `getZeroableOptionEncoder` and `getZeroableOptionDecoder` functions are also available.
+
+```ts
+const bytes = getZeroableOptionEncoder(getU16Encoder()).encode(some(42));
+const value = getZeroableOptionDecoder(getU16Decoder()).decode(bytes);
+```
+
 To read more about the available codecs and how to use them, check out the documentation of the main [`@solana/codecs` package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs).
