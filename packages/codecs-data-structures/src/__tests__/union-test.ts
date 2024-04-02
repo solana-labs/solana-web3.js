@@ -1,4 +1,4 @@
-import { assertIsFixedSize, assertIsVariableSize, fixCodec, mapCodec } from '@solana/codecs-core';
+import { assertIsFixedSize, assertIsVariableSize, fixCodecSize, mapCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE, SolanaError } from '@solana/errors';
@@ -11,7 +11,7 @@ import { b } from './__setup__';
 describe('getUnionCodec', () => {
     const codec = getUnionCodec(
         [
-            fixCodec(getUtf8Codec(), 8), // 8 bytes.
+            fixCodecSize(getUtf8Codec(), 8), // 8 bytes.
             getU16Codec(), // 2 bytes.
             getBooleanCodec(), // 1 byte.
             getStructCodec([

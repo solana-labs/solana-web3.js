@@ -4,11 +4,11 @@ import {
     combineCodec,
     Decoder,
     Encoder,
-    fixDecoder,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    fixEncoder,
+    fixEncoderSize,
     mapDecoder,
     mapEncoder,
     VariableSizeCodec,
@@ -89,7 +89,7 @@ export function getOptionEncoder<TFrom>(
     if (!fixed) return encoder;
     assertIsFixedSize(item);
     assertIsFixedSize(prefix);
-    return fixEncoder(encoder, prefix.fixedSize + item.fixedSize);
+    return fixEncoderSize(encoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -127,7 +127,7 @@ export function getOptionDecoder<TTo>(
     if (!fixed) return decoder;
     assertIsFixedSize(item);
     assertIsFixedSize(prefix);
-    return fixDecoder(decoder, prefix.fixedSize + item.fixedSize);
+    return fixDecoderSize(decoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**

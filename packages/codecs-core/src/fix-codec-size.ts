@@ -13,7 +13,6 @@ import {
     Offset,
 } from './codec';
 import { combineCodec } from './combine-codec';
-import { ReadonlyUint8Array } from './readonly-uint8array';
 
 /**
  * Creates a fixed-size encoder from a given encoder.
@@ -21,7 +20,7 @@ import { ReadonlyUint8Array } from './readonly-uint8array';
  * @param encoder - The encoder to wrap into a fixed-size encoder.
  * @param fixedBytes - The fixed number of bytes to write.
  */
-export function fixEncoder<TFrom, TSize extends number>(
+export function fixEncoderSize<TFrom, TSize extends number>(
     encoder: Encoder<TFrom>,
     fixedBytes: TSize,
 ): FixedSizeEncoder<TFrom, TSize> {
@@ -46,14 +45,14 @@ export function fixEncoder<TFrom, TSize extends number>(
  * @param decoder - The decoder to wrap into a fixed-size decoder.
  * @param fixedBytes - The fixed number of bytes to read.
  */
-export function fixDecoder<TTo, TSize extends number>(
+export function fixDecoderSize<TTo, TSize extends number>(
     decoder: Decoder<TTo>,
     fixedBytes: TSize,
 ): FixedSizeDecoder<TTo, TSize> {
     return createDecoder({
         fixedSize: fixedBytes,
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset: Offset) => {
-            assertByteArrayHasEnoughBytesForCodec('fixCodec', fixedBytes, bytes, offset);
+        read: (bytes, offset) => {
+            assertByteArrayHasEnoughBytesForCodec('fixCodecSize', fixedBytes, bytes, offset);
             // Slice the byte array to the fixed size if necessary.
             if (offset > 0 || bytes.length > fixedBytes) {
                 bytes = bytes.slice(offset, offset + fixedBytes);
@@ -75,9 +74,9 @@ export function fixDecoder<TTo, TSize extends number>(
  * @param codec - The codec to wrap into a fixed-size codec.
  * @param fixedBytes - The fixed number of bytes to read/write.
  */
-export function fixCodec<TFrom, TTo extends TFrom, TSize extends number>(
+export function fixCodecSize<TFrom, TTo extends TFrom, TSize extends number>(
     codec: Codec<TFrom, TTo>,
     fixedBytes: TSize,
 ): FixedSizeCodec<TFrom, TTo, TSize> {
-    return combineCodec(fixEncoder(codec, fixedBytes), fixDecoder(codec, fixedBytes));
+    return combineCodec(fixEncoderSize(codec, fixedBytes), fixDecoderSize(codec, fixedBytes));
 }

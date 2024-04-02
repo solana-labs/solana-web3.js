@@ -32,12 +32,12 @@ type FixedSizeNumberCodec<TSize extends number = number> =
 /**
  * Stores the size of the `encoder` in bytes as a prefix using the `prefix` encoder.
  */
-export function prefixEncoder<TFrom>(
+export function prefixEncoderSize<TFrom>(
     encoder: FixedSizeEncoder<TFrom>,
     prefix: FixedSizeNumberEncoder,
 ): FixedSizeEncoder<TFrom>;
-export function prefixEncoder<TFrom>(encoder: Encoder<TFrom>, prefix: NumberEncoder): VariableSizeEncoder<TFrom>;
-export function prefixEncoder<TFrom>(encoder: Encoder<TFrom>, prefix: NumberEncoder): Encoder<TFrom> {
+export function prefixEncoderSize<TFrom>(encoder: Encoder<TFrom>, prefix: NumberEncoder): VariableSizeEncoder<TFrom>;
+export function prefixEncoderSize<TFrom>(encoder: Encoder<TFrom>, prefix: NumberEncoder): Encoder<TFrom> {
     const write = ((value, bytes, offset) => {
         // Here we exceptionally use the `encode` function instead of the `write`
         // function to contain the content of the encoder within its own bounds.
@@ -69,12 +69,12 @@ export function prefixEncoder<TFrom>(encoder: Encoder<TFrom>, prefix: NumberEnco
 /**
  * Bounds the size of the `decoder` by reading the `prefix` encoder prefix.
  */
-export function prefixDecoder<TTo>(
+export function prefixDecoderSize<TTo>(
     decoder: FixedSizeDecoder<TTo>,
     prefix: FixedSizeNumberDecoder,
 ): FixedSizeDecoder<TTo>;
-export function prefixDecoder<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder): VariableSizeDecoder<TTo>;
-export function prefixDecoder<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder): Decoder<TTo> {
+export function prefixDecoderSize<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder): VariableSizeDecoder<TTo>;
+export function prefixDecoderSize<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder): Decoder<TTo> {
     const read = ((bytes, offset) => {
         const [bigintSize, decoderOffset] = prefix.read(bytes, offset);
         const size = Number(bigintSize);
@@ -83,7 +83,7 @@ export function prefixDecoder<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder)
         if (offset > 0 || bytes.length > size) {
             bytes = bytes.slice(offset, offset + size);
         }
-        assertByteArrayHasEnoughBytesForCodec('prefixDecoder', size, bytes);
+        assertByteArrayHasEnoughBytesForCodec('prefixDecoderSize', size, bytes);
         // Here we exceptionally use the `decode` function instead of the `read`
         // function to contain the content of the decoder within its own bounds.
         return [decoder.decode(bytes), offset + size];
@@ -102,17 +102,17 @@ export function prefixDecoder<TTo>(decoder: Decoder<TTo>, prefix: NumberDecoder)
 /**
  * Bounds the size of the `codec` using the provided `prefix` codec prefix.
  */
-export function prefixCodec<TFrom, TTo extends TFrom>(
+export function prefixCodecSize<TFrom, TTo extends TFrom>(
     codec: FixedSizeCodec<TFrom, TTo>,
     prefix: FixedSizeNumberCodec,
 ): FixedSizeCodec<TFrom, TTo>;
-export function prefixCodec<TFrom, TTo extends TFrom>(
+export function prefixCodecSize<TFrom, TTo extends TFrom>(
     codec: Codec<TFrom, TTo>,
     prefix: NumberCodec,
 ): VariableSizeCodec<TFrom, TTo>;
-export function prefixCodec<TFrom, TTo extends TFrom>(
+export function prefixCodecSize<TFrom, TTo extends TFrom>(
     codec: Codec<TFrom, TTo>,
     prefix: NumberCodec,
 ): Codec<TFrom, TTo> {
-    return combineCodec(prefixEncoder(codec, prefix), prefixDecoder(codec, prefix));
+    return combineCodec(prefixEncoderSize(codec, prefix), prefixDecoderSize(codec, prefix));
 }
