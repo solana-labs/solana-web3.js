@@ -9,8 +9,8 @@ import {
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import {
-    SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
+    SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SolanaError,
 } from '@solana/errors';
 
@@ -115,11 +115,7 @@ describe('getDiscriminatedUnionCodec', () => {
             }),
         );
         expect(() => discriminatedUnion(getWebEvent()).read(new Uint8Array([4]), 0)).toThrow(
-            new SolanaError(SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE, {
-                discriminator: 4,
-                maxRange: 3,
-                minRange: 0,
-            }),
+            new SolanaError(SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE, { maxRange: 3, minRange: 0, variant: 4 }),
         );
     });
 
