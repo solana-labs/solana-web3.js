@@ -2,20 +2,20 @@ import {
     assertIsFixedSize,
     Codec,
     combineCodec,
-    createDecoder,
-    createEncoder,
     Decoder,
     Encoder,
+    fixDecoder,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    getEncodedSize,
-    isFixedSize,
-    ReadonlyUint8Array,
+    fixEncoder,
+    mapDecoder,
+    mapEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
+import { getTupleDecoder, getTupleEncoder, getUnionDecoder, getUnionEncoder } from '@solana/codecs-data-structures';
 import {
     FixedSizeNumberCodec,
     FixedSizeNumberDecoder,
@@ -27,7 +27,7 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 
-import { isOption, isSome, none, Option, OptionOrNullable, some } from './option';
+import { isOption, isSome, None, none, Option, OptionOrNullable, Some, some } from './option';
 import { wrapNullable } from './unwrap-option';
 
 /** Defines the config for option codecs. */
@@ -73,43 +73,23 @@ export function getOptionEncoder<TFrom>(
 ): Encoder<OptionOrNullable<TFrom>> {
     const prefix = config.prefix ?? getU8Encoder();
     const fixed = config.fixed ?? false;
-
-    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
-    if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item);
-        assertIsFixedSize(prefix);
-        const fixedSize = prefix.fixedSize + item.fixedSize;
-        return createEncoder({
-            fixedSize,
-            write: (optionOrNullable: OptionOrNullable<TFrom>, bytes, offset) => {
-                const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
-                const prefixOffset = prefix.write(Number(isSome(option)), bytes, offset);
-                if (isSome(option)) {
-                    item.write(option.value, bytes, prefixOffset);
-                }
-                return offset + fixedSize;
-            },
-        });
-    }
-
-    return createEncoder({
-        getSizeFromValue: (optionOrNullable: OptionOrNullable<TFrom>) => {
-            const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
-            return (
-                getEncodedSize(Number(isSome(option)), prefix) +
-                (isSome(option) ? getEncodedSize(option.value, item) : 0)
-            );
+    const encoder = getUnionEncoder(
+        [
+            mapEncoder(prefix, (_value: None | null) => 0),
+            mapEncoder(getTupleEncoder([prefix, item]), (value: Some<TFrom> | TFrom): [number, TFrom] => {
+                return [1, isOption(value) && isSome(value) ? value.value : value];
+            }),
+        ],
+        (variant: OptionOrNullable<TFrom>) => {
+            const option = isOption<TFrom>(variant) ? variant : wrapNullable(variant);
+            return Number(isSome(option));
         },
-        maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined,
-        write: (optionOrNullable: OptionOrNullable<TFrom>, bytes, offset) => {
-            const option = isOption<TFrom>(optionOrNullable) ? optionOrNullable : wrapNullable(optionOrNullable);
-            offset = prefix.write(Number(isSome(option)), bytes, offset);
-            if (isSome(option)) {
-                offset = item.write(option.value, bytes, offset);
-            }
-            return offset;
-        },
-    });
+    );
+
+    if (!fixed) return encoder;
+    assertIsFixedSize(item);
+    assertIsFixedSize(prefix);
+    return fixEncoder(encoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -136,31 +116,18 @@ export function getOptionDecoder<TTo>(
 ): Decoder<Option<TTo>> {
     const prefix = config.prefix ?? getU8Decoder();
     const fixed = config.fixed ?? false;
+    const decoder = getUnionDecoder(
+        [
+            mapDecoder(prefix, (_value: bigint | number) => none<TTo>()),
+            mapDecoder(getTupleDecoder([prefix, item]), ([, value]) => some(value)),
+        ],
+        (bytes, offset) => Number(prefix.read(bytes, offset)[0] !== 0),
+    );
 
-    let fixedSize: number | null = null;
-    const isZeroSizeItem = isFixedSize(item) && isFixedSize(prefix) && item.fixedSize === 0;
-    if (fixed || isZeroSizeItem) {
-        assertIsFixedSize(item);
-        assertIsFixedSize(prefix);
-        fixedSize = prefix.fixedSize + item.fixedSize;
-    }
-
-    return createDecoder({
-        ...(fixedSize === null
-            ? { maxSize: sumCodecSizes([prefix, item].map(getMaxSize)) ?? undefined }
-            : { fixedSize }),
-        read: (bytes: ReadonlyUint8Array | Uint8Array, offset) => {
-            if (bytes.length - offset <= 0) {
-                return [none(), offset];
-            }
-            const [isSome, prefixOffset] = prefix.read(bytes, offset);
-            if (isSome === 0) {
-                return [none(), fixedSize !== null ? offset + fixedSize : prefixOffset];
-            }
-            const [value, newOffset] = item.read(bytes, prefixOffset);
-            return [some(value), fixedSize !== null ? offset + fixedSize : newOffset];
-        },
-    });
+    if (!fixed) return decoder;
+    assertIsFixedSize(item);
+    assertIsFixedSize(prefix);
+    return fixDecoder(decoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -185,13 +152,9 @@ export function getOptionCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
     config: OptionCodecConfig<NumberCodec> = {},
 ): Codec<OptionOrNullable<TFrom>, Option<TTo>> {
-    return combineCodec(getOptionEncoder<TFrom>(item, config as object), getOptionDecoder<TTo>(item, config as object));
-}
-
-function sumCodecSizes(sizes: (number | null)[]): number | null {
-    return sizes.reduce((all, size) => (all === null || size === null ? null : all + size), 0 as number | null);
-}
-
-function getMaxSize(codec: { fixedSize: number } | { maxSize?: number }): number | null {
-    return isFixedSize(codec) ? codec.fixedSize : codec.maxSize ?? null;
+    type ConfigCast = OptionCodecConfig<NumberCodec> & { fixed?: false };
+    return combineCodec(
+        getOptionEncoder<TFrom>(item, config as ConfigCast),
+        getOptionDecoder<TTo>(item, config as ConfigCast),
+    );
 }

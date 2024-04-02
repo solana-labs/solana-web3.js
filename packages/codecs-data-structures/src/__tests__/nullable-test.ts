@@ -1,4 +1,3 @@
-import { FixedSizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getStringCodec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
@@ -102,6 +101,6 @@ describe('getNullableCodec', () => {
         expect(nullable(u8(), { fixed: true, prefix: u16() }).fixedSize).toBe(3);
 
         // Zero-size items.
-        expect(nullable(unit() as FixedSizeCodec<void> & { fixedSize: 0 }).fixedSize).toBe(1);
+        expect(nullable(unit()).fixedSize).toBe(1);
     });
 });
