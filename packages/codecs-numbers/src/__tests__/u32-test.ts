@@ -16,7 +16,7 @@ describe('getU32Codec', () => {
     it('encodes and decodes u32 numbers', () => {
         expect.hasAssertions();
         const u32LE = u32();
-        const u32BE = u32({ endian: Endian.BIG });
+        const u32BE = u32({ endian: Endian.Big });
 
         assertValid(u32LE, 1, '01000000');
         assertValid(u32BE, 1, '00000001');

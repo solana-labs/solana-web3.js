@@ -9,7 +9,7 @@ describe('getF32Codec', () => {
     it('encodes and decodes f32 numbers', () => {
         expect.hasAssertions();
         const f32LE = f32();
-        const f32BE = f32({ endian: Endian.BIG });
+        const f32BE = f32({ endian: Endian.Big });
 
         assertValid(f32LE, 0, '00000000');
         assertValid(f32BE, 0, '00000000');

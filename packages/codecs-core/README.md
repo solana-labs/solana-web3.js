@@ -594,7 +594,7 @@ const getBigEndianU64Codec = () => reverseCodec(getU64Codec());
 Note that number codecs can already do that for you via their `endian` option.
 
 ```ts
-const getBigEndianU64Codec = () => getU64Codec({ endian: Endian.BIG });
+const getBigEndianU64Codec = () => getU64Codec({ endian: Endian.Big });
 ```
 
 As usual, the `reverseEncoder` and `reverseDecoder` functions can also be used to achieve that.

@@ -15,7 +15,7 @@ describe('getI32Codec', () => {
     it('encodes and decodes i32 numbers', () => {
         expect.hasAssertions();
         const i32LE = i32();
-        const i32BE = i32({ endian: Endian.BIG });
+        const i32BE = i32({ endian: Endian.Big });
 
         assertValid(i32LE, 0, '00000000');
         assertValid(i32BE, 0, '00000000');

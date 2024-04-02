@@ -42,16 +42,16 @@ By default, integers are stored using little endianness but you may change this 
 
 ```ts
 // Big-endian unsigned integers.
-getU16Codec({ endian: Endian.BIG }).encode(42); // 0x002a
-getU32Codec({ endian: Endian.BIG }).encode(42); // 0x0000002a
-getU64Codec({ endian: Endian.BIG }).encode(42); // 0x000000000000002a
-getU128Codec({ endian: Endian.BIG }).encode(42); // 0x0000000000000000000000000000002a
+getU16Codec({ endian: Endian.Big }).encode(42); // 0x002a
+getU32Codec({ endian: Endian.Big }).encode(42); // 0x0000002a
+getU64Codec({ endian: Endian.Big }).encode(42); // 0x000000000000002a
+getU128Codec({ endian: Endian.Big }).encode(42); // 0x0000000000000000000000000000002a
 
 // Big-endian signed integers.
-getI16Codec({ endian: Endian.BIG }).encode(-42); // 0xffd6
-getI32Codec({ endian: Endian.BIG }).encode(-42); // 0xffffffd6
-getI64Codec({ endian: Endian.BIG }).encode(-42); // 0xffffffffffffffd6
-getI128Codec({ endian: Endian.BIG }).encode(-42); // 0xffffffffffffffffffffffffffffffd6
+getI16Codec({ endian: Endian.Big }).encode(-42); // 0xffd6
+getI32Codec({ endian: Endian.Big }).encode(-42); // 0xffffffd6
+getI64Codec({ endian: Endian.Big }).encode(-42); // 0xffffffffffffffd6
+getI128Codec({ endian: Endian.Big }).encode(-42); // 0xffffffffffffffffffffffffffffffd6
 ```
 
 All integer codecs are of type `Codec<number>` except for the `u64`, `u128`, `i64` and `i128` codecs which are of type `Codec<number | bigint, bigint>`. This means we can provide either a `number` of a `bigint` value to encode but the decoded value will always be a `bigint`. This is because JavaScript's native `number` type does not support numbers larger than `2^53 - 1` and these large integer codecs have the potential to go over that value.
@@ -84,8 +84,8 @@ getF64Codec().encode(-1.5); // 0x000000000000f8bf
 Similarly to the integer codecs, they are stored in little-endian by default but may be stored in big-endian using the `endian` option.
 
 ```ts
-getF32Codec({ endian: Endian.BIG }).encode(-1.5); // 0xbfc00000
-getF64Codec({ endian: Endian.BIG }).encode(-1.5); // 0xbff8000000000000
+getF32Codec({ endian: Endian.Big }).encode(-1.5); // 0xbfc00000
+getF64Codec({ endian: Endian.Big }).encode(-1.5); // 0xbff8000000000000
 ```
 
 Note that based on the selected codec, some of the precision of the number you are encoding may be lost when decoding it. For instance, when storing `3.1415` using a `f32` codec, you will not get the exact same number back.
