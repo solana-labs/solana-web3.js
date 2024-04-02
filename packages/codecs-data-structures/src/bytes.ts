@@ -12,7 +12,7 @@ import {
  * Encodes byte arrays as provided.
  *
  * To control the size of the encoded byte array, you can use
- * the `fixEncoderSize` or `prefixEncoderSize` functions.
+ * the `fixEncoderSize` or `addEncoderSizePrefix` functions.
  */
 export function getBytesEncoder(): VariableSizeEncoder<ReadonlyUint8Array | Uint8Array> {
     return createEncoder({
@@ -28,7 +28,7 @@ export function getBytesEncoder(): VariableSizeEncoder<ReadonlyUint8Array | Uint
  * Decodes byte arrays as-is.
  *
  * To control the size of the decoded byte array, you can use
- * the `fixDecoderSize` or `prefixDecoderSize` functions.
+ * the `fixDecoderSize` or `addDecoderSizePrefix` functions.
  */
 export function getBytesDecoder(): VariableSizeDecoder<ReadonlyUint8Array> {
     return createDecoder({
@@ -43,7 +43,7 @@ export function getBytesDecoder(): VariableSizeDecoder<ReadonlyUint8Array> {
  * Creates a sized bytes codec.
  *
  * To control the size of the encoded and decoded byte arrays,
- * you can use the `fixCodecSize` or `prefixCodecSize` functions.
+ * you can use the `fixCodecSize` or `addCodecSizePrefix` functions.
  */
 export function getBytesCodec(): VariableSizeCodec<ReadonlyUint8Array | Uint8Array, ReadonlyUint8Array> {
     return combineCodec(getBytesEncoder(), getBytesDecoder());

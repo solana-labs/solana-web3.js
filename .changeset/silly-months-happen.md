@@ -17,5 +17,5 @@ getBytesCodec({ size: getU16Codec() }); // Prefixed.
 // After.
 getBytesCodec(); // Variable.
 fixCodecSize(getBytesCodec(), 5); // Fixed.
-prefixCodecSize(getBytesCodec(), getU16Codec()); // Prefixed.
+addCodecSizePrefix(getBytesCodec(), getU16Codec()); // Prefixed.
 ```

@@ -1,4 +1,4 @@
-import { fixCodecSize, offsetCodec, prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize, offsetCodec } from '@solana/codecs-core';
 import { getU8Codec, getU32Codec } from '@solana/codecs-numbers';
 
 import { getBase16Codec } from '../base16';
@@ -9,7 +9,7 @@ describe('sized string encodings', () => {
     const b = (value: string) => getBase16Codec().encode(value);
 
     it('encodes prefixed strings', () => {
-        const u32PrefixedString = prefixCodecSize(getUtf8Codec(), getU32Codec());
+        const u32PrefixedString = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 
         // Empty string.
         expect(u32PrefixedString.encode('')).toStrictEqual(b('00000000'));
@@ -25,7 +25,7 @@ describe('sized string encodings', () => {
         expect(u32PrefixedString.read(b('ff03000000e8aa9e'), 1)).toStrictEqual(['語', 8]);
 
         // Different prefix lengths.
-        const u8PrefixedString = prefixCodecSize(getUtf8Codec(), getU8Codec());
+        const u8PrefixedString = addCodecSizePrefix(getUtf8Codec(), getU8Codec());
         expect(u8PrefixedString.encode('ABC')).toStrictEqual(b('03414243'));
         expect(u8PrefixedString.decode(b('03414243'))).toBe('ABC');
 
@@ -72,7 +72,7 @@ describe('sized string encodings', () => {
 
     it('encodes strings using custom encodings', () => {
         // Prefixed.
-        const prefixedString = prefixCodecSize(getBase58Codec(), getU8Codec());
+        const prefixedString = addCodecSizePrefix(getBase58Codec(), getU8Codec());
         expect(prefixedString.encode('ABC')).toStrictEqual(b('027893'));
         expect(prefixedString.decode(b('027893'))).toBe('ABC');
 
@@ -89,15 +89,15 @@ describe('sized string encodings', () => {
     });
 
     it('has the right sizes', () => {
-        expect(prefixCodecSize(getUtf8Codec(), getU8Codec()).getSizeFromValue('ABC')).toBe(1 + 3);
-        expect(prefixCodecSize(getUtf8Codec(), getU8Codec()).maxSize).toBeUndefined();
+        expect(addCodecSizePrefix(getUtf8Codec(), getU8Codec()).getSizeFromValue('ABC')).toBe(1 + 3);
+        expect(addCodecSizePrefix(getUtf8Codec(), getU8Codec()).maxSize).toBeUndefined();
         expect(getUtf8Codec().getSizeFromValue('ABC')).toBe(3);
         expect(getUtf8Codec().maxSize).toBeUndefined();
         expect(fixCodecSize(getUtf8Codec(), 42).fixedSize).toBe(42);
     });
 
     it('offsets prefixed strings', () => {
-        const codec = prefixCodecSize(
+        const codec = addCodecSizePrefix(
             getUtf8Codec(),
             offsetCodec(getU8Codec(), {
                 postOffset: () => 0,

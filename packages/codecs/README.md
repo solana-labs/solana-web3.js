@@ -25,7 +25,7 @@ Here's a quick example that encodes and decodes a simple `Person` object.
 type Person = { name: string; age: number };
 const getPersonCodec = (): Codec<Person> =>
     getStructCodec([
-        ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
+        ['name', addCodecSizePrefix(getUtf8Codec(), getU32Codec())],
         ['age', getU32Codec()],
     ]);
 
@@ -41,7 +41,7 @@ Whilst Codecs can both encode and decode, it is possible to only focus on encodi
 ```ts
 const getPersonDecoder = (): Decoder<Person> =>
     getStructDecoder([
-        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+        ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
         ['age', getU32Decoder()],
     ]);
 ```
@@ -57,7 +57,7 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Creating custom codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#creating-custom-codecs).
     -   [Mapping codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#mapping-codecs).
     -   [Fixing the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs).
-    -   [Prefixing the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-the-size-of-codecs).
+    -   [Prefixing codecs with their size](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-codecs-with-their-size).
     -   [Adjusting the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#adjusting-the-size-of-codecs).
     -   [Offsetting codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#offsetting-codecs).
     -   [Padding codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#padding-codecs).

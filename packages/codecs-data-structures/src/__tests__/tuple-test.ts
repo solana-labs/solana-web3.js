@@ -1,4 +1,4 @@
-import { fixCodecSize, offsetCodec, prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize, offsetCodec } from '@solana/codecs-core';
 import { getI16Codec, getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -11,7 +11,7 @@ describe('getTupleCodec', () => {
     const i16 = getI16Codec;
     const u8 = getU8Codec;
     const u64 = getU64Codec;
-    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
     const fixedString8 = fixCodecSize(getUtf8Codec(), 8);
 
     it('encodes tuples', () => {

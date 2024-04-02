@@ -1,4 +1,4 @@
-import { fixCodecSize, isVariableSize, prefixCodecSize } from '@solana/codecs-core';
+import { addCodecSizePrefix, fixCodecSize, isVariableSize } from '@solana/codecs-core';
 import { getU8Codec } from '@solana/codecs-numbers';
 
 import { getBytesCodec } from '../bytes';
@@ -43,8 +43,8 @@ describe('getBytesCodec', () => {
         expect(prefixedCoded.decode(b('2aff00'))).toStrictEqual(b('2aff00'));
     });
 
-    it('can use prefixCodecSize to prepend the byte array length', () => {
-        const prefixedCoded = prefixCodecSize(getBytesCodec(), getU8Codec());
+    it('can use addCodecSizePrefix to prepend the byte array length', () => {
+        const prefixedCoded = addCodecSizePrefix(getBytesCodec(), getU8Codec());
         expect(prefixedCoded.encode(b('2aff'))).toStrictEqual(b('022aff'));
         expect(prefixedCoded.decode(b('022aff'))).toStrictEqual(b('2aff'));
         expect(prefixedCoded.getSizeFromValue(b('2aff'))).toBe(3);

@@ -1,12 +1,12 @@
+import { addCodecSizePrefix } from '../add-codec-size-prefix';
 import { assertIsFixedSize, assertIsVariableSize, Codec } from '../codec';
-import { prefixCodecSize } from '../prefix-codec-size';
 import { b, getMockCodec } from './__setup__';
 
-describe('prefixCodecSize', () => {
+describe('addCodecSizePrefix', () => {
     it('encodes the byte length before the content', () => {
         const numberCodec = getMockCodec({ size: 4 });
         const contentCodec = getMockCodec({ size: 10 });
-        const prefixedCodec = prefixCodecSize(contentCodec, numberCodec as Codec<number>);
+        const prefixedCodec = addCodecSizePrefix(contentCodec, numberCodec as Codec<number>);
 
         prefixedCodec.encode('helloworld');
         expect(numberCodec.write).toHaveBeenCalledWith(10, expect.any(Uint8Array), 0);
@@ -17,7 +17,7 @@ describe('prefixCodecSize', () => {
         const numberCodec = getMockCodec({ size: 4 });
         numberCodec.read.mockReturnValue([10, 4]);
         const contentCodec = getMockCodec({ size: 10 });
-        const prefixedCodec = prefixCodecSize(contentCodec, numberCodec as Codec<number>);
+        const prefixedCodec = addCodecSizePrefix(contentCodec, numberCodec as Codec<number>);
 
         prefixedCodec.decode(b('0a00000068656c6c6f776f726c64'));
         expect(numberCodec.read).toHaveBeenCalledWith(b('0a00000068656c6c6f776f726c64'), 0);
@@ -32,14 +32,14 @@ describe('prefixCodecSize', () => {
             if (value > 255) throw overflowError;
         });
         const contentCodec = getMockCodec({ size: 256 });
-        const prefixedCodec = prefixCodecSize(contentCodec, numberCodec as Codec<number>);
+        const prefixedCodec = addCodecSizePrefix(contentCodec, numberCodec as Codec<number>);
         expect(() => prefixedCodec.encode(null)).toThrow(overflowError);
     });
 
     it('returns the correct fixed size', () => {
         const numberCodec = getMockCodec({ size: 4 });
         const contentCodec = getMockCodec({ size: 10 });
-        const prefixedCodec = prefixCodecSize(contentCodec, numberCodec as Codec<number>);
+        const prefixedCodec = addCodecSizePrefix(contentCodec, numberCodec as Codec<number>);
         assertIsFixedSize(prefixedCodec);
         expect(prefixedCodec.fixedSize).toBe(14);
     });
@@ -48,7 +48,7 @@ describe('prefixCodecSize', () => {
         const numberCodec = getMockCodec({ size: 4 });
         const contentCodec = getMockCodec();
         contentCodec.getSizeFromValue.mockReturnValueOnce(10);
-        const prefixedCodec = prefixCodecSize(contentCodec, numberCodec as Codec<number>);
+        const prefixedCodec = addCodecSizePrefix(contentCodec, numberCodec as Codec<number>);
         assertIsVariableSize(prefixedCodec);
         expect(prefixedCodec.getSizeFromValue('helloworld')).toBe(14);
     });

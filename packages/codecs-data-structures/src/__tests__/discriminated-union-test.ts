@@ -1,10 +1,10 @@
 import {
+    addCodecSizePrefix,
     assertIsFixedSize,
     assertIsVariableSize,
     isFixedSize,
     isVariableSize,
     offsetCodec,
-    prefixCodecSize,
     resizeCodec,
 } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
@@ -34,7 +34,7 @@ describe('getDiscriminatedUnionCodec', () => {
     const u32 = getU32Codec;
     const u64 = getU64Codec;
     const unit = getUnitCodec;
-    const u32String = prefixCodecSize(getUtf8Codec(), getU32Codec());
+    const u32String = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 
     type WebEvent =
         | { __kind: 'Click'; x: number; y: number } // Struct variant.

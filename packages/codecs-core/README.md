@@ -26,7 +26,7 @@ The easiest way to create your own codecs is to compose the [various codecs](htt
 type Person = { name: string; age: number };
 const getPersonCodec = (): Codec<Person> =>
     getStructCodec([
-        ['name', prefixCodecSize(getUtf8Codec(), getU32Codec())],
+        ['name', addCodecSizePrefix(getUtf8Codec(), getU32Codec())],
         ['age', getU32Codec()],
     ]);
 ```
@@ -57,7 +57,7 @@ Whilst Codecs can both encode and decode, it is possible to only focus on encodi
 ```ts
 const getPersonEncoder = (): Encoder<Person> =>
     getStructEncoder([
-        ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
+        ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
         ['age', getU32Encoder()],
     ]);
 
@@ -69,7 +69,7 @@ The same can be done for decoding the `Person` type by using Decoders like so.
 ```ts
 const getPersonDecoder = (): Decoder<Person> =>
     getStructDecoder([
-        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+        ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
         ['age', getU32Decoder()],
     ]);
 
@@ -122,7 +122,7 @@ type PersonInput = { name: string, age?: number };
 const getPersonEncoder = (): Encoder<PersonInput> =>
     mapEncoder(
         getStructEncoder([
-            ['name', prefixEncoderSize(getUtf8Encoder(), getU32Encoder())],
+            ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
             ['age', getU32Encoder()],
         ]),
         input => { ...input, age: input.age ?? 42 }
@@ -130,7 +130,7 @@ const getPersonEncoder = (): Encoder<PersonInput> =>
 
 const getPersonDecoder = (): Decoder<Person> =>
     getStructDecoder([
-        ['name', prefixDecoderSize(getUtf8Decoder(), getU32Decoder())],
+        ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
         ['age', getU32Decoder()],
     ]);
 
@@ -152,7 +152,7 @@ myCodec.fixedSize; // 4 bytes.
 On the other hand, `VariableSizeCodecs` do not know the size of their encoded data in advance. Instead, they will grab that information either from the provided encoded data or from the value to encode. For the former, we can simply access the length of the `Uint8Array`. For the latter, it provides a `getSizeFromValue` that tells us the encoded byte size of the provided value.
 
 ```ts
-const myCodec: VariableSizeCodec<string> = prefixCodecSize(getUtf8Codec(), getU32Codec());
+const myCodec: VariableSizeCodec<string> = addCodecSizePrefix(getUtf8Codec(), getU32Codec());
 myCodec.getSizeFromValue('hello world'); // 4 + 11 bytes.
 ```
 
@@ -360,16 +360,16 @@ const get32BytesBase58Decoder = () => fixDecoderSize(getBase58Decoder(), 32);
 const get32BytesBase58Codec = () => combineCodec(get32BytesBase58Encoder(), get32BytesBase58Decoder());
 ```
 
-## Prefixing the size of codecs
+## Prefixing codecs with their size
 
-The `prefixCodecSize` function allows you to store the byte size of any codec as a number prefix. This allows you to contain variable-size codecs to their actual size.
+The `addCodecSizePrefix` function allows you to store the byte size of any codec as a number prefix. This allows you to contain variable-size codecs to their actual size.
 
 When encoding, the size of the encoded data is stored before the encoded data itself. When decoding, the size is read first to know how many bytes to read next.
 
-For example, say we want to represent a variable-size base-58 string using a `u32` size prefix — the equivalent of a Borsh `String` in Rust. Here’s how you can use the `prefixCodecSize` function to achieve that.
+For example, say we want to represent a variable-size base-58 string using a `u32` size prefix — the equivalent of a Borsh `String` in Rust. Here’s how you can use the `addCodecSizePrefix` function to achieve that.
 
 ```ts
-const getU32Base58Codec = () => prefixCodecSize(getBase58Codec(), getU32Codec());
+const getU32Base58Codec = () => addCodecSizePrefix(getBase58Codec(), getU32Codec());
 
 getU32Base58Codec().encode('hello world');
 // 0x0b00000068656c6c6f20776f726c64
@@ -377,11 +377,11 @@ getU32Base58Codec().encode('hello world');
 //   └-- Our encoded u32 size prefix.
 ```
 
-You may also use the `prefixEncoderSize` and `prefixDecoderSize` functions to separate your codec logic like so:
+You may also use the `addEncoderSizePrefix` and `addDecoderSizePrefix` functions to separate your codec logic like so:
 
 ```ts
-const getU32Base58Encoder = () => prefixEncoderSize(getBase58Encoder(), getU32Encoder());
-const getU32Base58Decoder = () => prefixDecoderSize(getBase58Decoder(), getU32Decoder());
+const getU32Base58Encoder = () => addEncoderSizePrefix(getBase58Encoder(), getU32Encoder());
+const getU32Base58Decoder = () => addDecoderSizePrefix(getBase58Decoder(), getU32Decoder());
 const getU32Base58Codec = () => combineCodec(getU32Base58Encoder(), getU32Base58Decoder());
 ```
 
