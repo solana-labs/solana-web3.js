@@ -2,6 +2,9 @@ pull_request_rules:
   - name: Add community label to outside contributions
     conditions:
       - author≠@core-contributors
+      - author≠@spl-maintainers
+      - author≠@spl-triage
+      - author≠@spl-write
       - author≠mergify[bot]
       - author≠dependabot[bot]
       - author≠github-actions[bot]
@@ -12,6 +15,9 @@ pull_request_rules:
   - name: Request review of community contributions from community PR subscribers
     conditions:
       - author≠@core-contributors
+      - author≠@spl-maintainers
+      - author≠@spl-triage
+      - author≠@spl-write
       - author≠mergify[bot]
       - author≠dependabot[bot]
       - author≠github-actions[bot]
