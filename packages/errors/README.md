@@ -39,7 +39,7 @@ npx @solana/errors decode -- 123
 
 1. Add a new exported error code constant to `src/codes.ts`.
 2. Add that new constant to the `SolanaErrorCode` union in `src/codes.ts`.
-3. If you would like the new error to encapsulate context about the error itself (eg. the public keys for which a transaction is missing signatures) define the shape of that context in `src/details.ts`.
+3. If you would like the new error to encapsulate context about the error itself (eg. the public keys for which a transaction is missing signatures) define the shape of that context in `src/context.ts`.
 4. Add the error's message to `src/messages.ts`. Any context values that you defined above will be interpolated into the message wherever you write `$key`, where `key` is the index of a value in the context (eg. ``'Missing a signature for account `$address`'``).
 5. Publish a new version of `@solana/errors`.
 6. Bump the version of `@solana/errors` in the package from which the error is thrown.
