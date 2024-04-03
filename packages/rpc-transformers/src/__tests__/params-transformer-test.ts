@@ -212,6 +212,28 @@ describe('getDefaultParamsTransformerForSolanaRpc', () => {
             },
         );
     });
+    // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
+    it.each([undefined, 'processed', 'confirmed', 'finalized'])(
+        'sets the `preflightCommitment` to `processed` when `skipPreflight` is `true` and `preflightCommitment` is `%s` on calls to `sendTransaction`',
+        explicitPreflightCommitment => {
+            const patcher = getDefaultParamsTransformerForSolanaRpc();
+            expect(
+                patcher(
+                    [
+                        null,
+                        {
+                            // eslint-disable-next-line jest/no-conditional-in-test
+                            ...(explicitPreflightCommitment
+                                ? { preflightCommitment: explicitPreflightCommitment }
+                                : null),
+                            skipPreflight: true,
+                        },
+                    ],
+                    'sendTransaction',
+                ),
+            ).toContainEqual(expect.objectContaining({ preflightCommitment: 'processed' }));
+        },
+    );
     describe('given an integer overflow handler', () => {
         let onIntegerOverflow: jest.Mock;
         let paramsTransformer: (value: unknown) => unknown;

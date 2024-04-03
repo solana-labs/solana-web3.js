@@ -811,6 +811,9 @@ importers:
 
   packages/rpc-transformers:
     dependencies:
+      '@solana/functional':
+        specifier: workspace:*
+        version: link:../functional
       '@solana/rpc-spec':
         specifier: workspace:*
         version: link:../rpc-spec

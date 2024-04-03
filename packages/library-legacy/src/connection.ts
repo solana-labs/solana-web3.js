@@ -5895,7 +5895,9 @@ export class Connection {
     const config: any = {encoding: 'base64'};
     const skipPreflight = options && options.skipPreflight;
     const preflightCommitment =
-      (options && options.preflightCommitment) || this.commitment;
+      skipPreflight === true
+        ? 'processed' // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
+        : (options && options.preflightCommitment) || this.commitment;
 
     if (options && options.maxRetries != null) {
       config.maxRetries = options.maxRetries;

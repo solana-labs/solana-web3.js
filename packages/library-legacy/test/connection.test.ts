@@ -4968,6 +4968,29 @@ describe('Connection', function () {
     });
   }
 
+  // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
+  (
+    [undefined, 'processed', 'confirmed', 'finalized'] as (
+      | Commitment
+      | undefined
+    )[]
+  ).forEach(explicitPreflightCommitment => {
+    it(`sets \`preflightCommitment\` to \`processed\` when \`skipPreflight\` is \`true\`, no matter that \`preflightCommitment\` was set to \`${explicitPreflightCommitment}\``, () => {
+      const connection = new Connection(url);
+      const rpcRequestMethod = spy(connection, '_rpcRequest');
+      connection.sendEncodedTransaction('ENCODEDTRANSACTION', {
+        ...(explicitPreflightCommitment
+          ? {preflightCommitment: explicitPreflightCommitment}
+          : null),
+        skipPreflight: true,
+      });
+      expect(rpcRequestMethod).to.have.been.calledWithExactly(
+        'sendTransaction',
+        [match.any, match.has('preflightCommitment', 'processed')],
+      );
+    });
+  });
+
   it('get largest accounts', async () => {
     await mockRpcResponse({
       method: 'getLargestAccounts',

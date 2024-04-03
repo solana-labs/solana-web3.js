@@ -1,3 +1,4 @@
+import { pipe } from '@solana/functional';
 import { Commitment } from '@solana/rpc-types';
 
 import { applyDefaultCommitment } from './default-commitment';
@@ -32,11 +33,28 @@ export function getDefaultParamsTransformerForSolanaRpc(config?: ParamsTransform
         if (optionsObjectPositionInParams == null) {
             return patchedParams;
         }
-        return applyDefaultCommitment({
-            commitmentPropertyName: methodName === 'sendTransaction' ? 'preflightCommitment' : 'commitment',
-            optionsObjectPositionInParams,
-            overrideCommitment: defaultCommitment,
-            params: patchedParams,
-        });
+        return pipe(
+            patchedParams,
+            params =>
+                applyDefaultCommitment({
+                    commitmentPropertyName: methodName === 'sendTransaction' ? 'preflightCommitment' : 'commitment',
+                    optionsObjectPositionInParams,
+                    overrideCommitment: defaultCommitment,
+                    params,
+                }),
+            // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
+            params =>
+                methodName === 'sendTransaction'
+                    ? applyFixForIssue479(params as [unknown, { skipPreflight?: boolean } | undefined])
+                    : params,
+        );
     };
+}
+
+// See https://github.com/anza-xyz/agave/issues/479
+function applyFixForIssue479(params: [unknown, { skipPreflight?: boolean } | undefined]) {
+    if (params[1]?.skipPreflight !== true) {
+        return params;
+    }
+    return [params[0], { ...params[1], preflightCommitment: 'processed' }, ...params.slice(2)];
 }

@@ -63,6 +63,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/functional": "workspace:*",
         "@solana/rpc-types": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*"
