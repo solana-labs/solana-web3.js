@@ -106,7 +106,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-mocha": "^10.1.0",
-    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-prettier": "^5.1.3",
     "esm": "^3.2.25",
     "mocha": "^10.3.0",
     "mockttp": "^3.10.1",
