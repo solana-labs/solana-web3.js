@@ -92,8 +92,13 @@ describe('partiallySignTransaction', () => {
             },
         };
 
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairA], transaction);
-        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            }),
+        );
     });
     it('returns unchanged compiled message bytes', async () => {
         expect.assertions(1);
@@ -108,7 +113,7 @@ describe('partiallySignTransaction', () => {
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty('messageBytes', messageBytes);
     });
     it('returns a signed transaction object having null for the missing signers', async () => {
-        expect.assertions(2);
+        expect.assertions(1);
         const transaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
@@ -117,9 +122,14 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressC]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairA], transaction);
-        expect(signatures[mockPublicKeyAddressB]).toBeNull();
-        expect(signatures[mockPublicKeyAddressC]).toBeNull();
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressB]: null,
+                [mockPublicKeyAddressC]: null,
+            }),
+        );
     });
     it("returns a transaction object having the second signer's signature", async () => {
         expect.assertions(1);
@@ -130,11 +140,16 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairB], transaction);
-        expect(signatures[mockPublicKeyAddressB]).toBe(MOCK_SIGNATURE_B);
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            }),
+        );
     });
     it('returns a transaction object having multiple signatures', async () => {
-        expect.assertions(3);
+        expect.assertions(1);
         const transaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
@@ -143,13 +158,18 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressC]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction(
+        const partiallySignedTransactionPromise = newPartiallySignTransaction(
             [mockKeyPairA, mockKeyPairB, mockKeyPairC],
             transaction,
         );
-        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
-        expect(signatures[mockPublicKeyAddressB]).toBe(MOCK_SIGNATURE_B);
-        expect(signatures[mockPublicKeyAddressC]).toBe(MOCK_SIGNATURE_C);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+                [mockPublicKeyAddressC]: MOCK_SIGNATURE_C,
+            }),
+        );
     });
     it('stores the signatures in the order specified on the compiled message', async () => {
         expect.assertions(1);
@@ -177,8 +197,13 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairB], transaction);
-        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            }),
+        );
     });
     it('produces a new signature for an existing signer', async () => {
         expect.assertions(1);
@@ -199,8 +224,13 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: new Uint8Array([1, 2, 3, 4]) as ReadonlyUint8Array as SignatureBytes,
             },
         };
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairA], transaction);
-        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+            }),
+        );
     });
     it('produces a signature for a new signer when there is an existing one', async () => {
         expect.assertions(1);
@@ -211,8 +241,13 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction([mockKeyPairB], transaction);
-        expect(signatures[mockPublicKeyAddressB]).toBe(MOCK_SIGNATURE_B);
+        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            }),
+        );
     });
     it('freezes the object', async () => {
         expect.assertions(1);
@@ -312,7 +347,7 @@ describe('signTransaction', () => {
         );
     });
     it('returns a signed transaction object with multiple signatures', async () => {
-        expect.assertions(2);
+        expect.assertions(1);
         const transaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
@@ -320,9 +355,14 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const { signatures } = await newSignTransaction([mockKeyPairA, mockKeyPairB], transaction);
-        expect(signatures[mockPublicKeyAddressA]).toBe(MOCK_SIGNATURE_A);
-        expect(signatures[mockPublicKeyAddressB]).toBe(MOCK_SIGNATURE_B);
+        const partiallySignedTransactionPromise = newSignTransaction([mockKeyPairA, mockKeyPairB], transaction);
+        await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
+            'signatures',
+            expect.objectContaining({
+                [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
+                [mockPublicKeyAddressB]: MOCK_SIGNATURE_B,
+            }),
+        );
     });
     it('returns a signed transaction object with the compiled message bytes', async () => {
         expect.assertions(1);
