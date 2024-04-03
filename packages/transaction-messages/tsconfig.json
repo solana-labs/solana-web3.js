@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": []
+    },
+    "display": "@solana/transaction-messages",
+    "extends": "../tsconfig/base.json",
+    "include": ["src"]
+}
