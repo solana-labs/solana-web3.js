@@ -13,6 +13,7 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS,
     SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
@@ -271,6 +272,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
             codecDescription: string;
         };
+        [SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS]: {
+            stringValues: string[];
+        };
         [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]: {
             encodedBytes: ReadonlyUint8Array;
             hexEncodedBytes: string;
@@ -287,8 +291,8 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]: {
             discriminator: bigint | number;
-            maxRange: number;
-            minRange: number;
+            formattedValidDiscriminators: string;
+            validDiscriminators: number[];
         };
         [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]: {
             bytesLength: number;
@@ -317,10 +321,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             variants: readonly (bigint | boolean | number | string | null | undefined)[];
         };
         [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]: {
-            maxRange: number;
-            minRange: number;
-            value: number | string;
-            variants: string[];
+            formattedNumericalValues: string;
+            numericalValues: number[];
+            stringValues: string[];
+            variant: number | string | symbol;
         };
         [SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT]: {
             value: bigint | boolean | number | string | null | undefined;

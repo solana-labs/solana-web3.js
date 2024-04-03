@@ -187,28 +187,22 @@ The `getEnumCodec` function accepts a JavaScript enum constructor and returns a 
 enum Direction {
     Left,
     Right,
-    Up,
-    Down,
 }
 
 const bytes = getEnumCodec(Direction).encode(Direction.Left);
 const direction = getEnumCodec(Direction).decode(bytes);
 ```
 
-When encoding an enum, you may pass the value as an enum value, as a number or even as a string by passing the variant’s name.
+When encoding an enum, you may either provide the value of the enum variant — e.g. `Direction.Left` — or its key — e.g. `'Left'`.
 
 ```ts
 enum Direction {
     Left,
     Right,
-    Up,
-    Down,
 }
 
 getEnumCodec(Direction).encode(Direction.Left); // 0x00
 getEnumCodec(Direction).encode(Direction.Right); // 0x01
-getEnumCodec(Direction).encode(0); // 0x00
-getEnumCodec(Direction).encode(1); // 0x01
 getEnumCodec(Direction).encode('Left'); // 0x00
 getEnumCodec(Direction).encode('Right'); // 0x01
 ```
@@ -221,19 +215,57 @@ u32DirectionCodec.encode(Direction.Left); // 0x00000000
 u32DirectionCodec.encode(Direction.Right); // 0x01000000
 ```
 
-Note that if you provide a string enum — e.g. `enum Direction { Left = 'LEFT' }` — to the `getEnumCodec` function, it will only store the index of the variant. However, the string value may be used to encode that index.
+This function also works with lexical enums — e.g. `enum Direction { Left = '←' }` — explicit numerical enums — e.g. `enum Speed { Left = 50 }` — and hybrid enums with a mix of both.
 
 ```ts
-enum Direction {
-    Left = 'LEFT',
-    Right = 'RIGHT',
-    Up = 'UP',
-    Down = 'DOWN',
+enum Numbers {
+    One,
+    Five = 5,
+    Six,
+    Nine = 'nine',
 }
 
-getEnumCodec(Direction).encode(Direction.Right); // 0x01
-getEnumCodec(Direction).encode('Right' as Direction); // 0x01
-getEnumCodec(Direction).encode('RIGHT'); // 0x01
+getEnumCodec(Numbers).encode(Direction.One); // 0x00
+getEnumCodec(Numbers).encode(Direction.Five); // 0x01
+getEnumCodec(Numbers).encode(Direction.Six); // 0x02
+getEnumCodec(Numbers).encode(Direction.Nine); // 0x03
+getEnumCodec(Numbers).encode('One'); // 0x00
+getEnumCodec(Numbers).encode('Five'); // 0x01
+getEnumCodec(Numbers).encode('Six'); // 0x02
+getEnumCodec(Numbers).encode('Nine'); // 0x03
+```
+
+Notice how, by default, the index of the enum variant is used to encode the value of the enum. For instance, in the example above, `Numbers.Five` is encoded as `0x01` even though its value is `5`. This is also true for lexical enums.
+
+However, when dealing with numerical enums that have explicit values, you may use the `useValuesAsDiscriminators` option to encode the value of the enum variant instead of its index.
+
+```ts
+enum Numbers {
+    One,
+    Five = 5,
+    Six,
+    Nine = 9,
+}
+
+const codec = getEnumCodec(Numbers, { useValuesAsDiscriminators: true });
+codec.encode(Direction.One); // 0x00
+codec.encode(Direction.Five); // 0x05
+codec.encode(Direction.Six); // 0x06
+codec.encode(Direction.Nine); // 0x09
+codec.encode('One'); // 0x00
+codec.encode('Five'); // 0x05
+codec.encode('Six'); // 0x06
+codec.encode('Nine'); // 0x09
+```
+
+Note that when using the `useValuesAsDiscriminators` option on an enum that contains a lexical value, an error will be thrown.
+
+```ts
+enum Lexical {
+    One,
+    Two = 'two',
+}
+getEnumCodec(Lexical, { useValuesAsDiscriminators: true }); // Throws an error.
 ```
 
 Separate `getEnumEncoder` and `getEnumDecoder` functions are also available.
