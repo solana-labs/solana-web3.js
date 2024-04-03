@@ -6,6 +6,6 @@
         }
     },
     "display": "@solana/web3.js-legacy-sham",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

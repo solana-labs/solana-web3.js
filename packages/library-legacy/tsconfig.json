@@ -11,19 +11,10 @@
     "resolveJsonModule": true,
     "strict": true,
     "paths": {
-      "@types/jest": [
-        "./test/__shadow-jest-types.d.ts"
-      ]
+      "@types/jest": ["./test/__shadow-jest-types.d.ts"]
     }
   },
-  "extends": "@solana/tsconfig/base.json",
-  "include": [
-    "src",
-    "test"
-  ],
-  "exclude": [
-    "declarations",
-    "lib",
-    "node_modules"
-  ]
+  "extends": "../tsconfig/base.json",
+  "include": ["src", "test"],
+  "exclude": ["declarations", "lib", "node_modules"]
 }

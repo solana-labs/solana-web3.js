@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2015", "ES2019.Array", "ES2020.BigInt", "ES2022.Error"]
     },
     "display": "@solana/addresses",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

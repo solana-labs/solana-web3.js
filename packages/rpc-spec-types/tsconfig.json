@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2022.Error"]
     },
     "display": "@solana/rpc-spec-types",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

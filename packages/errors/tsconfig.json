@@ -5,6 +5,6 @@
         "resolveJsonModule": true
     },
     "display": "@solana/errors",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["bin", "src"]
 }

@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2016"]
     },
     "display": "TextEncoder and TextDecoder Implementation",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

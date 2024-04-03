@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2017", "ES2019.Array"]
     },
     "display": "@solana/sysvars",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

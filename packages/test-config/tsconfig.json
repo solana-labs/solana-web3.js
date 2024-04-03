@@ -1,5 +1,5 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Test Config",
-    "extends": "@solana/tsconfig/base.json"
+    "extends": "../tsconfig/base.json"
 }

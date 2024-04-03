@@ -4,6 +4,6 @@
         "lib": ["DOM", "ES2020", "ES2022.Error"]
     },
     "display": "@solana/transaction-confirmation",
-    "extends": "@solana/tsconfig/base.json",
+    "extends": "../tsconfig/base.json",
     "include": ["src"]
 }
