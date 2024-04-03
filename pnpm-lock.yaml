@@ -966,9 +966,19 @@ importers:
 
   packages/transaction-messages:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
+      '@solana/rpc-types':
+        specifier: workspace:*
+        version: link:../rpc-types
+    devDependencies:
+      '@solana/codecs-strings':
+        specifier: workspace:*
+        version: link:../codecs-strings
 
   packages/transactions:
     dependencies:

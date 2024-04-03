@@ -63,7 +63,12 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@solana/instructions": "workspace:*"
+        "@solana/errors": "workspace:*",
+        "@solana/instructions": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
+    },
+    "devDependencies": {
+        "@solana/codecs-strings": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
