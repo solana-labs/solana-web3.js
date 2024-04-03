@@ -1,3 +1,4 @@
+import { Address } from '@solana/addresses';
 import { Blockhash } from '@solana/rpc-types';
 
 import {
@@ -6,12 +7,22 @@ import {
     setTransactionMessageLifetimeUsingBlockhash,
 } from '../blockhash';
 import { createTransactionMessage } from '../create-transaction-message';
+import {
+    IDurableNonceTransactionMessage,
+    NewNonce,
+    setTransactionMessageLifetimeUsingDurableNonce,
+} from '../durable-nonce';
 import { BaseTransactionMessage, TransactionMessage } from '../transaction-message';
 
 const mockBlockhash = null as unknown as Blockhash;
 const mockBlockhashLifetime = {
     blockhash: mockBlockhash,
     lastValidBlockHeight: 0n,
+};
+const mockNonceConfig = {
+    nonce: null as unknown as NewNonce<'nonce'>,
+    nonceAccountAddress: null as unknown as Address<'nonce'>,
+    nonceAuthorityAddress: null as unknown as Address<'nonceAuthority'>,
 };
 
 // createTransactionMessage
@@ -92,3 +103,23 @@ setTransactionMessageLifetimeUsingBlockhash(
         };
     };
 }
+
+// setTransactionMessageLifetimeUsingDurableNonce
+setTransactionMessageLifetimeUsingDurableNonce(
+    mockNonceConfig,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage;
+setTransactionMessageLifetimeUsingDurableNonce(
+    mockNonceConfig,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
+    // @ts-expect-error Version should match
+) satisfies Extract<TransactionMessage, { version: 0 }> & IDurableNonceTransactionMessage;
+setTransactionMessageLifetimeUsingDurableNonce(
+    mockNonceConfig,
+    null as unknown as Extract<TransactionMessage, { version: 0 }>,
+) satisfies Extract<TransactionMessage, { version: 0 }> & IDurableNonceTransactionMessage;
+setTransactionMessageLifetimeUsingDurableNonce(
+    mockNonceConfig,
+    null as unknown as Extract<TransactionMessage, { version: 0 }>,
+    // @ts-expect-error Version should match
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage;
