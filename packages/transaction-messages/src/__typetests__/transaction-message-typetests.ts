@@ -13,6 +13,7 @@ import {
     setTransactionMessageLifetimeUsingDurableNonce,
 } from '../durable-nonce';
 import { ITransactionMessageWithFeePayer, setTransactionMessageFeePayer } from '../fee-payer';
+import { appendTransactionMessageInstruction, prependTransactionMessageInstruction } from '../instructions';
 import { BaseTransactionMessage, TransactionMessage } from '../transaction-message';
 
 const mockFeePayer = null as unknown as Address<'feePayer'>;
@@ -26,6 +27,12 @@ const mockNonceConfig = {
     nonceAccountAddress: null as unknown as Address<'nonce'>,
     nonceAuthorityAddress: null as unknown as Address<'nonceAuthority'>,
 };
+
+const mockInstruction = {
+    accounts: [],
+    data: Uint8Array.of(0),
+    programAddress: null as unknown as Address<'program'>,
+} as TransactionMessage['instructions'][number];
 
 // createTransactionMessage
 createTransactionMessage({ version: 'legacy' }) satisfies Extract<TransactionMessage, { version: 'legacy' }>;
@@ -185,3 +192,33 @@ setTransactionMessageFeePayer(
 ) satisfies Extract<TransactionMessage, { version: 0 }> &
     IDurableNonceTransactionMessage &
     ITransactionMessageWithFeePayer<'feePayer'>;
+
+// appendTransactionMessageInstruction
+appendTransactionMessageInstruction(
+    mockInstruction,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & {
+    instructions: TransactionMessage['instructions'];
+};
+appendTransactionMessageInstruction(
+    mockInstruction,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithFeePayer<'feePayer'>,
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
+    ITransactionMessageWithFeePayer<'feePayer'> & {
+        instructions: TransactionMessage['instructions'];
+    };
+
+// prependTransactionMessageInstruction
+prependTransactionMessageInstruction(
+    mockInstruction,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & {
+    instructions: TransactionMessage['instructions'];
+};
+prependTransactionMessageInstruction(
+    mockInstruction,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithFeePayer<'feePayer'>,
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
+    ITransactionMessageWithFeePayer<'feePayer'> & {
+        instructions: TransactionMessage['instructions'];
+    };
