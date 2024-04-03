@@ -11,6 +11,7 @@ export * from '@solana/rpc-parsed-types';
 export * from '@solana/rpc-subscriptions';
 export * from '@solana/rpc-types';
 export * from '@solana/signers';
+export * from '@solana/transaction-messages';
 export * from '@solana/transactions';
 export * from './airdrop';
 export * from './decode-transaction';
