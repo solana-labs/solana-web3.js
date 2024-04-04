@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -43,7 +43,7 @@ export function getBooleanEncoder<TSize extends number>(
 ): FixedSizeEncoder<boolean, TSize>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder>): VariableSizeEncoder<boolean>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}): Encoder<boolean> {
-    return mapEncoder(config.size ?? getU8Encoder(), (value: boolean) => (value ? 1 : 0));
+    return transformEncoder(config.size ?? getU8Encoder(), (value: boolean) => (value ? 1 : 0));
 }
 
 /**
@@ -57,7 +57,7 @@ export function getBooleanDecoder<TSize extends number>(
 ): FixedSizeDecoder<boolean, TSize>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): VariableSizeDecoder<boolean>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
-    return mapDecoder(config.size ?? getU8Decoder(), (value: bigint | number): boolean => Number(value) === 1);
+    return transformDecoder(config.size ?? getU8Decoder(), (value: bigint | number): boolean => Number(value) === 1);
 }
 
 /**

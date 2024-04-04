@@ -9,8 +9,8 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -74,8 +74,8 @@ export function getNullableEncoder<TFrom>(
     const fixed = config.fixed ?? false;
     const encoder = getUnionEncoder(
         [
-            mapEncoder(prefix, (_value: null) => 0),
-            mapEncoder(getTupleEncoder([prefix, item]), (value: TFrom): [number, TFrom] => [1, value]),
+            transformEncoder(prefix, (_value: null) => 0),
+            transformEncoder(getTupleEncoder([prefix, item]), (value: TFrom): [number, TFrom] => [1, value]),
         ],
         variant => Number(variant !== null),
     );
@@ -112,8 +112,8 @@ export function getNullableDecoder<TTo>(
     const fixed = config.fixed ?? false;
     const decoder = getUnionDecoder(
         [
-            mapDecoder(prefix, (_value: bigint | number) => null),
-            mapDecoder(getTupleDecoder([prefix, item]), ([, value]): TTo => value),
+            transformDecoder(prefix, (_value: bigint | number) => null),
+            transformDecoder(getTupleDecoder([prefix, item]), ([, value]): TTo => value),
         ],
         (bytes, offset) => Number(prefix.read(bytes, offset)[0] !== 0),
     );

@@ -6,9 +6,9 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
     ReadonlyUint8Array,
+    transformDecoder,
+    transformEncoder,
 } from '@solana/codecs-core';
 import { getBytesDecoder, getBytesEncoder, getUnionDecoder, getUnionEncoder } from '@solana/codecs-data-structures';
 import { getBase16Decoder } from '@solana/codecs-strings';
@@ -44,8 +44,10 @@ export function getZeroableOptionEncoder<TFrom, TSize extends number>(
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionEncoder(
         [
-            mapEncoder(fixEncoderSize(getBytesEncoder(), item.fixedSize), (_value: None | null) => zeroValue),
-            mapEncoder(item, (value: Some<TFrom> | TFrom) => (isOption(value) && isSome(value) ? value.value : value)),
+            transformEncoder(fixEncoderSize(getBytesEncoder(), item.fixedSize), (_value: None | null) => zeroValue),
+            transformEncoder(item, (value: Some<TFrom> | TFrom) =>
+                isOption(value) && isSome(value) ? value.value : value,
+            ),
         ],
         (variant: OptionOrNullable<TFrom>) => {
             const option = isOption<TFrom>(variant) ? variant : wrapNullable(variant);
@@ -68,8 +70,8 @@ export function getZeroableOptionDecoder<TTo, TSize extends number>(
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionDecoder(
         [
-            mapDecoder(fixDecoderSize(getBytesDecoder(), item.fixedSize), () => none<TTo>()),
-            mapDecoder(item, value => some(value)),
+            transformDecoder(fixDecoderSize(getBytesDecoder(), item.fixedSize), () => none<TTo>()),
+            transformDecoder(item, value => some(value)),
         ],
         (bytes, offset) => (containsBytes(bytes, zeroValue, offset) ? 0 : 1),
     ) as FixedSizeDecoder<Option<TTo>, TSize>;

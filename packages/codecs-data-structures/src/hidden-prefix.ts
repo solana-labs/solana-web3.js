@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -31,7 +31,7 @@ export function getHiddenPrefixEncoder<TFrom>(
     encoder: Encoder<TFrom>,
     prefixedEncoders: readonly Encoder<void>[],
 ): Encoder<TFrom> {
-    return mapEncoder(
+    return transformEncoder(
         getTupleEncoder([...prefixedEncoders, encoder]) as Encoder<readonly [...void[], TFrom]>,
         (value: TFrom) => [...prefixedEncoders.map(() => undefined), value] as const,
     );
@@ -53,7 +53,7 @@ export function getHiddenPrefixDecoder<TTo>(
     decoder: Decoder<TTo>,
     prefixedDecoders: readonly Decoder<void>[],
 ): Decoder<TTo> {
-    return mapDecoder(
+    return transformDecoder(
         getTupleDecoder([...prefixedDecoders, decoder]) as Decoder<readonly [...void[], TTo]>,
         tuple => tuple[tuple.length - 1] as TTo,
     );

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Codec, combineCodec, Decoder, Encoder, mapDecoder, mapEncoder } from '@solana/codecs-core';
+import { Codec, combineCodec, Decoder, Encoder, transformDecoder, transformEncoder } from '@solana/codecs-core';
 import { getU8Decoder, getU8Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 import { SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT, SolanaError } from '@solana/errors';
 
@@ -121,7 +121,7 @@ export function getDiscriminatedUnionEncoder<
     const prefix = config.size ?? getU8Encoder();
     return getUnionEncoder(
         variants.map(([, variant], index) =>
-            mapEncoder(getTupleEncoder([prefix, variant]), (value: TFrom): [number, TFrom] => [index, value]),
+            transformEncoder(getTupleEncoder([prefix, variant]), (value: TFrom): [number, TFrom] => [index, value]),
         ),
         value => getVariantDiscriminator(variants, value[discriminatorProperty]),
     );
@@ -144,7 +144,7 @@ export function getDiscriminatedUnionDecoder<
     const prefix = config.size ?? getU8Decoder();
     return getUnionDecoder(
         variants.map(([discriminator, variant]) =>
-            mapDecoder(getTupleDecoder([prefix, variant]), ([, value]) => ({
+            transformDecoder(getTupleDecoder([prefix, variant]), ([, value]) => ({
                 [discriminatorProperty]: discriminator,
                 ...value,
             })),

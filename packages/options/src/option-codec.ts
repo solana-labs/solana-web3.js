@@ -9,8 +9,8 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -75,8 +75,8 @@ export function getOptionEncoder<TFrom>(
     const fixed = config.fixed ?? false;
     const encoder = getUnionEncoder(
         [
-            mapEncoder(prefix, (_value: None | null) => 0),
-            mapEncoder(getTupleEncoder([prefix, item]), (value: Some<TFrom> | TFrom): [number, TFrom] => {
+            transformEncoder(prefix, (_value: None | null) => 0),
+            transformEncoder(getTupleEncoder([prefix, item]), (value: Some<TFrom> | TFrom): [number, TFrom] => {
                 return [1, isOption(value) && isSome(value) ? value.value : value];
             }),
         ],
@@ -118,8 +118,8 @@ export function getOptionDecoder<TTo>(
     const fixed = config.fixed ?? false;
     const decoder = getUnionDecoder(
         [
-            mapDecoder(prefix, (_value: bigint | number) => none<TTo>()),
-            mapDecoder(getTupleDecoder([prefix, item]), ([, value]) => some(value)),
+            transformDecoder(prefix, (_value: bigint | number) => none<TTo>()),
+            transformDecoder(getTupleDecoder([prefix, item]), ([, value]) => some(value)),
         ],
         (bytes, offset) => Number(prefix.read(bytes, offset)[0] !== 0),
     );

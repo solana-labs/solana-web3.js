@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -53,7 +53,7 @@ export function getMapEncoder<TFromKey, TFromValue>(
     value: Encoder<TFromValue>,
     config: MapCodecConfig<NumberEncoder> = {},
 ): Encoder<Map<TFromKey, TFromValue>> {
-    return mapEncoder(
+    return transformEncoder(
         getArrayEncoder(getTupleEncoder([key, value]), config as object),
         (map: Map<TFromKey, TFromValue>): [TFromKey, TFromValue][] => [...map.entries()],
     );
@@ -86,7 +86,7 @@ export function getMapDecoder<TToKey, TToValue>(
     value: Decoder<TToValue>,
     config: MapCodecConfig<NumberDecoder> = {},
 ): Decoder<Map<TToKey, TToValue>> {
-    return mapDecoder(
+    return transformDecoder(
         getArrayDecoder(getTupleDecoder([key, value]), config as object) as Decoder<[TToKey, TToValue][]>,
         (entries: [TToKey, TToValue][]): Map<TToKey, TToValue> => new Map(entries),
     );
