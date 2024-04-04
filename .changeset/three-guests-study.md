@@ -13,7 +13,6 @@
 '@solana/instructions': patch
 '@solana/keys': patch
 '@solana/web3.js-experimental': patch
-'@solana/web3.js-legacy-sham': patch
 '@solana/options': patch
 '@solana/programs': patch
 '@solana/rpc': patch
