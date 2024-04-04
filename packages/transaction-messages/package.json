@@ -62,7 +62,9 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "dependencies": {},
+    "dependencies": {
+        "@solana/instructions": "workspace:*"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [
