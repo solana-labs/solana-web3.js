@@ -18,6 +18,7 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS,
     SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
@@ -259,6 +260,8 @@ export const SolanaErrorMessages: Readonly<{
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]:
         'Codec [$codecDescription] cannot decode empty byte arrays.',
+    [SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS]:
+        'Enum codec cannot use lexical values [$stringValues] as discriminators. Either remove all lexical values or set `useValuesAsDiscriminators` to `false`.',
     [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]:
         'Sentinel [$hexSentinel] must not be present in encoded bytes [$hexEncodedBytes].',
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]:
@@ -268,7 +271,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH]:
         'Encoder and decoder must either both be fixed-size or variable-size.',
     [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]:
-        'Enum discriminator out of range. Expected a number between $minRange and $maxRange, got $discriminator.',
+        'Enum discriminator out of range. Expected a number in [$formattedValidDiscriminators], got $discriminator.',
     [SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH]: 'Expected a fixed-size codec, got a variable-size one.',
     [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]:
         'Codec [$codecDescription] expected a positive byte length, got $bytesLength.',
@@ -282,7 +285,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT]:
         'Invalid discriminated union variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]:
-        'Invalid enum variant. Expected one of [$variants] or a number between $minRange and $maxRange, got $value.',
+        'Invalid enum variant. Expected one of [$stringValues] or a number in [$formattedNumericalValues], got $variant.',
     [SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT]:
         'Invalid literal union variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]:
