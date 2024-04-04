@@ -1,7 +1,7 @@
 import { IAccountMeta, IInstruction } from '@solana/instructions';
 
 export type BaseTransactionMessage<
-    TVersion extends TransactionVersion = TransactionVersion,
+    TVersion extends NewTransactionVersion = NewTransactionVersion,
     TInstruction extends IInstruction = IInstruction,
 > = Readonly<{
     instructions: readonly TInstruction[];
@@ -16,4 +16,4 @@ type LegacyTransactionMessage = BaseTransactionMessage<'legacy', ILegacyInstruct
 type V0TransactionMessage = BaseTransactionMessage<0, IInstruction>;
 
 export type TransactionMessage = LegacyTransactionMessage | V0TransactionMessage;
-export type TransactionVersion = 'legacy' | 0;
+export type NewTransactionVersion = 'legacy' | 0;

@@ -348,6 +348,9 @@ importers:
       '@solana/transaction-confirmation':
         specifier: workspace:*
         version: link:../transaction-confirmation
+      '@solana/transaction-messages':
+        specifier: workspace:*
+        version: link:../transaction-messages
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions

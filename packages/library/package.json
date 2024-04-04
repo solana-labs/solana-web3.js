@@ -80,6 +80,7 @@
         "@solana/rpc-types": "workspace:*",
         "@solana/signers": "workspace:*",
         "@solana/transaction-confirmation": "workspace:*",
+        "@solana/transaction-messages": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
     "bundlewatch": {
