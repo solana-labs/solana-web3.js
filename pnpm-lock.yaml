@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -975,6 +979,12 @@ importers:
         specifier: workspace:*
         version: link:../transactions
     devDependencies:
+      '@solana/instructions':
+        specifier: workspace:*
+        version: link:../instructions
+
+  packages/transaction-messages:
+    dependencies:
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions
@@ -3204,7 +3214,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: '*'
+      jsdom: ^22
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -13421,7 +13431,3 @@ packages:
       which: 3.0.1
       yaml: 2.3.1
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
