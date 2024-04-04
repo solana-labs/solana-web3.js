@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -47,7 +47,7 @@ export function getSetEncoder<TFrom>(
     item: Encoder<TFrom>,
     config: SetCodecConfig<NumberEncoder> = {},
 ): Encoder<Set<TFrom>> {
-    return mapEncoder(getArrayEncoder(item, config as object), (set: Set<TFrom>): TFrom[] => [...set]);
+    return transformEncoder(getArrayEncoder(item, config as object), (set: Set<TFrom>): TFrom[] => [...set]);
 }
 
 /**
@@ -69,7 +69,7 @@ export function getSetDecoder<TTo>(
     config?: SetCodecConfig<NumberDecoder>,
 ): VariableSizeDecoder<Set<TTo>>;
 export function getSetDecoder<TTo>(item: Decoder<TTo>, config: SetCodecConfig<NumberDecoder> = {}): Decoder<Set<TTo>> {
-    return mapDecoder(getArrayDecoder(item, config as object), (entries: TTo[]): Set<TTo> => new Set(entries));
+    return transformDecoder(getArrayDecoder(item, config as object), (entries: TTo[]): Set<TTo> => new Set(entries));
 }
 
 /**

@@ -2,8 +2,8 @@ import {
     combineCodec,
     createDecoder,
     createEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -60,7 +60,7 @@ export const getBase64Encoder = (): VariableSizeEncoder<string> => {
         });
     }
 
-    return mapEncoder(getBaseXResliceEncoder(alphabet, 6), (value: string): string => value.replace(/=/g, ''));
+    return transformEncoder(getBaseXResliceEncoder(alphabet, 6), (value: string): string => value.replace(/=/g, ''));
 };
 
 /** Decodes strings in base64. */
@@ -81,7 +81,7 @@ export const getBase64Decoder = (): VariableSizeDecoder<string> => {
         });
     }
 
-    return mapDecoder(getBaseXResliceDecoder(alphabet, 6), (value: string): string =>
+    return transformDecoder(getBaseXResliceDecoder(alphabet, 6), (value: string): string =>
         value.padEnd(Math.ceil(value.length / 4) * 4, '='),
     );
 };

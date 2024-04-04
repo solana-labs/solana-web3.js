@@ -7,7 +7,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapEncoder,
+    transformEncoder,
 } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
@@ -80,7 +80,7 @@ export function blockhash(putativeBlockhash: string): Blockhash {
 }
 
 export function getBlockhashEncoder(): FixedSizeEncoder<Blockhash, 32> {
-    return mapEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeBlockhash =>
+    return transformEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeBlockhash =>
         blockhash(putativeBlockhash),
     );
 }

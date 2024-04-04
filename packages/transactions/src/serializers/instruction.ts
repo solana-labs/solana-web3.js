@@ -2,8 +2,8 @@ import {
     addDecoderSizePrefix,
     addEncoderSizePrefix,
     combineCodec,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -25,7 +25,7 @@ type Instruction = ReturnType<typeof getCompiledInstructions>[number];
 let memoizedGetInstructionEncoder: VariableSizeEncoder<Instruction> | undefined;
 export function getInstructionEncoder(): VariableSizeEncoder<Instruction> {
     if (!memoizedGetInstructionEncoder) {
-        memoizedGetInstructionEncoder = mapEncoder<Required<Instruction>, Instruction>(
+        memoizedGetInstructionEncoder = transformEncoder<Required<Instruction>, Instruction>(
             getStructEncoder([
                 ['programAddressIndex', getU8Encoder()],
                 ['accountIndices', getArrayEncoder(getU8Encoder(), { size: getShortU16Encoder() })],
@@ -51,7 +51,7 @@ export function getInstructionEncoder(): VariableSizeEncoder<Instruction> {
 let memoizedGetInstructionDecoder: VariableSizeDecoder<Instruction> | undefined;
 export function getInstructionDecoder(): VariableSizeDecoder<Instruction> {
     if (!memoizedGetInstructionDecoder) {
-        memoizedGetInstructionDecoder = mapDecoder<Required<Instruction>, Instruction>(
+        memoizedGetInstructionDecoder = transformDecoder<Required<Instruction>, Instruction>(
             getStructDecoder([
                 ['programAddressIndex', getU8Decoder()],
                 ['accountIndices', getArrayDecoder(getU8Decoder(), { size: getShortU16Decoder() })],

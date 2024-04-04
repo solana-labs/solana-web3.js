@@ -5,8 +5,8 @@ import {
     Decoder,
     fixDecoderSize,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -27,7 +27,7 @@ function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage>
 }
 
 function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledMessage> {
-    return mapEncoder(
+    return transformEncoder(
         getStructEncoder([
             ...getPreludeStructEncoderTuple(),
             ['addressTableLookups', getAddressTableLookupArrayEncoder()],
@@ -93,7 +93,7 @@ export function getCompiledMessageEncoder(): VariableSizeEncoder<CompiledMessage
 }
 
 export function getCompiledMessageDecoder(): VariableSizeDecoder<CompiledMessage> {
-    return mapDecoder(
+    return transformDecoder(
         getStructDecoder(getPreludeStructDecoderTuple()) as VariableSizeDecoder<
             CompiledMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
         >,

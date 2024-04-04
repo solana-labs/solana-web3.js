@@ -1,6 +1,6 @@
 import { Codec, createCodec, createDecoder, createEncoder } from '../codec';
-import { mapCodec, mapDecoder, mapEncoder } from '../map-codec';
 import { ReadonlyUint8Array } from '../readonly-uint8array';
+import { transformCodec, transformDecoder, transformEncoder } from '../transform-codec';
 
 const numberCodec: Codec<number> = createCodec({
     fixedSize: 1,
@@ -11,10 +11,10 @@ const numberCodec: Codec<number> = createCodec({
     },
 });
 
-describe('mapCodec', () => {
+describe('transformCodec', () => {
     it('can loosen the codec input with a map', () => {
         // From <number> to <number | string, number>.
-        const mappedCodec: Codec<number | string, number> = mapCodec(numberCodec, (value: number | string) =>
+        const mappedCodec: Codec<number | string, number> = transformCodec(numberCodec, (value: number | string) =>
             // eslint-disable-next-line jest/no-conditional-in-test
             typeof value === 'number' ? value : value.length,
         );
@@ -28,7 +28,7 @@ describe('mapCodec', () => {
 
     it('can map both the input and output of a codec', () => {
         // From <number> to <number | string, string>.
-        const mappedCodec: Codec<number | string, string> = mapCodec(
+        const mappedCodec: Codec<number | string, string> = transformCodec(
             numberCodec,
             // eslint-disable-next-line jest/no-conditional-in-test
             (value: number | string) => (typeof value === 'number' ? value : value.length),
@@ -44,7 +44,7 @@ describe('mapCodec', () => {
 
     it('can map the input and output of a codec to the same type', () => {
         // From <number> to <string>.
-        const mappedCodec: Codec<string> = mapCodec(
+        const mappedCodec: Codec<string> = transformCodec(
             numberCodec,
             (value: string) => value.length,
             (value: number) => 'x'.repeat(value),
@@ -60,7 +60,7 @@ describe('mapCodec', () => {
     it('can wrap a codec type in an object using a map', () => {
         // From <number> to <{ value: number }>.
         type Wrap<T> = { value: T };
-        const mappedCodec: Codec<Wrap<number>> = mapCodec(
+        const mappedCodec: Codec<Wrap<number>> = transformCodec(
             numberCodec,
             (value: Wrap<number>) => value.value,
             (value: number): Wrap<number> => ({ value }),
@@ -93,7 +93,7 @@ describe('mapCodec', () => {
 
         // From <Strict> to <Loose, Strict>.
         type Loose = { discriminator?: number; label: string };
-        const looseCodec: Codec<Loose, Strict> = mapCodec(
+        const looseCodec: Codec<Loose, Strict> = transformCodec(
             strictCodec,
             (value: Loose): Strict => ({
                 discriminator: 42, // <- Default value.
@@ -132,7 +132,7 @@ describe('mapCodec', () => {
         const bytesA = codec.encode([42, 'Hello world']);
         expect(codec.decode(bytesA)).toStrictEqual([42, 'xxxxxxxxxxx']);
 
-        const mappedCodec = mapCodec(codec, (value: [number | null, string]): [number, string] => [
+        const mappedCodec = transformCodec(codec, (value: [number | null, string]): [number, string] => [
             // eslint-disable-next-line jest/no-conditional-in-test
             value[0] ?? value[1].length,
             value[1],
@@ -146,7 +146,7 @@ describe('mapCodec', () => {
     });
 });
 
-describe('mapEncoder', () => {
+describe('transformEncoder', () => {
     it('can map an encoder to another encoder', () => {
         const encoderA = createEncoder({
             fixedSize: 1,
@@ -156,21 +156,21 @@ describe('mapEncoder', () => {
             },
         });
 
-        const encoderB = mapEncoder(encoderA, (value: string): number => value.length);
+        const encoderB = transformEncoder(encoderA, (value: string): number => value.length);
 
         expect(encoderB.fixedSize).toBe(1);
         expect(encoderB.encode('helloworld')).toStrictEqual(new Uint8Array([10]));
     });
 });
 
-describe('mapDecoder', () => {
+describe('transformDecoder', () => {
     it('can map an encoder to another encoder', () => {
         const decoder = createDecoder({
             fixedSize: 1,
             read: (bytes: ReadonlyUint8Array | Uint8Array, offset = 0) => [bytes[offset], offset + 1],
         });
 
-        const decoderB = mapDecoder(decoder, (value: number): string => 'x'.repeat(value));
+        const decoderB = transformDecoder(decoder, (value: number): string => 'x'.repeat(value));
 
         expect(decoderB.fixedSize).toBe(1);
         expect(decoderB.decode(new Uint8Array([10]))).toBe('xxxxxxxxxx');

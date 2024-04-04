@@ -1,4 +1,10 @@
-import { combineCodec, FixedSizeCodec, FixedSizeDecoder, FixedSizeEncoder, mapDecoder } from '@solana/codecs-core';
+import {
+    combineCodec,
+    FixedSizeCodec,
+    FixedSizeDecoder,
+    FixedSizeEncoder,
+    transformDecoder,
+} from '@solana/codecs-core';
 import { getU64Decoder, getU64Encoder } from '@solana/codecs-numbers';
 import { SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
@@ -45,7 +51,7 @@ export function getLamportsEncoder(): FixedSizeEncoder<LamportsUnsafeBeyond2Pow5
 }
 
 export function getLamportsDecoder(): FixedSizeDecoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
-    return mapDecoder(getMemoizedU64Decoder(), lamports);
+    return transformDecoder(getMemoizedU64Decoder(), lamports);
 }
 
 export function getLamportsCodec(): FixedSizeCodec<

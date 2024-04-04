@@ -7,7 +7,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapEncoder,
+    transformEncoder,
 } from '@solana/codecs-core';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 import {
@@ -82,7 +82,9 @@ export function address<TAddress extends string = string>(putativeAddress: TAddr
 }
 
 export function getAddressEncoder(): FixedSizeEncoder<Address, 32> {
-    return mapEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeAddress => address(putativeAddress));
+    return transformEncoder(fixEncoderSize(getMemoizedBase58Encoder(), 32), putativeAddress =>
+        address(putativeAddress),
+    );
 }
 
 export function getAddressDecoder(): FixedSizeDecoder<Address, 32> {

@@ -3,8 +3,8 @@ import {
     fixDecoderSize,
     FixedSizeDecoder,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -48,13 +48,13 @@ export function getCompiledTransactionDecoder(): VariableSizeDecoder<CompiledTra
 export function getTransactionEncoder(): VariableSizeEncoder<
     CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)
 > {
-    return mapEncoder(getCompiledTransactionEncoder(), getCompiledTransaction);
+    return transformEncoder(getCompiledTransactionEncoder(), getCompiledTransaction);
 }
 
 export function getTransactionDecoder(
     config?: DecompileTransactionConfig,
 ): VariableSizeDecoder<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
-    return mapDecoder(getCompiledTransactionDecoder(), compiledTransaction =>
+    return transformDecoder(getCompiledTransactionDecoder(), compiledTransaction =>
         decompileTransaction(compiledTransaction, config),
     );
 }

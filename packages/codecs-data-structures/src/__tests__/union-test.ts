@@ -1,4 +1,4 @@
-import { assertIsFixedSize, assertIsVariableSize, fixCodecSize, mapCodec } from '@solana/codecs-core';
+import { assertIsFixedSize, assertIsVariableSize, fixCodecSize, transformCodec } from '@solana/codecs-core';
 import { getU8Codec, getU16Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE, SolanaError } from '@solana/errors';
@@ -98,7 +98,7 @@ describe('getUnionCodec', () => {
     });
 
     it('can be used to create a zeroable nullable codec', () => {
-        const nullCodec = mapCodec(
+        const nullCodec = transformCodec(
             getU8Codec(),
             (_value: null) => 0xff,
             () => null,
@@ -115,12 +115,12 @@ describe('getUnionCodec', () => {
     });
 
     it('can be used to create a discriminated union codec', () => {
-        const staticU16One = mapCodec(
+        const staticU16One = transformCodec(
             getU16Codec(),
             (_value: 1) => 1,
             () => 1 as const,
         );
-        const staticU16Two = mapCodec(
+        const staticU16Two = transformCodec(
             getU16Codec(),
             (_value: 2) => 2,
             () => 2 as const,

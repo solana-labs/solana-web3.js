@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -62,7 +62,7 @@ export function getLiteralUnionEncoder<const TVariants extends readonly Variant[
     config: LiteralUnionCodecConfig<NumberEncoder> = {},
 ): Encoder<GetTypeFromVariants<TVariants>> {
     const discriminator = config.size ?? getU8Encoder();
-    return mapEncoder(discriminator, variant => {
+    return transformEncoder(discriminator, variant => {
         const index = variants.indexOf(variant);
         if (index < 0) {
             throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT, {
@@ -96,7 +96,7 @@ export function getLiteralUnionDecoder<const TVariants extends readonly Variant[
     config: LiteralUnionCodecConfig<NumberDecoder> = {},
 ): Decoder<GetTypeFromVariants<TVariants>> {
     const discriminator = config.size ?? getU8Decoder();
-    return mapDecoder(discriminator, (index: bigint | number) => {
+    return transformDecoder(discriminator, (index: bigint | number) => {
         if (index < 0 || index >= variants.length) {
             throw new SolanaError(SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE, {
                 discriminator: index,

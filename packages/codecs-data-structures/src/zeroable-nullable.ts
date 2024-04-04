@@ -6,9 +6,9 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
     ReadonlyUint8Array,
+    transformDecoder,
+    transformEncoder,
 } from '@solana/codecs-core';
 import { getBase16Decoder } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__EXPECTED_ZERO_VALUE_TO_MATCH_ITEM_FIXED_SIZE, SolanaError } from '@solana/errors';
@@ -42,7 +42,7 @@ export function getZeroableNullableEncoder<TFrom, TSize extends number>(
 ): FixedSizeEncoder<TFrom | null, TSize> {
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionEncoder(
-        [mapEncoder(fixEncoderSize(getBytesEncoder(), item.fixedSize), (_value: null) => zeroValue), item],
+        [transformEncoder(fixEncoderSize(getBytesEncoder(), item.fixedSize), (_value: null) => zeroValue), item],
         variant => Number(variant !== null),
     ) as FixedSizeEncoder<TFrom | null, TSize>;
 }
@@ -60,7 +60,7 @@ export function getZeroableNullableDecoder<TTo, TSize extends number>(
 ): FixedSizeDecoder<TTo | null, TSize> {
     const zeroValue = getZeroValue(item.fixedSize, config.zeroValue);
     return getUnionDecoder(
-        [mapDecoder(fixDecoderSize(getBytesDecoder(), item.fixedSize), () => null), item],
+        [transformDecoder(fixDecoderSize(getBytesDecoder(), item.fixedSize), () => null), item],
         (bytes, offset) => (containsBytes(bytes, zeroValue, offset) ? 0 : 1),
     ) as FixedSizeDecoder<TTo | null, TSize>;
 }

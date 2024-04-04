@@ -1,4 +1,4 @@
-import { mapCodec } from '@solana/codecs-core';
+import { transformCodec } from '@solana/codecs-core';
 import { getShortU16Codec, getU32Codec } from '@solana/codecs-numbers';
 
 import { getBooleanCodec } from '../boolean';
@@ -7,7 +7,7 @@ import { b } from './__setup__';
 describe('getBooleanCodec', () => {
     // A variable-size number codecs that uses 0 for `false`
     // and the max shortU16 value for `true`.
-    const mappedShortU16 = mapCodec(
+    const mappedShortU16 = transformCodec(
         getShortU16Codec(),
         // eslint-disable-next-line jest/no-conditional-in-test
         v => (v === 0 ? 0 : 0xffff),

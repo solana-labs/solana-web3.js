@@ -46,7 +46,7 @@ There is a significant library of composable codecs at your disposal, enabling y
 -   [`@solana/codecs-data-structures`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-data-structures) for many data structure codecs such as objects, arrays, tuples, sets, maps, enums, discriminated unions, booleans, etc.
 -   [`@solana/options`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options) for a Rust-like `Option` type and associated codec.
 
-You may also be interested in some of the helpers of this `@solana/codecs-core` library such as `mapCodec`, `fixCodecSize` or `reverseCodec` that create new codecs from existing ones.
+You may also be interested in some of the helpers of this `@solana/codecs-core` library such as `transformCodec`, `fixCodecSize` or `reverseCodec` that create new codecs from existing ones.
 
 Note that all of these libraries are included in the [`@solana/codecs` package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs) as well as the main `@solana/web3.js` package for your convenience.
 
@@ -113,14 +113,14 @@ const value = u64Codec.decode(bytes); // BigInt(42)
 
 This relationship between the type we encode “From” and decode “To” can be generalized in TypeScript as `To extends From`.
 
-Here’s another example using an object with default values. You can read more about the `mapEncoder` helper below.
+Here’s another example using an object with default values. You can read more about the `transformEncoder` helper below.
 
 ```ts
 type Person = { name: string, age: number };
 type PersonInput = { name: string, age?: number };
 
 const getPersonEncoder = (): Encoder<PersonInput> =>
-    mapEncoder(
+    transformEncoder(
         getStructEncoder([
             ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
             ['age', getU32Encoder()],
@@ -285,7 +285,7 @@ const getCipherDecoder = () =>
 const getCipherCodec = () => combineCodec(getCipherEncoder(), getCipherDecoder());
 ```
 
-## Mapping codecs
+## Transforming codecs
 
 It is possible to transform a `Codec<T>` to a `Codec<U>` by providing two mapping functions: one that goes from `T` to `U` and one that does the opposite.
 
@@ -293,7 +293,7 @@ For instance, here’s how you would map a `u32` integer into a `string` represe
 
 ```ts
 const getStringU32Codec = () =>
-    mapCodec(
+    transformCodec(
         getU32Codec(),
         (integerAsString: string): number => parseInt(integerAsString),
         (integer: number): string => integer.toString(),
@@ -309,7 +309,7 @@ To illustrate that, let’s take our previous `getStringU32Codec` example but ma
 
 ```ts
 const getStringU64Codec = () =>
-    mapCodec(
+    transformCodec(
         getU64Codec(),
         (integerInput: number | string): number | bigint =>
             typeof integerInput === 'string' ? BigInt(integerAsString) : integerInput,
@@ -327,7 +327,7 @@ const getPersonCodec = (): Codec<Person> => { /*...*/ }
 
 type PersonInput = { name: string; age?: number; }
 const getPersonWithDefaultValueCodec = (): Codec<PersonInput, Person> =>
-    mapCodec(
+    transformCodec(
         getPersonCodec(),
         (person: PersonInput): Person => { ...person, age: person.age ?? 42 }
     )
@@ -337,8 +337,8 @@ Similar helpers exist to map `Encoder` and `Decoder` instances allowing you to s
 
 ```ts
 const getStringU32Encoder = () =>
-    mapEncoder(getU32Encoder(), (integerAsString: string): number => parseInt(integerAsString));
-const getStringU32Decoder = () => mapDecoder(getU32Decoder(), (integer: number): string => integer.toString());
+    transformEncoder(getU32Encoder(), (integerAsString: string): number => parseInt(integerAsString));
+const getStringU32Decoder = () => transformDecoder(getU32Decoder(), (integer: number): string => integer.toString());
 const getStringU32Codec = () => combineCodec(getStringU32Encoder(), getStringU32Decoder());
 ```
 

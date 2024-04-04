@@ -6,8 +6,8 @@ import {
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -85,7 +85,7 @@ export function getEnumEncoder<TEnum extends EnumLookupObject>(
             stringValues: enumValues.filter((v): v is string => typeof v === 'string'),
         });
     }
-    return mapEncoder(prefix, (variant: GetEnumFrom<TEnum>): number => {
+    return transformEncoder(prefix, (variant: GetEnumFrom<TEnum>): number => {
         const index = getEnumIndexFromVariant({ enumKeys, enumValues, variant });
         if (index < 0) {
             throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT, {
@@ -129,7 +129,7 @@ export function getEnumDecoder<TEnum extends EnumLookupObject>(
             stringValues: enumValues.filter((v): v is string => typeof v === 'string'),
         });
     }
-    return mapDecoder(prefix, (value: bigint | number): GetEnumTo<TEnum> => {
+    return transformDecoder(prefix, (value: bigint | number): GetEnumTo<TEnum> => {
         const discriminator = Number(value);
         const index = getEnumIndexFromDiscriminator({
             discriminator,
