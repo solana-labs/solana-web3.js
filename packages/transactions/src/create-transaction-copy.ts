@@ -17,3 +17,5 @@ export function createTransaction<TVersion extends TransactionVersion>({
     Object.freeze(out);
     return out;
 }
+
+// add a random comment to test another commit changing the file after copying
