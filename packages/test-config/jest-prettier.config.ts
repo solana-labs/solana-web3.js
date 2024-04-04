@@ -8,7 +8,7 @@ const config: Partial<Config.InitialProjectOptions> = {
     moduleFileExtensions: ['js', 'ts', 'json', 'md'],
     runner: 'prettier',
     testMatch: ['<rootDir>/src/**', '<rootDir>*'],
-    testPathIgnorePatterns: ['README.md'],
+    testPathIgnorePatterns: ['README.md', 'CHANGELOG.md'],
 };
 
 export default config;
