@@ -1,5 +1,4 @@
 import {
-    assertIsFixedSize,
     Codec,
     combineCodec,
     Decoder,
@@ -9,6 +8,9 @@ import {
     FixedSizeEncoder,
     mapDecoder,
     mapEncoder,
+    VariableSizeCodec,
+    VariableSizeDecoder,
+    VariableSizeEncoder,
 } from '@solana/codecs-core';
 import {
     FixedSizeNumberCodec,
@@ -39,11 +41,9 @@ export function getBooleanEncoder(): FixedSizeEncoder<boolean, 1>;
 export function getBooleanEncoder<TSize extends number>(
     config: BooleanCodecConfig<NumberEncoder> & { size: FixedSizeNumberEncoder<TSize> },
 ): FixedSizeEncoder<boolean, TSize>;
-export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder>): Encoder<boolean>;
+export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder>): VariableSizeEncoder<boolean>;
 export function getBooleanEncoder(config: BooleanCodecConfig<NumberEncoder> = {}): Encoder<boolean> {
-    const size = config.size ?? getU8Encoder();
-    assertIsFixedSize(size);
-    return mapEncoder(size, (value: boolean) => (value ? 1 : 0));
+    return mapEncoder(config.size ?? getU8Encoder(), (value: boolean) => (value ? 1 : 0));
 }
 
 /**
@@ -55,11 +55,9 @@ export function getBooleanDecoder(): FixedSizeDecoder<boolean, 1>;
 export function getBooleanDecoder<TSize extends number>(
     config: BooleanCodecConfig<NumberDecoder> & { size: FixedSizeNumberDecoder<TSize> },
 ): FixedSizeDecoder<boolean, TSize>;
-export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): Decoder<boolean>;
+export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder>): VariableSizeDecoder<boolean>;
 export function getBooleanDecoder(config: BooleanCodecConfig<NumberDecoder> = {}): Decoder<boolean> {
-    const size = config.size ?? getU8Decoder();
-    assertIsFixedSize(size);
-    return mapDecoder(size, (value: bigint | number): boolean => Number(value) === 1);
+    return mapDecoder(config.size ?? getU8Decoder(), (value: bigint | number): boolean => Number(value) === 1);
 }
 
 /**
@@ -71,7 +69,7 @@ export function getBooleanCodec(): FixedSizeCodec<boolean, boolean, 1>;
 export function getBooleanCodec<TSize extends number>(
     config: BooleanCodecConfig<NumberCodec> & { size: FixedSizeNumberCodec<TSize> },
 ): FixedSizeCodec<boolean, boolean, TSize>;
-export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec>): Codec<boolean>;
+export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec>): VariableSizeCodec<boolean>;
 export function getBooleanCodec(config: BooleanCodecConfig<NumberCodec> = {}): Codec<boolean> {
     return combineCodec(getBooleanEncoder(config), getBooleanDecoder(config));
 }
