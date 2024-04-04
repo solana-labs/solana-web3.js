@@ -41,7 +41,7 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          version: changeset version && pnpm style:fix
+          version: pnpm changeset version && pnpm style:fix
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
