@@ -10,10 +10,10 @@ import { pipe } from '@solana/functional';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
 import { SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
+import type { getCompiledAddressTableLookups } from '@solana/transaction-messages';
 
 import { setTransactionLifetimeUsingBlockhash } from './blockhash';
 import { CompilableTransaction } from './compilable-transaction';
-import type { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { CompiledTransaction } from './compile-transaction';
 import { createTransaction } from './create-transaction';
 import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce';

@@ -1,4 +1,5 @@
 export * from './blockhash';
+export * from './codecs';
 export * from './compile';
 export * from './create-transaction-message';
 export * from './durable-nonce';
