@@ -13,6 +13,7 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
@@ -28,6 +29,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES,
     SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
@@ -269,6 +271,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
             codecDescription: string;
         };
+        [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]: {
+            encodedBytes: ReadonlyUint8Array;
+            hexEncodedBytes: string;
+            hexSentinel: string;
+            sentinel: ReadonlyUint8Array;
+        };
         [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]: {
             decoderFixedSize: number;
             encoderFixedSize: number;
@@ -343,6 +351,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             bytesLength: number;
             codecDescription: string;
             offset: number;
+        };
+        [SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES]: {
+            decodedBytes: ReadonlyUint8Array;
+            hexDecodedBytes: string;
+            hexSentinel: string;
+            sentinel: ReadonlyUint8Array;
         };
         [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]: {
             maxRange: number;

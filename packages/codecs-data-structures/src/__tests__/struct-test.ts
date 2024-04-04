@@ -1,4 +1,4 @@
-import { addCodecSizePrefix, fixCodecSize, offsetCodec, resizeCodec } from '@solana/codecs-core';
+import { addCodecSentinel, addCodecSizePrefix, fixCodecSize, offsetCodec, resizeCodec } from '@solana/codecs-core';
 import { getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 
@@ -76,5 +76,16 @@ describe('getStructCodec', () => {
         expect(person.encode(alice)).toStrictEqual(b('416c6963650000000000000020000000'));
         expect(person.read(b('416c6963650000000000000020000000'), 0)).toStrictEqual([alice, 16]);
         expect(person.read(b('ff416c6963650000000000000020000000'), 1)).toStrictEqual([alice, 17]);
+    });
+
+    it('can chain sentinel codecs', () => {
+        const person = struct([
+            ['firstname', addCodecSentinel(getUtf8Codec(), b('ff'))],
+            ['lastname', addCodecSentinel(getUtf8Codec(), b('ff'))],
+            ['age', u8()],
+        ]);
+        const john = { age: 42, firstname: 'John', lastname: 'Doe' };
+        expect(person.encode(john)).toStrictEqual(b('4a6f686eff446f65ff2a'));
+        expect(person.decode(b('4a6f686eff446f65ff2a'))).toStrictEqual(john);
     });
 });

@@ -1,4 +1,4 @@
-import { addCodecSizePrefix, fixCodecSize, offsetCodec } from '@solana/codecs-core';
+import { addCodecSentinel, addCodecSizePrefix, fixCodecSize, offsetCodec } from '@solana/codecs-core';
 import { getI16Codec, getU8Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
 import { getUtf8Codec } from '@solana/codecs-strings';
 import { SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS, SolanaError } from '@solana/errors';
@@ -71,5 +71,16 @@ describe('getTupleCodec', () => {
         expect(person.encode(['Alice', 32])).toStrictEqual(b('2000000000000000416c696365000000'));
         expect(person.read(b('2000000000000000416c696365000000'), 0)).toStrictEqual([['Alice', 32n], 16]);
         expect(person.read(b('ff2000000000000000416c696365000000'), 1)).toStrictEqual([['Alice', 32n], 17]);
+    });
+
+    it('can chain sentinel codecs', () => {
+        const person = tuple([
+            addCodecSentinel(getUtf8Codec(), b('ff')),
+            addCodecSentinel(getUtf8Codec(), b('ff')),
+            u8(),
+        ]);
+        const john = ['John', 'Doe', 42] as const;
+        expect(person.encode(john)).toStrictEqual(b('4a6f686eff446f65ff2a'));
+        expect(person.decode(b('4a6f686eff446f65ff2a'))).toStrictEqual(john);
     });
 });
