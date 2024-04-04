@@ -40,8 +40,6 @@ jobs:
       - name: Create Changesets Pull Request or Trigger an NPM Publish
         id: changesets
         uses: changesets/action@v1
-        with:
-          version: (pnpm changeset version) && (pnpm style:fix)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
