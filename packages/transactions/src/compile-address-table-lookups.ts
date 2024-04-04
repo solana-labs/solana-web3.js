@@ -1,7 +1,6 @@
 import { Address, getAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
-
-import { OrderedAccounts } from './accounts';
+import { OrderedAccounts } from '@solana/transaction-messages';
 
 type AddressTableLookup = Readonly<{
     lookupTableAddress: Address;

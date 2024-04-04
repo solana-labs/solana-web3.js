@@ -1,7 +1,7 @@
 import { Address, getAddressComparator } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
+import { OrderedAccounts } from '@solana/transaction-messages';
 
-import { OrderedAccounts } from '../accounts';
 import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 
 const MOCK_ADDRESSES: ReadonlyArray<Address> = [
