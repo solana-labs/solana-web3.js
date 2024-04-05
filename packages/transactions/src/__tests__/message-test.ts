@@ -4,10 +4,10 @@ import {
     getCompiledInstructions,
     getCompiledLifetimeToken,
     getCompiledMessageHeader,
+    getCompiledStaticAccounts,
 } from '@solana/transaction-messages';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
-import { getCompiledStaticAccounts } from '../compile-static-accounts';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileTransactionMessage } from '../message';
 import { BaseTransaction } from '../types';
@@ -18,8 +18,8 @@ jest.mock('@solana/transaction-messages', () => ({
     getCompiledInstructions: jest.fn(),
     getCompiledLifetimeToken: jest.fn(),
     getCompiledMessageHeader: jest.fn(),
+    getCompiledStaticAccounts: jest.fn(),
 }));
-jest.mock('../compile-static-accounts');
 
 const MOCK_LIFETIME_CONSTRAINT =
     'SOME_CONSTRAINT' as unknown as ITransactionWithBlockhashLifetime['lifetimeConstraint'];
