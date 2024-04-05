@@ -5,14 +5,7 @@ import { SignatureBytes } from '@solana/keys';
 import { CompilableTransaction } from './compilable-transaction';
 import { compileTransactionMessage } from './message';
 import { getCompiledMessageEncoder } from './serializers/message';
-
-export type TransactionMessageBytes = ReadonlyUint8Array & { readonly __brand: unique symbol };
-export type OrderedMap<K extends string, V> = Record<K, V>;
-
-export type NewTransaction = Readonly<{
-    messageBytes: TransactionMessageBytes;
-    signatures: OrderedMap<Address, SignatureBytes | null>;
-}>;
+import { NewTransaction, OrderedMap, TransactionMessageBytes } from './transaction';
 
 export function compileTransaction(transactionMessage: CompilableTransaction): NewTransaction {
     const compiledMessage = compileTransactionMessage(transactionMessage);

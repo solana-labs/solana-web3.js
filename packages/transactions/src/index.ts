@@ -10,6 +10,7 @@ export * from './new-compile-transaction';
 export * from './new-signatures';
 export * from './serializers';
 export * from './signatures';
+export * from './transaction';
 export * from './types';
 export * from './unsigned-transaction';
 export * from './wire-transaction';
