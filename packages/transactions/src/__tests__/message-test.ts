@@ -2,11 +2,11 @@ import { Address } from '@solana/addresses';
 import {
     getCompiledAddressTableLookups,
     getCompiledInstructions,
+    getCompiledLifetimeToken,
     getCompiledMessageHeader,
 } from '@solana/transaction-messages';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
-import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 import { getCompiledStaticAccounts } from '../compile-static-accounts';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileTransactionMessage } from '../message';
@@ -16,9 +16,9 @@ jest.mock('@solana/transaction-messages', () => ({
     ...jest.requireActual('@solana/transaction-messages'),
     getCompiledAddressTableLookups: jest.fn(),
     getCompiledInstructions: jest.fn(),
+    getCompiledLifetimeToken: jest.fn(),
     getCompiledMessageHeader: jest.fn(),
 }));
-jest.mock('../compile-lifetime-token');
 jest.mock('../compile-static-accounts');
 
 const MOCK_LIFETIME_CONSTRAINT =
