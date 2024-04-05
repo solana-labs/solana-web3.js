@@ -6,6 +6,7 @@ import {
     ITransactionMessageWithBlockhashLifetime,
     setTransactionMessageLifetimeUsingBlockhash,
 } from '../blockhash';
+import { CompilableTransactionMessage } from '../compilable-transaction-message';
 import { createTransactionMessage } from '../create-transaction-message';
 import {
     IDurableNonceTransactionMessage,
@@ -222,3 +223,20 @@ prependTransactionMessageInstruction(
     ITransactionMessageWithFeePayer<'feePayer'> & {
         instructions: TransactionMessage['instructions'];
     };
+
+// CompilableTransactionMessage
+// @ts-expect-error missing fee payer + lifetime token
+null as unknown as BaseTransactionMessage satisfies CompilableTransactionMessage;
+// @ts-expect-error missing lifetime token
+null as unknown as BaseTransactionMessage & ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
+null as unknown as BaseTransactionMessage &
+    // @ts-expect-error missing fee payer
+    ITransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
+// @ts-expect-error missing fee payer
+null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage satisfies CompilableTransactionMessage;
+null as unknown as BaseTransactionMessage &
+    ITransactionMessageWithBlockhashLifetime &
+    ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
+null as unknown as BaseTransactionMessage &
+    IDurableNonceTransactionMessage &
+    ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
