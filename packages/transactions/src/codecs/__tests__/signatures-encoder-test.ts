@@ -2,10 +2,8 @@ import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__TRANSACTION__CANNOT_ENCODE_WITH_EMPTY_SIGNATURES, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 
-import { NewTransaction } from '../../transaction';
+import { SignaturesMap } from '../../transaction';
 import { getSignaturesEncoder } from '../signatures-encoder';
-
-type SignaturesMap = NewTransaction['signatures'];
 
 describe('getSignaturesEncoder', () => {
     const encoder = getSignaturesEncoder();

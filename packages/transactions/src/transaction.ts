@@ -4,8 +4,9 @@ import { SignatureBytes } from '@solana/keys';
 
 export type TransactionMessageBytes = ReadonlyUint8Array & { readonly __brand: unique symbol };
 export type OrderedMap<K extends string, V> = Record<K, V>;
+export type SignaturesMap = OrderedMap<Address, SignatureBytes | null>;
 
 export type NewTransaction = Readonly<{
     messageBytes: TransactionMessageBytes;
-    signatures: OrderedMap<Address, SignatureBytes | null>;
+    signatures: SignaturesMap;
 }>;
