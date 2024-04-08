@@ -24,16 +24,6 @@ export type RpcFromTransport<TRpcMethods, TRpcTransport extends RpcTransport> = 
       : TRpcTransport extends RpcTransportMainnet
         ? RpcMainnet<TRpcMethods>
         : Rpc<TRpcMethods>;
-export type RpcFromCluster<
-    TRpcMethods,
-    TCluster extends 'devnet' | 'mainnet' | 'testnet' | undefined = undefined,
-> = TCluster extends 'devnet'
-    ? RpcDevnet<TRpcMethods>
-    : TCluster extends 'testnet'
-      ? RpcTestnet<TRpcMethods>
-      : TCluster extends 'mainnet'
-        ? RpcMainnet<TRpcMethods>
-        : Rpc<TRpcMethods>;
 
 export type SolanaRpcApiFromTransport<TTransport extends RpcTransport> = TTransport extends RpcTransportDevnet
     ? SolanaRpcApiDevnet

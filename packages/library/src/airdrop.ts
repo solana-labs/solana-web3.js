@@ -1,6 +1,10 @@
 import type { Signature } from '@solana/keys';
-import type { GetSignatureStatusesApi, RequestAirdropApi, RpcFromCluster } from '@solana/rpc';
-import type { RpcSubscriptionsFromCluster, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
+import type { GetSignatureStatusesApi, RequestAirdropApi, RpcDevnet, RpcTestnet } from '@solana/rpc';
+import type {
+    RpcSubscriptionsDevnet,
+    RpcSubscriptionsTestnet,
+    SignatureNotificationsApi,
+} from '@solana/rpc-subscriptions';
 import {
     createRecentSignatureConfirmationPromiseFactory,
     getTimeoutPromise,
@@ -16,14 +20,41 @@ type AirdropFunction = (
     >,
 ) => Promise<Signature>;
 
-type AirdropFactoryConfig<TCluster extends 'devnet' | 'testnet'> = Readonly<{
-    rpc: RpcFromCluster<GetSignatureStatusesApi & RequestAirdropApi, TCluster>;
-    rpcSubscriptions: RpcSubscriptionsFromCluster<SignatureNotificationsApi, TCluster>;
+type AirdropFactoryRpcApi = GetSignatureStatusesApi & RequestAirdropApi;
+type AirdropFactoryRpcSubscriptionsApi = SignatureNotificationsApi;
+
+type AirdropFactoryConfig<
+    TRpc extends RpcDevnet<AirdropFactoryRpcApi> | RpcTestnet<AirdropFactoryRpcApi>,
+    TRpcSubscriptions extends
+        | RpcSubscriptionsDevnet<AirdropFactoryRpcSubscriptionsApi>
+        | RpcSubscriptionsTestnet<AirdropFactoryRpcSubscriptionsApi>,
+> = Readonly<{
+    rpc: TRpc;
+    rpcSubscriptions: TRpcSubscriptions;
 }>;
 
-export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'devnet'>): AirdropFunction;
-export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'testnet'>): AirdropFunction;
-export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'devnet' | 'testnet'>): AirdropFunction {
+export function airdropFactory({
+    rpc,
+    rpcSubscriptions,
+}: AirdropFactoryConfig<
+    RpcDevnet<AirdropFactoryRpcApi>,
+    RpcSubscriptionsDevnet<AirdropFactoryRpcSubscriptionsApi>
+>): AirdropFunction;
+export function airdropFactory({
+    rpc,
+    rpcSubscriptions,
+}: AirdropFactoryConfig<
+    RpcTestnet<AirdropFactoryRpcApi>,
+    RpcSubscriptionsTestnet<AirdropFactoryRpcSubscriptionsApi>
+>): AirdropFunction;
+export function airdropFactory({
+    rpc,
+    rpcSubscriptions,
+}: AirdropFactoryConfig<
+    RpcDevnet<AirdropFactoryRpcApi> | RpcTestnet<AirdropFactoryRpcApi>,
+    | RpcSubscriptionsDevnet<AirdropFactoryRpcSubscriptionsApi>
+    | RpcSubscriptionsTestnet<AirdropFactoryRpcSubscriptionsApi>
+>): AirdropFunction {
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,
