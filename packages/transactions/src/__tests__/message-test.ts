@@ -1,8 +1,11 @@
 import { Address } from '@solana/addresses';
-import { getCompiledAddressTableLookups, getCompiledMessageHeader } from '@solana/transaction-messages';
+import {
+    getCompiledAddressTableLookups,
+    getCompiledInstructions,
+    getCompiledMessageHeader,
+} from '@solana/transaction-messages';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
-import { getCompiledInstructions } from '../compile-instructions';
 import { getCompiledLifetimeToken } from '../compile-lifetime-token';
 import { getCompiledStaticAccounts } from '../compile-static-accounts';
 import { ITransactionWithFeePayer } from '../fee-payer';
@@ -12,9 +15,9 @@ import { BaseTransaction } from '../types';
 jest.mock('@solana/transaction-messages', () => ({
     ...jest.requireActual('@solana/transaction-messages'),
     getCompiledAddressTableLookups: jest.fn(),
+    getCompiledInstructions: jest.fn(),
     getCompiledMessageHeader: jest.fn(),
 }));
-jest.mock('../compile-instructions');
 jest.mock('../compile-lifetime-token');
 jest.mock('../compile-static-accounts');
 

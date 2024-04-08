@@ -18,12 +18,13 @@ import type { getCompiledAddressTableLookups } from '@solana/transaction-message
 import {
     getAddressTableLookupDecoder,
     getAddressTableLookupEncoder,
+    getInstructionDecoder,
+    getInstructionEncoder,
     getMessageHeaderDecoder,
     getMessageHeaderEncoder,
 } from '@solana/transaction-messages';
 
 import { CompiledMessage } from '../message';
-import { getInstructionDecoder, getInstructionEncoder } from './instruction';
 import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
 
 function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage> {

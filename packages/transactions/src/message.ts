@@ -1,12 +1,12 @@
 import {
     getAddressMapFromInstructions,
     getCompiledAddressTableLookups,
+    getCompiledInstructions,
     getCompiledMessageHeader,
     getOrderedAccountsFromAddressMap,
 } from '@solana/transaction-messages';
 
 import { CompilableTransaction } from './compilable-transaction';
-import { getCompiledInstructions } from './compile-instructions';
 import { getCompiledLifetimeToken } from './compile-lifetime-token';
 import { getCompiledStaticAccounts } from './compile-static-accounts';
 
