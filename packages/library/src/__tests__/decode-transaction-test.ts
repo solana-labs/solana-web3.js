@@ -2,7 +2,12 @@ import { FetchAccountsConfig, fetchJsonParsedAccounts } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import type { Blockhash, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
-import { decompileTransaction, getCompiledTransactionDecoder } from '@solana/transactions';
+import {
+    CompilableTransaction,
+    getCompiledTransactionDecoder,
+    getTransactionDecoder,
+    ITransactionWithSignatures,
+} from '@solana/transactions';
 import type { CompiledTransaction } from '@solana/transactions/dist/types/compile-transaction';
 
 jest.mock('@solana/accounts');
@@ -46,14 +51,25 @@ describe('decodeTransaction', () => {
             signatures: [],
         };
 
+        const mockTransaction: CompilableTransaction = { version: 0 } as unknown as CompilableTransaction;
+
         // mock `getCompiledTransactionDecoder` to return `compiledTransaction`
         let mockCompiledTransactionDecode: () => CompiledTransaction;
+        let mockTransactionDecode: () => CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures);
+
         beforeEach(() => {
             mockCompiledTransactionDecode = jest.fn().mockReturnValue(compiledTransaction);
+            mockTransactionDecode = jest.fn().mockReturnValue(mockTransaction);
 
             jest.mocked(getCompiledTransactionDecoder).mockReturnValue({
                 decode: mockCompiledTransactionDecode,
             } as unknown as ReturnType<typeof getCompiledTransactionDecoder>);
+
+            // mock `getTransactionDecoder`
+
+            jest.mocked(getTransactionDecoder).mockReturnValue({
+                decode: mockTransactionDecode,
+            } as unknown as ReturnType<typeof getTransactionDecoder>);
         });
 
         it('should pass the given encoded transaction to the compiled transaction decoder', async () => {
@@ -68,19 +84,31 @@ describe('decodeTransaction', () => {
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
-        it('should call `decompileTransaction` with the compiled transaction and no lookup tables', async () => {
+        it('should call the transaction decoder with no lookup tables', async () => {
             expect.assertions(1);
             await decodeTransaction(encodedTransaction, rpc);
-            expect(decompileTransaction).toHaveBeenCalledWith(compiledTransaction, {
+            expect(getTransactionDecoder).toHaveBeenCalledWith({
                 addressesByLookupTableAddress: {},
                 lastValidBlockHeight: undefined,
             });
         });
 
+        it('should return the result of the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            const decodePromise = decodeTransaction(encodedTransaction, rpc);
+            await expect(decodePromise).resolves.toStrictEqual(mockTransaction);
+        });
+
+        it('should call the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            await decodeTransaction(encodedTransaction, rpc);
+            expect(mockTransactionDecode).toHaveBeenLastCalledWith(encodedTransaction);
+        });
+
         it('should pass `lastValidBlockHeight` to `decompileTransaction`', async () => {
             expect.assertions(1);
             await decodeTransaction(encodedTransaction, rpc, { lastValidBlockHeight: 100n });
-            expect(decompileTransaction).toHaveBeenCalledWith(compiledTransaction, {
+            expect(getTransactionDecoder).toHaveBeenCalledWith({
                 addressesByLookupTableAddress: {},
                 lastValidBlockHeight: 100n,
             });
@@ -104,14 +132,25 @@ describe('decodeTransaction', () => {
             signatures: [],
         };
 
+        const mockTransaction: CompilableTransaction = { version: 0 } as unknown as CompilableTransaction;
+
         // mock `getCompiledTransactionDecoder` to return `compiledTransaction`
         let mockCompiledTransactionDecode: () => CompiledTransaction;
+        let mockTransactionDecode: () => CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures);
+
         beforeEach(() => {
             mockCompiledTransactionDecode = jest.fn().mockReturnValue(compiledTransaction);
+            mockTransactionDecode = jest.fn().mockReturnValue(mockTransaction);
 
             jest.mocked(getCompiledTransactionDecoder).mockReturnValue({
                 decode: mockCompiledTransactionDecode,
             } as unknown as ReturnType<typeof getCompiledTransactionDecoder>);
+
+            // mock `getTransactionDecoder`
+
+            jest.mocked(getTransactionDecoder).mockReturnValue({
+                decode: mockTransactionDecode,
+            } as unknown as ReturnType<typeof getTransactionDecoder>);
         });
 
         it('should pass the given encoded transaction to the compiled transaction decoder', async () => {
@@ -126,13 +165,25 @@ describe('decodeTransaction', () => {
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
-        it('should call `decompileTransaction` with the compiled transaction and no lookup tables', async () => {
+        it('should call the transaction decoder with no lookup tables', async () => {
             expect.assertions(1);
             await decodeTransaction(encodedTransaction, rpc);
-            expect(decompileTransaction).toHaveBeenCalledWith(compiledTransaction, {
+            expect(getTransactionDecoder).toHaveBeenCalledWith({
                 addressesByLookupTableAddress: {},
                 lastValidBlockHeight: undefined,
             });
+        });
+
+        it('should return the result of the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            const decodePromise = decodeTransaction(encodedTransaction, rpc);
+            await expect(decodePromise).resolves.toStrictEqual(mockTransaction);
+        });
+
+        it('should call the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            await decodeTransaction(encodedTransaction, rpc);
+            expect(mockTransactionDecode).toHaveBeenLastCalledWith(encodedTransaction);
         });
     });
 
@@ -153,14 +204,24 @@ describe('decodeTransaction', () => {
             signatures: [],
         };
 
+        const mockTransaction: CompilableTransaction = { version: 0 } as unknown as CompilableTransaction;
+
         // mock `getCompiledTransactionDecoder` to return `compiledTransaction`
         let mockCompiledTransactionDecode: () => CompiledTransaction;
+        let mockTransactionDecode: () => CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures);
+
         beforeEach(() => {
             mockCompiledTransactionDecode = jest.fn().mockReturnValue(compiledTransaction);
+            mockTransactionDecode = jest.fn().mockReturnValue(mockTransaction);
 
             jest.mocked(getCompiledTransactionDecoder).mockReturnValue({
                 decode: mockCompiledTransactionDecode,
             } as unknown as ReturnType<typeof getCompiledTransactionDecoder>);
+
+            // mock `getTransactionDecoder`
+            jest.mocked(getTransactionDecoder).mockReturnValue({
+                decode: mockTransactionDecode,
+            } as unknown as ReturnType<typeof getTransactionDecoder>);
         });
 
         it('should pass the given encoded transaction to the compiled transaction decoder', async () => {
@@ -175,13 +236,25 @@ describe('decodeTransaction', () => {
             expect(fetchJsonParsedAccounts).not.toHaveBeenCalled();
         });
 
-        it('should call `decompileTransaction` with the compiled transaction and no lookup tables', async () => {
+        it('should call the transaction decoder with no lookup tables', async () => {
             expect.assertions(1);
             await decodeTransaction(encodedTransaction, rpc);
-            expect(decompileTransaction).toHaveBeenCalledWith(compiledTransaction, {
+            expect(getTransactionDecoder).toHaveBeenCalledWith({
                 addressesByLookupTableAddress: {},
                 lastValidBlockHeight: undefined,
             });
+        });
+
+        it('should return the result of the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            const decodePromise = decodeTransaction(encodedTransaction, rpc);
+            await expect(decodePromise).resolves.toStrictEqual(mockTransaction);
+        });
+
+        it('should call the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            await decodeTransaction(encodedTransaction, rpc);
+            expect(mockTransactionDecode).toHaveBeenLastCalledWith(encodedTransaction);
         });
     });
 
@@ -216,6 +289,8 @@ describe('decodeTransaction', () => {
             signatures: [],
         };
 
+        const mockTransaction: CompilableTransaction = { version: 0 } as unknown as CompilableTransaction;
+
         const addressInLookup1 = '3333' as Address;
         const addressInLookup2 = '4444' as Address;
 
@@ -242,10 +317,11 @@ describe('decodeTransaction', () => {
             },
         ];
 
-        // mock `getCompiledTransactionDecoder` to return `compiledTransaction`
         let mockCompiledTransactionDecode: () => CompiledTransaction;
+        let mockTransactionDecode: () => CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures);
         beforeEach(() => {
             mockCompiledTransactionDecode = jest.fn().mockReturnValue(compiledTransaction);
+            mockTransactionDecode = jest.fn().mockReturnValue(mockTransaction);
 
             jest.mocked(getCompiledTransactionDecoder).mockReturnValue({
                 decode: mockCompiledTransactionDecode,
@@ -253,6 +329,11 @@ describe('decodeTransaction', () => {
 
             // mock `fetchJsonParsedAccounts` to resolve to `fetchedLookupTables`
             jest.mocked(fetchJsonParsedAccounts).mockResolvedValue(fetchedLookupTables);
+
+            // mock `getTransactionDecoder`
+            jest.mocked(getTransactionDecoder).mockReturnValue({
+                decode: mockTransactionDecode,
+            } as unknown as ReturnType<typeof getTransactionDecoder>);
         });
 
         it('should pass the given encoded transaction to the compiled transaction decoder', async () => {
@@ -285,16 +366,28 @@ describe('decodeTransaction', () => {
             );
         });
 
-        it('should call `decompileTransaction` with the compiled transaction and the fetched lookup tables', async () => {
+        it('should call the transaction decoder with no lookup tables', async () => {
             expect.assertions(1);
             await decodeTransaction(encodedTransaction, rpc);
-            expect(decompileTransaction).toHaveBeenCalledWith(compiledTransaction, {
+            expect(getTransactionDecoder).toHaveBeenCalledWith({
                 addressesByLookupTableAddress: {
                     [lookupTableAddress1]: [addressInLookup1],
                     [lookupTableAddress2]: [addressInLookup2],
                 },
                 lastValidBlockHeight: undefined,
             });
+        });
+
+        it('should return the result of the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            const decodePromise = decodeTransaction(encodedTransaction, rpc);
+            await expect(decodePromise).resolves.toStrictEqual(mockTransaction);
+        });
+
+        it('should call the `getTransactionDecoder` decode function', async () => {
+            expect.assertions(1);
+            await decodeTransaction(encodedTransaction, rpc);
+            expect(mockTransactionDecode).toHaveBeenLastCalledWith(encodedTransaction);
         });
     });
 });
