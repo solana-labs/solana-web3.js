@@ -1,8 +1,11 @@
 import { getAddressDecoder } from '@solana/addresses';
 import {
+    combineCodec,
     fixDecoderSize,
+    padRightDecoder,
     ReadonlyUint8Array,
     transformDecoder,
+    VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
 } from '@solana/codecs-core';
@@ -12,9 +15,10 @@ import {
     getBytesEncoder,
     getStructDecoder,
     getStructEncoder,
+    getTupleDecoder,
 } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getU8Decoder } from '@solana/codecs-numbers';
-import { SOLANA_ERROR__TRANSACTION__SIGNATURES_LENGTH_NUM_SIGNERS_MISMATCH, SolanaError } from '@solana/errors';
+import { SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 import { getTransactionVersionDecoder } from '@solana/transaction-messages';
 
@@ -38,6 +42,10 @@ export function getNewTransactionDecoder(): VariableSizeDecoder<NewTransaction> 
     );
 }
 
+export function getNewTransactionCodec(): VariableSizeCodec<NewTransaction> {
+    return combineCodec(getNewTransactionEncoder(), getNewTransactionDecoder());
+}
+
 type PartiallyDecodedTransaction = {
     messageBytes: ReadonlyUint8Array;
     signatures: ReadonlyUint8Array[];
@@ -48,39 +56,33 @@ function decodePartiallyDecodedTransaction(transaction: PartiallyDecodedTransact
 
     /*
     Relevant message structure is at the start:
-    - transaction version
-    - transaction header (includes number of signer accounts)
-    - static accounts (signers first)
+    - transaction version (0 bytes for legacy transactions, 1 byte for versioned transactions)
+    - `numRequiredSignatures` (1 byte, we verify this matches the length of signatures)
+    - `numReadOnlySignedAccounts` (1 byte, not used here)
+    - `numReadOnlyUnsignedAccounts` (1 byte, not used here)
+    - static addresses, with signers first. This is an array of addresses, encoded with a short-u16 length
     */
 
-    let offset = 0;
+    const signerAddressesDecoder = getTupleDecoder([
+        // read transaction version
+        getTransactionVersionDecoder(),
+        // read first byte of header, `numSignerAccounts`
+        // padRight to skip the next 2 bytes, `numReadOnlySignedAccounts` and `numReadOnlyUnsignedAccounts` which we don't need
+        padRightDecoder(getU8Decoder(), 2),
+        // read static addresses
+        getArrayDecoder(getAddressDecoder(), { size: getShortU16Decoder() }),
+    ]);
+    const [_txVersion, numRequiredSignatures, staticAddresses] = signerAddressesDecoder.decode(messageBytes);
 
-    // read version
-    offset = getTransactionVersionDecoder().read(messageBytes, offset)[1];
-
-    // read header
-    // first byte of header is numSignerAccounts
-    const numSignersResult = getU8Decoder().read(messageBytes, offset);
-    const numSigners = numSignersResult[0];
-    // there are two more bytes which we don't need to read
-    offset = numSignersResult[1] + 2;
-
-    // read signer addresses (these are first in the static accounts)
-    // compact-u16 array format, read the short-u16 length
-    const addressesLength = getShortU16Decoder().read(messageBytes, offset);
-    offset = addressesLength[1];
-
-    // by decoding this array with a fixed size,
-    // we don't try to read a length prefix and only read as many addresses as we need
-    const [signerAddresses] = getArrayDecoder(getAddressDecoder(), { size: numSigners }).read(messageBytes, offset);
+    const signerAddresses = staticAddresses.slice(0, numRequiredSignatures);
 
     // signer addresses and signatures must be the same length
     // we encode an all-zero signature when the signature is missing
     if (signerAddresses.length !== signatures.length) {
-        throw new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_LENGTH_NUM_SIGNERS_MISMATCH, {
+        throw new SolanaError(SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, {
+            numRequiredSignatures,
             signaturesLength: signatures.length,
             signerAddresses,
-            signerAddressesLength: signerAddresses.length,
         });
     }
 
@@ -97,6 +99,6 @@ function decodePartiallyDecodedTransaction(transaction: PartiallyDecodedTransact
 
     return {
         messageBytes: messageBytes as TransactionMessageBytes,
-        signatures: signaturesMap,
+        signatures: Object.freeze(signaturesMap),
     };
 }

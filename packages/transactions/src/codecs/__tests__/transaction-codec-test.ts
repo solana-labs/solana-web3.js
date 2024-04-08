@@ -1,15 +1,17 @@
+import '@solana/test-matchers/toBeFrozenObject';
+
 import { Address } from '@solana/addresses';
-import { ReadonlyUint8Array, VariableSizeEncoder } from '@solana/codecs-core';
-import { SOLANA_ERROR__TRANSACTION__SIGNATURES_LENGTH_NUM_SIGNERS_MISMATCH, SolanaError } from '@solana/errors';
+import { ReadonlyUint8Array, VariableSizeDecoder, VariableSizeEncoder } from '@solana/codecs-core';
+import { SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 
 import { NewTransaction, TransactionMessageBytes } from '../../transaction';
 import { getSignaturesEncoder } from '../signatures-encoder';
-import { getNewTransactionDecoder, getNewTransactionEncoder } from '../transaction-codec';
+import { getNewTransactionCodec, getNewTransactionDecoder, getNewTransactionEncoder } from '../transaction-codec';
 
 jest.mock('../signatures-encoder');
 
-describe('getNewTransactionEncoder', () => {
+describe.each([getNewTransactionEncoder, getNewTransactionCodec])('Transaction encoder %p', encoderFactory => {
     const mockEncodedSignatures = new Uint8Array([1, 2, 3]);
     let encoder: VariableSizeEncoder<NewTransaction>;
     beforeEach(() => {
@@ -20,7 +22,7 @@ describe('getNewTransactionEncoder', () => {
                 return offset + mockEncodedSignatures.length;
             }),
         });
-        encoder = getNewTransactionEncoder();
+        encoder = encoderFactory();
     });
 
     it('should encode the transaction correctly', () => {
@@ -42,8 +44,15 @@ describe('getNewTransactionEncoder', () => {
     });
 });
 
-describe('getNewTransactionDecoder', () => {
-    const decoder = getNewTransactionDecoder();
+describe.each([getNewTransactionDecoder, getNewTransactionCodec])('Transaction decoder %p', decoderFactory => {
+    let decoder: VariableSizeDecoder<NewTransaction>;
+    beforeEach(() => {
+        (getSignaturesEncoder as jest.Mock).mockReturnValue({
+            getSizeFromValue: jest.fn().mockReturnValue(0),
+            write: jest.fn(),
+        });
+        decoder = decoderFactory();
+    });
 
     describe('for a transaction with a single signature', () => {
         const addressBytes = new Uint8Array(64).fill(11);
@@ -124,6 +133,39 @@ describe('getNewTransactionDecoder', () => {
                 },
             };
             expect(decoder.decode(encodedTransaction)).toStrictEqual(expectedTransaction);
+        });
+
+        it('should freeze the signatures map', () => {
+            const signature = new Uint8Array(64).fill(0) as ReadonlyUint8Array as SignatureBytes;
+            const messageBytes = new Uint8Array([
+                /** VERSION HEADER */
+                128, // 0 + version mask
+
+                /** MESSAGE HEADER */
+                1, // numSignerAccounts
+                0, // numReadonlySignerAccount
+                1, // numReadonlyNonSignerAccounts
+
+                /** STATIC ADDRESSES */
+                2, // Number of static accounts
+                ...addressBytes,
+                ...new Uint8Array(64).fill(12),
+
+                /** REST OF TRANSACTION MESSAGE (arbitrary) */
+                ...new Uint8Array(100).fill(1),
+            ]) as ReadonlyUint8Array as TransactionMessageBytes;
+
+            const encodedTransaction = new Uint8Array([
+                /** SIGNATURES */
+                1, // num signatures
+                ...signature,
+
+                /** MESSAGE */
+                ...messageBytes,
+            ]);
+
+            const decoded = decoder.decode(encodedTransaction);
+            expect(decoded.signatures).toBeFrozenObject();
         });
     });
 
@@ -302,10 +344,10 @@ describe('getNewTransactionDecoder', () => {
             ]);
 
             expect(() => decoder.decode(encodedTransaction)).toThrow(
-                new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_LENGTH_NUM_SIGNERS_MISMATCH, {
+                new SolanaError(SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, {
+                    numRequiredSignatures: 3,
                     signaturesLength: 2,
                     signerAddresses: [address1, address2, address3],
-                    signerAddressesLength: 3,
                 }),
             );
         });
