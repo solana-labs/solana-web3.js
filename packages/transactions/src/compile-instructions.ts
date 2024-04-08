@@ -1,7 +1,6 @@
 import { Address } from '@solana/addresses';
 import { IInstruction } from '@solana/instructions';
-
-import { OrderedAccounts } from './accounts';
+import { OrderedAccounts } from '@solana/transaction-messages';
 
 type CompiledInstruction = Readonly<{
     accountIndices?: number[];

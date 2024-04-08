@@ -1015,6 +1015,9 @@ importers:
       '@solana/rpc-types':
         specifier: workspace:*
         version: link:../rpc-types
+      '@solana/transaction-messages':
+        specifier: workspace:*
+        version: link:../transaction-messages
 
   packages/tsconfig: {}
 

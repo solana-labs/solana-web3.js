@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
+import { OrderedAccounts } from '@solana/transaction-messages';
 
-import { OrderedAccounts } from '../accounts';
 import { getCompiledInstructions } from '../compile-instructions';
 
 let _nextMockAddress = 0;

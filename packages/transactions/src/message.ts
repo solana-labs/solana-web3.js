@@ -1,4 +1,5 @@
-import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
+import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from '@solana/transaction-messages';
+
 import { CompilableTransaction } from './compilable-transaction';
 import { getCompiledAddressTableLookups } from './compile-address-table-lookups';
 import { getCompiledMessageHeader } from './compile-header';
