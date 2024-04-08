@@ -14,10 +14,10 @@ import {
 import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import type { getCompiledAddressTableLookups } from '@solana/transaction-messages';
+import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from '@solana/transaction-messages';
 
-import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { CompiledMessage } from '../message';
-import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
 import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
 import { getInstructionDecoder, getInstructionEncoder } from './instruction';
 import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
