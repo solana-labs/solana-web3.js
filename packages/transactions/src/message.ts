@@ -4,11 +4,11 @@ import {
     getCompiledInstructions,
     getCompiledLifetimeToken,
     getCompiledMessageHeader,
+    getCompiledStaticAccounts,
     getOrderedAccountsFromAddressMap,
 } from '@solana/transaction-messages';
 
 import { CompilableTransaction } from './compilable-transaction';
-import { getCompiledStaticAccounts } from './compile-static-accounts';
 
 type BaseCompiledMessage = Readonly<{
     header: ReturnType<typeof getCompiledMessageHeader>;

@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
-import { OrderedAccounts } from '@solana/transaction-messages';
 
-import { getCompiledStaticAccounts } from '../compile-static-accounts';
+import { OrderedAccounts } from '../../compile/accounts';
+import { getCompiledStaticAccounts } from '../../compile/static-accounts';
 
 let _nextMockAddress = 0;
 function getMockAddress() {
