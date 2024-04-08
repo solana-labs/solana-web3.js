@@ -8,22 +8,23 @@ import {
 } from '@solana/errors';
 import { pipe } from '@solana/functional';
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
-import { SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
-import type { getCompiledAddressTableLookups } from '@solana/transaction-messages';
 
-import { setTransactionLifetimeUsingBlockhash } from './blockhash';
-import { CompilableTransaction } from './compilable-transaction';
-import { CompiledTransaction } from './compile-transaction';
-import { createTransaction } from './create-transaction';
-import { isAdvanceNonceAccountInstruction, Nonce, setTransactionLifetimeUsingDurableNonce } from './durable-nonce';
-import { setTransactionFeePayer } from './fee-payer';
-import { appendTransactionInstruction } from './instructions';
-import { CompiledMessage } from './message';
-import { ITransactionWithSignatures } from './signatures';
-import { TransactionVersion } from './types';
+import { setTransactionMessageLifetimeUsingBlockhash } from './blockhash';
+import { CompilableTransactionMessage } from './compilable-transaction-message';
+import { CompiledTransactionMessage } from './compile';
+import type { getCompiledAddressTableLookups } from './compile/address-table-lookups';
+import { createTransactionMessage } from './create-transaction-message';
+import {
+    newIsAdvanceNonceAccountInstruction,
+    NewNonce,
+    setTransactionMessageLifetimeUsingDurableNonce,
+} from './durable-nonce';
+import { setTransactionMessageFeePayer } from './fee-payer';
+import { appendTransactionMessageInstruction } from './instructions';
+import { NewTransactionVersion } from './transaction-message';
 
-function getAccountMetas(message: CompiledMessage): IAccountMeta[] {
+function getAccountMetas(message: CompiledTransactionMessage): IAccountMeta[] {
     const { header } = message;
     const numWritableSignerAccounts = header.numSignerAccounts - header.numReadonlySignerAccounts;
     const numWritableNonSignerAccounts =
@@ -122,7 +123,7 @@ function getAddressLookupMetas(
 }
 
 function convertInstruction(
-    instruction: CompiledMessage['instructions'][0],
+    instruction: CompiledTransactionMessage['instructions'][0],
     accountMetas: IAccountMeta[],
 ): IInstruction {
     const programAddress = accountMetas[instruction.programAddressIndex]?.address;
@@ -148,7 +149,7 @@ type LifetimeConstraint =
           lastValidBlockHeight: bigint;
       }
     | {
-          nonce: Nonce;
+          nonce: NewNonce;
           nonceAccountAddress: Address;
           nonceAuthorityAddress: Address;
       };
@@ -158,7 +159,7 @@ function getLifetimeConstraint(
     firstInstruction?: IInstruction,
     lastValidBlockHeight?: bigint,
 ): LifetimeConstraint {
-    if (!firstInstruction || !isAdvanceNonceAccountInstruction(firstInstruction)) {
+    if (!firstInstruction || !newIsAdvanceNonceAccountInstruction(firstInstruction)) {
         // first instruction is not advance durable nonce, so use blockhash lifetime constraint
         return {
             blockhash: messageLifetimeToken as Blockhash,
@@ -173,78 +174,60 @@ function getLifetimeConstraint(
         assertIsAddress(nonceAuthorityAddress);
 
         return {
-            nonce: messageLifetimeToken as Nonce,
+            nonce: messageLifetimeToken as NewNonce,
             nonceAccountAddress,
             nonceAuthorityAddress,
         };
     }
 }
 
-function convertSignatures(compiledTransaction: CompiledTransaction): ITransactionWithSignatures['signatures'] {
-    const {
-        compiledMessage: { staticAccounts },
-        signatures,
-    } = compiledTransaction;
-    return signatures.reduce((acc, sig, index) => {
-        // compiled transaction includes a fake all 0 signature if it hasn't been signed
-        // we don't store those for the new tx model. So just skip if it's all 0s
-        const allZeros = sig.every(byte => byte === 0);
-        if (allZeros) return acc;
-
-        const address = staticAccounts[index];
-        return { ...acc, [address]: sig as SignatureBytes };
-    }, {});
-}
-
-export type DecompileTransactionConfig = {
+export type DecompileTransactionMessageConfig = {
     addressesByLookupTableAddress?: AddressesByLookupTableAddress;
     lastValidBlockHeight?: bigint;
 };
 
-export function decompileTransaction(
-    compiledTransaction: CompiledTransaction,
-    config?: DecompileTransactionConfig,
-): CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures) {
-    const { compiledMessage } = compiledTransaction;
-
-    const feePayer = compiledMessage.staticAccounts[0];
+export function decompileTransactionMessage(
+    compiledTransactionMessage: CompiledTransactionMessage,
+    config?: DecompileTransactionMessageConfig,
+): CompilableTransactionMessage {
+    const feePayer = compiledTransactionMessage.staticAccounts[0];
     if (!feePayer) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_FEE_PAYER_MISSING);
     }
 
-    const accountMetas = getAccountMetas(compiledMessage);
+    const accountMetas = getAccountMetas(compiledTransactionMessage);
     const accountLookupMetas =
-        'addressTableLookups' in compiledMessage &&
-        compiledMessage.addressTableLookups !== undefined &&
-        compiledMessage.addressTableLookups.length > 0
-            ? getAddressLookupMetas(compiledMessage.addressTableLookups, config?.addressesByLookupTableAddress ?? {})
+        'addressTableLookups' in compiledTransactionMessage &&
+        compiledTransactionMessage.addressTableLookups !== undefined &&
+        compiledTransactionMessage.addressTableLookups.length > 0
+            ? getAddressLookupMetas(
+                  compiledTransactionMessage.addressTableLookups,
+                  config?.addressesByLookupTableAddress ?? {},
+              )
             : [];
     const transactionMetas = [...accountMetas, ...accountLookupMetas];
 
-    const instructions: IInstruction[] = compiledMessage.instructions.map(compiledInstruction =>
+    const instructions: IInstruction[] = compiledTransactionMessage.instructions.map(compiledInstruction =>
         convertInstruction(compiledInstruction, transactionMetas),
     );
 
     const firstInstruction = instructions[0];
     const lifetimeConstraint = getLifetimeConstraint(
-        compiledMessage.lifetimeToken,
+        compiledTransactionMessage.lifetimeToken,
         firstInstruction,
         config?.lastValidBlockHeight,
     );
 
-    const signatures = convertSignatures(compiledTransaction);
-
     return pipe(
-        createTransaction({ version: compiledMessage.version as TransactionVersion }),
-        tx => setTransactionFeePayer(feePayer, tx),
+        createTransactionMessage({ version: compiledTransactionMessage.version as NewTransactionVersion }),
+        tx => setTransactionMessageFeePayer(feePayer, tx),
         tx =>
             instructions.reduce((acc, instruction) => {
-                return appendTransactionInstruction(instruction, acc);
+                return appendTransactionMessageInstruction(instruction, acc);
             }, tx),
         tx =>
             'blockhash' in lifetimeConstraint
-                ? setTransactionLifetimeUsingBlockhash(lifetimeConstraint, tx)
-                : setTransactionLifetimeUsingDurableNonce(lifetimeConstraint, tx),
-        tx => (Object.keys(signatures).length > 0 ? { ...tx, signatures } : tx),
+                ? setTransactionMessageLifetimeUsingBlockhash(lifetimeConstraint, tx)
+                : setTransactionMessageLifetimeUsingDurableNonce(lifetimeConstraint, tx),
     );
 }
