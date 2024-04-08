@@ -10,13 +10,13 @@ import {
 } from '@solana/errors';
 import { SignatureBytes, signBytes } from '@solana/keys';
 
-import { NewTransaction, OrderedMap, TransactionMessageBytes } from '../new-compile-transaction';
 import {
     newAssertTransactionIsFullySigned,
     newGetSignatureFromTransaction,
     newPartiallySignTransaction,
     newSignTransaction,
 } from '../new-signatures';
+import { NewTransaction, OrderedMap, TransactionMessageBytes } from '../transaction';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');

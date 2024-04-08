@@ -9,7 +9,7 @@ import {
 } from '@solana/errors';
 import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
-import { NewTransaction } from './new-compile-transaction';
+import { NewTransaction } from './transaction';
 
 export interface FullySignedTransaction extends NewTransaction {
     readonly __brand: unique symbol;
