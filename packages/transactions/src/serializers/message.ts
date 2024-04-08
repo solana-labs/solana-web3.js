@@ -22,10 +22,11 @@ import {
     getInstructionEncoder,
     getMessageHeaderDecoder,
     getMessageHeaderEncoder,
+    getTransactionVersionDecoder,
+    getTransactionVersionEncoder,
 } from '@solana/transaction-messages';
 
 import { CompiledMessage } from '../message';
-import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
 
 function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage> {
     return getStructEncoder(getPreludeStructEncoderTuple()) as VariableSizeEncoder<CompiledMessage>;

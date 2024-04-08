@@ -4,3 +4,4 @@
 export * from './address-table-lookup';
 export * from './header';
 export * from './instruction';
+export * from './transaction-version';
