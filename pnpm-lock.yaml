@@ -242,12 +242,6 @@ importers:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/functional':
-        specifier: workspace:*
-        version: link:../functional
-      '@solana/instructions':
-        specifier: workspace:*
-        version: link:../instructions
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -255,9 +249,6 @@ importers:
         specifier: workspace:*
         version: link:../transactions
     devDependencies:
-      '@solana/rpc-types':
-        specifier: workspace:*
-        version: link:../rpc-types
       '@solana/web3.js':
         specifier: workspace:../library-legacy
         version: link:../library-legacy

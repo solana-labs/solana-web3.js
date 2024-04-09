@@ -60,7 +60,7 @@ function decodePartiallyDecodedTransaction(transaction: PartiallyDecodedTransact
     - `numRequiredSignatures` (1 byte, we verify this matches the length of signatures)
     - `numReadOnlySignedAccounts` (1 byte, not used here)
     - `numReadOnlyUnsignedAccounts` (1 byte, not used here)
-    - static addresses, with signers first. This is an array of addresses, encoded with a short-u16 length
+    - static addresses, with signers first. This is an array of addresses, prefixed with a short-u16 length
     */
 
     const signerAddressesDecoder = getTupleDecoder([
