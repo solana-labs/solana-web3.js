@@ -66,7 +66,7 @@
     "dependencies": {
         "@solana/errors": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
-        "undici-types": "^6.7.1"
+        "undici-types": "^6.12.0"
     },
     "devDependencies": {
         "tinybench": "^2.6.0",
