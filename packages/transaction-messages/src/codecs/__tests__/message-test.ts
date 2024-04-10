@@ -2,9 +2,13 @@ import { Address } from '@solana/addresses';
 import { Decoder, Encoder } from '@solana/codecs-core';
 
 import { CompiledTransactionMessage } from '../../compile/message';
-import { getCompiledMessageCodec, getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
+import {
+    getCompiledTransactionMessageCodec,
+    getCompiledTransactionMessageDecoder,
+    getCompiledTransactionMessageEncoder,
+} from '../message';
 
-describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
+describe.each([getCompiledTransactionMessageCodec, getCompiledTransactionMessageEncoder])(
     'Transaction message serializer %p',
     serializerFactory => {
         let compiledMessage: Encoder<CompiledTransactionMessage>;
@@ -156,7 +160,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
         });
         it('omits the address table lookups for `legacy` transactions', () => {
             expect(
-                getCompiledMessageCodec().encode({
+                getCompiledTransactionMessageCodec().encode({
                     header: {
                         numReadonlyNonSignerAccounts: 1,
                         numReadonlySignerAccounts: 2,
@@ -191,7 +195,7 @@ describe.each([getCompiledMessageCodec, getCompiledMessageEncoder])(
     },
 );
 
-describe.each([getCompiledMessageCodec, getCompiledMessageDecoder])(
+describe.each([getCompiledTransactionMessageCodec, getCompiledTransactionMessageDecoder])(
     'Transaction message deserializer %p',
     serializerFactory => {
         let compiledMessage: Decoder<CompiledTransactionMessage>;
