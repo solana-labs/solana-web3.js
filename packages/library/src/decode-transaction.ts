@@ -6,11 +6,11 @@ import {
 } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
+import { type AddressesByLookupTableAddress } from '@solana/transaction-messages';
 import {
-    type AddressesByLookupTableAddress,
     type CompilableTransaction,
-    decompileTransaction,
     getCompiledTransactionDecoder,
+    getTransactionDecoder,
     type ITransactionWithSignatures,
 } from '@solana/transactions';
 
@@ -67,8 +67,8 @@ export async function decodeTransaction(
     const fetchedLookupTables =
         lookupTableAddresses.length > 0 ? await fetchLookupTables(lookupTableAddresses, rpc, fetchAccountsConfig) : {};
 
-    return decompileTransaction(compiledTransaction, {
+    return getTransactionDecoder({
         addressesByLookupTableAddress: fetchedLookupTables,
         lastValidBlockHeight,
-    });
+    }).decode(encodedTransaction);
 }

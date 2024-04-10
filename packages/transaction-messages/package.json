@@ -68,6 +68,7 @@
         "@solana/codecs-data-structures": "workspace:*",
         "@solana/codecs-numbers": "workspace:*",
         "@solana/errors": "workspace:*",
+        "@solana/functional": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
