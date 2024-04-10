@@ -3,7 +3,12 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
-import { CompilableTransaction, partiallySignTransaction } from '@solana/transactions';
+import {
+    CompilableTransaction,
+    newPartiallySignTransaction,
+    NewTransaction,
+    partiallySignTransaction,
+} from '@solana/transactions';
 
 import {
     assertIsKeyPairSigner,
@@ -28,6 +33,7 @@ jest.mock('@solana/keys', () => ({
 }));
 jest.mock('@solana/transactions', () => ({
     ...jest.requireActual('@solana/transactions'),
+    newPartiallySignTransaction: jest.fn(),
     partiallySignTransaction: jest.fn(),
 }));
 
@@ -37,6 +43,7 @@ describe('isKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
+            newSignTransactions: () => Promise.resolve([]),
             signMessages: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
@@ -55,6 +62,7 @@ describe('assertIsKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
+            newSignTransactions: () => Promise.resolve([]),
             signMessages: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
@@ -132,6 +140,46 @@ describe('createSignerFromKeyPair', () => {
         expect(jest.mocked(signBytes)).toHaveBeenCalledTimes(2);
         expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(1, myKeyPair.privateKey, messages[0].content);
         expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(2, myKeyPair.privateKey, messages[1].content);
+    });
+
+    it('signs transactions using the newSignTransactions function', async () => {
+        expect.assertions(7);
+
+        // Given a KeyPairSigner created from a mock CryptoKeyPair.
+        const myKeyPair = getMockCryptoKeyPair();
+        const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
+        jest.mocked(getAddressFromPublicKey).mockResolvedValueOnce(myAddress);
+        const mySigner = await createSignerFromKeyPair(myKeyPair);
+
+        // And given we have a couple of mock transactions to sign.
+        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
+
+        // And given we mock the next two calls of the partiallySignTransaction function.
+        const mockSignatures = [new Uint8Array([101, 101, 101]), new Uint8Array([201, 201, 201])] as SignatureBytes[];
+        jest.mocked(newPartiallySignTransaction).mockResolvedValueOnce({
+            ...mockTransactions[0],
+            signatures: { [myAddress]: mockSignatures[0] },
+        });
+        jest.mocked(newPartiallySignTransaction).mockResolvedValueOnce({
+            ...mockTransactions[1],
+            signatures: { [myAddress]: mockSignatures[1] },
+        });
+
+        // When we sign both transactions using that signer.
+        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
+
+        // Then the signature directories contain the expected signatures.
+        expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });
+        expect(signatureDictionaries[1]).toStrictEqual({ [myAddress]: mockSignatures[1] });
+
+        // And the signature directories are frozen.
+        expect(signatureDictionaries[0]).toBeFrozenObject();
+        expect(signatureDictionaries[1]).toBeFrozenObject();
+
+        // And partiallySignTransaction was called twice with the expected parameters.
+        expect(jest.mocked(newPartiallySignTransaction)).toHaveBeenCalledTimes(2);
+        expect(jest.mocked(newPartiallySignTransaction)).toHaveBeenNthCalledWith(1, [myKeyPair], mockTransactions[0]);
+        expect(jest.mocked(newPartiallySignTransaction)).toHaveBeenNthCalledWith(2, [myKeyPair], mockTransactions[1]);
     });
 
     it('signs transactions using the signTransactions function', async () => {

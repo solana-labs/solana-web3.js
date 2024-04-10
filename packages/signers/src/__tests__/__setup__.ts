@@ -52,7 +52,7 @@ export function createMockMessageModifyingSigner(
 export function createMockTransactionPartialSigner(
     address: Address,
 ): TransactionPartialSigner & { signTransactions: jest.Mock } {
-    return { address, signTransactions: jest.fn() };
+    return { address, newSignTransactions: jest.fn(), signTransactions: jest.fn() };
 }
 
 export function createMockTransactionModifyingSigner(
