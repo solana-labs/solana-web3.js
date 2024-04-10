@@ -72,7 +72,7 @@ function getAddressTableLookupArrayDecoder() {
     return getArrayDecoder(getAddressTableLookupDecoder(), { size: getShortU16Decoder() });
 }
 
-export function getCompiledMessageEncoder(): VariableSizeEncoder<CompiledTransactionMessage> {
+export function getCompiledTransactionMessageEncoder(): VariableSizeEncoder<CompiledTransactionMessage> {
     return createEncoder({
         getSizeFromValue: (compiledMessage: CompiledTransactionMessage) => {
             if (compiledMessage.version === 'legacy') {
@@ -91,7 +91,7 @@ export function getCompiledMessageEncoder(): VariableSizeEncoder<CompiledTransac
     });
 }
 
-export function getCompiledMessageDecoder(): VariableSizeDecoder<CompiledTransactionMessage> {
+export function getCompiledTransactionMessageDecoder(): VariableSizeDecoder<CompiledTransactionMessage> {
     return transformDecoder(
         getStructDecoder(getPreludeStructDecoderTuple()) as VariableSizeDecoder<
             CompiledTransactionMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
@@ -108,6 +108,6 @@ export function getCompiledMessageDecoder(): VariableSizeDecoder<CompiledTransac
     );
 }
 
-export function getCompiledMessageCodec(): VariableSizeCodec<CompiledTransactionMessage> {
-    return combineCodec(getCompiledMessageEncoder(), getCompiledMessageDecoder());
+export function getCompiledTransactionMessageCodec(): VariableSizeCodec<CompiledTransactionMessage> {
+    return combineCodec(getCompiledTransactionMessageEncoder(), getCompiledTransactionMessageDecoder());
 }

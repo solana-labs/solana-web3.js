@@ -4,4 +4,5 @@
 export * from './address-table-lookup';
 export * from './header';
 export * from './instruction';
+export * from './message';
 export * from './transaction-version';
