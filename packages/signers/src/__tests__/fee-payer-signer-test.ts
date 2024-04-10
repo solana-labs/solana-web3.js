@@ -1,16 +1,16 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
-import { BaseTransaction, ITransactionWithFeePayer, ITransactionWithSignatures } from '@solana/transactions';
+import { BaseTransactionMessage, ITransactionMessageWithFeePayer } from '@solana/transaction-messages';
 
-import { ITransactionWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer';
+import { ITransactionMessageWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer';
 import { TransactionSigner } from '../transaction-signer';
 import { createMockTransactionPartialSigner } from './__setup__';
 
 describe('setTransactionFeePayerSigner', () => {
     let feePayerSignerA: TransactionSigner;
     let feePayerSignerB: TransactionSigner;
-    let baseTx: BaseTransaction;
+    let baseTx: BaseTransactionMessage;
     beforeEach(() => {
         baseTx = { instructions: [], version: 0 };
         feePayerSignerA = createMockTransactionPartialSigner('1111' as Address);
@@ -22,7 +22,7 @@ describe('setTransactionFeePayerSigner', () => {
         expect(txWithFeePayerA).toHaveProperty('feePayerSigner', feePayerSignerA);
     });
     describe('given a transaction with a fee payer signer already set', () => {
-        let txWithFeePayerA: BaseTransaction & ITransactionWithFeePayerSigner;
+        let txWithFeePayerA: BaseTransactionMessage & ITransactionMessageWithFeePayerSigner;
         beforeEach(() => {
             txWithFeePayerA = {
                 ...baseTx,
@@ -39,29 +39,9 @@ describe('setTransactionFeePayerSigner', () => {
             const txWithSameFeePayer = setTransactionFeePayerSigner(feePayerSignerA, txWithFeePayerA);
             expect(txWithFeePayerA).toBe(txWithSameFeePayer);
         });
-        describe('given that transaction also has signatures', () => {
-            let txWithFeePayerAndSignatures: BaseTransaction & ITransactionWithFeePayer & ITransactionWithSignatures;
-            beforeEach(() => {
-                txWithFeePayerAndSignatures = {
-                    ...txWithFeePayerA,
-                    signatures: {},
-                };
-            });
-            it('does not clear the signatures when the fee payer is the same as the current one', () => {
-                expect(setTransactionFeePayerSigner(feePayerSignerA, txWithFeePayerAndSignatures)).toHaveProperty(
-                    'signatures',
-                    txWithFeePayerAndSignatures.signatures,
-                );
-            });
-            it('clears the signatures when the fee payer is different than the current one', () => {
-                expect(setTransactionFeePayerSigner(feePayerSignerB, txWithFeePayerAndSignatures)).not.toHaveProperty(
-                    'signatures',
-                );
-            });
-        });
     });
     describe('given a transaction with a non-signer fee payer already set', () => {
-        let txWithFeePayerA: BaseTransaction & ITransactionWithFeePayer;
+        let txWithFeePayerA: BaseTransactionMessage & ITransactionMessageWithFeePayer;
         beforeEach(() => {
             txWithFeePayerA = {
                 ...baseTx,
@@ -78,26 +58,6 @@ describe('setTransactionFeePayerSigner', () => {
             expect(txWithSameFeePayer).toHaveProperty('feePayer', feePayerSignerA.address);
             expect(txWithSameFeePayer).toHaveProperty('feePayerSigner', feePayerSignerA);
             expect(txWithFeePayerA).not.toBe(txWithSameFeePayer);
-        });
-        describe('given that transaction also has signatures', () => {
-            let txWithFeePayerAndSignatures: BaseTransaction & ITransactionWithFeePayer & ITransactionWithSignatures;
-            beforeEach(() => {
-                txWithFeePayerAndSignatures = {
-                    ...txWithFeePayerA,
-                    signatures: {},
-                };
-            });
-            it('does not clear the signatures when the fee payer is the same as the current one', () => {
-                expect(setTransactionFeePayerSigner(feePayerSignerA, txWithFeePayerAndSignatures)).toHaveProperty(
-                    'signatures',
-                    txWithFeePayerAndSignatures.signatures,
-                );
-            });
-            it('clears the signatures when the fee payer is different than the current one', () => {
-                expect(setTransactionFeePayerSigner(feePayerSignerB, txWithFeePayerAndSignatures)).not.toHaveProperty(
-                    'signatures',
-                );
-            });
         });
     });
     it('freezes the object', () => {

@@ -70,6 +70,7 @@
         "@solana/errors": "workspace:*",
         "@solana/instructions": "workspace:*",
         "@solana/keys": "workspace:*",
+        "@solana/transaction-messages": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {

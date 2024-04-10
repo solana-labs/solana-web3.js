@@ -854,6 +854,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
+      '@solana/transaction-messages':
+        specifier: workspace:*
+        version: link:../transaction-messages
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions
