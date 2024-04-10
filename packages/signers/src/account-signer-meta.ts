@@ -1,4 +1,5 @@
 import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@solana/instructions';
+import { BaseTransactionMessage } from '@solana/transaction-messages';
 import { BaseTransaction, TransactionVersion } from '@solana/transactions';
 
 import { deduplicateSigners } from './deduplicate-signers';
@@ -30,6 +31,15 @@ export type ITransactionWithSigners<
     TAccounts extends readonly IAccountMetaWithSigner<TSigner>[] = readonly IAccountMetaWithSigner<TSigner>[],
 > = Pick<
     BaseTransaction<TransactionVersion, IInstruction & IInstructionWithSigners<TSigner, TAccounts>>,
+    'instructions'
+> & { feePayerSigner?: TSigner };
+
+/** A variation of the transaction message type that allows IAccountSignerMeta in its account metas. */
+export type ITransactionMessageWithSigners<
+    TSigner extends TransactionSigner = TransactionSigner,
+    TAccounts extends readonly IAccountMetaWithSigner<TSigner>[] = readonly IAccountMetaWithSigner<TSigner>[],
+> = Pick<
+    BaseTransactionMessage<TransactionVersion, IInstruction & IInstructionWithSigners<TSigner, TAccounts>>,
     'instructions'
 > & { feePayerSigner?: TSigner };
 
