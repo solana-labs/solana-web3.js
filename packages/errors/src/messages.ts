@@ -177,6 +177,7 @@ import {
     SOLANA_ERROR__TRANSACTION__INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_CANNOT_PAY_FEES,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
+    SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_BORROW_OUTSTANDING,
@@ -583,6 +584,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]:
         'This transaction includes an address (`$programAddress`) which is both invoked and ' +
         'marked writable. Program addresses may not be writable',
+    [SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH]:
+        'The transaction message expected the transaction to have $signerAddressesLength signatures, got $signaturesLength.',
     [SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE]:
         'Transaction version must be in the range [0, 127]. `$actualVersion` given',
