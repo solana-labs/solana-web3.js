@@ -14,5 +14,5 @@ export * from '@solana/signers';
 export * from '@solana/transaction-messages';
 export * from '@solana/transactions';
 export * from './airdrop';
-export * from './decode-transaction';
+export * from './decode-transaction-message';
 export * from './send-transaction';

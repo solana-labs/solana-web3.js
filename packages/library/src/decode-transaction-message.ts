@@ -6,15 +6,12 @@ import {
 } from '@solana/accounts';
 import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
-import { type AddressesByLookupTableAddress } from '@solana/transaction-messages';
 import {
-    type CompilableTransaction,
-    getCompiledTransactionDecoder,
-    getTransactionDecoder,
-    type ITransactionWithSignatures,
-} from '@solana/transactions';
-
-let compiledTransactionDecoder: ReturnType<typeof getCompiledTransactionDecoder> | undefined = undefined;
+    type AddressesByLookupTableAddress,
+    CompiledTransactionMessage,
+    decompileTransactionMessage,
+    TransactionMessage,
+} from '@solana/transaction-messages';
 
 type FetchedAddressLookup = {
     addresses: Address[];
@@ -41,34 +38,29 @@ async function fetchLookupTables(
     }, {});
 }
 
-type DecodeTransactionConfig = FetchAccountsConfig & {
+type DecodeTransactionMessageConfig = FetchAccountsConfig & {
     lastValidBlockHeight?: bigint;
 };
 
-export async function decodeTransaction(
-    encodedTransaction: Uint8Array,
+export async function decodeTransactionMessage(
+    compiledTransactionMessage: CompiledTransactionMessage,
     rpc: Rpc<GetMultipleAccountsApi>,
-    config?: DecodeTransactionConfig,
-): Promise<CompilableTransaction | (CompilableTransaction & ITransactionWithSignatures)> {
-    const { lastValidBlockHeight, ...fetchAccountsConfig } = config ?? {};
-
-    if (!compiledTransactionDecoder) compiledTransactionDecoder = getCompiledTransactionDecoder();
-    const compiledTransaction = compiledTransactionDecoder.decode(encodedTransaction);
-    const { compiledMessage } = compiledTransaction;
-
+    config?: DecodeTransactionMessageConfig,
+): Promise<TransactionMessage> {
     const lookupTables =
-        'addressTableLookups' in compiledMessage &&
-        compiledMessage.addressTableLookups !== undefined &&
-        compiledMessage.addressTableLookups.length > 0
-            ? compiledMessage.addressTableLookups
+        'addressTableLookups' in compiledTransactionMessage &&
+        compiledTransactionMessage.addressTableLookups !== undefined &&
+        compiledTransactionMessage.addressTableLookups.length > 0
+            ? compiledTransactionMessage.addressTableLookups
             : [];
     const lookupTableAddresses = lookupTables.map(l => l.lookupTableAddress);
 
-    const fetchedLookupTables =
+    const { lastValidBlockHeight, ...fetchAccountsConfig } = config ?? {};
+    const addressesByLookupTableAddress =
         lookupTableAddresses.length > 0 ? await fetchLookupTables(lookupTableAddresses, rpc, fetchAccountsConfig) : {};
 
-    return getTransactionDecoder({
-        addressesByLookupTableAddress: fetchedLookupTables,
+    return decompileTransactionMessage(compiledTransactionMessage, {
+        addressesByLookupTableAddress,
         lastValidBlockHeight,
-    }).decode(encodedTransaction);
+    });
 }
