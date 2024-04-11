@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
-import { CompilableTransaction } from '@solana/transactions';
+import { CompilableTransaction, NewTransaction } from '@solana/transactions';
 
 import { BaseSignerConfig } from './types';
 
@@ -10,6 +10,10 @@ export type TransactionSendingSignerConfig = BaseSignerConfig;
 /** Defines a signer capable of signing and sending transactions simultaneously. */
 export type TransactionSendingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
+    newSignAndSendTransactions(
+        transactions: readonly NewTransaction[],
+        config?: TransactionSendingSignerConfig,
+    ): Promise<readonly SignatureBytes[]>;
     signAndSendTransactions(
         transactions: readonly CompilableTransaction[],
         config?: TransactionSendingSignerConfig,

@@ -12,6 +12,7 @@ describe('isTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
+            newSignAndSendTransactions: () => Promise.resolve([]),
             signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
@@ -26,6 +27,7 @@ describe('assertIsTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
+            newSignAndSendTransactions: () => Promise.resolve([]),
             signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
