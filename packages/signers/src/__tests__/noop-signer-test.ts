@@ -1,7 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { address } from '@solana/addresses';
-import { CompilableTransaction } from '@solana/transactions';
+import { CompilableTransaction, NewTransaction } from '@solana/transactions';
 
 import { createNoopSigner, NoopSigner } from '../noop-signer';
 import { createSignableMessage } from '../signable-message';
@@ -37,6 +37,25 @@ describe('createNoopSigner', () => {
         // When we sign two messages using that signer.
         const messages = [createSignableMessage('hello'), createSignableMessage('world')];
         const signatureDictionaries = await mySigner.signMessages(messages);
+
+        // Then the signature directories are empty and frozen.
+        expect(signatureDictionaries[0]).toStrictEqual({});
+        expect(signatureDictionaries[1]).toStrictEqual({});
+        expect(signatureDictionaries[0]).toBeFrozenObject();
+        expect(signatureDictionaries[1]).toBeFrozenObject();
+    });
+
+    it('returns an empty signature directory when signing new transactions', async () => {
+        expect.assertions(4);
+
+        // Given a NoopSigner.
+        const mySigner = createNoopSigner(address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'));
+
+        // And given we have a couple of mock transactions to sign.
+        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
+
+        // When we sign both transactions using that signer.
+        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
 
         // Then the signature directories are empty and frozen.
         expect(signatureDictionaries[0]).toStrictEqual({});

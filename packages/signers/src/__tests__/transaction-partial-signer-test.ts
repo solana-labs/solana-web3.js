@@ -12,6 +12,7 @@ describe('isTransactionPartialSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
+            newSignTransactions: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
@@ -26,6 +27,7 @@ describe('assertIsTransactionPartialSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
+            newSignTransactions: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies TransactionPartialSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
