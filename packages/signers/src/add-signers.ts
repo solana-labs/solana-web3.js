@@ -1,12 +1,7 @@
 import { IInstruction, isSignerRole } from '@solana/instructions';
 import { BaseTransactionMessage } from '@solana/transaction-messages';
 
-import {
-    IAccountSignerMeta,
-    IInstructionWithSigners,
-    ITransactionMessageWithSigners,
-    ITransactionWithSigners,
-} from './account-signer-meta';
+import { IAccountSignerMeta, IInstructionWithSigners, ITransactionMessageWithSigners } from './account-signer-meta';
 import { deduplicateSigners } from './deduplicate-signers';
 import { TransactionSigner } from './transaction-signer';
 
@@ -35,10 +30,10 @@ export function addSignersToInstruction<TInstruction extends IInstruction>(
 /** Attaches the provided signers to the account metas of a transaction message when applicable. */
 export function addSignersToTransactionMessage<TTransactionMessage extends BaseTransactionMessage>(
     signers: TransactionSigner[],
-    transactionMessage: TTransactionMessage | (ITransactionWithSigners & TTransactionMessage),
+    transactionMessage: TTransactionMessage | (ITransactionMessageWithSigners & TTransactionMessage),
 ): ITransactionMessageWithSigners & TTransactionMessage {
     if (transactionMessage.instructions.length === 0) {
-        return transactionMessage as ITransactionWithSigners & TTransactionMessage;
+        return transactionMessage as ITransactionMessageWithSigners & TTransactionMessage;
     }
 
     return Object.freeze({
