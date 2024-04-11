@@ -52,17 +52,6 @@ export function getSignersFromInstruction<TSigner extends TransactionSigner = Tr
     );
 }
 
-/** Extract all signers from a transaction that may contain IAccountSignerMeta accounts. */
-export function getSignersFromTransaction<
-    TSigner extends TransactionSigner = TransactionSigner,
-    TTransaction extends ITransactionWithSigners<TSigner> = ITransactionWithSigners<TSigner>,
->(transaction: TTransaction): readonly TSigner[] {
-    return deduplicateSigners([
-        ...(transaction.feePayerSigner ? [transaction.feePayerSigner] : []),
-        ...transaction.instructions.flatMap(getSignersFromInstruction),
-    ]);
-}
-
 /** Extract all signers from a transaction message that may contain IAccountSignerMeta accounts. */
 export function getSignersFromTransactionMessage<
     TSigner extends TransactionSigner = TransactionSigner,
