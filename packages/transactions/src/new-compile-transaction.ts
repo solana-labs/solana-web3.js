@@ -1,15 +1,17 @@
 import { Address } from '@solana/addresses';
 import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { SignatureBytes } from '@solana/keys';
+import {
+    CompilableTransactionMessage,
+    getCompiledTransactionMessageEncoder,
+    newCompileTransactionMessage,
+} from '@solana/transaction-messages';
 
-import { CompilableTransaction } from './compilable-transaction';
-import { compileTransactionMessage } from './message';
-import { getCompiledMessageEncoder } from './serializers/message';
 import { NewTransaction, OrderedMap, TransactionMessageBytes } from './transaction';
 
-export function compileTransaction(transactionMessage: CompilableTransaction): NewTransaction {
-    const compiledMessage = compileTransactionMessage(transactionMessage);
-    const messageBytes = getCompiledMessageEncoder().encode(
+export function compileTransaction(transactionMessage: CompilableTransactionMessage): NewTransaction {
+    const compiledMessage = newCompileTransactionMessage(transactionMessage);
+    const messageBytes = getCompiledTransactionMessageEncoder().encode(
         compiledMessage,
     ) as ReadonlyUint8Array as TransactionMessageBytes;
 

@@ -69,19 +69,19 @@ export function createMockMessageModifyingSigner(
 
 export function createMockTransactionPartialSigner(
     address: Address,
-): TransactionPartialSigner & { signTransactions: jest.Mock } {
+): TransactionPartialSigner & { newSignTransactions: jest.Mock; signTransactions: jest.Mock } {
     return { address, newSignTransactions: jest.fn(), signTransactions: jest.fn() };
 }
 
 export function createMockTransactionModifyingSigner(
     address: Address,
-): TransactionModifyingSigner & { modifyAndSignTransactions: jest.Mock } {
+): TransactionModifyingSigner & { modifyAndSignTransactions: jest.Mock; newModifyAndSignTransactions: jest.Mock } {
     return { address, modifyAndSignTransactions: jest.fn(), newModifyAndSignTransactions: jest.fn() };
 }
 
 export function createMockTransactionSendingSigner(
     address: Address,
-): TransactionSendingSigner & { signAndSendTransactions: jest.Mock } {
+): TransactionSendingSigner & { newSignAndSendTransactions: jest.Mock; signAndSendTransactions: jest.Mock } {
     return { address, newSignAndSendTransactions: jest.fn(), signAndSendTransactions: jest.fn() };
 }
 

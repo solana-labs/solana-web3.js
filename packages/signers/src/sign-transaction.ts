@@ -1,42 +1,38 @@
 import { SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
+import { CompilableTransactionMessage } from '@solana/transaction-messages';
 import {
-    assertTransactionIsFullySigned,
-    CompilableTransaction,
-    IFullySignedTransaction,
-    ITransactionWithSignatures,
+    compileTransaction,
+    FullySignedTransaction,
+    newAssertTransactionIsFullySigned,
+    NewTransaction,
 } from '@solana/transactions';
 
-import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta';
+import { getSignersFromTransaction, ITransactionMessageWithSigners } from './account-signer-meta';
 import { deduplicateSigners } from './deduplicate-signers';
 import { isTransactionModifyingSigner, TransactionModifyingSigner } from './transaction-modifying-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer';
 import { isTransactionSigner, TransactionSigner } from './transaction-signer';
-import { ITransactionWithSingleSendingSigner } from './transaction-with-single-sending-signer';
+import { ITransactionMessageWithSingleSendingSigner } from './transaction-with-single-sending-signer';
 
-type CompilableTransactionWithSigners = CompilableTransaction &
-    ITransactionWithSigners &
-    Partial<ITransactionWithSignatures>;
+type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & ITransactionMessageWithSigners;
 
 /**
  * Signs a transaction using any signers that may be stored in IAccountSignerMeta instruction accounts
  * as well as any signers provided explicitly to this function.
  * It will ignore TransactionSendingSigners since this function does not send the transaction.
  */
-export async function partiallySignTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
->(
-    transaction: TTransaction,
-    config: { abortSignal?: AbortSignal } = {},
-): Promise<ITransactionWithSignatures & TTransaction> {
+export async function partiallySignTransactionMessageWithSigners<
+    TTransactionMessage extends CompilableTransactionMessageWithSigners = CompilableTransactionMessageWithSigners,
+>(transactionMessage: TTransactionMessage, config: { abortSignal?: AbortSignal } = {}): Promise<NewTransaction> {
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
-        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
+        deduplicateSigners(getSignersFromTransaction(transactionMessage).filter(isTransactionSigner)),
         { identifySendingSigner: false },
     );
 
     return await signModifyingAndPartialTransactionSigners(
-        transaction,
+        transactionMessage,
         modifyingSigners,
         partialSigners,
         config.abortSignal,
@@ -49,14 +45,14 @@ export async function partiallySignTransactionWithSigners<
  * It will assert that the transaction is fully signed before returning.
  * It will ignore TransactionSendingSigners since this function does not send the transaction.
  */
-export async function signTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
+export async function signTransactionMessageWithSigners<
+    TTransactionMessage extends CompilableTransactionMessageWithSigners = CompilableTransactionMessageWithSigners,
 >(
-    transaction: TTransaction,
+    transactionMessage: TTransactionMessage,
     config: { abortSignal?: AbortSignal } = {},
-): Promise<IFullySignedTransaction & TTransaction> {
-    const signedTransaction = await partiallySignTransactionWithSigners(transaction, config);
-    assertTransactionIsFullySigned(signedTransaction);
+): Promise<FullySignedTransaction> {
+    const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage, config);
+    newAssertTransactionIsFullySigned(signedTransaction);
     return signedTransaction;
 }
 
@@ -66,10 +62,11 @@ export async function signTransactionWithSigners<
  * It will identify a single TransactionSendingSigners to use for sending the transaction, if any.
  * Otherwise, it will send the transaction using the provided fallbackSender.
  */
-export async function signAndSendTransactionWithSigners<
-    TTransaction extends CompilableTransactionWithSigners &
-        ITransactionWithSingleSendingSigner = CompilableTransactionWithSigners & ITransactionWithSingleSendingSigner,
->(transaction: TTransaction, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
+export async function signAndSendTransactionMessageWithSigners<
+    TTransactionMessage extends CompilableTransactionMessageWithSigners &
+        ITransactionMessageWithSingleSendingSigner = CompilableTransactionMessageWithSigners &
+        ITransactionMessageWithSingleSendingSigner,
+>(transaction: TTransactionMessage, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
         deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
@@ -88,7 +85,7 @@ export async function signAndSendTransactionWithSigners<
     }
 
     abortSignal?.throwIfAborted();
-    const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
+    const [signature] = await sendingSigner.newSignAndSendTransactions([signedTransaction], { abortSignal });
     abortSignal?.throwIfAborted();
 
     return signature;
@@ -172,32 +169,35 @@ function identifyTransactionModifyingSigners(
  * sequentially followed by the TransactionPartialSigners in parallel.
  */
 async function signModifyingAndPartialTransactionSigners<
-    TTransaction extends CompilableTransactionWithSigners = CompilableTransactionWithSigners,
+    TTransactionMessage extends CompilableTransactionMessageWithSigners = CompilableTransactionMessageWithSigners,
 >(
-    transaction: TTransaction,
+    transactionMessage: TTransactionMessage,
     modifyingSigners: readonly TransactionModifyingSigner[] = [],
     partialSigners: readonly TransactionPartialSigner[] = [],
     abortSignal?: AbortSignal,
-): Promise<ITransactionWithSignatures & TTransaction> {
+): Promise<NewTransaction> {
+    // serialize the transaction
+    const transaction = compileTransaction(transactionMessage);
+
     // Handle modifying signers sequentially.
     const modifiedTransaction = await modifyingSigners.reduce(
         async (transaction, modifyingSigner) => {
             abortSignal?.throwIfAborted();
-            const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
+            const [tx] = await modifyingSigner.newModifyAndSignTransactions([await transaction], { abortSignal });
             return Object.freeze(tx);
         },
-        Promise.resolve(transaction) as Promise<TTransaction>,
+        Promise.resolve(transaction) as Promise<NewTransaction>,
     );
 
     // Handle partial signers in parallel.
     abortSignal?.throwIfAborted();
     const signatureDictionaries = await Promise.all(
         partialSigners.map(async partialSigner => {
-            const [signatures] = await partialSigner.signTransactions([modifiedTransaction], { abortSignal });
+            const [signatures] = await partialSigner.newSignTransactions([modifiedTransaction], { abortSignal });
             return signatures;
         }),
     );
-    const signedTransaction: ITransactionWithSignatures & TTransaction = {
+    const signedTransaction: NewTransaction = {
         ...modifiedTransaction,
         signatures: Object.freeze(
             signatureDictionaries.reduce((signatures, signatureDictionary) => {
