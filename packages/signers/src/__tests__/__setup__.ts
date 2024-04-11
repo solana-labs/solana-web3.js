@@ -1,6 +1,7 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import type { Blockhash } from '@solana/rpc-types';
+import { CompilableTransactionMessage } from '@solana/transaction-messages';
 import {
     appendTransactionInstruction,
     CompilableTransaction,
@@ -9,7 +10,12 @@ import {
     setTransactionLifetimeUsingBlockhash,
 } from '@solana/transactions';
 
-import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from '../account-signer-meta';
+import {
+    IAccountSignerMeta,
+    IInstructionWithSigners,
+    ITransactionMessageWithSigners,
+    ITransactionWithSigners,
+} from '../account-signer-meta';
 import { MessageModifyingSigner } from '../message-modifying-signer';
 import { MessagePartialSigner } from '../message-partial-signer';
 import { TransactionModifyingSigner } from '../transaction-modifying-signer';
@@ -30,6 +36,18 @@ export function createMockInstructionWithSigners(signers: TransactionSigner[]): 
 export function createMockTransactionWithSigners(
     signers: TransactionSigner[],
 ): CompilableTransaction & ITransactionWithSigners {
+    const transaction = createTransaction({ version: 0 });
+    const transactionWithFeePayer = setTransactionFeePayer(signers[0]?.address ?? '1111', transaction);
+    const compilableTransaction = setTransactionLifetimeUsingBlockhash(
+        { blockhash: 'dummy_blockhash' as Blockhash, lastValidBlockHeight: 42n },
+        transactionWithFeePayer,
+    );
+    return appendTransactionInstruction(createMockInstructionWithSigners(signers), compilableTransaction);
+}
+
+export function createMockTransactionMessageWithSigners(
+    signers: TransactionSigner[],
+): CompilableTransactionMessage & ITransactionMessageWithSigners {
     const transaction = createTransaction({ version: 0 });
     const transactionWithFeePayer = setTransactionFeePayer(signers[0]?.address ?? '1111', transaction);
     const compilableTransaction = setTransactionLifetimeUsingBlockhash(
