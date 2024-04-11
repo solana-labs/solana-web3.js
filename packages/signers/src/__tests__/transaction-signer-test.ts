@@ -14,6 +14,7 @@ describe('isTransactionSigner', () => {
         const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransactions: () => Promise.resolve([]),
+            newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
@@ -45,6 +46,7 @@ describe('assertIsTransactionSigner', () => {
         const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransactions: () => Promise.resolve([]),
+            newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
