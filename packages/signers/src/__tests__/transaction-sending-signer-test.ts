@@ -12,12 +12,12 @@ describe('isTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            newSignAndSendTransactions: () => Promise.resolve([]),
+            signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionSendingSigner(mySigner)).toBe(true);
         expect(isTransactionSendingSigner({ address: myAddress })).toBe(false);
-        expect(isTransactionSendingSigner({ address: myAddress, newSignAndSendTransactions: 42 })).toBe(false);
+        expect(isTransactionSendingSigner({ address: myAddress, signAndSendTransactions: 42 })).toBe(false);
     });
 });
 
@@ -26,7 +26,7 @@ describe('assertIsTransactionSendingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            newSignAndSendTransactions: () => Promise.resolve([]),
+            signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSendingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, {
@@ -34,7 +34,7 @@ describe('assertIsTransactionSendingSigner', () => {
         });
         expect(() => assertIsTransactionSendingSigner(mySigner)).not.toThrow();
         expect(() => assertIsTransactionSendingSigner({ address: myAddress })).toThrow(expectedError);
-        expect(() => assertIsTransactionSendingSigner({ address: myAddress, newSignAndSendTransactions: 42 })).toThrow(
+        expect(() => assertIsTransactionSendingSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(
             expectedError,
         );
     });

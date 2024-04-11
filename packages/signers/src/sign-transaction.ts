@@ -85,7 +85,7 @@ export async function signAndSendTransactionMessageWithSigners<
     }
 
     abortSignal?.throwIfAborted();
-    const [signature] = await sendingSigner.newSignAndSendTransactions([signedTransaction], { abortSignal });
+    const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
     abortSignal?.throwIfAborted();
 
     return signature;

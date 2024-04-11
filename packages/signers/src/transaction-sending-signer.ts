@@ -10,7 +10,7 @@ export type TransactionSendingSignerConfig = BaseSignerConfig;
 /** Defines a signer capable of signing and sending transactions simultaneously. */
 export type TransactionSendingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    newSignAndSendTransactions(
+    signAndSendTransactions(
         transactions: readonly NewTransaction[],
         config?: TransactionSendingSignerConfig,
     ): Promise<readonly SignatureBytes[]>;
@@ -21,7 +21,7 @@ export function isTransactionSendingSigner<TAddress extends string>(value: {
     [key: string]: unknown;
     address: Address<TAddress>;
 }): value is TransactionSendingSigner<TAddress> {
-    return 'newSignAndSendTransactions' in value && typeof value.newSignAndSendTransactions === 'function';
+    return 'signAndSendTransactions' in value && typeof value.signAndSendTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionSendingSigner} interface. */

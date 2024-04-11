@@ -235,8 +235,8 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // And only the partial signer function was called.
         expect(signerB.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
-        expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
-        expect(signerB.newSignAndSendTransactions).not.toHaveBeenCalled();
+        expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
+        expect(signerB.signAndSendTransactions).not.toHaveBeenCalled();
     });
 
     it('uses a composite signer as a modifying signer when there are no other modifying signers', async () => {
@@ -533,7 +533,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // And given signer A and B are mocked to provide the following return values.
         signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
-        signerB.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
         // When we sign and send this transaction.
         assertIsTransactionMessageWithSingleSendingSigner(transactionMessage);
@@ -541,7 +541,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // Then the sending signer was used to send the transaction.
         expect(signerA.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
-        expect(signerB.newSignAndSendTransactions).toHaveBeenCalledWith(
+        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...unsignedTransaction, signatures: { '1111': '1111_signature', '2222': null } }],
             { abortSignal: undefined },
         );
@@ -593,7 +593,7 @@ describe('signAndSendTransactionWithSigners', () => {
         };
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
-        signerA.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signerA.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we sign and send this transaction.
@@ -601,7 +601,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
 
         // Then the composite signer was used as a sending signer.
-        expect(signerA.newSignAndSendTransactions).toHaveBeenCalledWith(
+        expect(signerA.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...unsignedTransaction, signatures: { '1111': null, '2222': '2222_signature' } }],
             { abortSignal: undefined },
         );
@@ -631,7 +631,7 @@ describe('signAndSendTransactionWithSigners', () => {
         // And given the following mocked signatures for these signers.
         const modifiedTransaction = { ...unsignedTransaction, signatures: { '1111': '1111_signature', '2222': null } };
         signerA.newModifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
-        signerB.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
         // When we sign and send this transaction.
         assertIsTransactionMessageWithSingleSendingSigner(transaction);
@@ -642,11 +642,11 @@ describe('signAndSendTransactionWithSigners', () => {
             abortSignal: undefined,
         });
         expect(signerA.signTransactions).not.toHaveBeenCalled();
-        expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
+        expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
 
         // And the sending only signer was used to send the transaction.
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-        expect(signerB.newSignAndSendTransactions).toHaveBeenCalledWith([modifiedTransaction], {
+        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith([modifiedTransaction], {
             abortSignal: undefined,
         });
     });
@@ -672,7 +672,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // And given the following mocked signatures for these signers.
         signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
-        signerB.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signerB.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const modifiedTransaction = {
             ...unsignedTransaction,
             signatures: { '1111': null, '2222': null, '3333': '3333_signature' },
@@ -686,14 +686,14 @@ describe('signAndSendTransactionWithSigners', () => {
         // Then the composite signer was used as a partial signer.
         expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
         expect(signerA.newModifyAndSignTransactions).not.toHaveBeenCalled();
-        expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
+        expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
 
         // And the other signers were used as expected.
         expect(signerC.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
         });
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-        expect(signerB.newSignAndSendTransactions).toHaveBeenCalledWith(
+        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [
                 {
                     ...unsignedTransaction,
@@ -709,7 +709,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // Given a transaction with a mocked sending signer.
         const signer = createMockTransactionSendingSigner('1111' as Address);
-        signer.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signer.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -738,7 +738,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // Given a transaction with a mocked sending signer.
         const signer = createMockTransactionSendingSigner('1111' as Address);
-        signer.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
+        signer.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
