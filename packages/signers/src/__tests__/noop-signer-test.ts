@@ -1,11 +1,10 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { address } from '@solana/addresses';
-import { CompilableTransaction, NewTransaction } from '@solana/transactions';
+import { NewTransaction } from '@solana/transactions';
 
 import { createNoopSigner, NoopSigner } from '../noop-signer';
 import { createSignableMessage } from '../signable-message';
-import { CompilableTransactionMessage } from '@solana/transaction-messages';
 
 describe('createNoopSigner', () => {
     it('creates a NoopSigner from a given address', () => {

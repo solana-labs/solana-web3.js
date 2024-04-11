@@ -3,7 +3,7 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError } from '@solana/errors';
 import { AccountRole, IInstruction } from '@solana/instructions';
-import { BaseTransaction } from '@solana/transactions';
+import { BaseTransactionMessage } from '@solana/transaction-messages';
 
 import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta';
 import { addSignersToInstruction, addSignersToTransactionMessage } from '../add-signers';
@@ -169,7 +169,7 @@ describe('addSignersToTransactionMessage', () => {
             data: new Uint8Array([]),
             programAddress: '9999' as Address,
         };
-        const transaction: BaseTransaction = {
+        const transaction: BaseTransactionMessage = {
             instructions: [instructionA, instructionB],
             version: 0,
         };
@@ -192,7 +192,7 @@ describe('addSignersToTransactionMessage', () => {
 
     it('freezes the returned transaction', () => {
         // Given a one-instruction transaction with signer account metas.
-        const transaction: BaseTransaction = {
+        const transaction: BaseTransactionMessage = {
             instructions: [
                 {
                     accounts: [{ address: '1111' as Address, role: AccountRole.READONLY_SIGNER }],
@@ -215,7 +215,7 @@ describe('addSignersToTransactionMessage', () => {
 
     it('returns the transaction as-is if it has no instructions', () => {
         // Given transaction with no instructions.
-        const transaction: BaseTransaction = { instructions: [], version: 0 };
+        const transaction: BaseTransactionMessage = { instructions: [], version: 0 };
 
         // When we try to add signers to the transaction.
         const signer = createMockTransactionPartialSigner('1111' as Address);
