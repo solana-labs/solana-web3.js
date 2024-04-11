@@ -21,7 +21,8 @@ You can think of signers as an abstract way to sign messages and transactions. T
 ```ts
 import { pipe } from '@solana/functional';
 import { generateKeyPairSigner } from '@solana/signers';
-import { createTransaction } from '@solana/transactions';
+import { createTransactionMessage } from '@solana/transaction-messages';
+import { compileTransaction } from '@solana/transactions';
 
 // Generate a key pair signer.
 const mySigner = await generateKeyPairSigner();
@@ -31,11 +32,12 @@ mySigner.address; // Address;
 const myMessage = createSignableMessage('Hello world!');
 const [messageSignatures] = await mySigner.signMessages([myMessage]);
 
-// Sign one or multiple transactions.
-const myTransaction = pipe(
-    createTransaction({ version: 0 }),
+// Sign one or multiple transaction messages.
+const myTransactionMessage = pipe(
+    createTransactionMessage({ version: 0 }),
     // Add instructions, fee payer, lifetime, etc.
 );
+const myTransaction = compileTransaction(myTransactionMessage);
 const [transactionSignatures] = await mySigner.signTransactions([myTransaction]);
 ```
 
@@ -172,12 +174,12 @@ assertIsMessageSigner({ address: myAddress, modifyAndSignMessages: async () => {
 
 #### `TransactionPartialSigner<TAddress>`
 
-An interface that signs an array of `CompilableTransactions` without modifying their content. It defines a `signTransactions` function that returns a `SignatureDictionary` for each provided transaction. Such signature dictionaries are expected to be merged with the existing ones if any.
+An interface that signs an array of `Transactions` without modifying their content. It defines a `signTransactions` function that returns a `SignatureDictionary` for each provided transaction. Such signature dictionaries are expected to be merged with the existing ones if any.
 
 ```ts
 const myTransactionPartialSigner: TransactionPartialSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    signTransactions: async (transactions: CompilableTransaction[]): Promise<SignatureDictionary[]> => {
+    signTransactions: async (transactions: Transaction[]): Promise<SignatureDictionary[]> => {
         // My custom signing logic.
     },
 };
@@ -190,12 +192,12 @@ const myTransactionPartialSigner: TransactionPartialSigner<'1234..5678'> = {
 
 #### `TransactionModifyingSigner<TAddress>`
 
-An interface that potentially modifies the provided `CompilableTransactions` before signing them. E.g. this enables wallets to inject additional instructions into the transaction before signing them. For each transaction, instead of returning a `SignatureDirectory`, its `modifyAndSignTransactions` function returns an updated `CompilableTransaction` with a potentially modified set of instructions and signature dictionary.
+An interface that potentially modifies the provided `Transactions` before signing them. E.g. this enables wallets to inject additional instructions into the transaction before signing them. For each transaction, instead of returning a `SignatureDirectory`, its `modifyAndSignTransactions` function returns an updated `Transaction` with a potentially modified set of instructions and signature dictionary.
 
 ```ts
 const myTransactionModifyingSigner: TransactionModifyingSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    modifyAndSignTransactions: async <T extends CompilableTransaction>(transactions: T[]): Promise<T[]> => {
+    modifyAndSignTransactions: async <T extends Transaction>(transactions: T[]): Promise<T[]> => {
         // My custom signing logic.
     },
 };
@@ -216,7 +218,7 @@ Note that it is also possible for such signers to modify the provided transactio
 ```ts
 const myTransactionSendingSigner: TransactionSendingSigner<'1234..5678'> = {
     address: address('1234..5678'),
-    signAndSendTransactions: async (transactions: CompilableTransaction[]): Promise<SignatureBytes[]> => {
+    signAndSendTransactions: async (transactions: Transaction[]): Promise<SignatureBytes[]> => {
         // My custom signing logic.
     },
 };
@@ -406,12 +408,12 @@ const myInstructionWithSigners: IInstruction & IInstructionWithSigners = {
 };
 ```
 
-#### `ITransactionWithSigners`
+#### `ITransactionMessageWithSigners`
 
-Composable type that allows `IAccountSignerMetas` to be used inside all of the transaction's account metas.
+Composable type that allows `IAccountSignerMetas` to be used inside all of the transaction message's account metas.
 
 ```ts
-const myTransactionWithSigners: BaseTransaction & ITransactionWithSigners = {
+const myTransactionMessageWithSigners: BaseTransactionMessage & ITransactionMessageWithSigners = {
     instructions: [
         myInstructionA as IInstruction & IInstructionWithSigners,
         myInstructionB as IInstruction & IInstructionWithSigners,
@@ -443,12 +445,12 @@ const instructionSigners = getSignersFromInstruction(myInstructionWithSigners);
 // ^ [mySignerA, mySignerB]
 ```
 
-#### `getSignersFromTransaction()`
+#### `getSignersFromTransactionMessage()`
 
-Similarly to `getSignersFromInstruction`, this function extracts and deduplicates all signers stored inside the account metas of all the instructions inside a transaction.
+Similarly to `getSignersFromInstruction`, this function extracts and deduplicates all signers stored inside the account metas of all the instructions inside a transaction message.
 
 ```ts
-const transactionSigners = getSignersFromTransaction(myTransactionWithSigners);
+const transactionSigners = getSignersFromTransactionMessage(myTransactionMessageWithSigners);
 ```
 
 #### `addSignersToInstruction()`
@@ -476,49 +478,49 @@ const myInstructionWithSigners = addSignersToInstruction([mySignerA, mySignerB],
 // myInstructionWithSigners.accounts[1].signer === mySignerB
 ```
 
-#### `addSignersToTransaction()`
+#### `addSignersToTransactionMessage()`
 
-Similarly to `addSignersToInstruction`, this function adds signer to all the applicable account metas of all the instructions inside a transaction.
+Similarly to `addSignersToInstruction`, this function adds signer to all the applicable account metas of all the instructions inside a transaction message.
 
 ```ts
-const myTransactionWithSigners = addSignersToTransaction(mySigners, myTransaction);
+const myTransactionMessageWithSigners = addSignersToTransactionMessage(mySigners, myTransactionMessage);
 ```
 
 ## Signing transactions with signers
 
-As we've seen in the previous section, we can store and extract `TransactionSigners` from instructions and transactions. This allows us to provide helper methods that sign transactions using the signers stored inside them.
+As we've seen in the previous section, we can store and extract `TransactionSigners` from instructions and transaction messages. This allows us to provide helper methods that sign transaction messages using the signers stored inside them.
 
 ### Functions
 
-#### `partiallySignTransactionWithSigners()`
+#### `partiallySignTransactionMessageWithSigners()`
 
-Extracts all signers inside the provided transaction and uses them to sign it. It first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel.
+Extracts all signers inside the provided transaction message and uses them to sign it. It first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel.
 
 If a composite signer implements both interfaces, it will be used as a modifying signer if no other signer implements that interface. Otherwise, it will be used as a partial signer.
 
 ```ts
-const mySignedTransaction = await partiallySignTransactionWithSigners(myTransaction);
+const mySignedTransaction = await partiallySignTransactionMessageWithSigners(myTransactionMessage);
 ```
 
 It also accepts an optional `AbortSignal` that will be propagated to all signers.
 
 ```ts
-const mySignedTransaction = await partiallySignTransactionWithSigners(myTransaction, {
+const mySignedTransaction = await partiallySignTransactionMessageWithSigners(myTransactionMessage, {
     abortSignal: myAbortController.signal,
 });
 ```
 
-Finally, note that this function ignores `TransactionSendingSigners` as it does not send the transaction. See the `signAndSendTransactionWithSigners` function below for more details on how to use sending signers.
+Finally, note that this function ignores `TransactionSendingSigners` as it does not send the transaction. See the `signAndSendTransactionMessageWithSigners` function below for more details on how to use sending signers.
 
-#### `signTransactionWithSigners()`
+#### `signTransactionMessageWithSigners()`
 
-This function works the same as the `partiallySignTransactionWithSigners` function described above except that it also ensures the transaction is fully signed before returning it. An error will be thrown if that's not the case.
+This function works the same as the `partiallySignTransactionMessageWithSigners` function described above except that it also ensures the transaction is fully signed before returning it. An error will be thrown if that's not the case.
 
 ```ts
-const mySignedTransaction = await signTransactionWithSigners(myTransaction);
+const mySignedTransaction = await signTransactionMessageWithSigners(myTransactionMessage);
 
 // With additional config.
-const mySignedTransaction = await signTransactionWithSigners(myTransaction, {
+const mySignedTransaction = await signTransactionMessageWithSigners(myTransactionMessage, {
     abortSignal: myAbortController.signal,
 });
 
