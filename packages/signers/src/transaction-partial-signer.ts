@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
-import { CompilableTransaction, NewTransaction } from '@solana/transactions';
+import { NewTransaction } from '@solana/transactions';
 
 import { BaseSignerConfig, SignatureDictionary } from './types';
 
@@ -13,10 +13,6 @@ export type TransactionPartialSigner<TAddress extends string = string> = Readonl
         transactions: readonly NewTransaction[],
         config?: TransactionPartialSignerConfig,
     ): Promise<readonly SignatureDictionary[]>;
-    signTransactions(
-        transactions: readonly CompilableTransaction[],
-        config?: TransactionPartialSignerConfig,
-    ): Promise<readonly SignatureDictionary[]>;
 }>;
 
 /** Checks whether the provided value implements the {@link TransactionPartialSigner} interface. */
@@ -24,7 +20,7 @@ export function isTransactionPartialSigner<TAddress extends string>(value: {
     [key: string]: unknown;
     address: Address<TAddress>;
 }): value is TransactionPartialSigner<TAddress> {
-    return 'signTransactions' in value && typeof value.signTransactions === 'function';
+    return 'newSignTransactions' in value && typeof value.newSignTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionPartialSigner} interface. */

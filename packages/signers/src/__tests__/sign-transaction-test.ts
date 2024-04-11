@@ -351,7 +351,7 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // Given a transaction with a mocked partial signer.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -471,7 +471,7 @@ describe('signTransactionWithSigners', () => {
 
         // Given a transaction with a mocked partial signer.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
