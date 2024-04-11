@@ -20,7 +20,7 @@ describe('createNoopSigner', () => {
 
         // And provided functions to sign messages and transactions.
         expect(typeof mySigner.signMessages).toBe('function');
-        expect(typeof mySigner.newSignTransactions).toBe('function');
+        expect(typeof mySigner.signTransactions).toBe('function');
     });
 
     it('freezes the created signer', () => {
@@ -55,7 +55,7 @@ describe('createNoopSigner', () => {
         const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
 
         // When we sign both transactions using that signer.
-        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
 
         // Then the signature directories are empty and frozen.
         expect(signatureDictionaries[0]).toStrictEqual({});
@@ -74,7 +74,7 @@ describe('createNoopSigner', () => {
         const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
 
         // When we sign both transactions using that signer.
-        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
 
         // Then the signature directories are empty and frozen.
         expect(signatureDictionaries[0]).toStrictEqual({});

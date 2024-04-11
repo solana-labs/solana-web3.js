@@ -41,7 +41,7 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
     const out: KeyPairSigner = {
         address,
         keyPair,
-        newSignTransactions: transactions =>
+        signTransactions: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
                     const signedTransaction = await newPartiallySignTransaction([keyPair], transaction);

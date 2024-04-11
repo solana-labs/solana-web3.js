@@ -56,7 +56,7 @@ describe('partiallySignTransactionWithSigners', () => {
         // And given signer A and B are mocked to provide the following signatures.
         const modifiedTransaction = { ...unsignedTransaction, signatures: { '1111': '1111_signature', '2222': null } };
         signerA.newModifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
-        signerB.newSignTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
+        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we partially sign this transaction.
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
@@ -71,7 +71,7 @@ describe('partiallySignTransactionWithSigners', () => {
         expect(signerA.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
         });
-        expect(signerB.newSignTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
     });
 
     it('signs modifying signers before partial signers', async () => {
@@ -87,7 +87,7 @@ describe('partiallySignTransactionWithSigners', () => {
             events.push('signerA');
             return transactions.map(tx => ({ ...tx, signatures: { '1111': '1111_signature' } }));
         });
-        signerB.newSignTransactions.mockImplementation((transactions: NewTransaction[]) => {
+        signerB.signTransactions.mockImplementation((transactions: NewTransaction[]) => {
             events.push('signerB');
             return transactions.map(() => ({ '2222': '2222_signature' }));
         });
@@ -177,8 +177,8 @@ describe('partiallySignTransactionWithSigners', () => {
                 events.push(`${signerId} ends`);
                 return transactions.map(() => ({ [address]: `${address}_signature` }));
             };
-        signerA.newSignTransactions.mockImplementation(mockImplementation('signerA', '1111', 500));
-        signerB.newSignTransactions.mockImplementation(mockImplementation('signerB', '2222', 600));
+        signerA.signTransactions.mockImplementation(mockImplementation('signerA', '1111', 500));
+        signerB.signTransactions.mockImplementation(mockImplementation('signerB', '2222', 600));
 
         // And given a transaction that contains theses two signers in its account metas.
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
@@ -225,7 +225,7 @@ describe('partiallySignTransactionWithSigners', () => {
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
         // And given signer B's partial interface is mocked to provide the following signatures.
-        signerB.newSignTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
+        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we partially sign this transaction.
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
@@ -234,7 +234,7 @@ describe('partiallySignTransactionWithSigners', () => {
         expect(signedTransaction.signatures).toStrictEqual({ '1111': null, '2222': '2222_signature' });
 
         // And only the partial signer function was called.
-        expect(signerB.newSignTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
+        expect(signerB.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
         expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
         expect(signerB.newSignAndSendTransactions).not.toHaveBeenCalled();
     });
@@ -261,17 +261,17 @@ describe('partiallySignTransactionWithSigners', () => {
         // And given the following mocked signatures.
         const modifiedTransaction = { ...unsignedTransaction, signatures: { '1111': '1111_signature' } };
         signerA.newModifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
-        signerB.newSignTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
+        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we partially sign this transaction.
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
 
         // Then signer A was used as a modifying signer.
-        expect(signerA.newSignTransactions).not.toHaveBeenCalled();
+        expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
         });
-        expect(signerB.newSignTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
 
         // And it contains the expected signatures.
         expect(signedTransaction.signatures).toStrictEqual({
@@ -301,14 +301,14 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // And given the following mocked signatures.
         const modifiedTransaction = { ...unsignedTransaction, signatures: { '2222': '2222_signature' } };
-        signerA.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         signerB.newModifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
 
         // When we partially sign this transaction.
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
 
         // Then signer A was used as a partial signer.
-        expect(signerA.newSignTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
         expect(signerA.newModifyAndSignTransactions).not.toHaveBeenCalled();
         expect(signerB.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
@@ -336,7 +336,7 @@ describe('partiallySignTransactionWithSigners', () => {
         };
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
-        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
 
         // When we partially sign this transaction.
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
@@ -351,7 +351,7 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // Given a transaction with a mocked partial signer.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -414,7 +414,7 @@ describe('signTransactionWithSigners', () => {
         // And given signer A and B are mocked to provide the following signatures.
         const modifiedTransaction = { ...unsignedTransaction, signatures: { '1111': '1111_signature' } };
         signerA.newModifyAndSignTransactions.mockResolvedValueOnce([modifiedTransaction]);
-        signerB.newSignTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
+        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we sign this transaction.
         const signedTransaction = await signTransactionMessageWithSigners(transactionMessage);
@@ -432,7 +432,7 @@ describe('signTransactionWithSigners', () => {
         expect(signerA.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
         });
-        expect(signerB.newSignTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
     });
 
     it('asserts the transaction is fully signed', async () => {
@@ -452,7 +452,7 @@ describe('signTransactionWithSigners', () => {
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
         // And given signer A is mocked to provide the following signatures.
-        signerA.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
 
         // When we try to sign this transaction.
         const promise = signTransactionMessageWithSigners(transactionMessage);
@@ -471,7 +471,7 @@ describe('signTransactionWithSigners', () => {
 
         // Given a transaction with a mocked partial signer.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -532,7 +532,7 @@ describe('signAndSendTransactionWithSigners', () => {
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
         // And given signer A and B are mocked to provide the following return values.
-        signerA.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         signerB.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
 
         // When we sign and send this transaction.
@@ -540,7 +540,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
 
         // Then the sending signer was used to send the transaction.
-        expect(signerA.newSignTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
         expect(signerB.newSignAndSendTransactions).toHaveBeenCalledWith(
             [{ ...unsignedTransaction, signatures: { '1111': '1111_signature', '2222': null } }],
             { abortSignal: undefined },
@@ -555,7 +555,7 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // Given a transaction with a mocked partial signer but no sending signer.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        signer.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -594,7 +594,7 @@ describe('signAndSendTransactionWithSigners', () => {
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
         signerA.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
-        signerB.newSignTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
+        signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we sign and send this transaction.
         assertIsTransactionMessageWithSingleSendingSigner(transactionMessage);
@@ -605,7 +605,7 @@ describe('signAndSendTransactionWithSigners', () => {
             [{ ...unsignedTransaction, signatures: { '1111': null, '2222': '2222_signature' } }],
             { abortSignal: undefined },
         );
-        expect(signerA.newSignTransactions).not.toHaveBeenCalled();
+        expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.newModifyAndSignTransactions).not.toHaveBeenCalled();
 
         // And the returned signature matches the one returned by that sending signer.
@@ -641,7 +641,7 @@ describe('signAndSendTransactionWithSigners', () => {
         expect(signerA.newModifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
             abortSignal: undefined,
         });
-        expect(signerA.newSignTransactions).not.toHaveBeenCalled();
+        expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
 
         // And the sending only signer was used to send the transaction.
@@ -671,7 +671,7 @@ describe('signAndSendTransactionWithSigners', () => {
         jest.mocked(compileTransaction).mockReturnValue(unsignedTransaction);
 
         // And given the following mocked signatures for these signers.
-        signerA.newSignTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
+        signerA.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         signerB.newSignAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const modifiedTransaction = {
             ...unsignedTransaction,
@@ -684,7 +684,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionMessageWithSigners(transaction);
 
         // Then the composite signer was used as a partial signer.
-        expect(signerA.newSignTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
         expect(signerA.newModifyAndSignTransactions).not.toHaveBeenCalled();
         expect(signerA.newSignAndSendTransactions).not.toHaveBeenCalled();
 

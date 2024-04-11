@@ -38,14 +38,14 @@ describe('isKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            newSignTransactions: () => Promise.resolve([]),
             signMessages: () => Promise.resolve([]),
+            signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isKeyPairSigner(mySigner)).toBe(true);
         expect(isKeyPairSigner({ address: myAddress })).toBe(false);
         expect(isKeyPairSigner({ ...mySigner, signMessages: 42 })).toBe(false);
-        expect(isKeyPairSigner({ ...mySigner, newSignTransactions: 42 })).toBe(false);
+        expect(isKeyPairSigner({ ...mySigner, signTransactions: 42 })).toBe(false);
         expect(isKeyPairSigner({ ...mySigner, keyPair: 42 })).toBe(false);
     });
 });
@@ -56,8 +56,8 @@ describe('assertIsKeyPairSigner', () => {
         const mySigner = {
             address: myAddress,
             keyPair: getMockCryptoKeyPair(),
-            newSignTransactions: () => Promise.resolve([]),
             signMessages: () => Promise.resolve([]),
+            signTransactions: () => Promise.resolve([]),
         } satisfies KeyPairSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         const expectedError = new SolanaError(SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, {
@@ -66,7 +66,7 @@ describe('assertIsKeyPairSigner', () => {
         expect(() => assertIsKeyPairSigner(mySigner)).not.toThrow();
         expect(() => assertIsKeyPairSigner({ address: myAddress })).toThrow(expectedError);
         expect(() => assertIsKeyPairSigner({ ...mySigner, signMessages: 42 })).toThrow(expectedError);
-        expect(() => assertIsKeyPairSigner({ ...mySigner, newSignTransactions: 42 })).toThrow(expectedError);
+        expect(() => assertIsKeyPairSigner({ ...mySigner, signTransactions: 42 })).toThrow(expectedError);
         expect(() => assertIsKeyPairSigner({ ...mySigner, keyPair: 42 })).toThrow(expectedError);
     });
 });
@@ -91,7 +91,7 @@ describe('createSignerFromKeyPair', () => {
 
         // And provided functions to sign messages and transactions.
         expect(typeof mySigner.signMessages).toBe('function');
-        expect(typeof mySigner.newSignTransactions).toBe('function');
+        expect(typeof mySigner.signTransactions).toBe('function');
     });
 
     it('freezes the created signer', async () => {
@@ -135,7 +135,7 @@ describe('createSignerFromKeyPair', () => {
         expect(jest.mocked(signBytes)).toHaveBeenNthCalledWith(2, myKeyPair.privateKey, messages[1].content);
     });
 
-    it('signs transactions using the newSignTransactions function', async () => {
+    it('signs transactions using the signTransactions function', async () => {
         expect.assertions(7);
 
         // Given a KeyPairSigner created from a mock CryptoKeyPair.
@@ -159,7 +159,7 @@ describe('createSignerFromKeyPair', () => {
         });
 
         // When we sign both transactions using that signer.
-        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
 
         // Then the signature directories contain the expected signatures.
         expect(signatureDictionaries[0]).toStrictEqual({ [myAddress]: mockSignatures[0] });

@@ -193,7 +193,7 @@ async function signModifyingAndPartialTransactionSigners<
     abortSignal?.throwIfAborted();
     const signatureDictionaries = await Promise.all(
         partialSigners.map(async partialSigner => {
-            const [signatures] = await partialSigner.newSignTransactions([modifiedTransaction], { abortSignal });
+            const [signatures] = await partialSigner.signTransactions([modifiedTransaction], { abortSignal });
             return signatures;
         }),
     );

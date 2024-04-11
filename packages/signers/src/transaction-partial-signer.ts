@@ -9,7 +9,7 @@ export type TransactionPartialSignerConfig = BaseSignerConfig;
 /** Defines a signer capable of signing transactions. */
 export type TransactionPartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    newSignTransactions(
+    signTransactions(
         transactions: readonly NewTransaction[],
         config?: TransactionPartialSignerConfig,
     ): Promise<readonly SignatureDictionary[]>;
@@ -20,7 +20,7 @@ export function isTransactionPartialSigner<TAddress extends string>(value: {
     [key: string]: unknown;
     address: Address<TAddress>;
 }): value is TransactionPartialSigner<TAddress> {
-    return 'newSignTransactions' in value && typeof value.newSignTransactions === 'function';
+    return 'signTransactions' in value && typeof value.signTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionPartialSigner} interface. */
