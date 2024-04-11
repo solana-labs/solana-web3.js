@@ -12,13 +12,12 @@ describe('isTransactionModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignTransactions: () => Promise.resolve([]),
             newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
         expect(isTransactionModifyingSigner(mySigner)).toBe(true);
         expect(isTransactionModifyingSigner({ address: myAddress })).toBe(false);
-        expect(isTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toBe(false);
+        expect(isTransactionModifyingSigner({ address: myAddress, newModifyAndSignTransactions: 42 })).toBe(false);
     });
 });
 
@@ -27,7 +26,6 @@ describe('assertIsTransactionModifyingSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const mySigner = {
             address: myAddress,
-            modifyAndSignTransactions: () => Promise.resolve([]),
             newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionModifyingSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
@@ -36,8 +34,8 @@ describe('assertIsTransactionModifyingSigner', () => {
         });
         expect(() => assertIsTransactionModifyingSigner(mySigner)).not.toThrow();
         expect(() => assertIsTransactionModifyingSigner({ address: myAddress })).toThrow(expectedError);
-        expect(() => assertIsTransactionModifyingSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
-            expectedError,
-        );
+        expect(() =>
+            assertIsTransactionModifyingSigner({ address: myAddress, newModifyAndSignTransactions: 42 }),
+        ).toThrow(expectedError);
     });
 });

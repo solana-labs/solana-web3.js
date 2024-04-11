@@ -75,8 +75,8 @@ export function createMockTransactionPartialSigner(
 
 export function createMockTransactionModifyingSigner(
     address: Address,
-): TransactionModifyingSigner & { modifyAndSignTransactions: jest.Mock; newModifyAndSignTransactions: jest.Mock } {
-    return { address, modifyAndSignTransactions: jest.fn(), newModifyAndSignTransactions: jest.fn() };
+): TransactionModifyingSigner & { newModifyAndSignTransactions: jest.Mock } {
+    return { address, newModifyAndSignTransactions: jest.fn() };
 }
 
 export function createMockTransactionSendingSigner(
