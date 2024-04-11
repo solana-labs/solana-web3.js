@@ -12,7 +12,7 @@ describe('isTransactionSigner', () => {
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            newModifyAndSignTransactions: () => Promise.resolve([]),
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
@@ -28,7 +28,7 @@ describe('isTransactionSigner', () => {
         expect(isTransactionSigner({ ...myPartialSigner, ...myModifyingSigner, ...mySendingSigner })).toBe(true);
         expect(isTransactionSigner({ address: myAddress })).toBe(false);
         expect(isTransactionSigner({ address: myAddress, signTransactions: 42 })).toBe(false);
-        expect(isTransactionSigner({ address: myAddress, newModifyAndSignTransactions: 42 })).toBe(false);
+        expect(isTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toBe(false);
         expect(isTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toBe(false);
     });
 });
@@ -42,7 +42,7 @@ describe('assertIsTransactionSigner', () => {
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
-            newModifyAndSignTransactions: () => Promise.resolve([]),
+            modifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
@@ -63,7 +63,7 @@ describe('assertIsTransactionSigner', () => {
         ).not.toThrow();
         expect(() => assertIsTransactionSigner({ address: myAddress })).toThrow(expectedError);
         expect(() => assertIsTransactionSigner({ address: myAddress, signTransactions: 42 })).toThrow(expectedError);
-        expect(() => assertIsTransactionSigner({ address: myAddress, newModifyAndSignTransactions: 42 })).toThrow(
+        expect(() => assertIsTransactionSigner({ address: myAddress, modifyAndSignTransactions: 42 })).toThrow(
             expectedError,
         );
         expect(() => assertIsTransactionSigner({ address: myAddress, signAndSendTransactions: 42 })).toThrow(

@@ -9,7 +9,7 @@ export type TransactionModifyingSignerConfig = BaseSignerConfig;
 /** Defines a signer capable of signing transactions. */
 export type TransactionModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    newModifyAndSignTransactions(
+    modifyAndSignTransactions(
         transactions: readonly NewTransaction[],
         config?: TransactionModifyingSignerConfig,
     ): Promise<readonly NewTransaction[]>;
@@ -20,7 +20,7 @@ export function isTransactionModifyingSigner<TAddress extends string>(value: {
     [key: string]: unknown;
     address: Address<TAddress>;
 }): value is TransactionModifyingSigner<TAddress> {
-    return 'newModifyAndSignTransactions' in value && typeof value.newModifyAndSignTransactions === 'function';
+    return 'modifyAndSignTransactions' in value && typeof value.modifyAndSignTransactions === 'function';
 }
 
 /** Asserts that the provided value implements the {@link TransactionModifyingSigner} interface. */

@@ -183,7 +183,7 @@ async function signModifyingAndPartialTransactionSigners<
     const modifiedTransaction = await modifyingSigners.reduce(
         async (transaction, modifyingSigner) => {
             abortSignal?.throwIfAborted();
-            const [tx] = await modifyingSigner.newModifyAndSignTransactions([await transaction], { abortSignal });
+            const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
             return Object.freeze(tx);
         },
         Promise.resolve(transaction) as Promise<NewTransaction>,

@@ -41,6 +41,12 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
     const out: KeyPairSigner = {
         address,
         keyPair,
+        signMessages: messages =>
+            Promise.all(
+                messages.map(async message =>
+                    Object.freeze({ [address]: await signBytes(keyPair.privateKey, message.content) }),
+                ),
+            ),
         signTransactions: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
@@ -48,12 +54,6 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
                     // we know that the address has signed `signedTransaction` because it comes from the keypair
                     return Object.freeze({ [address]: signedTransaction.signatures[address]! });
                 }),
-            ),
-        signMessages: messages =>
-            Promise.all(
-                messages.map(async message =>
-                    Object.freeze({ [address]: await signBytes(keyPair.privateKey, message.content) }),
-                ),
             ),
     };
 
