@@ -10,7 +10,7 @@ const signAndSendTransactions = () => {};
 
 {
     // [isTransactionSendingSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), signAndSendTransactions };
+    const potentialSigner = { address: address('1'), newSignAndSendTransactions: signAndSendTransactions };
     if (isTransactionSendingSigner(potentialSigner)) {
         potentialSigner satisfies TransactionSendingSigner<'1'>;
     }
@@ -18,7 +18,7 @@ const signAndSendTransactions = () => {};
 
 {
     // [assertIsTransactionSendingSigner]: It keeps track of the address type parameter when the address is a valid Address.
-    const potentialSigner = { address: address('1'), signAndSendTransactions };
+    const potentialSigner = { address: address('1'), newSignAndSendTransactions: signAndSendTransactions };
     assertIsTransactionSendingSigner(potentialSigner);
     potentialSigner satisfies TransactionSendingSigner<'1'>;
 }
