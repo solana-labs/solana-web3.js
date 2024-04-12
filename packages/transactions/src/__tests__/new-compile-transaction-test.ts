@@ -1,13 +1,19 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import {
+    CompiledTransactionMessage,
+    getCompiledTransactionMessageEncoder,
+    newCompileTransactionMessage,
+} from '@solana/transaction-messages';
 
-import { CompiledMessage, compileTransactionMessage } from '../message';
 import { compileTransaction } from '../new-compile-transaction';
-import { getCompiledMessageEncoder } from '../serializers';
 
-jest.mock('../message');
-jest.mock('../serializers/message');
+jest.mock('@solana/transaction-messages', () => ({
+    ...jest.requireActual('@solana/transaction-messages'),
+    getCompiledTransactionMessageEncoder: jest.fn(),
+    newCompileTransactionMessage: jest.fn(),
+}));
 
 type TransactionMessage = Parameters<typeof compileTransaction>[0];
 
@@ -16,14 +22,19 @@ describe('compileTransactionMessage', () => {
     const mockAddressB = '1aaa' as Address;
     const mockCompiledMessage = {
         header: {
+            numReadonlyNonSignerAccounts: 0,
+            numReadonlySignerAccounts: 0,
             numSignerAccounts: 2,
         },
+        instructions: [],
+        lifetimeToken: 'a',
         staticAccounts: [mockAddressA, mockAddressB],
-    } as CompiledMessage;
+        version: 0,
+    } as CompiledTransactionMessage;
     const mockCompiledMessageBytes = new Uint8Array(Array(100)).fill(1);
     beforeEach(() => {
-        (compileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
-        (getCompiledMessageEncoder as jest.Mock).mockReturnValue({
+        (newCompileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (getCompiledTransactionMessageEncoder as jest.Mock).mockReturnValue({
             encode: jest.fn().mockReturnValue(mockCompiledMessageBytes),
         });
     });
