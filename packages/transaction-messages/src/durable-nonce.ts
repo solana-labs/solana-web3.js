@@ -116,7 +116,7 @@ function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is Advance
     return data.byteLength === 4 && data[0] === 4 && data[1] === 0 && data[2] === 0 && data[3] === 0;
 }
 
-function isDurableNonceTransaction(
+export function isDurableNonceTransaction(
     transaction: BaseTransactionMessage | (BaseTransactionMessage & IDurableNonceTransactionMessage),
 ): transaction is BaseTransactionMessage & IDurableNonceTransactionMessage {
     return (
