@@ -8,7 +8,7 @@ import {
     NewTransaction,
 } from '@solana/transactions';
 
-import { getSignersFromTransaction, ITransactionMessageWithSigners } from './account-signer-meta';
+import { getSignersFromTransactionMessage, ITransactionMessageWithSigners } from './account-signer-meta';
 import { deduplicateSigners } from './deduplicate-signers';
 import { isTransactionModifyingSigner, TransactionModifyingSigner } from './transaction-modifying-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
@@ -27,7 +27,7 @@ export async function partiallySignTransactionMessageWithSigners<
     TTransactionMessage extends CompilableTransactionMessageWithSigners = CompilableTransactionMessageWithSigners,
 >(transactionMessage: TTransactionMessage, config: { abortSignal?: AbortSignal } = {}): Promise<NewTransaction> {
     const { partialSigners, modifyingSigners } = categorizeTransactionSigners(
-        deduplicateSigners(getSignersFromTransaction(transactionMessage).filter(isTransactionSigner)),
+        deduplicateSigners(getSignersFromTransactionMessage(transactionMessage).filter(isTransactionSigner)),
         { identifySendingSigner: false },
     );
 
@@ -69,7 +69,7 @@ export async function signAndSendTransactionMessageWithSigners<
 >(transaction: TTransactionMessage, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
-        deduplicateSigners(getSignersFromTransaction(transaction).filter(isTransactionSigner)),
+        deduplicateSigners(getSignersFromTransactionMessage(transaction).filter(isTransactionSigner)),
     );
 
     abortSignal?.throwIfAborted();
@@ -85,7 +85,7 @@ export async function signAndSendTransactionMessageWithSigners<
     }
 
     abortSignal?.throwIfAborted();
-    const [signature] = await sendingSigner.newSignAndSendTransactions([signedTransaction], { abortSignal });
+    const [signature] = await sendingSigner.signAndSendTransactions([signedTransaction], { abortSignal });
     abortSignal?.throwIfAborted();
 
     return signature;
@@ -183,7 +183,7 @@ async function signModifyingAndPartialTransactionSigners<
     const modifiedTransaction = await modifyingSigners.reduce(
         async (transaction, modifyingSigner) => {
             abortSignal?.throwIfAborted();
-            const [tx] = await modifyingSigner.newModifyAndSignTransactions([await transaction], { abortSignal });
+            const [tx] = await modifyingSigner.modifyAndSignTransactions([await transaction], { abortSignal });
             return Object.freeze(tx);
         },
         Promise.resolve(transaction) as Promise<NewTransaction>,
@@ -193,7 +193,7 @@ async function signModifyingAndPartialTransactionSigners<
     abortSignal?.throwIfAborted();
     const signatureDictionaries = await Promise.all(
         partialSigners.map(async partialSigner => {
-            const [signatures] = await partialSigner.newSignTransactions([modifiedTransaction], { abortSignal });
+            const [signatures] = await partialSigner.signTransactions([modifiedTransaction], { abortSignal });
             return signatures;
         }),
     );

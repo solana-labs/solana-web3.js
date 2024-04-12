@@ -8,17 +8,14 @@ describe('isTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            newSignTransactions: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransactions: () => Promise.resolve([]),
-            newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            newSignAndSendTransactions: () => Promise.resolve([]),
             signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 
@@ -41,17 +38,14 @@ describe('assertIsTransactionSigner', () => {
         const myAddress = address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy');
         const myPartialSigner = {
             address: myAddress,
-            newSignTransactions: () => Promise.resolve([]),
             signTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const myModifyingSigner = {
             address: myAddress,
             modifyAndSignTransactions: () => Promise.resolve([]),
-            newModifyAndSignTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
         const mySendingSigner = {
             address: myAddress,
-            newSignAndSendTransactions: () => Promise.resolve([]),
             signAndSendTransactions: () => Promise.resolve([]),
         } satisfies TransactionSigner<'Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'>;
 

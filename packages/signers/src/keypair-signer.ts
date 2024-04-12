@@ -1,7 +1,7 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { createKeyPairFromBytes, generateKeyPair, signBytes } from '@solana/keys';
-import { newPartiallySignTransaction, partiallySignTransaction } from '@solana/transactions';
+import { newPartiallySignTransaction } from '@solana/transactions';
 
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
@@ -41,14 +41,6 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
     const out: KeyPairSigner = {
         address,
         keyPair,
-        newSignTransactions: transactions =>
-            Promise.all(
-                transactions.map(async transaction => {
-                    const signedTransaction = await newPartiallySignTransaction([keyPair], transaction);
-                    // we know that the address has signed `signedTransaction` because it comes from the keypair
-                    return Object.freeze({ [address]: signedTransaction.signatures[address]! });
-                }),
-            ),
         signMessages: messages =>
             Promise.all(
                 messages.map(async message =>
@@ -58,8 +50,9 @@ export async function createSignerFromKeyPair(keyPair: CryptoKeyPair): Promise<K
         signTransactions: transactions =>
             Promise.all(
                 transactions.map(async transaction => {
-                    const signedTransaction = await partiallySignTransaction([keyPair], transaction);
-                    return Object.freeze({ [address]: signedTransaction.signatures[address] });
+                    const signedTransaction = await newPartiallySignTransaction([keyPair], transaction);
+                    // we know that the address has signed `signedTransaction` because it comes from the keypair
+                    return Object.freeze({ [address]: signedTransaction.signatures[address]! });
                 }),
             ),
     };

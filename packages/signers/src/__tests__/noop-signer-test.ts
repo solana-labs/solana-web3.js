@@ -1,7 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { address } from '@solana/addresses';
-import { CompilableTransaction, NewTransaction } from '@solana/transactions';
+import { NewTransaction } from '@solana/transactions';
 
 import { createNoopSigner, NoopSigner } from '../noop-signer';
 import { createSignableMessage } from '../signable-message';
@@ -55,7 +55,7 @@ describe('createNoopSigner', () => {
         const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
 
         // When we sign both transactions using that signer.
-        const signatureDictionaries = await mySigner.newSignTransactions(mockTransactions);
+        const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
 
         // Then the signature directories are empty and frozen.
         expect(signatureDictionaries[0]).toStrictEqual({});
@@ -71,7 +71,7 @@ describe('createNoopSigner', () => {
         const mySigner = createNoopSigner(address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'));
 
         // And given we have a couple of mock transactions to sign.
-        const mockTransactions = [{} as CompilableTransaction, {} as CompilableTransaction];
+        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
 
         // When we sign both transactions using that signer.
         const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
