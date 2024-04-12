@@ -1,4 +1,5 @@
 import { assertDigestCapabilityIsAvailable } from '@solana/assertions';
+import type { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     isSolanaError,
     SOLANA_ERROR__ADDRESSES__FAILED_TO_FIND_VIABLE_PDA_BUMP_SEED,
@@ -77,7 +78,7 @@ type SeedInput = Readonly<{
     seed: Seed;
 }>;
 
-type Seed = Uint8Array | string;
+type Seed = ReadonlyUint8Array | string;
 
 const MAX_SEED_LENGTH = 32;
 const MAX_SEEDS = 16;
