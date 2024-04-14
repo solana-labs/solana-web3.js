@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": ["DOM", "ES2020", "ES2020.BigInt", "ES2022.Error"]
+    },
+    "display": "@solana/fast-stable-stringify",
+    "extends": "../tsconfig/base.json",
+    "include": ["src"]
+}
