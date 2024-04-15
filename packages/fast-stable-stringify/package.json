@@ -49,14 +49,25 @@
         "test:unit:browser": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.browser.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent",
         "test:unit:node": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent"
     },
+    "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
+    "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/nickyout/fast-stable-stringify.git"
+        "url": "https://github.com/solana-labs/solana-web3.js"
     },
-    "author": "Hrushikesh Rao Naidnur",
-    "license": "MIT",
     "bugs": {
-        "url": "https://github.com/nickyout/fast-stable-stringify/issues"
+        "url": "https://github.com/solana-labs/solana-web3.js/issues"
     },
-    "homepage": "https://github.com/nickyout/fast-stable-stringify#readme"
+    "browserslist": [
+        "supports bigint and not dead",
+        "maintained node versions"
+    ],
+    "bundlewatch": {
+        "defaultCompression": "gzip",
+        "files": [
+            {
+                "path": "./dist/index*.js"
+            }
+        ]
+    }
 }
