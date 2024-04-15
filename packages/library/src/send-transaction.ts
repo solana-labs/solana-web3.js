@@ -12,16 +12,13 @@ import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,
 } from '@solana/transaction-confirmation';
+import { FullySignedTransaction } from '@solana/transactions';
 import {
-    BaseTransaction,
-    IDurableNonceTransaction,
-    IFullySignedTransaction,
-    ITransactionWithBlockhashLifetime,
-    ITransactionWithFeePayer,
-} from '@solana/transactions';
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
 import {
-    SendableTransaction,
     sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT,
     sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
@@ -42,7 +39,7 @@ interface SendTransactionWithoutConfirmingFactoryConfig {
 }
 
 type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
-    transaction: ITransactionWithBlockhashLifetime & SendableTransaction,
+    transaction: FullySignedTransaction & TransactionWithBlockhashLifetime,
     config: Omit<
         Parameters<typeof sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmRecentTransaction' | 'rpc' | 'transaction'
@@ -50,7 +47,7 @@ type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
 ) => Promise<void>;
 
 type SendAndConfirmDurableNonceTransactionFunction = (
-    transaction: BaseTransaction & IDurableNonceTransaction & IFullySignedTransaction & ITransactionWithFeePayer,
+    transaction: FullySignedTransaction & TransactionWithDurableNonceLifetime,
     config: Omit<
         Parameters<typeof sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmDurableNonceTransaction' | 'rpc' | 'transaction'
@@ -58,7 +55,7 @@ type SendAndConfirmDurableNonceTransactionFunction = (
 ) => Promise<void>;
 
 type SendTransactionWithoutConfirmingFunction = (
-    transaction: SendableTransaction,
+    transaction: FullySignedTransaction,
     config: Omit<Parameters<typeof sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0], 'rpc' | 'transaction'>,
 ) => Promise<void>;
 

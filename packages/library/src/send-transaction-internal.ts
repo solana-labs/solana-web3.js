@@ -5,14 +5,11 @@ import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,
 } from '@solana/transaction-confirmation';
+import { FullySignedTransaction, newGetBase64EncodedWireTransaction } from '@solana/transactions';
 import {
-    BaseTransaction,
-    getBase64EncodedWireTransaction,
-    IDurableNonceTransaction,
-    IFullySignedTransaction,
-    ITransactionWithBlockhashLifetime,
-    ITransactionWithFeePayer,
-} from '@solana/transactions';
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
 interface SendAndConfirmDurableNonceTransactionConfig
     extends SendTransactionBaseConfig,
@@ -23,7 +20,7 @@ interface SendAndConfirmDurableNonceTransactionConfig
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: IDurableNonceTransaction & SendableTransaction;
+    transaction: FullySignedTransaction & TransactionWithDurableNonceLifetime;
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
@@ -35,23 +32,18 @@ interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: ITransactionWithBlockhashLifetime & SendableTransaction;
+    transaction: FullySignedTransaction & TransactionWithBlockhashLifetime;
 }
 
 interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding {
     abortSignal?: AbortSignal;
     commitment: Commitment;
     rpc: Rpc<SendTransactionApi>;
-    transaction: SendableTransaction;
+    transaction: FullySignedTransaction;
 }
 
 interface SendTransactionConfigWithoutEncoding
     extends Omit<NonNullable<Parameters<SendTransactionApi['sendTransaction']>[1]>, 'encoding'> {}
-
-export type SendableTransaction = BaseTransaction &
-    IFullySignedTransaction &
-    ITransactionWithFeePayer &
-    (IDurableNonceTransaction | ITransactionWithBlockhashLifetime);
 
 function getSendTransactionConfigWithAdjustedPreflightCommitment(
     commitment: Commitment,
@@ -84,7 +76,7 @@ export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     transaction,
     ...sendTransactionConfig
 }: SendTransactionBaseConfig): Promise<Signature> {
-    const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
+    const base64EncodedWireTransaction = newGetBase64EncodedWireTransaction(transaction);
     return await rpc
         .sendTransaction(base64EncodedWireTransaction, {
             ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),

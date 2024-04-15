@@ -3,13 +3,13 @@ import type { Rpc, SendTransactionApi } from '@solana/rpc';
 import type { Commitment } from '@solana/rpc-types';
 import {
     Base64EncodedWireTransaction,
-    BaseTransaction,
-    getBase64EncodedWireTransaction,
-    IDurableNonceTransaction,
-    IFullySignedTransaction,
-    ITransactionWithBlockhashLifetime,
-    ITransactionWithFeePayer,
+    FullySignedTransaction,
+    newGetBase64EncodedWireTransaction,
 } from '@solana/transactions';
+import {
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
 import {
     sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT,
@@ -23,10 +23,7 @@ const FOREVER_PROMISE = new Promise(() => {
 });
 
 describe('sendAndConfirmTransaction', () => {
-    const MOCK_TRANSACTION = {} as unknown as BaseTransaction &
-        IFullySignedTransaction &
-        ITransactionWithBlockhashLifetime &
-        ITransactionWithFeePayer;
+    const MOCK_TRANSACTION = {} as FullySignedTransaction & TransactionWithBlockhashLifetime;
     let confirmRecentTransaction: jest.Mock;
     let createPendingRequest: jest.Mock;
     let rpc: Rpc<SendTransactionApi>;
@@ -39,7 +36,7 @@ describe('sendAndConfirmTransaction', () => {
         rpc = {
             sendTransaction: createPendingRequest,
         };
-        jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
+        jest.mocked(newGetBase64EncodedWireTransaction).mockReturnValue(
             'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
@@ -51,7 +48,7 @@ describe('sendAndConfirmTransaction', () => {
             rpc,
             transaction: MOCK_TRANSACTION,
         });
-        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
+        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
     it('calls `sendTransaction` with the expected inputs', () => {
@@ -69,7 +66,7 @@ describe('sendAndConfirmTransaction', () => {
             rpc,
             transaction: MOCK_TRANSACTION,
         });
-        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
+        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
             encoding: 'base64',
@@ -180,10 +177,8 @@ describe('sendAndConfirmTransaction', () => {
 });
 
 describe('sendAndConfirmDurableNonceTransaction', () => {
-    const MOCK_DURABLE_NONCE_TRANSACTION = {} as unknown as BaseTransaction &
-        IDurableNonceTransaction &
-        IFullySignedTransaction &
-        ITransactionWithFeePayer;
+    const MOCK_DURABLE_NONCE_TRANSACTION = {} as unknown as FullySignedTransaction &
+        TransactionWithDurableNonceLifetime;
     let confirmDurableNonceTransaction: jest.Mock;
     let createPendingRequest: jest.Mock;
     let rpc: Rpc<SendTransactionApi>;
@@ -196,7 +191,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
         rpc = {
             sendTransaction: createPendingRequest,
         };
-        jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
+        jest.mocked(newGetBase64EncodedWireTransaction).mockReturnValue(
             'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
@@ -208,7 +203,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
-        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
+        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
     it('calls `sendTransaction` with the expected inputs', () => {
@@ -226,7 +221,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
-        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
+        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
             encoding: 'base64',
