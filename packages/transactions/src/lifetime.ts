@@ -1,8 +1,9 @@
-import { Blockhash } from '@solana/rpc-types';
+import { Blockhash, Slot } from '@solana/rpc-types';
 import { NewNonce } from '@solana/transaction-messages';
 
 export type TransactionBlockhashLifetime = {
     blockhash: Blockhash;
+    lastValidBlockHeight: Slot;
 };
 
 export type TransactionDurableNonceLifetime = {

@@ -47,7 +47,7 @@ describe('partiallySignTransactionWithSigners', () => {
         const signerB = createMockTransactionPartialSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -98,7 +98,7 @@ describe('partiallySignTransactionWithSigners', () => {
         // And given a transaction that contains theses signers in its account metas (in any order).
         const transactionMessage = createMockTransactionMessageWithSigners([signerB, signerA]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -144,7 +144,7 @@ describe('partiallySignTransactionWithSigners', () => {
         // And given a transaction that contains theses two signers in its account metas.
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -188,7 +188,7 @@ describe('partiallySignTransactionWithSigners', () => {
         // And given a transaction that contains theses two signers in its account metas.
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -222,7 +222,7 @@ describe('partiallySignTransactionWithSigners', () => {
         };
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -257,7 +257,7 @@ describe('partiallySignTransactionWithSigners', () => {
         const signerB = createMockTransactionPartialSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -299,7 +299,7 @@ describe('partiallySignTransactionWithSigners', () => {
         const signerB = createMockTransactionModifyingSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -337,7 +337,7 @@ describe('partiallySignTransactionWithSigners', () => {
         const signer = createMockTransactionPartialSigner('1111' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -364,7 +364,7 @@ describe('partiallySignTransactionWithSigners', () => {
         signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -392,7 +392,7 @@ describe('partiallySignTransactionWithSigners', () => {
         // Given a transaction
         const transactionMessage = createMockTransactionMessageWithSigners([]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {},
         };
@@ -415,7 +415,7 @@ describe('signTransactionWithSigners', () => {
         const signerB = createMockTransactionPartialSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -456,7 +456,7 @@ describe('signTransactionWithSigners', () => {
         const signerB = createMockTransactionSendingSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -488,7 +488,7 @@ describe('signTransactionWithSigners', () => {
         signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -516,7 +516,7 @@ describe('signTransactionWithSigners', () => {
         // Given a transaction
         const transactionMessage = createMockTransactionMessageWithSigners([]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {},
         };
@@ -539,7 +539,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const signerB = createMockTransactionSendingSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -575,7 +575,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signer.signTransactions.mockResolvedValueOnce([{ '1111': '1111_signature' }]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -603,7 +603,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const signerB = createMockTransactionPartialSigner('2222' as Address);
         const transactionMessage = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -639,7 +639,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const signerB = createMockTransactionSendingSigner('2222' as Address);
         const transaction = createMockTransactionMessageWithSigners([signerA, signerB]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -681,7 +681,7 @@ describe('signAndSendTransactionWithSigners', () => {
         const signerC = createMockTransactionModifyingSigner('3333' as Address);
         const transaction = createMockTransactionMessageWithSigners([signerA, signerB, signerC]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -733,7 +733,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signer.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,
@@ -763,7 +763,7 @@ describe('signAndSendTransactionWithSigners', () => {
         signer.signAndSendTransactions.mockResolvedValueOnce([new Uint8Array([1, 2, 3])]);
         const transactionMessage = createMockTransactionMessageWithSigners([signer]);
         const unsignedTransaction: NewTransaction & TransactionWithLifetime = {
-            lifetimeConstraint: { blockhash: 'a' as Blockhash },
+            lifetimeConstraint: { blockhash: 'a' as Blockhash, lastValidBlockHeight: 1n },
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 ['1111' as Address]: null,

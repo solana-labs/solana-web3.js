@@ -40,10 +40,10 @@ export function compileTransaction(
     }
 
     let lifetimeConstraint: TransactionWithLifetime['lifetimeConstraint'];
-    console.log({ transactionMessage });
     if (isTransactionMessageWithBlockhashLifetime(transactionMessage)) {
         lifetimeConstraint = {
             blockhash: transactionMessage.lifetimeConstraint.blockhash,
+            lastValidBlockHeight: transactionMessage.lifetimeConstraint.lastValidBlockHeight,
         };
     } else {
         lifetimeConstraint = {

@@ -42,7 +42,10 @@ describe('compileTransactionMessage', () => {
     });
 
     const emptyMockTransactionMessage = {
-        lifetimeConstraint: { blockhash: 'b' as Blockhash },
+        lifetimeConstraint: {
+            blockhash: '4'.repeat(44) as Blockhash,
+            lastValidBlockHeight: 1n,
+        },
     } as TransactionMessage;
 
     it('compiles the supplied `TransactionMessage` and sets the `messageBytes` property to the result', () => {
@@ -80,6 +83,7 @@ describe('compileTransactionMessage', () => {
         const transaction = compileTransaction(transactionMessage);
         expect(transaction.lifetimeConstraint).toStrictEqual({
             blockhash: 'D5vmAVFNZFaBBZNJ17tMaVrcsQ9DZViL9bAZn1n1Kxer' as Blockhash,
+            lastValidBlockHeight: 1n,
         });
     });
 
