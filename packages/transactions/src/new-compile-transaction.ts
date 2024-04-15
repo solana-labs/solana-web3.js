@@ -48,6 +48,7 @@ export function compileTransaction(
     } else {
         lifetimeConstraint = {
             nonce: transactionMessage.lifetimeConstraint.nonce,
+            nonceAccountAddress: transactionMessage.instructions[0].accounts[0].address,
         };
     }
 
