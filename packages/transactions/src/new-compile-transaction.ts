@@ -10,16 +10,20 @@ import {
     newCompileTransactionMessage,
 } from '@solana/transaction-messages';
 
-import { TransactionBlockhashLifetime, TransactionDurableNonceLifetime, TransactionWithLifetime } from './lifetime';
+import {
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
+    TransactionWithLifetime,
+} from './lifetime';
 import { NewTransaction, OrderedMap, TransactionMessageBytes } from './transaction';
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage & ITransactionMessageWithBlockhashLifetime,
-): NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime };
+): NewTransaction & TransactionWithBlockhashLifetime;
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage & IDurableNonceTransactionMessage,
-): NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime };
+): NewTransaction & TransactionWithDurableNonceLifetime;
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage,

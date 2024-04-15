@@ -8,7 +8,13 @@ import {
     NewNonce,
 } from '@solana/transaction-messages';
 
-import { TransactionBlockhashLifetime, TransactionDurableNonceLifetime, TransactionWithLifetime } from '../lifetime';
+import {
+    TransactionBlockhashLifetime,
+    TransactionDurableNonceLifetime,
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
+    TransactionWithLifetime,
+} from '../lifetime';
 import { compileTransaction } from '../new-compile-transaction';
 import { NewTransaction } from '../transaction';
 
@@ -22,7 +28,7 @@ compileTransaction(
     null as unknown as BaseTransactionMessage &
         ITransactionMessageWithBlockhashLifetime &
         ITransactionMessageWithFeePayer,
-) satisfies NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime };
+) satisfies NewTransaction & TransactionWithBlockhashLifetime;
 compileTransaction(
     null as unknown as BaseTransactionMessage &
         ITransactionMessageWithBlockhashLifetime &
@@ -35,7 +41,7 @@ compileTransaction(
 ) satisfies NewTransaction & TransactionWithLifetime;
 compileTransaction(
     null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage & ITransactionMessageWithFeePayer,
-) satisfies NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime };
+) satisfies NewTransaction & TransactionWithDurableNonceLifetime;
 compileTransaction(
     null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage & ITransactionMessageWithFeePayer,
 ).lifetimeConstraint.nonce satisfies NewNonce;
