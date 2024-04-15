@@ -1,10 +1,7 @@
 import { getBase64Decoder } from '@solana/codecs-strings';
 
+import { Base64EncodedWireTransaction } from './new-wire-transaction';
 import { getTransactionEncoder } from './serializers/transaction';
-
-export type Base64EncodedWireTransaction = string & {
-    readonly __brand: unique symbol;
-};
 
 export function getBase64EncodedWireTransaction(
     transaction: Parameters<ReturnType<typeof getTransactionEncoder>['encode']>[0],

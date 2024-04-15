@@ -4,12 +4,12 @@ import { SOLANA_ERROR__INVALID_NONCE, SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, Sol
 import type { GetAccountInfoApi, Rpc } from '@solana/rpc';
 import type { AccountNotificationsApi, RpcSubscriptions } from '@solana/rpc-subscriptions';
 import type { Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
-import type { Nonce } from '@solana/transactions';
+import { NewNonce } from '@solana/transaction-messages';
 
 type GetNonceInvalidationPromiseFn = (config: {
     abortSignal: AbortSignal;
     commitment: Commitment;
-    currentNonceValue: Nonce;
+    currentNonceValue: NewNonce;
     nonceAccountAddress: Address;
 }) => Promise<void>;
 
@@ -42,10 +42,10 @@ export function createNonceInvalidationPromiseFactory(
             .subscribe({ abortSignal: abortController.signal });
         const base58Decoder = getBase58Decoder();
         const base64Encoder = getBase64Encoder();
-        function getNonceFromAccountData([base64EncodedBytes]: Base64EncodedDataResponse): Nonce {
+        function getNonceFromAccountData([base64EncodedBytes]: Base64EncodedDataResponse): NewNonce {
             const data = base64Encoder.encode(base64EncodedBytes);
             const nonceValueBytes = data.slice(NONCE_VALUE_OFFSET, NONCE_VALUE_OFFSET + 32);
-            return base58Decoder.decode(nonceValueBytes) as Nonce;
+            return base58Decoder.decode(nonceValueBytes) as NewNonce;
         }
         const nonceAccountDidAdvancePromise = (async () => {
             for await (const accountNotification of accountNotifications) {
@@ -78,7 +78,7 @@ export function createNonceInvalidationPromiseFactory(
             const nonceValue =
                 // This works because we asked for the exact slice of data representing the nonce
                 // value, and furthermore asked for it in `base58` encoding.
-                nonceAccount.data[0] as unknown as Nonce;
+                nonceAccount.data[0] as unknown as NewNonce;
             if (nonceValue !== expectedNonceValue) {
                 throw new SolanaError(SOLANA_ERROR__INVALID_NONCE, {
                     actualNonceValue: nonceValue,

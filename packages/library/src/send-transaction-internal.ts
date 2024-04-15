@@ -7,12 +7,17 @@ import {
 } from '@solana/transaction-confirmation';
 import {
     BaseTransaction,
-    getBase64EncodedWireTransaction,
+    FullySignedTransaction,
     IDurableNonceTransaction,
     IFullySignedTransaction,
     ITransactionWithBlockhashLifetime,
     ITransactionWithFeePayer,
+    newGetBase64EncodedWireTransaction,
 } from '@solana/transactions';
+import {
+    TransactionBlockhashLifetime,
+    TransactionDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
 interface SendAndConfirmDurableNonceTransactionConfig
     extends SendTransactionBaseConfig,
@@ -23,7 +28,7 @@ interface SendAndConfirmDurableNonceTransactionConfig
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: IDurableNonceTransaction & SendableTransaction;
+    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime };
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
@@ -35,14 +40,14 @@ interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: ITransactionWithBlockhashLifetime & SendableTransaction;
+    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionBlockhashLifetime };
 }
 
 interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding {
     abortSignal?: AbortSignal;
     commitment: Commitment;
     rpc: Rpc<SendTransactionApi>;
-    transaction: SendableTransaction;
+    transaction: FullySignedTransaction;
 }
 
 interface SendTransactionConfigWithoutEncoding
@@ -84,7 +89,7 @@ export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     transaction,
     ...sendTransactionConfig
 }: SendTransactionBaseConfig): Promise<Signature> {
-    const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
+    const base64EncodedWireTransaction = newGetBase64EncodedWireTransaction(transaction);
     return await rpc
         .sendTransaction(base64EncodedWireTransaction, {
             ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),

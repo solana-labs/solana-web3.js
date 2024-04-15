@@ -1,11 +1,9 @@
 import { Signature } from '@solana/keys';
-import type { Slot } from '@solana/rpc-types';
+import { newGetSignatureFromTransaction, NewTransaction } from '@solana/transactions';
 import {
-    getSignatureFromTransaction,
-    IDurableNonceTransaction,
-    ITransactionWithFeePayer,
-    ITransactionWithSignatures,
-} from '@solana/transactions';
+    TransactionBlockhashLifetime,
+    TransactionDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
 import { createBlockHeightExceedencePromiseFactory } from './confirmation-strategy-blockheight';
 import { createNonceInvalidationPromiseFactory } from './confirmation-strategy-nonce';
@@ -14,19 +12,13 @@ import { getTimeoutPromise } from './confirmation-strategy-timeout';
 
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseTransactionConfirmationStrategyConfig {
     getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;
-    transaction: IDurableNonceTransaction & ITransactionWithFeePayer & ITransactionWithSignatures;
+    transaction: NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime };
 }
 
 interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
     extends BaseTransactionConfirmationStrategyConfig {
     getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
-    transaction: ITransactionWithFeePayer &
-        ITransactionWithSignatures &
-        Readonly<{
-            lifetimeConstraint: {
-                lastValidBlockHeight: Slot;
-            };
-        }>;
+    transaction: NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime };
 }
 
 interface WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig
@@ -39,7 +31,7 @@ export async function waitForDurableNonceTransactionConfirmation(
     config: WaitForDurableNonceTransactionConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
-        getSignatureFromTransaction(config.transaction),
+        newGetSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({ abortSignal, commitment, getNonceInvalidationPromise, transaction }) {
             return [
@@ -47,7 +39,7 @@ export async function waitForDurableNonceTransactionConfirmation(
                     abortSignal,
                     commitment,
                     currentNonceValue: transaction.lifetimeConstraint.nonce,
-                    nonceAccountAddress: transaction.instructions[0].accounts[0].address,
+                    nonceAccountAddress: transaction.lifetimeConstraint.nonceAccountAddress,
                 }),
             ];
         },
@@ -58,7 +50,7 @@ export async function waitForRecentTransactionConfirmation(
     config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
-        getSignatureFromTransaction(config.transaction),
+        newGetSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({
             abortSignal,
