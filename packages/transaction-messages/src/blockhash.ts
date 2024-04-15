@@ -13,7 +13,7 @@ export interface ITransactionMessageWithBlockhashLifetime {
     readonly lifetimeConstraint: BlockhashLifetimeConstraint;
 }
 
-function isTransactionMessageWithBlockhashLifetime(
+export function isTransactionMessageWithBlockhashLifetime(
     transaction: BaseTransactionMessage | (BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime),
 ): transaction is BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime {
     const lifetimeConstraintShapeMatches =
