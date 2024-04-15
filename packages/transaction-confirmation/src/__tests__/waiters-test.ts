@@ -1,10 +1,15 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SolanaError } from '@solana/errors';
-import { AccountRole, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
-import { IDurableNonceTransaction, Nonce } from '@solana/transactions';
+import { NewNonce } from '@solana/transaction-messages';
+import { NewTransaction, TransactionMessageBytes } from '@solana/transactions';
+import {
+    TransactionBlockhashLifetime,
+    TransactionDurableNonceLifetime,
+} from '@solana/transactions/dist/types/lifetime';
 
+import { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
 import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,
@@ -16,32 +21,13 @@ const FOREVER_PROMISE = new Promise(() => {
 });
 
 describe('waitForDurableNonceTransactionConfirmation', () => {
-    const MOCK_DURABLE_NONCE_TRANSACTION = {
-        feePayer: '9'.repeat(44) as Address,
-        instructions: [
-            // Mock AdvanceNonce instruction.
-            {
-                accounts: [
-                    { address: '5'.repeat(44), role: AccountRole.WRITABLE } as WritableAccount,
-                    {
-                        address:
-                            'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>,
-                        role: AccountRole.READONLY,
-                    },
-                    {
-                        address: '6'.repeat(44),
-                        role: AccountRole.READONLY_SIGNER,
-                    } as ReadonlySignerAccount,
-                ],
-                data: new Uint8Array([4, 0, 0, 0]) as IDurableNonceTransaction['instructions'][0]['data'],
-                programAddress: '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
-            },
-        ],
-        lifetimeConstraint: { nonce: 'xyz' as Nonce },
+    const MOCK_DURABLE_NONCE_TRANSACTION: NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime } = {
+        lifetimeConstraint: { nonce: 'xyz' as NewNonce, nonceAccountAddress: '5'.repeat(44) as Address },
+        messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
         signatures: {
             ['9'.repeat(44) as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
-        } as const,
-    } as const;
+        },
+    };
     let getNonceInvalidationPromise: jest.Mock<Promise<void>>;
     let getRecentSignatureConfirmationPromise: jest.Mock<Promise<void>>;
     beforeEach(() => {
@@ -129,8 +115,8 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
         const transactionWithoutFeePayerSignature = {
             ...MOCK_DURABLE_NONCE_TRANSACTION,
             signatures: {
-                // Signature by someone other than the fee payer.
-                ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
+                // No signature for fee payer.
+                ['9'.repeat(44) as Address]: null,
             } as const,
         };
         const commitmentPromise = waitForDurableNonceTransactionConfirmation({
@@ -184,13 +170,13 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
 });
 
 describe('waitForRecentTransactionConfirmation', () => {
-    const MOCK_TRANSACTION = {
-        feePayer: '9'.repeat(44) as Address,
+    const MOCK_TRANSACTION: NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime } = {
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
+        messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
         signatures: {
             ['9'.repeat(44) as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
-        } as const,
-    } as const;
+        },
+    };
     let getBlockHeightExceedencePromise: jest.Mock<Promise<void>>;
     let getRecentSignatureConfirmationPromise: jest.Mock<Promise<void>>;
     beforeEach(() => {
@@ -243,8 +229,8 @@ describe('waitForRecentTransactionConfirmation', () => {
         const transactionWithoutFeePayerSignature = {
             ...MOCK_TRANSACTION,
             signatures: {
-                // Signature by someone other than the fee payer.
-                ['456' as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,
+                // No signature for fee payer
+                ['9'.repeat(44) as Address]: null,
             } as const,
         };
         const commitmentPromise = waitForRecentTransactionConfirmation({

@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import { getBase58Encoder, getBase64Decoder } from '@solana/codecs-strings';
 import { SOLANA_ERROR__INVALID_NONCE, SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SolanaError } from '@solana/errors';
-import { Nonce } from '@solana/transactions';
+import { NewNonce } from '@solana/transaction-messages';
 
 import { createNonceInvalidationPromiseFactory } from '../confirmation-strategy-nonce';
 
@@ -10,7 +10,7 @@ const FOREVER_PROMISE = new Promise(() => {
 });
 
 describe('createNonceInvalidationPromiseFactory', () => {
-    function getBase64EncodedNonceAccountData(nonceValue: Nonce) {
+    function getBase64EncodedNonceAccountData(nonceValue: NewNonce) {
         // This is mostly fake; we just put the nonce value in the correct spot in the byte buffer
         // without actually implementing the rest.
         const NONCE_VALUE_OFFSET =
@@ -56,7 +56,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         getNonceInvalidationPromise({
             abortSignal: abortController.signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
@@ -73,7 +73,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         getNonceInvalidationPromise({
             abortSignal: abortController.signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         expect(createSubscriptionIterable).toHaveBeenCalledWith({
@@ -89,7 +89,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
@@ -110,7 +110,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
@@ -134,7 +134,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         const invalidationPromise = getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
@@ -146,7 +146,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         const invalidationPromise = getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
@@ -165,7 +165,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         const invalidationPromise = getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
@@ -180,7 +180,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         accountNotificationGenerator.mockImplementation(async function* () {
             yield {
                 value: {
-                    data: getBase64EncodedNonceAccountData('4'.repeat(44) as Nonce),
+                    data: getBase64EncodedNonceAccountData('4'.repeat(44) as NewNonce),
                 },
             };
             yield FOREVER_PROMISE;
@@ -188,7 +188,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         const invalidationPromise = getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await jest.runAllTimersAsync();
@@ -197,13 +197,13 @@ describe('createNonceInvalidationPromiseFactory', () => {
     it('fatals when the nonce value returned by the account subscription is different than the expected one', async () => {
         expect.assertions(1);
         accountNotificationGenerator.mockImplementation(async function* () {
-            yield { value: { data: getBase64EncodedNonceAccountData('5'.repeat(44) as Nonce) } };
+            yield { value: { data: getBase64EncodedNonceAccountData('5'.repeat(44) as NewNonce) } };
             yield FOREVER_PROMISE;
         });
         const invalidationPromise = getNonceInvalidationPromise({
             abortSignal: new AbortController().signal,
             commitment: 'finalized',
-            currentNonceValue: '4'.repeat(44) as Nonce,
+            currentNonceValue: '4'.repeat(44) as NewNonce,
             nonceAccountAddress: '9'.repeat(44) as Address,
         });
         await expect(invalidationPromise).rejects.toThrow(
