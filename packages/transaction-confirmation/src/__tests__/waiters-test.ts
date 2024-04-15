@@ -5,8 +5,8 @@ import type { Blockhash } from '@solana/rpc-types';
 import { NewNonce } from '@solana/transaction-messages';
 import { NewTransaction, TransactionMessageBytes } from '@solana/transactions';
 import {
-    TransactionBlockhashLifetime,
-    TransactionDurableNonceLifetime,
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
 } from '@solana/transactions/dist/types/lifetime';
 
 import { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
@@ -21,7 +21,7 @@ const FOREVER_PROMISE = new Promise(() => {
 });
 
 describe('waitForDurableNonceTransactionConfirmation', () => {
-    const MOCK_DURABLE_NONCE_TRANSACTION: NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime } = {
+    const MOCK_DURABLE_NONCE_TRANSACTION: NewTransaction & TransactionWithDurableNonceLifetime = {
         lifetimeConstraint: { nonce: 'xyz' as NewNonce, nonceAccountAddress: '5'.repeat(44) as Address },
         messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
         signatures: {
@@ -170,7 +170,7 @@ describe('waitForDurableNonceTransactionConfirmation', () => {
 });
 
 describe('waitForRecentTransactionConfirmation', () => {
-    const MOCK_TRANSACTION: NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime } = {
+    const MOCK_TRANSACTION: NewTransaction & TransactionWithBlockhashLifetime = {
         lifetimeConstraint: { blockhash: '4'.repeat(44) as Blockhash, lastValidBlockHeight: 123n },
         messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
         signatures: {

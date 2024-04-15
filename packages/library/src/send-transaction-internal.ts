@@ -15,8 +15,8 @@ import {
     newGetBase64EncodedWireTransaction,
 } from '@solana/transactions';
 import {
-    TransactionBlockhashLifetime,
-    TransactionDurableNonceLifetime,
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
 } from '@solana/transactions/dist/types/lifetime';
 
 interface SendAndConfirmDurableNonceTransactionConfig
@@ -28,7 +28,7 @@ interface SendAndConfirmDurableNonceTransactionConfig
             'getNonceInvalidationPromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime };
+    transaction: FullySignedTransaction & TransactionWithDurableNonceLifetime;
 }
 
 interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
@@ -40,7 +40,7 @@ interface SendAndConfirmTransactionWithBlockhashLifetimeConfig
             'getBlockHeightExceedencePromise' | 'getRecentSignatureConfirmationPromise'
         >,
     ) => Promise<void>;
-    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionBlockhashLifetime };
+    transaction: FullySignedTransaction & TransactionWithBlockhashLifetime;
 }
 
 interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding {
