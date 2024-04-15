@@ -6,18 +6,11 @@ import {
     waitForRecentTransactionConfirmation,
 } from '@solana/transaction-confirmation';
 import {
-    BaseTransaction,
     FullySignedTransaction,
-    IDurableNonceTransaction,
-    IFullySignedTransaction,
-    ITransactionWithBlockhashLifetime,
-    ITransactionWithFeePayer,
     newGetBase64EncodedWireTransaction,
-} from '@solana/transactions';
-import {
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
-} from '@solana/transactions/dist/types/lifetime';
+} from '@solana/transactions';
 
 interface SendAndConfirmDurableNonceTransactionConfig
     extends SendTransactionBaseConfig,
@@ -52,11 +45,6 @@ interface SendTransactionBaseConfig extends SendTransactionConfigWithoutEncoding
 
 interface SendTransactionConfigWithoutEncoding
     extends Omit<NonNullable<Parameters<SendTransactionApi['sendTransaction']>[1]>, 'encoding'> {}
-
-export type SendableTransaction = BaseTransaction &
-    IFullySignedTransaction &
-    ITransactionWithFeePayer &
-    (IDurableNonceTransaction | ITransactionWithBlockhashLifetime);
 
 function getSendTransactionConfigWithAdjustedPreflightCommitment(
     commitment: Commitment,
