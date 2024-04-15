@@ -89,11 +89,23 @@ describe('compileTransactionMessage', () => {
 
     it('returns a durable nonce lifetime constraint when the transaction message has a nonce constraint', () => {
         const transactionMessage = {
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: 'nonceAddress' as Address,
+                        },
+                    ],
+                },
+            ],
             lifetimeConstraint: {
                 nonce: 'b' as NewNonce,
             },
-        } as TransactionMessage;
+        } as unknown as TransactionMessage;
         const transaction = compileTransaction(transactionMessage);
-        expect(transaction.lifetimeConstraint).toStrictEqual({ nonce: 'b' as NewNonce });
+        expect(transaction.lifetimeConstraint).toStrictEqual({
+            nonce: 'b' as NewNonce,
+            nonceAccountAddress: 'nonceAddress',
+        });
     });
 });
