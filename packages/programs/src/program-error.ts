@@ -1,4 +1,4 @@
-import { Address } from '@solana/addresses';
+import type { Address } from '@solana/addresses';
 import { isSolanaError, SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM, SolanaError } from '@solana/errors';
 
 export function isProgramError<TProgramErrorCode extends number>(
