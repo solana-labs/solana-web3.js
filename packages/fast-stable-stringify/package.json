@@ -1,7 +1,7 @@
 {
-    "name": "@solana/rpc-graphql",
+    "name": "@solana/fast-stable-stringify",
     "version": "2.0.0-preview.2",
-    "description": "A library for resolving GraphQl query calls to the Solana JSON RPC API",
+    "description": "Deterministic stringification for when performance and bundle size matters",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.js",
@@ -28,14 +28,15 @@
     ],
     "sideEffects": false,
     "keywords": [
-        "blockchain",
-        "solana",
-        "web3"
+        "JSON",
+        "stable",
+        "deterministic",
+        "stringify",
+        "fast",
+        "BigInt"
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
-        "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
         "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
@@ -45,7 +46,6 @@
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:native": "agadoo dist/index.native.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
-        "test:typecheck": "tsc --noEmit",
         "test:unit:browser": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.browser.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent",
         "test:unit:node": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent"
     },
@@ -56,26 +56,12 @@
         "url": "https://github.com/solana-labs/solana-web3.js"
     },
     "bugs": {
-        "url": "http://github.com/solana-labs/solana-web3.js/issues"
+        "url": "https://github.com/solana-labs/solana-web3.js/issues"
     },
     "browserslist": [
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "dependencies": {
-        "@graphql-tools/schema": "^10.0.3",
-        "@solana/codecs-strings": "workspace:*",
-        "@solana/fast-stable-stringify": "workspace:*",
-        "dataloader": "^2.2.2",
-        "graphql": "^16.8.0"
-    },
-    "devDependencies": {
-        "@solana/addresses": "workspace:*",
-        "@solana/keys": "workspace:*",
-        "@solana/rpc": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
-        "@solana/transactions": "workspace:*"
-    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [
