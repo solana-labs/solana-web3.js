@@ -14,7 +14,7 @@
   "ignore": ["@solana/web3.js"],
   "linked": [],
   "snapshot": {
-    "prereleaseTemplate": "{tag}.1.{datetime}.{commit}",
+    "prereleaseTemplate": "{tag}.2.{datetime}.{commit}",
     "useCalculatedVersion": true
   },
   "privatePackages": false,
