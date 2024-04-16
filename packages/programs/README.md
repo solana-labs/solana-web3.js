@@ -56,6 +56,29 @@ const myProgram: Program<'1234..5678'> & ProgramWithErrors<MyProgramErrorCode, M
 
 ## Functions
 
+### `isProgramError()`
+
+This function takes any error — typically caused by a transaction failure — and identifies whether it is a custom program error from the provided program address. It takes the following parameters:
+
+-   The `error` to identify.
+-   The `transactionMessage` object that failed to execute. Since the RPC response only provide the index of the failed instruction, we need the transaction message to access its program address.
+-   The `programAddress` of the program from which the error is expected.
+-   Optionally, the expected error `code` of the custom program error. When provided, the function will also check that the custom program error code matches the given value.
+
+```ts
+try {
+    // Send and confirm your transaction.
+} catch (error) {
+    if (isProgramError(error, transactionMessage, myProgramAddress, 42)) {
+        // Handle custom program error 42 from this program.
+    } else if (isProgramError(error, transactionMessage, myProgramAddress)) {
+        // Handle all other custom program errors from this program.
+    } else {
+        throw error;
+    }
+}
+```
+
 ### `resolveTransactionError()`
 
 This function takes a raw error caused by a transaction failure and attempts to resolve it into a custom program error.
