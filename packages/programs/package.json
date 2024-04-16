@@ -62,11 +62,12 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "devDependencies": {
+    "dependencies": {
         "@solana/addresses": "workspace:*",
-        "@solana/errors": "workspace:*",
+        "@solana/errors": "workspace:*"
+    },
+    "devDependencies": {
         "@solana/functional": "workspace:*",
-        "@solana/transactions": "workspace:*",
         "@solana/transaction-messages": "workspace:*"
     },
     "bundlewatch": {
