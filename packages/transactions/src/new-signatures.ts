@@ -34,10 +34,10 @@ function uint8ArraysEqual(arr1: Uint8Array, arr2: Uint8Array) {
     return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 }
 
-export async function newPartiallySignTransaction(
+export async function newPartiallySignTransaction<T extends NewTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: NewTransaction,
-): Promise<NewTransaction> {
+    transaction: T,
+): Promise<T> {
     let newSignatures: Record<Address, SignatureBytes> | undefined;
     let unexpectedSigners: Set<Address> | undefined;
 
@@ -92,10 +92,10 @@ export async function newPartiallySignTransaction(
     });
 }
 
-export async function newSignTransaction(
+export async function newSignTransaction<T extends NewTransaction>(
     keyPairs: CryptoKeyPair[],
-    transaction: NewTransaction,
-): Promise<FullySignedTransaction> {
+    transaction: T,
+): Promise<FullySignedTransaction & T> {
     const out = await newPartiallySignTransaction(keyPairs, transaction);
     newAssertTransactionIsFullySigned(out);
     Object.freeze(out);
