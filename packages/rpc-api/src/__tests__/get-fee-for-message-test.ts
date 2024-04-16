@@ -7,7 +7,7 @@ import {
 } from '@solana/errors';
 import type { Rpc } from '@solana/rpc-spec';
 import type { Blockhash, Commitment } from '@solana/rpc-types';
-import type { SerializedMessageBytesBase64 } from '@solana/transactions';
+import type { TransactionMessageBytesBase64 } from '@solana/transactions';
 
 import { GetFeeForMessageApi, GetLatestBlockhashApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
@@ -56,7 +56,7 @@ function getMockTransactionMessage(blockhash: Blockhash) {
         /** ADDRESS TABLE LOOKUPS */
         0x00, // Number of address table lookups
     ]);
-    return getBase64Decoder().decode(message) as SerializedMessageBytesBase64;
+    return getBase64Decoder().decode(message) as TransactionMessageBytesBase64;
 }
 
 describe('getFeeForMessage', () => {
@@ -111,7 +111,7 @@ describe('getFeeForMessage', () => {
     describe('when called with an invalid message', () => {
         it('throws an error', async () => {
             expect.assertions(1);
-            const sendPromise = rpc.getFeeForMessage('someInvalidMessage' as SerializedMessageBytesBase64).send();
+            const sendPromise = rpc.getFeeForMessage('someInvalidMessage' as TransactionMessageBytesBase64).send();
             await expect(sendPromise).rejects.toThrow(
                 new SolanaError(SOLANA_ERROR__JSON_RPC__INVALID_PARAMS, {
                     __serverMessage: 'invalid base64 encoding: InvalidPadding',

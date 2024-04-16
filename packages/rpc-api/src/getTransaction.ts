@@ -16,7 +16,7 @@ import type {
     U64UnsafeBeyond2Pow53Minus1,
     UnixTimestamp,
 } from '@solana/rpc-types';
-import type { TransactionVersion } from '@solana/transactions';
+import type { NewTransactionVersion } from '@solana/transaction-messages';
 
 type ReturnData = {
     /** the return data itself */
@@ -162,7 +162,7 @@ export interface GetTransactionApi extends RpcApiMethods {
     /**
      * Returns transaction details for a confirmed transaction
      */
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends NewTransactionVersion | void = void>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -172,7 +172,7 @@ export interface GetTransactionApi extends RpcApiMethods {
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
                   ? Record<string, never>
-                  : { version: TransactionVersion }) & {
+                  : { version: NewTransactionVersion }) & {
                   meta: (TransactionMetaBase & TransactionMetaInnerInstructionsParsed) | null;
                   transaction: TransactionJsonParsed &
                       (TMaxSupportedTransactionVersion extends void
@@ -180,7 +180,7 @@ export interface GetTransactionApi extends RpcApiMethods {
                           : TransactionAddressTableLookups);
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends NewTransactionVersion | void = void>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -190,7 +190,7 @@ export interface GetTransactionApi extends RpcApiMethods {
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
                   ? Record<string, never>
-                  : { version: TransactionVersion }) & {
+                  : { version: NewTransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &
@@ -201,7 +201,7 @@ export interface GetTransactionApi extends RpcApiMethods {
                   transaction: Base64EncodedDataResponse;
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends NewTransactionVersion | void = void>(
         signature: Signature,
         config: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -211,7 +211,7 @@ export interface GetTransactionApi extends RpcApiMethods {
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
                   ? Record<string, never>
-                  : { version: TransactionVersion }) & {
+                  : { version: NewTransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &
@@ -222,7 +222,7 @@ export interface GetTransactionApi extends RpcApiMethods {
                   transaction: Base58EncodedDataResponse;
               })
         | null;
-    getTransaction<TMaxSupportedTransactionVersion extends TransactionVersion | void = void>(
+    getTransaction<TMaxSupportedTransactionVersion extends NewTransactionVersion | void = void>(
         signature: Signature,
         config?: GetTransactionCommonConfig<TMaxSupportedTransactionVersion> &
             Readonly<{
@@ -232,7 +232,7 @@ export interface GetTransactionApi extends RpcApiMethods {
         | (GetTransactionApiResponseBase &
               (TMaxSupportedTransactionVersion extends void
                   ? Record<string, never>
-                  : { version: TransactionVersion }) & {
+                  : { version: NewTransactionVersion }) & {
                   meta:
                       | (TransactionMetaBase &
                             TransactionMetaInnerInstructionsNotParsed &

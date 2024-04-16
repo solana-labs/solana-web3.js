@@ -68,6 +68,7 @@
         "@solana/rpc-types": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-transformers": "workspace:*",
+        "@solana/transaction-messages": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
