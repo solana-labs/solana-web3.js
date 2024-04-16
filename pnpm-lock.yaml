@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -811,8 +807,8 @@ importers:
         specifier: workspace:*
         version: link:../rpc-spec
       undici-types:
-        specifier: ^6.7.1
-        version: 6.7.1
+        specifier: ^6.13.0
+        version: 6.13.0
     devDependencies:
       tinybench:
         specifier: ^2.6.0
@@ -3219,7 +3215,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: ^22
+      jsdom: '*'
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -12842,8 +12838,8 @@ packages:
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  /undici-types@6.7.1:
-    resolution: {integrity: sha512-7r+rI8EcAjs3Th8JYhJUW4K6cNne8aPoQ7f44Y8zZIkLEcn7UkKvbQpFgBu/fbn2YY7k44pn1e7PnTY/vzBnVQ==}
+  /undici-types@6.13.0:
+    resolution: {integrity: sha512-xtFJHudx8S2DSoujjMd1WeWvn7KKWFRESZTMeL1RptAYERu29D6jphMjjY+vn96jvN3kVPDNxU/E13VTaXj6jg==}
     dev: false
 
   /undici@6.6.2:
@@ -13434,3 +13430,7 @@ packages:
       which: 3.0.1
       yaml: 2.3.1
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
