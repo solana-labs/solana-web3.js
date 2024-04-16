@@ -1,6 +1,7 @@
 import { Address } from '@solana/addresses';
 import { pipe } from '@solana/functional';
-import { appendTransactionInstruction, createTransaction } from '@solana/transactions';
+import { createTransactionMessage } from '@solana/transaction-messages';
+import { appendTransactionInstruction } from '@solana/transactions';
 
 import { Program, ProgramWithErrors } from '../program';
 import { resolveTransactionError } from '../resolve-transaction-error';
@@ -34,7 +35,7 @@ describe('resolveTransactionError', () => {
 
         // And given the following transaction such that both programs are invoked.
         const transaction = pipe(
-            createTransaction({ version: 0 }),
+            createTransactionMessage({ version: 0 }),
             tx => appendTransactionInstruction({ programAddress: programA.address }, tx),
             tx => appendTransactionInstruction({ programAddress: programB.address }, tx),
         );
@@ -72,7 +73,7 @@ describe('resolveTransactionError', () => {
 
         // And given the following transaction such that both programs are invoked.
         const transaction = pipe(
-            createTransaction({ version: 0 }),
+            createTransactionMessage({ version: 0 }),
             tx => appendTransactionInstruction({ programAddress: programA.address }, tx),
             tx => appendTransactionInstruction({ programAddress: programB.address }, tx),
         );
@@ -103,7 +104,7 @@ describe('resolveTransactionError', () => {
 
         // And given the following transaction such that both programs are invoked.
         const transaction = pipe(
-            createTransaction({ version: 0 }),
+            createTransactionMessage({ version: 0 }),
             tx => appendTransactionInstruction({ programAddress: programA.address }, tx),
             tx => appendTransactionInstruction({ programAddress: programB.address }, tx),
         );

@@ -65,6 +65,7 @@
     "devDependencies": {
         "@solana/addresses": "workspace:*",
         "@solana/functional": "workspace:*",
+        "@solana/transaction-messages": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
     "bundlewatch": {
