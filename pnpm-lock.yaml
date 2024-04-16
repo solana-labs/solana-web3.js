@@ -579,9 +579,15 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional
+      '@solana/transaction-messages':
+        specifier: workspace:*
+        version: link:../transaction-messages
       '@solana/transactions':
         specifier: workspace:*
         version: link:../transactions

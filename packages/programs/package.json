@@ -64,8 +64,10 @@
     ],
     "devDependencies": {
         "@solana/addresses": "workspace:*",
+        "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
-        "@solana/transactions": "workspace:*"
+        "@solana/transactions": "workspace:*",
+        "@solana/transaction-messages": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
