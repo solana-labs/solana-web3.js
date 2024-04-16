@@ -1,4 +1,4 @@
-import { ITransactionWithSignatures } from '.';
+import { ITransactionWithSignatures } from './signatures';
 import { BaseTransaction } from './types';
 
 export function getUnsignedTransaction<TTransaction extends BaseTransaction>(
