@@ -1,3 +1,4 @@
+import fastStableStringify from '@solana/fast-stable-stringify';
 import { pipe } from '@solana/functional';
 import type { SolanaRpcSubscriptionsApi, SolanaRpcSubscriptionsApiUnstable } from '@solana/rpc-subscriptions-api';
 import { createSolanaRpcSubscriptionsApi } from '@solana/rpc-subscriptions-api';
@@ -7,9 +8,6 @@ import {
     type RpcSubscriptionsTransport,
 } from '@solana/rpc-subscriptions-spec';
 import { ClusterUrl } from '@solana/rpc-types';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import fastStableStringify from 'fast-stable-stringify';
 
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';

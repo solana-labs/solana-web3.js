@@ -1,10 +1,9 @@
+import fastStableStringify from '@solana/fast-stable-stringify';
 import HttpKeepAliveAgent, {
   HttpsAgent as HttpsKeepAliveAgent,
 } from 'agentkeepalive';
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-// @ts-ignore
-import fastStableStringify from 'fast-stable-stringify';
 import type {Agent as NodeHttpAgent} from 'http';
 import {Agent as NodeHttpsAgent} from 'https';
 import {
@@ -6291,10 +6290,7 @@ export class Connection {
     args: IWSRequestParams,
   ): ClientSubscriptionId {
     const clientSubscriptionId = this._nextClientSubscriptionId++;
-    const hash = fastStableStringify(
-      [subscriptionConfig.method, args],
-      true /* isArrayProp */,
-    );
+    const hash = fastStableStringify([subscriptionConfig.method, args]);
     const existingSubscription = this._subscriptionsByHash[hash];
     if (existingSubscription === undefined) {
       this._subscriptionsByHash[hash] = {
