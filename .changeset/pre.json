@@ -12,7 +12,6 @@
     "@solana/codecs": "2.0.0-preview.1",
     "@solana/compat": "2.0.0-preview.1",
     "@solana/errors": "2.0.0-preview.1",
-    "@solana/fast-stable-stringify": "1.0.0",
     "@solana/functional": "2.0.0-preview.1",
     "@solana/instructions": "2.0.0-preview.1",
     "@solana/keys": "2.0.0-preview.1",

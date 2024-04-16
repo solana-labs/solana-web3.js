@@ -29,5 +29,3 @@ Unlike substack's, it does:
 npm run test:unit:browser
 npm run test:unit:node 
 ```
-
-_Notice: The License of this repository has been changed from GPL-3.0 to MIT as of 2017-08-25. All following commits will fall under the MIT license._
