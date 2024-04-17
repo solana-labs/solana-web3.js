@@ -1,6 +1,4 @@
 import type { Address } from '@solana/addresses';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import stringify from '@solana/fast-stable-stringify';
 import type { Signature } from '@solana/keys';
 import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc';
@@ -67,5 +65,4 @@ export type RpcGraphQLLoaders = {
     transaction: TransactionLoader;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const cacheKeyFn = (obj: any) => stringify(obj);
+export const cacheKeyFn = (obj: unknown) => stringify(obj) ?? '';

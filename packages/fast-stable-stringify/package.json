@@ -37,6 +37,7 @@
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
+        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
@@ -47,6 +48,7 @@
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:native": "agadoo dist/index.native.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
+        "test:typecheck": "tsc --noEmit",
         "test:unit:browser": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.browser.ts --rootDir . --silent",
         "test:unit:node": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --rootDir . --silent"
     },
