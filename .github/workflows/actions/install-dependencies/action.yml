@@ -1,6 +1,11 @@
 name: Install Dependencies
 description: Sets up Node and its package manager, then installs all dependencies
 
+inputs:
+  version:
+    default: 'lts/*'
+    type: string
+
 runs:
   using: composite
   steps:
@@ -12,7 +17,7 @@ runs:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: ${{ inputs.version }}
         cache: 'pnpm'
 
     - name: Install dependencies
