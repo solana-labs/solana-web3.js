@@ -1532,6 +1532,7 @@ function createRpcClient(
   fetchMiddleware?: FetchMiddleware,
   disableRetryOnRateLimit?: boolean,
   httpAgent?: NodeHttpAgent | NodeHttpsAgent | false,
+  log = false,
 ): RpcClient {
   const fetch = customFetch ? customFetch : fetchImpl;
   let agent: NodeHttpAgent | NodeHttpsAgent | undefined;
@@ -1635,6 +1636,12 @@ function createRpcClient(
         if (too_many_requests_retries === 0) {
           break;
         }
+        if(log){
+          console.error(
+            `Server responded with ${res.status} ${res.statusText}.  Retrying after ${waitTime}ms delay...`,
+          );
+        }
+        
         await sleep(waitTime);
         waitTime *= 2;
       }
