@@ -196,6 +196,9 @@ describe('fastStableStringify', function () {
         expect(stringify(value)).toBe(jsonStableStringify(value));
     });
     it('hashes bigints', function () {
-        expect(stringify(200n)).toMatch('"200n"');
+        expect(stringify(200n)).toMatch('200n');
+        expect(stringify({ foo: 100n, goo: '100n' })).toMatch('{"foo":100n,"goo":"100n"}');
+        expect(stringify({ age: BigInt(100n), name: 'Hrushi' })).toMatch('{"age":100n,"name":"Hrushi"}');
+        expect(stringify({ age: [BigInt(100n), BigInt(200n), BigInt(300n)] })).toMatch('{"age":[100n,200n,300n]}');
     });
 });
