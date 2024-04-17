@@ -3,7 +3,7 @@ import stringify from '..';
 describe('test_fast_stable_stringify', function () {
     it('big int', function () {
         const obj = { age: 23, bigint: BigInt('200'), name: 'ABCD' };
-        expect(stringify(obj)).toMatch('{"age":23,"bigint":"200n‽","name":"ABCD"}');
+        expect(stringify(obj)).toMatch('{"age":23,"bigint":"200n‽¶","name":"ABCD"}');
     });
 
     it('only string', function () {
