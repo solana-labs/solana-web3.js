@@ -16,12 +16,18 @@ type AirdropFunction = (
     >,
 ) => Promise<Signature>;
 
-type AirdropFactoryConfig = Readonly<{
-    rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi>;
-    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>;
-}>;
+type AirdropFactoryConfig<TCluster> = {
+    rpc: Rpc<GetSignatureStatusesApi & RequestAirdropApi> & { '~cluster'?: TCluster };
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi> & { '~cluster'?: TCluster };
+};
 
-export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig): AirdropFunction {
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'devnet'>): AirdropFunction;
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'mainnet'>): AirdropFunction;
+export function airdropFactory({ rpc, rpcSubscriptions }: AirdropFactoryConfig<'testnet'>): AirdropFunction;
+export function airdropFactory<TCluster extends 'devnet' | 'mainnet' | 'testnet' | void = void>({
+    rpc,
+    rpcSubscriptions,
+}: AirdropFactoryConfig<TCluster>): AirdropFunction {
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
         rpc,
         rpcSubscriptions,

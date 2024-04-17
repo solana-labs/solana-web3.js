@@ -55,9 +55,10 @@ The `@solana/codecs` package is composed of several smaller packages, each with 
     -   [Different From and To types](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#different-from-and-to-types).
     -   [Fixed-size and variable-size codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixed-size-and-variable-size-codecs).
     -   [Creating custom codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#creating-custom-codecs).
-    -   [Mapping codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#mapping-codecs).
+    -   [Transforming codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#transforming-codecs).
     -   [Fixing the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#fixing-the-size-of-codecs).
     -   [Prefixing codecs with their size](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#prefixing-codecs-with-their-size).
+    -   [Adding sentinels to codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#adding-sentinels-to-codecs).
     -   [Adjusting the size of codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#adjusting-the-size-of-codecs).
     -   [Offsetting codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#offsetting-codecs).
     -   [Padding codecs](https://github.com/solana-labs/solana-web3.js/tree/master/packages/codecs-core#padding-codecs).

@@ -5,8 +5,8 @@ import {
     Decoder,
     fixDecoderSize,
     fixEncoderSize,
-    mapDecoder,
-    mapEncoder,
+    transformDecoder,
+    transformEncoder,
     VariableSizeCodec,
     VariableSizeDecoder,
     VariableSizeEncoder,
@@ -14,20 +14,26 @@ import {
 import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
+import type { getCompiledAddressTableLookups } from '@solana/transaction-messages';
+import {
+    getAddressTableLookupDecoder,
+    getAddressTableLookupEncoder,
+    getInstructionDecoder,
+    getInstructionEncoder,
+    getMessageHeaderDecoder,
+    getMessageHeaderEncoder,
+    getTransactionVersionDecoder,
+    getTransactionVersionEncoder,
+} from '@solana/transaction-messages';
 
-import type { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
 import { CompiledMessage } from '../message';
-import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
-import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
-import { getInstructionDecoder, getInstructionEncoder } from './instruction';
-import { getTransactionVersionDecoder, getTransactionVersionEncoder } from './transaction-version';
 
 function getCompiledMessageLegacyEncoder(): VariableSizeEncoder<CompiledMessage> {
     return getStructEncoder(getPreludeStructEncoderTuple()) as VariableSizeEncoder<CompiledMessage>;
 }
 
 function getCompiledMessageVersionedEncoder(): VariableSizeEncoder<CompiledMessage> {
-    return mapEncoder(
+    return transformEncoder(
         getStructEncoder([
             ...getPreludeStructEncoderTuple(),
             ['addressTableLookups', getAddressTableLookupArrayEncoder()],
@@ -93,7 +99,7 @@ export function getCompiledMessageEncoder(): VariableSizeEncoder<CompiledMessage
 }
 
 export function getCompiledMessageDecoder(): VariableSizeDecoder<CompiledMessage> {
-    return mapDecoder(
+    return transformDecoder(
         getStructDecoder(getPreludeStructDecoderTuple()) as VariableSizeDecoder<
             CompiledMessage & { addressTableLookups?: ReturnType<typeof getCompiledAddressTableLookups> }
         >,

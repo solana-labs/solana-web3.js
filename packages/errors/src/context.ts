@@ -13,6 +13,8 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS,
+    SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
@@ -28,6 +30,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES,
     SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_DATA,
@@ -137,6 +140,7 @@ import {
     SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_CANNOT_PAY_FEES,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
+    SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION,
@@ -269,6 +273,15 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]: {
             codecDescription: string;
         };
+        [SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS]: {
+            stringValues: string[];
+        };
+        [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]: {
+            encodedBytes: ReadonlyUint8Array;
+            hexEncodedBytes: string;
+            hexSentinel: string;
+            sentinel: ReadonlyUint8Array;
+        };
         [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]: {
             decoderFixedSize: number;
             encoderFixedSize: number;
@@ -279,8 +292,8 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]: {
             discriminator: bigint | number;
-            maxRange: number;
-            minRange: number;
+            formattedValidDiscriminators: string;
+            validDiscriminators: number[];
         };
         [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]: {
             bytesLength: number;
@@ -309,10 +322,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             variants: readonly (bigint | boolean | number | string | null | undefined)[];
         };
         [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]: {
-            maxRange: number;
-            minRange: number;
-            value: number | string;
-            variants: string[];
+            formattedNumericalValues: string;
+            numericalValues: number[];
+            stringValues: string[];
+            variant: number | string | symbol;
         };
         [SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT]: {
             value: bigint | boolean | number | string | null | undefined;
@@ -343,6 +356,12 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             bytesLength: number;
             codecDescription: string;
             offset: number;
+        };
+        [SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES]: {
+            decodedBytes: ReadonlyUint8Array;
+            hexDecodedBytes: string;
+            hexSentinel: string;
+            sentinel: ReadonlyUint8Array;
         };
         [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]: {
             maxRange: number;
@@ -547,6 +566,11 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]: {
             programAddress: string;
+        };
+        [SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH]: {
+            numRequiredSignatures: number;
+            signaturesLength: number;
+            signerAddresses: string[];
         };
         [SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING]: {
             addresses: string[];

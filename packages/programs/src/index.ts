@@ -1,2 +1,1 @@
-export * from './program';
-export * from './resolve-transaction-error';
+export * from './program-error';

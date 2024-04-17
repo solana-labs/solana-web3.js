@@ -1,13 +1,13 @@
 import { Address } from '@solana/addresses';
-import { createTransaction } from '@solana/transactions';
+import { createTransactionMessage } from '@solana/transaction-messages';
 
-import { getSignersFromInstruction, getSignersFromTransaction } from '../account-signer-meta';
+import { getSignersFromInstruction, getSignersFromTransactionMessage } from '../account-signer-meta';
 import { setTransactionFeePayerSigner } from '../fee-payer-signer';
 import {
     createMockInstructionWithSigners,
+    createMockTransactionMessageWithSigners,
     createMockTransactionModifyingSigner,
     createMockTransactionPartialSigner,
-    createMockTransactionWithSigners,
 } from './__setup__';
 
 describe('getSignersFromInstruction', () => {
@@ -41,15 +41,15 @@ describe('getSignersFromInstruction', () => {
     });
 });
 
-describe('getSignersFromTransaction', () => {
+describe('getSignersFromTransactionMessage', () => {
     it('extracts signers from the account meta of the provided transaction', () => {
         // Given a transaction with two signers A and B.
         const signerA = createMockTransactionPartialSigner('1111' as Address);
         const signerB = createMockTransactionModifyingSigner('2222' as Address);
-        const transaction = createMockTransactionWithSigners([signerA, signerB]);
+        const transaction = createMockTransactionMessageWithSigners([signerA, signerB]);
 
         // When we extract the signers from the transaction's account metas.
-        const extractedSigners = getSignersFromTransaction(transaction);
+        const extractedSigners = getSignersFromTransactionMessage(transaction);
 
         // Then we expect signer A and B to be part of the extracted signers.
         expect(extractedSigners).toHaveLength(2);
@@ -60,10 +60,10 @@ describe('getSignersFromTransaction', () => {
     it('extracts the fee payer signer of the provided transaction', () => {
         // Given a transaction with a signer fee payer.
         const feePayerSigner = createMockTransactionPartialSigner('1111' as Address);
-        const transaction = setTransactionFeePayerSigner(feePayerSigner, createTransaction({ version: 0 }));
+        const transaction = setTransactionFeePayerSigner(feePayerSigner, createTransactionMessage({ version: 0 }));
 
         // When we extract the signers from the transaction.
-        const extractedSigners = getSignersFromTransaction(transaction);
+        const extractedSigners = getSignersFromTransactionMessage(transaction);
 
         // Then we expect the extracted signers to contain the fee payer signer.
         expect(extractedSigners).toHaveLength(1);
@@ -74,10 +74,10 @@ describe('getSignersFromTransaction', () => {
         // Given a transaction with duplicated signers using the same reference.
         const signerA = createMockTransactionPartialSigner('1111' as Address);
         const signerB = createMockTransactionModifyingSigner('2222' as Address);
-        const transaction = createMockTransactionWithSigners([signerA, signerB, signerA, signerA]);
+        const transaction = createMockTransactionMessageWithSigners([signerA, signerB, signerA, signerA]);
 
         // When we extract the signers from the transaction's account metas.
-        const extractedSigners = getSignersFromTransaction(transaction);
+        const extractedSigners = getSignersFromTransactionMessage(transaction);
 
         // Then we expect the extracted signers to be deduplicated.
         expect(extractedSigners).toHaveLength(2);

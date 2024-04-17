@@ -1,10 +1,14 @@
-import { getAddressMapFromInstructions, getOrderedAccountsFromAddressMap } from './accounts';
+import {
+    getAddressMapFromInstructions,
+    getCompiledAddressTableLookups,
+    getCompiledInstructions,
+    getCompiledLifetimeToken,
+    getCompiledMessageHeader,
+    getCompiledStaticAccounts,
+    getOrderedAccountsFromAddressMap,
+} from '@solana/transaction-messages';
+
 import { CompilableTransaction } from './compilable-transaction';
-import { getCompiledAddressTableLookups } from './compile-address-table-lookups';
-import { getCompiledMessageHeader } from './compile-header';
-import { getCompiledInstructions } from './compile-instructions';
-import { getCompiledLifetimeToken } from './compile-lifetime-token';
-import { getCompiledStaticAccounts } from './compile-static-accounts';
 
 type BaseCompiledMessage = Readonly<{
     header: ReturnType<typeof getCompiledMessageHeader>;
@@ -39,7 +43,11 @@ export function compileTransactionMessage(transaction: CompilableTransaction): C
             : null),
         header: getCompiledMessageHeader(orderedAccounts),
         instructions: getCompiledInstructions(transaction.instructions, orderedAccounts),
-        lifetimeToken: getCompiledLifetimeToken(transaction.lifetimeConstraint),
+        // TODO later: remove this cast, gross hack because of renamed types
+        // won't apply when the input is from transaction-messages
+        lifetimeToken: getCompiledLifetimeToken(
+            transaction.lifetimeConstraint as Parameters<typeof getCompiledLifetimeToken>[0],
+        ),
         staticAccounts: getCompiledStaticAccounts(orderedAccounts),
         version: transaction.version,
     };

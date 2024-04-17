@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
-import { CompilableTransaction } from '@solana/transactions';
+import { NewTransaction } from '@solana/transactions';
 
 import { BaseSignerConfig, SignatureDictionary } from './types';
 
@@ -10,7 +10,7 @@ export type TransactionPartialSignerConfig = BaseSignerConfig;
 export type TransactionPartialSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
     signTransactions(
-        transactions: readonly CompilableTransaction[],
+        transactions: readonly NewTransaction[],
         config?: TransactionPartialSignerConfig,
     ): Promise<readonly SignatureDictionary[]>;
 }>;

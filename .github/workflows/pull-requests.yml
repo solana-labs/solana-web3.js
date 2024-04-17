@@ -36,6 +36,8 @@ jobs:
 
       - name: Install Dependencies
         uses: ./.github/workflows/actions/install-dependencies
+        with:
+          version: ${{ matrix.node }}
 
       - name: Setup Solana Test Validator
         id: start-test-validator

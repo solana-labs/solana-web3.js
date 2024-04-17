@@ -1,7 +1,7 @@
 export * from './blockhash';
+export * from './codecs';
 export * from './compilable-transaction';
 export * from './create-transaction';
-export * from './decompile-transaction';
 export * from './durable-nonce';
 export * from './fee-payer';
 export * from './instructions';
@@ -10,6 +10,7 @@ export * from './new-compile-transaction';
 export * from './new-signatures';
 export * from './serializers';
 export * from './signatures';
+export * from './transaction';
 export * from './types';
 export * from './unsigned-transaction';
 export * from './wire-transaction';

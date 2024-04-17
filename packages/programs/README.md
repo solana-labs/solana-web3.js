@@ -14,66 +14,29 @@
 
 # @solana/programs
 
-This package contains types for defining programs and helpers for resolving program errors. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
-
-## Types
-
-### `Program`
-
-The `Program` type defines a Solana program.
-
-```ts
-const myProgram: Program<'1234..5678'> = {
-    name: 'myProgramName',
-    address: '1234..5678' as Address<'1234..5678'>,
-};
-```
-
-### `ProgramWithErrors`
-
-The `ProgramWithErrors` type helps extend the `Program` type by defining a `getErrorFromCode` function that can be used to resolve a custom program error from a transaction error code.
-
-```ts
-enum MyProgramErrorCode {
-    UNINITIALIZED_ACCOUNT = 0,
-    INVALID_ACCOUNT_OWNER = 1,
-    INVALID_ACCOUNT_DATA = 2,
-    SOME_OTHER_ERROR = 3,
-}
-
-class MyProgramError extends Error {
-    // ...
-}
-
-const myProgram: Program<'1234..5678'> & ProgramWithErrors<MyProgramErrorCode, MyProgramError> = {
-    name: 'myProgramName',
-    address: '1234..5678' as Address<'1234..5678'>,
-    getErrorFromCode: (code: MyProgramErrorCode, originalError: Error): MyProgramError => {
-        // ...
-    },
-};
-```
+This package contains helpers for identifying custom program errors. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 ## Functions
 
-### `resolveTransactionError()`
+### `isProgramError()`
 
-This function takes a raw error caused by a transaction failure and attempts to resolve it into a custom program error.
+This function takes any error — typically caused by a transaction failure — and identifies whether it is a custom program error from the provided program address. It takes the following parameters:
 
-For this to work, the `resolveTransactionError` function also needs the following parameters:
-
--   The `transaction` object that failed to execute. This allows us to identify the failing instruction and correctly identify the program that caused the error.
--   An array of all `programs` that can be used to resolve the error. If the program that caused the error is not present in the array, the function won't be able to return a custom program error.
-
-Note that, if the error cannot be resolved into a custom program error, the original error is returned as-is.
+-   The `error` to identify.
+-   The `transactionMessage` object that failed to execute. Since the RPC response only provide the index of the failed instruction, we need the transaction message to access its program address.
+-   The `programAddress` of the program from which the error is expected.
+-   Optionally, the expected error `code` of the custom program error. When provided, the function will also check that the custom program error code matches the given value.
 
 ```ts
-// Store your programs.
-const programs = [createSplSystemProgram(), createSplComputeBudgetProgram(), createSplAddressLookupTableProgram()];
-
 try {
     // Send and confirm your transaction.
 } catch (error) {
-    throw resolveTransactionError(error, transaction, programs);
+    if (isProgramError(error, transactionMessage, myProgramAddress, 42)) {
+        // Handle custom program error 42 from this program.
+    } else if (isProgramError(error, transactionMessage, myProgramAddress)) {
+        // Handle all other custom program errors from this program.
+    } else {
+        throw error;
+    }
 }
 ```

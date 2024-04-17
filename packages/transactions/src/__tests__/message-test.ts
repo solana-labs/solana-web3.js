@@ -1,20 +1,25 @@
 import { Address } from '@solana/addresses';
+import {
+    getCompiledAddressTableLookups,
+    getCompiledInstructions,
+    getCompiledLifetimeToken,
+    getCompiledMessageHeader,
+    getCompiledStaticAccounts,
+} from '@solana/transaction-messages';
 
 import { ITransactionWithBlockhashLifetime } from '../blockhash';
-import { getCompiledAddressTableLookups } from '../compile-address-table-lookups';
-import { getCompiledMessageHeader } from '../compile-header';
-import { getCompiledInstructions } from '../compile-instructions';
-import { getCompiledLifetimeToken } from '../compile-lifetime-token';
-import { getCompiledStaticAccounts } from '../compile-static-accounts';
 import { ITransactionWithFeePayer } from '../fee-payer';
 import { compileTransactionMessage } from '../message';
 import { BaseTransaction } from '../types';
 
-jest.mock('../compile-address-table-lookups');
-jest.mock('../compile-header');
-jest.mock('../compile-instructions');
-jest.mock('../compile-lifetime-token');
-jest.mock('../compile-static-accounts');
+jest.mock('@solana/transaction-messages', () => ({
+    ...jest.requireActual('@solana/transaction-messages'),
+    getCompiledAddressTableLookups: jest.fn(),
+    getCompiledInstructions: jest.fn(),
+    getCompiledLifetimeToken: jest.fn(),
+    getCompiledMessageHeader: jest.fn(),
+    getCompiledStaticAccounts: jest.fn(),
+}));
 
 const MOCK_LIFETIME_CONSTRAINT =
     'SOME_CONSTRAINT' as unknown as ITransactionWithBlockhashLifetime['lifetimeConstraint'];
@@ -76,6 +81,7 @@ describe('compileTransactionMessage', () => {
         });
         it('sets `instructions` to the return value of `getCompiledInstructions`', () => {
             const message = compileTransactionMessage(baseTx);
+            console.log({ message });
             expect(getCompiledInstructions).toHaveBeenCalledWith(
                 baseTx.instructions,
                 expect.any(Array) /* orderedAccounts */,

@@ -3,10 +3,10 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__ADDRESS_CANNOT_HAVE_MULTIPLE_SIGNERS, SolanaError } from '@solana/errors';
 import { AccountRole, IInstruction } from '@solana/instructions';
-import { BaseTransaction } from '@solana/transactions';
+import { BaseTransactionMessage } from '@solana/transaction-messages';
 
 import { IAccountSignerMeta, IInstructionWithSigners } from '../account-signer-meta';
-import { addSignersToInstruction, addSignersToTransaction } from '../add-signers';
+import { addSignersToInstruction, addSignersToTransactionMessage } from '../add-signers';
 import { createMockTransactionModifyingSigner, createMockTransactionPartialSigner } from './__setup__';
 
 describe('addSignersToInstruction', () => {
@@ -156,7 +156,7 @@ describe('addSignersToInstruction', () => {
     });
 });
 
-describe('addSignersToTransaction', () => {
+describe('addSignersToTransactionMessage', () => {
     it('adds signers to the account metas of the transaction', () => {
         // Given a transaction with two instructions with signer account metas.
         const instructionA: IInstruction = {
@@ -169,7 +169,7 @@ describe('addSignersToTransaction', () => {
             data: new Uint8Array([]),
             programAddress: '9999' as Address,
         };
-        const transaction: BaseTransaction = {
+        const transaction: BaseTransactionMessage = {
             instructions: [instructionA, instructionB],
             version: 0,
         };
@@ -179,7 +179,7 @@ describe('addSignersToTransaction', () => {
         const signerB = createMockTransactionModifyingSigner('2222' as Address);
 
         // When we add the signers to the transaction.
-        const transactionWithSigners = addSignersToTransaction([signerA, signerB], transaction);
+        const transactionWithSigners = addSignersToTransactionMessage([signerA, signerB], transaction);
 
         // Then the transaction's account metas now store the provided signers.
         expect(transactionWithSigners.instructions[0].accounts).toStrictEqual([
@@ -192,7 +192,7 @@ describe('addSignersToTransaction', () => {
 
     it('freezes the returned transaction', () => {
         // Given a one-instruction transaction with signer account metas.
-        const transaction: BaseTransaction = {
+        const transaction: BaseTransactionMessage = {
             instructions: [
                 {
                     accounts: [{ address: '1111' as Address, role: AccountRole.READONLY_SIGNER }],
@@ -205,7 +205,7 @@ describe('addSignersToTransaction', () => {
 
         // When we add signers to the transaction.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        const transactionWithSigners = addSignersToTransaction([signer], transaction);
+        const transactionWithSigners = addSignersToTransactionMessage([signer], transaction);
 
         // Then the returned transaction is frozen and so are its updated instructions and account metas.
         expect(transactionWithSigners).toBeFrozenObject();
@@ -215,11 +215,11 @@ describe('addSignersToTransaction', () => {
 
     it('returns the transaction as-is if it has no instructions', () => {
         // Given transaction with no instructions.
-        const transaction: BaseTransaction = { instructions: [], version: 0 };
+        const transaction: BaseTransactionMessage = { instructions: [], version: 0 };
 
         // When we try to add signers to the transaction.
         const signer = createMockTransactionPartialSigner('1111' as Address);
-        const transactionWithSigners = addSignersToTransaction([signer], transaction);
+        const transactionWithSigners = addSignersToTransactionMessage([signer], transaction);
 
         // Then the returned transaction is the same as the original.
         expect(transactionWithSigners).toBe(transaction);

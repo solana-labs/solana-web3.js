@@ -3,24 +3,24 @@ import {
     SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING,
     SolanaError,
 } from '@solana/errors';
-import { CompilableTransaction } from '@solana/transactions';
+import { CompilableTransactionMessage } from '@solana/transaction-messages';
 
-import { getSignersFromTransaction, ITransactionWithSigners } from './account-signer-meta';
+import { getSignersFromTransactionMessage, ITransactionMessageWithSigners } from './account-signer-meta';
 import { isTransactionModifyingSigner } from './transaction-modifying-signer';
 import { isTransactionPartialSigner } from './transaction-partial-signer';
 import { isTransactionSendingSigner } from './transaction-sending-signer';
 
-/** Defines a transaction with exactly one {@link TransactionSendingSigner}. */
-export type ITransactionWithSingleSendingSigner = ITransactionWithSigners & {
+/** Defines a transaction message with exactly one {@link TransactionSendingSigner}. */
+export type ITransactionMessageWithSingleSendingSigner = ITransactionMessageWithSigners & {
     readonly __transactionWithSingleSendingSigner: unique symbol;
 };
 
 /** Checks whether the provided transaction has exactly one {@link TransactionSendingSigner}. */
-export function isTransactionWithSingleSendingSigner<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction,
-): transaction is ITransactionWithSingleSendingSigner & TTransaction {
+export function isTransactionMessageWithSingleSendingSigner<TTransactionMessage extends CompilableTransactionMessage>(
+    transaction: TTransactionMessage,
+): transaction is ITransactionMessageWithSingleSendingSigner & TTransactionMessage {
     try {
-        assertIsTransactionWithSingleSendingSigner(transaction);
+        assertIsTransactionMessageWithSingleSendingSigner(transaction);
         return true;
     } catch {
         return false;
@@ -28,10 +28,12 @@ export function isTransactionWithSingleSendingSigner<TTransaction extends Compil
 }
 
 /** Asserts that the provided transaction has exactly one {@link TransactionSendingSigner}. */
-export function assertIsTransactionWithSingleSendingSigner<TTransaction extends CompilableTransaction>(
-    transaction: TTransaction,
-): asserts transaction is ITransactionWithSingleSendingSigner & TTransaction {
-    const signers = getSignersFromTransaction(transaction);
+export function assertIsTransactionMessageWithSingleSendingSigner<
+    TTransactionMessage extends CompilableTransactionMessage,
+>(
+    transaction: TTransactionMessage,
+): asserts transaction is ITransactionMessageWithSingleSendingSigner & TTransactionMessage {
+    const signers = getSignersFromTransactionMessage(transaction);
     const sendingSigners = signers.filter(isTransactionSendingSigner);
 
     if (sendingSigners.length === 0) {

@@ -18,6 +18,8 @@ import {
     SOLANA_ERROR__BLOCK_HEIGHT_EXCEEDED,
     SOLANA_ERROR__BLOCKHASH_STRING_LENGTH_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY,
+    SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS,
+    SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH,
     SOLANA_ERROR__CODECS__ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH,
@@ -36,6 +38,7 @@ import {
     SOLANA_ERROR__CODECS__LITERAL_UNION_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE,
+    SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES,
     SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE,
     SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED,
     SOLANA_ERROR__INSTRUCTION__EXPECTED_TO_HAVE_ACCOUNTS,
@@ -161,6 +164,7 @@ import {
     SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION__ADDRESS_MISSING,
     SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION,
+    SOLANA_ERROR__TRANSACTION__CANNOT_ENCODE_WITH_EMPTY_SIGNATURES,
     SOLANA_ERROR__TRANSACTION__EXPECTED_BLOCKHASH_LIFETIME,
     SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME,
     SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
@@ -173,6 +177,7 @@ import {
     SOLANA_ERROR__TRANSACTION__INVALID_NONCE_TRANSACTION_INSTRUCTIONS_MISSING,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_CANNOT_PAY_FEES,
     SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE,
+    SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
     SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE,
     SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_BORROW_OUTSTANDING,
@@ -257,6 +262,10 @@ export const SolanaErrorMessages: Readonly<{
         'The network has progressed past the last block for which this transaction could have been committed.',
     [SOLANA_ERROR__CODECS__CANNOT_DECODE_EMPTY_BYTE_ARRAY]:
         'Codec [$codecDescription] cannot decode empty byte arrays.',
+    [SOLANA_ERROR__CODECS__CANNOT_USE_LEXICAL_VALUES_AS_ENUM_DISCRIMINATORS]:
+        'Enum codec cannot use lexical values [$stringValues] as discriminators. Either remove all lexical values or set `useValuesAsDiscriminators` to `false`.',
+    [SOLANA_ERROR__CODECS__ENCODED_BYTES_MUST_NOT_INCLUDE_SENTINEL]:
+        'Sentinel [$hexSentinel] must not be present in encoded bytes [$hexEncodedBytes].',
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_FIXED_SIZE_MISMATCH]:
         'Encoder and decoder must have the same fixed size, got [$encoderFixedSize] and [$decoderFixedSize].',
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_MAX_SIZE_MISMATCH]:
@@ -264,7 +273,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__ENCODER_DECODER_SIZE_COMPATIBILITY_MISMATCH]:
         'Encoder and decoder must either both be fixed-size or variable-size.',
     [SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE]:
-        'Enum discriminator out of range. Expected a number between $minRange and $maxRange, got $discriminator.',
+        'Enum discriminator out of range. Expected a number in [$formattedValidDiscriminators], got $discriminator.',
     [SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH]: 'Expected a fixed-size codec, got a variable-size one.',
     [SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH]:
         'Codec [$codecDescription] expected a positive byte length, got $bytesLength.',
@@ -278,7 +287,7 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT]:
         'Invalid discriminated union variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS__INVALID_ENUM_VARIANT]:
-        'Invalid enum variant. Expected one of [$variants] or a number between $minRange and $maxRange, got $value.',
+        'Invalid enum variant. Expected one of [$stringValues] or a number in [$formattedNumericalValues], got $variant.',
     [SOLANA_ERROR__CODECS__INVALID_LITERAL_UNION_VARIANT]:
         'Invalid literal union variant. Expected one of [$variants], got $value.',
     [SOLANA_ERROR__CODECS__INVALID_NUMBER_OF_ITEMS]:
@@ -290,6 +299,8 @@ export const SolanaErrorMessages: Readonly<{
         'Codec [$codecDescription] expected number to be in the range [$min, $max], got $value.',
     [SOLANA_ERROR__CODECS__OFFSET_OUT_OF_RANGE]:
         'Codec [$codecDescription] expected offset to be in the range [0, $bytesLength], got $offset.',
+    [SOLANA_ERROR__CODECS__SENTINEL_MISSING_IN_DECODED_BYTES]:
+        'Expected sentinel [$hexSentinel] to be present in decoded bytes [$hexDecodedBytes].',
     [SOLANA_ERROR__CODECS__UNION_VARIANT_OUT_OF_RANGE]:
         'Union variant out of range. Expected an index between $minRange and $maxRange, got $variant.',
     [SOLANA_ERROR__CRYPTO__RANDOM_VALUES_FUNCTION_UNIMPLEMENTED]: 'No random values implementation could be found.',
@@ -546,6 +557,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION]:
         'Attempted to sign a transaction with an address that is not a signer for it',
     [SOLANA_ERROR__TRANSACTION__ADDRESS_MISSING]: 'Transaction is missing an address at index: $index.',
+    [SOLANA_ERROR__TRANSACTION__CANNOT_ENCODE_WITH_EMPTY_SIGNATURES]:
+        'Transaction has no expected signers therefore it cannot be encoded',
     [SOLANA_ERROR__TRANSACTION__EXPECTED_BLOCKHASH_LIFETIME]: 'Transaction does not have a blockhash lifetime',
     [SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME]: 'Transaction is not a durable nonce transaction',
     [SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING]:
@@ -571,6 +584,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__TRANSACTION__INVOKED_PROGRAMS_MUST_NOT_BE_WRITABLE]:
         'This transaction includes an address (`$programAddress`) which is both invoked and ' +
         'marked writable. Program addresses may not be writable',
+    [SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH]:
+        'The transaction message expected the transaction to have $signerAddressesLength signatures, got $signaturesLength.',
     [SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING]: 'Transaction is missing signatures for addresses: $addresses.',
     [SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE]:
         'Transaction version must be in the range [0, 127]. `$actualVersion` given',

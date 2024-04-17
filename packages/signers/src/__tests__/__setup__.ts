@@ -1,15 +1,15 @@
 import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction } from '@solana/instructions';
 import type { Blockhash } from '@solana/rpc-types';
+import { CompilableTransactionMessage } from '@solana/transaction-messages';
 import {
-    appendTransactionInstruction,
-    CompilableTransaction,
-    createTransaction,
-    setTransactionFeePayer,
-    setTransactionLifetimeUsingBlockhash,
-} from '@solana/transactions';
+    appendTransactionMessageInstruction,
+    createTransactionMessage,
+    setTransactionMessageFeePayer,
+    setTransactionMessageLifetimeUsingBlockhash,
+} from '@solana/transaction-messages';
 
-import { IAccountSignerMeta, IInstructionWithSigners, ITransactionWithSigners } from '../account-signer-meta';
+import { IAccountSignerMeta, IInstructionWithSigners, ITransactionMessageWithSigners } from '../account-signer-meta';
 import { MessageModifyingSigner } from '../message-modifying-signer';
 import { MessagePartialSigner } from '../message-partial-signer';
 import { TransactionModifyingSigner } from '../transaction-modifying-signer';
@@ -27,16 +27,16 @@ export function createMockInstructionWithSigners(signers: TransactionSigner[]): 
     };
 }
 
-export function createMockTransactionWithSigners(
+export function createMockTransactionMessageWithSigners(
     signers: TransactionSigner[],
-): CompilableTransaction & ITransactionWithSigners {
-    const transaction = createTransaction({ version: 0 });
-    const transactionWithFeePayer = setTransactionFeePayer(signers[0]?.address ?? '1111', transaction);
-    const compilableTransaction = setTransactionLifetimeUsingBlockhash(
+): CompilableTransactionMessage & ITransactionMessageWithSigners {
+    const transaction = createTransactionMessage({ version: 0 });
+    const transactionWithFeePayer = setTransactionMessageFeePayer(signers[0]?.address ?? '1111', transaction);
+    const compilableTransaction = setTransactionMessageLifetimeUsingBlockhash(
         { blockhash: 'dummy_blockhash' as Blockhash, lastValidBlockHeight: 42n },
         transactionWithFeePayer,
     );
-    return appendTransactionInstruction(createMockInstructionWithSigners(signers), compilableTransaction);
+    return appendTransactionMessageInstruction(createMockInstructionWithSigners(signers), compilableTransaction);
 }
 
 export function createMockMessagePartialSigner(address: Address): MessagePartialSigner & { signMessages: jest.Mock } {

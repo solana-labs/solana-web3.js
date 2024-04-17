@@ -1,14 +1,17 @@
 import { Address } from '@solana/addresses';
 import { AccountRole } from '@solana/instructions';
+import { AddressesByLookupTableAddress, decompileTransactionMessage } from '@solana/transaction-messages';
 
-import { AddressesByLookupTableAddress, decompileTransaction } from '../../decompile-transaction';
 import { CompiledMessage, compileTransactionMessage } from '../../message';
 import { getCompiledMessageDecoder, getCompiledMessageEncoder } from '../message';
 import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction';
 
 jest.mock('../../message');
 jest.mock('../message');
-jest.mock('../../decompile-transaction');
+jest.mock('@solana/transaction-messages', () => ({
+    ...jest.requireActual('@solana/transaction-messages'),
+    decompileTransactionMessage: jest.fn(),
+}));
 
 let _nextMockAddress = 0;
 function getMockAddress() {
@@ -106,7 +109,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
     let addressB: Address;
     let mockCompiledMessage: CompiledMessage;
     let mockCompiledWireMessage: Uint8Array;
-    let mockDecompiledTransaction: ReturnType<typeof decompileTransaction>;
+    let mockDecompiledTransactionMessage: ReturnType<typeof decompileTransactionMessage>;
 
     beforeEach(() => {
         addressA = getMockAddress();
@@ -120,7 +123,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
             staticAccounts: [addressB, addressA],
         } as CompiledMessage;
         mockCompiledWireMessage = new Uint8Array([1, 2, 3]);
-        mockDecompiledTransaction = {
+        mockDecompiledTransactionMessage = {
             instructions: [
                 {
                     accounts: [
@@ -135,7 +138,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
                     ],
                 },
             ],
-        } as unknown as ReturnType<typeof decompileTransaction>;
+        } as unknown as ReturnType<typeof decompileTransactionMessage>;
 
         (getCompiledMessageEncoder as jest.Mock).mockReturnValue({
             getSizeFromValue: jest.fn().mockReturnValue(mockCompiledWireMessage.length),
@@ -147,7 +150,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         (getCompiledMessageDecoder as jest.Mock).mockReturnValue({
             read: jest.fn().mockReturnValue([mockCompiledMessage, 0]),
         });
-        (decompileTransaction as jest.Mock).mockReturnValue(mockDecompiledTransaction);
+        (decompileTransactionMessage as jest.Mock).mockReturnValue(mockDecompiledTransactionMessage);
 
         transaction = deserializerFactory();
     });
@@ -164,14 +167,8 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         ]);
 
         const decodedTransaction = transaction.decode(bytes);
-        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
-        expect(decompileTransaction).toHaveBeenCalledWith(
-            {
-                compiledMessage: mockCompiledMessage,
-                signatures: [noSignature, noSignature],
-            },
-            undefined,
-        );
+        expect(decodedTransaction).toStrictEqual(mockDecompiledTransactionMessage);
+        expect(decompileTransactionMessage).toHaveBeenCalledWith(mockCompiledMessage, undefined);
     });
     it('deserializes a partially signed transaction', () => {
         const noSignature = new Uint8Array(Array(64).fill(0));
@@ -188,14 +185,14 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         ]);
 
         const decodedTransaction = transaction.decode(bytes);
-        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
-        expect(decompileTransaction).toHaveBeenCalledWith(
-            {
-                compiledMessage: mockCompiledMessage,
-                signatures: [noSignature, mockSignatureA],
+        const expected = {
+            ...mockDecompiledTransactionMessage,
+            signatures: {
+                [addressA]: mockSignatureA,
             },
-            undefined,
-        );
+        };
+        expect(decodedTransaction).toStrictEqual(expected);
+        expect(decompileTransactionMessage).toHaveBeenCalledWith(mockCompiledMessage, undefined);
     });
     it('deserializes a fully signed transaction', () => {
         const mockSignatureA = new Uint8Array(Array(64).fill(1));
@@ -212,16 +209,17 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
         ]);
 
         const decodedTransaction = transaction.decode(bytes);
-        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
-        expect(decompileTransaction).toHaveBeenCalledWith(
-            {
-                compiledMessage: mockCompiledMessage,
-                signatures: [mockSignatureB, mockSignatureA],
+        const expected = {
+            ...mockDecompiledTransactionMessage,
+            signatures: {
+                [addressA]: mockSignatureA,
+                [addressB]: mockSignatureB,
             },
-            undefined,
-        );
+        };
+        expect(decodedTransaction).toStrictEqual(expected);
+        expect(decompileTransactionMessage).toHaveBeenCalledWith(mockCompiledMessage, undefined);
     });
-    it('passes lastValidBlockHeight to decompileTransaction', () => {
+    it('passes lastValidBlockHeight to decompileTransactionMessage', () => {
         const noSignature = new Uint8Array(Array(64).fill(0));
         const bytes = new Uint8Array([
             /** SIGNATURES */
@@ -235,18 +233,12 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
 
         const transaction = deserializerFactory({ lastValidBlockHeight: 100n });
         const decodedTransaction = transaction.decode(bytes);
-        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
-        expect(decompileTransaction).toHaveBeenCalledWith(
-            {
-                compiledMessage: mockCompiledMessage,
-                signatures: [noSignature, noSignature],
-            },
-            {
-                lastValidBlockHeight: 100n,
-            },
-        );
+        expect(decodedTransaction).toStrictEqual(mockDecompiledTransactionMessage);
+        expect(decompileTransactionMessage).toHaveBeenCalledWith(mockCompiledMessage, {
+            lastValidBlockHeight: 100n,
+        });
     });
-    it('passes lookupTables to decompileTransaction', () => {
+    it('passes lookupTables to decompileTransactionMessage', () => {
         const noSignature = new Uint8Array(Array(64).fill(0));
         const bytes = new Uint8Array([
             /** SIGNATURES */
@@ -265,15 +257,9 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction deseria
 
         const transaction = deserializerFactory({ addressesByLookupTableAddress: lookupTables });
         const decodedTransaction = transaction.decode(bytes);
-        expect(decodedTransaction).toStrictEqual(mockDecompiledTransaction);
-        expect(decompileTransaction).toHaveBeenCalledWith(
-            {
-                compiledMessage: mockCompiledMessage,
-                signatures: [noSignature, noSignature],
-            },
-            {
-                addressesByLookupTableAddress: lookupTables,
-            },
-        );
+        expect(decodedTransaction).toStrictEqual(mockDecompiledTransactionMessage);
+        expect(decompileTransactionMessage).toHaveBeenCalledWith(mockCompiledMessage, {
+            addressesByLookupTableAddress: lookupTables,
+        });
     });
 });
