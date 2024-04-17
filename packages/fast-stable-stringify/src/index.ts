@@ -61,7 +61,7 @@ function stringify(val, isArrayProp) {
         case 'undefined':
             return isArrayProp ? null : undefined;
         case 'bigint':
-            return JSON.stringify(val.toString() + 'n‽');
+            return JSON.stringify(val.toString() + 'n‽¶');
         case 'string':
             return JSON.stringify(val);
         default:
