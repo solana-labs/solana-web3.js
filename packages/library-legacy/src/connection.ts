@@ -1,9 +1,10 @@
-import fastStableStringify from '@solana/fast-stable-stringify';
 import HttpKeepAliveAgent, {
   HttpsAgent as HttpsKeepAliveAgent,
 } from 'agentkeepalive';
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
+// @ts-ignore
+import fastStableStringify from 'fast-stable-stringify';
 import type {Agent as NodeHttpAgent} from 'http';
 import {Agent as NodeHttpsAgent} from 'https';
 import {

@@ -369,9 +369,6 @@ importers:
       '@solana/buffer-layout':
         specifier: ^4.0.1
         version: 4.0.1
-      '@solana/fast-stable-stringify':
-        specifier: workspace:*
-        version: link:../fast-stable-stringify
       agentkeepalive:
         specifier: ^4.5.0
         version: 4.5.0
@@ -390,6 +387,9 @@ importers:
       buffer:
         specifier: 6.0.3
         version: 6.0.3
+      fast-stable-stringify:
+        specifier: ^1.0.0
+        version: 1.0.0
       jayson:
         specifier: ^4.1.0
         version: 4.1.0
@@ -7509,7 +7509,6 @@ packages:
 
   /fast-stable-stringify@1.0.0:
     resolution: {integrity: sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==}
-    dev: true
 
   /fastestsmallesttextencoderdecoder@1.0.22:
     resolution: {integrity: sha512-Pb8d48e+oIuY4MaM64Cd7OW1gt4nxCHs7/ddPPZ/Ic3sg8yVGM7O9wDvZ7us6ScaUupzM+pfBolwtYhN1IxBIw==}
