@@ -64,13 +64,13 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
+        "@solana/fast-stable-stringify": "workspace:*",
         "@solana/functional": "workspace:*",
         "@solana/rpc-subscriptions-api": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-subscriptions-transport-websocket": "workspace:*",
         "@solana/rpc-transformers": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
-        "fast-stable-stringify": "^1.0.0"
+        "@solana/rpc-types": "workspace:*"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
