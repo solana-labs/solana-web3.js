@@ -37,6 +37,7 @@
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
+        "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
         "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
@@ -46,8 +47,12 @@
         "test:treeshakability:browser": "agadoo dist/index.browser.js",
         "test:treeshakability:native": "agadoo dist/index.native.js",
         "test:treeshakability:node": "agadoo dist/index.node.js",
-        "test:unit:browser": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.browser.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent",
-        "test:unit:node": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --globalSetup @solana/test-config/test-validator-setup.js --globalTeardown @solana/test-config/test-validator-teardown.js --rootDir . --silent"
+        "test:unit:browser": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.browser.ts --rootDir . --silent",
+        "test:unit:node": "jest -c ../../node_modules/@solana/test-config/jest-unit.config.node.ts --rootDir . --silent"
+    },
+    "devDependencies": {
+        "@types/json-stable-stringify": "^1.0.36",
+        "json-stable-stringify": "^1.1.1"
     },
     "author": "Solana Labs Maintainers <maintainers@solanalabs.com>",
     "license": "MIT",
