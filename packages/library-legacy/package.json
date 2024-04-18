@@ -117,7 +117,7 @@
     "rollup": "^4.14.3",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
-    "semantic-release": "^21.0.7",
+    "semantic-release": "^23.0.8",
     "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",
     "start-server-and-test": "^2.0.3",
