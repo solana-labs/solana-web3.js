@@ -22,17 +22,17 @@ import { SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, SolanaError } f
 import { SignatureBytes } from '@solana/keys';
 import { getTransactionVersionDecoder } from '@solana/transaction-messages';
 
-import { NewTransaction, SignaturesMap, TransactionMessageBytes } from '../transaction';
+import { SignaturesMap, Transaction, TransactionMessageBytes } from '../transaction';
 import { getSignaturesEncoder } from './signatures-encoder';
 
-export function getTransactionEncoder(): VariableSizeEncoder<NewTransaction> {
+export function getTransactionEncoder(): VariableSizeEncoder<Transaction> {
     return getStructEncoder([
         ['signatures', getSignaturesEncoder()],
         ['messageBytes', getBytesEncoder()],
     ]);
 }
 
-export function getTransactionDecoder(): VariableSizeDecoder<NewTransaction> {
+export function getTransactionDecoder(): VariableSizeDecoder<Transaction> {
     return transformDecoder(
         getStructDecoder([
             ['signatures', getArrayDecoder(fixDecoderSize(getBytesDecoder(), 64), { size: getShortU16Decoder() })],
@@ -42,7 +42,7 @@ export function getTransactionDecoder(): VariableSizeDecoder<NewTransaction> {
     );
 }
 
-export function getTransactionCodec(): VariableSizeCodec<NewTransaction> {
+export function getTransactionCodec(): VariableSizeCodec<Transaction> {
     return combineCodec(getTransactionEncoder(), getTransactionDecoder());
 }
 
@@ -51,7 +51,7 @@ type PartiallyDecodedTransaction = {
     signatures: ReadonlyUint8Array[];
 };
 
-function decodePartiallyDecodedTransaction(transaction: PartiallyDecodedTransaction): NewTransaction {
+function decodePartiallyDecodedTransaction(transaction: PartiallyDecodedTransaction): Transaction {
     const { messageBytes, signatures } = transaction;
 
     /*

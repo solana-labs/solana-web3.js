@@ -16,7 +16,7 @@ import {
     partiallySignTransaction,
     signTransaction,
 } from '../signatures';
-import { NewTransaction, OrderedMap, TransactionMessageBytes } from '../transaction';
+import { OrderedMap, Transaction, TransactionMessageBytes } from '../transaction';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
@@ -25,7 +25,7 @@ describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
         signatures['123' as Address] = new Uint8Array(new Array(64).fill(9)) as SignatureBytes;
-        const transactionWithFeePayerSignature: NewTransaction = {
+        const transactionWithFeePayerSignature: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
@@ -34,7 +34,7 @@ describe('getSignatureFromTransaction', () => {
         );
     });
     it('throws when supplied a transaction that has not been signed by the fee payer', () => {
-        const transactionWithoutFeePayerSignature: NewTransaction = {
+        const transactionWithoutFeePayerSignature: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {},
         };
@@ -83,7 +83,7 @@ describe('partiallySignTransaction', () => {
     });
     it("returns a signed transaction object having the first signer's signature", async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -101,7 +101,7 @@ describe('partiallySignTransaction', () => {
     it('returns unchanged compiled message bytes', async () => {
         expect.assertions(1);
         const messageBytes = new Uint8Array([1, 2, 3]) as ReadonlyUint8Array as TransactionMessageBytes;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: messageBytes as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -112,7 +112,7 @@ describe('partiallySignTransaction', () => {
     });
     it('returns a signed transaction object having null for the missing signers', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -131,7 +131,7 @@ describe('partiallySignTransaction', () => {
     });
     it("returns a transaction object having the second signer's signature", async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -148,7 +148,7 @@ describe('partiallySignTransaction', () => {
     });
     it('returns a transaction object having multiple signatures', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -171,7 +171,7 @@ describe('partiallySignTransaction', () => {
     });
     it('stores the signatures in the order specified on the compiled message', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -185,7 +185,7 @@ describe('partiallySignTransaction', () => {
     });
     it('does not modify an existing signature when the signature is the same', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
@@ -202,7 +202,7 @@ describe('partiallySignTransaction', () => {
     });
     it('produces a new signature for an existing signer', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
@@ -213,7 +213,7 @@ describe('partiallySignTransaction', () => {
     });
     it('modifies the existing signature when the signature is different', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: new Uint8Array([1, 2, 3, 4]) as ReadonlyUint8Array as SignatureBytes,
@@ -229,7 +229,7 @@ describe('partiallySignTransaction', () => {
     });
     it('produces a signature for a new signer when there is an existing one', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
@@ -246,7 +246,7 @@ describe('partiallySignTransaction', () => {
     });
     it('freezes the object', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -256,7 +256,7 @@ describe('partiallySignTransaction', () => {
     });
     it('returns the input transaction object if no signatures changed', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
@@ -266,7 +266,7 @@ describe('partiallySignTransaction', () => {
     });
     it('throws if a keypair is for an address that is not in the signatures of the transaction', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -281,7 +281,7 @@ describe('partiallySignTransaction', () => {
     });
     it('throws with multiple addresses if there are multiple keypairs that are not in the signatures', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -327,7 +327,7 @@ describe('signTransaction', () => {
     });
     it('fatals when missing a signer', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -343,7 +343,7 @@ describe('signTransaction', () => {
     });
     it('returns a signed transaction object with multiple signatures', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -362,7 +362,7 @@ describe('signTransaction', () => {
     it('returns a signed transaction object with the compiled message bytes', async () => {
         expect.assertions(1);
         const messageBytes = new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -374,7 +374,7 @@ describe('signTransaction', () => {
     });
     it('stores the signatures in the order specified on the compiled message', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -387,7 +387,7 @@ describe('signTransaction', () => {
     });
     it('freezes the object', async () => {
         expect.assertions(1);
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures: {
                 [mockPublicKeyAddressA]: null,
@@ -407,7 +407,7 @@ describe('assertTransactionIsFullySigned', () => {
     it('throws if the transaction has no signature for the fee payer', () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
         signatures[mockPublicKeyAddressA] = null;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
@@ -423,7 +423,7 @@ describe('assertTransactionIsFullySigned', () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
         signatures[mockPublicKeyAddressA] = null;
         signatures[mockPublicKeyAddressB] = null;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
@@ -438,7 +438,7 @@ describe('assertTransactionIsFullySigned', () => {
     it('does not throw if the transaction is signed by its only signer', () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
         signatures[mockPublicKeyAddressA] = mockSignatureA;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
@@ -450,7 +450,7 @@ describe('assertTransactionIsFullySigned', () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
         signatures[mockPublicKeyAddressA] = mockSignatureA;
         signatures[mockPublicKeyAddressB] = mockSignatureB;
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
@@ -460,7 +460,7 @@ describe('assertTransactionIsFullySigned', () => {
 
     it('does not throw if the transaction has no signatures', () => {
         const signatures: OrderedMap<Address, SignatureBytes | null> = {};
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };

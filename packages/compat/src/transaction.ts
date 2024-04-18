@@ -1,6 +1,6 @@
 import { SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, SolanaError } from '@solana/errors';
 import type { SignatureBytes } from '@solana/keys';
-import { NewTransaction, type SignaturesMap, TransactionMessageBytes } from '@solana/transactions';
+import { type SignaturesMap, Transaction, TransactionMessageBytes } from '@solana/transactions';
 import type { PublicKey, VersionedTransaction } from '@solana/web3.js';
 
 import { ReadonlyUint8Array } from '../../codecs-core/dist/types';
@@ -19,7 +19,7 @@ function convertSignatures(transaction: VersionedTransaction, staticAccountKeys:
     );
 }
 
-export function fromVersionedTransaction(transaction: VersionedTransaction): NewTransaction {
+export function fromVersionedTransaction(transaction: VersionedTransaction): Transaction {
     const { message } = transaction;
     const { staticAccountKeys } = message.getAccountKeys();
 

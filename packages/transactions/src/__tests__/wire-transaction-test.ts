@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { SignatureBytes } from '@solana/keys';
 
-import { NewTransaction, TransactionMessageBytes } from '../transaction';
+import { Transaction, TransactionMessageBytes } from '../transaction';
 import { getBase64EncodedWireTransaction } from '../wire-transaction';
 
 describe('getBase64EncodedWireTransaction', () => {
@@ -41,7 +41,7 @@ describe('getBase64EncodedWireTransaction', () => {
         }
         */
 
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes: new Uint8Array([
                 128, 2, 1, 1, 3, 15, 30, 107, 20, 33, 192, 74, 7, 4, 49, 38, 92, 25, 197, 187, 238, 25, 146, 186, 232,
                 175, 209, 205, 7, 142, 248, 175, 112, 71, 220, 17, 247, 45, 91, 65, 60, 101, 64, 222, 21, 12, 147, 115,

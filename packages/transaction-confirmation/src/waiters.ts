@@ -1,5 +1,5 @@
 import { Signature } from '@solana/keys';
-import { getSignatureFromTransaction, NewTransaction } from '@solana/transactions';
+import { getSignatureFromTransaction, Transaction } from '@solana/transactions';
 import {
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
@@ -12,13 +12,13 @@ import { getTimeoutPromise } from './confirmation-strategy-timeout';
 
 interface WaitForDurableNonceTransactionConfirmationConfig extends BaseTransactionConfirmationStrategyConfig {
     getNonceInvalidationPromise: ReturnType<typeof createNonceInvalidationPromiseFactory>;
-    transaction: Readonly<NewTransaction & TransactionWithDurableNonceLifetime>;
+    transaction: Readonly<Transaction & TransactionWithDurableNonceLifetime>;
 }
 
 interface WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig
     extends BaseTransactionConfirmationStrategyConfig {
     getBlockHeightExceedencePromise: ReturnType<typeof createBlockHeightExceedencePromiseFactory>;
-    transaction: Readonly<NewTransaction & TransactionWithBlockhashLifetime>;
+    transaction: Readonly<Transaction & TransactionWithBlockhashLifetime>;
 }
 
 interface WaitForRecentTransactionWithTimeBasedLifetimeConfirmationConfig

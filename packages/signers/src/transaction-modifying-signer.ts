@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_MODIFYING_SIGNER, SolanaError } from '@solana/errors';
-import { NewTransaction } from '@solana/transactions';
+import { Transaction } from '@solana/transactions';
 
 import { BaseSignerConfig } from './types';
 
@@ -9,7 +9,7 @@ export type TransactionModifyingSignerConfig = BaseSignerConfig;
 /** Defines a signer capable of signing transactions. */
 export type TransactionModifyingSigner<TAddress extends string = string> = Readonly<{
     address: Address<TAddress>;
-    modifyAndSignTransactions<T extends NewTransaction>(
+    modifyAndSignTransactions<T extends Transaction>(
         transactions: readonly T[],
         config?: TransactionModifyingSignerConfig,
     ): Promise<readonly T[]>;

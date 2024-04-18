@@ -1,7 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { address } from '@solana/addresses';
-import { NewTransaction } from '@solana/transactions';
+import { Transaction } from '@solana/transactions';
 
 import { createNoopSigner, NoopSigner } from '../noop-signer';
 import { createSignableMessage } from '../signable-message';
@@ -52,7 +52,7 @@ describe('createNoopSigner', () => {
         const mySigner = createNoopSigner(address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'));
 
         // And given we have a couple of mock transactions to sign.
-        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
+        const mockTransactions = [{} as Transaction, {} as Transaction];
 
         // When we sign both transactions using that signer.
         const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
@@ -71,7 +71,7 @@ describe('createNoopSigner', () => {
         const mySigner = createNoopSigner(address('Gp7YgHcJciP4px5FdFnywUiMG4UcfMZV9UagSAZzDxdy'));
 
         // And given we have a couple of mock transactions to sign.
-        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
+        const mockTransactions = [{} as Transaction, {} as Transaction];
 
         // When we sign both transactions using that signer.
         const signatureDictionaries = await mySigner.signTransactions(mockTransactions);
