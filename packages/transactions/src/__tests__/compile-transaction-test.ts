@@ -6,7 +6,7 @@ import {
     CompiledTransactionMessage,
     compileTransactionMessage,
     getCompiledTransactionMessageEncoder,
-    NewNonce,
+    Nonce,
 } from '@solana/transaction-messages';
 
 import { compileTransaction } from '../compile-transaction';
@@ -99,12 +99,12 @@ describe('compileTransactionMessage', () => {
                 },
             ],
             lifetimeConstraint: {
-                nonce: 'b' as NewNonce,
+                nonce: 'b' as Nonce,
             },
         } as unknown as TransactionMessage;
         const transaction = compileTransaction(transactionMessage);
         expect(transaction.lifetimeConstraint).toStrictEqual({
-            nonce: 'b' as NewNonce,
+            nonce: 'b' as Nonce,
             nonceAccountAddress: 'nonceAddress',
         });
     });

@@ -3,9 +3,9 @@ import {
     CompilableTransactionMessage,
     compileTransactionMessage,
     getCompiledTransactionMessageEncoder,
-    IDurableNonceTransactionMessage,
     isTransactionMessageWithBlockhashLifetime,
     TransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithDurableNonceLifetime,
 } from '@solana/transaction-messages';
 
 import {
@@ -20,7 +20,7 @@ export function compileTransaction(
 ): Readonly<Transaction & TransactionWithBlockhashLifetime>;
 
 export function compileTransaction(
-    transactionMessage: CompilableTransactionMessage & IDurableNonceTransactionMessage,
+    transactionMessage: CompilableTransactionMessage & TransactionMessageWithDurableNonceLifetime,
 ): Readonly<Transaction & TransactionWithDurableNonceLifetime>;
 
 export function compileTransaction(

@@ -1,8 +1,8 @@
 import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
-    IDurableNonceTransactionMessage,
     TransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithDurableNonceLifetime,
 } from '@solana/transaction-messages';
 import { FullySignedTransaction, Transaction } from '@solana/transactions';
 import {
@@ -33,7 +33,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
 {
     // [partiallySignTransactionMessageWithSigners]: returns a transaction with a durable nonce lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
-        IDurableNonceTransactionMessage;
+        TransactionMessageWithDurableNonceLifetime;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
         Readonly<Transaction & TransactionWithDurableNonceLifetime>
     >;
@@ -59,7 +59,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
 {
     // [signTransactionMessageWithSigners]: returns a fully signed transaction with a durable nonce lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
-        IDurableNonceTransactionMessage;
+        TransactionMessageWithDurableNonceLifetime;
     signTransactionMessageWithSigners(transactionMessage) satisfies Promise<
         Readonly<FullySignedTransaction & TransactionWithDurableNonceLifetime>
     >;

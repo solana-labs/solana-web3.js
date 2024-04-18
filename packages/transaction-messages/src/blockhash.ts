@@ -1,7 +1,7 @@
 import { SOLANA_ERROR__TRANSACTION__EXPECTED_BLOCKHASH_LIFETIME, SolanaError } from '@solana/errors';
 import { assertIsBlockhash, type Blockhash } from '@solana/rpc-types';
 
-import { IDurableNonceTransactionMessage } from './durable-nonce';
+import { TransactionMessageWithDurableNonceLifetime } from './durable-nonce';
 import { BaseTransactionMessage } from './transaction-message';
 
 type BlockhashLifetimeConstraint = Readonly<{
@@ -38,7 +38,7 @@ export function assertIsTransactionMessageWithBlockhashLifetime(
 }
 
 export function setTransactionMessageLifetimeUsingBlockhash<
-    TTransaction extends BaseTransactionMessage & IDurableNonceTransactionMessage,
+    TTransaction extends BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime,
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction,

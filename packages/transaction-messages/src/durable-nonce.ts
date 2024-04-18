@@ -34,20 +34,20 @@ type DurableNonceConfig<
     TNonceAuthorityAddress extends string = string,
     TNonceValue extends string = string,
 > = Readonly<{
-    readonly nonce: NewNonce<TNonceValue>;
+    readonly nonce: Nonce<TNonceValue>;
     readonly nonceAccountAddress: Address<TNonceAccountAddress>;
     readonly nonceAuthorityAddress: Address<TNonceAuthorityAddress>;
 }>;
-export type NewNonce<TNonceValue extends string = string> = TNonceValue & { readonly __brand: unique symbol };
+export type Nonce<TNonceValue extends string = string> = TNonceValue & { readonly __brand: unique symbol };
 type NonceLifetimeConstraint<TNonceValue extends string = string> = Readonly<{
-    nonce: NewNonce<TNonceValue>;
+    nonce: Nonce<TNonceValue>;
 }>;
 
 const RECENT_BLOCKHASHES_SYSVAR_ADDRESS =
     'SysvarRecentB1ockHashes11111111111111111111' as Address<'SysvarRecentB1ockHashes11111111111111111111'>;
 const SYSTEM_PROGRAM_ADDRESS = '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
 
-export interface IDurableNonceTransactionMessage<
+export interface TransactionMessageWithDurableNonceLifetime<
     TNonceAccountAddress extends string = string,
     TNonceAuthorityAddress extends string = string,
     TNonceValue extends string = string,
@@ -61,8 +61,8 @@ export interface IDurableNonceTransactionMessage<
 }
 
 export function assertIsDurableNonceTransactionMessage(
-    transaction: BaseTransactionMessage | (BaseTransactionMessage & IDurableNonceTransactionMessage),
-): asserts transaction is BaseTransactionMessage & IDurableNonceTransactionMessage {
+    transaction: BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime),
+): asserts transaction is BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime {
     if (!isDurableNonceTransaction(transaction)) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__EXPECTED_NONCE_LIFETIME);
     }
@@ -89,7 +89,7 @@ function createAdvanceNonceAccountInstruction<
     };
 }
 
-export function newIsAdvanceNonceAccountInstruction(
+export function isAdvanceNonceAccountInstruction(
     instruction: IInstruction,
 ): instruction is AdvanceNonceAccountInstruction {
     return (
@@ -117,13 +117,13 @@ function isAdvanceNonceAccountInstructionData(data: Uint8Array): data is Advance
 }
 
 export function isDurableNonceTransaction(
-    transaction: BaseTransactionMessage | (BaseTransactionMessage & IDurableNonceTransactionMessage),
-): transaction is BaseTransactionMessage & IDurableNonceTransactionMessage {
+    transaction: BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime),
+): transaction is BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime {
     return (
         'lifetimeConstraint' in transaction &&
         typeof transaction.lifetimeConstraint.nonce === 'string' &&
         transaction.instructions[0] != null &&
-        newIsAdvanceNonceAccountInstruction(transaction.instructions[0])
+        isAdvanceNonceAccountInstruction(transaction.instructions[0])
     );
 }
 
@@ -152,18 +152,19 @@ export function setTransactionMessageLifetimeUsingDurableNonce<
         nonceAccountAddress,
         nonceAuthorityAddress,
     }: DurableNonceConfig<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue>,
-    transaction: TTransaction | (IDurableNonceTransactionMessage & TTransaction),
-): IDurableNonceTransactionMessage<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> & TTransaction {
+    transaction: TTransaction | (TransactionMessageWithDurableNonceLifetime & TTransaction),
+): TransactionMessageWithDurableNonceLifetime<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
+    TTransaction {
     let newInstructions: [
         AdvanceNonceAccountInstruction<TNonceAccountAddress, TNonceAuthorityAddress>,
         ...IInstruction[],
     ];
 
     const firstInstruction = transaction.instructions[0];
-    if (firstInstruction && newIsAdvanceNonceAccountInstruction(firstInstruction)) {
+    if (firstInstruction && isAdvanceNonceAccountInstruction(firstInstruction)) {
         if (isAdvanceNonceAccountInstructionForNonce(firstInstruction, nonceAccountAddress, nonceAuthorityAddress)) {
             if (isDurableNonceTransaction(transaction) && transaction.lifetimeConstraint.nonce === nonce) {
-                return transaction as IDurableNonceTransactionMessage<
+                return transaction as TransactionMessageWithDurableNonceLifetime<
                     TNonceAccountAddress,
                     TNonceAuthorityAddress,
                     TNonceValue
@@ -194,7 +195,8 @@ export function setTransactionMessageLifetimeUsingDurableNonce<
         lifetimeConstraint: {
             nonce,
         },
-    } as IDurableNonceTransactionMessage<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> & TTransaction;
+    } as TransactionMessageWithDurableNonceLifetime<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
+        TTransaction;
     Object.freeze(out);
     return out;
 }
