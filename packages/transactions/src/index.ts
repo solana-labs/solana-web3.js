@@ -1,6 +1,4 @@
 export * from './codecs';
-export * from './create-transaction'; // will be removed soon, only used by programs code that is removed in an open PR
-export * from './instructions'; // will be removed soon, only used by programs code that is removed in an open PR
 export * from './lifetime';
 export * from './new-compile-transaction';
 export * from './new-signatures';

@@ -20,8 +20,6 @@ import { NewTransaction, OrderedMap, TransactionMessageBytes } from '../transact
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
-jest.mock('../message');
-jest.mock('../serializers/message');
 
 describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {

@@ -23,9 +23,3 @@ export type TransactionWithBlockhashLifetime = {
 export type TransactionWithDurableNonceLifetime = {
     readonly lifetimeConstraint: TransactionDurableNonceLifetime;
 };
-
-export function isTransactionBlockhashLifetime(
-    lifetime: TransactionWithLifetime['lifetimeConstraint'],
-): lifetime is TransactionBlockhashLifetime {
-    return 'blockhash' in lifetime;
-}
