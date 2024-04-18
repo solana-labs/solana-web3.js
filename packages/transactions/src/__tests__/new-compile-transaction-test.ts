@@ -42,7 +42,10 @@ describe('compileTransactionMessage', () => {
     });
 
     const emptyMockTransactionMessage = {
-        lifetimeConstraint: { blockhash: 'b' as Blockhash },
+        lifetimeConstraint: {
+            blockhash: '4'.repeat(44) as Blockhash,
+            lastValidBlockHeight: 1n,
+        },
     } as TransactionMessage;
 
     it('compiles the supplied `TransactionMessage` and sets the `messageBytes` property to the result', () => {
@@ -80,16 +83,29 @@ describe('compileTransactionMessage', () => {
         const transaction = compileTransaction(transactionMessage);
         expect(transaction.lifetimeConstraint).toStrictEqual({
             blockhash: 'D5vmAVFNZFaBBZNJ17tMaVrcsQ9DZViL9bAZn1n1Kxer' as Blockhash,
+            lastValidBlockHeight: 1n,
         });
     });
 
     it('returns a durable nonce lifetime constraint when the transaction message has a nonce constraint', () => {
         const transactionMessage = {
+            instructions: [
+                {
+                    accounts: [
+                        {
+                            address: 'nonceAddress' as Address,
+                        },
+                    ],
+                },
+            ],
             lifetimeConstraint: {
                 nonce: 'b' as NewNonce,
             },
-        } as TransactionMessage;
+        } as unknown as TransactionMessage;
         const transaction = compileTransaction(transactionMessage);
-        expect(transaction.lifetimeConstraint).toStrictEqual({ nonce: 'b' as NewNonce });
+        expect(transaction.lifetimeConstraint).toStrictEqual({
+            nonce: 'b' as NewNonce,
+            nonceAccountAddress: 'nonceAddress',
+        });
     });
 });
