@@ -1,13 +1,13 @@
-import { NewTransactionVersion, TransactionMessage } from './transaction-message';
+import { TransactionMessage, TransactionVersion } from './transaction-message';
 
-type TransactionConfig<TVersion extends NewTransactionVersion> = Readonly<{
+type TransactionConfig<TVersion extends TransactionVersion> = Readonly<{
     version: TVersion;
 }>;
 
-export function createTransactionMessage<TVersion extends NewTransactionVersion>(
+export function createTransactionMessage<TVersion extends TransactionVersion>(
     config: TransactionConfig<TVersion>,
 ): Extract<TransactionMessage, { version: TVersion }>;
-export function createTransactionMessage<TVersion extends NewTransactionVersion>({
+export function createTransactionMessage<TVersion extends TransactionVersion>({
     version,
 }: TransactionConfig<TVersion>): TransactionMessage {
     const out: TransactionMessage = {

@@ -1,6 +1,6 @@
 import { Decoder, Encoder } from '@solana/codecs-core';
 
-import { NewTransactionVersion } from '../../transaction-message';
+import { TransactionVersion } from '../../transaction-message';
 import {
     getTransactionVersionCodec,
     getTransactionVersionDecoder,
@@ -9,12 +9,12 @@ import {
 
 const VERSION_FLAG_MASK = 0x80;
 const VERSION_TEST_CASES = // Versions 0–127
-    [...Array(128).keys()].map(version => [version | VERSION_FLAG_MASK, version as NewTransactionVersion] as const);
+    [...Array(128).keys()].map(version => [version | VERSION_FLAG_MASK, version as TransactionVersion] as const);
 
 describe.each([getTransactionVersionCodec, getTransactionVersionEncoder])(
     'Transaction version encoder',
     serializerFactory => {
-        let transactionVersion: Encoder<NewTransactionVersion>;
+        let transactionVersion: Encoder<TransactionVersion>;
         beforeEach(() => {
             transactionVersion = serializerFactory();
         });
@@ -24,7 +24,7 @@ describe.each([getTransactionVersionCodec, getTransactionVersionEncoder])(
         it.each(VERSION_TEST_CASES)('serializes to `%s` when the version is `%s`', (expected, version) => {
             expect(transactionVersion.encode(version)).toEqual(new Uint8Array([expected]));
         });
-        it.each([-1 as NewTransactionVersion, 128 as NewTransactionVersion])(
+        it.each([-1 as TransactionVersion, 128 as TransactionVersion])(
             'throws when passed the out-of-range version `%s`',
             version => {
                 expect(() => transactionVersion.encode(version)).toThrow();
@@ -36,7 +36,7 @@ describe.each([getTransactionVersionCodec, getTransactionVersionEncoder])(
 describe.each([getTransactionVersionCodec, getTransactionVersionDecoder])(
     'Transaction version decoder',
     serializerFactory => {
-        let transactionVersion: Decoder<NewTransactionVersion>;
+        let transactionVersion: Decoder<TransactionVersion>;
         beforeEach(() => {
             transactionVersion = serializerFactory();
         });
