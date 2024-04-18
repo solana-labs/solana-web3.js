@@ -1532,7 +1532,7 @@ function createRpcClient(
   fetchMiddleware?: FetchMiddleware,
   disableRetryOnRateLimit?: boolean,
   httpAgent?: NodeHttpAgent | NodeHttpsAgent | false,
-  log = false,
+  log = true,
 ): RpcClient {
   const fetch = customFetch ? customFetch : fetchImpl;
   let agent: NodeHttpAgent | NodeHttpsAgent | undefined;
