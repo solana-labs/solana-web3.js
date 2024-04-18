@@ -4,8 +4,8 @@ import { Address } from '@solana/addresses';
 import { Blockhash } from '@solana/rpc-types';
 import {
     CompiledTransactionMessage,
+    compileTransactionMessage,
     getCompiledTransactionMessageEncoder,
-    newCompileTransactionMessage,
     NewNonce,
 } from '@solana/transaction-messages';
 
@@ -13,8 +13,8 @@ import { compileTransaction } from '../compile-transaction';
 
 jest.mock('@solana/transaction-messages', () => ({
     ...jest.requireActual('@solana/transaction-messages'),
+    compileTransactionMessage: jest.fn(),
     getCompiledTransactionMessageEncoder: jest.fn(),
-    newCompileTransactionMessage: jest.fn(),
 }));
 
 type TransactionMessage = Parameters<typeof compileTransaction>[0];
@@ -35,7 +35,7 @@ describe('compileTransactionMessage', () => {
     } as CompiledTransactionMessage;
     const mockCompiledMessageBytes = new Uint8Array(Array(100)).fill(1);
     beforeEach(() => {
-        (newCompileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
+        (compileTransactionMessage as jest.Mock).mockReturnValue(mockCompiledMessage);
         (getCompiledTransactionMessageEncoder as jest.Mock).mockReturnValue({
             encode: jest.fn().mockReturnValue(mockCompiledMessageBytes),
         });
