@@ -3,9 +3,9 @@ import {
     BaseTransactionMessage,
     CompilableTransactionMessage,
     IDurableNonceTransactionMessage,
-    ITransactionMessageWithBlockhashLifetime,
     ITransactionMessageWithFeePayer,
     NewNonce,
+    TransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
 
 import { compileTransaction } from '../compile-transaction';
@@ -21,18 +21,18 @@ import { Transaction } from '../transaction';
 // transaction message with blockhash lifetime
 compileTransaction(
     null as unknown as BaseTransactionMessage &
-        ITransactionMessageWithBlockhashLifetime &
-        ITransactionMessageWithFeePayer,
+        ITransactionMessageWithFeePayer &
+        TransactionMessageWithBlockhashLifetime,
 ) satisfies Readonly<Transaction & TransactionWithLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage &
-        ITransactionMessageWithBlockhashLifetime &
-        ITransactionMessageWithFeePayer,
+        ITransactionMessageWithFeePayer &
+        TransactionMessageWithBlockhashLifetime,
 ) satisfies Readonly<Transaction & TransactionWithBlockhashLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage &
-        ITransactionMessageWithBlockhashLifetime &
-        ITransactionMessageWithFeePayer,
+        ITransactionMessageWithFeePayer &
+        TransactionMessageWithBlockhashLifetime,
 ).lifetimeConstraint.blockhash satisfies Blockhash;
 
 // transaction message with durable nonce lifetime

@@ -3,8 +3,8 @@ import { Blockhash } from '@solana/rpc-types';
 
 import {
     assertIsTransactionMessageWithBlockhashLifetime,
-    ITransactionMessageWithBlockhashLifetime,
     setTransactionMessageLifetimeUsingBlockhash,
+    TransactionMessageWithBlockhashLifetime,
 } from '../blockhash';
 import { CompilableTransactionMessage } from '../compilable-transaction-message';
 import { createTransactionMessage } from '../create-transaction-message';
@@ -47,27 +47,27 @@ createTransactionMessage({ version: 'legacy' }) satisfies Extract<TransactionMes
 setTransactionMessageLifetimeUsingBlockhash(
     mockBlockhashLifetime,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
-) satisfies Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithBlockhashLifetime;
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithBlockhashLifetime;
 setTransactionMessageLifetimeUsingBlockhash(
     mockBlockhashLifetime,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
     // @ts-expect-error Version should match
-) satisfies Extract<TransactionMessage, { version: 0 }> & ITransactionMessageWithBlockhashLifetime;
+) satisfies Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithBlockhashLifetime;
 setTransactionMessageLifetimeUsingBlockhash(
     mockBlockhashLifetime,
     null as unknown as Extract<TransactionMessage, { version: 0 }>,
-) satisfies Extract<TransactionMessage, { version: 0 }> & ITransactionMessageWithBlockhashLifetime;
+) satisfies Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithBlockhashLifetime;
 setTransactionMessageLifetimeUsingBlockhash(
     mockBlockhashLifetime,
     null as unknown as Extract<TransactionMessage, { version: 0 }>,
     // @ts-expect-error Version should match
-) satisfies Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithBlockhashLifetime;
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithBlockhashLifetime;
 
 {
     // assertIsTransactionMessageWithBlockhashLifetime
     const transaction = null as unknown as BaseTransactionMessage;
     // @ts-expect-error Should not be blockhash lifetime
-    transaction satisfies ITransactionMessageWithBlockhashLifetime;
+    transaction satisfies TransactionMessageWithBlockhashLifetime;
     // @ts-expect-error Should not satisfy has blockhash
     transaction satisfies {
         lifetimeConstraint: {
@@ -81,7 +81,7 @@ setTransactionMessageLifetimeUsingBlockhash(
         };
     };
     assertIsTransactionMessageWithBlockhashLifetime(transaction);
-    transaction satisfies ITransactionMessageWithBlockhashLifetime;
+    transaction satisfies TransactionMessageWithBlockhashLifetime;
     transaction satisfies {
         lifetimeConstraint: {
             blockhash: Blockhash;
@@ -139,31 +139,31 @@ setTransactionMessageFeePayer(
 // (blockhash)
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithBlockhashLifetime,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithBlockhashLifetime,
 ) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
-    ITransactionMessageWithBlockhashLifetime &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithBlockhashLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }> &
-        ITransactionMessageWithBlockhashLifetime &
-        ITransactionMessageWithFeePayer<'NOTfeePayer'>,
+        ITransactionMessageWithFeePayer<'NOTfeePayer'> &
+        TransactionMessageWithBlockhashLifetime,
 ) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
-    ITransactionMessageWithBlockhashLifetime &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithBlockhashLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & ITransactionMessageWithBlockhashLifetime,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithBlockhashLifetime,
     // @ts-expect-error Version should match
 ) satisfies Extract<TransactionMessage, { version: 0 }> &
-    ITransactionMessageWithBlockhashLifetime &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithBlockhashLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 0 }> & ITransactionMessageWithBlockhashLifetime,
+    null as unknown as Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithBlockhashLifetime,
 ) satisfies Extract<TransactionMessage, { version: 0 }> &
-    ITransactionMessageWithBlockhashLifetime &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithBlockhashLifetime;
 
 // (durable nonce)
 setTransactionMessageFeePayer(
@@ -231,12 +231,12 @@ null as unknown as BaseTransactionMessage satisfies CompilableTransactionMessage
 null as unknown as BaseTransactionMessage & ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
 null as unknown as BaseTransactionMessage &
     // @ts-expect-error missing fee payer
-    ITransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
+    TransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
 // @ts-expect-error missing fee payer
 null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage satisfies CompilableTransactionMessage;
 null as unknown as BaseTransactionMessage &
-    ITransactionMessageWithBlockhashLifetime &
-    ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
+    ITransactionMessageWithFeePayer &
+    TransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
 null as unknown as BaseTransactionMessage &
     IDurableNonceTransactionMessage &
     ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;

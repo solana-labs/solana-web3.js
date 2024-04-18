@@ -2,7 +2,7 @@ import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
     IDurableNonceTransactionMessage,
-    ITransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
 import { FullySignedTransaction, Transaction } from '@solana/transactions';
 import {
@@ -24,7 +24,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
 {
     // [partiallySignTransactionMessageWithSigners]: returns a transaction with a blockhash lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime;
+        TransactionMessageWithBlockhashLifetime;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
         Readonly<Transaction & TransactionWithBlockhashLifetime>
     >;
@@ -50,7 +50,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
 {
     // [signTransactionMessageWithSigners]: returns a fully signed transaction with a blockhash lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime;
+        TransactionMessageWithBlockhashLifetime;
     signTransactionMessageWithSigners(transactionMessage) satisfies Promise<
         Readonly<FullySignedTransaction & TransactionWithBlockhashLifetime>
     >;
