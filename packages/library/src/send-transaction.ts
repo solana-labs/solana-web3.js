@@ -14,8 +14,8 @@ import {
 } from '@solana/transaction-confirmation';
 import {
     FullySignedTransaction,
-    TransactionBlockhashLifetime,
-    TransactionDurableNonceLifetime,
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
 } from '@solana/transactions';
 
 import {
@@ -39,7 +39,7 @@ interface SendTransactionWithoutConfirmingFactoryConfig {
 }
 
 type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
-    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionBlockhashLifetime },
+    transaction: FullySignedTransaction & TransactionWithBlockhashLifetime,
     config: Omit<
         Parameters<typeof sendAndConfirmTransactionWithBlockhashLifetime_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmRecentTransaction' | 'rpc' | 'transaction'
@@ -47,7 +47,7 @@ type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
 ) => Promise<void>;
 
 type SendAndConfirmDurableNonceTransactionFunction = (
-    transaction: FullySignedTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime },
+    transaction: FullySignedTransaction & TransactionWithDurableNonceLifetime,
     config: Omit<
         Parameters<typeof sendAndConfirmDurableNonceTransaction_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'confirmDurableNonceTransaction' | 'rpc' | 'transaction'

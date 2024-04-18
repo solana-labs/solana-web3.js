@@ -6,8 +6,8 @@ import {
 } from '@solana/transaction-messages';
 import { FullySignedTransaction, NewTransaction } from '@solana/transactions';
 import {
-    TransactionBlockhashLifetime,
-    TransactionDurableNonceLifetime,
+    TransactionWithBlockhashLifetime,
+    TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
 } from '@solana/transactions/dist/types/lifetime';
 
@@ -26,7 +26,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         ITransactionMessageWithBlockhashLifetime;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        NewTransaction & { lifetimeConstraint: TransactionBlockhashLifetime }
+        Readonly<NewTransaction & TransactionWithBlockhashLifetime>
     >;
 }
 
@@ -35,7 +35,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         IDurableNonceTransactionMessage;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        NewTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime }
+        Readonly<NewTransaction & TransactionWithDurableNonceLifetime>
     >;
 }
 
@@ -43,7 +43,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     // [partiallySignTransactionMessageWithSigners]: returns a transaction with an unknown lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        NewTransaction & TransactionWithLifetime
+        Readonly<NewTransaction & TransactionWithLifetime>
     >;
 }
 
@@ -52,7 +52,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         ITransactionMessageWithBlockhashLifetime;
     signTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        FullySignedTransaction & { lifetimeConstraint: TransactionBlockhashLifetime }
+        Readonly<FullySignedTransaction & TransactionWithBlockhashLifetime>
     >;
 }
 
@@ -61,7 +61,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         IDurableNonceTransactionMessage;
     signTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        FullySignedTransaction & { lifetimeConstraint: TransactionDurableNonceLifetime }
+        Readonly<FullySignedTransaction & TransactionWithDurableNonceLifetime>
     >;
 }
 
@@ -69,7 +69,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     // [signTransactionMessageWithSigners]: returns a fully signed transaction with an unknown lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners;
     signTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        FullySignedTransaction & TransactionWithLifetime
+        Readonly<FullySignedTransaction & TransactionWithLifetime>
     >;
 }
 
