@@ -17,7 +17,7 @@ export interface FullySignedTransaction extends NewTransaction {
 
 let base58Decoder: Decoder<string> | undefined;
 
-export function newGetSignatureFromTransaction(transaction: NewTransaction): Signature {
+export function getSignatureFromTransaction(transaction: NewTransaction): Signature {
     if (!base58Decoder) base58Decoder = getBase58Decoder();
 
     // We have ordered signatures from the compiled message accounts
@@ -34,7 +34,7 @@ function uint8ArraysEqual(arr1: Uint8Array, arr2: Uint8Array) {
     return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 }
 
-export async function newPartiallySignTransaction<T extends NewTransaction>(
+export async function partiallySignTransaction<T extends NewTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: T,
 ): Promise<T> {
@@ -92,17 +92,17 @@ export async function newPartiallySignTransaction<T extends NewTransaction>(
     });
 }
 
-export async function newSignTransaction<T extends NewTransaction>(
+export async function signTransaction<T extends NewTransaction>(
     keyPairs: CryptoKeyPair[],
     transaction: T,
 ): Promise<FullySignedTransaction & T> {
-    const out = await newPartiallySignTransaction(keyPairs, transaction);
-    newAssertTransactionIsFullySigned(out);
+    const out = await partiallySignTransaction(keyPairs, transaction);
+    assertTransactionIsFullySigned(out);
     Object.freeze(out);
     return out;
 }
 
-export function newAssertTransactionIsFullySigned(
+export function assertTransactionIsFullySigned(
     transaction: NewTransaction,
 ): asserts transaction is FullySignedTransaction {
     const missingSigs: Address[] = [];
