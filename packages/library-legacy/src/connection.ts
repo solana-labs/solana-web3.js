@@ -3123,6 +3123,7 @@ export class Connection {
   constructor(
     endpoint: string,
     commitmentOrConfig?: Commitment | ConnectionConfig,
+    log = true
   ) {
     let wsEndpoint;
     let httpHeaders;
@@ -3154,6 +3155,7 @@ export class Connection {
       fetchMiddleware,
       disableRetryOnRateLimit,
       httpAgent,
+      log
     );
     this._rpcRequest = createRpcRequest(this._rpcClient);
     this._rpcBatchRequest = createRpcBatchRequest(this._rpcClient);
