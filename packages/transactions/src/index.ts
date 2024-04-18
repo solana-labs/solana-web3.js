@@ -1,18 +1,9 @@
-export * from './blockhash';
 export * from './codecs';
-export * from './compilable-transaction';
-export * from './create-transaction';
-export * from './durable-nonce';
-export * from './fee-payer';
-export * from './instructions';
+export * from './create-transaction'; // will be removed soon, only used by programs code that is removed in an open PR
+export * from './instructions'; // will be removed soon, only used by programs code that is removed in an open PR
 export * from './lifetime';
-export * from './message';
 export * from './new-compile-transaction';
 export * from './new-signatures';
 export * from './new-wire-transaction';
-export * from './serializers';
-export * from './signatures';
 export * from './transaction';
-export * from './types';
-export * from './unsigned-transaction';
-export * from './wire-transaction';
+export * from './types'; // some uses to clean up before removing

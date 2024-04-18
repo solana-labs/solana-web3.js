@@ -29,7 +29,6 @@ jest.mock('@solana/keys', () => ({
 jest.mock('@solana/transactions', () => ({
     ...jest.requireActual('@solana/transactions'),
     newPartiallySignTransaction: jest.fn(),
-    partiallySignTransaction: jest.fn(),
 }));
 
 describe('isKeyPairSigner', () => {
