@@ -7,7 +7,7 @@ export type Base64EncodedWireTransaction = string & {
     readonly __brand: unique symbol;
 };
 
-export function newGetBase64EncodedWireTransaction(transaction: NewTransaction): Base64EncodedWireTransaction {
+export function getBase64EncodedWireTransaction(transaction: NewTransaction): Base64EncodedWireTransaction {
     const wireTransactionBytes = getTransactionEncoder().encode(transaction);
     return getBase64Decoder().decode(wireTransactionBytes) as Base64EncodedWireTransaction;
 }
