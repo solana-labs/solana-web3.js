@@ -7,11 +7,11 @@ import { SignatureBytes } from '@solana/keys';
 
 import { NewTransaction, TransactionMessageBytes } from '../../transaction';
 import { getSignaturesEncoder } from '../signatures-encoder';
-import { getNewTransactionCodec, getNewTransactionDecoder, getNewTransactionEncoder } from '../transaction-codec';
+import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction-codec';
 
 jest.mock('../signatures-encoder');
 
-describe.each([getNewTransactionEncoder, getNewTransactionCodec])('Transaction encoder %p', encoderFactory => {
+describe.each([getTransactionEncoder, getTransactionCodec])('Transaction encoder %p', encoderFactory => {
     const mockEncodedSignatures = new Uint8Array([1, 2, 3]);
     let encoder: VariableSizeEncoder<NewTransaction>;
     beforeEach(() => {
@@ -44,7 +44,7 @@ describe.each([getNewTransactionEncoder, getNewTransactionCodec])('Transaction e
     });
 });
 
-describe.each([getNewTransactionDecoder, getNewTransactionCodec])('Transaction decoder %p', decoderFactory => {
+describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder %p', decoderFactory => {
     let decoder: VariableSizeDecoder<NewTransaction>;
     beforeEach(() => {
         (getSignaturesEncoder as jest.Mock).mockReturnValue({

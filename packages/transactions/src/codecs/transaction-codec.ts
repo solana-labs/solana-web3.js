@@ -25,14 +25,14 @@ import { getTransactionVersionDecoder } from '@solana/transaction-messages';
 import { NewTransaction, SignaturesMap, TransactionMessageBytes } from '../transaction';
 import { getSignaturesEncoder } from './signatures-encoder';
 
-export function getNewTransactionEncoder(): VariableSizeEncoder<NewTransaction> {
+export function getTransactionEncoder(): VariableSizeEncoder<NewTransaction> {
     return getStructEncoder([
         ['signatures', getSignaturesEncoder()],
         ['messageBytes', getBytesEncoder()],
     ]);
 }
 
-export function getNewTransactionDecoder(): VariableSizeDecoder<NewTransaction> {
+export function getTransactionDecoder(): VariableSizeDecoder<NewTransaction> {
     return transformDecoder(
         getStructDecoder([
             ['signatures', getArrayDecoder(fixDecoderSize(getBytesDecoder(), 64), { size: getShortU16Decoder() })],
@@ -42,8 +42,8 @@ export function getNewTransactionDecoder(): VariableSizeDecoder<NewTransaction> 
     );
 }
 
-export function getNewTransactionCodec(): VariableSizeCodec<NewTransaction> {
-    return combineCodec(getNewTransactionEncoder(), getNewTransactionDecoder());
+export function getTransactionCodec(): VariableSizeCodec<NewTransaction> {
+    return combineCodec(getTransactionEncoder(), getTransactionDecoder());
 }
 
 type PartiallyDecodedTransaction = {
