@@ -9,7 +9,7 @@ import {
     NewNonce,
 } from '@solana/transaction-messages';
 
-import { compileTransaction } from '../new-compile-transaction';
+import { compileTransaction } from '../compile-transaction';
 
 jest.mock('@solana/transaction-messages', () => ({
     ...jest.requireActual('@solana/transaction-messages'),

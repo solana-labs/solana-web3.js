@@ -8,6 +8,7 @@ import {
     NewNonce,
 } from '@solana/transaction-messages';
 
+import { compileTransaction } from '../compile-transaction';
 import {
     TransactionBlockhashLifetime,
     TransactionDurableNonceLifetime,
@@ -15,7 +16,6 @@ import {
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
 } from '../lifetime';
-import { compileTransaction } from '../new-compile-transaction';
 import { NewTransaction } from '../transaction';
 
 // transaction message with blockhash lifetime
