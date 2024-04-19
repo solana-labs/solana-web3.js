@@ -406,8 +406,8 @@ importers:
         specifier: ^7.23.3
         version: 7.23.3(@babel/core@7.24.0)
       '@babel/plugin-transform-private-methods':
-        specifier: ^7.23.3
-        version: 7.23.3(@babel/core@7.24.0)
+        specifier: ^7.24.1
+        version: 7.24.1(@babel/core@7.24.0)
       '@babel/plugin-transform-private-property-in-object':
         specifier: ^7.24.1
         version: 7.24.1(@babel/core@7.24.0)
@@ -2026,15 +2026,15 @@ packages:
       '@babel/helper-plugin-utils': 7.24.0
     dev: true
 
-  /@babel/plugin-transform-private-methods@7.23.3(@babel/core@7.24.0):
-    resolution: {integrity: sha512-UzqRcRtWsDMTLrRWFvUBDwmw06tCQH9Rl1uAjfh6ijMSmGYQ+fpdB+cnqRC8EMh5tuuxSv0/TejGL+7vyj+50g==}
+  /@babel/plugin-transform-private-methods@7.24.1(@babel/core@7.24.0):
+    resolution: {integrity: sha512-tGvisebwBO5em4PaYNqt4fkw56K2VALsAbAakY0FjTYqJp7gfdrgr7YX76Or8/cpik0W6+tj3rZ0uHU9Oil4tw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.24.0
-      '@babel/helper-create-class-features-plugin': 7.22.15(@babel/core@7.24.0)
-      '@babel/helper-plugin-utils': 7.22.5
+      '@babel/helper-create-class-features-plugin': 7.24.4(@babel/core@7.24.0)
+      '@babel/helper-plugin-utils': 7.24.0
     dev: true
 
   /@babel/plugin-transform-private-property-in-object@7.24.1(@babel/core@7.24.0):
@@ -2272,7 +2272,7 @@ packages:
       '@babel/plugin-transform-optional-catch-binding': 7.23.4(@babel/core@7.24.0)
       '@babel/plugin-transform-optional-chaining': 7.23.4(@babel/core@7.24.0)
       '@babel/plugin-transform-parameters': 7.23.3(@babel/core@7.24.0)
-      '@babel/plugin-transform-private-methods': 7.23.3(@babel/core@7.24.0)
+      '@babel/plugin-transform-private-methods': 7.24.1(@babel/core@7.24.0)
       '@babel/plugin-transform-private-property-in-object': 7.24.1(@babel/core@7.24.0)
       '@babel/plugin-transform-property-literals': 7.23.3(@babel/core@7.24.0)
       '@babel/plugin-transform-regenerator': 7.23.3(@babel/core@7.24.0)
