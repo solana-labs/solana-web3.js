@@ -7,7 +7,7 @@ import {
 } from '@solana/transaction-confirmation';
 import {
     FullySignedTransaction,
-    newGetBase64EncodedWireTransaction,
+    getBase64EncodedWireTransaction,
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
 } from '@solana/transactions';
@@ -77,7 +77,7 @@ export async function sendTransaction_INTERNAL_ONLY_DO_NOT_EXPORT({
     transaction,
     ...sendTransactionConfig
 }: SendTransactionBaseConfig): Promise<Signature> {
-    const base64EncodedWireTransaction = newGetBase64EncodedWireTransaction(transaction);
+    const base64EncodedWireTransaction = getBase64EncodedWireTransaction(transaction);
     return await rpc
         .sendTransaction(base64EncodedWireTransaction, {
             ...getSendTransactionConfigWithAdjustedPreflightCommitment(commitment, sendTransactionConfig),

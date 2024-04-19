@@ -4,7 +4,7 @@ import type { Commitment } from '@solana/rpc-types';
 import {
     Base64EncodedWireTransaction,
     FullySignedTransaction,
-    newGetBase64EncodedWireTransaction,
+    getBase64EncodedWireTransaction,
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
 } from '@solana/transactions';
@@ -34,7 +34,7 @@ describe('sendAndConfirmTransaction', () => {
         rpc = {
             sendTransaction: createPendingRequest,
         };
-        jest.mocked(newGetBase64EncodedWireTransaction).mockReturnValue(
+        jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
             'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
@@ -46,7 +46,7 @@ describe('sendAndConfirmTransaction', () => {
             rpc,
             transaction: MOCK_TRANSACTION,
         });
-        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
+        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
     it('calls `sendTransaction` with the expected inputs', () => {
@@ -64,7 +64,7 @@ describe('sendAndConfirmTransaction', () => {
             rpc,
             transaction: MOCK_TRANSACTION,
         });
-        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
+        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
             encoding: 'base64',
@@ -189,7 +189,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
         rpc = {
             sendTransaction: createPendingRequest,
         };
-        jest.mocked(newGetBase64EncodedWireTransaction).mockReturnValue(
+        jest.mocked(getBase64EncodedWireTransaction).mockReturnValue(
             'MOCK_WIRE_TRANSACTION' as Base64EncodedWireTransaction,
         );
     });
@@ -201,7 +201,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
-        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
+        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', expect.anything());
     });
     it('calls `sendTransaction` with the expected inputs', () => {
@@ -219,7 +219,7 @@ describe('sendAndConfirmDurableNonceTransaction', () => {
             rpc,
             transaction: MOCK_DURABLE_NONCE_TRANSACTION,
         });
-        expect(newGetBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
+        expect(getBase64EncodedWireTransaction).toHaveBeenCalledWith(MOCK_DURABLE_NONCE_TRANSACTION);
         expect(createPendingRequest).toHaveBeenCalledWith('MOCK_WIRE_TRANSACTION', {
             ...sendTransactionConfig,
             encoding: 'base64',
