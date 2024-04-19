@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SolanaError } from '@solana/errors';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
-import { NewNonce } from '@solana/transaction-messages';
+import { Nonce } from '@solana/transaction-messages';
 import { Transaction, TransactionMessageBytes } from '@solana/transactions';
 import {
     TransactionWithBlockhashLifetime,
@@ -22,7 +22,7 @@ const FOREVER_PROMISE = new Promise(() => {
 
 describe('waitForDurableNonceTransactionConfirmation', () => {
     const MOCK_DURABLE_NONCE_TRANSACTION: Transaction & TransactionWithDurableNonceLifetime = {
-        lifetimeConstraint: { nonce: 'xyz' as NewNonce, nonceAccountAddress: '5'.repeat(44) as Address },
+        lifetimeConstraint: { nonce: 'xyz' as Nonce, nonceAccountAddress: '5'.repeat(44) as Address },
         messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
         signatures: {
             ['9'.repeat(44) as Address]: new Uint8Array(new Array(64).fill(0)) as SignatureBytes,

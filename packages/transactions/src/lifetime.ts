@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 import { Blockhash, Slot } from '@solana/rpc-types';
-import { NewNonce } from '@solana/transaction-messages';
+import { Nonce } from '@solana/transaction-messages';
 
 export type TransactionBlockhashLifetime = {
     blockhash: Blockhash;
@@ -8,7 +8,7 @@ export type TransactionBlockhashLifetime = {
 };
 
 export type TransactionDurableNonceLifetime = {
-    nonce: NewNonce;
+    nonce: Nonce;
     nonceAccountAddress: Address;
 };
 

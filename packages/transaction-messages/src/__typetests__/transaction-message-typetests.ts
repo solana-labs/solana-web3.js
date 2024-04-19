@@ -9,9 +9,9 @@ import {
 import { CompilableTransactionMessage } from '../compilable-transaction-message';
 import { createTransactionMessage } from '../create-transaction-message';
 import {
-    IDurableNonceTransactionMessage,
-    NewNonce,
+    Nonce,
     setTransactionMessageLifetimeUsingDurableNonce,
+    TransactionMessageWithDurableNonceLifetime,
 } from '../durable-nonce';
 import { ITransactionMessageWithFeePayer, setTransactionMessageFeePayer } from '../fee-payer';
 import { appendTransactionMessageInstruction, prependTransactionMessageInstruction } from '../instructions';
@@ -24,7 +24,7 @@ const mockBlockhashLifetime = {
     lastValidBlockHeight: 0n,
 };
 const mockNonceConfig = {
-    nonce: null as unknown as NewNonce<'nonce'>,
+    nonce: null as unknown as Nonce<'nonce'>,
     nonceAccountAddress: null as unknown as Address<'nonce'>,
     nonceAuthorityAddress: null as unknown as Address<'nonceAuthority'>,
 };
@@ -98,21 +98,21 @@ setTransactionMessageLifetimeUsingBlockhash(
 setTransactionMessageLifetimeUsingDurableNonce(
     mockNonceConfig,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
-) satisfies Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage;
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageLifetimeUsingDurableNonce(
     mockNonceConfig,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }>,
     // @ts-expect-error Version should match
-) satisfies Extract<TransactionMessage, { version: 0 }> & IDurableNonceTransactionMessage;
+) satisfies Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageLifetimeUsingDurableNonce(
     mockNonceConfig,
     null as unknown as Extract<TransactionMessage, { version: 0 }>,
-) satisfies Extract<TransactionMessage, { version: 0 }> & IDurableNonceTransactionMessage;
+) satisfies Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageLifetimeUsingDurableNonce(
     mockNonceConfig,
     null as unknown as Extract<TransactionMessage, { version: 0 }>,
     // @ts-expect-error Version should match
-) satisfies Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage;
+) satisfies Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithDurableNonceLifetime;
 
 // setTransactionMessageFeePayer
 
@@ -168,31 +168,31 @@ setTransactionMessageFeePayer(
 // (durable nonce)
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithDurableNonceLifetime,
 ) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
-    IDurableNonceTransactionMessage &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
     null as unknown as Extract<TransactionMessage, { version: 'legacy' }> &
-        IDurableNonceTransactionMessage &
-        ITransactionMessageWithFeePayer<'NOTfeePayer'>,
+        ITransactionMessageWithFeePayer<'NOTfeePayer'> &
+        TransactionMessageWithDurableNonceLifetime,
 ) satisfies Extract<TransactionMessage, { version: 'legacy' }> &
-    IDurableNonceTransactionMessage &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & IDurableNonceTransactionMessage,
+    null as unknown as Extract<TransactionMessage, { version: 'legacy' }> & TransactionMessageWithDurableNonceLifetime,
     // @ts-expect-error Version should match
 ) satisfies Extract<TransactionMessage, { version: 0 }> &
-    IDurableNonceTransactionMessage &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithDurableNonceLifetime;
 setTransactionMessageFeePayer(
     mockFeePayer,
-    null as unknown as Extract<TransactionMessage, { version: 0 }> & IDurableNonceTransactionMessage,
+    null as unknown as Extract<TransactionMessage, { version: 0 }> & TransactionMessageWithDurableNonceLifetime,
 ) satisfies Extract<TransactionMessage, { version: 0 }> &
-    IDurableNonceTransactionMessage &
-    ITransactionMessageWithFeePayer<'feePayer'>;
+    ITransactionMessageWithFeePayer<'feePayer'> &
+    TransactionMessageWithDurableNonceLifetime;
 
 // appendTransactionMessageInstruction
 appendTransactionMessageInstruction(
@@ -232,11 +232,14 @@ null as unknown as BaseTransactionMessage & ITransactionMessageWithFeePayer sati
 null as unknown as BaseTransactionMessage &
     // @ts-expect-error missing fee payer
     TransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
-// @ts-expect-error missing fee payer
-null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage satisfies CompilableTransactionMessage;
+{
+    const transaction = null as unknown as BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime;
+    // @ts-expect-error missing fee payer
+    transaction satisfies CompilableTransactionMessage;
+}
 null as unknown as BaseTransactionMessage &
     ITransactionMessageWithFeePayer &
     TransactionMessageWithBlockhashLifetime satisfies CompilableTransactionMessage;
 null as unknown as BaseTransactionMessage &
-    IDurableNonceTransactionMessage &
-    ITransactionMessageWithFeePayer satisfies CompilableTransactionMessage;
+    ITransactionMessageWithFeePayer &
+    TransactionMessageWithDurableNonceLifetime satisfies CompilableTransactionMessage;

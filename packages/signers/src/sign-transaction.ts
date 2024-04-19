@@ -2,8 +2,8 @@ import { SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING, SolanaError }
 import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
-    IDurableNonceTransactionMessage,
     TransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithDurableNonceLifetime,
 } from '@solana/transaction-messages';
 import {
     assertTransactionIsFullySigned,
@@ -43,7 +43,8 @@ export async function partiallySignTransactionMessageWithSigners<
 
 export async function partiallySignTransactionMessageWithSigners<
     TTransactionMessage extends CompilableTransactionMessageWithSigners &
-        IDurableNonceTransactionMessage = CompilableTransactionMessageWithSigners & IDurableNonceTransactionMessage,
+        TransactionMessageWithDurableNonceLifetime = CompilableTransactionMessageWithSigners &
+        TransactionMessageWithDurableNonceLifetime,
 >(
     transactionMessage: TTransactionMessage,
     config?: { abortSignal?: AbortSignal },
@@ -92,7 +93,8 @@ export async function signTransactionMessageWithSigners<
 
 export async function signTransactionMessageWithSigners<
     TTransactionMessage extends CompilableTransactionMessageWithSigners &
-        IDurableNonceTransactionMessage = CompilableTransactionMessageWithSigners & IDurableNonceTransactionMessage,
+        TransactionMessageWithDurableNonceLifetime = CompilableTransactionMessageWithSigners &
+        TransactionMessageWithDurableNonceLifetime,
 >(
     transactionMessage: TTransactionMessage,
     config?: { abortSignal?: AbortSignal },

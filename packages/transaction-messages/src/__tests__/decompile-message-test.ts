@@ -8,7 +8,7 @@ import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction } from '@so
 
 import { CompiledTransactionMessage } from '../compile';
 import { decompileTransactionMessage } from '../decompile-message';
-import { NewNonce } from '../durable-nonce';
+import { Nonce } from '../durable-nonce';
 
 describe('decompileTransactionMessage', () => {
     const U64_MAX = 2n ** 64n - 1n;
@@ -197,7 +197,7 @@ describe('decompileTransactionMessage', () => {
     });
 
     describe('for a transaction with a durable nonce lifetime', () => {
-        const nonce = '27kqzE1RifbyoFtibDRTjbnfZ894jsNpuR77JJkt3vgH' as NewNonce;
+        const nonce = '27kqzE1RifbyoFtibDRTjbnfZ894jsNpuR77JJkt3vgH' as Nonce;
 
         // added as writable non-signer in the durable nonce instruction
         const nonceAccountAddress = 'DhezFECsqmzuDxeuitFChbghTrwKLdsKdVsGArYbFEtm' as Address;

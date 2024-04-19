@@ -7,9 +7,9 @@ import type { Blockhash } from '@solana/rpc-types';
 import { TransactionMessageWithBlockhashLifetime } from '../blockhash';
 import {
     assertIsDurableNonceTransactionMessage,
-    IDurableNonceTransactionMessage,
-    NewNonce,
+    Nonce,
     setTransactionMessageLifetimeUsingDurableNonce,
+    TransactionMessageWithDurableNonceLifetime,
 } from '../durable-nonce';
 import { BaseTransactionMessage } from '../transaction-message';
 
@@ -22,7 +22,7 @@ function createMockAdvanceNonceAccountInstruction<
 }: {
     nonceAccountAddress: Address<TNonceAccountAddress>;
     nonceAuthorityAddress: Address<TNonceAuthorityAddress>;
-}): IDurableNonceTransactionMessage['instructions'][0] {
+}): TransactionMessageWithDurableNonceLifetime['instructions'][0] {
     return {
         accounts: [
             { address: nonceAccountAddress, role: AccountRole.WRITABLE } as WritableAccount<TNonceAccountAddress>,
@@ -36,15 +36,15 @@ function createMockAdvanceNonceAccountInstruction<
                 role: AccountRole.READONLY_SIGNER,
             } as ReadonlySignerAccount<TNonceAuthorityAddress>,
         ],
-        data: new Uint8Array([4, 0, 0, 0]) as IDurableNonceTransactionMessage['instructions'][0]['data'],
+        data: new Uint8Array([4, 0, 0, 0]) as TransactionMessageWithDurableNonceLifetime['instructions'][0]['data'],
         programAddress: '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>,
     };
 }
 
 describe('assertIsDurableNonceTransactionMessage()', () => {
-    let durableNonceTx: BaseTransactionMessage & IDurableNonceTransactionMessage;
+    let durableNonceTx: BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime;
     const NONCE_CONSTRAINT = {
-        nonce: '123' as NewNonce,
+        nonce: '123' as Nonce,
         nonceAccountAddress: '123' as Address,
         nonceAuthorityAddress: '123' as Address,
     };
@@ -53,7 +53,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
             instructions: [createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT)],
             lifetimeConstraint: {
                 nonce: NONCE_CONSTRAINT.nonce,
-            } as IDurableNonceTransactionMessage['lifetimeConstraint'],
+            } as TransactionMessageWithDurableNonceLifetime['lifetimeConstraint'],
             version: 0,
         } as const;
     });
@@ -77,7 +77,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
                 ],
                 lifetimeConstraint: {
                     nonce: NONCE_CONSTRAINT.nonce,
-                } as IDurableNonceTransactionMessage['lifetimeConstraint'],
+                } as TransactionMessageWithDurableNonceLifetime['lifetimeConstraint'],
             });
         }).toThrow();
     });
@@ -93,7 +93,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
                 ],
                 lifetimeConstraint: {
                     nonce: NONCE_CONSTRAINT.nonce,
-                } as IDurableNonceTransactionMessage['lifetimeConstraint'],
+                } as TransactionMessageWithDurableNonceLifetime['lifetimeConstraint'],
             });
         }).toThrow();
     });
@@ -109,7 +109,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
                 ],
                 lifetimeConstraint: {
                     nonce: NONCE_CONSTRAINT.nonce,
-                } as IDurableNonceTransactionMessage['lifetimeConstraint'],
+                } as TransactionMessageWithDurableNonceLifetime['lifetimeConstraint'],
             });
         }).toThrow();
     });
@@ -155,7 +155,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
             instructions: [updatedInstruction],
             lifetimeConstraint: {
                 nonce: NONCE_CONSTRAINT.nonce,
-            } as IDurableNonceTransactionMessage['lifetimeConstraint'],
+            } as TransactionMessageWithDurableNonceLifetime['lifetimeConstraint'],
             version: 0,
         } as const;
         expect(() => {
@@ -167,12 +167,12 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
 describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
     let baseTx: BaseTransactionMessage;
     const NONCE_CONSTRAINT_A = {
-        nonce: '123' as NewNonce,
+        nonce: '123' as Nonce,
         nonceAccountAddress: '123' as Address,
         nonceAuthorityAddress: '123' as Address,
     };
     const NONCE_CONSTRAINT_B = {
-        nonce: '456' as NewNonce,
+        nonce: '456' as Nonce,
         nonceAccountAddress: '456' as Address,
         nonceAuthorityAddress: '456' as Address,
     };
@@ -229,7 +229,7 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
         });
     });
     describe('given a durable nonce transaction', () => {
-        let durableNonceTxWithConstraintA: BaseTransactionMessage & IDurableNonceTransactionMessage;
+        let durableNonceTxWithConstraintA: BaseTransactionMessage & TransactionMessageWithDurableNonceLifetime;
         beforeEach(() => {
             durableNonceTxWithConstraintA = {
                 ...baseTx,

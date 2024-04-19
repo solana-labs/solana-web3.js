@@ -1,7 +1,7 @@
 import { IInstruction } from '@solana/instructions';
 
 import { TransactionMessageWithBlockhashLifetime } from './blockhash';
-import { IDurableNonceTransactionMessage } from './durable-nonce';
+import { TransactionMessageWithDurableNonceLifetime } from './durable-nonce';
 import { ITransactionMessageWithFeePayer } from './fee-payer';
 import { BaseTransactionMessage, NewTransactionVersion } from './transaction-message';
 
@@ -10,4 +10,4 @@ export type CompilableTransactionMessage<
     TInstruction extends IInstruction = IInstruction,
 > = BaseTransactionMessage<TVersion, TInstruction> &
     ITransactionMessageWithFeePayer &
-    (IDurableNonceTransactionMessage | TransactionMessageWithBlockhashLifetime);
+    (TransactionMessageWithBlockhashLifetime | TransactionMessageWithDurableNonceLifetime);
