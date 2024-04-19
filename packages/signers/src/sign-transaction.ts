@@ -6,9 +6,9 @@ import {
     ITransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
 import {
+    assertTransactionIsFullySigned,
     compileTransaction,
     FullySignedTransaction,
-    newAssertTransactionIsFullySigned,
     NewTransaction,
 } from '@solana/transactions';
 import {
@@ -112,7 +112,7 @@ export async function signTransactionMessageWithSigners<
     config: { abortSignal?: AbortSignal } = {},
 ): Promise<Readonly<FullySignedTransaction & TransactionWithLifetime>> {
     const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage, config);
-    newAssertTransactionIsFullySigned(signedTransaction);
+    assertTransactionIsFullySigned(signedTransaction);
     return signedTransaction;
 }
 

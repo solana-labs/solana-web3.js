@@ -1,5 +1,5 @@
 import { Signature } from '@solana/keys';
-import { newGetSignatureFromTransaction, NewTransaction } from '@solana/transactions';
+import { getSignatureFromTransaction, NewTransaction } from '@solana/transactions';
 import {
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
@@ -31,7 +31,7 @@ export async function waitForDurableNonceTransactionConfirmation(
     config: WaitForDurableNonceTransactionConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
-        newGetSignatureFromTransaction(config.transaction),
+        getSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({ abortSignal, commitment, getNonceInvalidationPromise, transaction }) {
             return [
@@ -50,7 +50,7 @@ export async function waitForRecentTransactionConfirmation(
     config: WaitForRecentTransactionWithBlockhashLifetimeConfirmationConfig,
 ): Promise<void> {
     await raceStrategies(
-        newGetSignatureFromTransaction(config.transaction),
+        getSignatureFromTransaction(config.transaction),
         config,
         function getSpecificStrategiesForRace({
             abortSignal,

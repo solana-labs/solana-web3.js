@@ -11,11 +11,11 @@ import {
 import { SignatureBytes, signBytes } from '@solana/keys';
 
 import {
-    newAssertTransactionIsFullySigned,
-    newGetSignatureFromTransaction,
-    newPartiallySignTransaction,
-    newSignTransaction,
-} from '../new-signatures';
+    assertTransactionIsFullySigned,
+    getSignatureFromTransaction,
+    partiallySignTransaction,
+    signTransaction,
+} from '../signatures';
 import { NewTransaction, OrderedMap, TransactionMessageBytes } from '../transaction';
 
 jest.mock('@solana/addresses');
@@ -29,7 +29,7 @@ describe('getSignatureFromTransaction', () => {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
-        expect(newGetSignatureFromTransaction(transactionWithFeePayerSignature)).toBe(
+        expect(getSignatureFromTransaction(transactionWithFeePayerSignature)).toBe(
             'BUguQsv2ZuHus54HAFzjdJHzZBkygAjKhEeYwSG19tUfUyvvz3worsdQCdAXDNjakJHioSiyxhFiDJrm8XpSXRA',
         );
     });
@@ -39,7 +39,7 @@ describe('getSignatureFromTransaction', () => {
             signatures: {},
         };
         expect(() => {
-            newGetSignatureFromTransaction(transactionWithoutFeePayerSignature);
+            getSignatureFromTransaction(transactionWithoutFeePayerSignature);
         }).toThrow(new SolanaError(SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING));
     });
 });
@@ -90,7 +90,7 @@ describe('partiallySignTransaction', () => {
             },
         };
 
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -107,7 +107,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty('messageBytes', messageBytes);
     });
     it('returns a signed transaction object having null for the missing signers', async () => {
@@ -120,7 +120,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressC]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -138,7 +138,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairB], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -156,7 +156,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressC]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction(
+        const partiallySignedTransactionPromise = partiallySignTransaction(
             [mockKeyPairA, mockKeyPairB, mockKeyPairC],
             transaction,
         );
@@ -179,10 +179,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressC]: null,
             },
         };
-        const { signatures } = await newPartiallySignTransaction(
-            [mockKeyPairC, mockKeyPairB, mockKeyPairA],
-            transaction,
-        );
+        const { signatures } = await partiallySignTransaction([mockKeyPairC, mockKeyPairB, mockKeyPairA], transaction);
         const orderedAddresses = Object.keys(signatures);
         expect(orderedAddresses).toEqual([mockPublicKeyAddressA, mockPublicKeyAddressB, mockPublicKeyAddressC]);
     });
@@ -195,7 +192,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairB], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -211,7 +208,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
             },
         };
-        await newPartiallySignTransaction([mockKeyPairA], transaction);
+        await partiallySignTransaction([mockKeyPairA], transaction);
         expect(signBytes as jest.Mock).toHaveBeenCalledTimes(1);
     });
     it('modifies the existing signature when the signature is different', async () => {
@@ -222,7 +219,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: new Uint8Array([1, 2, 3, 4]) as ReadonlyUint8Array as SignatureBytes,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairA], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairA], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -239,7 +236,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const partiallySignedTransactionPromise = newPartiallySignTransaction([mockKeyPairB], transaction);
+        const partiallySignedTransactionPromise = partiallySignTransaction([mockKeyPairB], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -255,7 +252,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: null,
             },
         };
-        await expect(newPartiallySignTransaction([mockKeyPairA], transaction)).resolves.toBeFrozenObject();
+        await expect(partiallySignTransaction([mockKeyPairA], transaction)).resolves.toBeFrozenObject();
     });
     it('returns the input transaction object if no signatures changed', async () => {
         expect.assertions(1);
@@ -265,7 +262,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: MOCK_SIGNATURE_A,
             },
         };
-        await expect(newPartiallySignTransaction([mockKeyPairA], transaction)).resolves.toBe(transaction);
+        await expect(partiallySignTransaction([mockKeyPairA], transaction)).resolves.toBe(transaction);
     });
     it('throws if a keypair is for an address that is not in the signatures of the transaction', async () => {
         expect.assertions(1);
@@ -275,7 +272,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: null,
             },
         };
-        await expect(newPartiallySignTransaction([mockKeyPairB], transaction)).rejects.toThrow(
+        await expect(partiallySignTransaction([mockKeyPairB], transaction)).rejects.toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION, {
                 expectedAddresses: [mockPublicKeyAddressA],
                 unexpectedAddresses: [mockPublicKeyAddressB],
@@ -290,7 +287,7 @@ describe('partiallySignTransaction', () => {
                 [mockPublicKeyAddressA]: null,
             },
         };
-        await expect(newPartiallySignTransaction([mockKeyPairB, mockKeyPairC], transaction)).rejects.toThrow(
+        await expect(partiallySignTransaction([mockKeyPairB, mockKeyPairC], transaction)).rejects.toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__ADDRESSES_CANNOT_SIGN_TRANSACTION, {
                 expectedAddresses: [mockPublicKeyAddressA],
                 unexpectedAddresses: [mockPublicKeyAddressB, mockPublicKeyAddressC],
@@ -337,7 +334,7 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const signedTransactionPromise = newSignTransaction([mockKeyPairA], transaction);
+        const signedTransactionPromise = signTransaction([mockKeyPairA], transaction);
         await expect(signedTransactionPromise).rejects.toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: [mockPublicKeyAddressB],
@@ -353,7 +350,7 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const partiallySignedTransactionPromise = newSignTransaction([mockKeyPairA, mockKeyPairB], transaction);
+        const partiallySignedTransactionPromise = signTransaction([mockKeyPairA, mockKeyPairB], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty(
             'signatures',
             expect.objectContaining({
@@ -372,7 +369,7 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const partiallySignedTransactionPromise = newSignTransaction([mockKeyPairA, mockKeyPairB], transaction);
+        const partiallySignedTransactionPromise = signTransaction([mockKeyPairA, mockKeyPairB], transaction);
         await expect(partiallySignedTransactionPromise).resolves.toHaveProperty('messageBytes', messageBytes);
     });
     it('stores the signatures in the order specified on the compiled message', async () => {
@@ -384,7 +381,7 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        const { signatures } = await newSignTransaction([mockKeyPairB, mockKeyPairA], transaction);
+        const { signatures } = await signTransaction([mockKeyPairB, mockKeyPairA], transaction);
         const orderedAddresses = Object.keys(signatures);
         expect(orderedAddresses).toEqual([mockPublicKeyAddressA, mockPublicKeyAddressB]);
     });
@@ -397,7 +394,7 @@ describe('signTransaction', () => {
                 [mockPublicKeyAddressB]: null,
             },
         };
-        await expect(newSignTransaction([mockKeyPairA, mockKeyPairB], transaction)).resolves.toBeFrozenObject();
+        await expect(signTransaction([mockKeyPairA, mockKeyPairB], transaction)).resolves.toBeFrozenObject();
     });
 });
 
@@ -415,7 +412,7 @@ describe('assertTransactionIsFullySigned', () => {
             signatures,
         };
 
-        expect(() => newAssertTransactionIsFullySigned(transaction)).toThrow(
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: [mockPublicKeyAddressA],
             }),
@@ -431,7 +428,7 @@ describe('assertTransactionIsFullySigned', () => {
             signatures,
         };
 
-        expect(() => newAssertTransactionIsFullySigned(transaction)).toThrow(
+        expect(() => assertTransactionIsFullySigned(transaction)).toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: [mockPublicKeyAddressA, mockPublicKeyAddressB],
             }),
@@ -446,7 +443,7 @@ describe('assertTransactionIsFullySigned', () => {
             signatures,
         };
 
-        expect(() => newAssertTransactionIsFullySigned(transaction)).not.toThrow();
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
     });
 
     it('does not throw if the transaction is signed by all its signers', () => {
@@ -458,7 +455,7 @@ describe('assertTransactionIsFullySigned', () => {
             signatures,
         };
 
-        expect(() => newAssertTransactionIsFullySigned(transaction)).not.toThrow();
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
     });
 
     it('does not throw if the transaction has no signatures', () => {
@@ -467,6 +464,6 @@ describe('assertTransactionIsFullySigned', () => {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
         };
-        expect(() => newAssertTransactionIsFullySigned(transaction)).not.toThrow();
+        expect(() => assertTransactionIsFullySigned(transaction)).not.toThrow();
     });
 });
