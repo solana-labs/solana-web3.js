@@ -26,13 +26,13 @@ type VersionedCompiledTransactionMessage = BaseCompiledTransactionMessage &
         version: number;
     }>;
 
-export function newCompileTransactionMessage(
+export function compileTransactionMessage(
     transaction: CompilableTransactionMessage & Readonly<{ version: 'legacy' }>,
 ): LegacyCompiledTransactionMessage;
-export function newCompileTransactionMessage(
+export function compileTransactionMessage(
     transaction: CompilableTransactionMessage,
 ): VersionedCompiledTransactionMessage;
-export function newCompileTransactionMessage(transaction: CompilableTransactionMessage): CompiledTransactionMessage {
+export function compileTransactionMessage(transaction: CompilableTransactionMessage): CompiledTransactionMessage {
     const addressMap = getAddressMapFromInstructions(transaction.feePayer, transaction.instructions);
     const orderedAccounts = getOrderedAccountsFromAddressMap(addressMap);
     return {

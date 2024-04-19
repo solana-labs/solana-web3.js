@@ -1,11 +1,11 @@
 import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     CompilableTransactionMessage,
+    compileTransactionMessage,
     getCompiledTransactionMessageEncoder,
     IDurableNonceTransactionMessage,
     isTransactionMessageWithBlockhashLifetime,
     ITransactionMessageWithBlockhashLifetime,
-    newCompileTransactionMessage,
 } from '@solana/transaction-messages';
 
 import {
@@ -30,7 +30,7 @@ export function compileTransaction(
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage,
 ): Readonly<Transaction & TransactionWithLifetime> {
-    const compiledMessage = newCompileTransactionMessage(transactionMessage);
+    const compiledMessage = compileTransactionMessage(transactionMessage);
     const messageBytes = getCompiledTransactionMessageEncoder().encode(
         compiledMessage,
     ) as ReadonlyUint8Array as TransactionMessageBytes;

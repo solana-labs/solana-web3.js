@@ -6,7 +6,7 @@ import { getCompiledAddressTableLookups } from '../address-table-lookups';
 import { getCompiledMessageHeader } from '../header';
 import { getCompiledInstructions } from '../instructions';
 import { getCompiledLifetimeToken } from '../lifetime-token';
-import { newCompileTransactionMessage } from '../message';
+import { compileTransactionMessage } from '../message';
 import { getCompiledStaticAccounts } from '../static-accounts';
 
 jest.mock('../address-table-lookups');
@@ -39,16 +39,16 @@ describe('compileTransactionMessage', () => {
                 legacyBaseTx = { ...baseTx, version: 'legacy' };
             });
             it('does not set `addressTableLookups`', () => {
-                const message = newCompileTransactionMessage(legacyBaseTx);
+                const message = compileTransactionMessage(legacyBaseTx);
                 expect(message).not.toHaveProperty('addressTableLookups');
             });
             it('does not call `getCompiledAddressTableLookups`', () => {
-                newCompileTransactionMessage(legacyBaseTx);
+                compileTransactionMessage(legacyBaseTx);
                 expect(getCompiledAddressTableLookups).not.toHaveBeenCalled();
             });
         });
         it('sets `addressTableLookups` to the return value of `getCompiledAddressTableLookups`', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             expect(getCompiledAddressTableLookups).toHaveBeenCalled();
             expect(message.addressTableLookups).toBe(expectedAddressTableLookups);
         });
@@ -63,7 +63,7 @@ describe('compileTransactionMessage', () => {
             jest.mocked(getCompiledMessageHeader).mockReturnValue(expectedCompiledMessageHeader);
         });
         it('sets `header` to the return value of `getCompiledMessageHeader`', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             expect(getCompiledMessageHeader).toHaveBeenCalled();
             expect(message.header).toBe(expectedCompiledMessageHeader);
         });
@@ -74,7 +74,7 @@ describe('compileTransactionMessage', () => {
             jest.mocked(getCompiledInstructions).mockReturnValue(expectedInstructions);
         });
         it('sets `instructions` to the return value of `getCompiledInstructions`', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             console.log({ message });
             expect(getCompiledInstructions).toHaveBeenCalledWith(
                 baseTx.instructions,
@@ -88,7 +88,7 @@ describe('compileTransactionMessage', () => {
             jest.mocked(getCompiledLifetimeToken).mockReturnValue('abc');
         });
         it('sets `lifetimeToken` to the return value of `getCompiledLifetimeToken`', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             expect(getCompiledLifetimeToken).toHaveBeenCalledWith('SOME_CONSTRAINT');
             expect(message.lifetimeToken).toBe('abc');
         });
@@ -99,14 +99,14 @@ describe('compileTransactionMessage', () => {
             jest.mocked(getCompiledStaticAccounts).mockReturnValue(expectedStaticAccounts);
         });
         it('sets `staticAccounts` to the return value of `getCompiledStaticAccounts`', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             expect(getCompiledStaticAccounts).toHaveBeenCalled();
             expect(message.staticAccounts).toBe(expectedStaticAccounts);
         });
     });
     describe('versions', () => {
         it('compiles the version', () => {
-            const message = newCompileTransactionMessage(baseTx);
+            const message = compileTransactionMessage(baseTx);
             expect(message).toHaveProperty('version', 0);
         });
     });
