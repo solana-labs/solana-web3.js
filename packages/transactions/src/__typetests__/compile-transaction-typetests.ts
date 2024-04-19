@@ -16,19 +16,19 @@ import {
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
 } from '../lifetime';
-import { NewTransaction } from '../transaction';
+import { Transaction } from '../transaction';
 
 // transaction message with blockhash lifetime
 compileTransaction(
     null as unknown as BaseTransactionMessage &
         ITransactionMessageWithBlockhashLifetime &
         ITransactionMessageWithFeePayer,
-) satisfies Readonly<NewTransaction & TransactionWithLifetime>;
+) satisfies Readonly<Transaction & TransactionWithLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage &
         ITransactionMessageWithBlockhashLifetime &
         ITransactionMessageWithFeePayer,
-) satisfies Readonly<NewTransaction & TransactionWithBlockhashLifetime>;
+) satisfies Readonly<Transaction & TransactionWithBlockhashLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage &
         ITransactionMessageWithBlockhashLifetime &
@@ -38,25 +38,25 @@ compileTransaction(
 // transaction message with durable nonce lifetime
 compileTransaction(
     null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage & ITransactionMessageWithFeePayer,
-) satisfies Readonly<NewTransaction & TransactionWithLifetime>;
+) satisfies Readonly<Transaction & TransactionWithLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage & ITransactionMessageWithFeePayer,
-) satisfies Readonly<NewTransaction & TransactionWithDurableNonceLifetime>;
+) satisfies Readonly<Transaction & TransactionWithDurableNonceLifetime>;
 compileTransaction(
     null as unknown as BaseTransactionMessage & IDurableNonceTransactionMessage & ITransactionMessageWithFeePayer,
 ).lifetimeConstraint.nonce satisfies NewNonce;
 
 // transaction message with unknown lifetime
 compileTransaction(null as unknown as CompilableTransactionMessage) satisfies Readonly<
-    NewTransaction & TransactionWithLifetime
+    Transaction & TransactionWithLifetime
 >;
 // @ts-expect-error not known to have blockhash lifetime
 compileTransaction(null as unknown as CompilableTransactionMessage) satisfies Readonly<
-    NewTransaction & TransactionBlockhashLifetime
+    Transaction & TransactionBlockhashLifetime
 >;
 // @ts-expect-error not known to have durable nonce lifetime
 compileTransaction(null as unknown as CompilableTransactionMessage) satisfies Readonly<
-    NewTransaction & TransactionDurableNonceLifetime
+    Transaction & TransactionDurableNonceLifetime
 >;
 compileTransaction(null as unknown as CompilableTransactionMessage).lifetimeConstraint satisfies
     | { blockhash: Blockhash }

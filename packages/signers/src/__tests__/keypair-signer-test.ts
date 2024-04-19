@@ -3,7 +3,7 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { address, getAddressFromPublicKey } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { generateKeyPair, SignatureBytes, signBytes } from '@solana/keys';
-import { NewTransaction, partiallySignTransaction } from '@solana/transactions';
+import { partiallySignTransaction, Transaction } from '@solana/transactions';
 
 import {
     assertIsKeyPairSigner,
@@ -144,7 +144,7 @@ describe('createSignerFromKeyPair', () => {
         const mySigner = await createSignerFromKeyPair(myKeyPair);
 
         // And given we have a couple of mock transactions to sign.
-        const mockTransactions = [{} as NewTransaction, {} as NewTransaction];
+        const mockTransactions = [{} as Transaction, {} as Transaction];
 
         // And given we mock the next two calls of the partiallySignTransaction function.
         const mockSignatures = [new Uint8Array([101, 101, 101]), new Uint8Array([201, 201, 201])] as SignatureBytes[];

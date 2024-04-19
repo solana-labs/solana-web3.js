@@ -15,23 +15,23 @@ import {
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
 } from './lifetime';
-import { NewTransaction, OrderedMap, TransactionMessageBytes } from './transaction';
+import { OrderedMap, Transaction, TransactionMessageBytes } from './transaction';
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage & ITransactionMessageWithBlockhashLifetime,
-): Readonly<NewTransaction & TransactionWithBlockhashLifetime>;
+): Readonly<Transaction & TransactionWithBlockhashLifetime>;
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage & IDurableNonceTransactionMessage,
-): Readonly<NewTransaction & TransactionWithDurableNonceLifetime>;
+): Readonly<Transaction & TransactionWithDurableNonceLifetime>;
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage,
-): Readonly<NewTransaction & TransactionWithLifetime>;
+): Readonly<Transaction & TransactionWithLifetime>;
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage,
-): Readonly<NewTransaction & TransactionWithLifetime> {
+): Readonly<Transaction & TransactionWithLifetime> {
     const compiledMessage = newCompileTransactionMessage(transactionMessage);
     const messageBytes = getCompiledTransactionMessageEncoder().encode(
         compiledMessage,
@@ -56,7 +56,7 @@ export function compileTransaction(
         };
     }
 
-    const transaction: NewTransaction & TransactionWithLifetime = {
+    const transaction: Transaction & TransactionWithLifetime = {
         lifetimeConstraint,
         messageBytes: messageBytes as TransactionMessageBytes,
         signatures: Object.freeze(signatures),

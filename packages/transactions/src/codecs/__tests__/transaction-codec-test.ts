@@ -5,7 +5,7 @@ import { ReadonlyUint8Array, VariableSizeDecoder, VariableSizeEncoder } from '@s
 import { SOLANA_ERROR__TRANSACTION__MESSAGE_SIGNATURES_MISMATCH, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 
-import { NewTransaction, TransactionMessageBytes } from '../../transaction';
+import { Transaction, TransactionMessageBytes } from '../../transaction';
 import { getSignaturesEncoder } from '../signatures-encoder';
 import { getTransactionCodec, getTransactionDecoder, getTransactionEncoder } from '../transaction-codec';
 
@@ -13,7 +13,7 @@ jest.mock('../signatures-encoder');
 
 describe.each([getTransactionEncoder, getTransactionCodec])('Transaction encoder %p', encoderFactory => {
     const mockEncodedSignatures = new Uint8Array([1, 2, 3]);
-    let encoder: VariableSizeEncoder<NewTransaction>;
+    let encoder: VariableSizeEncoder<Transaction>;
     beforeEach(() => {
         (getSignaturesEncoder as jest.Mock).mockReturnValue({
             getSizeFromValue: jest.fn().mockReturnValue(mockEncodedSignatures.length),
@@ -28,7 +28,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction encoder
     it('should encode the transaction correctly', () => {
         const messageBytes = new Uint8Array([4, 5, 6]) as ReadonlyUint8Array as TransactionMessageBytes;
 
-        const transaction: NewTransaction = {
+        const transaction: Transaction = {
             messageBytes,
             signatures: {},
         };
@@ -45,7 +45,7 @@ describe.each([getTransactionEncoder, getTransactionCodec])('Transaction encoder
 });
 
 describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder %p', decoderFactory => {
-    let decoder: VariableSizeDecoder<NewTransaction>;
+    let decoder: VariableSizeDecoder<Transaction>;
     beforeEach(() => {
         (getSignaturesEncoder as jest.Mock).mockReturnValue({
             getSizeFromValue: jest.fn().mockReturnValue(0),
@@ -87,7 +87,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder
                 ...messageBytes,
             ]);
 
-            const expectedTransaction: NewTransaction = {
+            const expectedTransaction: Transaction = {
                 messageBytes: messageBytes,
                 signatures: {
                     [address]: signature,
@@ -126,7 +126,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder
             ]);
 
             const address = 'k7FaK87WHGVXzkaoHb7CdVPgkKDQhZ29VLDeBVbDfYn' as Address;
-            const expectedTransaction: NewTransaction = {
+            const expectedTransaction: Transaction = {
                 messageBytes: messageBytes,
                 signatures: {
                     [address]: null,
@@ -215,7 +215,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder
                 ...messageBytes,
             ]);
 
-            const expectedTransaction: NewTransaction = {
+            const expectedTransaction: Transaction = {
                 messageBytes: messageBytes,
                 signatures: {
                     [address1]: signature1,
@@ -258,7 +258,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder
                 ...messageBytes,
             ]);
 
-            const expectedTransaction: NewTransaction = {
+            const expectedTransaction: Transaction = {
                 messageBytes: messageBytes,
                 signatures: {
                     [address1]: null,
@@ -301,7 +301,7 @@ describe.each([getTransactionDecoder, getTransactionCodec])('Transaction decoder
                 ...messageBytes,
             ]);
 
-            const expectedTransaction: NewTransaction = {
+            const expectedTransaction: Transaction = {
                 messageBytes: messageBytes,
                 signatures: {
                     [address1]: signature1,

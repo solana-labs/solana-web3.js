@@ -4,7 +4,7 @@ import {
     IDurableNonceTransactionMessage,
     ITransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
-import { FullySignedTransaction, NewTransaction } from '@solana/transactions';
+import { FullySignedTransaction, Transaction } from '@solana/transactions';
 import {
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
@@ -26,7 +26,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         ITransactionMessageWithBlockhashLifetime;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        Readonly<NewTransaction & TransactionWithBlockhashLifetime>
+        Readonly<Transaction & TransactionWithBlockhashLifetime>
     >;
 }
 
@@ -35,7 +35,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         IDurableNonceTransactionMessage;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        Readonly<NewTransaction & TransactionWithDurableNonceLifetime>
+        Readonly<Transaction & TransactionWithDurableNonceLifetime>
     >;
 }
 
@@ -43,7 +43,7 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     // [partiallySignTransactionMessageWithSigners]: returns a transaction with an unknown lifetime
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners;
     partiallySignTransactionMessageWithSigners(transactionMessage) satisfies Promise<
-        Readonly<NewTransaction & TransactionWithLifetime>
+        Readonly<Transaction & TransactionWithLifetime>
     >;
 }
 

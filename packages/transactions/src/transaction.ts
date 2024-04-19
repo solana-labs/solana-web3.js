@@ -8,7 +8,7 @@ export type TransactionMessageBytesBase64 = string & { readonly __serializedMess
 export type OrderedMap<K extends string, V> = Record<K, V>;
 export type SignaturesMap = OrderedMap<Address, SignatureBytes | null>;
 
-export type NewTransaction = Readonly<{
+export type Transaction = Readonly<{
     messageBytes: TransactionMessageBytes;
     signatures: SignaturesMap;
 }>;

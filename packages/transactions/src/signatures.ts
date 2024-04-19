@@ -9,15 +9,15 @@ import {
 } from '@solana/errors';
 import { Signature, SignatureBytes, signBytes } from '@solana/keys';
 
-import { NewTransaction } from './transaction';
+import { Transaction } from './transaction';
 
-export interface FullySignedTransaction extends NewTransaction {
+export interface FullySignedTransaction extends Transaction {
     readonly __brand: unique symbol;
 }
 
 let base58Decoder: Decoder<string> | undefined;
 
-export function getSignatureFromTransaction(transaction: NewTransaction): Signature {
+export function getSignatureFromTransaction(transaction: Transaction): Signature {
     if (!base58Decoder) base58Decoder = getBase58Decoder();
 
     // We have ordered signatures from the compiled message accounts
@@ -34,7 +34,7 @@ function uint8ArraysEqual(arr1: Uint8Array, arr2: Uint8Array) {
     return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
 }
 
-export async function partiallySignTransaction<T extends NewTransaction>(
+export async function partiallySignTransaction<T extends Transaction>(
     keyPairs: CryptoKeyPair[],
     transaction: T,
 ): Promise<T> {
@@ -92,7 +92,7 @@ export async function partiallySignTransaction<T extends NewTransaction>(
     });
 }
 
-export async function signTransaction<T extends NewTransaction>(
+export async function signTransaction<T extends Transaction>(
     keyPairs: CryptoKeyPair[],
     transaction: T,
 ): Promise<FullySignedTransaction & T> {
@@ -103,7 +103,7 @@ export async function signTransaction<T extends NewTransaction>(
 }
 
 export function assertTransactionIsFullySigned(
-    transaction: NewTransaction,
+    transaction: Transaction,
 ): asserts transaction is FullySignedTransaction {
     const missingSigs: Address[] = [];
     Object.entries(transaction.signatures).forEach(([address, signatureBytes]) => {
