@@ -12,7 +12,7 @@ import type {
     TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
-import { NewTransactionVersion } from '@solana/transaction-messages';
+import { TransactionVersion } from '@solana/transaction-messages';
 
 import { GetBlockApi } from '../getBlock';
 
@@ -292,7 +292,7 @@ async () => {
             }>[];
             signatures: readonly Base58EncodedBytes[];
         };
-        version: NewTransactionVersion;
+        version: TransactionVersion;
     };
 
     // Fifth overload
@@ -543,7 +543,7 @@ async () => {
                   }>)
             | null;
         transaction: Base58EncodedDataResponse;
-        version: NewTransactionVersion;
+        version: TransactionVersion;
     };
 
     // Ninth overload
@@ -767,7 +767,7 @@ async () => {
                   }>)
             | null;
         transaction: Base64EncodedDataResponse;
-        version: NewTransactionVersion;
+        version: TransactionVersion;
     };
 
     // Thirteenth overload
@@ -991,7 +991,7 @@ async () => {
                 }>[];
             }>;
         };
-        version: NewTransactionVersion;
+        version: TransactionVersion;
     };
 
     // Seventeenth overload
@@ -1139,7 +1139,7 @@ async () => {
     type ExpectedTransactionForFullJsonVersioned = {
         meta: (ExpectedMetaForFullJsonBase & ExpectedMetaForFullJsonLoadedAddresses) | null;
         transaction: ExpectedTransactionForFullJsonBase;
-        version: NewTransactionVersion;
+        version: TransactionVersion;
     };
 
     // Twenty-first overload

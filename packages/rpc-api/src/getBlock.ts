@@ -13,7 +13,7 @@ import type {
     U64UnsafeBeyond2Pow53Minus1,
     UnixTimestamp,
 } from '@solana/rpc-types';
-import type { NewTransactionVersion } from '@solana/transaction-messages';
+import type { TransactionVersion } from '@solana/transaction-messages';
 
 // API response types
 
@@ -60,7 +60,7 @@ type GetBlockEncoding = 'base58' | 'base64' | 'json' | 'jsonParsed';
 // This will error if the block contains any transactions with a version greater than "legacy" (code -32015).
 // - Also, If `maxSupportedTransactionVersion` is not provided, the `version` field of each transaction is omitted.
 // - These rules apply to both "accounts" and "full" transaction details.
-type GetBlockMaxSupportedTransactionVersion = Exclude<NewTransactionVersion, 'legacy'>;
+type GetBlockMaxSupportedTransactionVersion = Exclude<TransactionVersion, 'legacy'>;
 
 export interface GetBlockApi extends RpcApiMethods {
     /**

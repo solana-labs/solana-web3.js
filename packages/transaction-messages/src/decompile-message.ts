@@ -22,7 +22,7 @@ import {
 } from './durable-nonce';
 import { setTransactionMessageFeePayer } from './fee-payer';
 import { appendTransactionMessageInstruction } from './instructions';
-import { NewTransactionVersion } from './transaction-message';
+import { TransactionVersion } from './transaction-message';
 
 function getAccountMetas(message: CompiledTransactionMessage): IAccountMeta[] {
     const { header } = message;
@@ -219,7 +219,7 @@ export function decompileTransactionMessage(
     );
 
     return pipe(
-        createTransactionMessage({ version: compiledTransactionMessage.version as NewTransactionVersion }),
+        createTransactionMessage({ version: compiledTransactionMessage.version as TransactionVersion }),
         tx => setTransactionMessageFeePayer(feePayer, tx),
         tx =>
             instructions.reduce((acc, instruction) => {

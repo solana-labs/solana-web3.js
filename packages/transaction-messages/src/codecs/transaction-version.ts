@@ -8,11 +8,11 @@ import {
 } from '@solana/codecs-core';
 import { SOLANA_ERROR__TRANSACTION__VERSION_NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
-import { NewTransactionVersion } from '../transaction-message';
+import { TransactionVersion } from '../transaction-message';
 
 const VERSION_FLAG_MASK = 0x80;
 
-export function getTransactionVersionEncoder(): VariableSizeEncoder<NewTransactionVersion> {
+export function getTransactionVersionEncoder(): VariableSizeEncoder<TransactionVersion> {
     return createEncoder({
         getSizeFromValue: value => (value === 'legacy' ? 0 : 1),
         maxSize: 1,
@@ -31,7 +31,7 @@ export function getTransactionVersionEncoder(): VariableSizeEncoder<NewTransacti
     });
 }
 
-export function getTransactionVersionDecoder(): VariableSizeDecoder<NewTransactionVersion> {
+export function getTransactionVersionDecoder(): VariableSizeDecoder<TransactionVersion> {
     return createDecoder({
         maxSize: 1,
         read: (bytes, offset) => {
@@ -40,13 +40,13 @@ export function getTransactionVersionDecoder(): VariableSizeDecoder<NewTransacti
                 // No version flag set; it's a legacy (unversioned) transaction.
                 return ['legacy', offset];
             } else {
-                const version = (firstByte ^ VERSION_FLAG_MASK) as NewTransactionVersion;
+                const version = (firstByte ^ VERSION_FLAG_MASK) as TransactionVersion;
                 return [version, offset + 1];
             }
         },
     });
 }
 
-export function getTransactionVersionCodec(): VariableSizeCodec<NewTransactionVersion> {
+export function getTransactionVersionCodec(): VariableSizeCodec<TransactionVersion> {
     return combineCodec(getTransactionVersionEncoder(), getTransactionVersionDecoder());
 }
