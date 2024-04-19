@@ -4,7 +4,7 @@ import { Address } from '@solana/addresses';
 import { AccountRole, IInstruction, ReadonlySignerAccount, WritableAccount } from '@solana/instructions';
 import type { Blockhash } from '@solana/rpc-types';
 
-import { ITransactionMessageWithBlockhashLifetime } from '../blockhash';
+import { TransactionMessageWithBlockhashLifetime } from '../blockhash';
 import {
     assertIsDurableNonceTransactionMessage,
     IDurableNonceTransactionMessage,
@@ -128,7 +128,7 @@ describe('assertIsDurableNonceTransactionMessage()', () => {
                 lifetimeConstraint: {
                     blockhash: '123' as Blockhash,
                     lastValidBlockHeight: 123n,
-                } as ITransactionMessageWithBlockhashLifetime['lifetimeConstraint'],
+                } as TransactionMessageWithBlockhashLifetime['lifetimeConstraint'],
             } as BaseTransactionMessage);
         }).toThrow();
     });

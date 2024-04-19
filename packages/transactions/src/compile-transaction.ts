@@ -5,7 +5,7 @@ import {
     getCompiledTransactionMessageEncoder,
     IDurableNonceTransactionMessage,
     isTransactionMessageWithBlockhashLifetime,
-    ITransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
 
 import {
@@ -16,7 +16,7 @@ import {
 import { SignaturesMap, Transaction, TransactionMessageBytes } from './transaction';
 
 export function compileTransaction(
-    transactionMessage: CompilableTransactionMessage & ITransactionMessageWithBlockhashLifetime,
+    transactionMessage: CompilableTransactionMessage & TransactionMessageWithBlockhashLifetime,
 ): Readonly<Transaction & TransactionWithBlockhashLifetime>;
 
 export function compileTransaction(

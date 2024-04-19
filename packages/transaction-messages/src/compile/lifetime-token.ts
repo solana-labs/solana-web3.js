@@ -1,9 +1,9 @@
-import { IDurableNonceTransactionMessage, ITransactionMessageWithBlockhashLifetime } from '../index';
+import { IDurableNonceTransactionMessage, TransactionMessageWithBlockhashLifetime } from '../index';
 
 export function getCompiledLifetimeToken(
     lifetimeConstraint: (
         | IDurableNonceTransactionMessage
-        | ITransactionMessageWithBlockhashLifetime
+        | TransactionMessageWithBlockhashLifetime
     )['lifetimeConstraint'],
 ): string {
     if ('nonce' in lifetimeConstraint) {

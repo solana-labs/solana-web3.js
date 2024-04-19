@@ -5,8 +5,8 @@ import type { Blockhash } from '@solana/rpc-types';
 
 import {
     assertIsTransactionMessageWithBlockhashLifetime,
-    ITransactionMessageWithBlockhashLifetime,
     setTransactionMessageLifetimeUsingBlockhash,
+    TransactionMessageWithBlockhashLifetime,
 } from '../blockhash';
 import { BaseTransactionMessage } from '../transaction-message';
 
@@ -108,7 +108,7 @@ describe('setTransactionMessageLifetimeUsingBlockhash', () => {
         expect(txWithBlockhashLifetimeConstraint).toHaveProperty('lifetimeConstraint', BLOCKHASH_CONSTRAINT_A);
     });
     describe('given a transaction with a blockhash lifetime already set', () => {
-        let txWithBlockhashLifetimeConstraint: BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime;
+        let txWithBlockhashLifetimeConstraint: BaseTransactionMessage & TransactionMessageWithBlockhashLifetime;
         beforeEach(() => {
             txWithBlockhashLifetimeConstraint = {
                 ...baseTx,

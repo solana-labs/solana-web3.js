@@ -1,6 +1,6 @@
 import { Address } from '@solana/addresses';
 
-import { ITransactionMessageWithBlockhashLifetime } from '../../blockhash';
+import { TransactionMessageWithBlockhashLifetime } from '../../blockhash';
 import { CompilableTransactionMessage } from '../../compilable-transaction-message';
 import { getCompiledAddressTableLookups } from '../address-table-lookups';
 import { getCompiledMessageHeader } from '../header';
@@ -16,7 +16,7 @@ jest.mock('../lifetime-token');
 jest.mock('../static-accounts');
 
 const MOCK_LIFETIME_CONSTRAINT =
-    'SOME_CONSTRAINT' as unknown as ITransactionMessageWithBlockhashLifetime['lifetimeConstraint'];
+    'SOME_CONSTRAINT' as unknown as TransactionMessageWithBlockhashLifetime['lifetimeConstraint'];
 
 describe('compileTransactionMessage', () => {
     let baseTx: CompilableTransactionMessage;

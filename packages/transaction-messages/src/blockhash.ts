@@ -9,13 +9,13 @@ type BlockhashLifetimeConstraint = Readonly<{
     lastValidBlockHeight: bigint;
 }>;
 
-export interface ITransactionMessageWithBlockhashLifetime {
+export interface TransactionMessageWithBlockhashLifetime {
     readonly lifetimeConstraint: BlockhashLifetimeConstraint;
 }
 
 export function isTransactionMessageWithBlockhashLifetime(
-    transaction: BaseTransactionMessage | (BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime),
-): transaction is BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime {
+    transaction: BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithBlockhashLifetime),
+): transaction is BaseTransactionMessage & TransactionMessageWithBlockhashLifetime {
     const lifetimeConstraintShapeMatches =
         'lifetimeConstraint' in transaction &&
         typeof transaction.lifetimeConstraint.blockhash === 'string' &&
@@ -30,8 +30,8 @@ export function isTransactionMessageWithBlockhashLifetime(
 }
 
 export function assertIsTransactionMessageWithBlockhashLifetime(
-    transaction: BaseTransactionMessage | (BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime),
-): asserts transaction is BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime {
+    transaction: BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithBlockhashLifetime),
+): asserts transaction is BaseTransactionMessage & TransactionMessageWithBlockhashLifetime {
     if (!isTransactionMessageWithBlockhashLifetime(transaction)) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__EXPECTED_BLOCKHASH_LIFETIME);
     }
@@ -42,18 +42,18 @@ export function setTransactionMessageLifetimeUsingBlockhash<
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction,
-): ITransactionMessageWithBlockhashLifetime & Omit<TTransaction, 'lifetimeConstraint'>;
+): Omit<TTransaction, 'lifetimeConstraint'> & TransactionMessageWithBlockhashLifetime;
 
 export function setTransactionMessageLifetimeUsingBlockhash<
-    TTransaction extends BaseTransactionMessage | (BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime),
+    TTransaction extends BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithBlockhashLifetime),
 >(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
     transaction: TTransaction,
-): ITransactionMessageWithBlockhashLifetime & TTransaction;
+): TransactionMessageWithBlockhashLifetime & TTransaction;
 
 export function setTransactionMessageLifetimeUsingBlockhash(
     blockhashLifetimeConstraint: BlockhashLifetimeConstraint,
-    transaction: BaseTransactionMessage | (BaseTransactionMessage & ITransactionMessageWithBlockhashLifetime),
+    transaction: BaseTransactionMessage | (BaseTransactionMessage & TransactionMessageWithBlockhashLifetime),
 ) {
     if (
         'lifetimeConstraint' in transaction &&

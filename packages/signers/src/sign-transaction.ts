@@ -3,7 +3,7 @@ import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
     IDurableNonceTransactionMessage,
-    ITransactionMessageWithBlockhashLifetime,
+    TransactionMessageWithBlockhashLifetime,
 } from '@solana/transaction-messages';
 import {
     assertTransactionIsFullySigned,
@@ -34,8 +34,8 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
  */
 export async function partiallySignTransactionMessageWithSigners<
     TTransactionMessage extends CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime = CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime,
+        TransactionMessageWithBlockhashLifetime = CompilableTransactionMessageWithSigners &
+        TransactionMessageWithBlockhashLifetime,
 >(
     transactionMessage: TTransactionMessage,
     config?: { abortSignal?: AbortSignal },
@@ -83,8 +83,8 @@ export async function partiallySignTransactionMessageWithSigners<
  */
 export async function signTransactionMessageWithSigners<
     TTransactionMessage extends CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime = CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithBlockhashLifetime,
+        TransactionMessageWithBlockhashLifetime = CompilableTransactionMessageWithSigners &
+        TransactionMessageWithBlockhashLifetime,
 >(
     transactionMessage: TTransactionMessage,
     config?: { abortSignal?: AbortSignal },
