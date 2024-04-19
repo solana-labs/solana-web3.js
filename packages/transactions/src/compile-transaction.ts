@@ -1,6 +1,4 @@
-import { Address } from '@solana/addresses';
 import { ReadonlyUint8Array } from '@solana/codecs-core';
-import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
     getCompiledTransactionMessageEncoder,
@@ -15,7 +13,7 @@ import {
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
 } from './lifetime';
-import { OrderedMap, Transaction, TransactionMessageBytes } from './transaction';
+import { SignaturesMap, Transaction, TransactionMessageBytes } from './transaction';
 
 export function compileTransaction(
     transactionMessage: CompilableTransactionMessage & ITransactionMessageWithBlockhashLifetime,
@@ -38,7 +36,7 @@ export function compileTransaction(
     ) as ReadonlyUint8Array as TransactionMessageBytes;
 
     const transactionSigners = compiledMessage.staticAccounts.slice(0, compiledMessage.header.numSignerAccounts);
-    const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+    const signatures: SignaturesMap = {};
     for (const signerAddress of transactionSigners) {
         signatures[signerAddress] = null;
     }

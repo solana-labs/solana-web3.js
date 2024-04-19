@@ -16,14 +16,14 @@ import {
     partiallySignTransaction,
     signTransaction,
 } from '../signatures';
-import { OrderedMap, Transaction, TransactionMessageBytes } from '../transaction';
+import { SignaturesMap, Transaction, TransactionMessageBytes } from '../transaction';
 
 jest.mock('@solana/addresses');
 jest.mock('@solana/keys');
 
 describe('getSignatureFromTransaction', () => {
     it("returns the signature associated with a transaction's fee payer", () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         signatures['123' as Address] = new Uint8Array(new Array(64).fill(9)) as SignatureBytes;
         const transactionWithFeePayerSignature: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -405,7 +405,7 @@ describe('assertTransactionIsFullySigned', () => {
     const mockSignatureB = new Uint8Array(1) as SignatureBytes;
 
     it('throws if the transaction has no signature for the fee payer', () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         signatures[mockPublicKeyAddressA] = null;
         const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -420,7 +420,7 @@ describe('assertTransactionIsFullySigned', () => {
     });
 
     it('throws all missing signers if the transaction has no signature for multiple signers', () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         signatures[mockPublicKeyAddressA] = null;
         signatures[mockPublicKeyAddressB] = null;
         const transaction: Transaction = {
@@ -436,7 +436,7 @@ describe('assertTransactionIsFullySigned', () => {
     });
 
     it('does not throw if the transaction is signed by its only signer', () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         signatures[mockPublicKeyAddressA] = mockSignatureA;
         const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
@@ -447,7 +447,7 @@ describe('assertTransactionIsFullySigned', () => {
     });
 
     it('does not throw if the transaction is signed by all its signers', () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         signatures[mockPublicKeyAddressA] = mockSignatureA;
         signatures[mockPublicKeyAddressB] = mockSignatureB;
         const transaction: Transaction = {
@@ -459,7 +459,7 @@ describe('assertTransactionIsFullySigned', () => {
     });
 
     it('does not throw if the transaction has no signatures', () => {
-        const signatures: OrderedMap<Address, SignatureBytes | null> = {};
+        const signatures: SignaturesMap = {};
         const transaction: Transaction = {
             messageBytes: new Uint8Array() as ReadonlyUint8Array as TransactionMessageBytes,
             signatures,
