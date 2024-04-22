@@ -521,6 +521,26 @@ export const instructionTypeDefs = /* GraphQL */ `
         mint: Account
     }
 
+    """
+    SplToken-2022: InitializeMetadataPointer instruction
+    """
+    type SplTokenInitializeMetadataPointerInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        metadataAddress: Account
+        mint: Account
+    }
+
+    """
+    SplToken-2022: UpdateMetadataPointer instruction
+    """
+    type SplTokenUpdateMetadataPointerInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        metadataAddress: Account
+        mint: Account
+    }
+
     # TODO: Extensions!
     # ...
 
