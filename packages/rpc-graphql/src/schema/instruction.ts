@@ -511,29 +511,38 @@ export const instructionTypeDefs = /* GraphQL */ `
         mint: Account
         newAuthority: Account
     }
-    
+
     """
     Token Extension 2022: TransferFee
     """
     type TransferFeeExtension {
-       mint: String,
-       transferFeeBasisPoints: INT,
-       maximumFee: INT,
-       transferFeeConfigAuthority: String,
-       withdrawWithheldAuthority: String,
-       source: String,
-       destination: String,
-       tokenAmount: TokenAmount,
-       feeAmount: TokenAmount,
-       signers: [Address],
-       authority: String,
-       multisigWithdrawWithheldAuthority: String,
-       feeRecipient: String,
-       sourceAccounts: [String],
-       multisigtransferFeeConfigAuthority: String,
-       multisigAuthority: String,
+        mint: String
+        transferFeeBasisPoints: INT
+        maximumFee: INT
+        transferFeeConfigAuthority: String
+        withdrawWithheldAuthority: String
+        source: String
+        destination: String
+        tokenAmount: TokenAmount
+        feeAmount: TokenAmount
+        signers: [Address]
+        authority: String
+        multisigWithdrawWithheldAuthority: String
+        feeRecipient: String
+        sourceAccounts: [String]
+        multisigtransferFeeConfigAuthority: String
+        multisigAuthority: String
     }
 
+    type Reallocate {
+        account: String
+        payer: String
+        systemProgram: String
+        extensionTypes: [String]
+        owner: String
+        signers: [String]
+        multisigOwner: String
+    }
 
     # TODO: Extensions!
     # - TransferFeeExtension
