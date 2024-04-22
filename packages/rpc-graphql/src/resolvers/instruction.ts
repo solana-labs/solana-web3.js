@@ -208,6 +208,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeMetadataPointerInstruction: {
+        authority: resolveAccount('authority'),
+        metadataAddress: resolveAccount('metadataAddress'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeMint2Instruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
@@ -281,6 +286,11 @@ export const instructionResolvers = {
         source: resolveAccount('source'),
     },
     SplTokenUiAmountToAmountInstruction: {
+        mint: resolveAccount('mint'),
+    },
+    SplTokenUpdateMetadataPointerInstruction: {
+        authority: resolveAccount('authority'),
+        metadataAddress: resolveAccount('metadataAddress'),
         mint: resolveAccount('mint'),
     },
     StakeAuthorizeCheckedInstruction: {
@@ -530,6 +540,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializePermanentDelegate') {
                         return 'SplTokenInitializePermanentDelegateInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeMetadataPointer') {
+                        return 'SplTokenInitializeMetadataPointerInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateMetadataPointer') {
+                        return 'SplTokenUpdateMetadataPointerInstruction';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
