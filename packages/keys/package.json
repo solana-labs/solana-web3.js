@@ -81,6 +81,6 @@
         ]
     },
     "devDependencies": {
-        "tinybench": "^2.6.0"
+        "tinybench": "^2.8.0"
     }
 }

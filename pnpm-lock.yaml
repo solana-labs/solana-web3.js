@@ -227,8 +227,8 @@ importers:
         specifier: workspace:*
         version: link:../text-encoding-impl
       tinybench:
-        specifier: ^2.6.0
-        version: 2.6.0
+        specifier: ^2.8.0
+        version: 2.8.0
 
   packages/compat:
     dependencies:
@@ -297,8 +297,8 @@ importers:
         version: link:../errors
     devDependencies:
       tinybench:
-        specifier: ^2.6.0
-        version: 2.6.0
+        specifier: ^2.8.0
+        version: 2.8.0
 
   packages/library:
     dependencies:
@@ -828,8 +828,8 @@ importers:
         version: 6.13.0
     devDependencies:
       tinybench:
-        specifier: ^2.6.0
-        version: 2.6.0
+        specifier: ^2.8.0
+        version: 2.8.0
       undici:
         specifier: ^6.13.0
         version: 6.13.0
@@ -12423,8 +12423,8 @@ packages:
       convert-hrtime: 5.0.0
     dev: true
 
-  /tinybench@2.6.0:
-    resolution: {integrity: sha512-N8hW3PG/3aOoZAN5V/NSAEDz0ZixDSSt5b/a05iqtpgfLWMSVuCo7w0k2vVvEjdrIoeGqZzweX2WlyioNIHchA==}
+  /tinybench@2.8.0:
+    resolution: {integrity: sha512-1/eK7zUnIklz4JUUlL+658n58XO2hHLQfSk1Zf2LKieUjxidN16eKFEoDEfjHc3ohofSSqK3X5yO6VGb6iW8Lw==}
     dev: true
 
   /tmp@0.0.33:
