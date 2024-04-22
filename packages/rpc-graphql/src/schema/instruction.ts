@@ -504,7 +504,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
-    SplToken: InitializeMintCloseAuthority instruction
+    SplToken-2022: InitializeMintCloseAuthority instruction
     """
     type SplTokenInitializeMintCloseAuthorityInstruction implements TransactionInstruction {
         programId: Address
@@ -512,21 +512,17 @@ export const instructionTypeDefs = /* GraphQL */ `
         newAuthority: Account
     }
 
+    """
+    SplToken-2022: InitializePermanentDelegate instruction
+    """
+    type SplTokenInitializePermanentDelegateInstruction implements TransactionInstruction {
+        programId: Address
+        delegate: Account
+        mint: Account
+    }
+
     # TODO: Extensions!
-    # - TransferFeeExtension
-    # - ConfidentialTransferFeeExtension
-    # - DefaultAccountStateExtension
-    # - Reallocate
-    # - MemoTransferExtension
-    # - CreateNativeMint
-    # - InitializeNonTransferableMint
-    # - InterestBearingMintExtension
-    # - CpiGuardExtension
-    # - InitializePermanentDelegate
-    # - TransferHookExtension
-    # - ConfidentialTransferFeeExtension
-    # - WithdrawExcessLamports
-    # - MetadataPointerExtension
+    # ...
 
     type Lockup {
         custodian: Account

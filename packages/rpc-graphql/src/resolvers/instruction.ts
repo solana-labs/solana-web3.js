@@ -230,6 +230,10 @@ export const instructionResolvers = {
         multisig: resolveAccount('multisig'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializePermanentDelegateInstruction: {
+        delegate: resolveAccount('delegate'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
@@ -523,6 +527,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeMintCloseAuthority') {
                         return 'SplTokenInitializeMintCloseAuthorityInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializePermanentDelegate') {
+                        return 'SplTokenInitializePermanentDelegateInstruction';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
