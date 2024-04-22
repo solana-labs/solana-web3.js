@@ -517,8 +517,8 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type TransferFeeExtension {
         mint: String
-        transferFeeBasisPoints: INT
-        maximumFee: INT
+        transferFeeBasisPoints: Int
+        maximumFee: Int
         transferFeeConfigAuthority: String
         withdrawWithheldAuthority: String
         source: String
@@ -534,7 +534,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigAuthority: String
     }
 
-    type Reallocate {
+    type ReallocateExtension {
         account: String
         payer: String
         systemProgram: String
@@ -542,6 +542,14 @@ export const instructionTypeDefs = /* GraphQL */ `
         owner: String
         signers: [String]
         multisigOwner: String
+    }
+
+    type DefaultAccountStateExtension {
+        mint: String
+        accountState: String
+        freezeAuthority: String
+        multisigFreezeAuthority: String
+        signers: [String]
     }
 
     # TODO: Extensions!
