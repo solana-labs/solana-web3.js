@@ -17,6 +17,7 @@ import {
     mockTransactionMemo,
     mockTransactionSystem,
     mockTransactionToken,
+    mockTransactionToken2022AllExtensions,
     mockTransactionVote,
 } from './__setup__';
 
@@ -648,6 +649,95 @@ describe('transaction', () => {
                                                 },
                                             },
                                         ]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+        });
+        describe('token-2022 extensions', () => {
+            beforeEach(() => {
+                mockRpcTransport.mockResolvedValueOnce(mockTransactionToken2022AllExtensions);
+            });
+            it('initialize-mint-close-authority', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeMintCloseAuthorityInstruction {
+                                        mint {
+                                            address
+                                        }
+                                        newAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        newAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+            it('initialize-permanent-delegate', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializePermanentDelegateInstruction {
+                                        delegate {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        delegate: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                     },
                                 ]),
                             },
