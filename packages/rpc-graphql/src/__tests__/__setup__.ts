@@ -1390,6 +1390,313 @@ export const mockTransactionStake = {
 // There's a memo instruction in this one
 export const mockTransactionMemo = mockTransactionStake;
 
+export const mockTransactionToken2022AllExtensions = {
+    blockTime: 1713246023,
+    meta: {
+        computeUnitsConsumed: 41367,
+        err: null,
+        fee: 10000,
+        innerInstructions: [],
+        logMessages: ['REDACTED'],
+        postBalances: [99996921345480, 7078320, 1, 1, 1009200, 1141440],
+        postTokenBalances: [],
+        preBalances: [99996928433800, 0, 1, 1, 1009200, 1141440],
+        preTokenBalances: [],
+        rewards: [],
+        status: { Ok: null },
+    },
+    slot: 6717,
+    transaction: {
+        message: {
+            accountKeys: [
+                {
+                    pubkey: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                    signer: true,
+                    source: 'transaction',
+                    writable: true,
+                },
+                {
+                    pubkey: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                    signer: true,
+                    source: 'transaction',
+                    writable: true,
+                },
+                {
+                    pubkey: '11111111111111111111111111111111',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+                {
+                    pubkey: 'ComputeBudget111111111111111111111111111111',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+                {
+                    pubkey: 'SysvarRent111111111111111111111111111111111',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+                {
+                    pubkey: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    signer: false,
+                    source: 'transaction',
+                    writable: false,
+                },
+            ],
+            instructions: [
+                // Initializing Mint Extensions.
+                {
+                    parsed: {
+                        info: {
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            newAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'initializeMintCloseAuthority',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            delegate: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializePermanentDelegate',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            rate: 5,
+                            rateAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'initializeInterestBearingConfig',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: { mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ' },
+                        type: 'initializeNonTransferableMint',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            accountState: 'initialized',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeDefaultAccountState',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            maximumFee: 11,
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            transferFeeBasisPoints: 10,
+                            transferFeeConfigAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            withdrawWithheldAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'initializeTransferFeeConfig',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            auditorElgamalPubkey: null,
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            autoApproveNewAccounts: true,
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeConfidentialTransferMint',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                // TODO: `--enable-freeze`. Not supported by `jsonParsed` yet.
+                {
+                    accounts: ['FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ'],
+                    data: 'FQsaEAbK2543un21hNdSBkRnUxPtWEMrLCqSTL1pH7ks8vxEus7Wudc96rrUGi6vSfBuzo9BGZFLdAwNy2BhwjjHcF',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            programId: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeTransferHook',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            metadataAddress: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeMetadataPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            groupAddress: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeGroupPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            memberAddress: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'initializeGroupMemberPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                // Updating Mint Extension pointers.
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            metadataAddress: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'updateMetadataPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            groupAddress: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'updateGroupPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            authority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            memberAddress: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'updateGroupMemberPointer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                // Initializing Account Extensions.
+                {
+                    parsed: {
+                        info: { account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d' },
+                        type: 'initializeImmutableOwner',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                // TODO (more) ...
+                // Toggling Account Extensions.
+                {
+                    parsed: {
+                        info: {
+                            account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            owner: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'enableRequiredMemoTransfers',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            owner: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'enableCpiGuard',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            decryptableZeroBalance: 'o1O7rQmIqYJpoIuTj7d7dv+XvY5jvyFN9xs9oVO3sYH4/RBK',
+                            maximumPendingBalanceCreditCounter: 65536,
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            multisigOwner: 'Sysvar1nstructions1111111111111111111111111',
+                            signers: ['2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB'],
+                        },
+                        type: 'configureConfidentialTransferAccount',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                // TODO (more) ...
+            ],
+            recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
+        },
+        signatures: [
+            '3Td5GvkFeAN43v2w1dP4RbuACWKWXgQE5DBHSyr6iGCGfjR4BUhmGoFiUsM3PauyaLMRTZN6RMjkbmdwawJy8UY5',
+            'KeEuFvtCTWjsC1kX2GChA5PZnjhfvXnQgigcSnbFoSsnE1cvEyNd8NVTgyJHqrusWhesR29z4EKwuF5xVFPyhEK',
+        ],
+    },
+};
+
 export const mockTransactionVote = {
     blockTime: 1699617237,
     meta: {
