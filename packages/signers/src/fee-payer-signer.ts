@@ -11,7 +11,7 @@ export interface ITransactionMessageWithFeePayerSigner<
     readonly feePayerSigner: TSigner;
 }
 
-export function setTransactionFeePayerSigner<
+export function setTransactionMessageFeePayerSigner<
     TFeePayerAddress extends string,
     TTransactionMessage extends BaseTransactionMessage,
 >(

@@ -4,12 +4,13 @@ import {
     TransactionMessageWithBlockhashLifetime,
     TransactionMessageWithDurableNonceLifetime,
 } from '@solana/transaction-messages';
-import { FullySignedTransaction, Transaction } from '@solana/transactions';
 import {
+    FullySignedTransaction,
+    Transaction,
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
-} from '@solana/transactions/dist/types/lifetime';
+} from '@solana/transactions';
 
 import { ITransactionMessageWithSigners } from '../account-signer-meta';
 import {

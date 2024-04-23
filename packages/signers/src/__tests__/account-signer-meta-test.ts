@@ -2,7 +2,7 @@ import { Address } from '@solana/addresses';
 import { createTransactionMessage } from '@solana/transaction-messages';
 
 import { getSignersFromInstruction, getSignersFromTransactionMessage } from '../account-signer-meta';
-import { setTransactionFeePayerSigner } from '../fee-payer-signer';
+import { setTransactionMessageFeePayerSigner } from '../fee-payer-signer';
 import {
     createMockInstructionWithSigners,
     createMockTransactionMessageWithSigners,
@@ -60,7 +60,10 @@ describe('getSignersFromTransactionMessage', () => {
     it('extracts the fee payer signer of the provided transaction', () => {
         // Given a transaction with a signer fee payer.
         const feePayerSigner = createMockTransactionPartialSigner('1111' as Address);
-        const transaction = setTransactionFeePayerSigner(feePayerSigner, createTransactionMessage({ version: 0 }));
+        const transaction = setTransactionMessageFeePayerSigner(
+            feePayerSigner,
+            createTransactionMessage({ version: 0 }),
+        );
 
         // When we extract the signers from the transaction.
         const extractedSigners = getSignersFromTransactionMessage(transaction);
