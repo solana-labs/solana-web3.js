@@ -3,11 +3,11 @@ import '@solana/test-matchers/toBeFrozenObject';
 import { Address } from '@solana/addresses';
 import { BaseTransactionMessage, ITransactionMessageWithFeePayer } from '@solana/transaction-messages';
 
-import { ITransactionMessageWithFeePayerSigner, setTransactionFeePayerSigner } from '../fee-payer-signer';
+import { ITransactionMessageWithFeePayerSigner, setTransactionMessageFeePayerSigner } from '../fee-payer-signer';
 import { TransactionSigner } from '../transaction-signer';
 import { createMockTransactionPartialSigner } from './__setup__';
 
-describe('setTransactionFeePayerSigner', () => {
+describe('setTransactionMessageFeePayerSigner', () => {
     let feePayerSignerA: TransactionSigner;
     let feePayerSignerB: TransactionSigner;
     let baseTx: BaseTransactionMessage;
@@ -17,7 +17,7 @@ describe('setTransactionFeePayerSigner', () => {
         feePayerSignerB = createMockTransactionPartialSigner('2222' as Address);
     });
     it('sets the fee payer signer on the transaction', () => {
-        const txWithFeePayerA = setTransactionFeePayerSigner(feePayerSignerA, baseTx);
+        const txWithFeePayerA = setTransactionMessageFeePayerSigner(feePayerSignerA, baseTx);
         expect(txWithFeePayerA).toHaveProperty('feePayer', feePayerSignerA.address);
         expect(txWithFeePayerA).toHaveProperty('feePayerSigner', feePayerSignerA);
     });
@@ -31,12 +31,12 @@ describe('setTransactionFeePayerSigner', () => {
             };
         });
         it('sets the new fee payer on the transaction when it differs from the existing one', () => {
-            const txWithFeePayerB = setTransactionFeePayerSigner(feePayerSignerB, txWithFeePayerA);
+            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerSignerB, txWithFeePayerA);
             expect(txWithFeePayerB).toHaveProperty('feePayer', feePayerSignerB.address);
             expect(txWithFeePayerB).toHaveProperty('feePayerSigner', feePayerSignerB);
         });
         it('returns the original transaction when trying to set the same fee payer again', () => {
-            const txWithSameFeePayer = setTransactionFeePayerSigner(feePayerSignerA, txWithFeePayerA);
+            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, txWithFeePayerA);
             expect(txWithFeePayerA).toBe(txWithSameFeePayer);
         });
     });
@@ -49,19 +49,19 @@ describe('setTransactionFeePayerSigner', () => {
             };
         });
         it('sets the new fee payer on the transaction when it differs from the existing one', () => {
-            const txWithFeePayerB = setTransactionFeePayerSigner(feePayerSignerB, txWithFeePayerA);
+            const txWithFeePayerB = setTransactionMessageFeePayerSigner(feePayerSignerB, txWithFeePayerA);
             expect(txWithFeePayerB).toHaveProperty('feePayer', feePayerSignerB.address);
             expect(txWithFeePayerB).toHaveProperty('feePayerSigner', feePayerSignerB);
         });
         it('returns a new transaction instance when setting the same fee payer but as a signer this time', () => {
-            const txWithSameFeePayer = setTransactionFeePayerSigner(feePayerSignerA, txWithFeePayerA);
+            const txWithSameFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, txWithFeePayerA);
             expect(txWithSameFeePayer).toHaveProperty('feePayer', feePayerSignerA.address);
             expect(txWithSameFeePayer).toHaveProperty('feePayerSigner', feePayerSignerA);
             expect(txWithFeePayerA).not.toBe(txWithSameFeePayer);
         });
     });
     it('freezes the object', () => {
-        const txWithFeePayer = setTransactionFeePayerSigner(feePayerSignerA, baseTx);
+        const txWithFeePayer = setTransactionMessageFeePayerSigner(feePayerSignerA, baseTx);
         expect(txWithFeePayer).toBeFrozenObject();
     });
 });
