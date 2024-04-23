@@ -7,8 +7,13 @@ import {
     SolanaError,
 } from '@solana/errors';
 import { Blockhash } from '@solana/rpc-types';
-import { compileTransaction, FullySignedTransaction, Transaction, TransactionMessageBytes } from '@solana/transactions';
-import { TransactionWithLifetime } from '@solana/transactions/dist/types/lifetime';
+import {
+    compileTransaction,
+    FullySignedTransaction,
+    Transaction,
+    TransactionMessageBytes,
+    TransactionWithLifetime,
+} from '@solana/transactions';
 
 import { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
 import {

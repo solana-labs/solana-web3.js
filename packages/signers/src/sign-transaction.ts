@@ -10,12 +10,10 @@ import {
     compileTransaction,
     FullySignedTransaction,
     Transaction,
-} from '@solana/transactions';
-import {
     TransactionWithBlockhashLifetime,
     TransactionWithDurableNonceLifetime,
     TransactionWithLifetime,
-} from '@solana/transactions/dist/types/lifetime';
+} from '@solana/transactions';
 
 import { getSignersFromTransactionMessage, ITransactionMessageWithSigners } from './account-signer-meta';
 import { deduplicateSigners } from './deduplicate-signers';
