@@ -15,4 +15,6 @@ export * from '@solana/transaction-messages';
 export * from '@solana/transactions';
 export * from './airdrop';
 export * from './decode-transaction-message';
-export * from './send-transaction';
+export * from './send-and-confirm-durable-nonce-transaction';
+export * from './send-and-confirm-transaction';
+export * from './send-transaction-without-confirming';
