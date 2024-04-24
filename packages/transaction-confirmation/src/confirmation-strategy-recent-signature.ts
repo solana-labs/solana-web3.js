@@ -10,10 +10,29 @@ type GetRecentSignatureConfirmationPromiseFn = (config: {
     signature: Signature;
 }) => Promise<void>;
 
-export function createRecentSignatureConfirmationPromiseFactory(
-    rpc: Rpc<GetSignatureStatusesApi>,
-    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi>,
-): GetRecentSignatureConfirmationPromiseFn {
+type CreateRecentSignatureConfirmationPromiseFactoryConfig<TCluster> = {
+    rpc: Rpc<GetSignatureStatusesApi> & { '~cluster'?: TCluster };
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi> & { '~cluster'?: TCluster };
+};
+
+export function createRecentSignatureConfirmationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateRecentSignatureConfirmationPromiseFactoryConfig<'devnet'>): GetRecentSignatureConfirmationPromiseFn;
+export function createRecentSignatureConfirmationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateRecentSignatureConfirmationPromiseFactoryConfig<'testnet'>): GetRecentSignatureConfirmationPromiseFn;
+export function createRecentSignatureConfirmationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateRecentSignatureConfirmationPromiseFactoryConfig<'mainnet'>): GetRecentSignatureConfirmationPromiseFn;
+export function createRecentSignatureConfirmationPromiseFactory<
+    TCluster extends 'devnet' | 'mainnet' | 'testnet' | void = void,
+>({
+    rpc,
+    rpcSubscriptions,
+}: CreateRecentSignatureConfirmationPromiseFactoryConfig<TCluster>): GetRecentSignatureConfirmationPromiseFn {
     return async function getRecentSignatureConfirmationPromise({
         abortSignal: callerAbortSignal,
         commitment,
