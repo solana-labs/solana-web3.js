@@ -13,16 +13,33 @@ type GetNonceInvalidationPromiseFn = (config: {
     nonceAccountAddress: Address;
 }) => Promise<void>;
 
+type CreateNonceInvalidationPromiseFactoryConfig<TCluster> = {
+    rpc: Rpc<GetAccountInfoApi> & { '~cluster'?: TCluster };
+    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi> & { '~cluster'?: TCluster };
+};
+
 const NONCE_VALUE_OFFSET =
     4 + // version(u32)
     4 + // state(u32)
     32; // nonce authority(pubkey)
 // Then comes the nonce value.
 
-export function createNonceInvalidationPromiseFactory(
-    rpc: Rpc<GetAccountInfoApi>,
-    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi>,
-): GetNonceInvalidationPromiseFn {
+export function createNonceInvalidationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateNonceInvalidationPromiseFactoryConfig<'devnet'>): GetNonceInvalidationPromiseFn;
+export function createNonceInvalidationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateNonceInvalidationPromiseFactoryConfig<'testnet'>): GetNonceInvalidationPromiseFn;
+export function createNonceInvalidationPromiseFactory({
+    rpc,
+    rpcSubscriptions,
+}: CreateNonceInvalidationPromiseFactoryConfig<'mainnet'>): GetNonceInvalidationPromiseFn;
+export function createNonceInvalidationPromiseFactory<TCluster extends 'devnet' | 'mainnet' | 'testnet' | void = void>({
+    rpc,
+    rpcSubscriptions,
+}: CreateNonceInvalidationPromiseFactoryConfig<TCluster>): GetNonceInvalidationPromiseFn {
     return async function getNonceInvalidationPromise({
         abortSignal: callerAbortSignal,
         commitment,

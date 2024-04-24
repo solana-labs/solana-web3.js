@@ -48,7 +48,7 @@ describe('createNonceInvalidationPromiseFactory', () => {
         const rpcSubscriptions = {
             accountNotifications: createPendingSubscription,
         };
-        getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
+        getNonceInvalidationPromise = createNonceInvalidationPromiseFactory({ rpc, rpcSubscriptions });
     });
     it('calls the abort signal passed to the account info query when aborted', async () => {
         expect.assertions(2);

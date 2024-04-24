@@ -75,7 +75,7 @@ export function sendAndConfirmDurableNonceTransactionFactory({
     rpc,
     rpcSubscriptions,
 }: SendAndConfirmDurableNonceTransactionFactoryConfig): SendAndConfirmDurableNonceTransactionFunction {
-    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
+    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory({ rpc, rpcSubscriptions });
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
