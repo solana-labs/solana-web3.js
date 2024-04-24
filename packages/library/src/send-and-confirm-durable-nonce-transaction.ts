@@ -17,20 +17,36 @@ type SendAndConfirmDurableNonceTransactionFunction = (
     >,
 ) => Promise<void>;
 
-interface SendAndConfirmDurableNonceTransactionFactoryConfig {
-    rpc: Rpc<GetAccountInfoApi & GetSignatureStatusesApi & SendTransactionApi>;
-    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi & SignatureNotificationsApi>;
-}
+type SendAndConfirmDurableNonceTransactionFactoryConfig<TCluster> = {
+    rpc: Rpc<GetAccountInfoApi & GetSignatureStatusesApi & SendTransactionApi> & { '~cluster'?: TCluster };
+    rpcSubscriptions: RpcSubscriptions<AccountNotificationsApi & SignatureNotificationsApi> & { '~cluster'?: TCluster };
+};
 
 export function sendAndConfirmDurableNonceTransactionFactory({
     rpc,
     rpcSubscriptions,
-}: SendAndConfirmDurableNonceTransactionFactoryConfig): SendAndConfirmDurableNonceTransactionFunction {
-    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory({ rpc, rpcSubscriptions });
+}: SendAndConfirmDurableNonceTransactionFactoryConfig<'devnet'>): SendAndConfirmDurableNonceTransactionFunction;
+export function sendAndConfirmDurableNonceTransactionFactory({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmDurableNonceTransactionFactoryConfig<'testnet'>): SendAndConfirmDurableNonceTransactionFunction;
+export function sendAndConfirmDurableNonceTransactionFactory({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmDurableNonceTransactionFactoryConfig<'mainnet'>): SendAndConfirmDurableNonceTransactionFunction;
+export function sendAndConfirmDurableNonceTransactionFactory<
+    TCluster extends 'devnet' | 'mainnet' | 'testnet' | void = void,
+>({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmDurableNonceTransactionFactoryConfig<TCluster>): SendAndConfirmDurableNonceTransactionFunction {
+    const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory({ rpc, rpcSubscriptions } as Parameters<
+        typeof createNonceInvalidationPromiseFactory
+    >[0]);
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
-    });
+    } as Parameters<typeof createRecentSignatureConfirmationPromiseFactory>[0]);
     async function confirmDurableNonceTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
