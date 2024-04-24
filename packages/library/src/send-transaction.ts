@@ -76,10 +76,10 @@ export function sendAndConfirmDurableNonceTransactionFactory({
     rpcSubscriptions,
 }: SendAndConfirmDurableNonceTransactionFactoryConfig): SendAndConfirmDurableNonceTransactionFunction {
     const getNonceInvalidationPromise = createNonceInvalidationPromiseFactory(rpc, rpcSubscriptions);
-    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
-    );
+    });
     async function confirmDurableNonceTransaction(
         config: Omit<
             Parameters<typeof waitForDurableNonceTransactionConfirmation>[0],
@@ -110,10 +110,10 @@ export function sendAndConfirmTransactionFactory({
         rpc,
         rpcSubscriptions,
     });
-    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
-    );
+    });
     async function confirmRecentTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmation>[0],

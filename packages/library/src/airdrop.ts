@@ -28,10 +28,10 @@ export function airdropFactory<TCluster extends 'devnet' | 'mainnet' | 'testnet'
     rpc,
     rpcSubscriptions,
 }: AirdropFactoryConfig<TCluster>): AirdropFunction {
-    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(
+    const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
-    );
+    } as Parameters<typeof createRecentSignatureConfirmationPromiseFactory>[0]);
     async function confirmSignatureOnlyTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmationUntilTimeout>[0],

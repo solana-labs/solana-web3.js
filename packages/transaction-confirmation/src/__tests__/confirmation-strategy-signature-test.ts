@@ -31,7 +31,7 @@ describe('createSignatureConfirmationPromiseFactory', () => {
         const rpcSubscriptions = {
             signatureNotifications: createPendingSubscription,
         };
-        getSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory(rpc, rpcSubscriptions);
+        getSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({ rpc, rpcSubscriptions });
     });
     it('sets up a subscription for notifications about signature changes', async () => {
         expect.assertions(2);
