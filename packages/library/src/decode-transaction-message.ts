@@ -8,9 +8,9 @@ import type { Address } from '@solana/addresses';
 import type { GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import {
     type AddressesByLookupTableAddress,
+    CompilableTransactionMessage,
     CompiledTransactionMessage,
     decompileTransactionMessage,
-    TransactionMessage,
 } from '@solana/transaction-messages';
 
 type FetchedAddressLookup = {
@@ -46,7 +46,7 @@ export async function decodeTransactionMessage(
     compiledTransactionMessage: CompiledTransactionMessage,
     rpc: Rpc<GetMultipleAccountsApi>,
     config?: DecodeTransactionMessageConfig,
-): Promise<TransactionMessage> {
+): Promise<CompilableTransactionMessage> {
     const lookupTables =
         'addressTableLookups' in compiledTransactionMessage &&
         compiledTransactionMessage.addressTableLookups !== undefined &&
