@@ -15,7 +15,8 @@ import { getArrayDecoder, getArrayEncoder, getStructDecoder, getStructEncoder } 
 import { getShortU16Decoder, getShortU16Encoder } from '@solana/codecs-numbers';
 import { getBase58Decoder, getBase58Encoder } from '@solana/codecs-strings';
 
-import { CompiledTransactionMessage, getCompiledAddressTableLookups } from '../compile';
+import { getCompiledAddressTableLookups } from '../compile/address-table-lookups';
+import { CompiledTransactionMessage } from '../compile/message';
 import { getAddressTableLookupDecoder, getAddressTableLookupEncoder } from './address-table-lookup';
 import { getMessageHeaderDecoder, getMessageHeaderEncoder } from './header';
 import { getInstructionDecoder, getInstructionEncoder } from './instruction';
