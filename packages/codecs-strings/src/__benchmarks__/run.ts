@@ -1,4 +1,4 @@
-#!/usr/bin/env -S  pnpm exec tsx
+#!/usr/bin/env -S pnpx tsx
 
 import { webcrypto as crypto } from 'node:crypto';
 
