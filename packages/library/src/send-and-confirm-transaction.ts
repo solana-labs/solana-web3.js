@@ -17,23 +17,35 @@ type SendAndConfirmTransactionWithBlockhashLifetimeFunction = (
     >,
 ) => Promise<void>;
 
-interface SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig {
-    rpc: Rpc<GetEpochInfoApi & GetSignatureStatusesApi & SendTransactionApi>;
-    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi>;
-}
+type SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig<TCluster> = {
+    rpc: Rpc<GetEpochInfoApi & GetSignatureStatusesApi & SendTransactionApi> & { '~cluster'?: TCluster };
+    rpcSubscriptions: RpcSubscriptions<SignatureNotificationsApi & SlotNotificationsApi> & { '~cluster'?: TCluster };
+};
 
 export function sendAndConfirmTransactionFactory({
     rpc,
     rpcSubscriptions,
-}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig): SendAndConfirmTransactionWithBlockhashLifetimeFunction {
+}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig<'devnet'>): SendAndConfirmTransactionWithBlockhashLifetimeFunction;
+export function sendAndConfirmTransactionFactory({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig<'testnet'>): SendAndConfirmTransactionWithBlockhashLifetimeFunction;
+export function sendAndConfirmTransactionFactory({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig<'mainnet'>): SendAndConfirmTransactionWithBlockhashLifetimeFunction;
+export function sendAndConfirmTransactionFactory<TCluster extends 'devnet' | 'mainnet' | 'testnet' | void = void>({
+    rpc,
+    rpcSubscriptions,
+}: SendAndConfirmTransactionWithBlockhashLifetimeFactoryConfig<TCluster>): SendAndConfirmTransactionWithBlockhashLifetimeFunction {
     const getBlockHeightExceedencePromise = createBlockHeightExceedencePromiseFactory({
         rpc,
         rpcSubscriptions,
-    });
+    } as Parameters<typeof createBlockHeightExceedencePromiseFactory>[0]);
     const getRecentSignatureConfirmationPromise = createRecentSignatureConfirmationPromiseFactory({
         rpc,
         rpcSubscriptions,
-    });
+    } as Parameters<typeof createRecentSignatureConfirmationPromiseFactory>[0]);
     async function confirmRecentTransaction(
         config: Omit<
             Parameters<typeof waitForRecentTransactionConfirmation>[0],
