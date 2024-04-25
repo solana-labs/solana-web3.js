@@ -73,7 +73,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
-    "@babel/plugin-transform-class-properties": "^7.23.3",
+    "@babel/plugin-transform-class-properties": "^7.24.1",
     "@babel/plugin-transform-private-methods": "^7.24.1",
     "@babel/plugin-transform-private-property-in-object": "^7.24.1",
     "@babel/plugin-transform-runtime": "^7.24.3",
