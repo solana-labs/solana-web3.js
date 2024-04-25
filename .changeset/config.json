@@ -17,6 +17,9 @@
     "prereleaseTemplate": "{tag}.2.{datetime}.{commit}",
     "useCalculatedVersion": true
   },
-  "privatePackages": false,
+  "privatePackages": {
+    "version": false,
+    "tag": false
+  },
   "updateInternalDependencies": "patch"
 }
