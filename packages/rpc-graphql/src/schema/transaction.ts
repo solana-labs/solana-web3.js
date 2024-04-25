@@ -65,6 +65,7 @@ export const transactionTypeDefs = /* GraphQL */ `
     A Solana transaction
     """
     type Transaction {
+        id: Signature!
         blockTime: BigInt
         data(encoding: TransactionEncoding!): String
         message: TransactionMessage

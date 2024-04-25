@@ -59,6 +59,7 @@ describe('transaction', () => {
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
                         blockTime
+                        id
                         slot
                     }
                 }
@@ -68,10 +69,12 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         blockTime: expect.any(BigInt),
+                        id: expect.any(String),
                         slot: expect.any(BigInt),
                     },
                 },
             });
+            expect(result?.data?.transaction?.id).toBe(signature);
         });
         it("can query a transaction's computeUnitsConsumed from it's meta", async () => {
             expect.assertions(1);
