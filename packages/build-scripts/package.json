@@ -1,5 +1,6 @@
 {
     "name": "@solana/build-scripts",
+    "version": "0.0.0",
     "private": true,
     "files": [
         "add-js-extension-to-types.mjs",
