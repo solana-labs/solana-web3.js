@@ -445,8 +445,8 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5(rollup@4.16.4)
       '@rollup/plugin-terser':
-        specifier: ^0.4.3
-        version: 0.4.3(rollup@4.16.4)
+        specifier: ^0.4.4
+        version: 0.4.4(rollup@4.16.4)
       '@solana/spl-token':
         specifier: ^0.4.5
         version: 0.4.6(@solana/web3.js@1.91.6)(fastestsmallesttextencoderdecoder@1.0.22)
@@ -3876,11 +3876,11 @@ packages:
       rollup: 4.16.4
     dev: true
 
-  /@rollup/plugin-terser@0.4.3(rollup@4.16.4):
-    resolution: {integrity: sha512-EF0oejTMtkyhrkwCdg0HJ0IpkcaVg1MMSf2olHb2Jp+1mnLM04OhjpJWGma4HobiDTF0WCyViWuvadyE9ch2XA==}
+  /@rollup/plugin-terser@0.4.4(rollup@4.16.4):
+    resolution: {integrity: sha512-XHeJC5Bgvs8LfukDwWZp7yeqin6ns8RTl2B9avbejt6tZqsqvVoWI7ZTQrcNsfKEDWBTnTxM8nMDkO2IFFbd0A==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
-      rollup: ^2.x || ^3.x
+      rollup: ^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
         optional: true
