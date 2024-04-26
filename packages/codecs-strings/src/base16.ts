@@ -17,11 +17,17 @@ const enum HexC {
     F_LO = 102, // f
 }
 
+const INVALID_STRING_ERROR_BASE_CONFIG = {
+    alphabet: '0123456789abcdef',
+    base: 16,
+} as const;
+
 function charCodeToBase16(char: number) {
     if (char >= HexC.ZERO && char <= HexC.NINE) return char - HexC.ZERO;
     if (char >= HexC.A_UP && char <= HexC.F_UP) return char - (HexC.A_UP - 10);
     if (char >= HexC.A_LO && char <= HexC.F_LO) return char - (HexC.A_LO - 10);
 }
+
 /** Encodes strings in base16. */
 export const getBase16Encoder = (): VariableSizeEncoder<string> =>
     createEncoder({
@@ -34,8 +40,7 @@ export const getBase16Encoder = (): VariableSizeEncoder<string> =>
                 const n = charCodeToBase16(c);
                 if (n === undefined) {
                     throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
-                        alphabet: '0123456789abcdef',
-                        base: 16,
+                        ...INVALID_STRING_ERROR_BASE_CONFIG,
                         value,
                     });
                 }
@@ -49,14 +54,13 @@ export const getBase16Encoder = (): VariableSizeEncoder<string> =>
 
                 const n1 = charCodeToBase16(c1);
                 const n2 = charCodeToBase16(c2);
-                if (n1 === undefined || (Number.isInteger(c2) && n2 === undefined)) {
+                if (n1 === undefined || (n2 === undefined && !Number.isNaN(c2))) {
                     throw new SolanaError(SOLANA_ERROR__CODECS__INVALID_STRING_FOR_BASE, {
-                        alphabet: '0123456789abcdef',
-                        base: 16,
+                        ...INVALID_STRING_ERROR_BASE_CONFIG,
                         value,
                     });
                 }
-                hexBytes[i] = Number.isInteger(c2) ? n1 << 4 | (n2 ?? 0) : n1;
+                hexBytes[i] = !Number.isNaN(c2) ? (n1 << 4) | (n2 ?? 0) : n1;
             }
 
             bytes.set(hexBytes, offset);
