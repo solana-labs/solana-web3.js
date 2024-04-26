@@ -858,10 +858,10 @@ describe('transaction', () => {
                                         maximumFee
                                         transferFeeConfigAuthority {
                                             address
-                                       }
-                                       withdrawWithheldAuthority {
+                                        }
+                                        withdrawWithheldAuthority {
                                             address
-                                       } 
+                                        }
                                     }
                                 }
                             }
@@ -883,12 +883,11 @@ describe('transaction', () => {
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                         transferFeeBasisPoints: expect.any(Number),
                                         transferFeeConfigAuthority: {
-                                            address: expect.any(String)
+                                            address: expect.any(String),
                                         },
                                         withdrawWithheldAuthority: {
-                                            address: expect.any(String)
+                                            address: expect.any(String),
                                         },
-
                                     },
                                 ]),
                             },
