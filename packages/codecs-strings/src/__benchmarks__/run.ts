@@ -46,12 +46,14 @@ bench
         'Base16 encode',
         () => {
             base16Codec.encode(base16EncodedString);
-        }, {
-        beforeEach() {
-            randomizeBytes();
-            base16EncodedString = base16Codec.decode(bytes16);
-        }
-    });
+        },
+        {
+            beforeEach() {
+                randomizeBytes();
+                base16EncodedString = base16Codec.decode(bytes16);
+            },
+        },
+    );
 
 (async () => {
     await bench.warmup();
