@@ -1,4 +1,4 @@
-#!/usr/bin/env -S pnpx tsx
+#!/usr/bin/env -S pnpm dlx tsx
 
 import { ok } from 'node:assert';
 import process from 'node:process';

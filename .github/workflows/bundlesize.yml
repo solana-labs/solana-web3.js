@@ -31,7 +31,7 @@ jobs:
           name: library-dist
 
       - name: Run Bundlewatch
-        run: pnpx bundlewatch
+        run: pnpm dlx bundlewatch
         env:
           BUNDLEWATCH_GITHUB_TOKEN: ${{ secrets.BUNDLEWATCH_GITHUB_TOKEN }}
           CI_BRANCH: ${{ github.ref	}}
