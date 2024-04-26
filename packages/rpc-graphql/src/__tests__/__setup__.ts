@@ -1686,22 +1686,6 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
-                // Transfer Fee Instruction InitializeTransferFeeConfig
-                {
-                    parsed: {
-                        info: {
-                            maximumFee: 5000,
-                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
-                            transferFeeBasisPoints: 50,
-                            transferFeeConfigAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
-                            withdrawWithheldAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
-                        },
-                        type: 'initializeTransferFeeConfig',
-                    },
-                    program: 'spl-token',
-                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                    stackHeight: null,
-                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',

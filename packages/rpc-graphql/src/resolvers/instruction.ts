@@ -241,8 +241,8 @@ export const instructionResolvers = {
     },
     SplTokenInitializeTransferFeeConfig: {
         mint: resolveAccount('mint'),
-        transferFeeConfigAuthority: resolveAccount('account'),
-        withdrawWithheldAuthority: resolveAccount('account'),
+        transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
