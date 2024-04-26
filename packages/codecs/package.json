@@ -67,6 +67,9 @@
         "@solana/codecs-strings": "workspace:*",
         "@solana/options": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [
