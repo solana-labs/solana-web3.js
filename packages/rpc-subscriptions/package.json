@@ -72,6 +72,9 @@
         "@solana/rpc-transformers": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

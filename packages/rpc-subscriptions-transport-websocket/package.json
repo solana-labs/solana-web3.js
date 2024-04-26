@@ -71,6 +71,7 @@
         "jest-websocket-mock": "^2.5.0"
     },
     "peerDependencies": {
+        "typescript": ">=5",
         "ws": "^8.14.0"
     },
     "bundlewatch": {

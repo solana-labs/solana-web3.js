@@ -75,6 +75,9 @@
         "@solana/rpc-types": "workspace:*",
         "@solana/transaction-messages": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

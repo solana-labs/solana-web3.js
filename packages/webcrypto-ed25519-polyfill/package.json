@@ -68,6 +68,9 @@
     "devDependencies": {
         "@solana/crypto-impl": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

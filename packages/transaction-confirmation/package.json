@@ -78,6 +78,9 @@
     "devDependencies": {
         "@solana/instructions": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

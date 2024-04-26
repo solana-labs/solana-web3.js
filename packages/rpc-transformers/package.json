@@ -68,6 +68,9 @@
         "@solana/rpc-spec": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

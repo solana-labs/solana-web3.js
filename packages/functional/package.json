@@ -62,6 +62,9 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

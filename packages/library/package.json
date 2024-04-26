@@ -83,6 +83,9 @@
         "@solana/transaction-messages": "workspace:*",
         "@solana/transactions": "workspace:*"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

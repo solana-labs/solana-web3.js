@@ -73,6 +73,9 @@
         "undici": "^6.14.0",
         "zx": "^7.2.3"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

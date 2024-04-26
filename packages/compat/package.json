@@ -75,6 +75,9 @@
         "@solana/keys": "workspace:*",
         "@solana/web3.js": "workspace:../library-legacy"
     },
+    "peerDependencies": {
+        "typescript": ">=5"
+    },
     "bundlewatch": {
         "defaultCompression": "gzip",
         "files": [

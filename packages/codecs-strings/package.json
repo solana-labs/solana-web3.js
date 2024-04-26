@@ -76,7 +76,8 @@
         "tinybench": "^2.8.0"
     },
     "peerDependencies": {
-        "fastestsmallesttextencoderdecoder": "^1.0.22"
+        "fastestsmallesttextencoderdecoder": "^1.0.22",
+        "typescript": ">=5"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
