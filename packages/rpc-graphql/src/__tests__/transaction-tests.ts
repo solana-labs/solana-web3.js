@@ -841,6 +841,60 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-transferFee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeTransferFeeConfig {
+                                        mint {
+                                            address
+                                        }
+                                        transferFeeBasisPoints
+                                        maximumFee
+                                        transferFeeConfigAuthority {
+                                            address
+                                        }
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        maximumFee: expect.any(Number),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        transferFeeBasisPoints: expect.any(Number),
+                                        transferFeeConfigAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

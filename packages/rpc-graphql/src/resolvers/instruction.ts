@@ -239,6 +239,11 @@ export const instructionResolvers = {
         delegate: resolveAccount('delegate'),
         mint: resolveAccount('mint'),
     },
+    SplTokenInitializeTransferFeeConfig: {
+        mint: resolveAccount('mint'),
+        transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
@@ -546,6 +551,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateMetadataPointer') {
                         return 'SplTokenUpdateMetadataPointerInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTransferFeeConfig') {
+                        return 'SplTokenInitializeTransferFeeConfig';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

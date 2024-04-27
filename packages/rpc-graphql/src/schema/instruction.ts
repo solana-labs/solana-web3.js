@@ -541,6 +541,18 @@ export const instructionTypeDefs = /* GraphQL */ `
         mint: Account
     }
 
+    """
+    SplToken-2022: InitializeTransferFeeConfig instruction
+    """
+    type SplTokenInitializeTransferFeeConfig implements TransactionInstruction {
+        programId: Address
+        mint: Account
+        transferFeeBasisPoints: Int
+        transferFeeConfigAuthority: Account
+        withdrawWithheldAuthority: Account
+        maximumFee: Int
+    }
+
     # TODO: Extensions!
     # ...
 
