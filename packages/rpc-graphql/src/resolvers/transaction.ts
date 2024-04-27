@@ -103,6 +103,7 @@ export function resolveTransaction(fieldName?: string) {
             const loadedTransactions = await context.loaders.transaction.loadMany(argsSet);
 
             let result: TransactionResult = {
+                ID: signature,
                 encodedData: {},
                 signature,
             };

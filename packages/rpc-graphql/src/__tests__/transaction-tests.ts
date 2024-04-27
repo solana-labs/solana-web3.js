@@ -58,8 +58,8 @@ describe('transaction', () => {
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
+                        ID
                         blockTime
-                        id
                         slot
                     }
                 }
@@ -68,13 +68,13 @@ describe('transaction', () => {
             expect(result).toMatchObject({
                 data: {
                     transaction: {
+                        ID: expect.any(signature),
                         blockTime: expect.any(BigInt),
-                        id: expect.any(String),
                         slot: expect.any(BigInt),
                     },
                 },
             });
-            expect(result?.data?.transaction?.id).toBe(signature);
+            expect(result?.data?.transaction?.ID).toBe(signature);
         });
         it("can query a transaction's computeUnitsConsumed from it's meta", async () => {
             expect.assertions(1);
