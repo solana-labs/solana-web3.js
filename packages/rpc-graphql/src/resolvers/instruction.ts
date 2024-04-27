@@ -320,6 +320,12 @@ export const instructionResolvers = {
         multisigAuthority: resolveAccount('multisigAuthority'),
         source: resolveAccount('source'),
     },
+    SplTokenTransferCheckedWithFee: {
+        authority: resolveAccount('authority'),
+        destination: resolveAccount('destination'),
+        mint: resolveAccount('mint'),
+        source: resolveAccount('source'),
+    },
     SplTokenTransferInstruction: {
         authority: resolveAccount('authority'),
         destination: resolveAccount('destination'),
@@ -638,6 +644,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeTransferFeeConfig') {
                         return 'SplTokenInitializeTransferFeeConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'transferCheckedWithFee') {
+                        return 'SplTokenTransferCheckedWithFee';
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeTransferHook') {
                         return 'SplTokenInitializeTransferHookInstruction';

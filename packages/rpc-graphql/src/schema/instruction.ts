@@ -704,6 +704,19 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
+    """
+    SplToken-2022: TransferCheckedWithFee instruction
+    """
+    type SplTokenTransferCheckedWithFee implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        destination: Account
+        feeAmount: TokenAmount
+        mint: Account
+        source: Account
+        tokenAmount: TokenAmount
+    }
+
     # TODO: Extensions!
     # ...
 

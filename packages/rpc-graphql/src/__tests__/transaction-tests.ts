@@ -1661,6 +1661,86 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('transfer-checked-with-fee', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenTransferCheckedWithFee {
+                                        mint {
+                                            address
+                                        }
+                                        authority {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                        destination {
+                                            address
+                                        }
+                                        feeAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                        tokenAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        feeAmount: {
+                                            amount: expect.any(String),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null, // can't convert decimal to BigInt
+                                            uiAmountString: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                        tokenAmount: {
+                                            amount: expect.any(String),
+                                            decimals: expect.any(Number),
+                                            uiAmount: expect.any(BigInt),
+                                            uiAmountString: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
