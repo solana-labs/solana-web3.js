@@ -1643,7 +1643,7 @@ describe('transaction', () => {
             });
 
             it('withdraw-withheld-tokens-from-mint-with-multisigWithdrawWithheldAuthority', async () => {
-                // expect.assertions(1);
+                expect.assertions(1);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
                         transaction(signature: $signature) {
@@ -1669,7 +1669,6 @@ describe('transaction', () => {
                 `;
 
                 const result = await rpcGraphQL.query(source, { signature });
-                console.log(result.data);
                 expect(result).toMatchObject({
                     data: {
                         transaction: {
