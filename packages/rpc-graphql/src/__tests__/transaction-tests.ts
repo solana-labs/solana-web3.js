@@ -1806,14 +1806,14 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        signers: [expect.any(String),expect.any(String)],
+                                        signers: [expect.any(String), expect.any(String)],
                                         source: {
                                             address: expect.any(String),
                                         },
                                         tokenAmount: {
                                             amount: expect.any(String),
                                             decimals: expect.any(Number),
-                                            uiAmount: null,  // Can't convert decimal to BigInt
+                                            uiAmount: null, // Can't convert decimal to BigInt
                                             uiAmountString: expect.any(String),
                                         },
                                     },
