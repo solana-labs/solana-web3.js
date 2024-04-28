@@ -716,7 +716,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
         tokenAmount: TokenAmount
         multisigAuthority: Account
-        signers: [Account]
+        signers: [Address]
     }
 
     # TODO: Extensions!

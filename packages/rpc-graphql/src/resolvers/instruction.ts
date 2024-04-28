@@ -324,7 +324,8 @@ export const instructionResolvers = {
         authority: resolveAccount('authority'),
         destination: resolveAccount('destination'),
         mint: resolveAccount('mint'),
-        source: resolveAccount('source'),
+        multisigAuthority: resolveAccount('multisigAuthority'),
+        source: resolveAccount('source')
     },
     SplTokenTransferInstruction: {
         authority: resolveAccount('authority'),

@@ -1950,6 +1950,36 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            destination: "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB",
+                            feeAmount: {
+                                amount: "5",
+                                decimals: 2,
+                                uiAmount: 0.05,
+                                uiAmountString: "0.05"
+                            },
+                            mint: "FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ",
+                            multisigAuthority: "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB",
+                            signers: [
+                                "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB",
+                                "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB"
+                            ],
+                            source: "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB",
+                            tokenAmount: {
+                                amount: "55",
+                                decimals: 2,
+                                uiAmount: 0.55,
+                                uiAmountString: "0.55"
+                            }
+                        },
+                        type: 'transferCheckedWithFee',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                }
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',

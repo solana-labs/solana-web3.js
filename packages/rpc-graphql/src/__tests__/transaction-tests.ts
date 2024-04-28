@@ -1662,7 +1662,7 @@ describe('transaction', () => {
                 });
             });
 
-            it('transfer-checked-with-fee', async () => {
+            it('transfer-checked-with-fee-with-authority', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
@@ -1732,6 +1732,88 @@ describe('transaction', () => {
                                             amount: expect.any(String),
                                             decimals: expect.any(Number),
                                             uiAmount: expect.any(BigInt),
+                                            uiAmountString: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('transfer-checked-with-fee-with-multisigAuthority', async () => {
+                // expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenTransferCheckedWithFee {
+                                        mint {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                        destination {
+                                            address
+                                        }
+                                        feeAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                        tokenAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                        multisigAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        feeAmount: {
+                                            amount: expect.any(String),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null, // can't convert decimal to BigInt
+                                            uiAmountString: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: [expect.any(String),expect.any(String)],
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                        tokenAmount: {
+                                            amount: expect.any(String),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null,  // Can't convert decimal to BigInt
                                             uiAmountString: expect.any(String),
                                         },
                                     },
