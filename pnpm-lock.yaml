@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -601,8 +597,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0(mocha@10.4.0)
       ts-node:
-        specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.93)(@types/node@18.19.21)(typescript@5.4.5)
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.3.93)(@types/node@18.19.21)(typescript@5.4.5)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -3354,7 +3350,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: ^22
+      jsdom: '*'
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -12620,8 +12616,8 @@ packages:
       tsconfig-paths: 3.14.2
     dev: true
 
-  /ts-node@10.9.1(@swc/core@1.3.93)(@types/node@18.19.21)(typescript@5.4.5):
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+  /ts-node@10.9.2(@swc/core@1.3.93)(@types/node@18.19.21)(typescript@5.4.5):
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
@@ -13550,3 +13546,7 @@ packages:
       which: 3.0.1
       yaml: 2.3.1
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
