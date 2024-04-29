@@ -581,7 +581,7 @@ const value = getZeroableNullableDecoder(getU16Decoder()).decode(bytes);
 
 ## Bytes codec
 
-The `getBytesCodec` function returns a `Codec<Uint8Array>` meaning it coverts `Uint8Arrays` to and from… `Uint8Arrays`! Whilst this might seem a bit useless, it can be useful when composed into other codecs. For example, you could use it in a struct codec to say that a particular field should be left unserialised.
+The `getBytesCodec` function returns a `Codec<Uint8Array>` meaning it converts `Uint8Arrays` to and from… `Uint8Arrays`! Whilst this might seem a bit useless, it can be useful when composed into other codecs. For example, you could use it in a struct codec to say that a particular field should be left unserialised.
 
 ```ts
 const bytes = getBytesCodec().encode(new Uint8Array([42])); // 0x2a

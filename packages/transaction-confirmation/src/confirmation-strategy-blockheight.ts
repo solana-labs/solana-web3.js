@@ -70,7 +70,7 @@ export function createBlockHeightExceedencePromiseFactory<
                         } = await getBlockHeightAndDifferenceBetweenSlotHeightAndBlockHeight();
                         currentBlockHeight = recheckedBlockHeight;
                         if (currentBlockHeight > lastValidBlockHeight) {
-                            // Verfied; the block height has been exceeded.
+                            // Verified; the block height has been exceeded.
                             break;
                         } else {
                             // The block height has not been exceeded, which implies that the

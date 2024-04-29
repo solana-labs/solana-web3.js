@@ -21,7 +21,7 @@ describe('addCodecSentinel', () => {
         expect(mockCodec.write).toHaveBeenCalledWith('helloworld', expect.any(Uint8Array), 0);
     });
 
-    it('decodes until the first occurence of the sentinel is found', () => {
+    it('decodes until the first occurrence of the sentinel is found', () => {
         const mockCodec = getMockCodec();
         mockCodec.read.mockReturnValue(['helloworld', 10]);
         const codec = addCodecSentinel(mockCodec, b('ff'));
