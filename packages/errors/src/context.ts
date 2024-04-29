@@ -596,7 +596,7 @@ function encodeValue(value: unknown): string {
         return encodeURIComponent(
             String(
                 value != null && Object.getPrototypeOf(value) === null
-                    ? // Plain objects with no protoype don't have a `toString` method.
+                    ? // Plain objects with no prototype don't have a `toString` method.
                       // Convert them before stringifying them.
                       { ...(value as object) }
                     : value,

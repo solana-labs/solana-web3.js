@@ -12,7 +12,7 @@ export type Epoch = U64UnsafeBeyond2Pow53Minus1;
 // truncated or rounded because of a downcast to JavaScript `number` between your calling code and
 // the JSON-RPC transport.
 //
-// Spefically being used to denote micro-lamports, which are 0.000001 lamports.
+// Specifically being used to denote micro-lamports, which are 0.000001 lamports.
 export type MicroLamportsUnsafeBeyond2Pow53Minus1 = bigint & { readonly __brand: unique symbol };
 
 // FIXME(solana-labs/solana/issues/30341) Beware that any value outside of range
