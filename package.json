@@ -42,6 +42,7 @@
         "jest-watch-select-projects": "^2.0.0",
         "jest-watch-typeahead": "^2.2.2",
         "prettier": "^3.2",
+        "ts-node": "^10.9.2",
         "tsup": "^8.0.1",
         "turbo": "^1.13.0",
         "typescript": "^5.4.5"
