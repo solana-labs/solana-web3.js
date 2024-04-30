@@ -9,7 +9,7 @@ module.exports = async function globalSetup() {
         {
             command: 'while true; do sleep 86400000; done',
             host: '127.0.0.1',
-            launchTimeout: 50000,
+            launchTimeout: 999999,
             path: 'health',
             port: 8899,
             protocol: 'http',

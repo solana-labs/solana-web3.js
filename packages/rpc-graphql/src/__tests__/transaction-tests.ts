@@ -64,7 +64,7 @@ describe('transaction', () => {
                     }
                 }
             `;
-            const result = await rpcGraphQL.query(source, { ID, signature });
+            const result = await rpcGraphQL.query(source, { ID: signature, signature });
             expect(result).toMatchObject({
                 data: {
                     transaction: {
@@ -74,7 +74,7 @@ describe('transaction', () => {
                     },
                 },
             });
-            expect(result?.data?.transaction?.ID).toBe(signature);
+            expect((result?.data?.transaction as { ID: string })?.ID).toBe(signature);
         });
         it("can query a transaction's computeUnitsConsumed from it's meta", async () => {
             expect.assertions(1);

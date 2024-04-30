@@ -158,6 +158,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'base64', // GraphQL client prefers `base64`
                     },
@@ -165,6 +166,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'finalized',
                         encoding: 'base64', // GraphQL client prefers `base64`
                     },
@@ -424,6 +426,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'base64',
                     },
@@ -431,6 +434,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'jsonParsed',
                     },
@@ -468,6 +472,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'base58',
                     },
@@ -475,6 +480,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'base64',
                     },
@@ -482,6 +488,7 @@ describe('account loader', () => {
                 expect(rpc.getTransaction).toHaveBeenCalledWith(
                     '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                     {
+                        ID: '67rSZV97NzE4B4ZeFqULqWZcNEV2KwNfDLMzecJmBheZ4sWhudqGAzypoBCKfeLkKtDQBGnkwgdrrFM8ZMaS3pkk',
                         commitment: 'confirmed',
                         encoding: 'jsonParsed',
                     },

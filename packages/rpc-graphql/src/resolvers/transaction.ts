@@ -23,6 +23,7 @@ export type InstructionResult = {
 };
 
 export type TransactionResult = Partial<TransactionLoaderValue> & {
+    ID?: Signature;
     encodedData?: EncodedTransactionData;
     signature?: Signature;
 };
@@ -96,14 +97,14 @@ export function resolveTransaction(fieldName?: string) {
 
         if (signature) {
             if (onlyFieldsRequested(['signature'], info)) {
-                return { signature };
+                return { ID: signature, signature };
             }
 
             const argsSet = buildTransactionLoaderArgSetFromResolveInfo({ ...args, ID: signature, signature }, info);
             const loadedTransactions = await context.loaders.transaction.loadMany(argsSet);
-
+            const nonNullSignature = signature!;
             let result: TransactionResult = {
-                ID: signature,
+                ID: nonNullSignature,
                 encodedData: {},
                 signature,
             };
