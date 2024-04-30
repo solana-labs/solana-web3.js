@@ -99,7 +99,7 @@ export function resolveTransaction(fieldName?: string) {
                 return { signature };
             }
 
-            const argsSet = buildTransactionLoaderArgSetFromResolveInfo({ ...args, signature }, info);
+            const argsSet = buildTransactionLoaderArgSetFromResolveInfo({ ...args, ID: signature, signature }, info);
             const loadedTransactions = await context.loaders.transaction.loadMany(argsSet);
 
             let result: TransactionResult = {

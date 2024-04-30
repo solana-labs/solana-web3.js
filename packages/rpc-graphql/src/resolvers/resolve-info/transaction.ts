@@ -78,6 +78,7 @@ export function buildTransactionArgSetWithVisitor<TArgs extends BlockLoaderArgs 
  */
 export function buildTransactionLoaderArgSetFromResolveInfo(
     args: {
+        ID: Signature;
         commitment?: Omit<Commitment, 'processed'>;
         minContextSlot?: Slot;
         signature: Signature;
