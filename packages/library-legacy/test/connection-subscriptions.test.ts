@@ -1,4 +1,4 @@
-import chai from 'chai';
+import {expect, use} from 'chai';
 import {stub, SinonStubbedInstance, SinonSpy, spy} from 'sinon';
 import sinonChai from 'sinon-chai';
 
@@ -17,8 +17,7 @@ import {
 import type Client from '../src/rpc-websocket';
 import {url} from './url';
 
-chai.use(sinonChai);
-const expect = chai.expect;
+use(sinonChai);
 
 function stubRpcWebSocket(
   connection: Connection,
@@ -387,12 +386,12 @@ describe('Subscriptions', () => {
           let acknowledgeSubscription = (
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             _serverSubscriptionId: number,
-          ) => {
+          ): void => {
             expect.fail(
               'Expected a function to have been assigned to `acknowledgeSubscription` in the test.',
             );
           };
-          let fatalSubscription = () => {
+          let fatalSubscription = (): void => {
             expect.fail(
               'Expected a function to have been assigned to `fatalSubscription` in the test.',
             );
@@ -451,12 +450,12 @@ describe('Subscriptions', () => {
               });
             });
             describe('then unsubscribing that listener', () => {
-              let acknowledgeUnsubscribe = () => {
+              let acknowledgeUnsubscribe = (): void => {
                 expect.fail(
                   'Expected a function to have been assigned to `acknowledgeUnsubscribe` in the test',
                 );
               };
-              let fatalUnsubscribe = () => {
+              let fatalUnsubscribe = (): void => {
                 expect.fail(
                   'Expected a function to have been assigned to `fatalUnsubscribe` in the test',
                 );
