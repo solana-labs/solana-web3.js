@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -447,8 +443,8 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0
       rpc-websockets:
-        specifier: ^7.5.1
-        version: 7.5.1
+        specifier: ^7.10.0
+        version: 7.10.0
       superstruct:
         specifier: ^0.14.2
         version: 0.14.2
@@ -3581,7 +3577,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: ^22
+      jsdom: '*'
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -4760,7 +4756,7 @@ packages:
       fast-stable-stringify: 1.0.0
       jayson: 4.1.0
       node-fetch: 2.7.0
-      rpc-websockets: 7.6.1
+      rpc-websockets: 7.10.0
       superstruct: 0.14.2
     transitivePeerDependencies:
       - bufferutil
@@ -11921,20 +11917,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /rpc-websockets@7.5.1:
-    resolution: {integrity: sha512-kGFkeTsmd37pHPMaHIgN1LVKXMi0JD782v4Ds9ZKtLlwdTKjn+CxM9A9/gLT2LaOuEcEFGL98h1QWQtlOIdW0w==}
-    dependencies:
-      '@babel/runtime': 7.23.4
-      eventemitter3: 4.0.7
-      uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    optionalDependencies:
-      bufferutil: 4.0.8
-      utf-8-validate: 5.0.10
-    dev: false
-
-  /rpc-websockets@7.6.1:
-    resolution: {integrity: sha512-MmRGaJJvxTHSRxYPjJJqcj2zWnCetw7YbYbKlD0Yc7qVw6PsZhRJg1MI3mpWlpBs+4zO+urlNfLl9zLsdOD/gA==}
+  /rpc-websockets@7.10.0:
+    resolution: {integrity: sha512-cemZ6RiDtYZpPiBzYijdOrkQQzmBCmug0E9SdRH2gIUNT15ql4mwCYWIp0VnSZq6Qrw/JkGUygp4PrK1y9KfwQ==}
     dependencies:
       '@babel/runtime': 7.23.4
       eventemitter3: 4.0.7
@@ -11943,7 +11927,6 @@ packages:
     optionalDependencies:
       bufferutil: 4.0.8
       utf-8-validate: 5.0.10
-    dev: true
 
   /rrweb-cssom@0.6.0:
     resolution: {integrity: sha512-APM0Gt1KoXBz0iIkkdB/kfvGOwC4UuJFeG/c+yV7wSc7q96cG/kJ0HiYCnzivD9SB53cLV1MlHFNfOuPaadYSw==}
@@ -13513,22 +13496,6 @@ packages:
       utf-8-validate:
         optional: true
 
-  /ws@8.13.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
-    resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dependencies:
-      bufferutil: 4.0.8
-      utf-8-validate: 5.0.10
-    dev: false
-
   /ws@8.14.0:
     resolution: {integrity: sha512-WR0RJE9Ehsio6U4TuM+LmunEsjQ5ncHlw4sn9ihD6RoJKZrVyH9FWV3dmnwu8B2aNib1OvG2X6adUCyFpQyWcg==}
     engines: {node: '>=10.0.0'}
@@ -13705,3 +13672,7 @@ packages:
       '@types/fs-extra': 11.0.4
       '@types/node': 20.12.7
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
