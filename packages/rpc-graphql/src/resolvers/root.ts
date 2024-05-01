@@ -1,6 +1,6 @@
 import type { makeExecutableSchema } from '@graphql-tools/schema';
 
-import { resolveAccount } from './account';
+import { resolveAccount, resolveMultipleAccounts } from './account';
 import { resolveBlock } from './block';
 import { resolveProgramAccounts } from './program-accounts';
 import { resolveTransaction } from './transaction';
@@ -9,6 +9,7 @@ export const rootResolvers: Parameters<typeof makeExecutableSchema>[0]['resolver
     Query: {
         account: resolveAccount(),
         block: resolveBlock(),
+        multipleAccounts: resolveMultipleAccounts(),
         programAccounts: resolveProgramAccounts(),
         transaction: resolveTransaction(),
     },

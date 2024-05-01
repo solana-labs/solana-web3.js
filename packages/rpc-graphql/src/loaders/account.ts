@@ -134,8 +134,9 @@ function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi & GetMultipleAccoun
                     return Array.from({ length: 1 }, async () => {
                         try {
                             const result = await resolveAccountUsingRpc({ address, ...args });
+                            const resultWithAddress = { ...result, address };
                             addressCallbacks[address].callbacks.forEach(({ callback, dataSlice }) => {
-                                callback.resolve(sliceData(result, dataSlice, args.dataSlice));
+                                callback.resolve(sliceData(resultWithAddress, dataSlice, args.dataSlice));
                             });
                         } catch (e) {
                             addressCallbacks[address].callbacks.forEach(({ callback }) => {
@@ -155,10 +156,14 @@ function createAccountBatchLoadFn(rpc: Rpc<GetAccountInfoApi & GetMultipleAccoun
                                     addresses: chunk,
                                     ...args,
                                 });
+                                const resultsWithAddress = results.map((result, ii) => ({
+                                    ...result,
+                                    address: chunk[ii],
+                                }));
                                 chunk.forEach((address, ii) => {
-                                    const result = results[ii];
+                                    const resultWithAddress = resultsWithAddress[ii];
                                     addressCallbacks[address].callbacks.forEach(({ callback, dataSlice }) => {
-                                        callback.resolve(sliceData(result, dataSlice, args.dataSlice));
+                                        callback.resolve(sliceData(resultWithAddress, dataSlice, args.dataSlice));
                                     });
                                 });
                             } catch (e) {

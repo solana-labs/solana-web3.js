@@ -54,7 +54,7 @@ export const resolveAccount = (fieldName?: string) => {
             const argsSet = buildAccountLoaderArgSetFromResolveInfo({ ...args, address }, info);
             const loadedAccounts = await context.loaders.account.loadMany(argsSet);
 
-            let result: AccountResult = {
+            const result: AccountResult = {
                 address,
                 encodedData: {},
             };
@@ -68,11 +68,7 @@ export const resolveAccount = (fieldName?: string) => {
                     return;
                 }
                 if (!result.ownerProgram) {
-                    result = {
-                        ...result,
-                        ...account,
-                        ownerProgram: account.owner,
-                    };
+                    Object.assign(result, account, { ownerProgram: account.owner });
                 }
 
                 const { data } = account;
@@ -104,10 +100,7 @@ export const resolveAccount = (fieldName?: string) => {
                             programId,
                             programName,
                         };
-                        result = {
-                            ...result,
-                            ...(parsedData as object),
-                        };
+                        Object.assign(result, account, parsedData as object);
                     }
                 }
             });
@@ -115,6 +108,92 @@ export const resolveAccount = (fieldName?: string) => {
             return result;
         }
 
+        return null;
+    };
+};
+
+export const resolveMultipleAccounts = (fieldName?: string) => {
+    return async (
+        parent: { [x: string]: Address[] },
+        args: { addresses?: Address[]; commitment?: Commitment; minContextSlot?: Slot },
+        context: RpcGraphQLContext,
+        info: GraphQLResolveInfo,
+    ): Promise<(AccountResult | null)[] | null> => {
+        const addresses = fieldName ? parent[fieldName] : args.addresses;
+
+        if (addresses) {
+            // Do not load any accounts if only the addresses are requested
+            if (onlyFieldsRequested(['address'], info)) {
+                return addresses.map(address => ({ address }));
+            }
+
+            const argsSet = addresses
+                .map(address =>
+                    buildAccountLoaderArgSetFromResolveInfo(
+                        { address, commitment: args.commitment, minContextSlot: args.minContextSlot },
+                        info,
+                    ),
+                )
+                .reduce((acc, val) => acc.concat(val), []);
+            const loadedAccounts = await context.loaders.account.loadMany(argsSet);
+
+            const resultMap: { [x: string]: AccountResult } = {};
+
+            loadedAccounts.forEach((account, i) => {
+                if (account instanceof Error) {
+                    console.error(account);
+                    return;
+                }
+                if (account === null) {
+                    return;
+                }
+
+                const address = account.address;
+                const result = (resultMap[address] ||= {
+                    address,
+                    encodedData: {},
+                });
+
+                if (!result.ownerProgram) {
+                    Object.assign(result, account, { ownerProgram: account.owner });
+                }
+
+                const { data } = account;
+                const { encoding, dataSlice } = argsSet[i];
+
+                if (encoding && result.encodedData) {
+                    if (Array.isArray(data)) {
+                        result.encodedData[
+                            cacheKeyFn({
+                                dataSlice,
+                                encoding: encoding === 'jsonParsed' ? 'base64' : encoding,
+                            })
+                        ] = data[0];
+                    } else if (typeof data === 'string') {
+                        result.encodedData[
+                            cacheKeyFn({
+                                dataSlice,
+                                encoding: 'base58',
+                            })
+                        ] = data;
+                    } else if (typeof data === 'object') {
+                        const {
+                            parsed: { info: parsedData, type: accountType },
+                            program: programName,
+                            programId,
+                        } = data;
+                        result.jsonParsedConfigs = {
+                            accountType,
+                            programId,
+                            programName,
+                        };
+                        Object.assign(result, account, parsedData as object);
+                    }
+                }
+            });
+
+            return addresses.map(address => resultMap[address]);
+        }
         return null;
     };
 };

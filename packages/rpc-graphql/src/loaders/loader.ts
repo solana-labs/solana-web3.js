@@ -21,7 +21,9 @@ export type AccountLoaderArgsBase = {
     minContextSlot?: Slot;
 };
 export type AccountLoaderArgs = AccountLoaderArgsBase & { address: Address };
-export type AccountLoaderValue = ReturnType<GetAccountInfoApi['getAccountInfo']>['value'] | null;
+export type AccountLoaderValue =
+    | (ReturnType<GetAccountInfoApi['getAccountInfo']>['value'] & { address: Address })
+    | null;
 export type AccountLoader = Loader<AccountLoaderArgs, AccountLoaderValue>;
 
 export type BlockLoaderArgsBase = {
