@@ -502,7 +502,7 @@ importers:
         specifier: ^0.4.4
         version: 0.4.4(rollup@4.16.4)
       '@solana/spl-token':
-        specifier: ^0.4.5
+        specifier: ^0.4.6
         version: 0.4.6(@solana/web3.js@1.91.6)(fastestsmallesttextencoderdecoder@1.0.22)
       '@types/bn.js':
         specifier: ^5.1.5
