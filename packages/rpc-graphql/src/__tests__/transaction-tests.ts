@@ -1262,6 +1262,106 @@ describe('transaction', () => {
                     },
                 });
             });
+            it('initialize-default-account-state', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeDefaultAccountStateInstruction {
+                                        accountState
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        accountState: expect.any(String),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+            it('update-default-account-state', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateDefaultAccountStateInstruction {
+                                        accountState
+                                        freezeAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigFreezeAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        accountState: expect.any(String),
+                                        freezeAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigFreezeAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        accountState: expect.any(String),
+                                        freezeAuthority: null,
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigFreezeAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

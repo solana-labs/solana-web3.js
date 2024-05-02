@@ -503,6 +503,33 @@ export const instructionTypeDefs = /* GraphQL */ `
         uiAmount: String
     }
 
+    enum SplTokenDefaultAccountState {
+        FROZEN
+        INITIALIZED
+        UNINITIALIZED
+    }
+
+    """
+    SplToken-2022: InitializeDefaultAccountState instruction
+    """
+    type SplTokenInitializeDefaultAccountStateInstruction implements TransactionInstruction {
+        programId: Address
+        accountState: SplTokenDefaultAccountState
+        mint: Account
+    }
+
+    """
+    SplToken-2022: UpdateDefaultAccountState instruction
+    """
+    type SplTokenUpdateDefaultAccountStateInstruction implements TransactionInstruction {
+        programId: Address
+        accountState: SplTokenDefaultAccountState
+        freezeAuthority: Account
+        mint: Account
+        multisigFreezeAuthority: Account
+        signers: [Address]
+    }
+
     """
     SplToken-2022: InitializeMintCloseAuthority instruction
     """

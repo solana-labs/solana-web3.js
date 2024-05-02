@@ -1715,6 +1715,36 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            accountState: 'frozen',
+                            freezeAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'updateDefaultAccountState',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            accountState: 'frozen',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            multisigFreezeAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'updateDefaultAccountState',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // Initializing Account Extensions.
                 {
                     parsed: {
