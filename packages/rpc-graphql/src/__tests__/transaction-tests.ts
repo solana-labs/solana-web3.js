@@ -811,6 +811,10 @@ describe('transaction', () => {
                                         mint {
                                             address
                                         }
+                                        multisigAuthority {
+                                            address
+                                        }
+                                        signers
                                     }
                                 }
                             }
@@ -833,7 +837,23 @@ describe('transaction', () => {
                                         mint: {
                                             address: expect.any(String),
                                         },
+                                        multisigAuthority: null,
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        authority: null,
+                                        metadataAddress: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
                                     },
                                 ]),
                             },
