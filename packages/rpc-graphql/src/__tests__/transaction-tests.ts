@@ -745,6 +745,122 @@ describe('transaction', () => {
                     },
                 });
             });
+            it('initialize-group-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeGroupPointerInstruction {
+                                        authority {
+                                            address
+                                        }
+                                        groupAddress {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        groupAddress: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+            it('update-group-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateGroupPointerInstruction {
+                                        authority {
+                                            address
+                                        }
+                                        groupAddress {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        groupAddress: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        authority: null,
+                                        groupAddress: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
             it('initialize-metadata-pointer', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `
@@ -861,7 +977,6 @@ describe('transaction', () => {
                     },
                 });
             });
-
             it('initialize-transferFee-config', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `
