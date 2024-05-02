@@ -182,6 +182,11 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenDefaultAccountState: {
+        FROZEN: 'frozen',
+        INITIALIZED: 'initialized',
+        UNINITIALIZED: 'uninitialized',
+    },
     SplTokenFreezeAccountInstruction: {
         account: resolveAccount('account'),
         freezeAuthority: resolveAccount('freezeAuthority'),
@@ -207,6 +212,9 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
+    },
+    SplTokenInitializeDefaultAccountStateInstruction: {
+        mint: resolveAccount('mint'),
     },
     SplTokenInitializeGroupMemberPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -307,6 +315,11 @@ export const instructionResolvers = {
     },
     SplTokenUiAmountToAmountInstruction: {
         mint: resolveAccount('mint'),
+    },
+    SplTokenUpdateDefaultAccountStateInstruction: {
+        freezeAuthority: resolveAccount('freezeAuthority'),
+        mint: resolveAccount('mint'),
+        multisigFreezeAuthority: resolveAccount('multisigFreezeAuthority'),
     },
     SplTokenUpdateGroupMemberPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -606,6 +619,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateTransferHook') {
                         return 'SplTokenUpdateTransferHookInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeDefaultAccountState') {
+                        return 'SplTokenInitializeDefaultAccountStateInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateDefaultAccountState') {
+                        return 'SplTokenUpdateDefaultAccountStateInstruction';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
