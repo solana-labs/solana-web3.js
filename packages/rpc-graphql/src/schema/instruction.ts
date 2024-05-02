@@ -599,6 +599,28 @@ export const instructionTypeDefs = /* GraphQL */ `
         maximumFee: Int
     }
 
+    """
+    SplToken-2022: InitializeTransferHook instruction
+    """
+    type SplTokenInitializeTransferHookInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        hookProgramId: Account
+        mint: Account
+    }
+
+    """
+    SplToken-2022: UpdateTransferHook instruction
+    """
+    type SplTokenUpdateTransferHookInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        hookProgramId: Account
+        mint: Account
+        multisigAuthority: Account
+        signers: [Address]
+    }
+
     # TODO: Extensions!
     # ...
 

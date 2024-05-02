@@ -254,6 +254,11 @@ export const instructionResolvers = {
         transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
         withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
+    SplTokenInitializeTransferHookInstruction: {
+        authority: resolveAccount('authority'),
+        hookProgramId: resolveAccount('programId'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
@@ -318,6 +323,12 @@ export const instructionResolvers = {
     SplTokenUpdateMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
         metadataAddress: resolveAccount('metadataAddress'),
+        mint: resolveAccount('mint'),
+        multisigAuthority: resolveAccount('multisigAuthority'),
+    },
+    SplTokenUpdateTransferHookInstruction: {
+        authority: resolveAccount('authority'),
+        hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
@@ -589,6 +600,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeTransferFeeConfig') {
                         return 'SplTokenInitializeTransferFeeConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTransferHook') {
+                        return 'SplTokenInitializeTransferHookInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateTransferHook') {
+                        return 'SplTokenUpdateTransferHookInstruction';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
