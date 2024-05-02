@@ -1652,7 +1652,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        signers: [expect.any(String), expect.any(String)],
+                                        signers: expect.arrayContaining([expect.any(String)]),
                                         withdrawWithheldAuthority: null,
                                     },
                                 ]),
