@@ -539,6 +539,8 @@ export const instructionTypeDefs = /* GraphQL */ `
         authority: Account
         metadataAddress: Account
         mint: Account
+        multisigAuthority: Account
+        signers: [Address]
     }
 
     """

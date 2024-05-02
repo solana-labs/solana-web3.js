@@ -297,6 +297,7 @@ export const instructionResolvers = {
         authority: resolveAccount('authority'),
         metadataAddress: resolveAccount('metadataAddress'),
         mint: resolveAccount('mint'),
+        multisigAuthority: resolveAccount('multisigAuthority'),
     },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
