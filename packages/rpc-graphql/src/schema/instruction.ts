@@ -544,6 +544,28 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
+    SplToken-2022: InitializeGroupMemberPointer instruction
+    """
+    type SplTokenInitializeGroupMemberPointerInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        memberAddress: Account
+        mint: Account
+    }
+
+    """
+    SplToken-2022: UpdateGroupMemberPointer instruction
+    """
+    type SplTokenUpdateGroupMemberPointerInstruction implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        memberAddress: Account
+        mint: Account
+        multisigAuthority: Account
+        signers: [Address]
+    }
+
+    """
     SplToken-2022: InitializeMetadataPointer instruction
     """
     type SplTokenInitializeMetadataPointerInstruction implements TransactionInstruction {

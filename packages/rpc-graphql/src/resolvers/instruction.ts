@@ -208,6 +208,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeGroupMemberPointerInstruction: {
+        authority: resolveAccount('authority'),
+        memberAddress: resolveAccount('memberAddress'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeGroupPointerInstruction: {
         authority: resolveAccount('authority'),
         groupAddress: resolveAccount('groupAddress'),
@@ -297,6 +302,12 @@ export const instructionResolvers = {
     },
     SplTokenUiAmountToAmountInstruction: {
         mint: resolveAccount('mint'),
+    },
+    SplTokenUpdateGroupMemberPointerInstruction: {
+        authority: resolveAccount('authority'),
+        memberAddress: resolveAccount('memberAddress'),
+        mint: resolveAccount('mint'),
+        multisigAuthority: resolveAccount('multisigAuthority'),
     },
     SplTokenUpdateGroupPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -563,6 +574,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateGroupPointer') {
                         return 'SplTokenUpdateGroupPointerInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeGroupMemberPointer') {
+                        return 'SplTokenInitializeGroupMemberPointerInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateGroupMemberPointer') {
+                        return 'SplTokenUpdateGroupMemberPointerInstruction';
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeMetadataPointer') {
                         return 'SplTokenInitializeMetadataPointerInstruction';
