@@ -648,6 +648,28 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
+    """
+    SplToken-2022: EnableCpiGuard instruction
+    """
+    type SplTokenEnableCpiGuardInstruction implements TransactionInstruction {
+        programId: Address
+        account: Account
+        multisigOwner: Account
+        owner: Account
+        signers: [Address]
+    }
+
+    """
+    SplToken-2022: DisableCpiGuard instruction
+    """
+    type SplTokenDisableCpiGuardInstruction implements TransactionInstruction {
+        programId: Address
+        account: Account
+        multisigOwner: Account
+        owner: Account
+        signers: [Address]
+    }
+
     # TODO: Extensions!
     # ...
 

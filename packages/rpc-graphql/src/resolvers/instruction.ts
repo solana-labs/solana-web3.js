@@ -187,6 +187,16 @@ export const instructionResolvers = {
         INITIALIZED: 'initialized',
         UNINITIALIZED: 'uninitialized',
     },
+    SplTokenDisableCpiGuardInstruction: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableCpiGuardInstruction: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenFreezeAccountInstruction: {
         account: resolveAccount('account'),
         freezeAuthority: resolveAccount('freezeAuthority'),
@@ -625,6 +635,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateDefaultAccountState') {
                         return 'SplTokenUpdateDefaultAccountStateInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableCpiGuard') {
+                        return 'SplTokenDisableCpiGuardInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableCpiGuard') {
+                        return 'SplTokenEnableCpiGuardInstruction';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
