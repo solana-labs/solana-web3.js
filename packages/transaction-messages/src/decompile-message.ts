@@ -136,11 +136,11 @@ function convertInstruction(
     const accounts = instruction.accountIndices?.map(accountIndex => accountMetas[accountIndex]);
     const { data } = instruction;
 
-    return {
+    return Object.freeze({
         programAddress,
-        ...(accounts && accounts.length ? { accounts } : {}),
+        ...(accounts && accounts.length ? { accounts: Object.freeze(accounts) } : {}),
         ...(data && data.length ? { data } : {}),
-    };
+    });
 }
 
 type LifetimeConstraint =

@@ -1,3 +1,5 @@
+import '@solana/test-matchers/toBeFrozenObject';
+
 import { Address } from '@solana/addresses';
 import {
     SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_ADDRESS_LOOKUP_TABLE_CONTENTS_MISSING,
@@ -38,6 +40,23 @@ describe('decompileTransactionMessage', () => {
                 blockhash,
                 lastValidBlockHeight: U64_MAX,
             });
+        });
+
+        it('freezes the blockhash lifetime constraint', () => {
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 0,
+                    numReadonlySignerAccounts: 0,
+                    numSignerAccounts: 1,
+                },
+                instructions: [],
+                lifetimeToken: blockhash,
+                staticAccounts: [feePayer],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.lifetimeConstraint).toBeFrozenObject();
         });
 
         it('converts a transaction with version legacy', () => {
@@ -140,6 +159,42 @@ describe('decompileTransactionMessage', () => {
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
         });
 
+        it('freezes the instruction accounts', () => {
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 2, // 1 passed into instruction + 1 program
+                    numReadonlySignerAccounts: 1,
+                    numSignerAccounts: 3, // fee payer + 2 passed into instruction
+                },
+                instructions: [
+                    {
+                        accountIndices: [1, 2, 3, 4],
+                        data: new Uint8Array([0, 1, 2, 3, 4]),
+                        programAddressIndex: 5,
+                    },
+                ],
+                lifetimeToken: blockhash,
+                staticAccounts: [
+                    // writable signers
+                    feePayer,
+                    'H4RdPRWYk3pKw2CkNznxQK6J6herjgQke2pzFJW4GC6x' as Address,
+                    // read-only signers
+                    'G35QeFd4jpXWfRkuRKwn8g4vYrmn8DWJ5v88Kkpd8z1V' as Address,
+                    // writable non-signers
+                    '3LeBzRE9Yna5zi9R8vdT3MiNQYuEp4gJgVyhhwmqfCtd' as Address,
+                    // read-only non-signers
+                    '8kud9bpNvfemXYdTFjs5cZ8fZinBkx8JAnhVmRwJZk5e' as Address,
+                    programAddress,
+                ],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.instructions[0].accounts).toBeFrozenObject();
+        });
+
         it('converts a transaction with multiple instructions', () => {
             const compiledTransaction: CompiledTransactionMessage = {
                 header: {
@@ -193,6 +248,46 @@ describe('decompileTransactionMessage', () => {
                 blockhash,
                 lastValidBlockHeight: 100n,
             });
+        });
+
+        it('freezes the instructions within the transaction', () => {
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 1,
+                    // fee payer
+                    numReadonlySignerAccounts: 0,
+                    numSignerAccounts: 1, // program address
+                },
+                instructions: [{ programAddressIndex: 1 }],
+                lifetimeToken: blockhash,
+                staticAccounts: [feePayer, programAddress],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.instructions[0]).toBeFrozenObject();
+        });
+
+        it('freezes the instructions array', () => {
+            const programAddress = 'HZMKVnRrWLyQLwPLTTLKtY7ET4Cf7pQugrTr9eTBrpsf' as Address;
+
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 1,
+                    // fee payer
+                    numReadonlySignerAccounts: 0,
+                    numSignerAccounts: 1, // program address
+                },
+                instructions: [{ programAddressIndex: 1 }],
+                lifetimeToken: blockhash,
+                staticAccounts: [feePayer, programAddress],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.instructions).toBeFrozenObject();
         });
     });
 
@@ -264,6 +359,42 @@ describe('decompileTransactionMessage', () => {
             expect(transaction.instructions).toStrictEqual([expectedInstruction]);
             expect(transaction.feePayer).toStrictEqual(nonceAuthorityAddress);
             expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
+        });
+
+        it('freezes the nonce lifetime constraint', () => {
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 2, // recent blockhashes sysvar, system program
+                    numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                    numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                },
+                instructions: [
+                    {
+                        accountIndices: [
+                            1, // nonce account address
+                            3, // recent blockhashes sysvar
+                            0, // nonce authority address
+                        ],
+                        data: new Uint8Array([4, 0, 0, 0]),
+                        programAddressIndex: 2,
+                    },
+                ],
+                lifetimeToken: nonce,
+                staticAccounts: [
+                    // writable signers
+                    nonceAuthorityAddress,
+                    // no read-only signers
+                    // writable non-signers
+                    nonceAccountAddress,
+                    // read-only non-signers
+                    systemProgramAddress,
+                    recentBlockhashesSysvarAddress,
+                ],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.lifetimeConstraint).toBeFrozenObject();
         });
 
         it('converts a transaction with one instruction which is advance nonce (fee payer is not nonce authority)', () => {
@@ -404,6 +535,96 @@ describe('decompileTransactionMessage', () => {
 
             expect(transaction.instructions).toStrictEqual(expectedInstructions);
             expect(transaction.lifetimeConstraint).toStrictEqual({ nonce });
+        });
+
+        it('freezes the instructions within the transaction', () => {
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 4, // recent blockhashes sysvar, system program, 2 other program addresses
+                    numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                    numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                },
+                instructions: [
+                    {
+                        accountIndices: [
+                            1, // nonce account address
+                            3, // recent blockhashes sysvar
+                            0, // nonce authority address
+                        ],
+                        data: new Uint8Array([4, 0, 0, 0]),
+                        programAddressIndex: 2,
+                    },
+                    {
+                        accountIndices: [0, 1],
+                        data: new Uint8Array([1, 2, 3, 4]),
+                        programAddressIndex: 4,
+                    },
+                    { programAddressIndex: 5 },
+                ],
+                lifetimeToken: nonce,
+                staticAccounts: [
+                    // writable signers
+                    nonceAuthorityAddress,
+                    // no read-only signers
+                    // writable non-signers
+                    nonceAccountAddress,
+                    // read-only non-signers
+                    systemProgramAddress,
+                    recentBlockhashesSysvarAddress,
+                    '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
+                    'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
+                ],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.instructions[0]).toBeFrozenObject();
+            expect(transaction.instructions[1]).toBeFrozenObject();
+            expect(transaction.instructions[2]).toBeFrozenObject();
+        });
+
+        it('freezes the instructions array', () => {
+            const compiledTransaction: CompiledTransactionMessage = {
+                header: {
+                    numReadonlyNonSignerAccounts: 4, // recent blockhashes sysvar, system program, 2 other program addresses
+                    numReadonlySignerAccounts: 0, // nonce authority already added as fee payer
+                    numSignerAccounts: 1, // fee payer and nonce authority are the same account
+                },
+                instructions: [
+                    {
+                        accountIndices: [
+                            1, // nonce account address
+                            3, // recent blockhashes sysvar
+                            0, // nonce authority address
+                        ],
+                        data: new Uint8Array([4, 0, 0, 0]),
+                        programAddressIndex: 2,
+                    },
+                    {
+                        accountIndices: [0, 1],
+                        data: new Uint8Array([1, 2, 3, 4]),
+                        programAddressIndex: 4,
+                    },
+                    { programAddressIndex: 5 },
+                ],
+                lifetimeToken: nonce,
+                staticAccounts: [
+                    // writable signers
+                    nonceAuthorityAddress,
+                    // no read-only signers
+                    // writable non-signers
+                    nonceAccountAddress,
+                    // read-only non-signers
+                    systemProgramAddress,
+                    recentBlockhashesSysvarAddress,
+                    '3hpECiFPtnyxoWqWqcVyfBUDhPKSZXWDduNXFywo8ncP' as Address,
+                    'Cmqw16pVQvmW1b7Ek1ioQ5Ggf1PaoXi5XxsK9iVSbRKC' as Address,
+                ],
+                version: 0,
+            };
+
+            const transaction = decompileTransactionMessage(compiledTransaction);
+            expect(transaction.instructions).toBeFrozenObject();
         });
     });
 
