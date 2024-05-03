@@ -294,6 +294,13 @@ export const instructionResolvers = {
         mintAuthority: resolveAccount('mintAuthority'),
         multisigMintAuthority: resolveAccount('multisigMintAuthority'),
     },
+    SplTokenReallocate: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        payer: resolveAccount('payer'),
+        systemProgram: resolveAccount('systemProgram'),
+    },
     SplTokenRevokeInstruction: {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -656,6 +663,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromAccounts') {
                         return 'SplTokenWithdrawWithheldTokensFromAccounts';
+                    }
+                    if (jsonParsedConfigs?.instructionType === 'reallocate') {
+                        return 'SplTokenReallocate';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

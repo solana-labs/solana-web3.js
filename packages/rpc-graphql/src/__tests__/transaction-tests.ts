@@ -1591,6 +1591,69 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('reallocate', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenReallocate {
+                                        account {
+                                            address
+                                        }
+                                        extensionTypes
+                                        owner {
+                                            address
+                                        }
+                                        payer {
+                                            address
+                                        }
+                                        systemProgram {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        extensionTypes: expect.any([expect.any(String)]),
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        payer: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        systemProgram: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

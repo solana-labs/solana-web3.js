@@ -692,6 +692,20 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawWithheldAuthority: Account
     }
 
+    """
+    SplToken-2022: Reallocate instruction
+    """
+    type SplTokenReallocate implements TransactionInstruction {
+        programId: Address
+        account: Account
+        extensionTypes: [String]
+        owner: Account
+        payer: Account
+        systemProgram: Account
+        multisigOwner: Account
+        signers: [Address]
+    }
+
     # TODO: Extensions!
     # ...
 
