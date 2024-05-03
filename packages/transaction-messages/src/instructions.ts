@@ -11,12 +11,10 @@ export function appendTransactionMessageInstructions<TTransaction extends BaseTr
     instructions: ReadonlyArray<TTransaction['instructions'][number]>,
     transaction: TTransaction,
 ): TTransaction {
-    const out = {
+    return Object.freeze({
         ...transaction,
-        instructions: [...transaction.instructions, ...instructions],
-    };
-    Object.freeze(out);
-    return out;
+        instructions: Object.freeze([...transaction.instructions, ...instructions]),
+    });
 }
 
 export function prependTransactionMessageInstruction<TTransaction extends BaseTransactionMessage>(
@@ -30,10 +28,8 @@ export function prependTransactionMessageInstructions<TTransaction extends BaseT
     instructions: ReadonlyArray<TTransaction['instructions'][number]>,
     transaction: TTransaction,
 ): TTransaction {
-    const out = {
+    return Object.freeze({
         ...transaction,
-        instructions: [...instructions, ...transaction.instructions],
-    };
-    Object.freeze(out);
-    return out;
+        instructions: Object.freeze([...instructions, ...transaction.instructions]),
+    });
 }
