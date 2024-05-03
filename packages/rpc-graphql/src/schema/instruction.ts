@@ -684,12 +684,12 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type SplTokenWithdrawWithheldTokensFromAccounts implements TransactionInstruction {
         programId: Address
-        mint: Account
-        sourceAccounts: [Address]
-        withdrawWithheldAuthority: Account
         feeRecipient: Account
+        mint: Account
         multisigWithdrawWithheldAuthority: Account
         signers: [Address]
+        sourceAccounts: [Address]
+        withdrawWithheldAuthority: Account
     }
 
     # TODO: Extensions!
