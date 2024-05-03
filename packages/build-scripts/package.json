@@ -3,7 +3,6 @@
     "version": "0.0.0",
     "private": true,
     "files": [
-        "add-js-extension-to-types.mjs",
         "env-shim.ts",
         "tsup.config.library.ts",
         "tsup.config.package.ts"

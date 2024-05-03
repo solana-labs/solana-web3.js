@@ -4,25 +4,25 @@
     "description": "A polyfill that adds Ed25519 key manipulation capabilities to `SubtleCrypto` in environments where it is not yet supported",
     "exports": {
         "browser": {
-            "import": "./dist/index.browser.js",
+            "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs"
         },
         "node": {
-            "import": "./dist/index.node.js",
+            "import": "./dist/index.node.mjs",
             "require": "./dist/index.node.cjs"
         },
-        "react-native": "./dist/index.native.js",
+        "react-native": "./dist/index.native.mjs",
         "types": "./dist/types/index.d.ts"
     },
     "browser": {
         "./dist/index.node.cjs": "./dist/index.browser.cjs",
-        "./dist/index.node.js": "./dist/index.browser.js"
+        "./dist/index.node.mjs": "./dist/index.browser.mjs"
     },
     "main": "./dist/index.node.cjs",
-    "module": "./dist/index.node.js",
-    "react-native": "./dist/index.native.js",
+    "module": "./dist/index.node.mjs",
+    "react-native": "./dist/index.native.mjs",
     "types": "./dist/types/index.d.ts",
-    "type": "module",
+    "type": "commonjs",
     "files": [
         "./dist/"
     ],
@@ -34,7 +34,7 @@
     ],
     "scripts": {
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
-        "compile:typedefs": "tsc -p ./tsconfig.declarations.json && node ../../node_modules/@solana/build-scripts/add-js-extension-to-types.mjs",
+        "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
         "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",

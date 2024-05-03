@@ -2,6 +2,6 @@
 
 import process from 'node:process';
 
-import { run } from '../dist/cli.js';
+import { run } from '../dist/cli.mjs';
 
 run(process.argv);
