@@ -206,6 +206,9 @@ export const instructionResolvers = {
     SplTokenGetAccountDataSizeInstruction: {
         mint: resolveAccount('mint'),
     },
+    SplTokenHarvestWithheldTokensToMint: {
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeAccount2Instruction: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
@@ -354,6 +357,12 @@ export const instructionResolvers = {
         hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
+    },
+    SplTokenWithdrawWithheldTokensFromAccounts: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
@@ -641,6 +650,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'enableCpiGuard') {
                         return 'SplTokenEnableCpiGuardInstruction';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'harvestWithheldTokensToMint') {
+                        return 'SplTokenHarvestWithheldTokensToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromAccounts') {
+                        return 'SplTokenWithdrawWithheldTokensFromAccounts';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

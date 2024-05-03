@@ -670,6 +670,28 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
+    """
+    SplToken-2022: HarvestWithheldTokensToMint instruction
+    """
+    type SplTokenHarvestWithheldTokensToMint implements TransactionInstruction {
+        programId: Address
+        mint: Account
+        sourceAccounts: [Address]
+    }
+
+    """
+    SplToken-2022: HarvestWithheldTokensToMint instruction
+    """
+    type SplTokenWithdrawWithheldTokensFromAccounts implements TransactionInstruction {
+        programId: Address
+        mint: Account
+        sourceAccounts: [Address]
+        withdrawWithheldAuthority: Account
+        feeRecipient: Account
+        multisigWithdrawWithheldAuthority: Account
+        signers: [Address]
+    }
+
     # TODO: Extensions!
     # ...
 

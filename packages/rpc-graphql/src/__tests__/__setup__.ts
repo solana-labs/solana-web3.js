@@ -1841,6 +1841,59 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            sourceAccounts: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'harvestWithheldTokensToMint',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            feeRecipient: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            sourceAccounts: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                            withdrawWithheldAuthority: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                        },
+                        type: 'withdrawWithheldTokensFromAccounts',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            feeRecipient: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            sourceAccounts: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                            multisigWithdrawWithheldAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'withdrawWithheldTokensFromAccounts',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
