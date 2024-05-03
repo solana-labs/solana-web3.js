@@ -1654,7 +1654,7 @@ describe('transaction', () => {
                                         },
                                         extensionTypes: expect.any([expect.any(String)]),
                                         multisigOwner: {
-                                           address: expect.any(String)
+                                            address: expect.any(String),
                                         },
                                         owner: {
                                             address: expect.any(String),
@@ -1667,7 +1667,7 @@ describe('transaction', () => {
                                         systemProgram: {
                                             address: expect.any(String),
                                         },
-                                    }
+                                    },
                                 ]),
                             },
                         },

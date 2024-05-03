@@ -1917,8 +1917,11 @@ export const mockTransactionToken2022AllExtensions = {
                             owner: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             payer: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             systemProgram: '11111111111111111111111111111111',
-                            signers:  ["2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB", "2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB"],
-                            multisigOwner: "Sysvar1nstructions1111111111111111111111111",
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                            multisigOwner: 'Sysvar1nstructions1111111111111111111111111',
                         },
                         type: 'reallocate',
                     },
