@@ -1648,6 +1648,26 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                     },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        extensionTypes: expect.any([expect.any(String)]),
+                                        multisigOwner: {
+                                           address: expect.any(String)
+                                        },
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        payer: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.any([expect.any(String)]),
+                                        systemProgram: {
+                                            address: expect.any(String),
+                                        },
+                                    }
                                 ]),
                             },
                         },

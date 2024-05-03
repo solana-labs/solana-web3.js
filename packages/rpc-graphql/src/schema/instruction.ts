@@ -700,10 +700,10 @@ export const instructionTypeDefs = /* GraphQL */ `
         account: Account
         extensionTypes: [String]
         owner: Account
-        payer: Account
-        systemProgram: Account
         multisigOwner: Account
+        payer: Account
         signers: [Address]
+        systemProgram: Account
     }
 
     # TODO: Extensions!
