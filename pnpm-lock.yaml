@@ -562,8 +562,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0
       mockttp:
-        specifier: ^3.10.1
-        version: 3.10.1
+        specifier: ^3.11.0
+        version: 3.11.0
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -5794,6 +5794,12 @@ packages:
       tslib: 2.6.2
     dev: true
 
+  /async-mutex@0.5.0:
+    resolution: {integrity: sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA==}
+    dependencies:
+      tslib: 2.6.2
+    dev: true
+
   /async@2.6.4:
     resolution: {integrity: sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==}
     dependencies:
@@ -6852,8 +6858,8 @@ packages:
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
     dev: true
 
-  /destroyable-server@1.0.1:
-    resolution: {integrity: sha512-i3ZQbobNLw6EhSqgs0vFYqajDDWs0dm8JORWpQK+uRXBDxAAtGdmzTyqBkQNyr4hT6jMck3J7F2Qq6H50aJMyg==}
+  /destroyable-server@1.0.2:
+    resolution: {integrity: sha512-Ln7ZKRq+7kr/3e4FCI8+jAjRbqbdaET8/ZBoUVvn+sDSAD7zDZA5mykkPRcrjBcaGy+LOM4ntMlIp1NMj1kMxw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/node': 18.19.21
@@ -10601,8 +10607,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /mockttp@3.10.1:
-    resolution: {integrity: sha512-D+8uEDJr/DDEzQ6Weg2w1hw+vA/+FzfltOUpqpjCxbaqRrDvQrfOkkYgtx4jlp7b3tfxJBMTO4MwuBhhfY93WQ==}
+  /mockttp@3.11.0:
+    resolution: {integrity: sha512-zR5GjGAiOEYcZURmNipugCTR9Y4e9vnK0yeVz0se6M/lTfx05b5d2gXzuduquqJt/yWTRVOBMNuuS0026yfudw==}
     engines: {node: '>=14.14.0'}
     hasBin: true
     dependencies:
@@ -10613,6 +10619,7 @@ packages:
       '@httptoolkit/websocket-stream': 6.0.1
       '@types/cors': 2.8.17
       '@types/node': 18.19.21
+      async-mutex: 0.5.0
       base64-arraybuffer: 0.1.5
       body-parser: 1.20.2
       cacheable-lookup: 6.1.0
@@ -10621,7 +10628,7 @@ packages:
       cors: 2.8.5
       cors-gate: 1.1.3
       cross-fetch: 3.1.8
-      destroyable-server: 1.0.1
+      destroyable-server: 1.0.2
       express: 4.19.2
       graphql: 15.8.0
       graphql-http: 1.22.0(graphql@15.8.0)
@@ -10638,7 +10645,7 @@ packages:
       pac-proxy-agent: 7.0.1
       parse-multipart-data: 1.5.0
       performance-now: 2.1.0
-      portfinder: 1.0.28
+      portfinder: 1.0.32
       read-tls-client-hello: 1.0.1
       semver: 7.6.0
       socks-proxy-agent: 7.0.0
@@ -11310,8 +11317,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /portfinder@1.0.28:
-    resolution: {integrity: sha512-Se+2isanIcEqf2XMHjyUKskczxbPH7dQnlMjXX6+dybayyHvAf/TCgyMRlzf/B6QDhAEFOGes0pzRo3by4AbMA==}
+  /portfinder@1.0.32:
+    resolution: {integrity: sha512-on2ZJVVDXRADWE6jnQaX0ioEylzgBpQk8r55NE4wjXW1ZxO+BgDlY6DXwj20i0V8eB4SenDQ00WEaxfiIQPcxg==}
     engines: {node: '>= 0.12.0'}
     dependencies:
       async: 2.6.4
