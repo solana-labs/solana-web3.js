@@ -10,10 +10,8 @@ export function createTransactionMessage<TVersion extends TransactionVersion>(
 export function createTransactionMessage<TVersion extends TransactionVersion>({
     version,
 }: TransactionConfig<TVersion>): TransactionMessage {
-    const out: TransactionMessage = {
-        instructions: [],
+    return Object.freeze({
+        instructions: Object.freeze([]),
         version,
-    };
-    Object.freeze(out);
-    return out;
+    }) as TransactionMessage;
 }
