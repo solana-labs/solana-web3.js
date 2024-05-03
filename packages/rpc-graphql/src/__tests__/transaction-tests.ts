@@ -1480,6 +1480,117 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('harvest-withheld-tokens-to-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenHarvestWithheldTokensToMint {
+                                        mint {
+                                            address
+                                        }
+                                        sourceAccounts
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('withdraw-withheld-tokens-from-accounts', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldTokensFromAccounts {
+                                        feeRecipient {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        signers
+                                        sourceAccounts
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
