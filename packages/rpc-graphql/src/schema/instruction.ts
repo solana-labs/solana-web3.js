@@ -680,7 +680,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
-    SplToken-2022: HarvestWithheldTokensToMint instruction
+    SplToken-2022: WithdrawWithheldTokensFromAccounts instruction
     """
     type SplTokenWithdrawWithheldTokensFromAccounts implements TransactionInstruction {
         programId: Address
