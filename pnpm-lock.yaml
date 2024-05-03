@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -443,8 +447,8 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0
       rpc-websockets:
-        specifier: ^7.10.0
-        version: 7.10.0
+        specifier: ^7.11.0
+        version: 7.11.0
       superstruct:
         specifier: ^0.14.2
         version: 0.14.2
@@ -3586,7 +3590,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: '*'
+      jsdom: ^22
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -4755,7 +4759,7 @@ packages:
       fast-stable-stringify: 1.0.0
       jayson: 4.1.0
       node-fetch: 2.7.0
-      rpc-websockets: 7.10.0
+      rpc-websockets: 7.11.0
       superstruct: 0.14.2
     transitivePeerDependencies:
       - bufferutil
@@ -11826,10 +11830,9 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /rpc-websockets@7.10.0:
-    resolution: {integrity: sha512-cemZ6RiDtYZpPiBzYijdOrkQQzmBCmug0E9SdRH2gIUNT15ql4mwCYWIp0VnSZq6Qrw/JkGUygp4PrK1y9KfwQ==}
+  /rpc-websockets@7.11.0:
+    resolution: {integrity: sha512-IkLYjayPv6Io8C/TdCL5gwgzd1hFz2vmBZrjMw/SPEXo51ETOhnzgS4Qy5GWi2JQN7HKHa66J3+2mv0fgNh/7w==}
     dependencies:
-      '@babel/runtime': 7.24.5
       eventemitter3: 4.0.7
       uuid: 8.3.2
       ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -13581,7 +13584,3 @@ packages:
       '@types/fs-extra': 11.0.4
       '@types/node': 20.12.7
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
