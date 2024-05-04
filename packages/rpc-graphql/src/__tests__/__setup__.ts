@@ -1985,8 +1985,6 @@ export const mockTransactionToken2022AllExtensions = {
                         info: {
                             account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             owner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
-                            multisigAuthority: null,
-                            signers: null,
                         },
                         type: 'enableRequiredMemoTransfers',
                     },
@@ -2015,8 +2013,6 @@ export const mockTransactionToken2022AllExtensions = {
                         info: {
                             account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             owner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
-                            multisigAuthority: null,
-                            signers: null,
                         },
                         type: 'disableRequiredMemoTransfers',
                     },
