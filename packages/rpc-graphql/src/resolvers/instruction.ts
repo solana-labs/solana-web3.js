@@ -192,7 +192,17 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenDisableRequiredMemoTransfers: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenEnableCpiGuardInstruction: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableRequiredMemoTransfers: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -675,6 +685,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromMint') {
                         return 'SplTokenWithdrawWithheldTokensFromMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableRequiredMemoTransfers') {
+                        return 'SplTokenEnableRequiredMemoTransfers';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableRequiredMemoTransfers') {
+                        return 'SplTokenDisableRequiredMemoTransfers';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

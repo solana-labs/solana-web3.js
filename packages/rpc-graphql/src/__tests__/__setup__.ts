@@ -1980,6 +1980,62 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            owner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'enableRequiredMemoTransfers',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            multisigOwner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'enableRequiredMemoTransfers',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            owner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                        },
+                        type: 'disableRequiredMemoTransfers',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            multisigOwner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'disableRequiredMemoTransfers',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
