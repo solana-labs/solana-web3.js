@@ -1914,7 +1914,6 @@ export const mockTransactionToken2022AllExtensions = {
                         info: {
                             account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
                             extensionTypes: ['transferFeeAmount', 'memoTransfer'],
-                            owner: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             payer: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
                             systemProgram: '11111111111111111111111111111111',
                             signers: [

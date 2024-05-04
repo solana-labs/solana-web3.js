@@ -1656,9 +1656,6 @@ describe('transaction', () => {
                                         multisigOwner: {
                                             address: expect.any(String),
                                         },
-                                        owner: {
-                                            address: expect.any(String),
-                                        },
                                         payer: {
                                             address: expect.any(String),
                                         },
