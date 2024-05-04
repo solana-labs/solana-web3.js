@@ -1944,6 +1944,51 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeInterestBearingConfig {
+                                        mint {
+                                            address
+                                        }
+                                        rate {
+                                            address
+                                        }
+                                        rateAuthority
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rate: {
+                                            address: expect.any(String),
+                                        },
+                                        rateAuthority: expect.any(Number),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

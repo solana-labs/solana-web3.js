@@ -253,6 +253,10 @@ export const instructionResolvers = {
         groupAddress: resolveAccount('groupAddress'),
         mint: resolveAccount('mint'),
     },
+    SplTokenInitializeInterestBearingConfig: {
+        mint: resolveAccount('mint'),
+        rate: resolveAccount('rate'),
+    },
     SplTokenInitializeMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
         metadataAddress: resolveAccount('metadataAddress'),
@@ -698,6 +702,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferMint') {
                         return 'SplTokenInitializeConfidentialTransferMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeInterestBearingConfig') {
+                        return 'SplTokenInitializeInterestBearingConfig';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
