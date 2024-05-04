@@ -719,6 +719,28 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
     }
 
+    """
+    SplToken-2022: EnableRequiredMemoTransfers instruction
+    """
+    type SplTokenEnableRequiredMemoTransfers implements TransactionInstruction {
+        programId: Address
+        account: Account
+        owner: Account
+        multisigOwner: Account
+        signers: [Address]
+    }
+
+    """
+    SplToken-2022: DisableRequiredMemoTransfers instruction
+    """
+    type SplTokenDisableRequiredMemoTransfers implements TransactionInstruction {
+        programId: Address
+        account: Account
+        owner: Account
+        multisigOwner: Account
+        signers: [Address]
+    }
+
     # TODO: Extensions!
     # ...
 
