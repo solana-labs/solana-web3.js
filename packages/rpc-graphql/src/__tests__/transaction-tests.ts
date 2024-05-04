@@ -1591,6 +1591,76 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('withdraw-withheld-tokens-from-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldTokensFromMint {
+                                        mint {
+                                            address
+                                        }
+                                        feeRecipient {
+                                            address
+                                        }
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

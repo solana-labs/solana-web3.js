@@ -364,6 +364,12 @@ export const instructionResolvers = {
         multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
         withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
+    SplTokenWithdrawWithheldTokensFromMint: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
         clockSysvar: resolveAccount('clockSysvar'),
@@ -656,6 +662,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromAccounts') {
                         return 'SplTokenWithdrawWithheldTokensFromAccounts';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromMint') {
+                        return 'SplTokenWithdrawWithheldTokensFromMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
