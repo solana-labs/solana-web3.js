@@ -7,13 +7,25 @@ import { rootResolvers } from './root';
 import { transactionResolvers } from './transaction';
 import { typeTypeResolvers } from './types';
 
-export function createSolanaGraphQLResolvers(): Parameters<typeof makeExecutableSchema>[0]['resolvers'] {
+type Resolvers = Parameters<typeof makeExecutableSchema>[0]['resolvers'];
+
+export function createSolanaGraphQLResolvers({
+    queryResolvers,
+    typeResolvers,
+}: {
+    queryResolvers?: Resolvers;
+    typeResolvers?: Resolvers;
+}): Resolvers {
     return {
+        Query: {
+            ...queryResolvers,
+            ...rootResolvers,
+        },
         ...accountResolvers,
         ...blockResolvers,
         ...instructionResolvers,
-        ...rootResolvers,
         ...transactionResolvers,
+        ...typeResolvers,
         ...typeTypeResolvers,
     };
 }
