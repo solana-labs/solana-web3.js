@@ -1,11 +1,11 @@
 import type { makeExecutableSchema } from '@graphql-tools/schema';
 
-import { accountResolvers } from '../resolvers/account';
-import { blockResolvers } from '../resolvers/block';
-import { instructionResolvers } from '../resolvers/instruction';
-import { rootResolvers } from '../resolvers/root';
-import { transactionResolvers } from '../resolvers/transaction';
-import { typeTypeResolvers } from '../resolvers/types';
+import { accountResolvers } from './account';
+import { blockResolvers } from './block';
+import { instructionResolvers } from './instruction';
+import { rootResolvers } from './root';
+import { transactionResolvers } from './transaction';
+import { typeTypeResolvers } from './types';
 
 export function createSolanaGraphQLResolvers(): Parameters<typeof makeExecutableSchema>[0]['resolvers'] {
     return {
