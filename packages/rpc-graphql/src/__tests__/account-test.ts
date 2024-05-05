@@ -1246,6 +1246,47 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the stake history sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarStakeHistory1111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarStakeHistoryAccount {
+                                entries {
+                                    effective
+                                    activating
+                                    deactivating
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarStakeHistory1111111111111111111111111',
+                            entries: expect.any(Array), // Not always populated on test validator
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
