@@ -901,5 +901,52 @@ describe('account', () => {
                 },
             });
         });
+        describe('sysvars', () => {
+            it('can get the clock sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarC1ock11111111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarClockAccount {
+                                epoch
+                                epochStartTimestamp
+                                leaderScheduleEpoch
+                                slot
+                                unixTimestamp
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarC1ock11111111111111111111111111111111',
+                            epoch: expect.any(BigInt),
+                            epochStartTimestamp: expect.any(BigInt),
+                            lamports: expect.any(BigInt),
+                            leaderScheduleEpoch: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            slot: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                            unixTimestamp: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+        });
     });
 });

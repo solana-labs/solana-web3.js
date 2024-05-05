@@ -176,4 +176,22 @@ export const accountTypeDefs = /* GraphQL */ `
         rootSlot: BigInt
         votes: [VoteAccountDataVote]
     }
+
+    """
+    Sysvar Clock
+    """
+    type SysvarClockAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        epoch: BigInt
+        epochStartTimestamp: BigInt
+        leaderScheduleEpoch: BigInt
+        slot: BigInt
+        unixTimestamp: BigInt
+    }
 `;
