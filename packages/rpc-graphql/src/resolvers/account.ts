@@ -147,6 +147,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'clock') {
                 return 'SysvarClockAccount';
             }
+            if (jsonParsedConfigs.accountType === 'epochRewards') {
+                return 'SysvarEpochRewardsAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -192,6 +195,10 @@ export const accountResolvers = {
         voter: resolveAccount('voter'),
     },
     SysvarClockAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarEpochRewardsAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },

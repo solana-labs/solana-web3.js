@@ -194,4 +194,20 @@ export const accountTypeDefs = /* GraphQL */ `
         slot: BigInt
         unixTimestamp: BigInt
     }
+
+    """
+    Sysvar Epoch Rewards
+    """
+    type SysvarEpochRewardsAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        distributedRewards: BigInt
+        distributionCompleteBlockHeight: BigInt
+        totalRewards: BigInt
+    }
 `;
