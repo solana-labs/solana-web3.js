@@ -388,8 +388,8 @@ export const instructionResolvers = {
         withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
     SplTokenInitializeConfidentialTransferMint: {
-        mint: resolveAccount('mint'),
         authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
     },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),
