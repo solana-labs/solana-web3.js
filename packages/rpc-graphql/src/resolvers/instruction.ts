@@ -236,6 +236,10 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeDefaultAccountStateInstruction: {
         mint: resolveAccount('mint'),
     },
@@ -691,6 +695,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'disableRequiredMemoTransfers') {
                         return 'SplTokenDisableRequiredMemoTransfers';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferMint') {
+                        return 'SplTokenInitializeConfidentialTransferMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

@@ -1896,6 +1896,54 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeConfidentialTransferMint {
+                                        mint {
+                                            address
+                                        }
+                                        authority {
+                                            address
+                                        }
+                                        auditorElgamalPubkey
+                                        autoApproveNewAccounts
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        auditorElgamalPubkey: null,
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        autoApproveNewAccounts: expect.any(Boolean),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
