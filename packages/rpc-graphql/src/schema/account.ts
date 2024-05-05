@@ -229,9 +229,10 @@ export const accountTypeDefs = /* GraphQL */ `
         warmup: Boolean
     }
 
-    type SysvarFeesFeeCalculator {
+    type FeeCalculator {
         lamportsPerSignature: BigInt
     }
+
     """
     Sysvar Fees
     """
@@ -243,7 +244,7 @@ export const accountTypeDefs = /* GraphQL */ `
         ownerProgram: Account
         space: BigInt
         rentEpoch: BigInt
-        feeCalculator: SysvarFeesFeeCalculator
+        feeCalculator: FeeCalculator
     }
 
     """
@@ -258,5 +259,23 @@ export const accountTypeDefs = /* GraphQL */ `
         space: BigInt
         rentEpoch: BigInt
         lastRestartSlot: BigInt
+    }
+
+    type SysvarRecentBlockhashesEntry {
+        blockhash: String
+        feeCalculator: FeeCalculator
+    }
+    """
+    Sysvar Recent Blockhashes
+    """
+    type SysvarRecentBlockhashesAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        entries: [SysvarRecentBlockhashesEntry]
     }
 `;

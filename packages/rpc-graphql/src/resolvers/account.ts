@@ -104,10 +104,16 @@ export const resolveAccount = (fieldName?: string) => {
                             programId,
                             programName,
                         };
-                        result = {
-                            ...result,
-                            ...(parsedData as object),
-                        };
+                        if (Array.isArray(parsedData)) {
+                            // If the `jsonParsed` data is an array, put it
+                            // into a field called `entries`.
+                            Object.assign(result, { entries: parsedData });
+                        } else {
+                            result = {
+                                ...result,
+                                ...(parsedData as object),
+                            };
+                        }
                     }
                 }
             });
@@ -158,6 +164,9 @@ function resolveAccountType(accountResult: AccountResult) {
             }
             if (jsonParsedConfigs.accountType === 'lastRestartSlot') {
                 return 'SysvarLastRestartSlotAccount';
+            }
+            if (jsonParsedConfigs.accountType === 'recentBlockhashes') {
+                return 'SysvarRecentBlockhashesAccount';
             }
         }
     }
@@ -220,6 +229,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarLastRestartSlotAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarRecentBlockhashesAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
