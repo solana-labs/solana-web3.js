@@ -6,6 +6,9 @@ export default defineConfig(_options =>
         format: ['cjs', 'esm'],
         minify: true,
         name: platform,
+        outExtension({ format }) {
+            return { js: `.${format === 'cjs' ? 'cjs' : 'mjs'}` };
+        },
         platform,
         sourcemap: true,
         treeshake: true,

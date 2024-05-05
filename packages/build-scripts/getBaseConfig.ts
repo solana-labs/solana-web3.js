@@ -61,7 +61,7 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               if (format === 'iife') {
                                   extension = `.${isDebugBuild ? 'development' : 'production.min'}.js`;
                               } else {
-                                  extension = `.${platform}.${format === 'cjs' ? 'cjs' : 'js'}`;
+                                  extension = `.${platform}.${format === 'cjs' ? 'cjs' : 'mjs'}`;
                               }
                               return {
                                   js: extension,
