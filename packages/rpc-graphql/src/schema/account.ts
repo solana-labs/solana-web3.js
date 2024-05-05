@@ -294,4 +294,23 @@ export const accountTypeDefs = /* GraphQL */ `
         exemptionThreshold: Int
         lamportsPerByteYear: BigInt
     }
+
+    type SlotHashEntry {
+        hash: String
+        slot: BigInt
+    }
+
+    """
+    Sysvar Slot Hashes
+    """
+    type SysvarSlotHashesAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        entries: [SlotHashEntry]
+    }
 `;

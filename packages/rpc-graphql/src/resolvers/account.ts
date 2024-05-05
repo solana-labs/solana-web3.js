@@ -171,6 +171,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'rent') {
                 return 'SysvarRentAccount';
             }
+            if (jsonParsedConfigs.accountType === 'slotHashes') {
+                return 'SysvarSlotHashesAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -240,6 +243,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarRentAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarSlotHashesAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },

@@ -1162,6 +1162,51 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the slot hashes sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarS1otHashes111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarSlotHashesAccount {
+                                entries {
+                                    hash
+                                    slot
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarS1otHashes111111111111111111111111111',
+                            entries: expect.arrayContaining([
+                                {
+                                    hash: expect.any(String),
+                                    slot: expect.any(BigInt),
+                                },
+                            ]),
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
