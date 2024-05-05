@@ -6,7 +6,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -19,14 +19,14 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
     }
 
     type NonceAccountFeeCalculator {
-        lamportsPerSignature: String
+        lamportsPerSignature: Lamports
     }
     """
     A nonce account
@@ -35,12 +35,12 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
         authority: Account
-        blockhash: String
+        blockhash: Hash
         feeCalculator: NonceAccountFeeCalculator
     }
 
@@ -51,14 +51,14 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
         addresses: [Address]
         authority: Account
-        deactivationSlot: String
-        lastExtendedSlot: String
+        deactivationSlot: Slot
+        lastExtendedSlot: Slot
         lastExtendedSlotStartIndex: Int
     }
 
@@ -69,7 +69,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -77,7 +77,7 @@ export const accountTypeDefs = /* GraphQL */ `
         freezeAuthority: Account
         isInitialized: Boolean
         mintAuthority: Account
-        supply: String
+        supply: BigInt
     }
 
     """
@@ -87,7 +87,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -110,12 +110,12 @@ export const accountTypeDefs = /* GraphQL */ `
     type StakeAccountDataMeta {
         authorized: StakeAccountDataMetaAuthorized
         lockup: StakeAccountDataMetaLockup
-        rentExemptReserve: String
+        rentExemptReserve: Lamports
     }
     type StakeAccountDataStakeDelegation {
         activationEpoch: Epoch
         deactivationEpoch: Epoch
-        stake: String
+        stake: Lamports
         voter: Account
         warmupCooldownRate: Int
     }
@@ -130,7 +130,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -143,9 +143,9 @@ export const accountTypeDefs = /* GraphQL */ `
         epoch: Epoch
     }
     type VoteAccountDataEpochCredit {
-        credits: String
+        credits: BigInt
         epoch: Epoch
-        previousCredits: String
+        previousCredits: BigInt
     }
     type VoteAccountDataLastTimestamp {
         slot: Slot
@@ -162,7 +162,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -184,7 +184,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -202,13 +202,13 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
-        distributedRewards: BigInt
+        distributedRewards: Lamports
         distributionCompleteBlockHeight: BigInt
-        totalRewards: BigInt
+        totalRewards: Lamports
     }
 
     """
@@ -218,7 +218,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -230,7 +230,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     type FeeCalculator {
-        lamportsPerSignature: BigInt
+        lamportsPerSignature: Lamports
     }
 
     """
@@ -240,7 +240,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -254,7 +254,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -262,7 +262,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     type SysvarRecentBlockhashesEntry {
-        blockhash: String
+        blockhash: Hash
         feeCalculator: FeeCalculator
     }
     """
@@ -272,7 +272,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -286,17 +286,17 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
         burnPercent: Int
         exemptionThreshold: Int
-        lamportsPerByteYear: BigInt
+        lamportsPerByteYear: Lamports
     }
 
     type SlotHashEntry {
-        hash: String
+        hash: Hash
         slot: Slot
     }
 
@@ -307,7 +307,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -321,7 +321,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
@@ -330,9 +330,9 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     type StakeHistoryEntry {
-        activating: BigInt
-        deactivating: BigInt
-        effective: BigInt
+        activating: Lamports
+        deactivating: Lamports
+        effective: Lamports
     }
 
     """
@@ -342,7 +342,7 @@ export const accountTypeDefs = /* GraphQL */ `
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
-        lamports: BigInt
+        lamports: Lamports
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch

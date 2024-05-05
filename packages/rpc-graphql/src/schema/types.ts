@@ -33,6 +33,10 @@ export const typeTypeDefs = /* GraphQL */ `
 
     scalar Epoch
 
+    scalar Hash
+
+    scalar Lamports
+
     input ProgramAccountsFilter {
         bytes: BigInt
         dataSize: BigInt
@@ -47,7 +51,7 @@ export const typeTypeDefs = /* GraphQL */ `
 
     type Reward {
         commission: Int
-        lamports: BigInt
+        lamports: Lamports
         postBalance: BigInt
         pubkey: Address
         rewardType: String
@@ -58,7 +62,7 @@ export const typeTypeDefs = /* GraphQL */ `
     scalar Slot
 
     type TokenAmount {
-        amount: String
+        amount: BigInt
         decimals: Int
         uiAmount: BigInt
         uiAmountString: String

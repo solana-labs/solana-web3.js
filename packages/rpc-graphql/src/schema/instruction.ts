@@ -27,7 +27,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         lookupTableAccount: Account
         lookupTableAuthority: Account
         payerAccount: Account
-        recentSlot: BigInt
+        recentSlot: Slot
         systemProgram: Account
     }
 
@@ -309,7 +309,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type SplTokenTransferInstruction implements TransactionInstruction {
         programId: Address
-        amount: String
+        amount: BigInt
         authority: Account
         destination: Account
         multisigAuthority: Account
@@ -321,7 +321,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type SplTokenApproveInstruction implements TransactionInstruction {
         programId: Address
-        amount: String
+        amount: BigInt
         delegate: Account
         multisigOwner: Account
         owner: Account
@@ -355,7 +355,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenMintToInstruction implements TransactionInstruction {
         programId: Address
         account: Account
-        amount: String
+        amount: BigInt
         authority: Account
         mint: Account
         mintAuthority: Account
@@ -368,7 +368,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenBurnInstruction implements TransactionInstruction {
         programId: Address
         account: Account
-        amount: String
+        amount: BigInt
         authority: Account
         mint: Account
         multisigAuthority: Account
@@ -412,14 +412,14 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type SplTokenTransferCheckedInstruction implements TransactionInstruction {
         programId: Address
-        amount: String
+        amount: BigInt
         authority: Account
         decimals: BigInt # FIXME:*
         destination: Account
         mint: Account
         multisigAuthority: Account
         source: Account
-        tokenAmount: String
+        tokenAmount: BigInt
     }
 
     """
@@ -432,7 +432,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigOwner: Account
         owner: Account
         source: Account
-        tokenAmount: String
+        tokenAmount: BigInt
     }
 
     """
@@ -445,7 +445,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         mint: Account
         mintAuthority: Account
         multisigMintAuthority: Account
-        tokenAmount: String
+        tokenAmount: BigInt
     }
 
     """
@@ -457,7 +457,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         authority: Account
         mint: Account
         multisigAuthority: Account
-        tokenAmount: String
+        tokenAmount: BigInt
     }
 
     """
@@ -490,7 +490,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type SplTokenAmountToUiAmountInstruction implements TransactionInstruction {
         programId: Address
-        amount: String
+        amount: BigInt
         mint: Account
     }
 
@@ -865,7 +865,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type StakeSplitInstruction implements TransactionInstruction {
         programId: Address
-        lamports: BigInt
+        lamports: Lamports
         newSplitAccount: Account
         stakeAccount: Account
         stakeAuthority: Account
@@ -878,7 +878,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         clockSysvar: Account
         destination: Account
-        lamports: BigInt
+        lamports: Lamports
         stakeAccount: Account
         withdrawAuthority: Account
     }
@@ -1010,7 +1010,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type CreateAccountInstruction implements TransactionInstruction {
         programId: Address
-        lamports: BigInt
+        lamports: Lamports
         newAccount: Account
         owner: Account
         source: Account
@@ -1032,7 +1032,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type TransferInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
-        lamports: BigInt
+        lamports: Lamports
         source: Account
     }
 
@@ -1042,7 +1042,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type CreateAccountWithSeedInstruction implements TransactionInstruction {
         programId: Address
         base: Account
-        lamports: BigInt
+        lamports: Lamports
         owner: Account
         seed: String
         space: BigInt
@@ -1064,7 +1064,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type WithdrawNonceAccountInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
-        lamports: BigInt
+        lamports: Lamports
         nonceAccount: Account
         nonceAuthority: Account
         recentBlockhashesSysvar: Account
@@ -1139,7 +1139,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type TransferWithSeedInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
-        lamports: BigInt
+        lamports: Lamports
         source: Account
         sourceBase: Address
         sourceOwner: Account
@@ -1201,7 +1201,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     type Vote {
-        hash: String
+        hash: Hash
         slots: [Slot]
         timestamp: BigInt
     }
@@ -1223,7 +1223,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         slot: Slot
     }
     type VoteStateUpdate {
-        hash: String
+        hash: Hash
         lockouts: [VoteStateUpdateLockout]
         root: Slot
         timestamp: BigInt
@@ -1234,7 +1234,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteUpdateVoteStateInstruction implements TransactionInstruction {
         programId: Address
-        hash: String
+        hash: Hash
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
@@ -1245,7 +1245,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteUpdateVoteStateSwitchInstruction implements TransactionInstruction {
         programId: Address
-        hash: String
+        hash: Hash
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
@@ -1256,7 +1256,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteCompactUpdateVoteStateInstruction implements TransactionInstruction {
         programId: Address
-        hash: String
+        hash: Hash
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
@@ -1267,7 +1267,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     type VoteCompactUpdateVoteStateSwitchInstruction implements TransactionInstruction {
         programId: Address
-        hash: String
+        hash: Hash
         voteAccount: Account
         voteAuthority: Account
         voteStateUpdate: VoteStateUpdate
@@ -1279,7 +1279,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type VoteWithdrawInstruction implements TransactionInstruction {
         programId: Address
         destination: Account
-        lamports: BigInt
+        lamports: Lamports
         voteAccount: Account
         withdrawAuthority: Account
     }
@@ -1310,7 +1310,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type VoteVoteSwitchInstruction implements TransactionInstruction {
         programId: Address
         clockSysvar: Account
-        hash: String
+        hash: Hash
         slotHashesSysvar: Account
         vote: Vote
         voteAccount: Account

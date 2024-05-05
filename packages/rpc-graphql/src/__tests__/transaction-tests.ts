@@ -639,7 +639,7 @@ describe('transaction', () => {
                                     {
                                         instructions: expect.arrayContaining([
                                             {
-                                                amount: expect.any(String),
+                                                amount: expect.any(BigInt),
                                                 destination: {
                                                     address: expect.any(String),
                                                 },
@@ -1720,7 +1720,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         feeAmount: {
-                                            amount: expect.any(String),
+                                            amount: expect.any(BigInt),
                                             decimals: expect.any(Number),
                                             uiAmount: null, // can't convert decimal to BigInt
                                             uiAmountString: expect.any(String),
@@ -1735,7 +1735,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         tokenAmount: {
-                                            amount: expect.any(String),
+                                            amount: expect.any(BigInt),
                                             decimals: expect.any(Number),
                                             uiAmount: expect.any(BigInt),
                                             uiAmountString: expect.any(String),
@@ -1747,7 +1747,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         feeAmount: {
-                                            amount: expect.any(String),
+                                            amount: expect.any(BigInt),
                                             decimals: expect.any(Number),
                                             uiAmount: null, // can't convert decimal to BigInt
                                             uiAmountString: expect.any(String),
@@ -1764,7 +1764,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         tokenAmount: {
-                                            amount: expect.any(String),
+                                            amount: expect.any(BigInt),
                                             decimals: expect.any(Number),
                                             uiAmount: null, // Can't convert decimal to BigInt
                                             uiAmountString: expect.any(String),
