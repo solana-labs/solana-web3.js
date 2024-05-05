@@ -1207,6 +1207,45 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the slot history sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarS1otHistory11111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarSlotHistoryAccount {
+                                bits
+                                nextSlot
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarS1otHistory11111111111111111111111111',
+                            bits: expect.any(String),
+                            lamports: expect.any(BigInt),
+                            nextSlot: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
