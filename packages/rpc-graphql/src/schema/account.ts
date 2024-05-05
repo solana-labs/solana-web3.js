@@ -313,4 +313,19 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
         entries: [SlotHashEntry]
     }
+
+    """
+    Sysvar Slot History
+    """
+    type SysvarSlotHistoryAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        bits: String
+        nextSlot: BigInt
+    }
 `;
