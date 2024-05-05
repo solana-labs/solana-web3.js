@@ -59,7 +59,9 @@ describe('transaction', () => {
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
                         blockTime
-                        slot
+                        slot {
+                            slot
+                        }
                     }
                 }
             `;
@@ -68,7 +70,9 @@ describe('transaction', () => {
                 data: {
                     transaction: {
                         blockTime: expect.any(BigInt),
-                        slot: expect.any(BigInt),
+                        slot: {
+                            slot: expect.any(BigInt),
+                        },
                     },
                 },
             });

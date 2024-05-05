@@ -6,10 +6,11 @@ export const blockTypeDefs = /* GraphQL */ `
         blockhash: Hash
         blockHeight: BigInt
         blockTime: BigInt
-        parentSlot: Slot
+        parentSlot: Block
         previousBlockhash: Hash
         rewards: [Reward]
         signatures: [Signature]
+        slot: Slot
         transactions: [Transaction]
     }
 `;

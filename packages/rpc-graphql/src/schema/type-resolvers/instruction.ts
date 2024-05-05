@@ -1,4 +1,5 @@
 import { resolveAccount } from '../../resolvers/account';
+import { resolveBlock } from '../../resolvers/block';
 import { InstructionResult } from '../../resolvers/transaction';
 
 export const instructionTypeResolvers = {
@@ -98,6 +99,7 @@ export const instructionTypeResolvers = {
         lookupTableAccount: resolveAccount('lookupTableAccount'),
         lookupTableAuthority: resolveAccount('lookupTableAuthority'),
         payerAccount: resolveAccount('payerAccount'),
+        recentSlot: resolveBlock('recentSlot'),
         systemProgram: resolveAccount('systemProgram'),
     },
     DeactivateLookupTableInstruction: {
@@ -1143,6 +1145,12 @@ export const instructionTypeResolvers = {
 
         rentSysvar: resolveAccount('rentSysvar'),
         voteAccount: resolveAccount('voteAccount'),
+    },
+    VoteStateUpdate: {
+        root: resolveBlock('root'),
+    },
+    VoteStateUpdateLockout: {
+        slot: resolveBlock('slot'),
     },
     VoteUpdateCommissionInstruction: {
         voteAccount: resolveAccount('voteAccount'),

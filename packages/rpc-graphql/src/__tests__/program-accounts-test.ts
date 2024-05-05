@@ -195,8 +195,12 @@ describe('programAccounts', () => {
                             authority {
                                 address
                             }
-                            deactivationSlot
-                            lastExtendedSlot
+                            deactivationSlot {
+                                slot
+                            }
+                            lastExtendedSlot {
+                                slot
+                            }
                             lastExtendedSlotStartIndex
                         }
                     }
@@ -212,9 +216,13 @@ describe('programAccounts', () => {
                             authority: {
                                 address: expect.any(String),
                             },
-                            deactivationSlot: expect.any(BigInt),
+                            deactivationSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             lamports: expect.any(BigInt),
-                            lastExtendedSlot: expect.any(BigInt),
+                            lastExtendedSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             lastExtendedSlotStartIndex: expect.any(Number),
                             ownerProgram: {
                                 address: 'AddressLookupTab1e1111111111111111111111111',
@@ -475,17 +483,23 @@ describe('programAccounts', () => {
                                 previousCredits
                             }
                             lastTimestamp {
-                                slot
+                                slot {
+                                    slot
+                                }
                                 timestamp
                             }
                             node {
                                 address
                             }
                             priorVoters
-                            rootSlot
+                            rootSlot {
+                                slot
+                            }
                             votes {
                                 confirmationCount
-                                slot
+                                slot {
+                                    slot
+                                }
                             }
                         }
                     }
@@ -518,7 +532,9 @@ describe('programAccounts', () => {
                             ]),
                             lamports: expect.any(BigInt),
                             lastTimestamp: {
-                                slot: expect.any(BigInt),
+                                slot: {
+                                    slot: expect.any(BigInt),
+                                },
                                 timestamp: expect.any(BigInt),
                             },
                             node: {
@@ -528,11 +544,15 @@ describe('programAccounts', () => {
                                 address: 'Vote111111111111111111111111111111111111111',
                             },
                             priorVoters: expect.any(Array),
-                            rootSlot: expect.any(BigInt),
+                            rootSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             votes: expect.arrayContaining([
                                 {
                                     confirmationCount: expect.any(Number),
-                                    slot: expect.any(BigInt),
+                                    slot: {
+                                        slot: expect.any(BigInt),
+                                    },
                                 },
                             ]),
                         },

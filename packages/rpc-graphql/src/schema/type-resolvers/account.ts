@@ -1,4 +1,5 @@
 import { AccountResult, resolveAccount, resolveAccountData } from '../../resolvers/account';
+import { resolveBlock } from '../../resolvers/block';
 
 export const accountTypeResolvers = {
     Account: {
@@ -70,6 +71,8 @@ export const accountTypeResolvers = {
     LookupTableAccount: {
         authority: resolveAccount('authority'),
         data: resolveAccountData(),
+        deactivationSlot: resolveBlock('deactivationSlot'),
+        lastExtendedSlot: resolveBlock('lastExtendedSlot'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     MintAccount: {
@@ -82,6 +85,9 @@ export const accountTypeResolvers = {
         authority: resolveAccount('authority'),
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SlotHashEntry: {
+        slot: resolveBlock('slot'),
     },
     StakeAccount: {
         data: resolveAccountData(),
@@ -100,6 +106,7 @@ export const accountTypeResolvers = {
     SysvarClockAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
+        slot: resolveBlock('slot'),
     },
     SysvarEpochRewardsAccount: {
         data: resolveAccountData(),
@@ -107,6 +114,7 @@ export const accountTypeResolvers = {
     },
     SysvarEpochScheduleAccount: {
         data: resolveAccountData(),
+        firstNormalSlot: resolveBlock('firstNormalSlot'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarFeesAccount: {
@@ -115,6 +123,7 @@ export const accountTypeResolvers = {
     },
     SysvarLastRestartSlotAccount: {
         data: resolveAccountData(),
+        lastRestartSlot: resolveBlock('lastRestartSlot'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarRecentBlockhashesAccount: {
@@ -131,6 +140,7 @@ export const accountTypeResolvers = {
     },
     SysvarSlotHistoryAccount: {
         data: resolveAccountData(),
+        nextSlot: resolveBlock('nextSlot'),
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarStakeHistoryAccount: {
@@ -148,8 +158,15 @@ export const accountTypeResolvers = {
         data: resolveAccountData(),
         node: resolveAccount('nodePubkey'),
         ownerProgram: resolveAccount('ownerProgram'),
+        rootSlot: resolveBlock('rootSlot'),
     },
     VoteAccountDataAuthorizedVoter: {
         authorizedVoter: resolveAccount('authorizedVoter'),
+    },
+    VoteAccountDataLastTimestamp: {
+        slot: resolveBlock('slot'),
+    },
+    VoteAccountDataVote: {
+        slot: resolveBlock('slot'),
     },
 };

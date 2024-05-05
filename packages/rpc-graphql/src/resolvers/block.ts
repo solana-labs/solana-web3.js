@@ -23,7 +23,7 @@ export const resolveBlock = (fieldName?: string) => {
     ) => {
         const slot = fieldName ? parent[fieldName] : args.slot;
 
-        if (slot) {
+        if (slot != undefined) {
             if (onlyFieldsRequested(['slot'], info)) {
                 return { slot };
             }

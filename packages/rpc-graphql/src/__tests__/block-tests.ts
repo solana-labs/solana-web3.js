@@ -66,7 +66,9 @@ describe('block', () => {
                 query testQuery($slot: Slot!) {
                     block(slot: $slot) {
                         blockhash
-                        parentSlot
+                        parentSlot {
+                            slot
+                        }
                         rewards {
                             pubkey
                             lamports
@@ -81,7 +83,9 @@ describe('block', () => {
                 data: {
                     block: {
                         blockhash: expect.any(String),
-                        parentSlot: expect.any(BigInt),
+                        parentSlot: {
+                            slot: expect.any(BigInt),
+                        },
                         rewards: expect.arrayContaining([
                             {
                                 lamports: expect.any(BigInt),

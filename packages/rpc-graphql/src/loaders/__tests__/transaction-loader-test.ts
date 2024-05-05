@@ -36,13 +36,19 @@ describe('account loader', () => {
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction1: transaction(signature: $signature) {
-                        slot
+                        slot {
+                            slot
+                        }
                     }
                     transaction2: transaction(signature: $signature) {
-                        slot
+                        slot {
+                            slot
+                        }
                     }
                     transaction3: transaction(signature: $signature) {
-                        slot
+                        slot {
+                            slot
+                        }
                     }
                 }
             `;
@@ -55,7 +61,9 @@ describe('account loader', () => {
             const source = /* GraphQL */ `
                 query testQuery($signature: Signature!) {
                     transaction(signature: $signature) {
-                        slot
+                        slot {
+                            slot
+                        }
                     }
                 }
             `;
@@ -76,7 +84,9 @@ describe('account loader', () => {
                             blockTime
                         }
                         transaction2: transaction(signature: $signature) {
-                            slot
+                            slot {
+                                slot
+                            }
                         }
                         transaction3: transaction(signature: $signature) {
                             message {
@@ -276,7 +286,9 @@ describe('account loader', () => {
                         ) {
                             blockTime
                             data(encoding: BASE_58)
-                            slot
+                            slot {
+                                slot
+                            }
                         }
                     }
                 `;
@@ -300,7 +312,9 @@ describe('account loader', () => {
                         ) {
                             blockTime
                             data(encoding: BASE_64)
-                            slot
+                            slot {
+                                slot
+                            }
                         }
                     }
                 `;

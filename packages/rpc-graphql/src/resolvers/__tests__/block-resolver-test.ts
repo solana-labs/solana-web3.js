@@ -66,7 +66,9 @@ describe('block resolver', () => {
                     blockhash
                 }
                 fragment GetParentSlot on Block {
-                    parentSlot
+                    parentSlot {
+                        slot
+                    }
                 }
             `;
             rpcGraphQL.query(source, { slot });

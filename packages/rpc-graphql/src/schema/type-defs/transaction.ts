@@ -70,7 +70,7 @@ export const transactionTypeDefs = /* GraphQL */ `
         message: TransactionMessage
         meta: TransactionMeta
         signatures: [Signature]
-        slot: Slot
+        slot: Block
         version: String
     }
 `;

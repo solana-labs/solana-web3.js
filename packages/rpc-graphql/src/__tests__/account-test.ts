@@ -567,8 +567,12 @@ describe('account', () => {
                             authority {
                                 address
                             }
-                            deactivationSlot
-                            lastExtendedSlot
+                            deactivationSlot {
+                                slot
+                            }
+                            lastExtendedSlot {
+                                slot
+                            }
                             lastExtendedSlotStartIndex
                         }
                     }
@@ -583,9 +587,13 @@ describe('account', () => {
                         authority: {
                             address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
                         },
-                        deactivationSlot: expect.any(BigInt),
+                        deactivationSlot: {
+                            slot: expect.any(BigInt),
+                        },
                         lamports: expect.any(BigInt),
-                        lastExtendedSlot: expect.any(BigInt),
+                        lastExtendedSlot: {
+                            slot: expect.any(BigInt),
+                        },
                         lastExtendedSlotStartIndex: expect.any(Number),
                         ownerProgram: {
                             address: 'AddressLookupTab1e1111111111111111111111111',
@@ -836,17 +844,23 @@ describe('account', () => {
                                 previousCredits
                             }
                             lastTimestamp {
-                                slot
+                                slot {
+                                    slot
+                                }
                                 timestamp
                             }
                             node {
                                 address
                             }
                             priorVoters
-                            rootSlot
+                            rootSlot {
+                                slot
+                            }
                             votes {
                                 confirmationCount
-                                slot
+                                slot {
+                                    slot
+                                }
                             }
                         }
                     }
@@ -878,7 +892,9 @@ describe('account', () => {
                         ]),
                         lamports: expect.any(BigInt),
                         lastTimestamp: {
-                            slot: expect.any(BigInt),
+                            slot: {
+                                slot: expect.any(BigInt),
+                            },
                             timestamp: expect.any(BigInt),
                         },
                         node: {
@@ -889,12 +905,16 @@ describe('account', () => {
                         },
                         priorVoters: expect.any(Array),
                         rentEpoch: expect.any(BigInt),
-                        rootSlot: expect.any(BigInt),
+                        rootSlot: {
+                            slot: expect.any(BigInt),
+                        },
                         space: 3762n,
                         votes: expect.arrayContaining([
                             {
                                 confirmationCount: expect.any(Number),
-                                slot: expect.any(BigInt),
+                                slot: {
+                                    slot: expect.any(BigInt),
+                                },
                             },
                         ]),
                     },
@@ -921,7 +941,9 @@ describe('account', () => {
                                 epoch
                                 epochStartTimestamp
                                 leaderScheduleEpoch
-                                slot
+                                slot {
+                                    slot
+                                }
                                 unixTimestamp
                             }
                         }
@@ -940,7 +962,9 @@ describe('account', () => {
                                 address: 'Sysvar1111111111111111111111111111111111111',
                             },
                             rentEpoch: expect.any(BigInt),
-                            slot: expect.any(BigInt),
+                            slot: {
+                                slot: expect.any(BigInt),
+                            },
                             space: expect.any(BigInt),
                             unixTimestamp: expect.any(BigInt),
                         },
@@ -966,7 +990,9 @@ describe('account', () => {
                             space
                             ... on SysvarEpochScheduleAccount {
                                 firstNormalEpoch
-                                firstNormalSlot
+                                firstNormalSlot {
+                                    slot
+                                }
                                 leaderScheduleSlotOffset
                                 slotsPerEpoch
                                 warmup
@@ -980,7 +1006,9 @@ describe('account', () => {
                         account: {
                             address: 'SysvarEpochSchedu1e111111111111111111111111',
                             firstNormalEpoch: expect.any(BigInt),
-                            firstNormalSlot: expect.any(BigInt),
+                            firstNormalSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             lamports: expect.any(BigInt),
                             leaderScheduleSlotOffset: expect.any(BigInt),
                             ownerProgram: {
@@ -1051,7 +1079,9 @@ describe('account', () => {
                             rentEpoch
                             space
                             ... on SysvarLastRestartSlotAccount {
-                                lastRestartSlot
+                                lastRestartSlot {
+                                    slot
+                                }
                             }
                         }
                     }
@@ -1062,7 +1092,9 @@ describe('account', () => {
                         account: {
                             address: 'SysvarLastRestartS1ot1111111111111111111111',
                             lamports: expect.any(BigInt),
-                            lastRestartSlot: expect.any(BigInt),
+                            lastRestartSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             ownerProgram: {
                                 address: 'Sysvar1111111111111111111111111111111111111',
                             },
@@ -1180,7 +1212,9 @@ describe('account', () => {
                             ... on SysvarSlotHashesAccount {
                                 entries {
                                     hash
-                                    slot
+                                    slot {
+                                        slot
+                                    }
                                 }
                             }
                         }
@@ -1194,7 +1228,9 @@ describe('account', () => {
                             entries: expect.arrayContaining([
                                 {
                                     hash: expect.any(String),
-                                    slot: expect.any(BigInt),
+                                    slot: {
+                                        slot: expect.any(BigInt),
+                                    },
                                 },
                             ]),
                             lamports: expect.any(BigInt),
@@ -1224,7 +1260,9 @@ describe('account', () => {
                             space
                             ... on SysvarSlotHistoryAccount {
                                 bits
-                                nextSlot
+                                nextSlot {
+                                    slot
+                                }
                             }
                         }
                     }
@@ -1236,7 +1274,9 @@ describe('account', () => {
                             address: 'SysvarS1otHistory11111111111111111111111111',
                             bits: expect.any(String),
                             lamports: expect.any(BigInt),
-                            nextSlot: expect.any(BigInt),
+                            nextSlot: {
+                                slot: expect.any(BigInt),
+                            },
                             ownerProgram: {
                                 address: 'Sysvar1111111111111111111111111111111111111',
                             },
