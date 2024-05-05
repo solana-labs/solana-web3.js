@@ -150,6 +150,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'epochRewards') {
                 return 'SysvarEpochRewardsAccount';
             }
+            if (jsonParsedConfigs.accountType === 'epochSchedule') {
+                return 'SysvarEpochScheduleAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -199,6 +202,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarEpochRewardsAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarEpochScheduleAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },

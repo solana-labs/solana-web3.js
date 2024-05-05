@@ -210,4 +210,22 @@ export const accountTypeDefs = /* GraphQL */ `
         distributionCompleteBlockHeight: BigInt
         totalRewards: BigInt
     }
+
+    """
+    Sysvar Epoch Schedule
+    """
+    type SysvarEpochScheduleAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        firstNormalEpoch: BigInt
+        firstNormalSlot: BigInt
+        leaderScheduleSlotOffset: BigInt
+        slotsPerEpoch: BigInt
+        warmup: Boolean
+    }
 `;
