@@ -143,6 +143,11 @@ function resolveAccountType(accountResult: AccountResult) {
         ) {
             return 'LookupTableAccount';
         }
+        if (jsonParsedConfigs.programName === 'sysvar') {
+            if (jsonParsedConfigs.accountType === 'clock') {
+                return 'SysvarClockAccount';
+            }
+        }
     }
     return 'GenericAccount';
 }
@@ -185,6 +190,10 @@ export const accountResolvers = {
     },
     StakeAccountDataStakeDelegation: {
         voter: resolveAccount('voter'),
+    },
+    SysvarClockAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
     },
     TokenAccount: {
         data: resolveAccountData(),
