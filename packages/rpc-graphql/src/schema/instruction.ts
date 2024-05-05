@@ -748,8 +748,8 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         auditorElgamalPubkey: Address
         authority: Account
-        mint: Account
         autoApproveNewAccounts: Boolean
+        mint: Account
     }
 
     # TODO: Extensions!
