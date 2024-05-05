@@ -1998,7 +1998,7 @@ describe('transaction', () => {
                             message {
                                 instructions {
                                     programId
-                                    ... on SplTokenUpdateInterestBearingConfig {
+                                    ... on SplTokenUpdateInterestBearingConfigRate {
                                         mint {
                                             address
                                         }
@@ -2044,7 +2044,7 @@ describe('transaction', () => {
                                         newRate: expect.any(Number),
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                         rateAuthority: null,
-                                        signers: expect.any([expect.any(String)]),
+                                        signers: expect.arrayContaining([expect.any(String)]),
                                     },
                                 ]),
                             },

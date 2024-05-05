@@ -763,9 +763,9 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
-    SplToken-2022: UpdateInterestBearingConfig instruction
+    SplToken-2022: UpdateInterestBearingConfigRate instruction
     """
-    type SplTokenUpdateInterestBearingConfig implements TransactionInstruction {
+    type SplTokenUpdateInterestBearingConfigRate implements TransactionInstruction {
         programId: Address
         mint: Account
         multisigRateAuthority: Account

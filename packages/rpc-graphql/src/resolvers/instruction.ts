@@ -371,7 +371,7 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
-    SplTokenUpdateInterestBearingConfig: {
+    SplTokenUpdateInterestBearingConfigRate: {
         mint: resolveAccount('mint'),
         multisigRateAuthority: resolveAccount('multisigRateAuthority'),
         rateAuthority: resolveAccount('rateAuthority'),
@@ -712,7 +712,7 @@ export const instructionResolvers = {
                         return 'SplTokenInitializeInterestBearingConfig';
                     }
                     if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
-                        return 'SplTokenUpdateInterestBearingConfig';
+                        return 'SplTokenUpdateInterestBearingConfigRate';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
