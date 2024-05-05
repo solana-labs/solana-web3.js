@@ -278,4 +278,20 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
         entries: [SysvarRecentBlockhashesEntry]
     }
+
+    """
+    Sysvar Rent
+    """
+    type SysvarRentAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        burnPercent: Int
+        exemptionThreshold: Int
+        lamportsPerByteYear: BigInt
+    }
 `;
