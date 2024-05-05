@@ -158,6 +158,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
+    SplTokenApproveConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        confidentialTransferAuditorAuthority: resolveAccount('confidentialTransferAuditorAuthority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenApproveInstruction: {
         delegate: resolveAccount('delegate'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -194,6 +199,12 @@ export const instructionResolvers = {
     },
     SplTokenDisableRequiredMemoTransfers: {
         account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEmptyConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
@@ -713,6 +724,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
                         return 'SplTokenUpdateInterestBearingConfigRate';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'approveConfidentialTransferAccount') {
+                        return 'SplTokenApproveConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'emptyConfidentialTransferAccount') {
+                        return 'SplTokenEmptyConfidentialTransferAccount';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

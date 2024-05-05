@@ -2052,6 +2052,127 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('approve-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenApproveConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        confidentialTransferAuditorAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        confidentialTransferAuditorAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('empty-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEmptyConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
