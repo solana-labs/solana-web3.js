@@ -228,4 +228,21 @@ export const accountTypeDefs = /* GraphQL */ `
         slotsPerEpoch: BigInt
         warmup: Boolean
     }
+
+    type SysvarFeesFeeCalculator {
+        lamportsPerSignature: BigInt
+    }
+    """
+    Sysvar Fees
+    """
+    type SysvarFeesAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        feeCalculator: SysvarFeesFeeCalculator
+    }
 `;

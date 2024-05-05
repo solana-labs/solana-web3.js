@@ -153,6 +153,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'epochSchedule') {
                 return 'SysvarEpochScheduleAccount';
             }
+            if (jsonParsedConfigs.accountType === 'fees') {
+                return 'SysvarFeesAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -206,6 +209,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarEpochScheduleAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarFeesAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
