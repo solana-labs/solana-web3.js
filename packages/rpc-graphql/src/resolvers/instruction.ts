@@ -202,6 +202,12 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenEmptyConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenEnableCpiGuardInstruction: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -719,8 +725,11 @@ export const instructionResolvers = {
                     if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
                         return 'SplTokenUpdateInterestBearingConfigRate';
                     }
-                    if (jsonParsedConfigs?.instructionType === 'approveConfidentialTransferAccount') {
+                    if (jsonParsedConfigs.instructionType === 'approveConfidentialTransferAccount') {
                         return 'SplTokenApproveConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'emptyConfidentialTransferAccount') {
+                        return 'SplTokenEmptyConfidentialTransferAccount';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
