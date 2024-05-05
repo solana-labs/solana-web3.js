@@ -9,7 +9,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
     }
 
     """
@@ -22,7 +22,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
     }
 
     type NonceAccountFeeCalculator {
@@ -38,7 +38,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         authority: Account
         blockhash: String
         feeCalculator: NonceAccountFeeCalculator
@@ -54,7 +54,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         addresses: [Address]
         authority: Account
         deactivationSlot: String
@@ -72,7 +72,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         decimals: Int
         freezeAuthority: Account
         isInitialized: Boolean
@@ -90,7 +90,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         isNative: Boolean
         mint: Account
         owner: Account
@@ -104,7 +104,7 @@ export const accountTypeDefs = /* GraphQL */ `
     }
     type StakeAccountDataMetaLockup {
         custodian: Account
-        epoch: BigInt
+        epoch: Epoch
         unixTimestamp: BigInt
     }
     type StakeAccountDataMeta {
@@ -113,8 +113,8 @@ export const accountTypeDefs = /* GraphQL */ `
         rentExemptReserve: String
     }
     type StakeAccountDataStakeDelegation {
-        activationEpoch: BigInt
-        deactivationEpoch: BigInt
+        activationEpoch: Epoch
+        deactivationEpoch: Epoch
         stake: String
         voter: Account
         warmupCooldownRate: Int
@@ -133,27 +133,27 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         meta: StakeAccountDataMeta
         stake: StakeAccountDataStake
     }
 
     type VoteAccountDataAuthorizedVoter {
         authorizedVoter: Account
-        epoch: BigInt
+        epoch: Epoch
     }
     type VoteAccountDataEpochCredit {
         credits: String
-        epoch: BigInt
+        epoch: Epoch
         previousCredits: String
     }
     type VoteAccountDataLastTimestamp {
-        slot: BigInt
+        slot: Slot
         timestamp: BigInt
     }
     type VoteAccountDataVote {
         confirmationCount: Int
-        slot: BigInt
+        slot: Slot
     }
     """
     A vote account
@@ -165,7 +165,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         authorizedVoters: [VoteAccountDataAuthorizedVoter]
         authorizedWithdrawer: Account
         commission: Int
@@ -173,7 +173,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lastTimestamp: VoteAccountDataLastTimestamp
         node: Account
         priorVoters: [Address]
-        rootSlot: BigInt
+        rootSlot: Slot
         votes: [VoteAccountDataVote]
     }
 
@@ -187,11 +187,11 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
-        epoch: BigInt
+        rentEpoch: Epoch
+        epoch: Epoch
         epochStartTimestamp: BigInt
-        leaderScheduleEpoch: BigInt
-        slot: BigInt
+        leaderScheduleEpoch: Epoch
+        slot: Slot
         unixTimestamp: BigInt
     }
 
@@ -205,7 +205,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         distributedRewards: BigInt
         distributionCompleteBlockHeight: BigInt
         totalRewards: BigInt
@@ -221,9 +221,9 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
-        firstNormalEpoch: BigInt
-        firstNormalSlot: BigInt
+        rentEpoch: Epoch
+        firstNormalEpoch: Epoch
+        firstNormalSlot: Slot
         leaderScheduleSlotOffset: BigInt
         slotsPerEpoch: BigInt
         warmup: Boolean
@@ -243,7 +243,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         feeCalculator: FeeCalculator
     }
 
@@ -257,8 +257,8 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
-        lastRestartSlot: BigInt
+        rentEpoch: Epoch
+        lastRestartSlot: Slot
     }
 
     type SysvarRecentBlockhashesEntry {
@@ -275,7 +275,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         entries: [SysvarRecentBlockhashesEntry]
     }
 
@@ -289,7 +289,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         burnPercent: Int
         exemptionThreshold: Int
         lamportsPerByteYear: BigInt
@@ -297,7 +297,7 @@ export const accountTypeDefs = /* GraphQL */ `
 
     type SlotHashEntry {
         hash: String
-        slot: BigInt
+        slot: Slot
     }
 
     """
@@ -310,7 +310,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         entries: [SlotHashEntry]
     }
 
@@ -324,9 +324,9 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         bits: String
-        nextSlot: BigInt
+        nextSlot: Slot
     }
 
     type StakeHistoryEntry {
@@ -345,7 +345,7 @@ export const accountTypeDefs = /* GraphQL */ `
         lamports: BigInt
         ownerProgram: Account
         space: BigInt
-        rentEpoch: BigInt
+        rentEpoch: Epoch
         entries: [StakeHistoryEntry]
     }
 `;

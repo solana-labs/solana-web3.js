@@ -815,7 +815,7 @@ export const instructionTypeDefs = /* GraphQL */ `
 
     type Lockup {
         custodian: Account
-        epoch: BigInt
+        epoch: Epoch
         unixTimestamp: BigInt
     }
 
@@ -1202,7 +1202,7 @@ export const instructionTypeDefs = /* GraphQL */ `
 
     type Vote {
         hash: String
-        slots: [BigInt]
+        slots: [Slot]
         timestamp: BigInt
     }
 
@@ -1220,12 +1220,12 @@ export const instructionTypeDefs = /* GraphQL */ `
 
     type VoteStateUpdateLockout {
         confirmationCount: BigInt # FIXME:*
-        slot: BigInt
+        slot: Slot
     }
     type VoteStateUpdate {
         hash: String
         lockouts: [VoteStateUpdateLockout]
-        root: BigInt
+        root: Slot
         timestamp: BigInt
     }
 

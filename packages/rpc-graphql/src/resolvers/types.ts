@@ -52,6 +52,7 @@ export const typeTypeResolvers = {
         CONFIRMED: 'confirmed',
         FINALIZED: 'finalized',
     },
+    Epoch: bigIntScalarAlias,
     Signature: stringScalarAlias,
     Slot: bigIntScalarAlias,
     TokenBalance: {

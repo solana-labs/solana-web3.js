@@ -31,6 +31,8 @@ export const typeTypeDefs = /* GraphQL */ `
         length: Int!
     }
 
+    scalar Epoch
+
     input ProgramAccountsFilter {
         bytes: BigInt
         dataSize: BigInt
