@@ -158,6 +158,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
+    SplTokenApproveConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        confidentialTransferAuditorAuthority: resolveAccount('confidentialTransferAuditorAuthority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenApproveInstruction: {
         delegate: resolveAccount('delegate'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -713,6 +718,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
                         return 'SplTokenUpdateInterestBearingConfigRate';
+                    }
+                    if (jsonParsedConfigs?.instructionType === 'approveConfidentialTransferAccount') {
+                        return 'SplTokenApproveConfidentialTransferAccount';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
