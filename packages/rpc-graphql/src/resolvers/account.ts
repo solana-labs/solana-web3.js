@@ -168,6 +168,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'recentBlockhashes') {
                 return 'SysvarRecentBlockhashesAccount';
             }
+            if (jsonParsedConfigs.accountType === 'rent') {
+                return 'SysvarRentAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -233,6 +236,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarRecentBlockhashesAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarRentAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },

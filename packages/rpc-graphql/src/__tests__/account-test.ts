@@ -1121,6 +1121,47 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the rent sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarRent111111111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarRentAccount {
+                                burnPercent
+                                exemptionThreshold
+                                lamportsPerByteYear
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarRent111111111111111111111111111111111',
+                            burnPercent: expect.any(Number),
+                            exemptionThreshold: expect.any(Number),
+                            lamports: expect.any(BigInt),
+                            lamportsPerByteYear: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
