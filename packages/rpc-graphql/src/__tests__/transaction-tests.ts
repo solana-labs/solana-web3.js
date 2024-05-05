@@ -2173,6 +2173,61 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('configure-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfigureConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        decryptableZeroBalance
+                                        maximumPendingBalanceCreditCounter
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        decryptableZeroBalance: expect.any(String),
+                                        maximumPendingBalanceCreditCounter: expect.any(BigInt),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

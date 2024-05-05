@@ -187,6 +187,11 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenConfigureConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+    },
     SplTokenDefaultAccountState: {
         FROZEN: 'frozen',
         INITIALIZED: 'initialized',
@@ -730,6 +735,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'emptyConfidentialTransferAccount') {
                         return 'SplTokenEmptyConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'configureConfidentialTransferAccount') {
+                        return 'SplTokenConfigureConfidentialTransferAccount';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
