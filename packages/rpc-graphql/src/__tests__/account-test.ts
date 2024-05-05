@@ -949,6 +949,51 @@ describe('account', () => {
             });
             // TODO: Does not exist on-chain yet.
             it.todo('can get the epoch rewards sysvar');
+            it('can get the epoch schedule sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarEpochSchedu1e111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarEpochScheduleAccount {
+                                firstNormalEpoch
+                                firstNormalSlot
+                                leaderScheduleSlotOffset
+                                slotsPerEpoch
+                                warmup
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarEpochSchedu1e111111111111111111111111',
+                            firstNormalEpoch: expect.any(BigInt),
+                            firstNormalSlot: expect.any(BigInt),
+                            lamports: expect.any(BigInt),
+                            leaderScheduleSlotOffset: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            slotsPerEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                            warmup: expect.any(Boolean),
+                        },
+                    },
+                });
+            });
         });
     });
 });
