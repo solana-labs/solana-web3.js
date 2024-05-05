@@ -1944,6 +1944,114 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeInterestBearingConfig {
+                                        mint {
+                                            address
+                                        }
+                                        rate
+                                        rateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rate: expect.any(Number),
+                                        rateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateInterestBearingConfigRate {
+                                        mint {
+                                            address
+                                        }
+                                        multisigRateAuthority {
+                                            address
+                                        }
+                                        newRate
+                                        rateAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigRateAuthority: null,
+                                        newRate: expect.any(Number),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        signers: null,
+                                    },
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigRateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        newRate: expect.any(Number),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rateAuthority: null,
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
