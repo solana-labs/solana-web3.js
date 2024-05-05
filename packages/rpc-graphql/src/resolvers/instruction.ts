@@ -236,6 +236,10 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeDefaultAccountStateInstruction: {
         mint: resolveAccount('mint'),
     },
@@ -386,10 +390,6 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
         withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
-    },
-    SplTokenInitializeConfidentialTransferMint: {
-        authority: resolveAccount('authority'),
-        mint: resolveAccount('mint'),
     },
     StakeAuthorizeCheckedInstruction: {
         authority: resolveAccount('authority'),

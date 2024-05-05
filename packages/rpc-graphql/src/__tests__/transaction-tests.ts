@@ -1928,14 +1928,14 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        mint: {
-                                            address: expect.any(String),
-                                        },
+                                        auditorElgamalPubkey: null,
                                         authority: {
                                             address: expect.any(String),
                                         },
-                                        auditorElgamalPubkey: null,
                                         autoApproveNewAccounts: expect.any(Boolean),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                     },
                                 ]),
