@@ -19,4 +19,8 @@ describe('createTransactionMessage', () => {
         const tx = createTransactionMessage({ version: 0 });
         expect(tx).toBeFrozenObject();
     });
+    it('freezes the instructions array', () => {
+        const tx = createTransactionMessage({ version: 0 });
+        expect(tx.instructions).toBeFrozenObject();
+    });
 });

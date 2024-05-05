@@ -137,4 +137,11 @@ describe('setTransactionMessageLifetimeUsingBlockhash', () => {
         );
         expect(txWithBlockhashLifetimeConstraint).toBeFrozenObject();
     });
+    it('freezes the blockhash constraint', () => {
+        const txWithBlockhashLifetimeConstraint = setTransactionMessageLifetimeUsingBlockhash(
+            BLOCKHASH_CONSTRAINT_A,
+            baseTx,
+        );
+        expect(txWithBlockhashLifetimeConstraint.lifetimeConstraint).toBeFrozenObject();
+    });
 });

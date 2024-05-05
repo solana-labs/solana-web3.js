@@ -47,6 +47,10 @@ describe('Transaction instruction helpers', () => {
             const txWithAddedInstruction = appendTransactionMessageInstruction(exampleInstruction, baseTx);
             expect(txWithAddedInstruction).toBeFrozenObject();
         });
+        it('freezes the instructions array', () => {
+            const txWithAddedInstruction = appendTransactionMessageInstruction(exampleInstruction, baseTx);
+            expect(txWithAddedInstruction.instructions).toBeFrozenObject();
+        });
     });
     describe('appendTransactionMessageInstructions', () => {
         it('adds the instructions to the end of the list', () => {
@@ -67,6 +71,13 @@ describe('Transaction instruction helpers', () => {
             );
             expect(txWithAddedInstruction).toBeFrozenObject();
         });
+        it('freezes the instructions array', () => {
+            const txWithAddedInstruction = appendTransactionMessageInstructions(
+                [exampleInstruction, secondExampleInstruction],
+                baseTx,
+            );
+            expect(txWithAddedInstruction.instructions).toBeFrozenObject();
+        });
     });
     describe('prependTransactionMessageInstruction', () => {
         it('adds the instruction to the beginning of the list', () => {
@@ -76,6 +87,10 @@ describe('Transaction instruction helpers', () => {
         it('freezes the object', () => {
             const txWithAddedInstruction = prependTransactionMessageInstruction(exampleInstruction, baseTx);
             expect(txWithAddedInstruction).toBeFrozenObject();
+        });
+        it('freezes the instructions array', () => {
+            const txWithAddedInstruction = prependTransactionMessageInstruction(exampleInstruction, baseTx);
+            expect(txWithAddedInstruction.instructions).toBeFrozenObject();
         });
     });
     describe('prependTransactionMessageInstructions', () => {
@@ -96,6 +111,13 @@ describe('Transaction instruction helpers', () => {
                 baseTx,
             );
             expect(txWithAddedInstruction).toBeFrozenObject();
+        });
+        it('freezes the instructions array', () => {
+            const txWithAddedInstruction = prependTransactionMessageInstructions(
+                [exampleInstruction, secondExampleInstruction],
+                baseTx,
+            );
+            expect(txWithAddedInstruction.instructions).toBeFrozenObject();
         });
     });
 });
