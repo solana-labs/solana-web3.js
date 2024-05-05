@@ -245,4 +245,18 @@ export const accountTypeDefs = /* GraphQL */ `
         rentEpoch: BigInt
         feeCalculator: SysvarFeesFeeCalculator
     }
+
+    """
+    Sysvar Last Restart Slot
+    """
+    type SysvarLastRestartSlotAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        lastRestartSlot: BigInt
+    }
 `;

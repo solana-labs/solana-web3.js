@@ -156,6 +156,9 @@ function resolveAccountType(accountResult: AccountResult) {
             if (jsonParsedConfigs.accountType === 'fees') {
                 return 'SysvarFeesAccount';
             }
+            if (jsonParsedConfigs.accountType === 'lastRestartSlot') {
+                return 'SysvarLastRestartSlotAccount';
+            }
         }
     }
     return 'GenericAccount';
@@ -213,6 +216,10 @@ export const accountResolvers = {
         ownerProgram: resolveAccount('ownerProgram'),
     },
     SysvarFeesAccount: {
+        data: resolveAccountData(),
+        ownerProgram: resolveAccount('ownerProgram'),
+    },
+    SysvarLastRestartSlotAccount: {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
