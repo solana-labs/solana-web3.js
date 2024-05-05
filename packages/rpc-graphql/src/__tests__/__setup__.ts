@@ -2110,7 +2110,7 @@ export const mockTransactionToken2022AllExtensions = {
                     parsed: {
                         info: {
                             account: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
-                            instructionsSysvar: 'SysvarRent111111111111111111111111111111111',
+                            instructionsSysvar: 'Sysvar1nstructions1111111111111111111111111',
                             multisigOwner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
                             proofInstructionOffset: 1,
                             signers: [
