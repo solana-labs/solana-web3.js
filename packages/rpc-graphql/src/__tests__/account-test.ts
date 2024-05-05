@@ -947,6 +947,8 @@ describe('account', () => {
                     },
                 });
             });
+            // TODO: Does not exist on-chain yet.
+            it.todo('can get the epoch rewards sysvar');
         });
     });
 });
