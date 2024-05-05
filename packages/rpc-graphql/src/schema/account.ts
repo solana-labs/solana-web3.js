@@ -328,4 +328,24 @@ export const accountTypeDefs = /* GraphQL */ `
         bits: String
         nextSlot: BigInt
     }
+
+    type StakeHistoryEntry {
+        activating: BigInt
+        deactivating: BigInt
+        effective: BigInt
+    }
+
+    """
+    Sysvar Stake History
+    """
+    type SysvarStakeHistoryAccount implements Account {
+        address: Address
+        data(encoding: AccountEncoding!, dataSlice: DataSlice): String
+        executable: Boolean
+        lamports: BigInt
+        ownerProgram: Account
+        space: BigInt
+        rentEpoch: BigInt
+        entries: [StakeHistoryEntry]
+    }
 `;
