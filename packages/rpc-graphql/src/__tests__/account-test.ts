@@ -1035,6 +1035,43 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the last restart slot sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarLastRestartS1ot1111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarLastRestartSlotAccount {
+                                lastRestartSlot
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarLastRestartS1ot1111111111111111111111',
+                            lamports: expect.any(BigInt),
+                            lastRestartSlot: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
