@@ -53,6 +53,8 @@ export const typeTypeResolvers = {
         FINALIZED: 'finalized',
     },
     Epoch: bigIntScalarAlias,
+    Hash: stringScalarAlias,
+    Lamports: bigIntScalarAlias,
     Signature: stringScalarAlias,
     Slot: bigIntScalarAlias,
     TokenBalance: {

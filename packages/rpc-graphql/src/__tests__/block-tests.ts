@@ -667,7 +667,7 @@ describe('block', () => {
                                             {
                                                 instructions: expect.arrayContaining([
                                                     {
-                                                        amount: expect.any(String),
+                                                        amount: expect.any(BigInt),
                                                         destination: {
                                                             address: expect.any(String),
                                                         },
