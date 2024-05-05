@@ -255,7 +255,7 @@ export const instructionResolvers = {
     },
     SplTokenInitializeInterestBearingConfig: {
         mint: resolveAccount('mint'),
-        rate: resolveAccount('rate'),
+        rateAuthority: resolveAccount('rateAuthority'),
     },
     SplTokenInitializeMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -370,6 +370,11 @@ export const instructionResolvers = {
         groupAddress: resolveAccount('groupAddress'),
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
+    },
+    SplTokenUpdateInterestBearingConfig: {
+        mint: resolveAccount('mint'),
+        multisigRateAuthority: resolveAccount('multisigRateAuthority'),
+        rateAuthority: resolveAccount('rateAuthority'),
     },
     SplTokenUpdateMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -705,6 +710,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeInterestBearingConfig') {
                         return 'SplTokenInitializeInterestBearingConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
+                        return 'SplTokenUpdateInterestBearingConfig';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

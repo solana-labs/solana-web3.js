@@ -758,8 +758,20 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenInitializeInterestBearingConfig implements TransactionInstruction {
         programId: Address
         mint: Account
-        rate: Account
-        rateAuthority: Int
+        rate: Int
+        rateAuthority: Account
+    }
+
+    """
+    SplToken-2022: UpdateInterestBearingConfig instruction
+    """
+    type SplTokenUpdateInterestBearingConfig implements TransactionInstruction {
+        programId: Address
+        mint: Account
+        multisigRateAuthority: Account
+        newRate: Int
+        rateAuthority: Account
+        signers: [Address]
     }
 
     # TODO: Extensions!
