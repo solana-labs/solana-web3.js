@@ -1072,6 +1072,55 @@ describe('account', () => {
                     },
                 });
             });
+            it('can get the recent blockhashes sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarRecentB1ockHashes11111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarRecentBlockhashesAccount {
+                                entries {
+                                    blockhash
+                                    feeCalculator {
+                                        lamportsPerSignature
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarRecentB1ockHashes11111111111111111111',
+                            entries: expect.arrayContaining([
+                                {
+                                    blockhash: expect.any(String),
+                                    feeCalculator: {
+                                        lamportsPerSignature: expect.any(BigInt),
+                                    },
+                                },
+                            ]),
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
         });
     });
 });
