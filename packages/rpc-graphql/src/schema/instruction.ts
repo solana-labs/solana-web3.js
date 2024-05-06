@@ -855,6 +855,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         owner: Account
         signers: [Address]
     }
+
     """
     SplToken-2022: DisableConfidentialTransferNonConfidentialCredits instruction
     """
@@ -864,6 +865,21 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigOwner: Account
         owner: Account
         signers: [Address]
+    }
+
+    """
+    SplToken-2022: DepositConfidentialTransfer instruction
+    """
+    type SplTokenDepositConfidentialTransfer implements TransactionInstruction {
+        programId: Address
+        amount: BigInt
+        decimals: BigInt # FIXME:*
+        destination: Account
+        mint: Account
+        multisigOwner: Account
+        owner: Account
+        signers: [Address]
+        source: Account
     }
 
     # TODO: Extensions!

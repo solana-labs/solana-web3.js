@@ -202,6 +202,13 @@ export const instructionResolvers = {
         INITIALIZED: 'initialized',
         UNINITIALIZED: 'uninitialized',
     },
+    SplTokenDepositConfidentialTransfer: {
+        destination: resolveAccount('destination'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
     SplTokenDisableConfidentialTransferConfidentialCredits: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -778,6 +785,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'disableNonConfidentialTransferConfidentialCredits') {
                         return 'SplTokenDisableConfidentialTransferNonConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'depositConfidentialTransfer') {
+                        return 'SplTokenDepositConfidentialTransfer';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
