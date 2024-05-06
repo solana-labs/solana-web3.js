@@ -207,6 +207,11 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenDisableConfidentialTransferNonConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenDisableCpiGuardInstruction: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -224,6 +229,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
     },
     SplTokenEnableConfidentialTransferConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableConfidentialTransferNonConfidentialCredits: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -762,6 +772,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'disableConfidentialTransferConfidentialCredits') {
                         return 'SplTokenDisableConfidentialTransferConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableConfidentialTransferNonConfidentialCredits') {
+                        return 'SplTokenEnableConfidentialTransferNonConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableNonConfidentialTransferConfidentialCredits') {
+                        return 'SplTokenDisableConfidentialTransferNonConfidentialCredits';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
