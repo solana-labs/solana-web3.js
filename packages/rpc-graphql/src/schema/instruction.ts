@@ -891,9 +891,11 @@ export const instructionTypeDefs = /* GraphQL */ `
         decimals: BigInt # FIXME:*
         destination: Account
         instructionsSysvar: Account
+        newDecryptableAvailableBalance: String
         mint: Account
         multisigOwner: Account
         owner: Account
+        proofInstructionOffset: Int
         signers: [Address]
         source: Account
     }
