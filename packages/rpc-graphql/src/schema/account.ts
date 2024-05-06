@@ -15,6 +15,14 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Permanent Delegate
+    """
+    type SplToken2022ExtensionPermanentDelegate implements SplToken2022Extension {
+        extension: String
+        delegate: Account
+    }
+
+    """
     Account interface
     """
     interface Account {
