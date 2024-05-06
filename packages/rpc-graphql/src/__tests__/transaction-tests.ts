@@ -2534,6 +2534,90 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('deposit-confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDepositConfidentialTransfer {
+                                        amount
+                                        decimals
+                                        destination {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
