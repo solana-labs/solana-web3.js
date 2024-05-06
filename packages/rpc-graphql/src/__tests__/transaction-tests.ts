@@ -2618,6 +2618,105 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('withdraw-confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawConfidentialTransfer {
+                                        amount
+                                        decimals
+                                        destination {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
