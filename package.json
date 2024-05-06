@@ -28,7 +28,7 @@
         "@typescript-eslint/parser": "^6.21.0",
         "agadoo": "^3.0.0",
         "eslint": "^8.57.0",
-        "eslint-config-turbo": "^1.12.4",
+        "eslint-config-turbo": "^1.13.3",
         "eslint-plugin-jest": "^27.9.0",
         "eslint-plugin-react-hooks": "^4.6.2",
         "eslint-plugin-simple-import-sort": "^10.0.0",
