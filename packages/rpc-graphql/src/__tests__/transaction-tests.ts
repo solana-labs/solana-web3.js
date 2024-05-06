@@ -2576,7 +2576,7 @@ describe('transaction', () => {
                                 instructions: expect.arrayContaining([
                                     {
                                         amount: expect.any(BigInt),
-                                        decimals: expect.any(BigInt),
+                                        decimals: expect.any(Number),
                                         destination: {
                                             address: expect.any(String),
                                         },
@@ -2595,7 +2595,7 @@ describe('transaction', () => {
                                     },
                                     {
                                         amount: expect.any(BigInt),
-                                        decimals: expect.any(BigInt),
+                                        decimals: expect.any(Number),
                                         destination: {
                                             address: expect.any(String),
                                         },
