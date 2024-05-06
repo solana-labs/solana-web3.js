@@ -2,8 +2,8 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { graphql } from 'graphql';
 
 import { createSolanaGraphQLContext } from './context';
-import { createSolanaGraphQLResolvers } from './resolvers';
 import { createSolanaGraphQLTypeDefs } from './schema/type-defs';
+import { createSolanaGraphQLTypeResolvers } from './schema/type-resolvers';
 
 export interface RpcGraphQL {
     query(
@@ -21,7 +21,7 @@ export function createRpcGraphQL(
         maxMultipleAccountsBatchSize: config?.maxMultipleAccountsBatchSize ?? 100,
     };
     const schema = makeExecutableSchema({
-        resolvers: createSolanaGraphQLResolvers(),
+        resolvers: createSolanaGraphQLTypeResolvers(),
         typeDefs: createSolanaGraphQLTypeDefs(),
     });
     return {

@@ -6,7 +6,7 @@ import { BlockLoaderValue, cacheKeyFn } from '../loaders';
 import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
 
-type BlockResult = Partial<BlockLoaderValue> & {
+export type BlockResult = Partial<BlockLoaderValue> & {
     slot: Slot;
     transactionResults?: { [i: number]: TransactionResult };
 };
@@ -115,11 +115,4 @@ export const resolveBlock = (fieldName?: string) => {
         }
         return null;
     };
-};
-
-export const blockResolvers = {
-    Block: {
-        transactions: (parent?: BlockResult) =>
-            parent?.transactionResults ? Object.values(parent.transactionResults) : null,
-    },
 };

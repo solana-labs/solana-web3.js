@@ -71,7 +71,7 @@ export function mapJsonParsedInnerInstructions(
     }));
 }
 
-const resolveTransactionData = () => {
+export const resolveTransactionData = () => {
     return (
         parent: TransactionResult | null,
         args: {
@@ -164,9 +164,3 @@ export function resolveTransaction(fieldName?: string) {
         return null;
     };
 }
-
-export const transactionResolvers = {
-    Transaction: {
-        data: resolveTransactionData(),
-    },
-};

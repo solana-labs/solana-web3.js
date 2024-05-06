@@ -1,6 +1,6 @@
 import { Kind } from 'graphql';
 
-import { resolveAccount } from './account';
+import { resolveAccount } from '../../resolvers/account';
 
 const stringScalarAlias = {
     __parseLiteral(ast: { kind: Kind; value: bigint | boolean | number | string }): string | null {

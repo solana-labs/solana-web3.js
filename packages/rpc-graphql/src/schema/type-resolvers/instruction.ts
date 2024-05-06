@@ -1,7 +1,7 @@
-import { resolveAccount } from './account';
-import { InstructionResult } from './transaction';
+import { resolveAccount } from '../../resolvers/account';
+import { InstructionResult } from '../../resolvers/transaction';
 
-export const instructionResolvers = {
+export const instructionTypeResolvers = {
     AdvanceNonceAccountInstruction: {
         nonceAccount: resolveAccount('nonceAccount'),
         nonceAuthority: resolveAccount('nonceAuthority'),
