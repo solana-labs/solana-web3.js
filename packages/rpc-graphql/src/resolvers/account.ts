@@ -211,6 +211,9 @@ function resolveToken2022ExtensionType(extensionResult: Token2022ExtensionResult
     if (extensionResult.extension === 'mintCloseAuthority') {
         return 'SplToken2022ExtensionMintCloseAuthority';
     }
+    if (extensionResult.extension === 'permanentDelegate') {
+        return 'SplToken2022ExtensionPermanentDelegate';
+    }
 }
 
 export const accountResolvers = {
@@ -244,6 +247,9 @@ export const accountResolvers = {
     },
     SplToken2022ExtensionMintCloseAuthority: {
         closeAuthority: resolveAccount('closeAuthority'),
+    },
+    SplToken2022ExtensionPermanentDelegate: {
+        delegate: resolveAccount('delegate'),
     },
     StakeAccount: {
         data: resolveAccountData(),
