@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 overrides:
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -31,8 +27,8 @@ importers:
         specifier: ^3.0.3
         version: 3.0.3(@typescript-eslint/eslint-plugin@6.21.0)(@typescript-eslint/parser@6.21.0)(eslint-plugin-jest@27.9.0)(eslint-plugin-react-hooks@4.6.2)(eslint-plugin-simple-import-sort@10.0.0)(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0)(eslint@8.57.0)(typescript@5.4.5)
       '@solana/prettier-config-solana':
-        specifier: 0.0.4
-        version: 0.0.4(prettier@3.2.5)
+        specifier: 0.0.5
+        version: 0.0.5(prettier@3.2.5)
       '@solana/test-config':
         specifier: workspace:*
         version: link:packages/test-config
@@ -3590,7 +3586,7 @@ packages:
     engines: {node: ^16.10.0 || ^18.12.0 || >=20.0.0}
     peerDependencies:
       canvas: ^2.5.0
-      jsdom: ^22
+      jsdom: '*'
     peerDependenciesMeta:
       canvas:
         optional: true
@@ -4683,10 +4679,10 @@ packages:
       '@solana/codecs-numbers': 2.0.0-preview.2
     dev: true
 
-  /@solana/prettier-config-solana@0.0.4(prettier@3.2.5):
-    resolution: {integrity: sha512-8kNkSb7h4DkJlDn4C8v0V2IJQhAswPE4kHE45xAp6eKDEJw7PlHsiYIm46A6owpr57W3KS/xnTVVGE4p/5PijA==}
+  /@solana/prettier-config-solana@0.0.5(prettier@3.2.5):
+    resolution: {integrity: sha512-igtLH1QaX5xzSLlqteexRIg9X1QKA03xKYQc2qY1TrMDDhxKXoRZOStQPWdita2FVJzxTGz/tdMGC1vS0biRcg==}
     peerDependencies:
-      prettier: ^3.1.0
+      prettier: ^3.2.0
     dependencies:
       prettier: 3.2.5
     dev: true
@@ -13591,3 +13587,7 @@ packages:
       '@types/fs-extra': 11.0.4
       '@types/node': 20.12.7
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
