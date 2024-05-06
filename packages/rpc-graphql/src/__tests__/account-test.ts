@@ -1395,6 +1395,34 @@ describe('account', () => {
                     },
                 });
             });
+            it('non-transferable', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplToken2022ExtensionNonTransferable {
+                                        extension # Interface field
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'nonTransferable',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

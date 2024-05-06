@@ -35,6 +35,13 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Non-Transferable
+    """
+    type SplToken2022ExtensionNonTransferable implements SplToken2022Extension {
+        extension: String
+    }
+
+    """
     Account interface
     """
     interface Account {

@@ -214,6 +214,9 @@ function resolveToken2022ExtensionType(extensionResult: Token2022ExtensionResult
     if (extensionResult.extension === 'mintCloseAuthority') {
         return 'SplToken2022ExtensionMintCloseAuthority';
     }
+    if (extensionResult.extension === 'nonTransferable') {
+        return 'SplToken2022ExtensionNonTransferable';
+    }
     if (extensionResult.extension === 'permanentDelegate') {
         return 'SplToken2022ExtensionPermanentDelegate';
     }
