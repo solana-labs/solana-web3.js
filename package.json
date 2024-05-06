@@ -17,7 +17,7 @@
         "@changesets/cli": "^2.27.1",
         "@solana/build-scripts": "workspace:*",
         "@solana/eslint-config-solana": "^3.0.3",
-        "@solana/prettier-config-solana": "0.0.4",
+        "@solana/prettier-config-solana": "0.0.5",
         "@solana/test-config": "workspace:*",
         "@solana/test-matchers": "workspace:*",
         "@solana/tsconfig": "workspace:*",
