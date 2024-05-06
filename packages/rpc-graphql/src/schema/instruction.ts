@@ -882,6 +882,24 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
+    """
+    SplToken-2022: WithdrawConfidentialTransfer instruction
+    """
+    type SplTokenWithdrawConfidentialTransfer implements TransactionInstruction {
+        programId: Address
+        amount: BigInt
+        decimals: BigInt # FIXME:*
+        destination: Account
+        instructionsSysvar: Account
+        newDecryptableAvailableBalance: String
+        mint: Account
+        multisigOwner: Account
+        owner: Account
+        proofInstructionOffset: Int
+        signers: [Address]
+        source: Account
+    }
+
     # TODO: Extensions!
     # ...
 
