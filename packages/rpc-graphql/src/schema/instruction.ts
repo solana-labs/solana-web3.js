@@ -873,7 +873,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenDepositConfidentialTransfer implements TransactionInstruction {
         programId: Address
         amount: BigInt
-        decimals: Int
+        decimals: BigInt # FIXME:*
         destination: Account
         mint: Account
         multisigOwner: Account
