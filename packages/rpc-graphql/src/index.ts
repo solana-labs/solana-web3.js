@@ -3,7 +3,7 @@ import { graphql } from 'graphql';
 
 import { createSolanaGraphQLContext } from './context';
 import { createSolanaGraphQLResolvers } from './resolvers';
-import { createSolanaGraphQLTypeDefs } from './schema';
+import { createSolanaGraphQLTypeDefs } from './schema/type-defs';
 
 export interface RpcGraphQL {
     query(
