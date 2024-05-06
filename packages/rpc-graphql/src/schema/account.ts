@@ -1,5 +1,20 @@
 export const accountTypeDefs = /* GraphQL */ `
     """
+    Token-2022 Extensions (Account State)
+    """
+    interface SplToken2022Extension {
+        extension: String
+    }
+
+    """
+    Token-2022 Extension: Mint Close Authority
+    """
+    type SplToken2022ExtensionMintCloseAuthority implements SplToken2022Extension {
+        extension: String
+        closeAuthority: Account
+    }
+
+    """
     Account interface
     """
     interface Account {
@@ -74,6 +89,7 @@ export const accountTypeDefs = /* GraphQL */ `
         space: BigInt
         rentEpoch: Epoch
         decimals: Int
+        extensions: [SplToken2022Extension]
         freezeAuthority: Account
         isInitialized: Boolean
         mintAuthority: Account
@@ -91,6 +107,7 @@ export const accountTypeDefs = /* GraphQL */ `
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
+        extensions: [SplToken2022Extension]
         isNative: Boolean
         mint: Account
         owner: Account
