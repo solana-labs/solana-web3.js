@@ -2475,7 +2475,7 @@ describe('transaction', () => {
                 });
             });
 
-            it('disable-non-confidential-transfer-confidential-credits', async () => {
+            it('disable-confidential-transfer-non-confidential-credits', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `
                     query testQuery($signature: Signature!) {
@@ -2483,7 +2483,7 @@ describe('transaction', () => {
                             message {
                                 instructions {
                                     programId
-                                    ... on SplTokenDisableNonConfidentialTransferConfidentialCredits {
+                                    ... on SplTokenDisableConfidentialTransferNonConfidentialCredits {
                                         account {
                                             address
                                         }
