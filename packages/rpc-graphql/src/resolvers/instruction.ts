@@ -151,6 +151,11 @@ export const instructionResolvers = {
     SplTokenAmountToUiAmountInstruction: {
         mint: resolveAccount('mint'),
     },
+    SplTokenApplyPendingConfidentialTransferBalance: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenApproveCheckedInstruction: {
         delegate: resolveAccount('delegate'),
         mint: resolveAccount('mint'),
@@ -738,6 +743,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'configureConfidentialTransferAccount') {
                         return 'SplTokenConfigureConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'applyPendingConfidentialTransferBalance') {
+                        return 'SplTokenApplyPendingConfidentialTransferBalance';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

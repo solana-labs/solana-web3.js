@@ -2124,6 +2124,38 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            account: '8wYAr4UKaHh35zFFbZW6iGgaBPJo1z9mvLwsdd3Mcpjo',
+                            expectedPendingBalanceCreditCounter: 1,
+                            newDecryptableAvailableBalance: '57fZKMs9YqFhu6fENwKTe7mGZh+wJbIvYkQ3LI/FDnOdc2w7',
+                            owner: 'B1diwnBSzuzbyzkKvd7nWfe4Et4hBbmBzvNY6HXB6mRV',
+                        },
+                        type: 'applyPendingConfidentialTransferBalance',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '8wYAr4UKaHh35zFFbZW6iGgaBPJo1z9mvLwsdd3Mcpjo',
+                            expectedPendingBalanceCreditCounter: 1,
+                            newDecryptableAvailableBalance: '57fZKMs9YqFhu6fENwKTe7mGZh+wJbIvYkQ3LI/FDnOdc2w7',
+                            multisigOwner: 'B1diwnBSzuzbyzkKvd7nWfe4Et4hBbmBzvNY6HXB6mRV',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'applyPendingConfidentialTransferBalance',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',

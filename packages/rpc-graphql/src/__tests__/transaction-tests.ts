@@ -2228,6 +2228,72 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('apply-pending-confidential-transfer-balance', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenApplyPendingConfidentialTransferBalance {
+                                        account {
+                                            address
+                                        }
+                                        expectedPendingBalanceCreditCounter
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        expectedPendingBalanceCreditCounter: expect.any(BigInt),
+                                        multisigOwner: null,
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        expectedPendingBalanceCreditCounter: expect.any(BigInt),
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
