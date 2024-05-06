@@ -1355,6 +1355,46 @@ describe('account', () => {
                     },
                 });
             });
+            it('interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplToken2022ExtensionInterestBearingConfig {
+                                        currentRate
+                                        initializationTimestamp
+                                        lastUpdateTimestamp
+                                        preUpdateAverageRate
+                                        rateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    currentRate: expect.any(Number),
+                                    initializationTimestamp: expect.any(BigInt),
+                                    lastUpdateTimestamp: expect.any(BigInt),
+                                    preUpdateAverageRate: expect.any(Number),
+                                    rateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

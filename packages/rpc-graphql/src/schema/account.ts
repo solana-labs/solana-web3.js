@@ -23,6 +23,18 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Interest-Bearing Config
+    """
+    type SplToken2022ExtensionInterestBearingConfig implements SplToken2022Extension {
+        extension: String
+        currentRate: Int
+        initializationTimestamp: BigInt
+        lastUpdateTimestamp: BigInt
+        preUpdateAverageRate: Int
+        rateAuthority: Account
+    }
+
+    """
     Account interface
     """
     interface Account {

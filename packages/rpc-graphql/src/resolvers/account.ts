@@ -208,6 +208,9 @@ const resolveToken2022Extensions = () => {
 };
 
 function resolveToken2022ExtensionType(extensionResult: Token2022ExtensionResult) {
+    if (extensionResult.extension === 'interestBearingConfig') {
+        return 'SplToken2022ExtensionInterestBearingConfig';
+    }
     if (extensionResult.extension === 'mintCloseAuthority') {
         return 'SplToken2022ExtensionMintCloseAuthority';
     }
@@ -244,6 +247,9 @@ export const accountResolvers = {
     },
     SplToken2022Extension: {
         __resolveType: resolveToken2022ExtensionType,
+    },
+    SplToken2022ExtensionInterestBearingConfig: {
+        rateAuthority: resolveAccount('rateAuthority'),
     },
     SplToken2022ExtensionMintCloseAuthority: {
         closeAuthority: resolveAccount('closeAuthority'),
