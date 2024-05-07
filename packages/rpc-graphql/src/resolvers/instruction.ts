@@ -192,6 +192,14 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenConfidentialTransfer: {
+        destination: resolveAccount('destination'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
     SplTokenConfigureConfidentialTransferAccount: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
@@ -799,6 +807,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'withdrawConfidentialTransfer') {
                         return 'SplTokenWithdrawConfidentialTransfer';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'confidentialTransfer') {
+                        return 'SplTokenConfidentialTransfer';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
