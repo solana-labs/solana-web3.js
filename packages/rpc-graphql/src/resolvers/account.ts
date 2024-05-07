@@ -220,6 +220,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'groupPointer') {
         return 'SplTokenExtensionGroupPointer';
     }
+    if (extensionResult.extension === 'groupMemberPointer') {
+        return 'SplTokenExtensionGroupMemberPointer';
+    }
     if (extensionResult.extension === 'interestBearingConfig') {
         return 'SplTokenExtensionInterestBearingConfig';
     }
@@ -277,6 +280,10 @@ export const accountResolvers = {
     },
     SplTokenExtensionConfidentialTransferMint: {
         authority: resolveAccount('authority'),
+    },
+    SplTokenExtensionGroupMemberPointer: {
+        authority: resolveAccount('authority'),
+        memberAddress: resolveAccount('memberAddress'),
     },
     SplTokenExtensionGroupPointer: {
         authority: resolveAccount('authority'),
