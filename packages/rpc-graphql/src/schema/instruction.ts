@@ -503,12 +503,6 @@ export const instructionTypeDefs = /* GraphQL */ `
         uiAmount: String
     }
 
-    enum SplTokenDefaultAccountState {
-        FROZEN
-        INITIALIZED
-        UNINITIALIZED
-    }
-
     """
     SplToken-2022: InitializeDefaultAccountState instruction
     """
@@ -620,10 +614,10 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenInitializeTransferFeeConfig implements TransactionInstruction {
         programId: Address
         mint: Account
-        transferFeeBasisPoints: Int
+        transferFeeBasisPoints: BigInt #*FIXME:*
         transferFeeConfigAuthority: Account
         withdrawWithheldAuthority: Account
-        maximumFee: Int
+        maximumFee: BigInt #*FIXME:*
     }
 
     """
@@ -758,7 +752,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     type SplTokenInitializeInterestBearingConfig implements TransactionInstruction {
         programId: Address
         mint: Account
-        rate: Int
+        rate: BigInt #*FIXME:*
         rateAuthority: Account
     }
 
@@ -769,7 +763,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         programId: Address
         mint: Account
         multisigRateAuthority: Account
-        newRate: Int
+        newRate: BigInt #*FIXME:*
         rateAuthority: Account
         signers: [Address]
     }
@@ -793,7 +787,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         instructionsSysvar: Account
         multisigOwner: Account
         owner: Account
-        proofInstructionOffset: Int
+        proofInstructionOffset: BigInt #*FIXME:*
         signers: [Address]
     }
 
@@ -895,7 +889,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         mint: Account
         multisigOwner: Account
         owner: Account
-        proofInstructionOffset: Int
+        proofInstructionOffset: BigInt #*FIXME:*
         signers: [Address]
         source: Account
     }
@@ -911,7 +905,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         multisigOwner: Account
         newSourceDecryptableAvailableBalance: String
         owner: Account
-        proofInstructionOffset: Int
+        proofInstructionOffset: BigInt #*FIXME:*
         signers: [Address]
         source: Account
     }
@@ -961,9 +955,6 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: [Address]
         withdrawWithheldAuthority: Account
     }
-
-    # TODO: Extensions!
-    # ...
 
     type Lockup {
         custodian: Account

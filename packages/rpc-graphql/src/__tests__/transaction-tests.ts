@@ -1127,12 +1127,12 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        maximumFee: expect.any(Number),
+                                        maximumFee: expect.any(BigInt),
                                         mint: {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        transferFeeBasisPoints: expect.any(Number),
+                                        transferFeeBasisPoints: expect.any(BigInt),
                                         transferFeeConfigAuthority: {
                                             address: expect.any(String),
                                         },
@@ -1978,7 +1978,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        rate: expect.any(Number),
+                                        rate: expect.any(BigInt),
                                         rateAuthority: {
                                             address: expect.any(String),
                                         },
@@ -2027,7 +2027,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         multisigRateAuthority: null,
-                                        newRate: expect.any(Number),
+                                        newRate: expect.any(BigInt),
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                         rateAuthority: {
                                             address: expect.any(String),
@@ -2041,7 +2041,7 @@ describe('transaction', () => {
                                         multisigRateAuthority: {
                                             address: expect.any(String),
                                         },
-                                        newRate: expect.any(Number),
+                                        newRate: expect.any(BigInt),
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                         rateAuthority: null,
                                         signers: expect.arrayContaining([expect.any(String)]),
@@ -2149,7 +2149,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: null,
                                     },
                                     {
@@ -2164,7 +2164,7 @@ describe('transaction', () => {
                                         },
                                         owner: null,
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: expect.arrayContaining([expect.any(String)]),
                                     },
                                 ]),
@@ -2681,7 +2681,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: null,
                                         source: {
                                             address: expect.any(String),
@@ -2705,7 +2705,7 @@ describe('transaction', () => {
                                         newDecryptableAvailableBalance: expect.any(String),
                                         owner: null,
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: expect.arrayContaining([expect.any(String)]),
                                         source: {
                                             address: expect.any(String),
@@ -2776,7 +2776,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: null,
                                         source: {
                                             address: expect.any(String),
@@ -2798,7 +2798,7 @@ describe('transaction', () => {
                                         newSourceDecryptableAvailableBalance: expect.any(String),
                                         owner: null,
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: expect.arrayContaining([expect.any(String)]),
                                         source: {
                                             address: expect.any(String),

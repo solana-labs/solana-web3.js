@@ -218,11 +218,6 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         multisigOwner: resolveAccount('multisigOwner'),
     },
-    SplTokenDefaultAccountState: {
-        FROZEN: 'frozen',
-        INITIALIZED: 'initialized',
-        UNINITIALIZED: 'uninitialized',
-    },
     SplTokenDepositConfidentialTransfer: {
         destination: resolveAccount('destination'),
         mint: resolveAccount('mint'),

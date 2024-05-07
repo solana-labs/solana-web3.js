@@ -1298,10 +1298,11 @@ describe('account', () => {
                         account(address: $address) {
                             ... on MintAccount {
                                 extensions {
-                                    ... on SplToken2022ExtensionMintCloseAuthority {
+                                    ... on SplTokenExtensionMintCloseAuthority {
                                         closeAuthority {
                                             address
                                         }
+                                        extension
                                     }
                                 }
                             }
@@ -1317,6 +1318,7 @@ describe('account', () => {
                                     closeAuthority: {
                                         address: expect.any(String),
                                     },
+                                    extension: 'mintCloseAuthority',
                                 },
                             ]),
                         },
@@ -1330,10 +1332,11 @@ describe('account', () => {
                         account(address: $address) {
                             ... on MintAccount {
                                 extensions {
-                                    ... on SplToken2022ExtensionPermanentDelegate {
+                                    ... on SplTokenExtensionPermanentDelegate {
                                         delegate {
                                             address
                                         }
+                                        extension
                                     }
                                 }
                             }
@@ -1349,6 +1352,7 @@ describe('account', () => {
                                     delegate: {
                                         address: expect.any(String),
                                     },
+                                    extension: 'permanentDelegate',
                                 },
                             ]),
                         },
@@ -1362,8 +1366,9 @@ describe('account', () => {
                         account(address: $address) {
                             ... on MintAccount {
                                 extensions {
-                                    ... on SplToken2022ExtensionInterestBearingConfig {
+                                    ... on SplTokenExtensionInterestBearingConfig {
                                         currentRate
+                                        extension
                                         initializationTimestamp
                                         lastUpdateTimestamp
                                         preUpdateAverageRate
@@ -1383,6 +1388,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     currentRate: expect.any(Number),
+                                    extension: 'interestBearingConfig',
                                     initializationTimestamp: expect.any(BigInt),
                                     lastUpdateTimestamp: expect.any(BigInt),
                                     preUpdateAverageRate: expect.any(Number),
@@ -1402,8 +1408,8 @@ describe('account', () => {
                         account(address: $address) {
                             ... on MintAccount {
                                 extensions {
-                                    ... on SplToken2022ExtensionNonTransferable {
-                                        extension # Interface field
+                                    ... on SplTokenExtensionNonTransferable {
+                                        extension
                                     }
                                 }
                             }
