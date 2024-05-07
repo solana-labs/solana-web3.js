@@ -36,6 +36,15 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Group Pointer
+    """
+    type SplTokenExtensionGroupPointer implements SplTokenExtension {
+        extension: String
+        authority: Account
+        groupAddress: Account
+    }
+
+    """
     Token-2022 Extension: Interest-Bearing Config
     """
     type SplTokenExtensionInterestBearingConfig implements SplTokenExtension {
