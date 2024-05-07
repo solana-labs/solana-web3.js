@@ -232,6 +232,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'transferFeeConfig') {
         return 'SplTokenExtensionTransferFeeConfig';
     }
+    if (extensionResult.extension === 'transferHook') {
+        return 'SplTokenExtensionTransferHook';
+    }
 }
 
 export const accountResolvers = {
@@ -281,6 +284,10 @@ export const accountResolvers = {
     SplTokenExtensionTransferFeeConfig: {
         transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
         withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
+    SplTokenExtensionTransferHook: {
+        authority: resolveAccount('authority'),
+        hookProgramId: resolveAccount('programId'),
     },
     StakeAccount: {
         data: resolveAccountData(),
