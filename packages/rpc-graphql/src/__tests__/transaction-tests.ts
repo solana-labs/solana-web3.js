@@ -2960,6 +2960,87 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('withdraw-withheld-confidential-transfer-tokens-from-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldConfidentialTransferTokensFromMint {
+                                        feeRecipient {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
