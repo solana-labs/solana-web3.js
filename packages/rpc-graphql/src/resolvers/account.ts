@@ -255,6 +255,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'tokenGroup') {
         return 'SplTokenExtensionTokenGroup';
     }
+    if (extensionResult.extension === 'tokenGroupMember') {
+        return 'SplTokenExtensionTokenGroupMember';
+    }
     if (extensionResult.extension === 'tokenMetadata') {
         return 'SplTokenExtensionTokenMetadata';
     }
@@ -325,6 +328,10 @@ export const accountResolvers = {
     SplTokenExtensionTokenGroup: {
         mint: resolveAccount('mint'),
         updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenExtensionTokenGroupMember: {
+        group: resolveAccount('group'),
+        mint: resolveAccount('mint'),
     },
     SplTokenExtensionTokenMetadata: {
         additionalMetadata: resolveAdditionalTokenMetadata(),

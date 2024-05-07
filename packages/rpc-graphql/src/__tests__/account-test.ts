@@ -1291,6 +1291,8 @@ describe('account', () => {
         describe('token-2022 extensions', () => {
             // See scripts/fixtures/spl-token-22-mint-mega-token.json
             const megaMintAddress = '5gSwsLGzyCwgwPJSnxjsQCaFeE19ZFaibHMLky9TDFim';
+            // See scripts/fixtures/spl-token-22-mint-mega-token-member.json
+            const megaMemberAddress = 'CXZDzjSrQ5jPaBgk6ckTQrLPTnUURiY2GnAgVCS9Fggz';
             it('mint-close-authority', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `
@@ -1851,6 +1853,48 @@ describe('account', () => {
                                     },
                                     size: expect.any(BigInt),
                                     updateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('token-group-member', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenGroupMember {
+                                        extension
+                                        group {
+                                            address
+                                        }
+                                        memberNumber
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMemberAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'tokenGroupMember',
+                                    group: {
+                                        address: expect.any(String),
+                                    },
+                                    memberNumber: expect.any(BigInt),
+                                    mint: {
                                         address: expect.any(String),
                                     },
                                 },

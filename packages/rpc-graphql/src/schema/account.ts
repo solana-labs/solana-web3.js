@@ -108,6 +108,16 @@ export const accountTypeDefs = /* GraphQL */ `
         updateAuthority: Account
     }
 
+    """
+    Token-2022 Extension: Token Group Member
+    """
+    type SplTokenExtensionTokenGroupMember implements SplTokenExtension {
+        extension: String
+        group: Account
+        memberNumber: BigInt
+        mint: Account
+    }
+
     type SplTokenMetadataAdditionalMetadata {
         key: String
         value: String
