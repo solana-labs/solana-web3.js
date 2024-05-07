@@ -207,6 +207,20 @@ const resolveTokenExtensions = () => {
     };
 };
 
+const resolveAdditionalTokenMetadata = () => {
+    return (parent: { additionalMetadata?: [string, string][] }) => {
+        if (parent.additionalMetadata != undefined) {
+            return parent.additionalMetadata.map(([key, value]) => {
+                return {
+                    key,
+                    value,
+                };
+            });
+        }
+        return null;
+    };
+};
+
 function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'confidentialTransferFeeConfig') {
         return 'SplTokenExtensionConfidentialTransferFeeConfig';
@@ -237,6 +251,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     }
     if (extensionResult.extension === 'permanentDelegate') {
         return 'SplTokenExtensionPermanentDelegate';
+    }
+    if (extensionResult.extension === 'tokenMetadata') {
+        return 'SplTokenExtensionTokenMetadata';
     }
     if (extensionResult.extension === 'transferFeeConfig') {
         return 'SplTokenExtensionTransferFeeConfig';
@@ -301,6 +318,11 @@ export const accountResolvers = {
     },
     SplTokenExtensionPermanentDelegate: {
         delegate: resolveAccount('delegate'),
+    },
+    SplTokenExtensionTokenMetadata: {
+        additionalMetadata: resolveAdditionalTokenMetadata(),
+        mint: resolveAccount('mint'),
+        updateAuthority: resolveAccount('updateAuthority'),
     },
     SplTokenExtensionTransferFeeConfig: {
         transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),

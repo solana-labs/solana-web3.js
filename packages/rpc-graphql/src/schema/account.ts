@@ -97,6 +97,23 @@ export const accountTypeDefs = /* GraphQL */ `
         delegate: Account
     }
 
+    type SplTokenMetadataAdditionalMetadata {
+        key: String
+        value: String
+    }
+    """
+    Token-2022 Extension: Token Metadata
+    """
+    type SplTokenExtensionTokenMetadata implements SplTokenExtension {
+        extension: String
+        additionalMetadata: [SplTokenMetadataAdditionalMetadata]
+        mint: Account
+        name: String
+        symbol: String
+        updateAuthority: Account
+        uri: String
+    }
+
     type SplTokenTransferFeeConfig {
         epoch: Epoch
         maximumFee: BigInt
