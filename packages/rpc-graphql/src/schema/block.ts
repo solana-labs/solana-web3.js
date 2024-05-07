@@ -3,6 +3,7 @@ export const blockTypeDefs = /* GraphQL */ `
     A Solana block
     """
     type Block {
+        id: ID!
         blockhash: Hash
         blockHeight: BigInt
         blockTime: BigInt
@@ -10,6 +11,7 @@ export const blockTypeDefs = /* GraphQL */ `
         previousBlockhash: Hash
         rewards: [Reward]
         signatures: [Signature]
+        slot: Slot
         transactions: [Transaction]
     }
 `;

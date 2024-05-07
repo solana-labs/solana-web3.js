@@ -28,6 +28,38 @@ describe('programAccounts', () => {
             commitment: 'CONFIRMED',
             programAddress: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
         };
+        it("can query program accounts' IDs", async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($programAddress: Address!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                        id
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    programAccounts: expect.arrayContaining([{ id: expect.any(String) }]),
+                },
+            });
+        });
+        it("can query program accounts' addresses", async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($programAddress: Address!, $commitment: Commitment) {
+                    programAccounts(programAddress: $programAddress, commitment: $commitment) {
+                        address
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    programAccounts: expect.arrayContaining([{ address: expect.any(String) }]),
+                },
+            });
+        });
         it("can query program accounts' lamports balances", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `

@@ -8,6 +8,7 @@ import {
     Rpc,
 } from '@solana/rpc';
 
+import { identifierFn } from '../hashers/identifier';
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import {
     mockTransactionAddressLookup,
@@ -52,7 +53,64 @@ describe('transaction', () => {
     });
 
     describe('basic queries', () => {
-        it('can query a transaction', async () => {
+        it("can query a transaction's ID", async () => {
+            expect.assertions(1);
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
+            const source = /* GraphQL */ `
+                query testQuery($signature: Signature!) {
+                    transaction(signature: $signature) {
+                        id
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, { signature });
+            expect(result).toMatchObject({
+                data: {
+                    transaction: {
+                        id: identifierFn({ signature }),
+                    },
+                },
+            });
+        });
+        it("can query a transaction's signature", async () => {
+            expect.assertions(1);
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
+            const source = /* GraphQL */ `
+                query testQuery($signature: Signature!) {
+                    transaction(signature: $signature) {
+                        signature
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, { signature });
+            expect(result).toMatchObject({
+                data: {
+                    transaction: {
+                        signature,
+                    },
+                },
+            });
+        });
+        it("can query a transaction's block time", async () => {
+            expect.assertions(1);
+            mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
+            const source = /* GraphQL */ `
+                query testQuery($signature: Signature!) {
+                    transaction(signature: $signature) {
+                        blockTime
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, { signature });
+            expect(result).toMatchObject({
+                data: {
+                    transaction: {
+                        blockTime: expect.any(BigInt),
+                    },
+                },
+            });
+        });
+        it('can query multiple fields on a transaction', async () => {
             expect.assertions(1);
             mockRpcTransport.mockResolvedValueOnce(mockTransactionVote);
             const source = /* GraphQL */ `

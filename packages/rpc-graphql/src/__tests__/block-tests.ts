@@ -8,6 +8,7 @@ import {
 } from '@solana/rpc';
 import type { Slot } from '@solana/rpc-types';
 
+import { identifierFn } from '../hashers/identifier';
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import { mockBlockFull, mockBlockFullBase58, mockBlockFullBase64, mockBlockSignatures } from './__setup__';
 
@@ -40,6 +41,44 @@ describe('block', () => {
         rpcGraphQL = createRpcGraphQL(rpc);
     });
     describe('basic queries', () => {
+        it("can query a block's ID", async () => {
+            expect.assertions(1);
+            mockRpcTransport.mockResolvedValue(mockBlockFull);
+            const source = /* GraphQL */ `
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot) {
+                        id
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, { slot });
+            expect(result).toMatchObject({
+                data: {
+                    block: {
+                        id: identifierFn({ slot }),
+                    },
+                },
+            });
+        });
+        it("can query a block's slot", async () => {
+            expect.assertions(1);
+            mockRpcTransport.mockResolvedValue(mockBlockFull);
+            const source = /* GraphQL */ `
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot) {
+                        slot
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, { slot });
+            expect(result).toMatchObject({
+                data: {
+                    block: {
+                        slot,
+                    },
+                },
+            });
+        });
         it("can query a block's block time", async () => {
             expect.assertions(1);
             mockRpcTransport.mockResolvedValue(mockBlockFull);
