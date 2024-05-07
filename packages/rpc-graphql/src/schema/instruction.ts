@@ -916,6 +916,25 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
+    """
+    SplToken-2022: ConfidentialTransferWithSplitProofs instruction
+    """
+    type SplTokenConfidentialTransferWithSplitProofs implements TransactionInstruction {
+        programId: Address
+        batchedGroupedCiphertext2HandlesValidityContext: Account
+        batchedRangeProofContext: Account
+        ciphertextCommitmentEqualityContext: Account
+        closeSplitContextStateOnExecution: Boolean
+        contextStateOwner: Account
+        destination: Account
+        lamportDestination: Account
+        mint: Account
+        newSourceDecryptableAvailableBalance: String
+        noOpOnUninitializedSplitContextState: Boolean
+        owner: Account
+        source: Account
+    }
+
     # TODO: Extensions!
     # ...
 

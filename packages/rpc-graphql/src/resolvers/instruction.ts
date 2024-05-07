@@ -200,6 +200,19 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
+    SplTokenConfidentialTransferWithSplitProofs: {
+        batchedGroupedCiphertext2HandlesValidityContext: resolveAccount(
+            'batchedGroupedCiphertext2HandlesValidityContext',
+        ),
+        batchedRangeProofContext: resolveAccount('batchedRangeProofContext'),
+        ciphertextCommitmentEqualityContext: resolveAccount('ciphertextCommitmentEqualityContext'),
+        contextStateOwner: resolveAccount('contextStateOwner'),
+        destination: resolveAccount('destination'),
+        lamportDestination: resolveAccount('lamportDestination'),
+        mint: resolveAccount('mint'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
     SplTokenConfigureConfidentialTransferAccount: {
         account: resolveAccount('account'),
         mint: resolveAccount('mint'),
@@ -810,6 +823,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'confidentialTransfer') {
                         return 'SplTokenConfidentialTransfer';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'confidentialTransferWithSplitProofs') {
+                        return 'SplTokenConfidentialTransferWithSplitProofs';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
