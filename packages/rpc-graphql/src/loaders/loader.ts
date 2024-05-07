@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import stringify from '@solana/fast-stable-stringify';
 import type { Signature } from '@solana/keys';
 import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc';
 import type { Commitment, Slot } from '@solana/rpc-types';
@@ -64,5 +63,3 @@ export type RpcGraphQLLoaders = {
     programAccounts: ProgramAccountsLoader;
     transaction: TransactionLoader;
 };
-
-export const cacheKeyFn = (obj: unknown) => stringify(obj) ?? '';

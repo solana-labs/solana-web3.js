@@ -3,13 +3,13 @@ import { getBase58Codec, getBase64Codec } from '@solana/codecs-strings';
 import type { GetAccountInfoApi, GetMultipleAccountsApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
+import { cacheKeyFn } from '../hashers/cache-key';
 import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer';
 import {
     AccountLoader,
     AccountLoaderArgs,
     AccountLoaderArgsBase,
     AccountLoaderValue,
-    cacheKeyFn,
     MultipleAccountsLoaderArgs,
 } from './loader';
 

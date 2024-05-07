@@ -1,10 +1,10 @@
 import type { GetProgramAccountsApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
+import { cacheKeyFn } from '../hashers/cache-key';
 import { sliceData } from './account';
 import { buildCoalescedFetchesByArgsHashWithDataSlice, ToFetchMap } from './coalescer';
 import {
-    cacheKeyFn,
     ProgramAccountsLoader,
     ProgramAccountsLoaderArgs,
     ProgramAccountsLoaderArgsBase,

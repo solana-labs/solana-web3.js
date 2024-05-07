@@ -4,7 +4,8 @@ import { Commitment } from '@solana/rpc-types';
 import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { cacheKeyFn, TransactionLoaderValue } from '../loaders';
+import { cacheKeyFn } from '../hashers/cache-key';
+import { TransactionLoaderValue } from '../loaders';
 import { buildTransactionLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 
 export type EncodedTransactionData = {

@@ -1,8 +1,9 @@
 import type { GetBlockApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
+import { cacheKeyFn } from '../hashers/cache-key';
 import { buildCoalescedFetchesByArgsHash, ToFetchMap } from './coalescer';
-import { BlockLoader, BlockLoaderArgs, BlockLoaderArgsBase, BlockLoaderValue, cacheKeyFn } from './loader';
+import { BlockLoader, BlockLoaderArgs, BlockLoaderArgsBase, BlockLoaderValue } from './loader';
 
 async function loadBlock(rpc: Rpc<GetBlockApi>, { slot, ...config }: BlockLoaderArgs): Promise<BlockLoaderValue> {
     // @ts-expect-error FIX ME: https://github.com/microsoft/TypeScript/issues/43187
