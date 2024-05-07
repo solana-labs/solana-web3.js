@@ -971,6 +971,15 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawWithheldAuthority: Account
     }
 
+    """
+    SplToken-2022: HarvestWithheldConfidentialTransferTokensToMint instruction
+    """
+    type SplTokenHarvestWithheldConfidentialTransferTokensToMint implements TransactionInstruction {
+        programId: Address
+        mint: Account
+        sourceAccounts: [Address]
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch

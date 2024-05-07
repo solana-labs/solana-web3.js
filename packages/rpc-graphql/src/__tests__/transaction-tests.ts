@@ -3125,6 +3125,46 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('harvest-withheld-confidential-transfer-tokens-to-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenHarvestWithheldConfidentialTransferTokensToMint {
+                                        mint {
+                                            address
+                                        }
+                                        sourceAccounts
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
