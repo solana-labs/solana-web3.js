@@ -1459,6 +1459,68 @@ describe('account', () => {
                     },
                 });
             });
+            it('transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferFeeConfig {
+                                        extension
+                                        newerTransferFee {
+                                            epoch
+                                            maximumFee
+                                            transferFeeBasisPoints
+                                        }
+                                        olderTransferFee {
+                                            epoch
+                                            maximumFee
+                                            transferFeeBasisPoints
+                                        }
+                                        transferFeeConfigAuthority {
+                                            address
+                                        }
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'transferFeeConfig',
+                                    newerTransferFee: {
+                                        epoch: expect.any(BigInt),
+                                        maximumFee: expect.any(BigInt),
+                                        transferFeeBasisPoints: expect.any(Number),
+                                    },
+                                    olderTransferFee: {
+                                        epoch: expect.any(BigInt),
+                                        maximumFee: expect.any(BigInt),
+                                        transferFeeBasisPoints: expect.any(Number),
+                                    },
+                                    transferFeeConfigAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    withdrawWithheldAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    withheldAmount: expect.any(BigInt),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

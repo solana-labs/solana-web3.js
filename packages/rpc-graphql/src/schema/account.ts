@@ -49,6 +49,23 @@ export const accountTypeDefs = /* GraphQL */ `
         delegate: Account
     }
 
+    type SplTokenTransferFeeConfig {
+        epoch: Epoch
+        maximumFee: BigInt
+        transferFeeBasisPoints: Int
+    }
+    """
+    Token-2022 Extension: Transfer Fee Config
+    """
+    type SplTokenExtensionTransferFeeConfig implements SplTokenExtension {
+        extension: String
+        newerTransferFee: SplTokenTransferFeeConfig
+        olderTransferFee: SplTokenTransferFeeConfig
+        transferFeeConfigAuthority: Account
+        withdrawWithheldAuthority: Account
+        withheldAmount: BigInt
+    }
+
     """
     Account interface
     """
