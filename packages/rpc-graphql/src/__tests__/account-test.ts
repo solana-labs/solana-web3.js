@@ -1599,6 +1599,46 @@ describe('account', () => {
                     },
                 });
             });
+            it('transfer-hook', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferHook {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        hookProgramId {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'transferHook',
+                                    hookProgramId: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

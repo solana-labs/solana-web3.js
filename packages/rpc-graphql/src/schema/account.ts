@@ -88,6 +88,15 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Transfer Hook
+    """
+    type SplTokenExtensionTransferHook implements SplTokenExtension {
+        extension: String
+        authority: Account
+        hookProgramId: Account
+    }
+
+    """
     Account interface
     """
     interface Account {
