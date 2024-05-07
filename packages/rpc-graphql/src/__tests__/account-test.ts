@@ -1719,6 +1719,46 @@ describe('account', () => {
                     },
                 });
             });
+            it('group-member-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionGroupMemberPointer {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        memberAddress {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'groupMemberPointer',
+                                    memberAddress: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });
