@@ -100,7 +100,7 @@
     "@types/sinon-chai": "^3.2.12",
     "chai": "^5.1.0",
     "chai-as-promised": "^7.1.1",
-    "commitlint": "^19.2.1",
+    "commitlint": "^19.3.0",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
