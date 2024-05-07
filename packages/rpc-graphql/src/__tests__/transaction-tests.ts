@@ -2810,6 +2810,97 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('confidential-transfer-with-split-proofs', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfidentialTransferWithSplitProofs {
+                                        batchedGroupedCiphertext2HandlesValidityContext {
+                                            address
+                                        }
+                                        batchedRangeProofContext {
+                                            address
+                                        }
+                                        ciphertextCommitmentEqualityContext {
+                                            address
+                                        }
+                                        closeSplitContextStateOnExecution
+                                        contextStateOwner {
+                                            address
+                                        }
+                                        destination {
+                                            address
+                                        }
+                                        lamportDestination {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        newSourceDecryptableAvailableBalance
+                                        noOpOnUninitializedSplitContextState
+                                        owner {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        batchedGroupedCiphertext2HandlesValidityContext: {
+                                            address: expect.any(String),
+                                        },
+                                        batchedRangeProofContext: {
+                                            address: expect.any(String),
+                                        },
+                                        ciphertextCommitmentEqualityContext: {
+                                            address: expect.any(String),
+                                        },
+                                        closeSplitContextStateOnExecution: expect.any(Boolean),
+                                        contextStateOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        lamportDestination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        noOpOnUninitializedSplitContextState: expect.any(Boolean),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
