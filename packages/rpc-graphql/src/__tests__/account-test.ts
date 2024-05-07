@@ -1815,6 +1815,50 @@ describe('account', () => {
                     },
                 });
             });
+            it('token-group', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenGroup {
+                                        extension
+                                        maxSize
+                                        mint {
+                                            address
+                                        }
+                                        size
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'tokenGroup',
+                                    maxSize: expect.any(BigInt),
+                                    mint: {
+                                        address: expect.any(String),
+                                    },
+                                    size: expect.any(BigInt),
+                                    updateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });
