@@ -1759,6 +1759,62 @@ describe('account', () => {
                     },
                 });
             });
+            it('token-metadata', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenMetadata {
+                                        additionalMetadata {
+                                            key
+                                            value
+                                        }
+                                        extension
+                                        mint {
+                                            address
+                                        }
+                                        name
+                                        symbol
+                                        updateAuthority {
+                                            address
+                                        }
+                                        uri
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    additionalMetadata: expect.arrayContaining([
+                                        {
+                                            key: expect.any(String),
+                                            value: expect.any(String),
+                                        },
+                                    ]),
+                                    extension: 'tokenMetadata',
+                                    mint: {
+                                        address: expect.any(String),
+                                    },
+                                    name: expect.any(String),
+                                    symbol: expect.any(String),
+                                    updateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    uri: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });
