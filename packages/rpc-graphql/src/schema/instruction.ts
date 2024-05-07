@@ -980,6 +980,28 @@ export const instructionTypeDefs = /* GraphQL */ `
         sourceAccounts: [Address]
     }
 
+    """
+    SplToken-2022: EnableConfidentialTransferFeeHarvestToMint instruction
+    """
+    type SplTokenEnableConfidentialTransferFeeHarvestToMint implements TransactionInstruction {
+        programId: Address
+        account: Account
+        owner: Account
+        multisigOwner: Account
+        signers: Address
+    }
+
+    """
+    SplToken-2022: DisableConfidentialTransferFeeHarvestToMint instruction
+    """
+    type SplTokenDisableConfidentialTransferFeeHarvestToMint implements TransactionInstruction {
+        programId: Address
+        account: Account
+        multisigOwner: Account
+        owner: Account
+        signers: Address
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
