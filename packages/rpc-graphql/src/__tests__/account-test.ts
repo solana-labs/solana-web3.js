@@ -1521,6 +1521,44 @@ describe('account', () => {
                     },
                 });
             });
+            it('confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferMint {
+                                        auditorElgamalPubkey
+                                        authority {
+                                            address
+                                        }
+                                        autoApproveNewAccounts
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    auditorElgamalPubkey: null,
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    autoApproveNewAccounts: expect.any(Boolean),
+                                    extension: 'confidentialTransferMint',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

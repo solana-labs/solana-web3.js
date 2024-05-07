@@ -7,6 +7,16 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Confidential Transfer Mint
+    """
+    type SplTokenExtensionConfidentialTransferMint implements SplTokenExtension {
+        extension: String
+        auditorElgamalPubkey: Address
+        authority: Account
+        autoApproveNewAccounts: Boolean
+    }
+
+    """
     Token-2022 Extension: Default Account State
     """
     type SplTokenExtensionDefaultAccountState implements SplTokenExtension {
