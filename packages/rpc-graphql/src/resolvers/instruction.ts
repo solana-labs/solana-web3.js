@@ -280,6 +280,9 @@ export const instructionResolvers = {
     SplTokenGetAccountDataSizeInstruction: {
         mint: resolveAccount('mint'),
     },
+    SplTokenHarvestWithheldConfidentialTransferTokensToMint: {
+        mint: resolveAccount('mint'),
+    },
     SplTokenHarvestWithheldTokensToMint: {
         mint: resolveAccount('mint'),
     },
@@ -852,6 +855,9 @@ export const instructionResolvers = {
                         jsonParsedConfigs.instructionType === 'withdrawWithheldConfidentialTransferTokensFromAccounts'
                     ) {
                         return 'SplTokenWithdrawWithheldConfidentialTransferTokensFromAccounts';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'harvestWithheldConfidentialTransferTokensToMint') {
+                        return 'SplTokenHarvestWithheldConfidentialTransferTokensToMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
