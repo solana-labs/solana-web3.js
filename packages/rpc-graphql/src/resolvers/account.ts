@@ -3,7 +3,8 @@ import { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { AccountLoaderValue, cacheKeyFn } from '../loaders';
+import { cacheKeyFn } from '../hashers/cache-key';
+import { AccountLoaderValue } from '../loaders';
 import { buildAccountLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 
 type Encoding = 'base58' | 'base64' | 'base64+zstd';

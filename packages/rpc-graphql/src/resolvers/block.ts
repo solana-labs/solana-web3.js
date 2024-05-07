@@ -2,7 +2,8 @@ import type { Commitment, Slot } from '@solana/rpc-types';
 import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { BlockLoaderValue, cacheKeyFn } from '../loaders';
+import { cacheKeyFn } from '../hashers/cache-key';
+import { BlockLoaderValue } from '../loaders';
 import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
 

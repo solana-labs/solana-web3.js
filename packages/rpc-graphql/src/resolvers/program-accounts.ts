@@ -3,7 +3,7 @@ import { Commitment, Slot } from '@solana/rpc-types';
 import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
-import { cacheKeyFn } from '../loaders';
+import { cacheKeyFn } from '../hashers/cache-key';
 import { AccountResult } from './account';
 import { buildProgramAccountsLoaderArgSetFromResolveInfo } from './resolve-info';
 

@@ -1,6 +1,7 @@
 import { DataSlice } from '@solana/rpc-types';
 
-import { BatchLoadPromiseCallback, cacheKeyFn } from './loader';
+import { cacheKeyFn } from '../hashers/cache-key';
+import { BatchLoadPromiseCallback } from './loader';
 
 type Encoding = ('base58' | 'base64' | 'base64+zstd' | 'jsonParsed') | ('base58' | 'base64' | 'json' | 'jsonParsed');
 

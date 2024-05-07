@@ -1,14 +1,9 @@
 import type { GetTransactionApi, Rpc } from '@solana/rpc';
 import DataLoader from 'dataloader';
 
+import { cacheKeyFn } from '../hashers/cache-key';
 import { buildCoalescedFetchesByArgsHash, ToFetchMap } from './coalescer';
-import {
-    cacheKeyFn,
-    TransactionLoader,
-    TransactionLoaderArgs,
-    TransactionLoaderArgsBase,
-    TransactionLoaderValue,
-} from './loader';
+import { TransactionLoader, TransactionLoaderArgs, TransactionLoaderArgsBase, TransactionLoaderValue } from './loader';
 
 async function loadTransaction(
     rpc: Rpc<GetTransactionApi>,
