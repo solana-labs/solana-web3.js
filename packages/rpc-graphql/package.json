@@ -64,6 +64,7 @@
     ],
     "dependencies": {
         "@graphql-tools/schema": "^10.0.3",
+        "@solana/codecs-core": "workspace:*",
         "@solana/codecs-strings": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
         "dataloader": "^2.2.2",
