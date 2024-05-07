@@ -7,6 +7,14 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Default Account State
+    """
+    type SplTokenExtensionDefaultAccountState implements SplTokenExtension {
+        extension: String
+        accountState: SplTokenDefaultAccountState
+    }
+
+    """
     Token-2022 Extension: Interest-Bearing Config
     """
     type SplTokenExtensionInterestBearingConfig implements SplTokenExtension {

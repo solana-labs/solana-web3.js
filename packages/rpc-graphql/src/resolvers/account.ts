@@ -208,6 +208,9 @@ const resolveTokenExtensions = () => {
 };
 
 function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
+    if (extensionResult.extension === 'defaultAccountState') {
+        return 'SplTokenExtensionDefaultAccountState';
+    }
     if (extensionResult.extension === 'interestBearingConfig') {
         return 'SplTokenExtensionInterestBearingConfig';
     }
