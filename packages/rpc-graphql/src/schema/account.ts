@@ -48,6 +48,15 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Metadata Pointer
+    """
+    type SplTokenExtensionMetadataPointer implements SplTokenExtension {
+        extension: String
+        authority: Account
+        metadataAddress: Account
+    }
+
+    """
     Token-2022 Extension: Mint Close Authority
     """
     type SplTokenExtensionMintCloseAuthority implements SplTokenExtension {

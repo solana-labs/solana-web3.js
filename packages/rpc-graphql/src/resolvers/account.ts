@@ -220,6 +220,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'interestBearingConfig') {
         return 'SplTokenExtensionInterestBearingConfig';
     }
+    if (extensionResult.extension === 'metadataPointer') {
+        return 'SplTokenExtensionMetadataPointer';
+    }
     if (extensionResult.extension === 'mintCloseAuthority') {
         return 'SplTokenExtensionMintCloseAuthority';
     }
@@ -274,6 +277,10 @@ export const accountResolvers = {
     },
     SplTokenExtensionInterestBearingConfig: {
         rateAuthority: resolveAccount('rateAuthority'),
+    },
+    SplTokenExtensionMetadataPointer: {
+        authority: resolveAccount('authority'),
+        metadataAddress: resolveAccount('metadataAddress'),
     },
     SplTokenExtensionMintCloseAuthority: {
         closeAuthority: resolveAccount('closeAuthority'),
