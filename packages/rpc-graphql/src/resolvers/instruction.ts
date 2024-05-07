@@ -471,6 +471,13 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
     },
+    SplTokenWithdrawWithheldConfidentialTransferTokensFromMint: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
     SplTokenWithdrawWithheldTokensFromAccounts: {
         feeRecipient: resolveAccount('feeRecipient'),
         mint: resolveAccount('mint'),
@@ -835,6 +842,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateConfidentialTransferMint') {
                         return 'SplTokenUpdateConfidentialTransferMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawWithheldConfidentialTransferTokensFromMint') {
+                        return 'SplTokenWithdrawWithheldConfidentialTransferTokensFromMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
