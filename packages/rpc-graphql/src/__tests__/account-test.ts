@@ -1559,6 +1559,46 @@ describe('account', () => {
                     },
                 });
             });
+            it('confidential-transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferFeeConfig {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        harvestToMintEnabled
+                                        withdrawWithheldAuthorityElgamalPubkey
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'confidentialTransferFeeConfig',
+                                    harvestToMintEnabled: expect.any(Boolean),
+                                    withdrawWithheldAuthorityElgamalPubkey: expect.any(String),
+                                    withheldAmount: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });

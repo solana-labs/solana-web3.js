@@ -7,6 +7,17 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Confidential Transfer Fee Config
+    """
+    type SplTokenExtensionConfidentialTransferFeeConfig implements SplTokenExtension {
+        extension: String
+        authority: Account
+        harvestToMintEnabled: Boolean
+        withdrawWithheldAuthorityElgamalPubkey: Address
+        withheldAmount: String
+    }
+
+    """
     Token-2022 Extension: Confidential Transfer Mint
     """
     type SplTokenExtensionConfidentialTransferMint implements SplTokenExtension {
