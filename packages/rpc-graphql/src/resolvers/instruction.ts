@@ -423,6 +423,12 @@ export const instructionResolvers = {
     SplTokenUiAmountToAmountInstruction: {
         mint: resolveAccount('mint'),
     },
+    SplTokenUpdateConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
+        confidentialTransferMintAuthority: resolveAccount('confidentialTransferMintAuthority'),
+        mint: resolveAccount('mint'),
+        newConfidentialTransferMintAuthority: resolveAccount('newConfidentialTransferMintAuthority'),
+    },
     SplTokenUpdateDefaultAccountStateInstruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
         mint: resolveAccount('mint'),
@@ -826,6 +832,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'confidentialTransferWithSplitProofs') {
                         return 'SplTokenConfidentialTransferWithSplitProofs';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateConfidentialTransferMint') {
+                        return 'SplTokenUpdateConfidentialTransferMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

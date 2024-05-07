@@ -2901,6 +2901,65 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('update-confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateConfidentialTransferMint {
+                                        auditorElgamalPubkey
+                                        authority {
+                                            address
+                                        }
+                                        autoApproveNewAccounts
+                                        confidentialTransferMintAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        newConfidentialTransferMintAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        auditorElgamalPubkey: null,
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        autoApproveNewAccounts: expect.any(Boolean),
+                                        confidentialTransferMintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        newConfidentialTransferMintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

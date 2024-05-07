@@ -935,6 +935,19 @@ export const instructionTypeDefs = /* GraphQL */ `
         source: Account
     }
 
+    """
+    SplToken-2022: UpdateConfidentialTransferMint instruction
+    """
+    type SplTokenUpdateConfidentialTransferMint implements TransactionInstruction {
+        programId: Address
+        auditorElgamalPubkey: Address
+        authority: Account
+        autoApproveNewAccounts: Boolean
+        confidentialTransferMintAuthority: Account
+        mint: Account
+        newConfidentialTransferMintAuthority: Account
+    }
+
     # TODO: Extensions!
     # ...
 
