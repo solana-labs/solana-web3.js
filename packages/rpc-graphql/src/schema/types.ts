@@ -61,6 +61,12 @@ export const typeTypeDefs = /* GraphQL */ `
 
     scalar Slot
 
+    enum SplTokenDefaultAccountState {
+        FROZEN
+        INITIALIZED
+        UNINITIALIZED
+    }
+
     type TokenAmount {
         amount: BigInt
         decimals: Int

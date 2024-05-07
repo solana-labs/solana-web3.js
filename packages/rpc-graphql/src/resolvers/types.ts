@@ -57,6 +57,11 @@ export const typeTypeResolvers = {
     Lamports: bigIntScalarAlias,
     Signature: stringScalarAlias,
     Slot: bigIntScalarAlias,
+    SplTokenDefaultAccountState: {
+        FROZEN: 'frozen',
+        INITIALIZED: 'initialized',
+        UNINITIALIZED: 'uninitialized',
+    },
     TokenBalance: {
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),

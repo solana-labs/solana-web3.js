@@ -192,7 +192,7 @@ type Token2022ExtensionResult = {
     state: object;
 };
 
-const resolveToken2022Extensions = () => {
+const resolveTokenExtensions = () => {
     return (parent: (AccountResult & { extensions?: Token2022ExtensionResult[] }) | null) => {
         if (parent != null && parent.extensions != undefined) {
             return parent.extensions.map(e => {
@@ -207,18 +207,18 @@ const resolveToken2022Extensions = () => {
     };
 };
 
-function resolveToken2022ExtensionType(extensionResult: Token2022ExtensionResult) {
+function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'interestBearingConfig') {
-        return 'SplToken2022ExtensionInterestBearingConfig';
+        return 'SplTokenExtensionInterestBearingConfig';
     }
     if (extensionResult.extension === 'mintCloseAuthority') {
-        return 'SplToken2022ExtensionMintCloseAuthority';
+        return 'SplTokenExtensionMintCloseAuthority';
     }
     if (extensionResult.extension === 'nonTransferable') {
-        return 'SplToken2022ExtensionNonTransferable';
+        return 'SplTokenExtensionNonTransferable';
     }
     if (extensionResult.extension === 'permanentDelegate') {
-        return 'SplToken2022ExtensionPermanentDelegate';
+        return 'SplTokenExtensionPermanentDelegate';
     }
 }
 
@@ -238,7 +238,7 @@ export const accountResolvers = {
     },
     MintAccount: {
         data: resolveAccountData(),
-        extensions: resolveToken2022Extensions(),
+        extensions: resolveTokenExtensions(),
         freezeAuthority: resolveAccount('freezeAuthority'),
         mintAuthority: resolveAccount('mintAuthority'),
         ownerProgram: resolveAccount('ownerProgram'),
@@ -248,16 +248,16 @@ export const accountResolvers = {
         data: resolveAccountData(),
         ownerProgram: resolveAccount('ownerProgram'),
     },
-    SplToken2022Extension: {
-        __resolveType: resolveToken2022ExtensionType,
+    SplTokenExtension: {
+        __resolveType: resolveTokenExtensionType,
     },
-    SplToken2022ExtensionInterestBearingConfig: {
+    SplTokenExtensionInterestBearingConfig: {
         rateAuthority: resolveAccount('rateAuthority'),
     },
-    SplToken2022ExtensionMintCloseAuthority: {
+    SplTokenExtensionMintCloseAuthority: {
         closeAuthority: resolveAccount('closeAuthority'),
     },
-    SplToken2022ExtensionPermanentDelegate: {
+    SplTokenExtensionPermanentDelegate: {
         delegate: resolveAccount('delegate'),
     },
     StakeAccount: {
@@ -316,7 +316,7 @@ export const accountResolvers = {
     },
     TokenAccount: {
         data: resolveAccountData(),
-        extensions: resolveToken2022Extensions(),
+        extensions: resolveTokenExtensions(),
         mint: resolveAccount('mint'),
         owner: resolveAccount('owner'),
         ownerProgram: resolveAccount('ownerProgram'),

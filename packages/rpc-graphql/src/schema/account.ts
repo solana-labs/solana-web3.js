@@ -2,30 +2,14 @@ export const accountTypeDefs = /* GraphQL */ `
     """
     Token-2022 Extensions (Account State)
     """
-    interface SplToken2022Extension {
+    interface SplTokenExtension {
         extension: String
-    }
-
-    """
-    Token-2022 Extension: Mint Close Authority
-    """
-    type SplToken2022ExtensionMintCloseAuthority implements SplToken2022Extension {
-        extension: String
-        closeAuthority: Account
-    }
-
-    """
-    Token-2022 Extension: Permanent Delegate
-    """
-    type SplToken2022ExtensionPermanentDelegate implements SplToken2022Extension {
-        extension: String
-        delegate: Account
     }
 
     """
     Token-2022 Extension: Interest-Bearing Config
     """
-    type SplToken2022ExtensionInterestBearingConfig implements SplToken2022Extension {
+    type SplTokenExtensionInterestBearingConfig implements SplTokenExtension {
         extension: String
         currentRate: Int
         initializationTimestamp: BigInt
@@ -35,10 +19,26 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Mint Close Authority
+    """
+    type SplTokenExtensionMintCloseAuthority implements SplTokenExtension {
+        extension: String
+        closeAuthority: Account
+    }
+
+    """
     Token-2022 Extension: Non-Transferable
     """
-    type SplToken2022ExtensionNonTransferable implements SplToken2022Extension {
+    type SplTokenExtensionNonTransferable implements SplTokenExtension {
         extension: String
+    }
+
+    """
+    Token-2022 Extension: Permanent Delegate
+    """
+    type SplTokenExtensionPermanentDelegate implements SplTokenExtension {
+        extension: String
+        delegate: Account
     }
 
     """
@@ -116,7 +116,7 @@ export const accountTypeDefs = /* GraphQL */ `
         space: BigInt
         rentEpoch: Epoch
         decimals: Int
-        extensions: [SplToken2022Extension]
+        extensions: [SplTokenExtension]
         freezeAuthority: Account
         isInitialized: Boolean
         mintAuthority: Account
@@ -134,7 +134,7 @@ export const accountTypeDefs = /* GraphQL */ `
         ownerProgram: Account
         space: BigInt
         rentEpoch: Epoch
-        extensions: [SplToken2022Extension]
+        extensions: [SplTokenExtension]
         isNative: Boolean
         mint: Account
         owner: Account
