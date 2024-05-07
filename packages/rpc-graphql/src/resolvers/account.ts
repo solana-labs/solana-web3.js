@@ -223,6 +223,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'permanentDelegate') {
         return 'SplTokenExtensionPermanentDelegate';
     }
+    if (extensionResult.extension === 'transferFeeConfig') {
+        return 'SplTokenExtensionTransferFeeConfig';
+    }
 }
 
 export const accountResolvers = {
@@ -262,6 +265,10 @@ export const accountResolvers = {
     },
     SplTokenExtensionPermanentDelegate: {
         delegate: resolveAccount('delegate'),
+    },
+    SplTokenExtensionTransferFeeConfig: {
+        transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
     },
     StakeAccount: {
         data: resolveAccountData(),
