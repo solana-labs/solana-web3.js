@@ -208,6 +208,9 @@ const resolveTokenExtensions = () => {
 };
 
 function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
+    if (extensionResult.extension === 'confidentialTransferMint') {
+        return 'SplTokenExtensionConfidentialTransferMint';
+    }
     if (extensionResult.extension === 'defaultAccountState') {
         return 'SplTokenExtensionDefaultAccountState';
     }
@@ -256,6 +259,9 @@ export const accountResolvers = {
     },
     SplTokenExtension: {
         __resolveType: resolveTokenExtensionType,
+    },
+    SplTokenExtensionConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
     },
     SplTokenExtensionInterestBearingConfig: {
         rateAuthority: resolveAccount('rateAuthority'),
