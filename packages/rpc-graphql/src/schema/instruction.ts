@@ -956,6 +956,21 @@ export const instructionTypeDefs = /* GraphQL */ `
         withdrawWithheldAuthority: Account
     }
 
+    """
+    SplToken-2022: WithdrawWithheldConfidentialTransferTokensFromAccounts instruction
+    """
+    type SplTokenWithdrawWithheldConfidentialTransferTokensFromAccounts implements TransactionInstruction {
+        programId: Address
+        feeRecipient: Account
+        instructionsSysvar: Account
+        mint: Account
+        multisigWithdrawWithheldAuthority: Account
+        proofInstructionOffset: BigInt #*FIXME:*
+        signers: [Address]
+        sourceAccounts: [Address]
+        withdrawWithheldAuthority: Account
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
