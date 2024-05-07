@@ -957,7 +957,7 @@ export const instructionTypeDefs = /* GraphQL */ `
         instructionsSysvar: Account
         mint: Account
         multisigWithdrawWithheldAuthority: Account
-        proofInstructionOffset: Int
+        proofInstructionOffset: BigInt #*FIXME:*
         signers: [Address]
         withdrawWithheldAuthority: Account
     }

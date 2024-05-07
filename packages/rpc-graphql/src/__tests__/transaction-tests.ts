@@ -3011,7 +3011,7 @@ describe('transaction', () => {
                                         },
                                         multisigWithdrawWithheldAuthority: null,
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: null,
                                         withdrawWithheldAuthority: {
                                             address: expect.any(String),
@@ -3031,7 +3031,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        proofInstructionOffset: expect.any(Number),
+                                        proofInstructionOffset: expect.any(BigInt),
                                         signers: expect.arrayContaining([expect.any(String)]),
                                         withdrawWithheldAuthority: null,
                                     },
