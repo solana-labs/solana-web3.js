@@ -2717,6 +2717,99 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfidentialTransfer {
+                                        destination {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newSourceDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(Number),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

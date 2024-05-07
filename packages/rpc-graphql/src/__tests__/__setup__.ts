@@ -2347,6 +2347,44 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            source: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            destination: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            instructionsSysvar: 'SysvarRent111111111111111111111111111111111',
+                            newSourceDecryptableAvailableBalance: '57fZKMs9YqFhu6fENwKTe7mGZh+wJbIvYkQ3LI/FDnOdc2w7',
+                            owner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            proofInstructionOffset: 1,
+                        },
+                        type: 'confidentialTransfer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            source: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            destination: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            mint: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            instructionsSysvar: 'SysvarRent111111111111111111111111111111111',
+                            newSourceDecryptableAvailableBalance: '57fZKMs9YqFhu6fENwKTe7mGZh+wJbIvYkQ3LI/FDnOdc2w7',
+                            proofInstructionOffset: 1,
+                            multisigOwner: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                        },
+                        type: 'confidentialTransfer',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
