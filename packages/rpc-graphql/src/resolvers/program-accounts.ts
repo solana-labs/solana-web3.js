@@ -4,6 +4,7 @@ import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { cacheKeyFn } from '../hashers/cache-key';
+import { identifierFn } from '../hashers/identifier';
 import { AccountResult } from './account';
 import { buildProgramAccountsLoaderArgSetFromResolveInfo } from './resolve-info';
 
@@ -36,11 +37,17 @@ export function resolveProgramAccounts(fieldName?: string) {
                 }
                 programAccounts.forEach(programAccount => {
                     const { account, pubkey: address } = programAccount;
+                    const id = identifierFn({
+                        address,
+                        commitment: args.commitment,
+                        minContextSlot: args.minContextSlot,
+                    });
 
                     const thisResult = (result[address] ||= {
                         ...account,
                         address,
                         encodedData: {},
+                        id,
                         ownerProgram: account.owner,
                     });
 

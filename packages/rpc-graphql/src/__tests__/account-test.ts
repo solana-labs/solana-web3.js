@@ -7,6 +7,7 @@ import {
     Rpc,
 } from '@solana/rpc';
 
+import { identifierFn } from '../hashers/identifier';
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
@@ -27,6 +28,42 @@ describe('account', () => {
         const variableValues = {
             address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
         };
+        it("can query an account's ID", async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        id
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        id: identifierFn({ address: variableValues.address }),
+                    },
+                },
+            });
+        });
+        it("can query an account's address", async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($address: Address!, $commitment: Commitment) {
+                    account(address: $address, commitment: $commitment) {
+                        address
+                    }
+                }
+            `;
+            const result = await rpcGraphQL.query(source, variableValues);
+            expect(result).toMatchObject({
+                data: {
+                    account: {
+                        address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
+                    },
+                },
+            });
+        });
         it("can query an account's lamports balance", async () => {
             expect.assertions(1);
             const source = /* GraphQL */ `
@@ -59,24 +96,6 @@ describe('account', () => {
                 data: {
                     account: {
                         executable: false,
-                    },
-                },
-            });
-        });
-        it("can query an account's address", async () => {
-            expect.assertions(1);
-            const source = /* GraphQL */ `
-                query testQuery($address: Address!, $commitment: Commitment) {
-                    account(address: $address, commitment: $commitment) {
-                        address
-                    }
-                }
-            `;
-            const result = await rpcGraphQL.query(source, variableValues);
-            expect(result).toMatchObject({
-                data: {
-                    account: {
-                        address: 'AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca',
                     },
                 },
             });

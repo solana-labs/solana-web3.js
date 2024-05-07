@@ -4,6 +4,7 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { cacheKeyFn } from '../hashers/cache-key';
+import { type ID, identifierFn } from '../hashers/identifier';
 import { AccountLoaderValue } from '../loaders';
 import { buildAccountLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 
@@ -17,6 +18,7 @@ export type EncodedAccountData = {
 export type AccountResult = Partial<Omit<AccountLoaderValue, 'data'>> & {
     address: Address;
     encodedData?: EncodedAccountData;
+    id: ID;
     jsonParsedConfigs?: {
         accountType: string;
         programId: Address;
@@ -47,9 +49,11 @@ export const resolveAccount = (fieldName?: string) => {
         const address = fieldName ? parent[fieldName] : args.address;
 
         if (address) {
+            const id = identifierFn({ address, ...args });
+
             // Do not load any accounts if only the address is requested
-            if (onlyFieldsRequested(['address'], info)) {
-                return { address };
+            if (onlyFieldsRequested(['address', 'id'], info)) {
+                return { address, id };
             }
 
             const argsSet = buildAccountLoaderArgSetFromResolveInfo({ ...args, address }, info);
@@ -58,6 +62,7 @@ export const resolveAccount = (fieldName?: string) => {
             let result: AccountResult = {
                 address,
                 encodedData: {},
+                id,
             };
 
             loadedAccounts.forEach((account, i) => {

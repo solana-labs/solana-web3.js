@@ -3,11 +3,13 @@ import { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { cacheKeyFn } from '../hashers/cache-key';
+import { type ID, identifierFn } from '../hashers/identifier';
 import { BlockLoaderValue } from '../loaders';
 import { buildBlockLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 import { mapJsonParsedInnerInstructions, mapJsonParsedInstructions, TransactionResult } from './transaction';
 
 type BlockResult = Partial<BlockLoaderValue> & {
+    id: ID;
     slot: Slot;
     transactionResults?: { [i: number]: TransactionResult };
 };
@@ -25,14 +27,17 @@ export const resolveBlock = (fieldName?: string) => {
         const slot = fieldName ? parent[fieldName] : args.slot;
 
         if (slot) {
-            if (onlyFieldsRequested(['slot'], info)) {
-                return { slot };
+            const id = identifierFn({ slot, ...args });
+
+            if (onlyFieldsRequested(['id', 'slot'], info)) {
+                return { id, slot };
             }
 
             const argsSet = buildBlockLoaderArgSetFromResolveInfo({ ...args, slot }, info);
             const loadedBlocks = await context.loaders.block.loadMany(argsSet);
 
             let result: BlockResult = {
+                id,
                 slot,
             };
 

@@ -29,6 +29,34 @@ describe('transaction resolver', () => {
         };
         rpcGraphQL = createRpcGraphQL(rpc);
     });
+    describe('signature-only requests', () => {
+        it('will not call the RPC for only an ID', async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($signature: Signature!) {
+                    transaction(signature: $signature) {
+                        id
+                    }
+                }
+            `;
+            rpcGraphQL.query(source, { signature });
+            await jest.runAllTimersAsync();
+            expect(rpc.getTransaction).not.toHaveBeenCalled();
+        });
+        it('will not call the RPC for only a signature', async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($signature: Signature!) {
+                    transaction(signature: $signature) {
+                        signature
+                    }
+                }
+            `;
+            rpcGraphQL.query(source, { signature });
+            await jest.runAllTimersAsync();
+            expect(rpc.getTransaction).not.toHaveBeenCalled();
+        });
+    });
     describe('fragment spreads', () => {
         it('will resolve fields from fragment spreads', async () => {
             expect.assertions(2);

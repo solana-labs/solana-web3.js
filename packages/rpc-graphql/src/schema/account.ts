@@ -165,6 +165,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Account interface
     """
     interface Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -178,6 +179,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Generic base account type
     """
     type GenericAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -194,6 +196,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A nonce account
     """
     type NonceAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -210,6 +213,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A lookup table account
     """
     type LookupTableAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -228,6 +232,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A mint account
     """
     type MintAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -247,6 +252,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A token account
     """
     type TokenAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -291,6 +297,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A stake account
     """
     type StakeAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -323,6 +330,7 @@ export const accountTypeDefs = /* GraphQL */ `
     A vote account
     """
     type VoteAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -345,6 +353,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Clock
     """
     type SysvarClockAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -363,6 +372,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Epoch Rewards
     """
     type SysvarEpochRewardsAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -379,6 +389,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Epoch Schedule
     """
     type SysvarEpochScheduleAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -401,6 +412,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Fees
     """
     type SysvarFeesAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -415,6 +427,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Last Restart Slot
     """
     type SysvarLastRestartSlotAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -433,6 +446,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Recent Blockhashes
     """
     type SysvarRecentBlockhashesAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -447,6 +461,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Rent
     """
     type SysvarRentAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -468,6 +483,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Slot Hashes
     """
     type SysvarSlotHashesAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -482,6 +498,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Slot History
     """
     type SysvarSlotHistoryAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean
@@ -503,6 +520,7 @@ export const accountTypeDefs = /* GraphQL */ `
     Sysvar Stake History
     """
     type SysvarStakeHistoryAccount implements Account {
+        id: ID!
         address: Address
         data(encoding: AccountEncoding!, dataSlice: DataSlice): String
         executable: Boolean

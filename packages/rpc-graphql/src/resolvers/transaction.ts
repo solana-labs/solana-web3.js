@@ -5,6 +5,7 @@ import type { GraphQLResolveInfo } from 'graphql';
 
 import { RpcGraphQLContext } from '../context';
 import { cacheKeyFn } from '../hashers/cache-key';
+import { type ID, identifierFn } from '../hashers/identifier';
 import { TransactionLoaderValue } from '../loaders';
 import { buildTransactionLoaderArgSetFromResolveInfo, onlyFieldsRequested } from './resolve-info';
 
@@ -25,6 +26,7 @@ export type InstructionResult = {
 
 export type TransactionResult = Partial<TransactionLoaderValue> & {
     encodedData?: EncodedTransactionData;
+    id?: ID;
     signature?: Signature;
 };
 
@@ -96,8 +98,10 @@ export function resolveTransaction(fieldName?: string) {
         const signature = fieldName ? parent[fieldName] : args.signature;
 
         if (signature) {
-            if (onlyFieldsRequested(['signature'], info)) {
-                return { signature };
+            const id = identifierFn({ signature, ...args });
+
+            if (onlyFieldsRequested(['id', 'signature'], info)) {
+                return { id, signature };
             }
 
             const argsSet = buildTransactionLoaderArgSetFromResolveInfo({ ...args, signature }, info);
@@ -105,6 +109,7 @@ export function resolveTransaction(fieldName?: string) {
 
             let result: TransactionResult = {
                 encodedData: {},
+                id,
                 signature,
             };
 

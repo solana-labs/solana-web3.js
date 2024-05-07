@@ -47,6 +47,19 @@ describe('account resolver', () => {
     });
     describe('address-only requests', () => {
         describe('in the first level', () => {
+            it('will not call the RPC for only an ID', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery {
+                        account(address: "AyGCwnwxQMCqaU4ixReHt8h5W4dwmxU7eM3BEQBdWVca") {
+                            id
+                        }
+                    }
+                `;
+                rpcGraphQL.query(source);
+                await jest.runAllTimersAsync();
+                expect(rpc.getAccountInfo).not.toHaveBeenCalled();
+            });
             it('will not call the RPC for only an address', async () => {
                 expect.assertions(1);
                 const source = /* GraphQL */ `

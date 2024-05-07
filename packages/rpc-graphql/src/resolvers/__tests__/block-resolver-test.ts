@@ -31,6 +31,34 @@ describe('block resolver', () => {
         };
         rpcGraphQL = createRpcGraphQL(rpc);
     });
+    describe('slot-only requests', () => {
+        it('will not call the RPC for only an ID', async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot) {
+                        id
+                    }
+                }
+            `;
+            rpcGraphQL.query(source, { slot });
+            await jest.runAllTimersAsync();
+            expect(rpc.getBlock).not.toHaveBeenCalled();
+        });
+        it('will not call the RPC for only a slot', async () => {
+            expect.assertions(1);
+            const source = /* GraphQL */ `
+                query testQuery($slot: Slot!) {
+                    block(slot: $slot) {
+                        slot
+                    }
+                }
+            `;
+            rpcGraphQL.query(source, { slot });
+            await jest.runAllTimersAsync();
+            expect(rpc.getBlock).not.toHaveBeenCalled();
+        });
+    });
     describe('fragment spreads', () => {
         it('will resolve fields from fragment spreads', async () => {
             expect.assertions(2);
