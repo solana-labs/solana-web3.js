@@ -3285,6 +3285,55 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-confidential-transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeConfidentialTransferFeeConfig {
+                                        authority {
+                                            address
+                                        }
+                                        harvestToMintEnabled
+                                        mint {
+                                            address
+                                        }
+                                        withdrawWithheldAuthorityElgamalPubkey
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        harvestToMintEnabled: expect.any(Boolean),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        withdrawWithheldAuthorityElgamalPubkey: null,
+                                        withheldAmount: expect.any(String),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });

@@ -313,6 +313,10 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeConfidentialTransferFeeConfig: {
+        authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeConfidentialTransferMint: {
         authority: resolveAccount('authority'),
         mint: resolveAccount('mint'),
@@ -874,6 +878,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'disableConfidentialTransferFeeHarvestToMint') {
                         return 'SplTokenDisableConfidentialTransferFeeHarvestToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferFeeConfig') {
+                        return 'SplTokenInitializeConfidentialTransferFeeConfig';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
