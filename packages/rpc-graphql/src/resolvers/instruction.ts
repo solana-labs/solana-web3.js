@@ -369,6 +369,12 @@ export const instructionResolvers = {
         delegate: resolveAccount('delegate'),
         mint: resolveAccount('mint'),
     },
+    SplTokenInitializeTokenGroup: {
+        group: resolveAccount('group'),
+        mint: resolveAccount('mint'),
+        mintAuthority: resolveAccount('mintAuthority'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
     SplTokenInitializeTransferFeeConfig: {
         mint: resolveAccount('mint'),
         transferFeeConfigAuthority: resolveAccount('transferFeeConfigAuthority'),
@@ -881,6 +887,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferFeeConfig') {
                         return 'SplTokenInitializeConfidentialTransferFeeConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenGroup') {
+                        return 'SplTokenInitializeTokenGroup';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
