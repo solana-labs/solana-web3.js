@@ -1002,6 +1002,18 @@ export const instructionTypeDefs = /* GraphQL */ `
         signers: Address
     }
 
+    """
+    SplToken-2022: InitializeConfidentialTransferFeeConfig instruction
+    """
+    type SplTokenInitializeConfidentialTransferFeeConfig implements TransactionInstruction {
+        programId: Address
+        authority: Account
+        harvestToMintEnabled: Boolean
+        mint: Account
+        withdrawWithheldAuthorityElgamalPubkey: Address
+        withheldAmount: String
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
