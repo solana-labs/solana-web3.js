@@ -230,6 +230,11 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenDisableConfidentialTransferFeeHarvestToMint: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenDisableConfidentialTransferNonConfidentialCredits: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
@@ -252,6 +257,11 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
     },
     SplTokenEnableConfidentialTransferConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableConfidentialTransferFeeHarvestToMint: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -858,6 +868,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'harvestWithheldConfidentialTransferTokensToMint') {
                         return 'SplTokenHarvestWithheldConfidentialTransferTokensToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableConfidentialTransferFeeHarvestToMint') {
+                        return 'SplTokenEnableConfidentialTransferFeeHarvestToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableConfidentialTransferFeeHarvestToMint') {
+                        return 'SplTokenDisableConfidentialTransferFeeHarvestToMint';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
