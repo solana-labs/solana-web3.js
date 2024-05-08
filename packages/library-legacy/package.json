@@ -69,7 +69,7 @@
     "jayson": "^4.1.0",
     "node-fetch": "^2.7.0",
     "rpc-websockets": "^7.11.0",
-    "superstruct": "^0.14.2"
+    "superstruct": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -117,7 +117,7 @@
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^23.0.8",
-    "sinon": "^17.0.1",
+    "sinon": "^17.0.2",
     "sinon-chai": "^3.7.0",
     "start-server-and-test": "^2.0.3",
     "tslib": "^2.6.2",
