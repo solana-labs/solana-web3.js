@@ -3436,6 +3436,55 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('update-group-authority', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupUpdateGroupAuthority {
+                                        group {
+                                            address
+                                        }
+                                        newAuthority {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        newAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
