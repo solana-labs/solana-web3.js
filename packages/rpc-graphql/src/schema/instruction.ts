@@ -1026,6 +1026,16 @@ export const instructionTypeDefs = /* GraphQL */ `
         updateAuthority: Account
     }
 
+    """
+    Spl Token Group: UpdateGroupMaxSize instruction
+    """
+    type SplTokenGroupUpdateGroupMaxSize implements TransactionInstruction {
+        programId: Address
+        group: Account
+        maxSize: BigInt
+        updateAuthority: Account
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
