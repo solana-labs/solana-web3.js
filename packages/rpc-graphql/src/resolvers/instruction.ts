@@ -401,6 +401,12 @@ export const instructionResolvers = {
         hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
     },
+    SplTokenMetadataInitializeMetadata: {
+        metadata: resolveAccount('metadata'),
+        mint: resolveAccount('mint'),
+        mintAuthority: resolveAccount('mintAuthority'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
         authority: resolveAccount('authority'),
@@ -915,6 +921,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeTokenGroupMember') {
                         return 'SplTokenGroupInitializeMember';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenMetadata') {
+                        return 'SplTokenMetadataInitializeMetadata';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
