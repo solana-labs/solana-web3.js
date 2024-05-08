@@ -589,11 +589,11 @@ importers:
         specifier: ^23.0.8
         version: 23.0.8(typescript@5.4.5)
       sinon:
-        specifier: ^17.0.1
-        version: 17.0.1
+        specifier: ^17.0.2
+        version: 17.0.2
       sinon-chai:
         specifier: ^3.7.0
-        version: 3.7.0(chai@5.1.0)(sinon@17.0.1)
+        version: 3.7.0(chai@5.1.0)(sinon@17.0.2)
       start-server-and-test:
         specifier: ^2.0.3
         version: 2.0.3
@@ -2835,8 +2835,8 @@ packages:
   '@sinonjs/commons@2.0.0':
     resolution: {integrity: sha512-uLa0j859mMrg2slwQYdO/AkrOfmH+X6LTVmNTS9CqexuE2IvVORIkSpJLqePAbEnKJ77aMmCwr1NUZ57120Xcg==}
 
-  '@sinonjs/commons@3.0.0':
-    resolution: {integrity: sha512-jXBtWAF4vmdNmZgD5FoKsVLv3rPgDnLgPbU84LIJ3otV44vJlDRokVng5v8NFJdCf/da9legHcKaRuZs4L7faA==}
+  '@sinonjs/commons@3.0.1':
+    resolution: {integrity: sha512-K3mCHKQ9sVh8o1C9cxkwxaOmXoAMlDxC1mYyHrjqOWEcBjYr76t96zL2zlj5dUGZ3HSw240X1qgH3Mjf1yJWpQ==}
 
   '@sinonjs/fake-timers@11.2.2':
     resolution: {integrity: sha512-G2piCSxQ7oWOxwGSAyFHfPIsyeJGXYtc6mFbnFA+kRXkiEnTl8c/8jul2S329iFBnDI9HGoeWWAZvuvOkZccgw==}
@@ -4120,8 +4120,8 @@ packages:
     resolution: {integrity: sha512-/VTCrvm5Z0JGty/BWHljh+BAiw3IK+2j87NGMu8Nwc/f48WoDAC395uomO9ZD117ZOBaHmkX1oyLvkVM/aIT3w==}
     engines: {node: '>=0.3.1'}
 
-  diff@5.1.0:
-    resolution: {integrity: sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==}
+  diff@5.2.0:
+    resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
     engines: {node: '>=0.3.1'}
 
   dir-glob@3.0.1:
@@ -6776,8 +6776,8 @@ packages:
       chai: ^4.0.0
       sinon: '>=4.0.0'
 
-  sinon@17.0.1:
-    resolution: {integrity: sha512-wmwE19Lie0MLT+ZYNpDymasPHUKTaZHUH/pKEubRXIzySv9Atnlw+BUMGCzWgV7b7wO+Hw6f1TEOr0IUnmU8/g==}
+  sinon@17.0.2:
+    resolution: {integrity: sha512-uihLiaB9FhzesElPDFZA7hDcNABzsVHwr3YfmM9sBllVwab3l0ltGlRV1XhpNfIacNDLGD1QRZNLs5nU5+hTuA==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -9648,13 +9648,13 @@ snapshots:
     dependencies:
       type-detect: 4.0.8
 
-  '@sinonjs/commons@3.0.0':
+  '@sinonjs/commons@3.0.1':
     dependencies:
       type-detect: 4.0.8
 
   '@sinonjs/fake-timers@11.2.2':
     dependencies:
-      '@sinonjs/commons': 3.0.0
+      '@sinonjs/commons': 3.0.1
 
   '@sinonjs/fake-timers@8.1.0':
     dependencies:
@@ -11050,7 +11050,7 @@ snapshots:
 
   diff@5.0.0: {}
 
-  diff@5.1.0: {}
+  diff@5.2.0: {}
 
   dir-glob@3.0.1:
     dependencies:
@@ -13481,7 +13481,7 @@ snapshots:
 
   nise@5.1.9:
     dependencies:
-      '@sinonjs/commons': 3.0.0
+      '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
       '@sinonjs/text-encoding': 0.7.2
       just-extend: 6.2.0
@@ -14263,17 +14263,17 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  sinon-chai@3.7.0(chai@5.1.0)(sinon@17.0.1):
+  sinon-chai@3.7.0(chai@5.1.0)(sinon@17.0.2):
     dependencies:
       chai: 5.1.0
-      sinon: 17.0.1
+      sinon: 17.0.2
 
-  sinon@17.0.1:
+  sinon@17.0.2:
     dependencies:
-      '@sinonjs/commons': 3.0.0
+      '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
       '@sinonjs/samsam': 8.0.0
-      diff: 5.1.0
+      diff: 5.2.0
       nise: 5.1.9
       supports-color: 7.2.0
 
