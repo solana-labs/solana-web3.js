@@ -296,6 +296,13 @@ export const instructionResolvers = {
         mintAuthority: resolveAccount('mintAuthority'),
         updateAuthority: resolveAccount('updateAuthority'),
     },
+    SplTokenGroupInitializeMember: {
+        group: resolveAccount('group'),
+        groupUpdateAuthority: resolveAccount('groupUpdateAuthority'),
+        member: resolveAccount('member'),
+        memberMint: resolveAccount('memberMint'),
+        memberMintAuthority: resolveAccount('memberMintAuthority'),
+    },
     SplTokenGroupUpdateGroupAuthority: {
         group: resolveAccount('group'),
         newAuthority: resolveAccount('newAuthority'),
@@ -905,6 +912,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateTokenGroupAuthority') {
                         return 'SplTokenGroupUpdateGroupAuthority';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenGroupMember') {
+                        return 'SplTokenGroupInitializeMember';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
