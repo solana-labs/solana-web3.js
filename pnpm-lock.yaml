@@ -450,8 +450,8 @@ importers:
         specifier: ^7.11.0
         version: 7.11.0
       superstruct:
-        specifier: ^0.14.2
-        version: 0.14.2
+        specifier: ^1.0.4
+        version: 1.0.4
     devDependencies:
       '@babel/core':
         specifier: ^7.24.5
@@ -6983,6 +6983,10 @@ packages:
 
   superstruct@0.14.2:
     resolution: {integrity: sha512-nPewA6m9mR3d6k7WkZ8N8zpTWfenFH3q9pA2PkuiZxINr9DKB2+40wEQf0ixn8VaGuJ78AB6iWOtStI+/4FKZQ==}
+
+  superstruct@1.0.4:
+    resolution: {integrity: sha512-7JpaAoX2NGyoFlI9NBh66BQXGONc+uE+MRS5i2iOBKuS4e+ccgMDjATgZldkah+33DakBxDHiss9kvUcGAO8UQ==}
+    engines: {node: '>=14.0.0'}
 
   supports-color@5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
@@ -14501,6 +14505,8 @@ snapshots:
       time-span: 5.1.0
 
   superstruct@0.14.2: {}
+
+  superstruct@1.0.4: {}
 
   supports-color@5.5.0:
     dependencies:
