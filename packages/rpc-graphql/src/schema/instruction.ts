@@ -1014,6 +1014,18 @@ export const instructionTypeDefs = /* GraphQL */ `
         withheldAmount: String
     }
 
+    """
+    Spl Token Group: InitializeGroup instruction
+    """
+    type SplTokenGroupInitializeGroup implements TransactionInstruction {
+        programId: Address
+        group: Account
+        maxSize: BigInt
+        mint: Account
+        mintAuthority: Account
+        updateAuthority: Account
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch

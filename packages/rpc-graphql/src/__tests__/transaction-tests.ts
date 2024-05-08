@@ -3334,6 +3334,63 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-token-group', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupInitializeGroup {
+                                        group {
+                                            address
+                                        }
+                                        maxSize
+                                        mint {
+                                            address
+                                        }
+                                        mintAuthority {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        maxSize: expect.any(BigInt),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
