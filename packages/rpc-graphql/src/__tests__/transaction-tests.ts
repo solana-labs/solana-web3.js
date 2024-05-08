@@ -3343,7 +3343,7 @@ describe('transaction', () => {
                             message {
                                 instructions {
                                     programId
-                                    ... on SplTokenInitializeTokenGroup {
+                                    ... on SplTokenGroupInitializeGroup {
                                         group {
                                             address
                                         }

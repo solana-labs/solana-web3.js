@@ -1015,9 +1015,9 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
-    SplToken-2022: InitializeTokenGroup instruction
+    Spl Token Group: InitializeGroup instruction
     """
-    type SplTokenInitializeTokenGroup implements TransactionInstruction {
+    type SplTokenGroupInitializeGroup implements TransactionInstruction {
         programId: Address
         group: Account
         maxSize: BigInt
