@@ -392,6 +392,9 @@ importers:
       '@solana/signers':
         specifier: workspace:*
         version: link:../signers
+      '@solana/sysvars':
+        specifier: workspace:*
+        version: link:../sysvars
       '@solana/transaction-confirmation':
         specifier: workspace:*
         version: link:../transaction-confirmation
