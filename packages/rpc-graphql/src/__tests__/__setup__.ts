@@ -2687,6 +2687,32 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
+                {
+                    parsed: {
+                        info: {
+                            metadata: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            updateAuthority: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            newAuthority: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                        },
+                        type: 'updateTokenMetadataAuthority',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            metadata: 'FsHcsGiY43QmZc6yTgwYC1DA5U3ZgycXxn3bd2oBjrEZ',
+                            start: 0,
+                            end: 100,
+                        },
+                        type: 'emitTokenMetadata',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
                 // TODO (more) ...
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
