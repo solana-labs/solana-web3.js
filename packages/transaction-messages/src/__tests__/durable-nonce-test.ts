@@ -189,7 +189,7 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
         );
         expect(durableNonceTxWithConstraintA).toHaveProperty('lifetimeConstraint', { nonce: NONCE_CONSTRAINT_A.nonce });
     });
-    it('appends an `AdvanceNonceAccount` instruction', () => {
+    it('prepends an `AdvanceNonceAccount` instruction', () => {
         const durableNonceTxWithConstraintA = setTransactionMessageLifetimeUsingDurableNonce(
             NONCE_CONSTRAINT_A,
             baseTx,
@@ -198,6 +198,13 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
             createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
             baseTx.instructions[0],
         ]);
+    });
+    it('freezes the prepended `AdvanceNonceAccount` instruction', () => {
+        const durableNonceTxWithConstraintA = setTransactionMessageLifetimeUsingDurableNonce(
+            NONCE_CONSTRAINT_A,
+            baseTx,
+        );
+        expect(durableNonceTxWithConstraintA.instructions[0]).toBeFrozenObject();
     });
     describe('given a transaction with an advance nonce account instruction but no nonce lifetime constraint', () => {
         it('does not modify an `AdvanceNonceAccount` instruction if the existing one matches the constraint added', () => {
@@ -213,19 +220,39 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
             );
             expect(durableNonceTxWithConstraintA.instructions).toEqual([instruction, baseTx.instructions[0]]);
         });
-        it('replaces an `AdvanceNonceAccount` instruction if the existing one does not match the constraint added', () => {
-            const transaction: BaseTransactionMessage = {
-                ...baseTx,
-                instructions: [createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_B), baseTx.instructions[0]],
-            };
-            const durableNonceTxWithConstraintA = setTransactionMessageLifetimeUsingDurableNonce(
-                NONCE_CONSTRAINT_A,
-                transaction,
-            );
-            expect(durableNonceTxWithConstraintA.instructions).toEqual([
-                createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
-                baseTx.instructions[0],
-            ]);
+        describe('when the existing `AdvanceNonceAccount` instruction does not match the constraint added', () => {
+            it('replaces the existing instruction', () => {
+                const transaction: BaseTransactionMessage = {
+                    ...baseTx,
+                    instructions: [
+                        createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_B),
+                        baseTx.instructions[0],
+                    ],
+                };
+                const durableNonceTxWithConstraintA = setTransactionMessageLifetimeUsingDurableNonce(
+                    NONCE_CONSTRAINT_A,
+                    transaction,
+                );
+                expect(durableNonceTxWithConstraintA.instructions).toEqual([
+                    createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_A),
+                    baseTx.instructions[0],
+                ]);
+            });
+
+            it('freezes the replacement instruction', () => {
+                const transaction: BaseTransactionMessage = {
+                    ...baseTx,
+                    instructions: [
+                        createMockAdvanceNonceAccountInstruction(NONCE_CONSTRAINT_B),
+                        baseTx.instructions[0],
+                    ],
+                };
+                const durableNonceTxWithConstraintA = setTransactionMessageLifetimeUsingDurableNonce(
+                    NONCE_CONSTRAINT_A,
+                    transaction,
+                );
+                expect(durableNonceTxWithConstraintA.instructions[0]).toBeFrozenObject();
+            });
         });
     });
     describe('given a durable nonce transaction', () => {
@@ -260,6 +287,13 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
                 durableNonceTxWithConstraintA.instructions[1],
             ]);
         });
+        it('freezes the replacement advance nonce account instruction', () => {
+            const durableNonceTxWithConstraintB = setTransactionMessageLifetimeUsingDurableNonce(
+                NONCE_CONSTRAINT_B,
+                durableNonceTxWithConstraintA,
+            );
+            expect(durableNonceTxWithConstraintB.instructions[0]).toBeFrozenObject();
+        });
         it('returns the original transaction when trying to set the same durable nonce constraint again', () => {
             const txWithSameNonceLifetimeConstraint = setTransactionMessageLifetimeUsingDurableNonce(
                 NONCE_CONSTRAINT_A,
@@ -271,5 +305,13 @@ describe('setTransactionMessageLifetimeUsingDurableNonce', () => {
     it('freezes the object', () => {
         const durableNonceTx = setTransactionMessageLifetimeUsingDurableNonce(NONCE_CONSTRAINT_A, baseTx);
         expect(durableNonceTx).toBeFrozenObject();
+    });
+    it('freezes the instructions array', () => {
+        const durableNonceTx = setTransactionMessageLifetimeUsingDurableNonce(NONCE_CONSTRAINT_A, baseTx);
+        expect(durableNonceTx.instructions).toBeFrozenObject();
+    });
+    it('freezes the nonce lifetime', () => {
+        const durableNonceTx = setTransactionMessageLifetimeUsingDurableNonce(NONCE_CONSTRAINT_A, baseTx);
+        expect(durableNonceTx.lifetimeConstraint).toBeFrozenObject();
     });
 });

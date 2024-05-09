@@ -177,26 +177,24 @@ export function setTransactionMessageLifetimeUsingDurableNonce<
         } else {
             // we have a different advance nonce instruction as the first instruction, replace it
             newInstructions = [
-                createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+                Object.freeze(createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress)),
                 ...transaction.instructions.slice(1),
             ];
         }
     } else {
         // we don't have an existing advance nonce instruction as the first instruction, prepend one
         newInstructions = [
-            createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress),
+            Object.freeze(createAdvanceNonceAccountInstruction(nonceAccountAddress, nonceAuthorityAddress)),
             ...transaction.instructions,
         ];
     }
 
-    const out = {
+    return Object.freeze({
         ...transaction,
-        instructions: newInstructions,
-        lifetimeConstraint: {
+        instructions: Object.freeze(newInstructions),
+        lifetimeConstraint: Object.freeze({
             nonce,
-        },
-    } as TransactionMessageWithDurableNonceLifetime<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
+        }),
+    }) as TransactionMessageWithDurableNonceLifetime<TNonceAccountAddress, TNonceAuthorityAddress, TNonceValue> &
         TTransaction;
-    Object.freeze(out);
-    return out;
 }

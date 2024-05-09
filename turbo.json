@@ -18,7 +18,7 @@
         },
         "compile:js": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "tsconfig.*", "src/**"],
+            "inputs": ["$TURBO_DEFAULT$", "tsconfig.*", "src/**", "../build-scripts/*.ts"],
             "outputs": ["dist/**"]
         },
         "compile:typedefs": {

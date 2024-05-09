@@ -6,6 +6,9 @@ export default defineConfig(_options =>
         format: platform === 'native' ? ['esm'] : ['cjs', 'esm'],
         minify: true,
         name: platform,
+        outExtension({ format }) {
+            return { js: `.${format === 'cjs' ? 'cjs' : 'mjs'}` };
+        },
         platform: platform === 'node' ? 'node' : 'browser',
         sourcemap: true,
         treeshake: true,

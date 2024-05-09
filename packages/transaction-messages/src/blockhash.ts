@@ -64,7 +64,7 @@ export function setTransactionMessageLifetimeUsingBlockhash(
     }
     const out = {
         ...transaction,
-        lifetimeConstraint: blockhashLifetimeConstraint,
+        lifetimeConstraint: Object.freeze(blockhashLifetimeConstraint),
     };
     Object.freeze(out);
     return out;

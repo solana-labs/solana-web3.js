@@ -9,8 +9,8 @@ export const transactionTypeDefs = /* GraphQL */ `
     union TransactionStatus = TransactionStatusOk | TransactionStatusErr
 
     type TransactionLoadedAddresses {
-        readonly: [String]
-        writable: [String]
+        readonly: [Address]
+        writable: [Address]
     }
 
     type TransactionInnerInstruction {
@@ -21,13 +21,13 @@ export const transactionTypeDefs = /* GraphQL */ `
     type TransactionMeta {
         computeUnitsConsumed: BigInt
         err: String
-        fee: BigInt
+        fee: Lamports
         innerInstructions: [TransactionInnerInstruction]
         loadedAddresses: TransactionLoadedAddresses
         logMessages: [String]
-        postBalances: [BigInt]
+        postBalances: [Lamports]
         postTokenBalances: [TokenBalance]
-        preBalances: [BigInt]
+        preBalances: [Lamports]
         preTokenBalances: [TokenBalance]
         returnData: ReturnData
         rewards: [Reward]
@@ -58,7 +58,7 @@ export const transactionTypeDefs = /* GraphQL */ `
         addressTableLookups: [TransactionMessageAddressTableLookup]
         header: TransactionMessageHeader
         instructions: [TransactionInstruction]
-        recentBlockhash: String
+        recentBlockhash: Hash
     }
 
     """

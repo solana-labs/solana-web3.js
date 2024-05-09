@@ -4,24 +4,24 @@
     "private": true,
     "exports": {
         "browser": {
-            "import": "./dist/index.browser.js",
+            "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs",
             "types": "./dist/types/index.browser.d.ts"
         },
         "node": {
-            "import": "./dist/index.node.js",
+            "import": "./dist/index.node.mjs",
             "require": "./dist/index.node.cjs",
             "types": "./dist/types/index.browser.d.ts"
         }
     },
     "browser": {
         "./dist/index.node.cjs": "./dist/index.browser.cjs",
-        "./dist/index.node.js": "./dist/index.browser.js"
+        "./dist/index.node.mjs": "./dist/index.browser.mjs"
     },
     "main": "./dist/index.node.cjs",
-    "module": "./dist/index.node.js",
+    "module": "./dist/index.node.mjs",
     "types": "./dist/types/index.browser.d.ts",
-    "type": "module",
+    "type": "commonjs",
     "files": [
         "./dist/"
     ],
@@ -33,8 +33,8 @@
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier --log-level warn --ignore-unknown --write ./*",
         "test:lint": "jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",
         "test:prettier": "jest -c ../../node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
-        "test:treeshakability:browser": "agadoo dist/index.browser.js",
-        "test:treeshakability:node": "agadoo dist/index.node.js",
+        "test:treeshakability:browser": "agadoo dist/index.browser.mjs",
+        "test:treeshakability:node": "agadoo dist/index.node.mjs",
         "test:typecheck": "tsc --noEmit"
     },
     "browserslist": [

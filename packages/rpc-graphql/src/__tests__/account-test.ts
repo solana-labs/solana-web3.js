@@ -489,7 +489,7 @@ describe('account', () => {
             expect(resultParsed).toMatchObject({
                 data: {
                     account: {
-                        supply: expect.any(String),
+                        supply: expect.any(BigInt),
                     },
                 },
             });
@@ -534,7 +534,7 @@ describe('account', () => {
                         },
                         blockhash: expect.any(String),
                         feeCalculator: {
-                            lamportsPerSignature: expect.any(String),
+                            lamportsPerSignature: expect.any(BigInt),
                         },
                         lamports: expect.any(BigInt),
                         ownerProgram: {
@@ -583,9 +583,9 @@ describe('account', () => {
                         authority: {
                             address: '4msgK65vdz5ADUAB3eTQGpF388NuQUAoknLxutUQJd5B',
                         },
-                        deactivationSlot: expect.any(String),
+                        deactivationSlot: expect.any(BigInt),
                         lamports: expect.any(BigInt),
-                        lastExtendedSlot: expect.any(String),
+                        lastExtendedSlot: expect.any(BigInt),
                         lastExtendedSlotStartIndex: expect.any(Number),
                         ownerProgram: {
                             address: 'AddressLookupTab1e1111111111111111111111111',
@@ -641,7 +641,7 @@ describe('account', () => {
                         },
                         rentEpoch: expect.any(BigInt),
                         space: 82n,
-                        supply: expect.any(String),
+                        supply: expect.any(BigInt),
                     },
                 },
             });
@@ -701,7 +701,7 @@ describe('account', () => {
                         space: 165n,
                         state: expect.any(String),
                         tokenAmount: {
-                            amount: expect.any(String),
+                            amount: expect.any(BigInt),
                             decimals: expect.any(Number),
                             uiAmountString: expect.any(String),
                         },
@@ -781,7 +781,7 @@ describe('account', () => {
                                 epoch: expect.any(BigInt),
                                 unixTimestamp: expect.any(BigInt),
                             },
-                            rentExemptReserve: expect.any(String),
+                            rentExemptReserve: expect.any(BigInt),
                         },
                         ownerProgram: {
                             address: 'Stake11111111111111111111111111111111111111',
@@ -793,7 +793,7 @@ describe('account', () => {
                             delegation: {
                                 activationEpoch: expect.any(BigInt),
                                 deactivationEpoch: expect.any(BigInt),
-                                stake: expect.any(String),
+                                stake: expect.any(BigInt),
                                 voter: {
                                     address: 'CertusDeBmqN8ZawdkxK5kFGMwBXdudvWHYwtNgNhvLu',
                                 },
@@ -871,9 +871,9 @@ describe('account', () => {
                         commission: expect.any(Number),
                         epochCredits: expect.arrayContaining([
                             {
-                                credits: expect.any(String),
+                                credits: expect.any(BigInt),
                                 epoch: expect.any(BigInt),
-                                previousCredits: expect.any(String),
+                                previousCredits: expect.any(BigInt),
                             },
                         ]),
                         lamports: expect.any(BigInt),
@@ -899,6 +899,1009 @@ describe('account', () => {
                         ]),
                     },
                 },
+            });
+        });
+        describe('sysvars', () => {
+            it('can get the clock sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarC1ock11111111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarClockAccount {
+                                epoch
+                                epochStartTimestamp
+                                leaderScheduleEpoch
+                                slot
+                                unixTimestamp
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarC1ock11111111111111111111111111111111',
+                            epoch: expect.any(BigInt),
+                            epochStartTimestamp: expect.any(BigInt),
+                            lamports: expect.any(BigInt),
+                            leaderScheduleEpoch: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            slot: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                            unixTimestamp: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            // TODO: Does not exist on-chain yet.
+            it.todo('can get the epoch rewards sysvar');
+            it('can get the epoch schedule sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarEpochSchedu1e111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarEpochScheduleAccount {
+                                firstNormalEpoch
+                                firstNormalSlot
+                                leaderScheduleSlotOffset
+                                slotsPerEpoch
+                                warmup
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarEpochSchedu1e111111111111111111111111',
+                            firstNormalEpoch: expect.any(BigInt),
+                            firstNormalSlot: expect.any(BigInt),
+                            lamports: expect.any(BigInt),
+                            leaderScheduleSlotOffset: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            slotsPerEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                            warmup: expect.any(Boolean),
+                        },
+                    },
+                });
+            });
+            it('can get the fees sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarFees111111111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarFeesAccount {
+                                feeCalculator {
+                                    lamportsPerSignature
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarFees111111111111111111111111111111111',
+                            feeCalculator: {
+                                lamportsPerSignature: expect.any(BigInt),
+                            },
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the last restart slot sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarLastRestartS1ot1111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarLastRestartSlotAccount {
+                                lastRestartSlot
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarLastRestartS1ot1111111111111111111111',
+                            lamports: expect.any(BigInt),
+                            lastRestartSlot: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the recent blockhashes sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarRecentB1ockHashes11111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarRecentBlockhashesAccount {
+                                entries {
+                                    blockhash
+                                    feeCalculator {
+                                        lamportsPerSignature
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarRecentB1ockHashes11111111111111111111',
+                            entries: expect.arrayContaining([
+                                {
+                                    blockhash: expect.any(String),
+                                    feeCalculator: {
+                                        lamportsPerSignature: expect.any(BigInt),
+                                    },
+                                },
+                            ]),
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the rent sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarRent111111111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarRentAccount {
+                                burnPercent
+                                exemptionThreshold
+                                lamportsPerByteYear
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarRent111111111111111111111111111111111',
+                            burnPercent: expect.any(Number),
+                            exemptionThreshold: expect.any(Number),
+                            lamports: expect.any(BigInt),
+                            lamportsPerByteYear: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the slot hashes sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarS1otHashes111111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarSlotHashesAccount {
+                                entries {
+                                    hash
+                                    slot
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarS1otHashes111111111111111111111111111',
+                            entries: expect.arrayContaining([
+                                {
+                                    hash: expect.any(String),
+                                    slot: expect.any(BigInt),
+                                },
+                            ]),
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the slot history sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarS1otHistory11111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarSlotHistoryAccount {
+                                bits
+                                nextSlot
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarS1otHistory11111111111111111111111111',
+                            bits: expect.any(String),
+                            lamports: expect.any(BigInt),
+                            nextSlot: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+            it('can get the stake history sysvar', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    address: 'SysvarStakeHistory1111111111111111111111111',
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            address
+                            lamports
+                            ownerProgram {
+                                address
+                            }
+                            rentEpoch
+                            space
+                            ... on SysvarStakeHistoryAccount {
+                                entries {
+                                    effective
+                                    activating
+                                    deactivating
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            address: 'SysvarStakeHistory1111111111111111111111111',
+                            entries: expect.any(Array), // Not always populated on test validator
+                            lamports: expect.any(BigInt),
+                            ownerProgram: {
+                                address: 'Sysvar1111111111111111111111111111111111111',
+                            },
+                            rentEpoch: expect.any(BigInt),
+                            space: expect.any(BigInt),
+                        },
+                    },
+                });
+            });
+        });
+        describe('token-2022 extensions', () => {
+            // See scripts/fixtures/spl-token-22-mint-mega-token.json
+            const megaMintAddress = '5gSwsLGzyCwgwPJSnxjsQCaFeE19ZFaibHMLky9TDFim';
+            // See scripts/fixtures/spl-token-22-mint-mega-token-member.json
+            const megaMemberAddress = 'CXZDzjSrQ5jPaBgk6ckTQrLPTnUURiY2GnAgVCS9Fggz';
+            it('mint-close-authority', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionMintCloseAuthority {
+                                        closeAuthority {
+                                            address
+                                        }
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    closeAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'mintCloseAuthority',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('permanent-delegate', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionPermanentDelegate {
+                                        delegate {
+                                            address
+                                        }
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    delegate: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'permanentDelegate',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionInterestBearingConfig {
+                                        currentRate
+                                        extension
+                                        initializationTimestamp
+                                        lastUpdateTimestamp
+                                        preUpdateAverageRate
+                                        rateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    currentRate: expect.any(Number),
+                                    extension: 'interestBearingConfig',
+                                    initializationTimestamp: expect.any(BigInt),
+                                    lastUpdateTimestamp: expect.any(BigInt),
+                                    preUpdateAverageRate: expect.any(Number),
+                                    rateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('non-transferable', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionNonTransferable {
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'nonTransferable',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('default-account-state', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionDefaultAccountState {
+                                        accountState
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    accountState: expect.any(String),
+                                    extension: 'defaultAccountState',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferFeeConfig {
+                                        extension
+                                        newerTransferFee {
+                                            epoch
+                                            maximumFee
+                                            transferFeeBasisPoints
+                                        }
+                                        olderTransferFee {
+                                            epoch
+                                            maximumFee
+                                            transferFeeBasisPoints
+                                        }
+                                        transferFeeConfigAuthority {
+                                            address
+                                        }
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'transferFeeConfig',
+                                    newerTransferFee: {
+                                        epoch: expect.any(BigInt),
+                                        maximumFee: expect.any(BigInt),
+                                        transferFeeBasisPoints: expect.any(Number),
+                                    },
+                                    olderTransferFee: {
+                                        epoch: expect.any(BigInt),
+                                        maximumFee: expect.any(BigInt),
+                                        transferFeeBasisPoints: expect.any(Number),
+                                    },
+                                    transferFeeConfigAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    withdrawWithheldAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    withheldAmount: expect.any(BigInt),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferMint {
+                                        auditorElgamalPubkey
+                                        authority {
+                                            address
+                                        }
+                                        autoApproveNewAccounts
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    auditorElgamalPubkey: null,
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    autoApproveNewAccounts: expect.any(Boolean),
+                                    extension: 'confidentialTransferMint',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('confidential-transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferFeeConfig {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        harvestToMintEnabled
+                                        withdrawWithheldAuthorityElgamalPubkey
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'confidentialTransferFeeConfig',
+                                    harvestToMintEnabled: expect.any(Boolean),
+                                    withdrawWithheldAuthorityElgamalPubkey: expect.any(String),
+                                    withheldAmount: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('transfer-hook', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferHook {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        hookProgramId {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'transferHook',
+                                    hookProgramId: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('metadata-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionMetadataPointer {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        metadataAddress {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'metadataPointer',
+                                    metadataAddress: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('group-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionGroupPointer {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        groupAddress {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'groupPointer',
+                                    groupAddress: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('group-member-pointer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionGroupMemberPointer {
+                                        authority {
+                                            address
+                                        }
+                                        extension
+                                        memberAddress {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    authority: {
+                                        address: expect.any(String),
+                                    },
+                                    extension: 'groupMemberPointer',
+                                    memberAddress: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('token-metadata', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenMetadata {
+                                        additionalMetadata {
+                                            key
+                                            value
+                                        }
+                                        extension
+                                        mint {
+                                            address
+                                        }
+                                        name
+                                        symbol
+                                        updateAuthority {
+                                            address
+                                        }
+                                        uri
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    additionalMetadata: expect.arrayContaining([
+                                        {
+                                            key: expect.any(String),
+                                            value: expect.any(String),
+                                        },
+                                    ]),
+                                    extension: 'tokenMetadata',
+                                    mint: {
+                                        address: expect.any(String),
+                                    },
+                                    name: expect.any(String),
+                                    symbol: expect.any(String),
+                                    updateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                    uri: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('token-group', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenGroup {
+                                        extension
+                                        maxSize
+                                        mint {
+                                            address
+                                        }
+                                        size
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMintAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'tokenGroup',
+                                    maxSize: expect.any(BigInt),
+                                    mint: {
+                                        address: expect.any(String),
+                                    },
+                                    size: expect.any(BigInt),
+                                    updateAuthority: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+            it('token-group-member', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on MintAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTokenGroupMember {
+                                        extension
+                                        group {
+                                            address
+                                        }
+                                        memberNumber
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { address: megaMemberAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'tokenGroupMember',
+                                    group: {
+                                        address: expect.any(String),
+                                    },
+                                    memberNumber: expect.any(BigInt),
+                                    mint: {
+                                        address: expect.any(String),
+                                    },
+                                },
+                            ]),
+                        },
+                    },
+                });
             });
         });
     });

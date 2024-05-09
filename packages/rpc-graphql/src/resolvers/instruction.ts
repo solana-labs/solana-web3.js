@@ -151,12 +151,22 @@ export const instructionResolvers = {
     SplTokenAmountToUiAmountInstruction: {
         mint: resolveAccount('mint'),
     },
+    SplTokenApplyPendingConfidentialTransferBalance: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenApproveCheckedInstruction: {
         delegate: resolveAccount('delegate'),
         mint: resolveAccount('mint'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
         source: resolveAccount('source'),
+    },
+    SplTokenApproveConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        confidentialTransferAuditorAuthority: resolveAccount('confidentialTransferAuditorAuthority'),
+        mint: resolveAccount('mint'),
     },
     SplTokenApproveInstruction: {
         delegate: resolveAccount('delegate'),
@@ -182,17 +192,91 @@ export const instructionResolvers = {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
-    SplTokenDefaultAccountState: {
-        FROZEN: 'frozen',
-        INITIALIZED: 'initialized',
-        UNINITIALIZED: 'uninitialized',
+    SplTokenConfidentialTransfer: {
+        destination: resolveAccount('destination'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
+    SplTokenConfidentialTransferWithSplitProofs: {
+        batchedGroupedCiphertext2HandlesValidityContext: resolveAccount(
+            'batchedGroupedCiphertext2HandlesValidityContext',
+        ),
+        batchedRangeProofContext: resolveAccount('batchedRangeProofContext'),
+        ciphertextCommitmentEqualityContext: resolveAccount('ciphertextCommitmentEqualityContext'),
+        contextStateOwner: resolveAccount('contextStateOwner'),
+        destination: resolveAccount('destination'),
+        lamportDestination: resolveAccount('lamportDestination'),
+        mint: resolveAccount('mint'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
+    SplTokenConfigureConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+    },
+    SplTokenDepositConfidentialTransfer: {
+        destination: resolveAccount('destination'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
+    SplTokenDisableConfidentialTransferConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenDisableConfidentialTransferFeeHarvestToMint: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenDisableConfidentialTransferNonConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
     },
     SplTokenDisableCpiGuardInstruction: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
     },
+    SplTokenDisableRequiredMemoTransfers: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEmptyConfidentialTransferAccount: {
+        account: resolveAccount('account'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableConfidentialTransferConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableConfidentialTransferFeeHarvestToMint: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableConfidentialTransferNonConfidentialCredits: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
     SplTokenEnableCpiGuardInstruction: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+    },
+    SplTokenEnableRequiredMemoTransfers: {
         account: resolveAccount('account'),
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -204,6 +288,31 @@ export const instructionResolvers = {
         multisigFreezeAuthority: resolveAccount('multisigFreezeAuthority'),
     },
     SplTokenGetAccountDataSizeInstruction: {
+        mint: resolveAccount('mint'),
+    },
+    SplTokenGroupInitializeGroup: {
+        group: resolveAccount('group'),
+        mint: resolveAccount('mint'),
+        mintAuthority: resolveAccount('mintAuthority'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenGroupInitializeMember: {
+        group: resolveAccount('group'),
+        groupUpdateAuthority: resolveAccount('groupUpdateAuthority'),
+        member: resolveAccount('member'),
+        memberMint: resolveAccount('memberMint'),
+        memberMintAuthority: resolveAccount('memberMintAuthority'),
+    },
+    SplTokenGroupUpdateGroupAuthority: {
+        group: resolveAccount('group'),
+        newAuthority: resolveAccount('newAuthority'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenGroupUpdateGroupMaxSize: {
+        group: resolveAccount('group'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenHarvestWithheldConfidentialTransferTokensToMint: {
         mint: resolveAccount('mint'),
     },
     SplTokenHarvestWithheldTokensToMint: {
@@ -226,6 +335,14 @@ export const instructionResolvers = {
         owner: resolveAccount('owner'),
         rentSysvar: resolveAccount('rentSysvar'),
     },
+    SplTokenInitializeConfidentialTransferFeeConfig: {
+        authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
+    },
+    SplTokenInitializeConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
+        mint: resolveAccount('mint'),
+    },
     SplTokenInitializeDefaultAccountStateInstruction: {
         mint: resolveAccount('mint'),
     },
@@ -238,6 +355,10 @@ export const instructionResolvers = {
         authority: resolveAccount('authority'),
         groupAddress: resolveAccount('groupAddress'),
         mint: resolveAccount('mint'),
+    },
+    SplTokenInitializeInterestBearingConfig: {
+        mint: resolveAccount('mint'),
+        rateAuthority: resolveAccount('rateAuthority'),
     },
     SplTokenInitializeMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
@@ -279,6 +400,20 @@ export const instructionResolvers = {
         authority: resolveAccount('authority'),
         hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
+    },
+    SplTokenMetadataInitialize: {
+        metadata: resolveAccount('metadata'),
+        mint: resolveAccount('mint'),
+        mintAuthority: resolveAccount('mintAuthority'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenMetadataRemoveKey: {
+        metadata: resolveAccount('metadata'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenMetadataUpdateField: {
+        metadata: resolveAccount('metadata'),
+        updateAuthority: resolveAccount('updateAuthority'),
     },
     SplTokenMintToCheckedInstruction: {
         account: resolveAccount('account'),
@@ -327,6 +462,13 @@ export const instructionResolvers = {
         multisigAuthority: resolveAccount('multisigAuthority'),
         source: resolveAccount('source'),
     },
+    SplTokenTransferCheckedWithFee: {
+        authority: resolveAccount('authority'),
+        destination: resolveAccount('destination'),
+        mint: resolveAccount('mint'),
+        multisigAuthority: resolveAccount('multisigAuthority'),
+        source: resolveAccount('source'),
+    },
     SplTokenTransferInstruction: {
         authority: resolveAccount('authority'),
         destination: resolveAccount('destination'),
@@ -335,6 +477,12 @@ export const instructionResolvers = {
     },
     SplTokenUiAmountToAmountInstruction: {
         mint: resolveAccount('mint'),
+    },
+    SplTokenUpdateConfidentialTransferMint: {
+        authority: resolveAccount('authority'),
+        confidentialTransferMintAuthority: resolveAccount('confidentialTransferMintAuthority'),
+        mint: resolveAccount('mint'),
+        newConfidentialTransferMintAuthority: resolveAccount('newConfidentialTransferMintAuthority'),
     },
     SplTokenUpdateDefaultAccountStateInstruction: {
         freezeAuthority: resolveAccount('freezeAuthority'),
@@ -353,6 +501,11 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
+    SplTokenUpdateInterestBearingConfigRate: {
+        mint: resolveAccount('mint'),
+        multisigRateAuthority: resolveAccount('multisigRateAuthority'),
+        rateAuthority: resolveAccount('rateAuthority'),
+    },
     SplTokenUpdateMetadataPointerInstruction: {
         authority: resolveAccount('authority'),
         metadataAddress: resolveAccount('metadataAddress'),
@@ -365,7 +518,35 @@ export const instructionResolvers = {
         mint: resolveAccount('mint'),
         multisigAuthority: resolveAccount('multisigAuthority'),
     },
+    SplTokenWithdrawConfidentialTransfer: {
+        destination: resolveAccount('destination'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        source: resolveAccount('source'),
+    },
+    SplTokenWithdrawWithheldConfidentialTransferTokensFromAccounts: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
+    SplTokenWithdrawWithheldConfidentialTransferTokensFromMint: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        instructionsSysvar: resolveAccount('instructionsSysvar'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
     SplTokenWithdrawWithheldTokensFromAccounts: {
+        feeRecipient: resolveAccount('feeRecipient'),
+        mint: resolveAccount('mint'),
+        multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
+        withdrawWithheldAuthority: resolveAccount('withdrawWithheldAuthority'),
+    },
+    SplTokenWithdrawWithheldTokensFromMint: {
         feeRecipient: resolveAccount('feeRecipient'),
         mint: resolveAccount('mint'),
         multisigWithdrawWithheldAuthority: resolveAccount('multisigWithdrawWithheldAuthority'),
@@ -640,6 +821,9 @@ export const instructionResolvers = {
                     if (jsonParsedConfigs.instructionType === 'initializeTransferFeeConfig') {
                         return 'SplTokenInitializeTransferFeeConfig';
                     }
+                    if (jsonParsedConfigs.instructionType === 'transferCheckedWithFee') {
+                        return 'SplTokenTransferCheckedWithFee';
+                    }
                     if (jsonParsedConfigs.instructionType === 'initializeTransferHook') {
                         return 'SplTokenInitializeTransferHookInstruction';
                     }
@@ -663,6 +847,104 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromAccounts') {
                         return 'SplTokenWithdrawWithheldTokensFromAccounts';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawWithheldTokensFromMint') {
+                        return 'SplTokenWithdrawWithheldTokensFromMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableRequiredMemoTransfers') {
+                        return 'SplTokenEnableRequiredMemoTransfers';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableRequiredMemoTransfers') {
+                        return 'SplTokenDisableRequiredMemoTransfers';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferMint') {
+                        return 'SplTokenInitializeConfidentialTransferMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeInterestBearingConfig') {
+                        return 'SplTokenInitializeInterestBearingConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateInterestBearingConfigRate') {
+                        return 'SplTokenUpdateInterestBearingConfigRate';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'approveConfidentialTransferAccount') {
+                        return 'SplTokenApproveConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'emptyConfidentialTransferAccount') {
+                        return 'SplTokenEmptyConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'configureConfidentialTransferAccount') {
+                        return 'SplTokenConfigureConfidentialTransferAccount';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'applyPendingConfidentialTransferBalance') {
+                        return 'SplTokenApplyPendingConfidentialTransferBalance';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableConfidentialTransferConfidentialCredits') {
+                        return 'SplTokenEnableConfidentialTransferConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableConfidentialTransferConfidentialCredits') {
+                        return 'SplTokenDisableConfidentialTransferConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableConfidentialTransferNonConfidentialCredits') {
+                        return 'SplTokenEnableConfidentialTransferNonConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableNonConfidentialTransferConfidentialCredits') {
+                        return 'SplTokenDisableConfidentialTransferNonConfidentialCredits';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'depositConfidentialTransfer') {
+                        return 'SplTokenDepositConfidentialTransfer';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawConfidentialTransfer') {
+                        return 'SplTokenWithdrawConfidentialTransfer';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'confidentialTransfer') {
+                        return 'SplTokenConfidentialTransfer';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'confidentialTransferWithSplitProofs') {
+                        return 'SplTokenConfidentialTransferWithSplitProofs';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateConfidentialTransferMint') {
+                        return 'SplTokenUpdateConfidentialTransferMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'withdrawWithheldConfidentialTransferTokensFromMint') {
+                        return 'SplTokenWithdrawWithheldConfidentialTransferTokensFromMint';
+                    }
+                    if (
+                        jsonParsedConfigs.instructionType === 'withdrawWithheldConfidentialTransferTokensFromAccounts'
+                    ) {
+                        return 'SplTokenWithdrawWithheldConfidentialTransferTokensFromAccounts';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'harvestWithheldConfidentialTransferTokensToMint') {
+                        return 'SplTokenHarvestWithheldConfidentialTransferTokensToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'enableConfidentialTransferFeeHarvestToMint') {
+                        return 'SplTokenEnableConfidentialTransferFeeHarvestToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'disableConfidentialTransferFeeHarvestToMint') {
+                        return 'SplTokenDisableConfidentialTransferFeeHarvestToMint';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeConfidentialTransferFeeConfig') {
+                        return 'SplTokenInitializeConfidentialTransferFeeConfig';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenGroup') {
+                        return 'SplTokenGroupInitializeGroup';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateTokenGroupMaxSize') {
+                        return 'SplTokenGroupUpdateGroupMaxSize';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateTokenGroupAuthority') {
+                        return 'SplTokenGroupUpdateGroupAuthority';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenGroupMember') {
+                        return 'SplTokenGroupInitializeMember';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'initializeTokenMetadata') {
+                        return 'SplTokenMetadataInitialize';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateTokenMetadataField') {
+                        return 'SplTokenMetadataUpdateField';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'removeTokenMetadataKey') {
+                        return 'SplTokenMetadataRemoveKey';
                     }
                     if (jsonParsedConfigs?.instructionType === 'reallocate') {
                         return 'SplTokenReallocate';

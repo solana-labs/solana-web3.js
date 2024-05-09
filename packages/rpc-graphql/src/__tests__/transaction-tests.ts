@@ -639,7 +639,7 @@ describe('transaction', () => {
                                     {
                                         instructions: expect.arrayContaining([
                                             {
-                                                amount: expect.any(String),
+                                                amount: expect.any(BigInt),
                                                 destination: {
                                                     address: expect.any(String),
                                                 },
@@ -1127,12 +1127,12 @@ describe('transaction', () => {
                             message: {
                                 instructions: expect.arrayContaining([
                                     {
-                                        maximumFee: expect.any(Number),
+                                        maximumFee: expect.any(BigInt),
                                         mint: {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        transferFeeBasisPoints: expect.any(Number),
+                                        transferFeeBasisPoints: expect.any(BigInt),
                                         transferFeeConfigAuthority: {
                                             address: expect.any(String),
                                         },
@@ -1584,6 +1584,2116 @@ describe('transaction', () => {
                                         signers: expect.arrayContaining([expect.any(String)]),
                                         sourceAccounts: expect.arrayContaining([expect.any(String)]),
                                         withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('withdraw-withheld-tokens-from-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldTokensFromMint {
+                                        mint {
+                                            address
+                                        }
+                                        feeRecipient {
+                                            address
+                                        }
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('transfer-checked-with-fee', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenTransferCheckedWithFee {
+                                        mint {
+                                            address
+                                        }
+                                        authority {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                        destination {
+                                            address
+                                        }
+                                        feeAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                        tokenAmount {
+                                            amount
+                                            decimals
+                                            uiAmount
+                                            uiAmountString
+                                        }
+                                        multisigAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        feeAmount: {
+                                            amount: expect.any(BigInt),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null, // can't convert decimal to BigInt
+                                            uiAmountString: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                        tokenAmount: {
+                                            amount: expect.any(BigInt),
+                                            decimals: expect.any(Number),
+                                            uiAmount: expect.any(BigInt),
+                                            uiAmountString: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        authority: null,
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        feeAmount: {
+                                            amount: expect.any(BigInt),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null, // can't convert decimal to BigInt
+                                            uiAmountString: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                        tokenAmount: {
+                                            amount: expect.any(BigInt),
+                                            decimals: expect.any(Number),
+                                            uiAmount: null, // Can't convert decimal to BigInt
+                                            uiAmountString: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('enable-required-memo-transfers', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEnableRequiredMemoTransfers {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('disable-required-memo-transfers', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDisableRequiredMemoTransfers {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeConfidentialTransferMint {
+                                        mint {
+                                            address
+                                        }
+                                        authority {
+                                            address
+                                        }
+                                        auditorElgamalPubkey
+                                        autoApproveNewAccounts
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        auditorElgamalPubkey: null,
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        autoApproveNewAccounts: expect.any(Boolean),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeInterestBearingConfig {
+                                        mint {
+                                            address
+                                        }
+                                        rate
+                                        rateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rate: expect.any(BigInt),
+                                        rateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-interest-bearing-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateInterestBearingConfigRate {
+                                        mint {
+                                            address
+                                        }
+                                        multisigRateAuthority {
+                                            address
+                                        }
+                                        newRate
+                                        rateAuthority {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigRateAuthority: null,
+                                        newRate: expect.any(BigInt),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        signers: null,
+                                    },
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigRateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        newRate: expect.any(BigInt),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        rateAuthority: null,
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('approve-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenApproveConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        confidentialTransferAuditorAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        confidentialTransferAuditorAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('empty-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEmptyConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('configure-confidential-transfer-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfigureConfidentialTransferAccount {
+                                        account {
+                                            address
+                                        }
+                                        decryptableZeroBalance
+                                        maximumPendingBalanceCreditCounter
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        decryptableZeroBalance: expect.any(String),
+                                        maximumPendingBalanceCreditCounter: expect.any(BigInt),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('apply-pending-confidential-transfer-balance', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenApplyPendingConfidentialTransferBalance {
+                                        account {
+                                            address
+                                        }
+                                        expectedPendingBalanceCreditCounter
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        expectedPendingBalanceCreditCounter: expect.any(BigInt),
+                                        multisigOwner: null,
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        expectedPendingBalanceCreditCounter: expect.any(BigInt),
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('enable-confidential-transfer-confidential-credits', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEnableConfidentialTransferConfidentialCredits {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('disable-confidential-transfer-confidential-credits', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDisableConfidentialTransferConfidentialCredits {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('enable-confidential-transfer-non-confidential-credits', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEnableConfidentialTransferNonConfidentialCredits {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('disable-confidential-transfer-non-confidential-credits', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDisableConfidentialTransferNonConfidentialCredits {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('deposit-confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDepositConfidentialTransfer {
+                                        amount
+                                        decimals
+                                        destination {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('withdraw-confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawConfidentialTransfer {
+                                        amount
+                                        decimals
+                                        destination {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        amount: expect.any(BigInt),
+                                        decimals: expect.any(BigInt),
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('confidential-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfidentialTransfer {
+                                        destination {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        newSourceDecryptableAvailableBalance
+                                        owner {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('confidential-transfer-with-split-proofs', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenConfidentialTransferWithSplitProofs {
+                                        batchedGroupedCiphertext2HandlesValidityContext {
+                                            address
+                                        }
+                                        batchedRangeProofContext {
+                                            address
+                                        }
+                                        ciphertextCommitmentEqualityContext {
+                                            address
+                                        }
+                                        closeSplitContextStateOnExecution
+                                        contextStateOwner {
+                                            address
+                                        }
+                                        destination {
+                                            address
+                                        }
+                                        lamportDestination {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        newSourceDecryptableAvailableBalance
+                                        noOpOnUninitializedSplitContextState
+                                        owner {
+                                            address
+                                        }
+                                        source {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        batchedGroupedCiphertext2HandlesValidityContext: {
+                                            address: expect.any(String),
+                                        },
+                                        batchedRangeProofContext: {
+                                            address: expect.any(String),
+                                        },
+                                        ciphertextCommitmentEqualityContext: {
+                                            address: expect.any(String),
+                                        },
+                                        closeSplitContextStateOnExecution: expect.any(Boolean),
+                                        contextStateOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        destination: {
+                                            address: expect.any(String),
+                                        },
+                                        lamportDestination: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        newSourceDecryptableAvailableBalance: expect.any(String),
+                                        noOpOnUninitializedSplitContextState: expect.any(Boolean),
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        source: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-confidential-transfer-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenUpdateConfidentialTransferMint {
+                                        auditorElgamalPubkey
+                                        authority {
+                                            address
+                                        }
+                                        autoApproveNewAccounts
+                                        confidentialTransferMintAuthority {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        newConfidentialTransferMintAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        auditorElgamalPubkey: null,
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        autoApproveNewAccounts: expect.any(Boolean),
+                                        confidentialTransferMintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        newConfidentialTransferMintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('withdraw-withheld-confidential-transfer-tokens-from-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldConfidentialTransferTokensFromMint {
+                                        feeRecipient {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('withdraw-withheld-confidential-transfer-tokens-from-accounts', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenWithdrawWithheldConfidentialTransferTokensFromAccounts {
+                                        feeRecipient {
+                                            address
+                                        }
+                                        instructionsSysvar {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        multisigWithdrawWithheldAuthority {
+                                            address
+                                        }
+                                        proofInstructionOffset
+                                        signers
+                                        sourceAccounts
+                                        withdrawWithheldAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: null,
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        feeRecipient: {
+                                            address: expect.any(String),
+                                        },
+                                        instructionsSysvar: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigWithdrawWithheldAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        proofInstructionOffset: expect.any(BigInt),
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                        withdrawWithheldAuthority: null,
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('harvest-withheld-confidential-transfer-tokens-to-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenHarvestWithheldConfidentialTransferTokensToMint {
+                                        mint {
+                                            address
+                                        }
+                                        sourceAccounts
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        sourceAccounts: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('enable-confidential-transfer-fee-harvest-to-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenEnableConfidentialTransferFeeHarvestToMint {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('disable-confidential-transfer-fee-harvest-to-mint', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenDisableConfidentialTransferFeeHarvestToMint {
+                                        account {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        owner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-confidential-transfer-fee-config', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenInitializeConfidentialTransferFeeConfig {
+                                        authority {
+                                            address
+                                        }
+                                        harvestToMintEnabled
+                                        mint {
+                                            address
+                                        }
+                                        withdrawWithheldAuthorityElgamalPubkey
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        authority: {
+                                            address: expect.any(String),
+                                        },
+                                        harvestToMintEnabled: expect.any(Boolean),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        withdrawWithheldAuthorityElgamalPubkey: null,
+                                        withheldAmount: expect.any(String),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-token-group', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupInitializeGroup {
+                                        group {
+                                            address
+                                        }
+                                        maxSize
+                                        mint {
+                                            address
+                                        }
+                                        mintAuthority {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        maxSize: expect.any(BigInt),
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-group-max-size', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupUpdateGroupMaxSize {
+                                        group {
+                                            address
+                                        }
+                                        maxSize
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        maxSize: expect.any(BigInt),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-group-authority', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupUpdateGroupAuthority {
+                                        group {
+                                            address
+                                        }
+                                        newAuthority {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        newAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-token-group-member', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenGroupInitializeMember {
+                                        group {
+                                            address
+                                        }
+                                        groupUpdateAuthority {
+                                            address
+                                        }
+                                        member {
+                                            address
+                                        }
+                                        memberMint {
+                                            address
+                                        }
+                                        memberMintAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        group: {
+                                            address: expect.any(String),
+                                        },
+                                        groupUpdateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        member: {
+                                            address: expect.any(String),
+                                        },
+                                        memberMint: {
+                                            address: expect.any(String),
+                                        },
+                                        memberMintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('initialize-token-metadata', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenMetadataInitialize {
+                                        metadata {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        mintAuthority {
+                                            address
+                                        }
+                                        name
+                                        symbol
+                                        updateAuthority {
+                                            address
+                                        }
+                                        uri
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        metadata: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        name: expect.any(String),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        symbol: expect.any(String),
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        uri: expect.any(String),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('update-token-metadata-field', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenMetadataUpdateField {
+                                        field
+                                        metadata {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                        value
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        field: expect.any(String),
+                                        metadata: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        value: expect.any(String),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('remove-token-metadata-key', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenMetadataRemoveKey {
+                                        idempotent
+                                        key
+                                        metadata {
+                                            address
+                                        }
+                                        updateAuthority {
+                                            address
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        idempotent: expect.any(Boolean),
+                                        key: expect.any(String),
+                                        metadata: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
                                     },
                                 ]),
                             },

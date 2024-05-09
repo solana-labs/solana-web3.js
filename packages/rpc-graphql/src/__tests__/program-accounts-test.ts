@@ -212,9 +212,9 @@ describe('programAccounts', () => {
                             authority: {
                                 address: expect.any(String),
                             },
-                            deactivationSlot: expect.any(String),
+                            deactivationSlot: expect.any(BigInt),
                             lamports: expect.any(BigInt),
-                            lastExtendedSlot: expect.any(String),
+                            lastExtendedSlot: expect.any(BigInt),
                             lastExtendedSlotStartIndex: expect.any(Number),
                             ownerProgram: {
                                 address: 'AddressLookupTab1e1111111111111111111111111',
@@ -280,7 +280,7 @@ describe('programAccounts', () => {
                             ownerProgram: {
                                 address: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
                             },
-                            supply: expect.any(String),
+                            supply: expect.any(BigInt),
                         },
                         // Token account
                         {
@@ -298,7 +298,7 @@ describe('programAccounts', () => {
                             },
                             state: expect.any(String),
                             tokenAmount: expect.objectContaining({
-                                amount: expect.any(String),
+                                amount: expect.any(BigInt),
                                 decimals: expect.any(Number),
                                 uiAmountString: expect.any(String),
                             }),
@@ -343,7 +343,7 @@ describe('programAccounts', () => {
                             },
                             blockhash: expect.any(String),
                             feeCalculator: {
-                                lamportsPerSignature: expect.any(String),
+                                lamportsPerSignature: expect.any(BigInt),
                             },
                             lamports: expect.any(BigInt),
                             ownerProgram: {
@@ -424,7 +424,7 @@ describe('programAccounts', () => {
                                     epoch: expect.any(BigInt),
                                     unixTimestamp: expect.any(BigInt),
                                 },
-                                rentExemptReserve: expect.any(String),
+                                rentExemptReserve: expect.any(BigInt),
                             },
                             ownerProgram: {
                                 address: 'Stake11111111111111111111111111111111111111',
@@ -434,7 +434,7 @@ describe('programAccounts', () => {
                                 delegation: {
                                     activationEpoch: expect.any(BigInt),
                                     deactivationEpoch: expect.any(BigInt),
-                                    stake: expect.any(String),
+                                    stake: expect.any(BigInt),
                                     voter: {
                                         address: expect.any(String),
                                     },
@@ -511,9 +511,9 @@ describe('programAccounts', () => {
                             commission: expect.any(Number),
                             epochCredits: expect.arrayContaining([
                                 {
-                                    credits: expect.any(String),
+                                    credits: expect.any(BigInt),
                                     epoch: expect.any(BigInt),
-                                    previousCredits: expect.any(String),
+                                    previousCredits: expect.any(BigInt),
                                 },
                             ]),
                             lamports: expect.any(BigInt),
