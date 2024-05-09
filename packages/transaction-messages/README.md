@@ -143,7 +143,7 @@ const nonce =
     // value, and furthermore asked for it in `base58` encoding.
     nonceAccount!.data[0] as unknown as Nonce;
 
-const durableNonceTransaction = setTransactionLifetimeUsingDurableNonce(
+const durableNonceTransactionMessage = setTransactionMessageLifetimeUsingDurableNonce(
     { nonce, nonceAccountAddress, nonceAuthorityAddress },
     tx,
 );

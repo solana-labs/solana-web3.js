@@ -36,14 +36,14 @@ sum === 111; // true
 A pipeline is one solution to performing consecutive operations on a value using functions, such as you would when building a transaction.
 
 ```ts
-const transferTransaction = pipe(
+const transferTransactionMessage = pipe(
     // The result of the first expression...
-    createTransaction({ version: 0 }),
+    createTransactionMessage({ version: 0 }),
     // ...gets passed as the sole argument to the next function in the pipeline.
-    tx => setTransactionFeePayer(myAddress, tx),
+    tx => setTransactionMessageFeePayer(myAddress, tx),
     // The return value of that function gets passed to the next...
-    tx => setTransactionLifetimeUsingBlockhash(latestBlockhash, tx),
+    tx => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, tx),
     // ...and so on.
-    tx => appendTransactionInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx),
+    tx => appendTransactionMessageInstruction(createTransferInstruction(myAddress, toAddress, amountInLamports), tx),
 );
 ```
