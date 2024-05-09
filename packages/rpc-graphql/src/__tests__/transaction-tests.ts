@@ -1634,7 +1634,7 @@ describe('transaction', () => {
                                         account: {
                                             address: expect.any(String),
                                         },
-                                        extensionTypes: expect.any([expect.any(String)]),
+                                        extensionTypes: expect.arrayContaining([expect.any(String)]),
                                         multisigOwner: null,
                                         owner: {
                                             address: expect.any(String),
@@ -1652,7 +1652,7 @@ describe('transaction', () => {
                                         account: {
                                             address: expect.any(String),
                                         },
-                                        extensionTypes: expect.any([expect.any(String)]),
+                                        extensionTypes: expect.arrayContaining([expect.any(String)]),
                                         multisigOwner: {
                                             address: expect.any(String),
                                         },
@@ -1661,7 +1661,7 @@ describe('transaction', () => {
                                             address: expect.any(String),
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
-                                        signers: expect.any([expect.any(String)]),
+                                        signers: expect.arrayContaining([expect.any(String)]),
                                         systemProgram: {
                                             address: expect.any(String),
                                         },

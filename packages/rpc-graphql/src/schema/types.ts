@@ -74,4 +74,32 @@ export const typeTypeDefs = /* GraphQL */ `
         BASE_58
         BASE_64
     }
+
+    enum ExtensionType {
+        Uninitialized
+        TransferFeeConfig
+        TransferFeeAmount
+        MintCloseAuthority
+        ConfidentialTransferMint
+        ConfidentialTransferAccount
+        DefaultAccountState
+        ImmutableOwner
+        MemoTransfer
+        NonTransferable
+        InterestBearingConfig
+        CpiGuard
+        PermanentDelegate
+        NonTransferableAccount
+        ConfidentialTransferFeeConfig
+        ConfidentialTransferFeeAmount
+        TransferHook
+        TransferHookAccount
+        MetadataPointer
+        TokenMetadata
+        GroupPointer
+        GroupMemberPointer
+        TokenGroup
+        TokenGroupMember
+        UnparseableExtension
+    }
 `;
