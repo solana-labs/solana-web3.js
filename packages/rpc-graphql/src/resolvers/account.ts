@@ -270,6 +270,27 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'confidentialTransferAccount') {
         return 'SplTokenExtensionConfidentialTransferAccount';
     }
+    if (extensionResult.extension === 'transferFeeAmount') {
+        return 'SplTokenExtensionTransferFeeAmount';
+    }
+    if (extensionResult.extension === 'transferHookAccount') {
+        return 'SplTokenExtensionTransferHookAccount';
+    }
+    if (extensionResult.extension === 'confidentialTransferFeeAmount') {
+        return 'SplTokenExtensionConfidentialTransferFeeAmount';
+    }
+    if (extensionResult.extension === 'nonTransferableAccount') {
+        return 'SplTokenExtensionNonTransferableAccount';
+    }
+    if (extensionResult.extension === 'immutableOwner') {
+        return 'SplTokenExtensionImmutableOwner';
+    }
+    if (extensionResult.extension === 'memoTransfer') {
+        return 'SplTokenExtensionMemoTransfer';
+    }
+    if (extensionResult.extension === 'cpiGuard') {
+        return 'SplTokenExtensionCpiGuard';
+    }
 }
 
 export const accountResolvers = {
