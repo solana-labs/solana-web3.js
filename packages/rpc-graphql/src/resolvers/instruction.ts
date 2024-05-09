@@ -407,6 +407,10 @@ export const instructionResolvers = {
         mintAuthority: resolveAccount('mintAuthority'),
         updateAuthority: resolveAccount('updateAuthority'),
     },
+    SplTokenMetadataRemoveKey: {
+        metadata: resolveAccount('metadata'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
     SplTokenMetadataUpdateField: {
         metadata: resolveAccount('metadata'),
         updateAuthority: resolveAccount('updateAuthority'),
@@ -931,6 +935,9 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'updateTokenMetadataField') {
                         return 'SplTokenMetadataUpdateField';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'removeTokenMetadataKey') {
+                        return 'SplTokenMetadataRemoveKey';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {

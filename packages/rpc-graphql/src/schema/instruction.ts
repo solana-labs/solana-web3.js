@@ -1083,6 +1083,17 @@ export const instructionTypeDefs = /* GraphQL */ `
         value: String
     }
 
+    """
+    Spl Token Metadata: RemoveKey instruction
+    """
+    type SplTokenMetadataRemoveKey implements TransactionInstruction {
+        programId: Address
+        idempotent: Boolean
+        key: String
+        metadata: Account
+        updateAuthority: Account
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
