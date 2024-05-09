@@ -288,6 +288,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'cpiGuard') {
         return 'SplTokenExtensionCpiGuard';
     }
+    if (extensionResult.extension === 'confidentialTransferAccount') {
+        return 'SplTokenExtensionConfidentialTransferAccount';
+    }
 }
 
 export const accountResolvers = {

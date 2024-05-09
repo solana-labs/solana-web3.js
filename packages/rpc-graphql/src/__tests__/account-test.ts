@@ -2125,6 +2125,60 @@ describe('account', () => {
                     },
                 });
             });
+
+            it('confidentialTransferAccount', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferAccount {
+                                        actualPendingBalanceCreditCounter
+                                        allowConfidentialCredits
+                                        allowNonConfidentialCredits
+                                        approved
+                                        availableBalance
+                                        decryptableAvailableBalance
+                                        elgamalPubkey
+                                        expectedPendingBalanceCreditCounter
+                                        maximumPendingBalanceCreditCounter
+                                        pendingBalanceCreditCounter
+                                        pendingBalanceHi
+                                        pendingBalanceLo
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    actualPendingBalanceCreditCounter: null,
+                                    allowConfidentialCredits: expect.any(Boolean),
+                                    allowNonConfidentialCredits: expect.any(Boolean),
+                                    approved: expect.any(Boolean),
+                                    availableBalance: expect.any(String),
+                                    decryptableAvailableBalance: expect.any(String),
+                                    elgamalPubkey: expect.any(String),
+                                    expectedPendingBalanceCreditCounter: null,
+                                    extension: 'confidentialTransferAccount',
+                                    maximumPendingBalanceCreditCounter: null,
+                                    pendingBalanceCreditCounter: null,
+                                    pendingBalanceHi: expect.any(String),
+                                    pendingBalanceLo: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });
