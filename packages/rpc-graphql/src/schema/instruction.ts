@@ -1061,7 +1061,7 @@ export const instructionTypeDefs = /* GraphQL */ `
     """
     Spl Token Metadata: InitializeMetadata instruction
     """
-    type SplTokenMetadataInitializeMetadata implements TransactionInstruction {
+    type SplTokenMetadataInitialize implements TransactionInstruction {
         programId: Address
         metadata: Account
         mint: Account

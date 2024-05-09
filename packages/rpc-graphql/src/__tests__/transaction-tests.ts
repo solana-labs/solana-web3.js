@@ -3555,7 +3555,7 @@ describe('transaction', () => {
                             message {
                                 instructions {
                                     programId
-                                    ... on SplTokenMetadataInitializeMetadata {
+                                    ... on SplTokenMetadataInitialize {
                                         metadata {
                                             address
                                         }

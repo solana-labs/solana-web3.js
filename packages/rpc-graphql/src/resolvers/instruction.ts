@@ -401,7 +401,7 @@ export const instructionResolvers = {
         hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
     },
-    SplTokenMetadataInitializeMetadata: {
+    SplTokenMetadataInitialize: {
         metadata: resolveAccount('metadata'),
         mint: resolveAccount('mint'),
         mintAuthority: resolveAccount('mintAuthority'),
@@ -923,7 +923,7 @@ export const instructionResolvers = {
                         return 'SplTokenGroupInitializeMember';
                     }
                     if (jsonParsedConfigs.instructionType === 'initializeTokenMetadata') {
-                        return 'SplTokenMetadataInitializeMetadata';
+                        return 'SplTokenMetadataInitialize';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
