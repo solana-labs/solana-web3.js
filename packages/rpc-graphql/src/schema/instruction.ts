@@ -1072,6 +1072,17 @@ export const instructionTypeDefs = /* GraphQL */ `
         uri: String
     }
 
+    """
+    Spl Token Metadata: UpdateField instruction
+    """
+    type SplTokenMetadataUpdateField implements TransactionInstruction {
+        programId: Address
+        field: String
+        metadata: Account
+        updateAuthority: Account
+        value: String
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch
