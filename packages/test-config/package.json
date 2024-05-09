@@ -8,12 +8,12 @@
     ],
     "peerDependencies": {
         "jest-dev-server": "^10.0.0",
-        "undici": "^6.15.0",
+        "undici": "^6.16.0",
         "whatwg-fetch": "^3.6.20"
     },
     "devDependencies": {
         "@jest/types": "^29.6.3",
-        "undici": "^6.15.0",
+        "undici": "^6.16.0",
         "whatwg-fetch": "^3.6.20"
     }
 }
