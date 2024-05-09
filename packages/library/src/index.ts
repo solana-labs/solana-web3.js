@@ -14,6 +14,7 @@ export * from '@solana/signers';
 export * from '@solana/transaction-messages';
 export * from '@solana/transactions';
 export * from './airdrop';
+export * from './compute-limit';
 export * from './decode-transaction-message';
 export * from './send-and-confirm-durable-nonce-transaction';
 export * from './send-and-confirm-transaction';

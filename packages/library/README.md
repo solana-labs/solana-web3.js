@@ -880,6 +880,46 @@ const signedTransaction = await signTransaction([signer], transactionMessageWith
 // => "Property 'lifetimeConstraint' is missing in type"
 ```
 
+### Calibrating A Transaction Message's Compute Unit Budget
+
+Correctly budgeting a compute unit limit for your transaction message can increase the probabilty that your transaction will be accepted for processing. If you don't declare a compute unit limit on your transaction, validators will assume an upper limit of 200K compute units (CU) per instruction.
+
+Since validators have an incentive to pack as many transactions into each block as possible, they may choose to include transactions that they know will fit into the remaining compute budget for the current block over transactions that might not. For this reason, you should set a compute unit limit on each of your transaction messages, whenever possible.
+
+Use this utility to estimate the actual compute unit cost of a given transaction message.
+
+```ts
+import { getSetComputeLimitInstruction } from '@solana-program/compute-budget';
+import { createSolanaRpc, getComputeUnitEstimateForTransactionMessageFactory, pipe } from '@solana/web3.js';
+
+// Create an estimator function.
+const rpc = createSolanaRpc('http://127.0.0.1:8899');
+const getComputeUnitEstimateForTransactionMessage = getComputeUnitEstimateForTransactionMessageFactory({
+    rpc,
+});
+
+// Create your transaction message.
+const transactionMessage = pipe(
+    createTransactionMessage({ version: 'legacy' }),
+    /* ... */
+);
+
+// Request an estimate of the actual compute units this message will consume.
+const computeUnitsEstimate = await getComputeUnitEstimateForTransactionMessage(transactionMessage);
+
+// Set the transaction message's compute unit budget.
+const transactionMessageWithComputeUnitLimit = prependTransactionMessageInstruction(
+    getSetComputeLimitInstruction({ units: computeUnitsEstimate }),
+    transactionMessage,
+);
+```
+
+> [!WARNING]
+> The compute unit estimate is just that &ndash; an estimate. The compute unit consumption of the actual transaction might be higher or lower than what was observed in simulation. Unless you are confident that your particular transaction message will consume the same or fewer compute units as was estimated, you might like to augment the estimate by either a fixed number of CUs or a multiplier.
+
+> [!NOTE]
+> If you are preparing an _unsigned_ transaction, destined to be signed and submitted to the network by a wallet, you might like to leave it up to the wallet to determine the compute unit limit. Consider that the wallet might have a more global view of how many compute units certain types of transactions consume, and might be able to make better estimates of an appropriate compute unit budget.
+
 ### Helpers For Building Transaction Messages
 
 Building transaction messages in this manner might feel different from what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transaction messages to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transaction messages in **pipelines**. Here’s how it can be used:
