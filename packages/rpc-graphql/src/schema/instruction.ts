@@ -1058,6 +1058,20 @@ export const instructionTypeDefs = /* GraphQL */ `
         memberMintAuthority: Account
     }
 
+    """
+    Spl Token Metadata: InitializeMetadata instruction
+    """
+    type SplTokenMetadataInitialize implements TransactionInstruction {
+        programId: Address
+        metadata: Account
+        mint: Account
+        mintAuthority: Account
+        name: String
+        symbol: String
+        updateAuthority: Account
+        uri: String
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch

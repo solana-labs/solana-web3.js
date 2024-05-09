@@ -3546,6 +3546,67 @@ describe('transaction', () => {
                     },
                 });
             });
+
+            it('initialize-token-metadata', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenMetadataInitialize {
+                                        metadata {
+                                            address
+                                        }
+                                        mint {
+                                            address
+                                        }
+                                        mintAuthority {
+                                            address
+                                        }
+                                        name
+                                        symbol
+                                        updateAuthority {
+                                            address
+                                        }
+                                        uri
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        metadata: {
+                                            address: expect.any(String),
+                                        },
+                                        mint: {
+                                            address: expect.any(String),
+                                        },
+                                        mintAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        name: expect.any(String),
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        symbol: expect.any(String),
+                                        updateAuthority: {
+                                            address: expect.any(String),
+                                        },
+                                        uri: expect.any(String),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
         });
     });
 });
