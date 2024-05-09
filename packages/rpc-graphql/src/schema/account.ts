@@ -162,6 +162,60 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: Transfer Fee Amount
+    """
+    type SplTokenExtensionTransferFeeAmount implements SplTokenExtension {
+        extension: String
+        withheldAmount: BigInt
+    }
+
+    """
+    Token-2022 Extension: Transfer Hook Account
+    """
+    type SplTokenExtensionTransferHookAccount implements SplTokenExtension {
+        extension: String
+        transferring: Boolean
+    }
+
+    """
+    Token-2022 Extension: Confidential Transfer Fee Amount
+    """
+    type SplTokenExtensionConfidentialTransferFeeAmount implements SplTokenExtension {
+        extension: String
+        withheldAmount: String
+    }
+
+    """
+    Token-2022 Extension: NonTransferableAccount
+    """
+    type SplTokenExtensionNonTransferableAccount implements SplTokenExtension {
+        extension: String
+    }
+
+    """
+    Token-2022 Extension: ImmutableOwner
+    """
+    type SplTokenExtensionImmutableOwner implements SplTokenExtension {
+        extension: String
+    }
+
+    """
+    Token-2022 Extension: MemoTransfer
+    """
+    type SplTokenExtensionMemoTransfer implements SplTokenExtension {
+        extension: String
+        requireIncomingTransferMemos: Boolean
+    }
+
+    """
+    Token-2022 Extension: CpiGuard
+    """
+    type SplTokenExtensionCpiGuard implements SplTokenExtension {
+        extension: String
+        lockCpi: Boolean
+    }
+
+    """
     Token-2022 Extension: ConfidentialTransferAccount
     """
     type SplTokenExtensionConfidentialTransferAccount implements SplTokenExtension {

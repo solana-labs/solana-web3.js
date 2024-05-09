@@ -1959,6 +1959,226 @@ describe('account', () => {
                     },
                 });
             });
+
+            it('transfer-fee-amount', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferFeeAmount {
+                                        extension
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'transferFeeAmount',
+                                    withheldAmount: expect.any(BigInt),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('transfer-hook-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionTransferHookAccount {
+                                        extension
+                                        transferring
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'transferHookAccount',
+                                    transferring: expect.any(Boolean),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('confidential-transfer-fee-amount', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionConfidentialTransferFeeAmount {
+                                        extension
+                                        withheldAmount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'confidentialTransferFeeAmount',
+                                    withheldAmount: expect.any(String),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('non-transferable-account', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionNonTransferableAccount {
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'nonTransferableAccount',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('immutable-owner', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionImmutableOwner {
+                                        extension
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'immutableOwner',
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('memo-transfer', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionMemoTransfer {
+                                        extension
+                                        requireIncomingTransferMemos
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'memoTransfer',
+                                    requireIncomingTransferMemos: expect.any(Boolean),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
+
+            it('cpi-guard', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($address: Address!) {
+                        account(address: $address) {
+                            ... on TokenAccount {
+                                extensions {
+                                    ... on SplTokenExtensionCpiGuard {
+                                        extension
+                                        lockCpi
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+
+                const result = await rpcGraphQL.query(source, { address: megaAccountAddress });
+                expect(result).toMatchObject({
+                    data: {
+                        account: {
+                            extensions: expect.arrayContaining([
+                                {
+                                    extension: 'cpiGuard',
+                                    lockCpi: expect.any(Boolean),
+                                },
+                            ]),
+                        },
+                    },
+                });
+            });
         });
     });
 });
