@@ -1984,7 +1984,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     extension: 'transferFeeAmount',
-                                    withheldAmount: expect.any(BigInt)
+                                    withheldAmount: expect.any(BigInt),
                                 },
                             ]),
                         },
@@ -2016,7 +2016,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     extension: 'transferHookAccount',
-                                    transferring: expect.any(Boolean)
+                                    transferring: expect.any(Boolean),
                                 },
                             ]),
                         },
@@ -2048,7 +2048,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     extension: 'confidentialTransferFeeAmount',
-                                    withheldAmount: expect.any(String)
+                                    withheldAmount: expect.any(String),
                                 },
                             ]),
                         },
@@ -2140,7 +2140,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     extension: 'memoTransfer',
-                                    requireIncomingTransferMemos: expect.any(Boolean)
+                                    requireIncomingTransferMemos: expect.any(Boolean),
                                 },
                             ]),
                         },
@@ -2172,7 +2172,7 @@ describe('account', () => {
                             extensions: expect.arrayContaining([
                                 {
                                     extension: 'cpiGuard',
-                                    lockCpi: expect.any(Boolean)
+                                    lockCpi: expect.any(Boolean),
                                 },
                             ]),
                         },
