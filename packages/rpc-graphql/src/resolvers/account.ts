@@ -267,6 +267,9 @@ function resolveTokenExtensionType(extensionResult: Token2022ExtensionResult) {
     if (extensionResult.extension === 'transferHook') {
         return 'SplTokenExtensionTransferHook';
     }
+    if (extensionResult.extension === 'confidentialTransferAccount') {
+        return 'SplTokenExtensionConfidentialTransferAccount';
+    }
 }
 
 export const accountResolvers = {

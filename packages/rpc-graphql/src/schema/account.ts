@@ -162,6 +162,25 @@ export const accountTypeDefs = /* GraphQL */ `
     }
 
     """
+    Token-2022 Extension: ConfidentialTransferAccount
+    """
+    type SplTokenExtensionConfidentialTransferAccount implements SplTokenExtension {
+        extension: String
+        actualPendingBalanceCreditCounter: Int
+        allowConfidentialCredits: Boolean
+        allowNonConfidentialCredits: Boolean
+        approved: Boolean
+        availableBalance: String
+        decryptableAvailableBalance: String
+        elgamalPubkey: String
+        expectedPendingBalanceCreditCounter: Int
+        maximumPendingBalanceCreditCounter: Int
+        pendingBalanceCreditCounter: Int
+        pendingBalanceHi: String
+        pendingBalanceLo: String
+    }
+
+    """
     Account interface
     """
     interface Account {
