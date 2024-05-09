@@ -1094,6 +1094,26 @@ export const instructionTypeDefs = /* GraphQL */ `
         updateAuthority: Account
     }
 
+    """
+    Spl Token Metadata: UpdateAuthority instruction
+    """
+    type SplTokenMetadataUpdateAuthority implements TransactionInstruction {
+        programId: Address
+        metadata: Account
+        newAuthority: Account
+        updateAuthority: Account
+    }
+
+    """
+    Spl Token Metadata: Emit instruction
+    """
+    type SplTokenMetadataEmit implements TransactionInstruction {
+        programId: Address
+        metadata: Account
+        end: BigInt
+        start: BigInt
+    }
+
     type Lockup {
         custodian: Account
         epoch: Epoch

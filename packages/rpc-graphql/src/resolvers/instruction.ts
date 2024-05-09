@@ -401,6 +401,9 @@ export const instructionResolvers = {
         hookProgramId: resolveAccount('programId'),
         mint: resolveAccount('mint'),
     },
+    SplTokenMetadataEmit: {
+        metadata: resolveAccount('metadata'),
+    },
     SplTokenMetadataInitialize: {
         metadata: resolveAccount('metadata'),
         mint: resolveAccount('mint'),
@@ -409,6 +412,11 @@ export const instructionResolvers = {
     },
     SplTokenMetadataRemoveKey: {
         metadata: resolveAccount('metadata'),
+        updateAuthority: resolveAccount('updateAuthority'),
+    },
+    SplTokenMetadataUpdateAuthority: {
+        metadata: resolveAccount('metadata'),
+        newAuthority: resolveAccount('newAuthority'),
         updateAuthority: resolveAccount('updateAuthority'),
     },
     SplTokenMetadataUpdateField: {
@@ -938,6 +946,12 @@ export const instructionResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'removeTokenMetadataKey') {
                         return 'SplTokenMetadataRemoveKey';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'updateTokenMetadataAuthority') {
+                        return 'SplTokenMetadataUpdateAuthority';
+                    }
+                    if (jsonParsedConfigs.instructionType === 'emitTokenMetadata') {
+                        return 'SplTokenMetadataEmit';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
