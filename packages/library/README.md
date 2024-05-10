@@ -18,7 +18,7 @@ If you build JavaScript applications on Solana, it’s likely you’ve worked wi
 
 Here’s an example of a common code snippet from `@solana/web3.js`:
 
-```tsx
+```ts
 const connection = new Connection('https://api.mainnet-beta.solana.com');
 const instruction = SystemProgram.transfer({ fromPubkey, toPubkey, lamports });
 const transaction = new Transaction().add(instruction);
@@ -193,7 +193,7 @@ That being said, the main `@solana/web3.js` library re-exports the `@solana/rpc`
 
 To get started with RPC calls, you may use the `createSolanaRpc` function by providing the URL of the Solana JSON RPC server. This will create a default client for interacting with the Solana JSON RPC.
 
-```tsx
+```ts
 import { createSolanaRpc } from '@solana/web3.js';
 
 // Create an RPC client.
@@ -208,7 +208,7 @@ const slot = await rpc.getSlot().send();
 
 The `createSolanaRpc` function communicates with the RPC server using a default HTTP transport that should satisfy most use cases. However, you may provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a transport and use it to create a new RPC client via the `createSolanaRpcFromTransport` function.
 
-```tsx
+```ts
 import { createSolanaRpcFromTransport, createDefaultRpcTransport } from '@solana/web3.js';
 
 // Create an HTTP transport or any custom transport of your choice.
@@ -228,7 +228,7 @@ Using custom RPC transports, one can implement highly specialized functionality 
 
 Here’s an example of how someone might implement a “round robin” approach to leveraging multiple RPC transports within their application:
 
-```tsx
+```ts
 import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
 // Create an HTTP transport for each RPC server.
@@ -254,7 +254,7 @@ const rpc = createSolanaRpcFromTransport(roundRobinTransport);
 
 Another example of a possible customization for RPC transports is sharding. Here’s an example:
 
-```tsx
+```ts
 // TODO: Your turn; send us a pull request with an example.
 ```
 
@@ -262,7 +262,7 @@ Another example of a possible customization for RPC transports is sharding. Here
 
 The transport library can also be used to implement custom retry logic on any request:
 
-```tsx
+```ts
 import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
 // Set the maximum number of attempts to retry a request.
@@ -308,7 +308,7 @@ const rpc = createSolanaRpcFromTransport(retryingTransport);
 
 Support for handling failover can be implemented as a first-class citizen in your application using the new transport library. Here’s an example of some failover logic integrated into a transport:
 
-```tsx
+```ts
 // TODO: Your turn; send us a pull request with an example.
 ```
 
@@ -316,7 +316,7 @@ Support for handling failover can be implemented as a first-class citizen in you
 
 Perhaps your application needs to make a large number of requests or needs to fan requests for different methods out to different servers. Here’s an example of an implementation that does the latter:
 
-```tsx
+```ts
 import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
 
 // Create multiple transports.
@@ -408,7 +408,7 @@ This means the library can support future additions to the official [Solana JSON
 
 Here’s an example of how a developer at QuickNode might build a custom RPC type-spec for their in-house RPC methods:
 
-```tsx
+```ts
 // Define the method's response payload.
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
@@ -434,7 +434,7 @@ export type QuickNodeRpcApi = NftCollectionDetailsApi;
 
 Here’s how a developer might use it:
 
-```tsx
+```ts
 import { createDefaultRpcTransport, createRpc, createRpcApi } from '@solana/web3.js';
 
 // Create the custom API.
@@ -464,7 +464,7 @@ Since the arguments of the `getSlot` method are reserved for the request payload
 
 Aborting RPC requests can be useful for a variety of things such as setting a timeout on a request or cancelling a request when a user navigates away from a page.
 
-```tsx
+```ts
 import { createSolanaRpc } from '@solana/web3.js';
 
 const rpc = createSolanaRpc('http://127.0.0.1:8900');
@@ -506,7 +506,7 @@ Since the main `@solana/web3.js` library also re-exports the `@solana/rpc-subscr
 
 To get started with RPC Subscriptions, you may use the `createSolanaRpcSubscriptions` function by providing the WebSocket URL of the Solana JSON RPC server. This will create a default client for interacting with Solana RPC Subscriptions.
 
-```tsx
+```ts
 import { createSolanaRpcSubscriptions } from '@solana/web3.js';
 
 // Create an RPC Subscriptions client.
@@ -520,7 +520,7 @@ The new subscriptions API vends subscription notifications as an `AsyncIterator`
 
 Here’s an example of working with a subscription in the new library:
 
-```tsx
+```ts
 import { address, createSolanaRpcSubscriptions, createDefaultRpcSubscriptionsTransport } from '@solana/web3.js';
 
 // Create the RPC Subscriptions client.
@@ -561,7 +561,7 @@ Let's take a look at some concrete examples that demonstrate how to abort subscr
 
 Here's an example of an `AbortController` used to abort a subscription after a 5-second timeout:
 
-```tsx
+```ts
 import { createSolanaRpcSubscriptions } from '@solana/web3.js';
 
 const rpcSubscriptions = createSolanaRpcSubscriptions('ws://127.0.0.1:8900');
@@ -589,7 +589,7 @@ Read more about `AbortController` at the following links:
 
 It is also possible to abort a subscription inside the `for await...of` loop. This enables us to cancel a subscription based on some condition, such as a change in the state of an account. For instance, the following example cancels a subscription when the owner of an account changes:
 
-```tsx
+```ts
 // Subscribe to account notifications.
 const accountNotifications = await rpc
     .accountNotifications(address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3'), { commitment: 'confirmed' })
@@ -638,7 +638,7 @@ When a connection fails unexpectedly, any messages you miss while disconnected c
 
 Here’s an example of such logic:
 
-```tsx
+```ts
 try {
     for await (const notif of accountNotifications) {
         updateAccountBalance(notif.lamports);
@@ -657,7 +657,7 @@ try {
 
 The `createSolanaRpcSubscriptions` function communicates with the RPC server using a default WebSocket transport that should satisfy most use cases. However, you may here as well provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a WebSocket transport and use it to create a new RPC Subscriptions client via the `createSolanaRpcSubscriptionsFromTransport` function.
 
-```tsx
+```ts
 import { createDefaultRpcSubscriptionsTransport, createSolanaRpcSubscriptionsFromTransport } from '@solana/web3.js';
 
 // Create a WebSocket transport or any custom transport of your choice.
@@ -756,7 +756,7 @@ One thing to note is that many operations from Web Crypto – such as importing,
 
 Here’s an example of generating a `CryptoKeyPair` using the Web Crypto API and signing a message:
 
-```tsx
+```ts
 import { generateKeyPair, signBytes, verifySignature } from '@solana/web3.js';
 
 const keyPair: CryptoKeyPair = await generateKeyPair();
@@ -777,7 +777,7 @@ This polyfill can be found at `@solana/webcrypto-ed25519-polyfill` and mimics th
 
 Determine if your target runtime supports Ed25519, and install the polyfill if it does not:
 
-```tsx
+```ts
 import '@solana/webcrypto-ed25519-polyfill';
 import { generateKeyPair, signBytes, verifySignature } from '@solana/web3.js';
 
@@ -798,7 +798,7 @@ Consequently, that means no more `PublicKey`.
 
 Here’s what they look like in development:
 
-```tsx
+```ts
 import { Address, address, getAddressFromPublicKey, generateKeyPair } from '@solana/web3.js';
 
 // Coerce a string to an `Address`
@@ -825,7 +825,7 @@ Address lookups are now completely described inside transaction instructions, so
 
 Here’s a simple example of creating a transaction – notice how the type of the transaction is refined at each step of the process:
 
-```tsx
+```ts
 import {
     address,
     createTransaction,
@@ -872,7 +872,7 @@ As you can see, each time a transaction is modified, the type reflects the curre
 
 Additionally, transaction-modifying methods such as `setTransactionFeePayer(..)` and `setTransactionLifetimeUsingBlockhash(..)` will strip a transaction of its signatures, since those signatures would no longer match the modified transaction message.
 
-```tsx
+```ts
 import {
     address,
     createTransaction,
@@ -909,7 +909,7 @@ const transactionSignaturesStripped = setTransactionLifetimeUsingBlockhash(
 
 The `signTransaction(..)` function will raise a type error if your unsigned transaction is not already equipped with a fee payer and a lifetime.
 
-```tsx
+```ts
 const feePayer = address('AxZfZWeqztBCL37Mkjkd4b8Hf6J13WCcfozrBY6vZzv3');
 const signer = await generateKeyPair();
 
@@ -925,7 +925,7 @@ Transaction objects are also **frozen by these functions** to prevent transactio
 
 Building transactions in this manner might feel different from what you’re used to. Also, we certainly wouldn’t want you to have to bind transformed transactions to a new variable at each step, so we have released a functional programming library dubbed `@solana/functional` that lets you build transactions in **pipelines**. Here’s how it can be used:
 
-```tsx
+```ts
 import { pipe } from '@solana/functional';
 import {
     address,
@@ -961,7 +961,7 @@ These packages are included in the main `@solana/web3.js` library but you may al
 
 Here’s an example of encoding and decoding a custom struct with some strings and numbers:
 
-```tsx
+```ts
 import { addCodecSizePrefix } from '@solana/codecs-core';
 import { getStructCodec } from '@solana/codecs-data-structures';
 import { getU32Codec, getU64Codec, getU8Codec } from '@solana/codecs-numbers';
@@ -997,7 +997,7 @@ myDecodedToken satisfies {
 
 You may only need to encode or decode data, but not both. Importing one or the other allows your optimizing compiler to tree-shake the other implementation away:
 
-```tsx
+```ts
 import { Codec, combineCodec, Decoder, Encoder, addDecoderSizePrefix, addEncoderSizePrefix } from '@solana/codecs-core';
 import { getStructDecoder, getStructEncoder } from '@solana/codecs-data-structures';
 import {
@@ -1054,7 +1054,7 @@ The RPC methods – both HTTP and subscriptions – are built with multiple over
 
 Here’s an example of this in action:
 
-```tsx
+```ts
 // Provide one set of parameters, get a certain type
 // These parameters resolve to return type:
 // {
@@ -1102,7 +1102,7 @@ As previously mentioned, the type coverage in web3.js 2.0 allows developers to c
 
 In the example below, a transaction is created and then attempted to be compiled without setting the fee payer. This would result in a runtime error from the RPC, but instead you will see a type error from TypeScript as you type:
 
-```tsx
+```ts
 const encodedTx = pipe(
     createTransaction({ version: 0 }),
     tx => setTransactionLifetimeUsingBlockhash(recentBlockhash, tx),
@@ -1112,7 +1112,7 @@ const encodedTx = pipe(
 
 Consider another example where a developer is attempting to send a transaction that has not been fully signed. Again, the TypeScript compiler will throw a type error:
 
-```tsx
+```ts
 const unsignedTransaction = pipe(
     createTransaction({ version: 0 }),
     tx => setTransactionFeePayer(feePayerAddress, tx),
@@ -1134,7 +1134,7 @@ assertTransactionIsFullySigned(transaction);
 
 Are you working with a nonce transaction and forgot to make `AdvanceNonce` the first instruction? That’s a type error:
 
-```tsx
+```ts
 const feePayer = await generateKeyPair();
 const feePayerAddress = await getAddressFromPublicKey(feePayer.publicKey);
 
@@ -1168,14 +1168,14 @@ validNonceTransaction satisfies IDurableNonceTransaction; // OK
 
 The library’s type-checking can even catch you using lamports instead of SOL for a value:
 
-```tsx
+```ts
 const airdropAmount = 1n; // SOL
 const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();
 ```
 
 It will force you to cast the numerical value for your airdrop (or transfer, etc.) amount using `lamports()`, which should be a good reminder!
 
-```tsx
+```ts
 const airdropAmount = lamports(1000000000n);
 const signature = rpc.requestAirdrop(myAddress, airdropAmount).send();
 ```
@@ -1188,7 +1188,7 @@ The `@solana/compat` library allows for interoperability between functions and c
 
 Here’s how you can use `@solana/compat` to convert from a legacy `PublicKey` to an `Address`:
 
-```tsx
+```ts
 import { fromLegacyPublicKey } from '@solana/compat';
 
 const publicKey = new PublicKey('B3piXWBQLLRuk56XG5VihxR4oe2PSsDM8nTF6s1DeVF5');
@@ -1197,7 +1197,7 @@ const address: Address = fromLegacyPublicKey(publicKey);
 
 Here’s how to convert from a legacy `Keypair` to a `CryptoKeyPair`:
 
-```tsx
+```ts
 import { fromLegacyKeypair } from '@solana/compat';
 
 const keypairLegacy = Keypair.generate();
@@ -1206,7 +1206,7 @@ const cryptoKeyPair: CryptoKeyPair = fromLegacyKeypair(keypair);
 
 Here’s how to convert legacy transaction objects to the new library’s transaction types:
 
-```tsx
+```ts
 // For a transaction using a blockhash lifetime
 const tx = fromVersionedTransactionWithBlockhash(legacyTransactionV0);
 // You can also optionally provide a `lastValidBlockheight` parameter to manage retries
@@ -1228,7 +1228,7 @@ We think that program clients should be _generated_ rather than written. Develop
 
 We use [Kinobi](https://github.com/metaplex-foundation/kinobi) to represent Solana programs and generate clients for them. This includes a JavaScript client compatible with this library. For instance, here is how you’d construct a transaction composed of instructions from three different core programs.
 
-```tsx
+```ts
 import { createTransaction, pipe } from '@solana/web3.js';
 import { getAddMemoInstruction } from '@solana-program/memo';
 import { getSetComputeUnitLimitInstruction } from '@solana-program/compute-budget';
@@ -1349,7 +1349,7 @@ The `@solana/rpc-graphql` package can be used to make GraphQL queries to Solana 
 
 Here’s an example of retrieving account data with GraphQL:
 
-```tsx
+```ts
 const source = `
     query myQuery($address: String!) {
         account(address: $address) {
@@ -1381,7 +1381,7 @@ Using GraphQL allows developers to only specify which fields they _actually_ nee
 
 However, GraphQL is also extremely powerful for **nesting queries**, which can be particularly useful if you want to, say, get the **sum** of every lamports balance of every **owner of the owner** of each token account, while discarding any mint accounts.
 
-```tsx
+```ts
 const source = `
     query getLamportsOfOwnersOfOwnersOfTokenAccounts {
         programAccounts(programAddress: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") {
@@ -1405,7 +1405,7 @@ const sumOfAllLamportsOfOwnersOfOwnersOfTokenAccounts = result
 
 The new GraphQL package supports this same style of nested querying on transactions and blocks.
 
-```tsx
+```ts
 const source = `
     query myQuery($signature: String!, $commitment: Commitment) {
         transaction(signature: $signature, commitment: $commitment) {
