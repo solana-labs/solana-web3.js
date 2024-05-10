@@ -410,6 +410,8 @@ This means the library can support future additions to the official [Solana JSON
 Here’s an example of how a developer at QuickNode might build a custom RPC type-spec for their in-house RPC methods:
 
 ```ts
+import { RpcApiMethods } from '@solana/web3.js';
+
 // Define the method's response payload.
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
@@ -424,7 +426,7 @@ type NftCollectionDetailsApiResponse = Readonly<{
 }>;
 
 // Set up an interface for the request method.
-interface NftCollectionDetailsApi {
+interface NftCollectionDetailsApi extends RpcApiMethods {
     // Define the method's name, parameters and response type
     qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
 }
