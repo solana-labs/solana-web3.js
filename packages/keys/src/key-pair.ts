@@ -1,4 +1,5 @@
 import { assertKeyGenerationIsAvailable, assertPRNGIsAvailable } from '@solana/assertions';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY,
@@ -18,7 +19,7 @@ export async function generateKeyPair(): Promise<CryptoKeyPair> {
     return keyPair as CryptoKeyPair;
 }
 
-export async function createKeyPairFromBytes(bytes: Uint8Array, extractable?: boolean): Promise<CryptoKeyPair> {
+export async function createKeyPairFromBytes(bytes: ReadonlyUint8Array, extractable?: boolean): Promise<CryptoKeyPair> {
     assertPRNGIsAvailable();
 
     if (bytes.byteLength !== 64) {
