@@ -12,6 +12,7 @@ import {SystemProgram} from './system';
 import {SYSVAR_CLOCK_PUBKEY, SYSVAR_RENT_PUBKEY} from '../sysvar';
 import {Transaction, TransactionInstruction} from '../transaction';
 import {toBuffer} from '../utils/to-buffer';
+import { Lockout } from '../vote-account';
 
 /**
  * Vote account info
@@ -94,6 +95,17 @@ export type UpdateValidatorIdentityParams = {
   votePubkey: PublicKey;
   authorizedWithdrawerPubkey: PublicKey;
   nodePubkey: PublicKey;
+};
+
+export type CompactUpdateVoteStateParams = {
+  voteAccount: PublicKey,
+  voteAuthority: PublicKey,
+  voteStateUpdate: {
+    lockouts: Lockout[],
+    root: number,
+    hash: PublicKey,
+    timestamp?: number,
+  },
 };
 
 /**
@@ -239,6 +251,41 @@ export class VoteInstruction {
   }
 
   /**
+   * Decode a compact update vote state instruction and retrieve the instruction params.
+   */
+  static decodeCompactUpdateVoteState(
+      instruction: TransactionInstruction,
+  ): CompactUpdateVoteStateParams {
+    this.checkProgramId(instruction.programId);
+    this.checkKeyLength(instruction.keys, 2);
+
+    const { voteStateUpdate: { lockoutOffsets, root, hash, timestampOption, timestamp }  } = decodeData(
+      VOTE_INSTRUCTION_LAYOUTS.CompactUpdateVoteState,
+      instruction.data,
+    );
+    let lockoutSlot = root;
+
+    return {
+      voteAccount: instruction.keys[0].pubkey,
+      voteAuthority: instruction.keys[1].pubkey,
+      voteStateUpdate: {
+        lockouts: lockoutOffsets.map(
+          (lockoutOffset: {
+            offset: number;
+            confirmationCount: number;
+          }) => ({
+            slot: (lockoutSlot = lockoutSlot + lockoutOffset.offset),
+            confirmationCount: lockoutOffset.confirmationCount,
+          })
+        ),
+        root,
+        hash: new PublicKey(hash),
+        timestamp: timestampOption ? timestamp : undefined,
+      },
+    };
+  }
+
+  /**
    * @internal
    */
   static checkProgramId(programId: PublicKey) {
@@ -271,7 +318,8 @@ export type VoteInstructionType =
   | 'AuthorizeWithSeed'
   | 'InitializeAccount'
   | 'Withdraw'
-  | 'UpdateValidatorIdentity';
+  | 'UpdateValidatorIdentity'
+  | 'CompactUpdateVoteState';
 
 /** @internal */
 export type VoteAuthorizeWithSeedArgs = Readonly<{
@@ -300,6 +348,18 @@ type VoteInstructionInputData = {
     lamports: number;
   };
   UpdateValidatorIdentity: IInstructionInputData;
+  CompactUpdateVoteState: IInstructionInputData & {
+    voteStateUpdate: {
+      lockoutOffsets: {
+        offset: number;
+        confirmationCount: number;
+      }[];
+      root: number;
+      hash: Uint8Array,
+      timestampOption: number;
+      timestamp?: number;
+    };
+  };
 };
 
 const VOTE_INSTRUCTION_LAYOUTS = Object.freeze<{
@@ -340,6 +400,23 @@ const VOTE_INSTRUCTION_LAYOUTS = Object.freeze<{
     layout: BufferLayout.struct<VoteInstructionInputData['AuthorizeWithSeed']>([
       BufferLayout.u32('instruction'),
       Layout.voteAuthorizeWithSeedArgs(),
+    ]),
+  },
+  CompactUpdateVoteState: {
+    index: 12,
+    layout: BufferLayout.struct<VoteInstructionInputData['CompactUpdateVoteState']>([
+      BufferLayout.u32('instruction'),
+      BufferLayout.struct<VoteInstructionInputData['CompactUpdateVoteState']['voteStateUpdate']>([
+        BufferLayout.nu64('root'),
+        BufferLayout.u8(), // lockoutOffsets.length
+        BufferLayout.seq(BufferLayout.struct<VoteInstructionInputData['CompactUpdateVoteState']['voteStateUpdate']['lockoutOffsets'][number]>([
+          BufferLayout.u8('offset'),
+          BufferLayout.u8('confirmationCount'),
+        ]), BufferLayout.offset(BufferLayout.u8(), -1), 'lockoutOffsets'),
+        Layout.publicKey('hash'),
+        BufferLayout.u8('timestampOption'),
+        BufferLayout.nu64('timestamp'),
+      ], 'voteStateUpdate'),
     ]),
   },
 });
@@ -575,6 +652,45 @@ export class VoteProgram {
       {pubkey: votePubkey, isSigner: false, isWritable: true},
       {pubkey: nodePubkey, isSigner: true, isWritable: false},
       {pubkey: authorizedWithdrawerPubkey, isSigner: true, isWritable: false},
+    ];
+
+    return new Transaction().add({
+      keys,
+      programId: this.programId,
+      data,
+    });
+  }
+
+  /**
+   * Generate a transaction for compacted UpdateVoteState.
+   */
+  static compactUpdateVoteState(
+      params: CompactUpdateVoteStateParams,
+  ): Transaction {
+    const { voteAccount, voteAuthority, voteStateUpdate: { lockouts, root, hash, timestamp } } = params;
+    const type = VOTE_INSTRUCTION_LAYOUTS.CompactUpdateVoteState;
+    let currentSlot = root;
+    const rawData = {
+      voteStateUpdate: {
+        lockoutOffsets: lockouts.map((lockout) => {
+          const lockoutOffset = {
+            offset: lockout.slot - currentSlot,
+            confirmationCount: lockout.confirmationCount,
+          };
+          currentSlot += lockout.slot - currentSlot;
+          return lockoutOffset;
+        }),
+        root,
+        hash: toBuffer(hash.toBuffer()),
+        timestampOption: timestamp !== undefined ? 1 : 0,
+        timestamp: timestamp !== undefined ? timestamp : 0,
+      },
+    };
+    const data = encodeData(type, rawData);
+
+    const keys = [
+      {pubkey: voteAccount, isSigner: false, isWritable: true},
+      {pubkey: voteAuthority, isSigner: true, isWritable: true},
     ];
 
     return new Transaction().add({
