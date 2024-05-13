@@ -519,12 +519,12 @@ u32NullableStringCodec.encode(null);
 //   └------┘ 4-byte prefix (false).
 ```
 
-Additionally, if the item is a `FixedSizeCodec`, you may set the `fixed` option to `true` to also make the returned nullable codec a `FixedSizeCodec`. To do so, it will pad `null` values with zeroes to match the length of existing values.
+Additionally, if the item is a `FixedSizeCodec`, you may set the `noneValue` option to `"zeroes"` to also make the returned nullable codec a `FixedSizeCodec`. To do so, it will pad `null` values with zeroes to match the length of existing values.
 
 ```ts
 const fixedNullableStringCodec = getNullableCodec(
     fixCodecSize(getUtf8Codec(), 8), // Only works with fixed-size items.
-    { fixed: true },
+    { noneValue: 'zeroes' },
 );
 
 fixedNullableStringCodec.encode('Hi');
@@ -538,6 +538,60 @@ fixedNullableStringCodec.encode(null);
 //   └-- 1-byte prefix (false — The item is null).
 ```
 
+The `noneValue` option can also be set to an explicit byte array to use as the padding for `null` values. Note that, in this case, the returned codec will not be a `FixedSizeCodec` as the byte array representing `null` values may be of any length.
+
+```ts
+const codec = getNullableCodec(getUtf8Codec(), {
+    noneValue: new Uint8Array([255]), // 0xff means null.
+});
+
+codec.encode('Hi');
+// 0x014869
+//   | └-- 2-byte utf8 string content ("Hi").
+//   └-- 1-byte prefix (true — The item exists).
+
+codec.encode(null);
+// 0x00ff
+//   | └-- 1-byte representing null (0xff).
+//   └-- 1-byte prefix (false — The item is null).
+```
+
+Last but not least, the `prefix` option of the `getNullableCodec` function can also be set to `null`, meaning no prefix will be used to determine whether the item exists. In this case, the codec will rely on the `noneValue` option to determine whether the item is `null`.
+
+```ts
+const codecWithZeroNoneValue = getNullableCodec(getU16Codec(), {
+    noneValue: 'zeroes', // 0x0000 means null.
+    prefix: null,
+});
+codecWithZeroNoneValue.encode(42); // 0x2a00
+codecWithZeroNoneValue.encode(null); // 0x0000
+
+const codecWithCustomNoneValue = getNullableCodec(getU16Codec(), {
+    noneValue: new Uint8Array([255]), // 0xff means null.
+    prefix: null,
+});
+codecWithCustomNoneValue.encode(42); // 0x2a00
+codecWithCustomNoneValue.encode(null); // 0xff
+```
+
+Finally, note that if `prefix` is set to `null` and no `noneValue` is provided, the codec assume that the item exists if and only if some remaining bytes are available to decode. This could be useful to describe data structures that may or may not have additional data to the end of the buffer.
+
+```ts
+const codec = getNullableCodec(getU16Codec(), { prefix: null });
+codec.encode(42); // 0x2a00
+codec.encode(null); // Encodes nothing.
+codec.decode(new Uint8Array([42, 0])); // 42
+codec.decode(new Uint8Array([])); // null
+```
+
+To recap, here are all the possible configurations of the `getNullableCodec` function, using a `u16` codec as an example.
+
+| `encode(42)` / `encode(null)` | No `noneValue` (default) | `noneValue: "zeroes"`       | Custom `noneValue` (`0xff`) |
+| ----------------------------- | ------------------------ | --------------------------- | --------------------------- |
+| `u8` prefix (default)         | `0x012a00` / `0x00`      | `0x012a00` / `0x000000`     | `0x012a00` / `0x00ff`       |
+| Custom `prefix` (`u16`)       | `0x01002a00` / `0x0000`  | `0x01002a00` / `0x00000000` | `0x01002a00` / `0x0000ff`   |
+| No `prefix`                   | `0x2a00` / `0x`          | `0x2a00` / `0x0000`         | `0x2a00` / `0xff`           |
+
 Note that you might be interested in the Rust-like alternative version of nullable codecs, available in [the `@solana/options` package](https://github.com/solana-labs/solana-web3.js/tree/master/packages/options).
 
 Separate `getNullableEncoder` and `getNullableDecoder` functions are also available.
@@ -545,38 +599,6 @@ Separate `getNullableEncoder` and `getNullableDecoder` functions are also availa
 ```ts
 const bytes = getNullableEncoder(getU32Encoder()).encode(42);
 const value = getNullableDecoder(getU32Decoder()).decode(bytes);
-```
-
-## Zeroable nullable codec
-
-Similarly to the `getNullableCodec` function, The `getZeroableNullableCodec` function accepts a codec of type `T` and returns a codec of type `T | null`. However, instead of relying on a boolean prefix to determine whether the item exists, it uses a zero value to represent `null`. This means, you may only use this codec with fixed-size items.
-
-```ts
-const codec = getZeroableNullableCodec(getU16Codec());
-codec.encode(42); // 0x2a00
-codec.encode(null); // 0x0000
-codec.decode(new Uint8Array([42, 0])); // 42
-codec.encode(new Uint8Array([0, 0])); // null
-```
-
-As you can see, by default, it uses a `Uint8Array` of zeroes to represent `null`. However, you may provide a custom zero value that will be used to encode/decode null values. Note that this zero value must be a `Uint8Array` of the same length as the codec's fixed size.
-
-```ts
-const codec = getZeroableNullableCodec(getU16Codec(), {
-    zeroValue: new Uint8Array([255, 255]),
-});
-codec.encode(42); // 0x2a00
-codec.encode(null); // 0xfffff
-codec.encode(new Uint8Array([0, 0])); // 0
-codec.decode(new Uint8Array([42, 0])); // 42
-codec.decode(new Uint8Array([255, 255])); // null
-```
-
-Separate `getZeroableNullableEncoder` and `getZeroableNullableDecoder` functions are also available.
-
-```ts
-const bytes = getZeroableNullableEncoder(getU16Encoder()).encode(42);
-const value = getZeroableNullableDecoder(getU16Decoder()).decode(bytes);
 ```
 
 ## Bytes codec

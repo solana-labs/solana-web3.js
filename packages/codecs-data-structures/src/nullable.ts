@@ -2,6 +2,7 @@ import {
     assertIsFixedSize,
     Codec,
     combineCodec,
+    containsBytes,
     Decoder,
     Encoder,
     fixDecoderSize,
@@ -9,6 +10,7 @@ import {
     FixedSizeDecoder,
     FixedSizeEncoder,
     fixEncoderSize,
+    ReadonlyUint8Array,
     transformDecoder,
     transformEncoder,
     VariableSizeCodec,
@@ -26,26 +28,47 @@ import {
     NumberEncoder,
 } from '@solana/codecs-numbers';
 
+import { getBooleanDecoder, getBooleanEncoder } from './boolean';
+import { getConstantDecoder, getConstantEncoder } from './constant';
 import { getTupleDecoder, getTupleEncoder } from './tuple';
 import { getUnionDecoder, getUnionEncoder } from './union';
+import { getUnitDecoder, getUnitEncoder } from './unit';
 
 /** Defines the config for nullable codecs. */
 export type NullableCodecConfig<TPrefix extends NumberCodec | NumberDecoder | NumberEncoder> = {
     /**
-     * Whether the item codec should be of fixed size.
+     * Defines how the `None` (or `null`) value should be represented.
      *
-     * When this is true, a `null` value will skip the bytes that would
-     * have been used for the item. Note that this will only work if the
-     * item codec is of fixed size.
-     * @defaultValue `false`
+     * By default, no none value is used. This means a `null` value will be
+     * represented by the absence of the item.
+     *
+     * When `'zeroes'` is provided, a `null` value will skip the bytes that would
+     * have been used for the item. Note that this returns a fixed-size codec
+     * and thus will only work if the item codec is of fixed size.
+     *
+     * When a custom byte array is provided, a `null` value will be represented
+     * by the provided byte array. Note that this returns a variable-size codec
+     * since the byte array representing `null` does not need to match the size
+     * of the item codec.
+     *
+     * @defaultValue No none value is used.
      */
-    fixed?: boolean;
+    noneValue?: ReadonlyUint8Array | 'zeroes';
 
     /**
-     * The codec to use for the boolean prefix.
-     * @defaultValue u8 prefix.
+     * The codec to use for the boolean prefix, if any.
+     *
+     * By default a `u8` number is used as a prefix to determine if the value is `null`.
+     * The value `0` is encoded for `null` and `1` if the value is present.
+     * This can be set to any number codec to customize the prefix.
+     *
+     * When `null` is provided, no prefix is used and the `noneValue` is used to
+     * determine if the value is `null`. If no `noneValue` is provided, then the
+     * absence of any bytes is used to determine if the value is `null`.
+     *
+     * @defaultValue `u8` prefix.
      */
-    prefix?: TPrefix;
+    prefix?: TPrefix | null;
 };
 
 /**
@@ -54,36 +77,53 @@ export type NullableCodecConfig<TPrefix extends NumberCodec | NumberDecoder | Nu
  * @param item - The encoder to use for the value that may be present.
  * @param config - A set of config for the encoder.
  */
+export function getNullableEncoder<TFrom, TSize extends number>(
+    item: FixedSizeEncoder<TFrom, TSize>,
+    config: NullableCodecConfig<NumberEncoder> & { noneValue: 'zeroes'; prefix: null },
+): FixedSizeEncoder<TFrom | null, TSize>;
 export function getNullableEncoder<TFrom>(
     item: FixedSizeEncoder<TFrom>,
-    config: NullableCodecConfig<FixedSizeNumberEncoder> & { fixed: true },
+    config: NullableCodecConfig<FixedSizeNumberEncoder> & { noneValue: 'zeroes' },
 ): FixedSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
-    item: FixedSizeEncoder<TFrom, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberEncoder>,
-): FixedSizeEncoder<TFrom | null>;
+    item: FixedSizeEncoder<TFrom>,
+    config: NullableCodecConfig<NumberEncoder> & { noneValue: 'zeroes' },
+): VariableSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
     item: Encoder<TFrom>,
-    config?: NullableCodecConfig<NumberEncoder> & { fixed?: false },
+    config?: NullableCodecConfig<NumberEncoder> & { noneValue?: ReadonlyUint8Array },
 ): VariableSizeEncoder<TFrom | null>;
 export function getNullableEncoder<TFrom>(
     item: Encoder<TFrom>,
     config: NullableCodecConfig<NumberEncoder> = {},
 ): Encoder<TFrom | null> {
-    const prefix = config.prefix ?? getU8Encoder();
-    const fixed = config.fixed ?? false;
-    const encoder = getUnionEncoder(
+    const prefix = (() => {
+        if (config.prefix === null) {
+            return transformEncoder(getUnitEncoder(), (_boolean: boolean) => undefined);
+        }
+        return getBooleanEncoder({ size: config.prefix ?? getU8Encoder() });
+    })();
+    const noneValue = (() => {
+        if (config.noneValue === 'zeroes') {
+            assertIsFixedSize(item);
+            return fixEncoderSize(getUnitEncoder(), item.fixedSize);
+        }
+        if (!config.noneValue) {
+            return getUnitEncoder();
+        }
+        return getConstantEncoder(config.noneValue);
+    })();
+
+    return getUnionEncoder(
         [
-            transformEncoder(prefix, (_value: null) => 0),
-            transformEncoder(getTupleEncoder([prefix, item]), (value: TFrom): [number, TFrom] => [1, value]),
+            transformEncoder(getTupleEncoder([prefix, noneValue]), (_value: null): [boolean, void] => [
+                false,
+                undefined,
+            ]),
+            transformEncoder(getTupleEncoder([prefix, item]), (value: TFrom): [boolean, TFrom] => [true, value]),
         ],
         variant => Number(variant !== null),
     );
-
-    if (!fixed) return encoder;
-    assertIsFixedSize(item);
-    assertIsFixedSize(prefix);
-    return fixEncoderSize(encoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -92,36 +132,60 @@ export function getNullableEncoder<TFrom>(
  * @param item - The decoder to use for the value that may be present.
  * @param config - A set of config for the decoder.
  */
+export function getNullableDecoder<TTo, TSize extends number>(
+    item: FixedSizeDecoder<TTo, TSize>,
+    config: NullableCodecConfig<NumberDecoder> & { noneValue: 'zeroes'; prefix: null },
+): FixedSizeDecoder<TTo | null, TSize>;
 export function getNullableDecoder<TTo>(
     item: FixedSizeDecoder<TTo>,
-    config: NullableCodecConfig<FixedSizeNumberDecoder> & { fixed: true },
+    config: NullableCodecConfig<FixedSizeNumberDecoder> & { noneValue: 'zeroes' },
 ): FixedSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
-    item: FixedSizeDecoder<TTo, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberDecoder>,
-): FixedSizeDecoder<TTo | null>;
+    item: FixedSizeDecoder<TTo>,
+    config: NullableCodecConfig<NumberDecoder> & { noneValue: 'zeroes' },
+): VariableSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
     item: Decoder<TTo>,
-    config?: NullableCodecConfig<NumberDecoder> & { fixed?: false },
+    config?: NullableCodecConfig<NumberDecoder> & { noneValue?: ReadonlyUint8Array },
 ): VariableSizeDecoder<TTo | null>;
 export function getNullableDecoder<TTo>(
     item: Decoder<TTo>,
     config: NullableCodecConfig<NumberDecoder> = {},
 ): Decoder<TTo | null> {
-    const prefix = config.prefix ?? getU8Decoder();
-    const fixed = config.fixed ?? false;
-    const decoder = getUnionDecoder(
+    const prefix = (() => {
+        if (config.prefix === null) {
+            return transformDecoder(getUnitDecoder(), () => false);
+        }
+        return getBooleanDecoder({ size: config.prefix ?? getU8Decoder() });
+    })();
+    const noneValue = (() => {
+        if (config.noneValue === 'zeroes') {
+            assertIsFixedSize(item);
+            return fixDecoderSize(getUnitDecoder(), item.fixedSize);
+        }
+        if (!config.noneValue) {
+            return getUnitDecoder();
+        }
+        return getConstantDecoder(config.noneValue);
+    })();
+
+    return getUnionDecoder(
         [
-            transformDecoder(prefix, (_value: bigint | number) => null),
+            transformDecoder(getTupleDecoder([prefix, noneValue]), () => null),
             transformDecoder(getTupleDecoder([prefix, item]), ([, value]): TTo => value),
         ],
-        (bytes, offset) => Number(prefix.read(bytes, offset)[0] !== 0),
+        (bytes, offset) => {
+            if (config.prefix === null && !config.noneValue) {
+                return Number(offset < bytes.length);
+            }
+            if (config.prefix === null && config.noneValue != null) {
+                const zeroValue =
+                    config.noneValue === 'zeroes' ? new Uint8Array(noneValue.fixedSize).fill(0) : config.noneValue;
+                return containsBytes(bytes, zeroValue, offset) ? 0 : 1;
+            }
+            return Number(prefix.read(bytes, offset)[0]);
+        },
     );
-
-    if (!fixed) return decoder;
-    assertIsFixedSize(item);
-    assertIsFixedSize(prefix);
-    return fixDecoderSize(decoder, prefix.fixedSize + item.fixedSize);
 }
 
 /**
@@ -130,23 +194,27 @@ export function getNullableDecoder<TTo>(
  * @param item - The codec to use for the value that may be present.
  * @param config - A set of config for the codec.
  */
+export function getNullableCodec<TFrom, TTo extends TFrom, TSize extends number>(
+    item: FixedSizeCodec<TFrom, TTo, TSize>,
+    config: NullableCodecConfig<NumberCodec> & { noneValue: 'zeroes'; prefix: null },
+): FixedSizeCodec<TFrom | null, TTo | null, TSize>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: FixedSizeCodec<TFrom, TTo>,
-    config: NullableCodecConfig<FixedSizeNumberCodec> & { fixed: true },
+    config: NullableCodecConfig<FixedSizeNumberCodec> & { noneValue: 'zeroes' },
 ): FixedSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
-    item: FixedSizeCodec<TFrom, TTo, 0>,
-    config?: NullableCodecConfig<FixedSizeNumberCodec>,
-): FixedSizeCodec<TFrom | null, TTo | null>;
+    item: FixedSizeCodec<TFrom, TTo>,
+    config: NullableCodecConfig<NumberCodec> & { noneValue: 'zeroes' },
+): VariableSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
-    config?: NullableCodecConfig<NumberCodec> & { fixed?: false },
+    config?: NullableCodecConfig<NumberCodec> & { noneValue?: ReadonlyUint8Array },
 ): VariableSizeCodec<TFrom | null, TTo | null>;
 export function getNullableCodec<TFrom, TTo extends TFrom = TFrom>(
     item: Codec<TFrom, TTo>,
     config: NullableCodecConfig<NumberCodec> = {},
 ): Codec<TFrom | null, TTo | null> {
-    type ConfigCast = NullableCodecConfig<NumberCodec> & { fixed?: false };
+    type ConfigCast = NullableCodecConfig<NumberCodec> & { noneValue?: ReadonlyUint8Array };
     return combineCodec(
         getNullableEncoder<TFrom>(item, config as ConfigCast),
         getNullableDecoder<TTo>(item, config as ConfigCast),
