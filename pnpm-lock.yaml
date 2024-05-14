@@ -9409,7 +9409,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.24.5
       '@babel/helper-module-imports': 7.22.15
-      '@rollup/pluginutils': 5.0.2(rollup@4.17.2)
+      '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
     optionalDependencies:
       '@types/babel__core': 7.20.1
       rollup: 4.17.2
