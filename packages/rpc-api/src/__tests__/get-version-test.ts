@@ -8,7 +8,7 @@ import { createLocalhostSolanaRpc } from './__setup__';
 
 const logFilePath = path.resolve(__dirname, '../../../../test-ledger/validator.log');
 const featureSetPattern = /feat:([\d]+)/;
-const versionPattern = /solana-validator ([\d.]+)/;
+const versionPattern = /agave-validator ([\d.]+)/;
 
 async function getVersionFromLogFile() {
     const file = await open(logFilePath);
