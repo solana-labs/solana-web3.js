@@ -5,9 +5,9 @@
 # Only the first caller will start the test validator.
 # Only the last caller to release the lock will shut the validator down.
 LOCK_DIR="/tmp/lock"
-EXCLUSIVE_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.exclusivelock"
-SHARED_LOCK_FILE="$LOCK_DIR/.solanatestvalidator.sharedlock"
-TEST_VALIDATOR=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/.solana/active_release/bin/solana-test-validator
+EXCLUSIVE_LOCK_FILE="$LOCK_DIR/.agavetestvalidator.exclusivelock"
+SHARED_LOCK_FILE="$LOCK_DIR/.agavetestvalidator.sharedlock"
+TEST_VALIDATOR=$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/.agave/active_release/bin/solana-test-validator
 TEST_VALIDATOR_LEDGER="$( cd "$(dirname "${BASH_SOURCE[0]}")/.." ; pwd -P )/test-ledger"
 FIXTURE_ACCOUNTS_DIR="$( cd "$(dirname "${BASH_SOURCE[0]}")/fixtures" ; pwd -P)"
 
