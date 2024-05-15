@@ -14,7 +14,7 @@ const gossipPattern = /local gossip address: [\d.]+:([\d]+)/;
 const pubkeyPattern = /identity pubkey: ([\w]{32,})/;
 const rpcPattern = /rpc bound to [\d.]+:([\d]+)/;
 const shredVersionPattern = /shred_version: ([\d]+)/;
-const versionPattern = /solana-validator ([\d.]+)/;
+const versionPattern = /agave-validator ([\d.]+)/;
 
 async function getNodeInfoFromLogFile() {
     const file = await open(logFilePath);
