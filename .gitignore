@@ -22,5 +22,5 @@ yarn-error.log*
 .sl
 
 # `solana-test-validator`
-.solana/
+.agave/
 test-ledger/
