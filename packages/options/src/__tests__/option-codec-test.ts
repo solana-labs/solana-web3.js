@@ -1,130 +1,584 @@
-import { getUnitCodec } from '@solana/codecs-data-structures';
-import { getU8Codec, getU16Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getShortU16Codec, getU8Codec, getU16Codec, getU32Codec, getU64Codec } from '@solana/codecs-numbers';
+import { getUtf8Codec } from '@solana/codecs-strings';
+import { SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH, SolanaError } from '@solana/errors';
 
 import { none, some } from '../option';
 import { getOptionCodec } from '../option-codec';
-import { b, base16, getMockCodec } from './__setup__';
+import { b } from './__setup__';
 
 describe('getOptionCodec', () => {
-    const option = getOptionCodec;
-    const u8 = getU8Codec;
-    const u16 = getU16Codec;
-    const u64 = getU64Codec;
-    const unit = getUnitCodec;
-
-    it('encodes options', () => {
-        // None.
-        expect(option(u8()).encode(none())).toStrictEqual(b('00'));
-        expect(option(u8()).encode(null)).toStrictEqual(b('00'));
-        expect(option(u8()).read(b('00'), 0)).toStrictEqual([none(), 1]);
-        expect(option(u8()).read(b('ffff00'), 2)).toStrictEqual([none(), 3]);
-
-        // None with custom prefix.
-        expect(option(u8(), { prefix: u16() }).encode(none())).toStrictEqual(b('0000'));
-        expect(option(u8(), { prefix: u16() }).encode(null)).toStrictEqual(b('0000'));
-        expect(option(u8(), { prefix: u16() }).read(b('0000'), 0)).toStrictEqual([none(), 2]);
-
-        // Some.
-        expect(option(u8()).encode(some(42))).toStrictEqual(b('012a'));
-        expect(option(u8()).encode(42)).toStrictEqual(b('012a'));
-        expect(option(u8()).read(b('012a'), 0)).toStrictEqual([some(42), 2]);
-        expect(option(u8()).read(b('ffff012a'), 2)).toStrictEqual([some(42), 4]);
-
-        // Some with custom prefix.
-        expect(option(u8(), { prefix: u16() }).encode(some(42))).toStrictEqual(b('01002a'));
-        expect(option(u8(), { prefix: u16() }).encode(42)).toStrictEqual(b('01002a'));
-        expect(option(u8(), { prefix: u16() }).read(b('01002a'), 0)).toStrictEqual([some(42), 3]);
-
-        // Some with variable-size codec.
-        const variableSizeMock = getMockCodec({ size: null });
-        variableSizeMock.getSizeFromValue.mockReturnValue(5);
-        variableSizeMock.write.mockImplementation((_, bytes: Uint8Array, offset: number) => {
-            bytes.set(b('7777777777'), offset);
-            return offset + 5;
+    describe('with prefix', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec());
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00'));
+            expect(codec.encode(none())).toStrictEqual(b('00'));
         });
-        variableSizeMock.read.mockReturnValue(['Hello', 6]);
-        expect(option(variableSizeMock).encode(some('Hello'))).toStrictEqual(b('017777777777'));
-        expect(variableSizeMock.write).toHaveBeenCalledWith('Hello', expect.any(Uint8Array), 1);
-        expect(option(variableSizeMock).encode('Hello')).toStrictEqual(b('017777777777'));
-        expect(variableSizeMock.write).toHaveBeenCalledWith('Hello', expect.any(Uint8Array), 1);
-        expect(option(variableSizeMock).read(b('017777777777'), 0)).toStrictEqual([some('Hello'), 6]);
-        expect(variableSizeMock.read).toHaveBeenCalledWith(b('017777777777'), 1);
 
-        // Different From and To types.
-        const optionU64 = option<bigint | number, bigint>(u64());
-        expect(optionU64.encode(some(2))).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(some(2n))).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(2)).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(2n)).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.read(b('010200000000000000'), 0)).toStrictEqual([some(2n), 9]);
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec());
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00'))).toStrictEqual(none());
+        });
 
-        // Nested options.
-        const nested = option(option(u8()));
-        expect(nested.encode(some(some(42)))).toStrictEqual(b('01012a'));
-        expect(nested.encode(some(42))).toStrictEqual(b('01012a'));
-        expect(nested.encode(42)).toStrictEqual(b('01012a'));
-        expect(nested.read(b('01012a'), 0)).toStrictEqual([some(some(42)), 3]);
-        expect(nested.encode(some(none()))).toStrictEqual(b('0100'));
-        expect(nested.encode(some(null))).toStrictEqual(b('0100'));
-        expect(nested.read(b('0100'), 0)).toStrictEqual([some(none()), 2]);
-        expect(nested.encode(none())).toStrictEqual(b('00'));
-        expect(nested.encode(null)).toStrictEqual(b('00'));
-        expect(nested.read(b('00'), 0)).toStrictEqual([none(), 1]);
+        it('encodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: getU8Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00'));
+            expect(codec.encode(none())).toStrictEqual(b('00'));
+        });
+
+        it('decodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: getU8Codec() });
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00'))).toStrictEqual(none());
+        });
+
+        it('encodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: getU32Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000000000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000000000'));
+            expect(codec.encode(42)).toStrictEqual(b('010000002a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('010000002a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00000000'));
+            expect(codec.encode(none())).toStrictEqual(b('00000000'));
+        });
+
+        it('decodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: getU32Codec() });
+            expect(codec.decode(b('010000000000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('010000002a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00000000'))).toStrictEqual(none());
+        });
+
+        it('encodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec());
+            expect(codec.encode('Hello')).toStrictEqual(b('0148656c6c6f'));
+            expect(codec.encode(some('Hello'))).toStrictEqual(b('0148656c6c6f'));
+            expect(codec.encode(null)).toStrictEqual(b('00'));
+            expect(codec.encode(none())).toStrictEqual(b('00'));
+        });
+
+        it('decodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec());
+            expect(codec.decode(b('0148656c6c6f'))).toStrictEqual(some('Hello'));
+            expect(codec.decode(b('00'))).toStrictEqual(none());
+        });
+
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec()));
+            expect(codec.encode(42)).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b('0100'));
+            expect(codec.encode(some(none()))).toStrictEqual(b('0100'));
+            expect(codec.encode(null)).toStrictEqual(b('00'));
+            expect(codec.encode(none())).toStrictEqual(b('00'));
+        });
+
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec()));
+            expect(codec.decode(b('01012a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b('0100'))).toStrictEqual(some(none()));
+            expect(codec.decode(b('00'))).toStrictEqual(none());
+        });
+
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec());
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(6);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(4);
+        });
+
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec());
+            expect(codec.read(b('ffff01010100'), 2)).toStrictEqual([some(257), 5]);
+            expect(codec.read(b('ffff00'), 2)).toStrictEqual([none(), 3]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec());
+            expect(codec.encode(2)).toStrictEqual(b('010200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('010200000000000000'));
+            expect(codec.decode(b('010200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a variable size codec with max size', () => {
+            const codec = getOptionCodec(getU16Codec());
+            expect(codec.getSizeFromValue(null)).toBe(1);
+            expect(codec.getSizeFromValue(42)).toBe(3);
+            expect(codec.maxSize).toBe(3);
+        });
     });
 
-    it('encodes fixed options', () => {
-        const fixedU8 = option(u8(), { fixed: true });
-        const fixedU8WithU16Prefix = option(u8(), { fixed: true, prefix: u16() });
+    describe('with zeroable none value', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(null)).toStrictEqual(b('0000'));
+            expect(codec.encode(none())).toStrictEqual(b('0000'));
+        });
 
-        // None.
-        expect(fixedU8.encode(none())).toStrictEqual(b('0000'));
-        expect(fixedU8.encode(null)).toStrictEqual(b('0000'));
-        expect(fixedU8.read(b('0000'), 0)).toStrictEqual([none(), 2]);
-        expect(fixedU8.read(b('ffff0000'), 2)).toStrictEqual([none(), 4]);
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('0000'))).toStrictEqual(none());
+        });
 
-        // None with custom prefix.
-        expect(fixedU8WithU16Prefix.encode(none())).toStrictEqual(b('000000'));
-        expect(fixedU8WithU16Prefix.encode(null)).toStrictEqual(b('000000'));
-        expect(fixedU8WithU16Prefix.read(b('000000'), 0)).toStrictEqual([none(), 3]);
+        it('can end up encoding the none value', () => {
+            // ...because the item codec could use offsets to update the bytes in different ways.
+            // Therefore checking that the encoded value is the same as the none value is not enough.
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.encode(0)).toStrictEqual(b('0000'));
+        });
 
-        // Some.
-        expect(fixedU8.encode(some(42))).toStrictEqual(b('012a'));
-        expect(fixedU8.encode(42)).toStrictEqual(b('012a'));
-        expect(fixedU8.read(b('012a'), 0)).toStrictEqual([some(42), 2]);
-        expect(fixedU8.read(b('ffff012a'), 2)).toStrictEqual([some(42), 4]);
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null }), {
+                noneValue: 'zeroes',
+                prefix: null,
+            });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b('0000'));
+            expect(codec.encode(some(none()))).toStrictEqual(b('0000'));
+            expect(codec.encode(null)).toStrictEqual(b('0000'));
+            expect(codec.encode(none())).toStrictEqual(b('0000'));
+        });
 
-        // Some with custom prefix.
-        expect(fixedU8WithU16Prefix.encode(42)).toStrictEqual(b('01002a'));
-        expect(fixedU8WithU16Prefix.read(b('01002a'), 0)).toStrictEqual([some(42), 3]);
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null }), {
+                noneValue: 'zeroes',
+                prefix: null,
+            });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b('0000'))).toStrictEqual(none());
+        });
 
-        // Different From and To types.
-        const optionU64 = option<bigint | number, bigint>(u64());
-        expect(optionU64.encode(some(2))).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(some(2n))).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(2)).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.encode(2n)).toStrictEqual(b('010200000000000000'));
-        expect(optionU64.read(b('010200000000000000'), 0)).toStrictEqual([some(2n), 9]);
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(5);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(5);
+        });
 
-        // Fixed options must wrap fixed-size items.
-        // @ts-expect-error Fixed options must wrap fixed-size items.
-        expect(() => option(getMockCodec({ size: null }), { fixed: true })).toThrow(); // `SolanaError` added in later commit.
-        // 'Fixed options can only be used with fixed-size codecs',
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.read(b('ffff010100'), 2)).toStrictEqual([some(257), 4]);
+            expect(codec.read(b('ffff000000'), 2)).toStrictEqual([none(), 4]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.encode(2)).toStrictEqual(b('0200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('0200000000000000'));
+            expect(codec.decode(b('0200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a fixed size codec', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: null });
+            expect(codec.fixedSize).toBe(2);
+        });
+
+        it('fails if the items is not fixed', () => {
+            // @ts-expect-error It cannot wrap a variable size item when fixed is true.
+            expect(() => getOptionCodec(getUtf8Codec(), { noneValue: 'zeroes', prefix: null })).toThrow(
+                new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH),
+            );
+        });
     });
 
-    it('has the right sizes', () => {
-        expect(option(u8()).getSizeFromValue(some(42))).toBe(1 + 1);
-        expect(option(u8()).maxSize).toBe(2);
-        expect(option(base16).getSizeFromValue(some('010203'))).toBe(1 + 3);
-        expect(option(base16).maxSize).toBeUndefined();
-        expect(option(u8(), { prefix: u16() }).getSizeFromValue(some(42))).toBe(2 + 1);
-        expect(option(u8(), { prefix: u16() }).maxSize).toBe(3);
+    describe('with custom none value', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(null)).toStrictEqual(b('ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('ffff'));
+        });
 
-        // Fixed.
-        expect(option(u8(), { fixed: true }).fixedSize).toBe(2);
-        expect(option(u64(), { fixed: true }).fixedSize).toBe(9);
-        expect(option(u8(), { fixed: true, prefix: u16() }).fixedSize).toBe(3);
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('ffff'))).toStrictEqual(none());
+        });
 
-        // Zero-size items.
-        expect(option(unit()).fixedSize).toBe(1);
+        it('can end up encoding the none value', () => {
+            // ...because the item codec could use offsets to update the bytes in different ways.
+            // Therefore checking that the encoded value is the same as the none value is not enough.
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.encode(65535)).toStrictEqual(b('ffff'));
+        });
+
+        it('encodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.encode('Hello')).toStrictEqual(b('48656c6c6f'));
+            expect(codec.encode(some('Hello'))).toStrictEqual(b('48656c6c6f'));
+            expect(codec.encode(null)).toStrictEqual(b('ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('ffff'));
+        });
+
+        it('decodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.decode(b('48656c6c6f'))).toStrictEqual(some('Hello'));
+            expect(codec.decode(b('ffff'))).toStrictEqual(none());
+        });
+
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null }), {
+                noneValue: b('ffff'),
+                prefix: null,
+            });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b('ffff'));
+            expect(codec.encode(some(none()))).toStrictEqual(b('ffff'));
+            expect(codec.encode(null)).toStrictEqual(b('ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('ffff'));
+        });
+
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null }), {
+                noneValue: b('ffff'),
+                prefix: null,
+            });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b('ffff'))).toStrictEqual(none());
+        });
+
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(5);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(5);
+        });
+
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('aaaa'), prefix: null });
+            expect(codec.read(b('ffff010100'), 2)).toStrictEqual([some(257), 4]);
+            expect(codec.read(b('ffffaaaa00'), 2)).toStrictEqual([none(), 4]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec(), { noneValue: b('ffff'), prefix: null });
+            expect(codec.encode(2)).toStrictEqual(b('0200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('0200000000000000'));
+            expect(codec.decode(b('0200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a variable size codec', () => {
+            // ...because the item and the none value do not need to have the same length.
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffffffff'), prefix: null });
+            expect(codec.getSizeFromValue(null)).toBe(4);
+            expect(codec.getSizeFromValue(42)).toBe(2);
+            expect(codec.maxSize).toBe(4);
+        });
+    });
+
+    describe('with prefix and zeroable none value', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes' });
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('000000'));
+            expect(codec.encode(none())).toStrictEqual(b('000000'));
+        });
+
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes' });
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('000000'))).toStrictEqual(none());
+        });
+
+        it('encodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: getU8Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('000000'));
+            expect(codec.encode(none())).toStrictEqual(b('000000'));
+        });
+
+        it('decodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: getU8Codec() });
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('000000'))).toStrictEqual(none());
+        });
+
+        it('encodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: getU32Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000000000'));
+            expect(codec.encode(42)).toStrictEqual(b('010000002a00'));
+            expect(codec.encode(null)).toStrictEqual(b('000000000000'));
+        });
+
+        it('decodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: getU32Codec() });
+            expect(codec.decode(b('010000000000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('010000002a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('000000000000'))).toStrictEqual(none());
+        });
+
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: 'zeroes' }), {
+                noneValue: 'zeroes',
+            });
+            expect(codec.encode(42)).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b('01000000'));
+            expect(codec.encode(some(none()))).toStrictEqual(b('01000000'));
+            expect(codec.encode(null)).toStrictEqual(b('00000000'));
+            expect(codec.encode(none())).toStrictEqual(b('00000000'));
+        });
+
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: 'zeroes' }), {
+                noneValue: 'zeroes',
+            });
+            expect(codec.decode(b('01012a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b('01000000'))).toStrictEqual(some(none()));
+            expect(codec.decode(b('00000000'))).toStrictEqual(none());
+        });
+
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes' });
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(6);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(6);
+        });
+
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes' });
+            expect(codec.read(b('ffff01010100'), 2)).toStrictEqual([some(257), 5]);
+            expect(codec.read(b('ffff00000000'), 2)).toStrictEqual([none(), 5]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec(), { noneValue: 'zeroes' });
+            expect(codec.encode(2)).toStrictEqual(b('010200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('010200000000000000'));
+            expect(codec.decode(b('010200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a fixed size codec if the prefix is fixed', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes' });
+            expect(codec.fixedSize).toBe(3);
+        });
+
+        it('returns a variable size codec if the prefix is variable', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: 'zeroes', prefix: getShortU16Codec() });
+            expect(codec.getSizeFromValue(null)).toBe(3);
+            expect(codec.getSizeFromValue(42)).toBe(3);
+            expect(codec.maxSize).toBe(5);
+        });
+
+        it('fails if the items is not fixed', () => {
+            // @ts-expect-error It cannot wrap a variable size item when fixed is true.
+            expect(() => getOptionCodec(getUtf8Codec(), { noneValue: 'zeroes' })).toThrow(
+                new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH),
+            );
+        });
+    });
+
+    describe('with prefix and custom none value', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff') });
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('00ffff'));
+        });
+
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff') });
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00ffff'))).toStrictEqual(none());
+        });
+
+        it('encodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: getU8Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000'));
+            expect(codec.encode(42)).toStrictEqual(b('012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('012a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('00ffff'));
+        });
+
+        it('decodes option numbers with explicit prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: getU8Codec() });
+            expect(codec.decode(b('010000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('012a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00ffff'))).toStrictEqual(none());
+        });
+
+        it('encodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: getU32Codec() });
+            expect(codec.encode(0)).toStrictEqual(b('010000000000'));
+            expect(codec.encode(some(0))).toStrictEqual(b('010000000000'));
+            expect(codec.encode(42)).toStrictEqual(b('010000002a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('010000002a00'));
+            expect(codec.encode(null)).toStrictEqual(b('00000000ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('00000000ffff'));
+        });
+
+        it('decodes option numbers with custom prefix', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff'), prefix: getU32Codec() });
+            expect(codec.decode(b('010000000000'))).toStrictEqual(some(0));
+            expect(codec.decode(b('010000002a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b('00000000ffff'))).toStrictEqual(none());
+        });
+
+        it('encodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { noneValue: b('ffff') });
+            expect(codec.encode('Hello')).toStrictEqual(b('0148656c6c6f'));
+            expect(codec.encode(some('Hello'))).toStrictEqual(b('0148656c6c6f'));
+            expect(codec.encode(null)).toStrictEqual(b('00ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('00ffff'));
+        });
+
+        it('decodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { noneValue: b('ffff') });
+            expect(codec.decode(b('0148656c6c6f'))).toStrictEqual(some('Hello'));
+            expect(codec.decode(b('00ffff'))).toStrictEqual(none());
+        });
+
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: b('ffff') }), {
+                noneValue: b('ffff'),
+            });
+            expect(codec.encode(42)).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('01012a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b('0100ffff'));
+            expect(codec.encode(some(none()))).toStrictEqual(b('0100ffff'));
+            expect(codec.encode(null)).toStrictEqual(b('00ffff'));
+            expect(codec.encode(none())).toStrictEqual(b('00ffff'));
+        });
+
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { noneValue: b('ffff') }), {
+                noneValue: b('ffff'),
+            });
+            expect(codec.decode(b('01012a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b('0100ffff'))).toStrictEqual(some(none()));
+            expect(codec.decode(b('00ffff'))).toStrictEqual(none());
+        });
+
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffff') });
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(6);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(6);
+        });
+
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('aaaa') });
+            expect(codec.read(b('ffff01010100'), 2)).toStrictEqual([some(257), 5]);
+            expect(codec.read(b('ffff00aaaa00'), 2)).toStrictEqual([none(), 5]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec(), { noneValue: b('ffff') });
+            expect(codec.encode(2)).toStrictEqual(b('010200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('010200000000000000'));
+            expect(codec.decode(b('010200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a variable size codec', () => {
+            // ...because the item and the none value do not need to have the same length.
+            const codec = getOptionCodec(getU16Codec(), { noneValue: b('ffffffff') });
+            expect(codec.getSizeFromValue(null)).toBe(5);
+            expect(codec.getSizeFromValue(42)).toBe(3);
+            expect(codec.maxSize).toBe(5);
+        });
+    });
+
+    describe('with no prefix nor none value', () => {
+        it('encodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: null });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(null)).toStrictEqual(b(''));
+            expect(codec.encode(none())).toStrictEqual(b(''));
+        });
+
+        it('decodes option numbers', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: null });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(42));
+            expect(codec.decode(b(''))).toStrictEqual(none());
+        });
+
+        it('encodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { prefix: null });
+            expect(codec.encode('Hello')).toStrictEqual(b('48656c6c6f'));
+            expect(codec.encode(some('Hello'))).toStrictEqual(b('48656c6c6f'));
+            expect(codec.encode(null)).toStrictEqual(b(''));
+            expect(codec.encode(none())).toStrictEqual(b(''));
+        });
+
+        it('decodes option variable strings', () => {
+            const codec = getOptionCodec(getUtf8Codec(), { prefix: null });
+            expect(codec.decode(b('48656c6c6f'))).toStrictEqual(some('Hello'));
+            expect(codec.decode(b(''))).toStrictEqual(none());
+        });
+
+        it('encodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { prefix: null }), { prefix: null });
+            expect(codec.encode(42)).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(42))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(some(42)))).toStrictEqual(b('2a00'));
+            expect(codec.encode(some(null))).toStrictEqual(b(''));
+            expect(codec.encode(some(none()))).toStrictEqual(b(''));
+            expect(codec.encode(null)).toStrictEqual(b(''));
+            expect(codec.encode(none())).toStrictEqual(b(''));
+        });
+
+        it('decodes nested option numbers', () => {
+            const codec = getOptionCodec(getOptionCodec(getU16Codec(), { prefix: null }), { prefix: null });
+            expect(codec.decode(b('2a00'))).toStrictEqual(some(some(42)));
+            expect(codec.decode(b(''))).toStrictEqual(none());
+        });
+
+        it('pushes the offset forward when writing', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: null });
+            expect(codec.write(257, new Uint8Array(10), 3)).toBe(5);
+            expect(codec.write(null, new Uint8Array(10), 3)).toBe(3);
+        });
+
+        it('pushes the offset forward when reading', () => {
+            const codec = getOptionCodec(getU16Codec(), { prefix: null });
+            expect(codec.read(b('ffff010100'), 2)).toStrictEqual([some(257), 4]);
+            expect(codec.read(b('ffff'), 2)).toStrictEqual([none(), 2]);
+        });
+
+        it('encodes and decodes different from and to types', () => {
+            const codec = getOptionCodec(getU64Codec(), { prefix: null });
+            expect(codec.encode(2)).toStrictEqual(b('0200000000000000'));
+            expect(codec.encode(2n)).toStrictEqual(b('0200000000000000'));
+            expect(codec.decode(b('0200000000000000'))).toStrictEqual(some(2n));
+        });
+
+        it('returns a variable size codec', () => {
+            // ...because the item and the none value do not need to have the same length.
+            const codec = getOptionCodec(getU16Codec(), { prefix: null });
+            expect(codec.getSizeFromValue(null)).toBe(0);
+            expect(codec.getSizeFromValue(42)).toBe(2);
+            expect(codec.maxSize).toBe(2);
+        });
     });
 });

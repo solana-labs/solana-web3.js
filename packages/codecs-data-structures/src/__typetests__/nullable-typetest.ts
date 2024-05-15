@@ -11,30 +11,34 @@ import { getNullableCodec, getNullableDecoder, getNullableEncoder } from '../nul
 
 {
     // [getNullableEncoder]: It knows if the encoder is fixed size or variable size.
-    getNullableEncoder({} as FixedSizeEncoder<void, 0>) satisfies FixedSizeEncoder<null | void>;
-    getNullableEncoder({} as FixedSizeEncoder<string>, { fixed: true }) satisfies FixedSizeEncoder<string | null>;
+    getNullableEncoder({} as FixedSizeEncoder<string>, { noneValue: 'zeroes' }) satisfies FixedSizeEncoder<
+        string | null
+    >;
+    getNullableEncoder({} as FixedSizeEncoder<string, 42>, {
+        noneValue: 'zeroes',
+        prefix: null,
+    }) satisfies FixedSizeEncoder<string | null, 42>;
     getNullableEncoder({} as FixedSizeEncoder<string>) satisfies VariableSizeEncoder<string | null>;
-
-    // @ts-expect-error It cannot be fixed when using a variable size item.
-    getNullableEncoder({} as VariableSizeEncoder<string>, { fixed: true });
 }
 
 {
     // [getNullableDecoder]: It knows if the decoder is fixed size or variable size.
-    getNullableDecoder({} as FixedSizeDecoder<void, 0>) satisfies FixedSizeDecoder<null | void>;
-    getNullableDecoder({} as FixedSizeDecoder<string>, { fixed: true }) satisfies FixedSizeDecoder<string | null>;
+    getNullableDecoder({} as FixedSizeDecoder<string>, { noneValue: 'zeroes' }) satisfies FixedSizeDecoder<
+        string | null
+    >;
+    getNullableDecoder({} as FixedSizeDecoder<string, 42>, {
+        noneValue: 'zeroes',
+        prefix: null,
+    }) satisfies FixedSizeDecoder<string | null, 42>;
     getNullableDecoder({} as FixedSizeDecoder<string>) satisfies VariableSizeDecoder<string | null>;
-
-    // @ts-expect-error It cannot be fixed when using a variable size item.
-    getNullableDecoder({} as VariableSizeDecoder<string>, { fixed: true });
 }
 
 {
     // [getNullableCodec]: It knows if the codec is fixed size or variable size.
-    getNullableCodec({} as FixedSizeCodec<void, void, 0>) satisfies FixedSizeCodec<null | void>;
-    getNullableCodec({} as FixedSizeCodec<string>, { fixed: true }) satisfies FixedSizeCodec<string | null>;
+    getNullableCodec({} as FixedSizeCodec<string>, { noneValue: 'zeroes' }) satisfies FixedSizeCodec<string | null>;
+    getNullableCodec({} as FixedSizeCodec<string, string, 42>, {
+        noneValue: 'zeroes',
+        prefix: null,
+    }) satisfies FixedSizeCodec<string | null, string | null, 42>;
     getNullableCodec({} as FixedSizeCodec<string>) satisfies VariableSizeCodec<string | null>;
-
-    // @ts-expect-error It cannot be fixed when using a variable size item.
-    getNullableCodec({} as VariableSizeCodec<string>, { fixed: true });
 }
