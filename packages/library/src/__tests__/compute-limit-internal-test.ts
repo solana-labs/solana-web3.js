@@ -108,7 +108,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
                             // prettier-ignore
                             new Uint8Array([
                                 0x02, // SetComputeUnitLimit instruction inde
-                                0xff, 0xff, 0xff, 0xff, // U32::MAX
+                                0xc0, 0x5c, 0x15, 0x00, // 1,400,000, MAX_COMPUTE_UNITS
                             ]),
                         programAddress: 'ComputeBudget111111111111111111111111111111',
                     },
@@ -158,7 +158,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
                         transactionMessage.instructions[0],
                         {
                             ...transactionMessage.instructions[1],
-                            data: new Uint8Array([0x02, 0xff, 0xff, 0xff, 0xff]), // Replaced with U32::MAX
+                            data: new Uint8Array([0x02, 0xc0, 0x5c, 0x15, 0x00]), // Replaced with MAX_COMPUTE_UNITS
                         },
                         transactionMessage.instructions[2],
                     ],
@@ -233,14 +233,16 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
         });
         await expect(estimatePromise).resolves.toBe(42);
     });
-    it('caps the estimated compute units to U32::MAX', async () => {
+    it('caps the estimated compute units to MAX_COMPUTE_UNITS of 1.4M', async () => {
         expect.assertions(1);
-        sendSimulateTransactionRequest.mockResolvedValue({ value: { unitsConsumed: 4294967295n /* U32::MAX + 1 */ } });
+        sendSimulateTransactionRequest.mockResolvedValue({
+            value: { unitsConsumed: 1400000n /* MAX_COMPUTE_UNITS */ },
+        });
         const estimatePromise = getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
             rpc,
             transactionMessage: mockTransactionMessage,
         });
-        await expect(estimatePromise).resolves.toBe(4294967295 /* U32::MAX */);
+        await expect(estimatePromise).resolves.toBe(1400000 /* MAX_COMPUTE_UNITS */);
     });
     it('throws with the cause when simulation fails', async () => {
         expect.assertions(1);
