@@ -192,9 +192,11 @@ rpcSubscriptions
 ({
     filters: [
         {
-            bytes: 'bytes' as Base58EncodedBytes,
-            encoding: 'base58',
-            offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            memcmp: {
+                bytes: 'bytes' as Base58EncodedBytes,
+                encoding: 'base58',
+                offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            },
         },
     ],
 }) satisfies Parameters<RpcSubscriptions<ProgramNotificationsApi>['programNotifications']>[1];
@@ -202,19 +204,23 @@ rpcSubscriptions
 ({
     filters: [
         {
-            // @ts-expect-error Can't flop them
-            bytes: 'bytes' as Base58EncodedBytes,
-            encoding: 'base64',
-            offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            // @ts-expect-error Can't flop the encodings
+            memcmp: {
+                bytes: 'bytes' as Base58EncodedBytes,
+                encoding: 'base64',
+                offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            },
         },
     ],
 }) satisfies Parameters<RpcSubscriptions<ProgramNotificationsApi>['programNotifications']>[1];
 ({
     filters: [
         {
-            bytes: 'bytes' as Base64EncodedBytes,
-            encoding: 'base64',
-            offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            memcmp: {
+                bytes: 'bytes' as Base64EncodedBytes,
+                encoding: 'base64',
+                offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            },
         },
     ],
 }) satisfies Parameters<RpcSubscriptions<ProgramNotificationsApi>['programNotifications']>[1];
@@ -222,10 +228,12 @@ rpcSubscriptions
 ({
     filters: [
         {
-            // @ts-expect-error Can't flop them
-            bytes: 'bytes' as Base64EncodedBytes,
-            encoding: 'base58',
-            offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            // @ts-expect-error Can't flop the encodings
+            memcmp: {
+                bytes: 'bytes' as Base64EncodedBytes,
+                encoding: 'base58',
+                offset: 0n as U64UnsafeBeyond2Pow53Minus1,
+            },
         },
     ],
 }) satisfies Parameters<RpcSubscriptions<ProgramNotificationsApi>['programNotifications']>[1];
