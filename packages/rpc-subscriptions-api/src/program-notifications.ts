@@ -26,9 +26,7 @@ type ProgramNotificationsMemcmpFilterBase64 = Readonly<{
     offset: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-type ProgramNotificationsDatasizeFilter = Readonly<{
-    dataSize: U64UnsafeBeyond2Pow53Minus1;
-}>;
+type ProgramNotificationsDatasizeFilter = U64UnsafeBeyond2Pow53Minus1;
 
 type ProgramNotificationsApiNotificationBase<TData> = SolanaRpcResponse<
     Readonly<{
@@ -40,11 +38,10 @@ type ProgramNotificationsApiNotificationBase<TData> = SolanaRpcResponse<
 type ProgramNotificationsApiCommonConfig = Readonly<{
     commitment?: Commitment;
     // The resultant account must meet ALL filter criteria to be included in the returned results
-    filters?: readonly (
-        | ProgramNotificationsDatasizeFilter
-        | ProgramNotificationsMemcmpFilterBase58
-        | ProgramNotificationsMemcmpFilterBase64
-    )[];
+    filters?: readonly Readonly<
+        | { dataSize: ProgramNotificationsDatasizeFilter }
+        | { memcmp: ProgramNotificationsMemcmpFilterBase58 | ProgramNotificationsMemcmpFilterBase64 }
+    >[];
 }>;
 
 export interface ProgramNotificationsApi extends RpcSubscriptionsApiMethods {
