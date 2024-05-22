@@ -3724,7 +3724,17 @@ export class Connection {
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<SignatureResult>>;
 
-  /** @deprecated Instead, call `confirmTransaction` and pass in {@link TransactionConfirmationStrategy} */
+  /** @deprecated Instead, call `confirmTransaction` and pass in {@link TransactionConfirmationStrategy}
+   *  @example
+   * ``` ts
+   * const latestBlockHash = await connection.getLatestBlockhash()
+   * await connection.confirmTransaction({
+   *   blockhash: latestBlockHash.blockhash,
+   *    lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+   *    signature: airdropSignature,
+   *   })
+   *   ```
+   */
   // eslint-disable-next-line no-dupe-class-members
   confirmTransaction(
     strategy: TransactionSignature,
