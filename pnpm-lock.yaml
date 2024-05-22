@@ -592,11 +592,11 @@ importers:
         specifier: ^23.0.8
         version: 23.0.8(typescript@5.4.5)
       sinon:
-        specifier: ^17.0.2
-        version: 17.0.2
+        specifier: ^18.0.0
+        version: 18.0.0
       sinon-chai:
         specifier: ^3.7.0
-        version: 3.7.0(chai@5.1.1)(sinon@17.0.2)
+        version: 3.7.0(chai@5.1.1)(sinon@18.0.0)
       start-server-and-test:
         specifier: ^2.0.3
         version: 2.0.3
@@ -5951,8 +5951,8 @@ packages:
     resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
     engines: {node: '>= 0.4.0'}
 
-  nise@5.1.9:
-    resolution: {integrity: sha512-qOnoujW4SV6e40dYxJOb3uvuoPHtmLzIk4TFo+j0jPJoC+5Z9xja5qH5JZobEPsa8+YYphMrOSwnrshEhG2qww==}
+  nise@6.0.0:
+    resolution: {integrity: sha512-K8ePqo9BFvN31HXwEtTNGzgrPpmvgciDsFz8aztFjt4LqKO/JeFD8tBOeuDiCMXrIl/m1YvfH8auSpxfaD09wg==}
 
   node-abort-controller@3.0.1:
     resolution: {integrity: sha512-/ujIVxthRs+7q6hsdjHMaj8hRG9NuWmwrz+JdRwZ14jdFoKSkm+vDsCbF9PLpnSqjaWQJuTmVtcWHNLr+vrOFw==}
@@ -6765,9 +6765,8 @@ packages:
       chai: ^4.0.0
       sinon: '>=4.0.0'
 
-  sinon@17.0.2:
-    resolution: {integrity: sha512-uihLiaB9FhzesElPDFZA7hDcNABzsVHwr3YfmM9sBllVwab3l0ltGlRV1XhpNfIacNDLGD1QRZNLs5nU5+hTuA==}
-    deprecated: There
+  sinon@18.0.0:
+    resolution: {integrity: sha512-+dXDXzD1sBO6HlmZDd7mXZCR/y5ECiEiGCBSGuFD/kZ0bDTofPYc6JaeGmPSF+1j1MejGUWkORbYOLDyvqCWpA==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -13463,7 +13462,7 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  nise@5.1.9:
+  nise@6.0.0:
     dependencies:
       '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
@@ -14247,18 +14246,18 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  sinon-chai@3.7.0(chai@5.1.1)(sinon@17.0.2):
+  sinon-chai@3.7.0(chai@5.1.1)(sinon@18.0.0):
     dependencies:
       chai: 5.1.1
-      sinon: 17.0.2
+      sinon: 18.0.0
 
-  sinon@17.0.2:
+  sinon@18.0.0:
     dependencies:
       '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
       '@sinonjs/samsam': 8.0.0
       diff: 5.2.0
-      nise: 5.1.9
+      nise: 6.0.0
       supports-color: 7.2.0
 
   sisteransi@1.0.5: {}
