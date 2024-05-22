@@ -141,7 +141,7 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
      */
     const existingSetComputeUnitLimitInstructionIndex =
         transactionMessage.instructions.findIndex(isSetComputeLimitInstruction);
-    const maxComputeUnitLimitInstruction = createComputeUnitLimitInstruction(4_294_967_295 /* U32::MAX */);
+    const maxComputeUnitLimitInstruction = createComputeUnitLimitInstruction(1_400_000 /* MAX_COMPUTE_UNIT_LIMIT */);
     if (existingSetComputeUnitLimitInstructionIndex === -1) {
         compilableTransactionMessage = appendTransactionMessageInstruction(
             maxComputeUnitLimitInstruction,
