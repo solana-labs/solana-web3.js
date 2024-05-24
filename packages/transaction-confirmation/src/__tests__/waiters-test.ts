@@ -9,7 +9,7 @@ import {
     TransactionWithDurableNonceLifetime,
 } from '@solana/transactions/dist/types/lifetime';
 
-import { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
+import type { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
 import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,

@@ -3,7 +3,7 @@ import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@so
 import { createKeyPairFromBytes, generateKeyPair, signBytes } from '@solana/keys';
 import { partiallySignTransaction } from '@solana/transactions';
 
-import { ReadonlyUint8Array } from '../../codecs-core/dist/types';
+import type { ReadonlyUint8Array } from '../../codecs-core/dist/types';
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 
