@@ -3,7 +3,7 @@ import type { SignatureBytes } from '@solana/keys';
 import { type SignaturesMap, Transaction, TransactionMessageBytes } from '@solana/transactions';
 import type { PublicKey, VersionedTransaction } from '@solana/web3.js';
 
-import { ReadonlyUint8Array } from '../../codecs-core/dist/types';
+import type { ReadonlyUint8Array } from '../../codecs-core/dist/types';
 
 function convertSignatures(transaction: VersionedTransaction, staticAccountKeys: PublicKey[]): SignaturesMap {
     return Object.fromEntries(
