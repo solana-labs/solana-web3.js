@@ -5537,17 +5537,18 @@ export class Connection {
   }
 
   /**
-   * Request an allocation of lamports to the specified address
+   * Requests an allocation of lamports to the specified address.
+   * You need to confirm the airdrop with `confirmTransaction()` afterwards.
    *
+   * Consider using `airdropIfRequired` provided by [@solana-developers/helpers](https://github.com/solana-developers/helpers)
+   * It takes care of confirming the airdrop.
    * ```typescript
-   * import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
-   *
-   * (async () => {
-   *   const connection = new Connection("https://api.testnet.solana.com", "confirmed");
-   *   const myAddress = new PublicKey("2nr1bHFT86W9tGnyvmYW4vcHKsQB3sVQfnddasz4kExM");
-   *   const signature = await connection.requestAirdrop(myAddress, LAMPORTS_PER_SOL);
-   *   await connection.confirmTransaction(signature);
-   * })();
+   *   const newBalance = await airdropIfRequired(
+   *     connection,
+   *     keypair.publicKey,
+   *     0.5 * LAMPORTS_PER_SOL,
+   *     1 * LAMPORTS_PER_SOL,
+   *   );
    * ```
    */
   async requestAirdrop(
