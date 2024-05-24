@@ -93,6 +93,14 @@ export async function sendAndConfirmRawTransaction(
   const status = (await confirmationPromise).value;
 
   if (status.err) {
+    if (signature != null) {
+      const transaction = await connection.getTransaction(signature);
+      if (transaction?.meta?.err) {
+        throw new Error(
+          `Transaction ${signature} failed: ${JSON.stringify(transaction.meta.logMessages, null, 2)}`,
+        );
+      }
+    }
     throw new Error(
       `Raw transaction ${signature} failed (${JSON.stringify(status)})`,
     );

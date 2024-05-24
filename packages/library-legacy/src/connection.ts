@@ -5921,7 +5921,10 @@ export class Connection {
         logs = res.error.data.logs;
       }
       throw new SendTransactionError(
-        'failed to send transaction: ' + res.error.message,
+        'failed to send transaction: ' +
+          res.error.message +
+          ' Logs: ' +
+          JSON.stringify(logs, null, 2),
         logs,
       );
     }
