@@ -1170,15 +1170,61 @@ export type ParsedMessageAccount = {
 };
 
 /**
+ * Generic parsed instruction type
+ */
+type ParsedTransferInstruction = {
+  type: string;
+  info: {
+    source: PublicKey;
+    destination: PublicKey;
+  }
+};
+
+/**
+ * A parsed transfer transaction instruction
+ */
+export type ParsedSystemTransferInstruction = ParsedTransferInstruction & {
+  info: {
+    lamports: number | bigint;
+  }
+};
+
+/**
+ * A parsed spl token transfer transaction instruction
+ */
+export type ParsedSplTokenTransferInstruction = ParsedTransferInstruction & {
+  info: {
+    amount: string;
+    authority: PublicKey;
+  }
+};
+
+/**
+ * A parsed spl token transfer checked transaction instruction
+ */
+export type ParsedSplTokenTransferCheckedInstruction = ParsedTransferInstruction & {
+  info: {
+    mint: PublicKey;
+    authority: PublicKey;
+    tokenAmount: {
+      amount: string;
+      decimals: number;
+      uiAmount: number;
+      uiAmountString: string;
+    }
+  }
+};
+
+/**
  * A parsed transaction instruction
  */
-export type ParsedInstruction = {
+export type ParsedInstruction<T = any> = {
   /** Name of the program for this instruction */
   program: string;
   /** ID of the program for this instruction */
   programId: PublicKey;
   /** Parsed instruction info */
-  parsed: any;
+  parsed: T;
 };
 
 /**
