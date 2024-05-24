@@ -90,10 +90,15 @@ export async function sendAndConfirmTransaction(
 
   if (status.err) {
     if (signature != null) {
-      const transaction = await connection.getTransaction(signature);
+      let transaction;
+      try {
+        transaction = await connection.getTransaction(signature);
+      } catch (_err) {
+        // If this does not work we'll just print the status
+      }
       if (transaction?.meta?.err) {
         throw new Error(
-          `Transaction ${signature} failed: ${JSON.stringify(transaction.meta.logMessages, null, 2)}`,
+          `Transaction ${signature} failed (${JSON.stringify(status)}): ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
         );
       }
     }
