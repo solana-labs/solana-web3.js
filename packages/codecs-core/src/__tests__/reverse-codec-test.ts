@@ -10,23 +10,29 @@ describe('reverseCodec', () => {
         const s = (size: number) => reverseCodec(fixCodecSize(base16, size));
 
         // Encode.
-        expect(s(1).encode('00')).toStrictEqual(b('00'));
-        expect(s(2).encode('00ff')).toStrictEqual(b('ff00'));
-        expect(s(2).encode('ff00')).toStrictEqual(b('00ff'));
-        expect(s(4).encode('00000001')).toStrictEqual(b('01000000'));
-        expect(s(4).encode('01000000')).toStrictEqual(b('00000001'));
-        expect(s(8).encode('0000000000000001')).toStrictEqual(b('0100000000000000'));
-        expect(s(8).encode('0100000000000000')).toStrictEqual(b('0000000000000001'));
-        expect(s(32).encode(`01${'00'.repeat(31)}`)).toStrictEqual(b(`${'00'.repeat(31)}01`));
-        expect(s(32).encode(`${'00'.repeat(31)}01`)).toStrictEqual(b(`01${'00'.repeat(31)}`));
+        expect(s(1).encode('99')).toStrictEqual(b('99'));
+        expect(s(2).encode('99ff')).toStrictEqual(b('ff99'));
+        expect(s(2).encode('ff9999')).toStrictEqual(b('99ff'));
+        expect(s(3).encode('9999ff')).toStrictEqual(b('ff9999'));
+        expect(s(3).encode('ff9999')).toStrictEqual(b('9999ff'));
+        expect(s(4).encode('999999ff')).toStrictEqual(b('ff999999'));
+        expect(s(4).encode('ff999999')).toStrictEqual(b('999999ff'));
+        expect(s(8).encode('99999999999999ff')).toStrictEqual(b('ff99999999999999'));
+        expect(s(8).encode('ff99999999999999')).toStrictEqual(b('99999999999999ff'));
+        expect(s(32).encode(`ff${'99'.repeat(31)}`)).toStrictEqual(b(`${'99'.repeat(31)}ff`));
+        expect(s(32).encode(`${'99'.repeat(31)}ff`)).toStrictEqual(b(`ff${'99'.repeat(31)}`));
 
         // Decode.
-        expect(s(2).decode(b('ff00'))).toBe('00ff');
-        expect(s(2).decode(b('00ff'))).toBe('ff00');
-        expect(s(4).decode(b('00000001'))).toBe('01000000');
-        expect(s(4).decode(b('01000000'))).toBe('00000001');
-        expect(s(4).read(b('aaaa01000000bbbb'), 2)).toStrictEqual(['00000001', 6]);
-        expect(s(4).read(b('aaaa00000001bbbb'), 2)).toStrictEqual(['01000000', 6]);
+        expect(s(2).decode(b('ff99'))).toBe('99ff');
+        expect(s(2).decode(b('99ff'))).toBe('ff99');
+        expect(s(3).decode(b('ff9999'))).toBe('9999ff');
+        expect(s(3).decode(b('9999ff'))).toBe('ff9999');
+        expect(s(3).read(b('aaaaff9999bbbb'), 2)).toStrictEqual(['9999ff', 5]);
+        expect(s(3).read(b('aaaa9999ffbbbb'), 2)).toStrictEqual(['ff9999', 5]);
+        expect(s(4).decode(b('999999ff'))).toBe('ff999999');
+        expect(s(4).decode(b('ff999999'))).toBe('999999ff');
+        expect(s(4).read(b('aaaaff999999bbbb'), 2)).toStrictEqual(['999999ff', 6]);
+        expect(s(4).read(b('aaaa999999ffbbbb'), 2)).toStrictEqual(['ff999999', 6]);
 
         // Variable-size codec.
         // @ts-expect-error Reversed codec should be fixed-size.
@@ -50,6 +56,24 @@ describe('reverseEncoder', () => {
 
         // @ts-expect-error Reversed encoder should be fixed-size.
         expect(() => reverseEncoder(base16)).toThrow(new SolanaError(SOLANA_ERROR__CODECS__EXPECTED_FIXED_LENGTH));
+    });
+
+    it('gives the encoder access to the unboxed original byte array', () => {
+        const write = jest.fn();
+        const encoder = createEncoder({
+            fixedSize: 2,
+            write,
+        });
+
+        const reversedEncoder = reverseEncoder(encoder);
+        const inputBytes = new Uint8Array([1, 2, 3, 4]);
+        const offset = 1;
+        reversedEncoder.write(9, inputBytes, offset);
+        expect(write).toHaveBeenCalledWith(
+            expect.anything(), // We are not testing the value being written
+            inputBytes, // The original, unboxed, uncloned bytes.
+            expect.anything(), // We are not testing the offset
+        );
     });
 });
 
@@ -78,5 +102,27 @@ describe('reverseDecoder', () => {
         const inputBytes = new Uint8Array([42, 0]);
         reversedDecoder.read(inputBytes, 0);
         expect(inputBytes).toStrictEqual(new Uint8Array([42, 0]));
+    });
+
+    it('gives the decoder access to the unboxed original byte array', () => {
+        const read = jest.fn();
+        const decoder = createDecoder({
+            fixedSize: 2,
+            read,
+        });
+
+        const reversedDecoder = reverseDecoder(decoder);
+        const inputBytes = new Uint8Array([1, 2, 3, 4]);
+        const offset = 1;
+        reversedDecoder.read(inputBytes, offset);
+        expect(read).toHaveBeenCalledWith(
+            expect.objectContaining([
+                1,
+                expect.any(Number), // We are not testing the post-reversal bytes, only that the
+                expect.any(Number), // original bytes at the end were supplied to the decoder.
+                4,
+            ]),
+            expect.anything(), // We are not testing the offset
+        );
     });
 });
