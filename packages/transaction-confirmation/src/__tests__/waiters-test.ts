@@ -1,4 +1,5 @@
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING, SolanaError } from '@solana/errors';
 import { Signature, SignatureBytes } from '@solana/keys';
 import type { Blockhash } from '@solana/rpc-types';
@@ -9,7 +10,6 @@ import {
     TransactionWithDurableNonceLifetime,
 } from '@solana/transactions/dist/types/lifetime';
 
-import type { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
 import {
     waitForDurableNonceTransactionConfirmation,
     waitForRecentTransactionConfirmation,

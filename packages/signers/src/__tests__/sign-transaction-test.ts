@@ -1,6 +1,7 @@
 import '@solana/test-matchers/toBeFrozenObject';
 
 import { Address } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import {
     SOLANA_ERROR__SIGNER__TRANSACTION_SENDING_SIGNER_MISSING,
     SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING,
@@ -15,7 +16,6 @@ import {
     TransactionWithLifetime,
 } from '@solana/transactions';
 
-import type { ReadonlyUint8Array } from '../../../codecs-core/dist/types';
 import {
     partiallySignTransactionMessageWithSigners,
     signAndSendTransactionMessageWithSigners,

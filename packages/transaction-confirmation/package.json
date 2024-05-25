@@ -76,6 +76,7 @@
         "@solana/transactions": "workspace:*"
     },
     "devDependencies": {
+        "@solana/codecs-core": "workspace:*",
         "@solana/instructions": "workspace:*"
     },
     "peerDependencies": {
