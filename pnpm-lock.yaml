@@ -266,6 +266,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
@@ -958,6 +961,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
@@ -1079,6 +1085,9 @@ importers:
         specifier: '>=5'
         version: 5.4.5
     devDependencies:
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@solana/instructions':
         specifier: workspace:*
         version: link:../instructions

@@ -1,9 +1,9 @@
 import { Address, getAddressFromPublicKey } from '@solana/addresses';
+import { ReadonlyUint8Array } from '@solana/codecs-core';
 import { SOLANA_ERROR__SIGNER__EXPECTED_KEY_PAIR_SIGNER, SolanaError } from '@solana/errors';
 import { createKeyPairFromBytes, generateKeyPair, signBytes } from '@solana/keys';
 import { partiallySignTransaction } from '@solana/transactions';
 
-import type { ReadonlyUint8Array } from '../../codecs-core/dist/types';
 import { isMessagePartialSigner, MessagePartialSigner } from './message-partial-signer';
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 
