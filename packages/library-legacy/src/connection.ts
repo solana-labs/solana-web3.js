@@ -3724,16 +3724,17 @@ export class Connection {
     commitment?: Commitment,
   ): Promise<RpcResponseAndContext<SignatureResult>>;
 
-  /** @deprecated Instead, call `confirmTransaction` and pass in {@link TransactionConfirmationStrategy}
-   *  @example
-   * ``` ts
-   * const latestBlockHash = await connection.getLatestBlockhash()
-   * await connection.confirmTransaction({
-   *   blockhash: latestBlockHash.blockhash,
-   *    lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-   *    signature: airdropSignature,
-   *   })
-   *   ```
+  /** @deprecated This function signature was deprecated because:
+   *
+   * Confirming a transaction using a blockhash, other than the one that was actually used in the transaction
+   * will yield incorrect information, such as ‘your blockhash is now invalid’ when it's either not or it's
+   * been invalid for quite some time.
+   *
+   * Instead, call `confirmTransaction` and pass in {@link TransactionConfirmationStrategy} .
+   *
+   * If you used this to confirm an airdrop consider using `airdropIfRequired` provided by
+   * [@solana-developers/helpers](https://github.com/solana-developers/helpers) it takes
+   * care of confirming the airdrop transaction.
    */
   // eslint-disable-next-line no-dupe-class-members
   confirmTransaction(
