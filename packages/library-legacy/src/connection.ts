@@ -3718,7 +3718,23 @@ export class Connection {
     }
     return res.result;
   }
-
+  /**
+   *
+   * @param strategy - {@link TransactionConfirmationStrategy} possibly blockhash or durable nonce based
+   * @param commitment - 'processed' | 'confirmed' | 'finalized' default: connection.commitment
+   * @example
+   * ``` ts
+   * const { blockhash, lastValidBlockheight } = await connection.getLatestBlockhash();
+   * const tx = new Transaction({ blockhash, lastValidBlockheight });
+   * const signature = await connection.sendTransaction(tx);
+   * const confirmationStrategy: BlockheightBasedTransactionConfirmationStrategy = {
+   *   blockhash,
+   *   lastValidBlockheight,
+   *   signature,
+   * };
+   * await connection.confirmTransaction(confirmationStrategy);
+   * ```
+   */
   confirmTransaction(
     strategy: TransactionConfirmationStrategy,
     commitment?: Commitment,
