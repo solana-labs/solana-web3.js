@@ -8,6 +8,7 @@ import {
 } from '../connection';
 import type {TransactionSignature} from '../transaction';
 import type {ConfirmOptions} from '../connection';
+import {SendTransactionError} from '../errors';
 
 /**
  * Send and confirm a raw transaction
@@ -101,8 +102,9 @@ export async function sendAndConfirmRawTransaction(
         // If this does not work we'll just print the status
       }
       if (transaction?.meta?.err) {
-        throw new Error(
-          `Transaction ${signature} failed (${JSON.stringify(status)}): ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
+        throw new SendTransactionError(
+          `Transaction ${signature} failed. Status: (${JSON.stringify(status)}) Logs: ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
+          transaction?.meta?.logMessages as string[] | undefined,
         );
       }
     }

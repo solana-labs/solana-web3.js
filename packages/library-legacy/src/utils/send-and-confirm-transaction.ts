@@ -3,6 +3,7 @@ import {Transaction} from '../transaction';
 import type {ConfirmOptions} from '../connection';
 import type {Signer} from '../keypair';
 import type {TransactionSignature} from '../transaction';
+import {SendTransactionError} from '../errors';
 
 /**
  * Sign, send and confirm a transaction.
@@ -97,8 +98,9 @@ export async function sendAndConfirmTransaction(
         // If this does not work we'll just print the status
       }
       if (transaction?.meta?.err) {
-        throw new Error(
-          `Transaction ${signature} failed (${JSON.stringify(status)}): ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
+        throw new SendTransactionError(
+          `Transaction ${signature} failed. Status: (${JSON.stringify(status)}) Logs: ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
+          transaction?.meta?.logMessages as string[] | undefined,
         );
       }
     }

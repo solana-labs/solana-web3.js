@@ -5924,7 +5924,7 @@ export class Connection {
         'failed to send transaction: ' +
           res.error.message +
           ' Logs: ' +
-          JSON.stringify(logs, null, 2),
+          JSON.stringify(logs?.slice(-10), null, 2),
         logs,
       );
     }
