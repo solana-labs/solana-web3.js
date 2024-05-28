@@ -204,6 +204,10 @@ importers:
       typescript:
         specifier: '>=5'
         version: 5.4.5
+    devDependencies:
+      tinybench:
+        specifier: ^2.8.0
+        version: 2.8.0
 
   packages/codecs-data-structures:
     dependencies:

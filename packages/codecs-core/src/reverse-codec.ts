@@ -7,6 +7,25 @@ import {
     FixedSizeEncoder,
 } from './codec';
 import { combineCodec } from './combine-codec';
+import { ReadonlyUint8Array } from './readonly-uint8array';
+
+function copySourceToTargetInReverse(
+    source: ReadonlyUint8Array,
+    target_WILL_MUTATE: Uint8Array,
+    sourceOffset: number,
+    sourceLength: number,
+    targetOffset: number = 0,
+) {
+    while (sourceOffset < --sourceLength) {
+        const leftValue = source[sourceOffset];
+        target_WILL_MUTATE[sourceOffset + targetOffset] = source[sourceLength];
+        target_WILL_MUTATE[sourceLength + targetOffset] = leftValue;
+        sourceOffset++;
+    }
+    if (sourceOffset === sourceLength) {
+        target_WILL_MUTATE[sourceOffset + targetOffset] = source[sourceOffset];
+    }
+}
 
 /**
  * Reverses the bytes of a fixed-size encoder.
@@ -19,8 +38,12 @@ export function reverseEncoder<TFrom, TSize extends number>(
         ...encoder,
         write: (value: TFrom, bytes, offset) => {
             const newOffset = encoder.write(value, bytes, offset);
-            const slice = bytes.slice(offset, offset + encoder.fixedSize).reverse();
-            bytes.set(slice, offset);
+            copySourceToTargetInReverse(
+                bytes /* source */,
+                bytes /* target_WILL_MUTATE */,
+                offset /* sourceOffset */,
+                offset + encoder.fixedSize /* sourceLength */,
+            );
             return newOffset;
         },
     });
@@ -36,12 +59,13 @@ export function reverseDecoder<TTo, TSize extends number>(
     return createDecoder({
         ...decoder,
         read: (bytes, offset) => {
-            const reverseEnd = offset + decoder.fixedSize;
-            if (offset === 0 && bytes.length === reverseEnd) {
-                return decoder.read(new Uint8Array([...bytes]).reverse(), offset);
-            }
             const reversedBytes = bytes.slice();
-            reversedBytes.set(bytes.slice(offset, reverseEnd).reverse(), offset);
+            copySourceToTargetInReverse(
+                bytes /* source */,
+                reversedBytes /* target_WILL_MUTATE */,
+                offset /* sourceOffset */,
+                offset + decoder.fixedSize /* sourceLength */,
+            );
             return decoder.read(reversedBytes, offset);
         },
     });
