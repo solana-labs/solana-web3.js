@@ -114,7 +114,7 @@
     "prettier": "^3.2",
     "rimraf": "5.0.7",
     "rollup": "^4.17.2",
-    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^23.0.8",
     "sinon": "^18.0.0",
