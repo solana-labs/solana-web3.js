@@ -7,7 +7,7 @@ import {
   TransactionConfirmationStrategy,
 } from '../connection';
 import type {TransactionSignature} from '../transaction';
-import type {ConfirmOptions} from '../connection';
+import type {ConfirmOptions, TransactionError} from '../connection';
 import {SendTransactionError} from '../errors';
 
 /**
@@ -95,18 +95,14 @@ export async function sendAndConfirmRawTransaction(
 
   if (status.err) {
     if (signature != null) {
-      let transaction;
-      try {
-        transaction = await connection.getTransaction(signature);
-      } catch (_err) {
-        // If this does not work we'll just print the status
-      }
-      if (transaction?.meta?.err) {
-        throw new SendTransactionError(
-          `Transaction ${signature} failed. Status: (${JSON.stringify(status)}) Logs: ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
-          transaction?.meta?.logMessages as string[] | undefined,
-        );
-      }
+      const transactionError: TransactionError = {
+        message: `Status: (${JSON.stringify(status)})`,
+      };
+      throw new SendTransactionError({
+        action: sendOptions?.skipPreflight ? 'send' : 'simulate',
+        signature: signature,
+        transactionError: transactionError,
+      });
     }
     throw new Error(
       `Raw transaction ${signature} failed (${JSON.stringify(status)})`,

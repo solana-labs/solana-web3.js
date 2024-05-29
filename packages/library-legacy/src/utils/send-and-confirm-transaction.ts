@@ -1,6 +1,6 @@
 import {Connection, SignatureResult} from '../connection';
 import {Transaction} from '../transaction';
-import type {ConfirmOptions} from '../connection';
+import type {ConfirmOptions, TransactionError} from '../connection';
 import type {Signer} from '../keypair';
 import type {TransactionSignature} from '../transaction';
 import {SendTransactionError} from '../errors';
@@ -91,18 +91,14 @@ export async function sendAndConfirmTransaction(
 
   if (status.err) {
     if (signature != null) {
-      let transaction;
-      try {
-        transaction = await connection.getTransaction(signature);
-      } catch (_err) {
-        // If this does not work we'll just print the status
-      }
-      if (transaction?.meta?.err) {
-        throw new SendTransactionError(
-          `Transaction ${signature} failed. Status: (${JSON.stringify(status)}) Logs: ${JSON.stringify(transaction.meta.logMessages?.slice(-10), null, 2)}`,
-          transaction?.meta?.logMessages as string[] | undefined,
-        );
-      }
+      const transactionError: TransactionError = {
+        message: `Status: (${JSON.stringify(status)})`,
+      };
+      throw new SendTransactionError({
+        action: 'send',
+        signature: signature,
+        transactionError: transactionError,
+      });
     }
     throw new Error(
       `Transaction ${signature} failed (${JSON.stringify(status)})`,

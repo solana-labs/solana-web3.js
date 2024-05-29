@@ -27,6 +27,7 @@ import {
   NONCE_ACCOUNT_LENGTH,
   MessageAddressTableLookup,
   sendAndConfirmRawTransaction,
+  SendTransactionError,
 } from '../src';
 import invariant from '../src/utils/assert';
 import {toBuffer} from '../src/utils/to-buffer';
@@ -1068,7 +1069,7 @@ describe('Connection', function () {
 
   if (process.env.TEST_LIVE) {
     describe('transaction sending error logs', () => {
-      it('sendAndConfirmTransaction without preflight checks logs error logs', async () => {
+      it('sendAndConfirmTransaction skipPreflight: false', async () => {
         const keypair = Keypair.generate();
         const destinationKeypair = Keypair.generate();
 
@@ -1111,7 +1112,7 @@ describe('Connection', function () {
         }
       });
 
-      it('sendAndConfirmTransaction with preflight checks logs error logs', async () => {
+      it('sendAndConfirmTransaction skipPreflight: true', async () => {
         const keypair = Keypair.generate();
         const destinationKeypair = Keypair.generate();
 
@@ -1145,17 +1146,17 @@ describe('Connection', function () {
           );
           throw new Error('Expected an error but did not get one');
         } catch (error) {
-          expect((error as Error).message).to.include(
-            'Transfer: insufficient lamports',
-          );
-          expect((error as Error).message).to.include(
-            'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
-          );
-          expect((error as Error).message).to.include('insufficient lamports');
+          if (error instanceof SendTransactionError) {
+            const logs = JSON.stringify(await error.getLogs(connection));
+            expect(logs).to.include('Transfer: insufficient lamports');
+            expect(logs).to.include(
+              'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+            );
+          }
         }
       });
 
-      it('sendAndConfirmRawTransaction logs error logs', async () => {
+      it('sendAndConfirmRawTransaction skipPreflight: true', async () => {
         const keypair = Keypair.generate();
         const destinationKeypair = Keypair.generate();
 
@@ -1191,18 +1192,22 @@ describe('Connection', function () {
             transferSolTransaction.serialize(),
             confirmOptions,
           );
-          throw new Error('Expected an error but did not get one');
         } catch (error) {
-          expect((error as Error).message).to.include(
-            'Transfer: insufficient lamports',
-          );
-          expect((error as Error).message).to.include(
-            'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
-          );
+          if (error instanceof SendTransactionError) {
+            const logs = JSON.stringify(
+              await error.getLogs(connection),
+              null,
+              2,
+            );
+            expect(logs).to.include('Transfer: insufficient lamports');
+            expect(logs).to.include(
+              'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+            );
+          }
         }
       });
 
-      it('sendAndConfirmRawTransaction with preflight checks logs error logs', async () => {
+      it('sendAndConfirmRawTransaction skipPreflight: false', async () => {
         const keypair = Keypair.generate();
         const destinationKeypair = Keypair.generate();
 
@@ -1240,13 +1245,49 @@ describe('Connection', function () {
           );
           throw new Error('Expected an error but did not get one');
         } catch (error) {
-          expect((error as Error).message).to.include(
+          expect((error as SendTransactionError).message).to.include(
             'Transfer: insufficient lamports',
           );
           expect((error as Error).message).to.include(
             'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
           );
         }
+      });
+
+      it('Simulate transaction contains logs', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        let simulationResult = await connection.simulateTransaction(
+          transferSolTransaction,
+          [keypair],
+        );
+        // Different to sendTransaction simulateTransaction does not throw an error
+        // if the transaction simulation fails. Instead, it returns the logs in the response.
+        const logs = JSON.stringify(simulationResult.value.logs);
+        expect(logs).to.include('Transfer: insufficient lamports');
+        expect(logs).to.include(
+          'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+        );
       });
     });
   }
