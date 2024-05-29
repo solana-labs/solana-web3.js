@@ -94,6 +94,20 @@ describe('getErrorMessage', () => {
             );
             expect(message).toBe("Something awful happened: 'bar'. How awful!");
         });
+        it('does not interpolate escaped variables', () => {
+            const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
+            messagesSpy.mockReturnValue({
+                // @ts-expect-error Mock error config doesn't conform to exported config.
+                123: 'Here is a $variable and here is a \\$escapedVariable.',
+            });
+            const message = getErrorMessage(
+                // @ts-expect-error Mock error config doesn't conform to exported config.
+                123,
+                { escapedVariable: 'bar', variable: 'foo' },
+            );
+            // prettier-ignore
+            expect(message).toBe('Here is a foo and here is a \\$escapedVariable.');
+        });
         it('interpolates a Uint8Array variable into a error message format string', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
             messagesSpy.mockReturnValue({
