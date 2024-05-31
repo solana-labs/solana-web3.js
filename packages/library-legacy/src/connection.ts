@@ -952,6 +952,8 @@ export type SimulateTransactionConfig = {
   };
   /** Optional parameter used to specify the minimum block slot that can be used for simulation */
   minContextSlot?: number;
+  /** Optional parameter used to include inner instructions in the response */
+  innerInstructions?: boolean;
 };
 
 export type SimulatedTransactionResponse = {
@@ -960,7 +962,27 @@ export type SimulatedTransactionResponse = {
   accounts?: (SimulatedTransactionAccountInfo | null)[] | null;
   unitsConsumed?: number;
   returnData?: TransactionReturnData | null;
+  innerInstructions?: ParsedInnerInstruction[] | null;
 };
+const ParsedInstructionStruct = pick({
+  program: string(),
+  programId: PublicKeyFromString,
+  parsed: optional(any()),
+});
+
+const PartiallyDecodedInstructionStruct = pick({
+  programId: PublicKeyFromString,
+  accounts: array(PublicKeyFromString),
+  data: string(),
+});
+
+const ParsedInnerInstructionStruct = pick({
+  index: number(),
+  instructions: array(
+    union([ParsedInstructionStruct, PartiallyDecodedInstructionStruct])
+  ),
+});
+
 const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
   pick({
     err: nullable(union([pick({}), string()])),
@@ -975,10 +997,10 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
               lamports: number(),
               data: array(string()),
               rentEpoch: optional(number()),
-            }),
-          ),
-        ),
-      ),
+            })
+          )
+        )
+      )
     ),
     unitsConsumed: optional(number()),
     returnData: optional(
@@ -986,10 +1008,11 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
         pick({
           programId: string(),
           data: tuple([string(), literal('base64')]),
-        }),
-      ),
+        })
+      )
     ),
-  }),
+    innerInstructions: optional(nullable(array(ParsedInnerInstructionStruct))),
+  })
 );
 
 export type ParsedInnerInstruction = {
@@ -1178,7 +1201,7 @@ export type ParsedInstruction = {
   /** ID of the program for this instruction */
   programId: PublicKey;
   /** Parsed instruction info */
-  parsed: any;
+  parsed?: any;
 };
 
 /**
@@ -5700,8 +5723,7 @@ export class Connection {
     if ('message' in transactionOrMessage) {
       const versionedTx = transactionOrMessage;
       const wireTransaction = versionedTx.serialize();
-      const encodedTransaction =
-        Buffer.from(wireTransaction).toString('base64');
+      const encodedTransaction = Buffer.from(wireTransaction).toString('base64');
       if (Array.isArray(configOrSigners) || includeAccounts !== undefined) {
         throw new Error('Invalid arguments');
       }
