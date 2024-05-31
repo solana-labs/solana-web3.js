@@ -979,7 +979,7 @@ const PartiallyDecodedInstructionStruct = pick({
 const ParsedInnerInstructionStruct = pick({
   index: number(),
   instructions: array(
-    union([ParsedInstructionStruct, PartiallyDecodedInstructionStruct])
+    union([ParsedInstructionStruct, PartiallyDecodedInstructionStruct]),
   ),
 });
 
@@ -997,10 +997,10 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
               lamports: number(),
               data: array(string()),
               rentEpoch: optional(number()),
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     unitsConsumed: optional(number()),
     returnData: optional(
@@ -1008,11 +1008,11 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
         pick({
           programId: string(),
           data: tuple([string(), literal('base64')]),
-        })
-      )
+        }),
+      ),
     ),
     innerInstructions: optional(nullable(array(ParsedInnerInstructionStruct))),
-  })
+  }),
 );
 
 export type ParsedInnerInstruction = {
@@ -5723,7 +5723,8 @@ export class Connection {
     if ('message' in transactionOrMessage) {
       const versionedTx = transactionOrMessage;
       const wireTransaction = versionedTx.serialize();
-      const encodedTransaction = Buffer.from(wireTransaction).toString('base64');
+      const encodedTransaction =
+        Buffer.from(wireTransaction).toString('base64');
       if (Array.isArray(configOrSigners) || includeAccounts !== undefined) {
         throw new Error('Invalid arguments');
       }
