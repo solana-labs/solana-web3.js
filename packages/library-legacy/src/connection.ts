@@ -952,7 +952,7 @@ export type SimulateTransactionConfig = {
   };
   /** Optional parameter used to specify the minimum block slot that can be used for simulation */
   minContextSlot?: number;
-  /** Optional parameter used to include inner instructions in the response */
+  /** Optional parameter used to include inner instructions in the simulation */
   innerInstructions?: boolean;
 };
 
