@@ -467,8 +467,8 @@ importers:
         specifier: ^7.24.6
         version: 7.24.6
       '@babel/plugin-transform-class-properties':
-        specifier: ^7.24.1
-        version: 7.24.1(@babel/core@7.24.6)
+        specifier: ^7.24.6
+        version: 7.24.6(@babel/core@7.24.6)
       '@babel/plugin-transform-private-methods':
         specifier: ^7.24.6
         version: 7.24.6(@babel/core@7.24.6)
@@ -1244,12 +1244,6 @@ packages:
     resolution: {integrity: sha512-VZQ57UsDGlX/5fFA7GkVPplZhHsVc+vuErWgdOiysI9Ksnw0Pbbd6pnPiR/mmJyKHgyIW0c7KT32gmhiF+cirg==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/helper-create-class-features-plugin@7.24.4':
-    resolution: {integrity: sha512-lG75yeuUSVu0pIcbhiYMXBXANHrpUPaOfu7ryAzskCgKUHuAxRQI5ssrtmF0X9UXldPlvT0XM/A4F44OXRt6iQ==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-
   '@babel/helper-create-class-features-plugin@7.24.5':
     resolution: {integrity: sha512-uRc4Cv8UQWnE4NXlYTIIdM7wfFkOqlFztcC/gVXDKohKoVB3OyonfelUBaJzSwpBntZ2KYGF/9S7asCHsXwW6g==}
     engines: {node: '>=6.9.0'}
@@ -1325,10 +1319,6 @@ packages:
 
   '@babel/helper-optimise-call-expression@7.24.6':
     resolution: {integrity: sha512-3SFDJRbx7KuPRl8XDUr8O7GAEB8iGyWPjLKJh/ywP/Iy9WOmEfMrsWbaZpvBu2HSYn4KQygIsz0O7m8y10ncMA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-plugin-utils@7.24.0':
-    resolution: {integrity: sha512-9cUznXMG0+FxRuJfvL82QlTqIzhVW9sL0KjMPHhAOOvpQGL8QtdxnBKILjBqxlHyliz0yCa1G903ZXI/FuHy2w==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-plugin-utils@7.24.5':
@@ -1591,8 +1581,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/plugin-transform-class-properties@7.24.1':
-    resolution: {integrity: sha512-OMLCXi0NqvJfORTaPQBwqLXHhb93wkBKZ4aNwMl6WtehO7ar+cmp+89iPEQPqxAnxsOKTaMcs3POz3rKayJ72g==}
+  '@babel/plugin-transform-class-properties@7.24.6':
+    resolution: {integrity: sha512-j6dZ0Z2Z2slWLR3kt9aOmSIrBvnntWjMDN/TVcMPxhXMLmJVqX605CBRlcGI4b32GMbfifTEsdEjGjiE+j/c3A==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -7805,19 +7795,6 @@ snapshots:
       lru-cache: 5.1.1
       semver: 6.3.1
 
-  '@babel/helper-create-class-features-plugin@7.24.4(@babel/core@7.24.6)':
-    dependencies:
-      '@babel/core': 7.24.6
-      '@babel/helper-annotate-as-pure': 7.22.5
-      '@babel/helper-environment-visitor': 7.22.20
-      '@babel/helper-function-name': 7.23.0
-      '@babel/helper-member-expression-to-functions': 7.24.5
-      '@babel/helper-optimise-call-expression': 7.22.5
-      '@babel/helper-replace-supers': 7.24.1(@babel/core@7.24.6)
-      '@babel/helper-skip-transparent-expression-wrappers': 7.22.5
-      '@babel/helper-split-export-declaration': 7.24.5
-      semver: 6.3.1
-
   '@babel/helper-create-class-features-plugin@7.24.5(@babel/core@7.24.6)':
     dependencies:
       '@babel/core': 7.24.6
@@ -7917,8 +7894,6 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.6
 
-  '@babel/helper-plugin-utils@7.24.0': {}
-
   '@babel/helper-plugin-utils@7.24.5': {}
 
   '@babel/helper-plugin-utils@7.24.6': {}
@@ -7934,8 +7909,8 @@ snapshots:
     dependencies:
       '@babel/core': 7.24.6
       '@babel/helper-environment-visitor': 7.24.6
-      '@babel/helper-member-expression-to-functions': 7.24.5
-      '@babel/helper-optimise-call-expression': 7.22.5
+      '@babel/helper-member-expression-to-functions': 7.24.6
+      '@babel/helper-optimise-call-expression': 7.24.6
 
   '@babel/helper-replace-supers@7.24.6(@babel/core@7.24.6)':
     dependencies:
@@ -8164,11 +8139,11 @@ snapshots:
       '@babel/core': 7.24.6
       '@babel/helper-plugin-utils': 7.24.6
 
-  '@babel/plugin-transform-class-properties@7.24.1(@babel/core@7.24.6)':
+  '@babel/plugin-transform-class-properties@7.24.6(@babel/core@7.24.6)':
     dependencies:
       '@babel/core': 7.24.6
-      '@babel/helper-create-class-features-plugin': 7.24.4(@babel/core@7.24.6)
-      '@babel/helper-plugin-utils': 7.24.0
+      '@babel/helper-create-class-features-plugin': 7.24.6(@babel/core@7.24.6)
+      '@babel/helper-plugin-utils': 7.24.6
 
   '@babel/plugin-transform-class-static-block@7.24.4(@babel/core@7.24.6)':
     dependencies:
@@ -8487,7 +8462,7 @@ snapshots:
       '@babel/plugin-transform-async-to-generator': 7.24.1(@babel/core@7.24.6)
       '@babel/plugin-transform-block-scoped-functions': 7.24.1(@babel/core@7.24.6)
       '@babel/plugin-transform-block-scoping': 7.24.5(@babel/core@7.24.6)
-      '@babel/plugin-transform-class-properties': 7.24.1(@babel/core@7.24.6)
+      '@babel/plugin-transform-class-properties': 7.24.6(@babel/core@7.24.6)
       '@babel/plugin-transform-class-static-block': 7.24.4(@babel/core@7.24.6)
       '@babel/plugin-transform-classes': 7.24.5(@babel/core@7.24.6)
       '@babel/plugin-transform-computed-properties': 7.24.1(@babel/core@7.24.6)
