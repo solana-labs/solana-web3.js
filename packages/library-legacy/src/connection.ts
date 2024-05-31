@@ -956,31 +956,81 @@ export type SimulateTransactionConfig = {
   innerInstructions?: boolean;
 };
 
+export type UiCompiledInstruction = {
+  programIdIndex: number;
+  accounts: number[];
+  data: string;
+  stackHeight?: number;
+};
+
+export type UiParsedInstruction = {
+  program: string;
+  programId: PublicKey;
+  parsed?: any;
+};
+
+export type UiPartiallyDecodedInstruction = {
+  programId: string;
+  accounts: string[];
+  data: string;
+  stackHeight?: number;
+};
+
+export type UiInstruction =
+  | {type: 'Compiled'; value: UiCompiledInstruction}
+  | {
+      type: 'Parsed';
+      value: UiParsedInstruction | UiPartiallyDecodedInstruction;
+    };
+
+export type UiInnerInstructions = {
+  index: number;
+  instructions: UiInstruction[];
+};
+
+export type ParsedNewInnerInstruction = {
+  index: number;
+  instructions: UiInstruction[];
+};
+
 export type SimulatedTransactionResponse = {
   err: TransactionError | string | null;
   logs: Array<string> | null;
   accounts?: (SimulatedTransactionAccountInfo | null)[] | null;
   unitsConsumed?: number;
   returnData?: TransactionReturnData | null;
-  innerInstructions?: ParsedInnerInstruction[] | null;
+  innerInstructions?: ParsedNewInnerInstruction[] | null;
 };
-const ParsedInstructionStruct = pick({
+const UiCompiledInstructionStruct = pick({
+  programIdIndex: number(),
+  accounts: array(number()),
+  data: string(),
+  stackHeight: optional(number()),
+});
+const UiParsedInstructionStruct = pick({
   program: string(),
   programId: PublicKeyFromString,
   parsed: optional(any()),
 });
-
-const PartiallyDecodedInstructionStruct = pick({
-  programId: PublicKeyFromString,
-  accounts: array(PublicKeyFromString),
+const UiPartiallyDecodedInstructionStruct = pick({
+  programId: string(),
+  accounts: array(string()),
   data: string(),
+  stackHeight: optional(number()),
 });
-
-const ParsedInnerInstructionStruct = pick({
+const UiInstructionStruct = union([
+  pick({type: literal('Compiled'), value: UiCompiledInstructionStruct}),
+  pick({
+    type: literal('Parsed'),
+    value: union([
+      UiParsedInstructionStruct,
+      UiPartiallyDecodedInstructionStruct,
+    ]),
+  }),
+]);
+const UiInnerInstructionsStruct = pick({
   index: number(),
-  instructions: array(
-    union([ParsedInstructionStruct, PartiallyDecodedInstructionStruct]),
-  ),
+  instructions: array(UiInstructionStruct),
 });
 
 const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
@@ -1011,7 +1061,7 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
         }),
       ),
     ),
-    innerInstructions: optional(nullable(array(ParsedInnerInstructionStruct))),
+    innerInstructions: optional(array(UiInnerInstructionsStruct)),
   }),
 );
 
