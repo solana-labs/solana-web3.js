@@ -17,23 +17,26 @@ export class SendTransactionError extends Error {
   }) {
     let message: string;
 
-    if (action === 'send') {
-      message =
-        `Transaction ${signature} resulted in an error. \n` +
-        `${transactionError.message}. ` +
-        (transactionError.data?.logs
-          ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
-          : '') +
-        '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
-    } else if (action === 'simulate') {
-      message =
-        `Simulation failed. \nMessage: ${transactionError.message}. \n` +
-        (transactionError.data?.logs
-          ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
-          : '') +
-        '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
-    } else {
-      message = 'Unknown action';
+    switch (action) {
+      case 'send':
+        message =
+          `Transaction ${signature} resulted in an error. \n` +
+          `${transactionError.message}. ` +
+          (transactionError.data?.logs
+            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+            : '') +
+          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+        break;
+      case 'simulate':
+        message =
+          `Simulation failed. \nMessage: ${transactionError.message}. \n` +
+          (transactionError.data?.logs
+            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+            : '') +
+          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+        break;
+      default:
+        message = 'Unknown action';
     }
     super(message);
 
