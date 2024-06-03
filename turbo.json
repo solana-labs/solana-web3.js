@@ -134,15 +134,15 @@
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         },
         "@solana/web3.js#test:live-with-test-validator": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         },
         "@solana/web3.js#test:typecheck": {
-            "dependsOn": ["^compile:typedefs"],
+            "dependsOn": ["compile:typedefs"],
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**", "tsconfig.*"]
         },
         "@solana/web3.js#test:unit:node": {
-            "dependsOn": ["^compile:js"],
+            "dependsOn": ["compile:js"],
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         }
     },
