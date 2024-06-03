@@ -26,6 +26,8 @@ import {
   SYSTEM_INSTRUCTION_LAYOUTS,
   NONCE_ACCOUNT_LENGTH,
   MessageAddressTableLookup,
+  sendAndConfirmRawTransaction,
+  SendTransactionError,
 } from '../src';
 import invariant from '../src/utils/assert';
 import {toBuffer} from '../src/utils/to-buffer';
@@ -1062,6 +1064,261 @@ describe('Connection', function () {
       expect(
         voteAccounts.current.concat(voteAccounts.delinquent).length,
       ).to.be.greaterThan(0);
+    });
+  }
+
+  if (process.env.TEST_LIVE) {
+    describe('transaction sending error logs', () => {
+      it('sendAndConfirmTransaction skipPreflight: false', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: false,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        const sendPromise = sendAndConfirmTransaction(
+          connection,
+          transferSolTransaction,
+          [keypair],
+          confirmOptions,
+        );
+
+        await Promise.all([
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Transfer: insufficient lamports/,
+          ),
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Program 11111111111111111111111111111111 failed: custom program error: 0x1/,
+          ),
+        ]);
+      });
+
+      it('sendAndConfirmTransaction skipPreflight: true', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: true,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        try {
+          await sendAndConfirmTransaction(
+            connection,
+            transferSolTransaction,
+            [keypair],
+            confirmOptions,
+          );
+          throw new Error('Expected an error but did not get one');
+        } catch (error) {
+          if (error instanceof SendTransactionError) {
+            const logsPromise: Promise<string[]> = error.getLogs(connection);
+
+            await Promise.all([
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes('Transfer: insufficient lamports'),
+                ),
+              ),
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes(
+                    'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                  ),
+                ),
+              ),
+            ]);
+          }
+        }
+      });
+
+      it('sendAndConfirmRawTransaction skipPreflight: true', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: true,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        try {
+          await sendAndConfirmRawTransaction(
+            connection,
+            transferSolTransaction.serialize(),
+            confirmOptions,
+          );
+        } catch (error) {
+          if (error instanceof SendTransactionError) {
+            const logsPromise: Promise<string[]> = error.getLogs(connection);
+
+            await Promise.all([
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes('Transfer: insufficient lamports'),
+                ),
+              ),
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes(
+                    'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                  ),
+                ),
+              ),
+            ]);
+          }
+        }
+      });
+
+      it('sendAndConfirmRawTransaction skipPreflight: false', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: false,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        const sendPromise = sendAndConfirmRawTransaction(
+          connection,
+          transferSolTransaction.serialize(),
+          confirmOptions,
+        );
+
+        await Promise.all([
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Transfer: insufficient lamports/,
+          ),
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Program 11111111111111111111111111111111 failed: custom program error: 0x1/,
+          ),
+        ]);
+      });
+
+      it('Simulate transaction contains logs', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        const simulationResultPromise = connection.simulateTransaction(
+          transferSolTransaction,
+          [keypair],
+        );
+
+        await Promise.all([
+          expect(simulationResultPromise)
+            .to.eventually.have.nested.property('value.logs')
+            .that.satisfies((logs: string[]) =>
+              logs.some(log => log.includes('Transfer: insufficient lamports')),
+            ),
+          expect(simulationResultPromise)
+            .to.eventually.have.nested.property('value.logs')
+            .that.satisfies((logs: string[]) =>
+              logs.some(log =>
+                log.includes(
+                  'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                ),
+              ),
+            ),
+        ]);
+      });
     });
   }
 

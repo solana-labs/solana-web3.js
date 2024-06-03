@@ -2927,7 +2927,12 @@ export type SignatureResult = {
 /**
  * Transaction error
  */
-export type TransactionError = {} | string;
+export type TransactionError = {
+  message: string;
+  data?: {
+    logs?: string[];
+  };
+};
 
 /**
  * Transaction confirmation status
@@ -5782,10 +5787,18 @@ export class Connection {
           console.error(res.error.message, logTrace);
         }
       }
-      throw new SendTransactionError(
-        'failed to simulate transaction: ' + res.error.message,
-        logs,
-      );
+      const transactionError: TransactionError = {
+        message: res.error.message,
+        data: {
+          logs: logs,
+        },
+      };
+
+      throw new SendTransactionError({
+        action: 'simulate',
+        signature: '',
+        transactionError: transactionError,
+      });
     }
     return res.result;
   }
@@ -5916,14 +5929,22 @@ export class Connection {
     const unsafeRes = await this._rpcRequest('sendTransaction', args);
     const res = create(unsafeRes, SendTransactionRpcResult);
     if ('error' in res) {
-      let logs;
+      let logs = undefined;
       if ('data' in res.error) {
         logs = res.error.data.logs;
       }
-      throw new SendTransactionError(
-        'failed to send transaction: ' + res.error.message,
-        logs,
-      );
+      const transactionError: TransactionError = {
+        message: res.error.message,
+        data: {
+          logs: logs,
+        },
+      };
+
+      throw new SendTransactionError({
+        action: skipPreflight ? 'send' : 'simulate',
+        signature: '',
+        transactionError: transactionError,
+      });
     }
     return res.result;
   }

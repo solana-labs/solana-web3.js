@@ -1,10 +1,74 @@
-export class SendTransactionError extends Error {
-  logs: string[] | undefined;
+import {Connection, TransactionError} from './connection';
+import {TransactionSignature} from './transaction';
 
-  constructor(message: string, logs?: string[]) {
+export class SendTransactionError extends Error {
+  #signature: TransactionSignature;
+  #transactionError: TransactionError;
+  #resolvedLogs: string[] | Promise<string[]> | undefined;
+
+  constructor({
+    action,
+    signature,
+    transactionError,
+  }: {
+    action: 'send' | 'simulate';
+    signature: TransactionSignature;
+    transactionError: TransactionError;
+  }) {
+    let message: string;
+
+    switch (action) {
+      case 'send':
+        message =
+          `Transaction ${signature} resulted in an error. \n` +
+          `${transactionError.message}. ` +
+          (transactionError.data?.logs
+            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+            : '') +
+          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+        break;
+      case 'simulate':
+        message =
+          `Simulation failed. \nMessage: ${transactionError.message}. \n` +
+          (transactionError.data?.logs
+            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+            : '') +
+          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+        break;
+      default:
+        message = 'Unknown action';
+    }
     super(message);
 
-    this.logs = logs;
+    this.#signature = signature;
+    this.#transactionError = transactionError;
+    this.#resolvedLogs = transactionError.data?.logs
+      ? transactionError.data.logs
+      : undefined;
+  }
+
+  get transactionError(): TransactionError {
+    return this.#transactionError;
+  }
+
+  async getLogs(connection: Connection): Promise<string[]> {
+    if (this.#resolvedLogs === undefined) {
+      this.#resolvedLogs = new Promise((resolve, reject) => {
+        connection
+          .getTransaction(this.#signature)
+          .then(tx => {
+            if (tx && tx.meta && tx.meta.logMessages) {
+              const logs = tx.meta.logMessages;
+              this.#resolvedLogs = logs;
+              resolve(logs);
+            } else {
+              reject(new Error('Log messages not found'));
+            }
+          })
+          .catch(reject);
+      });
+    }
+    return await this.#resolvedLogs;
   }
 }
 
