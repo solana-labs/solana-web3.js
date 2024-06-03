@@ -57,6 +57,7 @@
     "packageManager": "pnpm@9.1.0",
     "pnpm": {
         "overrides": {
+            "@solana/web3.js": "workspace:*",
             "jsdom": "^22",
             "mock-socket": "^9.3.1",
             "shelljs": ">=0.8.5"
