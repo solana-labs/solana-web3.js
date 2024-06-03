@@ -32,7 +32,9 @@ export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
         ...options,
       });
       if ('socket' in rpc) {
-        this.underlyingSocket = rpc.socket as ReturnType<typeof WebSocketBrowserImpl>;
+        this.underlyingSocket = rpc.socket as ReturnType<
+          typeof WebSocketBrowserImpl
+        >;
       } else {
         this.underlyingSocket = rpc as NodeWebSocketType;
       }
