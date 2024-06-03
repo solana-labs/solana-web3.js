@@ -1,19 +1,22 @@
-import {Connection, TransactionError} from './connection';
+import {Connection} from './connection';
 import {TransactionSignature} from './transaction';
 
 export class SendTransactionError extends Error {
   #signature: TransactionSignature;
-  #transactionError: TransactionError;
+  #transactionMessage: string;
+  #transactionLogs?: string[];
   #resolvedLogs: string[] | Promise<string[]> | undefined;
 
   constructor({
     action,
     signature,
-    transactionError,
+    transactionMessage,
+    transactionLogs,
   }: {
     action: 'send' | 'simulate';
     signature: TransactionSignature;
-    transactionError: TransactionError;
+    transactionMessage: string;
+    transactionLogs?: string[];
   }) {
     let message: string;
 
@@ -21,17 +24,17 @@ export class SendTransactionError extends Error {
       case 'send':
         message =
           `Transaction ${signature} resulted in an error. \n` +
-          `${transactionError.message}. ` +
-          (transactionError.data?.logs
-            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+          `${transactionMessage}. ` +
+          (transactionLogs
+            ? `Logs: \n${JSON.stringify(transactionLogs.slice(-10), null, 2)}. `
             : '') +
           '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
         break;
       case 'simulate':
         message =
-          `Simulation failed. \nMessage: ${transactionError.message}. \n` +
-          (transactionError.data?.logs
-            ? `Logs: \n${JSON.stringify(transactionError.data.logs.slice(-10), null, 2)}. `
+          `Simulation failed. \nMessage: ${transactionMessage}. \n` +
+          (transactionLogs
+            ? `Logs: \n${JSON.stringify(transactionLogs.slice(-10), null, 2)}. `
             : '') +
           '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
         break;
@@ -41,14 +44,9 @@ export class SendTransactionError extends Error {
     super(message);
 
     this.#signature = signature;
-    this.#transactionError = transactionError;
-    this.#resolvedLogs = transactionError.data?.logs
-      ? transactionError.data.logs
-      : undefined;
-  }
-
-  get transactionError(): TransactionError {
-    return this.#transactionError;
+    this.#transactionMessage = transactionMessage;
+    this.#transactionLogs = transactionLogs;
+    this.#resolvedLogs = transactionLogs ? transactionLogs : undefined;
   }
 
   async getLogs(connection: Connection): Promise<string[]> {
