@@ -95,13 +95,10 @@ export async function sendAndConfirmRawTransaction(
 
   if (status.err) {
     if (signature != null) {
-      const transactionError: TransactionError = {
-        message: `Status: (${JSON.stringify(status)})`,
-      };
       throw new SendTransactionError({
         action: sendOptions?.skipPreflight ? 'send' : 'simulate',
         signature: signature,
-        transactionError: transactionError,
+        transactionMessage: `Status: (${JSON.stringify(status)})`,
       });
     }
     throw new Error(

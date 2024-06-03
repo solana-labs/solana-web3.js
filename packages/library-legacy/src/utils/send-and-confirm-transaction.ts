@@ -1,6 +1,6 @@
 import {Connection, SignatureResult} from '../connection';
 import {Transaction} from '../transaction';
-import type {ConfirmOptions, TransactionError} from '../connection';
+import type {ConfirmOptions} from '../connection';
 import type {Signer} from '../keypair';
 import type {TransactionSignature} from '../transaction';
 import {SendTransactionError} from '../errors';
@@ -91,13 +91,10 @@ export async function sendAndConfirmTransaction(
 
   if (status.err) {
     if (signature != null) {
-      const transactionError: TransactionError = {
-        message: `Status: (${JSON.stringify(status)})`,
-      };
       throw new SendTransactionError({
         action: 'send',
         signature: signature,
-        transactionError: transactionError,
+        transactionMessage: `Status: (${JSON.stringify(status)})`,
       });
     }
     throw new Error(

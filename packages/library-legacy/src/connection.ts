@@ -2927,12 +2927,7 @@ export type SignatureResult = {
 /**
  * Transaction error
  */
-export type TransactionError = {
-  message: string;
-  data?: {
-    logs?: string[];
-  };
-};
+export type TransactionError = {} | string;
 
 /**
  * Transaction confirmation status
@@ -5787,17 +5782,12 @@ export class Connection {
           console.error(res.error.message, logTrace);
         }
       }
-      const transactionError: TransactionError = {
-        message: res.error.message,
-        data: {
-          logs: logs,
-        },
-      };
 
       throw new SendTransactionError({
         action: 'simulate',
         signature: '',
-        transactionError: transactionError,
+        transactionMessage: res.error.message,
+        transactionLogs: logs,
       });
     }
     return res.result;
@@ -5933,17 +5923,12 @@ export class Connection {
       if ('data' in res.error) {
         logs = res.error.data.logs;
       }
-      const transactionError: TransactionError = {
-        message: res.error.message,
-        data: {
-          logs: logs,
-        },
-      };
 
       throw new SendTransactionError({
         action: skipPreflight ? 'send' : 'simulate',
         signature: '',
-        transactionError: transactionError,
+        transactionMessage: res.error.message,
+        transactionLogs: logs,
       });
     }
     return res.result;
