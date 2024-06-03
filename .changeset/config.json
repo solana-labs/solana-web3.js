@@ -11,6 +11,7 @@
   ],
   "commit": false,
   "fixed": [["@solana/!({*-impl,build-scripts,test-*,tsconfig})"]],
+  "ignore": ["@solana/web3.js"],
   "linked": [],
   "snapshot": {
     "prereleaseTemplate": "{tag}.3.{datetime}.{commit}",
