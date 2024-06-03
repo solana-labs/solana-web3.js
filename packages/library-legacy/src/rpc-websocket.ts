@@ -1,11 +1,11 @@
-import RpcWebSocketCommonClient from 'rpc-websockets/dist/lib/client';
-import RpcWebSocketBrowserFactory from 'rpc-websockets/dist/lib/client/websocket.browser';
+import RpcWebSocketCommonClient from 'rpc-websockets/dist/lib/client.cjs';
+import WebSocketBrowserImpl from 'rpc-websockets/dist/lib/client/websocket.cjs';
 import {
   ICommonWebSocket,
   IWSClientAdditionalOptions,
   NodeWebSocketType,
   NodeWebSocketTypeOptions,
-} from 'rpc-websockets/dist/lib/client/client.types';
+} from 'rpc-websockets/dist/lib/client/client.types.cjs';
 
 import createRpc from './rpc-websocket-factory';
 
@@ -32,9 +32,9 @@ export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
         ...options,
       });
       if ('socket' in rpc) {
-        this.underlyingSocket = (
-          rpc as ReturnType<typeof RpcWebSocketBrowserFactory>
-        ).socket;
+        this.underlyingSocket = rpc.socket as ReturnType<
+          typeof WebSocketBrowserImpl
+        >;
       } else {
         this.underlyingSocket = rpc as NodeWebSocketType;
       }
