@@ -49,6 +49,10 @@ export class SendTransactionError extends Error {
     this.#resolvedLogs = transactionLogs ? transactionLogs : undefined;
   }
 
+  get transactionError(): {message: string; logs?: string[]} {
+    return {message: this.#transactionMessage, logs: this.#transactionLogs};
+  }
+
   async getLogs(connection: Connection): Promise<string[]> {
     if (this.#resolvedLogs === undefined) {
       this.#resolvedLogs = new Promise((resolve, reject) => {
@@ -58,6 +62,7 @@ export class SendTransactionError extends Error {
             if (tx && tx.meta && tx.meta.logMessages) {
               const logs = tx.meta.logMessages;
               this.#resolvedLogs = logs;
+              this.#transactionLogs = logs;
               resolve(logs);
             } else {
               reject(new Error('Log messages not found'));
