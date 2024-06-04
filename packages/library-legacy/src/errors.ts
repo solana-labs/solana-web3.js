@@ -58,6 +58,12 @@ export class SendTransactionError extends Error {
 
   /* @deprecated Use `await getLogs()` instead */
   get logs() {
+    if (
+      this.transactionLogs &&
+      typeof (this.transactionLogs as any).then === 'function'
+    ) {
+      return undefined;
+    }
     return this.transactionLogs as string[] | undefined;
   }
 
