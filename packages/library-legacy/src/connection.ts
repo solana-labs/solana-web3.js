@@ -5787,7 +5787,7 @@ export class Connection {
         action: 'simulate',
         signature: '',
         transactionMessage: res.error.message,
-        transactionLogs: logs,
+        logs: logs,
       });
     }
     return res.result;
@@ -5928,7 +5928,7 @@ export class Connection {
         action: skipPreflight ? 'send' : 'simulate',
         signature: '',
         transactionMessage: res.error.message,
-        transactionLogs: logs,
+        logs: logs,
       });
     }
     return res.result;

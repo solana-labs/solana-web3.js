@@ -4,19 +4,18 @@ import {TransactionSignature} from './transaction';
 export class SendTransactionError extends Error {
   private signature: TransactionSignature;
   private transactionMessage: string;
-  private transactionLogs?: string[];
-  private resolvedLogs: string[] | Promise<string[]> | undefined;
+  private logs: string[] | Promise<string[]> | undefined;
 
   constructor({
     action,
     signature,
     transactionMessage,
-    transactionLogs,
+    logs: logs,
   }: {
     action: 'send' | 'simulate';
     signature: TransactionSignature;
     transactionMessage: string;
-    transactionLogs?: string[];
+    logs?: string[];
   }) {
     let message: string;
 
@@ -25,16 +24,16 @@ export class SendTransactionError extends Error {
         message =
           `Transaction ${signature} resulted in an error. \n` +
           `${transactionMessage}. ` +
-          (transactionLogs
-            ? `Logs: \n${JSON.stringify(transactionLogs.slice(-10), null, 2)}. `
+          (logs
+            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
             : '') +
           '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
         break;
       case 'simulate':
         message =
           `Simulation failed. \nMessage: ${transactionMessage}. \n` +
-          (transactionLogs
-            ? `Logs: \n${JSON.stringify(transactionLogs.slice(-10), null, 2)}. `
+          (logs
+            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
             : '') +
           '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
         break;
@@ -45,24 +44,25 @@ export class SendTransactionError extends Error {
 
     this.signature = signature;
     this.transactionMessage = transactionMessage;
-    this.transactionLogs = transactionLogs;
-    this.resolvedLogs = transactionLogs ? transactionLogs : undefined;
+    this.logs = logs ? logs : undefined;
   }
 
   get transactionError(): {message: string; logs?: string[]} {
-    return {message: this.transactionMessage, logs: this.transactionLogs};
+    return {
+      message: this.transactionMessage,
+      logs: Array.isArray(this.logs) ? this.logs : undefined,
+    };
   }
 
   async getLogs(connection: Connection): Promise<string[]> {
-    if (this.resolvedLogs === undefined) {
-      this.resolvedLogs = new Promise((resolve, reject) => {
+    if (!Array.isArray(this.logs)) {
+      this.logs = new Promise((resolve, reject) => {
         connection
           .getTransaction(this.signature)
           .then(tx => {
             if (tx && tx.meta && tx.meta.logMessages) {
               const logs = tx.meta.logMessages;
-              this.resolvedLogs = logs;
-              this.transactionLogs = logs;
+              this.logs = logs;
               resolve(logs);
             } else {
               reject(new Error('Log messages not found'));
@@ -71,7 +71,7 @@ export class SendTransactionError extends Error {
           .catch(reject);
       });
     }
-    return await this.resolvedLogs;
+    return await this.logs;
   }
 }
 
