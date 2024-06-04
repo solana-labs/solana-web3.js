@@ -58,6 +58,7 @@
     "pnpm": {
         "overrides": {
             "@solana/web3.js": "workspace:*",
+            "conventional-changelog-conventionalcommits": ">= 8.0.0",
             "jsdom": "^22",
             "mock-socket": "^9.3.1",
             "shelljs": ">=0.8.5"
