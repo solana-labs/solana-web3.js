@@ -2,10 +2,10 @@ import {Connection} from './connection';
 import {TransactionSignature} from './transaction';
 
 export class SendTransactionError extends Error {
-  #signature: TransactionSignature;
-  #transactionMessage: string;
-  #transactionLogs?: string[];
-  #resolvedLogs: string[] | Promise<string[]> | undefined;
+  private signature: TransactionSignature;
+  private transactionMessage: string;
+  private transactionLogs?: string[];
+  private resolvedLogs: string[] | Promise<string[]> | undefined;
 
   constructor({
     action,
@@ -43,26 +43,26 @@ export class SendTransactionError extends Error {
     }
     super(message);
 
-    this.#signature = signature;
-    this.#transactionMessage = transactionMessage;
-    this.#transactionLogs = transactionLogs;
-    this.#resolvedLogs = transactionLogs ? transactionLogs : undefined;
+    this.signature = signature;
+    this.transactionMessage = transactionMessage;
+    this.transactionLogs = transactionLogs;
+    this.resolvedLogs = transactionLogs ? transactionLogs : undefined;
   }
 
   get transactionError(): {message: string; logs?: string[]} {
-    return {message: this.#transactionMessage, logs: this.#transactionLogs};
+    return {message: this.transactionMessage, logs: this.transactionLogs};
   }
 
   async getLogs(connection: Connection): Promise<string[]> {
-    if (this.#resolvedLogs === undefined) {
-      this.#resolvedLogs = new Promise((resolve, reject) => {
+    if (this.resolvedLogs === undefined) {
+      this.resolvedLogs = new Promise((resolve, reject) => {
         connection
-          .getTransaction(this.#signature)
+          .getTransaction(this.signature)
           .then(tx => {
             if (tx && tx.meta && tx.meta.logMessages) {
               const logs = tx.meta.logMessages;
-              this.#resolvedLogs = logs;
-              this.#transactionLogs = logs;
+              this.resolvedLogs = logs;
+              this.transactionLogs = logs;
               resolve(logs);
             } else {
               reject(new Error('Log messages not found'));
@@ -71,7 +71,7 @@ export class SendTransactionError extends Error {
           .catch(reject);
       });
     }
-    return await this.#resolvedLogs;
+    return await this.resolvedLogs;
   }
 }
 
