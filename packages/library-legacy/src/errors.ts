@@ -4,7 +4,7 @@ import {TransactionSignature} from './transaction';
 export class SendTransactionError extends Error {
   private signature: TransactionSignature;
   private transactionMessage: string;
-  private logs: string[] | Promise<string[]> | undefined;
+  private transactionLogs: string[] | Promise<string[]> | undefined;
 
   constructor({
     action,
@@ -44,25 +44,32 @@ export class SendTransactionError extends Error {
 
     this.signature = signature;
     this.transactionMessage = transactionMessage;
-    this.logs = logs ? logs : undefined;
+    this.transactionLogs = logs ? logs : undefined;
   }
 
   get transactionError(): {message: string; logs?: string[]} {
     return {
       message: this.transactionMessage,
-      logs: Array.isArray(this.logs) ? this.logs : undefined,
+      logs: Array.isArray(this.transactionLogs)
+        ? this.transactionLogs
+        : undefined,
     };
   }
 
+  /* @deprecated Use `await getLogs()` instead */
+  get logs() {
+    return this.transactionLogs as string[] | undefined;
+  }
+
   async getLogs(connection: Connection): Promise<string[]> {
-    if (!Array.isArray(this.logs)) {
-      this.logs = new Promise((resolve, reject) => {
+    if (!Array.isArray(this.transactionLogs)) {
+      this.transactionLogs = new Promise((resolve, reject) => {
         connection
           .getTransaction(this.signature)
           .then(tx => {
             if (tx && tx.meta && tx.meta.logMessages) {
               const logs = tx.meta.logMessages;
-              this.logs = logs;
+              this.transactionLogs = logs;
               resolve(logs);
             } else {
               reject(new Error('Log messages not found'));
@@ -71,7 +78,7 @@ export class SendTransactionError extends Error {
           .catch(reject);
       });
     }
-    return await this.logs;
+    return await this.transactionLogs;
   }
 }
 
