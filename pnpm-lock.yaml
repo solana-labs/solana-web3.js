@@ -928,8 +928,8 @@ importers:
         specifier: '>=5'
         version: 5.4.5
       undici-types:
-        specifier: ^6.18.1
-        version: 6.18.1
+        specifier: ^6.18.2
+        version: 6.18.2
     devDependencies:
       tinybench:
         specifier: ^2.8.0
@@ -7487,8 +7487,8 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  undici-types@6.18.1:
-    resolution: {integrity: sha512-yay8kaNGEGjUrGtW1ubEVqeWDHFpEdB7Pw/v+n7b5clmBkTTZJJpAEYtRtaCJ5wTDpTLR/Dn9nPgjGBRaIhvFg==}
+  undici-types@6.18.2:
+    resolution: {integrity: sha512-5ruQbENj95yDYJNS3TvcaxPMshV7aizdv/hWYjGIKoANWKjhWNBsr2YEuYZKodQulB1b8l7ILOuDQep3afowQQ==}
 
   undici@6.18.2:
     resolution: {integrity: sha512-o/MQLTwRm9IVhOqhZ0NQ9oXax1ygPjw6Vs+Vq/4QRjbOAC3B1GCHy7TYxxbExKlb7bzDRzt9vBWU6BDz0RFfYg==}
@@ -15155,7 +15155,7 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  undici-types@6.18.1: {}
+  undici-types@6.18.2: {}
 
   undici@6.18.2: {}
 
