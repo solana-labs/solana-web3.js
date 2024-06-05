@@ -574,8 +574,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0
       mockttp:
-        specifier: ^3.11.0
-        version: 3.11.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: ^3.12.0
+        version: 3.12.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -6089,8 +6089,8 @@ packages:
     resolution: {integrity: sha512-qxBgB7Qa2sEQgHFjj0dSigq7fX4k6Saisd5Nelwp2q8mlbAFh5dHV9JTTlF8viYJLSSWgMCZFUom8PJcMNBoJw==}
     engines: {node: '>= 8'}
 
-  mockttp@3.11.0:
-    resolution: {integrity: sha512-zR5GjGAiOEYcZURmNipugCTR9Y4e9vnK0yeVz0se6M/lTfx05b5d2gXzuduquqJt/yWTRVOBMNuuS0026yfudw==}
+  mockttp@3.12.0:
+    resolution: {integrity: sha512-+w249XKiBvjPvKfZxlV+Bm3KRghTEkdV6bq6OGoaxjrJblAe3oF2503zTiliKvmwdQokUkBIO05sD9qD2zkrGw==}
     engines: {node: '>=14.14.0'}
     hasBin: true
 
@@ -7565,6 +7565,9 @@ packages:
 
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
+
+  urlpattern-polyfill@8.0.2:
+    resolution: {integrity: sha512-Qp95D4TPJl1kC9SKigDcqgyM2VDVO4RiJc2d4qe5GrYm+zbIQCWWKAFaJNQ4BhdFeDGwBmAxqJBwWSJDb9T3BQ==}
 
   utf-8-validate@5.0.10:
     resolution: {integrity: sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==}
@@ -13741,7 +13744,7 @@ snapshots:
 
   mock-socket@9.3.1: {}
 
-  mockttp@3.11.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  mockttp@3.12.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       '@graphql-tools/schema': 8.5.1(graphql@15.8.0)
       '@graphql-tools/utils': 8.13.1(graphql@15.8.0)
@@ -13781,6 +13784,7 @@ snapshots:
       semver: 7.6.0
       socks-proxy-agent: 7.0.0
       typed-error: 3.2.2
+      urlpattern-polyfill: 8.0.2
       uuid: 8.3.2
       ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -15217,6 +15221,8 @@ snapshots:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
+
+  urlpattern-polyfill@8.0.2: {}
 
   utf-8-validate@5.0.10:
     dependencies:
