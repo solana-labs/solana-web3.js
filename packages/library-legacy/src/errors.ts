@@ -4,65 +4,81 @@ import {TransactionSignature} from './transaction';
 export class SendTransactionError extends Error {
   private signature: TransactionSignature;
   private transactionMessage: string;
-  private logs: string[] | Promise<string[]> | undefined;
+  private transactionLogs: string[] | Promise<string[]> | undefined;
 
   constructor({
     action,
     signature,
     transactionMessage,
-    logs: logs,
+    logs,
   }: {
     action: 'send' | 'simulate';
     signature: TransactionSignature;
     transactionMessage: string;
     logs?: string[];
   }) {
+    const maybeLogsOutput = logs
+      ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
+      : '';
+    const guideText =
+      '\nCatch the `SendTransactionError` and call `getLogs()` on it for full details.';
     let message: string;
-
     switch (action) {
       case 'send':
         message =
           `Transaction ${signature} resulted in an error. \n` +
           `${transactionMessage}. ` +
-          (logs
-            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
-            : '') +
-          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+          maybeLogsOutput +
+          guideText;
         break;
       case 'simulate':
         message =
           `Simulation failed. \nMessage: ${transactionMessage}. \n` +
-          (logs
-            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
-            : '') +
-          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+          maybeLogsOutput +
+          guideText;
         break;
-      default:
-        message = 'Unknown action';
+      default: {
+        message = `Unknown action '${((a: never) => a)(action)}'`;
+      }
     }
     super(message);
 
     this.signature = signature;
     this.transactionMessage = transactionMessage;
-    this.logs = logs ? logs : undefined;
+    this.transactionLogs = logs ? logs : undefined;
   }
 
   get transactionError(): {message: string; logs?: string[]} {
     return {
       message: this.transactionMessage,
-      logs: Array.isArray(this.logs) ? this.logs : undefined,
+      logs: Array.isArray(this.transactionLogs)
+        ? this.transactionLogs
+        : undefined,
     };
   }
 
+  /* @deprecated Use `await getLogs()` instead */
+  get logs(): string[] | undefined {
+    const cachedLogs = this.transactionLogs;
+    if (
+      cachedLogs != null &&
+      typeof cachedLogs === 'object' &&
+      'then' in cachedLogs
+    ) {
+      return undefined;
+    }
+    return cachedLogs;
+  }
+
   async getLogs(connection: Connection): Promise<string[]> {
-    if (!Array.isArray(this.logs)) {
-      this.logs = new Promise((resolve, reject) => {
+    if (!Array.isArray(this.transactionLogs)) {
+      this.transactionLogs = new Promise((resolve, reject) => {
         connection
           .getTransaction(this.signature)
           .then(tx => {
             if (tx && tx.meta && tx.meta.logMessages) {
               const logs = tx.meta.logMessages;
-              this.logs = logs;
+              this.transactionLogs = logs;
               resolve(logs);
             } else {
               reject(new Error('Log messages not found'));
@@ -71,7 +87,7 @@ export class SendTransactionError extends Error {
           .catch(reject);
       });
     }
-    return await this.logs;
+    return await this.transactionLogs;
   }
 }
 
