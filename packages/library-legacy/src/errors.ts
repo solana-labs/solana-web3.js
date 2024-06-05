@@ -10,35 +10,36 @@ export class SendTransactionError extends Error {
     action,
     signature,
     transactionMessage,
-    logs: logs,
+    logs,
   }: {
     action: 'send' | 'simulate';
     signature: TransactionSignature;
     transactionMessage: string;
     logs?: string[];
   }) {
+    const maybeLogsOutput = logs
+      ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
+      : '';
+    const guideText =
+      '\nCatch the `SendTransactionError` and call `getLogs()` on it for full details.';
     let message: string;
-
     switch (action) {
       case 'send':
         message =
           `Transaction ${signature} resulted in an error. \n` +
           `${transactionMessage}. ` +
-          (logs
-            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
-            : '') +
-          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+          maybeLogsOutput +
+          guideText;
         break;
       case 'simulate':
         message =
           `Simulation failed. \nMessage: ${transactionMessage}. \n` +
-          (logs
-            ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
-            : '') +
-          '\nCatch the SendTransactionError and call `getLogs()` on it for full details.';
+          maybeLogsOutput +
+          guideText;
         break;
-      default:
-        message = 'Unknown action';
+      default: {
+        message = `Unknown action '${((a: never) => a)(action)}'`;
+      }
     }
     super(message);
 
@@ -57,14 +58,16 @@ export class SendTransactionError extends Error {
   }
 
   /* @deprecated Use `await getLogs()` instead */
-  get logs() {
+  get logs(): string[] | undefined {
+    const cachedLogs = this.transactionLogs;
     if (
-      this.transactionLogs &&
-      typeof (this.transactionLogs as any).then === 'function'
+      cachedLogs != null &&
+      typeof cachedLogs === 'object' &&
+      'then' in cachedLogs
     ) {
       return undefined;
     }
-    return this.transactionLogs as string[] | undefined;
+    return cachedLogs;
   }
 
   async getLogs(connection: Connection): Promise<string[]> {
