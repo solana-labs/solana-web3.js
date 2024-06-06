@@ -85,14 +85,14 @@ describe('getErrorMessage', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
             messagesSpy.mockReturnValue({
                 // @ts-expect-error Mock error config doesn't conform to exported config.
-                123: "Something $severity happened: '$foo'. How $severity!",
+                123: "Something $severity happened: '$foo'. How \\\\$severity\\\\ is the \\$severity!",
             });
             const message = getErrorMessage(
                 // @ts-expect-error Mock error context doesn't conform to exported context.
                 123,
                 { foo: 'bar', severity: 'awful' },
             );
-            expect(message).toBe("Something awful happened: 'bar'. How awful!");
+            expect(message).toBe("Something awful happened: 'bar'. How \\awful\\ is the $severity!");
         });
         it('interpolates a Uint8Array variable into a error message format string', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');

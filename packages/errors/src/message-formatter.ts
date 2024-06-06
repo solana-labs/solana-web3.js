@@ -7,9 +7,24 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
     context: object = {},
 ): string {
     const messageFormatString = SolanaErrorMessages[code];
-    const message = messageFormatString.replace(/(?<!\\)\$(\w+)/g, (substring, variableName) =>
-        variableName in context ? `${context[variableName as keyof typeof context]}` : substring,
-    );
+    // return messageFormatString;
+    const message = messageFormatString.replace(/\\?\$(\w+)(\\){0,1}/g, (substring, variableName) => {
+        // If not escaped, return the variable :: e.g. $foo => bar
+        if (!substring.startsWith('\\')) {
+            return context[variableName as keyof typeof context];
+        }
+
+        /**
+         * Escaped patterns to match:
+         * \\$foo\\ => {{foo}} :: unescaping these into the variable
+         * \\$foo => $foo :: unescaping these into the unescaped string
+         */
+        if (substring.endsWith('\\')) {
+            return context[variableName as keyof typeof context];
+        }
+
+        return substring.replace('\\', '');
+    });
     return message;
 }
 
