@@ -11,7 +11,7 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
     const message = messageFormatString.replace(/\\?\$(\w+)(\\){0,1}/g, (substring, variableName) => {
         // If not escaped, return the variable :: e.g. $foo => bar
         if (!substring.startsWith('\\')) {
-            return context[variableName as keyof typeof context];
+            return variableName in context ? `${context[variableName as keyof typeof context]}` : substring;
         }
 
         /**
