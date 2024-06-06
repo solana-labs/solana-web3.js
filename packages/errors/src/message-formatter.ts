@@ -63,7 +63,6 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
                 if (char === '\\') {
                     nextState = { [START_INDEX]: ii, [TYPE]: StateType.EscapeSequence };
                 } else if (char === '$') {
-                    commitStateUpTo(ii);
                     nextState = { [START_INDEX]: ii, [TYPE]: StateType.Variable };
                 } else if (!char.match(/\w/)) {
                     nextState = { [START_INDEX]: ii, [TYPE]: StateType.Text };
@@ -71,7 +70,7 @@ export function getHumanReadableErrorMessage<TErrorCode extends SolanaErrorCode>
                 break;
         }
         if (nextState) {
-            if (state[TYPE] !== nextState[TYPE]) {
+            if (state !== nextState) {
                 commitStateUpTo(ii);
             }
             state = nextState;
