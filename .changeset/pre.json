@@ -20,6 +20,7 @@
     "@solana/web3.js": "0.0.0-development",
     "@solana/options": "2.0.0-preview.2",
     "@solana/programs": "2.0.0-preview.2",
+    "@solana/react": "2.0.0-preview.3",
     "@solana/rpc": "2.0.0-preview.2",
     "@solana/rpc-api": "2.0.0-preview.2",
     "@solana/rpc-graphql": "2.0.0-preview.2",
