@@ -27,13 +27,7 @@ export function useSignMessage<TWalletAccount extends UiWalletAccount>(
     );
 }
 
-/**
- * The plural version of `useSignMessage`. Call this function with more than one input to sign
- * multiple messages in one operation.
- *
- * See `useSignMessage()` for usage.
- */
-export function useSignMessages<TWalletAccount extends UiWalletAccount>(
+function useSignMessages<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
 ): (...inputs: readonly Input[]) => Promise<readonly Output[]> {
     const signMessageFeature = getWalletAccountFeature(

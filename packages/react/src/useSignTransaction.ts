@@ -40,13 +40,7 @@ export function useSignTransaction<TWalletAccount extends UiWalletAccount>(
     );
 }
 
-/**
- * The plural version of `useSignTransaction`. Call this function with more than one input to sign
- * multiple transactions in one operation.
- *
- * See `useSignTransaction()` for usage.
- */
-export function useSignTransactions<TWalletAccount extends UiWalletAccount>(
+function useSignTransactions<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: OnlySolanaChains<TWalletAccount['chains']>,
 ): (...inputs: readonly Input[]) => Promise<readonly Output[]> {

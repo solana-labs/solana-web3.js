@@ -39,15 +39,7 @@ export function useSignAndSendTransaction<TWalletAccount extends UiWalletAccount
     );
 }
 
-/**
- * The plural version of `useSignAndSendTransaction`. Call this function with more than one input
- * to sign and send multiple transactions in one operation.
- *
- * WARNING: As of June 2024, few wallets support sending multiple transactions in one operation.
- *
- * See `useSignAndSendTransactions()` for usage.
- */
-export function useSignAndSendTransactions<TWalletAccount extends UiWalletAccount>(
+function useSignAndSendTransactions<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: OnlySolanaChains<TWalletAccount['chains']>,
 ): (...inputs: readonly Input[]) => Promise<readonly Output[]> {

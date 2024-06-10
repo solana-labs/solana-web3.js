@@ -662,6 +662,21 @@ importers:
 
   packages/react:
     dependencies:
+      '@solana/addresses':
+        specifier: workspace:*
+        version: link:../addresses
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@solana/keys':
+        specifier: workspace:*
+        version: link:../keys
+      '@solana/signers':
+        specifier: workspace:*
+        version: link:../signers
+      '@solana/transactions':
+        specifier: workspace:*
+        version: link:../transactions
       '@solana/wallet-standard-features':
         specifier: ^1.2.0
         version: 1.2.0
@@ -678,6 +693,9 @@ importers:
         specifier: pre
         version: 0.0.0-20240607222957
     devDependencies:
+      '@solana/codecs-core':
+        specifier: workspace:*
+        version: link:../codecs-core
       '@types/react':
         specifier: ^18
         version: 18.3.3
