@@ -32,7 +32,7 @@ jobs:
         uses: ./.github/workflows/actions/setup-validator
 
       - name: Run Build Step (force)
-        run: pnpm turbo build --concurrency=100% --filter=\!@solana/web3.js --force=true
+        run: pnpm turbo build --filter=\!@solana/web3.js --force=true
 
       - name: Configure NPM token
         run: |
