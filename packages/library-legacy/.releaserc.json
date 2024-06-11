@@ -1,6 +1,6 @@
 {
   "commitPaths": ["."],
-  "repositoryUrl": "git@github.com:solana-labs/solana-web3.js.git",
+  "repositoryUrl": "https://github.com/solana-labs/solana-web3.js.git",
   "preset": "conventionalcommits",
   "presetConfig": {
     "issueUrlFormat": "{{host}}/{{owner}}/solana-web3.js/issues/{{id}}"
