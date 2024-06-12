@@ -10219,7 +10219,7 @@ snapshots:
 
   '@swc/helpers@0.5.11':
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
 
   '@swc/jest@0.2.36(@swc/core@1.3.93(@swc/helpers@0.5.11))':
     dependencies:
