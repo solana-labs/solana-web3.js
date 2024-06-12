@@ -1,9 +1,6 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "remoteCache": {
-        "signature": true
-    },
-    "tasks": {
+    "pipeline": {
         "build": {
             "dependsOn": [
                 "compile:js",
@@ -149,5 +146,7 @@
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         }
     },
-    "ui": "stream"
+    "remoteCache": {
+        "signature": true
+    }
 }
