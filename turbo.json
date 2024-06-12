@@ -1,6 +1,9 @@
 {
     "$schema": "https://turbo.build/schema.json",
-    "pipeline": {
+    "remoteCache": {
+        "signature": true
+    },
+    "tasks": {
         "build": {
             "dependsOn": [
                 "compile:js",
@@ -39,7 +42,8 @@
                 "test:treeshakability:browser",
                 "test:treeshakability:native",
                 "test:treeshakability:node"
-            ]
+            ],
+            "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
         },
         "publish-packages-legacy": {
             "cache": false,
@@ -52,7 +56,8 @@
                 "test:prettier",
                 "test:typecheck",
                 "test:unit:node"
-            ]
+            ],
+            "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
         },
         "style:fix": {
             "inputs": ["$TURBO_DEFAULT$", "*"],
@@ -146,7 +151,5 @@
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         }
     },
-    "remoteCache": {
-        "signature": true
-    }
+    "ui": "stream"
 }
