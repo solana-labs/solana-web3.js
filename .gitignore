@@ -24,3 +24,6 @@ yarn-error.log*
 # `solana-test-validator`
 .agave/
 test-ledger/
+
+# GitHub Pages deploy directory
+.ghpages-deploy
