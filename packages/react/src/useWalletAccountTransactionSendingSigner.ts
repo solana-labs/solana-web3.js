@@ -17,7 +17,7 @@ export function useWalletAccountTransactionSendingSigner<TWalletAccount extends 
     uiWalletAccount: TWalletAccount,
     chain: OnlySolanaChains<TWalletAccount['chains']>,
     extraConfig?: Readonly<{
-        getOptions(transaction: Transaction): Readonly<{ minContextSlot?: bigint }> | undefined;
+        getOptions?(transaction: Transaction): Readonly<{ minContextSlot?: bigint }> | undefined;
     }>,
 ): TransactionSendingSigner<TWalletAccount['address']> {
     const encoderRef = useRef<ReturnType<typeof getTransactionEncoder>>();
