@@ -7,7 +7,7 @@ import {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
+import { createSolanaRpcGraphQL, RpcGraphQL } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
 type GraphQLCompliantRpc = Rpc<
@@ -19,7 +19,7 @@ describe('programAccounts', () => {
     let rpcGraphQL: RpcGraphQL;
     beforeEach(() => {
         rpc = createLocalhostSolanaRpc();
-        rpcGraphQL = createRpcGraphQL(rpc);
+        rpcGraphQL = createSolanaRpcGraphQL(rpc);
     });
 
     describe('basic queries', () => {
