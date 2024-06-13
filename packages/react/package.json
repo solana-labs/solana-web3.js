@@ -65,6 +65,13 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/wallet-standard-features": "^1.2.0",
+        "@wallet-standard/base": "pre",
+        "@wallet-standard/errors": "pre",
+        "@wallet-standard/ui": "pre",
+        "@wallet-standard/ui-registry": "pre"
+    },
     "devDependencies": {
         "@types/react": "^18",
         "@types/react-test-renderer": "^18",

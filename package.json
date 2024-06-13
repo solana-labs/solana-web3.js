@@ -59,6 +59,7 @@
     "pnpm": {
         "overrides": {
             "@solana/web3.js": "workspace:*",
+            "@wallet-standard/base": "pre",
             "conventional-changelog-conventionalcommits": ">= 8.0.0",
             "jsdom": "^22",
             "mock-socket": "^9.3.1",
