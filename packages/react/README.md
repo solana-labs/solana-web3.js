@@ -18,6 +18,124 @@ This package contains React hooks for building Solana apps.
 
 ## Hooks
 
+### `useWalletAccountMessageSigner(uiWalletAccount)`
+
+Given a `UiWalletAccount`, this hook returns an object that conforms to the `MessageModifyingSigner` interface of `@solana/signers`.
+
+#### Example
+
+```tsx
+import { useWalletAccountMessageSigner } from '@solana/react';
+import { createSignableMessage } from '@solana/signers';
+
+function SignMessageButton({ account, text }) {
+    const messageSigner = useWalletAccountMessageSigner(account);
+    return (
+        <button
+            onClick={async () => {
+                try {
+                    const signableMessage = createSignableMessage(text);
+                    const [signedMessage] = await messageSigner.modifyAndSignMessages([signableMessage]);
+                    const messageWasModified = signableMessage.content !== signedMessage.content;
+                    const signatureBytes = signedMessage.signatures[messageSigner.address];
+                    window.alert(
+                        `Signature bytes: ${signatureBytes.toString()}${
+                            messageWasModified ? ' (message was modified)' : ''
+                        }`,
+                    );
+                } catch (e) {
+                    console.error('Failed to sign message', e);
+                }
+            }}
+        >
+            Sign Message: {text}
+        </button>
+    );
+}
+```
+
+> [!NOTE]
+> The type `MessageModifyingSigner` is returned from this hook instead of `MessageSigner` or `MessagePartialSigner`. This is a conservative assumption based on the fact that your application can not control whether or not the wallet will modify the message before signing it.
+
+### `useWalletAccountTransactionSigner(uiWalletAccount, chain)`
+
+Given a `UiWalletAccount` and a chain that begins with `solana:`, this hook returns an object that conforms to the `TransactionModifyingSigner` interface of `@solana/signers`.
+
+#### Example
+
+```tsx
+import { useWalletAccountTransactionSigner } from '@solana/react';
+
+function SignTransactionButton({ account, transaction }) {
+    const transactionSigner = useWalletAccountTransactionSigner(account, 'solana:devnet');
+    return (
+        <button
+            onClick={async () => {
+                try {
+                    const [{ signatures }] = await transactionSigner.modifyAndSignTransactions([transaction]);
+                    const signatureBytes = signatures[transactionSigner.address];
+                    window.alert(`Signature bytes: ${signatureBytes.toString()}`);
+                } catch (e) {
+                    console.error('Failed to sign transaction', e);
+                }
+            }}
+        >
+            Sign Transaction
+        </button>
+    );
+}
+```
+
+> [!NOTE]
+> The type `TransactionModifyingSigner` is returned from this hook instead of `TransactionSigner` or `TransactionPartialSigner`. This is a conservative assumption based on the fact that your application can not control whether or not the wallet will modify the transaction before signing it (eg. to add guard instructions, or a priority fee budget).
+
+### `useWalletAccountTransactionSendingSigner(uiWalletAccount, chain)`
+
+Given a `UiWalletAccount` and a chain that begins with `solana:`, this hook returns an object that conforms to the `TransactionSendingSigner` interface of `@solana/signers`.
+
+#### Example
+
+```tsx
+import { useWalletAccountTransactionSendingSigner } from '@solana/react';
+import {
+    appendTransactionMessageInstruction,
+    createSolanaRpc,
+    getBase58Decoder,
+    pipe,
+    setTransactionMessageFeePayerSigner,
+    setTransactionMessageLifetimeUsingBlockhash,
+    signAndSendTransactionMessageWithSigners,
+} from '@solana/web3.js';
+
+function RecordMemoButton({ account, rpc, text }) {
+    const signer = useWalletAccountTransactionSendingSigner(account, 'solana:devnet');
+    return (
+        <button
+            onClick={async () => {
+                try {
+                    const { value: latestBlockhash } = await createSolanaRpc('https://api.devnet.solana.com')
+                        .getLatestBlockhash()
+                        .send();
+                    const message = pipe(
+                        createTransactionMessage({ version: 'legacy' }),
+                        m => setTransactionMessageFeePayerSigner(signer, m),
+                        m => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, m),
+                        m => appendTransactionMessageInstruction(getAddMemoInstruction({ memo: text }), m),
+                    );
+                    const signatureBytes = await signAndSendTransactionMessageWithSigners(message);
+                    const base58Signature = getBase58Decoder().decode(signature);
+                    window.alert(`View transaction: https://explorer.solana.com/tx/${base58Signature}?cluster=devnet`);
+                } catch (e) {
+                    console.error('Failed to record memo', e);
+                }
+            }}
+        >
+            Record Memo
+        </button>
+    );
+}
+```
+
 ### `useSignMessage(uiWalletAccount)`
 
 Given a `UiWalletAccount`, this hook returns a function you can call to sign a byte array.
@@ -60,9 +178,6 @@ function SignMessageButton({ account, messageBytes }) {
     );
 }
 ```
-
-> [!NOTE]
-> There exists a plural version of this hook &ndash; `useSignMessages` &ndash; that accepts multiple inputs and returns an array of outputs.
 
 ### `useSignTransaction(uiWalletAccount, chain)`
 
@@ -107,9 +222,6 @@ function SignTransactionButton({ account, transactionBytes }) {
     );
 }
 ```
-
-> [!NOTE]
-> There exists a plural version of this hook &ndash; `useSignTransactions` &ndash; that accepts multiple inputs and returns an array of outputs.
 
 ### `useSignAndSendTransaction(uiWalletAccount, chain)`
 
@@ -158,6 +270,3 @@ function SignAndSendTransactionButton({ account, transactionBytes }) {
     );
 }
 ```
-
-> [!NOTE]
-> There exists a plural version of this hook &ndash; `useSignAndSendTransactions` &ndash; that accepts multiple inputs and returns an array of outputs.

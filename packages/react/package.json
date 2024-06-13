@@ -66,6 +66,11 @@
         "node": ">=17.4"
     },
     "dependencies": {
+        "@solana/addresses": "workspace:*",
+        "@solana/errors": "workspace:*",
+        "@solana/keys": "workspace:*",
+        "@solana/signers": "workspace:*",
+        "@solana/transactions": "workspace:*",
         "@solana/wallet-standard-features": "^1.2.0",
         "@wallet-standard/base": "pre",
         "@wallet-standard/errors": "pre",
@@ -73,6 +78,7 @@
         "@wallet-standard/ui-registry": "pre"
     },
     "devDependencies": {
+        "@solana/codecs-core": "workspace:*",
         "@types/react": "^18",
         "@types/react-test-renderer": "^18",
         "react": "^18",
