@@ -2713,7 +2713,40 @@ export const mockTransactionToken2022AllExtensions = {
                     programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                     stackHeight: null,
                 },
-                // TODO (more) ...
+                {
+                    parsed: {
+                        info: {
+                            account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            extensionTypes: ['transferFeeAmount', 'memoTransfer'],
+                            owner: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            payer: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            systemProgram: '11111111111111111111111111111111',
+                        },
+                        type: 'reallocate',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
+                {
+                    parsed: {
+                        info: {
+                            account: '6muXBR8kTs1UEbATDkFzEf61HPeEHrCvdBNciVoxic8d',
+                            extensionTypes: ['transferFeeAmount', 'memoTransfer'],
+                            payer: '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            systemProgram: '11111111111111111111111111111111',
+                            signers: [
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                                '2Pwe6Yahh5cbzvCwRMtTYFeboSwYiWeHhYJzZZBsU6eB',
+                            ],
+                            multisigOwner: 'Sysvar1nstructions1111111111111111111111111',
+                        },
+                        type: 'reallocate',
+                    },
+                    program: 'spl-token',
+                    programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                    stackHeight: null,
+                },
             ],
             recentBlockhash: '6vRS7MoToVccMqfQecdVC6UbmARaT5mha91zhreqnce9',
         },
