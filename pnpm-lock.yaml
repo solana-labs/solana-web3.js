@@ -5,7 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@solana/web3.js': workspace:*
+  '@solana/buffer-layout-utils>@solana/web3.js': workspace:*
+  '@solana/spl-token>@solana/web3.js': workspace:*
+  '@solana/spl-token-group>@solana/web3.js': workspace:*
+  '@solana/spl-token-metadata>@solana/web3.js': workspace:*
   '@wallet-standard/base': pre
   conventional-changelog-conventionalcommits: '>= 8.0.0'
   jsdom: ^22
@@ -290,7 +293,7 @@ importers:
         version: 5.4.5
     devDependencies:
       '@solana/web3.js':
-        specifier: workspace:*
+        specifier: workspace:../library-legacy
         version: link:../library-legacy
 
   packages/crypto-impl: {}
