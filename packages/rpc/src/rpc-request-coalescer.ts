@@ -69,10 +69,12 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                 const handleAbort = (e: AbortSignalEventMap['abort']) => {
                     signal.removeEventListener('abort', handleAbort);
                     coalescedRequest.numConsumers -= 1;
-                    if (coalescedRequest.numConsumers === 0) {
-                        const abortController = coalescedRequest.abortController;
-                        abortController.abort(EXPLICIT_ABORT_TOKEN);
-                    }
+                    Promise.resolve().then(() => {
+                        if (coalescedRequest.numConsumers === 0) {
+                            const abortController = coalescedRequest.abortController;
+                            abortController.abort(EXPLICIT_ABORT_TOKEN);
+                        }
+                    });
                     reject((e.target as AbortSignal).reason);
                 };
                 signal.addEventListener('abort', handleAbort);
