@@ -1015,6 +1015,20 @@ export const instructionTypeDefs = /* GraphQL */ `
     }
 
     """
+    SplToken-2022: Reallocate instruction
+    """
+    type SplTokenReallocate implements TransactionInstruction {
+        programId: Address
+        account: Account
+        extensionTypes: [SplTokenExtensionType]
+        owner: Account
+        multisigOwner: Account
+        payer: Account
+        signers: [Address]
+        systemProgram: Account
+    }
+
+    """
     Spl Token Group: InitializeGroup instruction
     """
     type SplTokenGroupInitializeGroup implements TransactionInstruction {

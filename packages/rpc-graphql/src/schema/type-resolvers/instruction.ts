@@ -437,6 +437,13 @@ export const instructionTypeResolvers = {
         mintAuthority: resolveAccount('mintAuthority'),
         multisigMintAuthority: resolveAccount('multisigMintAuthority'),
     },
+    SplTokenReallocate: {
+        account: resolveAccount('account'),
+        multisigOwner: resolveAccount('multisigOwner'),
+        owner: resolveAccount('owner'),
+        payer: resolveAccount('payer'),
+        systemProgram: resolveAccount('systemProgram'),
+    },
     SplTokenRevokeInstruction: {
         multisigOwner: resolveAccount('multisigOwner'),
         owner: resolveAccount('owner'),
@@ -952,6 +959,9 @@ export const instructionTypeResolvers = {
                     }
                     if (jsonParsedConfigs.instructionType === 'emitTokenMetadata') {
                         return 'SplTokenMetadataEmit';
+                    }
+                    if (jsonParsedConfigs?.instructionType === 'reallocate') {
+                        return 'SplTokenReallocate';
                     }
                 }
                 if (jsonParsedConfigs.programName === 'stake') {
