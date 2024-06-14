@@ -77,11 +77,7 @@ describe('useSignTransaction', () => {
     });
     it('fatals when passed a wallet account that does not support the specified chain', () => {
         const { result } = renderHook(() =>
-            useSignTransaction(
-                { ...mockUiWalletAccount, chains: ['solana:basednet'] },
-                // @ts-expect-error Using a non-supported chain on purpose, as part of the test.
-                'solana:danknet',
-            ),
+            useSignTransaction({ ...mockUiWalletAccount, chains: ['solana:basednet'] }, 'solana:danknet'),
         );
         expect(result.__type).toBe('error');
         expect(result.current).toEqual(

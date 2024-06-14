@@ -28,9 +28,18 @@ type Output = SolanaSignTransactionOutput;
  * Returns a function you can call to sign a serialized transaction.
  */
 export function useSignTransaction<TWalletAccount extends UiWalletAccount>(
-    ...config: Parameters<typeof useSignTransactions<TWalletAccount>>
+    uiWalletAccount: TWalletAccount,
+    chain: OnlySolanaChains<TWalletAccount['chains']>,
+): (input: Input) => Promise<Output>;
+export function useSignTransaction<TWalletAccount extends UiWalletAccount>(
+    uiWalletAccount: TWalletAccount,
+    chain: `solana:${string}`,
+): (input: Input) => Promise<Output>;
+export function useSignTransaction<TWalletAccount extends UiWalletAccount>(
+    uiWalletAccount: TWalletAccount,
+    chain: `solana:${string}`,
 ): (input: Input) => Promise<Output> {
-    const signTransactions = useSignTransactions(...config);
+    const signTransactions = useSignTransactions(uiWalletAccount, chain);
     return useCallback(
         async input => {
             const [result] = await signTransactions(input);
@@ -42,7 +51,7 @@ export function useSignTransaction<TWalletAccount extends UiWalletAccount>(
 
 function useSignTransactions<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
-    chain: OnlySolanaChains<TWalletAccount['chains']>,
+    chain: `solana:${string}`,
 ): (...inputs: readonly Input[]) => Promise<readonly Output[]> {
     if (!uiWalletAccount.chains.includes(chain)) {
         throw new WalletStandardError(WALLET_STANDARD_ERROR__FEATURES__WALLET_ACCOUNT_CHAIN_UNSUPPORTED, {
