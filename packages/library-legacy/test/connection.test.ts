@@ -1,6 +1,5 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-import * as splToken from '@solana/spl-token';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Agent as HttpAgent} from 'http';
@@ -4919,90 +4918,68 @@ describe('Connection', function () {
       const connection = new Connection(url, 'confirmed');
       const newAccount = PublicKey.unique();
 
-      let payerKeypair = new Keypair();
-      let testTokenMintPubkey: PublicKey;
-      let testOwnerKeypair: Keypair;
-      let testTokenAccountPubkey: PublicKey;
-      let testSignature: TransactionSignature;
+      // See scripts/fixtures/legacy-token-test-mint-account.json
+      const testTokenMintPubkey = new PublicKey(
+        '7MbpdfJa5xqwexkp6WUvkYHTPo4VgxYACDBNFWYLwCdo',
+      );
+      // See scripts/fixtures/legacy-token-test-token-owner.json
+      const testOwnerKeypair = Keypair.fromSecretKey(
+        // Public key: `AVGuygVeBmbYiJ47V7tgBNLSukNqW7pWZYJsKUNWhHpc`
+        new Uint8Array([
+          153, 120, 247, 45, 160, 119, 144, 219, 220, 209, 73, 91, 210, 102, 31,
+          136, 155, 12, 68, 27, 226, 215, 61, 214, 10, 245, 247, 180, 236, 63,
+          100, 202, 140, 247, 112, 54, 120, 32, 168, 118, 72, 115, 190, 34, 171,
+          126, 15, 119, 252, 173, 50, 173, 8, 10, 96, 239, 21, 32, 94, 67, 37,
+          43, 145, 249,
+        ]),
+      );
+      // See scripts/fixtures/legacy-token-test-token-account.json
+      const testTokenAccountPubkey = new PublicKey(
+        'EryTMgfSEabo5Fc7dN5z3nBQKzfHUJRpHAMnXdCrTq4S',
+      );
+      let selfTransferSignature: TransactionSignature;
 
       // Setup token mints and accounts for token tests
       before(async function () {
         this.timeout(30 * 1000);
 
-        await connection.confirmTransaction(
-          await connection.requestAirdrop(payerKeypair.publicKey, 100000000000),
+        const selfTransferTransaction = new Transaction().add(
+          new TransactionInstruction({
+            keys: [
+              {
+                pubkey: testTokenAccountPubkey,
+                isSigner: false,
+                isWritable: true,
+              },
+              {
+                pubkey: testTokenAccountPubkey,
+                isSigner: false,
+                isWritable: true,
+              },
+              {
+                pubkey: testOwnerKeypair.publicKey,
+                isSigner: true,
+                isWritable: false,
+              },
+            ],
+            programId: new PublicKey(
+              'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+            ),
+            data: Buffer.from(
+              // prettier-ignore
+              [
+                3, // TRANSFER instruction
+                1, 0, 0, 0, 0, 0, 0, 0, // 1 Lamport
+            ],
+            ),
+          }),
         );
 
-        const mintOwnerKeypair = new Keypair();
-        const accountOwnerKeypair = new Keypair();
-        const mintPubkey = await splToken.createMint(
-          connection as any,
-          payerKeypair,
-          mintOwnerKeypair.publicKey,
-          null, // freeze authority
-          2, // decimals
+        selfTransferSignature = await sendAndConfirmTransaction(
+          connection,
+          selfTransferTransaction,
+          [testOwnerKeypair],
         );
-
-        const tokenAccountPubkey = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          accountOwnerKeypair.publicKey,
-        );
-
-        await splToken.mintTo(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          tokenAccountPubkey,
-          mintOwnerKeypair,
-          11111,
-        );
-
-        const mintPubkey2 = await splToken.createMint(
-          connection as any,
-          payerKeypair,
-          mintOwnerKeypair.publicKey,
-          null, // freeze authority
-          2, // decimals
-        );
-
-        const tokenAccountPubkey2 = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey2,
-          accountOwnerKeypair.publicKey,
-        );
-
-        await splToken.mintTo(
-          connection as any,
-          payerKeypair,
-          mintPubkey2,
-          tokenAccountPubkey2,
-          mintOwnerKeypair,
-          100,
-        );
-
-        const tokenAccountDestPubkey = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          accountOwnerKeypair.publicKey,
-          new Keypair() as any,
-        );
-
-        testSignature = await splToken.transfer(
-          connection as any,
-          payerKeypair,
-          tokenAccountPubkey,
-          tokenAccountDestPubkey,
-          accountOwnerKeypair,
-          1,
-        );
-
-        testTokenMintPubkey = mintPubkey as PublicKey;
-        testOwnerKeypair = accountOwnerKeypair;
-        testTokenAccountPubkey = tokenAccountPubkey as PublicKey;
       });
 
       it('get token supply', async () => {
@@ -5020,7 +4997,7 @@ describe('Connection', function () {
           await connection.getTokenLargestAccounts(testTokenMintPubkey)
         ).value;
 
-        expect(largestAccounts).to.have.length(2);
+        expect(largestAccounts).to.have.length(1);
         const largestAccount = largestAccounts[0];
         expect(largestAccount.address.equals(testTokenAccountPubkey)).to.be
           .true;
@@ -5033,14 +5010,15 @@ describe('Connection', function () {
       });
 
       it('get confirmed token transaction', async () => {
-        const parsedTx =
-          await connection.getParsedConfirmedTransaction(testSignature);
+        const parsedTx = await connection.getParsedConfirmedTransaction(
+          selfTransferSignature,
+        );
         if (parsedTx === null) {
           expect(parsedTx).not.to.be.null;
           return;
         }
         const {signatures, message} = parsedTx.transaction;
-        expect(signatures[0]).to.eq(testSignature);
+        expect(signatures[0]).to.eq(selfTransferSignature);
         const ix = message.instructions[0];
         if ('parsed' in ix) {
           expect(ix.program).to.eq('spl-token');
@@ -5089,7 +5067,7 @@ describe('Connection', function () {
           await connection.getMultipleParsedAccounts([
             testTokenAccountPubkey,
             testTokenMintPubkey,
-            payerKeypair.publicKey,
+            testOwnerKeypair.publicKey,
             newAccount,
           ])
         ).value;
@@ -5121,12 +5099,12 @@ describe('Connection', function () {
           expect(parsedTokenMint).to.be.ok;
         }
 
-        const unparsedPayerAccount = accounts[2];
-        if (unparsedPayerAccount) {
-          const data = unparsedPayerAccount.data;
+        const unparsedOwnerAccount = accounts[2];
+        if (unparsedOwnerAccount) {
+          const data = unparsedOwnerAccount.data;
           expect(Buffer.isBuffer(data)).to.be.true;
         } else {
-          expect(unparsedPayerAccount).to.be.ok;
+          expect(unparsedOwnerAccount).to.be.ok;
         }
 
         const unknownAccount = accounts[3];
@@ -5175,14 +5153,14 @@ describe('Connection', function () {
             mint: testTokenMintPubkey,
           })
         ).value;
-        expect(accountsWithMintFilter).to.have.length(2);
+        expect(accountsWithMintFilter).to.have.length(1);
 
         const accountsWithProgramFilter = (
           await connection.getTokenAccountsByOwner(testOwnerKeypair.publicKey, {
             programId: TOKEN_PROGRAM_ID,
           })
         ).value;
-        expect(accountsWithProgramFilter).to.have.length(3);
+        expect(accountsWithProgramFilter).to.have.length(1);
 
         const noAccounts = (
           await connection.getTokenAccountsByOwner(newAccount, {

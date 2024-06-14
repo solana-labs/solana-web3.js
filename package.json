@@ -58,7 +58,6 @@
     "packageManager": "pnpm@9.1.0",
     "pnpm": {
         "overrides": {
-            "@solana/web3.js": "workspace:*",
             "@wallet-standard/base": "pre",
             "conventional-changelog-conventionalcommits": ">= 8.0.0",
             "jsdom": "^22",
