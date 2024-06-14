@@ -62,6 +62,10 @@ export function onlyFieldsRequested(fieldNames: string[], info: GraphQLResolveIn
     function checkFieldsWithVisitor(root: RootNode | null) {
         injectableRootVisitor(info, root, {
             fieldNodeOperation(_info, node) {
+                // Ignore the GraphQL default fields.
+                if (node.name.value === '__id' || node.name.value === '__typename') {
+                    return;
+                }
                 onlyFieldsRequested = fieldNames.includes(node.name.value);
                 if (!onlyFieldsRequested) {
                     return BREAK;
