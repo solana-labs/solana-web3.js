@@ -1,0 +1,11 @@
+{
+    "pubkey": "AVGuygVeBmbYiJ47V7tgBNLSukNqW7pWZYJsKUNWhHpc",
+    "account": {
+        "lamports": 10000000000,
+        "data": ["", "base64"],
+        "owner": "11111111111111111111111111111111",
+        "executable": false,
+        "rentEpoch": 0,
+        "space": 0
+    }
+}
