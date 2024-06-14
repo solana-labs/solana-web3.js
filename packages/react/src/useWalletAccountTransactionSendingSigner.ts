@@ -10,15 +10,27 @@ import { getAbortablePromise } from './abortable-promise';
 import { OnlySolanaChains } from './chain';
 import { useSignAndSendTransaction } from './useSignAndSendTransaction';
 
+type ExtraConfig = Readonly<{
+    getOptions?(transaction: Transaction): Readonly<{ minContextSlot?: bigint }> | undefined;
+}>;
+
 /**
  * Returns an object that conforms to the `TransactionSendingSigner` interface of `@solana/signers`.
  */
 export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: OnlySolanaChains<TWalletAccount['chains']>,
-    extraConfig?: Readonly<{
-        getOptions?(transaction: Transaction): Readonly<{ minContextSlot?: bigint }> | undefined;
-    }>,
+    extraConfig?: ExtraConfig,
+): TransactionSendingSigner<TWalletAccount['address']>;
+export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
+    uiWalletAccount: TWalletAccount,
+    chain: `solana:${string}`,
+    extraConfig?: ExtraConfig,
+): TransactionSendingSigner<TWalletAccount['address']>;
+export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
+    uiWalletAccount: TWalletAccount,
+    chain: `solana:${string}`,
+    extraConfig?: ExtraConfig,
 ): TransactionSendingSigner<TWalletAccount['address']> {
     const encoderRef = useRef<ReturnType<typeof getTransactionEncoder>>();
     const signAndSendTransaction = useSignAndSendTransaction(uiWalletAccount, chain);
