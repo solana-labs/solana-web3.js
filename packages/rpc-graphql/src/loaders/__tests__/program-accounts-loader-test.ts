@@ -7,7 +7,7 @@ import type {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../../index';
+import { createSolanaRpcGraphQL, RpcGraphQL } from '../../index';
 
 const FOREVER_PROMISE = new Promise(() => {
     /* never resolve */
@@ -28,7 +28,7 @@ describe('account loader', () => {
             getProgramAccounts: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
             getTransaction: jest.fn().mockReturnValue({ send: jest.fn().mockReturnValue(FOREVER_PROMISE) }),
         };
-        rpcGraphQL = createRpcGraphQL(rpc);
+        rpcGraphQL = createSolanaRpcGraphQL(rpc);
     });
     describe('cached responses', () => {
         it('coalesces multiple requests for the same program into one', async () => {

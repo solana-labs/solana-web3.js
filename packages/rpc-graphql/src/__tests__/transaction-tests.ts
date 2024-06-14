@@ -8,7 +8,7 @@ import {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
+import { createSolanaRpcGraphQL, RpcGraphQL } from '../index';
 import {
     mockTransactionAddressLookup,
     mockTransactionBase58,
@@ -48,7 +48,7 @@ describe('transaction', () => {
                 return target[p as keyof GraphQLCompliantRpc];
             },
         });
-        rpcGraphQL = createRpcGraphQL(mockRpc);
+        rpcGraphQL = createSolanaRpcGraphQL(mockRpc);
     });
 
     describe('basic queries', () => {
