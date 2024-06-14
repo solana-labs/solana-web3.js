@@ -250,6 +250,7 @@ describe('sendTransaction', () => {
             new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
                 accounts: null,
                 cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_NOT_FOUND),
+                innerInstructions: null,
                 logs: [],
                 returnData: null,
                 unitsConsumed: 0,
@@ -284,6 +285,7 @@ describe('sendTransaction', () => {
             new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
                 accounts: null,
                 cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__INSUFFICIENT_FUNDS_FOR_FEE),
+                innerInstructions: null,
                 logs: [],
                 returnData: null,
                 unitsConsumed: 0,
@@ -315,6 +317,7 @@ describe('sendTransaction', () => {
             new SolanaError(SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE, {
                 accounts: null,
                 cause: new SolanaError(SOLANA_ERROR__TRANSACTION_ERROR__BLOCKHASH_NOT_FOUND),
+                innerInstructions: null,
                 logs: [],
                 returnData: null,
                 unitsConsumed: 0,
