@@ -1,7 +1,6 @@
 import { env } from 'node:process';
 
 import browsersListToEsBuild from 'browserslist-to-esbuild';
-import path from 'path';
 import { Format, Options } from 'tsup';
 
 type Platform =
@@ -32,11 +31,25 @@ export function getBaseConfig(platform: Platform, formats: Format[], _options: O
                               if (format === 'iife') {
                                   options.define = {
                                       ...options.define,
-                                      __DEV__: `${isDebugBuild}`,
+                                      'import.meta.env.MODE': `"${isDebugBuild ? 'development' : 'production'}"`,
+                                      'process.env.NODE_ENV': `"${isDebugBuild ? 'development' : 'production'}"`,
                                   };
                                   options.target = BROWSERSLIST_TARGETS;
+                              } else {
+                                  options.banner = {
+                                      ...options.banner,
+                                      js: [
+                                          options.banner?.js,
+                                          ';',
+                                          'var __DEV__ = ',
+                                          "process.env.NODE_ENV === 'development'",
+                                          format === 'esm' ? " || import.meta.env.MODE === 'development'" : null,
+                                          ';',
+                                      ]
+                                          .filter(Boolean)
+                                          .join(''),
+                                  };
                               }
-                              options.inject = [path.resolve(__dirname, 'env-shim.ts')];
                           },
                           external: [
                               // Despite inlining `@solana/text-encoding-impl`, do not recursively inline `fastestsmallesttextencoderdecoder`.
