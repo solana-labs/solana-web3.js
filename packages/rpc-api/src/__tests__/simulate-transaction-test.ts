@@ -172,6 +172,7 @@ describe('simulateTransaction', () => {
                     value: {
                         accounts: null,
                         err: null,
+                        innerInstructions: null,
                         logs: expect.any(Array),
                         returnData: null,
                         unitsConsumed: expect.any(BigInt),
@@ -281,6 +282,7 @@ describe('simulateTransaction', () => {
             value: {
                 accounts: null,
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -319,6 +321,7 @@ describe('simulateTransaction', () => {
             value: {
                 accounts: null,
                 err: 'BlockhashNotFound',
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -357,6 +360,7 @@ describe('simulateTransaction', () => {
             value: {
                 accounts: null,
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -461,6 +465,7 @@ describe('simulateTransaction', () => {
             value: {
                 accounts: null,
                 err: 'AccountNotFound',
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -509,6 +514,7 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -557,6 +563,7 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -622,6 +629,7 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -671,6 +679,7 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -718,6 +727,8 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
+
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -771,6 +782,7 @@ describe('simulateTransaction', () => {
                     }),
                 ],
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
@@ -810,6 +822,7 @@ describe('simulateTransaction', () => {
             value: {
                 accounts: null,
                 err: null,
+                innerInstructions: null,
                 logs: expect.any(Array),
                 returnData: null,
                 unitsConsumed: expect.any(BigInt),
