@@ -259,4 +259,12 @@ describe('PublicKey', function () {
     const decoded = PublicKey.decodeUnchecked(encoded);
     expect(decoded.equals(publicKey)).to.be.true;
   });
+
+  it('isPublicKey', () => {
+    const publicKey = Keypair.generate().publicKey;
+    expect(PublicKey.isPublicKey(publicKey)).to.be.true;
+    expect(PublicKey.isPublicKey(publicKey.toBase58())).to.be.true;
+    expect(PublicKey.isPublicKey(publicKey.toBase58().slice(0, -1))).to.be
+      .false;
+  });
 });

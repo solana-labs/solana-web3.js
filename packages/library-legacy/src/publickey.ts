@@ -251,6 +251,17 @@ export class PublicKey extends Struct {
     const pubkey = new PublicKey(pubkeyData);
     return isOnCurve(pubkey.toBytes());
   }
+
+  /**
+   * Check that a pubkey is valid.
+   */
+  static isPublicKey(value: PublicKeyInitData): boolean {
+    try{
+      return new PublicKey(value).toBase58().length === 44;
+    } catch (err) {
+      return false;
+    }
+  }
 }
 
 SOLANA_SCHEMA.set(PublicKey, {
