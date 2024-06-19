@@ -956,6 +956,11 @@ export type SimulateTransactionConfig = {
   innerInstructions?: boolean;
 };
 
+export type ParsedInnerInstruction = {
+  index: number;
+  instructions: UiInstruction[];
+};
+
 export type UiCompiledInstruction = {
   programIdIndex: number;
   accounts: number[];
@@ -966,7 +971,11 @@ export type UiCompiledInstruction = {
 export type UiParsedInstruction = {
   program: string;
   programId: PublicKey;
-  parsed?: any;
+  parsed: {
+    info: any;
+    type: string;
+  };
+  stackHeight?: number;
 };
 
 export type UiPartiallyDecodedInstruction = {
@@ -977,18 +986,11 @@ export type UiPartiallyDecodedInstruction = {
 };
 
 export type UiInstruction =
-  | {type: 'Compiled'; value: UiCompiledInstruction}
-  | {
-      type: 'Parsed';
-      value: UiParsedInstruction | UiPartiallyDecodedInstruction;
-    };
+  | { type: 'Compiled'; value: UiCompiledInstruction }
+  | { type: 'Parsed'; value: UiParsedInstruction }
+  | { type: 'PartiallyDecoded'; value: UiPartiallyDecodedInstruction };
 
 export type UiInnerInstructions = {
-  index: number;
-  instructions: UiInstruction[];
-};
-
-export type ParsedNewInnerInstruction = {
   index: number;
   instructions: UiInstruction[];
 };
@@ -999,35 +1001,39 @@ export type SimulatedTransactionResponse = {
   accounts?: (SimulatedTransactionAccountInfo | null)[] | null;
   unitsConsumed?: number;
   returnData?: TransactionReturnData | null;
-  innerInstructions?: ParsedNewInnerInstruction[] | null;
+  innerInstructions?: UiInnerInstructions[] | null;
 };
+
 const UiCompiledInstructionStruct = pick({
   programIdIndex: number(),
   accounts: array(number()),
   data: string(),
   stackHeight: optional(number()),
 });
+
 const UiParsedInstructionStruct = pick({
   program: string(),
   programId: PublicKeyFromString,
-  parsed: optional(any()),
+  parsed: pick({
+    info: any(),
+    type: string(),
+  }),
+  stackHeight: optional(number()),
 });
+
 const UiPartiallyDecodedInstructionStruct = pick({
   programId: string(),
   accounts: array(string()),
   data: string(),
   stackHeight: optional(number()),
 });
+
 const UiInstructionStruct = union([
-  pick({type: literal('Compiled'), value: UiCompiledInstructionStruct}),
-  pick({
-    type: literal('Parsed'),
-    value: union([
-      UiParsedInstructionStruct,
-      UiPartiallyDecodedInstructionStruct,
-    ]),
-  }),
+  pick({ type: literal('Compiled'), value: UiCompiledInstructionStruct }),
+  pick({ type: literal('Parsed'), value: UiParsedInstructionStruct }),
+  pick({ type: literal('PartiallyDecoded'), value: UiPartiallyDecodedInstructionStruct }),
 ]);
+
 const UiInnerInstructionsStruct = pick({
   index: number(),
   instructions: array(UiInstructionStruct),
@@ -1064,11 +1070,6 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
     innerInstructions: optional(array(UiInnerInstructionsStruct)),
   }),
 );
-
-export type ParsedInnerInstruction = {
-  index: number;
-  instructions: (ParsedInstruction | PartiallyDecodedInstruction)[];
-};
 
 export type TokenBalance = {
   accountIndex: number;
@@ -5785,6 +5786,10 @@ export class Connection {
         config.commitment = this.commitment;
       }
 
+      if (configOrSigners && typeof configOrSigners === 'object' && 'innerInstructions' in configOrSigners) {
+        config.innerInstructions = configOrSigners.innerInstructions;
+      }
+
       const args = [encodedTransaction, config];
       const unsafeRes = await this._rpcRequest('simulateTransaction', args);
       const res = create(unsafeRes, SimulatedTransactionResponseStruct);
@@ -5873,6 +5878,10 @@ export class Connection {
 
     if (signers) {
       config.sigVerify = true;
+    }
+
+    if (configOrSigners && typeof configOrSigners === 'object' && 'innerInstructions' in configOrSigners) {
+      config.innerInstructions = configOrSigners.innerInstructions;
     }
 
     const args = [encodedTransaction, config];
