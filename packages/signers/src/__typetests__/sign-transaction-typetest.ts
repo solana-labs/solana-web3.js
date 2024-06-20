@@ -1,6 +1,8 @@
 import { SignatureBytes } from '@solana/keys';
 import {
     CompilableTransactionMessage,
+    createTransactionMessage,
+    setTransactionMessageLifetimeUsingBlockhash,
     TransactionMessageWithBlockhashLifetime,
     TransactionMessageWithDurableNonceLifetime,
 } from '@solana/transaction-messages';
@@ -13,12 +15,17 @@ import {
 } from '@solana/transactions';
 
 import { ITransactionMessageWithSigners } from '../account-signer-meta';
+import { setTransactionMessageFeePayerSigner } from '../fee-payer-signer';
 import {
     partiallySignTransactionMessageWithSigners,
     signAndSendTransactionMessageWithSigners,
     signTransactionMessageWithSigners,
 } from '../sign-transaction';
-import { ITransactionMessageWithSingleSendingSigner } from '../transaction-with-single-sending-signer';
+import { TransactionSigner } from '../transaction-signer';
+import {
+    assertIsTransactionMessageWithSingleSendingSigner,
+    ITransactionMessageWithSingleSendingSigner,
+} from '../transaction-with-single-sending-signer';
 
 type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & ITransactionMessageWithSigners;
 
@@ -79,4 +86,18 @@ type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & IT
     const transactionMessage = null as unknown as CompilableTransactionMessageWithSigners &
         ITransactionMessageWithSingleSendingSigner;
     signAndSendTransactionMessageWithSigners(transactionMessage) satisfies Promise<SignatureBytes>;
+}
+
+{
+    // [signAndSendTransactionMessageWithSigners]: it only works if the message contains a single sending signer.
+    const signer = null as unknown as TransactionSigner;
+    const latestBlockhash = null as unknown as Parameters<typeof setTransactionMessageLifetimeUsingBlockhash>[0];
+    const message = setTransactionMessageLifetimeUsingBlockhash(
+        latestBlockhash,
+        setTransactionMessageFeePayerSigner(signer, createTransactionMessage({ version: 0 })),
+    );
+    // @ts-expect-error The message could have multiple sending signers.
+    signAndSendTransactionMessageWithSigners(message);
+    assertIsTransactionMessageWithSingleSendingSigner(message);
+    signAndSendTransactionMessageWithSigners(message);
 }
