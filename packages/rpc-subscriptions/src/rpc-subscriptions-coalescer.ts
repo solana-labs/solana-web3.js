@@ -9,12 +9,17 @@ type Config<TRpcSubscriptionsMethods> = Readonly<{
 }>;
 type GetDeduplicationKeyFn = (subscriptionMethod: string | symbol, payload: unknown) => CacheKey;
 
-const EXPLICIT_ABORT_TOKEN = Symbol(
-    __DEV__
-        ? "This symbol is thrown from a subscription's iterator when the subscription is " +
-              'explicitly aborted by the user'
-        : undefined,
-);
+let EXPLICIT_ABORT_TOKEN: symbol;
+function createExplicitAbortToken() {
+    // This function is an annoying workaround to prevent `process.env.NODE_ENV` from appearing at
+    // the top level of this module and thwarting an optimizing compiler's attempt to tree-shake.
+    return Symbol(
+        __DEV__
+            ? "This symbol is thrown from a subscription's iterator when the subscription is " +
+                  'explicitly aborted by the user'
+            : undefined,
+    );
+}
 
 function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: CallableFunction) {
     (async () => {
@@ -91,10 +96,10 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                             ...iterable,
                             async *[Symbol.asyncIterator]() {
                                 abortPromise ||= abortSignal.aborted
-                                    ? Promise.reject(EXPLICIT_ABORT_TOKEN)
+                                    ? Promise.reject((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()))
                                     : new Promise<never>((_, reject) => {
                                           abortSignal.addEventListener('abort', () => {
-                                              reject(EXPLICIT_ABORT_TOKEN);
+                                              reject((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));
                                           });
                                       });
                                 try {
@@ -108,7 +113,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                                         }
                                     }
                                 } catch (e) {
-                                    if (e === EXPLICIT_ABORT_TOKEN) {
+                                    if (e === (EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken())) {
                                         return;
                                     }
                                     cache.delete(deduplicationKey);

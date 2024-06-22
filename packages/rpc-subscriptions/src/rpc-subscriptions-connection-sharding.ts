@@ -12,9 +12,12 @@ type Config<TTransport extends RpcSubscriptionsTransport> = Readonly<{
     transport: TTransport;
 }>;
 
-const NULL_SHARD_CACHE_KEY = Symbol(
-    __DEV__ ? 'Cache key to use when there is no connection sharding strategy' : undefined,
-);
+let NULL_SHARD_CACHE_KEY: symbol;
+function createNullShardCacheKey() {
+    // This function is an annoying workaround to prevent `process.env.NODE_ENV` from appearing at
+    // the top level of this module and thwarting an optimizing compiler's attempt to tree-shake.
+    return Symbol(__DEV__ ? 'Cache key to use when there is no connection sharding strategy' : undefined);
+}
 
 export function getWebSocketTransportWithConnectionSharding<TTransport extends RpcSubscriptionsTransport>({
     getShard,
@@ -22,7 +25,8 @@ export function getWebSocketTransportWithConnectionSharding<TTransport extends R
 }: Config<TTransport>): TTransport {
     return getCachedAbortableIterableFactory({
         getAbortSignalFromInputArgs: ({ signal }) => signal,
-        getCacheKeyFromInputArgs: ({ payload }) => (getShard ? getShard(payload) : NULL_SHARD_CACHE_KEY),
+        getCacheKeyFromInputArgs: ({ payload }) =>
+            getShard ? getShard(payload) : (NULL_SHARD_CACHE_KEY ||= createNullShardCacheKey()),
         onCacheHit: (connection, { payload }) => connection.send_DO_NOT_USE_OR_YOU_WILL_BE_FIRED(payload),
         onCreateIterable: (abortSignal, config) =>
             transport({
