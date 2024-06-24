@@ -270,7 +270,7 @@ export type ConfirmOptions = {
 export type ConfirmedSignaturesForAddress2Options = {
   /**
    * Start searching backwards from this transaction signature.
-   * @remark If not provided the search starts from the highest max confirmed block.
+   * @remarks If not provided the search starts from the highest max confirmed block.
    */
   before?: TransactionSignature;
   /** Search until this transaction signature is reached, if found before `limit`. */
@@ -285,7 +285,7 @@ export type ConfirmedSignaturesForAddress2Options = {
 export type SignaturesForAddressOptions = {
   /**
    * Start searching backwards from this transaction signature.
-   * @remark If not provided the search starts from the highest max confirmed block.
+   * @remarks If not provided the search starts from the highest max confirmed block.
    */
   before?: TransactionSignature;
   /** Search until this transaction signature is reached, if found before `limit`. */
