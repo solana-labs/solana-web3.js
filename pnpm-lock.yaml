@@ -526,8 +526,8 @@ importers:
         specifier: ^7.1.8
         version: 7.1.8
       '@types/express-serve-static-core':
-        specifier: ^4.19.3
-        version: 4.19.3
+        specifier: ^4.19.5
+        version: 4.19.5
       '@types/mocha':
         specifier: ^10.0.6
         version: 10.0.6
@@ -2966,8 +2966,8 @@ packages:
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
-  '@types/express-serve-static-core@4.19.3':
-    resolution: {integrity: sha512-KOzM7MhcBFlmnlr/fzISFF5vGWVSvN6fTd4T+ExOt08bA/dA5kpSzY52nMsI1KDFmUREpJelPYyuslLRSjjgCg==}
+  '@types/express-serve-static-core@4.19.5':
+    resolution: {integrity: sha512-y6W03tvrACO72aijJ5uF02FRq5cgDR9lUxddQ8vyF+GvmjJQqbzDcJngEjURc+ZsG31VI3hODNZJ2URj86pzmg==}
 
   '@types/fastestsmallesttextencoderdecoder@1.0.2':
     resolution: {integrity: sha512-0Md9qUxGnQ9uJ0NjsA70Y0NHIl3NwfBO1d8CGXK0zhczRL85CXJ3M0JZsmCNQ0WcAbt08FuT4U1G1mWQqgOsUg==}
@@ -10113,7 +10113,7 @@ snapshots:
 
   '@types/estree@1.0.5': {}
 
-  '@types/express-serve-static-core@4.19.3':
+  '@types/express-serve-static-core@4.19.5':
     dependencies:
       '@types/node': 18.19.21
       '@types/qs': 6.9.7
