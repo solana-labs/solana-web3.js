@@ -1004,17 +1004,21 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
         }),
       ),
     ),
-    innerInstructions: optional(nullable(array(
-      pick({
-        index: number(),
-        instructions: array(
-          union([
-            ParsedInstructionStruct,
-            PartiallyDecodedInstructionStruct,
-          ]),
+    innerInstructions: optional(
+      nullable(
+        array(
+          pick({
+            index: number(),
+            instructions: array(
+              union([
+                ParsedInstructionStruct,
+                PartiallyDecodedInstructionStruct,
+              ]),
+            ),
+          }),
         ),
-      }),
-    ))),
+      ),
+    ),
   }),
 );
 
@@ -5738,7 +5742,11 @@ export class Connection {
         config.commitment = this.commitment;
       }
 
-      if (configOrSigners && typeof configOrSigners === 'object' && 'innerInstructions' in configOrSigners) {
+      if (
+        configOrSigners &&
+        typeof configOrSigners === 'object' &&
+        'innerInstructions' in configOrSigners
+      ) {
         config.innerInstructions = configOrSigners.innerInstructions;
       }
 
@@ -5832,7 +5840,11 @@ export class Connection {
       config.sigVerify = true;
     }
 
-    if (configOrSigners && typeof configOrSigners === 'object' && 'innerInstructions' in configOrSigners) {
+    if (
+      configOrSigners &&
+      typeof configOrSigners === 'object' &&
+      'innerInstructions' in configOrSigners
+    ) {
       config.innerInstructions = configOrSigners.innerInstructions;
     }
 
