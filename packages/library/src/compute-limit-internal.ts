@@ -63,7 +63,7 @@ function isSetComputeLimitInstruction(
  * consumed during simulation.
  *
  * The estimate this function returns can be used to set a compute unit limit on the transaction.
- * Correctly budgeting a compute unit limit for your transaction message can increase the probabilty
+ * Correctly budgeting a compute unit limit for your transaction message can increase the probability
  * that your transaction will be accepted for processing.
  *
  * If you don't declare a compute unit limit on your transaction, validators will assume an upper
