@@ -96,6 +96,12 @@
         "test:treeshakability:node": {
             "dependsOn": ["compile:js"]
         },
+        "@solana/example-react-app#build": {
+            "dependsOn": ["^compile:js", "^compile:typedefs"],
+            "env": ["REACT_EXAMPLE_APP_ENABLE_MAINNET"],
+            "inputs": ["$TURBO_DEFAULT$", "index.html", "tsconfig.*", "vite.config.ts", "public/**", "src/**"],
+            "outputs": ["dist/**"]
+        },
         "@solana/web3.js#build": {
             "dependsOn": [
                 "clean",
@@ -149,6 +155,9 @@
         "@solana/web3.js#test:unit:node": {
             "dependsOn": ["compile:js"],
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
+        },
+        "//#compile:ghpages": {
+            "dependsOn": ["@solana/example-react-app#build", "@solana/web3.js#compile:docs"]
         }
     },
     "ui": "stream"
