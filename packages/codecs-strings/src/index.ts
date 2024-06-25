@@ -1,3 +1,4 @@
+export * from './ascii';
 export * from './assertions';
 export * from './base10';
 export * from './base16';

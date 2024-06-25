@@ -20,6 +20,7 @@ import {
     SOLANA_ERROR__CODECS__ENUM_DISCRIMINATOR_OUT_OF_RANGE,
     SOLANA_ERROR__CODECS__EXPECTED_POSITIVE_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__EXPECTED_ZERO_VALUE_TO_MATCH_ITEM_FIXED_SIZE,
+    SOLANA_ERROR__CODECS__INVALID_ASCII_STRING,
     SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH,
     SOLANA_ERROR__CODECS__INVALID_CONSTANT,
     SOLANA_ERROR__CODECS__INVALID_DISCRIMINATED_UNION_VARIANT,
@@ -304,6 +305,9 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             expectedSize: number;
             hexZeroValue: string;
             zeroValue: ReadonlyUint8Array;
+        };
+        [SOLANA_ERROR__CODECS__INVALID_ASCII_STRING]: {
+            value: string;
         };
         [SOLANA_ERROR__CODECS__INVALID_BYTE_LENGTH]: {
             bytesLength: number;
