@@ -15,17 +15,22 @@ type Props = Readonly<{
     account: UiWalletAccount;
 }>;
 
+const seenErrors = new WeakSet();
+
 export function Balance({ account }: Props) {
     const { chain } = useContext(ChainContext);
     const { rpc, rpcSubscriptions } = useContext(RpcContext);
     const subscribe = useMemo(() => balanceSubscribe.bind(null, rpc, rpcSubscriptions), [rpc, rpcSubscriptions]);
     const { data: lamports, error } = useSWRSubscription({ address: address(account.address), chain }, subscribe);
-    if (error) {
+    if (error && !seenErrors.has(error)) {
         return (
             <>
                 <ErrorDialog
                     error={error}
                     key={`${account.address}:${chain}`}
+                    onClose={() => {
+                        seenErrors.add(error);
+                    }}
                     title="Failed to fetch account balance"
                 />
                 <Text>
