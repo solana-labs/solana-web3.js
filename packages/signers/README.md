@@ -549,9 +549,9 @@ Here as well, composite transaction signers are treated such that at least one s
 -   `TransactionModifyingSigner`, if no other `TransactionModifyingSigner` exists.
 -   `TransactionPartialSigner`, otherwise.
 
-The provided transaction must be of type `ITransactionWithSingleSendingSigner` meaning that it must contain exactly one `TransactionSendingSigner` inside its account metas. If more than one composite signers implement the `TransactionSendingSigner` interface, one of them will be selected as the sending signer.
+The provided transaction must contain exactly one `TransactionSendingSigner` inside its account metas. If more than one composite signers implement the `TransactionSendingSigner` interface, one of them will be selected as the sending signer. Otherwise, if multiple `TransactionSendingSigners` must be selected, the function will throw an error.
 
-Therefore, you may use the `assertIsTransactionWithSingleSendingSigner()` function to ensure the transaction is of the expected type.
+If you'd like to assert that a transaction makes use of exactly one `TransactionSendingSigner` _before_ calling this function, you may use the `assertIsTransactionWithSingleSendingSigner` function.
 
 ```ts
 assertIsTransactionWithSingleSendingSigner(myTransaction);
