@@ -1,7 +1,7 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { DropdownMenu, ThickChevronRightIcon } from '@radix-ui/themes';
 import type { UiWallet, UiWalletAccount } from '@wallet-standard/react';
-import { useConnect, useDisconnect } from '@wallet-standard/react';
+import { uiWalletAccountsAreSame, useConnect, useDisconnect } from '@wallet-standard/react';
 import { useCallback, useContext } from 'react';
 
 import { SelectedWalletAccountContext } from '../context/SelectedWalletAccountContext';
@@ -22,14 +22,23 @@ export function ConnectWalletMenuItem({ onAccountSelect, onDisconnect, onError, 
     const [selectedWalletAccount] = useContext(SelectedWalletAccountContext);
     const handleConnectClick = useCallback(async () => {
         try {
-            const accounts = await connect();
-            if (accounts[0]) {
-                onAccountSelect(accounts[0]);
+            const existingAccounts = [...wallet.accounts];
+            const nextAccounts = await connect();
+            // Try to choose the first never-before-seen account.
+            for (const nextAccount of nextAccounts) {
+                if (!existingAccounts.some(existingAccount => uiWalletAccountsAreSame(nextAccount, existingAccount))) {
+                    onAccountSelect(nextAccount);
+                    return;
+                }
+            }
+            // Failing that, choose the first account in the list.
+            if (nextAccounts[0]) {
+                onAccountSelect(nextAccounts[0]);
             }
         } catch (e) {
             onError(e);
         }
-    }, [connect, onAccountSelect, onError]);
+    }, [connect, onAccountSelect, onError, wallet.accounts]);
     return (
         <DropdownMenu.Sub open={!isConnected ? false : undefined}>
             <DropdownMenuPrimitive.SubTrigger
