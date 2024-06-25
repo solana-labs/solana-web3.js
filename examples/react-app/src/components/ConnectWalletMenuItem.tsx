@@ -20,21 +20,16 @@ export function ConnectWalletMenuItem({ onAccountSelect, onDisconnect, onError, 
     const isPending = isConnecting || isDisconnecting;
     const isConnected = wallet.accounts.length > 0;
     const [selectedWalletAccount] = useContext(SelectedWalletAccountContext);
-    const handleClick = useCallback(async () => {
+    const handleConnectClick = useCallback(async () => {
         try {
-            if (isConnected) {
-                await disconnect();
-                onDisconnect(wallet);
-            } else {
-                const accounts = await connect();
-                if (accounts[0]) {
-                    onAccountSelect(accounts[0]);
-                }
+            const accounts = await connect();
+            if (accounts[0]) {
+                onAccountSelect(accounts[0]);
             }
         } catch (e) {
             onError(e);
         }
-    }, [connect, disconnect, isConnected, onAccountSelect, onDisconnect, onError, wallet]);
+    }, [connect, onAccountSelect, onError]);
     return (
         <DropdownMenu.Sub open={!isConnected ? false : undefined}>
             <DropdownMenuPrimitive.SubTrigger
@@ -46,7 +41,7 @@ export function ConnectWalletMenuItem({ onAccountSelect, onDisconnect, onError, 
                     'rt-DropdownMenuSubTrigger',
                 ].join(' ')}
                 disabled={isPending}
-                onClick={!isConnected ? handleClick : undefined}
+                onClick={!isConnected ? handleConnectClick : undefined}
             >
                 <WalletMenuItemContent loading={isPending} wallet={wallet} />
                 {isConnected ? (
@@ -71,6 +66,14 @@ export function ConnectWalletMenuItem({ onAccountSelect, onDisconnect, onError, 
                     ))}
                 </DropdownMenu.RadioGroup>
                 <DropdownMenu.Separator />
+                <DropdownMenu.Item
+                    onSelect={async e => {
+                        e.preventDefault();
+                        await handleConnectClick();
+                    }}
+                >
+                    Connect More
+                </DropdownMenu.Item>
                 <DropdownMenu.Item
                     color="red"
                     onSelect={async e => {
