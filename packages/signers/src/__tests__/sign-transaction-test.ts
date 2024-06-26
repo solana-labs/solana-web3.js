@@ -38,7 +38,7 @@ jest.mock('@solana/transactions', () => ({
     compileTransaction: jest.fn(),
 }));
 
-describe('partiallySignTransactionWithSigners', () => {
+describe('partiallySignTransactionMessageWithSigners', () => {
     it('signs the transaction with its extracted signers', async () => {
         expect.assertions(3);
 
@@ -406,7 +406,7 @@ describe('partiallySignTransactionWithSigners', () => {
     });
 });
 
-describe('signTransactionWithSigners', () => {
+describe('signTransactionMessageWithSigners', () => {
     it('signs the transaction with its extracted signers', async () => {
         expect.assertions(3);
 
@@ -472,7 +472,7 @@ describe('signTransactionWithSigners', () => {
         const promise = signTransactionMessageWithSigners(transactionMessage);
 
         // Then we expect an error letting us know the transaction is not fully signed.
-        // This is because sending signers are ignored by signTransactionWithSigners.
+        // This is because sending signers are ignored by signTransactionMessageWithSigners.
         await expect(promise).rejects.toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: ['2222' as Address],
@@ -530,7 +530,7 @@ describe('signTransactionWithSigners', () => {
     });
 });
 
-describe('signAndSendTransactionWithSigners', () => {
+describe('signAndSendTransactionMessageWithSigners', () => {
     it('signs and sends the transaction with the provided signers', async () => {
         expect.assertions(3);
 
