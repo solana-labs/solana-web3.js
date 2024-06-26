@@ -4,9 +4,7 @@ import { ok } from 'node:assert';
 import process from 'node:process';
 
 import { Bench } from 'tinybench';
-import { Agent, Dispatcher } from 'undici';
-
-import fetchImpl from '../index.node';
+import { Agent, Dispatcher, fetch } from 'undici';
 
 const NUM_CONCURRENT_REQUESTS = 1024;
 const URL = process.argv[2];
@@ -44,7 +42,7 @@ function getTestInit() {
 async function makeConcurrentRequests(num: number = NUM_CONCURRENT_REQUESTS) {
     await Promise.all(
         Array.from({ length: num }).map(() =>
-            fetchImpl(URL, {
+            fetch(URL, {
                 dispatcher,
                 ...getTestInit(),
             }),
@@ -58,40 +56,36 @@ bench
             dispatcher = undefined;
         },
     })
-    // FIXME: https://github.com/nodejs/undici/issues/2808
-    // .add('unlimited connections http/2', () => makeConcurrentRequests(), {
-    //     beforeEach: createDispatcher.bind(null, { allowH2: true, connections: null }),
-    // })
+    .add('unlimited connections http/2', () => makeConcurrentRequests(), {
+        beforeEach: createDispatcher.bind(null, { allowH2: true, connections: null }),
+    })
     .add('unlimited connections', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: null }),
     })
     .add('16 connections', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 16 }),
     })
-    // FIXME: https://github.com/nodejs/undici/issues/2808
-    // .add('16 connections, http/2', () => makeConcurrentRequests(), {
-    //     beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 16 }),
-    // })
+    .add('16 connections, http/2', () => makeConcurrentRequests(), {
+        beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 16 }),
+    })
     .add('16 connections, pipeline 2 wide', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 16, pipelining: 2 }),
     })
     .add('32 connections', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 32 }),
     })
-    // FIXME: https://github.com/nodejs/undici/issues/2808
-    // .add('32 connections, http/2', () => makeConcurrentRequests(), {
-    //     beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 32 }),
-    // })
+    .add('32 connections, http/2', () => makeConcurrentRequests(), {
+        beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 32 }),
+    })
     .add('32 connections, pipeline 2 wide', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 32, pipelining: 2 }),
     })
     .add('64 connections', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 64 }),
     })
-    // FIXME: https://github.com/nodejs/undici/issues/2808
-    // .add('64 connections, http/2', () => makeConcurrentRequests(), {
-    //     beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 64 }),
-    // })
+    .add('64 connections, http/2', () => makeConcurrentRequests(), {
+        beforeEach: createDispatcher.bind(null, { allowH2: true, connections: 64 }),
+    })
     .add('64 connections, pipeline 2 wide', () => makeConcurrentRequests(), {
         beforeEach: createDispatcher.bind(null, { connections: 64, pipelining: 2 }),
     });

@@ -1,0 +1,12 @@
+{
+    "name": "@solana/fetch-impl",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "benchmark": "./src/__benchmarks__/run.ts"
+    },
+    "devDependencies": {
+        "tinybench": "^2.6.0",
+        "undici": "^6.19.2"
+    }
+}
