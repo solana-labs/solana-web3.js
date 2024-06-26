@@ -21,7 +21,7 @@ import { isTransactionModifyingSigner, TransactionModifyingSigner } from './tran
 import { isTransactionPartialSigner, TransactionPartialSigner } from './transaction-partial-signer';
 import { isTransactionSendingSigner, TransactionSendingSigner } from './transaction-sending-signer';
 import { isTransactionSigner, TransactionSigner } from './transaction-signer';
-import { ITransactionMessageWithSingleSendingSigner } from './transaction-with-single-sending-signer';
+import { assertIsTransactionMessageWithSingleSendingSigner } from './transaction-with-single-sending-signer';
 
 type CompilableTransactionMessageWithSigners = CompilableTransactionMessage & ITransactionMessageWithSigners;
 
@@ -123,10 +123,10 @@ export async function signTransactionMessageWithSigners<
  * Otherwise, it will send the transaction using the provided fallbackSender.
  */
 export async function signAndSendTransactionMessageWithSigners<
-    TTransactionMessage extends CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithSingleSendingSigner = CompilableTransactionMessageWithSigners &
-        ITransactionMessageWithSingleSendingSigner,
+    TTransactionMessage extends CompilableTransactionMessageWithSigners = CompilableTransactionMessageWithSigners,
 >(transaction: TTransactionMessage, config: { abortSignal?: AbortSignal } = {}): Promise<SignatureBytes> {
+    assertIsTransactionMessageWithSingleSendingSigner(transaction);
+
     const abortSignal = config.abortSignal;
     const { partialSigners, modifyingSigners, sendingSigner } = categorizeTransactionSigners(
         deduplicateSigners(getSignersFromTransactionMessage(transaction).filter(isTransactionSigner)),
