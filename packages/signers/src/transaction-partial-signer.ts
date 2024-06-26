@@ -2,9 +2,9 @@ import { Address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_PARTIAL_SIGNER, SolanaError } from '@solana/errors';
 import { Transaction } from '@solana/transactions';
 
-import { BaseSignerConfig, SignatureDictionary } from './types';
+import { BaseTransactionSignerConfig, SignatureDictionary } from './types';
 
-export type TransactionPartialSignerConfig = BaseSignerConfig;
+export type TransactionPartialSignerConfig = BaseTransactionSignerConfig;
 
 /** Defines a signer capable of signing transactions. */
 export type TransactionPartialSigner<TAddress extends string = string> = Readonly<{

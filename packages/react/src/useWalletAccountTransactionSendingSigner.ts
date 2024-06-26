@@ -2,7 +2,7 @@ import { address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__WALLET_MULTISIGN_UNIMPLEMENTED, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
 import { TransactionSendingSigner } from '@solana/signers';
-import { getTransactionEncoder, Transaction } from '@solana/transactions';
+import { getTransactionEncoder } from '@solana/transactions';
 import { UiWalletAccount } from '@wallet-standard/ui';
 import { useMemo, useRef } from 'react';
 
@@ -10,36 +10,29 @@ import { getAbortablePromise } from './abortable-promise';
 import { OnlySolanaChains } from './chain';
 import { useSignAndSendTransaction } from './useSignAndSendTransaction';
 
-type ExtraConfig = Readonly<{
-    getOptions?(transaction: Transaction): Readonly<{ minContextSlot?: bigint }> | undefined;
-}>;
-
 /**
  * Returns an object that conforms to the `TransactionSendingSigner` interface of `@solana/signers`.
  */
 export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: OnlySolanaChains<TWalletAccount['chains']>,
-    extraConfig?: ExtraConfig,
 ): TransactionSendingSigner<TWalletAccount['address']>;
 export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: `solana:${string}`,
-    extraConfig?: ExtraConfig,
 ): TransactionSendingSigner<TWalletAccount['address']>;
 export function useWalletAccountTransactionSendingSigner<TWalletAccount extends UiWalletAccount>(
     uiWalletAccount: TWalletAccount,
     chain: `solana:${string}`,
-    extraConfig?: ExtraConfig,
 ): TransactionSendingSigner<TWalletAccount['address']> {
     const encoderRef = useRef<ReturnType<typeof getTransactionEncoder>>();
     const signAndSendTransaction = useSignAndSendTransaction(uiWalletAccount, chain);
-    const getOptions = extraConfig?.getOptions;
     return useMemo(
         () => ({
             address: address(uiWalletAccount.address),
-            async signAndSendTransactions(transactions, config) {
-                config?.abortSignal?.throwIfAborted();
+            async signAndSendTransactions(transactions, config = {}) {
+                const { abortSignal, ...options } = config;
+                abortSignal?.throwIfAborted();
                 const transactionEncoder = (encoderRef.current ||= getTransactionEncoder());
                 if (transactions.length > 1) {
                     throw new SolanaError(SOLANA_ERROR__SIGNER__WALLET_MULTISIGN_UNIMPLEMENTED);
@@ -49,18 +42,14 @@ export function useWalletAccountTransactionSendingSigner<TWalletAccount extends 
                 }
                 const [transaction] = transactions;
                 const wireTransactionBytes = transactionEncoder.encode(transaction);
-                const options = getOptions ? getOptions(transaction) : undefined;
                 const inputWithOptions = {
-                    ...(options ? { options } : null),
+                    ...options,
                     transaction: wireTransactionBytes as Uint8Array,
                 };
-                const { signature } = await getAbortablePromise(
-                    signAndSendTransaction(inputWithOptions),
-                    config?.abortSignal,
-                );
+                const { signature } = await getAbortablePromise(signAndSendTransaction(inputWithOptions), abortSignal);
                 return Object.freeze([signature as SignatureBytes]);
             },
         }),
-        [getOptions, signAndSendTransaction, uiWalletAccount.address],
+        [signAndSendTransaction, uiWalletAccount.address],
     );
 }
