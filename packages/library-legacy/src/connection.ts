@@ -2787,6 +2787,39 @@ export type GetNonceAndContextConfig = {
   minContextSlot?: number;
 };
 
+export type AccountSubscriptionConfig = Readonly<{
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /**
+   * Encoding format for Account data
+   *   - `base58` is slow.
+   *   - `jsonParsed` encoding attempts to use program-specific state parsers to return more
+   *      human-readable and explicit account state data
+   *   - If `jsonParsed` is requested but a parser cannot be found, the field falls back to `base64`
+   *     encoding, detectable when the `data` field is type `string`.
+   */
+  encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+}>;
+
+export type ProgramAccountSubscriptionConfig = Readonly<{
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /**
+   * Encoding format for Account data
+   *   - `base58` is slow.
+   *   - `jsonParsed` encoding attempts to use program-specific state parsers to return more
+   *      human-readable and explicit account state data
+   *   - If `jsonParsed` is requested but a parser cannot be found, the field falls back to `base64`
+   *     encoding, detectable when the `data` field is type `string`.
+   */
+  encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+  /**
+   * Filter results using various filter objects
+   * The resultant account must meet ALL filter criteria to be included in the returned results
+   */
+  filters?: GetProgramAccountsFilter[];
+}>;
+
 /**
  * Information describing an account
  */
@@ -6334,18 +6367,34 @@ export class Connection {
    *
    * @param publicKey Public key of the account to monitor
    * @param callback Function to invoke whenever the account is changed
-   * @param commitment Specify the commitment level account changes must reach before notification
+   * @param config
    * @return subscription id
    */
   onAccountChange(
     publicKey: PublicKey,
     callback: AccountChangeCallback,
+    config?: AccountSubscriptionConfig,
+  ): ClientSubscriptionId;
+  /** @deprecated Instead, pass in an {@link AccountSubscriptionConfig} */
+  // eslint-disable-next-line no-dupe-class-members
+  onAccountChange(
+    publicKey: PublicKey,
+    callback: AccountChangeCallback,
     commitment?: Commitment,
+  ): ClientSubscriptionId;
+  // eslint-disable-next-line no-dupe-class-members
+  onAccountChange(
+    publicKey: PublicKey,
+    callback: AccountChangeCallback,
+    commitmentOrConfig?: Commitment | AccountSubscriptionConfig,
   ): ClientSubscriptionId {
+    const {commitment, config} =
+      extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
       [publicKey.toBase58()],
       commitment || this._commitment || 'finalized', // Apply connection/server default.
       'base64',
+      config,
     );
     return this._makeSubscription(
       {
@@ -6394,21 +6443,40 @@ export class Connection {
    *
    * @param programId Public key of the program to monitor
    * @param callback Function to invoke whenever the account is changed
-   * @param commitment Specify the commitment level account changes must reach before notification
-   * @param filters The program account filters to pass into the RPC method
+   * @param config
    * @return subscription id
    */
   onProgramAccountChange(
     programId: PublicKey,
     callback: ProgramAccountChangeCallback,
+    config?: ProgramAccountSubscriptionConfig,
+  ): ClientSubscriptionId;
+  /** @deprecated Instead, pass in a {@link ProgramAccountSubscriptionConfig} */
+  // eslint-disable-next-line no-dupe-class-members
+  onProgramAccountChange(
+    programId: PublicKey,
+    callback: ProgramAccountChangeCallback,
     commitment?: Commitment,
     filters?: GetProgramAccountsFilter[],
+  ): ClientSubscriptionId;
+  // eslint-disable-next-line no-dupe-class-members
+  onProgramAccountChange(
+    programId: PublicKey,
+    callback: ProgramAccountChangeCallback,
+    commitmentOrConfig?: Commitment | ProgramAccountSubscriptionConfig,
+    maybeFilters?: GetProgramAccountsFilter[],
   ): ClientSubscriptionId {
+    const {commitment, config} =
+      extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
       [programId.toBase58()],
       commitment || this._commitment || 'finalized', // Apply connection/server default.
       'base64' /* encoding */,
-      filters ? {filters: filters} : undefined /* extra */,
+      config
+        ? config
+        : maybeFilters
+          ? {filters: maybeFilters}
+          : undefined /* extra */,
     );
     return this._makeSubscription(
       {
