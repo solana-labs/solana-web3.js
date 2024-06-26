@@ -144,33 +144,9 @@ describe('useWalletAccountTransactionSigner', () => {
             await expect(signPromise).resolves.toEqual([mockDecodedTransaction]);
         }
     });
-    it('calls `getOptions` with the transaction', () => {
-        const mockGetOptions = jest.fn();
-        const { result } = renderHook(() =>
-            useWalletAccountTransactionSigner(mockUiWalletAccount, 'solana:danknet', { getOptions: mockGetOptions }),
-        );
-        // eslint-disable-next-line jest/no-conditional-in-test
-        if (result.__type === 'error' || !result.current) {
-            throw result.current;
-        } else {
-            const { modifyAndSignTransactions } = result.current;
-            const inputTransaction = {
-                messageBytes: new Uint8Array([1, 2, 3]) as unknown as TransactionMessageBytes,
-                signatures: {
-                    '11111111111111111111111111111114': new Uint8Array(64).fill(2) as SignatureBytes,
-                },
-            };
-            modifyAndSignTransactions([inputTransaction]);
-            // eslint-disable-next-line jest/no-conditional-expect
-            expect(mockGetOptions).toHaveBeenCalledWith(inputTransaction);
-        }
-    });
-    it('adds the options returned by `getOptions` to the call to `signTransaction`', () => {
+    it('calls `signTransaction` with all options except the `abortSignal`', () => {
         const mockOptions = { minContextSlot: 123n };
-        const mockGetOptions = jest.fn().mockReturnValue(mockOptions);
-        const { result } = renderHook(() =>
-            useWalletAccountTransactionSigner(mockUiWalletAccount, 'solana:danknet', { getOptions: mockGetOptions }),
-        );
+        const { result } = renderHook(() => useWalletAccountTransactionSigner(mockUiWalletAccount, 'solana:danknet'));
         // eslint-disable-next-line jest/no-conditional-in-test
         if (result.__type === 'error' || !result.current) {
             throw result.current;
@@ -182,9 +158,12 @@ describe('useWalletAccountTransactionSigner', () => {
                     '11111111111111111111111111111114': new Uint8Array(64).fill(2) as SignatureBytes,
                 },
             };
-            modifyAndSignTransactions([inputTransaction]);
+            modifyAndSignTransactions([inputTransaction], {
+                abortSignal: AbortSignal.timeout(1_000_000),
+                ...mockOptions,
+            });
             // eslint-disable-next-line jest/no-conditional-expect
-            expect(mockSignTransaction).toHaveBeenCalledWith({ options: mockOptions });
+            expect(mockSignTransaction).toHaveBeenCalledWith(mockOptions);
         }
     });
     it('rejects when aborted', async () => {
