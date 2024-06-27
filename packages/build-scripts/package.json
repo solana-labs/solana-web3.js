@@ -9,6 +9,6 @@
     "devDependencies": {
         "@types/jscodeshift": "^0.11.11",
         "browserslist-to-esbuild": "^2.1.1",
-        "jscodeshift": "^0.16.0"
+        "jscodeshift": "^0.16.1"
     }
 }
