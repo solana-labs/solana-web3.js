@@ -61,21 +61,21 @@ export interface RpcSimulateTransactionResult {
                         accounts: number[];
                         data: string;
                         programIdIndex: number;
-                        stack_height?: number;
+                        stackHeight?: number;
                     }
                   | {
                         // Parsed
                         parsed: unknown;
                         program: string;
-                        program_id: string;
-                        stack_height?: number;
+                        programId: string;
+                        stackHeight?: number;
                     }
                   | {
                         // PartiallyDecoded
                         accounts: string[];
                         data: string;
-                        program_id: string;
-                        stack_height?: number;
+                        programId: string;
+                        stackHeight?: number;
                     }
               )[];
           }[]
