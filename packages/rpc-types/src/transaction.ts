@@ -144,7 +144,7 @@ type TransactionForFullMetaBase = Readonly<{
     status: TransactionStatus;
 }>;
 
-type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
+export type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
     innerInstructions: readonly Readonly<{
         /** The index of the instruction in the transaction */
         index: number;
@@ -153,7 +153,7 @@ type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
     }>[];
 }>;
 
-type TransactionForFullMetaInnerInstructionsParsed = Readonly<{
+export type TransactionForFullMetaInnerInstructionsParsed = Readonly<{
     innerInstructions: readonly Readonly<{
         /** The index of the instruction in the transaction */
         index: number;
