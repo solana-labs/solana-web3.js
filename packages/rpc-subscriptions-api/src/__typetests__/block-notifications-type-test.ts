@@ -724,6 +724,7 @@ type ExpectedMetaForFullBase58 = {
             accounts: readonly number[];
             data: Base58EncodedBytes;
             programIdIndex: number;
+            stackHeight?: number;
         }>[];
     }>[];
     logMessages: readonly string[] | null;
@@ -990,6 +991,7 @@ type ExpectedMetaForFullBase64 = {
             accounts: readonly number[];
             data: Base58EncodedBytes;
             programIdIndex: number;
+            stackHeight?: number;
         }>[];
     }>[];
     logMessages: readonly string[] | null;

@@ -73,6 +73,7 @@ type TransactionInstruction = Readonly<{
     accounts: readonly number[];
     data: Base58EncodedBytes;
     programIdIndex: number;
+    stackHeight?: number;
 }>;
 
 type TransactionJson = Readonly<{
@@ -92,6 +93,7 @@ type PartiallyDecodedTransactionInstruction = Readonly<{
     accounts: readonly Address[];
     data: Base58EncodedBytes;
     programId: Address;
+    stackHeight?: number;
 }>;
 
 type ParsedTransactionInstruction = Readonly<{
@@ -101,6 +103,7 @@ type ParsedTransactionInstruction = Readonly<{
     };
     program: string;
     programId: Address;
+    stackHeight?: number;
 }>;
 
 type TransactionJsonParsed = Readonly<{
