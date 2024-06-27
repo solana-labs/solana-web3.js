@@ -4,7 +4,7 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Agent as HttpAgent} from 'http';
 import {Agent as HttpsAgent} from 'https';
-import {match, mock, spy, useFakeTimers, SinonFakeTimers} from 'sinon';
+import {match, mock, spy, stub, useFakeTimers, SinonFakeTimers} from 'sinon';
 import sinonChai from 'sinon-chai';
 import {fail} from 'assert';
 
@@ -5914,7 +5914,7 @@ describe('Connection', function () {
               subscriptionId = connection.onAccountChange(
                 owner.publicKey,
                 resolve,
-                'confirmed',
+                {commitment: 'confirmed'},
               );
             },
           );
@@ -6394,4 +6394,125 @@ describe('Connection', function () {
       });
     }).timeout(5 * 1000);
   }
+
+  it('passes the commitment/encoding to the RPC when calling `onAccountChange`', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onAccountChange(PublicKey.default, mockCallback, {
+      commitment: 'processed',
+      encoding: 'base64+zstd',
+    });
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'accountSubscribe',
+        unsubscribeMethod: 'accountUnsubscribe',
+      },
+      [
+        match.any,
+        match
+          .has('commitment', 'processed')
+          .and(match.has('encoding', 'base64+zstd')),
+      ],
+    );
+  });
+  it('passes the commitment to the RPC when the deprecated signature of `onAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onAccountChange(PublicKey.default, mockCallback, 'processed');
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'accountSubscribe',
+        unsubscribeMethod: 'accountUnsubscribe',
+      },
+      [match.any, match.has('commitment', 'processed')],
+    );
+  });
+  it('passes the commitment to the RPC when the deprecated signature of `onProgramAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(
+      PublicKey.default,
+      mockCallback,
+      'processed' /* commitment */,
+    );
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [match.any, match.has('commitment', 'processed')],
+    );
+  });
+  it('passes the filters to the RPC when the deprecated signature of `onProgramAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(
+      PublicKey.default,
+      mockCallback,
+      /* commitment */ undefined,
+      /* filters */ [{dataSize: 123}],
+    );
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [match.any, match.has('filters', [{dataSize: 123}])],
+    );
+  });
+  it('passes the commitment/encoding/filters to the RPC when calling `onProgramAccountChange`', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(PublicKey.default, mockCallback, {
+      commitment: 'processed',
+      encoding: 'base64+zstd',
+      filters: [{dataSize: 123}],
+    });
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [
+        match.any,
+        match
+          .has('commitment', 'processed')
+          .and(
+            match
+              .has('encoding', 'base64+zstd')
+              .and(match.has('filters', [{dataSize: 123}])),
+          ),
+      ],
+    );
+  });
 });
