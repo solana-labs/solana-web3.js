@@ -14,6 +14,8 @@ type GetStakeActivationApiResponse = Readonly<{
 export interface GetStakeActivationApi extends RpcApiMethods {
     /**
      * Returns epoch activation information for a stake account
+     *
+     * @deprecated Deprecated since RPC v1.18; will be removed in a future version.
      */
     getStakeActivation(
         address: Address,
