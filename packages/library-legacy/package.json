@@ -120,6 +120,6 @@
     "start-server-and-test": "^2.0.4",
     "tslib": "^2.6.3",
     "tsx": "^4.15.7",
-    "typedoc": "^0.26.2"
+    "typedoc": "^0.26.3"
   }
 }
