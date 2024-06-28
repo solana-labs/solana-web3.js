@@ -41,10 +41,10 @@ npm install --save @solana/web3.js@tp3
 
 ```html
 <!-- Development (debug mode, unminified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp2/dist/index.development.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@tp3/dist/index.development.js"></script>
 
 <!-- Production (minified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp2/dist/index.production.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@tp3/dist/index.production.min.js"></script>
 ```
 
 What follows is an overview of _why_ the library was re-engineered, what changes have been introduced, and how the JavaScript landscape might look across Solana in the near future.
