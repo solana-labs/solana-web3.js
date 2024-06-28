@@ -1,7 +1,7 @@
 import { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
 
-type GetClusterNodesNode = Readonly<{
+type ClusterNode = Readonly<{
     /** The unique identifier of the node's feature set */
     featureSet: number | null;
     /** Gossip network address for the node */
@@ -24,7 +24,7 @@ type GetClusterNodesNode = Readonly<{
     version: string | null;
 }>;
 
-type GetClusterNodesApiResponse = readonly GetClusterNodesNode[];
+type GetClusterNodesApiResponse = readonly ClusterNode[];
 
 export interface GetClusterNodesApi extends RpcApiMethods {
     /**
