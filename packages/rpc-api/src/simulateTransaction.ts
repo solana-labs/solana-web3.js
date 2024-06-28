@@ -127,7 +127,7 @@ export interface SimulateTransactionApi extends RpcApiMethods {
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
         config?: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase,
-    ): SimulateTransactionApiResponseBase & { accounts: null };
+    ): SimulateTransactionApiResponseBase & SolanaRpcResponse<{ readonly accounts: null }>;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -160,5 +160,5 @@ export interface SimulateTransactionApi extends RpcApiMethods {
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase & { accounts: null };
+    ): SimulateTransactionApiResponseBase & SolanaRpcResponse<{ readonly accounts: null }>;
 }
