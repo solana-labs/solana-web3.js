@@ -967,7 +967,7 @@ export type SimulatedTransactionResponse = {
 const ParsedInstructionStruct = pick({
   program: string(),
   programId: PublicKeyFromString,
-  parsed: any(),
+  parsed: unknown(),
 });
 
 const PartiallyDecodedInstructionStruct = pick({
@@ -1208,7 +1208,7 @@ export type ParsedInstruction = {
   /** ID of the program for this instruction */
   programId: PublicKey;
   /** Parsed instruction info */
-  parsed?: any;
+  parsed: any;
 };
 
 /**
