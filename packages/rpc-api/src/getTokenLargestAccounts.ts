@@ -2,7 +2,9 @@ import type { Address } from '@solana/addresses';
 import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, SolanaRpcResponse, TokenAmount } from '@solana/rpc-types';
 
-type GetTokenLargestAccountsApiResponse = SolanaRpcResponse<{ address: Address }[] & TokenAmount>;
+type TokenLargestAccount = Readonly<{ address: Address }> & TokenAmount;
+
+type GetTokenLargestAccountsApiResponse = readonly TokenLargestAccount[];
 
 export interface GetTokenLargestAccountsApi extends RpcApiMethods {
     /**
@@ -13,5 +15,5 @@ export interface GetTokenLargestAccountsApi extends RpcApiMethods {
         config?: Readonly<{
             commitment?: Commitment;
         }>,
-    ): GetTokenLargestAccountsApiResponse;
+    ): SolanaRpcResponse<GetTokenLargestAccountsApiResponse>;
 }
