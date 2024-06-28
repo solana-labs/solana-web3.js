@@ -9,7 +9,7 @@ type GetLargestAccountsResponseItem = Readonly<{
     lamports: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
-type GetLargestAccountsApiResponse = SolanaRpcResponse<GetLargestAccountsResponseItem[]>;
+type GetLargestAccountsApiResponse = readonly GetLargestAccountsResponseItem[];
 
 export interface GetLargestAccountsApi extends RpcApiMethods {
     /**
@@ -22,5 +22,5 @@ export interface GetLargestAccountsApi extends RpcApiMethods {
             /** Filter results by account type */
             filter?: 'circulating' | 'nonCirculating';
         }>,
-    ): GetLargestAccountsApiResponse;
+    ): SolanaRpcResponse<GetLargestAccountsApiResponse>;
 }
