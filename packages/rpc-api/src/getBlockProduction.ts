@@ -15,20 +15,21 @@ type GetBlockProductionApiConfigBase = Readonly<{
     range?: SlotRange;
 }>;
 
-type GetBlockProductionApiResponseBase = SolanaRpcResponse<{
-    range: SlotRange;
+type BlockProductionWithSingleIdentity<TIdentity extends string> = Readonly<{
+    value: Readonly<{
+        byIdentity: Readonly<{ [TAddress in TIdentity]?: [NumberOfLeaderSlots, NumberOfBlocksProduced] }>;
+    }>;
 }>;
 
-type GetBlockProductionApiResponseWithAllIdentities = Readonly<{
+type BlockProductionWithAllIdentities = Readonly<{
     value: Readonly<{
         byIdentity: Record<Address, [NumberOfLeaderSlots, NumberOfBlocksProduced]>;
     }>;
 }>;
 
-type GetBlockProductionApiResponseWithSingleIdentity<TIdentity extends string> = Readonly<{
-    value: Readonly<{
-        byIdentity: Readonly<{ [TAddress in TIdentity]?: [NumberOfLeaderSlots, NumberOfBlocksProduced] }>;
-    }>;
+type GetBlockProductionApiResponse<T> = Readonly<{
+    byIdentity: T;
+    range: SlotRange;
 }>;
 
 export interface GetBlockProductionApi extends RpcApiMethods {
@@ -40,8 +41,8 @@ export interface GetBlockProductionApi extends RpcApiMethods {
             Readonly<{
                 identity: TIdentity;
             }>,
-    ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithSingleIdentity<TIdentity>;
+    ): SolanaRpcResponse<GetBlockProductionApiResponse<BlockProductionWithSingleIdentity<TIdentity>>>;
     getBlockProduction(
         config?: GetBlockProductionApiConfigBase,
-    ): GetBlockProductionApiResponseBase & GetBlockProductionApiResponseWithAllIdentities;
+    ): SolanaRpcResponse<GetBlockProductionApiResponse<BlockProductionWithAllIdentities>>;
 }
