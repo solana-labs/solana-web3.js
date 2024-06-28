@@ -7,7 +7,17 @@ import type {
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 
-type GetInflationRewardApiResponse = Readonly<{
+type GetInflationRewardApiConfig = Readonly<{
+    // Defaults to `finalized`
+    commitment?: Commitment;
+    // An epoch for which the reward occurs.
+    // If omitted, the previous epoch will be used
+    epoch?: U64UnsafeBeyond2Pow53Minus1;
+    // The minimum slot that the request can be evaluated at
+    minContextSlot?: Slot;
+}>;
+
+type InflationReward = Readonly<{
     // Reward amount in lamports
     amount: LamportsUnsafeBeyond2Pow53Minus1;
     // Vote account commission when the reward was credited
@@ -20,20 +30,11 @@ type GetInflationRewardApiResponse = Readonly<{
     postBalance: LamportsUnsafeBeyond2Pow53Minus1;
 }>;
 
+type GetInflationRewardApiResponse = readonly (InflationReward | null)[];
+
 export interface GetInflationRewardApi extends RpcApiMethods {
     /**
      * Returns the current block height of the node
      */
-    getInflationReward(
-        addresses: Address[],
-        config?: Readonly<{
-            // Defaults to `finalized`
-            commitment?: Commitment;
-            // An epoch for which the reward occurs.
-            // If omitted, the previous epoch will be used
-            epoch?: U64UnsafeBeyond2Pow53Minus1;
-            // The minimum slot that the request can be evaluated at
-            minContextSlot?: Slot;
-        }>,
-    ): Promise<readonly (GetInflationRewardApiResponse | null)[]>;
+    getInflationReward(addresses: Address[], config?: GetInflationRewardApiConfig): GetInflationRewardApiResponse;
 }
