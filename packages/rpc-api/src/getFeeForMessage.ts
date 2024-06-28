@@ -3,7 +3,7 @@ import type { Commitment, Slot, SolanaRpcResponse, U64UnsafeBeyond2Pow53Minus1 }
 import type { TransactionMessageBytesBase64 } from '@solana/transactions';
 
 /** Fee corresponding to the message at the specified blockhash */
-type GetFeeForMessageApiResponse = SolanaRpcResponse<U64UnsafeBeyond2Pow53Minus1 | null>;
+type GetFeeForMessageApiResponse = U64UnsafeBeyond2Pow53Minus1 | null;
 
 export interface GetFeeForMessageApi extends RpcApiMethods {
     /**
@@ -15,5 +15,5 @@ export interface GetFeeForMessageApi extends RpcApiMethods {
             commitment?: Commitment;
             minContextSlot?: Slot;
         }>,
-    ): GetFeeForMessageApiResponse;
+    ): SolanaRpcResponse<GetFeeForMessageApiResponse>;
 }
