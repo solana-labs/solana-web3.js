@@ -1007,7 +1007,7 @@ export type TokenBalance = {
 /**
  * Metadata for a parsed confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link ParsedTransactionMeta} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link ParsedTransactionMeta} instead.
  */
 export type ParsedConfirmedTransactionMeta = ParsedTransactionMeta;
 
@@ -1130,7 +1130,7 @@ type MessageResponse = {
 /**
  * A confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0.
+ * @deprecated Deprecated since RPC v1.8.0.
  */
 export type ConfirmedTransaction = {
   /** The slot during which the transaction was processed */
@@ -1220,7 +1220,7 @@ export type ParsedTransaction = {
 /**
  * A parsed and confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link ParsedTransactionWithMeta} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link ParsedTransactionWithMeta} instead.
  */
 export type ParsedConfirmedTransaction = ParsedTransactionWithMeta;
 
@@ -1427,7 +1427,7 @@ export type VersionedNoneModeBlockResponse = Omit<
 /**
  * A confirmed block on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0.
+ * @deprecated Deprecated since RPC v1.8.0.
  */
 export type ConfirmedBlock = {
   /** Blockhash of this block */
@@ -2483,7 +2483,7 @@ const GetParsedNoneModeBlockRpcResult = jsonRpcResult(
 /**
  * Expected JSON RPC response for the "getConfirmedBlock" message
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link GetBlockRpcResult} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetBlockRpcResult} instead.
  */
 const GetConfirmedBlockRpcResult = jsonRpcResult(
   nullable(
@@ -2551,7 +2551,7 @@ const GetParsedTransactionRpcResult = jsonRpcResult(
 /**
  * Expected JSON RPC response for the "getRecentBlockhash" message
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
  */
 const GetRecentBlockhashAndContextRpcResult = jsonRpcResultAndContext(
   pick({
@@ -4347,7 +4347,7 @@ export class Connection {
   /**
    * Fetch the current total currency supply of the cluster in lamports
    *
-   * @deprecated Deprecated since v1.2.8. Please use {@link getSupply} instead.
+   * @deprecated Deprecated since RPC v1.2.8. Please use {@link getSupply} instead.
    */
   async getTotalSupply(commitment?: Commitment): Promise<number> {
     const result = await this.getSupply({
@@ -4490,7 +4490,7 @@ export class Connection {
    * Fetch a recent blockhash from the cluster, return with context
    * @return {Promise<RpcResponseAndContext<{blockhash: Blockhash, feeCalculator: FeeCalculator}>>}
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getLatestBlockhash} instead.
+   * @deprecated Deprecated since RPC v1.9.0. Please use {@link getLatestBlockhash} instead.
    */
   async getRecentBlockhashAndContext(commitment?: Commitment): Promise<
     RpcResponseAndContext<{
@@ -4532,7 +4532,7 @@ export class Connection {
   /**
    * Fetch the fee calculator for a recent blockhash from the cluster, return with context
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getFeeForMessage} instead.
+   * @deprecated Deprecated since RPC v1.9.0. Please use {@link getFeeForMessage} instead.
    */
   async getFeeCalculatorForBlockhash(
     blockhash: Blockhash,
@@ -4601,7 +4601,7 @@ export class Connection {
    * Fetch a recent blockhash from the cluster
    * @return {Promise<{blockhash: Blockhash, feeCalculator: FeeCalculator}>}
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getLatestBlockhash} instead.
+   * @deprecated Deprecated since RPC v1.8.0. Please use {@link getLatestBlockhash} instead.
    */
   async getRecentBlockhash(
     commitment?: Commitment,
@@ -5149,7 +5149,7 @@ export class Connection {
    * Fetch a list of Transactions and transaction statuses from the cluster
    * for a confirmed block.
    *
-   * @deprecated Deprecated since v1.13.0. Please use {@link getBlock} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getBlock} instead.
    */
   async getConfirmedBlock(
     slot: number,
@@ -5247,7 +5247,7 @@ export class Connection {
   /**
    * Fetch a list of Signatures from the cluster for a confirmed block, excluding rewards
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getBlockSignatures} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getBlockSignatures} instead.
    */
   async getConfirmedBlockSignatures(
     slot: number,
@@ -5277,7 +5277,7 @@ export class Connection {
   /**
    * Fetch a transaction details for a confirmed transaction
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getTransaction} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getTransaction} instead.
    */
   async getConfirmedTransaction(
     signature: TransactionSignature,
@@ -5304,7 +5304,7 @@ export class Connection {
   /**
    * Fetch parsed transaction details for a confirmed transaction
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getParsedTransaction} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getParsedTransaction} instead.
    */
   async getParsedConfirmedTransaction(
     signature: TransactionSignature,
@@ -5329,7 +5329,7 @@ export class Connection {
   /**
    * Fetch parsed transaction details for a batch of confirmed transactions
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getParsedTransactions} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getParsedTransactions} instead.
    */
   async getParsedConfirmedTransactions(
     signatures: TransactionSignature[],
@@ -5366,7 +5366,7 @@ export class Connection {
    * Fetch a list of all the confirmed signatures for transactions involving an address
    * within a specified slot range. Max range allowed is 10,000 slots.
    *
-   * @deprecated Deprecated since v1.3. Please use {@link getConfirmedSignaturesForAddress2} instead.
+   * @deprecated Deprecated since RPC v1.3. Please use {@link getConfirmedSignaturesForAddress2} instead.
    *
    * @param address queried address
    * @param startSlot start slot, inclusive
@@ -5437,9 +5437,7 @@ export class Connection {
    * Returns confirmed signatures for transactions involving an
    * address backwards in time from the provided signature or most recent confirmed block
    *
-   *
-   * @param address queried address
-   * @param options
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getSignaturesForAddress} instead.
    */
   async getConfirmedSignaturesForAddress2(
     address: PublicKey,
