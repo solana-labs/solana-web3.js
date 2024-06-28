@@ -87,7 +87,7 @@ type WithInnerInstructionsConfig = Readonly<{
     innerInstructions: true;
 }>;
 
-type SimulateTransactionApiResponseBase = SolanaRpcResponse<{
+type SimulateTransactionApiResponseBase = Readonly<{
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
     /** Array of log messages the transaction instructions output during execution, null if simulation failed before the transaction was able to execute (for example due to an invalid blockhash or signature verification failure) */
@@ -108,12 +108,12 @@ type SimulateTransactionApiResponseBase = SolanaRpcResponse<{
     unitsConsumed?: U64UnsafeBeyond2Pow53Minus1;
 }>;
 
-type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = SolanaRpcResponse<{
+type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Readonly<{
     /** Array of accounts with the same length as the `accounts.addresses` array in the request */
     accounts: (T | null)[];
 }>;
 
-type SimulateTransactionApiResponseWithInnerInstructions = SolanaRpcResponse<
+type SimulateTransactionApiResponseWithInnerInstructions = Readonly<
     TransactionForFullMetaInnerInstructionsParsed | TransactionForFullMetaInnerInstructionsUnparsed
 >;
 
@@ -125,9 +125,11 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -135,8 +137,10 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithBase64Encoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -145,9 +149,13 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<
+                AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData
+            > &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -155,8 +163,10 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithBase64EncodingZstdCompression &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -165,9 +175,11 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -175,22 +187,26 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithJsonParsedEncoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
         config?: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase & WithInnerInstructionsConfig,
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithInnerInstructions &
-        SolanaRpcResponse<{ readonly accounts: null }>;
+    ): SolanaRpcResponse<
+        Readonly<{ readonly accounts: null }> &
+            SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
         config?: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase,
-    ): SimulateTransactionApiResponseBase & SolanaRpcResponse<{ readonly accounts: null }>;
+    ): SolanaRpcResponse<Readonly<{ readonly accounts: null }> & SimulateTransactionApiResponseBase>;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -199,9 +215,11 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -209,8 +227,10 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithBase64Encoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -219,9 +239,13 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<
+                AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData
+            > &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -229,8 +253,10 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithBase64EncodingZstdCompression &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -239,9 +265,11 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
-        SimulateTransactionApiResponseWithInnerInstructions;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -249,8 +277,10 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: AccountsConfigWithJsonParsedEncoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+    ): SolanaRpcResponse<
+        SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -258,13 +288,15 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         config: SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase &
             WithInnerInstructionsConfig & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase &
-        SimulateTransactionApiResponseWithInnerInstructions &
-        SolanaRpcResponse<{ readonly accounts: null }>;
+    ): SolanaRpcResponse<
+        Readonly<{ readonly accounts: null }> &
+            SimulateTransactionApiResponseBase &
+            SimulateTransactionApiResponseWithInnerInstructions
+    >;
 
     /** Simulate sending a transaction */
     simulateTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase & { encoding: 'base64' },
-    ): SimulateTransactionApiResponseBase & SolanaRpcResponse<{ readonly accounts: null }>;
+    ): SolanaRpcResponse<Readonly<{ readonly accounts: null }> & SimulateTransactionApiResponseBase>;
 }
