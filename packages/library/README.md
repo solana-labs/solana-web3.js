@@ -34,7 +34,7 @@ In response to your feedback, we began a process of modernizing the library to p
 ### For use in Node.js or a web application
 
 ```shell
-npm install --save @solana/web3.js@tp2
+npm install --save @solana/web3.js@tp3
 ```
 
 ### For use in a browser, without a build system
