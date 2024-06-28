@@ -12,7 +12,7 @@ import type {
     SolanaRpcResponse,
 } from '@solana/rpc-types';
 
-type GetMultipleAccountsApiResponseBase = AccountInfoBase | null;
+type GetMultipleAccountsApiResponse<T> = readonly ((AccountInfoBase & T) | null)[];
 
 type GetMultipleAccountsApiCommonConfig = Readonly<{
     /** Defaults to `finalized` */
@@ -38,7 +38,7 @@ export interface GetMultipleAccountsApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base64';
             }>,
-    ): SolanaRpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
+    ): SolanaRpcResponse<GetMultipleAccountsApiResponse<AccountInfoWithBase64EncodedData>>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Address[],
@@ -47,9 +47,7 @@ export interface GetMultipleAccountsApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base64+zstd';
             }>,
-    ): SolanaRpcResponse<
-        (GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedZStdCompressedData | null))[]
-    >;
+    ): SolanaRpcResponse<GetMultipleAccountsApiResponse<AccountInfoWithBase64EncodedZStdCompressedData>>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Address[],
@@ -57,7 +55,7 @@ export interface GetMultipleAccountsApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'jsonParsed';
             }>,
-    ): SolanaRpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithJsonData | null))[]>;
+    ): SolanaRpcResponse<GetMultipleAccountsApiResponse<AccountInfoWithJsonData>>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Address[],
@@ -66,10 +64,10 @@ export interface GetMultipleAccountsApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base58';
             }>,
-    ): SolanaRpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase58EncodedData | null))[]>;
+    ): SolanaRpcResponse<GetMultipleAccountsApiResponse<AccountInfoWithBase58EncodedData>>;
     getMultipleAccounts(
         /** An array of up to 100 Pubkeys to query */
         addresses: Address[],
         config?: GetMultipleAccountsApiCommonConfig,
-    ): SolanaRpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
+    ): SolanaRpcResponse<GetMultipleAccountsApiResponse<AccountInfoWithBase64EncodedData>>;
 }
