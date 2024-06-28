@@ -11,6 +11,8 @@ import type {
     Slot,
     SolanaRpcResponse,
     TransactionError,
+    TransactionForFullMetaInnerInstructionsParsed,
+    TransactionForFullMetaInnerInstructionsUnparsed,
     U64UnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
@@ -21,6 +23,12 @@ type SimulateTransactionConfigBase = Readonly<{
      * @defaultValue finalized
      * */
     commitment?: Commitment;
+    /**
+     * If `true` the response will include inner instructions. These inner instructions will be
+     * `jsonParsed` where possible, otherwise `json`.
+     * @defaultValue false
+     */
+    innerInstructions?: boolean;
     /** The minimum slot that the request can be evaluated at */
     minContextSlot?: Slot;
 }>;
@@ -74,6 +82,10 @@ type AccountsConfigWithBase64Encoding = Readonly<{
     };
 }>;
 
+type WithInnerInstructionsConfig = Readonly<{
+    innerInstructions: true;
+}>;
+
 type SimulateTransactionApiResponseBase = SolanaRpcResponse<{
     /** Error if transaction failed, null if transaction succeeded. */
     err: TransactionError | null;
@@ -95,7 +107,22 @@ type SimulateTransactionApiResponseWithAccounts<T extends AccountInfoBase> = Sol
     accounts: (T | null)[];
 }>;
 
+type SimulateTransactionApiResponseWithInnerInstructions = SolanaRpcResponse<
+    TransactionForFullMetaInnerInstructionsParsed | TransactionForFullMetaInnerInstructionsUnparsed
+>;
+
 export interface SimulateTransactionApi extends RpcApiMethods {
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config: AccountsConfigWithBase64Encoding &
+            SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig,
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
+
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
@@ -104,6 +131,17 @@ export interface SimulateTransactionApi extends RpcApiMethods {
             SimulateTransactionConfigBase,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config: AccountsConfigWithBase64EncodingZstdCompression &
+            SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig,
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -119,9 +157,28 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         base58EncodedWireTransaction: Base58EncodedBytes,
         config: AccountsConfigWithJsonParsedEncoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig,
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
+
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config: AccountsConfigWithJsonParsedEncoding &
+            SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase,
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+
+    /** @deprecated Set `encoding` to `'base64'` when calling this method */
+    simulateTransaction(
+        base58EncodedWireTransaction: Base58EncodedBytes,
+        config?: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase & WithInnerInstructionsConfig,
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithInnerInstructions &
+        SolanaRpcResponse<{ readonly accounts: null }>;
 
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
@@ -134,9 +191,31 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: AccountsConfigWithBase64Encoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig & { encoding: 'base64' },
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
+
+    /** Simulate sending a transaction */
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config: AccountsConfigWithBase64Encoding &
+            SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase & { encoding: 'base64' },
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedData>;
+
+    /** Simulate sending a transaction */
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config: AccountsConfigWithBase64EncodingZstdCompression &
+            SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig & { encoding: 'base64' },
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
 
     /** Simulate sending a transaction */
     simulateTransaction(
@@ -152,9 +231,30 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: AccountsConfigWithJsonParsedEncoding &
             SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig & { encoding: 'base64' },
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData> &
+        SimulateTransactionApiResponseWithInnerInstructions;
+
+    /** Simulate sending a transaction */
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config: AccountsConfigWithJsonParsedEncoding &
+            SigVerifyAndReplaceRecentBlockhashConfig &
             SimulateTransactionConfigBase & { encoding: 'base64' },
     ): SimulateTransactionApiResponseBase &
         SimulateTransactionApiResponseWithAccounts<AccountInfoBase & AccountInfoWithJsonData>;
+
+    /** Simulate sending a transaction */
+    simulateTransaction(
+        base64EncodedWireTransaction: Base64EncodedWireTransaction,
+        config: SigVerifyAndReplaceRecentBlockhashConfig &
+            SimulateTransactionConfigBase &
+            WithInnerInstructionsConfig & { encoding: 'base64' },
+    ): SimulateTransactionApiResponseBase &
+        SimulateTransactionApiResponseWithInnerInstructions &
+        SolanaRpcResponse<{ readonly accounts: null }>;
 
     /** Simulate sending a transaction */
     simulateTransaction(
