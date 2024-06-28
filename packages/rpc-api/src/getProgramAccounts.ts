@@ -16,6 +16,8 @@ import type {
     SolanaRpcResponse,
 } from '@solana/rpc-types';
 
+type GetProgramAccountsApiResponse<T> = readonly AccountInfoWithPubkey<AccountInfoBase & T>[];
+
 type GetProgramAccountsApiCommonConfig = Readonly<{
     /** @defaultValue "finalized" */
     commitment?: Commitment;
@@ -29,6 +31,7 @@ type GetProgramAccountsApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
+
 export interface GetProgramAccountsApi extends RpcApiMethods {
     /**
      * Returns the account information for a list of Pubkeys.
@@ -41,7 +44,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base64';
                 withContext: true;
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
+    ): SolanaRpcResponse<GetProgramAccountsApiResponse<AccountInfoWithBase64EncodedData>>;
 
     getProgramAccounts(
         program: Address,
@@ -51,7 +54,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base64';
                 withContext?: boolean;
             }>,
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[];
+    ): GetProgramAccountsApiResponse<AccountInfoWithBase64EncodedData>;
 
     getProgramAccounts(
         program: Address,
@@ -61,7 +64,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base64+zstd';
                 withContext: true;
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
+    ): SolanaRpcResponse<GetProgramAccountsApiResponse<AccountInfoWithBase64EncodedZStdCompressedData>>;
 
     getProgramAccounts(
         program: Address,
@@ -71,7 +74,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base64+zstd';
                 withContext?: boolean;
             }>,
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[];
+    ): GetProgramAccountsApiResponse<AccountInfoWithBase64EncodedZStdCompressedData>;
 
     getProgramAccounts(
         program: Address,
@@ -80,7 +83,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'jsonParsed';
                 withContext: true;
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[]>;
+    ): SolanaRpcResponse<GetProgramAccountsApiResponse<AccountInfoWithJsonData>>;
 
     getProgramAccounts(
         program: Address,
@@ -89,7 +92,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'jsonParsed';
                 withContext?: boolean;
             }>,
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithJsonData>[];
+    ): GetProgramAccountsApiResponse<AccountInfoWithJsonData>;
 
     getProgramAccounts(
         program: Address,
@@ -99,7 +102,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base58';
                 withContext: true;
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
+    ): SolanaRpcResponse<GetProgramAccountsApiResponse<AccountInfoWithBase58EncodedData>>;
 
     getProgramAccounts(
         program: Address,
@@ -109,7 +112,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 encoding: 'base58';
                 withContext?: boolean;
             }>,
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[];
+    ): GetProgramAccountsApiResponse<AccountInfoWithBase58EncodedData>;
 
     getProgramAccounts(
         program: Address,
@@ -118,7 +121,7 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
             Readonly<{
                 withContext: true;
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
+    ): SolanaRpcResponse<GetProgramAccountsApiResponse<AccountInfoWithBase58Bytes>>;
 
     getProgramAccounts(
         program: Address,
@@ -127,5 +130,5 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
             Readonly<{
                 withContext?: boolean;
             }>,
-    ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[];
+    ): GetProgramAccountsApiResponse<AccountInfoWithBase58Bytes>;
 }
