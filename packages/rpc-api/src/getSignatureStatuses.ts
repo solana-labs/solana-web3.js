@@ -39,9 +39,7 @@ type SignatureStatusResult = Readonly<{
     status: TransactionStatusErr | TransactionStatusOk;
 }>;
 
-type GetSignatureStatusesBase = ReadonlyArray<SignatureStatusResult | null>;
-
-type GetSignatureStatusesApiResponse = SolanaRpcResponse<GetSignatureStatusesBase>;
+type GetSignatureStatusesApiResponse = readonly (SignatureStatusResult | null)[];
 
 export interface GetSignatureStatusesApi extends RpcApiMethods {
     /**
@@ -66,5 +64,5 @@ export interface GetSignatureStatusesApi extends RpcApiMethods {
              */
             searchTransactionHistory?: boolean;
         }>,
-    ): GetSignatureStatusesApiResponse;
+    ): SolanaRpcResponse<GetSignatureStatusesApiResponse>;
 }
