@@ -3640,6 +3640,8 @@ export class Connection {
 
   /**
    * Returns epoch activation information for a stake account that has been delegated
+   *
+   * @deprecated Deprecated since RPC v1.18; will be removed in a future version.
    */
   async getStakeActivation(
     publicKey: PublicKey,
