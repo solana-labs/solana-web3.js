@@ -512,6 +512,7 @@ async () => {
                 accounts: readonly number[];
                 data: Base58EncodedBytes;
                 programIdIndex: number;
+                stackHeight?: number;
             }>[];
         }>[];
         logMessages: readonly string[] | null;
@@ -736,6 +737,7 @@ async () => {
                 accounts: readonly number[];
                 data: Base58EncodedBytes;
                 programIdIndex: number;
+                stackHeight?: number;
             }>[];
         }>[];
         logMessages: readonly string[] | null;
