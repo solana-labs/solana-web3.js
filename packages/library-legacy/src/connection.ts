@@ -952,6 +952,8 @@ export type SimulateTransactionConfig = {
   };
   /** Optional parameter used to specify the minimum block slot that can be used for simulation */
   minContextSlot?: number;
+  /** Optional parameter used to include inner instructions in the simulation */
+  innerInstructions?: boolean;
 };
 
 export type SimulatedTransactionResponse = {
@@ -960,7 +962,20 @@ export type SimulatedTransactionResponse = {
   accounts?: (SimulatedTransactionAccountInfo | null)[] | null;
   unitsConsumed?: number;
   returnData?: TransactionReturnData | null;
+  innerInstructions?: ParsedInnerInstruction[] | null;
 };
+const ParsedInstructionStruct = pick({
+  program: string(),
+  programId: PublicKeyFromString,
+  parsed: unknown(),
+});
+
+const PartiallyDecodedInstructionStruct = pick({
+  programId: PublicKeyFromString,
+  accounts: array(PublicKeyFromString),
+  data: string(),
+});
+
 const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
   pick({
     err: nullable(union([pick({}), string()])),
@@ -987,6 +1002,21 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
           programId: string(),
           data: tuple([string(), literal('base64')]),
         }),
+      ),
+    ),
+    innerInstructions: optional(
+      nullable(
+        array(
+          pick({
+            index: number(),
+            instructions: array(
+              union([
+                ParsedInstructionStruct,
+                PartiallyDecodedInstructionStruct,
+              ]),
+            ),
+          }),
+        ),
       ),
     ),
   }),
@@ -5712,6 +5742,14 @@ export class Connection {
         config.commitment = this.commitment;
       }
 
+      if (
+        configOrSigners &&
+        typeof configOrSigners === 'object' &&
+        'innerInstructions' in configOrSigners
+      ) {
+        config.innerInstructions = configOrSigners.innerInstructions;
+      }
+
       const args = [encodedTransaction, config];
       const unsafeRes = await this._rpcRequest('simulateTransaction', args);
       const res = create(unsafeRes, SimulatedTransactionResponseStruct);
@@ -5800,6 +5838,14 @@ export class Connection {
 
     if (signers) {
       config.sigVerify = true;
+    }
+
+    if (
+      configOrSigners &&
+      typeof configOrSigners === 'object' &&
+      'innerInstructions' in configOrSigners
+    ) {
+      config.innerInstructions = configOrSigners.innerInstructions;
     }
 
     const args = [encodedTransaction, config];
