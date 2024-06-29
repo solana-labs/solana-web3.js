@@ -51,7 +51,6 @@ describe('getDefaultParamsTransformerForSolanaRpc', () => {
             'getEpochInfo',
             'getFeeCalculatorForBlockhash',
             'getFeeForMessage',
-            'getFees',
             'getInflationGovernor',
             'getInflationReward',
             'getLargestAccounts',
