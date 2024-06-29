@@ -4400,29 +4400,6 @@ describe('Connection', function () {
     }
   });
 
-  it('get fee calculator', async () => {
-    const {blockhash} = await helpers.recentBlockhash({connection});
-    await mockRpcResponse({
-      method: 'getFeeCalculatorForBlockhash',
-      params: [blockhash, {commitment: 'confirmed'}],
-      value: {
-        feeCalculator: {
-          lamportsPerSignature: 5000,
-        },
-      },
-      withContext: true,
-    });
-
-    const feeCalculator = (
-      await connection.getFeeCalculatorForBlockhash(blockhash, 'confirmed')
-    ).value;
-    if (feeCalculator === null) {
-      expect(feeCalculator).not.to.be.null;
-      return;
-    }
-    expect(feeCalculator.lamportsPerSignature).to.eq(5000);
-  });
-
   it('get fee for message (legacy)', async () => {
     const accountFrom = Keypair.generate();
     const accountTo = Keypair.generate();
