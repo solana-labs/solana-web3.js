@@ -38,7 +38,7 @@ jest.mock('@solana/transactions', () => ({
     compileTransaction: jest.fn(),
 }));
 
-describe('partiallySignTransactionWithSigners', () => {
+describe('partiallySignTransactionMessageWithSigners', () => {
     it('signs the transaction with its extracted signers', async () => {
         expect.assertions(3);
 
@@ -62,7 +62,11 @@ describe('partiallySignTransactionWithSigners', () => {
         signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we partially sign this transaction.
-        const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
+        const mockOptions = {
+            abortSignal: AbortSignal.timeout(1_000_000),
+            minContextSlot: 123n,
+        };
+        const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage, mockOptions);
 
         // Then it contains the expected signatures.
         expect(signedTransaction.signatures).toStrictEqual({
@@ -71,10 +75,8 @@ describe('partiallySignTransactionWithSigners', () => {
         });
 
         // And the signers were called with the expected parameters.
-        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
-        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], mockOptions);
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], mockOptions);
     });
 
     it('signs modifying signers before partial signers', async () => {
@@ -241,7 +243,7 @@ describe('partiallySignTransactionWithSigners', () => {
         expect(signedTransaction.signatures).toStrictEqual({ '1111': null, '2222': '2222_signature' });
 
         // And only the partial signer function was called.
-        expect(signerB.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
+        expect(signerB.signTransactions).toHaveBeenCalledWith([unsignedTransaction], undefined /* config */);
         expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
         expect(signerB.signAndSendTransactions).not.toHaveBeenCalled();
     });
@@ -276,10 +278,8 @@ describe('partiallySignTransactionWithSigners', () => {
 
         // Then signer A was used as a modifying signer.
         expect(signerA.signTransactions).not.toHaveBeenCalled();
-        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
-        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], undefined /* config */);
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], undefined /* config */);
 
         // And it contains the expected signatures.
         expect(signedTransaction.signatures).toStrictEqual({
@@ -317,11 +317,9 @@ describe('partiallySignTransactionWithSigners', () => {
         const signedTransaction = await partiallySignTransactionMessageWithSigners(transactionMessage);
 
         // Then signer A was used as a partial signer.
-        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], undefined /* config */);
         expect(signerA.modifyAndSignTransactions).not.toHaveBeenCalled();
-        expect(signerB.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
+        expect(signerB.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], undefined /* config */);
 
         // And it contains the expected signatures.
         expect(signedTransaction.signatures).toStrictEqual({
@@ -406,7 +404,7 @@ describe('partiallySignTransactionWithSigners', () => {
     });
 });
 
-describe('signTransactionWithSigners', () => {
+describe('signTransactionMessageWithSigners', () => {
     it('signs the transaction with its extracted signers', async () => {
         expect.assertions(3);
 
@@ -430,7 +428,11 @@ describe('signTransactionWithSigners', () => {
         signerB.signTransactions.mockResolvedValueOnce([{ '2222': '2222_signature' }]);
 
         // When we sign this transaction.
-        const signedTransaction = await signTransactionMessageWithSigners(transactionMessage);
+        const mockOptions = {
+            abortSignal: AbortSignal.timeout(1_000_000),
+            minContextSlot: 123n,
+        };
+        const signedTransaction = await signTransactionMessageWithSigners(transactionMessage, mockOptions);
 
         // Then it contains the expected signatures.
         expect(signedTransaction.signatures).toStrictEqual({
@@ -442,10 +444,8 @@ describe('signTransactionWithSigners', () => {
         signedTransaction satisfies FullySignedTransaction;
 
         // And the signers were called with the expected parameters.
-        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
-        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], mockOptions);
+        expect(signerB.signTransactions).toHaveBeenCalledWith([modifiedTransaction], mockOptions);
     });
 
     it('asserts the transaction is fully signed', async () => {
@@ -472,7 +472,7 @@ describe('signTransactionWithSigners', () => {
         const promise = signTransactionMessageWithSigners(transactionMessage);
 
         // Then we expect an error letting us know the transaction is not fully signed.
-        // This is because sending signers are ignored by signTransactionWithSigners.
+        // This is because sending signers are ignored by signTransactionMessageWithSigners.
         await expect(promise).rejects.toThrow(
             new SolanaError(SOLANA_ERROR__TRANSACTION__SIGNATURES_MISSING, {
                 addresses: ['2222' as Address],
@@ -530,7 +530,7 @@ describe('signTransactionWithSigners', () => {
     });
 });
 
-describe('signAndSendTransactionWithSigners', () => {
+describe('signAndSendTransactionMessageWithSigners', () => {
     it('signs and sends the transaction with the provided signers', async () => {
         expect.assertions(3);
 
@@ -554,13 +554,17 @@ describe('signAndSendTransactionWithSigners', () => {
 
         // When we sign and send this transaction.
         assertIsTransactionMessageWithSingleSendingSigner(transactionMessage);
-        const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
+        const mockOptions = {
+            abortSignal: AbortSignal.timeout(1_000_000),
+            minContextSlot: 123n,
+        };
+        const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage, mockOptions);
 
         // Then the sending signer was used to send the transaction.
-        expect(signerA.signTransactions).toHaveBeenCalledWith([unsignedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([unsignedTransaction], mockOptions);
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...unsignedTransaction, signatures: { '1111': '1111_signature', '2222': null } }],
-            { abortSignal: undefined },
+            mockOptions,
         );
 
         // And the returned signature matches the one returned by the sending signer.
@@ -622,7 +626,7 @@ describe('signAndSendTransactionWithSigners', () => {
         // Then the composite signer was used as a sending signer.
         expect(signerA.signAndSendTransactions).toHaveBeenCalledWith(
             [{ ...unsignedTransaction, signatures: { '1111': null, '2222': '2222_signature' } }],
-            { abortSignal: undefined },
+            undefined /* config */,
         );
         expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.modifyAndSignTransactions).not.toHaveBeenCalled();
@@ -658,17 +662,13 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionMessageWithSigners(transaction);
 
         // Then the composite signer was used as a modifying signer.
-        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
+        expect(signerA.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], undefined /* config */);
         expect(signerA.signTransactions).not.toHaveBeenCalled();
         expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
 
         // And the sending only signer was used to send the transaction.
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
-        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith([modifiedTransaction], {
-            abortSignal: undefined,
-        });
+        expect(signerB.signAndSendTransactions).toHaveBeenCalledWith([modifiedTransaction], undefined /* config */);
     });
 
     it('uses a composite signer as a partial signer when other sending and modifying signers exist', async () => {
@@ -705,14 +705,12 @@ describe('signAndSendTransactionWithSigners', () => {
         const transactionSignature = await signAndSendTransactionMessageWithSigners(transaction);
 
         // Then the composite signer was used as a partial signer.
-        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], { abortSignal: undefined });
+        expect(signerA.signTransactions).toHaveBeenCalledWith([modifiedTransaction], undefined /* config */);
         expect(signerA.modifyAndSignTransactions).not.toHaveBeenCalled();
         expect(signerA.signAndSendTransactions).not.toHaveBeenCalled();
 
         // And the other signers were used as expected.
-        expect(signerC.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], {
-            abortSignal: undefined,
-        });
+        expect(signerC.modifyAndSignTransactions).toHaveBeenCalledWith([unsignedTransaction], undefined /* config */);
         expect(transactionSignature).toStrictEqual(new Uint8Array([1, 2, 3]));
         expect(signerB.signAndSendTransactions).toHaveBeenCalledWith(
             [
@@ -721,7 +719,7 @@ describe('signAndSendTransactionWithSigners', () => {
                     signatures: { '1111': '1111_signature', '2222': null, '3333': '3333_signature' },
                 },
             ],
-            { abortSignal: undefined },
+            undefined /* config */,
         );
     });
 

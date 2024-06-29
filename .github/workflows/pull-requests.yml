@@ -44,7 +44,10 @@ jobs:
         uses: ./.github/workflows/actions/setup-validator
 
       - name: Build & Test
-        run: pnpm build --concurrency=100%
+        run: pnpm build
+
+      - name: Build GitHub Pages
+        run: pnpm turbo run compile:ghpages --concurrency=100%
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'

@@ -1,19 +1,17 @@
-import RpcWebSocketCommonClient from 'rpc-websockets/dist/lib/client';
-import RpcWebSocketBrowserFactory from 'rpc-websockets/dist/lib/client/websocket.browser';
 import {
+  CommonClient,
   ICommonWebSocket,
   IWSClientAdditionalOptions,
   NodeWebSocketType,
   NodeWebSocketTypeOptions,
-} from 'rpc-websockets/dist/lib/client/client.types';
-
-import createRpc from './rpc-websocket-factory';
+  WebSocket as createRpc,
+} from 'rpc-websockets';
 
 interface IHasReadyState {
   readyState: WebSocket['readyState'];
 }
 
-export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
+export default class RpcWebSocketClient extends CommonClient {
   private underlyingSocket: IHasReadyState | undefined;
   constructor(
     address?: string,
@@ -32,9 +30,7 @@ export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
         ...options,
       });
       if ('socket' in rpc) {
-        this.underlyingSocket = (
-          rpc as ReturnType<typeof RpcWebSocketBrowserFactory>
-        ).socket;
+        this.underlyingSocket = rpc.socket as ReturnType<typeof createRpc>;
       } else {
         this.underlyingSocket = rpc as NodeWebSocketType;
       }
@@ -43,8 +39,8 @@ export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
     super(webSocketFactory, address, options, generate_request_id);
   }
   call(
-    ...args: Parameters<RpcWebSocketCommonClient['call']>
-  ): ReturnType<RpcWebSocketCommonClient['call']> {
+    ...args: Parameters<CommonClient['call']>
+  ): ReturnType<CommonClient['call']> {
     const readyState = this.underlyingSocket?.readyState;
     if (readyState === 1 /* WebSocket.OPEN */) {
       return super.call(...args);
@@ -60,8 +56,8 @@ export default class RpcWebSocketClient extends RpcWebSocketCommonClient {
     );
   }
   notify(
-    ...args: Parameters<RpcWebSocketCommonClient['notify']>
-  ): ReturnType<RpcWebSocketCommonClient['notify']> {
+    ...args: Parameters<CommonClient['notify']>
+  ): ReturnType<CommonClient['notify']> {
     const readyState = this.underlyingSocket?.readyState;
     if (readyState === 1 /* WebSocket.OPEN */) {
       return super.notify(...args);

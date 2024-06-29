@@ -8,7 +8,7 @@ import {
 } from '@solana/rpc';
 import type { Slot } from '@solana/rpc-types';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
+import { createSolanaRpcGraphQL, RpcGraphQL } from '../index';
 import { mockBlockFull, mockBlockFullBase58, mockBlockFullBase64, mockBlockSignatures } from './__setup__';
 
 type GraphQLCompliantRpc = Rpc<
@@ -37,7 +37,7 @@ describe('block', () => {
                 return target[p as keyof GraphQLCompliantRpc];
             },
         });
-        rpcGraphQL = createRpcGraphQL(rpc);
+        rpcGraphQL = createSolanaRpcGraphQL(rpc);
     });
     describe('basic queries', () => {
         it("can query a block's block time", async () => {

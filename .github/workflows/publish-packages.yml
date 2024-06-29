@@ -45,10 +45,10 @@ jobs:
 
       - name: Choose Build Step
         id: build-step-decider
-        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages' || 'build' }}" >> $GITHUB_OUTPUT
+        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages --concurrency=100%' || 'build' }}" >> $GITHUB_OUTPUT
 
       - name: Run Build Step (force)
-        run: pnpm turbo ${{ steps.build-step-decider.outputs.step-name }} --concurrency=100% --filter=!\@solana/web3.js --force=true
+        run: pnpm turbo ${{ steps.build-step-decider.outputs.step-name }} --filter=!\@solana/web3.js --force=true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

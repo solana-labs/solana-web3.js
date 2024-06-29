@@ -79,6 +79,22 @@ describe('RPC request coalescer', () => {
             const expectationB = expect(responsePromiseB).rejects.toBe(mockErrorB);
             await Promise.all([expectationA, expectationB]);
         });
+        it('does not abort the transport when the number of consumers increases, falls to zero, then increases again in the same runloop', async () => {
+            expect.assertions(2);
+            const abortControllerA = new AbortController();
+            const abortControllerB = new AbortController();
+            coalescedTransport({ payload: null, signal: abortControllerA.signal }).catch(() => {});
+            coalescedTransport({ payload: null, signal: abortControllerB.signal }).catch(() => {});
+            // Both abort, bringing the consumer count to zero.
+            abortControllerA.abort('o no A');
+            abortControllerB.abort('o no B');
+            // New request comes in at the last moment before the end of the runloop.
+            coalescedTransport({ payload: null });
+            await jest.runOnlyPendingTimersAsync();
+            expect(mockTransport).toHaveBeenCalledTimes(1);
+            const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
+            expect(transportAbortSignal.aborted).toBe(false);
+        });
         describe('multiple coalesced requests each with an abort signal', () => {
             let abortControllerA: AbortController;
             let abortControllerB: AbortController;
@@ -120,9 +136,13 @@ describe('RPC request coalescer', () => {
                 abortControllerA.abort('o no');
                 await expect(responsePromiseA).rejects.toBe('o no');
             });
-            it('aborts the transport when all of the requests abort', () => {
+            it('aborts the transport at the end of the runloop when all of the requests abort', async () => {
+                expect.assertions(1);
+                responsePromiseA.catch(() => {});
+                responsePromiseB.catch(() => {});
                 abortControllerA.abort('o no A');
                 abortControllerB.abort('o no B');
+                await jest.runOnlyPendingTimersAsync();
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 const transportAbortSignal = mockTransport.mock.lastCall![0].signal!;
                 expect(transportAbortSignal.aborted).toBe(true);

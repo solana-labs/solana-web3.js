@@ -1,6 +1,6 @@
 export type RpcRequest<TResponse> = {
     methodName: string;
-    params: unknown[];
+    params: unknown;
     responseTransformer?: (response: unknown, methodName: string) => TResponse;
 };
 

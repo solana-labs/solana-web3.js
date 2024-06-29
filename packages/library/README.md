@@ -34,17 +34,17 @@ In response to your feedback, we began a process of modernizing the library to p
 ### For use in Node.js or a web application
 
 ```shell
-npm install --save @solana/web3.js@tp2
+npm install --save @solana/web3.js@tp3
 ```
 
 ### For use in a browser, without a build system
 
 ```html
 <!-- Development (debug mode, unminified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp2/dist/index.development.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@tp3/dist/index.development.js"></script>
 
 <!-- Production (minified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp2/dist/index.production.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@tp3/dist/index.production.min.js"></script>
 ```
 
 What follows is an overview of _why_ the library was re-engineered, what changes have been introduced, and how the JavaScript landscape might look across Solana in the near future.
@@ -882,7 +882,7 @@ const signedTransaction = await signTransaction([signer], transactionMessageWith
 
 ### Calibrating A Transaction Message's Compute Unit Budget
 
-Correctly budgeting a compute unit limit for your transaction message can increase the probabilty that your transaction will be accepted for processing. If you don't declare a compute unit limit on your transaction, validators will assume an upper limit of 200K compute units (CU) per instruction.
+Correctly budgeting a compute unit limit for your transaction message can increase the probability that your transaction will be accepted for processing. If you don't declare a compute unit limit on your transaction, validators will assume an upper limit of 200K compute units (CU) per instruction.
 
 Since validators have an incentive to pack as many transactions into each block as possible, they may choose to include transactions that they know will fit into the remaining compute budget for the current block over transactions that might not. For this reason, you should set a compute unit limit on each of your transaction messages, whenever possible.
 

@@ -1,11 +1,10 @@
 import bs58 from 'bs58';
 import {Buffer} from 'buffer';
-import * as splToken from '@solana/spl-token';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Agent as HttpAgent} from 'http';
 import {Agent as HttpsAgent} from 'https';
-import {match, mock, spy, useFakeTimers, SinonFakeTimers} from 'sinon';
+import {match, mock, spy, stub, useFakeTimers, SinonFakeTimers} from 'sinon';
 import sinonChai from 'sinon-chai';
 import {fail} from 'assert';
 
@@ -26,6 +25,8 @@ import {
   SYSTEM_INSTRUCTION_LAYOUTS,
   NONCE_ACCOUNT_LENGTH,
   MessageAddressTableLookup,
+  sendAndConfirmRawTransaction,
+  SendTransactionError,
 } from '../src';
 import invariant from '../src/utils/assert';
 import {toBuffer} from '../src/utils/to-buffer';
@@ -1062,6 +1063,261 @@ describe('Connection', function () {
       expect(
         voteAccounts.current.concat(voteAccounts.delinquent).length,
       ).to.be.greaterThan(0);
+    });
+  }
+
+  if (process.env.TEST_LIVE) {
+    describe('transaction sending error logs', () => {
+      it('sendAndConfirmTransaction skipPreflight: false', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: false,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        const sendPromise = sendAndConfirmTransaction(
+          connection,
+          transferSolTransaction,
+          [keypair],
+          confirmOptions,
+        );
+
+        await Promise.all([
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Transfer: insufficient lamports/,
+          ),
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Program 11111111111111111111111111111111 failed: custom program error: 0x1/,
+          ),
+        ]);
+      });
+
+      it('sendAndConfirmTransaction skipPreflight: true', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: true,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        try {
+          await sendAndConfirmTransaction(
+            connection,
+            transferSolTransaction,
+            [keypair],
+            confirmOptions,
+          );
+          throw new Error('Expected an error but did not get one');
+        } catch (error) {
+          if (error instanceof SendTransactionError) {
+            const logsPromise: Promise<string[]> = error.getLogs(connection);
+
+            await Promise.all([
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes('Transfer: insufficient lamports'),
+                ),
+              ),
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes(
+                    'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                  ),
+                ),
+              ),
+            ]);
+          }
+        }
+      });
+
+      it('sendAndConfirmRawTransaction skipPreflight: true', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: true,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        try {
+          await sendAndConfirmRawTransaction(
+            connection,
+            transferSolTransaction.serialize(),
+            confirmOptions,
+          );
+        } catch (error) {
+          if (error instanceof SendTransactionError) {
+            const logsPromise: Promise<string[]> = error.getLogs(connection);
+
+            await Promise.all([
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes('Transfer: insufficient lamports'),
+                ),
+              ),
+              expect(logsPromise).to.eventually.satisfy((logs: string[]) =>
+                logs.some(log =>
+                  log.includes(
+                    'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                  ),
+                ),
+              ),
+            ]);
+          }
+        }
+      });
+
+      it('sendAndConfirmRawTransaction skipPreflight: false', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+        let confirmOptions = {
+          skipPreflight: false,
+          commitment: connection.commitment,
+          preflightCommitment: connection.commitment,
+          maxRetries: 5,
+          minContextSlot: 0,
+        };
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        const sendPromise = sendAndConfirmRawTransaction(
+          connection,
+          transferSolTransaction.serialize(),
+          confirmOptions,
+        );
+
+        await Promise.all([
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Transfer: insufficient lamports/,
+          ),
+          await expect(sendPromise).to.eventually.be.rejectedWith(
+            SendTransactionError,
+            /Program 11111111111111111111111111111111 failed: custom program error: 0x1/,
+          ),
+        ]);
+      });
+
+      it('Simulate transaction contains logs', async () => {
+        const keypair = Keypair.generate();
+        const destinationKeypair = Keypair.generate();
+
+        connection = new Connection(url, 'confirmed');
+
+        await connection.confirmTransaction(
+          await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL),
+        );
+
+        const transferSolTransaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: keypair.publicKey,
+            toPubkey: destinationKeypair.publicKey,
+            lamports: 2 * LAMPORTS_PER_SOL,
+          }),
+        );
+
+        transferSolTransaction.recentBlockhash = (
+          await connection.getRecentBlockhash('confirmed')
+        ).blockhash;
+        transferSolTransaction.sign(keypair);
+
+        const simulationResultPromise = connection.simulateTransaction(
+          transferSolTransaction,
+          [keypair],
+        );
+
+        await Promise.all([
+          expect(simulationResultPromise)
+            .to.eventually.have.nested.property('value.logs')
+            .that.satisfies((logs: string[]) =>
+              logs.some(log => log.includes('Transfer: insufficient lamports')),
+            ),
+          expect(simulationResultPromise)
+            .to.eventually.have.nested.property('value.logs')
+            .that.satisfies((logs: string[]) =>
+              logs.some(log =>
+                log.includes(
+                  'Program 11111111111111111111111111111111 failed: custom program error: 0x1',
+                ),
+              ),
+            ),
+        ]);
+      });
     });
   }
 
@@ -4639,90 +4895,68 @@ describe('Connection', function () {
       const connection = new Connection(url, 'confirmed');
       const newAccount = PublicKey.unique();
 
-      let payerKeypair = new Keypair();
-      let testTokenMintPubkey: PublicKey;
-      let testOwnerKeypair: Keypair;
-      let testTokenAccountPubkey: PublicKey;
-      let testSignature: TransactionSignature;
+      // See scripts/fixtures/legacy-token-test-mint-account.json
+      const testTokenMintPubkey = new PublicKey(
+        '7MbpdfJa5xqwexkp6WUvkYHTPo4VgxYACDBNFWYLwCdo',
+      );
+      // See scripts/fixtures/legacy-token-test-token-owner.json
+      const testOwnerKeypair = Keypair.fromSecretKey(
+        // Public key: `AVGuygVeBmbYiJ47V7tgBNLSukNqW7pWZYJsKUNWhHpc`
+        new Uint8Array([
+          153, 120, 247, 45, 160, 119, 144, 219, 220, 209, 73, 91, 210, 102, 31,
+          136, 155, 12, 68, 27, 226, 215, 61, 214, 10, 245, 247, 180, 236, 63,
+          100, 202, 140, 247, 112, 54, 120, 32, 168, 118, 72, 115, 190, 34, 171,
+          126, 15, 119, 252, 173, 50, 173, 8, 10, 96, 239, 21, 32, 94, 67, 37,
+          43, 145, 249,
+        ]),
+      );
+      // See scripts/fixtures/legacy-token-test-token-account.json
+      const testTokenAccountPubkey = new PublicKey(
+        'EryTMgfSEabo5Fc7dN5z3nBQKzfHUJRpHAMnXdCrTq4S',
+      );
+      let selfTransferSignature: TransactionSignature;
 
       // Setup token mints and accounts for token tests
       before(async function () {
         this.timeout(30 * 1000);
 
-        await connection.confirmTransaction(
-          await connection.requestAirdrop(payerKeypair.publicKey, 100000000000),
+        const selfTransferTransaction = new Transaction().add(
+          new TransactionInstruction({
+            keys: [
+              {
+                pubkey: testTokenAccountPubkey,
+                isSigner: false,
+                isWritable: true,
+              },
+              {
+                pubkey: testTokenAccountPubkey,
+                isSigner: false,
+                isWritable: true,
+              },
+              {
+                pubkey: testOwnerKeypair.publicKey,
+                isSigner: true,
+                isWritable: false,
+              },
+            ],
+            programId: new PublicKey(
+              'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+            ),
+            data: Buffer.from(
+              // prettier-ignore
+              [
+                3, // TRANSFER instruction
+                1, 0, 0, 0, 0, 0, 0, 0, // 1 Lamport
+            ],
+            ),
+          }),
         );
 
-        const mintOwnerKeypair = new Keypair();
-        const accountOwnerKeypair = new Keypair();
-        const mintPubkey = await splToken.createMint(
-          connection as any,
-          payerKeypair,
-          mintOwnerKeypair.publicKey,
-          null, // freeze authority
-          2, // decimals
+        selfTransferSignature = await sendAndConfirmTransaction(
+          connection,
+          selfTransferTransaction,
+          [testOwnerKeypair],
         );
-
-        const tokenAccountPubkey = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          accountOwnerKeypair.publicKey,
-        );
-
-        await splToken.mintTo(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          tokenAccountPubkey,
-          mintOwnerKeypair,
-          11111,
-        );
-
-        const mintPubkey2 = await splToken.createMint(
-          connection as any,
-          payerKeypair,
-          mintOwnerKeypair.publicKey,
-          null, // freeze authority
-          2, // decimals
-        );
-
-        const tokenAccountPubkey2 = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey2,
-          accountOwnerKeypair.publicKey,
-        );
-
-        await splToken.mintTo(
-          connection as any,
-          payerKeypair,
-          mintPubkey2,
-          tokenAccountPubkey2,
-          mintOwnerKeypair,
-          100,
-        );
-
-        const tokenAccountDestPubkey = await splToken.createAccount(
-          connection as any,
-          payerKeypair,
-          mintPubkey,
-          accountOwnerKeypair.publicKey,
-          new Keypair() as any,
-        );
-
-        testSignature = await splToken.transfer(
-          connection as any,
-          payerKeypair,
-          tokenAccountPubkey,
-          tokenAccountDestPubkey,
-          accountOwnerKeypair,
-          1,
-        );
-
-        testTokenMintPubkey = mintPubkey as PublicKey;
-        testOwnerKeypair = accountOwnerKeypair;
-        testTokenAccountPubkey = tokenAccountPubkey as PublicKey;
       });
 
       it('get token supply', async () => {
@@ -4740,7 +4974,7 @@ describe('Connection', function () {
           await connection.getTokenLargestAccounts(testTokenMintPubkey)
         ).value;
 
-        expect(largestAccounts).to.have.length(2);
+        expect(largestAccounts).to.have.length(1);
         const largestAccount = largestAccounts[0];
         expect(largestAccount.address.equals(testTokenAccountPubkey)).to.be
           .true;
@@ -4753,14 +4987,15 @@ describe('Connection', function () {
       });
 
       it('get confirmed token transaction', async () => {
-        const parsedTx =
-          await connection.getParsedConfirmedTransaction(testSignature);
+        const parsedTx = await connection.getParsedConfirmedTransaction(
+          selfTransferSignature,
+        );
         if (parsedTx === null) {
           expect(parsedTx).not.to.be.null;
           return;
         }
         const {signatures, message} = parsedTx.transaction;
-        expect(signatures[0]).to.eq(testSignature);
+        expect(signatures[0]).to.eq(selfTransferSignature);
         const ix = message.instructions[0];
         if ('parsed' in ix) {
           expect(ix.program).to.eq('spl-token');
@@ -4809,7 +5044,7 @@ describe('Connection', function () {
           await connection.getMultipleParsedAccounts([
             testTokenAccountPubkey,
             testTokenMintPubkey,
-            payerKeypair.publicKey,
+            testOwnerKeypair.publicKey,
             newAccount,
           ])
         ).value;
@@ -4841,12 +5076,12 @@ describe('Connection', function () {
           expect(parsedTokenMint).to.be.ok;
         }
 
-        const unparsedPayerAccount = accounts[2];
-        if (unparsedPayerAccount) {
-          const data = unparsedPayerAccount.data;
+        const unparsedOwnerAccount = accounts[2];
+        if (unparsedOwnerAccount) {
+          const data = unparsedOwnerAccount.data;
           expect(Buffer.isBuffer(data)).to.be.true;
         } else {
-          expect(unparsedPayerAccount).to.be.ok;
+          expect(unparsedOwnerAccount).to.be.ok;
         }
 
         const unknownAccount = accounts[3];
@@ -4895,14 +5130,14 @@ describe('Connection', function () {
             mint: testTokenMintPubkey,
           })
         ).value;
-        expect(accountsWithMintFilter).to.have.length(2);
+        expect(accountsWithMintFilter).to.have.length(1);
 
         const accountsWithProgramFilter = (
           await connection.getTokenAccountsByOwner(testOwnerKeypair.publicKey, {
             programId: TOKEN_PROGRAM_ID,
           })
         ).value;
-        expect(accountsWithProgramFilter).to.have.length(3);
+        expect(accountsWithProgramFilter).to.have.length(1);
 
         const noAccounts = (
           await connection.getTokenAccountsByOwner(newAccount, {
@@ -5656,7 +5891,7 @@ describe('Connection', function () {
               subscriptionId = connection.onAccountChange(
                 owner.publicKey,
                 resolve,
-                'confirmed',
+                {commitment: 'confirmed'},
               );
             },
           );
@@ -6136,4 +6371,125 @@ describe('Connection', function () {
       });
     }).timeout(5 * 1000);
   }
+
+  it('passes the commitment/encoding to the RPC when calling `onAccountChange`', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onAccountChange(PublicKey.default, mockCallback, {
+      commitment: 'processed',
+      encoding: 'base64+zstd',
+    });
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'accountSubscribe',
+        unsubscribeMethod: 'accountUnsubscribe',
+      },
+      [
+        match.any,
+        match
+          .has('commitment', 'processed')
+          .and(match.has('encoding', 'base64+zstd')),
+      ],
+    );
+  });
+  it('passes the commitment to the RPC when the deprecated signature of `onAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onAccountChange(PublicKey.default, mockCallback, 'processed');
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'accountSubscribe',
+        unsubscribeMethod: 'accountUnsubscribe',
+      },
+      [match.any, match.has('commitment', 'processed')],
+    );
+  });
+  it('passes the commitment to the RPC when the deprecated signature of `onProgramAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(
+      PublicKey.default,
+      mockCallback,
+      'processed' /* commitment */,
+    );
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [match.any, match.has('commitment', 'processed')],
+    );
+  });
+  it('passes the filters to the RPC when the deprecated signature of `onProgramAccountChange` is used', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(
+      PublicKey.default,
+      mockCallback,
+      /* commitment */ undefined,
+      /* filters */ [{dataSize: 123}],
+    );
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [match.any, match.has('filters', [{dataSize: 123}])],
+    );
+  });
+  it('passes the commitment/encoding/filters to the RPC when calling `onProgramAccountChange`', () => {
+    const connection = new Connection(url);
+    const rpcRequestMethod = stub(
+      connection,
+      // @ts-expect-error This method is private, but none the less this spy will work.
+      '_makeSubscription',
+    );
+    const mockCallback = () => {};
+    connection.onProgramAccountChange(PublicKey.default, mockCallback, {
+      commitment: 'processed',
+      encoding: 'base64+zstd',
+      filters: [{dataSize: 123}],
+    });
+    expect(rpcRequestMethod).to.have.been.calledWithExactly(
+      {
+        callback: mockCallback,
+        method: 'programSubscribe',
+        unsubscribeMethod: 'programUnsubscribe',
+      },
+      [
+        match.any,
+        match
+          .has('commitment', 'processed')
+          .and(
+            match
+              .has('encoding', 'base64+zstd')
+              .and(match.has('filters', [{dataSize: 123}])),
+          ),
+      ],
+    );
+  });
 });

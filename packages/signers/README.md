@@ -470,8 +470,8 @@ const myInstruction: IInstruction = {
     // ...
 };
 
-const signerA: TransactionSigner<'1111'>;
-const signerB: TransactionSigner<'2222'>;
+const mySignerA: TransactionSigner<'1111'>;
+const mySignerB: TransactionSigner<'2222'>;
 const myInstructionWithSigners = addSignersToInstruction([mySignerA, mySignerB], myInstruction);
 
 // myInstructionWithSigners.accounts[0].signer === mySignerA
@@ -528,20 +528,20 @@ const mySignedTransaction = await signTransactionMessageWithSigners(myTransactio
 mySignedTransaction satisfies IFullySignedTransaction;
 ```
 
-#### `signAndSendTransactionWithSigners()`
+#### `signAndSendTransactionMessageWithSigners()`
 
 Extracts all signers inside the provided transaction and uses them to sign it before sending it immediately to the blockchain. It returns the signature of the sent transaction (i.e. its identifier).
 
 ```ts
-const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction);
+const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
 
 // With additional config.
-const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction, {
+const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage, {
     abortSignal: myAbortController.signal,
 });
 ```
 
-Similarly to the `partiallySignTransactionWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the `TransactionSendingSigner` it identified.
+Similarly to the `partiallySignTransactionMessageWithSigners` function, it first uses all `TransactionModifyingSigners` sequentially before using all `TransactionPartialSigners` in parallel. It then sends the transaction using the `TransactionSendingSigner` it identified.
 
 Here as well, composite transaction signers are treated such that at least one sending signer is used if any. When a `TransactionSigner` implements more than one interface, use it as a:
 
@@ -549,23 +549,23 @@ Here as well, composite transaction signers are treated such that at least one s
 -   `TransactionModifyingSigner`, if no other `TransactionModifyingSigner` exists.
 -   `TransactionPartialSigner`, otherwise.
 
-The provided transaction must be of type `ITransactionWithSingleSendingSigner` meaning that it must contain exactly one `TransactionSendingSigner` inside its account metas. If more than one composite signers implement the `TransactionSendingSigner` interface, one of them will be selected as the sending signer.
+The provided transaction must contain exactly one `TransactionSendingSigner` inside its account metas. If more than one composite signers implement the `TransactionSendingSigner` interface, one of them will be selected as the sending signer. Otherwise, if multiple `TransactionSendingSigners` must be selected, the function will throw an error.
 
-Therefore, you may use the `assertIsTransactionWithSingleSendingSigner()` function to ensure the transaction is of the expected type.
+If you'd like to assert that a transaction makes use of exactly one `TransactionSendingSigner` _before_ calling this function, you may use the `assertIsTransactionMessageWithSingleSendingSigner` function.
 
 ```ts
-assertIsTransactionWithSingleSendingSigner(myTransaction);
-const myTransactionSignature = await signAndSendTransactionWithSigners(myTransaction);
+assertIsTransactionMessageWithSingleSendingSigner(transactionMessage);
+const transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
 ```
 
 Alternatively, you may use the `isTransactionWithSingleSendingSigner()` function to provide a fallback in case the transaction does not contain any sending signer.
 
 ```ts
 let transactionSignature: SignatureBytes;
-if (isTransactionWithSingleSendingSigner(transaction)) {
-    transactionSignature = await signAndSendTransactionWithSigners(transaction);
+if (isTransactionWithSingleSendingSigner(transactionMessage)) {
+    transactionSignature = await signAndSendTransactionMessageWithSigners(transactionMessage);
 } else {
-    const signedTransaction = await signTransactionWithSigners(transaction);
+    const signedTransaction = await signTransactionMessageWithSigners(transactionMessage);
     const encodedTransaction = getBase64EncodedWireTransaction(signedTransaction);
     transactionSignature = await rpc.sendTransaction(encodedTransaction).send();
 }

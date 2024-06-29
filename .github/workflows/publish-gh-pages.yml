@@ -1,0 +1,45 @@
+name: Publish GitHub Pages
+
+on:
+  workflow_dispatch:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+env:
+  # Among other things, opts out of Turborepo telemetry
+  # See https://consoledonottrack.com/
+  DO_NOT_TRACK: '1'
+  # Enables Turborepo Remote Caching.
+  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
+jobs:
+  compile-github-pages-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
+
+      - name: Compile
+        run: pnpm turbo run compile:ghpages --concurrency=100%
+        env:
+          REACT_EXAMPLE_APP_BASE_PATH: /solana-web3.js/example/
+
+      - name: Assemble deploy directory
+        run: |
+          mkdir -p .ghpages-deploy
+          cp -r ./packages/library-legacy/doc/* .ghpages-deploy
+          cp -r ./examples/react-app/dist/ .ghpages-deploy/example/
+
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .ghpages-deploy

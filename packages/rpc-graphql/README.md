@@ -35,7 +35,7 @@ for use in order to properly execute all queries.
 Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
 ```
 
-To initialize the RPC-GraphQL client, simple use `createRpcGraphQL`.
+To initialize the RPC-GraphQL client, simple use `createSolanaRpcGraphQL`.
 
 ```ts
 import { createSolanaRpc } from '@solana/rpc';
@@ -44,7 +44,7 @@ import { createSolanaRpc } from '@solana/rpc';
 const rpc = createSolanaRpc('https://api.devnet.solana.com');
 
 // Create the RPC-GraphQL client
-const rpcGraphQL = createRpcGraphQL(rpc);
+const rpcGraphQL = createSolanaRpcGraphQL(rpc);
 ```
 
 The `RpcGraphQL` type supports one method `query` which accepts a string

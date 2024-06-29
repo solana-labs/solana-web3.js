@@ -3,9 +3,9 @@ import { SOLANA_ERROR__SIGNER__EXPECTED_TRANSACTION_SENDING_SIGNER, SolanaError 
 import { SignatureBytes } from '@solana/keys';
 import { Transaction } from '@solana/transactions';
 
-import { BaseSignerConfig } from './types';
+import { BaseTransactionSignerConfig } from './types';
 
-export type TransactionSendingSignerConfig = BaseSignerConfig;
+export type TransactionSendingSignerConfig = BaseTransactionSignerConfig;
 
 /** Defines a signer capable of signing and sending transactions simultaneously. */
 export type TransactionSendingSigner<TAddress extends string = string> = Readonly<{

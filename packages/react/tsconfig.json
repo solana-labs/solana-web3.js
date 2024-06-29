@@ -1,0 +1,10 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "jsx": "react",
+        "lib": ["DOM", "ES2015", "ESNext.Promise"]
+    },
+    "display": "@solana/react",
+    "extends": "../tsconfig/base.json",
+    "include": ["src"]
+}

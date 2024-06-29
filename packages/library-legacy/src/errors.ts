@@ -1,10 +1,93 @@
-export class SendTransactionError extends Error {
-  logs: string[] | undefined;
+import {Connection} from './connection';
+import {TransactionSignature} from './transaction';
 
-  constructor(message: string, logs?: string[]) {
+export class SendTransactionError extends Error {
+  private signature: TransactionSignature;
+  private transactionMessage: string;
+  private transactionLogs: string[] | Promise<string[]> | undefined;
+
+  constructor({
+    action,
+    signature,
+    transactionMessage,
+    logs,
+  }: {
+    action: 'send' | 'simulate';
+    signature: TransactionSignature;
+    transactionMessage: string;
+    logs?: string[];
+  }) {
+    const maybeLogsOutput = logs
+      ? `Logs: \n${JSON.stringify(logs.slice(-10), null, 2)}. `
+      : '';
+    const guideText =
+      '\nCatch the `SendTransactionError` and call `getLogs()` on it for full details.';
+    let message: string;
+    switch (action) {
+      case 'send':
+        message =
+          `Transaction ${signature} resulted in an error. \n` +
+          `${transactionMessage}. ` +
+          maybeLogsOutput +
+          guideText;
+        break;
+      case 'simulate':
+        message =
+          `Simulation failed. \nMessage: ${transactionMessage}. \n` +
+          maybeLogsOutput +
+          guideText;
+        break;
+      default: {
+        message = `Unknown action '${((a: never) => a)(action)}'`;
+      }
+    }
     super(message);
 
-    this.logs = logs;
+    this.signature = signature;
+    this.transactionMessage = transactionMessage;
+    this.transactionLogs = logs ? logs : undefined;
+  }
+
+  get transactionError(): {message: string; logs?: string[]} {
+    return {
+      message: this.transactionMessage,
+      logs: Array.isArray(this.transactionLogs)
+        ? this.transactionLogs
+        : undefined,
+    };
+  }
+
+  /* @deprecated Use `await getLogs()` instead */
+  get logs(): string[] | undefined {
+    const cachedLogs = this.transactionLogs;
+    if (
+      cachedLogs != null &&
+      typeof cachedLogs === 'object' &&
+      'then' in cachedLogs
+    ) {
+      return undefined;
+    }
+    return cachedLogs;
+  }
+
+  async getLogs(connection: Connection): Promise<string[]> {
+    if (!Array.isArray(this.transactionLogs)) {
+      this.transactionLogs = new Promise((resolve, reject) => {
+        connection
+          .getTransaction(this.signature)
+          .then(tx => {
+            if (tx && tx.meta && tx.meta.logMessages) {
+              const logs = tx.meta.logMessages;
+              this.transactionLogs = logs;
+              resolve(logs);
+            } else {
+              reject(new Error('Log messages not found'));
+            }
+          })
+          .catch(reject);
+      });
+    }
+    return await this.transactionLogs;
   }
 }
 

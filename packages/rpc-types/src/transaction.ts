@@ -25,12 +25,14 @@ type ParsedTransactionInstruction = Readonly<{
     };
     program: string;
     programId: Address;
+    stackHeight?: number;
 }>;
 
 type PartiallyDecodedTransactionInstruction = Readonly<{
     accounts: readonly Address[];
     data: Base58EncodedBytes;
     programId: Address;
+    stackHeight?: number;
 }>;
 
 type ReturnData = {
@@ -44,6 +46,7 @@ type TransactionInstruction = Readonly<{
     accounts: readonly number[];
     data: Base58EncodedBytes;
     programIdIndex: number;
+    stackHeight?: number;
 }>;
 
 type TransactionParsedAccountLegacy = Readonly<{
@@ -141,7 +144,7 @@ type TransactionForFullMetaBase = Readonly<{
     status: TransactionStatus;
 }>;
 
-type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
+export type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
     innerInstructions: readonly Readonly<{
         /** The index of the instruction in the transaction */
         index: number;
@@ -150,7 +153,7 @@ type TransactionForFullMetaInnerInstructionsUnparsed = Readonly<{
     }>[];
 }>;
 
-type TransactionForFullMetaInnerInstructionsParsed = Readonly<{
+export type TransactionForFullMetaInnerInstructionsParsed = Readonly<{
     innerInstructions: readonly Readonly<{
         /** The index of the instruction in the transaction */
         index: number;

@@ -8,6 +8,7 @@ import {
 } from '../connection';
 import type {TransactionSignature} from '../transaction';
 import type {ConfirmOptions} from '../connection';
+import {SendTransactionError} from '../errors';
 
 /**
  * Send and confirm a raw transaction
@@ -93,6 +94,13 @@ export async function sendAndConfirmRawTransaction(
   const status = (await confirmationPromise).value;
 
   if (status.err) {
+    if (signature != null) {
+      throw new SendTransactionError({
+        action: sendOptions?.skipPreflight ? 'send' : 'simulate',
+        signature: signature,
+        transactionMessage: `Status: (${JSON.stringify(status)})`,
+      });
+    }
     throw new Error(
       `Raw transaction ${signature} failed (${JSON.stringify(status)})`,
     );

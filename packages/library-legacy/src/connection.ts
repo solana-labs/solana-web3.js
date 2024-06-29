@@ -270,7 +270,7 @@ export type ConfirmOptions = {
 export type ConfirmedSignaturesForAddress2Options = {
   /**
    * Start searching backwards from this transaction signature.
-   * @remark If not provided the search starts from the highest max confirmed block.
+   * @remarks If not provided the search starts from the highest max confirmed block.
    */
   before?: TransactionSignature;
   /** Search until this transaction signature is reached, if found before `limit`. */
@@ -285,7 +285,7 @@ export type ConfirmedSignaturesForAddress2Options = {
 export type SignaturesForAddressOptions = {
   /**
    * Start searching backwards from this transaction signature.
-   * @remark If not provided the search starts from the highest max confirmed block.
+   * @remarks If not provided the search starts from the highest max confirmed block.
    */
   before?: TransactionSignature;
   /** Search until this transaction signature is reached, if found before `limit`. */
@@ -952,6 +952,8 @@ export type SimulateTransactionConfig = {
   };
   /** Optional parameter used to specify the minimum block slot that can be used for simulation */
   minContextSlot?: number;
+  /** Optional parameter used to include inner instructions in the simulation */
+  innerInstructions?: boolean;
 };
 
 export type SimulatedTransactionResponse = {
@@ -960,7 +962,20 @@ export type SimulatedTransactionResponse = {
   accounts?: (SimulatedTransactionAccountInfo | null)[] | null;
   unitsConsumed?: number;
   returnData?: TransactionReturnData | null;
+  innerInstructions?: ParsedInnerInstruction[] | null;
 };
+const ParsedInstructionStruct = pick({
+  program: string(),
+  programId: PublicKeyFromString,
+  parsed: unknown(),
+});
+
+const PartiallyDecodedInstructionStruct = pick({
+  programId: PublicKeyFromString,
+  accounts: array(PublicKeyFromString),
+  data: string(),
+});
+
 const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
   pick({
     err: nullable(union([pick({}), string()])),
@@ -989,6 +1004,21 @@ const SimulatedTransactionResponseStruct = jsonRpcResultAndContext(
         }),
       ),
     ),
+    innerInstructions: optional(
+      nullable(
+        array(
+          pick({
+            index: number(),
+            instructions: array(
+              union([
+                ParsedInstructionStruct,
+                PartiallyDecodedInstructionStruct,
+              ]),
+            ),
+          }),
+        ),
+      ),
+    ),
   }),
 );
 
@@ -1007,7 +1037,7 @@ export type TokenBalance = {
 /**
  * Metadata for a parsed confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link ParsedTransactionMeta} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link ParsedTransactionMeta} instead.
  */
 export type ParsedConfirmedTransactionMeta = ParsedTransactionMeta;
 
@@ -1130,7 +1160,7 @@ type MessageResponse = {
 /**
  * A confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0.
+ * @deprecated Deprecated since RPC v1.8.0.
  */
 export type ConfirmedTransaction = {
   /** The slot during which the transaction was processed */
@@ -1220,7 +1250,7 @@ export type ParsedTransaction = {
 /**
  * A parsed and confirmed transaction on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link ParsedTransactionWithMeta} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link ParsedTransactionWithMeta} instead.
  */
 export type ParsedConfirmedTransaction = ParsedTransactionWithMeta;
 
@@ -1427,7 +1457,7 @@ export type VersionedNoneModeBlockResponse = Omit<
 /**
  * A confirmed block on the ledger
  *
- * @deprecated Deprecated since Solana v1.8.0.
+ * @deprecated Deprecated since RPC v1.8.0.
  */
 export type ConfirmedBlock = {
   /** Blockhash of this block */
@@ -2483,7 +2513,7 @@ const GetParsedNoneModeBlockRpcResult = jsonRpcResult(
 /**
  * Expected JSON RPC response for the "getConfirmedBlock" message
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link GetBlockRpcResult} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetBlockRpcResult} instead.
  */
 const GetConfirmedBlockRpcResult = jsonRpcResult(
   nullable(
@@ -2551,7 +2581,7 @@ const GetParsedTransactionRpcResult = jsonRpcResult(
 /**
  * Expected JSON RPC response for the "getRecentBlockhash" message
  *
- * @deprecated Deprecated since Solana v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
+ * @deprecated Deprecated since RPC v1.8.0. Please use {@link GetLatestBlockhashRpcResult} instead.
  */
 const GetRecentBlockhashAndContextRpcResult = jsonRpcResultAndContext(
   pick({
@@ -2773,6 +2803,39 @@ export type GetNonceAndContextConfig = {
   /** The minimum slot that the request can be evaluated at */
   minContextSlot?: number;
 };
+
+export type AccountSubscriptionConfig = Readonly<{
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /**
+   * Encoding format for Account data
+   *   - `base58` is slow.
+   *   - `jsonParsed` encoding attempts to use program-specific state parsers to return more
+   *      human-readable and explicit account state data
+   *   - If `jsonParsed` is requested but a parser cannot be found, the field falls back to `base64`
+   *     encoding, detectable when the `data` field is type `string`.
+   */
+  encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+}>;
+
+export type ProgramAccountSubscriptionConfig = Readonly<{
+  /** Optional commitment level */
+  commitment?: Commitment;
+  /**
+   * Encoding format for Account data
+   *   - `base58` is slow.
+   *   - `jsonParsed` encoding attempts to use program-specific state parsers to return more
+   *      human-readable and explicit account state data
+   *   - If `jsonParsed` is requested but a parser cannot be found, the field falls back to `base64`
+   *     encoding, detectable when the `data` field is type `string`.
+   */
+  encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
+  /**
+   * Filter results using various filter objects
+   * The resultant account must meet ALL filter criteria to be included in the returned results
+   */
+  filters?: GetProgramAccountsFilter[];
+}>;
 
 /**
  * Information describing an account
@@ -3594,6 +3657,8 @@ export class Connection {
 
   /**
    * Returns epoch activation information for a stake account that has been delegated
+   *
+   * @deprecated Deprecated since RPC v1.18; will be removed in a future version.
    */
   async getStakeActivation(
     publicKey: PublicKey,
@@ -4299,7 +4364,7 @@ export class Connection {
   /**
    * Fetch the current total currency supply of the cluster in lamports
    *
-   * @deprecated Deprecated since v1.2.8. Please use {@link getSupply} instead.
+   * @deprecated Deprecated since RPC v1.2.8. Please use {@link getSupply} instead.
    */
   async getTotalSupply(commitment?: Commitment): Promise<number> {
     const result = await this.getSupply({
@@ -4442,7 +4507,7 @@ export class Connection {
    * Fetch a recent blockhash from the cluster, return with context
    * @return {Promise<RpcResponseAndContext<{blockhash: Blockhash, feeCalculator: FeeCalculator}>>}
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getLatestBlockhash} instead.
+   * @deprecated Deprecated since RPC v1.9.0. Please use {@link getLatestBlockhash} instead.
    */
   async getRecentBlockhashAndContext(commitment?: Commitment): Promise<
     RpcResponseAndContext<{
@@ -4527,7 +4592,7 @@ export class Connection {
    * Fetch a recent blockhash from the cluster
    * @return {Promise<{blockhash: Blockhash, feeCalculator: FeeCalculator}>}
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getLatestBlockhash} instead.
+   * @deprecated Deprecated since RPC v1.8.0. Please use {@link getLatestBlockhash} instead.
    */
   async getRecentBlockhash(
     commitment?: Commitment,
@@ -5075,7 +5140,7 @@ export class Connection {
    * Fetch a list of Transactions and transaction statuses from the cluster
    * for a confirmed block.
    *
-   * @deprecated Deprecated since v1.13.0. Please use {@link getBlock} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getBlock} instead.
    */
   async getConfirmedBlock(
     slot: number,
@@ -5173,7 +5238,7 @@ export class Connection {
   /**
    * Fetch a list of Signatures from the cluster for a confirmed block, excluding rewards
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getBlockSignatures} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getBlockSignatures} instead.
    */
   async getConfirmedBlockSignatures(
     slot: number,
@@ -5203,7 +5268,7 @@ export class Connection {
   /**
    * Fetch a transaction details for a confirmed transaction
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getTransaction} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getTransaction} instead.
    */
   async getConfirmedTransaction(
     signature: TransactionSignature,
@@ -5230,7 +5295,7 @@ export class Connection {
   /**
    * Fetch parsed transaction details for a confirmed transaction
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getParsedTransaction} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getParsedTransaction} instead.
    */
   async getParsedConfirmedTransaction(
     signature: TransactionSignature,
@@ -5255,7 +5320,7 @@ export class Connection {
   /**
    * Fetch parsed transaction details for a batch of confirmed transactions
    *
-   * @deprecated Deprecated since Solana v1.8.0. Please use {@link getParsedTransactions} instead.
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getParsedTransactions} instead.
    */
   async getParsedConfirmedTransactions(
     signatures: TransactionSignature[],
@@ -5292,7 +5357,7 @@ export class Connection {
    * Fetch a list of all the confirmed signatures for transactions involving an address
    * within a specified slot range. Max range allowed is 10,000 slots.
    *
-   * @deprecated Deprecated since v1.3. Please use {@link getConfirmedSignaturesForAddress2} instead.
+   * @deprecated Deprecated since RPC v1.3. Please use {@link getConfirmedSignaturesForAddress2} instead.
    *
    * @param address queried address
    * @param startSlot start slot, inclusive
@@ -5363,9 +5428,7 @@ export class Connection {
    * Returns confirmed signatures for transactions involving an
    * address backwards in time from the provided signature or most recent confirmed block
    *
-   *
-   * @param address queried address
-   * @param options
+   * @deprecated Deprecated since RPC v1.7.0. Please use {@link getSignaturesForAddress} instead.
    */
   async getConfirmedSignaturesForAddress2(
     address: PublicKey,
@@ -5640,6 +5703,14 @@ export class Connection {
         config.commitment = this.commitment;
       }
 
+      if (
+        configOrSigners &&
+        typeof configOrSigners === 'object' &&
+        'innerInstructions' in configOrSigners
+      ) {
+        config.innerInstructions = configOrSigners.innerInstructions;
+      }
+
       const args = [encodedTransaction, config];
       const unsafeRes = await this._rpcRequest('simulateTransaction', args);
       const res = create(unsafeRes, SimulatedTransactionResponseStruct);
@@ -5730,6 +5801,14 @@ export class Connection {
       config.sigVerify = true;
     }
 
+    if (
+      configOrSigners &&
+      typeof configOrSigners === 'object' &&
+      'innerInstructions' in configOrSigners
+    ) {
+      config.innerInstructions = configOrSigners.innerInstructions;
+    }
+
     const args = [encodedTransaction, config];
     const unsafeRes = await this._rpcRequest('simulateTransaction', args);
     const res = create(unsafeRes, SimulatedTransactionResponseStruct);
@@ -5743,10 +5822,13 @@ export class Connection {
           console.error(res.error.message, logTrace);
         }
       }
-      throw new SendTransactionError(
-        'failed to simulate transaction: ' + res.error.message,
-        logs,
-      );
+
+      throw new SendTransactionError({
+        action: 'simulate',
+        signature: '',
+        transactionMessage: res.error.message,
+        logs: logs,
+      });
     }
     return res.result;
   }
@@ -5877,14 +5959,17 @@ export class Connection {
     const unsafeRes = await this._rpcRequest('sendTransaction', args);
     const res = create(unsafeRes, SendTransactionRpcResult);
     if ('error' in res) {
-      let logs;
+      let logs = undefined;
       if ('data' in res.error) {
         logs = res.error.data.logs;
       }
-      throw new SendTransactionError(
-        'failed to send transaction: ' + res.error.message,
-        logs,
-      );
+
+      throw new SendTransactionError({
+        action: skipPreflight ? 'send' : 'simulate',
+        signature: '',
+        transactionMessage: res.error.message,
+        logs: logs,
+      });
     }
     return res.result;
   }
@@ -6289,18 +6374,34 @@ export class Connection {
    *
    * @param publicKey Public key of the account to monitor
    * @param callback Function to invoke whenever the account is changed
-   * @param commitment Specify the commitment level account changes must reach before notification
+   * @param config
    * @return subscription id
    */
   onAccountChange(
     publicKey: PublicKey,
     callback: AccountChangeCallback,
+    config?: AccountSubscriptionConfig,
+  ): ClientSubscriptionId;
+  /** @deprecated Instead, pass in an {@link AccountSubscriptionConfig} */
+  // eslint-disable-next-line no-dupe-class-members
+  onAccountChange(
+    publicKey: PublicKey,
+    callback: AccountChangeCallback,
     commitment?: Commitment,
+  ): ClientSubscriptionId;
+  // eslint-disable-next-line no-dupe-class-members
+  onAccountChange(
+    publicKey: PublicKey,
+    callback: AccountChangeCallback,
+    commitmentOrConfig?: Commitment | AccountSubscriptionConfig,
   ): ClientSubscriptionId {
+    const {commitment, config} =
+      extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
       [publicKey.toBase58()],
       commitment || this._commitment || 'finalized', // Apply connection/server default.
       'base64',
+      config,
     );
     return this._makeSubscription(
       {
@@ -6349,21 +6450,40 @@ export class Connection {
    *
    * @param programId Public key of the program to monitor
    * @param callback Function to invoke whenever the account is changed
-   * @param commitment Specify the commitment level account changes must reach before notification
-   * @param filters The program account filters to pass into the RPC method
+   * @param config
    * @return subscription id
    */
   onProgramAccountChange(
     programId: PublicKey,
     callback: ProgramAccountChangeCallback,
+    config?: ProgramAccountSubscriptionConfig,
+  ): ClientSubscriptionId;
+  /** @deprecated Instead, pass in a {@link ProgramAccountSubscriptionConfig} */
+  // eslint-disable-next-line no-dupe-class-members
+  onProgramAccountChange(
+    programId: PublicKey,
+    callback: ProgramAccountChangeCallback,
     commitment?: Commitment,
     filters?: GetProgramAccountsFilter[],
+  ): ClientSubscriptionId;
+  // eslint-disable-next-line no-dupe-class-members
+  onProgramAccountChange(
+    programId: PublicKey,
+    callback: ProgramAccountChangeCallback,
+    commitmentOrConfig?: Commitment | ProgramAccountSubscriptionConfig,
+    maybeFilters?: GetProgramAccountsFilter[],
   ): ClientSubscriptionId {
+    const {commitment, config} =
+      extractCommitmentFromConfig(commitmentOrConfig);
     const args = this._buildArgs(
       [programId.toBase58()],
       commitment || this._commitment || 'finalized', // Apply connection/server default.
       'base64' /* encoding */,
-      filters ? {filters: filters} : undefined /* extra */,
+      config
+        ? config
+        : maybeFilters
+          ? {filters: maybeFilters}
+          : undefined /* extra */,
     );
     return this._makeSubscription(
       {

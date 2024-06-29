@@ -29,11 +29,16 @@ export type RpcWebSocketConnection = Readonly<{
     [Symbol.asyncIterator](): AsyncGenerator<unknown>;
 }>;
 
-const EXPLICIT_ABORT_TOKEN = Symbol(
-    __DEV__
-        ? "This symbol is thrown from a socket's iterator when the connection is explicitly aborted by the user"
-        : undefined,
-);
+let EXPLICIT_ABORT_TOKEN: symbol;
+function createExplicitAbortToken() {
+    // This function is an annoying workaround to prevent `process.env.NODE_ENV` from appearing at
+    // the top level of this module and thwarting an optimizing compiler's attempt to tree-shake.
+    return Symbol(
+        __DEV__
+            ? "This symbol is thrown from a socket's iterator when the connection is explicitly aborted by the user"
+            : undefined,
+    );
+}
 
 export async function createWebSocketConnection({
     sendBufferHighWatermark,
@@ -57,7 +62,7 @@ export async function createWebSocketConnection({
             });
         }
         function handleAbort() {
-            errorAndClearAllIteratorStates(EXPLICIT_ABORT_TOKEN);
+            errorAndClearAllIteratorStates((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));
             if (webSocket.readyState !== WebSocket.CLOSED && webSocket.readyState !== WebSocket.CLOSING) {
                 webSocket.close(1000);
             }
@@ -158,7 +163,7 @@ export async function createWebSocketConnection({
                                         });
                                     });
                                 } catch (e) {
-                                    if (e === EXPLICIT_ABORT_TOKEN) {
+                                    if (e === (EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken())) {
                                         return;
                                     } else {
                                         throw new SolanaError(

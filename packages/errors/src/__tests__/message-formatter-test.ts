@@ -81,18 +81,70 @@ describe('getErrorMessage', () => {
             );
             expect(message).toBe('static error message');
         });
-        it('interpolates variables into a error message format string', () => {
+        it.each([
+            {
+                expected: "Something awful happened: 'bar'. How awful!",
+                input: "Something $severity happened: '$foo'. How $severity!",
+            },
+            // Literal backslashes, escaped dollar signs
+            {
+                expected: 'How \\awful\\ is the $severity?',
+                input: 'How \\\\$severity\\\\ is the \\$severity?',
+            },
+            // Variable at beginning of sequence
+            { expected: 'awful times!', input: '$severity times!' },
+            // Variable at end of sequence
+            { expected: "Isn't it awful?", input: "Isn't it $severity?" },
+            // Variable in middle of text sequence
+            { expected: '~awful~', input: '~$severity~' },
+            // Variable interpolation with no value in the lookup
+            { expected: 'Is $thing a sandwich?', input: 'Is $thing a sandwich?' },
+            // Variable that has, as a substring, some other value in the lookup
+            { expected: '$fool', input: '$fool' },
+            // Trick for butting a variable up against regular text
+            { expected: 'barl', input: '$foo\\l' },
+            // Escaped variable marker
+            { expected: "It's the $severity, ya hear?", input: "It's the \\$severity, ya hear?" },
+            // Single dollar sign
+            { expected: ' $ ', input: ' $ ' },
+            // Single dollar sign at start
+            { expected: '$ ', input: '$ ' },
+            // Single dollar sign at end
+            { expected: ' $', input: ' $' },
+            // Double dollar sign with legitimate variable name
+            { expected: ' $bar ', input: ' $$foo ' },
+            // Double dollar sign with legitimate variable name at start
+            { expected: '$bar ', input: '$$foo ' },
+            // Double dollar sign with legitimate variable name at end
+            { expected: ' $bar', input: ' $$foo' },
+            // Single escape sequence
+            { expected: '  ', input: ' \\ ' },
+            // Single escape sequence at start
+            { expected: ' ', input: '\\ ' },
+            // Single escape sequence at end
+            { expected: ' ', input: ' \\' },
+            // Double escape sequence
+            { expected: ' \\ ', input: ' \\\\ ' },
+            // Double escape sequence at start
+            { expected: '\\ ', input: '\\\\ ' },
+            // Double escape sequence at end
+            { expected: ' \\', input: ' \\\\' },
+            // Just text
+            { expected: 'Some unencumbered text.', input: 'Some unencumbered text.' },
+            // Empty string
+            { expected: '', input: '' },
+        ])('interpolates variables into the error message format string `"$input"`', ({ input, expected }) => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');
             messagesSpy.mockReturnValue({
                 // @ts-expect-error Mock error config doesn't conform to exported config.
-                123: "Something $severity happened: '$foo'. How $severity!",
+                123: input,
             });
             const message = getErrorMessage(
                 // @ts-expect-error Mock error context doesn't conform to exported context.
                 123,
                 { foo: 'bar', severity: 'awful' },
             );
-            expect(message).toBe("Something awful happened: 'bar'. How awful!");
+            expect(message).toBe(expected);
         });
         it('interpolates a Uint8Array variable into a error message format string', () => {
             const messagesSpy = jest.spyOn(MessagesModule, 'SolanaErrorMessages', 'get');

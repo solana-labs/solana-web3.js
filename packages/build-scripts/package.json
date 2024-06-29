@@ -3,11 +3,12 @@
     "version": "0.0.0",
     "private": true,
     "files": [
-        "env-shim.ts",
         "tsup.config.library.ts",
         "tsup.config.package.ts"
     ],
     "devDependencies": {
-        "browserslist-to-esbuild": "^2.1.1"
+        "@types/jscodeshift": "^0.11.11",
+        "browserslist-to-esbuild": "^2.1.1",
+        "jscodeshift": "^0.16.1"
     }
 }

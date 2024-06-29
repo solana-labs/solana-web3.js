@@ -37,3 +37,19 @@ export const jsonParsedAccountsConfigs = [
     ['data', 'parsed', 'info', 'commission'],
     ['data', 'parsed', 'info', 'votes', KEYPATH_WILDCARD, 'confirmationCount'],
 ];
+export const innerInstructionsConfigs = [
+    ['index'],
+    ['instructions', KEYPATH_WILDCARD, 'accounts', KEYPATH_WILDCARD],
+    ['instructions', KEYPATH_WILDCARD, 'programIdIndex'],
+    ['instructions', KEYPATH_WILDCARD, 'stackHeight'],
+];
+export const messageConfig = [
+    ['addressTableLookups', KEYPATH_WILDCARD, 'writableIndexes', KEYPATH_WILDCARD],
+    ['addressTableLookups', KEYPATH_WILDCARD, 'readonlyIndexes', KEYPATH_WILDCARD],
+    ['header', 'numReadonlySignedAccounts'],
+    ['header', 'numReadonlyUnsignedAccounts'],
+    ['header', 'numRequiredSignatures'],
+    ['instructions', KEYPATH_WILDCARD, 'accounts', KEYPATH_WILDCARD],
+    ['instructions', KEYPATH_WILDCARD, 'programIdIndex'],
+    ['instructions', KEYPATH_WILDCARD, 'stackHeight'],
+] as const;

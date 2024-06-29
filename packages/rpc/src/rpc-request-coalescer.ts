@@ -12,13 +12,18 @@ type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
 // the `reason` property of the `AbortSignal` straight to `Error.captureStackTrace()` without first
 // typechecking it. `Error.captureStackTrace()` fatals when given a `Symbol`.
 // See https://github.com/nodejs/undici/pull/2597
-const EXPLICIT_ABORT_TOKEN = __DEV__
-    ? {
-          EXPLICIT_ABORT_TOKEN:
-              'This object is thrown from the request that underlies a series of coalesced ' +
-              'requests when the last request in that series aborts',
-      }
-    : {};
+let EXPLICIT_ABORT_TOKEN: ReturnType<typeof createExplicitAbortToken>;
+function createExplicitAbortToken() {
+    // This function is an annoying workaround to prevent `process.env.NODE_ENV` from appearing at
+    // the top level of this module and thwarting an optimizing compiler's attempt to tree-shake.
+    return __DEV__
+        ? {
+              EXPLICIT_ABORT_TOKEN:
+                  'This object is thrown from the request that underlies a series of coalesced ' +
+                  'requests when the last request in that series aborts',
+          }
+        : {};
+}
 
 export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTransport>(
     transport: TTransport,
@@ -46,7 +51,7 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                         signal: abortController.signal,
                     });
                 } catch (e) {
-                    if (e === EXPLICIT_ABORT_TOKEN) {
+                    if (e === (EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken())) {
                         // We triggered this error when the last subscriber aborted. Letting this
                         // error bubble up from here would cause runtime fatals where there should
                         // be none.
@@ -69,10 +74,12 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                 const handleAbort = (e: AbortSignalEventMap['abort']) => {
                     signal.removeEventListener('abort', handleAbort);
                     coalescedRequest.numConsumers -= 1;
-                    if (coalescedRequest.numConsumers === 0) {
-                        const abortController = coalescedRequest.abortController;
-                        abortController.abort(EXPLICIT_ABORT_TOKEN);
-                    }
+                    Promise.resolve().then(() => {
+                        if (coalescedRequest.numConsumers === 0) {
+                            const abortController = coalescedRequest.abortController;
+                            abortController.abort((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));
+                        }
+                    });
                     reject((e.target as AbortSignal).reason);
                 };
                 signal.addEventListener('abort', handleAbort);

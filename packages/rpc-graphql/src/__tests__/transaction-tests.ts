@@ -8,7 +8,7 @@ import {
     Rpc,
 } from '@solana/rpc';
 
-import { createRpcGraphQL, RpcGraphQL } from '../index';
+import { createSolanaRpcGraphQL, RpcGraphQL } from '../index';
 import {
     mockTransactionAddressLookup,
     mockTransactionBase58,
@@ -48,7 +48,7 @@ describe('transaction', () => {
                 return target[p as keyof GraphQLCompliantRpc];
             },
         });
-        rpcGraphQL = createRpcGraphQL(mockRpc);
+        rpcGraphQL = createSolanaRpcGraphQL(mockRpc);
     });
 
     describe('basic queries', () => {
@@ -3784,6 +3784,87 @@ describe('transaction', () => {
                                         },
                                         programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
                                         start: expect.any(BigInt),
+                                    },
+                                ]),
+                            },
+                        },
+                    },
+                });
+            });
+
+            it('reallocate', async () => {
+                expect.assertions(1);
+                const source = /* GraphQL */ `
+                    query testQuery($signature: Signature!) {
+                        transaction(signature: $signature) {
+                            message {
+                                instructions {
+                                    programId
+                                    ... on SplTokenReallocate {
+                                        account {
+                                            address
+                                        }
+                                        extensionTypes
+                                        owner {
+                                            address
+                                        }
+                                        payer {
+                                            address
+                                        }
+                                        systemProgram {
+                                            address
+                                        }
+                                        multisigOwner {
+                                            address
+                                        }
+                                        signers
+                                    }
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, { signature });
+                expect(result).toMatchObject({
+                    data: {
+                        transaction: {
+                            message: {
+                                instructions: expect.arrayContaining([
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        extensionTypes: expect.arrayContaining([expect.any(String)]),
+                                        multisigOwner: null,
+                                        owner: {
+                                            address: expect.any(String),
+                                        },
+                                        payer: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: null,
+                                        systemProgram: {
+                                            address: expect.any(String),
+                                        },
+                                    },
+                                    {
+                                        account: {
+                                            address: expect.any(String),
+                                        },
+                                        extensionTypes: expect.arrayContaining([expect.any(String)]),
+                                        multisigOwner: {
+                                            address: expect.any(String),
+                                        },
+                                        owner: null,
+                                        payer: {
+                                            address: expect.any(String),
+                                        },
+                                        programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+                                        signers: expect.arrayContaining([expect.any(String)]),
+                                        systemProgram: {
+                                            address: expect.any(String),
+                                        },
                                     },
                                 ]),
                             },

@@ -6,9 +6,11 @@ export type DataSlice = Readonly<{
 }>;
 
 export type GetProgramAccountsMemcmpFilter = Readonly<{
-    bytes: string;
-    encoding: 'base58' | 'base64';
-    offset: U64UnsafeBeyond2Pow53Minus1;
+    memcmp: Readonly<{
+        bytes: string;
+        encoding: 'base58' | 'base64';
+        offset: U64UnsafeBeyond2Pow53Minus1;
+    }>;
 }>;
 
 export type GetProgramAccountsDatasizeFilter = Readonly<{
