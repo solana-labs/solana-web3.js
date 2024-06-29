@@ -49,7 +49,6 @@ describe('getDefaultParamsTransformerForSolanaRpc', () => {
             'getConfirmedSignaturesForAddress2',
             'getConfirmedTransaction',
             'getEpochInfo',
-            'getFeeCalculatorForBlockhash',
             'getFeeForMessage',
             'getInflationGovernor',
             'getInflationReward',

@@ -14,7 +14,6 @@ export const OPTIONS_OBJECT_POSITION_BY_METHOD: Record<string, number> = {
     getConfirmedSignaturesForAddress2: 1,
     getConfirmedTransaction: 1,
     getEpochInfo: 0,
-    getFeeCalculatorForBlockhash: 1,
     getFeeForMessage: 1,
     getInflationGovernor: 0,
     getInflationReward: 1,
