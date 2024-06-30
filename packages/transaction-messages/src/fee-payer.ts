@@ -11,10 +11,10 @@ export function setTransactionMessageFeePayer<
     TTransaction extends BaseTransactionMessage,
 >(
     feePayer: Address<TFeePayerAddress>,
-    transaction: TTransaction | (ITransactionMessageWithFeePayer<string> & TTransaction),
-): ITransactionMessageWithFeePayer<TFeePayerAddress> & TTransaction {
+    transaction: TTransaction,
+): ITransactionMessageWithFeePayer<TFeePayerAddress> & Omit<TTransaction, 'feePayer'> {
     if ('feePayer' in transaction && feePayer === transaction.feePayer) {
-        return transaction as ITransactionMessageWithFeePayer<TFeePayerAddress> & TTransaction;
+        return transaction as ITransactionMessageWithFeePayer<TFeePayerAddress> & Omit<TTransaction, 'feePayer'>;
     }
     const out = {
         ...transaction,
