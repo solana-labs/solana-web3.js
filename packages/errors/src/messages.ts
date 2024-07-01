@@ -489,8 +489,8 @@ export const SolanaErrorMessages: Readonly<{
         'Cryptographic operations are only allowed in secure browser contexts. Read more ' +
         'here: https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts.',
     [SOLANA_ERROR__SUBTLE_CRYPTO__ED25519_ALGORITHM_UNIMPLEMENTED]:
-        'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall and ' +
-        'import `@solana/webcrypto-ed25519-polyfill` before generating keys in ' +
+        'This runtime does not support the generation of Ed25519 key pairs.\n\nInstall ' +
+        '@solana/webcrypto-ed25519-polyfill and call its `install` function before generating keys in ' +
         'environments that do not support Ed25519.\n\nFor a list of runtimes that ' +
         'currently support Ed25519 operations, visit ' +
         'https://github.com/WICG/webcrypto-secure-curves/issues/20.',

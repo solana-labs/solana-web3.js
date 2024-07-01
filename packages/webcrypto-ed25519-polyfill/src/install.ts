@@ -67,10 +67,10 @@ export function install() {
                         .then(keyPair => {
                             if (__DEV__) {
                                 console.warn(
-                                    '`@solana/webcrypto-ed25519-polyfill` was included in an ' +
+                                    '`@solana/webcrypto-ed25519-polyfill` was installed in an ' +
                                         'environment that supports Ed25519 key manipulation ' +
                                         'natively. Falling back to the native implementation. ' +
-                                        'Consider including this polyfill only in environments where ' +
+                                        'Consider installing this polyfill only in environments where ' +
                                         'Ed25519 is not supported.',
                                 );
                             }
