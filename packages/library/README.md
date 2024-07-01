@@ -781,7 +781,7 @@ This polyfill can be found at `@solana/webcrypto-ed25519-polyfill` and mimics th
 Determine if your target runtime supports Ed25519, and install the polyfill if it does not:
 
 ```ts
-import { install } from '@solana/webcrypto-ed25519-polyfill';
+import install from '@solana/webcrypto-ed25519-polyfill';
 import { generateKeyPair, signBytes, verifySignature } from '@solana/web3.js';
 
 install();
