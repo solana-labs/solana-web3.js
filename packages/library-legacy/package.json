@@ -119,7 +119,7 @@
     "sinon-chai": "^3.7.0",
     "start-server-and-test": "^2.0.4",
     "tslib": "^2.6.3",
-    "tsx": "^4.15.7",
+    "tsx": "^4.16.0",
     "typedoc": "^0.26.3"
   }
 }
