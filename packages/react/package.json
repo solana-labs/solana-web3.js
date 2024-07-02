@@ -1,6 +1,6 @@
 {
     "name": "@solana/react",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "React hooks for building Solana apps",
     "exports": {
         "browser": {

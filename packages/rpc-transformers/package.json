@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-transformers",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Reusable transformers for patching RPC inputs and outputs",
     "exports": {
         "browser": {

@@ -1,6 +1,6 @@
 {
     "name": "@solana/codecs-strings",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Codecs for strings of different sizes and encodings",
     "exports": {
         "browser": {

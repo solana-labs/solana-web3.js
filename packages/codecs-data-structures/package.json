@@ -1,6 +1,6 @@
 {
     "name": "@solana/codecs-data-structures",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Codecs for various data structures",
     "exports": {
         "browser": {

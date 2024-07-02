@@ -1,6 +1,6 @@
 {
     "name": "@solana/webcrypto-ed25519-polyfill",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "A polyfill that adds Ed25519 key manipulation capabilities to `SubtleCrypto` in environments where it is not yet supported",
     "exports": {
         "browser": {
