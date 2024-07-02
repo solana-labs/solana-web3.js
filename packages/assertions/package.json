@@ -1,6 +1,6 @@
 {
     "name": "@solana/assertions",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Helpers for asserting that a JavaScript environment supports certain features necessary for the operation of the Solana JavaScript SDK",
     "exports": {
         "browser": {

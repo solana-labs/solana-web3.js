@@ -1,6 +1,6 @@
 {
     "name": "@solana/keys",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Helpers for generating and transforming key material",
     "exports": {
         "browser": {

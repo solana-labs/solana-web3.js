@@ -1,6 +1,6 @@
 {
     "name": "@solana/transactions",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Helpers for creating and serializing transactions",
     "exports": {
         "browser": {
