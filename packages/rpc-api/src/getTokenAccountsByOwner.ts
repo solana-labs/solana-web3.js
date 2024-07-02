@@ -27,6 +27,8 @@ type TokenAccountInfoWithJsonData = Readonly<{
     }>;
 }>;
 
+type GetTokenAccountsByOwnerResponse<T> = readonly AccountInfoWithPubkey<AccountInfoBase & T>[];
+
 type MintFilter = Readonly<{
     /** Pubkey of the specific token Mint to limit accounts to */
     mint: Address;
@@ -62,7 +64,7 @@ export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base64';
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedData>[]>;
+    ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<AccountInfoWithBase64EncodedData>>;
 
     getTokenAccountsByOwner(
         owner: Address,
@@ -72,7 +74,7 @@ export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base64+zstd';
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase64EncodedZStdCompressedData>[]>;
+    ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<AccountInfoWithBase64EncodedZStdCompressedData>>;
 
     getTokenAccountsByOwner(
         owner: Address,
@@ -81,7 +83,7 @@ export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'jsonParsed';
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & TokenAccountInfoWithJsonData>[]>;
+    ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<TokenAccountInfoWithJsonData>>;
 
     getTokenAccountsByOwner(
         owner: Address,
@@ -91,11 +93,11 @@ export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
             Readonly<{
                 encoding: 'base58';
             }>,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58EncodedData>[]>;
+    ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<AccountInfoWithBase58EncodedData>>;
 
     getTokenAccountsByOwner(
         owner: Address,
         filter: AccountsFilter,
         config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig,
-    ): SolanaRpcResponse<AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[]>;
+    ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<AccountInfoWithBase58Bytes>>;
 }
