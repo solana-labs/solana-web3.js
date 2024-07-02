@@ -1,6 +1,6 @@
 {
     "name": "@solana/options",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Managing and serializing Rust-like Option types in JavaScript",
     "exports": {
         "browser": {

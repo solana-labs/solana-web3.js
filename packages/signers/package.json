@@ -1,6 +1,6 @@
 {
     "name": "@solana/signers",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "An abstraction layer over signing messages and transactions in Solana",
     "exports": {
         "browser": {

@@ -1,6 +1,6 @@
 {
     "name": "@solana/codecs-numbers",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Codecs for numbers of different sizes and endianness",
     "exports": {
         "browser": {
