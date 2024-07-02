@@ -29,8 +29,10 @@ Environments that support Ed25519 (see https://github.com/WICG/webcrypto-secure-
 For all others, simply import this polyfill before use.
 
 ```ts
-// Importing this will shim methods on `SubtleCrypto`, adding Ed25519 support.
-import '@solana/webcrypto-ed25519-polyfill';
+import install from '@solana/webcrypto-ed25519-polyfill';
+
+// Calling this will shim methods on `SubtleCrypto`, adding Ed25519 support.
+install();
 
 // Now you can do this, in environments that do not otherwise support Ed25519.
 const keyPair = await crypto.subtle.generateKey('Ed25519', false, ['sign']);

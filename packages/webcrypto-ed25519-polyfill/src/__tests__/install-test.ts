@@ -1,3 +1,4 @@
+import { install } from '../install';
 import {
     exportKeyPolyfill,
     generateKeyPolyfill,
@@ -18,13 +19,9 @@ describe('exportKey() polyfill', () => {
     afterEach(() => {
         globalThis.crypto.subtle.exportKey = originalExportKey;
     });
-    describe('when imported', () => {
-        beforeEach(async () => {
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+    describe('when installed', () => {
+        beforeEach(() => {
+            install();
         });
         it('delegates `exportKey` calls to the polyfill when supplied a polyfill-generated key', async () => {
             expect.assertions(1);
@@ -50,16 +47,12 @@ describe('exportKey() polyfill', () => {
             expect(globalThis.crypto.subtle.exportKey).not.toBe(originalExportKey);
         });
     });
-    describe('when imported with no `exportKey` function', () => {
-        beforeEach(async () => {
+    describe('when installed with no `exportKey` function', () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             globalThis.crypto.subtle.exportKey = undefined;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         afterEach(() => {
             globalThis.crypto.subtle.exportKey = originalExportKey;
@@ -78,14 +71,10 @@ describe('exportKey() polyfill', () => {
             await expect(() => globalThis.crypto.subtle.exportKey('raw', mockPublicKey)).rejects.toThrow();
         });
     });
-    describe('when imported in an insecure context', () => {
-        beforeEach(async () => {
+    describe('when installed in an insecure context', () => {
+        beforeEach(() => {
             globalThis.isSecureContext = false;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         if (__BROWSER__) {
             it('does not override `exportKey`', () => {
@@ -108,16 +97,12 @@ describe('generateKey() polyfill', () => {
     afterEach(() => {
         globalThis.crypto.subtle.generateKey = originalGenerateKey;
     });
-    describe('when imported in an environment with no `generateKey` function', () => {
-        beforeEach(async () => {
+    describe('when installed in an environment with no `generateKey` function', () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             globalThis.crypto.subtle.generateKey = undefined;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         afterEach(() => {
             globalThis.crypto.subtle.generateKey = originalGenerateKey;
@@ -153,8 +138,8 @@ describe('generateKey() polyfill', () => {
             ).resolves.toBe(mockKeyPair);
         });
     });
-    describe('when imported in an environment that does not support Ed25519', () => {
-        beforeEach(async () => {
+    describe('when installed in an environment that does not support Ed25519', () => {
+        beforeEach(() => {
             const originalGenerateKeyImpl = originalGenerateKey;
             (
                 originalGenerateKey as jest.Mock<
@@ -168,11 +153,7 @@ describe('generateKey() polyfill', () => {
                 }
                 return await originalGenerateKeyImpl.apply(globalThis.crypto.subtle, args);
             });
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         it('calls the original `generateKey` once as a test when the algorithm is "Ed25519" but never again (parallel version)', async () => {
             expect.assertions(1);
@@ -197,13 +178,9 @@ describe('generateKey() polyfill', () => {
             ).resolves.toBe(mockKeyPair);
         });
     });
-    describe('when imported in an environment that supports Ed25519', () => {
-        beforeEach(async () => {
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+    describe('when installed in an environment that supports Ed25519', () => {
+        beforeEach(() => {
+            install();
         });
         it('overrides `generateKey`', () => {
             expect(globalThis.crypto.subtle.generateKey).not.toBe(originalGenerateKey);
@@ -257,14 +234,10 @@ describe('generateKey() polyfill', () => {
             expect(generateKeyPolyfill).not.toHaveBeenCalled();
         });
     });
-    describe('when imported in an insecure context', () => {
-        beforeEach(async () => {
+    describe('when installed in an insecure context', () => {
+        beforeEach(() => {
             globalThis.isSecureContext = false;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         if (__BROWSER__) {
             it('does not override `generateKey`', () => {
@@ -287,13 +260,9 @@ describe('sign() polyfill', () => {
     afterEach(() => {
         globalThis.crypto.subtle.sign = originalSign;
     });
-    describe('when imported', () => {
-        beforeEach(async () => {
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+    describe('when installed', () => {
+        beforeEach(() => {
+            install();
         });
         it('delegates `sign` calls to the polyfill when supplied a polyfill-generated key', async () => {
             expect.assertions(1);
@@ -321,16 +290,12 @@ describe('sign() polyfill', () => {
             expect(globalThis.crypto.subtle.sign).not.toBe(originalSign);
         });
     });
-    describe('when imported with no `sign` function', () => {
-        beforeEach(async () => {
+    describe('when installed with no `sign` function', () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             globalThis.crypto.subtle.sign = undefined;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         afterEach(() => {
             globalThis.crypto.subtle.sign = originalSign;
@@ -351,14 +316,10 @@ describe('sign() polyfill', () => {
             await expect(() => globalThis.crypto.subtle.sign('Ed25519', mockPrivateKey, mockData)).rejects.toThrow();
         });
     });
-    describe('when imported in an insecure context', () => {
-        beforeEach(async () => {
+    describe('when installed in an insecure context', () => {
+        beforeEach(() => {
             globalThis.isSecureContext = false;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         if (__BROWSER__) {
             it('does not override `exportKey`', () => {
@@ -381,13 +342,9 @@ describe('verify() polyfill', () => {
     afterEach(() => {
         globalThis.crypto.subtle.verify = originalVerify;
     });
-    describe('when imported', () => {
-        beforeEach(async () => {
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+    describe('when installed', () => {
+        beforeEach(() => {
+            install();
         });
         it('delegates `verify` calls to the polyfill when supplied a polyfill-generated key', async () => {
             expect.assertions(1);
@@ -418,15 +375,11 @@ describe('verify() polyfill', () => {
         });
     });
     describe('when imported with no `verify` function', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             globalThis.crypto.subtle.verify = undefined;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         afterEach(() => {
             globalThis.crypto.subtle.verify = originalVerify;
@@ -452,13 +405,9 @@ describe('verify() polyfill', () => {
         });
     });
     describe('when imported in an insecure context', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             globalThis.isSecureContext = false;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         if (__BROWSER__) {
             it('does not override `exportKey`', () => {
@@ -488,15 +437,11 @@ describe('importKey() polyfill', () => {
         globalThis.crypto.subtle.importKey = originalImportKey;
     });
     describe('when imported in an environment with no `importKey` function', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             globalThis.crypto.subtle.importKey = undefined;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         afterEach(() => {
             globalThis.crypto.subtle.importKey = originalImportKey;
@@ -537,7 +482,7 @@ describe('importKey() polyfill', () => {
         });
     });
     describe('when imported in an environment that does not support Ed25519', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             const originalImportKeyImpl = originalImportKey;
             (
                 originalImportKey as unknown as jest.Mock<
@@ -551,11 +496,7 @@ describe('importKey() polyfill', () => {
                 }
                 return await originalImportKeyImpl.apply(globalThis.crypto.subtle, args);
             });
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         it('calls the original `importKey` once as a test when the algorithm is "Ed25519" but never again (parallel version)', async () => {
             expect.assertions(1);
@@ -598,12 +539,8 @@ describe('importKey() polyfill', () => {
         });
     });
     describe('when imported in an environment that supports Ed25519', () => {
-        beforeEach(async () => {
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+        beforeEach(() => {
+            install();
         });
         it('overrides `importKey`', () => {
             expect(globalThis.crypto.subtle.importKey).not.toBe(originalImportKey);
@@ -680,13 +617,9 @@ describe('importKey() polyfill', () => {
         });
     });
     describe('when imported in an insecure context', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             globalThis.isSecureContext = false;
-            await jest.isolateModulesAsync(async () => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                await import('../index');
-            });
+            install();
         });
         if (__BROWSER__) {
             it('does not override `importKey`', () => {
