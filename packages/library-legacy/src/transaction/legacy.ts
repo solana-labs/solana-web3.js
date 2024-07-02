@@ -934,7 +934,7 @@ export class Transaction {
         signature:
           signature == bs58.encode(DEFAULT_SIGNATURE)
             ? null
-            : bs58.decode(signature),
+            : Buffer.from(bs58.decode(signature)),
         publicKey: message.accountKeys[index],
       };
       transaction.signatures.push(sigPubkeyPair);
@@ -957,7 +957,7 @@ export class Transaction {
         new TransactionInstruction({
           keys,
           programId: message.accountKeys[instruction.programIdIndex],
-          data: bs58.decode(instruction.data),
+          data: Buffer.from(bs58.decode(instruction.data)),
         }),
       );
     });
