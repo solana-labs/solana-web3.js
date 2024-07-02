@@ -1,6 +1,6 @@
 {
     "name": "@solana/errors",
-    "version": "2.0.0-preview.3",
+    "version": "2.0.0-preview.4",
     "description": "Throw, identify, and decode Solana JavaScript errors",
     "exports": {
         "browser": {
