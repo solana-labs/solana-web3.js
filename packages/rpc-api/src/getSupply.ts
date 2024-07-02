@@ -6,7 +6,7 @@ type GetSupplyConfig = Readonly<{
     commitment?: Commitment;
 }>;
 
-type GetSupplyApiResponseBase = SolanaRpcResponse<{
+type GetSupplyApiResponseBase = Readonly<{
     /** Circulating supply in lamports */
     circulating: LamportsUnsafeBeyond2Pow53Minus1;
     /** Non-circulating supply in lamports */
@@ -17,21 +17,17 @@ type GetSupplyApiResponseBase = SolanaRpcResponse<{
 
 type GetSupplyApiResponseWithNonCirculatingAccounts = GetSupplyApiResponseBase &
     Readonly<{
-        value: Readonly<{
-            /** an array of account addresses of non-circulating accounts */
-            nonCirculatingAccounts: Address[];
-        }>;
+        /** an array of account addresses of non-circulating accounts */
+        nonCirculatingAccounts: Address[];
     }>;
 
 type GetSupplyApiResponseWithoutNonCirculatingAccounts = GetSupplyApiResponseBase &
     Readonly<{
-        value: Readonly<{
-            /** As per the docs:
-             * "If `excludeNonCirculatingAccountsList` is enabled, the returned array will be empty."
-             * See: https://solana.com/docs/rpc/http/getsupply
-             */
-            nonCirculatingAccounts: never[];
-        }>;
+        /** As per the docs:
+         * "If `excludeNonCirculatingAccountsList` is enabled, the returned array will be empty."
+         * See: https://solana.com/docs/rpc/http/getsupply
+         */
+        nonCirculatingAccounts: never[];
     }>;
 
 export interface GetSupplyApi extends RpcApiMethods {
@@ -43,11 +39,11 @@ export interface GetSupplyApi extends RpcApiMethods {
             Readonly<{
                 excludeNonCirculatingAccountsList: true;
             }>,
-    ): GetSupplyApiResponseWithoutNonCirculatingAccounts;
+    ): SolanaRpcResponse<GetSupplyApiResponseWithoutNonCirculatingAccounts>;
     getSupply(
         config?: GetSupplyConfig &
             Readonly<{
                 excludeNonCirculatingAccountsList?: false;
             }>,
-    ): GetSupplyApiResponseWithNonCirculatingAccounts;
+    ): SolanaRpcResponse<GetSupplyApiResponseWithNonCirculatingAccounts>;
 }
