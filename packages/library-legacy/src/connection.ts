@@ -2622,19 +2622,6 @@ const GetRecentPerformanceSamplesRpcResult = jsonRpcResult(
 );
 
 /**
- * Expected JSON RPC response for the "getFeeCalculatorForBlockhash" message
- */
-const GetFeeCalculatorRpcResult = jsonRpcResultAndContext(
-  nullable(
-    pick({
-      feeCalculator: pick({
-        lamportsPerSignature: number(),
-      }),
-    }),
-  ),
-);
-
-/**
  * Expected JSON RPC response for the "requestAirdrop" message
  */
 const RequestAirdropRpcResult = jsonRpcResult(string());
@@ -4557,32 +4544,6 @@ export class Connection {
     }
 
     return res.result;
-  }
-
-  /**
-   * Fetch the fee calculator for a recent blockhash from the cluster, return with context
-   *
-   * @deprecated Deprecated since RPC v1.9.0. Please use {@link getFeeForMessage} instead.
-   */
-  async getFeeCalculatorForBlockhash(
-    blockhash: Blockhash,
-    commitment?: Commitment,
-  ): Promise<RpcResponseAndContext<FeeCalculator | null>> {
-    const args = this._buildArgs([blockhash], commitment);
-    const unsafeRes = await this._rpcRequest(
-      'getFeeCalculatorForBlockhash',
-      args,
-    );
-
-    const res = create(unsafeRes, GetFeeCalculatorRpcResult);
-    if ('error' in res) {
-      throw new SolanaJSONRPCError(res.error, 'failed to get fee calculator');
-    }
-    const {context, value} = res.result;
-    return {
-      context,
-      value: value !== null ? value.feeCalculator : null,
-    };
   }
 
   /**
