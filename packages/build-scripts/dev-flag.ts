@@ -15,12 +15,12 @@ function replaceDev(source: string): string {
     const root = j(source);
     root.find(j.Identifier, { name: '__DEV__' }).replaceWith(() =>
         j.binaryExpression(
-            '===',
+            '!==',
             j.memberExpression(
                 j.memberExpression(j.identifier('process'), j.identifier('env')),
                 j.identifier('NODE_ENV'),
             ),
-            j.stringLiteral('development'),
+            j.stringLiteral('production'),
         ),
     );
     return root.toSource();
