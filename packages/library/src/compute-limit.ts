@@ -12,7 +12,10 @@ type ComputeUnitEstimateForTransactionMessageFactoryConfig = Readonly<{
 }>;
 type ComputeUnitEstimateForTransactionMessageFunction = (
     transactionMessage: CompilableTransactionMessage | (ITransactionMessageWithFeePayer & TransactionMessage),
-    config: Omit<Parameters<typeof getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT>[0], 'rpc'>,
+    config?: Omit<
+        Parameters<typeof getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
+        'rpc' | 'transactionMessage'
+    >,
 ) => Promise<number>;
 
 export function getComputeUnitEstimateForTransactionMessageFactory({
