@@ -81,11 +81,11 @@
         },
         "test:unit:browser": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"]
         },
         "test:unit:node": {
             "dependsOn": ["^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**"]
+            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**"]
         },
         "test:treeshakability:browser": {
             "dependsOn": ["compile:js"]
@@ -146,7 +146,7 @@
         },
         "@solana/web3.js#test:live-with-test-validator": {
             "dependsOn": ["compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
+            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**", "test/**"]
         },
         "@solana/web3.js#test:typecheck": {
             "dependsOn": ["compile:typedefs"],
