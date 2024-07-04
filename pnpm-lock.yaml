@@ -541,8 +541,8 @@ importers:
         specifier: ^9.0.2
         version: 9.0.2
       superstruct:
-        specifier: ^1.0.4
-        version: 1.0.4
+        specifier: ^2.0.0
+        version: 2.0.0
     devDependencies:
       '@babel/core':
         specifier: ^7.24.7
@@ -7874,8 +7874,8 @@ packages:
     resolution: {integrity: sha512-CY8u7DtbvucKuquCmOFEKhr9Besln7n9uN8eFbwcoGYWXOMW07u2o8njWaiXt11ylS3qoGF55pILjRmPlbodyg==}
     engines: {node: '>=18'}
 
-  superstruct@1.0.4:
-    resolution: {integrity: sha512-7JpaAoX2NGyoFlI9NBh66BQXGONc+uE+MRS5i2iOBKuS4e+ccgMDjATgZldkah+33DakBxDHiss9kvUcGAO8UQ==}
+  superstruct@2.0.0:
+    resolution: {integrity: sha512-l9HkF2HGmEc4cm0Mc3E08o/lhminlAdDDekqc+m1urG+SK6CL3e0TL0EJ8QyXkDwfS69rgI94GOXLD4qCD+1WA==}
     engines: {node: '>=14.0.0'}
 
   supports-color@5.5.0:
@@ -16369,7 +16369,7 @@ snapshots:
       function-timeout: 1.0.1
       time-span: 5.1.0
 
-  superstruct@1.0.4: {}
+  superstruct@2.0.0: {}
 
   supports-color@5.5.0:
     dependencies:
