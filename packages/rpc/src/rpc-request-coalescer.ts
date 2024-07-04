@@ -83,9 +83,12 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                     reject((e.target as AbortSignal).reason);
                 };
                 signal.addEventListener('abort', handleAbort);
-                responsePromise.then(resolve).finally(() => {
-                    signal.removeEventListener('abort', handleAbort);
-                });
+                responsePromise
+                    .then(resolve)
+                    .catch(reject)
+                    .finally(() => {
+                        signal.removeEventListener('abort', handleAbort);
+                    });
             });
         } else {
             return (await coalescedRequest.responsePromise) as TResponse;
