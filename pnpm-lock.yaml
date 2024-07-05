@@ -1063,8 +1063,8 @@ importers:
         specifier: ^6.19.2
         version: 6.19.2
       zx:
-        specifier: ^8.1.3
-        version: 8.1.3
+        specifier: ^8.1.4
+        version: 8.1.4
 
   packages/rpc-types:
     dependencies:
@@ -8575,8 +8575,8 @@ packages:
   zstd-codec@0.1.4:
     resolution: {integrity: sha512-KYnWoFWgGtWyQEKNnUcb3u8ZtKO8dn5d8u+oGpxPlopqsPyv60U8suDyfk7Z7UtAO6Sk5i1aVcAs9RbaB1n36A==}
 
-  zx@8.1.3:
-    resolution: {integrity: sha512-fA44CRlggDOKeqt66aMwzLj1tb0zEQJmIjsSDXpmNjRRKaLFYkpeGE/zXnO05sJvSuzAlbVM50zexJJGMrIvuQ==}
+  zx@8.1.4:
+    resolution: {integrity: sha512-QFDYYpnzdpRiJ3dL2102Cw26FpXpWshW4QLTGxiYfIcwdAqg084jRCkK/kuP/NOSkxOjydRwNFG81qzA5r1a6w==}
     engines: {node: '>= 12.17.0'}
     hasBin: true
 
@@ -16992,7 +16992,7 @@ snapshots:
 
   zstd-codec@0.1.4: {}
 
-  zx@8.1.3:
+  zx@8.1.4:
     optionalDependencies:
       '@types/fs-extra': 11.0.4
       '@types/node': 20.12.12
