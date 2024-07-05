@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.24.7",
-    "@noble/curves": "^1.4.0",
+    "@noble/curves": "^1.4.2",
     "@noble/hashes": "^1.4.0",
     "@solana/buffer-layout": "^4.0.1",
     "agentkeepalive": "^4.5.0",
