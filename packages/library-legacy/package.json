@@ -110,7 +110,7 @@
     "mz": "^2.7.0",
     "node-abort-controller": "^3.0.1",
     "prettier": "^3.3",
-    "rimraf": "5.0.7",
+    "rimraf": "5.0.8",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
