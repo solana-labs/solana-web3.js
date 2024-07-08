@@ -5,7 +5,7 @@ import {Keypair} from '../src/keypair';
 import {PublicKey} from '../src/publickey';
 import {ValidatorInfo} from '../src/validator-info';
 
-describe('ValidatorInfo', () => {
+describe.only('ValidatorInfo', () => {
   it('from config account data', () => {
     const keypair = Keypair.fromSeed(Uint8Array.from(Array(32).fill(8)));
 
@@ -14,6 +14,7 @@ describe('ValidatorInfo', () => {
       {
         name: 'Validator',
         keybaseUsername: 'validator_id',
+        iconUrl: 'https://example.com/icon',
       },
     );
 
@@ -27,7 +28,7 @@ describe('ValidatorInfo', () => {
     // 4) Use modified `solana-validator-info` tool to publish validator info
     // 5) And then use it again to fetch the data! (feel free to trim some A's)
     const configData = Buffer.from(
-      'AgdRlwF0SPKsXcI8nrx6x4wKJyV6xhRFjeCk8W+AAAAAABOY9ixtGkV8UbpqS189vS9p/KkyFiGNyJl+QWvRfZPKATUAAAAAAAAAeyJrZXliYXNlVXNlcm5hbWUiOiJ2YWxpZGF0b3JfaWQiLCJuYW1lIjoiVmFsaWRhdG9yIn0',
+      'AgdRlwF0SPKsXcI8nrx6x4wKJyV6xhRFjeCk8W+AAAAAABOY9ixtGkV8UbpqS189vS9p/KkyFiGNyJl+QWvRfZPKAVoAAAAAAAAAeyJrZXliYXNlVXNlcm5hbWUiOiJ2YWxpZGF0b3JfaWQiLCJuYW1lIjoiVmFsaWRhdG9yIiwiaWNvblVybCI6Imh0dHBzOi8vZXhhbXBsZS5jb20vaWNvbiJ9',
       'base64',
     );
     const info = ValidatorInfo.fromConfigData(configData);
