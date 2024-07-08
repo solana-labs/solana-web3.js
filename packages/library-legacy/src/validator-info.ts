@@ -33,6 +33,8 @@ export type Info = {
   website?: string;
   /** optional, extra information the validator chose to share */
   details?: string;
+  /** optional, validator logo URL */
+  iconUrl?: string;
   /** optional, used to identify validators on keybase.io */
   keybaseUsername?: string;
 };
@@ -41,6 +43,7 @@ const InfoString = pick({
   name: string(),
   website: optional(string()),
   details: optional(string()),
+  iconUrl: optional(string()),
   keybaseUsername: optional(string()),
 });
 
