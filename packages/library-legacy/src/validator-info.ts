@@ -33,7 +33,7 @@ export type Info = {
   website?: string;
   /** optional, extra information the validator chose to share */
   details?: string;
-  /** optional, validator logo URL
+  /** optional, validator logo URL */
   iconUrl?: string;
   /** optional, used to identify validators on keybase.io */
   keybaseUsername?: string;
