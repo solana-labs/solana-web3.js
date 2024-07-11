@@ -3,7 +3,7 @@ import { Button, Callout, DropdownMenu } from '@radix-ui/themes';
 import { StandardConnect, StandardDisconnect } from '@wallet-standard/core';
 import type { UiWallet } from '@wallet-standard/react';
 import { uiWalletAccountBelongsToUiWallet, useWallets } from '@wallet-standard/react';
-import { useContext, useRef, useState, useTransition } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { SelectedWalletAccountContext } from '../context/SelectedWalletAccountContext';
@@ -22,7 +22,6 @@ export function ConnectWalletMenu({ children }: Props) {
     const [selectedWalletAccount, setSelectedWalletAccount] = useContext(SelectedWalletAccountContext);
     const [error, setError] = useState<unknown | typeof NO_ERROR>(NO_ERROR);
     const [forceClose, setForceClose] = useState(false);
-    const [_isPending, startTransition] = useTransition();
     function renderItem(wallet: UiWallet) {
         return (
             <ErrorBoundary
@@ -31,16 +30,12 @@ export function ConnectWalletMenu({ children }: Props) {
             >
                 <ConnectWalletMenuItem
                     onAccountSelect={account => {
-                        startTransition(() => {
-                            setSelectedWalletAccount(account);
-                            setForceClose(true);
-                        });
+                        setSelectedWalletAccount(account);
+                        setForceClose(true);
                     }}
                     onDisconnect={wallet => {
                         if (selectedWalletAccount && uiWalletAccountBelongsToUiWallet(selectedWalletAccount, wallet)) {
-                            startTransition(() => {
-                                setSelectedWalletAccount(undefined);
-                            });
+                            setSelectedWalletAccount(undefined);
                         }
                     }}
                     onError={setError}

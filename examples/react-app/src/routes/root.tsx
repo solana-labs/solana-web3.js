@@ -35,7 +35,7 @@ function Root() {
                                 </Code>
                             </Box>
                         </Flex>
-                        <Flex direction="column" align="start">
+                        <Flex direction="column" align="end">
                             <Heading as="h4" size="3">
                                 Balance
                             </Heading>
@@ -43,13 +43,7 @@ function Root() {
                                 fallback={<Text>&ndash;</Text>}
                                 key={`${selectedWalletAccount.address}:${chain}`}
                             >
-                                <Suspense
-                                    fallback={
-                                        <Spinner loading>
-                                            <Balance account={selectedWalletAccount} />
-                                        </Spinner>
-                                    }
-                                >
+                                <Suspense fallback={<Spinner loading my="1" />}>
                                     <Balance account={selectedWalletAccount} />
                                 </Suspense>
                             </ErrorBoundary>
