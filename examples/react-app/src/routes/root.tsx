@@ -1,4 +1,5 @@
 import { Box, Code, Container, DataList, Flex, Heading, Spinner, Text } from '@radix-ui/themes';
+import { getUiWalletAccountStorageKey } from '@wallet-standard/react';
 import { Suspense, useContext } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -14,6 +15,10 @@ import { SelectedWalletAccountContext } from '../context/SelectedWalletAccountCo
 function Root() {
     const { chain } = useContext(ChainContext);
     const [selectedWalletAccount] = useContext(SelectedWalletAccountContext);
+    const errorBoundaryResetKeys = [
+        chain,
+        selectedWalletAccount && getUiWalletAccountStorageKey(selectedWalletAccount),
+    ].filter(Boolean);
     return (
         <Container mx={{ initial: '3', xs: '6' }}>
             {selectedWalletAccount ? (
@@ -52,12 +57,18 @@ function Root() {
                     </Flex>
                     <DataList.Root orientation={{ initial: 'vertical', sm: 'horizontal' }} size="3">
                         <FeaturePanel label="Sign Message">
-                            <ErrorBoundary FallbackComponent={FeatureNotSupportedCallout}>
+                            <ErrorBoundary
+                                FallbackComponent={FeatureNotSupportedCallout}
+                                resetKeys={errorBoundaryResetKeys}
+                            >
                                 <SolanaSignMessageFeaturePanel account={selectedWalletAccount} />
                             </ErrorBoundary>
                         </FeaturePanel>
                         <FeaturePanel label="Sign And Send Transaction">
-                            <ErrorBoundary FallbackComponent={FeatureNotSupportedCallout}>
+                            <ErrorBoundary
+                                FallbackComponent={FeatureNotSupportedCallout}
+                                resetKeys={errorBoundaryResetKeys}
+                            >
                                 <SolanaSignAndSendTransactionFeaturePanel account={selectedWalletAccount} />
                             </ErrorBoundary>
                         </FeaturePanel>
