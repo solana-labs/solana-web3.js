@@ -1,15 +1,14 @@
-import { Badge, Box, DropdownMenu, Flex, Heading, Spinner } from '@radix-ui/themes';
-import { useContext, useTransition } from 'react';
+import { Badge, Box, DropdownMenu, Flex, Heading } from '@radix-ui/themes';
+import { useContext } from 'react';
 
 import { ChainContext } from '../context/ChainContext';
 import { ConnectWalletMenu } from './ConnectWalletMenu';
 
 export function Nav() {
     const { displayName: currentChainName, chain, setChain } = useContext(ChainContext);
-    const [isPending, startTransition] = useTransition();
     const currentChainBadge = (
         <Badge color="gray" style={{ verticalAlign: 'middle' }}>
-            {currentChainName} <Spinner loading={isPending} />
+            {currentChainName}
         </Badge>
     );
     return (
@@ -32,9 +31,7 @@ export function Nav() {
                             <DropdownMenu.Content>
                                 <DropdownMenu.RadioGroup
                                     onValueChange={value => {
-                                        startTransition(() => {
-                                            setChain(value as 'solana:${string}');
-                                        });
+                                        setChain(value as 'solana:${string}');
                                     }}
                                     value={chain}
                                 >
