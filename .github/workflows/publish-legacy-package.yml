@@ -38,7 +38,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build, Test, and Publish (force)
-        run: pnpm turbo run publish-packages-legacy --concurrency=100% --filter=@solana/web3.js --force=true
+        run: pnpm turbo run publish-packages-legacy --concurrency=95.84% --filter=@solana/web3.js --force=true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

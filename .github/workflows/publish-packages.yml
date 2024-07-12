@@ -45,7 +45,7 @@ jobs:
 
       - name: Choose Build Step
         id: build-step-decider
-        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages --concurrency=100%' || 'build' }}" >> $GITHUB_OUTPUT
+        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages --concurrency=95.84%' || 'build' }}" >> $GITHUB_OUTPUT
 
       - name: Run Build Step (force)
         run: pnpm turbo ${{ steps.build-step-decider.outputs.step-name }} --filter=!\@solana/web3.js --force=true
