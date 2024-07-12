@@ -72,7 +72,7 @@
     "superstruct": "^2.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.7",
+    "@babel/core": "^7.24.8",
     "@babel/plugin-transform-class-properties": "^7.24.7",
     "@babel/plugin-transform-private-methods": "^7.24.7",
     "@babel/plugin-transform-private-property-in-object": "^7.24.7",
