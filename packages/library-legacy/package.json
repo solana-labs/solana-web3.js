@@ -55,7 +55,7 @@
     "test:unit:node": "cross-env NODE_ENV=test NODE_OPTIONS='--import tsx' mocha './test/**/*.test.ts'"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.7",
+    "@babel/runtime": "^7.24.8",
     "@noble/curves": "^1.4.2",
     "@noble/hashes": "^1.4.0",
     "@solana/buffer-layout": "^4.0.1",
