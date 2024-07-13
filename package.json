@@ -5,12 +5,12 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "turbo run --concurrency=100% build",
-        "compile": "turbo run --concurrency=100% compile:js compile:typedefs",
-        "lint": "turbo run --concurrency=100% test:lint",
-        "style:fix": "turbo  run --concurrency=100% style:fix && pnpm prettier --log-level warn --ignore-unknown --write '{.,!packages}/*'",
-        "test": "turbo run --concurrency=100% test:unit:browser test:unit:node",
-        "test:live-with-test-validator": "turbo run --concurrency=100% test:live-with-test-validator",
+        "build": "turbo run --concurrency=95.84% build",
+        "compile": "turbo run --concurrency=95.84% compile:js compile:typedefs",
+        "lint": "turbo run --concurrency=95.84% test:lint",
+        "style:fix": "turbo  run --concurrency=95.84% style:fix && pnpm prettier --log-level warn --ignore-unknown --write '{.,!packages}/*'",
+        "test": "turbo run --concurrency=95.84% test:unit:browser test:unit:node",
+        "test:live-with-test-validator": "turbo run --concurrency=95.84% test:live-with-test-validator",
         "test:live-with-test-validator:setup": "./scripts/setup-test-validator.sh"
     },
     "devDependencies": {

@@ -47,7 +47,7 @@ jobs:
         run: pnpm build
 
       - name: Build GitHub Pages
-        run: pnpm turbo run compile:ghpages --concurrency=100%
+        run: pnpm turbo run compile:ghpages --concurrency=95.84%
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'
