@@ -34,7 +34,7 @@ importers:
         version: 3.0.3(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.3))(eslint-plugin-jest@27.9.0(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))(typescript@5.5.3))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-simple-import-sort@10.0.0(eslint@8.57.0))(eslint-plugin-sort-keys-fix@1.1.2)(eslint-plugin-typescript-sort-keys@3.2.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3)
       '@solana/prettier-config-solana':
         specifier: 0.0.5
-        version: 0.0.5(prettier@3.3.2)
+        version: 0.0.5(prettier@3.3.3)
       '@solana/test-config':
         specifier: workspace:*
         version: link:packages/test-config
@@ -94,7 +94,7 @@ importers:
         version: 2.2.0(eslint@8.57.0)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))
       jest-runner-prettier:
         specifier: ^1.0.0
-        version: 1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(bufferutil@4.0.8)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))(prettier@3.3.2)(utf-8-validate@5.0.10)
+        version: 1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(bufferutil@4.0.8)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))(prettier@3.3.3)(utf-8-validate@5.0.10)
       jest-watch-master:
         specifier: ^1.0.0
         version: 1.0.0(jest-validate@30.0.0-alpha.5)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))
@@ -106,7 +106,7 @@ importers:
         version: 2.2.2(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))
       prettier:
         specifier: ^3.3
-        version: 3.3.2
+        version: 3.3.3
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)
@@ -7390,8 +7390,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  prettier@3.3.2:
-    resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
+  prettier@3.3.3:
+    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -12363,9 +12363,9 @@ snapshots:
       eslint-plugin-typescript-sort-keys: 3.2.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3)
       typescript: 5.5.3
 
-  '@solana/prettier-config-solana@0.0.5(prettier@3.3.2)':
+  '@solana/prettier-config-solana@0.0.5(prettier@3.3.3)':
     dependencies:
-      prettier: 3.3.2
+      prettier: 3.3.3
 
   '@solana/wallet-standard-features@1.2.0':
     dependencies:
@@ -15564,7 +15564,7 @@ snapshots:
       - '@jest/test-result'
       - jest-runner
 
-  jest-runner-prettier@1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(bufferutil@4.0.8)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))(prettier@3.3.2)(utf-8-validate@5.0.10):
+  jest-runner-prettier@1.0.0(patch_hash=wxyu3ekhzy6qhvwrai2xltdhn4)(bufferutil@4.0.8)(jest@30.0.0-alpha.5(@types/node@18.19.21)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@18.19.21)(typescript@5.5.3)))(prettier@3.3.3)(utf-8-validate@5.0.10):
     dependencies:
       create-jest-runner: 0.8.0
       emphasize: 5.0.0
@@ -15572,7 +15572,7 @@ snapshots:
       jest-diff: 27.5.1
       jest-runner: 27.5.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       p-limit: 4.0.0
-      prettier: 3.3.2
+      prettier: 3.3.3
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -16710,7 +16710,7 @@ snapshots:
 
   prettier@3.3.1: {}
 
-  prettier@3.3.2: {}
+  prettier@3.3.3: {}
 
   pretty-format@27.5.1:
     dependencies:
