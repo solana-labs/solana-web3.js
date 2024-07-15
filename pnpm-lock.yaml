@@ -1318,8 +1318,8 @@ importers:
         version: 8.14.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     devDependencies:
       '@types/ws':
-        specifier: ^8.5.10
-        version: 8.5.10
+        specifier: ^8.5.11
+        version: 8.5.11
 
 packages:
 
@@ -3933,6 +3933,9 @@ packages:
 
   '@types/ws@8.5.10':
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
+
+  '@types/ws@8.5.11':
+    resolution: {integrity: sha512-4+q7P5h3SpJxaBft0Dzpbr6lmMaqh0Jr2tbhJZ/luAwvD7ohSCniYkwz/pLxuT2h0EOa6QADgJj1Ko+TzRfZ+w==}
 
   '@types/yargs-parser@21.0.0':
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -10919,7 +10922,7 @@ snapshots:
 
   '@httptoolkit/websocket-stream@6.0.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@types/ws': 8.5.10
+      '@types/ws': 8.5.11
       duplexify: 3.7.1
       inherits: 2.0.4
       isomorphic-ws: 4.0.1(ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))
@@ -12640,6 +12643,10 @@ snapshots:
   '@types/ws@8.5.10':
     dependencies:
       '@types/node': 20.11.20
+
+  '@types/ws@8.5.11':
+    dependencies:
+      '@types/node': 18.19.21
 
   '@types/yargs-parser@21.0.0': {}
 
