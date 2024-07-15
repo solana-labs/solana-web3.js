@@ -28,5 +28,5 @@ export function getFixedSize(codec: { fixedSize: number } | { maxSize?: number }
 }
 
 export function getMaxSize(codec: { fixedSize: number } | { maxSize?: number }): number | null {
-    return isFixedSize(codec) ? codec.fixedSize : codec.maxSize ?? null;
+    return isFixedSize(codec) ? codec.fixedSize : (codec.maxSize ?? null);
 }

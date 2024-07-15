@@ -51,8 +51,8 @@ export function addEncoderSizePrefix<TFrom>(encoder: Encoder<TFrom>, prefix: Num
         return createEncoder({ ...encoder, fixedSize: prefix.fixedSize + encoder.fixedSize, write });
     }
 
-    const prefixMaxSize = isFixedSize(prefix) ? prefix.fixedSize : prefix.maxSize ?? null;
-    const encoderMaxSize = isFixedSize(encoder) ? encoder.fixedSize : encoder.maxSize ?? null;
+    const prefixMaxSize = isFixedSize(prefix) ? prefix.fixedSize : (prefix.maxSize ?? null);
+    const encoderMaxSize = isFixedSize(encoder) ? encoder.fixedSize : (encoder.maxSize ?? null);
     const maxSize = prefixMaxSize !== null && encoderMaxSize !== null ? prefixMaxSize + encoderMaxSize : null;
 
     return createEncoder({
@@ -93,8 +93,8 @@ export function addDecoderSizePrefix<TTo>(decoder: Decoder<TTo>, prefix: NumberD
         return createDecoder({ ...decoder, fixedSize: prefix.fixedSize + decoder.fixedSize, read });
     }
 
-    const prefixMaxSize = isFixedSize(prefix) ? prefix.fixedSize : prefix.maxSize ?? null;
-    const decoderMaxSize = isFixedSize(decoder) ? decoder.fixedSize : decoder.maxSize ?? null;
+    const prefixMaxSize = isFixedSize(prefix) ? prefix.fixedSize : (prefix.maxSize ?? null);
+    const decoderMaxSize = isFixedSize(decoder) ? decoder.fixedSize : (decoder.maxSize ?? null);
     const maxSize = prefixMaxSize !== null && decoderMaxSize !== null ? prefixMaxSize + decoderMaxSize : null;
     return createDecoder({ ...decoder, ...(maxSize !== null ? { maxSize } : {}), read });
 }
