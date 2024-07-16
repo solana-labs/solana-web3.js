@@ -5,7 +5,7 @@ import {Keypair} from '../src/keypair';
 import {PublicKey} from '../src/publickey';
 import {ValidatorInfo} from '../src/validator-info';
 
-describe.only('ValidatorInfo', () => {
+describe('ValidatorInfo', () => {
   it('from config account data', () => {
     const keypair = Keypair.fromSeed(Uint8Array.from(Array(32).fill(8)));
 
