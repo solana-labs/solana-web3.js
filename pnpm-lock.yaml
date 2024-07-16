@@ -647,8 +647,8 @@ importers:
         specifier: ^10.4.0
         version: 10.4.0
       mockttp:
-        specifier: ^3.14.0
-        version: 3.14.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: ^3.15.0
+        version: 3.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -6871,8 +6871,8 @@ packages:
     resolution: {integrity: sha512-qxBgB7Qa2sEQgHFjj0dSigq7fX4k6Saisd5Nelwp2q8mlbAFh5dHV9JTTlF8viYJLSSWgMCZFUom8PJcMNBoJw==}
     engines: {node: '>= 8'}
 
-  mockttp@3.14.0:
-    resolution: {integrity: sha512-4gWTScoYE5QzCKpMu/+GZ/OSjjZN+a1x0vq3uFCfADmVaoKEILZmVHuChX04DlfSzNShrNKsHRkZG6QLM7FYWQ==}
+  mockttp@3.15.0:
+    resolution: {integrity: sha512-+LqA7ayl3KQv0FRMnvz/ot5dq+47NTntX4ASO822n+k4LaeaPZnfJW3wKedHe5MFmm8HXC9emn7+R+b1giNvjg==}
     engines: {node: '>=14.14.0'}
     hasBin: true
 
@@ -12642,7 +12642,7 @@ snapshots:
 
   '@types/ws@8.5.10':
     dependencies:
-      '@types/node': 20.11.20
+      '@types/node': 18.19.21
 
   '@types/ws@8.5.11':
     dependencies:
@@ -16275,7 +16275,7 @@ snapshots:
 
   mock-socket@9.3.1: {}
 
-  mockttp@3.14.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  mockttp@3.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       '@graphql-tools/schema': 8.5.1(graphql@15.8.0)
       '@graphql-tools/utils': 8.13.1(graphql@15.8.0)
