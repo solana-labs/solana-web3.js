@@ -595,6 +595,7 @@ describe('Connection', function () {
             filters: [
               {
                 memcmp: {
+                  encoding: 'base58',
                   offset: 0,
                   bytes: 'XzdZ3w',
                 },
@@ -713,6 +714,7 @@ describe('Connection', function () {
             filters: [
               {
                 memcmp: {
+                  encoding: 'base58',
                   offset: 0,
                   bytes: '',
                 },
@@ -6473,7 +6475,7 @@ describe('Connection', function () {
       PublicKey.default,
       mockCallback,
       /* commitment */ undefined,
-      /* filters */ [{dataSize: 123}],
+      /* filters */ [{dataSize: 123}, {memcmp: {bytes: 'AAA', offset: 1}}],
     );
     expect(rpcRequestMethod).to.have.been.calledWithExactly(
       {
@@ -6481,7 +6483,13 @@ describe('Connection', function () {
         method: 'programSubscribe',
         unsubscribeMethod: 'programUnsubscribe',
       },
-      [match.any, match.has('filters', [{dataSize: 123}])],
+      [
+        match.any,
+        match.has('filters', [
+          {dataSize: 123},
+          {memcmp: {encoding: 'base58', bytes: 'AAA', offset: 1}},
+        ]),
+      ],
     );
   });
   it('passes the commitment/encoding/filters to the RPC when calling `onProgramAccountChange`', () => {

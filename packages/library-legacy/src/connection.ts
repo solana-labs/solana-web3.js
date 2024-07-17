@@ -384,6 +384,25 @@ function extractCommitmentFromConfig<TConfig>(
 /**
  * @internal
  */
+function applyDefaultMemcmpEncodingToFilters(
+  filters: GetProgramAccountsFilter[],
+): GetProgramAccountsFilter[] {
+  return filters.map(filter =>
+    'memcmp' in filter
+      ? {
+          ...filter,
+          memcmp: {
+            ...filter.memcmp,
+            encoding: filter.memcmp.encoding ?? 'base58',
+          },
+        }
+      : filter,
+  );
+}
+
+/**
+ * @internal
+ */
 function createRpcResult<T, U>(result: Struct<T, U>) {
   return union([
     pick({
@@ -2697,9 +2716,18 @@ export type MemcmpFilter = {
   memcmp: {
     /** offset into program account data to start comparison */
     offset: number;
-    /** data to match, as base-58 encoded string and limited to less than 129 bytes */
-    bytes: string;
-  };
+  } & (
+    | {
+        encoding?: 'base58'; // Base-58 is the default when not supplied.
+        /** data to match, as base-58 encoded string and limited to less than 129 bytes */
+        bytes: string;
+      }
+    | {
+        encoding: 'base64';
+        /** data to match, as base-64 encoded string */
+        bytes: string;
+      }
+  );
 };
 
 /**
@@ -3731,7 +3759,16 @@ export class Connection {
       [programId.toBase58()],
       commitment,
       encoding || 'base64',
-      configWithoutEncoding,
+      {
+        ...configWithoutEncoding,
+        ...(configWithoutEncoding.filters
+          ? {
+              filters: applyDefaultMemcmpEncodingToFilters(
+                configWithoutEncoding.filters,
+              ),
+            }
+          : null),
+      },
     );
     const unsafeRes = await this._rpcRequest('getProgramAccounts', args);
     const baseSchema = array(KeyedAccountInfoResult);
@@ -6521,7 +6558,7 @@ export class Connection {
       config
         ? config
         : maybeFilters
-          ? {filters: maybeFilters}
+          ? {filters: applyDefaultMemcmpEncodingToFilters(maybeFilters)}
           : undefined /* extra */,
     );
     return this._makeSubscription(
