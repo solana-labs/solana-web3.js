@@ -1,4 +1,3 @@
-import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
 import {
     Callable,
     createRpcMessage,
@@ -74,12 +73,7 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
                 payload,
                 signal: options?.abortSignal,
             });
-            if ('error' in response) {
-                throw getSolanaErrorFromJsonRpcError(response.error);
-            }
-            return (
-                responseTransformer ? responseTransformer(response.result, methodName) : response.result
-            ) as TResponse;
+            return (responseTransformer ? responseTransformer(response, methodName) : response) as TResponse;
         },
     };
 }

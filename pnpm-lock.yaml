@@ -912,9 +912,6 @@ importers:
 
   packages/rpc-spec:
     dependencies:
-      '@solana/errors':
-        specifier: workspace:*
-        version: link:../errors
       '@solana/rpc-spec-types':
         specifier: workspace:*
         version: link:../rpc-spec-types
@@ -1025,6 +1022,9 @@ importers:
 
   packages/rpc-transformers:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/functional':
         specifier: workspace:*
         version: link:../functional

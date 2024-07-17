@@ -180,7 +180,7 @@ function createPendingRpcSubscription<
                         if (!('params' in message) || message.params.subscription !== subscriptionId) {
                             continue;
                         }
-                        const notification = message.params.result as TNotification;
+                        const notification = message.params as TNotification;
                         yield responseTransformer
                             ? responseTransformer(notification, subscribeMethodName)
                             : notification;
