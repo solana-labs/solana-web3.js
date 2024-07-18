@@ -5,9 +5,12 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview"
+        "compile:js": "vite build",
+        "preview": "vite preview",
+        "style:fix": "pnpm eslint --fix src/* && pnpm prettier --log-level warn --ignore-unknown --write ./*",
+        "test:lint": "jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent --testMatch '<rootDir>src/**/*.{ts,tsx}'",
+        "test:prettier": "jest -c ../../node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
+        "test:typecheck": "tsc"
     },
     "dependencies": {
         "@radix-ui/react-dropdown-menu": "^2.0.6",
