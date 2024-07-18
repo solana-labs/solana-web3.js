@@ -132,8 +132,8 @@ importers:
         specifier: ^3.0.5
         version: 3.1.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@solana-program/system':
-        specifier: ^0.3.3
-        version: 0.3.3(@solana/web3.js@packages+library)
+        specifier: ^0.4.0
+        version: 0.4.0(@solana/web3.js@packages+library)
       '@solana/react':
         specifier: workspace:*
         version: link:../../packages/react
@@ -3532,10 +3532,10 @@ packages:
   '@sinonjs/text-encoding@0.7.2':
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
 
-  '@solana-program/system@0.3.3':
-    resolution: {integrity: sha512-TBR/NjAOn7kt1g1aZcUka6yk+n70/EcXO0cPL+lXCIfzqL5/3u1ko0UOLmdyCrs13jVheI+zeKmyR4Ft1Yz2fQ==}
+  '@solana-program/system@0.4.0':
+    resolution: {integrity: sha512-+kulWyBvu6bimkPcueoavFf6TS/Lo6CJ2mtfkOsoeOm9i7cmk48vaknrGpDKT0KnNaqneO2nMO9X6E8eEkdpgQ==}
     peerDependencies:
-      '@solana/web3.js': 2.0.0-preview.3
+      '@solana/web3.js': 2.0.0-preview.4
 
   '@solana/buffer-layout@4.0.1':
     resolution: {integrity: sha512-E1ImOIAD1tBZFRdjeM4/pzTiTApC0AOBGwyAMS4fwIodCWArzJ3DWdoh8cKxeFM2fElkxBh2Aqts1BPC373rHA==}
@@ -12153,7 +12153,7 @@ snapshots:
 
   '@sinonjs/text-encoding@0.7.2': {}
 
-  '@solana-program/system@0.3.3(@solana/web3.js@packages+library)':
+  '@solana-program/system@0.4.0(@solana/web3.js@packages+library)':
     dependencies:
       '@solana/web3.js': link:packages/library
 
