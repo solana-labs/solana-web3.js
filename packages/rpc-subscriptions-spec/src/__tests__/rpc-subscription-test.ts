@@ -215,7 +215,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
             .thingNotifications()
             .subscribe({ abortSignal: new AbortController().signal });
         const iterator = thingNotifications[Symbol.asyncIterator]();
-        await expect(iterator.next()).resolves.toHaveProperty('value', 456);
+        await expect(iterator.next()).resolves.toHaveProperty('value', { result: 456, subscription: 42 });
     });
     it.each([null, undefined])(
         'fatals when the subscription id returned from the server is `%s`',
@@ -324,7 +324,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
         let responseTransformer: jest.Mock;
         let rpc: RpcSubscriptions<TestRpcSubscriptionNotifications>;
         beforeEach(() => {
-            responseTransformer = jest.fn(response => `${response} processed response`);
+            responseTransformer = jest.fn(response => `${response.result} processed response`);
             rpc = createSubscriptionRpc({
                 api: {
                     thingNotifications(...params: unknown[]): RpcSubscriptionsRequest<unknown> {
@@ -349,7 +349,7 @@ describe('JSON-RPC 2.0 Subscriptions', () => {
                 .thingNotifications()
                 .subscribe({ abortSignal: new AbortController().signal });
             await thingNotifications[Symbol.asyncIterator]().next();
-            expect(responseTransformer).toHaveBeenCalledWith(123, 'thingSubscribe');
+            expect(responseTransformer).toHaveBeenCalledWith({ result: 123, subscription: 42 }, 'thingSubscribe');
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

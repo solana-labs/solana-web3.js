@@ -63,10 +63,11 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/errors": "workspace:*",
         "@solana/functional": "workspace:*",
-        "@solana/rpc-types": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
-        "@solana/rpc-subscriptions-spec": "workspace:*"
+        "@solana/rpc-subscriptions-spec": "workspace:*",
+        "@solana/rpc-types": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"

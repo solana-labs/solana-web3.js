@@ -1,4 +1,3 @@
-import { SOLANA_ERROR__JSON_RPC__PARSE_ERROR, SolanaError } from '@solana/errors';
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
@@ -35,19 +34,16 @@ describe('JSON-RPC 2.0', () => {
     });
     it('returns results from the transport', async () => {
         expect.assertions(1);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
+        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
         const result = await rpc.someMethod().send();
         expect(result).toBe(123);
     });
     it('throws errors from the transport', async () => {
         expect.assertions(1);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce({
-            error: { code: SOLANA_ERROR__JSON_RPC__PARSE_ERROR, message: 'o no' },
-        });
+        const transportError = new Error('o no');
+        (makeHttpRequest as jest.Mock).mockRejectedValueOnce(transportError);
         const sendPromise = rpc.someMethod().send();
-        await expect(sendPromise).rejects.toThrow(
-            new SolanaError(SOLANA_ERROR__JSON_RPC__PARSE_ERROR, { __serverMessage: 'o no' }),
-        );
+        await expect(sendPromise).rejects.toThrow(transportError);
     });
     describe('when calling a method having a concrete implementation', () => {
         let rpc: Rpc<TestRpcMethods>;
@@ -94,13 +90,13 @@ describe('JSON-RPC 2.0', () => {
         });
         it('calls the response transformer with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
-            (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
             await rpc.someMethod().send();
             expect(responseTransformer).toHaveBeenCalledWith(123, 'someMethod');
         });
         it('returns the processed response', async () => {
             expect.assertions(1);
-            (makeHttpRequest as jest.Mock).mockResolvedValueOnce({ result: 123 });
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
             const result = await rpc.someMethod().send();
             expect(result).toBe('123 processed response');
         });

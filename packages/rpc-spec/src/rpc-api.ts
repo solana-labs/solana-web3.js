@@ -4,7 +4,7 @@ import { RpcRequest } from './rpc-request';
 
 export type RpcApiConfig = Readonly<{
     parametersTransformer?: <T extends unknown[]>(params: T, methodName: string) => unknown;
-    responseTransformer?: <T>(response: unknown, methodName: string) => T;
+    responseTransformer?: <T>(response: unknown, methodName?: string) => T;
 }>;
 
 export type RpcApi<TRpcMethods> = {
