@@ -30,8 +30,6 @@
         "@solana/wallet-standard-features": "^1.2.0",
         "@types/react": "^18.3",
         "@types/react-dom": "^18.3",
-        "@typescript-eslint/eslint-plugin": "^7.13.1",
-        "@typescript-eslint/parser": "^7.13.1",
         "@vitejs/plugin-react-swc": "^3.7.0",
         "eslint-plugin-react-refresh": "^0.4.8",
         "vite": "^5.3.4"
