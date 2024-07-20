@@ -1,5 +1,14 @@
 # @solana/rpc-spec
 
+## 2.0.0-preview.5
+
+### Patch Changes
+
+-   [#2950](https://github.com/solana-labs/solana-web3.js/pull/2950) [`29821df`](https://github.com/solana-labs/solana-web3.js/commit/29821df246b14eb41dd4606913f44fac40183957) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Refactor rpc-spec to remove requirement for transports to implement parts of JSON RPC spec
+
+-   Updated dependencies []:
+    -   @solana/rpc-spec-types@2.0.0-preview.5
+
 ## 2.0.0-preview.4
 
 ### Patch Changes

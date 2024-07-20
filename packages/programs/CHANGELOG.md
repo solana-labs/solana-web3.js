@@ -1,5 +1,13 @@
 # @solana/programs
 
+## 2.0.0-preview.5
+
+### Patch Changes
+
+-   Updated dependencies [[`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4)]:
+    -   @solana/errors@2.0.0-preview.5
+    -   @solana/addresses@2.0.0-preview.5
+
 ## 2.0.0-preview.4
 
 ### Patch Changes
