@@ -218,4 +218,25 @@ describe('RPC request coalescer', () => {
             });
         });
     });
+    // https://github.com/solana-labs/solana-web3.js/pull/2910
+    describe('regression test #2910', () => {
+        beforeEach(() => {
+            // Necessary to prevent the coalescer from bailing out.
+            hashFn.mockReturnValue('samehash');
+        });
+        it('throws an error in the case of failure, if it was not configured with an `AbortSignal`', async () => {
+            expect.assertions(1);
+            const mockError = { err: 'bad' };
+            mockTransport.mockRejectedValueOnce(mockError);
+            await expect(coalescedTransport({ payload: null })).rejects.toBe(mockError);
+        });
+        it('throws an error in the case of failure, if it was configured with an `AbortSignal`', async () => {
+            expect.assertions(1);
+            const mockError = { err: 'bad' };
+            mockTransport.mockRejectedValueOnce(mockError);
+            await expect(coalescedTransport({ payload: null, signal: new AbortController().signal })).rejects.toBe(
+                mockError,
+            );
+        });
+    });
 });
