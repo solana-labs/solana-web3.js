@@ -1,0 +1,14 @@
+{
+    "name": "@solana/example-utils",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@inquirer/core": "^9.0.4",
+        "pino": "^9.3.1",
+        "pino-pretty": "^11.2.1"
+    },
+    "devDependencies": {
+        "yoctocolors": "^2.1.1"
+    }
+}

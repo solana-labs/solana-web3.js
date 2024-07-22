@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "lib": ["DOM"]
+    },
+    "display": "Crypto Implementation",
+    "extends": "../tsconfig/base.json",
+    "include": ["src"]
+}
