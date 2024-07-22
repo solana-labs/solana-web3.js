@@ -218,7 +218,8 @@ describe('RPC request coalescer', () => {
             });
         });
     });
-    describe('regression test #2910', () => { // https://github.com/solana-labs/solana-web3.js/pull/2910
+    // https://github.com/solana-labs/solana-web3.js/pull/2910
+    describe('regression test #2910', () => {
         beforeEach(() => {
             // Necessary to prevent the coalescer from bailing out.
             hashFn.mockReturnValue('samehash');
