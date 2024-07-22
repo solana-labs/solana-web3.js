@@ -535,3 +535,8 @@ export type SolanaErrorCode =
     | typeof SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_ACCOUNT_COST_LIMIT
     | typeof SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_BLOCK_COST_LIMIT
     | typeof SOLANA_ERROR__TRANSACTION_ERROR__WOULD_EXCEED_MAX_VOTE_COST_LIMIT;
+
+/**
+ * Errors of this type are understood to have an optional `SolanaError` nested inside as `cause`.
+ */
+export type SolanaErrorCodeWithCause = typeof SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE;

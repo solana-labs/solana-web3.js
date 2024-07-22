@@ -200,8 +200,7 @@ try {
             // TODO(@lorisleiva): Replace this with `isSystemProgramError()`
             isProgramError<SystemError>(e.cause, transactionMessage, SYSTEM_PROGRAM_ADDRESS)
                 ? getSystemErrorMessage(e.cause.context.code)
-                : // @ts-expect-error FIXME(#2959)
-                  e.cause?.message;
+                : e.cause?.message;
         log.error(preflightErrorContext, '%s: %s', preflightErrorMessage, errorDetailMessage);
     } else {
         throw e;

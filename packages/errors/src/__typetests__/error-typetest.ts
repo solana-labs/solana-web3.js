@@ -1,5 +1,5 @@
 import * as SolanaErrorCodeModule from '../codes';
-import { SolanaErrorCode } from '../codes';
+import { SolanaErrorCode, SolanaErrorCodeWithCause } from '../codes';
 import { SolanaErrorContext } from '../context';
 import { isSolanaError, SolanaError } from '../error';
 
@@ -56,3 +56,7 @@ null as unknown as SolanaErrorContext satisfies {
                   : SolanaErrorContext[Code][PP];
           };
 };
+
+// Special errors have a nested `cause` property that is an optional `SolanaError`
+const errorWithCause = null as unknown as SolanaError<SolanaErrorCodeWithCause>;
+errorWithCause.cause satisfies SolanaError | undefined;
