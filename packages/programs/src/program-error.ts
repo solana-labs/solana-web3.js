@@ -6,7 +6,8 @@ export function isProgramError<TProgramErrorCode extends number>(
     transactionMessage: { instructions: Record<number, { programAddress: Address }> },
     programAddress: Address,
     code?: TProgramErrorCode,
-): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> & { context: { code: TProgramErrorCode } } {
+): error is Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> &
+    SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> {
     if (!isSolanaError(error, SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM)) {
         return false;
     }
