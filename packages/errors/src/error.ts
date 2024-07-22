@@ -1,4 +1,4 @@
-import { SolanaErrorCode } from './codes';
+import { SolanaErrorCode, SolanaErrorCodeWithCause } from './codes';
 import { SolanaErrorContext } from './context';
 import { getErrorMessage } from './message-formatter';
 
@@ -23,6 +23,7 @@ type SolanaErrorCodedContext = Readonly<{
 }>;
 
 export class SolanaError<TErrorCode extends SolanaErrorCode = SolanaErrorCode> extends Error {
+    readonly cause?: TErrorCode extends SolanaErrorCodeWithCause ? SolanaError : unknown = this.cause;
     readonly context: SolanaErrorCodedContext[TErrorCode];
     constructor(
         ...[code, contextAndErrorOptions]: SolanaErrorContext[TErrorCode] extends undefined
