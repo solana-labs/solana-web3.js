@@ -1,8 +1,8 @@
 import { Address } from '@solana/addresses';
-import { AccountRole, IAccountLookupMeta, IInstruction, isSignerRole } from '@solana/instructions';
+import { AccountRole, IAccountLookupMeta, IAccountMeta, IInstruction, isSignerRole } from '@solana/instructions';
 
 import { AddressesByLookupTableAddress } from './addresses-by-lookup-table-address';
-import { TransactionMessage } from './transaction-message';
+import { BaseTransactionMessage, TransactionMessage } from './transaction-message';
 
 type Mutable<T> = {
     -readonly [P in keyof T]: T[P];
@@ -30,12 +30,30 @@ function findAddressInLookupTables(
 
 type TransactionMessageNotLegacy = Exclude<TransactionMessage, { version: 'legacy' }>;
 
+// Each account can be IAccountLookupMeta | IAccountMeta
+type WidenInstructionAccounts<TInstruction extends IInstruction> =
+    TInstruction extends IInstruction<infer TProgramAddress, infer TAccounts>
+        ? IInstruction<
+              TProgramAddress,
+              {
+                  [K in keyof TAccounts]: TAccounts[K] extends IAccountMeta<infer TAddress>
+                      ? IAccountLookupMeta<TAddress> | IAccountMeta<TAddress>
+                      : TAccounts[K];
+              }
+          >
+        : TInstruction;
+
+type WidenTransactionMessageInstructions<TTransactionMessage extends TransactionMessage> =
+    TTransactionMessage extends BaseTransactionMessage<infer TVersion, infer TInstruction>
+        ? BaseTransactionMessage<TVersion, WidenInstructionAccounts<TInstruction>>
+        : TTransactionMessage;
+
 export function compressTransactionMessageUsingAddressLookupTables<
     TTransactionMessage extends TransactionMessageNotLegacy = TransactionMessageNotLegacy,
 >(
     transactionMessage: TTransactionMessage,
     addressesByLookupTableAddress: AddressesByLookupTableAddress,
-): TTransactionMessage {
+): TTransactionMessage | WidenTransactionMessageInstructions<TTransactionMessage> {
     const lookupTableAddresses = new Set(Object.values(addressesByLookupTableAddress).flatMap(a => a));
 
     const newInstructions: IInstruction[] = [];
