@@ -157,7 +157,7 @@
             "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
         },
         "//#compile:ghpages": {
-            "dependsOn": ["@solana/example-react-app#build", "@solana/web3.js#compile:docs"]
+            "dependsOn": ["@solana/example-react-app#compile:js", "@solana/web3.js#compile:docs"]
         }
     },
     "ui": "stream"
