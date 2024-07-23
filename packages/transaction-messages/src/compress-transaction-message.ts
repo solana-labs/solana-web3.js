@@ -43,9 +43,15 @@ type WidenInstructionAccounts<TInstruction extends IInstruction> =
           >
         : TInstruction;
 
+type ExtractAdditionalProps<T, U> = Omit<T, keyof U>;
+
 type WidenTransactionMessageInstructions<TTransactionMessage extends TransactionMessage> =
     TTransactionMessage extends BaseTransactionMessage<infer TVersion, infer TInstruction>
-        ? BaseTransactionMessage<TVersion, WidenInstructionAccounts<TInstruction>>
+        ? BaseTransactionMessage<TVersion, WidenInstructionAccounts<TInstruction>> &
+              ExtractAdditionalProps<
+                  TTransactionMessage,
+                  BaseTransactionMessage<TVersion, WidenInstructionAccounts<TInstruction>>
+              >
         : TTransactionMessage;
 
 export function compressTransactionMessageUsingAddressLookupTables<
