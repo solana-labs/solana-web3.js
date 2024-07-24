@@ -111,7 +111,7 @@
     "node-abort-controller": "^3.0.1",
     "prettier": "^3.3",
     "rimraf": "6.0.1",
-    "rollup": "^4.18.1",
+    "rollup": "^4.19.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^24.0.0",
