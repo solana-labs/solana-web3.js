@@ -26,6 +26,7 @@ import {
     getBase64Encoder,
     getCompiledTransactionMessageDecoder,
     getTransactionDecoder,
+    lamports,
     partiallySignTransactionMessageWithSigners,
     pipe,
     setTransactionMessageFeePayer,
@@ -107,7 +108,7 @@ const transactionMessage = pipe(
         appendTransactionMessageInstructions(
             [
                 getTransferSolInstruction({
-                    amount: 12345678,
+                    amount: lamports(12345678n),
                     destination: DESTINATION_ADDRESS,
                     source: SOURCE_ACCOUNT_SIGNER,
                 }),
