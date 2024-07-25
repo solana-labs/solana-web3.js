@@ -9,7 +9,7 @@ import {
 } from '@solana/rpc-subscriptions-spec';
 import { ClusterUrl } from '@solana/rpc-types';
 
-import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
+import { DEFAULT_RPC_SUBSCRIPTIONS_CONFIG } from './rpc-default-config';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
 import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
 import {
@@ -41,7 +41,7 @@ export function createSolanaRpcSubscriptionsFromTransport<
 >(transport: TTransport) {
     return pipe(
         createSubscriptionRpc({
-            api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_CONFIG),
+            api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_SUBSCRIPTIONS_CONFIG),
             transport,
         }),
         rpcSubscriptions =>
