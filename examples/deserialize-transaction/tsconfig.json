@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "noEmit": true,
+        "target": "ESNext"
+    },
+    "display": "@solana/example-deserialize-transaction",
+    "extends": "../../packages/tsconfig/base.json",
+    "include": ["src"]
+}
