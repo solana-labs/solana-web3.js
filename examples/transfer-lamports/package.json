@@ -17,7 +17,6 @@
         "@solana/web3.js": "workspace:@solana/web3.js-experimental@*"
     },
     "devDependencies": {
-        "@types/prompts": "^2.4.9",
         "start-server-and-test": "^2.0.4",
         "tsx": "^4.16.2"
     }

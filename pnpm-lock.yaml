@@ -135,9 +135,6 @@ importers:
         specifier: workspace:@solana/web3.js-experimental@*
         version: link:../../packages/library
     devDependencies:
-      '@types/prompts':
-        specifier: ^2.4.9
-        version: 2.4.9
       start-server-and-test:
         specifier: ^2.0.4
         version: 2.0.4
@@ -215,9 +212,6 @@ importers:
         specifier: workspace:@solana/web3.js-experimental@*
         version: link:../../packages/library
     devDependencies:
-      '@types/prompts':
-        specifier: ^2.4.9
-        version: 2.4.9
       start-server-and-test:
         specifier: ^2.0.4
         version: 2.0.4
@@ -4083,9 +4077,6 @@ packages:
 
   '@types/prettier@2.7.3':
     resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
-
-  '@types/prompts@2.4.9':
-    resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -12947,11 +12938,6 @@ snapshots:
   '@types/parse-json@4.0.0': {}
 
   '@types/prettier@2.7.3': {}
-
-  '@types/prompts@2.4.9':
-    dependencies:
-      '@types/node': 18.19.21
-      kleur: 3.0.3
 
   '@types/prop-types@15.7.12': {}
 
