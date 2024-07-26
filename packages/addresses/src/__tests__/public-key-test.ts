@@ -57,11 +57,15 @@ describe('getAddressFromPublicKey', () => {
                     }) as RsaHashedKeyGenParams,
             ),
         ),
-    ])('throws when called with a $name/$__variant public key', async algorithm => {
-        expect.assertions(1);
-        const { publicKey } = await crypto.subtle.generateKey(algorithm, true, ['sign', 'verify']);
-        await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
-    });
+    ])(
+        'throws when called with a $name/$__variant public key',
+        async algorithm => {
+            expect.assertions(1);
+            const { publicKey } = await crypto.subtle.generateKey(algorithm, true, ['sign', 'verify']);
+            await expect(() => getAddressFromPublicKey(publicKey)).rejects.toThrow();
+        },
+        10_000 /* Increase `timeout` to 10 seconds; GitHub Actions runner is really slow. */,
+    );
     it('throws when called with a private key', async () => {
         expect.assertions(1);
         const mockPrivateKey = await crypto.subtle.importKey(
