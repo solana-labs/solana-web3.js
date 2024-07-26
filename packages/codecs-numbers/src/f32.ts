@@ -7,7 +7,7 @@ export const getF32Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
     numberEncoderFactory({
         config,
         name: 'f32',
-        set: (view, value, le) => view.setFloat32(0, typeof value === 'bigint' ? Number(value) : value, le),
+        set: (view, value, le) => view.setFloat32(0, Number(value), le),
         size: 4,
     });
 

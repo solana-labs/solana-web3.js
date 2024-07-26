@@ -8,7 +8,7 @@ export const getU16Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
         config,
         name: 'u16',
         range: [0, Number('0xffff')],
-        set: (view, value, le) => view.setUint16(0, typeof value === 'bigint' ? Number(value) : value, le),
+        set: (view, value, le) => view.setUint16(0, Number(value), le),
         size: 2,
     });
 

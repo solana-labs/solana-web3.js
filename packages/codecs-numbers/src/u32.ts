@@ -8,7 +8,7 @@ export const getU32Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
         config,
         name: 'u32',
         range: [0, Number('0xffffffff')],
-        set: (view, value, le) => view.setUint32(0, typeof value === 'bigint' ? Number(value) : value, le),
+        set: (view, value, le) => view.setUint32(0, Number(value), le),
         size: 4,
     });
 

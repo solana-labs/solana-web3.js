@@ -7,7 +7,7 @@ export const getF64Encoder = (config: NumberCodecConfig = {}): FixedSizeEncoder<
     numberEncoderFactory({
         config,
         name: 'f64',
-        set: (view, value, le) => view.setFloat64(0, typeof value === 'bigint' ? Number(value) : value, le),
+        set: (view, value, le) => view.setFloat64(0, Number(value), le),
         size: 8,
     });
 

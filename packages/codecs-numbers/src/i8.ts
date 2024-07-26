@@ -6,7 +6,7 @@ export const getI8Encoder = (): FixedSizeEncoder<bigint | number, 1> =>
     numberEncoderFactory({
         name: 'i8',
         range: [-Number('0x7f') - 1, Number('0x7f')],
-        set: (view, value) => view.setInt8(0, typeof value === 'bigint' ? Number(value) : value),
+        set: (view, value) => view.setInt8(0, Number(value)),
         size: 1,
     });
 
