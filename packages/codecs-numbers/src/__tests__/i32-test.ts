@@ -1,6 +1,6 @@
 import { Endian } from '../common';
 import { getI32Codec } from '../i32';
-import { assertRangeError, assertValid } from './__setup__';
+import { assertRangeError, assertValid, assertValidEncode } from './__setup__';
 
 const MIN = -Number('0x7fffffff') - 1;
 const MAX = Number('0x7fffffff');
@@ -23,6 +23,12 @@ describe('getI32Codec', () => {
         assertValid(i32BE, 1, '00000001');
         assertValid(i32LE, 42, '2a000000');
         assertValid(i32BE, 42, '0000002a');
+        assertValidEncode(i32LE, 0n, '00000000');
+        assertValidEncode(i32BE, 0n, '00000000');
+        assertValidEncode(i32LE, 1n, '01000000');
+        assertValidEncode(i32BE, 1n, '00000001');
+        assertValidEncode(i32LE, 42n, '2a000000');
+        assertValidEncode(i32BE, 42n, '0000002a');
         assertValid(i32LE, -1, 'ffffffff');
         assertValid(i32BE, -1, 'ffffffff');
         assertValid(i32LE, -42, 'd6ffffff');
@@ -33,18 +39,30 @@ describe('getI32Codec', () => {
         assertValid(i32BE, MIN + 1, '80000001');
         assertValid(i32LE, MAX - 1, 'feffff7f');
         assertValid(i32BE, MAX - 1, '7ffffffe');
+        assertValidEncode(i32LE, BigInt(MIN + 1), '01000080');
+        assertValidEncode(i32BE, BigInt(MIN + 1), '80000001');
+        assertValidEncode(i32LE, BigInt(MAX - 1), 'feffff7f');
+        assertValidEncode(i32BE, BigInt(MAX - 1), '7ffffffe');
 
         // Boundaries.
         assertValid(i32LE, MIN, '00000080');
         assertValid(i32BE, MIN, '80000000');
         assertValid(i32LE, MAX, 'ffffff7f');
         assertValid(i32BE, MAX, '7fffffff');
+        assertValidEncode(i32LE, BigInt(MIN), '00000080');
+        assertValidEncode(i32BE, BigInt(MIN), '80000000');
+        assertValidEncode(i32LE, BigInt(MAX), 'ffffff7f');
+        assertValidEncode(i32BE, BigInt(MAX), '7fffffff');
 
         // Out of range.
         assertRangeError(rangeErrorValues, i32LE, MIN - 1);
         assertRangeError(rangeErrorValues, i32BE, MIN - 1);
         assertRangeError(rangeErrorValues, i32LE, MAX + 1);
         assertRangeError(rangeErrorValues, i32BE, MAX + 1);
+        assertRangeError(rangeErrorValues, i32LE, BigInt(MIN - 1));
+        assertRangeError(rangeErrorValues, i32BE, BigInt(MIN - 1));
+        assertRangeError(rangeErrorValues, i32LE, BigInt(MAX + 1));
+        assertRangeError(rangeErrorValues, i32BE, BigInt(MAX + 1));
     });
 
     it('has the right size', () => {
