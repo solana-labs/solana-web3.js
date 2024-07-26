@@ -890,7 +890,7 @@ Since validators have an incentive to pack as many transactions into each block 
 Use this utility to estimate the actual compute unit cost of a given transaction message.
 
 ```ts
-import { getSetComputeLimitInstruction } from '@solana-program/compute-budget';
+import { getSetComputeUnitLimitInstruction } from '@solana-program/compute-budget';
 import { createSolanaRpc, getComputeUnitEstimateForTransactionMessageFactory, pipe } from '@solana/web3.js';
 
 // Create an estimator function.
@@ -910,7 +910,7 @@ const computeUnitsEstimate = await getComputeUnitEstimateForTransactionMessage(t
 
 // Set the transaction message's compute unit budget.
 const transactionMessageWithComputeUnitLimit = prependTransactionMessageInstruction(
-    getSetComputeLimitInstruction({ units: computeUnitsEstimate }),
+    getSetComputeUnitLimitInstruction({ units: computeUnitsEstimate }),
     transactionMessage,
 );
 ```
