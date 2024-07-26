@@ -7,7 +7,7 @@ import { getRpcTransportWithRequestCoalescing } from './rpc-request-coalescer';
 import { getSolanaRpcPayloadDeduplicationKey } from './rpc-request-deduplication';
 
 type RpcTransportConfig = Parameters<typeof createHttpTransport>[0];
-export interface DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {
+interface DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> extends RpcTransportConfig {
     url: TClusterUrl;
 }
 
