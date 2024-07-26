@@ -1,6 +1,6 @@
 import { Endian } from '../common';
 import { getF32Codec } from '../f32';
-import { assertValid } from './__setup__';
+import { assertValid, assertValidEncode } from './__setup__';
 
 const APPROX_PI = 3.1415927410125732;
 const f32 = getF32Codec;
@@ -13,11 +13,17 @@ describe('getF32Codec', () => {
 
         assertValid(f32LE, 0, '00000000');
         assertValid(f32BE, 0, '00000000');
+        assertValidEncode(f32LE, 0n, '00000000');
+        assertValidEncode(f32BE, 0n, '00000000');
 
         assertValid(f32LE, 1, '0000803f');
         assertValid(f32BE, 1, '3f800000');
+        assertValidEncode(f32LE, 1n, '0000803f');
+        assertValidEncode(f32BE, 1n, '3f800000');
         assertValid(f32LE, 42, '00002842');
         assertValid(f32BE, 42, '42280000');
+        assertValidEncode(f32LE, 42n, '00002842');
+        assertValidEncode(f32BE, 42n, '42280000');
         assertValid(f32LE, Math.PI, 'db0f4940', APPROX_PI);
         assertValid(f32BE, Math.PI, '40490fdb', APPROX_PI);
 
