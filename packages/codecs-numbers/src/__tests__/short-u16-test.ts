@@ -1,5 +1,5 @@
 import { getShortU16Codec } from '../short-u16';
-import { assertRangeError, assertValid } from './__setup__';
+import { assertRangeError, assertValid, assertValidEncode } from './__setup__';
 
 const MIN = 0;
 const MAX = 65535;
@@ -20,18 +20,31 @@ describe('getShortU16Codec', () => {
         assertValid(shortU16(), 128, '8001');
         assertValid(shortU16(), 16383, 'ff7f');
         assertValid(shortU16(), 16384, '808001');
+        assertValidEncode(shortU16(), 0n, '00');
+        assertValidEncode(shortU16(), 1n, '01');
+        assertValidEncode(shortU16(), 42n, '2a');
+        assertValidEncode(shortU16(), 127n, '7f');
+        assertValidEncode(shortU16(), 128n, '8001');
+        assertValidEncode(shortU16(), 16383n, 'ff7f');
+        assertValidEncode(shortU16(), 16384n, '808001');
 
         // Pre-boundaries.
         assertValid(shortU16(), MIN + 1, '01');
         assertValid(shortU16(), MAX - 1, 'feff03');
+        assertValidEncode(shortU16(), BigInt(MIN + 1), '01');
+        assertValidEncode(shortU16(), BigInt(MAX - 1), 'feff03');
 
         // Boundaries.
         assertValid(shortU16(), MIN, '00');
         assertValid(shortU16(), MAX, 'ffff03');
+        assertValidEncode(shortU16(), BigInt(MIN), '00');
+        assertValidEncode(shortU16(), BigInt(MAX), 'ffff03');
 
         // Out of range.
         assertRangeError(rangeErrorValues, shortU16(), MIN - 1);
         assertRangeError(rangeErrorValues, shortU16(), MAX + 1);
+        assertRangeError(rangeErrorValues, shortU16(), BigInt(MIN - 1));
+        assertRangeError(rangeErrorValues, shortU16(), BigInt(MAX + 1));
 
         // Assert re-serialization.
         const codec = shortU16();
