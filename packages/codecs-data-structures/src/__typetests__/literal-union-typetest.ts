@@ -14,9 +14,9 @@ import { getLiteralUnionCodec, getLiteralUnionDecoder, getLiteralUnionEncoder } 
     // [getLiteralUnionEncoder]: It knows if the encoder is fixed size or variable size.
     getLiteralUnionEncoder(['one', 2, 3n]) satisfies FixedSizeEncoder<'one' | 2 | 3n, 1>;
     getLiteralUnionEncoder(['one', 2, 3n], { size: getU32Encoder() }) satisfies FixedSizeEncoder<'one' | 2 | 3n, 4>;
-    getLiteralUnionEncoder(['one', 2, 3n], { size: {} as VariableSizeEncoder<number> }) satisfies VariableSizeEncoder<
-        'one' | 2 | 3n
-    >;
+    getLiteralUnionEncoder(['one', 2, 3n], {
+        size: {} as VariableSizeEncoder<bigint | number>,
+    }) satisfies VariableSizeEncoder<'one' | 2 | 3n>;
 }
 
 {
@@ -36,7 +36,10 @@ import { getLiteralUnionCodec, getLiteralUnionDecoder, getLiteralUnionEncoder } 
         'one' | 2 | 3n,
         4
     >;
-    getLiteralUnionCodec(['one', 2, 3n], { size: {} as VariableSizeCodec<number> }) satisfies VariableSizeCodec<
-        'one' | 2 | 3n
-    >;
+    getLiteralUnionCodec(['one', 2, 3n], {
+        size: {} as VariableSizeCodec<bigint | number, number>,
+    }) satisfies VariableSizeCodec<'one' | 2 | 3n>;
+    getLiteralUnionCodec(['one', 2, 3n], {
+        size: {} as VariableSizeCodec<bigint | number, bigint>,
+    }) satisfies VariableSizeCodec<'one' | 2 | 3n>;
 }

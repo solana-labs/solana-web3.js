@@ -30,7 +30,7 @@ type DirectionInput = Direction | keyof typeof Direction;
     getEnumEncoder(Direction) satisfies FixedSizeEncoder<DirectionInput, 1>;
     getEnumEncoder(Feedback, { size: getU32Encoder() }) satisfies FixedSizeEncoder<FeedbackInput, 4>;
     getEnumEncoder(Feedback, {
-        size: {} as VariableSizeEncoder<number>,
+        size: {} as VariableSizeEncoder<bigint | number>,
     }) satisfies VariableSizeEncoder<FeedbackInput>;
 }
 
@@ -47,8 +47,10 @@ type DirectionInput = Direction | keyof typeof Direction;
     getEnumCodec(Feedback) satisfies FixedSizeCodec<FeedbackInput, Feedback, 1>;
     getEnumCodec(Direction) satisfies FixedSizeCodec<DirectionInput, Direction, 1>;
     getEnumCodec(Feedback, { size: getU32Codec() }) satisfies FixedSizeCodec<FeedbackInput, Feedback, 4>;
-    getEnumCodec(Feedback, { size: {} as VariableSizeCodec<number> }) satisfies VariableSizeCodec<
-        FeedbackInput,
-        Feedback
-    >;
+    getEnumCodec(Feedback, {
+        size: {} as VariableSizeCodec<bigint | number, number>,
+    }) satisfies VariableSizeCodec<FeedbackInput, Feedback>;
+    getEnumCodec(Feedback, {
+        size: {} as VariableSizeCodec<bigint | number, bigint>,
+    }) satisfies VariableSizeCodec<FeedbackInput, Feedback>;
 }
