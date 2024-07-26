@@ -1,11 +1,13 @@
 import {
     combineCodec,
+    fixDecoderSize,
     FixedSizeCodec,
     FixedSizeDecoder,
     FixedSizeEncoder,
+    fixEncoderSize,
     transformDecoder,
 } from '@solana/codecs-core';
-import { getU64Decoder, getU64Encoder } from '@solana/codecs-numbers';
+import { getU64Decoder, getU64Encoder, NumberCodec, NumberDecoder, NumberEncoder } from '@solana/codecs-numbers';
 import { SOLANA_ERROR__LAMPORTS_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
 // FIXME(solana-labs/solana/issues/30341) Beware that any value above 9007199254740991 may be
@@ -46,18 +48,34 @@ export function lamports(putativeLamports: bigint): LamportsUnsafeBeyond2Pow53Mi
     return putativeLamports;
 }
 
-export function getLamportsEncoder(): FixedSizeEncoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+export function getLamportsEncoder(
+    innerEncoder?: NumberEncoder,
+): FixedSizeEncoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+    if (innerEncoder) {
+        return fixEncoderSize(innerEncoder, 8);
+    }
     return getMemoizedU64Encoder();
 }
 
-export function getLamportsDecoder(): FixedSizeDecoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+export function getLamportsDecoder(
+    innerDecoder?: NumberDecoder,
+): FixedSizeDecoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+    if (innerDecoder) {
+        return fixDecoderSize(
+            transformDecoder<bigint | number, LamportsUnsafeBeyond2Pow53Minus1>(innerDecoder, value =>
+                lamports(typeof value === 'bigint' ? value : BigInt(value)),
+            ),
+            8,
+        );
+    }
     return transformDecoder(getMemoizedU64Decoder(), lamports);
 }
 
-export function getLamportsCodec(): FixedSizeCodec<
-    LamportsUnsafeBeyond2Pow53Minus1,
-    LamportsUnsafeBeyond2Pow53Minus1,
-    8
-> {
+export function getLamportsCodec(
+    innerCodec?: NumberCodec,
+): FixedSizeCodec<LamportsUnsafeBeyond2Pow53Minus1, LamportsUnsafeBeyond2Pow53Minus1, 8> {
+    if (innerCodec) {
+        return combineCodec(getLamportsEncoder(innerCodec), getLamportsDecoder(innerCodec));
+    }
     return combineCodec(getLamportsEncoder(), getLamportsDecoder());
 }
