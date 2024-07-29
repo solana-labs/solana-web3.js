@@ -17,7 +17,6 @@ import {
     createSolanaRpcSubscriptions,
     createTransactionMessage,
     getSignatureFromTransaction,
-    isProgramError,
     isSolanaError,
     lamports,
     pipe,
@@ -27,12 +26,7 @@ import {
     signTransactionMessageWithSigners,
     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE,
 } from '@solana/web3.js';
-import {
-    getSystemErrorMessage,
-    getTransferSolInstruction,
-    SYSTEM_PROGRAM_ADDRESS,
-    SystemError,
-} from '@solana-program/system';
+import { getSystemErrorMessage, getTransferSolInstruction, isSystemError } from '@solana-program/system';
 
 const log = createLogger('Transfer');
 
@@ -196,11 +190,9 @@ try {
     if (isSolanaError(e, SOLANA_ERROR__JSON_RPC__SERVER_ERROR_SEND_TRANSACTION_PREFLIGHT_FAILURE)) {
         const preflightErrorContext = e.context;
         const preflightErrorMessage = e.message;
-        const errorDetailMessage =
-            // TODO(@lorisleiva): Replace this with `isSystemProgramError()`
-            isProgramError<SystemError>(e.cause, transactionMessage, SYSTEM_PROGRAM_ADDRESS)
-                ? getSystemErrorMessage(e.cause.context.code)
-                : e.cause?.message;
+        const errorDetailMessage = isSystemError(e.cause, transactionMessage)
+            ? getSystemErrorMessage(e.cause.context.code)
+            : e.cause?.message;
         log.error(preflightErrorContext, '%s: %s', preflightErrorMessage, errorDetailMessage);
     } else {
         throw e;

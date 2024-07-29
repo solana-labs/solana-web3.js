@@ -12,7 +12,7 @@
         "test:typecheck": "tsc"
     },
     "dependencies": {
-        "@solana-program/system": "^0.4.0",
+        "@solana-program/system": "^0.4.1",
         "@solana/example-utils": "workspace:*",
         "@solana/web3.js": "workspace:@solana/web3.js-experimental@*"
     },
