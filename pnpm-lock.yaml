@@ -219,8 +219,8 @@ importers:
   examples/transfer-lamports:
     dependencies:
       '@solana-program/system':
-        specifier: ^0.4.0
-        version: 0.4.0(@solana/web3.js@packages+library)
+        specifier: ^0.4.1
+        version: 0.4.1(@solana/web3.js@packages+library)
       '@solana/example-utils':
         specifier: workspace:*
         version: link:../utils
@@ -3811,6 +3811,11 @@ packages:
 
   '@solana-program/system@0.4.0':
     resolution: {integrity: sha512-+kulWyBvu6bimkPcueoavFf6TS/Lo6CJ2mtfkOsoeOm9i7cmk48vaknrGpDKT0KnNaqneO2nMO9X6E8eEkdpgQ==}
+    peerDependencies:
+      '@solana/web3.js': 2.0.0-preview.4
+
+  '@solana-program/system@0.4.1':
+    resolution: {integrity: sha512-9TyqkaKk6NJLECfewLW96sP4Oaw6YW/wzyxzt5Kn3h13i71Fo0mHlnMqw/D4VX1mn0LxM2fsZAaz4vazjRTCYQ==}
     peerDependencies:
       '@solana/web3.js': 2.0.0-preview.4
 
@@ -12722,6 +12727,10 @@ snapshots:
       '@solana/web3.js': link:packages/library
 
   '@solana-program/system@0.4.0(@solana/web3.js@packages+library)':
+    dependencies:
+      '@solana/web3.js': link:packages/library
+
+  '@solana-program/system@0.4.1(@solana/web3.js@packages+library)':
     dependencies:
       '@solana/web3.js': link:packages/library
 
