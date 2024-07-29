@@ -9,7 +9,11 @@ import {
 } from '@solana/codecs';
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
-import { getLamportsDecoder, getLamportsEncoder, LamportsUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import {
+    getDefaultLamportsDecoder,
+    getDefaultLamportsEncoder,
+    LamportsUnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 import { fetchEncodedSysvarAccount, SYSVAR_FEES_ADDRESS } from './sysvar';
 
@@ -30,13 +34,13 @@ export type SysvarFees = Readonly<{
 
 export function getSysvarFeesEncoder(): FixedSizeEncoder<SysvarFees, SysvarFeesSize> {
     return getStructEncoder([
-        ['feeCalculator', getStructEncoder([['lamportsPerSignature', getLamportsEncoder()]])],
+        ['feeCalculator', getStructEncoder([['lamportsPerSignature', getDefaultLamportsEncoder()]])],
     ]) as FixedSizeEncoder<SysvarFees, SysvarFeesSize>;
 }
 
 export function getSysvarFeesDecoder(): FixedSizeDecoder<SysvarFees, SysvarFeesSize> {
     return getStructDecoder([
-        ['feeCalculator', getStructDecoder([['lamportsPerSignature', getLamportsDecoder()]])],
+        ['feeCalculator', getStructDecoder([['lamportsPerSignature', getDefaultLamportsDecoder()]])],
     ]) as FixedSizeDecoder<SysvarFees, SysvarFeesSize>;
 }
 
