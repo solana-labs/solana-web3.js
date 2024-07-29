@@ -1,13 +1,21 @@
 import process from 'node:process';
 
-import { Logger, pino } from 'pino';
+import { DestinationStream, Logger, pino } from 'pino';
 import { build } from 'pino-pretty';
 
-const prettyStream = build({
+const BASE_OPTIONS = {
     colorize: true,
     colorizeObjects: true,
-    ignore: 'hostname,pid,time',
     sync: true,
+} as const;
+
+const prettyStream = build({
+    ...BASE_OPTIONS,
+    ignore: 'hostname,pid,time',
+});
+const prettyStreamWithTimestamp = build({
+    ...BASE_OPTIONS,
+    ignore: 'hostname,pid',
 });
 
 let fatalLoggerInstalled = false;
@@ -22,18 +30,24 @@ function ensureFatalLogger(logger: Logger<never>) {
     });
 }
 
-function createLoggerWithName(name: string) {
+function createLoggerWithName(name: string, stream: DestinationStream) {
     return pino(
         {
             level: 'debug',
             name,
         },
-        prettyStream,
+        stream,
     );
 }
 
-export default function createLogger(name: string) {
-    const logger = createLoggerWithName(name);
+export function createLogger(name: string) {
+    const logger = createLoggerWithName(name, prettyStream);
+    ensureFatalLogger(logger);
+    return logger;
+}
+
+export function createLoggerWithTimestamp(name: string) {
+    const logger = createLoggerWithName(name, prettyStreamWithTimestamp);
     ensureFatalLogger(logger);
     return logger;
 }

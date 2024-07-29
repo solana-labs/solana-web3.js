@@ -7,7 +7,7 @@
  *
  * To run this example, execute `pnpm start` in this directory.
  */
-import createLogger from '@solana/example-utils/createLogger.js';
+import { createLogger } from '@solana/example-utils/createLogger.js';
 import {
     Address,
     appendTransactionMessageInstructions,

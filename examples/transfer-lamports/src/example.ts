@@ -7,7 +7,7 @@
  *
  * To run this example, execute `pnpm start` in this directory.
  */
-import createLogger from '@solana/example-utils/createLogger.js';
+import { createLogger } from '@solana/example-utils/createLogger.js';
 import pressAnyKeyPrompt from '@solana/example-utils/pressAnyKeyPrompt.js';
 import {
     address,
