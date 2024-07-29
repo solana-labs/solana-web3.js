@@ -6,15 +6,15 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/web3.js/experimental.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/web3.js/experimental.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/web3.js/v/experimental
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/web3.js/preview.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/web3.js/preview.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/web3.js/v/preview
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-release-url]: https://github.com/semantic-release/semantic-release
 
-# Solana JavaScript SDK Technology Preview
+# Solana JavaScript SDK 2.0 Release Candidate
 
-If you build JavaScript applications on Solana, it’s likely you’ve worked with `@solana/web3.js` or a library powered by it. With 400K+ weekly downloads on npm, it’s the most-used library in the ecosystem for building program clients, web applications, block explorers, and more.
+If you build JavaScript applications on Solana, it’s likely you’ve worked with `@solana/web3.js` or a library powered by it. With 350K+ weekly downloads on npm, it’s the most-used library in the ecosystem for building program clients, web applications, block explorers, and more.
 
 Here’s an example of a common code snippet from `@solana/web3.js`:
 
@@ -25,37 +25,39 @@ const transaction = new Transaction().add(instruction);
 await sendAndConfirmTransaction(connection, transaction, [payer]);
 ```
 
-In response to your feedback, we began a process of modernizing the library to prepare for the next generation of Solana applications. A Technology Preview of the new web3.js is now available for you to evaluate.
+In response to your feedback, we began a process of modernizing the library to prepare for the next generation of Solana applications. A Release Candidate of the new web3.js is now available for you to evaluate.
 
-**This library is experimental**. It is unsuitable for production use, because the API is unstable and may change without warning. If you want to build a production Solana application, use the [1.x branch](https://www.npmjs.com/package/@solana/web3.js).
+Before leaving the Release Candidate stage, we want to collect as much of your feeback and bug reports as possible. If you find a bug or can not achieve your goals because of the design of the new APIs, please file [a GitHub issue here](https://github.com/solana-labs/solana-web3.js/issues/new/choose).
 
-## Installation
+# Installation
 
-### For use in Node.js or a web application
+For use in a Node.js or web application:
 
 ```shell
-npm install --save @solana/web3.js@tp4
+npm install --save @solana/web3.js@rc
 ```
 
-### For use in a browser, without a build system
+For use in a browser, without a build system:
 
 ```html
 <!-- Development (debug mode, unminified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp4/dist/index.development.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@rc/dist/index.development.js"></script>
 
 <!-- Production (minified) -->
-<script src="https://unpkg.com/@solana/web3.js@tp4/dist/index.production.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@rc/dist/index.production.min.js"></script>
 ```
 
-What follows is an overview of _why_ the library was re-engineered, what changes have been introduced, and how the JavaScript landscape might look across Solana in the near future.
+# Examples
 
-# Community feedback in action
+To get a feel for the new API, run and modify the live examples in the `examples/` directory. There, you will find a series of single-purpose Node scripts that demonstrate a specific feature or use case. You will also find a React application that you can run in a browser, that demonstrates being able to create, sign, and send transactions using browser wallets.
 
-We’re grateful to all of you for communicating the pain points you’ve experienced when developing Solana applications with web3.js. We’ve heard you loud and clear.
+# What's New
 
-## Tree-shaking
+Version 2.0 of the Solana JavaScript SDK is a response to many of the pain points you have communicated to us when developing Solana applications with web3.js. We’ve heard you loud and clear.
 
-The object-oriented design of the web3.js (1.x) API prevents optimizing compilers from being able to “tree-shake” unused code from your production builds. No matter how much of the web3.js API you use in your application, you have to package all of it.
+## Tree-Shakability
+
+The object-oriented design of the web3.js (1.x) API prevents optimizing compilers from being able to ‘tree-shake’ unused code from your production builds. No matter how much of the web3.js API you use in your application, you have until now been forced to package all of it.
 
 Read more about tree-shaking here:
 
@@ -67,46 +69,7 @@ One example of an API that can’t be tree-shaken is the `Connection` class. It 
 
 Needlessly large JavaScript bundles can cause issues with deployments to cloud compute providers like Cloudflare or AWS Lambda. They also impact webapp startup performance because of longer download and JavaScript parse times.
 
-## Opinionated
-
-Depending on your use case and your tolerance for certain application behaviours, you may be willing to configure your application to make a different set of tradeoffs than another developer. The default tradeoffs that we codify into the web3.js API on the other hand have to work for as large a population as possible, in the common case.
-
-The inability to customize web3.js has been a source of frustration for some:
-
--   The Mango team wanted to customize the transaction confirmation strategy, but all of that functionality is hidden away behind `confirmTransaction` – a static method of `Connection`. [Here’s the code for `confirmTransaction` on GitHub](https://github.com/solana-labs/solana-web3.js/blob/69a8ad25ef09f9e6d5bff1ffa8428d9be0bd32ac/packages/library-legacy/src/connection.ts#L3734).
--   Solana developer ‘mPaella’ [wanted us to add a feature in the RPC](https://github.com/solana-labs/solana-web3.js/issues/1143#issuecomment-1435927152) that would failover to a set of backup URLs in case the primary one failed.
--   Solana developer ‘epicfaace’ wanted first-class support for automatic time-windowed batching in the RPC transport. [Here’s their pull request](https://github.com/solana-labs/solana/pull/23628).
--   Multiple folks have expressed the need for custom retry logic for failed requests or transactions. [Here’s a pull request from ‘dafyddd’](https://github.com/solana-labs/solana/pull/11811) and [another from ‘abrkn’](https://github.com/solana-labs/solana-web3.js/issues/1041) attempting to modify retry logic to suit their individual use cases.
-
-## Lagging Behind Modern JavaScript
-
-The advance of modern JavaScript features presents an opportunity to developers of crypto applications, such as the ability to use native Ed25519 keys and to express large values as native `bigint`.
-
-The Web Incubator Community Group has advocated for the addition of Ed25519 support to the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), and support has already landed in _most_ modern JavaScript runtimes.
-
-Support for `bigint` values has also become commonplace. The older `number` primitive in JavaScript has a maximum value of 2^53 - 1, whereas Rust’s `u64` can represent values up to 2^64.
-
-## Class-Based Architecture
-
-The object oriented, class-based architecture of the legacy library causes unnecessary bundle bloat. Your application has no choice but to bundle _all_ of the functionality and dependencies of a class no matter how many methods you actually use at runtime.
-
-Class-based architecture also presents unique risks to developers who trigger the dual-package hazard. This describes a situation you can find yourself in if you build for both CommonJS and ES modules. The situation arises when two “copies” of the same class are present in the dependency tree, causing checks like `instanceof` to fail, which introduces aggravating and difficult to debug problems.
-
-Read more about dual-package hazard:
-
--   [NodeJS: Dual Package Hazard](https://nodejs.org/api/packages.html#dual-package-hazard)
-
-# The New web3.js
-
-Enter web3.js 2.0. The new API aims to deliver a re-imagined experience of building Solana applications, a high level of performance by default, and all with a minimum of code. From the ability to customize the behaviour of the library through composition, to the joy of being able to catch common errors during build time before they make it to production, we hope that you enjoy building with it as much as we’ve enjoyed creating it.
-
-## Features
-
-The new (2.0) version of `@solana/web3.js` aims to address shortcomings in the legacy library first, then goes even further.
-
-### Tree-Shaking
-
-The 2.0 library is tree-shakable, and that tree-shakeability is enforced in the CI. Anything you don’t use from web3.js 2.0 can now be discarded from your bundle by an optimizing compiler.
+Version 2.0 is fully tree-shakable and will remain so, enforced by build-time checks. Optimizing compilers can now eliminate those parts of the library that your application does not use.
 
 The new library itself is comprised of several smaller, modular packages under the `@solana` organization, including:
 
@@ -123,61 +86,73 @@ The new library itself is comprised of several smaller, modular packages under t
 
 Some of these packages are themselves composed of smaller packages. For instance, `@solana/rpc` is composed of `@solana/rpc-spec` (for core JSON RPC specification types), `@solana/rpc-api` (for the Solana-specific RPC methods), `@solana/rpc-transport-http` (for the default HTTP transport) and so on.
 
-Developers can use the default configurations within the library itself (`@solana/web3.js:2.0`) or import any number of the modular packages for additional customization.
+Developers can use the default configurations within the main library (`@solana/web3.js@rc`) or import any of its subpackages where customization-through-composition is desired.
 
-### Minimally Opinionated
+## Composable Internals
 
-The individual modules that make up web3.js are assembled in a **default** configuration reminiscent of the legacy library as part of the npm package `@solana/web3.js`, but those who wish to assemble them in different configurations may do so.
+Depending on your use case and your tolerance for certain application behaviours, you may wish to configure your application to make a different set of tradeoffs than another developer. The web3.js (1.x) API imposed a rigid set of common-case defaults on _all_ developers, some of which were impossible to change.
 
-Each package uses types and generics liberally, allowing you to inject new functionality, to make extensions to each API via composition and supertypes, and to encourage you to create higher-level opinionated abstractions of your own.
+The inability to customize web3.js up until now has been a source of frustration:
+
+-   The Mango team wanted to customize the transaction confirmation strategy, but all of that functionality is hidden away behind `confirmTransaction` – a static method of `Connection`. [Here’s the code for `confirmTransaction` on GitHub](https://github.com/solana-labs/solana-web3.js/blob/69a8ad25ef09f9e6d5bff1ffa8428d9be0bd32ac/packages/library-legacy/src/connection.ts#L3734).
+-   Solana developer ‘mPaella’ [wanted us to add a feature in the RPC](https://github.com/solana-labs/solana-web3.js/issues/1143#issuecomment-1435927152) that would failover to a set of backup URLs in case the primary one failed.
+-   Solana developer ‘epicfaace’ wanted first-class support for automatic time-windowed batching in the RPC transport. [Here’s their pull request](https://github.com/solana-labs/solana/pull/23628).
+-   Multiple folks have expressed the need for custom retry logic for failed requests or transactions. [Here’s a pull request from ‘dafyddd’](https://github.com/solana-labs/solana/pull/11811) and [another from ‘abrkn’](https://github.com/solana-labs/solana-web3.js/issues/1041) attempting to modify retry logic to suit their individual use cases.
+
+Version 2.0 exposes far more of its internals, particularly where communication with an RPC is concerned, and allows willing developers the ability to compose new implementations from the default ones that manifest a nearly limitless array of customizations.
+
+The individual modules that make up web3.js are assembled in a **default** configuration reminiscent of the legacy library as part of the npm package `@solana/web3.js@rc`, but those who wish to assemble them in different configurations may do so.
+
+Generic types are offered in numerous places, allowing you to specify new functionality, to make extensions to each API via composition and supertypes, and to encourage you to create higher-level opinionated abstractions of your own.
 
 In fact, we expect you to do so, and to open source some of those for use by others with similar needs.
 
-### Modern JavaScript
+## Modern JavaScript; Zero-Dependency
 
-The new API is built for compatibility with platform APIs to reduce our dependencies on userspace implementations that introduce supply chain risk and bundle bloat to your applications.
+The advance of modern JavaScript features presents an opportunity to developers of crypto applications, such as the ability to use native Ed25519 keys and to express large values as native `bigint`.
 
-One such example is the integration of Ed25519 `CryptoKeys` – native platform primitives for managing cryptographic keys and signatures.
+The Web Incubator Community Group has advocated for the addition of Ed25519 support to the [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API), and support has already landed in _most_ modern JavaScript runtimes.
 
-Read more about the Web Crypto API here:
+Engine support for `bigint` values has also become commonplace. The older `number` primitive in JavaScript has a maximum value of 2^53 - 1, whereas Rust’s `u64` can represent values up to 2^64.
 
--   [Mozilla Developer Docs: Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)
--   [Node JS Documentation: Web Crypto API](https://nodejs.org/api/webcrypto.html)
--   [Nieky Allen (Blog): The Web Crypto API in Action](https://medium.com/slalom-build/the-web-cryptography-api-in-action-89b2f68c602c)
+Version 2.0 eliminates userspace implementations of Ed25519 cryptography, large number polyfills, and more, in favour of custom implementations or the use of native JavaScript features, reducing the size of the library. It has no third-party dependencies.
 
-web3.js 2.0 also further eliminates dependencies such as `BN.js` by implementing large integers with `bigint`.
+## Functional Architecture
 
-### Interface-Based Architecture
+The object oriented, class-based architecture of web3.js (1.x) causes unnecessary bundle bloat. Your application has no choice but to bundle _all_ of the functionality and dependencies of a class no matter how many methods you actually use at runtime.
 
-The new library employs interfaces and types for just about _everything_, expressing most objects as data. The dual-package hazard is no longer a threat to your development; any objects compatible with an interface are usable with functions that specify that interface.
+Class-based architecture also presents unique risks to developers who trigger the dual-package hazard. This describes a situation you can find yourself in if you build for both CommonJS and ES modules. It arises when two copies of the same class are present in the dependency tree, causing checks like `instanceof` to fail. This introduces aggravating and difficult to debug problems.
 
-This interface-based approach also allows for easy customization; for extending the library’s functionality or building on top of it.
+Read more about dual-package hazard:
+
+-   [NodeJS: Dual Package Hazard](https://nodejs.org/api/packages.html#dual-package-hazard)
+
+Version 2.0 implements no classes (with the notable exception of the `SolanaError` class) and implements the thinnest possible interfaces at function boundaries.
 
 ## Statistics
 
-Consider these statistical comparisons between web3.js 2.0 and the legacy 1.x.
+Consider these statistical comparisons between version 2.0 and the legacy 1.x.
 
-|                                                                                                             | 1.x (Legacy) | 2.0        | +/- % |
-| ----------------------------------------------------------------------------------------------------------- | ------------ | ---------- | ----- |
-| Total minified size of library                                                                              | 90 KB        | 33 KB      | -63%  |
-| Total minified size of library (when runtime supports Ed25519)                                              | 90 KB        | 17 KB      | -81%  |
-| Bundled size of a web application that only executes a transfer of lamports                                 | 67 KB        | 4.5 KB     | -93%  |
-| Bundled size of a web application that only executes a transfer of lamports (when runtime supports Ed25519) | 67 KB        | 4.5 KB     | -93%  |
-| Bundled size of a worker that signs and sends a transaction                                                 | 5.4 MB       | 1.7 MB     | -68%  |
-| Performance of key generation, signing, and verifying signatures (Brave with Experimental API flag)         | 700 ops/s    | 7000 ops/s | +900% |
-| First-load size for Solana Explorer                                                                         | 311 KB       | 228 KB     | -26%  |
+|                                                                                                        | 1.x (Legacy) | 2.0        | +/- % |
+| ------------------------------------------------------------------------------------------------------ | ------------ | ---------- | ----- |
+| Total minified size of library                                                                         | 81 KB        | 57.5 KB    | -29%  |
+| Total minified size of library (when runtime supports Ed25519)                                         | 81 KB        | 53 KB      | -33%  |
+| Bundled size of a web application that executes a transfer of lamports                                 | 111 KB       | 23.9 KB    | -78%  |
+| Bundled size of a web application that executes a transfer of lamports (when runtime supports Ed25519) | 111 KB       | 18.2 KB    | -83%  |
+| Performance of key generation, signing, and verifying signatures (Brave with Experimental API flag)    | 700 ops/s    | 7000 ops/s | +900% |
+| First-load size for Solana Explorer                                                                    | 311 KB       | 228 KB     | -26%  |
 
 The re-engineered library achieves these speedups and reductions in bundle size in large part through use of modern JavaScript APIs.
 
 To validate our work, we replaced the legacy 1.x library with the new 2.0 library on the homepage of the Solana Explorer. Total first-load bundle size dropped by 26% without removing a single feature. [Here’s an X thread](https://twitter.com/callum_codes/status/1679124485218226176) by Callum McIntyre if you would like to dig deeper.
 
-# A tour of the web3.js 2.0 API
+# A Tour of the Version 2.0 API
 
 Here’s an overview of how to use the new library to interact with the RPC, configure network transports, work with Ed25519 keys, and to serialize data.
 
 ## RPC
 
-web3.js 2.0 ships with an implementation of the [JSON RPC specification](https://www.jsonrpc.org/specification) and a type spec for the [Solana JSON RPC](https://docs.solana.com/api).
+Version 2.0 ships with an implementation of the [JSON RPC specification](https://www.jsonrpc.org/specification) and a type spec for the [Solana JSON RPC](https://docs.solana.com/api).
 
 The main package responsible for managing communication with an RPC is `@solana/rpc`. However, this package makes use of more granular packages to break down the RPC logic into smaller pieces. Namely, these packages are:
 
@@ -188,11 +163,11 @@ The main package responsible for managing communication with an RPC is `@solana/
 -   `@solana/rpc-spec-types`: Shared JSON RPC specifications types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions` (described in the next section).
 -   `@solana/rpc-types`: Shared Solana RPC types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.
 
-That being said, the main `@solana/web3.js` library re-exports the `@solana/rpc` package so, going forward, we will import RPC types and functions from the library directly.
+The main `@solana/web3.js` package re-exports the `@solana/rpc` package so, going forward, we will import RPC types and functions from the library directly.
 
-### Getting Started with RPC Calls
+### RPC Calls
 
-To get started with RPC calls, you may use the `createSolanaRpc` function by providing the URL of the Solana JSON RPC server. This will create a default client for interacting with the Solana JSON RPC.
+You can use the `createSolanaRpc` function by providing the URL of a Solana JSON RPC server. This will create a default client for interacting with the Solana JSON RPC API.
 
 ```ts
 import { createSolanaRpc } from '@solana/web3.js';
@@ -205,9 +180,9 @@ const rpc = createSolanaRpc('http://127.0.0.1:8899');
 const slot = await rpc.getSlot().send();
 ```
 
-### Using Custom RPC Transports
+### Custom RPC Transports
 
-The `createSolanaRpc` function communicates with the RPC server using a default HTTP transport that should satisfy most use cases. However, you may provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a transport and use it to create a new RPC client via the `createSolanaRpcFromTransport` function.
+The `createSolanaRpc` function communicates with the RPC server using a default HTTP transport that should satisfy most use cases. You can provide your own transport or wrap an existing one to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a transport and use it to create a new RPC client via the `createSolanaRpcFromTransport` function.
 
 ```ts
 import { createSolanaRpcFromTransport, createDefaultRpcTransport } from '@solana/web3.js';
@@ -223,11 +198,11 @@ const rpc = createSolanaRpcFromTransport(transport);
 const slot = await rpc.getSlot().send();
 ```
 
-Using custom RPC transports, one can implement highly specialized functionality for leveraging multiple transports, attempting/handling retries, and more. Let's take a look at some concrete examples.
+A custom transport can implement specialized functionality such as coordinating multiple transports, implementing retries, and more. Let's take a look at some concrete examples.
 
 #### Round Robin
 
-Here’s an example of how someone might implement a “round robin” approach to leveraging multiple RPC transports within their application:
+A ‘round robin’ transport is one that distributes requests to a list of endpoints in sequence.
 
 ```ts
 import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
@@ -239,7 +214,7 @@ const transports = [
     createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' }),
 ];
 
-// Set up the round-robin factory.
+// Set up the round-robin transport.
 let nextTransport = 0;
 async function roundRobinTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
     const transport = transports[nextTransport];
@@ -247,21 +222,53 @@ async function roundRobinTransport<TResponse>(...args: Parameters<RpcTransport>)
     return await transport(...args);
 }
 
-// Create the RPC client using the round-robin transport.
+// Create an RPC client using the round-robin transport.
 const rpc = createSolanaRpcFromTransport(roundRobinTransport);
 ```
 
 #### Sharding
 
-Another example of a possible customization for RPC transports is sharding. Here’s an example:
+A sharding transport is a kind of distributing transport that sends requests to a particular server based on something about the request itself. Here’s an example that sends requests to different servers depending on the name of the method:
 
 ```ts
-// TODO: Your turn; send us a pull request with an example.
+import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
+
+// Create multiple transports.
+const transportA = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
+const transportB = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' });
+const transportC = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' });
+const transportD = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-4.com' });
+
+// Function to determine which shard to use based on the request method.
+function selectShard(method: string): RpcTransport {
+    switch (method) {
+        case 'getAccountInfo':
+        case 'getBalance':
+            return transportA;
+        case 'getTransaction':
+        case 'getRecentBlockhash':
+            return transportB;
+        case 'sendTransaction':
+            return transportC;
+        default:
+            return transportD;
+    }
+}
+
+// Create a transport that selects the correct transport given the request method name.
+async function shardingTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> {
+    const payload = args[0].payload as { method: string };
+    const selectedTransport = selectShard(payload.method);
+    return (await selectedTransport(...args)) as TResponse;
+}
+
+// Create an RPC client using the sharding transport.
+const rpc = createSolanaRpcFromTransport(shardingTransport);
 ```
 
-#### Retry Logic
+#### Retry
 
-The transport library can also be used to implement custom retry logic on any request:
+A custom transport is a good place to implement global retry logic for every request:
 
 ```ts
 import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
@@ -307,55 +314,19 @@ const rpc = createSolanaRpcFromTransport(retryingTransport);
 
 #### Failover
 
-Support for handling failover can be implemented as a first-class citizen in your application using the new transport library. Here’s an example of some failover logic integrated into a transport:
+Support for handling network failures can be implemented in the transport itself. Here’s an example of some failover logic integrated into a transport:
 
 ```ts
 // TODO: Your turn; send us a pull request with an example.
 ```
 
-#### Fanning Out
+### Augmenting/Constraining the RPC API
 
-Perhaps your application needs to make a large number of requests or needs to fan requests for different methods out to different servers. Here’s an example of an implementation that does the latter:
+Using the `createSolanaRpc` or `createSolanaRpcFromTransport` methods, we always get the same API that includes the Solana RPC API methods. Since the RPC API is described using types only, it is possible to augment those types to add your own methods.
 
-```ts
-import { createDefaultRpcTransport, createSolanaRpcFromTransport, type RpcTransport } from '@solana/web3.js';
+When constraining the API scope, keep in mind that types don’t affect bundle size. You may still like to constrain the type-spec for a variety of reasons, including reducing TypeScript noise.
 
-// Create multiple transports.
-const transportA = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-1.com' });
-const transportB = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-2.com' });
-const transportC = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-3.com' });
-const transportD = createDefaultRpcTransport({ url: 'https://mainnet-beta.my-server-4.com' });
-
-// Function to determine which shard to use based on the request method.
-function selectShard(method: string): RpcTransport {
-    switch (method) {
-        case 'getAccountInfo':
-        case 'getBalance':
-            return transportA;
-        case 'getTransaction':
-        case 'getRecentBlockhash':
-            return transportB;
-        case 'sendTransaction':
-            return transportC;
-        default:
-            return transportD;
-    }
-}
-
-const rpc = createSolanaRpcFromTransport(async <TResponse>(...args: Parameters<RpcTransport>): Promise<TResponse> => {
-    const payload = args[0].payload as { method: string };
-    const selectedTransport = selectShard(payload.method);
-    return (await selectedTransport(...args)) as TResponse;
-});
-```
-
-### Scoping the RPC API
-
-Using the `createSolanaRpc` or `createSolanaRpcFromTransport` methods, we always get the same RPC API, including all Solana RPC methods. However, since the RPC API is described using types only, it is possible to scope the API to a specific set of methods and even add your own custom methods.
-
-When reducing the API scope, keep in mind that types don’t affect bundle size. However, you may choose to scope the type-spec for a variety of reasons, including reducing TypeScript noise.
-
-#### Scoping by Cluster
+#### Constraining by Cluster
 
 If you're using a specific cluster, you may wrap your RPC URL inside a helper function like `mainnet` or `devnet` to inject that information into the RPC type system.
 
@@ -369,11 +340,11 @@ const devnetRpc = createSolanaRpc(devnet('https://api.devnet.solana.com'));
 //    ^? RpcDevnet<SolanaRpcApiDevnet>
 ```
 
-In the example above, `devnetRpc.requestAirdrop(..)` will work, but `mainnetRpc.requestAirdrop(..)` will throw a TypeScript error as `requestAirdrop` is not a valid method of the mainnet cluster.
+In the example above, `devnetRpc.requestAirdrop(..)` will work, but `mainnetRpc.requestAirdrop(..)` will raise a TypeScript error since `requestAirdrop` is not a valid method of the mainnet cluster.
 
 #### Cherry-Picking API Methods
 
-You may reduce the scope of the API’s type-spec even further so you are left only with the methods you need. The simplest way to do this is to cast the created RPC client to a type that only includes the methods you need.
+You can constrain the API’s type-spec even further so you are left only with the methods you need. The simplest way to do this is to cast the created RPC client to a type that only includes the required methods.
 
 ```ts
 import { createSolanaRpc, type Rpc, type GetAccountInfoApi, type GetMultipleAccountsApi } from '@solana/web3.js';
@@ -381,7 +352,7 @@ import { createSolanaRpc, type Rpc, type GetAccountInfoApi, type GetMultipleAcco
 const rpc = createSolanaRpc('http://127.0.0.1:8899') as Rpc<GetAccountInfoApi & GetMultipleAccountsApi>;
 ```
 
-Alternatively, you may explicitly create the RPC API using the `createSolanaRpcApi` function. You will then need to create your own transport explicitly and bind the two together using the `createRpc` function.
+Alternatively, you can explicitly create the RPC API using the `createSolanaRpcApi` function. You will need to create your own transport and bind the two together using the `createRpc` function.
 
 ```ts
 import {
@@ -401,38 +372,44 @@ const rpc = createRpc({ api, transport });
 
 Note that the `createSolanaRpcApi` function is a wrapper on top of the `createRpcApi` function which adds some Solana-specific transformers such as setting a default commitment on all methods or throwing an error when an integer overflow is detected.
 
-#### Creating your Own API Methods
+#### Creating Your Own API Methods
 
 The new library’s RPC specification supports an _infinite_ number of JSON-RPC methods with **zero increase** in bundle size.
 
-This means the library can support future additions to the official [Solana JSON RPC](https://docs.solana.com/api), or [custom RPC methods](https://www.quicknode.com/docs/ethereum/qn_fetchNFTCollectionDetails_v2) defined by some development team – for example, QuickNode or Helius.
+This means the library can support future additions to the official [Solana JSON RPC](https://docs.solana.com/api), or [custom RPC methods](https://docs.helius.dev/compression-and-das-api/digital-asset-standard-das-api/get-asset) defined by some RPC provider.
 
-Here’s an example of how a developer at QuickNode might build a custom RPC type-spec for their in-house RPC methods:
+Here’s an example of how a developer at might build a custom RPC type-spec for an RPC provider's implementation of the Metaplex Digital Asset Standard's `getAsset` method:
 
 ```ts
 import { RpcApiMethods } from '@solana/web3.js';
 
 // Define the method's response payload.
-type NftCollectionDetailsApiResponse = Readonly<{
-    address: string;
-    circulatingSupply: number;
-    description: string;
-    erc721: boolean;
-    erc1155: boolean;
-    genesisBlock: string;
-    genesisTransaction: string;
-    name: string;
-    totalSupply: number;
+type GetAssetApiResponse = Readonly<{
+    interface: DasApiAssetInterface;
+    id: Address;
+    content: Readonly<{
+        files?: readonly {
+            mime?: string;
+            uri?: string;
+            [key: string]: unknown;
+        }[];
+        json_uri: string;
+        links?: readonly {
+            [key: string]: unknown;
+        }[];
+        metadata: DasApiMetadata;
+    }>;
+    /* ...etc... */
 }>;
 
 // Set up an interface for the request method.
-interface NftCollectionDetailsApi extends RpcApiMethods {
+interface GetAssetApi extends RpcApiMethods {
     // Define the method's name, parameters and response type
-    qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
+    getAsset(args: { id: Address }): GetAssetApiResponse;
 }
 
 // Export the type spec for downstream users.
-export type QuickNodeRpcApi = NftCollectionDetailsApi;
+export type MetaplexDASApi = GetAssetApi;
 ```
 
 Here’s how a developer might use it:
@@ -441,17 +418,19 @@ Here’s how a developer might use it:
 import { createDefaultRpcTransport, createRpc, createRpcApi } from '@solana/web3.js';
 
 // Create the custom API.
-const api = createRpcApi<QuickNodeRpcApi>();
+const api = createRpcApi<MetaplexDASApi>();
 
-// Set up an HTTP transport.
-const transport = createDefaultRpcTransport({ url: 'http://127.0.0.1:8899' });
+// Set up an HTTP transport to a server that supports the custom API.
+const transport = createDefaultRpcTransport({
+    url: 'https://mainnet.helius-rpc.com/?api-key=<api_key>',
+});
 
 // Create the RPC client.
-const quickNodeRpc = createRpc({ api, transport });
-//    ^? Rpc<QuickNodeRpcApi>
+const metaplexDASRpc = createRpc({ api, transport });
+//    ^? Rpc<MetaplexDASApi>
 ```
 
-As long as a particular JSON RPC method adheres to the [official JSON RPC specification](https://www.jsonrpc.org/specification), it will be supported by web3.js 2.0.
+As long as a particular JSON RPC method adheres to the [official JSON RPC specification](https://www.jsonrpc.org/specification), it will be supported by version 2.0.
 
 ### Aborting RPC Requests
 
@@ -463,7 +442,7 @@ const pendingRequest: PendingRpcRequest<Slot> = rpc.getSlot();
 const slot: Slot = await pendingRequest.send();
 ```
 
-Since the arguments of the `getSlot` method are reserved for the request payload, the `send` method is the one that can accept additional arguments such as an `AbortSignal` to abort the request.
+The arguments of the `getSlot` method are reserved for the request payload, but the `send` method is where additional arguments such as an `AbortSignal` can be accepted in the context of the request.
 
 Aborting RPC requests can be useful for a variety of things such as setting a timeout on a request or cancelling a request when a user navigates away from a page.
 
@@ -484,7 +463,7 @@ function onUserNavigateAway() {
 const slot = await rpc.getSlot().send({ abortSignal: abortController.signal });
 ```
 
-Read more about `AbortController` at the following links:
+Read more about `AbortController` here:
 
 -   [Mozilla Developer Docs: `AbortController`](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
 -   [Mozilla Developer Docs: `AbortSignal`](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
@@ -507,7 +486,7 @@ Since the main `@solana/web3.js` library also re-exports the `@solana/rpc-subscr
 
 ### Getting Started with RPC Subscriptions
 
-To get started with RPC Subscriptions, you may use the `createSolanaRpcSubscriptions` function by providing the WebSocket URL of the Solana JSON RPC server. This will create a default client for interacting with Solana RPC Subscriptions.
+To get started with RPC Subscriptions, you may use the `createSolanaRpcSubscriptions` function by providing the WebSocket URL of a Solana JSON RPC server. This will create a default client for interacting with Solana RPC Subscriptions.
 
 ```ts
 import { createSolanaRpcSubscriptions } from '@solana/web3.js';
@@ -517,7 +496,7 @@ const rpcSubscriptions = createSolanaRpcSubscriptions('ws://127.0.0.1:8900');
 //    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi>
 ```
 
-### Subscriptions as Async Iterators
+### Subscriptions as `AsyncIterators`
 
 The new subscriptions API vends subscription notifications as an `AsyncIterator`. The `AsyncIterator` conforms to the [async iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), which allows developers to consume messages using a `for await...of` loop.
 
@@ -615,7 +594,7 @@ for await (const notification of accountNotifications) {
 }
 ```
 
-### Failed versus Aborted Subscriptions
+### Failed vs. Aborted Subscriptions
 
 It is important to note that a subscription failure behaves differently from a subscription abort. A subscription failure occurs when the subscription goes down and will throw an error that can be intercepted in a `try/catch`. However, an aborted subscription will not throw an error, but will instead exit the `for await...of` loop.
 
@@ -671,11 +650,11 @@ const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport(transport);
 //    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi>
 ```
 
-### Scoping the RPC Subscriptions API
+### Augmenting/Constraining the RPC Subscriptions API
 
-Using the `createSolanaRpcSubscriptions` or `createSolanaRpcSubscriptionsFromTransport` functions, we always get the same RPC Subscriptions API, including all Solana RPC stable subscriptions. However, since the RPC Subscriptions API is described using types only, it is possible to scope the API to a specific set of subscriptions and even add your own custom subscriptions.
+Using the `createSolanaRpcSubscriptions` or `createSolanaRpcSubscriptionsFromTransport` functions, we always get the same RPC Subscriptions API, including all Solana RPC stable subscriptions. However, since the RPC Subscriptions API is described using types only, it is possible to constrain the API to a specific set of subscriptions or even add your own custom subscriptions.
 
-#### Scoping by Cluster
+#### Constraining by Cluster
 
 If you're using a specific cluster, you may wrap your RPC URL inside a helper function like `mainnet` or `devnet` to inject that information into the RPC type system.
 
@@ -711,7 +690,7 @@ const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport_UNSTABLE(tran
 
 #### Cherry-Picking API Methods
 
-You may reduce the scope of the Subscription API even further so you are left only with the subscriptions you need. The simplest way to do this is to cast the created RPC client to a type that only includes the methods you need.
+You may constrain the scope of the Subscription API even further so you are left only with the subscriptions you need. The simplest way to do this is to cast the created RPC client to a type that only includes the methods you need.
 
 ```ts
 import {
@@ -881,7 +860,7 @@ const signedTransaction = await signTransaction([signer], transactionMessageWith
 // => "Property 'lifetimeConstraint' is missing in type"
 ```
 
-### Calibrating A Transaction Message's Compute Unit Budget
+### Calibrating a Transaction Message's Compute Unit Budget
 
 Correctly budgeting a compute unit limit for your transaction message can increase the probability that your transaction will be accepted for processing. If you don't declare a compute unit limit on your transaction, validators will assume an upper limit of 200K compute units (CU) per instruction.
 
@@ -1098,7 +1077,7 @@ const blockWithRewardsAndTransactionsResponse = await rpc
 
 ### Catching Compile-Time Bugs with TypeScript
 
-As previously mentioned, the type coverage in web3.js 2.0 allows developers to catch common bugs at compile time, rather than runtime.
+As previously mentioned, the type coverage in version 2.0 allows developers to catch common bugs at compile time, rather than runtime.
 
 In the example below, a transaction message is created and then attempted to be signed without setting the fee payer. This would result in a runtime error from the RPC, but instead you will see a type error from TypeScript as you type:
 
@@ -1297,11 +1276,11 @@ account.data.lastExtendedSlot; // Slot
 account.data.lastExtendedSlotStartIndex; // number
 ```
 
-### How does this work?
+### How Does This Work?
 
 All of this code is 100% auto-generated by Kinobi from a tree of standardized nodes that represent our programs. It contains obvious nodes such as `AccountNode` but also more specified nodes such as `ConditionalValueNode` that allows us to resolve account or argument default values conditionally.
 
-Kinobi allows us to hydrate our tree of nodes from IDLs which are typically generated by program frameworks such as [Anchor](https://github.com/coral-xyz/anchor) or [Shank](https://github.com/metaplex-foundation/shank). Additionally, visitors can be used on our nodes to expand the knowledge of our programs since the IDL itself doesn’t yet contain that level of information. Finally, special visitors called “renderers” visit our tree to generate clients such as this JavaScript client.
+Kinobi allows us to hydrate our tree of nodes from IDLs which are typically generated by program frameworks such as [Anchor](https://github.com/coral-xyz/anchor) or [Shank](https://github.com/metaplex-foundation/shank). Additionally, visitors can be used on our nodes to expand the knowledge of our programs since the IDL itself doesn’t yet contain that level of information. Finally, special visitors called ‘renderers’ visit our tree to generate clients such as this JavaScript client.
 
 Currently, there is one other renderer that generates Rust clients but this is only the beginning. In the future, you can expect renderers for auto-generated Python clients, documentation, CLIs, etc.
 
@@ -1326,12 +1305,6 @@ This [`create-solana-program`](https://github.com/solana-program/create-solana-p
 -   GitHub Actions pipelines to test your program, test your clients, and even manually publish new packages or crates for your clients. (Coming soon).
 
 When selecting the JavaScript client, you will get a fully generated library compatible with the new web3.js much like the `@solana-program` packages showcased above.
-
-# Going Forward
-
-This Technology Preview is just that, and development on the new web3.js is ongoing. We are working on tooling to accompany the new library to make building web applications on Solana easier, safer, and more scalable.
-
-Although this new approach to JavaScript tooling is drastically different than the tooling you are used to, we are confident that the customizability, performance, bundle size, and safety characteristics of the new library will make it worth the migration. We’re here to help you every step of the way, via Github issues when you find problems with the library, and on the [Solana Stack Exchange](https://sola.na/sse) when you have questions on how something is supposed to work.
 
 ## GraphQL
 
@@ -1442,15 +1415,16 @@ See more in the package’s [README on GitHub](https://github.com/solana-labs/so
 
 ## Development
 
-You can see all development of the new library and any associated tooling – such as program clients and GraphQL support – in the web3.js repository on GitHub.
+You can see all development of this library and associated GraphQL tooling in the web3.js repository on GitHub.
 
-https://github.com/solana-labs/solana-web3.js
+-   https://github.com/solana-labs/solana-web3.js
 
-Solana Labs develops these tools in public, with open source. We encourage any and all developers who would like to work on these tools to contribute to the codebase.
+You can follow along with program client generator development in the `@solana-program` org and the `@kinobi-so/kinobi` repository.
 
-In fact, we welcome anyone who experiments with the new library to submit feedback via GitHub issues (or pull requests). A steady stream of feedback on the library from you will give us the confidence to propose a release candidate sooner.
+-   https://github.com/solana-program/
+-   https://github.com/kinobi-so/kinobi
 
-You can find issues to tackle in the repository’s “issues” section, just make sure to follow the contributor guidelines!
+Solana Labs develops these tools in public, as open source. We encourage any and all developers who would like to work on these tools to contribute to the codebase.
 
 ## Thank you
 
