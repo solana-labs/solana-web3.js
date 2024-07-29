@@ -1,0 +1,22 @@
+{
+    "name": "@solana/example-rpc-transport-throttled",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "prestart": "turbo --output-logs=errors-only compile:js compile:typedefs",
+        "run:example": "tsx src/example.ts",
+        "start": "start-server-and-test '../../scripts/start-shared-test-validator.sh' http://127.0.0.1:8899/health run:example",
+        "style:fix": "pnpm eslint --fix src/* && pnpm prettier --log-level warn --ignore-unknown --write ./*",
+        "test:lint": "TERM_OVERRIDE=\"${TURBO_HASH:+dumb}\" TERM=${TERM_OVERRIDE:-$TERM} jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent --testMatch '<rootDir>src/**/*.{ts,tsx}'",
+        "test:prettier": "TERM_OVERRIDE=\"${TURBO_HASH:+dumb}\" TERM=${TERM_OVERRIDE:-$TERM} jest -c ../../node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",
+        "test:typecheck": "tsc"
+    },
+    "dependencies": {
+        "@solana/example-utils": "workspace:*",
+        "@solana/web3.js": "workspace:@solana/web3.js-experimental@*"
+    },
+    "devDependencies": {
+        "start-server-and-test": "^2.0.4",
+        "tsx": "^4.16.2"
+    }
+}
