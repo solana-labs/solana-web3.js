@@ -1,6 +1,6 @@
 import { Endian } from '../common';
 import { getF64Codec } from '../f64';
-import { assertValid } from './__setup__';
+import { assertValid, assertValidEncode } from './__setup__';
 
 const APPROX_PI = 3.141592653589793;
 const f64 = getF64Codec;
@@ -13,11 +13,17 @@ describe('getF64Codec', () => {
 
         assertValid(f64LE, 0, '0000000000000000');
         assertValid(f64BE, 0, '0000000000000000');
+        assertValidEncode(f64LE, 0n, '0000000000000000');
+        assertValidEncode(f64BE, 0n, '0000000000000000');
 
         assertValid(f64LE, 1, '000000000000f03f');
         assertValid(f64BE, 1, '3ff0000000000000');
         assertValid(f64LE, 42, '0000000000004540');
         assertValid(f64BE, 42, '4045000000000000');
+        assertValidEncode(f64LE, 1n, '000000000000f03f');
+        assertValidEncode(f64BE, 1n, '3ff0000000000000');
+        assertValidEncode(f64LE, 42n, '0000000000004540');
+        assertValidEncode(f64BE, 42n, '4045000000000000');
         assertValid(f64LE, Math.PI, '182d4454fb210940', APPROX_PI);
         assertValid(f64BE, Math.PI, '400921fb54442d18', APPROX_PI);
 

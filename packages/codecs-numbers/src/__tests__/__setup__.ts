@@ -2,7 +2,7 @@ import { Codec, createCodec, Encoder } from '@solana/codecs-core';
 import { SOLANA_ERROR__CODECS__NUMBER_OUT_OF_RANGE, SolanaError } from '@solana/errors';
 
 export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decodedNumber?: T): void => {
-    // Serialize.
+    // Encode.
     const actualBytes = codec.encode(number);
     const actualBytesBase16 = base16.decode(actualBytes);
     expect(actualBytesBase16).toBe(bytes);
@@ -16,6 +16,12 @@ export const assertValid = <T>(codec: Codec<T>, number: T, bytes: string, decode
     const deserializationWithOffset = codec.read(base16.encode(`ffffff${bytes}`), 3);
     expect(deserializationWithOffset[0]).toBe(decodedNumber ?? number);
     expect(deserializationWithOffset[1]).toBe(actualBytes.length + 3);
+};
+
+export const assertValidEncode = <T>(encoder: Encoder<T>, number: T, bytes: string): void => {
+    const actualBytes = encoder.encode(number);
+    const actualBytesBase16 = base16.decode(actualBytes);
+    expect(actualBytesBase16).toBe(bytes);
 };
 
 type RangeErrorValues = {

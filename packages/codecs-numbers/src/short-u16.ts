@@ -15,20 +15,20 @@ import { assertNumberIsBetweenForCodec } from './assertions';
  * Encodes short u16 numbers.
  * @see {@link getShortU16Codec} for a more detailed description.
  */
-export const getShortU16Encoder = (): VariableSizeEncoder<number> =>
+export const getShortU16Encoder = (): VariableSizeEncoder<bigint | number> =>
     createEncoder({
-        getSizeFromValue: (value: number): number => {
+        getSizeFromValue: (value: bigint | number): number => {
             if (value <= 0b01111111) return 1;
             if (value <= 0b0011111111111111) return 2;
             return 3;
         },
         maxSize: 3,
-        write: (value: number, bytes: Uint8Array, offset: Offset): Offset => {
+        write: (value: bigint | number, bytes: Uint8Array, offset: Offset): Offset => {
             assertNumberIsBetweenForCodec('shortU16', 0, 65535, value);
             const shortU16Bytes = [0];
             for (let ii = 0; ; ii += 1) {
                 // Shift the bits of the value over such that the next 7 bits are at the right edge.
-                const alignedValue = value >> (ii * 7);
+                const alignedValue = Number(value) >> (ii * 7);
                 if (alignedValue === 0) {
                     // No more bits to consume.
                     break;
@@ -80,5 +80,5 @@ export const getShortU16Decoder = (): VariableSizeDecoder<number> =>
  * pattern until the 3rd byte. The 3rd byte, if needed, uses
  * all 8 bits to store the last byte of the original value.
  */
-export const getShortU16Codec = (): VariableSizeCodec<number> =>
+export const getShortU16Codec = (): VariableSizeCodec<bigint | number, number> =>
     combineCodec(getShortU16Encoder(), getShortU16Decoder());
