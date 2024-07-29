@@ -15,8 +15,8 @@ import {
     type Blockhash,
     getBlockhashDecoder,
     getBlockhashEncoder,
-    getLamportsDecoder,
-    getLamportsEncoder,
+    getDefaultLamportsDecoder,
+    getDefaultLamportsEncoder,
     type LamportsUnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 
@@ -41,7 +41,7 @@ export function getSysvarRecentBlockhashesEncoder(): VariableSizeEncoder<SysvarR
     return getArrayEncoder(
         getStructEncoder([
             ['blockhash', getBlockhashEncoder()],
-            ['feeCalculator', getStructEncoder([['lamportsPerSignature', getLamportsEncoder()]])],
+            ['feeCalculator', getStructEncoder([['lamportsPerSignature', getDefaultLamportsEncoder()]])],
         ]),
     );
 }
@@ -50,7 +50,7 @@ export function getSysvarRecentBlockhashesDecoder(): VariableSizeDecoder<SysvarR
     return getArrayDecoder(
         getStructDecoder([
             ['blockhash', getBlockhashDecoder()],
-            ['feeCalculator', getStructDecoder([['lamportsPerSignature', getLamportsDecoder()]])],
+            ['feeCalculator', getStructDecoder([['lamportsPerSignature', getDefaultLamportsDecoder()]])],
         ]),
     );
 }

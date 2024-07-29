@@ -51,21 +51,21 @@ export function lamports(putativeLamports: bigint): LamportsUnsafeBeyond2Pow53Mi
 
 type ExtractAdditionalProps<T, U> = Omit<T, keyof U>;
 
-export function getLamportsEncoder(): FixedSizeEncoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
-    return getLamportsEncoderFromEncoder(getMemoizedU64Encoder());
+export function getDefaultLamportsEncoder(): FixedSizeEncoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+    return getLamportsEncoder(getMemoizedU64Encoder());
 }
 
-export function getLamportsEncoderFromEncoder<TEncoder extends NumberEncoder>(
+export function getLamportsEncoder<TEncoder extends NumberEncoder>(
     innerEncoder: TEncoder,
 ): Encoder<LamportsUnsafeBeyond2Pow53Minus1> & ExtractAdditionalProps<TEncoder, NumberEncoder> {
     return innerEncoder;
 }
 
-export function getLamportsDecoder(): FixedSizeDecoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
-    return getLamportsDecoderFromDecoder(getMemoizedU64Decoder());
+export function getDefaultLamportsDecoder(): FixedSizeDecoder<LamportsUnsafeBeyond2Pow53Minus1, 8> {
+    return getLamportsDecoder(getMemoizedU64Decoder());
 }
 
-export function getLamportsDecoderFromDecoder<TDecoder extends NumberDecoder>(
+export function getLamportsDecoder<TDecoder extends NumberDecoder>(
     innerDecoder: TDecoder,
 ): Decoder<LamportsUnsafeBeyond2Pow53Minus1> & ExtractAdditionalProps<TDecoder, NumberDecoder> {
     return transformDecoder<bigint | number, LamportsUnsafeBeyond2Pow53Minus1>(innerDecoder, value =>
@@ -73,19 +73,19 @@ export function getLamportsDecoderFromDecoder<TDecoder extends NumberDecoder>(
     ) as Decoder<LamportsUnsafeBeyond2Pow53Minus1> & ExtractAdditionalProps<TDecoder, NumberDecoder>;
 }
 
-export function getLamportsCodec(): FixedSizeCodec<
+export function getDefaultLamportsCodec(): FixedSizeCodec<
     LamportsUnsafeBeyond2Pow53Minus1,
     LamportsUnsafeBeyond2Pow53Minus1,
     8
 > {
-    return combineCodec(getLamportsEncoder(), getLamportsDecoder());
+    return combineCodec(getDefaultLamportsEncoder(), getDefaultLamportsDecoder());
 }
 
-export function getLamportsCodecFromCodec<TCodec extends NumberCodec>(
+export function getLamportsCodec<TCodec extends NumberCodec>(
     innerCodec: TCodec,
 ): Codec<LamportsUnsafeBeyond2Pow53Minus1, LamportsUnsafeBeyond2Pow53Minus1> &
     ExtractAdditionalProps<TCodec, NumberCodec> {
-    return combineCodec(getLamportsEncoderFromEncoder(innerCodec), getLamportsDecoderFromDecoder(innerCodec)) as Codec<
+    return combineCodec(getLamportsEncoder(innerCodec), getLamportsDecoder(innerCodec)) as Codec<
         LamportsUnsafeBeyond2Pow53Minus1,
         LamportsUnsafeBeyond2Pow53Minus1
     > &
