@@ -46,9 +46,9 @@ const log = createLogger('Deserialize');
 /**
  * SETUP: LOOKUP TABLE ADDRESS
  * Our fixtures include a lookup table, which we're going to use for this transaction
- * This is the address of the lookup table account from `scripts/fixtures/address-lookup-table-account.json`
+ * This is the address of the lookup table account from `scripts/fixtures/example-deserialize-transaction-address-lookup-table.json`
  */
-const LOOKUP_TABLE_ADDRESS = '2JPQuT3dHtPjrdcbUQyrrT4XYRYaWpWfmAJ54SUapg6n' as Address;
+const LOOKUP_TABLE_ADDRESS = 'DUbh3qSh4Vvxa52LGtCBCcuvAEMh62FLNkupnsBjhrCc' as Address;
 log.info({ address: LOOKUP_TABLE_ADDRESS }, '[setup] Setting lookup table address');
 
 /**
