@@ -36,26 +36,14 @@ import { fromLegacyKeypair } from '@solana/compat';
 const { privateKey, publicKey } = await fromLegacyKeypair(Keypair.generate());
 ```
 
-### `fromVersionedTransactionWithBlockhash()`
+### `fromVersionedTransaction`
 
-This can be used to convert a legacy `VersionedTransaction` object that uses a blockhash lifetime to a `Transaction` object. The returned transaction fulfils both the `ITransactionWithFeePayer` and `ITransactionWithBlockhash` interfaces.
+This can be used to convert a legacy `VersionedTransaction` object to a `Transaction` object.
 
 ```ts
-import { fromVersionedTransactionWithBlockhash } from '@solana/compat';
+import { fromVersionedTransaction } from '@solana/compat';
 
 // imagine a function that returns a legacy `VersionedTransaction`
 const legacyVersionedTransaction = getMyLegacyVersionedTransaction();
-const transaction = fromVersionedTransactionWithBlockhash(legacyVersionedTransaction);
-```
-
-### `fromVersionedTransactionWithDurableNonce()`
-
-This can be used to convert a legacy `VersionedTransaction` object that uses a durable nonce lifetime to a `Transaction` object. The returned transaction fulfils both the `ITransactionWithFeePayer` and `IDurableNonceTransaction` interfaces.
-
-```ts
-import { fromVersionedTransactionWithDurableNonce } from '@solana/compat';
-
-// imagine a function that returns a legacy `VersionedTransaction`
-const legacyVersionedTransaction = getMyLegacyVersionedTransaction();
-const transaction = fromVersionedTransactionWithDurableNonce(legacyVersionedTransaction);
+const transaction = fromVersionedTransaction(legacyVersionedTransaction);
 ```
