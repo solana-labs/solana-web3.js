@@ -87,14 +87,16 @@ async function waitForSlot(
   minSlot: number = 0,
 ): Promise<void> {
   while ((await connection.getSlot()) <= minSlot) {
-    // If the test validator is newly spawned, it may not have formed a root yet. Since we're
-    // going to have to wait up to 32 slots for a root, let's increase the timeout of this test.
-    this.timeout(
-      2000 +
-        400 * // ms per slot
-          (32 + minSlot) * // Max confirmations
-          1.25, // Fudge factor to leave time for rest of test
-    );
+    if (process.env.TEST_LIVE) {
+      // If the test validator is newly spawned, it may not have formed a root yet. Since we're
+      // going to have to wait up to 32 slots for a root, let's increase the timeout of this test.
+      this.timeout(
+        2000 +
+          400 * // ms per slot
+            (32 + minSlot) * // Max confirmations
+            1.25, // Fudge factor to leave time for rest of test
+      );
+    }
     continue;
   }
 }
@@ -2336,7 +2338,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
@@ -2516,7 +2518,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
@@ -2625,7 +2627,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
@@ -3130,7 +3132,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
@@ -3279,7 +3281,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
@@ -3436,7 +3438,7 @@ describe('Connection', function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
-      value: 1,
+      value: 2,
     });
 
     await waitForSlot.call(this, connection, 1);
