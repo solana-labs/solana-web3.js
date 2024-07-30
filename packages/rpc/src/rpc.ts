@@ -4,7 +4,11 @@ import { ClusterUrl } from '@solana/rpc-types';
 
 import type { RpcFromTransport, SolanaRpcApiFromTransport } from './rpc-clusters';
 import { DEFAULT_RPC_CONFIG } from './rpc-default-config';
-import { createDefaultRpcTransport, DefaultRpcTransportConfig } from './rpc-transport';
+import { createDefaultRpcTransport } from './rpc-transport';
+
+type DefaultRpcTransportConfig<TClusterUrl extends ClusterUrl> = Parameters<
+    typeof createDefaultRpcTransport<TClusterUrl>
+>[0];
 
 /** Creates a new Solana RPC using the default decorated HTTP transport. */
 export function createSolanaRpc<TClusterUrl extends ClusterUrl>(
