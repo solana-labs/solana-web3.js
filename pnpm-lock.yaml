@@ -200,6 +200,19 @@ importers:
         specifier: ^5.3.5
         version: 5.3.5(@types/node@22.0.0)(terser@5.18.0)
 
+  examples/rpc-custom-api:
+    dependencies:
+      '@solana/example-utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@solana/web3.js':
+        specifier: workspace:@solana/web3.js-experimental@*
+        version: link:../../packages/library
+    devDependencies:
+      tsx:
+        specifier: ^4.16.2
+        version: 4.16.2
+
   examples/rpc-transport-throttled:
     dependencies:
       '@solana/example-utils':
