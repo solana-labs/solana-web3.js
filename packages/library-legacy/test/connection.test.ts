@@ -81,6 +81,23 @@ import {encodeData} from '../src/instruction';
 use(chaiAsPromised);
 use(sinonChai);
 
+async function waitForSlot(
+  this: Mocha.Context,
+  connection: Connection,
+  minSlot: number = 0,
+): Promise<void> {
+  while ((await connection.getSlot()) <= minSlot) {
+    // If the test validator is newly spawned, it may not have formed a root yet. Since we're
+    // going to have to wait up to 32 slots for a root, let's increase the timeout of this test.
+    this.timeout(
+      2000 +
+        400 * // ms per slot
+          (32 + minSlot) * // Max confirmations
+          1.25, // Fudge factor to leave time for rest of test
+    );
+    continue;
+  }
+}
 async function mockNonceAccountResponse(
   nonceAccountPubkey: string,
   nonceValue: string,
@@ -2313,7 +2330,7 @@ describe('Connection', function () {
     expect(count).to.be.at.least(0);
   });
 
-  it('get confirmed signatures for address', async () => {
+  it('get confirmed signatures for address', async function () {
     const connection = new Connection(url);
 
     await mockRpcResponse({
@@ -2322,9 +2339,7 @@ describe('Connection', function () {
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getConfirmedBlock',
@@ -2495,7 +2510,7 @@ describe('Connection', function () {
     }
   });
 
-  it('get signatures for address', async () => {
+  it('get signatures for address', async function () {
     const connection = new Connection(url);
 
     await mockRpcResponse({
@@ -2504,9 +2519,7 @@ describe('Connection', function () {
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getConfirmedBlock',
@@ -2608,16 +2621,14 @@ describe('Connection', function () {
     }
   });
 
-  it('get parsed confirmed transactions', async () => {
+  it('get parsed confirmed transactions', async function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getConfirmedBlock',
@@ -3115,16 +3126,14 @@ describe('Connection', function () {
     expect(resultCOSlotRange.lastSlot).to.equal(lastSlot);
   });
 
-  it('get transaction', async () => {
+  it('get transaction', async function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getBlock',
@@ -3266,16 +3275,14 @@ describe('Connection', function () {
     expect(nullResponse).to.be.null;
   });
 
-  it('get confirmed transaction', async () => {
+  it('get confirmed transaction', async function () {
     await mockRpcResponse({
       method: 'getSlot',
       params: [],
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getConfirmedBlock',
@@ -3432,9 +3439,7 @@ describe('Connection', function () {
       value: 1,
     });
 
-    while ((await connection.getSlot()) <= 0) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     await mockRpcResponse({
       method: 'getBlock',
@@ -3887,9 +3892,7 @@ describe('Connection', function () {
         value: 1,
       });
 
-      while ((await connection.getSlot()) <= 0) {
-        continue;
-      }
+      await waitForSlot.call(this, connection);
     });
 
     it('gets the genesis block', async function () {
@@ -4235,9 +4238,7 @@ describe('Connection', function () {
         value: 1,
       });
 
-      while ((await connection.getSlot()) <= 0) {
-        continue;
-      }
+      await waitForSlot.call(this, connection);
     });
 
     it('gets the genesis block', async function () {
@@ -4394,7 +4395,7 @@ describe('Connection', function () {
     });
   });
 
-  it('get blocks between two slots', async () => {
+  it('get blocks between two slots', async function () {
     await mockRpcResponse({
       method: 'getBlocks',
       params: [0, 9],
@@ -4411,9 +4412,7 @@ describe('Connection', function () {
       value: 9,
     });
 
-    while ((await connection.getSlot()) <= 1) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     const [startSlot, latestSlot] = await Promise.all([
       connection.getFirstAvailableBlock(),
@@ -4423,9 +4422,9 @@ describe('Connection', function () {
     expect(blocks).to.have.length(latestSlot - startSlot + 1);
     expect(blocks[0]).to.eq(startSlot);
     expect(blocks).to.contain(latestSlot);
-  }).timeout(20 * 1000);
+  });
 
-  it('get blocks from starting slot', async () => {
+  it('get blocks from starting slot', async function () {
     await mockRpcResponse({
       method: 'getBlocks',
       params: [0],
@@ -4446,9 +4445,7 @@ describe('Connection', function () {
       value: 20,
     });
 
-    while ((await connection.getSlot()) <= 1) {
-      continue;
-    }
+    await waitForSlot.call(this, connection, 1);
 
     const startSlot = await connection.getFirstAvailableBlock();
     const [blocks, latestSlot] = await Promise.all([
@@ -4462,7 +4459,7 @@ describe('Connection', function () {
     }
     expect(blocks[0]).to.eq(startSlot);
     expect(blocks).to.contain(latestSlot);
-  }).timeout(20 * 1000);
+  });
 
   describe('get block signatures', function () {
     beforeEach(async function () {
@@ -4472,9 +4469,7 @@ describe('Connection', function () {
         value: 1,
       });
 
-      while ((await connection.getSlot()) <= 0) {
-        continue;
-      }
+      await waitForSlot.call(this, connection);
     });
 
     it('gets the genesis block', async function () {
