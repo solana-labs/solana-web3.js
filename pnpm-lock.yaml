@@ -757,8 +757,8 @@ importers:
         specifier: ^18.0.0
         version: 18.0.0
       sinon-chai:
-        specifier: ^3.7.0
-        version: 3.7.0(chai@5.1.1)(sinon@18.0.0)
+        specifier: ^4.0.0
+        version: 4.0.0(chai@5.1.1)(sinon@18.0.0)
       start-server-and-test:
         specifier: ^2.0.4
         version: 2.0.4
@@ -8088,10 +8088,10 @@ packages:
     resolution: {integrity: sha512-iuh+gPf28RkltuJC7W5MRi6XAjTDCAPC/prJUpQoG4vIP3MJZ+GTydVnodXA7pwvTKb2cA0m9OFZW/cdWy/I/w==}
     engines: {node: '>=6'}
 
-  sinon-chai@3.7.0:
-    resolution: {integrity: sha512-mf5NURdUaSdnatJx3uhoBOrY9dtL19fiOtAdT1Azxg3+lNJFiuN0uzaU3xX1LeAfL17kHQhTAJgpsfhbMJMY2g==}
+  sinon-chai@4.0.0:
+    resolution: {integrity: sha512-cWqO7O2I4XfJDWyWElAQ9D/dtdh5Mo0RHndsfiiYyjWnlPzBJdIvjCVURO4EjyYaC3BjV+ISNXCfTXPXTEIEWA==}
     peerDependencies:
-      chai: ^4.0.0
+      chai: ^5.0.0
       sinon: '>=4.0.0'
 
   sinon@18.0.0:
@@ -17689,7 +17689,7 @@ snapshots:
       figures: 2.0.0
       pkg-conf: 2.1.0
 
-  sinon-chai@3.7.0(chai@5.1.1)(sinon@18.0.0):
+  sinon-chai@4.0.0(chai@5.1.1)(sinon@18.0.0):
     dependencies:
       chai: 5.1.1
       sinon: 18.0.0

@@ -116,7 +116,7 @@
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^24.0.0",
     "sinon": "^18.0.0",
-    "sinon-chai": "^3.7.0",
+    "sinon-chai": "^4.0.0",
     "start-server-and-test": "^2.0.4",
     "tslib": "^2.6.3",
     "tsx": "^4.16.2",
