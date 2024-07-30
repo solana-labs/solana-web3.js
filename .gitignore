@@ -1,29 +1,22 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-node_modules
-.pnp
-.pnp.js
-
-# misc
+# IDE & OS specific
 .DS_Store
-*.pem
+.idea
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# turbo
-.turbo
-
-# Sapling SCM
-.sl
-
-# `solana-test-validator`
-.agave/
+# Validator
+.agave
 test-ledger/
 
-# GitHub Pages deploy directory
-.ghpages-deploy
+# Logs
+logs
+*.log
+
+# Dependencies
+node_modules/
+
+# VIM swap files
+*.sw*
+
+# Build artifacts
+declarations/
+doc/
+lib/

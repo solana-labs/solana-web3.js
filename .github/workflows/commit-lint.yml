@@ -1,10 +1,11 @@
-name: Commit lint (legacy)
+name: Commitlint (v1.x)
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - maintenance/v1.x
     paths:
-      - ./packages/library-legacy/
+      - ./src/
 
 jobs:
   web3-commit-lint:
@@ -35,6 +36,6 @@ jobs:
 
       - name: Check that commit message conforms to Semantic Release format
         if: ${{ github.event_name == 'pull_request' }}
-        run: bash commitlint.sh ./packages/library-legacy/
+        run: bash commitlint.sh ./src/
         env:
           COMMIT_RANGE: ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
