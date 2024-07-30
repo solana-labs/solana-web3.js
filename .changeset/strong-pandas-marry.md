@@ -1,5 +1,5 @@
 ---
-"@solana/web3.js-experimental": patch
+"@solana/web3.js": patch
 "@solana/rpc-subscriptions": patch
 "@solana/rpc": patch
 ---

@@ -53,7 +53,7 @@ jobs:
         if: always() && steps.start-test-validator.outcome == 'success'
         run: kill ${{ steps.start-test-validator.outputs.pid }}
 
-      - name: Upload Experimental Library Bundle
+      - name: Upload Library Bundle
         if: matrix.node == 'current'
         uses: actions/upload-artifact@v4
         with:

@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
     branches:
       - master
+      - maintenance/*
   push:
     branches:
       - master
+      - maintenance/*
 
 env:
   # Among other things, opts out of Turborepo telemetry
@@ -18,7 +20,32 @@ env:
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
-  compile-github-pages-and-publish:
+  compile-v1-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: maintenance/v1.x
+
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
+
+      - name: Compile docs
+        run: pnpm compile:docs
+
+      - name: Assemble Deploy Directory
+        run: |
+          mkdir -p .ghpages-deploy
+          mv ./docs/* .ghpages-deploy
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ghpages-deploy-artifacts-v1-docs
+          path: .ghpages-deploy
+          retention-days: 1
+
+  compile-github-pages:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,11 +59,31 @@ jobs:
         env:
           REACT_EXAMPLE_APP_BASE_PATH: /solana-web3.js/example/
 
-      - name: Assemble deploy directory
+      - name: Assemble Deploy Directory
         run: |
           mkdir -p .ghpages-deploy
-          cp -r ./packages/library-legacy/doc/* .ghpages-deploy
-          cp -r ./examples/react-app/dist/ .ghpages-deploy/example/
+          mv ./examples/react-app/dist/ .ghpages-deploy/example/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ghpages-deploy-artifacts
+          path: .ghpages-deploy
+          retention-days: 1
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [compile-v1-docs, compile-github-pages]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        uses: ./.github/workflows/actions/install-dependencies
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ghpages-deploy-artifacts*
+          merge-multiple: true
 
       - name: Deploy to Github Pages
         uses: peaceiris/actions-gh-pages@v3

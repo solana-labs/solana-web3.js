@@ -25,7 +25,7 @@
 "@solana/accounts": patch
 "@solana/programs": patch
 "@solana/rpc-spec": patch
-"@solana/web3.js-experimental": patch
+"@solana/web3.js": patch
 "@solana/options": patch
 "@solana/rpc-api": patch
 "@solana/signers": patch

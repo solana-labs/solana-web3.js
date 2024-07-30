@@ -1,5 +1,5 @@
 ---
-'@solana/web3.js-experimental': major
+'@solana/web3.js': major
 ---
 
 This version of the `@solana/web3.js` Technology Preview fixes a bug with the default RPC transport, adds a utility that you can use to get an estimate of a transaction message's compute unit cost, and introduces `@solana/react` hooks for interacting with Wallet Standard wallets.
