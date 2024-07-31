@@ -1,5 +1,55 @@
 # @solana/react
 
+## 2.0.0-rc.0
+
+### Minor Changes
+
+-   [#2928](https://github.com/solana-labs/solana-web3.js/pull/2928) [`bac3747`](https://github.com/solana-labs/solana-web3.js/commit/bac37479dcfad3da86ccd01da5095759f449eb3d) Thanks [@steveluscher](https://github.com/steveluscher)! - Added a `useSignIn` hook that, given a `UiWallet` or `UiWalletAccount`, returns a function that you can call to trigger a wallet's [&lsquo;Sign In With Solana&rsquo;](https://phantom.app/learn/developers/sign-in-with-solana) feature.
+
+    #### Example
+
+    ```tsx
+    import { useSignIn } from '@solana/react';
+
+    function SignInButton({ wallet }) {
+        const csrfToken = useCsrfToken();
+        const signIn = useSignIn(wallet);
+        return (
+            <button
+                onClick={async () => {
+                    try {
+                        const { account, signedMessage, signature } = await signIn({
+                            requestId: csrfToken,
+                        });
+                        // Authenticate the user, typically on the server, by verifying that
+                        // `signedMessage` was signed by the person who holds the private key for
+                        // `account.publicKey`.
+                        //
+                        // Authorize the user, also on the server, by decoding `signedMessage` as the
+                        // text of a Sign In With Solana message, verifying that it was not modified
+                        // from the values your application expects, and that its content is sufficient
+                        // to grant them access.
+                        window.alert(`You are now signed in with the address ${account.address}`);
+                    } catch (e) {
+                        console.error('Failed to sign in', e);
+                    }
+                }}
+            >
+                Sign In
+            </button>
+        );
+    }
+    ```
+
+### Patch Changes
+
+-   Updated dependencies [[`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4)]:
+    -   @solana/errors@2.0.0-rc.0
+    -   @solana/signers@2.0.0-rc.0
+    -   @solana/transactions@2.0.0-rc.0
+    -   @solana/addresses@2.0.0-rc.0
+    -   @solana/keys@2.0.0-rc.0
+
 ## 2.0.0-preview.4
 
 ### Patch Changes

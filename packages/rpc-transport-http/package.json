@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-transport-http",
-    "version": "2.0.0-rc",
+    "version": "2.0.0-rc.0",
     "description": "An RPC transport that uses HTTP requests",
     "exports": {
         "browser": {
