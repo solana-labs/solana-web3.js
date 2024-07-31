@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - maintenance/v1.x
-    paths:
-      - ./src/
 
 jobs:
   web3-commit-lint:
