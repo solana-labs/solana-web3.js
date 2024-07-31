@@ -1,7 +1,5 @@
 # Examples
 
-These examples pertain to the 2.0 line of `@solana/web3.js`. Follow these steps to run them.
-
 ## One-time setup
 
 Start by installing all dependencies.

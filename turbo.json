@@ -45,20 +45,6 @@
             ],
             "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
         },
-        "publish-packages-legacy": {
-            "cache": false,
-            "dependsOn": [
-                "compile:docs",
-                "compile:js",
-                "compile:typedefs",
-                "test:lint",
-                "test:live-with-test-validator",
-                "test:prettier",
-                "test:typecheck",
-                "test:unit:node"
-            ],
-            "passThroughEnv": ["GH_TOKEN", "NPM_TOKEN"]
-        },
         "style:fix": {
             "inputs": ["$TURBO_DEFAULT$", "*"],
             "outputs": ["*"]
@@ -102,62 +88,8 @@
             "inputs": ["$TURBO_DEFAULT$", "index.html", "tsconfig.*", "vite.config.ts", "public/**", "src/**"],
             "outputs": ["dist/**"]
         },
-        "@solana/web3.js#build": {
-            "dependsOn": [
-                "clean",
-                "compile:docs",
-                "compile:js",
-                "compile:typedefs",
-                "test:lint",
-                "test:live-with-test-validator",
-                "test:prettier",
-                "test:typecheck",
-                "test:unit:node"
-            ],
-            "outputs": ["doc/**", "declarations/**", "lib/**"]
-        },
-        "@solana/web3.js#clean": {
-            "outputs": ["doc/**", "declarations/**", "lib/**"]
-        },
-        "@solana/web3.js#compile:docs": {
-            "dependsOn": ["clean"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**"],
-            "outputs": ["doc/**"]
-        },
-        "@solana/web3.js#compile:js": {
-            "dependsOn": ["clean", "^compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "babel.config.json", "rollup.config.mjs", "tsconfig.*", "src/**"],
-            "outputs": ["lib/**"]
-        },
-        "@solana/web3.js#compile:typedefs": {
-            "dependsOn": ["clean", "^compile:typedefs"],
-            "inputs": [
-                "$TURBO_DEFAULT$",
-                "rollup.config.types.mjs",
-                "scripts/typegen.sh",
-                "src/**",
-                "test/__shadow-jest-types.d.ts",
-                "tsconfig.*"
-            ],
-            "outputs": ["declarations/**", "lib/**/*.d.ts"]
-        },
-        "@solana/web3.js#test:lint": {
-            "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
-        },
-        "@solana/web3.js#test:live-with-test-validator": {
-            "dependsOn": ["compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "../../.agave/**/version.yml", "src/**", "test/**"]
-        },
-        "@solana/web3.js#test:typecheck": {
-            "dependsOn": ["compile:typedefs"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**", "tsconfig.*"]
-        },
-        "@solana/web3.js#test:unit:node": {
-            "dependsOn": ["compile:js"],
-            "inputs": ["$TURBO_DEFAULT$", "src/**", "test/**"]
-        },
         "//#compile:ghpages": {
-            "dependsOn": ["@solana/example-react-app#compile:js", "@solana/web3.js#compile:docs"]
+            "dependsOn": ["@solana/example-react-app#compile:js"]
         }
     },
     "ui": "stream"

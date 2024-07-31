@@ -1,5 +1,5 @@
 {
-    "name": "@solana/web3.js-experimental",
+    "name": "@solana/web3.js",
     "version": "2.0.0-preview.4",
     "description": "Solana Javascript API",
     "exports": {
@@ -40,8 +40,8 @@
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",
         "prepublishOnly": "pnpm pkg delete devDependencies",
-        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-preview} --access public --no-git-checks",
-        "publish-packages": "sed -i 's/@solana\\/web3\\.js-experimental/@solana\\/web3\\.js/g' package.json && sed -i 's/@solana\\/web3\\.js/@solana\\/web3\\.js-bak/g' ../library-legacy/package.json && pnpm prepublishOnly && pnpm publish-impl && git reset --hard",
+        "publish-impl": "npm view $npm_package_name@$npm_package_version > /dev/null 2>&1 || pnpm publish --tag ${PUBLISH_TAG:-canary} --access public --no-git-checks",
+        "publish-packages": "pnpm prepublishOnly && pnpm publish-impl",
         "style:fix": "pnpm eslint --fix src/* && pnpm prettier --log-level warn --ignore-unknown --write ./*",
         "test:lint": "TERM_OVERRIDE=\"${TURBO_HASH:+dumb}\" TERM=${TERM_OVERRIDE:-$TERM} jest -c ../../node_modules/@solana/test-config/jest-lint.config.ts --rootDir . --silent",
         "test:prettier": "TERM_OVERRIDE=\"${TURBO_HASH:+dumb}\" TERM=${TERM_OVERRIDE:-$TERM} jest -c ../../node_modules/@solana/test-config/jest-prettier.config.ts --rootDir . --silent",

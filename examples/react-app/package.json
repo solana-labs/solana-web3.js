@@ -18,7 +18,7 @@
         "@radix-ui/themes": "^3.0.5",
         "@solana-program/system": "^0.4.0",
         "@solana/react": "workspace:*",
-        "@solana/web3.js": "workspace:@solana/web3.js-experimental@*",
+        "@solana/web3.js": "workspace:*",
         "@wallet-standard/core": "pre",
         "@wallet-standard/react": "pre",
         "react": "^18.3.0",

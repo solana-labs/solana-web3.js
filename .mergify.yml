@@ -35,10 +35,15 @@ pull_request_rules:
   - name: Automatic merge (squash) on CI success
     conditions:
       - and:
-          - status-success=all-web3-checks
           - or:
-              - -files~=^packages/library-legacy/
-              - status-success="Validate commit message"
+              - and:
+                  - base=maintenance/v1.x
+                  - and:
+                      - status-success=build-and-test
+                      - status-success="Validate commit message"
+              - and:
+                  - base!=maintenance/v1.x
+                  - status-success=all-web3-checks
           - label=automerge
           - label!=no-automerge
     actions:

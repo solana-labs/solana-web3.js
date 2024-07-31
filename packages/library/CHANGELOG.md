@@ -1,4 +1,4 @@
-# @solana/web3.js-experimental
+# @solana/web3.js
 
 ## 2.0.0-preview.4
 

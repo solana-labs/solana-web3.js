@@ -5,7 +5,8 @@
 
 version: 2
 updates:
-  - package-ecosystem: 'npm'
+  - target-branch: 'maintenance/v1.x'
+    package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: daily
@@ -15,4 +16,11 @@ updates:
       - 'automerge'
     commit-message:
       prefix: 'chore:'
-    open-pull-requests-limit: 3
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '01:00'
+      timezone: America/Los_Angeles
+    labels:
+      - 'automerge'
