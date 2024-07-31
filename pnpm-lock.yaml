@@ -112,7 +112,7 @@ importers:
         version: 10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@22.0.0)(typescript@5.5.4)
       tsup:
         specifier: ^8.2.3
-        version: 8.2.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5)
+        version: 8.2.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.3)(typescript@5.5.4)(yaml@2.4.5)
       turbo:
         specifier: ^2.0.10
         version: 2.0.10
@@ -139,8 +139,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       tsx:
-        specifier: ^4.16.2
-        version: 4.16.2
+        specifier: ^4.16.3
+        version: 4.16.3
 
   examples/react-app:
     dependencies:
@@ -210,8 +210,8 @@ importers:
         version: link:../../packages/library
     devDependencies:
       tsx:
-        specifier: ^4.16.2
-        version: 4.16.2
+        specifier: ^4.16.3
+        version: 4.16.3
 
   examples/rpc-transport-throttled:
     dependencies:
@@ -226,8 +226,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       tsx:
-        specifier: ^4.16.2
-        version: 4.16.2
+        specifier: ^4.16.3
+        version: 4.16.3
 
   examples/transfer-lamports:
     dependencies:
@@ -245,8 +245,8 @@ importers:
         specifier: ^2.0.4
         version: 2.0.4
       tsx:
-        specifier: ^4.16.2
-        version: 4.16.2
+        specifier: ^4.16.3
+        version: 4.16.3
 
   examples/utils:
     dependencies:
@@ -6363,8 +6363,8 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  tsx@4.16.2:
-    resolution: {integrity: sha512-C1uWweJDgdtX2x600HjaFaucXTilT7tgUZHbOE4+ypskZ1OP8CRCSDkCxG6Vya9EwaFIVagWwpaVAn5wzypaqQ==}
+  tsx@4.16.3:
+    resolution: {integrity: sha512-MP8AEUxVnboD2rCC6kDLxnpDBNWN9k3BSVU/0/nNxgm70bPBnfn+yCKcnOsIVPQwdkbKYoFOlKjjWZWJ2XCXUg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -12345,13 +12345,13 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.2)(yaml@2.4.5):
+  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.3)(yaml@2.4.5):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
       jiti: 1.21.0
       postcss: 8.4.39
-      tsx: 4.16.2
+      tsx: 4.16.3
       yaml: 2.4.5
 
   postcss@8.4.39:
@@ -12956,7 +12956,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.2.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5):
+  tsup@8.2.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.3)(typescript@5.5.4)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -12968,7 +12968,7 @@ snapshots:
       globby: 11.1.0
       joycon: 3.1.1
       picocolors: 1.0.1
-      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.2)(yaml@2.4.5)
+      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.39)(tsx@4.16.3)(yaml@2.4.5)
       resolve-from: 5.0.0
       rollup: 4.19.0
       source-map: 0.8.0-beta.0
@@ -12989,7 +12989,7 @@ snapshots:
       tslib: 1.14.1
       typescript: 5.5.4
 
-  tsx@4.16.2:
+  tsx@4.16.3:
     dependencies:
       esbuild: 0.21.5
       get-tsconfig: 4.7.5

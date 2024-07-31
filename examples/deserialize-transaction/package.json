@@ -19,6 +19,6 @@
     },
     "devDependencies": {
         "start-server-and-test": "^2.0.4",
-        "tsx": "^4.16.2"
+        "tsx": "^4.16.3"
     }
 }
