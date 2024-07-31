@@ -1,0 +1,29 @@
+name: Lint, Build, and Test
+description: Generates type definitions, bundles the code, runs all tests, and enforces code style.
+
+runs:
+  using: composite
+  steps:
+    - name: Enforce Code Formatting
+      shell: bash
+      run: pnpm test:prettier
+
+    - name: Compile Types
+      shell: bash
+      run: pnpm compile:typedefs
+
+    - name: Enforce Lint
+      shell: bash
+      run: pnpm test:lint
+
+    - name: Compile JavaScript
+      shell: bash
+      run: pnpm compile:js
+
+    - name: Run Unit Tests
+      shell: bash
+      run: pnpm test:unit
+
+    - name: Run Integration Tests
+      shell: bash
+      run: pnpm test:live-with-test-validator

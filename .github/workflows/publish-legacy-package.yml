@@ -1,21 +1,12 @@
-name: Publish Legacy Package
+name: Publish v1.x Package
 
 on:
   workflow_dispatch:
     branches:
-      - master
+      - maintenance/v1.x
   push:
     branches:
-      - master
-
-env:
-  # Among other things, opts out of Turborepo telemetry
-  # See https://consoledonottrack.com/
-  DO_NOT_TRACK: '1'
-  # Enables Turborepo Remote Caching.
-  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+      - maintenance/v1.x
 
 jobs:
   build-and-publish-to-npm:
@@ -37,8 +28,11 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Build, Test, and Publish (force)
-        run: pnpm turbo run publish-packages-legacy --concurrency=95.84% --filter=@solana/web3.js --force=true
+      - name: Lint, Build, and Test
+        uses: ./.github/workflows/actions/lint-build-and-test
+
+      - name: Publish
+        run: pnpm publish-packages
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

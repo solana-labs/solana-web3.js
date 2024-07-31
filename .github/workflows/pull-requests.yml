@@ -3,23 +3,7 @@ name: Pull requests
 on:
   pull_request:
 
-env:
-  # Among other things, opts out of Turborepo telemetry
-  # See https://consoledonottrack.com/
-  DO_NOT_TRACK: '1'
-  # Enables Turborepo Remote Caching.
-  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-
 jobs:
-  # Needed for grouping check-web3 strategies into one check for mergify
-  all-web3-checks:
-    runs-on: ubuntu-latest
-    needs: build-and-test
-    steps:
-      - run: echo "Done"
-
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -29,7 +13,7 @@ jobs:
           - 'current'
           - 'lts/*'
 
-    name: Build & Test on Node ${{ matrix.node }}
+    name: Lint, Build, and Test on Node ${{ matrix.node }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,21 +27,15 @@ jobs:
         id: start-test-validator
         uses: ./.github/workflows/actions/setup-validator
 
-      - name: Build & Test
-        run: pnpm build
+      - name: Lint, Build, and Test
+        uses: ./.github/workflows/actions/lint-build-and-test
 
-      - name: Build GitHub Pages
-        run: pnpm turbo run compile:ghpages --concurrency=95.84%
+      - name: Build Docs
+        description: >
+          We run this step in the context of PRs to make sure that the change does not prevent the 
+          docs from being built
+        run: pnpm compile:docs
 
       - name: Stop Test Validator
         if: always() && steps.start-test-validator.outcome == 'success'
         run: kill ${{ steps.start-test-validator.outputs.pid }}
-
-      - name: Upload Experimental Library Bundle
-        if: matrix.node == 'current'
-        uses: actions/upload-artifact@v4
-        with:
-          name: library-dist
-          path: |
-            ./packages/library/dist/
-            ./packages/library/package.json
