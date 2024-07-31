@@ -39,7 +39,7 @@ pull_request_rules:
               - and:
                   - base=maintenance/v1.x
                   - and:
-                      - status-success=build-and-test
+                      - status-success~=^Lint, Build, and Test
                       - status-success="Validate commit message"
               - and:
                   - base!=maintenance/v1.x
