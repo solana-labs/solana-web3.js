@@ -31,9 +31,8 @@ jobs:
         uses: ./.github/workflows/actions/lint-build-and-test
 
       - name: Build Docs
-        description: >
-          We run this step in the context of PRs to make sure that the change does not prevent the 
-          docs from being built
+        #  We run this step in the context of PRs to make sure that the change does not prevent
+        #  the docs from being built.
         run: pnpm compile:docs
 
       - name: Stop Test Validator
