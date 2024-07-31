@@ -116,7 +116,7 @@ importers:
         version: 10.0.6
       '@types/mz':
         specifier: ^2.7.4
-        version: 2.7.4
+        version: 2.7.8
       '@types/node-fetch':
         specifier: '2'
         version: 2.1.0
@@ -3674,6 +3674,9 @@ packages:
 
   '@types/mz@2.7.4':
     resolution: {integrity: sha512-Zs0imXxyWT20j3Z2NwKpr0IO2LmLactBblNyLua5Az4UHuqOQ02V3jPTgyKwDkuc33/ahw+C3O1PIZdrhFMuQA==}
+
+  '@types/mz@2.7.8':
+    resolution: {integrity: sha512-mGLNqqwt8yu4pDw9rEphAiyWnEdok0GzOGrwi5EiTuDFxw7H3ZaEI4ASFKq4HaZtemtjQ8MkcmtWcrU4V0WkIw==}
 
   '@types/node-fetch@2.1.0':
     resolution: {integrity: sha512-7qhZIMCvHDJMZtdirrb/SkmTs2Dg8oVCLpUCOxNKm36xBdUZhh2JDWO/BeOdI5UyStyaCmeRv5UskaiH7kAgdg==}
@@ -10707,6 +10710,10 @@ snapshots:
       '@types/node': 22.0.0
 
   '@types/mz@2.7.4':
+    dependencies:
+      '@types/node': 22.0.0
+
+  '@types/mz@2.7.8':
     dependencies:
       '@types/node': 22.0.0
 
