@@ -251,8 +251,8 @@ importers:
   examples/utils:
     dependencies:
       '@inquirer/core':
-        specifier: ^9.0.5
-        version: 9.0.5
+        specifier: ^9.0.8
+        version: 9.0.8
       pino:
         specifier: ^9.3.2
         version: 9.3.2
@@ -2688,8 +2688,8 @@ packages:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
     deprecated: Use @eslint/object-schema instead
 
-  '@inquirer/core@9.0.5':
-    resolution: {integrity: sha512-QWG41I7vn62O9stYKg/juKXt1PEbr/4ZZCPb4KgXDQGwgA9M5NBTQ7FnOvT1ridbxkm/wTxLCNraUs7y47pIRQ==}
+  '@inquirer/core@9.0.8':
+    resolution: {integrity: sha512-ttnI/BGlP9SxjbQnv1nssv7dPAwiR82KmjJZx2SxSZyi2mGbaEvh4jg0I4yU/4mVQf7QvCVGGr/hGuJFEYhwnw==}
     engines: {node: '>=18'}
 
   '@inquirer/figures@1.0.5':
@@ -11356,12 +11356,12 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.2': {}
 
-  '@inquirer/core@9.0.5':
+  '@inquirer/core@9.0.8':
     dependencies:
       '@inquirer/figures': 1.0.5
       '@inquirer/type': 1.5.1
       '@types/mute-stream': 0.0.4
-      '@types/node': 20.14.11
+      '@types/node': 22.0.0
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       cli-spinners: 2.9.2
@@ -12974,6 +12974,7 @@ snapshots:
   '@types/node@20.14.11':
     dependencies:
       undici-types: 5.26.5
+    optional: true
 
   '@types/node@22.0.0':
     dependencies:
@@ -13040,7 +13041,7 @@ snapshots:
 
   '@types/ws@8.5.11':
     dependencies:
-      '@types/node': 18.19.21
+      '@types/node': 22.0.0
 
   '@types/ws@8.5.12':
     dependencies:
