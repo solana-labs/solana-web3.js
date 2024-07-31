@@ -82,6 +82,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
+          path: .ghpages-deploy
           pattern: ghpages-deploy-artifacts*
           merge-multiple: true
 
