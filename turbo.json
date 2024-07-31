@@ -82,7 +82,7 @@
         "test:treeshakability:node": {
             "dependsOn": ["compile:js"]
         },
-        "@solana/example-react-app#build": {
+        "@solana/example-react-app#compile:js": {
             "dependsOn": ["^compile:js", "^compile:typedefs"],
             "env": ["REACT_EXAMPLE_APP_BASE_PATH", "REACT_EXAMPLE_APP_ENABLE_MAINNET"],
             "inputs": ["$TURBO_DEFAULT$", "index.html", "tsconfig.*", "vite.config.ts", "public/**", "src/**"],
