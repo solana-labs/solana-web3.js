@@ -1,5 +1,7 @@
 # @solana/fast-stable-stringify
 
+## 2.0.0-rc.0
+
 ## 2.0.0-preview.4
 
 ### Patch Changes

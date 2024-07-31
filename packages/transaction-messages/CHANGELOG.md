@@ -1,5 +1,21 @@
 # @solana/transaction-messages
 
+## 2.0.0-rc.0
+
+### Patch Changes
+
+-   [#2969](https://github.com/solana-labs/solana-web3.js/pull/2969) [`419c12e`](https://github.com/solana-labs/solana-web3.js/commit/419c12e617435570d0cded6ca6d35370d0060da7) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Add a function to replace accounts in a transaction message using lookup tables
+
+-   Updated dependencies [[`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4)]:
+    -   @solana/errors@2.0.0-rc.0
+    -   @solana/addresses@2.0.0-rc.0
+    -   @solana/codecs-core@2.0.0-rc.0
+    -   @solana/codecs-data-structures@2.0.0-rc.0
+    -   @solana/codecs-numbers@2.0.0-rc.0
+    -   @solana/instructions@2.0.0-rc.0
+    -   @solana/rpc-types@2.0.0-rc.0
+    -   @solana/functional@2.0.0-rc.0
+
 ## 2.0.0-preview.4
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @solana/rpc
 
+## 2.0.0-rc.0
+
+### Patch Changes
+
+-   [#2910](https://github.com/solana-labs/solana-web3.js/pull/2910) [`42a70f4`](https://github.com/solana-labs/solana-web3.js/commit/42a70f4c3004e55fe6ce5a8e500f5610765ec66f) Thanks [@Jac0xb](https://github.com/Jac0xb)! - Fixed a bug where the RPC would fail to throw errors in the event that you configured it with an `AbortSignal`
+
+-   [#2907](https://github.com/solana-labs/solana-web3.js/pull/2907) [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4) Thanks [@steveluscher](https://github.com/steveluscher)! - `__DEV__` mode will now be the default if you don't set `process.env.NODE_ENV` at all. This means fewer people ‘accidentally’ finding themselves in production mode with minified error messages.
+
+-   Updated dependencies [[`29821df`](https://github.com/solana-labs/solana-web3.js/commit/29821df246b14eb41dd4606913f44fac40183957), [`677a9c4`](https://github.com/solana-labs/solana-web3.js/commit/677a9c4eb88a8ac6a9ede8d82f367c5ac8d69ff4)]:
+    -   @solana/rpc-transformers@2.0.0-rc.0
+    -   @solana/rpc-spec@2.0.0-rc.0
+    -   @solana/errors@2.0.0-rc.0
+    -   @solana/rpc-transport-http@2.0.0-rc.0
+    -   @solana/rpc-api@2.0.0-rc.0
+    -   @solana/rpc-types@2.0.0-rc.0
+    -   @solana/fast-stable-stringify@2.0.0-rc.0
+    -   @solana/functional@2.0.0-rc.0
+
 ## 2.0.0-preview.4
 
 ### Patch Changes
