@@ -6,15 +6,15 @@
 
 [code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [code-style-prettier-url]: https://github.com/prettier/prettier
-[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc/experimental.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@solana/rpc/experimental.svg?style=flat
-[npm-url]: https://www.npmjs.com/package/@solana/rpc/v/experimental
+[npm-downloads-image]: https://img.shields.io/npm/dm/@solana/rpc/rc.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/@solana/rpc/rc.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/@solana/rpc/v/rc
 [semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
 [semantic-release-url]: https://github.com/semantic-release/semantic-release
 
 # @solana/rpc
 
-This package contains utilities for creating objects that you can use to communicate with a Solana JSON RPC server. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@experimental`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
+This package contains utilities for creating objects that you can use to communicate with a Solana JSON RPC server. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
 Unless you plan to create a custom RPC interface, you can use the [`createSolanaRpc(clusterUrl)`](#createsolanarpcclusterurl-config) function to obtain a default implementation of the [Solana JSON RPC API](https://solana.com/docs/rpc/http).
 
