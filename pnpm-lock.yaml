@@ -33,8 +33,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       bs58:
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^6.0.0
+        version: 6.0.0
       buffer:
         specifier: 6.0.3
         version: 6.0.3
@@ -4142,6 +4142,9 @@ packages:
   base-x@3.0.9:
     resolution: {integrity: sha512-H7JU6iBHTal1gp56aKoaa//YUxEaAOUiydvrV/pILqIHXTtqxSkATOnDA2u+jZ/61sD+L/412+7kzXRtWukhpQ==}
 
+  base-x@5.0.0:
+    resolution: {integrity: sha512-sMW3VGSX1QWVFA6l8U62MLKz29rRfpTlYdCqLdpLo1/Yd4zZwSbnUaDfciIAowAqvq7YFnWq9hrhdg1KYgc1lQ==}
+
   base64-arraybuffer@0.1.5:
     resolution: {integrity: sha512-437oANT9tP582zZMwSvZGy2nmSeAb8DW2me3y+Uv1Wp2Rulr8Mqlyrv3E7MLxmsiaPSMMDmiDVzgE+e8zlMx9g==}
     engines: {node: '>= 0.6.0'}
@@ -4213,6 +4216,9 @@ packages:
 
   bs58@4.0.1:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
+
+  bs58@6.0.0:
+    resolution: {integrity: sha512-PD0wEnEYg6ijszw/u8s+iI3H17cTymlrwkKhDhPZq+Sokl3AU4htyBFTjAeNAlCCmg0f53g6ih3jATyCKftTfw==}
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
@@ -11437,6 +11443,8 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
+  base-x@5.0.0: {}
+
   base64-arraybuffer@0.1.5: {}
 
   base64-js@1.5.1: {}
@@ -11516,6 +11524,10 @@ snapshots:
   bs58@4.0.1:
     dependencies:
       base-x: 3.0.9
+
+  bs58@6.0.0:
+    dependencies:
+      base-x: 5.0.0
 
   buffer-from@1.1.2: {}
 
