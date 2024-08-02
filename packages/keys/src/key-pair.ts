@@ -7,6 +7,7 @@ import {
 } from '@solana/errors';
 
 import { createPrivateKeyFromBytes } from './private-key';
+import { getPublicKeyFromPrivateKey } from './public-key';
 import { signBytes, verifySignature } from './signatures';
 
 export async function generateKeyPair(): Promise<CryptoKeyPair> {
@@ -40,4 +41,28 @@ export async function createKeyPairFromBytes(bytes: ReadonlyUint8Array, extracta
     }
 
     return { privateKey, publicKey } as CryptoKeyPair;
+}
+
+export async function createKeyPairFromPrivateKeyBytes(
+    bytes: ReadonlyUint8Array,
+    extractable: boolean = false,
+): Promise<CryptoKeyPair> {
+    const privateKeyPromise = createPrivateKeyFromBytes(bytes, extractable);
+
+    // Here we need the private key to be extractable in order to export
+    // it as a public key. Therefore, if the `extractable` parameter
+    // is `false`, we need to create two private keys such that:
+    //   - The extractable one is used to create the public key and
+    //   - The non-extractable one is the one we will return.
+    const [publicKey, privateKey] = await Promise.all([
+        // This nested promise makes things efficient by
+        // creating the public key in parallel with the
+        // second private key creation, if it is needed.
+        (extractable ? privateKeyPromise : createPrivateKeyFromBytes(bytes, true /* extractable */)).then(
+            async privateKey => await getPublicKeyFromPrivateKey(privateKey, true /* extractable */),
+        ),
+        privateKeyPromise,
+    ]);
+
+    return { privateKey, publicKey };
 }

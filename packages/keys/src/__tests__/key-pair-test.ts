@@ -1,10 +1,11 @@
 import {
     SOLANA_ERROR__KEYS__INVALID_KEY_PAIR_BYTE_LENGTH,
+    SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH,
     SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY,
     SolanaError,
 } from '@solana/errors';
 
-import { createKeyPairFromBytes, generateKeyPair } from '../key-pair';
+import { createKeyPairFromBytes, createKeyPairFromPrivateKeyBytes, generateKeyPair } from '../key-pair';
 
 const MOCK_KEY_BYTES = new Uint8Array([
     0xeb, 0xfa, 0x65, 0xeb, 0x93, 0xdc, 0x79, 0x15, 0x7a, 0xba, 0xde, 0xa2, 0xf7, 0x94, 0x37, 0x9d, 0xfc, 0x07, 0x1d,
@@ -82,6 +83,38 @@ describe('key-pair', () => {
             expect.assertions(1);
             await expect(createKeyPairFromBytes(MOCK_INVALID_KEY_BYTES)).rejects.toThrow(
                 new SolanaError(SOLANA_ERROR__KEYS__PUBLIC_KEY_MUST_MATCH_PRIVATE_KEY),
+            );
+        });
+    });
+
+    describe('createKeyPairFromPrivateKeyBytes', () => {
+        it('creates a key pair from a 32-bytes private key', async () => {
+            expect.assertions(1);
+            const keyPair = await createKeyPairFromPrivateKeyBytes(MOCK_KEY_BYTES.slice(0, 32));
+            expect(keyPair).toMatchObject({
+                privateKey: expect.objectContaining({
+                    [Symbol.toStringTag]: 'CryptoKey',
+                    algorithm: { name: 'Ed25519' },
+                    type: 'private',
+                }),
+                publicKey: expect.objectContaining({
+                    [Symbol.toStringTag]: 'CryptoKey',
+                    algorithm: { name: 'Ed25519' },
+                    type: 'public',
+                }),
+            });
+        });
+        it('uses the public key associated with the provided private key bytes', async () => {
+            expect.assertions(1);
+            const keyPair = await createKeyPairFromPrivateKeyBytes(MOCK_KEY_BYTES.slice(0, 32));
+            const publicKeyBytes = new Uint8Array(await crypto.subtle.exportKey('raw', keyPair.publicKey));
+            const expectedPublicKeyBytes = MOCK_KEY_BYTES.slice(32);
+            expect(publicKeyBytes).toEqual(expectedPublicKeyBytes);
+        });
+        it('errors when the byte array is not 32 bytes', async () => {
+            expect.assertions(1);
+            await expect(createKeyPairFromPrivateKeyBytes(MOCK_KEY_BYTES.slice(0, 31))).rejects.toThrow(
+                new SolanaError(SOLANA_ERROR__KEYS__INVALID_PRIVATE_KEY_BYTE_LENGTH, { actualLength: 31 }),
             );
         });
     });
