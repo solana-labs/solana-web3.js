@@ -475,8 +475,8 @@ importers:
         specifier: ^2.6.0
         version: 2.8.0
       undici:
-        specifier: ^6.19.4
-        version: 6.19.4
+        specifier: ^6.19.5
+        version: 6.19.5
 
   packages/functional:
     dependencies:
@@ -944,8 +944,8 @@ importers:
         specifier: ^2.8.0
         version: 2.8.0
       undici:
-        specifier: ^6.19.4
-        version: 6.19.4
+        specifier: ^6.19.5
+        version: 6.19.5
       zx:
         specifier: ^8.1.4
         version: 8.1.4
@@ -1049,8 +1049,8 @@ importers:
         specifier: ^29.6.3
         version: 29.6.3
       undici:
-        specifier: ^6.19.4
-        version: 6.19.4
+        specifier: ^6.19.5
+        version: 6.19.5
       whatwg-fetch:
         specifier: ^3.6.20
         version: 3.6.20
@@ -6421,8 +6421,8 @@ packages:
   undici-types@6.19.5:
     resolution: {integrity: sha512-VQUzGd+K73uDi/pTqzDBbxZneciOuMRjF0r/Lep2zr/GOnU+cUvfgRu4T5k4TWJfpGdSK5nrzVDoQVoEIAFbmg==}
 
-  undici@6.19.4:
-    resolution: {integrity: sha512-i3uaEUwNdkRq2qtTRRJb13moW5HWqviu7Vl7oYRYz++uPtGHJj+x7TGjcEuwS5Mt2P4nA0U9dhIX3DdB6JGY0g==}
+  undici@6.19.5:
+    resolution: {integrity: sha512-LryC15SWzqQsREHIOUybavaIHF5IoL0dJ9aWWxL/PgT1KfqAW5225FZpDUFlt9xiDMS2/S7DOKhFWA7RLksWdg==}
     engines: {node: '>=18.17'}
 
   unicode-canonical-property-names-ecmascript@2.0.0:
@@ -12992,7 +12992,7 @@ snapshots:
 
   undici-types@6.19.5: {}
 
-  undici@6.19.4: {}
+  undici@6.19.5: {}
 
   unicode-canonical-property-names-ecmascript@2.0.0:
     optional: true
