@@ -197,7 +197,7 @@ importers:
         version: 4.0.0(chai@5.1.1)(sinon@18.0.0)
       start-server-and-test:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.5
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
@@ -4630,6 +4630,15 @@ packages:
       supports-color:
         optional: true
 
+  debug@4.3.6:
+    resolution: {integrity: sha512-O/09Bd4Z1fBrU4VzkhFqVgpPzaGbw6Sm9FEkBT1A/YBXQFGuuSxa1dN2nxgxS34JmKXqYx8CZAwEVoJFImUXIg==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   decamelize@4.0.0:
     resolution: {integrity: sha512-9iE1PgSik9HeIIw2JO94IidnE3eBoQrFJ3w7sFuzSX4DpmZ3v5sZpUiV5Swcf6mQEF+Y0ru8Neo+p+nyh2J+hQ==}
     engines: {node: '>=10'}
@@ -7019,6 +7028,11 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  start-server-and-test@2.0.5:
+    resolution: {integrity: sha512-2CV4pz69NJVJKQmJeSr+O+SPtOreu0yxvhPmSXclzmAKkPREuMabyMh+Txpzemjx0RDzXOcG2XkhiUuxjztSQw==}
+    engines: {node: '>=16'}
+    hasBin: true
+
   statuses@1.5.0:
     resolution: {integrity: sha512-OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==}
     engines: {node: '>= 0.6'}
@@ -7796,7 +7810,7 @@ snapshots:
       '@babel/core': 7.24.9
       '@babel/helper-compilation-targets': 7.25.2
       '@babel/helper-plugin-utils': 7.24.8
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -9442,7 +9456,7 @@ snapshots:
       '@babel/parser': 7.25.3
       '@babel/template': 7.25.0
       '@babel/types': 7.25.2
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -9664,7 +9678,7 @@ snapshots:
   '@eslint/eslintrc@2.1.4':
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       espree: 9.6.1
       globals: 13.24.0
       ignore: 5.3.1
@@ -9783,7 +9797,7 @@ snapshots:
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.2
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -11452,13 +11466,13 @@ snapshots:
 
   agent-base@6.0.2:
     dependencies:
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
   agent-base@7.1.1:
     dependencies:
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
@@ -11612,6 +11626,14 @@ snapshots:
   axios@1.6.8(debug@4.3.5):
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.5)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.6.8(debug@4.3.6):
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.6)
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -12073,6 +12095,10 @@ snapshots:
     optionalDependencies:
       supports-color: 8.1.1
 
+  debug@4.3.6:
+    dependencies:
+      ms: 2.1.2
+
   decamelize@4.0.0: {}
 
   deep-eql@5.0.1: {}
@@ -12439,7 +12465,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
@@ -12734,6 +12760,10 @@ snapshots:
     optionalDependencies:
       debug: 4.3.5(supports-color@8.1.1)
 
+  follow-redirects@1.15.6(debug@4.3.6):
+    optionalDependencies:
+      debug: 4.3.6
+
   for-each@0.3.3:
     dependencies:
       is-callable: 1.2.7
@@ -12825,7 +12855,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       fs-extra: 11.2.0
     transitivePeerDependencies:
       - supports-color
@@ -13033,7 +13063,7 @@ snapshots:
   http-proxy-agent@7.0.0:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
@@ -13052,7 +13082,7 @@ snapshots:
   https-proxy-agent@7.0.4:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
@@ -14713,7 +14743,7 @@ snapshots:
   socks-proxy-agent@8.0.3:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.5(supports-color@8.1.1)
+      debug: 4.3.6
       socks: 2.8.1
     transitivePeerDependencies:
       - supports-color
@@ -14781,6 +14811,19 @@ snapshots:
       lazy-ass: 1.6.0
       ps-tree: 1.2.0
       wait-on: 7.2.0(debug@4.3.5)
+    transitivePeerDependencies:
+      - supports-color
+
+  start-server-and-test@2.0.5:
+    dependencies:
+      arg: 5.0.2
+      bluebird: 3.7.2
+      check-more-types: 2.24.0
+      debug: 4.3.6
+      execa: 5.1.1
+      lazy-ass: 1.6.0
+      ps-tree: 1.2.0
+      wait-on: 7.2.0(debug@4.3.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -15169,6 +15212,16 @@ snapshots:
   wait-on@7.2.0(debug@4.3.5):
     dependencies:
       axios: 1.6.8(debug@4.3.5)
+      joi: 17.12.2
+      lodash: 4.17.21
+      minimist: 1.2.8
+      rxjs: 7.8.1
+    transitivePeerDependencies:
+      - debug
+
+  wait-on@7.2.0(debug@4.3.6):
+    dependencies:
+      axios: 1.6.8(debug@4.3.6)
       joi: 17.12.2
       lodash: 4.17.21
       minimist: 1.2.8
