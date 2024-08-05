@@ -72,7 +72,7 @@
         "@solana/signers": "workspace:*",
         "@solana/transactions": "workspace:*",
         "@solana/wallet-standard-features": "^1.2.0",
-        "@wallet-standard/base": "0.0.0-20240802213516",
+        "@wallet-standard/base": "1.0.1",
         "@wallet-standard/errors": "0.0.0-20240802213516",
         "@wallet-standard/ui": "0.0.0-20240802213516",
         "@wallet-standard/ui-registry": "0.0.0-20240802213516"
