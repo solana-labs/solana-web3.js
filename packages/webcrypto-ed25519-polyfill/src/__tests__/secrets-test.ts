@@ -1,3 +1,5 @@
+import '@solana/test-matchers/toBeFrozenObject';
+
 import {
     exportKeyPolyfill,
     generateKeyPolyfill,
@@ -17,10 +19,12 @@ const MOCK_SECRET_KEY_BYTES = new Uint8Array([
     83, 147, 250, 112, 140, 37, 29, 73, 156, 38, 185, 76, 163, 8, 178, 225, 172, 53, 120, 108, 127, 191, 103, 8, 160,
     170, 183, 186, 246, 1, 227, 158,
 ]);
+const MOCK_SECRET_KEY_BASE_64_URL = 'U5P6cIwlHUmcJrlMowiy4aw1eGx_v2cIoKq3uvYB454';
 const MOCK_PUBLIC_KEY_BYTES = new Uint8Array([
     166, 132, 114, 186, 49, 163, 23, 12, 11, 14, 119, 219, 102, 96, 26, 226, 91, 97, 238, 217, 236, 84, 232, 204, 62,
     212, 179, 252, 20, 37, 179, 52,
 ]);
+const MOCK_PUBLIC_KEY_BASE_64_URL = 'poRyujGjFwwLDnfbZmAa4lth7tnsVOjMPtSz_BQlszQ';
 const ED25519_PKCS8_HEADER =
     // prettier-ignore
     [
@@ -56,7 +60,7 @@ const ED25519_PKCS8_HEADER =
     ];
 
 describe('exportKeyPolyfill', () => {
-    it.each(['jwk', 'spki'] as const)('throws an unimplemented error when the format is %s', async format => {
+    it.each(['spki'] as const)('throws an unimplemented error when the format is %s', async format => {
         expect.assertions(1);
         const mockKey = { format } as unknown as CryptoKey;
         await expect(exportKeyPolyfill(format, mockKey)).rejects.toThrow(/unimplemented/);
@@ -151,6 +155,59 @@ describe('exportKeyPolyfill', () => {
                         160, 170, 183, 186, 246, 1, 227, 158,
             ]);
             await expect(exportKeyPolyfill('pkcs8', privateKey)).resolves.toEqual(expectedBytes);
+        });
+    });
+    describe('when format is `jwk`', () => {
+        it('exports public keys', async () => {
+            expect.assertions(1);
+            jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
+            const { publicKey } = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
+            const jwk = await exportKeyPolyfill('jwk', publicKey);
+            expect(jwk).toEqual({
+                crv /* curve */: 'Ed25519',
+                ext /* extractable */: true,
+                key_ops /* key operations */: ['verify'],
+                kty /* key type */: 'OKP' /* octet key pair */,
+                x /* public key x-coordinate (base64-URL encoded) */: MOCK_PUBLIC_KEY_BASE_64_URL,
+            });
+        });
+        it('exports private keys', async () => {
+            expect.assertions(1);
+            jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
+            const { privateKey } = generateKeyPolyfill(/* extractable */ true, ['sign', 'verify']);
+            const jwk = await exportKeyPolyfill('jwk', privateKey);
+            expect(jwk).toEqual({
+                crv /* curve */: 'Ed25519',
+                d /* private key (base64-URL encoded) */: MOCK_SECRET_KEY_BASE_64_URL,
+                ext /* extractable */: true,
+                key_ops /* key operations */: ['sign'],
+                kty /* key type */: 'OKP' /* octet key pair */,
+                x /* public key x-coordinate (base64-URL encoded) */: MOCK_PUBLIC_KEY_BASE_64_URL,
+            });
+        });
+        it('freezes the exported public key', async () => {
+            expect.assertions(1);
+            jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
+            const { publicKey } = generateKeyPolyfill(/* extractable */ false, ['sign', 'verify']);
+            const jwk = await exportKeyPolyfill('jwk', publicKey);
+            expect(jwk).toBeFrozenObject();
+        });
+        it('freezes the exported private key', async () => {
+            expect.assertions(1);
+            jest.spyOn(globalThis.crypto, 'getRandomValues').mockReturnValue(MOCK_SECRET_KEY_BYTES);
+            const { privateKey } = generateKeyPolyfill(/* extractable */ true, ['sign', 'verify']);
+            const jwk = await exportKeyPolyfill('jwk', privateKey);
+            expect(jwk).toBeFrozenObject();
+        });
+        it('throws when the public key supplied is non-extractable', async () => {
+            expect.assertions(1);
+            const mockKey = { extractable: false, type: 'public' } as unknown as CryptoKey;
+            await expect(exportKeyPolyfill('jwk', mockKey)).rejects.toThrow('key is not extractable');
+        });
+        it('throws when the private key supplied is non-extractable', async () => {
+            expect.assertions(1);
+            const mockKey = { extractable: false, type: 'private' } as unknown as CryptoKey;
+            await expect(exportKeyPolyfill('jwk', mockKey)).rejects.toThrow('key is not extractable');
         });
     });
 });
