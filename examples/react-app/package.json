@@ -19,7 +19,7 @@
         "@solana-program/system": "^0.4.1",
         "@solana/react": "workspace:*",
         "@solana/web3.js": "workspace:*",
-        "@wallet-standard/core": "0.0.0-20240802213516",
+        "@wallet-standard/core": "1.0.3",
         "@wallet-standard/react": "0.0.0-20240802213516",
         "react": "^18.3.0",
         "react-dom": "^18.3.0",
