@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@solana-program/memo": "^0.4.1",
-        "@solana-program/system": "^0.4.1",
+        "@solana-program/system": "^0.5.0",
         "@solana/example-utils": "workspace:*",
         "@solana/web3.js": "workspace:*"
     },
