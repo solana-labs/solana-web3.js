@@ -12,6 +12,8 @@ env:
   # Among other things, opts out of Turborepo telemetry
   # See https://consoledonottrack.com/
   DO_NOT_TRACK: '1'
+  # Some tasks slow down considerably on GitHub Actions runners when concurrency is high
+  TURBO_CONCURRENCY: 1
   # Enables Turborepo Remote Caching.
   TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -47,7 +49,7 @@ jobs:
             xargs -t0 -n 1 -I {} \
               sh -c 'cd {} && pnpm pkg delete devDependencies'
           pnpm changeset version --snapshot canary
-          pnpm turbo publish-packages --concurrency=95.84%
+          pnpm turbo publish-packages --concurrency=${TURBO_CONCURRENCY:-1}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

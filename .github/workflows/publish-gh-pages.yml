@@ -14,6 +14,8 @@ env:
   # Among other things, opts out of Turborepo telemetry
   # See https://consoledonottrack.com/
   DO_NOT_TRACK: '1'
+  # Some tasks slow down considerably on GitHub Actions runners when concurrency is high
+  TURBO_CONCURRENCY: 1
   # Enables Turborepo Remote Caching.
   TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -55,7 +57,7 @@ jobs:
         uses: ./.github/workflows/actions/install-dependencies
 
       - name: Compile
-        run: pnpm turbo run compile:ghpages --concurrency=95.84%
+        run: pnpm turbo run compile:ghpages --concurrency=${TURBO_CONCURRENCY:-1}
         env:
           REACT_EXAMPLE_APP_BASE_PATH: /solana-web3.js/example/
 
