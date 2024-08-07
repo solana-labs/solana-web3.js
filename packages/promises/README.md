@@ -30,3 +30,9 @@ const result = await getAbortablePromise(
     AbortSignal.timeout(5000),
 );
 ```
+
+### `safeRace(...promises)`
+
+An implementation of `Promise.race` that causes all of the losing promises to settle. This allows them to be released and garbage collected, preventing memory leaks.
+
+Read more here: https://github.com/nodejs/node/issues/17469
