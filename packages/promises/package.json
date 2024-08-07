@@ -1,7 +1,7 @@
 {
-    "name": "@solana/react",
+    "name": "@solana/promises",
     "version": "2.0.0-rc.0",
-    "description": "React hooks for building Solana apps",
+    "description": "Helpers for using JavaScript promises",
     "exports": {
         "browser": {
             "import": "./dist/index.browser.mjs",
@@ -62,32 +62,8 @@
         "supports bigint and not dead",
         "maintained node versions"
     ],
-    "engine": {
-        "node": ">=17.4"
-    },
-    "dependencies": {
-        "@solana/addresses": "workspace:*",
-        "@solana/errors": "workspace:*",
-        "@solana/keys": "workspace:*",
-        "@solana/promises": "workspace:*",
-        "@solana/signers": "workspace:*",
-        "@solana/transactions": "workspace:*",
-        "@solana/wallet-standard-features": "^1.2.0",
-        "@wallet-standard/base": "1.0.1",
-        "@wallet-standard/errors": "0.0.0",
-        "@wallet-standard/ui": "0.0.0",
-        "@wallet-standard/ui-registry": "0.0.0"
-    },
-    "devDependencies": {
-        "@solana/codecs-core": "workspace:*",
-        "@types/react": "^18",
-        "@types/react-test-renderer": "^18",
-        "react": "^18",
-        "react-error-boundary": "^4.0.13",
-        "react-test-renderer": "^18"
-    },
     "peerDependencies": {
-        "react": ">=18"
+        "typescript": ">=5"
     },
     "bundlewatch": {
         "defaultCompression": "gzip",
