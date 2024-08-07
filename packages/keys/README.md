@@ -81,6 +81,28 @@ const keypairBytes = new Uint8Array(JSON.parse(keypairFile.toString()));
 const { privateKey, publicKey } = await createKeyPairFromBytes(keypairBytes);
 ```
 
+### `createKeyPairFromPrivateKeyBytes()`
+
+Given a private key represented as a 32-bytes `Uint8Array`, creates an Ed25519 public/private key pair for use with other methods in this package that accept `CryptoKey` objects.
+
+```ts
+import { createKeyPairFromPrivateKeyBytes } from '@solana/keys';
+
+const { privateKey, publicKey } = await createKeyPairFromPrivateKeyBytes(new Uint8Array([...]));
+```
+
+This can be useful when you have a private key but not the corresponding public key or when you need to derive key pairs from seeds. For instance, the following code snippet derives a key pair from the hash of a message.
+
+```ts
+import { getUtf8Encoder } from '@solana/codecs-strings';
+import { createKeyPairFromPrivateKeyBytes } from '@solana/keys';
+
+const message = getUtf8Encoder().encode('Hello, World!');
+const seed = new Uint8Array(await crypto.subtle.digest('SHA-256', message));
+
+const derivedKeypair = await createKeyPairFromPrivateKeyBytes(seed);
+```
+
 ### `createPrivateKeyFromBytes()`
 
 Given a private key represented as a 32-bytes `Uint8Array`, creates an Ed25519 private key for use with other methods in this package that accept `CryptoKey` objects.
