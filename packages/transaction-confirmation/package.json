@@ -69,6 +69,7 @@
         "@solana/codecs-strings": "workspace:*",
         "@solana/errors": "workspace:*",
         "@solana/keys": "workspace:*",
+        "@solana/promises": "workspace:*",
         "@solana/rpc": "workspace:*",
         "@solana/rpc-subscriptions": "workspace:*",
         "@solana/rpc-types": "workspace:*",

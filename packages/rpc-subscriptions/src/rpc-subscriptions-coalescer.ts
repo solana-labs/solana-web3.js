@@ -1,3 +1,4 @@
+import { safeRace } from '@solana/promises';
 import { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
 
 import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
@@ -105,7 +106,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                                 try {
                                     const iterator = iterable[Symbol.asyncIterator]();
                                     while (true) {
-                                        const iteratorResult = await Promise.race([iterator.next(), abortPromise]);
+                                        const iteratorResult = await safeRace([iterator.next(), abortPromise]);
                                         if (iteratorResult.done) {
                                             return;
                                         } else {
