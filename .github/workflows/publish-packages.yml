@@ -12,6 +12,8 @@ env:
   # Among other things, opts out of Turborepo telemetry
   # See https://consoledonottrack.com/
   DO_NOT_TRACK: '1'
+  # Some tasks slow down considerably on GitHub Actions runners when concurrency is high
+  TURBO_CONCURRENCY: 1
   # Enables Turborepo Remote Caching.
   TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
@@ -45,7 +47,7 @@ jobs:
 
       - name: Choose Build Step
         id: build-step-decider
-        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages --concurrency=95.84%' || 'build' }}" >> $GITHUB_OUTPUT
+        run: echo "step-name=${{ steps.changesets.outputs.hasChangesets == 'false' && 'publish-packages --concurrency=${TURBO_CONCURRENCY:-1}' || 'build' }}" >> $GITHUB_OUTPUT
 
       - name: Run Build Step (force)
         run: pnpm turbo ${{ steps.build-step-decider.outputs.step-name }} --force=true
