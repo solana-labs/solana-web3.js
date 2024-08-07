@@ -66,6 +66,7 @@
         "@solana/errors": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
         "@solana/functional": "workspace:*",
+        "@solana/promises": "workspace:*",
         "@solana/rpc-subscriptions-api": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-subscriptions-transport-websocket": "workspace:*",

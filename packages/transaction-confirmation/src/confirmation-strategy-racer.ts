@@ -1,4 +1,5 @@
 import type { Signature } from '@solana/keys';
+import { safeRace } from '@solana/promises';
 import type { Commitment } from '@solana/rpc-types';
 
 import { createRecentSignatureConfirmationPromiseFactory } from './confirmation-strategy-recent-signature';
@@ -30,7 +31,7 @@ export async function raceStrategies<TConfig extends BaseTransactionConfirmation
             ...config,
             abortSignal: abortController.signal,
         });
-        return await Promise.race([
+        return await safeRace([
             getRecentSignatureConfirmationPromise({
                 abortSignal: abortController.signal,
                 commitment,

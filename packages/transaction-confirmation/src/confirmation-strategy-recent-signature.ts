@@ -1,5 +1,6 @@
 import { getSolanaErrorFromTransactionError } from '@solana/errors';
 import type { Signature } from '@solana/keys';
+import { safeRace } from '@solana/promises';
 import type { GetSignatureStatusesApi, Rpc } from '@solana/rpc';
 import type { RpcSubscriptions, SignatureNotificationsApi } from '@solana/rpc-subscriptions';
 import { type Commitment, commitmentComparator } from '@solana/rpc-types';
@@ -80,7 +81,7 @@ export function createRecentSignatureConfirmationPromiseFactory<
             }
         })();
         try {
-            return await Promise.race([signatureDidCommitPromise, signatureStatusLookupPromise]);
+            return await safeRace([signatureDidCommitPromise, signatureStatusLookupPromise]);
         } finally {
             abortController.abort();
         }

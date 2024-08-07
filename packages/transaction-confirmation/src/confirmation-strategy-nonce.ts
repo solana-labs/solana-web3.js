@@ -1,6 +1,7 @@
 import type { Address } from '@solana/addresses';
 import { getBase58Decoder, getBase64Encoder } from '@solana/codecs-strings';
 import { SOLANA_ERROR__INVALID_NONCE, SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND, SolanaError } from '@solana/errors';
+import { safeRace } from '@solana/promises';
 import type { GetAccountInfoApi, Rpc } from '@solana/rpc';
 import type { AccountNotificationsApi, RpcSubscriptions } from '@solana/rpc-subscriptions';
 import type { Base64EncodedDataResponse, Commitment } from '@solana/rpc-types';
@@ -108,7 +109,7 @@ export function createNonceInvalidationPromiseFactory<TCluster extends 'devnet' 
             }
         })();
         try {
-            return await Promise.race([nonceAccountDidAdvancePromise, nonceIsAlreadyInvalidPromise]);
+            return await safeRace([nonceAccountDidAdvancePromise, nonceIsAlreadyInvalidPromise]);
         } finally {
             abortController.abort();
         }
