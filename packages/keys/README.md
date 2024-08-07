@@ -81,6 +81,30 @@ const keypairBytes = new Uint8Array(JSON.parse(keypairFile.toString()));
 const { privateKey, publicKey } = await createKeyPairFromBytes(keypairBytes);
 ```
 
+### `createPrivateKeyFromBytes()`
+
+Given a private key represented as a 32-bytes `Uint8Array`, creates an Ed25519 private key for use with other methods in this package that accept `CryptoKey` objects.
+
+```ts
+import { createPrivateKeyFromBytes } from '@solana/keys';
+
+const privateKey = await createPrivateKeyFromBytes(new Uint8Array([...]));
+const extractablePrivateKey = await createPrivateKeyFromBytes(new Uint8Array([...]), true);
+```
+
+### `getPublicKeyFromPrivateKey()`
+
+Given an extractable `CryptoKey` private key, gets the corresponding public key as a `CryptoKey`.
+
+```ts
+import { createPrivateKeyFromBytes, getPublicKeyFromPrivateKey } from '@solana/keys';
+
+const privateKey = await createPrivateKeyFromBytes(new Uint8Array([...]), true);
+
+const publicKey = await getPublicKeyFromPrivateKey(privateKey);
+const extractablePublicKey = await getPublicKeyFromPrivateKey(privateKey, true);
+```
+
 ### `isSignature()`
 
 This is a type guard that accepts a string as input. It will both return `true` if the string conforms to the `Signature` type and will refine the type for use in your program.
