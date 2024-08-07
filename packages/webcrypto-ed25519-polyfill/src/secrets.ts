@@ -133,6 +133,13 @@ async function getPublicKeyBytes(key: CryptoKey): Promise<Uint8Array> {
     return publicKeyBytes;
 }
 
+function base64UrlEncode(bytes: Uint8Array): string {
+    return btoa(Array.from(bytes, b => String.fromCharCode(b)).join(''))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+}
+
 export async function exportKeyPolyfill(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
 export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>;
 export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey> {
@@ -153,6 +160,24 @@ export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Prom
             }
             const secretKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
             return new Uint8Array([...ED25519_PKCS8_HEADER, ...secretKeyBytes]);
+        }
+        case 'jwk': {
+            const publicKeyBytes = await getPublicKeyBytes(key);
+            const base = {
+                crv /* curve */: 'Ed25519',
+                ext /* extractable */: key.extractable,
+                key_ops /* key operations */: key.usages,
+                kty /* key type */: 'OKP' /* octet key pair */,
+                x /* public key x-coordinate (base64-URL encoded) */: base64UrlEncode(publicKeyBytes),
+            };
+            if (key.type === 'private') {
+                const secretKeyBytes = getSecretKeyBytes_INTERNAL_ONLY_DO_NOT_EXPORT(key);
+                return Object.freeze({
+                    ...base,
+                    d /* private key (base64-URL encoded) */: base64UrlEncode(secretKeyBytes),
+                });
+            }
+            return Object.freeze({ ...base });
         }
         default:
             throw new Error(`Exporting polyfilled Ed25519 keys in the "${format}" format is unimplemented`);
