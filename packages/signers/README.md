@@ -316,6 +316,36 @@ import { generateKeyPairSigner } from '@solana/signers';
 const myKeyPairSigner = await generateKeyPairSigner();
 ```
 
+#### `createKeyPairSignerFromBytes()`
+
+A convenience function that creates a new KeyPair from a 64-bytes `Uint8Array` secret key and immediately creates a `KeyPairSigner` from it.
+
+```ts
+import fs from 'fs';
+import { createKeyPairFromBytes } from '@solana/keys';
+
+// Get bytes from local keypair file.
+const keypairFile = fs.readFileSync('~/.config/solana/id.json');
+const keypairBytes = new Uint8Array(JSON.parse(keypairFile.toString()));
+
+// Create a KeyPairSigner from the bytes.
+const { privateKey, publicKey } = await createKeyPairSignerFromBytes(keypairBytes);
+```
+
+#### `createKeyPairSignerFromPrivateKeyBytes()`
+
+A convenience function that creates a new KeyPair from a 32-bytes `Uint8Array` private key and immediately creates a `KeyPairSigner` from it.
+
+```ts
+import { getUtf8Encoder } from '@solana/codecs-strings';
+import { createKeyPairFromPrivateKeyBytes } from '@solana/keys';
+
+const message = getUtf8Encoder().encode('Hello, World!');
+const seed = new Uint8Array(await crypto.subtle.digest('SHA-256', message));
+
+const derivedSigner = await createKeyPairSignerFromPrivateKeyBytes(seed);
+```
+
 #### `isKeyPairSigner()`
 
 A type guard that returns `true` if the provided value is a `KeyPairSigner`.
