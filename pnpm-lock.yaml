@@ -241,6 +241,25 @@ importers:
         specifier: ^4.16.5
         version: 4.16.5
 
+  examples/signers:
+    dependencies:
+      '@solana-program/system':
+        specifier: ^0.5.0
+        version: 0.5.0(@solana/web3.js@packages+library)
+      '@solana/example-utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@solana/web3.js':
+        specifier: workspace:*
+        version: link:../../packages/library
+    devDependencies:
+      start-server-and-test:
+        specifier: ^2.0.5
+        version: 2.0.5
+      tsx:
+        specifier: ^4.16.3
+        version: 4.16.5
+
   examples/transfer-lamports:
     dependencies:
       '@solana-program/system':
