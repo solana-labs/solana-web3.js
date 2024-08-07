@@ -140,6 +140,15 @@ function base64UrlEncode(bytes: Uint8Array): string {
         .replace(/=+$/, '');
 }
 
+function base64UrlDecode(value: string): Uint8Array {
+    const m = value.length % 4;
+    const base64Value = value
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(value.length + (m === 0 ? 0 : 4 - m), '=');
+    return Uint8Array.from(atob(base64Value), c => c.charCodeAt(0));
+}
+
 export async function exportKeyPolyfill(format: 'jwk', key: CryptoKey): Promise<JsonWebKey>;
 export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer>;
 export async function exportKeyPolyfill(format: KeyFormat, key: CryptoKey): Promise<ArrayBuffer | JsonWebKey> {
@@ -222,18 +231,37 @@ export async function verifyPolyfill(key: CryptoKey, signature: BufferSource, da
     }
 }
 
+function assertValidKeyUsages(keyUsages: readonly KeyUsage[], type: 'private' | 'public') {
+    const prohibitedKeyUses = new Set<KeyUsage>([
+        ...((type === 'private' ? ['verify'] : ['sign']) as KeyUsage[]),
+        ...PROHIBITED_KEY_USAGES,
+    ]);
+    if (keyUsages.some(usage => prohibitedKeyUses.has(usage))) {
+        throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
+    }
+}
+
 export function importKeyPolyfill(
-    format: KeyFormat,
+    format: 'jwk',
+    keyData: JsonWebKey,
+    extractable: boolean,
+    keyUsages: readonly KeyUsage[],
+): CryptoKey;
+export function importKeyPolyfill(
+    format: Exclude<KeyFormat, 'jwk'>,
     keyData: BufferSource,
     extractable: boolean,
     keyUsages: readonly KeyUsage[],
+): CryptoKey;
+export function importKeyPolyfill(
+    format: KeyFormat,
+    keyData: BufferSource | JsonWebKey,
+    extractable: boolean,
+    keyUsages: readonly KeyUsage[],
 ): CryptoKey {
-    const bytes = bufferSourceToUint8Array(keyData);
-
     if (format === 'raw') {
-        if (keyUsages.some(usage => usage === 'sign' || PROHIBITED_KEY_USAGES.has(usage))) {
-            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
-        }
+        const bytes = bufferSourceToUint8Array(keyData as BufferSource);
+        assertValidKeyUsages(keyUsages, 'public');
         if (bytes.length !== 32) {
             throw new DOMException('Ed25519 raw keys must be exactly 32-bytes', 'DataError');
         }
@@ -252,9 +280,8 @@ export function importKeyPolyfill(
     }
 
     if (format === 'pkcs8') {
-        if (keyUsages.some(usage => usage === 'verify' || PROHIBITED_KEY_USAGES.has(usage))) {
-            throw new DOMException('Unsupported key usage for a Ed25519 key', 'SyntaxError');
-        }
+        const bytes = bufferSourceToUint8Array(keyData as BufferSource);
+        assertValidKeyUsages(keyUsages, 'private');
         // 48 bytes: 16-byte PKCS8 header + 32 byte secret key
         if (bytes.length !== 48) {
             throw new DOMException('Invalid keyData', 'DataError');
@@ -278,6 +305,41 @@ export function importKeyPolyfill(
         cache.set(privateKey, secretKeyBytes);
 
         return privateKey;
+    }
+
+    if (format === 'jwk') {
+        const jwk = keyData as JsonWebKey;
+        const type = 'd' in jwk ? 'private' : 'public';
+        assertValidKeyUsages(keyUsages, type);
+        const keyOps = new Set(jwk.key_ops ?? []);
+        const sameKeyUsages = keyUsages.length === keyOps.size && [...keyUsages].every(x => keyOps.has(x));
+        if (jwk.kty !== 'OKP' || jwk.crv !== 'Ed25519' || jwk.ext !== extractable || !sameKeyUsages) {
+            throw new DOMException('Invalid Ed25519 JWK', 'DataError');
+        }
+        if (type === 'public' && !jwk.x) {
+            throw new DOMException('Ed25519 JWK is missing public key coordinates', 'DataError');
+        }
+        if (type === 'private' && !jwk.d) {
+            throw new DOMException('Ed25519 JWK is missing private key coordinates', 'DataError');
+        }
+        const usageToKeep = type === 'public' ? 'verify' : 'sign';
+        const key = Object.freeze({
+            [Symbol.toStringTag]: 'CryptoKey',
+            algorithm: Object.freeze({ name: 'Ed25519' }),
+            extractable,
+            type,
+            usages: Object.freeze(keyUsages.filter(usage => usage === usageToKeep)) as KeyUsage[],
+        }) as CryptoKey;
+
+        if (type === 'public') {
+            const cache = (publicKeyBytesStore ||= new WeakMap());
+            cache.set(key, base64UrlDecode(jwk.x!));
+        } else {
+            const cache = (storageKeyBySecretKey_INTERNAL_ONLY_DO_NOT_EXPORT ||= new WeakMap());
+            cache.set(key, base64UrlDecode(jwk.d!));
+        }
+
+        return key;
     }
 
     throw new Error(`Importing Ed25519 keys in the "${format}" format is unimplemented`);
