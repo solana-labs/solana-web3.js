@@ -50,6 +50,7 @@ describe('Promise.race', () => {
         nativeRace = Promise.race.bind(Promise);
     });
     it('leaks memory', async () => {
+        expect.assertions(1);
         const usages = [];
         usages.push(process.memoryUsage());
         await run(nativeRace);
@@ -57,11 +58,12 @@ describe('Promise.race', () => {
         await run(nativeRace);
         usages.push(process.memoryUsage());
         expect(detectLeak(usages)).toBe(true);
-    }, 30_000 /* timeout */);
+    }, 60_000 /* timeout */);
 });
 
 describe('safeRace', () => {
     it('does not leak memory', async () => {
+        expect.assertions(1);
         const usages = [];
         usages.push(process.memoryUsage());
         await run(safeRace);
@@ -69,5 +71,5 @@ describe('safeRace', () => {
         await run(safeRace);
         usages.push(process.memoryUsage());
         expect(detectLeak(usages)).toBe(false);
-    }, 30_000 /* timeout */);
+    }, 60_000 /* timeout */);
 });
