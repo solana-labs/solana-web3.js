@@ -1,11 +1,11 @@
 import { Address, address } from '@solana/addresses';
 import { SOLANA_ERROR__SIGNER__WALLET_MULTISIGN_UNIMPLEMENTED, SolanaError } from '@solana/errors';
 import { SignatureBytes } from '@solana/keys';
+import { getAbortablePromise } from '@solana/promises';
 import { MessageModifyingSigner, SignableMessage } from '@solana/signers';
 import type { UiWalletAccount } from '@wallet-standard/ui';
 import { useMemo } from 'react';
 
-import { getAbortablePromise } from './abortable-promise';
 import { useSignMessage } from './useSignMessage';
 
 /**

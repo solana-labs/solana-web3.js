@@ -647,6 +647,12 @@ importers:
         specifier: workspace:*
         version: link:../transaction-messages
 
+  packages/promises:
+    dependencies:
+      typescript:
+        specifier: '>=5'
+        version: 5.5.4
+
   packages/react:
     dependencies:
       '@solana/addresses':
@@ -658,6 +664,9 @@ importers:
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
+      '@solana/promises':
+        specifier: workspace:*
+        version: link:../promises
       '@solana/signers':
         specifier: workspace:*
         version: link:../signers

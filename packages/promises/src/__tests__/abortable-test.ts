@@ -1,4 +1,4 @@
-import { getAbortablePromise } from '../abortable-promise';
+import { getAbortablePromise } from '../abortable';
 
 describe('getAbortablePromise()', () => {
     let promise: Promise<unknown>;
