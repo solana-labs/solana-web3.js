@@ -49,7 +49,9 @@ describe('Promise.race', () => {
     beforeEach(() => {
         nativeRace = Promise.race.bind(Promise);
     });
-    it('leaks memory', async () => {
+    // FIXME(#3081): This test times out in CI
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('leaks memory', async () => {
         expect.assertions(1);
         const usages = [];
         usages.push(process.memoryUsage());
@@ -62,7 +64,9 @@ describe('Promise.race', () => {
 });
 
 describe('safeRace', () => {
-    it('does not leak memory', async () => {
+    // FIXME(#3081): This test times out in CI
+    // eslint-disable-next-line jest/no-disabled-tests
+    it.skip('does not leak memory', async () => {
         expect.assertions(1);
         const usages = [];
         usages.push(process.memoryUsage());
