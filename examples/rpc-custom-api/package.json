@@ -15,6 +15,6 @@
         "@solana/web3.js": "workspace:*"
     },
     "devDependencies": {
-        "tsx": "^4.16.5"
+        "tsx": "^4.17.0"
     }
 }
