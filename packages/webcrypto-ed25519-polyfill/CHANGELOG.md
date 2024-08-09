@@ -1,5 +1,13 @@
 # @solana/webcrypto-ed25519-polyfill
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   [#3063](https://github.com/solana-labs/solana-web3.js/pull/3063) [`ae9e8d3`](https://github.com/solana-labs/solana-web3.js/commit/ae9e8d342740598d2dfc90e11c19aa9af520c1c4) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add support for exporting keys as JWK
+
+-   [#3064](https://github.com/solana-labs/solana-web3.js/pull/3064) [`2370096`](https://github.com/solana-labs/solana-web3.js/commit/237009609fbc0ae32eb9628d08a41f06229ac6d2) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add support for importing JWK keys
+
 ## 2.0.0-rc.0
 
 ### Patch Changes

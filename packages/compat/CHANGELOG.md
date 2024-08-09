@@ -1,5 +1,16 @@
 # @solana/compat
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   Updated dependencies [[`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302)]:
+    -   @solana/keys@2.0.0-rc.1
+    -   @solana/transactions@2.0.0-rc.1
+    -   @solana/addresses@2.0.0-rc.1
+    -   @solana/codecs-core@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes

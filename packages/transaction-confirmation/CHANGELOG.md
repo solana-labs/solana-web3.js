@@ -1,5 +1,23 @@
 # @solana/transaction-confirmation
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   [#3072](https://github.com/solana-labs/solana-web3.js/pull/3072) [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a memory leak with transaction confirmation and subscriptions
+
+-   Updated dependencies [[`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922), [`b4bf318`](https://github.com/solana-labs/solana-web3.js/commit/b4bf318d7d4bdd639e4c126c70350993a8540fe8), [`f2bb4e8`](https://github.com/solana-labs/solana-web3.js/commit/f2bb4e8c7f7efd049cb1c3810291c99e9293c25d), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302)]:
+    -   @solana/keys@2.0.0-rc.1
+    -   @solana/rpc-subscriptions@2.0.0-rc.1
+    -   @solana/promises@2.0.0-rc.1
+    -   @solana/transactions@2.0.0-rc.1
+    -   @solana/rpc@2.0.0-rc.1
+    -   @solana/addresses@2.0.0-rc.1
+    -   @solana/codecs-strings@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+    -   @solana/rpc-types@2.0.0-rc.1
+    -   @solana/transaction-messages@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes

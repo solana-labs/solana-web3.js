@@ -1,5 +1,20 @@
 # @solana/signers
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   [#3051](https://github.com/solana-labs/solana-web3.js/pull/3051) [`1ad523d`](https://github.com/solana-labs/solana-web3.js/commit/1ad523dc5792d9152a66e9dc2b83294e3eba4db0) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add a `createKeyPairSignerFromPrivateKeyBytes` helper that compose `createKeyPairFromPrivateKeyBytes` and `createSignerFromKeyPair`.
+
+-   Updated dependencies [[`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302)]:
+    -   @solana/keys@2.0.0-rc.1
+    -   @solana/transactions@2.0.0-rc.1
+    -   @solana/addresses@2.0.0-rc.1
+    -   @solana/codecs-core@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+    -   @solana/instructions@2.0.0-rc.1
+    -   @solana/transaction-messages@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes

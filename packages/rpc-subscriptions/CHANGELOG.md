@@ -1,5 +1,22 @@
 # @solana/rpc-subscriptions
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   [#3072](https://github.com/solana-labs/solana-web3.js/pull/3072) [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922) Thanks [@steveluscher](https://github.com/steveluscher)! - Fixed a memory leak with transaction confirmation and subscriptions
+
+-   Updated dependencies [[`b4bf318`](https://github.com/solana-labs/solana-web3.js/commit/b4bf318d7d4bdd639e4c126c70350993a8540fe8), [`f2bb4e8`](https://github.com/solana-labs/solana-web3.js/commit/f2bb4e8c7f7efd049cb1c3810291c99e9293c25d)]:
+    -   @solana/promises@2.0.0-rc.1
+    -   @solana/rpc-subscriptions-api@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+    -   @solana/fast-stable-stringify@2.0.0-rc.1
+    -   @solana/functional@2.0.0-rc.1
+    -   @solana/rpc-subscriptions-spec@2.0.0-rc.1
+    -   @solana/rpc-subscriptions-transport-websocket@2.0.0-rc.1
+    -   @solana/rpc-transformers@2.0.0-rc.1
+    -   @solana/rpc-types@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes
