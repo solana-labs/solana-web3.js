@@ -574,7 +574,7 @@ codecWithCustomNoneValue.encode(42); // 0x2a00
 codecWithCustomNoneValue.encode(null); // 0xff
 ```
 
-Finally, note that if `prefix` is set to `null` and no `noneValue` is provided, the codec assume that the item exists if and only if some remaining bytes are available to decode. This could be useful to describe data structures that may or may not have additional data to the end of the buffer.
+Finally, note that if `prefix` is set to `null` and no `noneValue` is provided, the codec assumes that the item exists if and only if some remaining bytes are available to decode. This could be useful to describe data structures that may or may not have additional data to the end of the buffer.
 
 ```ts
 const codec = getNullableCodec(getU16Codec(), { prefix: null });
