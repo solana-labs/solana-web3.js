@@ -1,5 +1,17 @@
 # @solana/react
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   Updated dependencies [[`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`1ad523d`](https://github.com/solana-labs/solana-web3.js/commit/1ad523dc5792d9152a66e9dc2b83294e3eba4db0), [`b4bf318`](https://github.com/solana-labs/solana-web3.js/commit/b4bf318d7d4bdd639e4c126c70350993a8540fe8), [`f2bb4e8`](https://github.com/solana-labs/solana-web3.js/commit/f2bb4e8c7f7efd049cb1c3810291c99e9293c25d), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302)]:
+    -   @solana/keys@2.0.0-rc.1
+    -   @solana/signers@2.0.0-rc.1
+    -   @solana/promises@2.0.0-rc.1
+    -   @solana/transactions@2.0.0-rc.1
+    -   @solana/addresses@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Minor Changes

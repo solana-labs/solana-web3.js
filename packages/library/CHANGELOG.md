@@ -1,5 +1,28 @@
 # @solana/web3.js
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   Updated dependencies [[`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61), [`1ad523d`](https://github.com/solana-labs/solana-web3.js/commit/1ad523dc5792d9152a66e9dc2b83294e3eba4db0), [`c122c75`](https://github.com/solana-labs/solana-web3.js/commit/c122c75936e8fa5364edf114a5182cf119b26922), [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302)]:
+    -   @solana/keys@2.0.0-rc.1
+    -   @solana/signers@2.0.0-rc.1
+    -   @solana/transaction-confirmation@2.0.0-rc.1
+    -   @solana/rpc-subscriptions@2.0.0-rc.1
+    -   @solana/transactions@2.0.0-rc.1
+    -   @solana/rpc@2.0.0-rc.1
+    -   @solana/sysvars@2.0.0-rc.1
+    -   @solana/accounts@2.0.0-rc.1
+    -   @solana/addresses@2.0.0-rc.1
+    -   @solana/codecs@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+    -   @solana/functional@2.0.0-rc.1
+    -   @solana/instructions@2.0.0-rc.1
+    -   @solana/programs@2.0.0-rc.1
+    -   @solana/rpc-parsed-types@2.0.0-rc.1
+    -   @solana/rpc-types@2.0.0-rc.1
+    -   @solana/transaction-messages@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes
