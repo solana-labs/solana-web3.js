@@ -1,5 +1,34 @@
 # @solana/keys
 
+## 2.0.0-rc.1
+
+### Patch Changes
+
+-   [#3050](https://github.com/solana-labs/solana-web3.js/pull/3050) [`7d310f6`](https://github.com/solana-labs/solana-web3.js/commit/7d310f6f9cd7d02fca4d6f8e311b857c9dd84e61) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add a `createKeyPairFromPrivateKeyBytes` helper that creates a keypair from the 32-byte private key bytes.
+
+    ```ts
+    import { createKeyPairFromPrivateKeyBytes } from '@solana/keys';
+
+    const { privateKey, publicKey } = await createKeyPairFromPrivateKeyBytes(new Uint8Array([...]));
+    ```
+
+-   [#3049](https://github.com/solana-labs/solana-web3.js/pull/3049) [`f9a8446`](https://github.com/solana-labs/solana-web3.js/commit/f9a84460670a97d4ab6514b28fe0d29c6fac3302) Thanks [@lorisleiva](https://github.com/lorisleiva)! - Add a `getPublicKeyFromPrivateKey` helper that, given an extractable `CryptoKey` private key, gets the corresponding public key as a `CryptoKey`.
+
+    ```ts
+    import { createPrivateKeyFromBytes, getPublicKeyFromPrivateKey } from '@solana/keys';
+
+    const privateKey = await createPrivateKeyFromBytes(new Uint8Array([...]), true);
+
+    const publicKey = await getPublicKeyFromPrivateKey(privateKey);
+    const extractablePublicKey = await getPublicKeyFromPrivateKey(privateKey, true);
+    ```
+
+-   Updated dependencies []:
+    -   @solana/assertions@2.0.0-rc.1
+    -   @solana/codecs-core@2.0.0-rc.1
+    -   @solana/codecs-strings@2.0.0-rc.1
+    -   @solana/errors@2.0.0-rc.1
+
 ## 2.0.0-rc.0
 
 ### Patch Changes
