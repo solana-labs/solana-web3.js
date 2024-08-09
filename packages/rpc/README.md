@@ -46,7 +46,7 @@ transport satisfies RpcTransportTestnet; // OK
 
 These types refine the base `Rpc` type. Each describes a RPC that is specific in some way to a particular Solana cluster and a corpus of RPC methods.
 
-This is useful in cases where you need to make assertions about the suitablilty of a RPC for a given purpose. For example, you might like to make it a type error to combine certain types with RPC belonging to certain clusters, at compile time.
+This is useful in cases where you need to make assertions about the suitability of a RPC for a given purpose. For example, you might like to make it a type error to combine certain types with RPC belonging to certain clusters, at compile time.
 
 ```ts
 async function getSpecialAccountInfo(
