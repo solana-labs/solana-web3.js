@@ -18,7 +18,7 @@ This is the JavaScript SDK for building Solana apps for Node, web, and React Nat
 
 ## Functions
 
-In addition to rexporting functions from packages in the `@solana/*` namespace, this package offers additional helpers for building Solana applications, with sensible defaults.
+In addition to reexporting functions from packages in the `@solana/*` namespace, this package offers additional helpers for building Solana applications, with sensible defaults.
 
 ### `airdropFactory({rpc, rpcSubscriptions})`
 

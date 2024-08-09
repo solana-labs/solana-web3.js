@@ -2,7 +2,7 @@
 
 This project is a fork of [nickyout/fast-stable-stringify](https://github.com/nickyout/fast-stable-stringify)
 
-The most popular repository providing this feature is [substack's json-stable-stringify](https://www.npmjs.com/package/json-stable-stringify). The intent if this library is to provide a faster alternative for when performance is more important than features. It assumes you provide basic javascript values without circular references, and returns a non-indented string.
+The most popular repository providing this feature is [substack's json-stable-stringify](https://www.npmjs.com/package/json-stable-stringify). The intent of this library is to provide a faster alternative for when performance is more important than features. It assumes you provide basic javascript values without circular references, and returns a non-indented string.
 
 Usage:
 
