@@ -7,6 +7,6 @@
     },
     "devDependencies": {
         "tinybench": "^2.9.0",
-        "undici": "^6.19.5"
+        "undici": "^6.19.7"
     }
 }
