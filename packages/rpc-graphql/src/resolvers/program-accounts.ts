@@ -12,7 +12,8 @@ export function resolveProgramAccounts(fieldName?: string) {
         parent: { [x: string]: Address },
         args: {
             commitment?: Commitment;
-            filters?: readonly { memcmp: { bytes: string; offset: number } }[];
+            dataSizeFilters?: { dataSize: bigint }[];
+            memcmpFilters?: { bytes: string; encoding: 'base58' | 'base64'; offset: bigint }[];
             minContextSlot?: Slot;
             programAddress: Address;
         },
@@ -20,9 +21,36 @@ export function resolveProgramAccounts(fieldName?: string) {
         info: GraphQLResolveInfo,
     ): Promise<AccountResult[] | null> => {
         const programAddress = fieldName ? parent[fieldName] : args.programAddress;
+        let filters:
+            | (
+                  | {
+                        dataSize: bigint;
+                    }
+                  | {
+                        memcmp: {
+                            bytes: string;
+                            encoding: 'base58' | 'base64';
+                            offset: bigint;
+                        };
+                    }
+              )[]
+            | undefined = [];
+        if (args.memcmpFilters) {
+            filters.concat(
+                args.memcmpFilters.map(memcmpFilter => ({
+                    memcmp: memcmpFilter,
+                })),
+            );
+        }
+        if (args.dataSizeFilters) {
+            filters = filters.concat(args.dataSizeFilters);
+        }
+        if (filters.length === 0) {
+            filters = undefined;
+        }
 
         if (programAddress) {
-            const argsSet = buildProgramAccountsLoaderArgSetFromResolveInfo({ ...args, programAddress }, info);
+            const argsSet = buildProgramAccountsLoaderArgSetFromResolveInfo({ ...args, filters, programAddress }, info);
             const loadedProgramAccountsLists = await context.loaders.programAccounts.loadMany(argsSet);
 
             const result: {

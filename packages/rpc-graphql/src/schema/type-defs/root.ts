@@ -5,7 +5,8 @@ export const rootTypeDefs = /* GraphQL */ `
         programAccounts(
             programAddress: Address!
             commitment: Commitment
-            filters: [ProgramAccountsFilter]
+            dataSizeFilters: [ProgramAccountsDataSizeFilter]
+            memcmpFilters: [ProgramAccountsMemcmpFilter]
             minContextSlot: Slot
         ): [Account]
         transaction(signature: Signature!, commitment: CommitmentWithoutProcessed): Transaction
