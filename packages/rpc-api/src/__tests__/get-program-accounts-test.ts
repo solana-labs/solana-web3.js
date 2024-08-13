@@ -2290,4 +2290,174 @@ describe('getProgramAccounts', () => {
             expect(accountInfo[0].account.data).toStrictEqual(['dGVzdCA=', 'base64']);
         });
     });
+
+    describe('when called with a data size filter', () => {
+        it('returns the matching accounts', async () => {
+            expect.assertions(3);
+            const program =
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+            const programAccounts = await rpc
+                .getProgramAccounts(program, {
+                    encoding: 'jsonParsed',
+                    filters: [
+                        {
+                            dataSize: 165n, // Token account size
+                        },
+                    ],
+                })
+                .send();
+
+            programAccounts.forEach(item => {
+                expect(item).toMatchObject({
+                    account: {
+                        data: {
+                            parsed: {
+                                info: {
+                                    isNative: expect.any(Boolean),
+                                    mint: expect.any(String),
+                                    owner: expect.any(String),
+                                    state: expect.any(String),
+                                    tokenAmount: {
+                                        amount: expect.any(String),
+                                        decimals: expect.any(Number),
+                                        uiAmount: expect.any(Number),
+                                        uiAmountString: expect.any(String),
+                                    },
+                                },
+                                type: 'account',
+                            },
+                            program: 'spl-token',
+                            space: 165n, // Token account space
+                        },
+                        executable: false,
+                        lamports: expect.any(BigInt),
+                        owner: expect.any(String),
+                        rentEpoch: expect.any(BigInt),
+                        space: 165n, // Token account space
+                    },
+                    pubkey: expect.any(String),
+                });
+            });
+        });
+    });
+
+    describe('when called with a memcmpy filter', () => {
+        it('returns the matching accounts', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-mint-account.json
+            const mint =
+                'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+            const program =
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+            const programAccounts = await rpc
+                .getProgramAccounts(program, {
+                    encoding: 'jsonParsed',
+                    filters: [
+                        {
+                            memcmp: {
+                                bytes: mint,
+                                encoding: 'base58',
+                                offset: 0n,
+                            },
+                        },
+                    ],
+                })
+                .send();
+
+            programAccounts.forEach(item => {
+                expect(item).toMatchObject({
+                    account: {
+                        data: {
+                            parsed: {
+                                info: {
+                                    isNative: expect.any(Boolean),
+                                    mint, // Matches mint address provided in filter.
+                                    owner: expect.any(String),
+                                    state: expect.any(String),
+                                    tokenAmount: {
+                                        amount: expect.any(String),
+                                        decimals: expect.any(Number),
+                                        uiAmount: expect.any(Number),
+                                        uiAmountString: expect.any(String),
+                                    },
+                                },
+                                type: 'account',
+                            },
+                            program: 'spl-token',
+                            space: 165n, // Token account space
+                        },
+                        executable: false,
+                        lamports: expect.any(BigInt),
+                        owner: expect.any(String),
+                        rentEpoch: expect.any(BigInt),
+                        space: 165n, // Token account space
+                    },
+                    pubkey: expect.any(String),
+                });
+            });
+        });
+    });
+
+    describe('when called with both a data size and a memcmpy filter', () => {
+        it('returns the matching accounts', async () => {
+            expect.assertions(1);
+            // See scripts/fixtures/spl-token-mint-account.json
+            const mint =
+                'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+            const program =
+                'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+            const programAccounts = await rpc
+                .getProgramAccounts(program, {
+                    encoding: 'jsonParsed',
+                    filters: [
+                        {
+                            dataSize: 165n, // Token account size
+                        },
+                        {
+                            memcmp: {
+                                bytes: mint,
+                                encoding: 'base58',
+                                offset: 0n,
+                            },
+                        },
+                    ],
+                })
+                .send();
+
+            programAccounts.forEach(item => {
+                expect(item).toMatchObject({
+                    account: {
+                        data: {
+                            parsed: {
+                                info: {
+                                    isNative: expect.any(Boolean),
+                                    mint, // Matches mint address provided in filter.
+                                    owner: expect.any(String),
+                                    state: expect.any(String),
+                                    tokenAmount: {
+                                        amount: expect.any(String),
+                                        decimals: expect.any(Number),
+                                        uiAmount: expect.any(Number),
+                                        uiAmountString: expect.any(String),
+                                    },
+                                },
+                                type: 'account',
+                            },
+                            program: 'spl-token',
+                            space: 165n, // Token account space
+                        },
+                        executable: false,
+                        lamports: expect.any(BigInt),
+                        owner: expect.any(String),
+                        rentEpoch: expect.any(BigInt),
+                        space: 165n, // Token account space
+                    },
+                    pubkey: expect.any(String),
+                });
+            });
+        });
+    });
 });
