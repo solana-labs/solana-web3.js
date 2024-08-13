@@ -1,3 +1,4 @@
+import type { Address } from '@solana/addresses';
 import {
     GetAccountInfoApi,
     GetBlockApi,
@@ -610,6 +611,166 @@ describe('programAccounts', () => {
                         programAccounts: expect.arrayContaining([
                             {
                                 data: 'dGVzdCA=', // As tested on local RPC
+                            },
+                        ]),
+                    },
+                });
+            });
+        });
+    });
+    describe('when called with a data size filter', () => {
+        const programAddress =
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+        describe('when using memcmp filter', () => {
+            it('returns the matching accounts', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    dataSizeFilters: [
+                        {
+                            dataSize: 165n, // Token account size
+                        },
+                    ],
+                    programAddress,
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($programAddress: Address!, $dataSizeFilters: [ProgramAccountsDataSizeFilter!]!) {
+                        programAccounts(
+                            programAddress: $programAddress
+                            commitment: null
+                            dataSizeFilters: $dataSizeFilters
+                        ) {
+                            ... on TokenAccount {
+                                mint {
+                                    address
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                console.log(result);
+                expect(result).toMatchObject({
+                    data: {
+                        programAccounts: expect.arrayContaining([
+                            {
+                                mint: {
+                                    address: expect.any(String),
+                                },
+                            },
+                        ]),
+                    },
+                });
+            });
+        });
+    });
+    describe('when called with a memcmp filter', () => {
+        // See scripts/fixtures/spl-token-mint-account.json
+        const mintAddress =
+            'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+        const programAddress =
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+        describe('when using memcmp filter', () => {
+            it('returns the matching accounts', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    memcmpFilters: [
+                        {
+                            bytes: mintAddress, // Mint address in data.
+                            encoding: 'BASE_58', // Base58-encoded address.
+                            offset: 0, // Offset 0 for mint address.
+                        },
+                    ],
+                    programAddress,
+                };
+                const source = /* GraphQL */ `
+                    query testQuery($programAddress: Address!, $memcmpFilters: [ProgramAccountsMemcmpFilter!]!) {
+                        programAccounts(
+                            programAddress: $programAddress
+                            commitment: null
+                            dataSizeFilters: null
+                            memcmpFilters: $memcmpFilters
+                        ) {
+                            ... on TokenAccount {
+                                mint {
+                                    address
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                console.log(result);
+                expect(result).toMatchObject({
+                    data: {
+                        programAccounts: expect.arrayContaining([
+                            {
+                                mint: {
+                                    address: mintAddress,
+                                },
+                            },
+                        ]),
+                    },
+                });
+            });
+        });
+    });
+
+    describe('when called with both a data size and a memcmpy filter', () => {
+        // See scripts/fixtures/spl-token-mint-account.json
+        const mintAddress =
+            'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr' as Address<'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'>;
+        const programAddress =
+            'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+
+        describe('when using memcmp filter', () => {
+            it('returns the matching accounts', async () => {
+                expect.assertions(1);
+                const variableValues = {
+                    dataSizeFilters: [
+                        {
+                            dataSize: 165n, // Token account size
+                        },
+                    ],
+                    memcmpFilters: [
+                        {
+                            bytes: mintAddress, // Mint address in data.
+                            encoding: 'BASE_58', // Base58-encoded address.
+                            offset: 0, // Offset 0 for mint address.
+                        },
+                    ],
+                    programAddress,
+                };
+                const source = /* GraphQL */ `
+                    query testQuery(
+                        $programAddress: Address!
+                        $dataSizeFilters: [ProgramAccountsDataSizeFilter!]!
+                        $memcmpFilters: [ProgramAccountsMemcmpFilter!]!
+                    ) {
+                        programAccounts(
+                            programAddress: $programAddress
+                            commitment: null
+                            dataSizeFilters: $dataSizeFilters
+                            memcmpFilters: $memcmpFilters
+                        ) {
+                            ... on TokenAccount {
+                                mint {
+                                    address
+                                }
+                            }
+                        }
+                    }
+                `;
+                const result = await rpcGraphQL.query(source, variableValues);
+                console.log(result);
+                expect(result).toMatchObject({
+                    data: {
+                        programAccounts: expect.arrayContaining([
+                            {
+                                mint: {
+                                    address: mintAddress,
+                                },
                             },
                         ]),
                     },
