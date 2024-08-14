@@ -37,11 +37,19 @@ export const typeTypeDefs = /* GraphQL */ `
 
     scalar Lamports
 
-    input ProgramAccountsFilter {
-        bytes: BigInt
-        dataSize: BigInt
-        encoding: AccountEncoding
-        offset: BigInt
+    input ProgramAccountsDataSizeFilter {
+        dataSize: BigInt!
+    }
+
+    enum ProgramAccountsMemcmpFilterAccountEncoding {
+        BASE_58
+        BASE_64
+    }
+
+    input ProgramAccountsMemcmpFilter {
+        bytes: String!
+        encoding: ProgramAccountsMemcmpFilterAccountEncoding!
+        offset: BigInt!
     }
 
     type ReturnData {

@@ -43,7 +43,18 @@ export type ProgramAccountsLoaderArgsBase = {
     commitment?: Commitment;
     dataSlice?: { length: number; offset: number };
     encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
-    filters?: readonly { memcmp: { bytes: string; offset: number } }[];
+    filters?: (
+        | {
+              dataSize: bigint;
+          }
+        | {
+              memcmp: {
+                  bytes: string;
+                  encoding: 'base58' | 'base64';
+                  offset: bigint;
+              };
+          }
+    )[];
     minContextSlot?: Slot;
 };
 export type ProgramAccountsLoaderArgs = ProgramAccountsLoaderArgsBase & { programAddress: Address };

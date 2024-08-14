@@ -55,6 +55,10 @@ export const typeTypeResolvers = {
     Epoch: bigIntScalarAlias,
     Hash: stringScalarAlias,
     Lamports: bigIntScalarAlias,
+    ProgramAccountsMemcmpFilterAccountEncoding: {
+        BASE_58: 'base58',
+        BASE_64: 'base64',
+    },
     Signature: stringScalarAlias,
     Slot: bigIntScalarAlias,
     SplTokenDefaultAccountState: {

@@ -12,7 +12,18 @@ import { buildAccountArgSetWithVisitor } from './account';
 export function buildProgramAccountsLoaderArgSetFromResolveInfo(
     args: {
         commitment?: Commitment;
-        filters?: readonly { memcmp: { bytes: string; offset: number } }[];
+        filters?: (
+            | {
+                  dataSize: bigint;
+              }
+            | {
+                  memcmp: {
+                      bytes: string;
+                      encoding: 'base58' | 'base64';
+                      offset: bigint;
+                  };
+              }
+        )[];
         minContextSlot?: Slot;
         programAddress: Address;
     },
