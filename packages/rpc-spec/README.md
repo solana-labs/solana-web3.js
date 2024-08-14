@@ -33,7 +33,7 @@ const response = await rpc
 
 ### `PendingRpcRequest<TResponse>`
 
-Pending requests are the result of calling a supported method on on `Rpc` object. They encapsulate all of the information necessary to make the request without actually making it.
+Pending requests are the result of calling a supported method on an `Rpc` object. They encapsulate all of the information necessary to make the request without actually making it.
 
 Calling the `send(options)` method on a `PendingRpcRequest` will trigger the request and return a promise for `TResponse`.
 
