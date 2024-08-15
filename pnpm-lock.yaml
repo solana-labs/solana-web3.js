@@ -78,8 +78,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       eslint-config-turbo:
-        specifier: ^2.0.12
-        version: 2.0.12(eslint@8.57.0)
+        specifier: ^2.0.13
+        version: 2.0.13(eslint@8.57.0)
       eslint-plugin-jest:
         specifier: ^27.9.0
         version: 27.9.0(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(jest@30.0.0-alpha.6(@types/node@22.3.0)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@22.3.0)(typescript@5.5.4)))(typescript@5.5.4)
@@ -4347,8 +4347,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-turbo@2.0.12:
-    resolution: {integrity: sha512-3PUzoyeJi2SjsTSjfWgTUIHK7kOqsapDEaOT7sCjFnZXvuhYLKxW37lysjq7+55abGGm0yQTXxNFLjrQKUORag==}
+  eslint-config-turbo@2.0.13:
+    resolution: {integrity: sha512-GdWQa8OAnX7SnrUK49U4zEv6rglLogQs1HQZ56Y7jn87ohkaBQAUFtxjyTNNgcDlYqzT/6deRlEGsJ/maRU2Wg==}
     peerDependencies:
       eslint: '>6.6.0'
 
@@ -4385,8 +4385,8 @@ packages:
     resolution: {integrity: sha512-DNPHFGCA0/hZIsfODbeLZqaGY/+q3vgtshF85r+YWDNCQ2apd9PNs/zL6ttKm0nD1IFwvxyg3YOTI7FHl4unrw==}
     engines: {node: '>=0.10.0'}
 
-  eslint-plugin-turbo@2.0.12:
-    resolution: {integrity: sha512-vXWKer7F0RPTcVy1B+hFTEK4mlEOpouB8MCAFD3WW4C6t98wvuDCsIPjxIldpxg7CnwmRxALpNWgNVkU2LVVEQ==}
+  eslint-plugin-turbo@2.0.13:
+    resolution: {integrity: sha512-hpHRtQVETm07OBvj8kFy/+sgts+i36wFM8xd4yr9Wt3TWtmC4mealtgSvSEx61vdkqbDhKMP4CftgpHj2DI4yw==}
     peerDependencies:
       eslint: '>6.6.0'
 
@@ -10301,10 +10301,10 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-turbo@2.0.12(eslint@8.57.0):
+  eslint-config-turbo@2.0.13(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
-      eslint-plugin-turbo: 2.0.12(eslint@8.57.0)
+      eslint-plugin-turbo: 2.0.13(eslint@8.57.0)
 
   eslint-plugin-jest@27.9.0(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(jest@30.0.0-alpha.6(@types/node@22.3.0)(ts-node@10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@22.3.0)(typescript@5.5.4)))(typescript@5.5.4):
     dependencies:
@@ -10336,7 +10336,7 @@ snapshots:
       natural-compare: 1.4.0
       requireindex: 1.2.0
 
-  eslint-plugin-turbo@2.0.12(eslint@8.57.0):
+  eslint-plugin-turbo@2.0.13(eslint@8.57.0):
     dependencies:
       dotenv: 16.0.3
       eslint: 8.57.0
