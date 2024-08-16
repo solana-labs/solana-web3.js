@@ -63,7 +63,7 @@
         "maintained node versions"
     ],
     "dependencies": {
-        "@graphql-tools/schema": "^10.0.5",
+        "@graphql-tools/schema": "^10.0.6",
         "@solana/codecs-strings": "workspace:*",
         "@solana/fast-stable-stringify": "workspace:*",
         "dataloader": "^2.2.2",
