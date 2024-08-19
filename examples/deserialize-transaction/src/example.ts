@@ -237,7 +237,7 @@ const compiledTransactionMessageDecoder = getCompiledTransactionMessageDecoder()
 const compiledTransactionMessage = compiledTransactionMessageDecoder.decode(decodedTransaction.messageBytes);
 
 // This gives us the data stucture `CompiledTransactionMessage`. This is the format that transactions are
-// compiled to before the entire transaction is encoded to base64 to be sent to the Solana network.
+// compiled before the entire transaction is encoded to base64 to be sent to the Solana network.
 
 // Let's inspect some fields of `compiledTransactionMessage`
 // We can see its version:
