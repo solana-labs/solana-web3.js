@@ -38,7 +38,7 @@ function getThrottledTransport<TClusterUrl extends ClusterUrl>(
     originalTransport: RpcTransportFromClusterUrl<TClusterUrl>,
 ): RpcTransportFromClusterUrl<TClusterUrl> {
     /**
-     * Keep track of how many more requests are allowed to be made in the curent 1 second span.
+     * Keep track of how many more requests are allowed to be made in the current 1 second span.
      */
     let requestBudgetRemaining = MAX_RPS;
     /**
