@@ -3,18 +3,18 @@ import { assertIsUnixTimestamp } from '../unix-timestamp';
 describe('assertIsUnixTimestamp()', () => {
     it('throws when supplied a too large number', () => {
         expect(() => {
-            assertIsUnixTimestamp(BigInt(Number.MAX_SAFE_INTEGER));
+            assertIsUnixTimestamp(BigInt(2n ** 63n));
         }).toThrow();
         expect(() => {
-            assertIsUnixTimestamp(BigInt(8.64e15 + 1));
+            assertIsUnixTimestamp(BigInt('9223372036854775808'));
         }).toThrow();
     });
     it('throws when supplied a too small number', () => {
         expect(() => {
-            assertIsUnixTimestamp(BigInt(Number.MIN_SAFE_INTEGER));
+            assertIsUnixTimestamp(BigInt(BigInt(-(2n ** 63n)) - 1n));
         }).toThrow();
         expect(() => {
-            assertIsUnixTimestamp(BigInt(-8.64e15 - 1));
+            assertIsUnixTimestamp(BigInt('-9223372036854775809'));
         }).toThrow();
     });
     it('does not throw when supplied a zero timestamp', () => {
@@ -29,7 +29,10 @@ describe('assertIsUnixTimestamp()', () => {
     });
     it('does not throw when supplied the max valid timestamp', () => {
         expect(() => {
-            assertIsUnixTimestamp(BigInt(8.64e15));
+            assertIsUnixTimestamp(BigInt(BigInt(2n ** 63n) - 1n));
+        }).not.toThrow();
+        expect(() => {
+            assertIsUnixTimestamp(BigInt('9223372036854775807'));
         }).not.toThrow();
     });
 });

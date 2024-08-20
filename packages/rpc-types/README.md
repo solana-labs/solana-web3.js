@@ -38,7 +38,9 @@ This type represents a number which has been encoded as a string for transit ove
 
 ### `UnixTimestampUnsafeBeyond2Pow53Minus1`
 
-This type represents a number in the range $[-8.64 \times 10^{15}, 8.64 \times 10^{15}]$. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_epoch_timestamps_and_invalid_date
+This type represents a Unix timestamp in _seconds_.
+
+**Note**: Despite the fact that this type is represented as a `bigint` in client code and an `i64` in server code, the JSON-RPC implementation represents a Unix timestamp as an IEEE 754 floating point number. This means that you can only safely send or receive values up to $2^{53} - 1$ between the client and the RPC server. See https://github.com/solana-labs/solana/issues/30741 for more detail.
 
 ## Functions
 

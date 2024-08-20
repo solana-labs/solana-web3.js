@@ -60,10 +60,10 @@ describe('coercions', () => {
             expect(coerced).toBe(raw);
         });
         it('throws on an out-of-range `UnixTimestampUnsafeBeyond2Pow53Minus1`', () => {
-            const thisThrows = () => unixTimestamp(BigInt(8.75e15));
+            const thisThrows = () => unixTimestamp(BigInt(2n ** 63n));
             expect(thisThrows).toThrow(
                 new SolanaError(SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE, {
-                    value: BigInt(8.75e15),
+                    value: BigInt(2n ** 63n),
                 }),
             );
         });

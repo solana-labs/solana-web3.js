@@ -501,7 +501,8 @@ export const SolanaErrorMessages: Readonly<{
     [SOLANA_ERROR__SUBTLE_CRYPTO__GENERATE_FUNCTION_UNIMPLEMENTED]: 'No key generation implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO__SIGN_FUNCTION_UNIMPLEMENTED]: 'No signing implementation could be found.',
     [SOLANA_ERROR__SUBTLE_CRYPTO__VERIFY_FUNCTION_UNIMPLEMENTED]: 'No key export implementation could be found.',
-    [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: 'Timestamp value must be in the range [-8.64e15, 8.64e15]. `$value` given',
+    [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]:
+        'Timestamp value must be in the range [-(2n ** 63n), (2n ** 63n) - 1]. `$value` given',
     [SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_BORROW_OUTSTANDING]:
         'Transaction processing left an account with an outstanding borrowed reference',
     [SOLANA_ERROR__TRANSACTION_ERROR__ACCOUNT_IN_USE]: 'Account in use',
