@@ -26,7 +26,7 @@ const rpc = null as unknown as Rpc<GetBlockApi>;
 function assertBase(
     response: {
         blockHeight: bigint;
-        blockTime: number;
+        blockTime: bigint;
         blockhash: string;
         parentSlot: bigint;
         previousBlockhash: string;
@@ -34,7 +34,7 @@ function assertBase(
 ) {
     response.blockhash satisfies string;
     response.blockHeight satisfies bigint;
-    response.blockTime satisfies number;
+    response.blockTime satisfies bigint;
     response.parentSlot satisfies bigint;
     response.previousBlockhash satisfies string;
 }

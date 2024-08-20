@@ -22,7 +22,7 @@ type BlockNotificationsApiNotificationBase = SolanaRpcResponse<
     Readonly<{
         block: {
             blockHeight: bigint;
-            blockTime: number;
+            blockTime: bigint;
             blockhash: string;
             parentSlot: bigint;
             previousBlockhash: string;

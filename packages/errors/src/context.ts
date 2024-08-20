@@ -532,7 +532,7 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             key: CryptoKey;
         };
         [SOLANA_ERROR__TIMESTAMP_OUT_OF_RANGE]: {
-            value: number;
+            value: bigint;
         };
         [SOLANA_ERROR__TRANSACTION_ERROR__DUPLICATE_INSTRUCTION]: {
             index: number;

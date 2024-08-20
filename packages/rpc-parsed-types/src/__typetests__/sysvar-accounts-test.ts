@@ -7,10 +7,10 @@ import { JsonParsedSysvarAccount } from '../sysvar-accounts';
     const account = {
         info: {
             epoch: 0n as Epoch,
-            epochStartTimestamp: 1704907181 as UnixTimestamp,
+            epochStartTimestamp: 1704907181n as UnixTimestamp,
             leaderScheduleEpoch: 1n as Epoch,
             slot: 90829n as Slot,
-            unixTimestamp: 1704998009 as UnixTimestamp,
+            unixTimestamp: 1704998009n as UnixTimestamp,
         },
         type: 'clock' as const,
     };
