@@ -27,7 +27,7 @@ In case an incident is discovered or reported, the following process will be fol
 
 ### 1. Accept the new report
 
-In response a newly reported security problem, a member of the `solana-labs/admins` group will accept the report to turn it into a draft advisory. The `solana-labs/security-incident-response` group should be added to the draft security advisory, and create a private fork of the repository (grey button towards the bottom of the page) if necessary.
+In response to a newly reported security problem, a member of the `solana-labs/admins` group will accept the report to turn it into a draft advisory. The `solana-labs/security-incident-response` group should be added to the draft security advisory, and create a private fork of the repository (grey button towards the bottom of the page) if necessary.
 
 If the advisory is the result of an audit finding, follow the same process as above but add the auditor's github user(s) and begin the title with "[Audit]".
 
