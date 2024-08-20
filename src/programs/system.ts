@@ -860,7 +860,7 @@ export class SystemProgram {
       {pubkey: params.fromPubkey, isSigner: true, isWritable: true},
       {pubkey: params.newAccountPubkey, isSigner: false, isWritable: true},
     ];
-    if (params.basePubkey != params.fromPubkey) {
+    if (!params.basePubkey.equals(params.fromPubkey)) {
       keys.push({
         pubkey: params.basePubkey,
         isSigner: true,
