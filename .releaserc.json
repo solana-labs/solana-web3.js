@@ -2,6 +2,9 @@
   "$schema": "https://json.schemastore.org/semantic-release.json",
   "branches": ["maintenance/v1.x"],
   "commitPaths": ["./src/"],
+  "overrides": {
+    "conventional-changelog-conventionalcommits": ">= 8.0.0"
+  },
   "repositoryUrl": "git@github.com:solana-labs/solana-web3.js.git",
   "preset": "conventionalcommits",
   "presetConfig": {
