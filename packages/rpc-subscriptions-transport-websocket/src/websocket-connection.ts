@@ -24,10 +24,9 @@ type IteratorState =
           onError: Parameters<ConstructorParameters<typeof Promise>[0]>[1];
           onMessage: Parameters<ConstructorParameters<typeof Promise>[0]>[0];
       };
-export type RpcWebSocketConnection = Readonly<{
+export interface RpcWebSocketConnection extends AsyncIterable<unknown> {
     send(payload: unknown): Promise<void>;
-    [Symbol.asyncIterator](): AsyncGenerator<unknown>;
-}>;
+}
 
 let EXPLICIT_ABORT_TOKEN: symbol;
 function createExplicitAbortToken() {
