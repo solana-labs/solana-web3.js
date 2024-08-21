@@ -8,7 +8,7 @@ interface TestRpcSubscriptionNotifications {
 }
 
 describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
-    let asyncGenerator: jest.Mock<AsyncGenerator<unknown, void>>;
+    let asyncGenerator: jest.Mock<AsyncGenerator<unknown, unknown>>;
     let createPendingSubscription: jest.Mock;
     let getDeduplicationKey: jest.Mock;
     let subscribe: jest.Mock;
@@ -114,6 +114,21 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
             await jest.runAllTimersAsync();
             await expect(messagePromiseA).resolves.toHaveProperty('value', 'hello');
             await expect(messagePromiseB).resolves.toHaveProperty('value', 'hello');
+        });
+        it('publishes the final message when the iterable returns', async () => {
+            expect.assertions(1);
+            asyncGenerator.mockImplementation(
+                // eslint-disable-next-line require-yield
+                async function* () {
+                    return await Promise.resolve('hello');
+                },
+            );
+            const iterable = await rpcSubscriptions
+                .thingNotifications({ payload: 'hello' })
+                .subscribe({ abortSignal: new AbortController().signal });
+            const iterator = iterable[Symbol.asyncIterator]();
+            const messagePromise = iterator.next();
+            await expect(messagePromise).resolves.toHaveProperty('value', 'hello');
         });
         it('aborting a subscription causes it to return', async () => {
             expect.assertions(1);
