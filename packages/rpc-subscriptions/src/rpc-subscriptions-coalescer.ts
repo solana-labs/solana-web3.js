@@ -108,7 +108,7 @@ export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsM
                                     while (true) {
                                         const iteratorResult = await safeRace([iterator.next(), abortPromise]);
                                         if (iteratorResult.done) {
-                                            return;
+                                            return iteratorResult.value;
                                         } else {
                                             yield iteratorResult.value;
                                         }
