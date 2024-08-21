@@ -1026,7 +1026,7 @@ Here’s an example of this in action:
 // {
 //     blockhash: Blockhash;
 //     blockHeight: bigint;
-//     blockTime: UnixTimestamp;
+//     blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1;
 //     parentSlot: bigint;
 //     previousBlockhash: Blockhash;
 // }

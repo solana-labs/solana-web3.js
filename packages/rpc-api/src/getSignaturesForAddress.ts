@@ -1,11 +1,11 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
 import type { RpcApiMethods } from '@solana/rpc-spec';
-import type { Commitment, Slot, TransactionError, UnixTimestamp } from '@solana/rpc-types';
+import type { Commitment, Slot, TransactionError, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetSignaturesForAddressTransaction = Readonly<{
     /** estimated production time of when transaction was processed. null if not available. */
-    blockTime: UnixTimestamp | null;
+    blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1 | null;
     /** The transaction's cluster confirmation status */
     confirmationStatus: Commitment | null;
     /** Error if transaction failed, null if transaction succeeded. */

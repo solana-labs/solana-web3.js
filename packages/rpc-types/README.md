@@ -36,7 +36,7 @@ This type represents a `bigint` which has been encoded as a string for transit o
 
 This type represents a number which has been encoded as a string for transit over a transport where loss of precision when using the native number type is a concern. The JSON-RPC is such a transport.
 
-### `UnixTimestamp`
+### `UnixTimestampUnsafeBeyond2Pow53Minus1`
 
 This type represents a number in the range $[-8.64 \times 10^{15}, 8.64 \times 10^{15}]$. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_epoch_timestamps_and_invalid_date
 
@@ -85,9 +85,9 @@ See [`assertIsLamports()`](#assertislamports) for an example of how to use an as
 
 ### `assertIsUnixTimestamp()`
 
-Timestamps returned from the RPC API conform to the type `UnixTimestamp`.
+Timestamps returned from the RPC API conform to the type `UnixTimestampUnsafeBeyond2Pow53Minus1`.
 
-From time to time you might acquire a number that you suspect might validate as a `UnixTimestamp`, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a `UnixTimestamp`, use the `assertIsUnixTimestamp` function.
+From time to time you might acquire a number that you suspect might validate as a `UnixTimestampUnsafeBeyond2Pow53Minus1`, from an untrusted network API or user input. To assert that such an arbitrary number is usable as a `UnixTimestampUnsafeBeyond2Pow53Minus1`, use the `assertIsUnixTimestamp` function.
 
 See [`assertIsLamports()`](#assertislamports) for an example of how to use an assertion function.
 
@@ -155,4 +155,4 @@ This helper combines _asserting_ that a string parses as a JavaScript `Number` w
 
 ### `unixTimestamp()`
 
-This helper combines _asserting_ that a number is in the Unix timestamp range with _coercing_ it to the `UnixTimestamp` type. It's best used with untrusted input.
+This helper combines _asserting_ that a number is in the Unix timestamp range with _coercing_ it to the `UnixTimestampUnsafeBeyond2Pow53Minus1` type. It's best used with untrusted input.

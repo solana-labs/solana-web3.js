@@ -1,4 +1,4 @@
-import { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
+import { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { JsonParsedSysvarAccount } from '../sysvar-accounts';
 
@@ -7,10 +7,10 @@ import { JsonParsedSysvarAccount } from '../sysvar-accounts';
     const account = {
         info: {
             epoch: 0n as Epoch,
-            epochStartTimestamp: 1704907181n as UnixTimestamp,
+            epochStartTimestamp: 1704907181n as UnixTimestampUnsafeBeyond2Pow53Minus1,
             leaderScheduleEpoch: 1n as Epoch,
             slot: 90829n as Slot,
-            unixTimestamp: 1704998009n as UnixTimestamp,
+            unixTimestamp: 1704998009n as UnixTimestampUnsafeBeyond2Pow53Minus1,
         },
         type: 'clock' as const,
     };

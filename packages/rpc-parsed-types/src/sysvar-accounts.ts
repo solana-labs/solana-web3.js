@@ -1,4 +1,10 @@
-import type { Blockhash, Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
+import type {
+    Blockhash,
+    Epoch,
+    Slot,
+    StringifiedBigInt,
+    UnixTimestampUnsafeBeyond2Pow53Minus1,
+} from '@solana/rpc-types';
 
 import { RpcParsedType } from './rpc-parsed-type';
 
@@ -8,10 +14,10 @@ type FeeCalculator = Readonly<{
 
 type JsonParsedClockAccount = Readonly<{
     epoch: Epoch;
-    epochStartTimestamp: UnixTimestamp;
+    epochStartTimestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
     leaderScheduleEpoch: Epoch;
     slot: Slot;
-    unixTimestamp: UnixTimestamp;
+    unixTimestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
 }>;
 
 type JsonParsedEpochScheduleAccount = Readonly<{
