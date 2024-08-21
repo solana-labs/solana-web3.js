@@ -7,6 +7,7 @@ import {
     assertIsAllowedHttpRequestHeaders,
     normalizeHeaders,
 } from './http-transport-headers';
+import { jsonParseWithLargeIntegersAsBigInts } from './json-parse-with-bigint';
 
 type Config = Readonly<{
     dispatcher_NODE_ONLY?: Dispatcher;
@@ -66,6 +67,6 @@ export function createHttpTransport(config: Config): RpcTransport {
                 statusCode: response.status,
             });
         }
-        return (await response.json()) as TResponse;
+        return jsonParseWithLargeIntegersAsBigInts(await response.text()) as TResponse;
     };
 }

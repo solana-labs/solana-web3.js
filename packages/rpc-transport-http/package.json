@@ -34,6 +34,7 @@
     ],
     "scripts": {
         "benchmark": "./src/__benchmarks__/run.ts",
+        "benchmark:json-parse": "./src/__benchmarks__/json-parse.ts",
         "compile:js": "tsup --config build-scripts/tsup.config.package.ts",
         "compile:typedefs": "tsc -p ./tsconfig.declarations.json",
         "dev": "jest -c ../../node_modules/@solana/test-config/jest-dev.config.ts --rootDir . --watch",

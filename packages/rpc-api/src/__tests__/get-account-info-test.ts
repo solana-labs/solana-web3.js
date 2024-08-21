@@ -37,7 +37,7 @@ describe('getAccountInfo', () => {
                         executable: false,
                         lamports: 5000000n,
                         owner: '11111111111111111111111111111111',
-                        rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                        rentEpoch: 18446744073709551615n,
                         space: 9n,
                     },
                 });
