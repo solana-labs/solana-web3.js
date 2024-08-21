@@ -13,11 +13,9 @@ import {
 } from '@solana/codecs';
 import type { GetAccountInfoApi } from '@solana/rpc-api';
 import type { Rpc } from '@solana/rpc-spec';
-import type { Epoch, Slot } from '@solana/rpc-types';
+import type { Epoch, Slot, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { fetchEncodedSysvarAccount, SYSVAR_CLOCK_ADDRESS } from './sysvar';
-
-type UnixTimestamp = bigint;
 
 type SysvarClockSize = 40;
 
@@ -28,10 +26,10 @@ type SysvarClockSize = 40;
  */
 export type SysvarClock = Readonly<{
     epoch: Epoch;
-    epochStartTimestamp: UnixTimestamp;
+    epochStartTimestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
     leaderScheduleEpoch: Epoch;
     slot: Slot;
-    unixTimestamp: UnixTimestamp;
+    unixTimestamp: UnixTimestampUnsafeBeyond2Pow53Minus1;
 }>;
 
 export function getSysvarClockEncoder(): FixedSizeEncoder<SysvarClock, SysvarClockSize> {
