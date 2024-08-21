@@ -102,6 +102,7 @@
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
     "commitlint": "^19.3.0",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
     "cross-env": "7.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.0",
