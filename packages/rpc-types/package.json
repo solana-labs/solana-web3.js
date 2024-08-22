@@ -3,6 +3,10 @@
     "version": "2.0.0-rc.1",
     "description": "Type definitions for values used in the Solana RPC, and helper functions for working with them",
     "exports": {
+        "edge-light": {
+            "import": "./dist/index.node.mjs",
+            "require": "./dist/index.node.cjs"
+        },
         "browser": {
             "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs"
