@@ -8,21 +8,23 @@ interface TestRpcSubscriptionNotifications {
 }
 
 describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
-    let asyncGenerator: jest.Mock<AsyncGenerator<unknown, unknown>>;
+    let getAsyncIterable: jest.MockedFn<() => AsyncIterable<unknown>>;
     let createPendingSubscription: jest.Mock;
     let getDeduplicationKey: jest.Mock;
     let subscribe: jest.Mock;
     let rpcSubscriptions: RpcSubscriptions<TestRpcSubscriptionNotifications>;
     beforeEach(() => {
         jest.useFakeTimers();
-        asyncGenerator = jest.fn().mockImplementation(async function* () {
+        getAsyncIterable = jest.fn().mockImplementation(async function* () {
             yield await new Promise(() => {
                 /* never resolve */
             });
         });
         getDeduplicationKey = jest.fn();
-        subscribe = jest.fn().mockResolvedValue({
-            [Symbol.asyncIterator]: asyncGenerator,
+        subscribe = jest.fn().mockReturnValue({
+            [Symbol.asyncIterator]() {
+                return getAsyncIterable()[Symbol.asyncIterator]();
+            },
         });
         createPendingSubscription = jest.fn().mockReturnValue({ subscribe });
         rpcSubscriptions = getRpcSubscriptionsWithSubscriptionCoalescing<TestRpcSubscriptionNotifications>({
@@ -98,7 +100,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('publishes the same messages through both iterables', async () => {
             expect.assertions(2);
-            asyncGenerator.mockImplementation(async function* () {
+            getAsyncIterable.mockImplementation(async function* () {
                 yield Promise.resolve('hello');
             });
             const iterableA = await rpcSubscriptions
@@ -117,7 +119,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('publishes the final message when the iterable returns', async () => {
             expect.assertions(1);
-            asyncGenerator.mockImplementation(
+            getAsyncIterable.mockImplementation(
                 // eslint-disable-next-line require-yield
                 async function* () {
                     return await Promise.resolve('hello');
@@ -132,7 +134,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('aborting a subscription causes it to return', async () => {
             expect.assertions(1);
-            asyncGenerator.mockImplementation(async function* () {
+            getAsyncIterable.mockImplementation(async function* () {
                 yield Promise.resolve('hello');
             });
             const abortController = new AbortController();
@@ -146,7 +148,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('aborting one subscription does not abort the other', async () => {
             expect.assertions(1);
-            asyncGenerator.mockImplementation(async function* () {
+            getAsyncIterable.mockImplementation(async function* () {
                 yield Promise.resolve('hello');
             });
             const abortControllerA = new AbortController();
@@ -258,7 +260,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('aborting a subscription causes it to return', async () => {
             expect.assertions(1);
-            asyncGenerator.mockImplementation(async function* () {
+            getAsyncIterable.mockImplementation(async function* () {
                 yield Promise.resolve('hello');
             });
             const abortController = new AbortController();
@@ -272,7 +274,7 @@ describe('getRpcSubscriptionsWithSubscriptionCoalescing', () => {
         });
         it('aborting one subscription does not abort the other', async () => {
             expect.assertions(1);
-            asyncGenerator.mockImplementation(async function* () {
+            getAsyncIterable.mockImplementation(async function* () {
                 yield Promise.resolve('hello');
             });
             const abortControllerA = new AbortController();
