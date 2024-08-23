@@ -1,4 +1,4 @@
-export type RpcRequest<TResponse> = {
+export type RpcApiRequestPlan<TResponse> = {
     methodName: string;
     params: unknown;
     responseTransformer?: (response: unknown, methodName: string) => TResponse;

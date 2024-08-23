@@ -8,7 +8,7 @@ import {
 } from '@solana/rpc-spec-types';
 
 import { RpcApi } from './rpc-api';
-import { PendingRpcRequest, RpcRequest, RpcSendOptions } from './rpc-request';
+import { PendingRpcRequest, RpcApiRequestPlan, RpcSendOptions } from './rpc-request';
 import { RpcTransport } from './rpc-transport';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
@@ -63,7 +63,7 @@ function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(
 
 function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport, TResponse>(
     rpcConfig: RpcConfig<TRpcMethods, TRpcTransport>,
-    pendingRequest: RpcRequest<TResponse>,
+    pendingRequest: RpcApiRequestPlan<TResponse>,
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {

@@ -1,6 +1,6 @@
 import { Callable } from '@solana/rpc-spec-types';
 
-import { RpcRequest } from './rpc-request';
+import { RpcApiRequestPlan } from './rpc-request';
 
 export type RpcApiConfig = Readonly<{
     parametersTransformer?: <T extends unknown[]>(params: T, methodName: string) => unknown;
@@ -12,7 +12,7 @@ export type RpcApi<TRpcMethods> = {
 };
 
 type RpcReturnTypeMapper<TRpcMethod> = TRpcMethod extends Callable
-    ? (...rawParams: unknown[]) => RpcRequest<ReturnType<TRpcMethod>>
+    ? (...rawParams: unknown[]) => RpcApiRequestPlan<ReturnType<TRpcMethod>>
     : never;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,7 +38,7 @@ export function createRpcApi<TRpcMethods extends RpcApiMethods>(config?: RpcApiC
                 ...rawParams: Parameters<
                     TRpcMethods[TMethodName] extends CallableFunction ? TRpcMethods[TMethodName] : never
                 >
-            ): RpcRequest<ReturnType<TRpcMethods[TMethodName]>> {
+            ): RpcApiRequestPlan<ReturnType<TRpcMethods[TMethodName]>> {
                 const params = config?.parametersTransformer
                     ? config?.parametersTransformer(rawParams, methodName)
                     : rawParams;

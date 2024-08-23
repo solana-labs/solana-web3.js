@@ -2,7 +2,7 @@ import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi } from '../rpc-api';
-import { RpcRequest } from '../rpc-request';
+import { RpcApiRequestPlan } from '../rpc-request';
 import { RpcTransport } from '../rpc-transport';
 
 interface TestRpcMethods {
@@ -50,7 +50,7 @@ describe('JSON-RPC 2.0', () => {
         beforeEach(() => {
             rpc = createRpc({
                 api: {
-                    someMethod(...params: unknown[]): RpcRequest<unknown> {
+                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
                             methodName: 'someMethodAugmented',
                             params: [...params, 'augmented', 'params'],
@@ -77,7 +77,7 @@ describe('JSON-RPC 2.0', () => {
             responseTransformer = jest.fn(response => `${response} processed response`);
             rpc = createRpc({
                 api: {
-                    someMethod(...params: unknown[]): RpcRequest<unknown> {
+                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
                             methodName: 'someMethod',
                             params,
