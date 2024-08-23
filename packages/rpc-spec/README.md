@@ -41,6 +41,32 @@ Calling the `send(options)` method on a `PendingRpcRequest` will trigger the req
 
 An object that exposes all of the functions described by `TRpcMethods`, and fulfils them using `TRpcTransport`. Calling each method returns a `PendingRpcRequest<TResponse>` where `TResponse` is that method's response type.
 
+### `RpcRequest`
+
+An object that describes the elements of a JSON RPC request. It consists of the following properties:
+
+-   `methodName`: The name of the JSON RPC method to be called.
+-   `params`: The parameters to be passed to the JSON RPC method.
+
+### `RpcRequestTransformer`
+
+A function that accepts an `RpcRequest` and returns another `RpcRequest`. This allows the `RpcApi` to transform the request before it is sent to the JSON RPC server.
+
+### `RpcResponse`
+
+An object that represents the response from a JSON RPC server. It contains two asynchronous methods that can be used to access the response data:
+
+-   `await response.json()`: Returns the data as a JSON object.
+-   `await response.text()`: Returns the data, unparsed, as a JSON string.
+
+This allows the `RpcApi` to decide whether they want the parsed JSON object or the raw JSON string. Ultimately, the `json` method will be used by the `Rpc` to provide the final response to the caller.
+
+### `RpcResponseTransformer`
+
+A function that accepts an `RpcResponse` and returns another `RpcResponse`. This allows the `RpcApi` to transform the response before it is returned to the caller.
+
+Note that a `RpcResponseTransformerFor<T>` generic function type is also available to ensure the response data returned by the transformer matches the expected type `T`.
+
 ### `RpcApi<TRpcMethods>`
 
 For each of `TRpcMethods` this object exposes a method with the same name that maps between its input arguments and a `RpcApiRequestPlan<TResponse>` that describes how to prepare a JSON RPC request to fetch `TResponse`.
@@ -51,7 +77,7 @@ This is a marker interface that all RPC method definitions must extend to be acc
 
 ### `RpcApiRequestPlan`
 
-This type describes how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object gives you the opportunity to:
+This type allows an `RpcApi` to describe how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object gives you the opportunity to:
 
 -   customize the JSON RPC method name in the case that it's different than the name of that function
 -   define the shape of the JSON RPC params in case they are different than the arguments provided to that function
@@ -116,3 +142,17 @@ A config object with the following properties:
 
 -   `parametersTransformer<T>(params: T, methodName): unknown`: An optional function that maps between the shape of the arguments an RPC method was called with and the shape of the params expected by the JSON RPC server.
 -   `responseTransformer<T>(response, methodName): T`: An optional function that maps between the shape of the JSON RPC server response for a given method and the shape of the response expected by the `RpcApi`.
+
+### `createJsonRpcResponseTransformer<T>(jsonTransformer)`
+
+Creates an `RpcResponseTransformerFor<T>` function from a function that transforms any JSON value to a value of type `T` by wrapping it in a `json` async function.
+
+```ts
+const getResultTransformer = createJsonRpcResponseTransformer((json: unknown) => {
+    return (json as { result: TResponse }).result;
+});
+```
+
+#### Arguments
+
+-   `jsonTransformer: (json: unknown, request: RpcRequest) => T`: A function that transforms an unknown JSON value to a value of type `T`.
