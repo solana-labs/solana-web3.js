@@ -6,8 +6,7 @@ import {
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
 
-import { RpcApi } from './rpc-api';
-import { PendingRpcRequest, RpcApiRequestPlan, RpcSendOptions } from './rpc-request';
+import { RpcApi, RpcApiRequestPlan } from './rpc-api';
 import { RpcTransport } from './rpc-transport';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
@@ -18,6 +17,14 @@ export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonl
 export type Rpc<TRpcMethods> = {
     [TMethodName in keyof TRpcMethods]: PendingRpcRequestBuilder<OverloadImplementations<TRpcMethods, TMethodName>>;
 };
+
+export type PendingRpcRequest<TResponse> = {
+    send(options?: RpcSendOptions): Promise<TResponse>;
+};
+
+export type RpcSendOptions = Readonly<{
+    abortSignal?: AbortSignal;
+}>;
 
 type PendingRpcRequestBuilder<TMethodImplementations> = UnionToIntersection<
     Flatten<{
