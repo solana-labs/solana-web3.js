@@ -1,9 +1,9 @@
-import type { RpcTransport } from '@solana/rpc-spec';
+import type { RpcResponse, RpcTransport } from '@solana/rpc-spec';
 
 type CoalescedRequest = {
     readonly abortController: AbortController;
     numConsumers: number;
-    readonly responsePromise: Promise<unknown>;
+    readonly responsePromise: Promise<RpcResponse | undefined>;
 };
 
 type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
@@ -30,11 +30,13 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
     getDeduplicationKey: GetDeduplicationKeyFn,
 ): TTransport {
     let coalescedRequestsByDeduplicationKey: Record<string, CoalescedRequest> | undefined;
-    return async function makeCoalescedHttpRequest<TResponse>(config: Parameters<RpcTransport>[0]): Promise<TResponse> {
-        const { payload, signal } = config;
+    return async function makeCoalescedHttpRequest<TResponse>(
+        request: Parameters<RpcTransport>[0],
+    ): Promise<RpcResponse<TResponse>> {
+        const { payload, signal } = request;
         const deduplicationKey = getDeduplicationKey(payload);
         if (deduplicationKey === undefined) {
-            return await transport(config);
+            return await transport(request);
         }
         if (!coalescedRequestsByDeduplicationKey) {
             Promise.resolve().then(() => {
@@ -47,7 +49,7 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
             const responsePromise = (async () => {
                 try {
                     return await transport<TResponse>({
-                        ...config,
+                        ...request,
                         signal: abortController.signal,
                     });
                 } catch (e) {
@@ -69,8 +71,8 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
         const coalescedRequest = coalescedRequestsByDeduplicationKey[deduplicationKey];
         coalescedRequest.numConsumers++;
         if (signal) {
-            const responsePromise = coalescedRequest.responsePromise as Promise<TResponse>;
-            return await new Promise<TResponse>((resolve, reject) => {
+            const responsePromise = coalescedRequest.responsePromise as Promise<RpcResponse<TResponse>>;
+            return await new Promise<RpcResponse<TResponse>>((resolve, reject) => {
                 const handleAbort = (e: AbortSignalEventMap['abort']) => {
                     signal.removeEventListener('abort', handleAbort);
                     coalescedRequest.numConsumers -= 1;
@@ -91,7 +93,7 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
                     });
             });
         } else {
-            return (await coalescedRequest.responsePromise) as TResponse;
+            return (await coalescedRequest.responsePromise) as RpcResponse<TResponse>;
         }
     } as TTransport;
 }
