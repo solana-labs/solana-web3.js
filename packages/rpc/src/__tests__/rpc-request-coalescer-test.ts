@@ -1,6 +1,13 @@
-import type { RpcTransport } from '@solana/rpc-spec';
+import type { RpcResponse, RpcTransport } from '@solana/rpc-spec';
 
 import { getRpcTransportWithRequestCoalescing } from '../rpc-request-coalescer';
+
+function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+    return {
+        json: () => Promise.resolve(jsonResponse),
+        text: () => Promise.resolve(JSON.stringify(jsonResponse)),
+    };
+}
 
 describe('RPC request coalescer', () => {
     let coalescedTransport: RpcTransport;
@@ -30,7 +37,7 @@ describe('RPC request coalescer', () => {
         });
         it('multiple requests in the same tick receive the same response', async () => {
             expect.assertions(2);
-            const mockResponse = { response: 'ok' };
+            const mockResponse = createMockResponse({ response: 'ok' });
             mockTransport.mockResolvedValueOnce(mockResponse);
             const responsePromiseA = coalescedTransport({ payload: null });
             const responsePromiseB = coalescedTransport({ payload: null });
@@ -41,8 +48,8 @@ describe('RPC request coalescer', () => {
         });
         it('multiple requests in different ticks receive different responses', async () => {
             expect.assertions(2);
-            const mockResponseA = { response: 'okA' };
-            const mockResponseB = { response: 'okB' };
+            const mockResponseA = createMockResponse({ response: 'okA' });
+            const mockResponseB = createMockResponse({ response: 'okB' });
             mockTransport.mockResolvedValueOnce(mockResponseA);
             mockTransport.mockResolvedValueOnce(mockResponseB);
             const responsePromiseA = coalescedTransport({ payload: null });
@@ -100,7 +107,7 @@ describe('RPC request coalescer', () => {
             let abortControllerB: AbortController;
             let responsePromiseA: ReturnType<typeof mockTransport>;
             let responsePromiseB: ReturnType<typeof mockTransport>;
-            let transportResponsePromise: (value: unknown) => void;
+            let transportResponsePromise: (value: RpcResponse<unknown>) => void;
             beforeEach(() => {
                 abortControllerA = new AbortController();
                 abortControllerB = new AbortController();
@@ -157,7 +164,7 @@ describe('RPC request coalescer', () => {
             it('delivers responses to all but the aborted requests', async () => {
                 expect.assertions(2);
                 abortControllerA.abort('o no A');
-                const mockResponse = { response: 'ok' };
+                const mockResponse = createMockResponse({ response: 'ok' });
                 transportResponsePromise(mockResponse);
                 await Promise.all([
                     expect(responsePromiseA).rejects.toBe('o no A'),
@@ -192,8 +199,8 @@ describe('RPC request coalescer', () => {
             });
             it('multiple requests in the same tick receive different responses', async () => {
                 expect.assertions(2);
-                const mockResponseA = { response: 'okA' };
-                const mockResponseB = { response: 'okB' };
+                const mockResponseA = createMockResponse({ response: 'okA' });
+                const mockResponseB = createMockResponse({ response: 'okB' });
                 mockTransport.mockResolvedValueOnce(mockResponseA);
                 mockTransport.mockResolvedValueOnce(mockResponseB);
                 const responsePromiseA = coalescedTransport({ payload: null });
