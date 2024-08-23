@@ -113,14 +113,14 @@ A config object with the following properties:
 
 Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcApiRequestPlan` by:
 
--   setting `methodName` to the name of the function called
--   setting `params` to the arguments supplied to that function, optionally transformed by `config.parametersTransformer`
--   setting `responseTransformer` to `config.responseTransformer` or the identity function if no such config exists
+-   setting `methodName` to the name of the function called, optionally transformed by `config.requestTransformer`.
+-   setting `params` to the arguments supplied to that function, optionally transformed by `config.requestTransformer`.
+-   setting `responseTransformer` to `config.responseTransformer`, if provided.
 
 ```ts
 // For example, given this `RpcApi`:
 const rpcApi = createRpcApi({
-    paramsTransformer: (...rawParams) => rawParams.reverse(),
+    requestTransformer: (...rawParams) => rawParams.reverse(),
     responseTransformer: response => response.result,
 });
 
@@ -140,8 +140,8 @@ rpcApi.foo('bar', { baz: 'bat' });
 
 A config object with the following properties:
 
--   `parametersTransformer<T>(params: T, methodName): unknown`: An optional function that maps between the shape of the arguments an RPC method was called with and the shape of the params expected by the JSON RPC server.
--   `responseTransformer<T>(response, methodName): T`: An optional function that maps between the shape of the JSON RPC server response for a given method and the shape of the response expected by the `RpcApi`.
+-   `requestTransformer<T>(request: RpcRequest<T>): RpcRequest`: An optional function that transforms the `RpcRequest` before it is sent to the JSON RPC server.
+-   `responseTransformer<T>(response: RpcResponse, request: RpcRequest): RpcResponse<T>`: An optional function that transforms the `RpcResponse` before it is returned to the caller.
 
 ### `createJsonRpcResponseTransformer<T>(jsonTransformer)`
 

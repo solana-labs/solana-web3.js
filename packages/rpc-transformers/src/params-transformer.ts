@@ -1,4 +1,5 @@
 import { pipe } from '@solana/functional';
+import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
 import { Commitment } from '@solana/rpc-types';
 
 import { applyDefaultCommitment } from './default-commitment';
@@ -7,15 +8,16 @@ import { getIntegerOverflowNodeVisitor } from './params-transformer-integer-over
 import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './params-transformer-options-object-position-config';
 import { getTreeWalker, KeyPath } from './tree-traversal';
 
-export type ParamsTransformerConfig = Readonly<{
+export type RequestTransformerConfig = Readonly<{
     defaultCommitment?: Commitment;
     onIntegerOverflow?: (methodName: string, keyPath: KeyPath, value: bigint) => void;
 }>;
 
-export function getDefaultParamsTransformerForSolanaRpc(config?: ParamsTransformerConfig) {
+export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransformerConfig): RpcRequestTransformer {
     const defaultCommitment = config?.defaultCommitment;
     const handleIntegerOverflow = config?.onIntegerOverflow;
-    return <T>(rawParams: T, methodName: string) => {
+    return <T>(request: RpcRequest): RpcRequest<T> => {
+        const { params: rawParams, methodName } = request;
         const traverse = getTreeWalker([
             ...(handleIntegerOverflow
                 ? [getIntegerOverflowNodeVisitor((...args) => handleIntegerOverflow(methodName, ...args))]
@@ -25,29 +27,34 @@ export function getDefaultParamsTransformerForSolanaRpc(config?: ParamsTransform
         const initialState = {
             keyPath: [],
         };
-        const patchedParams = traverse(rawParams, initialState);
-        if (!Array.isArray(patchedParams)) {
-            return patchedParams;
+        const patchedRequest = { methodName, params: traverse(rawParams, initialState) as T };
+        if (!Array.isArray(patchedRequest.params)) {
+            return patchedRequest;
         }
         const optionsObjectPositionInParams = OPTIONS_OBJECT_POSITION_BY_METHOD[methodName];
         if (optionsObjectPositionInParams == null) {
-            return patchedParams;
+            return patchedRequest;
         }
         return pipe(
-            patchedParams,
-            params =>
-                applyDefaultCommitment({
+            patchedRequest,
+            ({ methodName, params }) => ({
+                methodName,
+                params: applyDefaultCommitment({
                     commitmentPropertyName: methodName === 'sendTransaction' ? 'preflightCommitment' : 'commitment',
                     optionsObjectPositionInParams,
                     overrideCommitment: defaultCommitment,
-                    params,
+                    params: params as unknown[],
                 }),
+            }),
             // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
-            params =>
-                methodName === 'sendTransaction'
-                    ? applyFixForIssue479(params as [unknown, { skipPreflight?: boolean } | undefined])
-                    : params,
-        );
+            ({ methodName, params }) => ({
+                methodName,
+                params:
+                    methodName === 'sendTransaction'
+                        ? applyFixForIssue479(params as [unknown, { skipPreflight?: boolean } | undefined])
+                        : params,
+            }),
+        ) as RpcRequest<T>;
     };
 }
 

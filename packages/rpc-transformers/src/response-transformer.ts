@@ -1,5 +1,5 @@
 import { getSolanaErrorFromJsonRpcError } from '@solana/errors';
-import { RpcApiConfig } from '@solana/rpc-spec';
+import { RpcRequest, RpcResponse, RpcResponseTransformer } from '@solana/rpc-spec';
 
 import { AllowedNumericKeypaths } from './response-transformer-allowed-numeric-values';
 import { getBigIntUpcastVisitor } from './response-transformer-bigint-upcast';
@@ -13,17 +13,46 @@ type JsonRpcResponse = { error: Parameters<typeof getSolanaErrorFromJsonRpcError
 
 export function getDefaultResponseTransformerForSolanaRpc<TApi>(
     config?: ResponseTransformerConfig<TApi>,
-): NonNullable<RpcApiConfig['responseTransformer']> {
-    return (<T>(rawResponse: JsonRpcResponse, methodName?: keyof TApi): T => {
-        if ('error' in rawResponse) {
-            throw getSolanaErrorFromJsonRpcError(rawResponse.error);
+): RpcResponseTransformer {
+    return <T>(rawResponse: RpcResponse, request: RpcRequest): RpcResponse<T> => {
+        return {
+            ...rawResponse,
+            json: async () => {
+                const methodName = request.methodName as keyof TApi;
+                const rawData = (await rawResponse.json()) as JsonRpcResponse;
+                if ('error' in rawData) {
+                    throw getSolanaErrorFromJsonRpcError(rawData.error);
+                }
+                const keyPaths =
+                    config?.allowedNumericKeyPaths && methodName
+                        ? config.allowedNumericKeyPaths[methodName]
+                        : undefined;
+                const traverse = getTreeWalker([getBigIntUpcastVisitor(keyPaths ?? [])]);
+                const initialState = {
+                    keyPath: [],
+                };
+                return traverse(rawData.result, initialState) as T;
+            },
+        };
+    };
+}
+
+export function getDefaultResponseTransformerForSolanaRpcSubscriptions<TApi>(
+    config?: ResponseTransformerConfig<TApi>,
+): <T>(response: unknown, notificationName: string) => T {
+    return <T>(rawResponse: unknown, notificationName: string): T => {
+        const rawData = rawResponse as JsonRpcResponse;
+        if ('error' in rawData) {
+            throw getSolanaErrorFromJsonRpcError(rawData.error);
         }
         const keyPaths =
-            config?.allowedNumericKeyPaths && methodName ? config.allowedNumericKeyPaths[methodName] : undefined;
+            config?.allowedNumericKeyPaths && notificationName
+                ? config.allowedNumericKeyPaths[notificationName as keyof TApi]
+                : undefined;
         const traverse = getTreeWalker([getBigIntUpcastVisitor(keyPaths ?? [])]);
         const initialState = {
             keyPath: [],
         };
-        return traverse(rawResponse.result, initialState) as T;
-    }) as NonNullable<RpcApiConfig['responseTransformer']>;
+        return traverse(rawData.result, initialState) as T;
+    };
 }
