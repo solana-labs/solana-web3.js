@@ -68,7 +68,7 @@ importers:
         version: 7.24.7(@babel/core@7.25.2)
       '@babel/plugin-transform-runtime':
         specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.25.2)
+        version: 7.25.4(@babel/core@7.25.2)
       '@babel/preset-env':
         specifier: ^7.25.0
         version: 7.25.4(@babel/core@7.25.2)
@@ -2186,6 +2186,12 @@ packages:
 
   '@babel/plugin-transform-runtime@7.24.7':
     resolution: {integrity: sha512-YqXjrk4C+a1kZjewqt+Mmu2UuV1s07y8kqcUf4qYLnoqemhR4gRQikhdAhSVJioMjVTu6Mo6pAbaypEA3jY6fw==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+
+  '@babel/plugin-transform-runtime@7.25.4':
+    resolution: {integrity: sha512-8hsyG+KUYGY0coX6KUCDancA0Vw225KJ2HJO0yCNr1vq5r+lJTleDaJf0K7iOhjw4SWhu03TMBzYTJ9krmzULQ==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -9799,13 +9805,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/plugin-transform-runtime@7.24.7(@babel/core@7.25.2)':
+  '@babel/plugin-transform-runtime@7.25.4(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/helper-module-imports': 7.24.7
       '@babel/helper-plugin-utils': 7.24.8
       babel-plugin-polyfill-corejs2: 0.4.10(@babel/core@7.25.2)
-      babel-plugin-polyfill-corejs3: 0.10.4(@babel/core@7.25.2)
+      babel-plugin-polyfill-corejs3: 0.10.6(@babel/core@7.25.2)
       babel-plugin-polyfill-regenerator: 0.6.1(@babel/core@7.25.2)
       semver: 6.3.1
     transitivePeerDependencies:
@@ -12808,7 +12814,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.25.4
       '@babel/core': 7.25.2
-      '@babel/helper-define-polyfill-provider': 0.6.1(@babel/core@7.25.2)
+      '@babel/helper-define-polyfill-provider': 0.6.2(@babel/core@7.25.2)
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -12864,7 +12870,7 @@ snapshots:
   babel-plugin-polyfill-regenerator@0.6.1(@babel/core@7.25.2):
     dependencies:
       '@babel/core': 7.25.2
-      '@babel/helper-define-polyfill-provider': 0.6.1(@babel/core@7.25.2)
+      '@babel/helper-define-polyfill-provider': 0.6.2(@babel/core@7.25.2)
     transitivePeerDependencies:
       - supports-color
 
