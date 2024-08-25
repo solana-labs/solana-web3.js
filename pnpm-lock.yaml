@@ -59,7 +59,7 @@ importers:
         version: 7.25.2
       '@babel/plugin-transform-class-properties':
         specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.25.2)
+        version: 7.25.4(@babel/core@7.25.2)
       '@babel/plugin-transform-private-methods':
         specifier: ^7.24.7
         version: 7.25.4(@babel/core@7.25.2)
@@ -9009,14 +9009,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.24.9
       '@babel/helper-create-class-features-plugin': 7.24.7(@babel/core@7.24.9)
-      '@babel/helper-plugin-utils': 7.24.8
-    transitivePeerDependencies:
-      - supports-color
-
-  '@babel/plugin-transform-class-properties@7.24.7(@babel/core@7.25.2)':
-    dependencies:
-      '@babel/core': 7.25.2
-      '@babel/helper-create-class-features-plugin': 7.24.7(@babel/core@7.25.2)
       '@babel/helper-plugin-utils': 7.24.8
     transitivePeerDependencies:
       - supports-color
