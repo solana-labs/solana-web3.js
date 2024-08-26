@@ -14,4 +14,17 @@
 
 # @solana/rpc-transformers
 
-TODO
+## Functions
+
+### `getDefaultCommitmentTransformer(config)`
+
+Creates a transformer that adds the provided default commitment to the configuration object of the request when applicable.
+
+```ts
+import { getDefaultCommitmentTransformer, OPTIONS_OBJECT_POSITION_BY_METHOD } from '@solana/rpc-transformers';
+
+const requestTransformer = getDefaultCommitmentTransformer({
+    defaultCommitment: 'confirmed',
+    optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
+});
+```
