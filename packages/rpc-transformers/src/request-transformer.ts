@@ -16,7 +16,7 @@ export type RequestTransformerConfig = Readonly<{
 export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransformerConfig): RpcRequestTransformer {
     const defaultCommitment = config?.defaultCommitment;
     const handleIntegerOverflow = config?.onIntegerOverflow;
-    return <T>(request: RpcRequest): RpcRequest<T> => {
+    return (request: RpcRequest): RpcRequest => {
         const { params: rawParams, methodName } = request;
         const traverse = getTreeWalker([
             ...(handleIntegerOverflow
@@ -27,7 +27,7 @@ export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransfo
         const initialState = {
             keyPath: [],
         };
-        const patchedRequest = { methodName, params: traverse(rawParams, initialState) as T };
+        const patchedRequest = { methodName, params: traverse(rawParams, initialState) };
         return pipe(
             patchedRequest,
             getDefaultCommitmentRequestTransformer({
@@ -35,21 +35,26 @@ export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransfo
                 optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
             }),
             // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
-            ({ methodName, params }) => ({
-                methodName,
-                params:
-                    methodName === 'sendTransaction'
-                        ? applyFixForIssue479(params as [unknown, { skipPreflight?: boolean } | undefined])
-                        : params,
-            }),
-        ) as RpcRequest<T>;
+            getFixForIssue479RequestTransformer(),
+        );
     };
 }
 
 // See https://github.com/anza-xyz/agave/issues/479
-function applyFixForIssue479(params: [unknown, { skipPreflight?: boolean } | undefined]) {
-    if (params[1]?.skipPreflight !== true) {
-        return params;
-    }
-    return [params[0], { ...params[1], preflightCommitment: 'processed' }, ...params.slice(2)];
+function getFixForIssue479RequestTransformer(): RpcRequestTransformer {
+    return <TParams>(request: RpcRequest<TParams>): RpcRequest => {
+        if (request.methodName !== 'sendTransaction') {
+            return request;
+        }
+
+        const params = request.params as [unknown, { skipPreflight?: boolean } | undefined];
+        if (params[1]?.skipPreflight !== true) {
+            return request;
+        }
+
+        return Object.freeze({
+            ...request,
+            params: [params[0], { ...params[1], preflightCommitment: 'processed' }, ...params.slice(2)],
+        });
+    };
 }
