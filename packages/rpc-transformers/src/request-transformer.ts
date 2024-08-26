@@ -2,36 +2,25 @@ import { pipe } from '@solana/functional';
 import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
 import { Commitment } from '@solana/rpc-types';
 
-import { downcastNodeToNumberIfBigint } from './params-transformer-bigint-downcast';
-import { getIntegerOverflowNodeVisitor } from './params-transformer-integer-overflow';
+import { getBigIntDowncastRequestTransformer } from './request-transformer-bigint-downcast';
 import { getDefaultCommitmentRequestTransformer } from './request-transformer-default-commitment';
+import { getIntegerOverflowRequestTransformer, IntegerOverflowHandler } from './request-transformer-integer-overflow';
 import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './request-transformer-options-object-position-config';
-import { getTreeWalker, KeyPath } from './tree-traversal';
 
 export type RequestTransformerConfig = Readonly<{
     defaultCommitment?: Commitment;
-    onIntegerOverflow?: (methodName: string, keyPath: KeyPath, value: bigint) => void;
+    onIntegerOverflow?: IntegerOverflowHandler;
 }>;
 
 export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransformerConfig): RpcRequestTransformer {
-    const defaultCommitment = config?.defaultCommitment;
     const handleIntegerOverflow = config?.onIntegerOverflow;
     return (request: RpcRequest): RpcRequest => {
-        const { params: rawParams, methodName } = request;
-        const traverse = getTreeWalker([
-            ...(handleIntegerOverflow
-                ? [getIntegerOverflowNodeVisitor((...args) => handleIntegerOverflow(methodName, ...args))]
-                : []),
-            downcastNodeToNumberIfBigint,
-        ]);
-        const initialState = {
-            keyPath: [],
-        };
-        const patchedRequest = { methodName, params: traverse(rawParams, initialState) };
         return pipe(
-            patchedRequest,
+            request,
+            handleIntegerOverflow ? getIntegerOverflowRequestTransformer(handleIntegerOverflow) : r => r,
+            getBigIntDowncastRequestTransformer(),
             getDefaultCommitmentRequestTransformer({
-                defaultCommitment,
+                defaultCommitment: config?.defaultCommitment,
                 optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
             }),
             // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
