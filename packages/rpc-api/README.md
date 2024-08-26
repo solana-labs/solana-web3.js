@@ -56,4 +56,4 @@ The default behaviours include:
 A config object with the following properties:
 
 -   `defaultCommitment`: An optional default `Commitment` value. Given an RPC method that takes `commitment` as a parameter, this value will be used when the caller does not supply one.
--   `onIntegerOverflow(methodName, keyPath, value): void`: An optional function that will be called whenever a `bigint` input exceeds that which can be expressed using JavaScript numbers. This is used in the default `SolanaRpcApi` to throw an exception rather than to allow truncated values to propagate through a program.
+-   `onIntegerOverflow(request, keyPath, value): void`: An optional function that will be called whenever a `bigint` input exceeds that which can be expressed using JavaScript numbers. This is used in the default `SolanaRpcApi` to throw an exception rather than to allow truncated values to propagate through a program.

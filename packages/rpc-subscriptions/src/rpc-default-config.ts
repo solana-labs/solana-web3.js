@@ -6,7 +6,7 @@ export const DEFAULT_RPC_SUBSCRIPTIONS_CONFIG: Partial<
     NonNullable<Parameters<typeof createSolanaRpcSubscriptionsApi>[0]>
 > = {
     defaultCommitment: 'confirmed',
-    onIntegerOverflow(methodName, keyPath, value) {
-        throw createSolanaJsonRpcIntegerOverflowError(methodName, keyPath, value);
+    onIntegerOverflow(request, keyPath, value) {
+        throw createSolanaJsonRpcIntegerOverflowError(request.methodName, keyPath, value);
     },
 };

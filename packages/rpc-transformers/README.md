@@ -14,7 +14,22 @@
 
 # @solana/rpc-transformers
 
-## Functions
+## Request Transformers
+
+### `getDefaultRequestTransformerForSolanaRpc(config)`
+
+Returns the default request transformer for the Solana RPC API. Under the hood, this function composes multiple `RpcRequestTransformer` together such as the `getDefaultCommitmentTransformer`, the `getIntegerOverflowRequestTransformer` and the `getBigIntDowncastRequestTransformer`.
+
+```ts
+import { getDefaultRequestTransformerForSolanaRpc } from '@solana/rpc-transformers';
+
+const requestTransformer = getDefaultRequestTransformerForSolanaRpc({
+    defaultCommitment: 'confirmed',
+    onIntegerOverflow: (request, keyPath, value) => {
+        throw new Error(`Integer overflow at ${keyPath.join('.')}: ${value}`);
+    },
+});
+```
 
 ### `getDefaultCommitmentTransformer(config)`
 
@@ -27,4 +42,44 @@ const requestTransformer = getDefaultCommitmentTransformer({
     defaultCommitment: 'confirmed',
     optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
 });
+```
+
+### `getIntegerOverflowRequestTransformer(handler)`
+
+Creates a transformer that traverses the request parameters and executes the provided handler when an integer overflow is detected.
+
+```ts
+import { getIntegerOverflowRequestTransformer } from '@solana/rpc-transformers';
+
+const requestTransformer = getIntegerOverflowRequestTransformer((request, keyPath, value) => {
+    throw new Error(`Integer overflow at ${keyPath.join('.')}: ${value}`);
+});
+```
+
+### `getBigIntDowncastRequestTransformer()`
+
+Creates a transformer that downcasts all `BigInt` values to `Number`.
+
+```ts
+import { getBigIntDowncastRequestTransformer } from '@solana/rpc-transformers';
+
+const requestTransformer = getBigIntDowncastRequestTransformer();
+```
+
+### `getTreeWalkerRequestTransformer(visitors, initialState)`
+
+Creates a transformer that traverses the request parameters and executes the provided visitors at each node. A custom initial state can be provided but must at least provide `{ keyPath: [] }`.
+
+```ts
+import { getTreeWalkerRequestTransformer } from '@solana/rpc-transformers';
+
+const requestTransformer = getTreeWalkerRequestTransformer(
+    [
+        // Replaces foo.bar with "baz".
+        (node, state) => (state.keyPath === ['foo', 'bar'] ? 'baz' : node),
+        // Increments all numbers by 1.
+        node => (typeof node === number ? node + 1 : node),
+    ],
+    { keyPath: [] },
+);
 ```
