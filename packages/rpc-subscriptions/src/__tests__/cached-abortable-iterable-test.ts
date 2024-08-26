@@ -1,7 +1,7 @@
 import { getCachedAbortableIterableFactory } from '../cached-abortable-iterable';
 
 describe('getCachedAbortableIterableFactory', () => {
-    let asyncGenerator: jest.Mock<AsyncGenerator<unknown, void>>;
+    let getAsyncIterable: jest.MockedFn<() => AsyncIterable<unknown>>;
     let factory: (...args: unknown[]) => Promise<AsyncIterable<unknown>>;
     let getAbortSignalFromInputArgs: jest.Mock;
     let getCacheKeyFromInputArgs: jest.Mock;
@@ -9,7 +9,7 @@ describe('getCachedAbortableIterableFactory', () => {
     let onCreateIterable: jest.Mock;
     beforeEach(() => {
         jest.useFakeTimers();
-        asyncGenerator = jest.fn().mockImplementation(async function* () {
+        getAsyncIterable = jest.fn().mockImplementation(async function* () {
             yield await new Promise(() => {
                 /* never resolve */
             });
@@ -17,8 +17,10 @@ describe('getCachedAbortableIterableFactory', () => {
         getAbortSignalFromInputArgs = jest.fn().mockImplementation(() => new AbortController().signal);
         getCacheKeyFromInputArgs = jest.fn().mockReturnValue('cache-key');
         onCacheHit = jest.fn();
-        onCreateIterable = jest.fn().mockResolvedValue({
-            [Symbol.asyncIterator]: asyncGenerator,
+        onCreateIterable = jest.fn().mockReturnValue({
+            [Symbol.asyncIterator]() {
+                return getAsyncIterable()[Symbol.asyncIterator]();
+            },
         });
         factory = getCachedAbortableIterableFactory({
             getAbortSignalFromInputArgs,
@@ -137,7 +139,7 @@ describe('getCachedAbortableIterableFactory', () => {
     it('creates a new iterable for a message given that the prior iterable threw', async () => {
         expect.assertions(2);
         let throwFromIterable;
-        asyncGenerator.mockImplementationOnce(async function* () {
+        getAsyncIterable.mockImplementationOnce(async function* () {
             yield await new Promise((_, reject) => {
                 throwFromIterable = reject;
             });
@@ -155,7 +157,7 @@ describe('getCachedAbortableIterableFactory', () => {
     it('creates a new iterable for a message given that prior iterable returned', async () => {
         expect.assertions(1);
         let returnFromIterable;
-        asyncGenerator.mockImplementationOnce(async function* () {
+        getAsyncIterable.mockImplementationOnce(async function* () {
             try {
                 yield await new Promise((_, reject) => {
                     returnFromIterable = reject;
@@ -197,7 +199,7 @@ describe('getCachedAbortableIterableFactory', () => {
         Promise.all([factory('A'), factory('B')]);
         expect(onCacheHit).not.toHaveBeenCalled();
         await jest.runAllTimersAsync();
-        const iterable = asyncGenerator();
+        const iterable = getAsyncIterable();
         // FIXME: https://github.com/microsoft/TypeScript/issues/11498
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -206,7 +208,7 @@ describe('getCachedAbortableIterableFactory', () => {
         expect(onCacheHit).toHaveBeenCalledWith(iterable, 'B');
     });
     it('calls `onCacheHit` in the same runloop when the cached iterable is already resolved', () => {
-        const iterable = asyncGenerator();
+        const iterable = getAsyncIterable();
         onCreateIterable.mockReturnValue(iterable);
         Promise.all([factory('A'), factory('B')]);
         expect(onCacheHit).toHaveBeenCalledWith(iterable, 'B');
@@ -225,7 +227,7 @@ describe('getCachedAbortableIterableFactory', () => {
         factory('B');
         await jest.runAllTimersAsync();
         expect(onCacheHit).not.toHaveBeenCalled();
-        const iterable = asyncGenerator();
+        const iterable = getAsyncIterable();
         // FIXME: https://github.com/microsoft/TypeScript/issues/11498
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -235,7 +237,7 @@ describe('getCachedAbortableIterableFactory', () => {
     });
     it('calls `onCacheHit` in different runloops when the cached iterable is already resolved', async () => {
         expect.assertions(1);
-        const iterable = asyncGenerator();
+        const iterable = getAsyncIterable();
         onCreateIterable.mockReturnValue(iterable);
         await factory('A');
         await factory('B');
