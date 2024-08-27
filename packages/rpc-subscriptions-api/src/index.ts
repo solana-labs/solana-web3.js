@@ -88,7 +88,6 @@ function getAllowedNumericKeypaths(): AllowedNumericKeypaths<
         memoizedKeypaths = {
             accountNotifications: jsonParsedAccountsConfigs.map(c => ['value', ...c]),
             blockNotifications: [
-                ['value', 'block', 'blockTime'],
                 [
                     'value',
                     'block',

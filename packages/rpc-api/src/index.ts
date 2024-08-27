@@ -203,7 +203,6 @@ function getAllowedNumericKeypaths(): AllowedNumericKeypaths<RpcApi<SolanaRpcApi
         memoizedKeypaths = {
             getAccountInfo: jsonParsedAccountsConfigs.map(c => ['value', ...c]),
             getBlock: [
-                ['blockTime'],
                 ['transactions', KEYPATH_WILDCARD, 'meta', 'preTokenBalances', KEYPATH_WILDCARD, 'accountIndex'],
                 [
                     'transactions',
@@ -236,7 +235,6 @@ function getAllowedNumericKeypaths(): AllowedNumericKeypaths<RpcApi<SolanaRpcApi
                 ...messageConfig.map(c => ['transactions', KEYPATH_WILDCARD, 'transaction', 'message', ...c] as const),
                 ['rewards', KEYPATH_WILDCARD, 'commission'],
             ],
-            getBlockTime: [[]],
             getClusterNodes: [
                 [KEYPATH_WILDCARD, 'featureSet'],
                 [KEYPATH_WILDCARD, 'shredVersion'],
