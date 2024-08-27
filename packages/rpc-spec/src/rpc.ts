@@ -73,11 +73,15 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {
-            const { methodName, params, responseTransformer } = pendingRequest;
-            const request = Object.freeze({ methodName, params });
+            const { responseTransformer, ...rawRequest } = pendingRequest;
+            const request = Object.freeze({ ...rawRequest });
+            const payload = request.toPayload
+                ? request.toPayload(request.methodName, request.params)
+                : createRpcMessage(request.methodName, request.params);
             const rawResponse = await rpcConfig.transport<TResponse>({
-                payload: createRpcMessage(methodName, params),
+                payload,
                 signal: options?.abortSignal,
+                toText: request.toText,
             });
             const response = responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
             return await response.json();

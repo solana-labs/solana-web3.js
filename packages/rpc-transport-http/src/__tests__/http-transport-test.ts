@@ -66,6 +66,10 @@ describe('createHttpTransport', () => {
                 }),
             );
         });
+        it('sets the string `body` using the `toText` function if provided', () => {
+            makeHttpRequest({ payload: 123, toText: x => ((x as number) * 2).toString() });
+            expect(fetchSpy).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ body: '246' }));
+        });
         it('sets the accept header to `application/json`', () => {
             makeHttpRequest({ payload: 123 });
             expect(fetchSpy).toHaveBeenCalledWith(

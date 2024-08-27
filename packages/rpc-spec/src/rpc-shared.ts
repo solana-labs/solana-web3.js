@@ -1,6 +1,8 @@
 export type RpcRequest<TParams = unknown> = {
     readonly methodName: string;
     readonly params: TParams;
+    readonly toPayload?: (methodName: string, params: unknown) => unknown;
+    readonly toText?: (payload: unknown) => string;
 };
 
 export type RpcResponse<TResponse = unknown> = {
