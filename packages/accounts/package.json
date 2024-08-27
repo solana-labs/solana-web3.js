@@ -7,6 +7,10 @@
             "import": "./dist/index.node.mjs",
             "require": "./dist/index.node.cjs"
         },
+        "workerd": {
+            "import": "./dist/index.node.mjs",
+            "require": "./dist/index.node.cjs"
+        },
         "browser": {
             "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs"

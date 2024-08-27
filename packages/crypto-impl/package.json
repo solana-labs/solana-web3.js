@@ -8,6 +8,11 @@
             "require": "./dist/index.node.cjs",
             "types": "./dist/types/index.browser.d.ts"
         },
+        "workerd": {
+            "import": "./dist/index.node.mjs",
+            "require": "./dist/index.node.cjs",
+            "types": "./dist/types/index.browser.d.ts"
+        },
         "browser": {
             "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs",
