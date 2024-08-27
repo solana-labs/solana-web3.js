@@ -65,8 +65,6 @@ This allows the `RpcApi` to decide whether they want the parsed JSON object or t
 
 A function that accepts an `RpcResponse` and returns another `RpcResponse`. This allows the `RpcApi` to transform the response before it is returned to the caller.
 
-Note that a `RpcResponseTransformerFor<T>` generic function type is also available to ensure the response data returned by the transformer matches the expected type `T`.
-
 ### `RpcApi<TRpcMethods>`
 
 For each of `TRpcMethods` this object exposes a method with the same name that maps between its input arguments and a `RpcApiRequestPlan<TResponse>` that describes how to prepare a JSON RPC request to fetch `TResponse`.
@@ -143,13 +141,13 @@ A config object with the following properties:
 -   `requestTransformer<T>(request: RpcRequest<T>): RpcRequest`: An optional function that transforms the `RpcRequest` before it is sent to the JSON RPC server.
 -   `responseTransformer<T>(response: RpcResponse, request: RpcRequest): RpcResponse<T>`: An optional function that transforms the `RpcResponse` before it is returned to the caller.
 
-### `createJsonRpcResponseTransformer<T>(jsonTransformer)`
+### `createJsonRpcResponseTransformer(jsonTransformer)`
 
-Creates an `RpcResponseTransformerFor<T>` function from a function that transforms any JSON value to a value of type `T` by wrapping it in a `json` async function.
+Creates an `RpcResponseTransformer<T>` function from a function that transforms any JSON value to a value of type `T` by wrapping it in a `json` async function.
 
 ```ts
-const getResultTransformer = createJsonRpcResponseTransformer((json: unknown) => {
-    return (json as { result: TResponse }).result;
+const getResultTransformer = createJsonRpcResponseTransformer((json: unknown): unknown => {
+    return (json as { result: unknown }).result;
 });
 ```
 
