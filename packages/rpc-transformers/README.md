@@ -18,7 +18,7 @@
 
 ### `getDefaultRequestTransformerForSolanaRpc(config)`
 
-Returns the default request transformer for the Solana RPC API. Under the hood, this function composes multiple `RpcRequestTransformer` together such as the `getDefaultCommitmentTransformer`, the `getIntegerOverflowRequestTransformer` and the `getBigIntDowncastRequestTransformer`.
+Returns the default request transformer for the Solana RPC API. Under the hood, this function composes multiple `RpcRequestTransformers` together such as the `getDefaultCommitmentTransformer`, the `getIntegerOverflowRequestTransformer` and the `getBigIntDowncastRequestTransformer`.
 
 ```ts
 import { getDefaultRequestTransformerForSolanaRpc } from '@solana/rpc-transformers';
@@ -74,6 +74,73 @@ Creates a transformer that traverses the request parameters and executes the pro
 import { getTreeWalkerRequestTransformer } from '@solana/rpc-transformers';
 
 const requestTransformer = getTreeWalkerRequestTransformer(
+    [
+        // Replaces foo.bar with "baz".
+        (node, state) => (state.keyPath === ['foo', 'bar'] ? 'baz' : node),
+        // Increments all numbers by 1.
+        node => (typeof node === number ? node + 1 : node),
+    ],
+    { keyPath: [] },
+);
+```
+
+## Response Transformers
+
+### `getDefaultResponseTransformerForSolanaRpc(config)`
+
+Returns the default response transformer for the Solana RPC API. Under the hood, this function composes multiple `RpcResponseTransformers` together such as the `getThrowSolanaErrorResponseTransformer`, the `getResultResponseTransformer` and the `getBigIntUpcastResponseTransformer`.
+
+```ts
+import { getDefaultResponseTransformerForSolanaRpc } from '@solana/rpc-transformers';
+
+const responseTransformer = getDefaultResponseTransformerForSolanaRpc({
+    allowedNumericKeyPaths: getAllowedNumericKeypaths(),
+});
+```
+
+### `getThrowSolanaErrorResponseTransformer()`
+
+Returns a transformer that throws a `SolanaError` with the appropriate RPC error code if the body of the RPC response contains an error.
+
+```ts
+import { getThrowSolanaErrorResponseTransformer } from '@solana/rpc-transformers';
+
+const responseTransformer = getThrowSolanaErrorResponseTransformer();
+```
+
+### `getResultResponseTransformer()`
+
+Returns a transformer that extracts the `result` field from the body of the RPC response. For instance, we go from `{ jsonrpc: '2.0', result: 'foo', id: 1 }` to `'foo'`.
+
+```ts
+import { getResultResponseTransformer } from '@solana/rpc-transformers';
+
+const responseTransformer = getResultResponseTransformer();
+```
+
+### `getBigIntUpcastResponseTransformer(allowedNumericKeyPaths)`
+
+Returns a transformer that upcasts all `Number` values to `BigInts` unless they match within the provided `KeyPaths`. In other words, the provided `KeyPaths` will remain as `Number` values, any other numeric value will be upcasted to a `BigInt`. Note that you can use `KEYPATH_WILDCARD` to match any key within a `KeyPath`.
+
+```ts
+import { getBigIntUpcastResponseTransformer } from '@solana/rpc-transformers';
+
+const responseTransformer = getBigIntUpcastResponseTransformer([
+    ['index'],
+    ['instructions', KEYPATH_WILDCARD, 'accounts', KEYPATH_WILDCARD],
+    ['instructions', KEYPATH_WILDCARD, 'programIdIndex'],
+    ['instructions', KEYPATH_WILDCARD, 'stackHeight'],
+]);
+```
+
+### `getTreeWalkerResponseTransformer(visitors, initialState)`
+
+Creates a transformer that traverses the json response and executes the provided visitors at each node. A custom initial state can be provided but must at least provide `{ keyPath: [] }`.
+
+```ts
+import { getTreeWalkerResponseTransformer } from '@solana/rpc-transformers';
+
+const responseTransformer = getTreeWalkerResponseTransformer(
     [
         // Replaces foo.bar with "baz".
         (node, state) => (state.keyPath === ['foo', 'bar'] ? 'baz' : node),
