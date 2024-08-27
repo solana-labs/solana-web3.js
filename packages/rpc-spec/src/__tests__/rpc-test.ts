@@ -77,6 +77,75 @@ describe('JSON-RPC 2.0', () => {
             });
         });
     });
+    describe('when calling a method whose concrete implementation provides a `toPayload` function', () => {
+        let toPayload: jest.Mock;
+        let rpc: Rpc<TestRpcMethods>;
+        beforeEach(() => {
+            toPayload = jest.fn((methodName: string, params: unknown) => ({
+                myMethodName: methodName,
+                myParams: params,
+                processed: true,
+            }));
+            rpc = createRpc({
+                api: {
+                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
+                        return {
+                            methodName: 'someMethod',
+                            params,
+                            toPayload,
+                        };
+                    },
+                } as RpcApi<TestRpcMethods>,
+                transport: makeHttpRequest,
+            });
+        });
+        it('calls the `toPayload` function using the provided method name and parameters', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse({ ok: true }));
+            await rpc.someMethod(123).send();
+            expect(toPayload).toHaveBeenCalledWith('someMethod', [123]);
+        });
+        it('passes the result of the `toPayload` function to the RPC transport', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse({ ok: true }));
+            await rpc.someMethod(123).send();
+            expect(makeHttpRequest).toHaveBeenCalledWith({
+                payload: {
+                    myMethodName: 'someMethod',
+                    myParams: [123],
+                    processed: true,
+                },
+            });
+        });
+    });
+    describe('when calling a method whose concrete implementation provides a `toText` function', () => {
+        let toText: jest.Mock;
+        let rpc: Rpc<TestRpcMethods>;
+        beforeEach(() => {
+            toText = jest.fn();
+            rpc = createRpc({
+                api: {
+                    someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
+                        return {
+                            methodName: 'someMethod',
+                            params,
+                            toText,
+                        };
+                    },
+                } as RpcApi<TestRpcMethods>,
+                transport: makeHttpRequest,
+            });
+        });
+        it('passes the `toText` function to the RPC transport', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse({ ok: true }));
+            await rpc.someMethod(123).send();
+            expect(makeHttpRequest).toHaveBeenCalledWith({
+                payload: expect.any(Object),
+                toText,
+            });
+        });
+    });
     describe('when calling a method whose concrete implementation returns a response processor', () => {
         let responseTransformer: jest.Mock;
         let rpc: Rpc<TestRpcMethods>;

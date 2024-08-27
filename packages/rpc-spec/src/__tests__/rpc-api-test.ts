@@ -51,6 +51,35 @@ describe('createRpcApi', () => {
         // Then we expect the plan to contain the transformed params.
         expect(plan.params).toEqual([2, 4, 6]);
     });
+    it('can customise how to transform a request into a payload using a request transformer', () => {
+        // Given a dummy API with a request transformer that sets the `toPayload` function.
+        const toPayload = (methodName: string, params: unknown) => ({
+            myMethod: methodName,
+            myParams: params,
+        });
+        const api = createRpcApi<DummyApi>({
+            requestTransformer: (request: RpcRequest) => ({ ...request, toPayload }),
+        });
+
+        // When we call a method on the API.
+        const plan = api.someMethod('foo');
+
+        // Then we expect the plan to contain the custom `toPayload` function.
+        expect(plan.toPayload).toBe(toPayload);
+    });
+    it('can customise how to transform a payload into a string using a request transformer', () => {
+        // Given a dummy API with a request transformer that sets the `toText` function.
+        const toText = (payload: unknown) => `{"myPayload":${JSON.stringify(payload)}}`;
+        const api = createRpcApi<DummyApi>({
+            requestTransformer: (request: RpcRequest) => ({ ...request, toText }),
+        });
+
+        // When we call a method on the API.
+        const plan = api.someMethod('foo');
+
+        // Then we expect the plan to contain the custom `toText` function.
+        expect(plan.toText).toBe(toText);
+    });
     it('includes the provided response transformer in the plan', () => {
         // Given a dummy API with a response transformer.
         const responseTransformer = <T>(response: RpcResponse) => response as RpcResponse<T>;

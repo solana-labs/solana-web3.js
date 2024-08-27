@@ -44,8 +44,9 @@ export function createHttpTransport(config: Config): RpcTransport {
     return async function makeHttpRequest<TResponse>({
         payload,
         signal,
+        toText,
     }: Parameters<RpcTransport>[0]): Promise<RpcResponse<TResponse>> {
-        const body = JSON.stringify(payload);
+        const body = toText ? toText(payload) : JSON.stringify(payload);
         const requestInfo = {
             ...dispatcherConfig,
             body,

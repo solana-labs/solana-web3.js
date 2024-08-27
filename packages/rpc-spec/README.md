@@ -45,8 +45,10 @@ An object that exposes all of the functions described by `TRpcMethods`, and fulf
 
 An object that describes the elements of a JSON RPC request. It consists of the following properties:
 
--   `methodName`: The name of the JSON RPC method to be called.
--   `params`: The parameters to be passed to the JSON RPC method.
+-   `methodName: string`: The name of the JSON RPC method to be called.
+-   `params: unknown`: The parameters to be passed to the JSON RPC method.
+-   `toPayload?: (methodName: string, params: unknown) => unknown`: An optional function that defines how the method name and parameters should be transformed into a JSON RPC payload.
+-   `toText?: (payload: unknown) => string`: An optional function that defines how the JSO RPC payload should be transformed into a JSON string.
 
 ### `RpcRequestTransformer`
 
