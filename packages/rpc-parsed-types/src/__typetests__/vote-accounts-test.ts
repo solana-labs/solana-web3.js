@@ -1,5 +1,5 @@
 import { Address } from '@solana/addresses';
-import { Epoch, Slot, StringifiedBigInt, UnixTimestamp } from '@solana/rpc-types';
+import { Epoch, Slot, StringifiedBigInt, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 import { JsonParsedVoteAccount } from '../vote-accounts';
 
@@ -27,7 +27,7 @@ const account = {
         ],
         lastTimestamp: {
             slot: 228884530n as Slot,
-            timestamp: 1689090220n as UnixTimestamp,
+            timestamp: 1689090220n as UnixTimestampUnsafeBeyond2Pow53Minus1,
         },
         nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr' as Address,
         priorVoters: [],

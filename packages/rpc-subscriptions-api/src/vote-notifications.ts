@@ -1,13 +1,13 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
 import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
-import type { Blockhash, Slot, UnixTimestamp } from '@solana/rpc-types';
+import type { Blockhash, Slot, UnixTimestampUnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type VoteNotificationsApiNotification = Readonly<{
     hash: Blockhash;
     signature: Signature;
     slots: readonly Slot[];
-    timestamp: UnixTimestamp | null;
+    timestamp: UnixTimestampUnsafeBeyond2Pow53Minus1 | null;
     votePubkey: Address;
 }>;
 

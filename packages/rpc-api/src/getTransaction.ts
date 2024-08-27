@@ -14,7 +14,7 @@ import type {
     TransactionError,
     TransactionStatus,
     U64UnsafeBeyond2Pow53Minus1,
-    UnixTimestamp,
+    UnixTimestampUnsafeBeyond2Pow53Minus1,
 } from '@solana/rpc-types';
 import type { TransactionVersion } from '@solana/transaction-messages';
 
@@ -128,7 +128,7 @@ type GetTransactionCommonConfig<TMaxSupportedTransactionVersion> = Readonly<{
 
 type GetTransactionApiResponseBase = Readonly<{
     /** estimated production time of when the transaction was processed. null if not available */
-    blockTime: UnixTimestamp | null;
+    blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1 | null;
     /** the slot this transaction was processed in */
     slot: Slot;
 }>;
