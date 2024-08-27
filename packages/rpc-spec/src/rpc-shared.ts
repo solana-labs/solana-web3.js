@@ -12,17 +12,13 @@ export type RpcRequestTransformer = {
     <TParams>(request: RpcRequest<TParams>): RpcRequest;
 };
 
-export type RpcResponseTransformer = {
-    <TResponse>(response: RpcResponse, request: RpcRequest): RpcResponse<TResponse>;
-};
-
-export type RpcResponseTransformerFor<TResponse> = {
+export type RpcResponseTransformer<TResponse = unknown> = {
     (response: RpcResponse, request: RpcRequest): RpcResponse<TResponse>;
 };
 
-export function createJsonRpcResponseTransformer<TResponse>(
+export function createJsonRpcResponseTransformer<TResponse = unknown>(
     jsonTransformer: (json: unknown, request: RpcRequest) => TResponse,
-): RpcResponseTransformerFor<TResponse> {
+): RpcResponseTransformer<TResponse> {
     return function (response: RpcResponse, request: RpcRequest): RpcResponse<TResponse> {
         return Object.freeze({
             ...response,
