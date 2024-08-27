@@ -27,7 +27,7 @@ const account = {
         ],
         lastTimestamp: {
             slot: 228884530n as Slot,
-            timestamp: 1689090220 as UnixTimestamp,
+            timestamp: 1689090220n as UnixTimestamp,
         },
         nodePubkey: 'HMU77m6WSL9Xew9YvVCgz1hLuhzamz74eD9avi4XPdr' as Address,
         priorVoters: [],
