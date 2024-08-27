@@ -6,4 +6,6 @@ export * from './request-transformer-options-object-position-config';
 export * from './response-transformer';
 export * from './response-transformer-allowed-numeric-values';
 export * from './response-transformer-bigint-upcast';
+export * from './response-transformer-result';
+export * from './response-transformer-throw-solana-error';
 export * from './tree-traversal';

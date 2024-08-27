@@ -1,4 +1,25 @@
-import { KeyPath, KEYPATH_WILDCARD, TraversalState } from './tree-traversal';
+import { getTreeWalkerResponseTransformer, KeyPath, KEYPATH_WILDCARD, TraversalState } from './tree-traversal';
+
+export function getBigIntUpcastResponseTransformer(allowedNumericKeyPaths: readonly KeyPath[]) {
+    return getTreeWalkerResponseTransformer([getBigIntUpcastVisitor(allowedNumericKeyPaths)], { keyPath: [] });
+}
+
+export function getBigIntUpcastVisitor(allowedNumericKeyPaths: readonly KeyPath[]) {
+    return function upcastNodeToBigIntIfNumber(value: unknown, { keyPath }: TraversalState) {
+        if (
+            typeof value === 'number' &&
+            Number.isInteger(value) &&
+            !keyPathIsAllowedToBeNumeric(keyPath, allowedNumericKeyPaths)
+        ) {
+            // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the
+            // Solana JSON RPC implementation so that we can throw away this entire patcher instead
+            // of unsafely upcasting `numbers` to `bigints`.
+            return BigInt(value);
+        } else {
+            return value;
+        }
+    };
+}
 
 function keyPathIsAllowedToBeNumeric(keyPath: KeyPath, allowedNumericKeyPaths: readonly KeyPath[]) {
     return allowedNumericKeyPaths.some(prohibitedKeyPath => {
@@ -17,21 +38,4 @@ function keyPathIsAllowedToBeNumeric(keyPath: KeyPath, allowedNumericKeyPaths: r
         }
         return true;
     });
-}
-
-export function getBigIntUpcastVisitor(allowedNumericKeyPaths: readonly KeyPath[]) {
-    return function upcastNodeToBigIntIfNumber(value: unknown, { keyPath }: TraversalState) {
-        if (
-            typeof value === 'number' &&
-            Number.isInteger(value) &&
-            !keyPathIsAllowedToBeNumeric(keyPath, allowedNumericKeyPaths)
-        ) {
-            // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the
-            // Solana JSON RPC implementation so that we can throw away this entire patcher instead
-            // of unsafely upcasting `numbers` to `bigints`.
-            return BigInt(value);
-        } else {
-            return value;
-        }
-    };
 }
