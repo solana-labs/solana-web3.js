@@ -8,10 +8,7 @@ describe('createJsonRpcResponseTransformer', () => {
 
         // Given a request and a response that returns a number.
         const request = { methodName: 'someMethod', params: [123] };
-        const response = {
-            json: () => Promise.resolve(123),
-            text: () => Promise.resolve('123'),
-        };
+        const response = { json: () => Promise.resolve(123) };
 
         // When we create a JSON transformer that doubles the number.
         const transformer = createJsonRpcResponseTransformer((json: unknown) => (json as number) * 2);
@@ -22,30 +19,23 @@ describe('createJsonRpcResponseTransformer', () => {
         await expect(transformedResponse.json()).resolves.toBe(246);
     });
 
-    it('does not alter the value of the text Promise', async () => {
-        expect.assertions(1);
-
+    it('does not alter the value of the `fromText` function', () => {
         // Given a request and a response that returns a number.
         const request = { methodName: 'someMethod', params: [123] };
-        const response = {
-            json: () => Promise.resolve(123),
-            text: () => Promise.resolve('123'),
-        };
+        const fromText = jest.fn();
+        const response = { fromText, json: () => Promise.resolve(123) };
 
         // When we create a JSON transformer that doubles the number.
         const transformer = createJsonRpcResponseTransformer((json: unknown) => (json as number) * 2);
 
-        // Then the text should function should return the original string.
+        // Then the `fromText` function should not be altered.
         const transformedResponse = transformer(response, request);
-        await expect(transformedResponse.text()).resolves.toBe('123');
+        expect(transformedResponse.fromText).toBe(fromText);
     });
 
     it('returns a frozen object as the Reponse', () => {
         // Given any response.
-        const response = {
-            json: () => Promise.resolve(123),
-            text: () => Promise.resolve('123'),
-        };
+        const response = { json: () => Promise.resolve(123) };
 
         // When we pass it through a JSON transformer.
         const transformedResponse = createJsonRpcResponseTransformer(x => x)(response, {} as RpcRequest);

@@ -1,10 +1,10 @@
 import { SOLANA_ERROR__JSON_RPC__PARSE_ERROR, SolanaError } from '@solana/errors';
-import { RpcRequest, RpcResponse } from '@solana/rpc-spec';
+import { RpcRequest, RpcTransportResponse } from '@solana/rpc-spec';
 
 import { getDefaultResponseTransformerForSolanaRpc } from '../response-transformer';
 import { KEYPATH_WILDCARD } from '../tree-traversal';
 
-function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+function createMockResponse<T>(jsonResponse: T): RpcTransportResponse<T> {
     return {
         json: () => Promise.resolve(jsonResponse),
         text: () => Promise.resolve(JSON.stringify(jsonResponse)),

@@ -6,8 +6,8 @@ export type RpcRequest<TParams = unknown> = {
 };
 
 export type RpcResponse<TResponse = unknown> = {
+    readonly fromText?: (text: string) => unknown;
     readonly json: () => Promise<TResponse>;
-    readonly text: () => Promise<string>;
 };
 
 export type RpcRequestTransformer = {

@@ -111,7 +111,7 @@ Using this core transport, you can implement specialized functionality for lever
 Here’s an example of how someone might implement a “round robin” approach to distribute requests to multiple transports:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransportResponse, RpcTransport } from '@solana/rpc-spec';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create a transport for each RPC server
@@ -123,7 +123,9 @@ const transports = [
 
 // Create a wrapper transport that distributes requests to them
 let nextTransport = 0;
-async function roundRobinTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<RpcResponse<TResponse>> {
+async function roundRobinTransport<TResponse>(
+    ...args: Parameters<RpcTransport>
+): Promise<RpcTransportResponse<TResponse>> {
     const transport = transports[nextTransport];
     nextTransport = (nextTransport + 1) % transports.length;
     return await transport(...args);
@@ -137,7 +139,7 @@ Another example of a possible customization for a transport is to shard requests
 Perhaps your application needs to make a large number of requests, or needs to fan request for different methods out to different servers. Here’s an example of an implementation that does the latter:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransportResponse, RpcTransport } from '@solana/rpc-spec';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create multiple transports
@@ -162,7 +164,9 @@ function selectShard(method: string): RpcTransport {
     }
 }
 
-async function shardingTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<RpcResponse<TResponse>> {
+async function shardingTransport<TResponse>(
+    ...args: Parameters<RpcTransport>
+): Promise<RpcTransportResponse<TResponse>> {
     const payload = args[0].payload as { method: string };
     const selectedTransport = selectShard(payload.method);
     return await selectedTransport(...args);
@@ -174,7 +178,7 @@ async function shardingTransport<TResponse>(...args: Parameters<RpcTransport>): 
 The transport library can also be used to implement custom retry logic on any request:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransportResponse, RpcTransport } from '@solana/rpc-spec';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Set the maximum number of attempts to retry a request
@@ -195,7 +199,9 @@ function calculateRetryDelay(attempt: number): number {
 }
 
 // A retrying transport that will retry up to `MAX_ATTEMPTS` times before failing
-async function retryingTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<RpcResponse<TResponse>> {
+async function retryingTransport<TResponse>(
+    ...args: Parameters<RpcTransport>
+): Promise<RpcTransportResponse<TResponse>> {
     let requestError;
     for (let attempts = 0; attempts < MAX_ATTEMPTS; attempts++) {
         try {
@@ -218,7 +224,7 @@ async function retryingTransport<TResponse>(...args: Parameters<RpcTransport>): 
 Here’s an example of some failover logic integrated into a transport:
 
 ```ts
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransportResponse, RpcTransport } from '@solana/rpc-spec';
 import { createHttpTransport } from '@solana/rpc-transport-http';
 
 // Create a transport for each RPC server
@@ -229,7 +235,9 @@ const transports = [
 ];
 
 // A failover transport that will try each transport in order until one succeeds before failing
-async function failoverTransport<TResponse>(...args: Parameters<RpcTransport>): Promise<RpcResponse<TResponse>> {
+async function failoverTransport<TResponse>(
+    ...args: Parameters<RpcTransport>
+): Promise<RpcTransportResponse<TResponse>> {
     let requestError;
 
     for (const transport of transports) {

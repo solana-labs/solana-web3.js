@@ -1,8 +1,8 @@
-import type { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import type { RpcTransport, RpcTransportResponse } from '@solana/rpc-spec';
 
 import { getRpcTransportWithRequestCoalescing } from '../rpc-request-coalescer';
 
-function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+function createMockResponse<T>(jsonResponse: T): RpcTransportResponse<T> {
     return {
         json: () => Promise.resolve(jsonResponse),
         text: () => Promise.resolve(JSON.stringify(jsonResponse)),
@@ -107,7 +107,7 @@ describe('RPC request coalescer', () => {
             let abortControllerB: AbortController;
             let responsePromiseA: ReturnType<typeof mockTransport>;
             let responsePromiseB: ReturnType<typeof mockTransport>;
-            let transportResponsePromise: (value: RpcResponse<unknown>) => void;
+            let transportResponsePromise: (value: RpcTransportResponse<unknown>) => void;
             beforeEach(() => {
                 abortControllerA = new AbortController();
                 abortControllerB = new AbortController();

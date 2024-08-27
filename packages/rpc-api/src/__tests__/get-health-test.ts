@@ -1,10 +1,10 @@
 import { SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY, SolanaError } from '@solana/errors';
-import { createRpc, type Rpc, type RpcResponse } from '@solana/rpc-spec';
+import { createRpc, type Rpc, type RpcTransportResponse } from '@solana/rpc-spec';
 
 import { createSolanaRpcApi, GetHealthApi } from '../index';
 import { createLocalhostSolanaRpc } from './__setup__';
 
-function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+function createMockResponse<T>(jsonResponse: T): RpcTransportResponse<T> {
     return {
         json: () => Promise.resolve(jsonResponse),
         text: () => Promise.resolve(JSON.stringify(jsonResponse)),

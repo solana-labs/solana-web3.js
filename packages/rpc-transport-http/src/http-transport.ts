@@ -1,5 +1,5 @@
 import { SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR, SolanaError } from '@solana/errors';
-import { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import { RpcTransport, RpcTransportRequest, RpcTransportResponse } from '@solana/rpc-spec';
 import type Dispatcher from 'undici-types/dispatcher';
 
 import {
@@ -45,7 +45,7 @@ export function createHttpTransport(config: Config): RpcTransport {
         payload,
         signal,
         toText,
-    }: Parameters<RpcTransport>[0]): Promise<RpcResponse<TResponse>> {
+    }: RpcTransportRequest): Promise<RpcTransportResponse<TResponse>> {
         const body = toText ? toText(payload) : JSON.stringify(payload);
         const requestInfo = {
             ...dispatcherConfig,

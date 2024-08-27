@@ -7,6 +7,7 @@ import {
 } from '@solana/rpc-spec-types';
 
 import { RpcApi, RpcApiRequestPlan } from './rpc-api';
+import { RpcResponse } from './rpc-shared';
 import { RpcTransport } from './rpc-transport';
 
 export type RpcConfig<TRpcMethods, TRpcTransport extends RpcTransport> = Readonly<{
@@ -78,12 +79,22 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
             const payload = request.toPayload
                 ? request.toPayload(request.methodName, request.params)
                 : createRpcMessage(request.methodName, request.params);
-            const rawResponse = await rpcConfig.transport<TResponse>({
+            const transportResponse = await rpcConfig.transport<TResponse>({
                 payload,
                 signal: options?.abortSignal,
                 toText: request.toText,
             });
-            const response = responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
+            let response: RpcResponse<TResponse> = { json: () => transportResponse.json() };
+            const rawResponse: RpcResponse<TResponse> = {
+                json: async () => {
+                    if (response.fromText) {
+                        return response.fromText(await transportResponse.text()) as TResponse;
+                    } else {
+                        return await transportResponse.json();
+                    }
+                },
+            };
+            response = responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
             return await response.json();
         },
     };

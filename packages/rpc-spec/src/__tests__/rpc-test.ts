@@ -2,14 +2,14 @@ import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi, RpcApiRequestPlan } from '../rpc-api';
-import { createJsonRpcResponseTransformer, RpcResponse } from '../rpc-shared';
-import { RpcTransport } from '../rpc-transport';
+import { createJsonRpcResponseTransformer } from '../rpc-shared';
+import { RpcTransport, RpcTransportResponse } from '../rpc-transport';
 
 interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;
 }
 
-function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+function createMockResponse<T>(jsonResponse: T): RpcTransportResponse<T> {
     return {
         json: () => Promise.resolve(jsonResponse),
         text: () => Promise.resolve(JSON.stringify(jsonResponse)),
@@ -169,7 +169,10 @@ describe('JSON-RPC 2.0', () => {
             const rawResponse = createMockResponse(123);
             (makeHttpRequest as jest.Mock).mockResolvedValueOnce(rawResponse);
             await rpc.someMethod().send();
-            expect(responseTransformer).toHaveBeenCalledWith(rawResponse, { methodName: 'someMethod', params: [] });
+            expect(responseTransformer).toHaveBeenCalledWith(expect.objectContaining({ json: expect.any(Function) }), {
+                methodName: 'someMethod',
+                params: [],
+            });
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

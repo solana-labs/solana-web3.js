@@ -41,12 +41,12 @@ Calling the `send(options)` method on a `PendingRpcRequest` will trigger the req
 
 An object that exposes all of the functions described by `TRpcMethods`, and fulfils them using `TRpcTransport`. Calling each method returns a `PendingRpcRequest<TResponse>` where `TResponse` is that method's response type.
 
-### `RpcRequest`
+### `RpcRequest<TParams>`
 
 An object that describes the elements of a JSON RPC request. It consists of the following properties:
 
 -   `methodName: string`: The name of the JSON RPC method to be called.
--   `params: unknown`: The parameters to be passed to the JSON RPC method.
+-   `params: TParams`: The parameters to be passed to the JSON RPC method.
 -   `toPayload?: (methodName: string, params: unknown) => unknown`: An optional function that defines how the method name and parameters should be transformed into a JSON RPC payload.
 -   `toText?: (payload: unknown) => string`: An optional function that defines how the JSO RPC payload should be transformed into a JSON string.
 
@@ -54,12 +54,12 @@ An object that describes the elements of a JSON RPC request. It consists of the 
 
 A function that accepts an `RpcRequest` and returns another `RpcRequest`. This allows the `RpcApi` to transform the request before it is sent to the JSON RPC server.
 
-### `RpcResponse`
+### `RpcResponse<TResponse>`
 
-An object that represents the response from a JSON RPC server. It contains two asynchronous methods that can be used to access the response data:
+An object that represents the response from a JSON RPC server. It contains two functions:
 
--   `await response.json()`: Returns the data as a JSON object.
--   `await response.text()`: Returns the data, unparsed, as a JSON string.
+-   `json: () => Promise<TResponse>`: This async function returns the data as a JSON object.
+-   `fromText?: (text: string) => unknown`: An optional function that defines how the raw JSON string should be parsed into a JSON object.
 
 This allows the `RpcApi` to decide whether they want the parsed JSON object or the raw JSON string. Ultimately, the `json` method will be used by the `Rpc` to provide the final response to the caller.
 
@@ -91,10 +91,24 @@ A configuration object consisting of the following properties:
 
 ### `RpcTransport`
 
-Any function that implements this interface can act as a transport for an `Rpc`. It need only return a promise for a response given the following config:
+Any function that implements this interface can act as a transport for an `Rpc`. It need only return a promise for a `RpcTransportResponse` given a `RpcTransportRequest`. See below for the types of these objects.
+
+### `RpcTransportRequest`
+
+Represents a request that is ready to be sent via an RPC transport. It consists of the following properties:
 
 -   `payload`: A value of arbitrary type to be sent.
 -   `signal`: An optional `AbortSignal` on which the `'abort'` event will be fired if the request should be cancelled.
+-   `toText?: (payload: unknown) => string`: An optional function that defines how the JSON RPC payload should be transformed into a JSON string. When not provided, `JSON.stringify` should be used.
+
+### `RpcTransportResponse`
+
+Represents the response of an RPC transport. It contains two asynchronous methods that can be used to access the response data:
+
+-   `await response.json()`: Returns the data as a JSON object.
+-   `await response.text()`: Returns the data, unparsed, as a JSON string.
+
+This allows the consumer to decide whether they want the parsed JSON object or the raw JSON string.
 
 ## Functions
 
