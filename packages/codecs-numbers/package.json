@@ -3,6 +3,14 @@
     "version": "2.0.0-rc.1",
     "description": "Codecs for numbers of different sizes and endianness",
     "exports": {
+        "edge-light": {
+            "import": "./dist/index.node.mjs",
+            "require": "./dist/index.node.cjs"
+        },
+        "workerd": {
+            "import": "./dist/index.node.mjs",
+            "require": "./dist/index.node.cjs"
+        },
         "browser": {
             "import": "./dist/index.browser.mjs",
             "require": "./dist/index.browser.cjs"
