@@ -65,6 +65,12 @@
     "engine": {
         "node": ">=17.4"
     },
+    "dependencies": {
+        "@solana/promises": "workspace:*"
+    },
+    "devDependencies": {
+        "@solana/test-matchers": "workspace:*"
+    },
     "peerDependencies": {
         "typescript": ">=5"
     },

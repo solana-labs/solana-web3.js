@@ -348,9 +348,16 @@ importers:
 
   packages/async:
     dependencies:
+      '@solana/promises':
+        specifier: workspace:*
+        version: link:../promises
       typescript:
         specifier: '>=5'
         version: 5.5.4
+    devDependencies:
+      '@solana/test-matchers':
+        specifier: workspace:*
+        version: link:../test-matchers
 
   packages/build-scripts:
     devDependencies:
