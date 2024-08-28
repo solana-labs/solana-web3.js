@@ -346,6 +346,12 @@ importers:
         specifier: '>=5'
         version: 5.5.2
 
+  packages/async:
+    dependencies:
+      typescript:
+        specifier: '>=5'
+        version: 5.5.4
+
   packages/build-scripts:
     devDependencies:
       '@types/jscodeshift':
