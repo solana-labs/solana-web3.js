@@ -11,7 +11,7 @@ describe('isBlockhashValid', () => {
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            it('returns the result as a bool wrapped in an RpcResponse', async () => {
+            it('returns the result as a bool wrapped in an RpcResponseData', async () => {
                 expect.assertions(1);
                 const blockhash = '9PCVWkKP3bq1sT5eLFurUysMvVs4PxJsTfza5QSBB4d1' as Blockhash;
                 const result = await rpc.isBlockhashValid(blockhash, { commitment }).send();
