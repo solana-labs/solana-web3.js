@@ -43,13 +43,13 @@ An object that exposes all of the functions described by `TRpcMethods`, and fulf
 
 ### `RpcApi<TRpcMethods>`
 
-For each of `TRpcMethods` this object exposes a method with the same name that maps between its input arguments and a `RpcRequest<TResponse>` that describes how to prepare a JSON RPC request to fetch `TResponse`.
+For each of `TRpcMethods` this object exposes a method with the same name that maps between its input arguments and a `RpcApiRequestPlan<TResponse>` that describes how to prepare a JSON RPC request to fetch `TResponse`.
 
 ### `RpcApiMethods`
 
 This is a marker interface that all RPC method definitions must extend to be accepted for use with the `RpcApi` creator.
 
-### `RpcRequest`
+### `RpcApiRequestPlan`
 
 This type describes how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object gives you the opportunity to:
 
@@ -85,7 +85,7 @@ A config object with the following properties:
 
 ### `createRpcApi(config)`
 
-Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcRequest` by:
+Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcApiRequestPlan` by:
 
 -   setting `methodName` to the name of the function called
 -   setting `params` to the arguments supplied to that function, optionally transformed by `config.parametersTransformer`
@@ -101,7 +101,7 @@ const rpcApi = createRpcApi({
 // ...the following function call:
 rpcApi.foo('bar', { baz: 'bat' });
 
-// ...will produce the following `RpcRequest` object:
+// ...will produce the following `RpcApiRequestPlan` object:
 //
 //     {
 //         methodName: 'foo',
