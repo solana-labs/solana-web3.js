@@ -9,15 +9,15 @@ export type RpcResponse<TResponse = unknown> = {
 };
 
 export type RpcRequestTransformer = {
-    <TParams>(request: RpcRequest<unknown>): RpcRequest<TParams>;
+    <TParams>(request: RpcRequest<TParams>): RpcRequest;
 };
 
 export type RpcResponseTransformer = {
-    <TResponse>(response: RpcResponse<unknown>, request: RpcRequest<unknown>): RpcResponse<TResponse>;
+    <TResponse>(response: RpcResponse, request: RpcRequest): RpcResponse<TResponse>;
 };
 
 export type RpcResponseTransformerFor<TResponse> = {
-    (response: RpcResponse<unknown>, request: RpcRequest<unknown>): RpcResponse<TResponse>;
+    (response: RpcResponse, request: RpcRequest): RpcResponse<TResponse>;
 };
 
 export function createJsonRpcResponseTransformer<TResponse>(

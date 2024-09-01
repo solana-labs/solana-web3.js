@@ -24,8 +24,10 @@ describe('createRpcApi', () => {
     it('applies the request transformer to the provided method name', () => {
         // Given a dummy API with a request transformer that appends 'Transformed' to the method name.
         const api = createRpcApi<DummyApi>({
-            requestTransformer: <T>(request: RpcRequest<unknown>) =>
-                ({ ...request, methodName: `${request.methodName}Transformed` }) as RpcRequest<T>,
+            requestTransformer: (request: RpcRequest) => ({
+                ...request,
+                methodName: `${request.methodName}Transformed`,
+            }),
         });
 
         // When we call a method on the API.
@@ -37,8 +39,10 @@ describe('createRpcApi', () => {
     it('applies the request transformer to the provided params', () => {
         // Given a dummy API with a request transformer that doubles the provided params.
         const api = createRpcApi<DummyApi>({
-            requestTransformer: <T>(request: RpcRequest<unknown>) =>
-                ({ ...request, params: (request.params as number[]).map(x => x * 2) }) as RpcRequest<T>,
+            requestTransformer: (request: RpcRequest) => ({
+                ...request,
+                params: (request.params as number[]).map(x => x * 2),
+            }),
         });
 
         // When we call a method on the API.
@@ -49,7 +53,7 @@ describe('createRpcApi', () => {
     });
     it('includes the provided response transformer in the plan', () => {
         // Given a dummy API with a response transformer.
-        const responseTransformer = <T>(response: RpcResponse<unknown>) => response as RpcResponse<T>;
+        const responseTransformer = <T>(response: RpcResponse) => response as RpcResponse<T>;
         const api = createRpcApi<DummyApi>({ responseTransformer });
 
         // When we call a method on the API.
@@ -71,8 +75,7 @@ describe('createRpcApi', () => {
     it('also returns a frozen object with a request transformer', () => {
         // Given a dummy API with a request transformer.
         const api = createRpcApi<DummyApi>({
-            requestTransformer: <T>(request: RpcRequest<unknown>) =>
-                ({ ...request, methodName: 'transformed' }) as RpcRequest<T>,
+            requestTransformer: (request: RpcRequest) => ({ ...request, methodName: 'transformed' }),
         });
 
         // When we call a method on the API.
