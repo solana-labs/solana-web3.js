@@ -1,8 +1,7 @@
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
-import { RpcApi } from '../rpc-api';
-import { RpcApiRequestPlan } from '../rpc-request';
+import { RpcApi, RpcApiRequestPlan } from '../rpc-api';
 import { RpcResponse } from '../rpc-shared';
 import { RpcTransport } from '../rpc-transport';
 
