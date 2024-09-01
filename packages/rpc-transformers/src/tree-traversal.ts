@@ -1,9 +1,4 @@
-import {
-    createJsonRpcResponseTransformer,
-    RpcRequest,
-    RpcRequestTransformer,
-    RpcResponseTransformer,
-} from '@solana/rpc-spec';
+import { RpcRequest, RpcRequestTransformer, RpcResponseTransformer } from '@solana/rpc-spec';
 
 export type KeyPathWildcard = { readonly __brand: unique symbol };
 export type KeyPath = ReadonlyArray<KeyPath | KeyPathWildcard | number | string>;
@@ -61,7 +56,5 @@ export function getTreeWalkerResponseTransformer<TState extends TraversalState>(
     visitors: NodeVisitor[],
     initialState: TState,
 ): RpcResponseTransformer {
-    return createJsonRpcResponseTransformer(json => {
-        return getTreeWalker(visitors)(json, initialState);
-    });
+    return json => getTreeWalker(visitors)(json, initialState);
 }

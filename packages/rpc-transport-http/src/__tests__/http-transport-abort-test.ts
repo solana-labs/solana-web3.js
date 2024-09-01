@@ -76,10 +76,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
             } as unknown as Response);
             const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal });
             abortController.abort('I got bored waiting');
-            const response = await sendPromise;
-            await expect(response.json()).resolves.toMatchObject({
-                ok: true,
-            });
+            await expect(sendPromise).resolves.toMatchObject({ ok: true });
         });
     });
 });

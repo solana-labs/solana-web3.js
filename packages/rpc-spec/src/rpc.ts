@@ -79,8 +79,7 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
                 payload: createRpcMessage(methodName, params),
                 signal: options?.abortSignal,
             });
-            const response = responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
-            return await response.json();
+            return responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
         },
     };
 }

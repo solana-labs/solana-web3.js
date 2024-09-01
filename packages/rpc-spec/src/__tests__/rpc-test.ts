@@ -2,18 +2,10 @@ import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi, RpcApiRequestPlan } from '../rpc-api';
-import { createJsonRpcResponseTransformer, RpcResponse } from '../rpc-shared';
 import { RpcTransport } from '../rpc-transport';
 
 interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;
-}
-
-function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
-    return {
-        json: () => Promise.resolve(jsonResponse),
-        text: () => Promise.resolve(JSON.stringify(jsonResponse)),
-    };
 }
 
 describe('JSON-RPC 2.0', () => {
@@ -41,7 +33,7 @@ describe('JSON-RPC 2.0', () => {
     });
     it('returns results from the transport', async () => {
         expect.assertions(1);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse(123));
+        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
         const result = await rpc.someMethod().send();
         expect(result).toBe(123);
     });
@@ -81,7 +73,7 @@ describe('JSON-RPC 2.0', () => {
         let responseTransformer: jest.Mock;
         let rpc: Rpc<TestRpcMethods>;
         beforeEach(() => {
-            responseTransformer = jest.fn(createJsonRpcResponseTransformer(json => `${json} processed response`));
+            responseTransformer = jest.fn(json => `${json} processed response`);
             rpc = createRpc({
                 api: {
                     someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
@@ -97,14 +89,14 @@ describe('JSON-RPC 2.0', () => {
         });
         it('calls the response transformer with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
-            const rawResponse = createMockResponse(123);
+            const rawResponse = 123;
             (makeHttpRequest as jest.Mock).mockResolvedValueOnce(rawResponse);
             await rpc.someMethod().send();
             expect(responseTransformer).toHaveBeenCalledWith(rawResponse, { methodName: 'someMethod', params: [] });
         });
         it('returns the processed response', async () => {
             expect.assertions(1);
-            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse(123));
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
             const result = await rpc.someMethod().send();
             expect(result).toBe('123 processed response');
         });

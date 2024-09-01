@@ -54,12 +54,7 @@ A function that accepts an `RpcRequest` and returns another `RpcRequest`. This a
 
 ### `RpcResponse`
 
-An object that represents the response from a JSON RPC server. It contains two asynchronous methods that can be used to access the response data:
-
--   `await response.json()`: Returns the data as a JSON object.
--   `await response.text()`: Returns the data, unparsed, as a JSON string.
-
-This allows the `RpcApi` to decide whether they want the parsed JSON object or the raw JSON string. Ultimately, the `json` method will be used by the `Rpc` to provide the final response to the caller.
+A type that represents the response from a JSON RPC server. This could be any sort of data which is why `RpcResponse` defaults to `unknown`. You may use a type parameter to specify the shape of the response — e.g. `RpcResponse<{ result: number }>`.
 
 ### `RpcResponseTransformer`
 
@@ -140,17 +135,3 @@ A config object with the following properties:
 
 -   `requestTransformer<T>(request: RpcRequest<T>): RpcRequest`: An optional function that transforms the `RpcRequest` before it is sent to the JSON RPC server.
 -   `responseTransformer<T>(response: RpcResponse, request: RpcRequest): RpcResponse<T>`: An optional function that transforms the `RpcResponse` before it is returned to the caller.
-
-### `createJsonRpcResponseTransformer(jsonTransformer)`
-
-Creates an `RpcResponseTransformer<T>` function from a function that transforms any JSON value to a value of type `T` by wrapping it in a `json` async function.
-
-```ts
-const getResultTransformer = createJsonRpcResponseTransformer((json: unknown): unknown => {
-    return (json as { result: unknown }).result;
-});
-```
-
-#### Arguments
-
--   `jsonTransformer: (json: unknown, request: RpcRequest) => T`: A function that transforms an unknown JSON value to a value of type `T`.

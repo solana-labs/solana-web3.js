@@ -66,9 +66,6 @@ export function createHttpTransport(config: Config): RpcTransport {
                 statusCode: response.status,
             });
         }
-        return Object.freeze({
-            json: () => response.json(),
-            text: () => response.text(),
-        });
+        return await response.json();
     };
 }
