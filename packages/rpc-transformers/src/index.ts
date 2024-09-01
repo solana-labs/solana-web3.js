@@ -1,4 +1,4 @@
-export * from './params-transformer';
+export * from './request-transformer';
 export * from './params-transformer-bigint-downcast';
 export * from './params-transformer-integer-overflow';
 export * from './request-transformer-default-commitment';
