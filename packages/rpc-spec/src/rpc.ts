@@ -3,7 +3,6 @@ import {
     createRpcMessage,
     Flatten,
     OverloadImplementations,
-    RpcResponseData,
     UnionToIntersection,
 } from '@solana/rpc-spec-types';
 
@@ -68,12 +67,12 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {
             const { methodName, params, responseTransformer } = pendingRequest;
-            const payload = createRpcMessage(methodName, params);
-            const response = await rpcConfig.transport<RpcResponseData<unknown>>({
-                payload,
+            const response = await rpcConfig.transport<TResponse>({
+                payload: createRpcMessage(methodName, params),
                 signal: options?.abortSignal,
             });
-            return (responseTransformer ? responseTransformer(response, methodName) : response) as TResponse;
+            const responseData = await response.json();
+            return responseTransformer ? responseTransformer(responseData, methodName) : responseData;
         },
     };
 }

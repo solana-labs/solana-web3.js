@@ -3,10 +3,18 @@ import { createRpcMessage } from '@solana/rpc-spec-types';
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi } from '../rpc-api';
 import { RpcApiRequestPlan } from '../rpc-request';
+import { RpcResponse } from '../rpc-shared';
 import { RpcTransport } from '../rpc-transport';
 
 interface TestRpcMethods {
     someMethod(...args: unknown[]): unknown;
+}
+
+function createMockResponse<T>(jsonResponse: T): RpcResponse<T> {
+    return {
+        json: () => Promise.resolve(jsonResponse),
+        text: () => Promise.resolve(JSON.stringify(jsonResponse)),
+    };
 }
 
 describe('JSON-RPC 2.0', () => {
@@ -34,7 +42,7 @@ describe('JSON-RPC 2.0', () => {
     });
     it('returns results from the transport', async () => {
         expect.assertions(1);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
+        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse(123));
         const result = await rpc.someMethod().send();
         expect(result).toBe(123);
     });
@@ -90,13 +98,13 @@ describe('JSON-RPC 2.0', () => {
         });
         it('calls the response transformer with the response from the JSON-RPC 2.0 endpoint', async () => {
             expect.assertions(1);
-            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse(123));
             await rpc.someMethod().send();
             expect(responseTransformer).toHaveBeenCalledWith(123, 'someMethod');
         });
         it('returns the processed response', async () => {
             expect.assertions(1);
-            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(createMockResponse(123));
             const result = await rpc.someMethod().send();
             expect(result).toBe('123 processed response');
         });

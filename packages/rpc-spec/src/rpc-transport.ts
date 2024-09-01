@@ -1,8 +1,10 @@
-type RpcTransportConfig = Readonly<{
+import { RpcResponse } from './rpc-shared';
+
+type RpcTransportRequest = Readonly<{
     payload: unknown;
     signal?: AbortSignal;
 }>;
 
-export interface RpcTransport {
-    <TResponse>(config: RpcTransportConfig): Promise<TResponse>;
-}
+export type RpcTransport = {
+    <TResponse>(request: RpcTransportRequest): Promise<RpcResponse<TResponse>>;
+};
