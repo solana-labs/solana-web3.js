@@ -2,10 +2,10 @@ import { pipe } from '@solana/functional';
 import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
 import { Commitment } from '@solana/rpc-types';
 
-import { applyDefaultCommitment } from './default-commitment';
 import { downcastNodeToNumberIfBigint } from './params-transformer-bigint-downcast';
 import { getIntegerOverflowNodeVisitor } from './params-transformer-integer-overflow';
-import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './params-transformer-options-object-position-config';
+import { getDefaultCommitmentRequestTransformer } from './request-transformer-default-commitment';
+import { OPTIONS_OBJECT_POSITION_BY_METHOD } from './request-transformer-options-object-position-config';
 import { getTreeWalker, KeyPath } from './tree-traversal';
 
 export type RequestTransformerConfig = Readonly<{
@@ -28,23 +28,11 @@ export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransfo
             keyPath: [],
         };
         const patchedRequest = { methodName, params: traverse(rawParams, initialState) as T };
-        if (!Array.isArray(patchedRequest.params)) {
-            return patchedRequest;
-        }
-        const optionsObjectPositionInParams = OPTIONS_OBJECT_POSITION_BY_METHOD[methodName];
-        if (optionsObjectPositionInParams == null) {
-            return patchedRequest;
-        }
         return pipe(
             patchedRequest,
-            ({ methodName, params }) => ({
-                methodName,
-                params: applyDefaultCommitment({
-                    commitmentPropertyName: methodName === 'sendTransaction' ? 'preflightCommitment' : 'commitment',
-                    optionsObjectPositionInParams,
-                    overrideCommitment: defaultCommitment,
-                    params: params as unknown[],
-                }),
+            getDefaultCommitmentRequestTransformer({
+                defaultCommitment,
+                optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
             }),
             // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
             ({ methodName, params }) => ({
