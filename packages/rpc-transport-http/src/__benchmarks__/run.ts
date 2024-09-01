@@ -38,12 +38,10 @@ function createDispatcher(options: Agent.Options) {
     });
 }
 
-let id = 0;
-function getTestPayload() {
+function getTestRequest() {
     return {
-        id: ++id,
-        jsonrpc: '2.0',
-        method: 'getLatestBlockhash',
+        methodName: 'getLatestBlockhash',
+        params: [],
     };
 }
 
@@ -53,9 +51,7 @@ async function makeConcurrentRequests(num: number = NUM_CONCURRENT_REQUESTS) {
             createHttpTransport({
                 dispatcher_NODE_ONLY: dispatcher,
                 url: VALIDATOR_URL,
-            })({
-                payload: getTestPayload(),
-            }),
+            })(getTestRequest()),
         ),
     );
 }

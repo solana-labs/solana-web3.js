@@ -1,10 +1,4 @@
-import {
-    Callable,
-    createRpcMessage,
-    Flatten,
-    OverloadImplementations,
-    UnionToIntersection,
-} from '@solana/rpc-spec-types';
+import { Callable, Flatten, OverloadImplementations, UnionToIntersection } from '@solana/rpc-spec-types';
 
 import { RpcApi, RpcApiRequestPlan } from './rpc-api';
 import { RpcTransport } from './rpc-transport';
@@ -74,12 +68,16 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {
             const { methodName, params, responseTransformer } = pendingRequest;
-            const request = Object.freeze({ methodName, params });
-            const rawResponse = await rpcConfig.transport<TResponse>({
-                payload: createRpcMessage(methodName, params),
-                signal: options?.abortSignal,
-            });
-            return responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
+            const rawResponse = await rpcConfig.transport<TResponse>(
+                Object.freeze({
+                    methodName,
+                    params,
+                    signal: options?.abortSignal,
+                }),
+            );
+            return responseTransformer
+                ? responseTransformer(rawResponse, Object.freeze({ methodName, params }))
+                : rawResponse;
         },
     };
 }

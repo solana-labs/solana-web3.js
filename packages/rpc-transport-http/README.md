@@ -27,7 +27,8 @@ import { createHttpTransport } from '@solana/rpc-transport-http';
 
 const transport = createHttpTransport({ url: 'https://api.mainnet-beta.solana.com' });
 const response = await transport({
-    payload: { id: 1, jsonrpc: '2.0', method: 'getSlot' },
+    methodName: 'getSlot',
+    params: [],
 });
 const data = await response.json();
 ```
@@ -66,16 +67,11 @@ const transport = createHttpTransport({
     dispatcher_NODE_ONLY: dispatcher,
     url: 'https://mypool',
 });
-let id = 0;
 const balances = await Promise.allSettled(
     accounts.map(async account => {
         const response = await transport({
-            payload: {
-                id: ++id,
-                jsonrpc: '2.0',
-                method: 'getBalance',
-                params: [account],
-            },
+            methodName: 'getBalance',
+            params: [account],
         });
         return await response.json();
     }),

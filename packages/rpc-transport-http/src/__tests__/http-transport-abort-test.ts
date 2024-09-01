@@ -10,7 +10,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
     describe('when invoked with an already-aborted `AbortSignal`', () => {
         it('rejects with an `AbortError` when no reason is specified', async () => {
             expect.assertions(3);
-            const sendPromise = makeHttpRequest({ payload: 123, signal: AbortSignal.abort() });
+            const sendPromise = makeHttpRequest({ methodName: 'foo', params: 123, signal: AbortSignal.abort() });
             await expect(sendPromise).rejects.toThrow();
             await expect(sendPromise).rejects.toBeInstanceOf(DOMException);
             await expect(sendPromise).rejects.toHaveProperty('name', 'AbortError');
@@ -21,7 +21,8 @@ describe('createHttpTransport and `AbortSignal`', () => {
             it("rejects with the `AbortSignal's` reason", async () => {
                 expect.assertions(1);
                 const sendPromise = makeHttpRequest({
-                    payload: 123,
+                    methodName: 'foo',
+                    params: 123,
                     signal: AbortSignal.abort('Already aborted'),
                 });
                 await expect(sendPromise).rejects.toBe('Already aborted');
@@ -37,7 +38,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
         });
         it('rejects with an `AbortError` when no reason is specified', async () => {
             expect.assertions(1);
-            const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal });
+            const sendPromise = makeHttpRequest({ methodName: 'foo', params: 123, signal: abortSignal });
             abortController.abort();
             await expect(sendPromise).rejects.toThrow();
         });
@@ -46,7 +47,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
         if (!__BROWSER__) {
             it("rejects with with the `AbortSignal's` reason", async () => {
                 expect.assertions(1);
-                const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal });
+                const sendPromise = makeHttpRequest({ methodName: 'foo', params: 123, signal: abortSignal });
                 abortController.abort('I got bored waiting');
                 await expect(sendPromise).rejects.toBe('I got bored waiting');
             });
@@ -74,7 +75,7 @@ describe('createHttpTransport and `AbortSignal`', () => {
                 json: () => Promise.resolve({ ok: true }),
                 ok: true,
             } as unknown as Response);
-            const sendPromise = makeHttpRequest({ payload: 123, signal: abortSignal });
+            const sendPromise = makeHttpRequest({ methodName: 'foo', params: 123, signal: abortSignal });
             abortController.abort('I got bored waiting');
             await expect(sendPromise).resolves.toMatchObject({ ok: true });
         });

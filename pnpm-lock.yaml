@@ -976,6 +976,9 @@ importers:
       '@solana/rpc-spec':
         specifier: workspace:*
         version: link:../rpc-spec
+      '@solana/rpc-spec-types':
+        specifier: workspace:*
+        version: link:../rpc-spec-types
       typescript:
         specifier: '>=5'
         version: 5.5.2

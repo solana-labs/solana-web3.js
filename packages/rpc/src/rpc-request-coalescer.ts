@@ -1,4 +1,4 @@
-import type { RpcResponse, RpcTransport } from '@solana/rpc-spec';
+import type { RpcRequest, RpcResponse, RpcTransport } from '@solana/rpc-spec';
 
 type CoalescedRequest = {
     readonly abortController: AbortController;
@@ -6,7 +6,7 @@ type CoalescedRequest = {
     readonly responsePromise: Promise<RpcResponse | undefined>;
 };
 
-type GetDeduplicationKeyFn = (payload: unknown) => string | undefined;
+type GetDeduplicationKeyFn = (request: RpcRequest) => string | undefined;
 
 // This used to be a `Symbol()`, but there's a bug in Node <21 where the `undici` library passes
 // the `reason` property of the `AbortSignal` straight to `Error.captureStackTrace()` without first
@@ -33,8 +33,8 @@ export function getRpcTransportWithRequestCoalescing<TTransport extends RpcTrans
     return async function makeCoalescedHttpRequest<TResponse>(
         request: Parameters<RpcTransport>[0],
     ): Promise<RpcResponse<TResponse>> {
-        const { payload, signal } = request;
-        const deduplicationKey = getDeduplicationKey(payload);
+        const { methodName, params, signal } = request;
+        const deduplicationKey = getDeduplicationKey({ methodName, params });
         if (deduplicationKey === undefined) {
             return await transport(request);
         }

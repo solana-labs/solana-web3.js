@@ -1,18 +1,6 @@
 import fastStableStringify from '@solana/fast-stable-stringify';
+import { RpcRequest } from '@solana/rpc-spec';
 
-function isJsonRpcPayload(payload: unknown): payload is Readonly<{ method: string; params: unknown }> {
-    if (payload == null || typeof payload !== 'object' || Array.isArray(payload)) {
-        return false;
-    }
-    return (
-        'jsonrpc' in payload &&
-        payload.jsonrpc === '2.0' &&
-        'method' in payload &&
-        typeof payload.method === 'string' &&
-        'params' in payload
-    );
-}
-
-export function getSolanaRpcPayloadDeduplicationKey(payload: unknown): string | undefined {
-    return isJsonRpcPayload(payload) ? fastStableStringify([payload.method, payload.params]) : undefined;
+export function getSolanaRpcPayloadDeduplicationKey({ methodName, params }: RpcRequest): string | undefined {
+    return fastStableStringify([methodName, params]);
 }

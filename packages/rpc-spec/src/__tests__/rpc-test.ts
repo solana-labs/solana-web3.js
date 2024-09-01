@@ -1,5 +1,3 @@
-import { createRpcMessage } from '@solana/rpc-spec-types';
-
 import { createRpc, Rpc } from '../rpc';
 import { RpcApi, RpcApiRequestPlan } from '../rpc-api';
 import { RpcTransport } from '../rpc-transport';
@@ -28,7 +26,8 @@ describe('JSON-RPC 2.0', () => {
     it('sends a request to the transport', () => {
         rpc.someMethod(123).send();
         expect(makeHttpRequest).toHaveBeenCalledWith({
-            payload: { ...createRpcMessage('someMethod', [123]), id: expect.any(Number) },
+            methodName: 'someMethod',
+            params: [123],
         });
     });
     it('returns results from the transport', async () => {
@@ -59,13 +58,11 @@ describe('JSON-RPC 2.0', () => {
                 transport: makeHttpRequest,
             });
         });
-        it('converts the returned request to a JSON-RPC 2.0 message and sends it to the transport', () => {
+        it('passes the method name and parameters to the transport', () => {
             rpc.someMethod(123).send();
             expect(makeHttpRequest).toHaveBeenCalledWith({
-                payload: {
-                    ...createRpcMessage('someMethodAugmented', [123, 'augmented', 'params']),
-                    id: expect.any(Number),
-                },
+                methodName: 'someMethodAugmented',
+                params: [123, 'augmented', 'params'],
             });
         });
     });

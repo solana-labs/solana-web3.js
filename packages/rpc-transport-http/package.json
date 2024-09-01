@@ -74,6 +74,7 @@
     "dependencies": {
         "@solana/errors": "workspace:*",
         "@solana/rpc-spec": "workspace:*",
+        "@solana/rpc-spec-types": "workspace:*",
         "undici-types": "^6.19.8"
     },
     "devDependencies": {
