@@ -1,3 +1,5 @@
+import { RpcRequest, RpcRequestTransformer } from '@solana/rpc-spec';
+
 export type KeyPathWildcard = { readonly __brand: unique symbol };
 export type KeyPath = ReadonlyArray<KeyPath | KeyPathWildcard | number | string>;
 
@@ -34,5 +36,18 @@ export function getTreeWalker(visitors: NodeVisitor[]) {
         } else {
             return visitors.reduce((acc, visitNode) => visitNode(acc, state), node);
         }
+    };
+}
+
+export function getTreeWalkerRequestTransformer<TState extends TraversalState>(
+    visitors: NodeVisitor[],
+    initialState: TState,
+): RpcRequestTransformer {
+    return <TParams>(request: RpcRequest<TParams>): RpcRequest => {
+        const traverse = getTreeWalker(visitors);
+        return Object.freeze({
+            ...request,
+            params: traverse(request.params, initialState),
+        });
     };
 }
