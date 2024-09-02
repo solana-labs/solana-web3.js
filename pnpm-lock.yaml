@@ -167,7 +167,7 @@ importers:
         version: 10.7.3
       mockttp:
         specifier: ^3.15.0
-        version: 3.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        version: 3.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       mz:
         specifier: ^2.7.0
         version: 2.7.0
@@ -6357,8 +6357,8 @@ packages:
     engines: {node: '>=14.14.0'}
     hasBin: true
 
-  mockttp@3.15.1:
-    resolution: {integrity: sha512-Yyn5/41gWffYyPs340z7hFcegLQDRc4mODPupJxaTycZTMB1ui9Joz0lEZNEi/XqWuVwFIuB+Ft52O5WGXI2rg==}
+  mockttp@3.15.2:
+    resolution: {integrity: sha512-/zvEHam3SiHX0uIbtoJsqe85SMYHq5x4Tqgl0E5rBrI7D714UhS+rCU+q6Q3fMWI+NlDyW2xJ3lploJ4cwI/Vg==}
     engines: {node: '>=14.14.0'}
     hasBin: true
 
@@ -15024,7 +15024,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  mockttp@3.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  mockttp@3.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       '@graphql-tools/schema': 8.5.1(graphql@15.8.0)
       '@graphql-tools/utils': 8.13.1(graphql@15.8.0)
