@@ -64,7 +64,7 @@ describe('getStakeActivation', () => {
                     'context.__code',
                     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
                 ),
-                expect(stakeActivationPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+                expect(stakeActivationPromise).rejects.toHaveProperty('context.contextSlot', expect.any(BigInt)),
             ]);
         });
     });

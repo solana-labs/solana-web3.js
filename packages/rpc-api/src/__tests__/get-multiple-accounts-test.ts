@@ -43,7 +43,7 @@ describe('getMultipleAccounts', () => {
                             executable: false,
                             lamports: 5000000n,
                             owner: '11111111111111111111111111111111',
-                            rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            rentEpoch: 18446744073709551615n,
                             space: 9n,
                         },
                         {
@@ -51,7 +51,7 @@ describe('getMultipleAccounts', () => {
                             executable: false,
                             lamports: 5000000n,
                             owner: '11111111111111111111111111111111',
-                            rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            rentEpoch: 18446744073709551615n,
                             space: 0n,
                         },
                     ],
@@ -76,7 +76,7 @@ describe('getMultipleAccounts', () => {
                     'context.__code',
                     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
                 ),
-                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(BigInt)),
             ]);
         });
     });
@@ -114,7 +114,7 @@ describe('getMultipleAccounts', () => {
                         executable: false,
                         lamports: 5000000n,
                         owner: '11111111111111111111111111111111',
-                        rentEpoch: 18446744073709551616n,
+                        rentEpoch: 18446744073709551615n,
                         space: 9n,
                     },
                     null,

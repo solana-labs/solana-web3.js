@@ -16,9 +16,27 @@ type Config = Readonly<{
 export function createHttpTransportForSolanaRpc(config: Config): RpcTransport {
     return createHttpTransport({
         ...config,
-        fromJson: (rawResponse: string, payload: unknown) =>
-            isSolanaRequest(payload) ? parseJsonWithBigInts(rawResponse) : JSON.parse(rawResponse),
+        fromJson: (rawResponse: string, payload: unknown) => {
+            if (!isSolanaRequest(payload)) return JSON.parse(rawResponse);
+            const response = parseJsonWithBigInts(rawResponse);
+            // Error codes are always numbers.
+            if (isErrorResponse(response)) {
+                return { ...response, error: { ...response.error, code: Number(response.error.code) } };
+            }
+            return response;
+        },
         toJson: (payload: unknown) =>
             isSolanaRequest(payload) ? stringifyJsonWithBigints(payload) : JSON.stringify(payload),
     });
+}
+
+function isErrorResponse(value: unknown): value is { error: { code: bigint } } {
+    return (
+        !!value &&
+        typeof value === 'object' &&
+        'error' in value &&
+        !!value.error &&
+        typeof value.error === 'object' &&
+        'code' in value.error
+    );
 }

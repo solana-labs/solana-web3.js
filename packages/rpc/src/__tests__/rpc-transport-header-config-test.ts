@@ -1,4 +1,4 @@
-import { createHttpTransport } from '@solana/rpc-transport-http';
+import { createHttpTransportForSolanaRpc } from '@solana/rpc-transport-http';
 
 import { createDefaultRpcTransport } from '../rpc-transport';
 
@@ -10,7 +10,7 @@ describe('createDefaultRpcTransport', () => {
             headers: { aUtHoRiZaTiOn: 'Picard, 4 7 Alpha Tango' },
             url: 'fake://url',
         });
-        expect(createHttpTransport).toHaveBeenCalledWith(
+        expect(createHttpTransportForSolanaRpc).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     authorization: 'Picard, 4 7 Alpha Tango',
@@ -20,7 +20,7 @@ describe('createDefaultRpcTransport', () => {
     });
     it('adds a `solana-client` header with the current NPM package version by default', () => {
         createDefaultRpcTransport({ url: 'fake://url' });
-        expect(createHttpTransport).toHaveBeenCalledWith(
+        expect(createHttpTransportForSolanaRpc).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     // Version is defined in `setup-define-version-constant.ts`
@@ -34,7 +34,7 @@ describe('createDefaultRpcTransport', () => {
             headers: { 'sOlAnA-cLiEnT': 'fakeversion' },
             url: 'fake://url',
         });
-        expect(createHttpTransport).toHaveBeenCalledWith(
+        expect(createHttpTransportForSolanaRpc).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.objectContaining({
                     // Version is defined in `setup-define-version-constant.ts`
@@ -42,7 +42,7 @@ describe('createDefaultRpcTransport', () => {
                 }),
             }),
         );
-        expect(createHttpTransport).toHaveBeenCalledWith(
+        expect(createHttpTransportForSolanaRpc).toHaveBeenCalledWith(
             expect.objectContaining({
                 headers: expect.not.objectContaining({
                     'sOlAnA-cLiEnT': 'fakeversion',

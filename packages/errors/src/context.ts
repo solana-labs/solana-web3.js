@@ -441,7 +441,7 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
             __serverMessage: string;
         };
         [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED]: {
-            contextSlot: number;
+            contextSlot: bigint;
         };
         [SOLANA_ERROR__JSON_RPC__SERVER_ERROR_NODE_UNHEALTHY]: {
             numSlotsBehind?: number;
