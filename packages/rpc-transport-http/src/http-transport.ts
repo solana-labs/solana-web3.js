@@ -10,7 +10,9 @@ import {
 
 type Config = Readonly<{
     dispatcher_NODE_ONLY?: Dispatcher;
+    fromJson?: (rawResponse: string, payload: unknown) => RpcResponse;
     headers?: AllowedHttpRequestHeaders;
+    toJson?: (payload: unknown) => string;
     url: string;
 }>;
 
@@ -32,7 +34,7 @@ export function createHttpTransport(config: Config): RpcTransport {
     if (__DEV__ && !__NODEJS__ && 'dispatcher_NODE_ONLY' in config) {
         warnDispatcherWasSuppliedInNonNodeEnvironment();
     }
-    const { headers, url } = config;
+    const { fromJson, headers, toJson, url } = config;
     if (__DEV__ && headers) {
         assertIsAllowedHttpRequestHeaders(headers);
     }
@@ -45,7 +47,7 @@ export function createHttpTransport(config: Config): RpcTransport {
         payload,
         signal,
     }: Parameters<RpcTransport>[0]): Promise<RpcResponse<TResponse>> {
-        const body = JSON.stringify(payload);
+        const body = toJson ? toJson(payload) : JSON.stringify(payload);
         const requestInfo = {
             ...dispatcherConfig,
             body,
@@ -65,6 +67,9 @@ export function createHttpTransport(config: Config): RpcTransport {
                 message: response.statusText,
                 statusCode: response.status,
             });
+        }
+        if (fromJson) {
+            return fromJson(await response.text(), payload) as TResponse;
         }
         return await response.json();
     };
