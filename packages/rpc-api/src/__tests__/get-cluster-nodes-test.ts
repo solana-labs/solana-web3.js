@@ -77,9 +77,14 @@ describe('getClusterNodes', () => {
                 pubkey,
                 pubsub: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 rpc,
+                serveRepair: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 shredVersion,
                 tpu: expect.stringMatching(/127.0.0.1(:\d+)?/),
+                tpuForwards: expect.stringMatching(/127.0.0.1(:\d+)?/),
+                tpuForwardsQuic: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 tpuQuic: expect.stringMatching(/127.0.0.1(:\d+)?/),
+                tpuVote: expect.stringMatching(/127.0.0.1(:\d+)?/),
+                tvu: expect.stringMatching(/127.0.0.1(:\d+)?/),
                 version,
             });
         });
