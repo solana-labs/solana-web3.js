@@ -5,7 +5,7 @@
     "type": "module",
     "dependencies": {
         "@inquirer/core": "^9.1.0",
-        "pino": "^9.3.2",
+        "pino": "^9.4.0",
         "pino-pretty": "^11.2.2"
     },
     "devDependencies": {
