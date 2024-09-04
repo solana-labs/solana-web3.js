@@ -43,6 +43,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: ghpages-deploy-artifacts-v1-docs
           path: .ghpages-deploy
           retention-days: 1
@@ -68,6 +69,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          include-hidden-files: true
           name: ghpages-deploy-artifacts
           path: .ghpages-deploy
           retention-days: 1
