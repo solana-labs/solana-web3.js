@@ -1,5 +1,4 @@
 import { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 
 type ClusterNode = Readonly<{
     /** The unique identifier of the node's feature set */
@@ -40,7 +39,7 @@ type ClusterNode = Readonly<{
 
 type GetClusterNodesApiResponse = readonly ClusterNode[];
 
-export interface GetClusterNodesApi extends RpcApiMethods {
+export type GetClusterNodesApi = {
     /**
      * Returns information about all the nodes participating in the cluster
      * Note that the optional NO_CONFIG object is ignored. See https://github.com/solana-labs/solana-web3.js/issues/1389
@@ -49,4 +48,4 @@ export interface GetClusterNodesApi extends RpcApiMethods {
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): GetClusterNodesApiResponse;
-}
+};

@@ -16,12 +16,12 @@
 
 This package contains types that describe the [methods](https://solana.com/docs/rpc/http) of the Solana JSON RPC API, and utilities for creating a `RpcApi` implementation with sensible defaults. It can be used standalone, but it is also exported as part of the Solana JavaScript SDK [`@solana/web3.js@rc`](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library).
 
-Each RPC method is described in terms of a TypeScript interface of the following form:
+Each RPC method is described in terms of a TypeScript type of the following form:
 
 ```ts
-interface ExampleApi extends RpcApiMethods {
+type ExampleApi = {
     getSomething(address: Address): Something;
-}
+};
 ```
 
 A `RpcApi` that implements `ExampleApi` will ultimately expose its defined methods on any `Rpc` that uses it.

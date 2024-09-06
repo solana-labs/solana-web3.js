@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { MicroLamportsUnsafeBeyond2Pow53Minus1, Slot } from '@solana/rpc-types';
 
 type RecentPrioritizationFee = Readonly<{
@@ -15,7 +14,7 @@ type RecentPrioritizationFee = Readonly<{
 
 type GetRecentPrioritizationFeesApiResponse = readonly RecentPrioritizationFee[];
 
-export interface GetRecentPrioritizationFeesApi extends RpcApiMethods {
+export type GetRecentPrioritizationFeesApi = {
     /**
      * Returns the balance of the account of provided Pubkey
      */
@@ -30,4 +29,4 @@ export interface GetRecentPrioritizationFeesApi extends RpcApiMethods {
          */
         addresses?: Address[],
     ): GetRecentPrioritizationFeesApiResponse;
-}
+};

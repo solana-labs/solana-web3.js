@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetTransactionCountApiResponse = U64UnsafeBeyond2Pow53Minus1;
 
-export interface GetTransactionCountApi extends RpcApiMethods {
+export type GetTransactionCountApi = {
     /**
      * Returns the current Transaction count from the ledger
      */
@@ -15,4 +14,4 @@ export interface GetTransactionCountApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): GetTransactionCountApiResponse;
-}
+};

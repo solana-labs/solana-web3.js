@@ -1,4 +1,4 @@
-import { createRpcApi, RpcApi, RpcApiMethods } from '../rpc-api';
+import { createRpcApi, RpcApi } from '../rpc-api';
 
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
@@ -12,9 +12,9 @@ type NftCollectionDetailsApiResponse = Readonly<{
     totalSupply: number;
 }>;
 
-interface NftCollectionDetailsApi extends RpcApiMethods {
+type NftCollectionDetailsApi = {
     qn_fetchNFTCollectionDetails(args: { contracts: string[] }): NftCollectionDetailsApiResponse;
-}
+};
 
 type QuickNodeRpcMethods = NftCollectionDetailsApi;
 

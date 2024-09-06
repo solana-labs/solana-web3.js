@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type Epoch = U64UnsafeBeyond2Pow53Minus1;
@@ -42,9 +41,9 @@ type GetVoteAccountsConfig<TVotePubkey extends Address> = Readonly<{
     votePubkey?: TVotePubkey;
 }>;
 
-export interface GetVoteAccountsApi extends RpcApiMethods {
+export type GetVoteAccountsApi = {
     /** Returns the account info and associated stake for all the voting accounts in the current bank. */
     getVoteAccounts<TVoteAccount extends Address>(
         config?: GetVoteAccountsConfig<TVoteAccount>,
     ): GetVoteAccountsApiResponse<TVoteAccount>;
-}
+};

@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetStakeActivationApiResponse = Readonly<{
@@ -11,7 +10,7 @@ type GetStakeActivationApiResponse = Readonly<{
     state: 'activating' | 'active' | 'deactivating' | 'inactive';
 }>;
 
-export interface GetStakeActivationApi extends RpcApiMethods {
+export type GetStakeActivationApi = {
     /**
      * Returns epoch activation information for a stake account
      *
@@ -26,4 +25,4 @@ export interface GetStakeActivationApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): GetStakeActivationApiResponse;
-}
+};

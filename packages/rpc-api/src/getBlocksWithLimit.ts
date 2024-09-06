@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 
 type GetBlocksWithLimitApiResponse = Slot[];
 
-export interface GetBlocksWithLimitApi extends RpcApiMethods {
+export type GetBlocksWithLimitApi = {
     /**
      * Returns a list of confirmed blocks starting at the given slot
      * for up to `limit` blocks
@@ -18,4 +17,4 @@ export interface GetBlocksWithLimitApi extends RpcApiMethods {
             commitment?: Exclude<Commitment, 'processed'>;
         }>,
     ): GetBlocksWithLimitApiResponse;
-}
+};

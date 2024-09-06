@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, SolanaRpcResponse } from '@solana/rpc-types';
 
 type GetStakeMinimumDelegationApiResponse = LamportsUnsafeBeyond2Pow53Minus1;
 
-export interface GetStakeMinimumDelegationApi extends RpcApiMethods {
+export type GetStakeMinimumDelegationApi = {
     /**
      * Returns the stake minimum delegation, in lamports.
      */
@@ -12,4 +11,4 @@ export interface GetStakeMinimumDelegationApi extends RpcApiMethods {
             commitment?: Commitment;
         }>,
     ): SolanaRpcResponse<GetStakeMinimumDelegationApiResponse>;
-}
+};

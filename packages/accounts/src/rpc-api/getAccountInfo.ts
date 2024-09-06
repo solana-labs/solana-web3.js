@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -31,7 +30,7 @@ type GetAccountInfoApiSliceableCommonConfig = Readonly<{
     dataSlice?: DataSlice;
 }>;
 
-export interface GetAccountInfoApi extends RpcApiMethods {
+export type GetAccountInfoApi = {
     /**
      * Returns all information associated with the account of provided public key
      */
@@ -70,4 +69,4 @@ export interface GetAccountInfoApi extends RpcApiMethods {
         address: Address,
         config?: GetAccountInfoApiCommonConfig,
     ): GetAccountInfoApiResponseBase & NestInRpcResponseOrNull<AccountInfoWithBase58Bytes>;
-}
+};

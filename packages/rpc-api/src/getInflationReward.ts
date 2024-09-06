@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     Commitment,
     LamportsUnsafeBeyond2Pow53Minus1,
@@ -32,9 +31,9 @@ type InflationReward = Readonly<{
 
 type GetInflationRewardApiResponse = readonly (InflationReward | null)[];
 
-export interface GetInflationRewardApi extends RpcApiMethods {
+export type GetInflationRewardApi = {
     /**
      * Returns the current block height of the node
      */
     getInflationReward(addresses: Address[], config?: GetInflationRewardApiConfig): GetInflationRewardApiResponse;
-}
+};

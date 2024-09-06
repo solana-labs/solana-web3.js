@@ -1,4 +1,3 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { F64UnsafeSeeDocumentation, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetInflationRateApiResponse = Readonly<{
@@ -12,7 +11,7 @@ type GetInflationRateApiResponse = Readonly<{
     validator: F64UnsafeSeeDocumentation;
 }>;
 
-export interface GetInflationRateApi extends RpcApiMethods {
+export type GetInflationRateApi = {
     /**
      * Returns the current block height of the node
      */
@@ -20,4 +19,4 @@ export interface GetInflationRateApi extends RpcApiMethods {
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): GetInflationRateApiResponse;
-}
+};
