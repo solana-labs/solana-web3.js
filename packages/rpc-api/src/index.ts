@@ -179,15 +179,24 @@ export type {
     SimulateTransactionApi,
 };
 
-type Config = RequestTransformerConfig;
+// This is required because `AllowedKeyPaths<never>` allows any method
+// So we instead force it to be an empty object in that case
+type StrictAllowedNumericKeypaths<T> = [keyof T] extends [never] ? Record<string, never> : AllowedNumericKeypaths<T>;
+
+type Config<
+    TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiMainnet | SolanaRpcApiTestnet = SolanaRpcApi,
+> = Readonly<{
+    extendAllowedNumericKeypaths?: StrictAllowedNumericKeypaths<Omit<TRpcMethods, keyof SolanaRpcApi>>;
+}> &
+    RequestTransformerConfig;
 
 export function createSolanaRpcApi<
     TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiMainnet | SolanaRpcApiTestnet = SolanaRpcApi,
->(config?: Config): RpcApi<TRpcMethods> {
+>(config?: Config<TRpcMethods>): RpcApi<TRpcMethods> {
     return createRpcApi<TRpcMethods>({
         requestTransformer: getDefaultRequestTransformerForSolanaRpc(config),
         responseTransformer: getDefaultResponseTransformerForSolanaRpc({
-            allowedNumericKeyPaths: getAllowedNumericKeypaths(),
+            allowedNumericKeyPaths: { ...(config?.extendAllowedNumericKeypaths ?? {}), ...getAllowedNumericKeypaths() },
         }),
     });
 }
