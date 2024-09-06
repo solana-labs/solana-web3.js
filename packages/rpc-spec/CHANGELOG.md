@@ -1,5 +1,14 @@
 # @solana/rpc-spec
 
+## 2.0.0-rc.2
+
+### Patch Changes
+
+-   [#3137](https://github.com/solana-labs/solana-web3.js/pull/3137) [`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a) Thanks [@mcintyre94](https://github.com/mcintyre94)! - Add edge-light to package exports
+
+-   Updated dependencies [[`fd72c2e`](https://github.com/solana-labs/solana-web3.js/commit/fd72c2ed1edad488318fa5d3e285f04852f4210a)]:
+    -   @solana/rpc-spec-types@2.0.0-rc.2
+
 ## 2.0.0-rc.1
 
 ### Patch Changes

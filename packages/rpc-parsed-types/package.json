@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-parsed-types",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "Type definitions for parsed types used in the Solana RPC",
     "exports": {
         "edge-light": {

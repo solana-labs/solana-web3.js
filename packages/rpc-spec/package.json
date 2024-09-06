@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-spec",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "A generic implementation of JSON RPCs using proxies",
     "exports": {
         "edge-light": {

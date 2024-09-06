@@ -1,6 +1,6 @@
 {
     "name": "@solana/rpc-subscriptions",
-    "version": "2.0.0-rc.1",
+    "version": "2.0.0-rc.2",
     "description": "A library for subscribing to Solana RPC notifications",
     "exports": {
         "edge-light": {
