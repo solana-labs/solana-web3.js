@@ -1,3 +1,9 @@
+import { getTreeWalkerRequestTransformer } from './tree-traversal';
+
+export function getBigIntDowncastRequestTransformer() {
+    return getTreeWalkerRequestTransformer([downcastNodeToNumberIfBigint], { keyPath: [] });
+}
+
 export function downcastNodeToNumberIfBigint(value: bigint): number;
 export function downcastNodeToNumberIfBigint<T>(value: T): T;
 export function downcastNodeToNumberIfBigint(value: unknown): unknown {

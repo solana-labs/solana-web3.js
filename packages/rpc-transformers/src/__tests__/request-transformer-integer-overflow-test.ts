@@ -1,4 +1,4 @@
-import { getIntegerOverflowNodeVisitor } from '../params-transformer-integer-overflow';
+import { getIntegerOverflowNodeVisitor } from '../request-transformer-integer-overflow';
 import { TraversalState } from '../tree-traversal';
 
 const MOCK_TRAVERSAL_STATE = {

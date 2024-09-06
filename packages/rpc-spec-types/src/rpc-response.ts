@@ -2,10 +2,11 @@ interface IHasIdentifier {
     readonly id: number;
 }
 
-type RpcErrorResponse = Readonly<{
+type RpcErrorResponsePayload = Readonly<{
     code: number;
     data?: unknown;
     message: string;
 }>;
 
-export type RpcResponse<TResponse> = IHasIdentifier & Readonly<{ error: RpcErrorResponse } | { result: TResponse }>;
+export type RpcResponseData<TResponse> = IHasIdentifier &
+    Readonly<{ error: RpcErrorResponsePayload } | { result: TResponse }>;

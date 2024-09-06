@@ -11,7 +11,7 @@ describe('getStakeMinimumDelegation', () => {
     });
     (['confirmed', 'finalized', 'processed'] as Commitment[]).forEach(commitment => {
         describe(`when called with \`${commitment}\` commitment`, () => {
-            it('returns the result as a bigint wrapped in an RpcResponse', async () => {
+            it('returns the result as a bigint wrapped in an RpcResponseData', async () => {
                 expect.assertions(1);
                 const result = await rpc.getStakeMinimumDelegation({ commitment }).send();
                 expect(result.value).toEqual(expect.any(BigInt));

@@ -1,6 +1,6 @@
 import type { Commitment } from '@solana/rpc-types';
 
-import { applyDefaultCommitment } from '../default-commitment';
+import { applyDefaultCommitment } from '../request-transformer-default-commitment';
 
 const MOCK_COMMITMENT_PROPERTY_NAME = 'commitmentProperty';
 
