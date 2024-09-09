@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -44,7 +43,7 @@ type ProgramNotificationsApiCommonConfig = Readonly<{
     >[];
 }>;
 
-export interface ProgramNotificationsApi extends RpcSubscriptionsApiMethods {
+export type ProgramNotificationsApi = {
     /**
      * Subscribe to a program to receive notifications when the lamports or data for an account
      * owned by the given program changes
@@ -81,4 +80,4 @@ export interface ProgramNotificationsApi extends RpcSubscriptionsApiMethods {
         programId: Address,
         config?: ProgramNotificationsApiCommonConfig,
     ): ProgramNotificationsApiNotificationBase<AccountInfoWithBase58Bytes>;
-}
+};

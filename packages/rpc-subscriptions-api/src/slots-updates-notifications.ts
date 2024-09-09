@@ -1,4 +1,3 @@
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type SlotsUpdatesNotificationsApiNotificationBase = Readonly<{
@@ -36,7 +35,7 @@ type SlotsUpdatesNotificationsApiNotification =
     | SlotsUpdatesNotificationsApiNotificationDead
     | SlotsUpdatesNotificationsApiNotificationFrozen;
 
-export interface SlotsUpdatesNotificationsApi extends RpcSubscriptionsApiMethods {
+export type SlotsUpdatesNotificationsApi = {
     /**
      * Subscribe to receive a notification from the validator on a variety of updates on every slot
      */
@@ -44,4 +43,4 @@ export interface SlotsUpdatesNotificationsApi extends RpcSubscriptionsApiMethods
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): SlotsUpdatesNotificationsApiNotification;
-}
+};
