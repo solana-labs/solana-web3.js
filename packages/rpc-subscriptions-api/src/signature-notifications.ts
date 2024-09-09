@@ -1,5 +1,4 @@
 import type { Signature } from '@solana/keys';
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type { Commitment, SolanaRpcResponse, TransactionError } from '@solana/rpc-types';
 
 type SignatureNotificationsApiNotificationReceived = SolanaRpcResponse<Readonly<string>>;
@@ -15,7 +14,7 @@ type SignatureNotificationsApiConfigBase = Readonly<{
     commitment?: Commitment;
 }>;
 
-export interface SignatureNotificationsApi extends RpcSubscriptionsApiMethods {
+export type SignatureNotificationsApi = {
     /**
      * Subscribe to a transaction signature to receive notification when a given transaction is committed.
      * On `signatureNotification` - the subscription is automatically cancelled.
@@ -38,4 +37,4 @@ export interface SignatureNotificationsApi extends RpcSubscriptionsApiMethods {
         }> &
             SignatureNotificationsApiConfigBase,
     ): SignatureNotificationsApiNotificationProcessed;
-}
+};

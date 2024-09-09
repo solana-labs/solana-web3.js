@@ -1,4 +1,3 @@
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type { Slot } from '@solana/rpc-types';
 
 type SlotNotificationsApiNotification = Readonly<{
@@ -7,7 +6,7 @@ type SlotNotificationsApiNotification = Readonly<{
     slot: Slot;
 }>;
 
-export interface SlotNotificationsApi extends RpcSubscriptionsApiMethods {
+export type SlotNotificationsApi = {
     /**
      * Subscribe to receive notification anytime a slot is processed by the validator
      */
@@ -15,4 +14,4 @@ export interface SlotNotificationsApi extends RpcSubscriptionsApiMethods {
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): SlotNotificationsApiNotification;
-}
+};
