@@ -1,4 +1,3 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetEpochInfoApiResponse = Readonly<{
@@ -16,7 +15,7 @@ type GetEpochInfoApiResponse = Readonly<{
     transactionCount: U64UnsafeBeyond2Pow53Minus1 | null;
 }>;
 
-export interface GetEpochInfoApi extends RpcApiMethods {
+export type GetEpochInfoApi = {
     /**
      * Returns the balance of the account of provided Pubkey
      */
@@ -26,4 +25,4 @@ export interface GetEpochInfoApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): GetEpochInfoApiResponse;
-}
+};

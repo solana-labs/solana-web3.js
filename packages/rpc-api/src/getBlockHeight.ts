@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type GetBlockHeightApiResponse = U64UnsafeBeyond2Pow53Minus1;
 
-export interface GetBlockHeightApi extends RpcApiMethods {
+export type GetBlockHeightApi = {
     /**
      * Returns the current block height of the node
      */
@@ -15,4 +14,4 @@ export interface GetBlockHeightApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): GetBlockHeightApiResponse;
-}
+};

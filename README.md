@@ -389,8 +389,8 @@ type GetAssetApiResponse = Readonly<{
     /* ...etc... */
 }>;
 
-// Set up an interface for the request method.
-interface GetAssetApi extends RpcApiMethods {
+// Set up a type spec for the request method.
+type GetAssetApi = {
     // Define the method's name, parameters and response type
     getAsset(args: { id: Address }): GetAssetApiResponse;
 }

@@ -21,7 +21,7 @@ type RpcReturnTypeMapper<TRpcMethod> = TRpcMethod extends Callable
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RpcApiMethod = (...args: any) => any;
-export interface RpcApiMethods {
+interface RpcApiMethods {
     [methodName: string]: RpcApiMethod;
 }
 

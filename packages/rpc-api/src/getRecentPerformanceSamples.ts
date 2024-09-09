@@ -1,4 +1,3 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Slot, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
 
 type PerformanceSample = Readonly<{
@@ -16,7 +15,7 @@ type PerformanceSample = Readonly<{
 
 type GetRecentPerformanceSamplesApiResponse = readonly PerformanceSample[];
 
-export interface GetRecentPerformanceSamplesApi extends RpcApiMethods {
+export type GetRecentPerformanceSamplesApi = {
     /**
      * Returns a list of recent performance samples, in reverse slot order. Performance samples are taken every 60 seconds and include the number of transactions and slots that occur in a given time window.
      */
@@ -24,4 +23,4 @@ export interface GetRecentPerformanceSamplesApi extends RpcApiMethods {
         /** number of samples to return (maximum 720) */
         limit?: number,
     ): GetRecentPerformanceSamplesApiResponse;
-}
+};

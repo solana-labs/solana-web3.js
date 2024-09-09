@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Blockhash, Commitment, Slot, SolanaRpcResponse } from '@solana/rpc-types';
 
 type IsBlockhashValidApiResponse = boolean;
 
-export interface IsBlockhashValidApi extends RpcApiMethods {
+export type IsBlockhashValidApi = {
     /**
      * Returns whether a blockhash is still valid or not
      */
@@ -17,4 +16,4 @@ export interface IsBlockhashValidApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): SolanaRpcResponse<IsBlockhashValidApiResponse>;
-}
+};

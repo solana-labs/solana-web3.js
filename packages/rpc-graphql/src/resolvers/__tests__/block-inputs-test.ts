@@ -27,6 +27,7 @@ describe('block inputs', () => {
             get(target, p) {
                 if (!target[p as keyof GraphQLCompliantRpc]) {
                     const pendingRpcRequest = { send: mockRpcTransport };
+                    // @ts-expect-error - Mocking RPC methods
                     target[p as keyof GraphQLCompliantRpc] = jest
                         .fn()
                         .mockReturnValue(pendingRpcRequest) as GraphQLCompliantRpc[keyof GraphQLCompliantRpc];

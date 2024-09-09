@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, SolanaRpcResponse } from '@solana/rpc-types';
 
 type GetSupplyConfig = Readonly<{
@@ -30,7 +29,7 @@ type GetSupplyApiResponseWithoutNonCirculatingAccounts = GetSupplyApiResponseBas
         nonCirculatingAccounts: never[];
     }>;
 
-export interface GetSupplyApi extends RpcApiMethods {
+export type GetSupplyApi = {
     /**
      * Returns information about the current supply.
      */
@@ -46,4 +45,4 @@ export interface GetSupplyApi extends RpcApiMethods {
                 excludeNonCirculatingAccountsList?: false;
             }>,
     ): SolanaRpcResponse<GetSupplyApiResponseWithNonCirculatingAccounts>;
-}
+};

@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 
 type GetBlocksApiResponse = Slot[];
 
-export interface GetBlocksApi extends RpcApiMethods {
+export type GetBlocksApi = {
     /**
      * Returns a list of confirmed blocks between two slots
      */
@@ -15,4 +14,4 @@ export interface GetBlocksApi extends RpcApiMethods {
             commitment?: Exclude<Commitment, 'processed'>;
         }>,
     ): GetBlocksApiResponse;
-}
+};

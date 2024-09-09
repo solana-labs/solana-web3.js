@@ -1,4 +1,3 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Slot } from '@solana/rpc-types';
 
 type GetHighestSnapshotSlotApiResponse = Readonly<{
@@ -6,7 +5,7 @@ type GetHighestSnapshotSlotApiResponse = Readonly<{
     incremental: Slot | null;
 }>;
 
-export interface GetHighestSnapshotSlotApi extends RpcApiMethods {
+export type GetHighestSnapshotSlotApi = {
     /**
      * Returns the highest slot information that the node has snapshots for.
      *
@@ -18,4 +17,4 @@ export interface GetHighestSnapshotSlotApi extends RpcApiMethods {
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): GetHighestSnapshotSlotApiResponse;
-}
+};

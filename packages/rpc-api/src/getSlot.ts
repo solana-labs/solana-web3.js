@@ -1,9 +1,8 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 
 type GetSlotApiResponse = Slot;
 
-export interface GetSlotApi extends RpcApiMethods {
+export type GetSlotApi = {
     /**
      * Returns the slot that has reached the given or default commitment level
      */
@@ -13,4 +12,4 @@ export interface GetSlotApi extends RpcApiMethods {
             minContextSlot?: Slot;
         }>,
     ): GetSlotApiResponse;
-}
+};

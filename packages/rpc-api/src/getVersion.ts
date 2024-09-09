@@ -1,5 +1,3 @@
-import type { RpcApiMethods } from '@solana/rpc-spec';
-
 type GetVersionApiResponse = Readonly<{
     /** Unique identifier of the current software's feature set */
     'feature-set': number; // `u32`
@@ -7,7 +5,7 @@ type GetVersionApiResponse = Readonly<{
     'solana-core': string;
 }>;
 
-export interface GetVersionApi extends RpcApiMethods {
+export type GetVersionApi = {
     /**
      * Returns the current Solana version running on the node
      */
@@ -15,4 +13,4 @@ export interface GetVersionApi extends RpcApiMethods {
         // FIXME: https://github.com/solana-labs/solana-web3.js/issues/1389
         NO_CONFIG?: Record<string, never>,
     ): GetVersionApiResponse;
-}
+};

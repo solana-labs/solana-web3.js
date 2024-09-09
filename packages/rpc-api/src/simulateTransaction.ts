@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase64EncodedData,
@@ -117,7 +116,7 @@ type SimulateTransactionApiResponseWithInnerInstructions = Readonly<
     TransactionForFullMetaInnerInstructionsParsed | TransactionForFullMetaInnerInstructionsUnparsed
 >;
 
-export interface SimulateTransactionApi extends RpcApiMethods {
+export type SimulateTransactionApi = {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     simulateTransaction(
         base58EncodedWireTransaction: Base58EncodedBytes,
@@ -299,4 +298,4 @@ export interface SimulateTransactionApi extends RpcApiMethods {
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config: SigVerifyAndReplaceRecentBlockhashConfig & SimulateTransactionConfigBase & { encoding: 'base64' },
     ): SolanaRpcResponse<Readonly<{ readonly accounts: null }> & SimulateTransactionApiResponseBase>;
-}
+};

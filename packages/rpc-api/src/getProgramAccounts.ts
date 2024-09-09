@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -29,7 +28,7 @@ type GetProgramAccountsApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
-export interface GetProgramAccountsApi extends RpcApiMethods {
+export type GetProgramAccountsApi = {
     /**
      * Returns the account information for a list of Pubkeys.
      */
@@ -128,4 +127,4 @@ export interface GetProgramAccountsApi extends RpcApiMethods {
                 withContext?: boolean;
             }>,
     ): AccountInfoWithPubkey<AccountInfoBase & AccountInfoWithBase58Bytes>[];
-}
+};

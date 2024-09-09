@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58EncodedData,
@@ -26,7 +25,7 @@ type GetMultipleAccountsApiSliceableCommonConfig = Readonly<{
     dataSlice?: DataSlice;
 }>;
 
-export interface GetMultipleAccountsApi extends RpcApiMethods {
+export type GetMultipleAccountsApi = {
     /**
      * Returns the account information for a list of Pubkeys.
      */
@@ -72,4 +71,4 @@ export interface GetMultipleAccountsApi extends RpcApiMethods {
         addresses: Address[],
         config?: GetMultipleAccountsApiCommonConfig,
     ): SolanaRpcResponse<(GetMultipleAccountsApiResponseBase & (AccountInfoWithBase64EncodedData | null))[]>;
-}
+};

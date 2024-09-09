@@ -14,7 +14,6 @@ import {
     DEFAULT_RPC_CONFIG,
     mainnet,
     RpcApi,
-    RpcApiMethods,
     SolanaRpcApiMainnet,
 } from '@solana/web3.js';
 
@@ -31,13 +30,13 @@ type AssetMetadata = Readonly<{
     name: string;
     symbol: string;
 }>;
-interface TritonGetAssetApi extends RpcApiMethods {
+type TritonGetAssetApi = {
     /**
      * Define the ideal developer-facing API as a TypeScript type. Doing so will enable typechecking
      * and autocompletion for it on the RPC instance.
      */
     getAssetMetadata(address: Address): AssetMetadata;
-}
+};
 
 /**
  * STEP 2: CUSTOM JSON RPC API IMPLEMENTATION

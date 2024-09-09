@@ -1,6 +1,5 @@
 import type { Address } from '@solana/addresses';
 import type { JsonParsedTokenAccount } from '@solana/rpc-parsed-types';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -52,7 +51,7 @@ type GetTokenAccountsByOwnerApiSliceableCommonConfig = Readonly<{
     /** Limit the returned account data */
     dataSlice?: DataSlice;
 }>;
-export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
+export type GetTokenAccountsByOwnerApi = {
     /**
      * Returns all SPL Token accounts by token owner.
      */
@@ -100,4 +99,4 @@ export interface GetTokenAccountsByOwnerApi extends RpcApiMethods {
         filter: AccountsFilter,
         config?: GetTokenAccountsByOwnerApiCommonConfig & GetTokenAccountsByOwnerApiSliceableCommonConfig,
     ): SolanaRpcResponse<GetTokenAccountsByOwnerResponse<AccountInfoWithBase58Bytes>>;
-}
+};

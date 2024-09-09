@@ -1,6 +1,5 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     Base58EncodedBytes,
     Base58EncodedDataResponse,
@@ -161,7 +160,7 @@ type TransactionAddressTableLookups = Readonly<{
     }>;
 }>;
 
-export interface GetTransactionApi extends RpcApiMethods {
+export type GetTransactionApi = {
     /**
      * Returns transaction details for a confirmed transaction
      */
@@ -249,4 +248,4 @@ export interface GetTransactionApi extends RpcApiMethods {
                           : TransactionAddressTableLookups);
               })
         | null;
-}
+};

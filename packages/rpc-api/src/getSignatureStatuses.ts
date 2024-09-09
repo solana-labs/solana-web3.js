@@ -1,5 +1,4 @@
 import type { Signature } from '@solana/keys';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type {
     Commitment,
     Slot,
@@ -41,7 +40,7 @@ type SignatureStatusResult = Readonly<{
 
 type GetSignatureStatusesApiResponse = readonly (SignatureStatusResult | null)[];
 
-export interface GetSignatureStatusesApi extends RpcApiMethods {
+export type GetSignatureStatusesApi = {
     /**
      * Returns the statuses of a list of signatures.
      * Each signature must be a txid, the first signature of a transaction.
@@ -65,4 +64,4 @@ export interface GetSignatureStatusesApi extends RpcApiMethods {
             searchTransactionHistory?: boolean;
         }>,
     ): SolanaRpcResponse<GetSignatureStatusesApiResponse>;
-}
+};

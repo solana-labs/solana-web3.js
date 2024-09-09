@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 
 type GetLeaderScheduleApiConfigBase = Readonly<{
@@ -28,7 +27,7 @@ type GetLeaderScheduleApiResponseWithSingleIdentity<TIdentity extends string> = 
     [TAddress in TIdentity]?: Slot[];
 }>;
 
-export interface GetLeaderScheduleApi extends RpcApiMethods {
+export type GetLeaderScheduleApi = {
     /**
      * Fetch the leader schedule for the epoch that corresponds to the provided slot.
      * If unspecified, the leader schedule for the current epoch is fetched
@@ -64,4 +63,4 @@ export interface GetLeaderScheduleApi extends RpcApiMethods {
         slot: null,
         config?: GetLeaderScheduleApiConfigBase,
     ): GetLeaderScheduleApiResponseWithAllIdentities;
-}
+};

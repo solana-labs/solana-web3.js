@@ -1,5 +1,4 @@
 import type { Signature } from '@solana/keys';
-import type { RpcApiMethods } from '@solana/rpc-spec';
 import type { Commitment, Slot } from '@solana/rpc-types';
 import type { Base64EncodedWireTransaction } from '@solana/transactions';
 
@@ -12,7 +11,7 @@ type SendTransactionConfig = Readonly<{
 
 type SendTransactionResponse = Signature;
 
-export interface SendTransactionApi extends RpcApiMethods {
+export type SendTransactionApi = {
     /** @deprecated Set `encoding` to `'base64'` when calling this method */
     sendTransaction(
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
@@ -49,4 +48,4 @@ export interface SendTransactionApi extends RpcApiMethods {
         base64EncodedWireTransaction: Base64EncodedWireTransaction,
         config?: SendTransactionConfig & { encoding: 'base64' },
     ): SendTransactionResponse;
-}
+};
