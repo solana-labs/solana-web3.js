@@ -1,4 +1,3 @@
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type {
     Base58EncodedBytes,
     Blockhash,
@@ -80,7 +79,7 @@ type BlockNotificationsEncoding = 'base58' | 'base64' | 'json' | 'jsonParsed';
 // - These rules apply to both "accounts" and "full" transaction details.
 type BlockNotificationsMaxSupportedTransactionVersion = Exclude<TransactionVersion, 'legacy'>;
 
-export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
+export type BlockNotificationsApi = {
     /**
      * Subscribe to receive notification anytime a new block is Confirmed or Finalized.
      *
@@ -555,4 +554,4 @@ export interface BlockNotificationsApi extends RpcSubscriptionsApiMethods {
                     | null;
             }>
     >;
-}
+};

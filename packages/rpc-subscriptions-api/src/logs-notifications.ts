@@ -1,6 +1,5 @@
 import type { Address } from '@solana/addresses';
 import type { Signature } from '@solana/keys';
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type { Commitment, SolanaRpcResponse, TransactionError } from '@solana/rpc-types';
 
 type LogsNotificationsApiNotification = SolanaRpcResponse<
@@ -24,7 +23,7 @@ type LogsNotificationsApiConfig = Readonly<{
     commitment?: Commitment;
 }>;
 
-export interface LogsNotificationsApi extends RpcSubscriptionsApiMethods {
+export type LogsNotificationsApi = {
     /**
      * Subscribe to a transaction logs to receive notification when a given transaction is committed.
      * On `logsNotification` - the subscription is automatically cancelled.
@@ -34,4 +33,4 @@ export interface LogsNotificationsApi extends RpcSubscriptionsApiMethods {
         filter: LogsNotificationsApiFilter,
         config?: LogsNotificationsApiConfig,
     ): LogsNotificationsApiNotification;
-}
+};

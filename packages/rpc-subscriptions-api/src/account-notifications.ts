@@ -1,5 +1,4 @@
 import type { Address } from '@solana/addresses';
-import type { RpcSubscriptionsApiMethods } from '@solana/rpc-subscriptions-spec';
 import type {
     AccountInfoBase,
     AccountInfoWithBase58Bytes,
@@ -15,7 +14,7 @@ type AccountNotificationsApiCommonConfig = Readonly<{
     commitment?: Commitment;
 }>;
 
-export interface AccountNotificationsApi extends RpcSubscriptionsApiMethods {
+export type AccountNotificationsApi = {
     /**
      * Subscribe to an account to receive notifications when the lamports or data for
      * a given account public key changes.
@@ -55,4 +54,4 @@ export interface AccountNotificationsApi extends RpcSubscriptionsApiMethods {
         address: Address,
         config?: AccountNotificationsApiCommonConfig,
     ): SolanaRpcResponse<AccountInfoBase & AccountInfoWithBase58Bytes>;
-}
+};
