@@ -69,17 +69,16 @@ function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(
 
 function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport, TResponse>(
     rpcConfig: RpcConfig<TRpcMethods, TRpcTransport>,
-    pendingRequest: RpcApiRequestPlan<TResponse>,
+    apiPlan: RpcApiRequestPlan<TResponse>,
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {
-            const { methodName, params, responseTransformer } = pendingRequest;
-            const request = Object.freeze({ methodName, params });
+            const { methodName, params, responseTransformer } = apiPlan;
             const rawResponse = await rpcConfig.transport<TResponse>({
                 payload: createRpcMessage(methodName, params),
                 signal: options?.abortSignal,
             });
-            return responseTransformer ? responseTransformer(rawResponse, request) : rawResponse;
+            return responseTransformer ? responseTransformer(rawResponse) : rawResponse;
         },
     };
 }

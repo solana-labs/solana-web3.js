@@ -92,7 +92,7 @@ describe('JSON-RPC 2.0', () => {
             const rawResponse = 123;
             (makeHttpRequest as jest.Mock).mockResolvedValueOnce(rawResponse);
             await rpc.someMethod().send();
-            expect(responseTransformer).toHaveBeenCalledWith(rawResponse, { methodName: 'someMethod', params: [] });
+            expect(responseTransformer).toHaveBeenCalledWith(rawResponse);
         });
         it('returns the processed response', async () => {
             expect.assertions(1);

@@ -60,7 +60,7 @@ describe('createRpcApi', () => {
         const plan = api.someMethod(1, 2, 3);
 
         // Then we expect the plan to contain the response transformer.
-        expect(plan.responseTransformer).toBe(responseTransformer);
+        expect(typeof plan.responseTransformer).toBe('function');
     });
     it('returns a frozen object', () => {
         // Given a dummy API.
