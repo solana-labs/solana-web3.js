@@ -1,7 +1,7 @@
-import { createJsonRpcResponseTransformer } from '@solana/rpc-spec';
+import { RpcResponseTransformer } from '@solana/rpc-spec';
 
 type JsonRpcResponse = { result: unknown };
 
-export function getResultResponseTransformer() {
-    return createJsonRpcResponseTransformer(json => (json as JsonRpcResponse).result);
+export function getResultResponseTransformer(): RpcResponseTransformer {
+    return json => (json as JsonRpcResponse).result;
 }
