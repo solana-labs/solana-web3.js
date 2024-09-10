@@ -51,8 +51,7 @@ describe('JSON-RPC 2.0', () => {
                 api: {
                     someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
-                            methodName: 'someMethodAugmented',
-                            params: [...params, 'augmented', 'params'],
+                            payload: createRpcMessage('someMethodAugmented', [...params, 'augmented', 'params']),
                         };
                     },
                 } as RpcApi<TestRpcMethods>,
@@ -78,8 +77,7 @@ describe('JSON-RPC 2.0', () => {
                 api: {
                     someMethod(...params: unknown[]): RpcApiRequestPlan<unknown> {
                         return {
-                            methodName: 'someMethod',
-                            params,
+                            payload: createRpcMessage('someMethod', params),
                             responseTransformer,
                         };
                     },

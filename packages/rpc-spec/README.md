@@ -72,8 +72,7 @@ This is a marker interface that all RPC method definitions must extend to be acc
 
 This type allows an `RpcApi` to describe how a particular request should be issued to the JSON RPC server. Given a function that was called on a `Rpc`, this object gives you the opportunity to:
 
--   customize the JSON RPC method name in the case that it's different than the name of that function
--   define the shape of the JSON RPC params in case they are different than the arguments provided to that function
+-   provide a `payload` from the requested method name and parameters.
 -   provide a function to transform the JSON RPC server's response, in case it does not match the `TResponse` specified by the `PendingRpcRequest<TResponse>` returned from that function.
 
 ### `RpcSendOptions`
@@ -106,8 +105,7 @@ A config object with the following properties:
 
 Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcApiRequestPlan` by:
 
--   setting `methodName` to the name of the function called, optionally transformed by `config.requestTransformer`.
--   setting `params` to the arguments supplied to that function, optionally transformed by `config.requestTransformer`.
+-   setting `payload` to a JSON RPC v2 payload object with the requested `methodName` and `params` properties, optionally transformed by `config.requestTransformer`.
 -   setting `responseTransformer` to `config.responseTransformer`, if provided.
 
 ```ts
@@ -123,8 +121,7 @@ rpcApi.foo('bar', { baz: 'bat' });
 // ...will produce the following `RpcApiRequestPlan` object:
 //
 //     {
-//         methodName: 'foo',
-//         params: [{ baz: 'bat' }, 'bar'],
+//         payload: { id: 1, jsonrpc: '2.0', method: 'foo', params: ['bar', { baz: 'bat' }] },
 //         responseTransformer: (response) => response.result,
 //     }
 ```

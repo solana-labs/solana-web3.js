@@ -60,7 +60,7 @@ function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(
                 const createRpcRequest = Reflect.get(target, methodName, receiver);
                 const newRequest = createRpcRequest
                     ? createRpcRequest(...rawParams)
-                    : { methodName, params: rawParams };
+                    : { payload: createRpcMessage(methodName, rawParams) };
                 return createPendingRpcRequest(rpcConfig, newRequest);
             };
         },
@@ -73,11 +73,8 @@ function createPendingRpcRequest<TRpcMethods, TRpcTransport extends RpcTransport
 ): PendingRpcRequest<TResponse> {
     return {
         async send(options?: RpcSendOptions): Promise<TResponse> {
-            const { methodName, params, responseTransformer } = apiPlan;
-            const rawResponse = await rpcConfig.transport<TResponse>({
-                payload: createRpcMessage(methodName, params),
-                signal: options?.abortSignal,
-            });
+            const { payload, responseTransformer } = apiPlan;
+            const rawResponse = await rpcConfig.transport<TResponse>({ payload, signal: options?.abortSignal });
             return responseTransformer ? responseTransformer(rawResponse) : rawResponse;
         },
     };
