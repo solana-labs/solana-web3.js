@@ -23,27 +23,6 @@ export function getDefaultRequestTransformerForSolanaRpc(config?: RequestTransfo
                 defaultCommitment: config?.defaultCommitment,
                 optionsObjectPositionByMethod: OPTIONS_OBJECT_POSITION_BY_METHOD,
             }),
-            // FIXME Remove when https://github.com/anza-xyz/agave/pull/483 is deployed.
-            getFixForIssue479RequestTransformer(),
         );
-    };
-}
-
-// See https://github.com/anza-xyz/agave/issues/479
-function getFixForIssue479RequestTransformer(): RpcRequestTransformer {
-    return <TParams>(request: RpcRequest<TParams>): RpcRequest => {
-        if (request.methodName !== 'sendTransaction') {
-            return request;
-        }
-
-        const params = request.params as [unknown, { skipPreflight?: boolean } | undefined];
-        if (params[1]?.skipPreflight !== true) {
-            return request;
-        }
-
-        return Object.freeze({
-            ...request,
-            params: [params[0], { ...params[1], preflightCommitment: 'processed' }, ...params.slice(2)],
-        });
     };
 }
