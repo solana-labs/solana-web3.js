@@ -16407,7 +16407,7 @@ snapshots:
       '@semantic-release/release-notes-generator': 14.0.0(semantic-release@24.1.0(typescript@5.5.4))
       aggregate-error: 5.0.0
       cosmiconfig: 9.0.0(typescript@5.5.4)
-      debug: 4.3.6(supports-color@8.1.1)
+      debug: 4.3.7
       env-ci: 11.0.0
       execa: 9.1.0
       figures: 6.1.0
