@@ -26,7 +26,7 @@ interface RpcApiMethods {
     [methodName: string]: RpcApiMethod;
 }
 
-export function createRpcApi<TRpcMethods extends RpcApiMethods>(config?: RpcApiConfig): RpcApi<TRpcMethods> {
+export function createJsonRpcApi<TRpcMethods extends RpcApiMethods>(config?: RpcApiConfig): RpcApi<TRpcMethods> {
     return new Proxy({} as RpcApi<TRpcMethods>, {
         defineProperty() {
             return false;

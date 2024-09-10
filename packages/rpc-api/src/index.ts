@@ -1,4 +1,4 @@
-import { createRpcApi, RpcApi } from '@solana/rpc-spec';
+import { createJsonRpcApi, RpcApi } from '@solana/rpc-spec';
 import {
     AllowedNumericKeypaths,
     getDefaultRequestTransformerForSolanaRpc,
@@ -184,7 +184,7 @@ type Config = RequestTransformerConfig;
 export function createSolanaRpcApi<
     TRpcMethods extends SolanaRpcApi | SolanaRpcApiDevnet | SolanaRpcApiMainnet | SolanaRpcApiTestnet = SolanaRpcApi,
 >(config?: Config): RpcApi<TRpcMethods> {
-    return createRpcApi<TRpcMethods>({
+    return createJsonRpcApi<TRpcMethods>({
         requestTransformer: getDefaultRequestTransformerForSolanaRpc(config),
         responseTransformer: getDefaultResponseTransformerForSolanaRpc({
             allowedNumericKeyPaths: getAllowedNumericKeypaths(),

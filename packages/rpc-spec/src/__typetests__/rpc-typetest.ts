@@ -1,5 +1,5 @@
 import { createRpc, Rpc } from '../rpc';
-import { createRpcApi } from '../rpc-api';
+import { createJsonRpcApi } from '../rpc-api';
 import { RpcTransport } from '../rpc-transport';
 
 type MyApiMethods = {
@@ -7,7 +7,7 @@ type MyApiMethods = {
     foo(): number;
 };
 
-const api = createRpcApi<MyApiMethods>();
+const api = createJsonRpcApi<MyApiMethods>();
 const transport = null as unknown as RpcTransport;
 
 createRpc({ api, transport }) satisfies Rpc<MyApiMethods>;
