@@ -194,10 +194,10 @@ importers:
         version: 24.1.0(typescript@5.6.2)
       sinon:
         specifier: ^18.0.0
-        version: 18.0.0
+        version: 18.0.1
       sinon-chai:
         specifier: ^4.0.0
-        version: 4.0.0(chai@5.1.1)(sinon@18.0.0)
+        version: 4.0.0(chai@5.1.1)(sinon@18.0.1)
       start-server-and-test:
         specifier: ^2.0.4
         version: 2.0.7
@@ -7477,6 +7477,9 @@ packages:
 
   sinon@18.0.0:
     resolution: {integrity: sha512-+dXDXzD1sBO6HlmZDd7mXZCR/y5ECiEiGCBSGuFD/kZ0bDTofPYc6JaeGmPSF+1j1MejGUWkORbYOLDyvqCWpA==}
+
+  sinon@18.0.1:
+    resolution: {integrity: sha512-a2N2TDY1uGviajJ6r4D1CyRAkzE9NNVlYOV1wX5xQDuAk0ONgzgRl0EjCQuRCPxOwp13ghsMwt9Gdldujs39qw==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -16600,7 +16603,21 @@ snapshots:
       chai: 5.1.1
       sinon: 18.0.0
 
+  sinon-chai@4.0.0(chai@5.1.1)(sinon@18.0.1):
+    dependencies:
+      chai: 5.1.1
+      sinon: 18.0.1
+
   sinon@18.0.0:
+    dependencies:
+      '@sinonjs/commons': 3.0.1
+      '@sinonjs/fake-timers': 11.2.2
+      '@sinonjs/samsam': 8.0.0
+      diff: 5.2.0
+      nise: 6.0.0
+      supports-color: 7.2.0
+
+  sinon@18.0.1:
     dependencies:
       '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
