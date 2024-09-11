@@ -1,5 +1,5 @@
 import { pipe } from '@solana/functional';
-import { createHttpTransport } from '@solana/rpc-transport-http';
+import { createHttpTransport, createHttpTransportForSolanaRpc } from '@solana/rpc-transport-http';
 import type { ClusterUrl } from '@solana/rpc-types';
 
 import { RpcTransportFromClusterUrl } from './rpc-clusters';
@@ -28,7 +28,7 @@ export function createDefaultRpcTransport<TClusterUrl extends ClusterUrl>(
     config: DefaultRpcTransportConfig<TClusterUrl>,
 ): RpcTransportFromClusterUrl<TClusterUrl> {
     return pipe(
-        createHttpTransport({
+        createHttpTransportForSolanaRpc({
             ...config,
             headers: {
                 ...(config.headers ? normalizeHeaders(config.headers) : undefined),

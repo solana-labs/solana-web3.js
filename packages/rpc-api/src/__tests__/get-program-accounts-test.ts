@@ -65,7 +65,7 @@ describe('getProgramAccounts', () => {
                                 executable: false,
                                 lamports: 5000000n,
                                 owner: 'DXngmJfjurhnAwbMPgpUGPH6qNvetCKRJ6PiD4ag4PTj',
-                                rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                                rentEpoch: 18446744073709551615n,
                                 space: 9n,
                             },
                             pubkey: 'CcYNb7WqpjaMrNr7B1mapaNfWctZRH7LyAjWRLBGt1Fk',
@@ -92,7 +92,7 @@ describe('getProgramAccounts', () => {
                     'context.__code',
                     SOLANA_ERROR__JSON_RPC__SERVER_ERROR_MIN_CONTEXT_SLOT_NOT_REACHED,
                 ),
-                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(Number)),
+                expect(sendPromise).rejects.toHaveProperty('context.contextSlot', expect.any(BigInt)),
             ]);
         });
     });
@@ -126,7 +126,7 @@ describe('getProgramAccounts', () => {
                             executable: false,
                             lamports: 5000000n,
                             owner: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-                            rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            rentEpoch: 18446744073709551615n,
                             space: 9n,
                         },
                         pubkey: 'C5q1p5UiCVrt6vcLJDGcS4AZ98fahKyb9XkDRdqATK17',
@@ -137,7 +137,7 @@ describe('getProgramAccounts', () => {
                             executable: false,
                             lamports: 5000000n,
                             owner: 'AmtpVzo6H6qQCP9dH9wfu5hfa8kKaAFpTJ4aamPYR6V6',
-                            rentEpoch: 18446744073709551616n, // TODO: This number loses precision
+                            rentEpoch: 18446744073709551615n,
                             space: 9n,
                         },
                         pubkey: 'Hhsoev7Apk5dMbktzLUrsTHuMq9e9GSYBaLcnN2PfdKS',

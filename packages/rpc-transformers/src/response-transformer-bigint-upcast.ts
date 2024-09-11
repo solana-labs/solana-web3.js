@@ -6,17 +6,16 @@ export function getBigIntUpcastResponseTransformer(allowedNumericKeyPaths: reado
 
 export function getBigIntUpcastVisitor(allowedNumericKeyPaths: readonly KeyPath[]) {
     return function upcastNodeToBigIntIfNumber(value: unknown, { keyPath }: TraversalState) {
-        if (
-            typeof value === 'number' &&
-            Number.isInteger(value) &&
-            !keyPathIsAllowedToBeNumeric(keyPath, allowedNumericKeyPaths)
-        ) {
-            // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the
-            // Solana JSON RPC implementation so that we can throw away this entire patcher instead
-            // of unsafely upcasting `numbers` to `bigints`.
-            return BigInt(value);
+        const isInteger = (typeof value === 'number' && Number.isInteger(value)) || typeof value === 'bigint';
+        if (!isInteger) return value;
+
+        // FIXME(solana-labs/solana/issues/30341) Create a data type to represent u64 in the
+        // Solana JSON RPC implementation so that we can throw away this entire patcher instead
+        // of unsafely upcasting `numbers` to `bigints`.
+        if (keyPathIsAllowedToBeNumeric(keyPath, allowedNumericKeyPaths)) {
+            return Number(value);
         } else {
-            return value;
+            return BigInt(value);
         }
     };
 }
