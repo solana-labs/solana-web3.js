@@ -124,7 +124,7 @@ importers:
         version: 10.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@types/node@22.5.2)(typescript@5.6.2)
       tsup:
         specifier: ^8.2.4
-        version: 8.2.4(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.41)(tsx@4.19.0)(typescript@5.6.2)(yaml@2.4.5)
+        version: 8.2.4(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.0)(typescript@5.6.2)(yaml@2.4.5)
       turbo:
         specifier: ^2.1.1
         version: 2.1.1
@@ -204,13 +204,13 @@ importers:
         version: 18.3.0
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
-        version: 3.7.0(@swc/helpers@0.5.11)(vite@5.4.2(@types/node@22.5.2)(terser@5.18.0))
+        version: 3.7.0(@swc/helpers@0.5.11)(vite@5.4.4(@types/node@22.5.2)(terser@5.18.0))
       eslint-plugin-react-refresh:
         specifier: ^0.4.11
         version: 0.4.11(eslint@8.57.0)
       vite:
-        specifier: ^5.4.2
-        version: 5.4.2(@types/node@22.5.2)(terser@5.18.0)
+        specifier: ^5.4.4
+        version: 5.4.4(@types/node@22.5.2)(terser@5.18.0)
 
   examples/rpc-custom-api:
     dependencies:
@@ -5786,8 +5786,8 @@ packages:
       yaml:
         optional: true
 
-  postcss@8.4.41:
-    resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
+  postcss@8.4.45:
+    resolution: {integrity: sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==}
     engines: {node: ^10 || ^12 || >=14}
 
   preferred-pm@3.1.3:
@@ -6566,8 +6566,8 @@ packages:
     resolution: {integrity: sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==}
     engines: {node: '>=12'}
 
-  vite@5.4.2:
-    resolution: {integrity: sha512-dDrQTRHp5C1fTFzcSaMxjk6vdpKvT+2/mIdE07Gw2ykehT49O0z/VHS3zZ8iV/Gh8BJJKHWOe5RjaNrW5xf/GA==}
+  vite@5.4.4:
+    resolution: {integrity: sha512-RHFCkULitycHVTtelJ6jQLd+KSAAzOgEYorV32R2q++M6COBjKJR6BxqClwp5sf0XaBDjVMuJ9wnNfyAJwjMkA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -9726,10 +9726,10 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.11)(vite@5.4.2(@types/node@22.5.2)(terser@5.18.0))':
+  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.11)(vite@5.4.4(@types/node@22.5.2)(terser@5.18.0))':
     dependencies:
       '@swc/core': 1.6.5(@swc/helpers@0.5.11)
-      vite: 5.4.2(@types/node@22.5.2)(terser@5.18.0)
+      vite: 5.4.4(@types/node@22.5.2)(terser@5.18.0)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -12213,16 +12213,16 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.41)(tsx@4.19.0)(yaml@2.4.5):
+  postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.0)(yaml@2.4.5):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
       jiti: 1.21.0
-      postcss: 8.4.41
+      postcss: 8.4.45
       tsx: 4.19.0
       yaml: 2.4.5
 
-  postcss@8.4.41:
+  postcss@8.4.45:
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.0.1
@@ -12846,7 +12846,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.2.4(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.41)(tsx@4.19.0)(typescript@5.6.2)(yaml@2.4.5):
+  tsup@8.2.4(@swc/core@1.6.5(@swc/helpers@0.5.11))(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.0)(typescript@5.6.2)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -12858,7 +12858,7 @@ snapshots:
       globby: 11.1.0
       joycon: 3.1.1
       picocolors: 1.0.1
-      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.41)(tsx@4.19.0)(yaml@2.4.5)
+      postcss-load-config: 6.0.1(jiti@1.21.0)(postcss@8.4.45)(tsx@4.19.0)(yaml@2.4.5)
       resolve-from: 5.0.0
       rollup: 4.19.0
       source-map: 0.8.0-beta.0
@@ -12866,7 +12866,7 @@ snapshots:
       tree-kill: 1.2.2
     optionalDependencies:
       '@swc/core': 1.6.5(@swc/helpers@0.5.11)
-      postcss: 8.4.41
+      postcss: 8.4.45
       typescript: 5.6.2
     transitivePeerDependencies:
       - jiti
@@ -13009,10 +13009,10 @@ snapshots:
 
   value-or-promise@1.0.12: {}
 
-  vite@5.4.2(@types/node@22.5.2)(terser@5.18.0):
+  vite@5.4.4(@types/node@22.5.2)(terser@5.18.0):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.45
       rollup: 4.21.0
     optionalDependencies:
       '@types/node': 22.5.2
