@@ -135,3 +135,20 @@ A config object with the following properties:
 
 -   `requestTransformer<T>(request: RpcRequest<T>): RpcRequest`: An optional function that transforms the `RpcRequest` before it is sent to the JSON RPC server.
 -   `responseTransformer<T>(response: RpcResponse, request: RpcRequest): RpcResponse<T>`: An optional function that transforms the `RpcResponse` before it is returned to the caller.
+
+### `isJsonRpcPayload(payload)`
+
+A helper function that returns `true` if the given payload is a JSON RPC v2 payload. This means, the payload is an object such that:
+
+-   It has a `jsonrpc` property with a value of `'2.0'`.
+-   It has a `method` property that is a string.
+-   It has a `params` property of any type.
+
+```ts
+import { isJsonRpcPayload } from '@solana/rpc-spec';
+
+if (isJsonRpcPayload(payload)) {
+    const payloadMethod: string = payload.method;
+    const payloadParams: unknown = payload.params;
+}
+```
