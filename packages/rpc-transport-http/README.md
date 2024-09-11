@@ -110,6 +110,14 @@ An optional function that takes the request payload and converts it to a JSON st
 
 A string representing the target endpoint. In Node, it must be an absolute URL using the `http` or `https` protocol.
 
+### `createHttpTransportForSolanaRpc()`
+
+Creates an `RpcTransport` that uses JSON HTTP requests — much like the `createHttpTransport` function — except that it also uses custom `toJson` and `fromJson` functions in order to allow `bigint` values to be serialized and deserialized correctly over the wire.
+
+Since this is something specific to the Solana RPC API, these custom JSON functions are only triggered when the request is recognized as a Solana RPC request. Normal RPC APIs should aim to wrap their `bigint` values — e.g. `u64` or `i64` — in special value objects that represent the number as a string to avoid numerical values going above `Number.MAX_SAFE_INTEGER`.
+
+It has the same configuration options as `createHttpTransport`, but without the `fromJson` and `toJson` options.
+
 ## Augmenting Transports
 
 Using this core transport, you can implement specialized functionality for leveraging multiple transports, attempting/handling retries, and more.
