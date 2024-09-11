@@ -82,6 +82,10 @@ const balances = await Promise.allSettled(
 );
 ```
 
+##### `fromJson`
+
+An optional function that takes the response as a JSON string and converts it to a JSON value. The request payload is also provided as a second argument. When not provided, the JSON value will be accessed via the `response.json()` method of the fetch API.
+
 ##### `headers`
 
 An object of headers to set on the request. Avoid [forbidden headers](https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_header_name). Additionally, the headers `Accept`, `Content-Length`, and `Content-Type` are disallowed.
@@ -97,6 +101,10 @@ const transport = createHttpTransport({
     url: 'https://several-neat-iguana.quiknode.pro',
 });
 ```
+
+##### `toJson`
+
+An optional function that takes the request payload and converts it to a JSON string. When not provided, `JSON.stringify` will be used.
 
 ##### `url`
 
