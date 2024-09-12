@@ -1,3 +1,4 @@
+import { SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, SolanaError } from '@solana/errors';
 import { createRpcMessage } from '@solana/rpc-spec-types';
 
 import { createRpc, Rpc } from '../rpc';
@@ -10,7 +11,6 @@ interface TestRpcMethods {
 
 describe('JSON-RPC 2.0', () => {
     let makeHttpRequest: RpcTransport;
-    let rpc: Rpc<TestRpcMethods>;
     beforeEach(() => {
         makeHttpRequest = jest.fn(
             () =>
@@ -18,31 +18,57 @@ describe('JSON-RPC 2.0', () => {
                     /* never resolve */
                 }),
         );
-        rpc = createRpc({
-            api: {
-                // Note the lack of method implementations in the base case.
-            } as RpcApi<TestRpcMethods>,
-            transport: makeHttpRequest,
+    });
+    describe('when no API plan is available for a method', () => {
+        let rpc: Rpc<TestRpcMethods>;
+        beforeEach(() => {
+            rpc = createRpc({
+                api: {} as RpcApi<TestRpcMethods>,
+                transport: makeHttpRequest,
+            });
+        });
+        it('throws an error', () => {
+            expect(() => rpc.someMethod('some', 'params', 123)).toThrow(
+                new SolanaError(SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, {
+                    method: 'someMethod',
+                    params: ['some', 'params', 123],
+                }),
+            );
         });
     });
-    it('sends a request to the transport', () => {
-        rpc.someMethod(123).send();
-        expect(makeHttpRequest).toHaveBeenCalledWith({
-            payload: { ...createRpcMessage('someMethod', [123]), id: expect.any(Number) },
+    describe('when using a simple RPC API proxy', () => {
+        let rpc: Rpc<TestRpcMethods>;
+        beforeEach(() => {
+            rpc = createRpc({
+                api: new Proxy({} as RpcApi<TestRpcMethods>, {
+                    get(_, methodName) {
+                        return (...params: unknown[]) => ({
+                            payload: createRpcMessage(methodName.toString(), params),
+                        });
+                    },
+                }),
+                transport: makeHttpRequest,
+            });
         });
-    });
-    it('returns results from the transport', async () => {
-        expect.assertions(1);
-        (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
-        const result = await rpc.someMethod().send();
-        expect(result).toBe(123);
-    });
-    it('throws errors from the transport', async () => {
-        expect.assertions(1);
-        const transportError = new Error('o no');
-        (makeHttpRequest as jest.Mock).mockRejectedValueOnce(transportError);
-        const sendPromise = rpc.someMethod().send();
-        await expect(sendPromise).rejects.toThrow(transportError);
+        it('sends a request to the transport', () => {
+            rpc.someMethod(123).send();
+            expect(makeHttpRequest).toHaveBeenCalledWith({
+                payload: { ...createRpcMessage('someMethod', [123]), id: expect.any(Number) },
+            });
+        });
+        it('returns results from the transport', async () => {
+            expect.assertions(1);
+            (makeHttpRequest as jest.Mock).mockResolvedValueOnce(123);
+            const result = await rpc.someMethod().send();
+            expect(result).toBe(123);
+        });
+        it('throws errors from the transport', async () => {
+            expect.assertions(1);
+            const transportError = new Error('o no');
+            (makeHttpRequest as jest.Mock).mockRejectedValueOnce(transportError);
+            const sendPromise = rpc.someMethod().send();
+            await expect(sendPromise).rejects.toThrow(transportError);
+        });
     });
     describe('when calling a method having a concrete implementation', () => {
         let rpc: Rpc<TestRpcMethods>;

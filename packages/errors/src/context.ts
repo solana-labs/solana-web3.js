@@ -118,6 +118,7 @@ import {
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD,
     SOLANA_ERROR__RPC__INTEGER_OVERFLOW,
     SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR,
     SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN,
@@ -485,6 +486,10 @@ export type SolanaErrorContext = DefaultUnspecifiedErrorContextToUndefined<
         };
         [SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT]: {
             errorEvent: Event;
+        };
+        [SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD]: {
+            method: string;
+            params: unknown[];
         };
         [SOLANA_ERROR__RPC__INTEGER_OVERFLOW]: {
             argumentLabel: string;

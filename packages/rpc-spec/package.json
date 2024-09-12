@@ -71,6 +71,7 @@
         "maintained node versions"
     ],
     "dependencies": {
+        "@solana/errors": "workspace:*",
         "@solana/rpc-spec-types": "workspace:*"
     },
     "peerDependencies": {
