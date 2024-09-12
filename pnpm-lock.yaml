@@ -138,8 +138,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(@solana/web3.js@packages+library)
       '@solana-program/system':
-        specifier: ^0.5.0
-        version: 0.5.0(@solana/web3.js@packages+library)
+        specifier: ^0.5.1
+        version: 0.5.1(@solana/web3.js@packages+library)
       '@solana/example-utils':
         specifier: workspace:*
         version: link:../utils
@@ -166,8 +166,8 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@solana-program/system':
-        specifier: ^0.5.0
-        version: 0.5.0(@solana/web3.js@packages+library)
+        specifier: ^0.5.1
+        version: 0.5.1(@solana/web3.js@packages+library)
       '@solana/react':
         specifier: workspace:*
         version: link:../../packages/react
@@ -244,8 +244,8 @@ importers:
   examples/signers:
     dependencies:
       '@solana-program/system':
-        specifier: ^0.5.0
-        version: 0.5.0(@solana/web3.js@packages+library)
+        specifier: ^0.5.1
+        version: 0.5.1(@solana/web3.js@packages+library)
       '@solana/example-utils':
         specifier: workspace:*
         version: link:../utils
@@ -263,8 +263,8 @@ importers:
   examples/transfer-lamports:
     dependencies:
       '@solana-program/system':
-        specifier: ^0.5.0
-        version: 0.5.0(@solana/web3.js@packages+library)
+        specifier: ^0.5.1
+        version: 0.5.1(@solana/web3.js@packages+library)
       '@solana/example-utils':
         specifier: workspace:*
         version: link:../utils
@@ -3345,10 +3345,10 @@ packages:
     peerDependencies:
       '@solana/web3.js': 2.0.0-rc.0
 
-  '@solana-program/system@0.5.0':
-    resolution: {integrity: sha512-vZ5WfkZTSR3ZvikvG4dIN1B1Hjje+a2oy5E4i6T4z4C7WwPEwBti0bRz0hno4pmlqqG+VxAydhvFsXpRX7N0dQ==}
+  '@solana-program/system@0.5.1':
+    resolution: {integrity: sha512-2Em32hvP6Gtn9kmouAzWZiK3si5iEctvSn5MGlF8PRd6BLQ+uXtRZFOSgoMKtRSob7vtO2XpptwW2Vvmsv7jlQ==}
     peerDependencies:
-      '@solana/web3.js': 2.0.0-rc.0
+      '@solana/web3.js': 2.0.0-rc.1
 
   '@solana/buffer-layout@4.0.1':
     resolution: {integrity: sha512-E1ImOIAD1tBZFRdjeM4/pzTiTApC0AOBGwyAMS4fwIodCWArzJ3DWdoh8cKxeFM2fElkxBh2Aqts1BPC373rHA==}
@@ -9287,7 +9287,7 @@ snapshots:
     dependencies:
       '@solana/web3.js': link:packages/library
 
-  '@solana-program/system@0.5.0(@solana/web3.js@packages+library)':
+  '@solana-program/system@0.5.1(@solana/web3.js@packages+library)':
     dependencies:
       '@solana/web3.js': link:packages/library
 
