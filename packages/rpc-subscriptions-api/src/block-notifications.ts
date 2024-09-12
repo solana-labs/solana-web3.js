@@ -31,7 +31,7 @@ type BlockNotificationsNotificationBase = Readonly<{
 type BlockNotificationsNotificationBlock = Readonly<{
     /** The number of blocks beneath this block */
     blockHeight: U64UnsafeBeyond2Pow53Minus1;
-    /** The number of blocks beneath this block */
+    /** Estimated production time, as Unix timestamp */
     blockTime: UnixTimestampUnsafeBeyond2Pow53Minus1;
     /** the blockhash of this block */
     blockhash: Blockhash;
