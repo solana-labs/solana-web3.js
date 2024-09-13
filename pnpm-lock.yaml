@@ -135,8 +135,8 @@ importers:
   examples/deserialize-transaction:
     dependencies:
       '@solana-program/memo':
-        specifier: ^0.5.0
-        version: 0.5.0(@solana/web3.js@packages+library)
+        specifier: ^0.5.1
+        version: 0.5.1(@solana/web3.js@packages+library)
       '@solana-program/system':
         specifier: ^0.5.1
         version: 0.5.1(@solana/web3.js@packages+library)
@@ -3340,10 +3340,10 @@ packages:
   '@sinonjs/fake-timers@8.1.0':
     resolution: {integrity: sha512-OAPJUAtgeINhh/TAlUID4QTs53Njm7xzddaVlEs/SXwgtiD1tW22zAB/W1wdqfrpmikgaWQ9Fw6Ws+hsiRm5Vg==}
 
-  '@solana-program/memo@0.5.0':
-    resolution: {integrity: sha512-sdxwy/Ozq2T4+pikp0qfrVB+Hzvt1ps33fWKOx4BRuCoeBtaKGWYA4X2aONysZ8Ah0i5+1N2CEzxriYdLm2V4A==}
+  '@solana-program/memo@0.5.1':
+    resolution: {integrity: sha512-1cYZjncEs9erpucvqb1F99w9NU6hVIr2+hmQaegggOoejFUT84fV7QFe9g5UUcpS/L6Y+TZNlKhbR4kFIwmlZg==}
     peerDependencies:
-      '@solana/web3.js': 2.0.0-rc.0
+      '@solana/web3.js': 2.0.0-rc.1
 
   '@solana-program/system@0.5.1':
     resolution: {integrity: sha512-2Em32hvP6Gtn9kmouAzWZiK3si5iEctvSn5MGlF8PRd6BLQ+uXtRZFOSgoMKtRSob7vtO2XpptwW2Vvmsv7jlQ==}
@@ -9283,7 +9283,7 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 1.8.6
 
-  '@solana-program/memo@0.5.0(@solana/web3.js@packages+library)':
+  '@solana-program/memo@0.5.1(@solana/web3.js@packages+library)':
     dependencies:
       '@solana/web3.js': link:packages/library
 
