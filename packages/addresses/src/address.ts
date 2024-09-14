@@ -50,7 +50,6 @@ export function isAddress(putativeAddress: string): putativeAddress is Address<t
     } catch {
         return false;
     }
-    }
 }
 
 export function assertIsAddress(putativeAddress: string): asserts putativeAddress is Address<typeof putativeAddress> {

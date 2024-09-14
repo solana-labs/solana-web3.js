@@ -48,7 +48,7 @@ describe('Address', () => {
                 }).not.toThrow();
             });
             it('returns false when supplied a non-base58 string', () => {
-                expect(isAddress('not-a-base-58-encoded-string')).toEqual(false);
+                expect(isAddress('not-a-base-58-encoded-string')).toBe(false);
             });
             it('returns false when the decoded byte array has a length other than 32 bytes', () => {
                 expect(
@@ -56,10 +56,10 @@ describe('Address', () => {
                         // 31 bytes [128, ..., 128]
                         '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
                     ),
-                ).toEqual(false);
+                ).toBe(false);
             });
             it('returns true when supplied a base-58 encoded address', () => {
-                expect(isAddress('11111111111111111111111111111111')).toEqual(true);
+                expect(isAddress('11111111111111111111111111111111')).toBe(true);
             });
         });
         describe('using a mock base58 implementation', () => {
