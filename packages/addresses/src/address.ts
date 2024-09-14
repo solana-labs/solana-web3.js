@@ -46,14 +46,10 @@ export function isAddress(putativeAddress: string): putativeAddress is Address<t
     // Slow-path; actually attempt to decode the input string.
     const base58Encoder = getMemoizedBase58Encoder();
     try {
-        const bytes = base58Encoder.encode(putativeAddress);
-        const numBytes = bytes.byteLength;
-        if (numBytes !== 32) {
-            return false;
-        }
-        return true;
-    } catch (e) {
-        return false
+        return base58Encoder.encode(putativeAddress).byteLength === 32;
+    } catch {
+        return false;
+    }
     }
 }
 
