@@ -101,7 +101,7 @@ importers:
         version: 0.4.4(rollup@4.21.3)
       '@types/bn.js':
         specifier: ^5.1.5
-        version: 5.1.5
+        version: 5.1.6
       '@types/bs58':
         specifier: ^4.0.1
         version: 4.0.1
@@ -4055,6 +4055,9 @@ packages:
 
   '@types/bn.js@5.1.5':
     resolution: {integrity: sha512-V46N0zwKRF5Q00AZ6hWtN0T8gGmDUaUzLWQvHFo5yThtVwK/VCenFY3wXVbOvNfajEpsTfQM4IN9k/d6gUVX3A==}
+
+  '@types/bn.js@5.1.6':
+    resolution: {integrity: sha512-Xh8vSwUeMKeYYrj3cX4lGQgFSF/N03r+tv4AiLl1SucqV+uTQpxRcnM8AkXKHwYP9ZPXOYXRr2KPXpVlIvqh9w==}
 
   '@types/bs58@4.0.1':
     resolution: {integrity: sha512-yfAgiWgVLjFCmRv8zAcOIHywYATEwiTVccTLnRp6UxTNavT55M9d/uhK3T03St/+8/z/wW+CRjGKUNmEqoHHCA==}
@@ -12613,6 +12616,10 @@ snapshots:
     optional: true
 
   '@types/bn.js@5.1.5':
+    dependencies:
+      '@types/node': 22.0.0
+
+  '@types/bn.js@5.1.6':
     dependencies:
       '@types/node': 22.0.0
 
