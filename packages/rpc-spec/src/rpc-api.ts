@@ -1,13 +1,14 @@
-import { Callable } from '@solana/rpc-spec-types';
+import { Callable, createRpcMessage } from '@solana/rpc-spec-types';
 
-import { RpcRequest, RpcRequestTransformer, RpcResponse, RpcResponseTransformer } from './rpc-shared';
+import { RpcRequestTransformer, RpcResponse, RpcResponseTransformer } from './rpc-shared';
 
 export type RpcApiConfig = Readonly<{
     requestTransformer?: RpcRequestTransformer;
     responseTransformer?: RpcResponseTransformer;
 }>;
 
-export type RpcApiRequestPlan<TResponse> = RpcRequest & {
+export type RpcApiRequestPlan<TResponse> = {
+    payload: unknown;
     responseTransformer?: (response: RpcResponse) => RpcResponse<TResponse>;
 };
 
@@ -46,7 +47,7 @@ export function createRpcApi<TRpcMethods extends RpcApiMethods>(config?: RpcApiC
                 const rawRequest = Object.freeze({ methodName, params: rawParams });
                 const request = config?.requestTransformer ? config?.requestTransformer(rawRequest) : rawRequest;
                 return Object.freeze({
-                    ...request,
+                    payload: createRpcMessage(request.methodName, request.params),
                     ...(config?.responseTransformer
                         ? {
                               responseTransformer: (response: RpcResponse) => {

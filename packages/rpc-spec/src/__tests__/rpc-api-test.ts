@@ -8,7 +8,7 @@ type DummyApi = {
 };
 
 describe('createRpcApi', () => {
-    it('returns a plan containing the method name and parameters provided', () => {
+    it('returns a plan containing the payload to send to the transport', () => {
         // Given a dummy API.
         const api = createRpcApi<DummyApi>();
 
@@ -16,8 +16,8 @@ describe('createRpcApi', () => {
         const plan = api.someMethod(1, 'two', { three: [4] });
 
         // Then we expect the plan to contain the method name and the provided parameters.
-        expect(plan).toEqual({
-            methodName: 'someMethod',
+        expect(plan.payload).toMatchObject({
+            method: 'someMethod',
             params: [1, 'two', { three: [4] }],
         });
     });
@@ -34,7 +34,7 @@ describe('createRpcApi', () => {
         const plan = api.someMethod();
 
         // Then we expect the plan to contain the transformed method name.
-        expect(plan.methodName).toBe('someMethodTransformed');
+        expect(plan.payload).toMatchObject({ method: 'someMethodTransformed' });
     });
     it('applies the request transformer to the provided params', () => {
         // Given a dummy API with a request transformer that doubles the provided params.
@@ -49,7 +49,7 @@ describe('createRpcApi', () => {
         const plan = api.someMethod(1, 2, 3);
 
         // Then we expect the plan to contain the transformed params.
-        expect(plan.params).toEqual([2, 4, 6]);
+        expect(plan.payload).toMatchObject({ params: [2, 4, 6] });
     });
     it('includes the provided response transformer in the plan', () => {
         // Given a dummy API with a response transformer.
