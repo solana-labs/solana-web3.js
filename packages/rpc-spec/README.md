@@ -101,7 +101,7 @@ A config object with the following properties:
 -   `api`: An instance of `RpcApi`
 -   `transport`: A function that implements the `RpcTransport` interface
 
-### `createRpcApi(config)`
+### `createJsonRpcApi(config)`
 
 Creates a JavaScript proxy that converts _any_ function call called on it to a `RpcApiRequestPlan` by:
 
@@ -110,7 +110,7 @@ Creates a JavaScript proxy that converts _any_ function call called on it to a `
 
 ```ts
 // For example, given this `RpcApi`:
-const rpcApi = createRpcApi({
+const rpcApi = createJsonRpcApi({
     requestTransformer: (...rawParams) => rawParams.reverse(),
     responseTransformer: response => response.result,
 });

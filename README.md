@@ -357,7 +357,7 @@ const transport = createDefaultRpcTransport({ url: 'http:127.0.0.1:8899' });
 const rpc = createRpc({ api, transport });
 ```
 
-Note that the `createSolanaRpcApi` function is a wrapper on top of the `createRpcApi` function which adds some Solana-specific transformers such as setting a default commitment on all methods or throwing an error when an integer overflow is detected.
+Note that the `createSolanaRpcApi` function is a wrapper on top of the `createJsonRpcApi` function which adds some Solana-specific transformers such as setting a default commitment on all methods or throwing an error when an integer overflow is detected.
 
 #### Creating Your Own API Methods
 
@@ -393,7 +393,7 @@ type GetAssetApiResponse = Readonly<{
 type GetAssetApi = {
     // Define the method's name, parameters and response type
     getAsset(args: { id: Address }): GetAssetApiResponse;
-}
+};
 
 // Export the type spec for downstream users.
 export type MetaplexDASApi = GetAssetApi;
@@ -402,10 +402,10 @@ export type MetaplexDASApi = GetAssetApi;
 Here’s how a developer might use it:
 
 ```ts
-import { createDefaultRpcTransport, createRpc, createRpcApi } from '@solana/web3.js';
+import { createDefaultRpcTransport, createRpc, createJsonRpcApi } from '@solana/web3.js';
 
 // Create the custom API.
-const api = createRpcApi<MetaplexDASApi>();
+const api = createJsonRpcApi<MetaplexDASApi>();
 
 // Set up an HTTP transport to a server that supports the custom API.
 const transport = createDefaultRpcTransport({

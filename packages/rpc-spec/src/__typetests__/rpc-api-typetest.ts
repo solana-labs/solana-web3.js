@@ -1,4 +1,4 @@
-import { createRpcApi, RpcApi } from '../rpc-api';
+import { createJsonRpcApi, RpcApi } from '../rpc-api';
 
 type NftCollectionDetailsApiResponse = Readonly<{
     address: string;
@@ -18,4 +18,4 @@ type NftCollectionDetailsApi = {
 
 type QuickNodeRpcMethods = NftCollectionDetailsApi;
 
-createRpcApi<QuickNodeRpcMethods>() satisfies RpcApi<QuickNodeRpcMethods>;
+createJsonRpcApi<QuickNodeRpcMethods>() satisfies RpcApi<QuickNodeRpcMethods>;
