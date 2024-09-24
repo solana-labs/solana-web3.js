@@ -77,7 +77,7 @@
         "@solana/promises": "workspace:*",
         "@solana/rpc-subscriptions-api": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
-        "@solana/rpc-subscriptions-transport-websocket": "workspace:*",
+        "@solana/rpc-subscriptions-channel-websocket": "workspace:*",
         "@solana/rpc-transformers": "workspace:*",
         "@solana/rpc-types": "workspace:*"
     },

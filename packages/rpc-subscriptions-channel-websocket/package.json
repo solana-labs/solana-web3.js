@@ -1,5 +1,5 @@
 {
-    "name": "@solana/rpc-subscriptions-transport-websocket",
+    "name": "@solana/rpc-subscriptions-channel-websocket",
     "version": "2.0.0-rc.1",
     "description": "An RPC Subscriptions transport that uses WebSockets",
     "exports": {
@@ -72,7 +72,9 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
-        "@solana/rpc-subscriptions-spec": "workspace:*"
+        "@solana/functional": "workspace:*",
+        "@solana/rpc-subscriptions-spec": "workspace:*",
+        "@solana/subscribable": "workspace:*"
     },
     "devDependencies": {
         "@solana/ws-impl": "workspace:*",

@@ -1,4 +1,4 @@
-import fastStableStringify from '@solana/fast-stable-stringify';
+// import fastStableStringify from '@solana/fast-stable-stringify';
 import { pipe } from '@solana/functional';
 import type { SolanaRpcSubscriptionsApi, SolanaRpcSubscriptionsApiUnstable } from '@solana/rpc-subscriptions-api';
 import { createSolanaRpcSubscriptionsApi } from '@solana/rpc-subscriptions-api';
@@ -10,27 +10,37 @@ import {
 import { ClusterUrl } from '@solana/rpc-types';
 
 import { DEFAULT_RPC_SUBSCRIPTIONS_CONFIG } from './rpc-default-config';
+import {
+    createDefaultRpcSubscriptionsChannelCreator,
+    DefaultRpcSubscriptionsChannelConfig,
+} from './rpc-subscriptions-channel';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
-import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
+// import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
 import {
     createDefaultRpcSubscriptionsTransport,
     DefaultRpcSubscriptionsTransportConfig,
 } from './rpc-subscriptions-transport';
 
+interface DefaultRpcSubscriptionsConfig<TClusterUrl extends ClusterUrl>
+    extends DefaultRpcSubscriptionsTransportConfig<TClusterUrl>,
+        DefaultRpcSubscriptionsChannelConfig<TClusterUrl> {}
+
 export function createSolanaRpcSubscriptions<
     TClusterUrl extends ClusterUrl,
-    TApi extends RpcSubscriptionsApiMethods = SolanaRpcSubscriptionsApi,
->(clusterUrl: TClusterUrl, config?: Omit<DefaultRpcSubscriptionsTransportConfig<TClusterUrl>, 'url'>) {
-    const transport = createDefaultRpcSubscriptionsTransport({ url: clusterUrl, ...config });
-    return createSolanaRpcSubscriptionsFromTransport<typeof transport, TApi>(transport);
+    // FIXME: TApi extends RpcSubscriptionsApiMethods = SolanaRpcSubscriptionsApi,
+>(clusterUrl: TClusterUrl, config?: Omit<DefaultRpcSubscriptionsConfig<TClusterUrl>, 'url'>) {
+    const transport = createDefaultRpcSubscriptionsTransport({
+        createChannel: createDefaultRpcSubscriptionsChannelCreator({ ...config, url: clusterUrl }),
+    });
+    return createSolanaRpcSubscriptionsFromTransport(transport);
 }
 
 export function createSolanaRpcSubscriptions_UNSTABLE<TClusterUrl extends ClusterUrl>(
     clusterUrl: TClusterUrl,
     config?: Omit<DefaultRpcSubscriptionsTransportConfig<TClusterUrl>, 'url'>,
 ) {
-    return createSolanaRpcSubscriptions<TClusterUrl, SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>(
-        clusterUrl,
+    return createSolanaRpcSubscriptions(
+        /* FIXME: <TClusterUrl, SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable> */ clusterUrl,
         config,
     );
 }
@@ -44,11 +54,11 @@ export function createSolanaRpcSubscriptionsFromTransport<
             api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_SUBSCRIPTIONS_CONFIG),
             transport,
         }),
-        rpcSubscriptions =>
-            getRpcSubscriptionsWithSubscriptionCoalescing({
-                getDeduplicationKey: (...args) => fastStableStringify(args),
-                rpcSubscriptions,
-            }),
+        // rpcSubscriptions =>
+        //     getRpcSubscriptionsWithSubscriptionCoalescing({
+        //         getDeduplicationKey: (...args) => fastStableStringify(args),
+        //         rpcSubscriptions,
+        //     }),
     ) as RpcSubscriptionsFromTransport<TApi, TTransport>;
 }
 

@@ -1,5 +1,5 @@
 ---
-"@solana/rpc-subscriptions-transport-websocket": patch
+"@solana/rpc-subscriptions-channel-websocket": patch
 "@solana/webcrypto-ed25519-polyfill": patch
 "@solana/transaction-confirmation": patch
 "@solana/codecs-data-structures": patch

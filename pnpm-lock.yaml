@@ -866,12 +866,12 @@ importers:
       '@solana/rpc-subscriptions-api':
         specifier: workspace:*
         version: link:../rpc-subscriptions-api
+      '@solana/rpc-subscriptions-channel-websocket':
+        specifier: workspace:*
+        version: link:../rpc-subscriptions-channel-websocket
       '@solana/rpc-subscriptions-spec':
         specifier: workspace:*
         version: link:../rpc-subscriptions-spec
-      '@solana/rpc-subscriptions-transport-websocket':
-        specifier: workspace:*
-        version: link:../rpc-subscriptions-transport-websocket
       '@solana/rpc-transformers':
         specifier: workspace:*
         version: link:../rpc-transformers
@@ -887,6 +887,9 @@ importers:
       '@solana/addresses':
         specifier: workspace:*
         version: link:../addresses
+      '@solana/fast-stable-stringify':
+        specifier: workspace:*
+        version: link:../fast-stable-stringify
       '@solana/keys':
         specifier: workspace:*
         version: link:../keys
@@ -909,30 +912,24 @@ importers:
         specifier: '>=5'
         version: 5.5.2
     devDependencies:
-      '@solana/rpc-subscriptions-transport-websocket':
+      '@solana/rpc-subscriptions-channel-websocket':
         specifier: workspace:*
-        version: link:../rpc-subscriptions-transport-websocket
+        version: link:../rpc-subscriptions-channel-websocket
 
-  packages/rpc-subscriptions-spec:
+  packages/rpc-subscriptions-channel-websocket:
     dependencies:
       '@solana/errors':
         specifier: workspace:*
         version: link:../errors
-      '@solana/rpc-spec-types':
+      '@solana/functional':
         specifier: workspace:*
-        version: link:../rpc-spec-types
-      typescript:
-        specifier: '>=5'
-        version: 5.5.2
-
-  packages/rpc-subscriptions-transport-websocket:
-    dependencies:
-      '@solana/errors':
-        specifier: workspace:*
-        version: link:../errors
+        version: link:../functional
       '@solana/rpc-subscriptions-spec':
         specifier: workspace:*
         version: link:../rpc-subscriptions-spec
+      '@solana/subscribable':
+        specifier: workspace:*
+        version: link:../subscribable
       typescript:
         specifier: '>=5'
         version: 5.5.2
@@ -946,6 +943,24 @@ importers:
       jest-websocket-mock:
         specifier: ^2.5.0
         version: 2.5.0
+
+  packages/rpc-subscriptions-spec:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@solana/promises':
+        specifier: workspace:*
+        version: link:../promises
+      '@solana/rpc-spec-types':
+        specifier: workspace:*
+        version: link:../rpc-spec-types
+      '@solana/subscribable':
+        specifier: workspace:*
+        version: link:../subscribable
+      typescript:
+        specifier: '>=5'
+        version: 5.5.2
 
   packages/rpc-transformers:
     dependencies:
@@ -1047,6 +1062,15 @@ importers:
       '@solana/text-encoding-impl':
         specifier: workspace:*
         version: link:../text-encoding-impl
+
+  packages/subscribable:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      typescript:
+        specifier: '>=5'
+        version: 5.6.2
 
   packages/sysvars:
     dependencies:

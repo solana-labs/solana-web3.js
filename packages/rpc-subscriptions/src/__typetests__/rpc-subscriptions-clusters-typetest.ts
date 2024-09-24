@@ -5,7 +5,7 @@ import { devnet, mainnet, testnet } from '@solana/rpc-types';
 import {
     createSolanaRpcSubscriptions,
     createSolanaRpcSubscriptions_UNSTABLE,
-    createSolanaRpcSubscriptionsFromTransport,
+    createSolanaRpcSubscriptionsFromTransportAgent,
     createSolanaRpcSubscriptionsFromTransport_UNSTABLE,
 } from '../rpc-subscriptions';
 import type {
@@ -16,7 +16,7 @@ import type {
     RpcSubscriptionsTransportMainnet,
     RpcSubscriptionsTransportTestnet,
 } from '../rpc-subscriptions-clusters';
-import { createDefaultRpcSubscriptionsTransport } from '../rpc-subscriptions-transport';
+import { createDefaultRpcSubscriptionsChannelCreator } from '../rpc-subscriptions-channel';
 
 // Define cluster-aware URLs and transports.
 
@@ -25,10 +25,10 @@ const devnetUrl = devnet('https://api.devnet.solana.com');
 const testnetUrl = testnet('https://api.testnet.solana.com');
 const mainnetUrl = mainnet('https://api.mainnet-beta.solana.com');
 
-const genericTransport = createDefaultRpcSubscriptionsTransport({ url: genericUrl });
-const devnetTransport = createDefaultRpcSubscriptionsTransport({ url: devnetUrl });
-const testnetTransport = createDefaultRpcSubscriptionsTransport({ url: testnetUrl });
-const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUrl });
+const genericTransport = createDefaultRpcSubscriptionsChannelCreator({ url: genericUrl });
+const devnetTransport = createDefaultRpcSubscriptionsChannelCreator({ url: devnetUrl });
+const testnetTransport = createDefaultRpcSubscriptionsChannelCreator({ url: testnetUrl });
+const mainnetTransport = createDefaultRpcSubscriptionsChannelCreator({ url: mainnetUrl });
 
 // [DESCRIBE] createDefaultRpcSubscriptionsTransport.
 {
@@ -73,10 +73,10 @@ const mainnetTransport = createDefaultRpcSubscriptionsTransport({ url: mainnetUr
 
 // [DESCRIBE] createSolanaRpcSubscriptionsFromTransport.
 {
-    const genericRpc = createSolanaRpcSubscriptionsFromTransport(genericTransport);
-    const devnetRpc = createSolanaRpcSubscriptionsFromTransport(devnetTransport);
-    const tesnetRpc = createSolanaRpcSubscriptionsFromTransport(testnetTransport);
-    const mainnetRpc = createSolanaRpcSubscriptionsFromTransport(mainnetTransport);
+    const genericRpc = createSolanaRpcSubscriptionsFromTransportAgent(genericTransport);
+    const devnetRpc = createSolanaRpcSubscriptionsFromTransportAgent(devnetTransport);
+    const tesnetRpc = createSolanaRpcSubscriptionsFromTransportAgent(testnetTransport);
+    const mainnetRpc = createSolanaRpcSubscriptionsFromTransportAgent(mainnetTransport);
 
     // Checking stable subscriptions.
     {
