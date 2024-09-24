@@ -836,6 +836,9 @@ importers:
 
   packages/rpc-spec:
     dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
       '@solana/rpc-spec-types':
         specifier: workspace:*
         version: link:../rpc-spec-types

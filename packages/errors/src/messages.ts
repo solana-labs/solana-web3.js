@@ -135,6 +135,7 @@ import {
     SOLANA_ERROR__MALFORMED_BIGINT_STRING,
     SOLANA_ERROR__MALFORMED_NUMBER_STRING,
     SOLANA_ERROR__NONCE_ACCOUNT_NOT_FOUND,
+    SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD,
     SOLANA_ERROR__RPC__INTEGER_OVERFLOW,
     SOLANA_ERROR__RPC__TRANSPORT_HTTP_ERROR,
     SOLANA_ERROR__RPC__TRANSPORT_HTTP_HEADER_FORBIDDEN,
@@ -451,6 +452,7 @@ export const SolanaErrorMessages: Readonly<{
         'WebSocket was closed before payload could be added to the send buffer',
     [SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_CONNECTION_CLOSED]: 'WebSocket connection closed',
     [SOLANA_ERROR__RPC_SUBSCRIPTIONS__TRANSPORT_FAILED_TO_CONNECT]: 'WebSocket failed to connect',
+    [SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD]: 'Could not find an API plan for RPC method: `$method`',
     [SOLANA_ERROR__RPC__INTEGER_OVERFLOW]:
         'The $argumentLabel argument to the `$methodName` RPC method$optionalPathLabel was ' +
         '`$value`. This number is unsafe for use with the Solana JSON-RPC because it exceeds ' +

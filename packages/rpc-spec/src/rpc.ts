@@ -1,10 +1,5 @@
-import {
-    Callable,
-    createRpcMessage,
-    Flatten,
-    OverloadImplementations,
-    UnionToIntersection,
-} from '@solana/rpc-spec-types';
+import { SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, SolanaError } from '@solana/errors';
+import { Callable, Flatten, OverloadImplementations, UnionToIntersection } from '@solana/rpc-spec-types';
 
 import { RpcApi, RpcApiRequestPlan } from './rpc-api';
 import { RpcTransport } from './rpc-transport';
@@ -57,11 +52,15 @@ function makeProxy<TRpcMethods, TRpcTransport extends RpcTransport>(
         get(target, p, receiver) {
             return function (...rawParams: unknown[]) {
                 const methodName = p.toString();
-                const createRpcRequest = Reflect.get(target, methodName, receiver);
-                const newRequest = createRpcRequest
-                    ? createRpcRequest(...rawParams)
-                    : { payload: createRpcMessage(methodName, rawParams) };
-                return createPendingRpcRequest(rpcConfig, newRequest);
+                const getApiPlan = Reflect.get(target, methodName, receiver);
+                if (!getApiPlan) {
+                    throw new SolanaError(SOLANA_ERROR__RPC__API_PLAN_MISSING_FOR_RPC_METHOD, {
+                        method: methodName,
+                        params: rawParams,
+                    });
+                }
+                const apiPlan = getApiPlan(...rawParams);
+                return createPendingRpcRequest(rpcConfig, apiPlan);
             };
         },
     }) as Rpc<TRpcMethods>;
