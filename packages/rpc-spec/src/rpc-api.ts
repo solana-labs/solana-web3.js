@@ -1,6 +1,6 @@
 import { Callable } from '@solana/rpc-spec-types';
 
-import { RpcRequest, RpcRequestTransformer, RpcResponseTransformer } from './rpc-shared';
+import { RpcRequest, RpcRequestTransformer, RpcResponse, RpcResponseTransformer } from './rpc-shared';
 
 export type RpcApiConfig = Readonly<{
     requestTransformer?: RpcRequestTransformer;
@@ -8,7 +8,7 @@ export type RpcApiConfig = Readonly<{
 }>;
 
 export type RpcApiRequestPlan<TResponse> = RpcRequest & {
-    responseTransformer?: RpcResponseTransformer<TResponse>;
+    responseTransformer?: (response: RpcResponse) => RpcResponse<TResponse>;
 };
 
 export type RpcApi<TRpcMethods> = {
@@ -43,17 +43,18 @@ export function createRpcApi<TRpcMethods extends RpcApiMethods>(config?: RpcApiC
                     TRpcMethods[TMethodName] extends CallableFunction ? TRpcMethods[TMethodName] : never
                 >
             ): RpcApiRequestPlan<ReturnType<TRpcMethods[TMethodName]>> {
-                const rawRequest = { methodName, params: rawParams };
-                const request = config?.requestTransformer
-                    ? config?.requestTransformer(Object.freeze(rawRequest))
-                    : rawRequest;
+                const rawRequest = Object.freeze({ methodName, params: rawParams });
+                const request = config?.requestTransformer ? config?.requestTransformer(rawRequest) : rawRequest;
                 return Object.freeze({
                     ...request,
                     ...(config?.responseTransformer
                         ? {
-                              responseTransformer: config.responseTransformer as RpcResponseTransformer<
-                                  ReturnType<TRpcMethods[TMethodName]>
-                              >,
+                              responseTransformer: (response: RpcResponse) => {
+                                  const configTransformer = config.responseTransformer as RpcResponseTransformer<
+                                      ReturnType<TRpcMethods[TMethodName]>
+                                  >;
+                                  return configTransformer(response, request);
+                              },
                           }
                         : {}),
                 });
