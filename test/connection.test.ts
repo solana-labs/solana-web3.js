@@ -1546,7 +1546,14 @@ describe('Connection', function () {
     describe('transaction confirmation (mock)', () => {
       let clock: SinonFakeTimers;
       beforeEach(() => {
-        clock = useFakeTimers();
+        clock = useFakeTimers({
+          toFake: [
+            'clearInterval',
+            'clearTimeout',
+            'setInterval',
+            'setTimeout',
+          ],
+        });
       });
 
       afterEach(() => {
@@ -1699,9 +1706,9 @@ describe('Connection', function () {
           });
 
           rejectBlockheightPromise();
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
           resolveResultPromise({err: null});
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           expect(confirmationPromise).not.to.eventually.be.rejected;
         });
@@ -1881,7 +1888,7 @@ describe('Connection', function () {
             ],
             withContext: true,
           });
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           await expect(confirmationPromise).to.eventually.deep.equal({
             context: {slot: 11},
@@ -1996,7 +2003,7 @@ describe('Connection', function () {
             ],
             withContext: true,
           });
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           await expect(confirmationPromise).to.eventually.be.rejectedWith(
             TransactionExpiredNonceInvalidError,
@@ -2043,9 +2050,9 @@ describe('Connection', function () {
           });
 
           rejectNonceAccountFetchPromise();
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
           resolveResultPromise({err: null});
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           await expect(confirmationPromise).to.eventually.deep.equal({
             context: {slot: 11},
@@ -2080,7 +2087,7 @@ describe('Connection', function () {
             value: null,
             withContext: true,
           });
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
           await mockRpcResponse({
             method: 'getSignatureStatuses',
             params: [[mockSignature]],
@@ -2094,7 +2101,7 @@ describe('Connection', function () {
             ],
             withContext: true,
           });
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           await expect(confirmationPromise).to.eventually.be.rejectedWith(
             TransactionExpiredNonceInvalidError,
@@ -2140,10 +2147,10 @@ describe('Connection', function () {
             nonceValue,
             signature: mockSignature,
           });
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           resolveResultPromise({err: null});
-          clock.runToLastAsync();
+          await clock.runToLastAsync();
 
           await expect(confirmationPromise).to.eventually.deep.equal({
             context: {slot: 11},

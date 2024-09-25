@@ -119,7 +119,7 @@
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "semantic-release": "^24.0.0",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "sinon-chai": "^4.0.0",
     "start-server-and-test": "^2.0.4",
     "typescript": "^5.5.4",
