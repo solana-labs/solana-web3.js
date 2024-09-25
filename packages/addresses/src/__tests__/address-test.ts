@@ -24,6 +24,97 @@ const originalGetBase58Encoder = originalBase58Module.getBase58Encoder();
 const originalGetBase58Decoder = originalBase58Module.getBase58Decoder();
 
 describe('Address', () => {
+    describe('isAddress()', () => {
+        let isAddress: typeof import('../address').isAddress;
+        // Reload `isAddress` before each test to reset memoized state
+        beforeEach(async () => {
+            await jest.isolateModulesAsync(async () => {
+                const base58ModulePromise =
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    import('../address');
+                isAddress = (await base58ModulePromise).isAddress;
+            });
+        });
+
+        describe('using the real base58 implementation', () => {
+            beforeEach(() => {
+                // use real implementation
+                jest.mocked(getBase58Encoder).mockReturnValue(originalGetBase58Encoder);
+            });
+            it('does not throw when supplied a non-base58 address', () => {
+                expect(() => {
+                    isAddress('not-a-base-58-encoded-string');
+                }).not.toThrow();
+            });
+            it('returns false when supplied a non-base58 string', () => {
+                expect(isAddress('not-a-base-58-encoded-string')).toBe(false);
+            });
+            it('returns false when the decoded byte array has a length other than 32 bytes', () => {
+                expect(
+                    isAddress(
+                        // 31 bytes [128, ..., 128]
+                        '2xea9jWJ9eca3dFiefTeSPP85c6qXqunCqL2h2JNffM',
+                    ),
+                ).toBe(false);
+            });
+            it('returns true when supplied a base-58 encoded address', () => {
+                expect(isAddress('11111111111111111111111111111111')).toBe(true);
+            });
+        });
+        describe('using a mock base58 implementation', () => {
+            const mockEncode = jest.fn();
+            beforeEach(() => {
+                // use mock implementation
+                mockEncode.mockClear();
+                jest.mocked(getBase58Encoder).mockReturnValue({
+                    encode: mockEncode,
+                } as unknown as VariableSizeEncoder<string>);
+            });
+
+            [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44].forEach(len => {
+                it(`attempts to encode input strings of exactly ${len} characters`, () => {
+                    try {
+                        isAddress('1'.repeat(len));
+                        // eslint-disable-next-line no-empty
+                    } catch {}
+                    expect(mockEncode).toHaveBeenCalled();
+                });
+            });
+            it('does not attempt to decode too-short input strings', () => {
+                try {
+                    isAddress(
+                        // 31 bytes [0, ..., 0]
+                        '1111111111111111111111111111111', // 31 characters
+                    );
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(mockEncode).not.toHaveBeenCalled();
+            });
+            it('does not attempt to decode too-long input strings', () => {
+                try {
+                    isAddress(
+                        // 33 bytes [0, 255, ..., 255]
+                        '1JEKNVnkbo3jma5nREBBJCDoXFVeKkD56V3xKrvRmWxFG', // 45 characters
+                    );
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(mockEncode).not.toHaveBeenCalled();
+            });
+            it('memoizes getBase58Encoder when called multiple times', () => {
+                try {
+                    isAddress('1'.repeat(32));
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                try {
+                    isAddress('1'.repeat(32));
+                    // eslint-disable-next-line no-empty
+                } catch {}
+                expect(jest.mocked(getBase58Encoder)).toHaveBeenCalledTimes(1);
+            });
+        });
+    });
+
     describe('assertIsAddress()', () => {
         let assertIsAddress: typeof import('../address').assertIsAddress;
         // Reload `assertIsAddress` before each test to reset memoized state
