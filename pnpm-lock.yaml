@@ -107,7 +107,7 @@ importers:
         version: 4.0.1
       '@types/chai-as-promised':
         specifier: ^8.0.0
-        version: 8.0.0
+        version: 8.0.1
       '@types/express-serve-static-core':
         specifier: ^4.19.5
         version: 4.19.5
@@ -4101,8 +4101,8 @@ packages:
   '@types/chai-as-promised@7.1.8':
     resolution: {integrity: sha512-ThlRVIJhr69FLlh6IctTXFkmhtP3NpMZ2QGq69StYLyKZFp/HOp1VdKZj7RvfNWYYcJ1xlbLGLLWj1UvP5u/Gw==}
 
-  '@types/chai-as-promised@8.0.0':
-    resolution: {integrity: sha512-YbYaXFqJwSABp9OXQTVrPPmstZgNjkRieWVd/xAl5Yc/e5+F44bXLeQggpvm0sjsS1bg+2Y5cwU+rquwwD2dXA==}
+  '@types/chai-as-promised@8.0.1':
+    resolution: {integrity: sha512-dAlDhLjJlABwAVYObo9TPWYTRg9NaQM5CXeaeJYcYAkvzUf0JRLIiog88ao2Wqy/20WUnhbbUZcgvngEbJ3YXQ==}
 
   '@types/chai@4.3.14':
     resolution: {integrity: sha512-Wj71sXE4Q4AkGdG9Tvq1u/fquNz9EdG4LIJMwVVII7ashjD/8cf8fyIfJAjRr6YcsXnSE8cOGQPq1gqeR8z+3w==}
@@ -12673,7 +12673,7 @@ snapshots:
     dependencies:
       '@types/chai': 4.3.14
 
-  '@types/chai-as-promised@8.0.0':
+  '@types/chai-as-promised@8.0.1':
     dependencies:
       '@types/chai': 4.3.14
 
