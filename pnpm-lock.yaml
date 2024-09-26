@@ -49,7 +49,7 @@ importers:
         version: 2.7.0
       rpc-websockets:
         specifier: ^9.0.2
-        version: 9.0.2
+        version: 9.0.4
       superstruct:
         specifier: ^2.0.2
         version: 2.0.2
@@ -7450,6 +7450,9 @@ packages:
 
   rpc-websockets@9.0.2:
     resolution: {integrity: sha512-YzggvfItxMY3Lwuax5rC18inhbjJv9Py7JXRHxTIi94JOLrqBsSsUUc5bbl5W6c11tXhdfpDPK0KzBhoGe8jjw==}
+
+  rpc-websockets@9.0.4:
+    resolution: {integrity: sha512-yWZWN0M+bivtoNLnaDbtny4XchdAIF5Q4g/ZsC5UC61Ckbp0QczwO8fg44rV3uYmY4WHd+EZQbn90W1d8ojzqQ==}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -16575,6 +16578,19 @@ snapshots:
       fsevents: 2.3.3
 
   rpc-websockets@9.0.2:
+    dependencies:
+      '@swc/helpers': 0.5.11
+      '@types/uuid': 8.3.4
+      '@types/ws': 8.5.12
+      buffer: 6.0.3
+      eventemitter3: 5.0.1
+      uuid: 8.3.2
+      ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      bufferutil: 4.0.8
+      utf-8-validate: 5.0.10
+
+  rpc-websockets@9.0.4:
     dependencies:
       '@swc/helpers': 0.5.11
       '@types/uuid': 8.3.4
