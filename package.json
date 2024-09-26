@@ -91,7 +91,7 @@
     "@types/bn.js": "^5.1.5",
     "@types/bs58": "^4.0.1",
     "@types/chai-as-promised": "^8.0.0",
-    "@types/express-serve-static-core": "^4.19.5",
+    "@types/express-serve-static-core": "^5.0.0",
     "@types/mocha": "^10.0.6",
     "@types/mz": "^2.7.4",
     "@types/node-fetch": "2",
