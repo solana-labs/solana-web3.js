@@ -163,8 +163,8 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(react@18.3.1)
       '@radix-ui/themes':
-        specifier: ^3.1.3
-        version: 3.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^3.1.4
+        version: 3.1.4(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@solana-program/system':
         specifier: ^0.5.1
         version: 0.5.1(@solana/web3.js@packages+library)
@@ -3130,8 +3130,8 @@ packages:
   '@radix-ui/rect@1.1.0':
     resolution: {integrity: sha512-A9+lCBZoaMJlVKcRBz2YByCG+Cp2t6nAnMnNba+XiWxnj6r4JUFqfsgwocMBZU9LPtdxC6wB56ySYpc7LQIoJg==}
 
-  '@radix-ui/themes@3.1.3':
-    resolution: {integrity: sha512-GJt4r7Vh0w4yiGuqOKLvrZXLEAxUWfEUUtdj17rCfi+P/zpKUc7TsXro8GftA2Y1tm78Cx9x1HKt23dHc/WqIA==}
+  '@radix-ui/themes@3.1.4':
+    resolution: {integrity: sha512-HmyU8UpoYPmdfXSQIwbEnJS2Wv/5wbzxe/Niw/sMLMJTrlZiUKM/dEOM7N+bc7w2OMpUaQ8OH9czCGpcjHx98w==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -8981,7 +8981,7 @@ snapshots:
 
   '@radix-ui/rect@1.1.0': {}
 
-  '@radix-ui/themes@3.1.3(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@radix-ui/themes@3.1.4(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@radix-ui/colors': 3.0.0
       '@radix-ui/primitive': 1.1.0
