@@ -1,8 +1,8 @@
-import type { Commitment, Slot, SolanaRpcResponse, U64UnsafeBeyond2Pow53Minus1 } from '@solana/rpc-types';
+import type { Commitment, LamportsUnsafeBeyond2Pow53Minus1, Slot, SolanaRpcResponse } from '@solana/rpc-types';
 import type { TransactionMessageBytesBase64 } from '@solana/transactions';
 
 /** Fee corresponding to the message at the specified blockhash */
-type GetFeeForMessageApiResponse = U64UnsafeBeyond2Pow53Minus1 | null;
+type GetFeeForMessageApiResponse = LamportsUnsafeBeyond2Pow53Minus1 | null;
 
 export type GetFeeForMessageApi = {
     /**
