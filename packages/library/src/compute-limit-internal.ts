@@ -8,7 +8,7 @@ import {
     isInstructionWithData,
 } from '@solana/instructions';
 import { Rpc, SimulateTransactionApi } from '@solana/rpc';
-import { Blockhash, Commitment, Slot } from '@solana/rpc-types';
+import { Blockhash, Commitment, Slot, TransactionError } from '@solana/rpc-types';
 import {
     appendTransactionMessageInstruction,
     CompilableTransactionMessage,
@@ -57,6 +57,11 @@ function isSetComputeLimitInstruction(
         instruction.data[0] === SET_COMPUTE_UNIT_LIMIT_INSTRUCTION_INDEX
     );
 }
+
+export type ComputeUnitEstimateForTransactionMessageResult = Readonly<{
+    computeUnitEstimate: number;
+    transactionError: TransactionError | null;
+}>;
 
 /**
  * Simulates a transaction message on the network and returns the number of compute units it
@@ -120,7 +125,7 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
     rpc,
     transactionMessage,
     ...simulateConfig
-}: ComputeUnitEstimateForTransactionMessageConfig): Promise<number> {
+}: ComputeUnitEstimateForTransactionMessageConfig): Promise<ComputeUnitEstimateForTransactionMessageResult> {
     /**
      * STEP 1: Make sure the transaction message will not fail in simulation for lack of a lifetime
      *         - either a recent blockhash lifetime or a nonce.
@@ -162,7 +167,7 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
     const wireTransactionBytes = getBase64EncodedWireTransaction(compiledTransaction);
     try {
         const {
-            value: { unitsConsumed },
+            value: { err, unitsConsumed },
         } = await rpc
             .simulateTransaction(wireTransactionBytes, {
                 ...simulateConfig,
@@ -179,7 +184,7 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
         // compute units as a u64, but the `SetComputeLimit` instruction only accepts a u32. Until
         // this changes, downcast it.
         const downcastUnitsConsumed = unitsConsumed > 4_294_967_295n ? 4_294_967_295 : Number(unitsConsumed);
-        return downcastUnitsConsumed;
+        return { computeUnitEstimate: downcastUnitsConsumed, transactionError: err };
     } catch (e) {
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT, {
             cause: e,

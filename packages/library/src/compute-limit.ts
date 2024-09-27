@@ -5,7 +5,10 @@ import {
     TransactionMessage,
 } from '@solana/transaction-messages';
 
-import { getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT } from './compute-limit-internal';
+import {
+    ComputeUnitEstimateForTransactionMessageResult,
+    getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT,
+} from './compute-limit-internal';
 
 type ComputeUnitEstimateForTransactionMessageFactoryConfig = Readonly<{
     rpc: Rpc<SimulateTransactionApi>;
@@ -16,7 +19,7 @@ type ComputeUnitEstimateForTransactionMessageFunction = (
         Parameters<typeof getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT>[0],
         'rpc' | 'transactionMessage'
     >,
-) => Promise<number>;
+) => Promise<ComputeUnitEstimateForTransactionMessageResult>;
 
 export function getComputeUnitEstimateForTransactionMessageFactory({
     rpc,

@@ -6,7 +6,7 @@ import {
 } from '@solana/errors';
 import { AccountRole } from '@solana/instructions';
 import { Rpc, SimulateTransactionApi } from '@solana/rpc';
-import { Blockhash } from '@solana/rpc-types';
+import { Blockhash, TransactionError } from '@solana/rpc-types';
 import { ITransactionMessageWithFeePayer, Nonce, TransactionMessage } from '@solana/transaction-messages';
 
 import { getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT } from '../compute-limit-internal';
@@ -231,7 +231,7 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             rpc,
             transactionMessage: mockTransactionMessage,
         });
-        await expect(estimatePromise).resolves.toBe(42);
+        await expect(estimatePromise).resolves.toMatchObject({ computeUnitEstimate: 42 });
     });
     it('caps the estimated compute units to MAX_COMPUTE_UNITS of 1.4M', async () => {
         expect.assertions(1);
@@ -242,7 +242,28 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             rpc,
             transactionMessage: mockTransactionMessage,
         });
-        await expect(estimatePromise).resolves.toBe(1400000 /* MAX_COMPUTE_UNITS */);
+        await expect(estimatePromise).resolves.toMatchObject({
+            computeUnitEstimate: 1400000 /* MAX_COMPUTE_UNITS */,
+        });
+    });
+    it('returns null as transactionError when the transaction succeeds', async () => {
+        expect.assertions(1);
+        sendSimulateTransactionRequest.mockResolvedValue({ value: { err: null, unitsConsumed: 42n } });
+        const estimatePromise = getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
+            rpc,
+            transactionMessage: mockTransactionMessage,
+        });
+        await expect(estimatePromise).resolves.toMatchObject({ transactionError: null });
+    });
+    it('returns the transaction error when the transaction fails in simulation', async () => {
+        expect.assertions(1);
+        const transactionError: TransactionError = 'AccountNotFound';
+        sendSimulateTransactionRequest.mockResolvedValue({ value: { err: transactionError, unitsConsumed: 42n } });
+        const estimatePromise = getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
+            rpc,
+            transactionMessage: mockTransactionMessage,
+        });
+        await expect(estimatePromise).resolves.toStrictEqual({ computeUnitEstimate: 42, transactionError });
     });
     it('throws with the cause when simulation fails', async () => {
         expect.assertions(1);
