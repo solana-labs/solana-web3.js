@@ -175,6 +175,7 @@ import {
     SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_FEE_PAYER_MISSING,
     SOLANA_ERROR__TRANSACTION__FAILED_TO_DECOMPILE_INSTRUCTION_PROGRAM_ADDRESS_NOT_FOUND,
     SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT,
+    SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_MISSING,
     SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING,
     SOLANA_ERROR__TRANSACTION__INVALID_NONCE_TRANSACTION_FIRST_INSTRUCTION_MUST_BE_ADVANCE_NONCE,
@@ -583,6 +584,11 @@ export const SolanaErrorMessages: Readonly<{
         'Failed to estimate the compute unit consumption for this transaction message. This is ' +
         'likely because simulating the transaction failed. Inspect the `cause` property of this ' +
         'error to learn more',
+    [SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT]:
+        'Transaction failed when it was simulated in order to estimate the compute unit consumption. ' +
+        'The compute unit estimate provided is for a transaction that failed when simulated and may not ' +
+        'be representative of the compute units this transaction would consume if successful. Inspect the ' +
+        '`cause` property of this error to learn more',
     [SOLANA_ERROR__TRANSACTION__FEE_PAYER_MISSING]: 'Transaction is missing a fee payer.',
     [SOLANA_ERROR__TRANSACTION__FEE_PAYER_SIGNATURE_MISSING]:
         "Could not determine this transaction's signature. Make sure that the transaction has " +
