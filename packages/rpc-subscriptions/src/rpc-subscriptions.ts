@@ -1,5 +1,3 @@
-import fastStableStringify from '@solana/fast-stable-stringify';
-import { pipe } from '@solana/functional';
 import type { SolanaRpcSubscriptionsApi, SolanaRpcSubscriptionsApiUnstable } from '@solana/rpc-subscriptions-api';
 import { createSolanaRpcSubscriptionsApi } from '@solana/rpc-subscriptions-api';
 import {
@@ -11,7 +9,6 @@ import { ClusterUrl } from '@solana/rpc-types';
 
 import { DEFAULT_RPC_SUBSCRIPTIONS_CONFIG } from './rpc-default-config';
 import type { RpcSubscriptionsFromTransport } from './rpc-subscriptions-clusters';
-import { getRpcSubscriptionsWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
 import {
     createDefaultRpcSubscriptionsTransport,
     DefaultRpcSubscriptionsTransportConfig,
@@ -39,17 +36,10 @@ export function createSolanaRpcSubscriptionsFromTransport<
     TTransport extends RpcSubscriptionsTransport,
     TApi extends RpcSubscriptionsApiMethods = SolanaRpcSubscriptionsApi,
 >(transport: TTransport) {
-    return pipe(
-        createSubscriptionRpc({
-            api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_SUBSCRIPTIONS_CONFIG),
-            transport,
-        }),
-        rpcSubscriptions =>
-            getRpcSubscriptionsWithSubscriptionCoalescing({
-                getDeduplicationKey: (...args) => fastStableStringify(args),
-                rpcSubscriptions,
-            }),
-    ) as RpcSubscriptionsFromTransport<TApi, TTransport>;
+    return createSubscriptionRpc({
+        api: createSolanaRpcSubscriptionsApi<TApi>(DEFAULT_RPC_SUBSCRIPTIONS_CONFIG),
+        transport,
+    }) as RpcSubscriptionsFromTransport<TApi, TTransport>;
 }
 
 export function createSolanaRpcSubscriptionsFromTransport_UNSTABLE<TTransport extends RpcSubscriptionsTransport>(
