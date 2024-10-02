@@ -1,5 +1,5 @@
 import type { UiWalletAccount } from '@wallet-standard/react';
-import { uiWalletAccountBelongsToUiWallet,useWallets } from '@wallet-standard/react';
+import { uiWalletAccountBelongsToUiWallet, useWallets } from '@wallet-standard/react';
 import React from 'react';
 
 type Props = React.ComponentProps<'img'> &

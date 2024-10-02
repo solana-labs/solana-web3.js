@@ -2,7 +2,7 @@ module.exports = {
     root: true,
     env: { browser: true, es2020: true },
     extends: ['../../.eslintrc.js', '@solana/eslint-config-solana/react'],
-    ignorePatterns: ['dist', '.eslintrc.cjs'],
+    ignorePatterns: ['dist', '.eslintrc.cjs', '**/*.css'],
     parserOptions: {
         project: './tsconfig.app.json',
     },
