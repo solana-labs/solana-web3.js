@@ -72,6 +72,7 @@
     ],
     "dependencies": {
         "@solana/errors": "workspace:*",
+        "@solana/promises": "workspace:*",
         "@solana/rpc-spec-types": "workspace:*",
         "@solana/subscribable": "workspace:*"
     },
