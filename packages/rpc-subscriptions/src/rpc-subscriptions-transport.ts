@@ -12,6 +12,7 @@ import {
     RpcSubscriptionsTransportMainnet,
     RpcSubscriptionsTransportTestnet,
 } from './rpc-subscriptions-clusters';
+import { getRpcSubscriptionsTransportWithSubscriptionCoalescing } from './rpc-subscriptions-coalescer';
 
 export type DefaultRpcSubscriptionsTransportConfig<TClusterUrl extends ClusterUrl> = Readonly<{
     createChannel: RpcSubscriptionsChannelCreatorFromClusterUrl<TClusterUrl, unknown, unknown>;
@@ -24,6 +25,7 @@ export function createDefaultRpcSubscriptionsTransport<TClusterUrl extends Clust
         createRpcSubscriptionsTransportFromChannelCreator(
             createChannel,
         ) as RpcSubscriptionsTransport as RpcSubscriptionsTransportFromClusterUrl<TClusterUrl>,
+        transport => getRpcSubscriptionsTransportWithSubscriptionCoalescing(transport),
     );
 }
 
