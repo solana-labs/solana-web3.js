@@ -18,6 +18,19 @@ This package contains types that implement RPC subscriptions as required by the 
 
 ## Functions
 
+### `createDefaultRpcSubscriptionsChannelCreator(config)`
+
+Creates a function that returns new subscription channels when called.
+
+#### Arguments
+
+A config object with the following properties:
+
+-   `intervalMs`: The number of milliseconds to wait since the last message sent or received over the channel before sending a ping message to keep the channel open.
+-   `maxSubscriptionsPerChannel`: The number of subscribers that may share a channel before a new channel must be created. Set this to the maximum number of subscriptions that your RPC provider recommends making over a single connection.
+-   `minChannels`: The number of channels to create before reusing a channel for a new subscription.
+-   `sendBufferHighWatermark`: The number of bytes of data to admint into the `WebSocket` buffer before buffering data on the client. -`url`: The URL of the web socket server. Must use the `ws` or `wss` protocols.
+
 ### `getChannelPoolingChannelCreator(createChannel, { maxSubscriptionsPerChannel, minChannels })`
 
 Given a channel creator, will return a new channel creator with the following behavior.

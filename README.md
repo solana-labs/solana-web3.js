@@ -624,13 +624,23 @@ try {
 
 ### Using Custom RPC Subscriptions Transports
 
-The `createSolanaRpcSubscriptions` function communicates with the RPC server using a default WebSocket transport that should satisfy most use cases. However, you may here as well provide your own transport or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we explicitly create a WebSocket transport and use it to create a new RPC Subscriptions client via the `createSolanaRpcSubscriptionsFromTransport` function.
+The `createSolanaRpcSubscriptions` function communicates with the RPC server using a default `WebSocket` channel that should satisfy most use cases. However, you may here as well provide your own channel creator or decorate existing ones to communicate with RPC servers in any way you see fit. In the example below, we supply a custom `WebSocket` channel creator and use it to create a new RPC Subscriptions client via the `createSolanaRpcSubscriptionsFromTransport` function.
 
 ```ts
 import { createDefaultRpcSubscriptionsTransport, createSolanaRpcSubscriptionsFromTransport } from '@solana/web3.js';
 
-// Create a WebSocket transport or any custom transport of your choice.
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+// Create a transport with a custom channel creator of your choice.
+const transport = createDefaultRpcSubscriptionsTransport({
+    createChannel({ abortSignal }) {
+        return createWebSocketChannel({
+            maxSubscriptionsPerChannel: 100,
+            minChannels: 25,
+            sendBufferHighWatermark: 32_768,
+            signal: abortSignal,
+            url: 'ws://127.0.0.1:8900',
+        });
+    },
+});
 
 // Create an RPC client using that transport.
 const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport(transport);
@@ -661,16 +671,22 @@ If your app needs access to [unstable RPC Subscriptions](https://docs.solana.com
 
 ```ts
 import {
+    createDefaultRpcSubscriptionsChannelCreator,
+    createDefaultRpcSubscriptionsTransport,
     createSolanaRpcSubscriptions_UNSTABLE,
     createSolanaRpcSubscriptionsFromTransport_UNSTABLE,
 } from '@solana/web3.js';
 
-// Using the default WebSocket transport.
+// Using the default WebSocket channel.
 const rpcSubscriptions = createSolanaRpcSubscriptions_UNSTABLE('ws://127.0.0.1:8900');
 //    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>
 
 // Using a custom transport.
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+const transport = createDefaultRpcSubscriptionsTransport({
+    createChannel: createDefaultRpcSubscriptionsChannelCreator({
+        url: 'ws://127.0.0.1:8900',
+    }),
+});
 const rpcSubscriptions = createSolanaRpcSubscriptionsFromTransport_UNSTABLE(transport);
 //    ^? RpcSubscriptions<SolanaRpcSubscriptionsApi & SolanaRpcSubscriptionsApiUnstable>
 ```
@@ -696,6 +712,7 @@ Alternatively, you may explicitly create the RPC Subscriptions API using the `cr
 
 ```ts
 import {
+    createDefaultRpcSubscriptionsChannelCreator,
     createDefaultRpcSubscriptionsTransport,
     createSubscriptionRpc,
     createSolanaRpcSubscriptionsApi,
@@ -705,7 +722,11 @@ import {
 } from '@solana/web3.js';
 
 const api = createSolanaRpcSubscriptionsApi<AccountNotificationsApi & SlotNotificationsApi>(DEFAULT_RPC_CONFIG);
-const transport = createDefaultRpcSubscriptionsTransport({ url: 'ws://127.0.0.1:8900' });
+const transport = createDefaultRpcSubscriptionsTransport({
+    createChannel: createDefaultRpcSubscriptionsChannelCreator({
+        url: 'ws://127.0.0.1:8900',
+    }),
+});
 const rpcSubscriptions = createSubscriptionRpc({ api, transport });
 ```
 
