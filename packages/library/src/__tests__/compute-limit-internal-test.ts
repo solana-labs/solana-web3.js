@@ -2,11 +2,12 @@ import { Address } from '@solana/addresses';
 import {
     SOLANA_ERROR__INSTRUCTION_ERROR__INSUFFICIENT_FUNDS,
     SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT,
+    SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT,
     SolanaError,
 } from '@solana/errors';
 import { AccountRole } from '@solana/instructions';
 import { Rpc, SimulateTransactionApi } from '@solana/rpc';
-import { Blockhash } from '@solana/rpc-types';
+import { Blockhash, TransactionError } from '@solana/rpc-types';
 import { ITransactionMessageWithFeePayer, Nonce, TransactionMessage } from '@solana/transaction-messages';
 
 import { getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT } from '../compute-limit-internal';
@@ -242,7 +243,22 @@ describe('getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPOR
             rpc,
             transactionMessage: mockTransactionMessage,
         });
-        await expect(estimatePromise).resolves.toBe(1400000 /* MAX_COMPUTE_UNITS */);
+        await expect(estimatePromise).resolves.toBe(1400000);
+    });
+    it('throws with the transaction error as cause when the transaction fails in simulation', async () => {
+        expect.assertions(1);
+        const transactionError: TransactionError = 'AccountNotFound';
+        sendSimulateTransactionRequest.mockResolvedValue({ value: { err: transactionError, unitsConsumed: 42n } });
+        const estimatePromise = getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_DO_NOT_EXPORT({
+            rpc,
+            transactionMessage: mockTransactionMessage,
+        });
+        await expect(estimatePromise).rejects.toThrow(
+            new SolanaError(SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT, {
+                cause: transactionError,
+                unitsConsumed: 42,
+            }),
+        );
     });
     it('throws with the cause when simulation fails', async () => {
         expect.assertions(1);

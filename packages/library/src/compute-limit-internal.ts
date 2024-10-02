@@ -1,6 +1,11 @@
 import { Address } from '@solana/addresses';
 import { getU32Encoder } from '@solana/codecs';
-import { SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT, SolanaError } from '@solana/errors';
+import {
+    isSolanaError,
+    SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT,
+    SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT,
+    SolanaError,
+} from '@solana/errors';
 import {
     IInstruction,
     IInstructionWithData,
@@ -162,7 +167,7 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
     const wireTransactionBytes = getBase64EncodedWireTransaction(compiledTransaction);
     try {
         const {
-            value: { unitsConsumed },
+            value: { err: transactionError, unitsConsumed },
         } = await rpc
             .simulateTransaction(wireTransactionBytes, {
                 ...simulateConfig,
@@ -179,8 +184,15 @@ export async function getComputeUnitEstimateForTransactionMessage_INTERNAL_ONLY_
         // compute units as a u64, but the `SetComputeLimit` instruction only accepts a u32. Until
         // this changes, downcast it.
         const downcastUnitsConsumed = unitsConsumed > 4_294_967_295n ? 4_294_967_295 : Number(unitsConsumed);
+        if (transactionError) {
+            throw new SolanaError(SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT, {
+                cause: transactionError,
+                unitsConsumed: downcastUnitsConsumed,
+            });
+        }
         return downcastUnitsConsumed;
     } catch (e) {
+        if (isSolanaError(e, SOLANA_ERROR__TRANSACTION__FAILED_WHEN_SIMULATING_TO_ESTIMATE_COMPUTE_LIMIT)) throw e;
         throw new SolanaError(SOLANA_ERROR__TRANSACTION__FAILED_TO_ESTIMATE_COMPUTE_LIMIT, {
             cause: e,
         });
