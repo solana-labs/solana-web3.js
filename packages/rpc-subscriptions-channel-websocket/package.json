@@ -78,7 +78,6 @@
         "@solana/ws-impl": "workspace:*"
     },
     "devDependencies": {
-        "@solana/ws-impl": "workspace:*",
         "jest-websocket-mock": "^2.5.0"
     },
     "peerDependencies": {
