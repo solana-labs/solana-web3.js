@@ -464,7 +464,7 @@ The main package responsible for managing communication with RPC subscriptions i
 
 -   `@solana/rpc-subscriptions`: Contains all logic related to subscribing to Solana RPC notifications.
 -   `@solana/rpc-subscriptions-api`: Describes all Solana RPC subscriptions using types.
--   `@solana/rpc-subscriptions-transport-websocket`: Provides a concrete implementation of an RPC Subscriptions transport using WebSockets.
+-   `@solana/rpc-subscriptions-channel-websocket`: Provides a concrete implementation of an RPC Subscriptions channel using WebSockets.
 -   `@solana/rpc-subscriptions-spec`: Defines the JSON RPC spec for subscribing to RPC notifications.
 -   `@solana/rpc-spec-types`: Shared JSON RPC specifications types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.
 -   `@solana/rpc-types`: Shared Solana RPC types and helpers that are used by both `@solana/rpc` and `@solana/rpc-subscriptions`.

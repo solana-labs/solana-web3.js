@@ -3,7 +3,7 @@
     "compilerOptions": {
         "lib": ["DOM", "ES2022.Error"]
     },
-    "display": "@solana/rpc-subscriptions-transport-websocket",
+    "display": "@solana/rpc-subscriptions-channel-websocket",
     "extends": "../tsconfig/base.json",
     "include": ["src"]
 }

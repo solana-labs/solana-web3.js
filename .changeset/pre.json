@@ -29,7 +29,7 @@
     "@solana/rpc-subscriptions": "2.0.0-rc",
     "@solana/rpc-subscriptions-api": "2.0.0-rc",
     "@solana/rpc-subscriptions-spec": "2.0.0-rc",
-    "@solana/rpc-subscriptions-transport-websocket": "2.0.0-rc",
+    "@solana/rpc-subscriptions-channel-websocket": "2.0.0-rc",
     "@solana/rpc-transformers": "2.0.0-rc",
     "@solana/rpc-transport-http": "2.0.0-rc",
     "@solana/rpc-types": "2.0.0-rc",
