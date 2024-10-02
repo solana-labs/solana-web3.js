@@ -1,132 +1,65 @@
-import { safeRace } from '@solana/promises';
-import { PendingRpcSubscriptionsRequest, RpcSubscriptions } from '@solana/rpc-subscriptions-spec';
+import { RpcSubscriptionsTransport } from '@solana/rpc-subscriptions-spec';
+import { DataPublisher } from '@solana/subscribable';
 
-import { getCachedAbortableIterableFactory } from './cached-abortable-iterable';
+type CacheEntry = {
+    readonly abortController: AbortController;
+    readonly dataPublisherPromise: Promise<DataPublisher>;
+    numSubscribers: number;
+};
 
-type CacheKey = string | undefined;
-type Config<TRpcSubscriptionsMethods> = Readonly<{
-    getDeduplicationKey: GetDeduplicationKeyFn;
-    rpcSubscriptions: RpcSubscriptions<TRpcSubscriptionsMethods>;
-}>;
-type GetDeduplicationKeyFn = (subscriptionMethod: string | symbol, payload: unknown) => CacheKey;
-
-let EXPLICIT_ABORT_TOKEN: symbol;
-function createExplicitAbortToken() {
-    // This function is an annoying workaround to prevent `process.env.NODE_ENV` from appearing at
-    // the top level of this module and thwarting an optimizing compiler's attempt to tree-shake.
-    return Symbol(
-        __DEV__
-            ? "This symbol is thrown from a subscription's iterator when the subscription is " +
-                  'explicitly aborted by the user'
-            : undefined,
-    );
-}
-
-function registerIterableCleanup(iterable: AsyncIterable<unknown>, cleanupFn: CallableFunction) {
-    (async () => {
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            for await (const _ of iterable);
-        } catch {
-            /* empty */
-        } finally {
-            // Run the cleanup function.
-            cleanupFn();
+export function getRpcSubscriptionsTransportWithSubscriptionCoalescing<TTransport extends RpcSubscriptionsTransport>(
+    transport: TTransport,
+): TTransport {
+    const cache = new Map<string, CacheEntry>();
+    return function rpcSubscriptionsTransportWithSubscriptionCoalescing(config) {
+        const { subscriptionConfigurationHash, signal } = config;
+        if (subscriptionConfigurationHash === undefined) {
+            return transport(config);
         }
-    })();
-}
-
-export function getRpcSubscriptionsWithSubscriptionCoalescing<TRpcSubscriptionsMethods>({
-    getDeduplicationKey,
-    rpcSubscriptions,
-}: Config<TRpcSubscriptionsMethods>): RpcSubscriptions<TRpcSubscriptionsMethods> {
-    const cache = new Map<CacheKey, PendingRpcSubscriptionsRequest<unknown>>();
-    return new Proxy(rpcSubscriptions, {
-        defineProperty() {
-            return false;
-        },
-        deleteProperty() {
-            return false;
-        },
-        get(target, p, receiver) {
-            const subscriptionMethod = Reflect.get(target, p, receiver);
-            if (typeof subscriptionMethod !== 'function') {
-                return subscriptionMethod;
-            }
-            return function (...rawParams: unknown[]) {
-                const deduplicationKey = getDeduplicationKey(p, rawParams);
-                if (deduplicationKey === undefined) {
-                    return (subscriptionMethod as CallableFunction)(...rawParams);
+        let cachedDataPublisherPromise = cache.get(subscriptionConfigurationHash);
+        if (!cachedDataPublisherPromise) {
+            const abortController = new AbortController();
+            const dataPublisherPromise = transport({
+                ...config,
+                signal: abortController.signal,
+            });
+            dataPublisherPromise
+                .then(dataPublisher => {
+                    dataPublisher.on(
+                        'error',
+                        () => {
+                            cache.delete(subscriptionConfigurationHash);
+                            abortController.abort();
+                        },
+                        { signal: abortController.signal },
+                    );
+                })
+                .catch(() => {});
+            cache.set(
+                subscriptionConfigurationHash,
+                (cachedDataPublisherPromise = {
+                    abortController,
+                    dataPublisherPromise,
+                    numSubscribers: 0,
+                }),
+            );
+        }
+        cachedDataPublisherPromise.numSubscribers++;
+        signal.addEventListener(
+            'abort',
+            () => {
+                cachedDataPublisherPromise.numSubscribers--;
+                if (cachedDataPublisherPromise.numSubscribers === 0) {
+                    queueMicrotask(() => {
+                        if (cachedDataPublisherPromise.numSubscribers === 0) {
+                            cache.delete(subscriptionConfigurationHash);
+                            cachedDataPublisherPromise.abortController.abort();
+                        }
+                    });
                 }
-                if (cache.has(deduplicationKey)) {
-                    return cache.get(deduplicationKey)!;
-                }
-                const iterableFactory = getCachedAbortableIterableFactory<
-                    Parameters<PendingRpcSubscriptionsRequest<unknown>['subscribe']>,
-                    AsyncIterable<unknown>
-                >({
-                    getAbortSignalFromInputArgs: ({ abortSignal }) => abortSignal,
-                    getCacheKeyFromInputArgs: () => deduplicationKey,
-                    async onCacheHit(_iterable, _config) {
-                        /**
-                         * This transport's goal is to prevent duplicate subscriptions from
-                         * being made. If a cached iterable] is found, do not send the subscribe
-                         * message again.
-                         */
-                    },
-                    async onCreateIterable(abortSignal, config) {
-                        const pendingSubscription = (subscriptionMethod as CallableFunction)(
-                            ...rawParams,
-                        ) as PendingRpcSubscriptionsRequest<unknown>;
-                        const iterable = await pendingSubscription.subscribe({
-                            ...config,
-                            abortSignal,
-                        });
-                        registerIterableCleanup(iterable, () => {
-                            cache.delete(deduplicationKey);
-                        });
-                        return iterable;
-                    },
-                });
-                const pendingSubscription: PendingRpcSubscriptionsRequest<unknown> = {
-                    async subscribe(...args) {
-                        const iterable = await iterableFactory(...args);
-                        const { abortSignal } = args[0];
-                        let abortPromise;
-                        return {
-                            ...iterable,
-                            async *[Symbol.asyncIterator]() {
-                                abortPromise ||= abortSignal.aborted
-                                    ? Promise.reject((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()))
-                                    : new Promise<never>((_, reject) => {
-                                          abortSignal.addEventListener('abort', () => {
-                                              reject((EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken()));
-                                          });
-                                      });
-                                try {
-                                    const iterator = iterable[Symbol.asyncIterator]();
-                                    while (true) {
-                                        const iteratorResult = await safeRace([iterator.next(), abortPromise]);
-                                        if (iteratorResult.done) {
-                                            return iteratorResult.value;
-                                        } else {
-                                            yield iteratorResult.value;
-                                        }
-                                    }
-                                } catch (e) {
-                                    if (e === (EXPLICIT_ABORT_TOKEN ||= createExplicitAbortToken())) {
-                                        return;
-                                    }
-                                    cache.delete(deduplicationKey);
-                                    throw e;
-                                }
-                            },
-                        };
-                    },
-                };
-                cache.set(deduplicationKey, pendingSubscription);
-                return pendingSubscription;
-            };
-        },
-    });
+            },
+            { signal: cachedDataPublisherPromise.abortController.signal },
+        );
+        return cachedDataPublisherPromise.dataPublisherPromise;
+    } as TTransport;
 }

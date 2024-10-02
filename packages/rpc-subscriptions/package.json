@@ -78,7 +78,8 @@
         "@solana/rpc-subscriptions-channel-websocket": "workspace:*",
         "@solana/rpc-subscriptions-spec": "workspace:*",
         "@solana/rpc-transformers": "workspace:*",
-        "@solana/rpc-types": "workspace:*"
+        "@solana/rpc-types": "workspace:*",
+        "@solana/subscribable": "workspace:*"
     },
     "peerDependencies": {
         "typescript": ">=5"
