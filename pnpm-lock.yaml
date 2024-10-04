@@ -1051,6 +1051,15 @@ importers:
         specifier: workspace:*
         version: link:../text-encoding-impl
 
+  packages/subscribable:
+    dependencies:
+      '@solana/errors':
+        specifier: workspace:*
+        version: link:../errors
+      typescript:
+        specifier: '>=5'
+        version: 5.6.2
+
   packages/sysvars:
     dependencies:
       '@solana/accounts':

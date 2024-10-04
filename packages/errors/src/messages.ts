@@ -102,9 +102,10 @@ import {
     SOLANA_ERROR__INVALID_BLOCKHASH_BYTE_LENGTH,
     SOLANA_ERROR__INVALID_NONCE,
     SOLANA_ERROR__INVARIANT_VIOLATION__CACHED_ABORTABLE_ITERABLE_CACHE_ENTRY_MISSING,
+    SOLANA_ERROR__INVARIANT_VIOLATION__DATA_PUBLISHER_CHANNEL_UNIMPLEMENTED,
+    SOLANA_ERROR__INVARIANT_VIOLATION__SUBSCRIPTION_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
+    SOLANA_ERROR__INVARIANT_VIOLATION__SUBSCRIPTION_ITERATOR_STATE_MISSING,
     SOLANA_ERROR__INVARIANT_VIOLATION__SWITCH_MUST_BE_EXHAUSTIVE,
-    SOLANA_ERROR__INVARIANT_VIOLATION__WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE,
-    SOLANA_ERROR__INVARIANT_VIOLATION__WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING,
     SOLANA_ERROR__JSON_RPC__INTERNAL_ERROR,
     SOLANA_ERROR__JSON_RPC__INVALID_PARAMS,
     SOLANA_ERROR__JSON_RPC__INVALID_REQUEST,
@@ -393,17 +394,20 @@ export const SolanaErrorMessages: Readonly<{
         'Invariant violation: Found no abortable iterable cache entry for key `$cacheKey`. It ' +
         'should be impossible to hit this error; please file an issue at ' +
         'https://sola.na/web3invariant',
+    [SOLANA_ERROR__INVARIANT_VIOLATION__DATA_PUBLISHER_CHANNEL_UNIMPLEMENTED]:
+        'Invariant violation: This data publisher does not publish to the channel named ' +
+        '`$channelName`. Supported channels include $supportedChannelNames.',
+    [SOLANA_ERROR__INVARIANT_VIOLATION__SUBSCRIPTION_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE]:
+        'Invariant violation: WebSocket message iterator state is corrupt; iterated without first ' +
+        'resolving existing message promise. It should be impossible to hit this error; please ' +
+        'file an issue at https://sola.na/web3invariant',
+    [SOLANA_ERROR__INVARIANT_VIOLATION__SUBSCRIPTION_ITERATOR_STATE_MISSING]:
+        'Invariant violation: WebSocket message iterator is missing state storage. It should be ' +
+        'impossible to hit this error; please file an issue at https://sola.na/web3invariant',
     [SOLANA_ERROR__INVARIANT_VIOLATION__SWITCH_MUST_BE_EXHAUSTIVE]:
         'Invariant violation: Switch statement non-exhaustive. Received unexpected value ' +
         '`$unexpectedValue`. It should be impossible to hit this error; please file an issue at ' +
         'https://sola.na/web3invariant',
-    [SOLANA_ERROR__INVARIANT_VIOLATION__WEBSOCKET_MESSAGE_ITERATOR_MUST_NOT_POLL_BEFORE_RESOLVING_EXISTING_MESSAGE_PROMISE]:
-        'Invariant violation: WebSocket message iterator state is corrupt; iterated without first ' +
-        'resolving existing message promise. It should be impossible to hit this error; please ' +
-        'file an issue at https://sola.na/web3invariant',
-    [SOLANA_ERROR__INVARIANT_VIOLATION__WEBSOCKET_MESSAGE_ITERATOR_STATE_MISSING]:
-        'Invariant violation: WebSocket message iterator is missing state storage. It should be ' +
-        'impossible to hit this error; please file an issue at https://sola.na/web3invariant',
     [SOLANA_ERROR__JSON_RPC__INTERNAL_ERROR]: 'JSON-RPC error: Internal JSON-RPC error ($__serverMessage)',
     [SOLANA_ERROR__JSON_RPC__INVALID_PARAMS]: 'JSON-RPC error: Invalid method parameter(s) ($__serverMessage)',
     [SOLANA_ERROR__JSON_RPC__INVALID_REQUEST]:
