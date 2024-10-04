@@ -84,6 +84,31 @@ Things to note:
 -   If there are messages in the queue and the abort signal fires, all queued messages will be vended to the iterator after which it will return.
 -   Any new iterators created after the first error is encountered will reject with that error when polled.
 
+### `demultiplexDataPublisher(publisher, sourceChannelName, messageTransformer)`
+
+Given a channel that carries messages for multiple subscribers on a single channel name, this function returns a new `DataPublisher` that splits them into multiple channel names.
+
+Imagine a channel that carries multiple notifications whose destination is contained within the message itself.
+
+```ts
+const demuxedDataPublisher = demultiplexDataPublisher(channel, 'message', message => {
+    const destinationChannelName = `notification-for:${message.subscriberId}`;
+    return [destinationChannelName, message];
+});
+```
+
+Now you can subscribe to _only_ the messages you are interested in, without having to subscribe to the entire `'message'` channel and filter out the messages that are not for you.
+
+```ts
+demuxedDataPublisher.on(
+    'notification-for:123',
+    message => {
+        console.log('Got a message for subscriber 123', message);
+    },
+    { signal: AbortSignal.timeout(5_000) },
+);
+```
+
 ### `getDataPublisherFromEventEmitter(emitter)`
 
 Returns an object with an `on` function that you can call to subscribe to certain data over a named channel. The `on` function returns an unsubscribe function.
