@@ -18,6 +18,16 @@ This package contains types that implement RPC subscriptions as required by the 
 
 ## Functions
 
+### `getChannelPoolingChannelCreator(createChannel, { maxSubscriptionsPerChannel, minChannels })`
+
+Given a channel creator, will return a new channel creator with the following behavior.
+
+1. When called, returns an `RpcSubscriptionsChannel`. Adds that channel to a pool.
+2. When called again, creates and returns new `RpcSubscriptionChannels` up to the number specified by `minChannels`.
+3. When `minChannels` channels have been created, subsequent calls vend whichever existing channel from the pool has the fewest subscribers, or the next one in rotation in the event of a tie.
+4. Once all channels carry the number of subscribers specified by the number `maxSubscriptionsPerChannel`, new channels in excess of `minChannel` will be created, returned, and added to the pool.
+5. A channel will be destroyed once all of its subscribers' abort signals fire.
+
 ### `getRpcSubscriptionsChannelWithJSONSerialization(channel)`
 
 Given an `RpcSubscriptionsChannel`, will return a new channel that parses data published to the `'message'` channel as JSON, and JSON-stringifies messages sent via the `send(message)` method.
