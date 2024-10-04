@@ -62,7 +62,7 @@ importers:
         version: 7.25.7(@babel/core@7.25.7)
       '@babel/plugin-transform-private-methods':
         specifier: ^7.24.7
-        version: 7.25.4(@babel/core@7.25.7)
+        version: 7.25.7(@babel/core@7.25.7)
       '@babel/plugin-transform-private-property-in-object':
         specifier: ^7.24.7
         version: 7.25.7(@babel/core@7.25.7)
@@ -2471,12 +2471,6 @@ packages:
 
   '@babel/plugin-transform-private-methods@7.24.7':
     resolution: {integrity: sha512-COTCOkG2hn4JKGEKBADkA8WNb35TGkkRbI5iT845dB+NyqgO8Hn+ajPbSnIQznneJTa3d30scb6iz/DhH8GsJQ==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
-  '@babel/plugin-transform-private-methods@7.25.4':
-    resolution: {integrity: sha512-ao8BG7E2b/URaUQGqN3Tlsg+M3KlHY6rJ1O1gXAEUnZoyNQnvKyH87Kfg+FoxSeyWUB8ISZZsC91C44ZuBFytw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -10646,14 +10640,6 @@ snapshots:
     dependencies:
       '@babel/core': 7.24.9
       '@babel/helper-create-class-features-plugin': 7.24.7(@babel/core@7.24.9)
-      '@babel/helper-plugin-utils': 7.24.8
-    transitivePeerDependencies:
-      - supports-color
-
-  '@babel/plugin-transform-private-methods@7.25.4(@babel/core@7.25.7)':
-    dependencies:
-      '@babel/core': 7.25.7
-      '@babel/helper-create-class-features-plugin': 7.25.4(@babel/core@7.25.7)
       '@babel/helper-plugin-utils': 7.24.8
     transitivePeerDependencies:
       - supports-color
