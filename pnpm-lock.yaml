@@ -18,6 +18,7 @@ overrides:
   '@wallet-standard/ui-features': 0.0.0-20240802213516
   '@wallet-standard/ui-registry': 0.0.0-20240802213516
   '@wallet-standard/ui': 0.0.0-20240802213516
+  agadoo>rollup: ^4
   conventional-changelog-conventionalcommits: '>= 8.0.0'
   jsdom: ^22
   mock-socket: ^9.3.1
@@ -6029,11 +6030,6 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rollup@3.27.2:
-    resolution: {integrity: sha512-YGwmHf7h2oUHkVBT248x0yt6vZkYQ3/rvE5iQuVBh3WO8GcJ6BNeOkpoX1yMHIiBm18EMLjBPIoUDkhgnyxGOQ==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-
   rollup@4.21.0:
     resolution: {integrity: sha512-vo+S/lfA2lMS7rZ2Qoubi6I5hwZwzXeUIctILZLbHI+laNtvhhOIon2S1JksA5UEDQ7l3vberd0fxK44lTYjbQ==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -9210,9 +9206,9 @@ snapshots:
       '@types/react': 18.3.3
       '@types/react-dom': 18.3.0
 
-  '@rollup/plugin-virtual@3.0.1(rollup@3.27.2)':
+  '@rollup/plugin-virtual@3.0.1(rollup@4.21.0)':
     optionalDependencies:
-      rollup: 3.27.2
+      rollup: 4.21.0
 
   '@rollup/rollup-android-arm-eabi@4.21.0':
     optional: true
@@ -9846,9 +9842,9 @@ snapshots:
 
   agadoo@3.0.0:
     dependencies:
-      '@rollup/plugin-virtual': 3.0.1(rollup@3.27.2)
+      '@rollup/plugin-virtual': 3.0.1(rollup@4.21.0)
       acorn: 8.10.0
-      rollup: 3.27.2
+      rollup: 4.21.0
 
   agent-base@6.0.2:
     dependencies:
@@ -12458,10 +12454,6 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
-
-  rollup@3.27.2:
-    optionalDependencies:
-      fsevents: 2.3.3
 
   rollup@4.21.0:
     dependencies:
