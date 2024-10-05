@@ -71,6 +71,7 @@
             "@wallet-standard/ui-features": "0.0.0-20240802213516",
             "@wallet-standard/ui-registry": "0.0.0-20240802213516",
             "@wallet-standard/ui": "0.0.0-20240802213516",
+            "agadoo>rollup": "^4",
             "conventional-changelog-conventionalcommits": ">= 8.0.0",
             "jsdom": "^22",
             "mock-socket": "^9.3.1",
