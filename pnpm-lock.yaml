@@ -5496,8 +5496,8 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  micromatch@4.0.7:
-    resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
+  micromatch@4.0.8:
+    resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
 
   mime-db@1.52.0:
@@ -7755,7 +7755,7 @@ snapshots:
       '@changesets/types': 6.0.0
       '@manypkg/get-packages': 1.1.3
       fs-extra: 7.0.1
-      micromatch: 4.0.7
+      micromatch: 4.0.8
 
   '@changesets/errors@0.2.0':
     dependencies:
@@ -7791,7 +7791,7 @@ snapshots:
       '@changesets/errors': 0.2.0
       '@manypkg/get-packages': 1.1.3
       is-subdir: 1.2.0
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       spawndamnit: 2.0.0
 
   '@changesets/logger@0.1.1':
@@ -8159,7 +8159,7 @@ snapshots:
       jest-util: 30.0.0-alpha.6
       jest-validate: 30.0.0-alpha.6
       jest-watcher: 30.0.0-alpha.6
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pretty-format: 30.0.0-alpha.6
       slash: 3.0.0
       strip-ansi: 6.0.1
@@ -8347,7 +8347,7 @@ snapshots:
       jest-haste-map: 27.5.1
       jest-regex-util: 27.5.1
       jest-util: 27.5.1
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pirates: 4.0.6
       slash: 3.0.0
       source-map: 0.6.1
@@ -8368,7 +8368,7 @@ snapshots:
       jest-haste-map: 30.0.0-alpha.6
       jest-regex-util: 30.0.0-alpha.6
       jest-util: 30.0.0-alpha.6
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pirates: 4.0.6
       slash: 3.0.0
       write-file-atomic: 5.0.1
@@ -10672,7 +10672,7 @@ snapshots:
       '@nodelib/fs.walk': 1.2.8
       glob-parent: 5.1.2
       merge2: 1.4.1
-      micromatch: 4.0.7
+      micromatch: 4.0.8
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -11162,7 +11162,7 @@ snapshots:
       jest-runner: 30.0.0-alpha.6
       jest-util: 30.0.0-alpha.6
       jest-validate: 30.0.0-alpha.6
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       parse-json: 5.2.0
       pretty-format: 30.0.0-alpha.6
       slash: 3.0.0
@@ -11287,7 +11287,7 @@ snapshots:
       jest-serializer: 27.5.1
       jest-util: 27.5.1
       jest-worker: 27.5.1
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       walker: 1.0.8
     optionalDependencies:
       fsevents: 2.3.3
@@ -11302,7 +11302,7 @@ snapshots:
       jest-regex-util: 30.0.0-alpha.6
       jest-util: 30.0.0-alpha.6
       jest-worker: 30.0.0-alpha.6
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       walker: 1.0.8
     optionalDependencies:
       fsevents: 2.3.3
@@ -11345,7 +11345,7 @@ snapshots:
       '@types/stack-utils': 2.0.2
       chalk: 4.1.2
       graceful-fs: 4.2.11
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pretty-format: 27.5.1
       slash: 3.0.0
       stack-utils: 2.0.6
@@ -11357,7 +11357,7 @@ snapshots:
       '@types/stack-utils': 2.0.2
       chalk: 4.1.2
       graceful-fs: 4.2.11
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pretty-format: 29.7.0
       slash: 3.0.0
       stack-utils: 2.0.6
@@ -11369,7 +11369,7 @@ snapshots:
       '@types/stack-utils': 2.0.2
       chalk: 4.1.2
       graceful-fs: 4.2.11
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       pretty-format: 30.0.0-alpha.6
       slash: 3.0.0
       stack-utils: 2.0.6
@@ -11799,7 +11799,7 @@ snapshots:
       '@babel/register': 7.24.6(@babel/core@7.24.9)
       flow-parser: 0.238.0
       graceful-fs: 4.2.11
-      micromatch: 4.0.7
+      micromatch: 4.0.8
       neo-async: 2.6.2
       picocolors: 1.0.1
       recast: 0.23.9
@@ -11965,7 +11965,7 @@ snapshots:
 
   merge2@1.4.1: {}
 
-  micromatch@4.0.7:
+  micromatch@4.0.8:
     dependencies:
       braces: 3.0.3
       picomatch: 2.3.1
