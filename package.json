@@ -73,6 +73,7 @@
             "@wallet-standard/ui": "0.0.0-20240802213516",
             "agadoo>rollup": "^4",
             "conventional-changelog-conventionalcommits": ">= 8.0.0",
+            "dset@<3.1.4": "^3.1.4",
             "jsdom": "^22",
             "mock-socket": "^9.3.1",
             "shelljs": ">=0.8.5"
